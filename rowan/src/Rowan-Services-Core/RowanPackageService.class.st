@@ -38,8 +38,7 @@ RowanPackageService >> = packageService [
 
 { #category : 'testing' }
 RowanPackageService >> arePackageAndProjectClean [
-
-	^self rowanDirty not and:[self projectIsDirty not]
+  ^ self rowanDirty not and: [ self projectIsDirty not ]
 ]
 
 { #category : 'rowan' }
@@ -78,15 +77,6 @@ RowanPackageService >> classHierarchy: theClasses [
 	hierarchyServices copy keysAndValuesDo:[:key :value | 
 		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
 	^hierarchyServices
-]
-
-{ #category : 'client commands' }
-RowanPackageService >> compileClass: definitionString [
-
-	|  anonymousMethod |
-	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: Rowan image symbolList.
-	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 ]
 
 { #category : 'rowan' }
@@ -129,26 +119,6 @@ RowanPackageService >> deletePackage [
 
 ]
 
-{ #category : 'commands support' }
-RowanPackageService >> extendHierarchies: hierarchies [
-	
-	"extend the hierarchies by one level
-	of subclasses"
-
-	| extendedHierarchies |
-	extendedHierarchies := Array new. 
-	hierarchies do:[:hierarchy |
-		| theClass subclasses |
-		theClass := hierarchy last. 
-		(subclasses := organizer subclassesOf: theClass) isEmpty 
-			ifTrue:[extendedHierarchies add: hierarchy]
-			ifFalse:[
-				subclasses do:[:sub |
-					extendedHierarchies add: (hierarchy copy add: sub; yourself)
-				]]].
-	^extendedHierarchies
-]
-
 { #category : 'rowan' }
 RowanPackageService >> genericClassCreationTemplate [
 
@@ -159,34 +129,6 @@ RowanPackageService >> genericClassCreationTemplate [
 { #category : 'comparing' }
 RowanPackageService >> hash [
 	^self name hash
-]
-
-{ #category : 'commands support' }
-RowanPackageService >> hierarchiesByLevel: hierarchies [
-
-	"Return dictionary of classes by level. 
-	Example: 
-		hierarchies - #(#(Object Collection Array) #(Object AbstractException Exception))
-	Return: 
-		#(#nil->#(Object) Object->#(Collection AbstractException) Collection->#(Array) AbstractException->#(Exception)
-	"
-	| levels |
-	levels := hierarchies inject: Dictionary new into:[:dict :chain | 
-		1 to: chain size do: [:index | 
-			| cls theSuper classSet |
-			cls := chain at: index.
-			classSet := dict at: cls ifAbsentPut: [Array new].
-			index = 1 
-		ifTrue:[
-			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
-			((dict at: #'nil') includes: cls) ifFalse:[(dict at: #'nil') add: cls].
-		]
-		ifFalse:[
-				theSuper := chain at: index - 1.
-				((dict at: theSuper) includes: cls) ifFalse:[(dict at: theSuper) add: cls]
-				]].
-			dict].
-	^levels
 ]
 
 { #category : 'Accessing' }
@@ -308,28 +250,6 @@ RowanPackageService >> projectName: newValue [
 ]
 
 { #category : 'client commands' }
-RowanPackageService >> recompileMethodsAfterClassCompilation [
-
-	"compileClass: must be run first"
-	| theClass classService packageService |
-
-	theClass := [(UserGlobals at: #jadeiteCompileClassMethod) _executeInContext: nil] 
-		ensure: [UserGlobals at: #jadeiteCompileClassMethod put: nil].
-	classService := RowanClassService new name: theClass name. 
-	classService update. 
-	classService isNewClass: true.
-	classService packageName = name 
-		ifTrue:[
-			self selectedClass: classService
-		]
-		ifFalse:[
-			packageService := RowanPackageService forPackageNamed: classService packageName. 
-			packageService update. 
-			packageService selectedClass: classService].
-	RowanCommandResult addResult: classService.
-]
-
-{ #category : 'client commands' }
 RowanPackageService >> removeClass: classService [
 	self removeClassNamed: classService name. 
 	self setDefaultTemplate.
@@ -382,35 +302,13 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 { #category : 'commands support' }
 RowanPackageService >> services: services from: levels expand: toExpand [
 
-	(classes collect:[:svc | svc theClass]) do:[:aClass |
-		toExpand addAll: (organizer allSuperclassesOf: aClass)].
-	levels keysAndValuesDo: [:key :value |
-		| newKey service  | 
-		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService new classServiceFromOop: key asOop).
-			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-			service].
-		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService new classServiceFromOop: cls asOop).
-				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-				service
-				])]
+	^super services: services from: levels expand: toExpand classes: classes
 ]
 
 { #category : 'client commands' }
 RowanPackageService >> setDefaultTemplate [
 
 	defaultTemplate := self genericClassCreationTemplate.
-]
-
-{ #category : 'commands support' }
-RowanPackageService >> superclassChainsFor: behaviors [
-	organizer := ClassOrganizer new. 
-	^behaviors collect:[:behavior | | supers |
-			supers := organizer allSuperclassesOf: behavior. 
-			supers add: behavior. 
-			supers].
-
 ]
 
 { #category : 'client commands' }

@@ -113,6 +113,23 @@ RowanMethodServiceTest >> test_noStepPoints [
 ]
 
 { #category : 'tests' }
+RowanMethodServiceTest >> test_reformatSource [
+	| classService methodService source |
+		classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	source := 'abc | abc | abc := 1. abc := abc + abc. ^abc'.
+	classService saveMethodSource: source category: 'other'.
+	self assert: (classService methodsNamed: #abc) size equals: 1.
+	methodService := (classService methodsNamed: #abc) first.
+	self assert: methodService source equals: source.
+	methodService reformatSource.
+	self assert: methodService reformatSource source equals: 'abc
+  | abc |
+  abc := 1.
+  abc := abc + abc.
+  ^ abc'
+]
+
+{ #category : 'tests' }
 RowanMethodServiceTest >> test_runMethodTest [
 
 	| methodService classService |
