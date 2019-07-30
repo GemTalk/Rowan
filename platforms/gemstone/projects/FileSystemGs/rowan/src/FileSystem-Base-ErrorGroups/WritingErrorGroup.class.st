@@ -1,7 +1,7 @@
 Class {
 	#name : 'WritingErrorGroup',
 	#superclass : 'PosixErrorGroup',
-	#category : 'FileSystem-Disk-ErrorGroups'
+	#category : 'FileSystem-Base-ErrorGroups'
 }
 
 { #category : 'constants' }

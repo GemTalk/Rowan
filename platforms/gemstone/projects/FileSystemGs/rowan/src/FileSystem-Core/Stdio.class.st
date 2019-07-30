@@ -26,7 +26,7 @@ If launched as a desktop app (not from the console), Pharo.exe will not be linke
 Class {
 	#name : 'Stdio',
 	#superclass : 'Object',
-	#category : 'FileSystem-Core-Streams'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'initialize' }

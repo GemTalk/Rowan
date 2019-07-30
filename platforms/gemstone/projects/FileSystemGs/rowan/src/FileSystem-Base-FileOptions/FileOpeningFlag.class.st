@@ -8,5 +8,5 @@ For more details see: https://linux.die.net/man/3/open
 Class {
 	#name : 'FileOpeningFlag',
 	#superclass : 'PosixFlag',
-	#category : 'FileSystem-Base-FileOptionss'
+	#category : 'FileSystem-Base-FileOptions'
 }

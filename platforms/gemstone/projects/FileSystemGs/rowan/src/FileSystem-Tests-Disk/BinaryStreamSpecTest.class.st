@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'reference'
 	],
-	#category : 'FileSystem-Tests-Disk-Base'
+	#category : 'FileSystem-Tests-Disk'
 }
 
 { #category : 'running' }

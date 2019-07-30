@@ -1,7 +1,7 @@
 Class {
 	#name : 'NumberParserTest',
 	#superclass : 'TestCase',
-	#category : 'FileSystem-Tests-Core-Base'
+	#category : 'FileSystem-Tests-Core'
 }
 
 { #category : 'utilities' }

@@ -1,7 +1,7 @@
 Class {
 	#name : 'ClientFileSystemTest',
 	#superclass : 'FileSystemTest',
-	#category : 'FileSystem-Tests-Disk-Base'
+	#category : 'FileSystem-Tests-Client'
 }
 
 { #category : 'tests' }

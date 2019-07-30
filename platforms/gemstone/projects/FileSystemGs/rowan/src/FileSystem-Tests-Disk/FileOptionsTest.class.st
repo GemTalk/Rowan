@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'stream'
 	],
-	#category : 'FileSystem-Tests-Disk-Base'
+	#category : 'FileSystem-Tests-Disk'
 }
 
 { #category : 'Testing' }

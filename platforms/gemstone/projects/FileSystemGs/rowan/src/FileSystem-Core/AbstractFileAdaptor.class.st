@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'file'
 	],
-	#category : 'FileSystem-Core-Kernel'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'accessing' }

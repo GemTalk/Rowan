@@ -14,7 +14,7 @@ Class {
 		'requestor',
 		'failBlock'
 	],
-	#category : 'FileSystem-Core-Kernel'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'testing' }

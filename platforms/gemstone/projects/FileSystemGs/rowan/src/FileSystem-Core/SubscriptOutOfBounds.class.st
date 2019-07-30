@@ -7,7 +7,7 @@ Class {
 		'lowerBound',
 		'upperBound'
 	],
-	#category : 'FileSystem-Core-Kernel-Errors'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'signalling' }

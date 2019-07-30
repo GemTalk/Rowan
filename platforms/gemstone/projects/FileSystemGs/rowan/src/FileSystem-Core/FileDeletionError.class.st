@@ -1,5 +1,5 @@
 Class {
 	#name : 'FileDeletionError',
 	#superclass : 'FileSystemError',
-	#category : 'FileSystem-Core-Kernel-Errors'
+	#category : 'FileSystem-Core'
 }
