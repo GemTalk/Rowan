@@ -447,11 +447,11 @@ RowanClassServiceTest >> test_selectedMethod [
 
 { #category : 'test method compilation' }
 RowanClassServiceTest >> test_setSuperSubIndicators [
-	| classService superclassMethodService subclassMethodService selector subclassService packageService |
+	| classService superclassMethodService subclassMethodService selector subclassService browserService |
 	selector := #indicatorTesting. 
 	self loadRowanSample1.
-	[packageService := RowanPackageService forPackageNamed: 'RowanSample1-Core'.
-	packageService compileClass: 
+	[browserService := RowanBrowserService new. 
+	browserService compileClass: 
 		'RowanSample1 rwSubclass: ''RowanSubClass''
 			instVarNames: #()
 			classVars: #()
@@ -461,7 +461,7 @@ RowanClassServiceTest >> test_setSuperSubIndicators [
 			options: #()'.
 	classService := RowanClassService forClassNamed: 'RowanSample1'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
+	browserService recompileMethodsAfterClassCompilation. 
 	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
 	superclassMethodService := (classService methodsNamed: selector) first.
 	self deny: superclassMethodService hasSupers.
