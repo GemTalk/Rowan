@@ -12,7 +12,8 @@ Class {
 		'hierarchyServices',
 		'testPackages',
 		'testCount',
-		'dictionaries'
+		'dictionaries',
+		'selectedClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -40,6 +41,39 @@ RowanBrowserService >> allClasses [
 	allClasses := allClasses asArray. 
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> classHierarchy [
+	| theClasses |
+	theClasses := allClasses collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	updateType := #classHierarchyUpdate:browser:. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanBrowserService >> classHierarchy: theClasses [
+	| superclassChains levels services hierarchies toExpand |
+	superclassChains := self superclassChainsFor: theClasses. 
+	hierarchies := self extendHierarchies: superclassChains. 
+	levels := self hierarchiesByLevel: hierarchies.
+	services := Dictionary new. 
+	toExpand := Set new. 
+	self services: services from: levels expand: toExpand.
+	hierarchyServices := services reject:[:array | array isEmpty].
+	hierarchyServices copy keysAndValuesDo:[:key :value | 
+		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
+	^hierarchyServices
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> compileClass: definitionString [
+
+	|  anonymousMethod |
+	anonymousMethod := definitionString _compileInContext: nil 
+       symbolList: Rowan image symbolList.
+	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 ]
 
 { #category : 'client commands' }
@@ -89,6 +123,26 @@ RowanBrowserService >> packagesWithTests [
 	updateType := #testPackages:. 
 	testPackages := testPackages asArray. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> recompileMethodsAfterClassCompilation [
+  "compileClass: must be run first"
+
+  | theClass classService packageService |
+  theClass := [ (UserGlobals at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    ensure: [ UserGlobals at: #'jadeiteCompileClassMethod' put: nil ].
+  classService := RowanClassService new name: theClass name.
+  classService update.
+  classService isNewClass: true.
+  packageService := RowanPackageService
+    forPackageNamed: classService packageName.
+  packageService update.
+  packageService selectedClass: classService.
+  RowanCommandResult addResult: classService.
+  selectedClass := classService.
+  updateType := #none. 
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
@@ -158,9 +212,21 @@ RowanBrowserService >> saveRootObject: oop windowHandle: integer [
 	dictionary at: integer put: (Object _objectForOop: oop).
 ]
 
+{ #category : 'other' }
+RowanBrowserService >> selectedClass [
+
+	^selectedClass
+]
+
 { #category : 'perform' }
 RowanBrowserService >> servicePerform: symbol withArguments: collection [
 	super perform: symbol withArguments: collection.
+]
+
+{ #category : 'command support' }
+RowanBrowserService >> services: services from: levels expand: toExpand [
+
+	^super services: services from: levels expand: toExpand classes: allClasses
 ]
 
 { #category : 'client commands' }
