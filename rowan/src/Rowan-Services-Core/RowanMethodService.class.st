@@ -120,7 +120,7 @@ RowanMethodService >> = methodService [
 
 { #category : 'Accessing' }
 RowanMethodService >> accessedInstVars [
-	^accessedInstVars
+  ^ accessedInstVars
 ]
 
 { #category : 'Updating' }
@@ -141,13 +141,12 @@ RowanMethodService >> addOrUpdateMethod [
 
 { #category : 'client commands' }
 RowanMethodService >> allReferences [
-
-	| methods |
-	oop := self gsNMethod asOop. 
-	methods := organizer sendersOf: selector.
-	references := methods first collect:[:gsNMethod | 
-			self class forGsNMethod: gsNMethod organizer: organizer].
-	RowanCommandResult addResult: self
+  | methods |
+  oop := self gsNMethod asOop.
+  methods := organizer sendersOf: selector.
+  references := methods first
+    collect: [ :gsNMethod | self class forGsNMethod: gsNMethod organizer: organizer ].
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'initialization' }
@@ -178,11 +177,11 @@ RowanMethodService >> category: newValue [
 
 { #category : 'Accessing' }
 RowanMethodService >> classFromName [
-	
-	"the dictionary browser may have versions numbers in the name"
-	| nameSymbol |
-	nameSymbol := (className copyUpTo: Character space) asSymbol.
-	^(System myUserProfile resolveSymbol: nameSymbol) value
+  "the dictionary browser may have versions numbers in the name"
+
+  | nameSymbol |
+  nameSymbol := (className copyUpTo: Character space) asSymbol.
+  ^ (System myUserProfile resolveSymbol: nameSymbol) value
 ]
 
 { #category : 'Accessing' }
@@ -298,7 +297,7 @@ RowanMethodService >> gsNMethod [
 
 { #category : 'comparing' }
 RowanMethodService >> hash [
-	^(selector hash bitXor: className hash) bitXor: meta hash
+  ^ (selector hash bitXor: className hash) bitXor: meta hash
 ]
 
 { #category : 'Accessing' }
@@ -449,6 +448,13 @@ RowanMethodService >> printOn: aStream [
 				nextPut: $)
 ]
 
+{ #category : 'client commands' }
+RowanMethodService >> reformatSource [
+  source := (RBParser parseMethod: source) formattedCode.
+  updateType := #'dontUpdateSystem'.	"let browser update the source"
+  RowanCommandResult addResult: self
+]
+
 { #category : 'rowan' }
 RowanMethodService >> removeSelector: sel class: clsName [
 	
@@ -512,14 +518,18 @@ RowanMethodService >> selector: aSymbol [
 
 { #category : 'perform' }
 RowanMethodService >> servicePerform: symbol withArguments: collection [
+	| theCommand |
+	theCommand := command. 
 	super servicePerform: symbol withArguments: collection.
-	self update.
+	theCommand = #reformatSource ifFalse:[
+		self update].
 ]
 
 { #category : 'client commands' }
 RowanMethodService >> setBreakAt: stepPoint [
 	| method |
 	method := self isUnboundMethod 
+
 			ifTrue:[Object _objectForOop: oop] 
 			ifFalse:[self gsNMethod].
 	method setBreakAtStepPoint: stepPoint.
