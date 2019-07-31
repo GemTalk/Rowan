@@ -109,14 +109,16 @@ RwRepositoryComponentProjectTonelReaderVisitor >> packageExtension [
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName packageRoot: packageRoot [
 
-	| classFileExtensions classExtensionFileExtensions |
+	| classFileExtensions classExtensionFileExtensions trace |
+  trace := SessionTemps current at: #ROWAN_TRACE otherwise: nil .
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
-		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	classExtensionFileExtensions := self classExtensionFileExtensions.
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
 		| fileExtensions |
+    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading ', file asString ].
 		fileExtensions := file extensions asArray.
 		fileExtensions = classFileExtensions
 			ifTrue: [ self readClassFile: file inPackage: packageName ]
@@ -128,10 +130,12 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName pa
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassExtensionFile: file inPackage: packageName [
 
-	file readStreamDo: [:fileStream |
+	| fileReference |
+	fileReference := file asFileReference.
+	fileReference readStreamDo: [:fileStream |
 		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: 20000. "part of workaround for GemTalk/FileSystemGs#9"
+		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassExtension addClassMethodDefinition: mDef ].

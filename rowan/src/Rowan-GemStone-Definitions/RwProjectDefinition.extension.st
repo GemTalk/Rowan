@@ -1,6 +1,12 @@
 Extension { #name : 'RwProjectDefinition' }
 
 { #category : '*rowan-gemstone-definitions' }
+RwProjectDefinition >> asLoadedSymbolDictProject [
+
+	^ RwGsLoadedSymbolDictProject newForLoadSpecification: self specification.
+]
+
+{ #category : '*rowan-gemstone-definitions' }
 RwProjectDefinition >> defaultSymbolDictName [
 
 	^ (self specification platformSpec at: 'gemstone') defaultSymbolDictName
@@ -40,12 +46,18 @@ RwProjectDefinition >> projectOwnerId: aUserId [
 ]
 
 { #category : '*rowan-gemstone-definitions' }
+RwProjectDefinition >> register [
+
+	self specification register
+]
+
+{ #category : '*rowan-gemstone-definitions' }
 RwProjectDefinition >> setSymbolDictName: symbolDictName forPackageNamed: packageName [
 
+	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
 	(self specification platformSpec at: 'gemstone')
 		setSymbolDictName: symbolDictName
 		forPackageNamed: packageName
-
 ]
 
 { #category : '*rowan-gemstone-definitions' }
@@ -84,7 +96,6 @@ RwProjectDefinition >> updateGsPlatformSpecLoadedProjectInfo: projectInfo [
 			gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
 	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
 		ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map]
-
 ]
 
 { #category : '*rowan-gemstone-definitions' }

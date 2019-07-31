@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Dictionary
@@ -4051,5 +4052,5 @@ stonProcessSubObjects: block
 
 run
 STONWriter initialize.
+true
 %
-

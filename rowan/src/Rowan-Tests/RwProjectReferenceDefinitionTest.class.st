@@ -7,10 +7,10 @@ Class {
 { #category : 'tests' }
 RwProjectReferenceDefinitionTest >> testSpecificationConversion [
 
-	| rowanSpec projectHome specUrlString projectSpec_1 projectSpec_2 projectReferenceDefinition memory 
+	| rowanProject projectHome specUrlString projectSpec_1 projectSpec_2 projectReferenceDefinition memory 
 		x y |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/filetree/rowan/specs/Issue122.ston'.

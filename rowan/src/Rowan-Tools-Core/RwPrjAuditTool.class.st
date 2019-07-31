@@ -27,7 +27,7 @@ RwPrjAuditTool >> auditForProject: aLoadedProject [
 	| res |
 
 	res := RwAuditReport for: aLoadedProject.
-	"GsFile gciLogClient: '==============Auditing project ', aLoadedProject name."
+	"self _log: '==============Auditing project ', aLoadedProject name."
 		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
 				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res

@@ -58,30 +58,54 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 	projectSetDefinitionToLoad definitions keysAndValuesDo: [:projectName :projectDefinition |
 			projectDefinition packages keysAndValuesDo: [:packageName :packageDefinition |
 				"set the target symbol dictionary name for each incoming package definition"
-				packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ].
+				(packageDefinition gs_symbolDictionary isNil 
+					or: [ (loadedProjectInfo includesKey: projectName) or: [ (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue) not ] ])
+						ifTrue: [ 
+							"set gs_symbolDictionary for the first time, or (potentially) override if project freshly read 
+								from disk (loadedProjectInfo available)"
+							packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
 	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
-			| theProjectDef |
-			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
-				ifNil: [ projectDef ]
-				ifNotNil: [:loadedProject | loadedProject ].
+			| theLoadedProject |
+			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theProjectDef updateLoadedCommitId ].
+				ifTrue: [  
+					theLoadedProject 
+						updateLoadedCommitId;
+						markNotDirty.
+					theLoadedProject
+						loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
-				ifNotNil: [:map |
-					theProjectDef
-						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
-						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
+				ifNotNil: [:map | projectDef updateLoadedComponentInfoFor: theLoadedProject from: map ] ].
 	^ diff
 ]
 
 { #category : 'load project definitions' }
 RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition [
 
-	^ self loadProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+	^ self loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes [
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
+	| projectSetDefinition |
+	projectSetDefinition := projectDefinition repositoryRoot exists
+		ifTrue: [ 
+			Rowan projectTools read
+				readProjectSetForComponentProjectDefinition: projectDefinition
+				withConfigurations: projectDefinition loadedConfigurationNames
+				groupNames: projectDefinition loadedGroupNames 
+				platformConfigurationAttributes: platformConfigurationAttributes ]
+		ifFalse: [ 
+			RwProjectSetDefinition new
+				addProject: projectDefinition;
+				yourself ].
+	^ self loadProjectSetDefinition: projectSetDefinition
 ]
 
 { #category : 'load project definitions' }
@@ -90,108 +114,6 @@ RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	^ self loadProjectSetDefinition: projectSetDefinition
-]
-
-{ #category : 'load project definitions' }
-RwPrjLoadTool >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes [
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
-
-	| visitor projectSetDefinition |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
-	visitor := Rowan projectTools read
-			readConfigurationsForProjectComponentDefinition: projectDefinition
-			withConfigurations: projectDefinition loadedConfigurationNames
-			groupNames: projectDefinition loadedGroupNames 
-			platformConfigurationAttributes: platformConfigurationAttributes
-			forLoad: true.
-	visitor projectLoadSpecs do: [:loadSpec |
-		| dependentProjectDefinition |
-		dependentProjectDefinition := loadSpec asDefinition.
-		dependentProjectDefinition clone.
-		dependentProjectDefinition read do: [:readProjectDef |
-			(projectSetDefinition projectNames includes: readProjectDef name)
-				ifTrue: [ self error: 'duplicate dependent projects encountered ', readProjectDef name printString]
-				ifFalse: [ projectSetDefinition addDefinition: readProjectDef ] ] ].
-	^ self loadProjectSetDefinition: projectSetDefinition
-
-]
-
-{ #category : 'load project by spec url' }
-RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString [
-
-	| projectDefinition projectSetDefinition res |
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-
-]
-
-{ #category : 'load project by spec url' }
-RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString  projectRootPath: projectRootPath [
-
-	| projectDefinition projectSetDefinition res |
-
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-
-]
-
-{ #category : 'load project by spec url' }
-RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString withConfigurations: configNames groupNames: groupNames [
-
-	| projectDefinition projectSetDefinition res |
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString.
-	projectSetDefinition := Rowan projectTools read 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: configNames
-		groupNames: groupNames.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-]
-
-{ #category : 'load project by spec url' }
-RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString  withConfigurations: configNames groupNames: groupNames projectRootPath: projectRootPath [
-
-	| projectDefinition projectSetDefinition res |
-
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath.
-	projectSetDefinition := Rowan projectTools read 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: configNames
-		groupNames: groupNames.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-]
-
-{ #category : 'load project by name' }
-RwPrjLoadTool >> loadProjectNamed_254: projectNamed instanceMigrator: instanceMigrator [
-
-	"load the named project from disk, mark the loaded projects not dirty and run initializers"
-
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed.
-	res := self 
-		_doProjectSetLoad_254: projectSetDefinition
-		instanceMigrator: instanceMigrator 
-		originalProjectSet: projectSetDefinition 
-		processedClassNames: Set new.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-
 ]
 
 { #category : 'load project by name' }

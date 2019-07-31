@@ -52,7 +52,7 @@ RwAbstractReaderWriterVisitor >> _repositoryConventionFor: packagesRoot [
 { #category : 'private' }
 RwAbstractReaderWriterVisitor >> _repositoryFormatFor: packagesRoot [
 
-	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ 'filetree' ]
+	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ self defaultPackageFormat ]
 ]
 
 { #category : 'private' }
@@ -186,6 +186,12 @@ RwAbstractReaderWriterVisitor >> currentProjectDefinition: aRwComponentProjectDe
 ]
 
 { #category : 'accessing' }
+RwAbstractReaderWriterVisitor >> defaultPackageFormat [
+
+	self subclassResponsibility: #defaultPackageFormat
+]
+
+{ #category : 'accessing' }
 RwAbstractReaderWriterVisitor >> packageConvention [
 
 	"
@@ -199,7 +205,8 @@ RwAbstractReaderWriterVisitor >> packageConvention [
 		ppc := self currentProjectDefinition packageConvention.
 		dpc := self _repositoryConventionFor: self packagesRoot.
 		dpc ~= ppc
-			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, ' does not match expected package convention ', ppc printstring. ' for project ', self projectName printString ].
+			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, 
+           ' does not match expected package convention ', ppc printString. ' for project ', self projectName printString ].
 		packageConvention := ppc ]
 ]
 

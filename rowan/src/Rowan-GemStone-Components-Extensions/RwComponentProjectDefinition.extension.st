@@ -1,6 +1,12 @@
 Extension { #name : 'RwComponentProjectDefinition' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> asLoadedSymbolDictProject [
+
+	^ RwGsLoadedSymbolDictComponentProject newForProjectReferenceDefinition: self projectRef.
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> defaultSymbolDictName [
 
 	^ self projectRef defaultSymbolDictName
@@ -56,6 +62,7 @@ RwComponentProjectDefinition >> register [
 { #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> setSymbolDictName: symbolDictName forPackageNamed: packageName [
 
+	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
 	^self projectRef setSymbolDictName: symbolDictName forPackageNamed: packageName
 ]
 
@@ -63,4 +70,24 @@ RwComponentProjectDefinition >> setSymbolDictName: symbolDictName forPackageName
 RwComponentProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	^self projectRef symbolDictNameForPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> updateGsPlatformSpecLoadedProjectInfo: projectInfo [
+
+	| thePackageMapSpecs |
+	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+		ifNotNil: [:name | self defaultSymbolDictName: name ].
+	(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+		ifNotNil: [:boolean | 
+			self defaultUseSessionMethodsForExtensions: boolean  ].
+	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+		ifNotNil: [:map | self packageNameToPlatformPropertiesMap: map]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> useSessionMethodsForExtensionsForPackageNamed: packageName [
+
+	^ self projectRef useSessionMethodsForExtensionsForPackageNamed: packageName
 ]

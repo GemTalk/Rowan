@@ -5,20 +5,6 @@ Class {
 }
 
 { #category : 'smalltalk api' }
-RwGitTool >> createTmpFileWith: fileContents [
-
-	| file filename |
-	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
-	[ 
-	| count |
-	file := GsFile openWriteOnServer: filename.
-	(count := file nextPutAll: fileContents withGemstoneLineEndings)
-		ifNil: [ self error: 'failed write' ] ]
-		ensure: [ file close ].
-	^ filename
-]
-
-{ #category : 'smalltalk api' }
 RwGitTool >> gitaddIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'add' in: gitRepoPath with: args
@@ -226,11 +212,4 @@ RwGitTool >> performOnServer: commandLine logging: logging [
         show: result ].
   ^ result
 
-]
-
-{ #category : 'private' }
-RwGitTool >> performOnServer: commandLine status: statusBlock [
-  | performOnServerStatusArray |
-  performOnServerStatusArray := System _performOnServer: commandLine.
-  ^ statusBlock value: performOnServerStatusArray
 ]

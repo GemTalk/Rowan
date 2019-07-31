@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (CypressAbstractFileUrl
@@ -8,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -23,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'I''m a reader for tonel format.';
 		immediateInvariant.
@@ -38,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'I''m a writer for tonel format';
 		immediateInvariant.
@@ -53,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'No class-specific documentation for CypressTonelRepository, hierarchy is: 
 Object
@@ -73,7 +78,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a parsing error. 
 I happen whenever the parsing of a tonel file is broken in someway.';
@@ -89,7 +95,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a notification to say tonel writer that he should ignore a section. 
 This tipically happens on a MCClassTraitDefinition, because it will be managed on MCTraitDefinition.
@@ -107,7 +114,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-GemStoneCommon-Core';
 		comment: 'I am an implementation of a dictionary. Compared to other dictionaries I am very efficient for small sizes, speed- and space-wise. I also mantain the order in which elements are added when iterating. My implementation features some ideas from the RefactoringBrowser.';
 		immediateInvariant.
@@ -122,7 +130,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a parser for tonel files. 
 I parse a class with the following format: 
@@ -180,7 +189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: '';
 		immediateInvariant.
@@ -195,7 +205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a modified STON writer to make tonel metadata look as we want.
 
@@ -213,7 +224,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -228,7 +240,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -243,7 +256,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -258,7 +272,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -273,7 +288,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -288,7 +304,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -303,7 +320,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Cypress-Tests';
 		comment: '';
 		immediateInvariant.
@@ -318,7 +336,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -333,7 +352,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Cypress-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1341,7 +1361,7 @@ methodBody
 		- I can have inner blocks
 		- I can mention a comment of the form ""$"" or a comment of the form '$'
 	 all that needs to be skipped "
-	| result char prevChar comment string count |
+	| result char prevChar comment string count startPos |
 	
 	result := self class writeStreamClass on: String new.
 
@@ -1349,6 +1369,8 @@ methodBody
 	string := false.
 	prevChar := nil.
 	count := 0.
+        startPos := stream position .
+        "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
 	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
 	[ stream atEnd not ]
 	whileTrue: [ 
@@ -1406,7 +1428,6 @@ category: 'parsing'
 method: TonelParser
 methodDefList
 	| result classStream instanceStream |
-	
 	self separator. "to arrive to the end of the file in case there are no methods"
 	result := { {}. {} }.
 	classStream := (result at: 1) writeStreamPortable.
@@ -1420,10 +1441,14 @@ methodDefList
 						ifFalse: [ instanceStream nextPut: mDef ].
 					"skip possible spaces at the end"
 					self separator ]
-			] ] on: TonelParseError do:[:ex | 
-				lastSelectorParsed ifNotNil:[
-					GsFile gciLogServer:'Last selector parsed was: ', lastSelectorParsed printString ].
-				ex pass ].
+			] 
+  ] on: TonelParseError do:[:ex | 
+		lastSelectorParsed ifNotNil:[ | str |
+      str := ex details ifNil:[ '' ].
+      ex details: str, ', after tonel method selector: ', lastSelectorParsed printString 
+    ].
+		ex pass 
+  ].
 	^ result
 %
 
@@ -1526,7 +1551,7 @@ shebang
 
 	(stream peekFor: $#) ifFalse: [ ^ nil ].	
 	(stream peekFor: $!) ifFalse: [ ^ nil ].
-	stream  upTo: Character lf.
+	^ stream  upTo: Character lf.
 %
 
 category: 'accessing'
@@ -1596,7 +1621,8 @@ type
 category: 'parsing'
 method: TonelParser
 typeDef
-	self shebang. "ignore shebang on first line of file if present"
+	| shebang |
+	shebang := self shebang. "ignore shebang on first line of file if present"
 	^ self newTypeDefinitionFrom: { 
 		self separator.
 		self try: [ self comment ]. 
@@ -1609,6 +1635,7 @@ typeDef
 			normalizedMetadata := Dictionary new.
 			typeMetadata keysAndValuesDo: [:key :value |
 				normalizedMetadata at: key asLowercase asSymbol put: value ].
+			normalizedMetadata at: #shebang put: shebang.
 			normalizedMetadata ] 
 	}
 %
@@ -1853,6 +1880,9 @@ typeClassDefinitionOf: aClassDefinition
 
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
+
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedOop' put: gs_reservedOop asString ].
 
 	definition 		
 		at: #category put: aClassDefinition category asSymbol.

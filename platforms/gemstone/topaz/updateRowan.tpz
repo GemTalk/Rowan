@@ -1,0 +1,14 @@
+#!/usr/bin/gemstone/topaz
+#
+
+omit pushonly
+display oops
+
+set user SystemUser p swordfish
+login
+
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/reloadRowan.gs
+
+commit
+
+exit

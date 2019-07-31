@@ -203,8 +203,8 @@ RwModificationFiletreeWriterVisitor >> _methodFileNameFor: aMethodDefinition [
 		ifFalse: [ selector ]
 		ifTrue: [ 
 		  | output specials |
-		  specials := self class seletorSpecials.
-		  output := String new writeStream.
+		  specials := self class selectorSpecials.
+		  output := WriteStream on: String new.
 		  output nextPut: $^.
 		  selector
 			do: [ :each | 
@@ -253,6 +253,9 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 
 	(aClassDefinition instVarNames)
 		ifNotEmpty: [ :vars | definition at: #instvars put: vars asArray ].
+
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
 
 	definition at: #name put: aClassDefinition name.
 
@@ -371,6 +374,12 @@ RwModificationFiletreeWriterVisitor >> changedMethod: aMethodModification [
 			<< methodDefinition protocol
 			<< self _newLine
 			<< (methodDefinition source withLineEndings: self _newLine) ]
+]
+
+{ #category : 'accessing' }
+RwModificationFiletreeWriterVisitor >> defaultPackageFormat [
+
+	^ 'filetree'
 ]
 
 { #category : 'actions' }

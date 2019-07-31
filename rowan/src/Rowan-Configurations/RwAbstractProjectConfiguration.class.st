@@ -234,6 +234,12 @@ RwAbstractProjectConfiguration >> initializeForImport [
 
 ]
 
+{ #category : 'testing' }
+RwAbstractProjectConfiguration >> isIndependentlyLoadable [
+	
+	^ true
+]
+
 { #category : 'accessing' }
 RwAbstractProjectConfiguration >> name [
 

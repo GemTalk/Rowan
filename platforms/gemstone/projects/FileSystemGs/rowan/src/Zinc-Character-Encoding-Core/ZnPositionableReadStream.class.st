@@ -240,9 +240,9 @@ ZnPositionableReadStream >> readInto: collection startingAt: offset count: reque
 	"Read requestedCount elements into collection starting at offset,
 	returning the number of elements read, there could be less elements available."
 
-	0 to: requestedCount - 1 do: [ :count | | object |
-		(object := self next) ifNil: [ ^ count ].  
-		collection at: offset + count put: object ].
+	0 to: requestedCount - 1 do: [ :cnt | | object |
+		(object := self next) ifNil: [ ^ cnt ].  
+		collection at: offset + cnt put: object ].
 	^ requestedCount
 ]
 

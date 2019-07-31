@@ -27,8 +27,10 @@
 # Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
+	"install_3.tpz"
  	| projectSetDefinition gitRepoPath packageCreateTool loadedProjectInfo auditFailures readTool
 		reAudit gitRoot |
+  SessionTemps current at: #ROWAN_TRACE put: #gciLogServer . "log to topaz output file"
 	projectSetDefinition := RwProjectSetDefinition new.
 	loadedProjectInfo := Dictionary new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
@@ -39,7 +41,7 @@
 			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
 		}.
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Rowan_component.ston'. 
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/RowanV2.ston'. 
 			'$ROWAN_PROJECTS_HOME'
 		}.
 		{
@@ -164,8 +166,8 @@ GsFile gciLogServer: 'FAILED AUDIT: ', projectName.
 		reAudit ifTrue: [ GsFile gciLogServer: 'RERUN AUDIT' ] ].
 	auditFailures isEmpty 
 		ifFalse: [ 
-			self error: 'Post load Rowan audit failed for projects ', auditFailures printString ] 
-	
+			self error: 'Post load Rowan audit failed for projects ', auditFailures printString ] .
+  true	
 %
   commit
 
@@ -174,7 +176,7 @@ GsFile gciLogServer: 'FAILED AUDIT: ', projectName.
    run
   | rowanAssoc |
   rowanAssoc := RowanKernel associationAt: #Rowan.
-  Published add: rowanAssoc.
+  Published add: rowanAssoc. true
 %
   commit
 

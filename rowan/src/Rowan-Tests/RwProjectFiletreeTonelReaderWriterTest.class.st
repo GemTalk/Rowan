@@ -238,9 +238,9 @@ RwProjectFiletreeTonelReaderWriterTest >> _validateIssue361ProjectDefinitionSet:
 { #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
@@ -264,9 +264,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithBothMet
 
 	"method protocol starts with a * for non-extension method"
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet patches |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet patches |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Both-ProtocolValidationError.ston'.
@@ -322,9 +322,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithClassCa
 
 	"class category does not match package name -- Rowan Hybrid"
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_CategoryValidationError.ston'.
@@ -367,9 +367,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithEmptyCl
 	"https://github.com/GemTalk/Rowan/issues/361"
 
 
-	| rowanSpec projectHome projectName specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome projectName specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	projectName := 'Issue361'.
@@ -397,9 +397,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithExtensi
 		extension method protocol does start with a *, but does not match the package name
 	"
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Extension-ProtocolValidationError.ston'.
@@ -446,9 +446,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 
 	"method protocol starts with a * for non-extension method"
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Core-ProtocolValidationError.ston'.
@@ -495,16 +495,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -533,16 +529,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeClass [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -593,16 +585,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClas
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -653,16 +641,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removePackage [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -709,16 +693,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_C [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -757,16 +737,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_D_changeClass [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -816,16 +792,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_D_changeMethods [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -880,16 +852,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_E [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -913,4 +881,51 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_E [
 	writeProjectSetDefinition := RwProjectSetDefinition new addProject: writtenProjectDefinition; yourself.
 	projectSetModification := copyProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
+]
+
+{ #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_Rowan_pharo [
+
+	"write Rowan project to alternate directory, using the pharo project attributes to read the project in the first place"
+
+	"execute without errors"
+
+	| platformConfigurationAttributes projectDefinition projectSetDefinition projectSetModification visitor
+		projectHome rowanProject projectAlias writerVisitorClass |
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := (rowanProject repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
+	projectAlias := 'Rowan_', self _repositoryFormat.
+
+	(projectHome / projectAlias / 'src') 
+		ensureCreateDirectory;
+		deleteAllChildren;
+		yourself.
+
+"Read project and packages from disk for Pharo"
+	platformConfigurationAttributes := {
+		'common'.
+		'pharo'.	"want to read pharo packages"
+	}.
+	projectDefinition := RwComponentProjectDefinition 
+		newForUrl: 'file:', rowanProject repositoryRootPath, '/platforms/pharo/rowan/specs/Rowan_component.ston'.
+	projectDefinition projectHome: rowanProject repositoryRootPath asFileReference parent.
+	projectDefinition read: platformConfigurationAttributes.
+
+"Write project and packages to disk in filetree format, for bootstrapping Pharo"
+	projectDefinition
+		packagesPath: 'src';
+		projectHome: projectHome;
+		projectAlias: projectAlias;
+		packageFormat: self _repositoryFormat;
+		yourself.
+	projectSetDefinition := RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself.
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	visitor := writerVisitorClass new.
+	visitor visit: projectSetModification.
 ]

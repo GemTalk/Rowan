@@ -11,7 +11,7 @@ ClientFileSystemTest >> createFileSystem [
 
 { #category : 'tests' }
 ClientFileSystemTest >> testChildrenAt [
-	| directory entries |
+	| directory |
 	directory := Path * 'plonk'.
 	
 	filesystem createDirectory: directory.

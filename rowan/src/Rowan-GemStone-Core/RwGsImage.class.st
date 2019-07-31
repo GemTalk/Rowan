@@ -42,15 +42,27 @@ RwGsImage class >> _removeLoadedProject: aRwLoadedProject [
 
 	"note that it is not safe to just remove a loaded project from the registry, however this method is supplied as a convenience for tests"
 
+	^ self 
+		_removeLoadedProject: aRwLoadedProject 
+		ifAbsent: [ self error: 'The specified project was not found in the loaded project registry.' ]
+]
+
+{ #category : 'querying' }
+RwGsImage class >> _removeLoadedProject: aRwLoadedProject ifAbsent: absentBlock [
+
+	"note that it is not safe to just remove a loaded project from the registry, however this method is supplied as a convenience for tests"
+
 	| projectName projectRegistry |
 	projectName := aRwLoadedProject name.
 	projectRegistry := self
 		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
-	(projectRegistry at: projectName ifAbsent: [ ^ nil ]) == aRwLoadedProject
-		ifFalse: [ 
-			self
-				error:
-					'The specified project is not identical to the loaded project in the registry ... this is not expected' ].
+	(projectRegistry 
+		at: projectName 
+		ifAbsent: [ ^ absentBlock value ]) == aRwLoadedProject
+			ifFalse: [ 
+				self
+					error:
+						'The specified project is not identical to the loaded project in the registry.' ].
 	projectRegistry removeKey: projectName
 ]
 

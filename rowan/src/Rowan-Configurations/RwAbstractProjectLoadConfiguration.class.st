@@ -205,7 +205,38 @@ RwAbstractProjectLoadConfiguration >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	super initializeForExport.
-	conditionalPackageMatchers :=  conditionalPackageMapSpecMatchers := nil
+	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
 
+
+	super initializeForExport.
+	conditionalPackageMatchers :=  conditionalPackageMapSpecMatchers := nil.
+
+	self conditionalPackages
+		ifNotNil: [:cp |
+			| orderedConditionalPackages |
+			orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
+			(cp keys asSortedCollection: [:a :b | (a at: 1) <= (b at: 1) ]) do: [:ar |
+				| dict orderedPackageNames |
+				dict := cp at: ar.
+				orderedPackageNames := Rowan platform orderedDictionaryClass new.
+				dict keys asArray sort do: [:group | orderedPackageNames at: group put: (dict at: group) ].
+				orderedConditionalPackages at: ar put: orderedPackageNames ].
+			conditionalPackages := orderedConditionalPackages ].
+
+	conditionalPackageMapSpecs ifNotNil: [
+		| orderedConditionalPackageMapSpecs |
+		orderedConditionalPackageMapSpecs := Rowan platform orderedDictionaryClass new.
+		(conditionalPackageMapSpecs keys asSortedCollection: [:a :b | a <= b ]) do: [:platformName |
+			| orderedUserMap userMap |
+			orderedUserMap := Rowan platform orderedDictionaryClass new.
+			userMap := conditionalPackageMapSpecs at: platformName.
+			(userMap keys  asSortedCollection: [:a :b | a <= b ]) do: [:userName |
+				| attributeMap orderedAttributeMap |
+				attributeMap := userMap at: userName.
+				orderedAttributeMap  := Rowan platform orderedDictionaryClass new.
+				(attributeMap keys asSortedCollection: [:a :b | a <= b ]) do: [:attributeName |
+					orderedAttributeMap at: attributeName put: (attributeMap at: attributeName) ].
+				orderedUserMap at: userName put: orderedAttributeMap ].
+			orderedConditionalPackageMapSpecs at: platformName put: orderedUserMap ].
+		conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
 ]

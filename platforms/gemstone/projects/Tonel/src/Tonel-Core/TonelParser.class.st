@@ -263,7 +263,7 @@ TonelParser >> methodBody [
 		- I can have inner blocks
 		- I can mention a comment of the form ""$"" or a comment of the form '$'
 	 all that needs to be skipped "
-	| result char prevChar comment string count |
+	| result char prevChar comment string count startPos |
 	
 	result := self class writeStreamClass on: String new.
 
@@ -271,6 +271,8 @@ TonelParser >> methodBody [
 	string := false.
 	prevChar := nil.
 	count := 0.
+        startPos := stream position .
+        "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
 	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
 	[ stream atEnd not ]
 	whileTrue: [ 
@@ -328,7 +330,6 @@ TonelParser >> methodDef: aBlock [
 { #category : 'parsing' }
 TonelParser >> methodDefList [
 	| result classStream instanceStream |
-	
 	self separator. "to arrive to the end of the file in case there are no methods"
 	result := { {}. {} }.
 	classStream := (result at: 1) writeStreamPortable.
@@ -342,12 +343,15 @@ TonelParser >> methodDefList [
 						ifFalse: [ instanceStream nextPut: mDef ].
 					"skip possible spaces at the end"
 					self separator ]
-			] ] on: TonelParseError do:[:ex | 
-				lastSelectorParsed ifNotNil:[
-					GsFile gciLogServer:'Last selector parsed was: ', lastSelectorParsed printString ].
-				ex pass ].
+			] 
+  ] on: TonelParseError do:[:ex | 
+		lastSelectorParsed ifNotNil:[ | str |
+      str := ex details ifNil:[ '' ].
+      ex details: str, ', after tonel method selector: ', lastSelectorParsed printString 
+    ].
+		ex pass 
+  ].
 	^ result
-
 ]
 
 { #category : 'private factory' }
@@ -448,8 +452,7 @@ TonelParser >> shebang [
 
 	(stream peekFor: $#) ifFalse: [ ^ nil ].	
 	(stream peekFor: $!) ifFalse: [ ^ nil ].
-	stream  upTo: Character lf.
-
+	^ stream  upTo: Character lf.
 ]
 
 { #category : 'accessing' }
@@ -518,7 +521,8 @@ TonelParser >> type [
 
 { #category : 'parsing' }
 TonelParser >> typeDef [
-	self shebang. "ignore shebang on first line of file if present"
+	| shebang |
+	shebang := self shebang. "ignore shebang on first line of file if present"
 	^ self newTypeDefinitionFrom: { 
 		self separator.
 		self try: [ self comment ]. 
@@ -531,9 +535,9 @@ TonelParser >> typeDef [
 			normalizedMetadata := Dictionary new.
 			typeMetadata keysAndValuesDo: [:key :value |
 				normalizedMetadata at: key asLowercase asSymbol put: value ].
+			normalizedMetadata at: #shebang put: shebang.
 			normalizedMetadata ] 
 	}
-
 ]
 
 { #category : 'private parsing' }

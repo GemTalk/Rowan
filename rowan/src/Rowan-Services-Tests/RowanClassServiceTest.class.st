@@ -7,6 +7,14 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'Testing' }
+RowanClassServiceTest class >> isAbstract [
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #RowanClassServiceTest
+]
+
 { #category : 'patch' }
 RowanClassServiceTest >> createClassNamed: className [
 
@@ -158,16 +166,16 @@ RowanClassServiceTest >> setUp [
 
 	super setUp.
 	self createServicesTestClass. 
+	Rowan platform _alternateImageClass: Rowan image testImageClass.
 	self loadServicesTestProject.
-	Rowan platform _alternateImageClass: Rowan image testImageClass
 ]
 
 { #category : 'support' }
 RowanClassServiceTest >> tearDown [
 
 	super tearDown.
-	Rowan platform _alternateImageClass: nil.
 	self unloadServicesTestProject.
+	Rowan platform _alternateImageClass: nil.
 ]
 
 { #category : 'tests' }
@@ -221,6 +229,7 @@ RowanClassServiceTest >> test_behavior [
 { #category : 'tests' }
 RowanClassServiceTest >> test_classComment [
 	| classService behavior |
+
 	behavior := Rowan globalNamed: self servicesDefaultClassName. 
 	self assert: behavior comment equals: String new. 
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName meta: false. 

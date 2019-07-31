@@ -16,10 +16,17 @@ RwProject >> _specification [
 	^ self _loadedProject specification
 ]
 
+{ #category : 'actions' }
+RwProject >> audit [
+	"run audit on the receiver"
+
+	^ self _loadedProject audit
+]
+
 { #category : 'properties' }
 RwProject >> canCommit [
 
-	^ self _specification canCommit
+	^ self _loadedProject canCommit
 ]
 
 { #category : 'properties' }
@@ -58,6 +65,12 @@ RwProject >> existsOnDisk [
 			ifAbsent: [ false ]
 ]
 
+{ #category : 'exporting' }
+RwProject >> exportSpecification [
+
+	self _loadedProject asDefinition exportSpecification
+]
+
 { #category : 'accessing' }
 RwProject >> extendedClasses [
 
@@ -71,10 +84,31 @@ RwProject >> isDirty [
 
 ]
 
+{ #category : 'actions' }
+RwProject >> load [
+	"load the receiver into the image"
+
+	^ self _loadedProject load
+]
+
 { #category : 'properties' }
 RwProject >> loadedCommitId [
 
 	^ self _loadedProject loadedCommitId
+]
+
+{ #category : 'properties' }
+RwProject >> loadedConfigurationNames [
+	"Answer the list of configuration names that were explicitly specified when the project was loaded"
+
+	^ self _loadedProject loadedConfigurationNames
+]
+
+{ #category : 'properties' }
+RwProject >> loadedGroupNames [
+	"Answer the list of group names that were explicitly specified when the project was loaded"
+
+	^ self _loadedProject loadedGroupNames
 ]
 
 { #category : 'accessing' }
@@ -135,6 +169,13 @@ RwProject >> repositoryRoot [
 RwProject >> repositoryRootPath [
 
 	^ self repositoryRoot pathString
+]
+
+{ #category : 'actions' }
+RwProject >> unload [
+	"unload the receiver into the image"
+
+	^ self _loadedProject unload
 ]
 
 { #category : 'testing' }

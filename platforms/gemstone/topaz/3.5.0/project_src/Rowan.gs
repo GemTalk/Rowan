@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (CypressMethodDefinition
@@ -8,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -23,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -38,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -53,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '# GemStone version format
 
@@ -70,7 +75,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: 'RwSemanticVersionNumber conforms to version 2.0.0 of  [Semantic Versioning 2.0.0](http://semver.org/)
 
@@ -426,7 +432,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -441,7 +448,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'General way for Cypress to toss things up the stack for consideration by a higher authority.';
 		immediateInvariant.
@@ -456,7 +464,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -471,7 +480,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -486,7 +496,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -501,7 +512,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -516,7 +528,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -531,7 +544,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -546,7 +560,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -561,7 +576,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -576,7 +592,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -591,7 +608,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -606,7 +624,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -621,7 +640,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -636,7 +656,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -651,7 +672,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -666,7 +688,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -681,7 +704,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -696,7 +720,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -711,7 +736,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -726,7 +752,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -741,7 +768,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -756,7 +784,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -771,7 +800,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -786,7 +816,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -801,7 +832,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -816,7 +848,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -831,7 +864,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -846,7 +880,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -861,7 +896,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -876,7 +912,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -891,7 +928,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -906,7 +944,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -921,7 +960,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -936,7 +976,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -951,7 +992,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -966,7 +1008,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBParser takes a source code string and generates an AST for it. This is a hand-written, recursive descent parser and has been optimized for speed. The simplest way to call this is either ''RBParser parseExpression: aString'' if you want the AST for an expression, or ''RBParser parseMethod: aString'' if you want to parse an entire method.
 
@@ -993,10 +1036,27 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternParser is a subclass of RBParser that allows the extended syntax that creates matching trees. These trees can be used by the ParseTreeMatcher to search and transform source code.
 ';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBParser
+	subclass: 'RBTonelParser'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'AST-Core';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1009,7 +1069,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBParseTreeRule is the abstract superclass of all of the parse tree searching rules. A parse tree rule is the first class representation of a particular rule to search for. The owner of a rule is the algorithm that actually executes the search. This arrangement allows multiple searches to be conducted by a single Searcher.
 
@@ -1030,7 +1091,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReplaceRule is the abstract superclass of all of the transforming rules. The rules change the source code by replacing the node that matches the rule. Subclasses implement different strategies for this replacement.
 
@@ -1054,7 +1116,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBlockReplaceRule replaces the matching node by the result of evaluating replaceBlock. This allows arbitrary computation to come up with a replacement.
 
@@ -1073,7 +1136,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBStringReplaceRule replaces a matched tree with another tree (which may include metavariable from the matching tree). This is a very succint syntax for specifying most rewrites.
 
@@ -1093,7 +1157,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSearchRule is a parse tree rule that simply searches for matches to the rule. Every time a match is found, answerBlock is evaluated with the node that matches and the cureent answer. This two-argument approach allows a collection to be formed from all of the matches (Think inject:into:).
 
@@ -1113,7 +1178,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBProgramNode is an abstract class that represents an abstract syntax tree node in a Smalltalk program.
 
@@ -1150,7 +1216,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBMethodNode is the AST that represents a Smalltalk method.
 
@@ -1177,7 +1244,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternMethodNode is a RBMethodNode that will match other method nodes without their selectors being equal. 
 
@@ -1197,7 +1265,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPragmaNode is an AST node that represents a method pragma.
 
@@ -1219,7 +1288,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1234,7 +1304,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReturnNode is an AST node that represents a return expression.
 
@@ -1255,7 +1326,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSequenceNode is an AST node that represents a sequence of statements. Both RBBlockNodes and RBMethodNodes contain these.
 
@@ -1279,7 +1351,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBValueNode is an abstract class that represents a node that returns some value.
 
@@ -1306,7 +1379,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'A RBArrayNode is an AST node for runtime arrays.
 
@@ -1327,7 +1401,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBAssignmentNode is an AST node for assignment statements
 
@@ -1349,7 +1424,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBlockNode is an AST node that represents a block "[...]".
 
@@ -1374,7 +1450,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternBlockNode is the node in matching parse trees (it never occurs in normal Smalltalk code) that executes a block to determine if a match occurs. valueBlock takes two arguments, the first is the actual node that we are trying to match against, and second node is the dictionary that contains all the metavariable bindings that the matcher has made thus far.
 
@@ -1394,7 +1471,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternWrapperBlockNode allows further matching using a block after a node has been matched by a pattern node.
 
@@ -1412,7 +1490,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1427,7 +1506,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBCascadeNode is an AST node for cascaded messages (e.g., "self print1 ; print2").
 
@@ -1448,7 +1528,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literals.';
 		immediateInvariant.
@@ -1463,7 +1544,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'A RBLiteralArrayNode is an AST node that represents literal arrays and literal byte arrays.
 
@@ -1484,7 +1566,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literal values (e.g., #foo, true, 1, etc.), but not literal arrays.
 
@@ -1502,7 +1585,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBMessageNode is an AST node that represents a message send.
 
@@ -1525,7 +1609,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternMessageNode is a RBMessageNode that will match other message nodes without their selectors being equal. 
 
@@ -1544,7 +1629,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBVariableNode is an AST node that represent a variable (global, inst var, temp, etc.).
 
@@ -1564,7 +1650,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternVariableNode is an AST node that is used to match several other types of nodes (literals, variables, value nodes, statement nodes, and sequences of statement nodes).
 
@@ -1594,7 +1681,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBProgramNodeVisitor is an abstract visitor for the RBProgramNodes.
 
@@ -1611,7 +1699,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBConfigurableFormatter formats the Refactoring Browser''s parse trees. It has many more formatting options than the default formatter used by the RB. To change the RB to use this formatter, execute "RBProgramNode formatterClass: RBConfigurableFormatter". For some refactorings the RB must reformat the code after the change, so it is good to have a formatter configured to your tastes.
 
@@ -1635,7 +1724,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBFormatter formats a parse tree. It is an example of a Visitor. This is rarely called directly. Sending ''formattedCode'' to a parse tree uses this algorithm to return a pretty-printed version.
 
@@ -1658,7 +1748,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'ParseTreeSearcher walks over a normal source code parse tree using the visitor pattern, and then matches these nodes against the meta-nodes using the match:inContext: methods defined for the meta-nodes.
 
@@ -1680,7 +1771,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'ParseTreeRewriter walks over and transforms its RBProgramNode (tree). If the tree is modified, then answer is set to true, and the modified tree can be retrieved by the #tree method.
 
@@ -1698,7 +1790,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReadBeforeWrittenTester is a visitor that identifies variables that may have been read before they are initialized.
 
@@ -1720,7 +1813,8 @@ doit
 	classInstVars: #( classificationTable )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBScanner is a stream that returns a sequence of token from the string that it is created on. The tokens know where they came from in the source code and which comments were attached to them.
 
@@ -1755,10 +1849,27 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternScanner is a subclass of RBScanner that allows the extended syntax of pattern matching trees.
 ';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBScanner
+	subclass: 'RBTonelScanner'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'AST-Core';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1771,7 +1882,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSmallDictionary is a special dictionary optimized for small collections. In addition to the normal dictionary protocol, it also supports an #empty message which "empties" the collection but may hang on to the original elements (so it could collect garbage). Without #empty we would either need to create a new dictionary or explicitly remove everything from the dictionary. Both of these take more time and #empty.
 
@@ -1792,7 +1904,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBStringReplacement represents replacing source in the original method with a different string. These are used when reformatting code after a parse tree change has been made. Depending on the change, it may be possible to minimally change the parse tree without needing to format it.
 
@@ -1814,7 +1927,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBToken is the abstract superclass of all of the RB tokens. These tokens (unlike the standard parser''s) remember where they came from in the original source code.
 
@@ -1837,7 +1951,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBAssignmentToken is the first-class representation of the assignment token '':=''
 ';
@@ -1853,7 +1968,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1868,7 +1984,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBValueToken is the abstract superclass of all tokens that have additional information attached. For example, the BinarySelector token holds onto the actual character (e.g. $+).
 
@@ -1888,7 +2005,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBinarySelectorToken is the first-class representation of a binary selector (e.g. +)
 ';
@@ -1904,7 +2022,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBIdentifierToken is the first class representation of an identifier token (e.g. Class)
 ';
@@ -1920,7 +2039,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1935,7 +2055,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBKeywordToken is the first-class representation of a keyword token (e.g. add:)';
 		immediateInvariant.
@@ -1950,7 +2071,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1965,7 +2087,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralToken is the first-class representation of a literal token (entire literals, even literal arrays, are a single token in the ST80 grammar.).
 
@@ -1985,7 +2108,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -2000,7 +2124,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -2015,7 +2140,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternBlockToken is the first-class representation of the pattern block token.
 
@@ -2032,7 +2158,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSpecialCharacterToken is the first class representation of special characters.
 
@@ -2049,7 +2176,8 @@ doit
 	classInstVars: #( configuration )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Kernel';
 		comment: 'No class-specific documentation for Cypress, hierarchy is: 
 Object
@@ -2067,7 +2195,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Simple object with the results of the Jadeite command.';
 		immediateInvariant.
@@ -2082,7 +2211,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2097,7 +2227,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2112,7 +2243,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2127,7 +2259,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2142,7 +2275,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2157,7 +2291,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2172,7 +2307,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2187,7 +2323,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2202,7 +2339,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2217,7 +2355,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2232,7 +2371,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2247,7 +2387,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2262,7 +2403,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2277,7 +2419,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2292,7 +2435,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2307,7 +2451,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2322,7 +2467,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Rowan Service is the abstract service class for classes that represent
 first class entities in Rowan. They are transported to the client via 
@@ -2349,7 +2495,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'A place to put miscellaneous commands that don''t fit 
 well in other services. 
@@ -2363,13 +2510,30 @@ true.
 
 doit
 (RowanService
-	subclass: 'RowanBrowserService'
-	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount autoCommit )
+	subclass: 'RowanAutoCommitService'
+	instVarNames: #( autoCommit )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
+		category: 'Rowan-Services-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanService
+	subclass: 'RowanBrowserService'
+	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries selectedClass )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'RowanBrowserService handles services that fall outside
 the scope of other services.';
@@ -2380,12 +2544,13 @@ true.
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList )
+	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Most class operations done here. 
 
@@ -2402,7 +2567,24 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
+		category: 'Rowan-Services-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanService
+	subclass: 'RowanDictionaryService'
+	instVarNames: #( name classes hierarchyServices globals defaultTemplate )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2417,7 +2599,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2432,7 +2615,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2447,7 +2631,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2462,7 +2647,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2477,7 +2663,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2492,7 +2679,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2507,7 +2695,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2522,7 +2711,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2537,7 +2727,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2552,7 +2743,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2567,7 +2759,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2582,7 +2775,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2597,7 +2791,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2612,7 +2807,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2627,7 +2823,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2642,7 +2839,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2657,7 +2855,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2672,7 +2871,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2687,7 +2887,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2702,7 +2903,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2717,7 +2919,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2732,7 +2935,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract class with support for walking a modification tree and writing out the source code in a variety of formats:
 	topaz fileout
@@ -2750,9 +2954,10 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
-		comment: 'Example script that produces topaz bootstrap files for the Rowan projects:
+		comment: '  Example script that produces topaz bootstrap files for the Rowan projects:
 
 	| repositoryRootPath projectSetDefinition projectSetModification visitor |
 	repositoryRootPath := FileLocator dbfScratchDir / ''rowanBootstrap''.
@@ -2810,7 +3015,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2825,7 +3031,8 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2840,7 +3047,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2855,7 +3063,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2870,7 +3079,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2885,7 +3095,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2900,7 +3111,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: 'Fundamental concepts:
 
@@ -2929,7 +3141,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -2944,7 +3157,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: 'This class audits individual classes';
 		immediateInvariant.
@@ -2959,7 +3173,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -2974,7 +3189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -2989,7 +3205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3004,7 +3221,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3019,7 +3237,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3034,7 +3253,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3049,7 +3269,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3064,7 +3285,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3079,7 +3301,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3094,7 +3317,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3109,7 +3333,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3124,7 +3349,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3139,7 +3365,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3154,7 +3381,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3169,7 +3397,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3184,7 +3413,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3199,7 +3429,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3214,7 +3445,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3229,7 +3461,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3244,7 +3477,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3259,7 +3493,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3274,7 +3509,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3289,7 +3525,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3304,7 +3541,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3319,7 +3557,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3334,7 +3573,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3349,7 +3589,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3364,7 +3605,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3379,7 +3621,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3394,7 +3637,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3409,22 +3653,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
-		category: 'Rowan-Tools-Core';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwProjectTool
-	subclass: 'RwPrjSpecTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3439,7 +3669,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3454,7 +3685,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3469,7 +3701,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3484,7 +3717,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassAdditionOrRemoval, hierarchy is: 
 Object
@@ -3502,7 +3736,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Configuration that guides Cypress operation.
 
@@ -3532,7 +3767,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Abstract.
 Defines some "code" entity.
@@ -3554,7 +3790,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3569,7 +3806,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Defines a class.
 Properties should include ''name'' and ''super''.
@@ -3588,7 +3826,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Extends an existing class with additional methods.
 Properties must include ''name'', the name of the class to be extended, but should not include other things like ''super'' or ''instvars''.
@@ -3605,7 +3844,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3620,7 +3860,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3635,7 +3876,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3650,7 +3892,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3665,7 +3908,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3680,7 +3924,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3695,7 +3940,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3710,7 +3956,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3725,7 +3972,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3744,7 +3992,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3763,7 +4012,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3782,7 +4032,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3797,7 +4048,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Defines a package, which is a bunch of class definitions and class extensions.
 Properties include ''name''.
@@ -3815,7 +4067,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3825,12 +4078,13 @@ true.
 doit
 (RwProjectDefinition
 	subclass: 'RwComponentProjectDefinition'
-	instVarNames: #( components )
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3845,7 +4099,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3860,7 +4115,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3875,7 +4131,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to the elements of some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
 
@@ -3896,7 +4153,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
 		immediateInvariant.
@@ -3911,7 +4169,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassExtensionsModification, hierarchy is: 
 Object
@@ -3930,7 +4189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -3945,7 +4205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
 movedClasses are classes that have moved from one package to another within the package set.
@@ -3962,7 +4223,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
 movedClasses are classes that have moved from one package to another within the package set.
@@ -3979,7 +4241,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the instance or class methods defined by a class or class extension. The elements are method definitions. Key is selector (as string).';
 		immediateInvariant.
@@ -3994,7 +4257,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -4009,7 +4273,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
 		immediateInvariant.
@@ -4024,7 +4289,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the properties of a single entity. The elements are associations of propertyName -> propertyValue. Key is property name.';
 		immediateInvariant.
@@ -4039,7 +4305,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'DELETE ME';
 		immediateInvariant.
@@ -4054,7 +4321,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Holds some number of RwDefinitions or RwLoadedThingss to be operated on together. The entities put into the receiver should be at the same semantic level: all methods, class, packages , or projects.
 
@@ -4071,7 +4339,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypFileUtilities, hierarchy is: 
 Object
@@ -4089,7 +4358,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'No class-specific documentation for CypGemStoneFileUtilities, hierarchy is: 
 Object
@@ -4108,7 +4378,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'Keeps track of what LoadedPackages are in the GemStone repository, and is the gateway for operations to query or change the image.';
 		immediateInvariant.
@@ -4123,7 +4394,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'Walks a diff tree and adds patches to a patchSet that will update the GemStone image (repository) to the code state represented by the ''after'' state of the diff, provided that the ''before'' state of the diff is the current state of the image.';
 		immediateInvariant.
@@ -4138,7 +4410,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4153,7 +4426,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4168,7 +4442,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'Abstract. A patch is a single operation to be performed on a GemStone image (repository).';
 		immediateInvariant.
@@ -4183,7 +4458,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassPatch, hierarchy is: 
 Object
@@ -4202,7 +4478,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassAdditionPatch, hierarchy is: 
 Object
@@ -4221,7 +4498,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4236,7 +4514,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassDeletionPatch, hierarchy is: 
 Object
@@ -4255,7 +4534,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4270,7 +4550,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassPropertiesPatch, hierarchy is: 
 Object
@@ -4290,7 +4571,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4305,7 +4587,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVariableChangePatch, hierarchy is: 
 Object
@@ -4324,7 +4607,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVersioningPatch, hierarchy is: 
 Object
@@ -4343,7 +4627,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVersioningPatch, hierarchy is: 
 Object
@@ -4362,7 +4647,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodPatch, hierarchy is: 
 Object
@@ -4381,7 +4667,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodAdditionPatch, hierarchy is: 
 Object
@@ -4400,7 +4687,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodDeletionPatch, hierarchy is: 
 Object
@@ -4419,7 +4707,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4434,7 +4723,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4449,7 +4739,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodAdditionPatch, hierarchy is: 
 Object
@@ -4468,7 +4759,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4483,7 +4775,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodPropertiesPatch, hierarchy is: 
 Object
@@ -4503,7 +4796,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4518,7 +4812,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4533,7 +4828,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4548,7 +4844,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackagePatch, hierarchy is: 
 Object
@@ -4567,7 +4864,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4586,7 +4884,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4605,7 +4904,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4620,7 +4920,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackagePatch, hierarchy is: 
 Object
@@ -4639,7 +4940,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4658,7 +4960,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'A set of patches (changes) to be applied atomically (or as close to atomically as possible) to a GemStone repository.';
 		immediateInvariant.
@@ -4673,7 +4976,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4688,7 +4992,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'The Rowan-GemStone-Loader implementation does depend upon having a stable and consistent implementation of the RwGsSymbolDictionaryRegistry behavior for the duration of a load.
 
@@ -4731,7 +5036,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'properties: dictionary of properties
 name: name of class or package, selector of method
@@ -4748,7 +5054,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'package: the CypLoadedPackage that defines me and all my methods that are not extension methods.
 extensions: a collection of CypLoadedExtendedClasses for this class. From these we can tell which methods don''t belong to our default package.';
@@ -4764,7 +5071,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4779,7 +5087,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedClassExtension, hierarchy is: 
 Object
@@ -4798,7 +5107,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4813,7 +5123,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -4828,7 +5139,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedMethod, hierarchy is: 
 Object
@@ -4847,7 +5159,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'The MethodRegistry maps GsNMethods to LoadedMethods.';
 		immediateInvariant.
@@ -4862,7 +5175,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'repository: The repository I was loaded from (if known, nil otherwise)
 commitId: A repository-specific way of identifying source code commit, if it''s a type of repository that has that kind of information (nil otherwise)
@@ -4880,7 +5194,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4895,7 +5210,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -4905,12 +5221,13 @@ true.
 doit
 (RwLoadedProject
 	subclass: 'RwGsLoadedSymbolDictComponentProject'
-	instVarNames: #( loadedComponents )
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Components';
 		comment: '';
 		immediateInvariant.
@@ -4925,7 +5242,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4940,7 +5258,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -4955,7 +5274,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypMethodAdditionOrRemoval, hierarchy is: 
 Object
@@ -4973,7 +5293,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
 
@@ -4993,7 +5314,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single class definition or class extension.
 
@@ -5014,7 +5336,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5029,7 +5352,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -5044,7 +5368,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single method
 
@@ -5065,7 +5390,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5080,7 +5406,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5095,7 +5422,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5110,7 +5438,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
 
@@ -5131,7 +5460,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
 
@@ -5152,7 +5482,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5167,7 +5498,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5182,7 +5514,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents the move of a class definition from one package to another.';
 		immediateInvariant.
@@ -5197,7 +5530,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents a move of a method from a class definition to a class extension, or from a class extension to a class definition, or between two extensions, of the same class. This should always also result in a change of package, since a class should not be defined and extended in the same package, nor extended twice in the same package.';
 		immediateInvariant.
@@ -5212,7 +5546,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5227,7 +5562,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Kernel';
 		comment: 'Provides services specific to the Smalltalk dialect being run,
 and locates other services that are dialect-specific.';
@@ -5243,7 +5579,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'This class is private to Cypress.
 A GsPlatform is the gateway object for requesting platform-specific actions.';
@@ -5259,7 +5596,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -5269,12 +5607,13 @@ true.
 doit
 (RwProjectLoadConfigurationVisitor
 	subclass: 'RwProjectLoadComponentVisitor'
-	instVarNames: #( projectNames projectBasePath projectLoadSpecs )
+	instVarNames: #( projectNames projectBasePath projectLoadSpecs visitedComponents projectComponentDefinition )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -5289,7 +5628,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -5304,7 +5644,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
 Object
@@ -5324,7 +5665,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
 Object
@@ -5344,7 +5686,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5359,7 +5702,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5374,7 +5718,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5389,7 +5734,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5404,7 +5750,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5419,7 +5766,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5429,12 +5777,13 @@ true.
 doit
 (RwProjectSpecification
 	subclass: 'RwComponentSpecification'
-	instVarNames: #( projectName projectsPath defaultComponentName )
+	instVarNames: #( projectName projectAlias projectsPath defaultComponentName defaultGroupName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -5449,7 +5798,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: 'RwPackageLoadSpecification new
     specName: ''rowanLoadSpec'';
@@ -5473,7 +5823,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5488,7 +5839,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5503,7 +5855,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5518,7 +5871,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5533,7 +5887,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'A Uniform Resource Locator.  It specifies the location of a document on the Internet.  The base class is abstract; child classes break different types of URLs down in ways appropriate for that type.
 
@@ -5591,7 +5946,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class models a file URL according to (somewhat) RFC1738, see http://www.w3.org/Addressing/rfc1738.txt
 
@@ -5653,7 +6009,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the cypress: scheme:
 
@@ -5682,7 +6039,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the tonel: scheme:
 
@@ -5703,7 +6061,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the filetree: scheme[1]:
 
@@ -5724,7 +6083,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the github: scheme[1]:
 
@@ -5745,7 +6105,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'a URL type that can''t be broken down in any systematic way.  For example, mailto: and telnet: URLs.  The part after the scheme name is stored available via the #locator message.';
 		immediateInvariant.
@@ -5760,7 +6121,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'A URL which has a hierarchical encoding.  For instance, http and ftp URLs are hierarchical.';
 		immediateInvariant.
@@ -5775,7 +6137,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the smalltalk: scheme:
 
@@ -5801,7 +6164,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the gitfiletree: scheme:
 
@@ -5839,7 +6203,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5854,7 +6219,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5869,7 +6235,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5884,7 +6251,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5899,7 +6267,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Kernel-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5914,7 +6283,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5929,7 +6299,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5944,8 +6315,25 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TonelParser
+	subclass: 'NewTonelParser'
+	instVarNames: #( methodParser currentMethodNode methodBodyStart )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
 true.
@@ -8677,11 +9065,11 @@ category: 'jadeite'
 method: JadeServer
 autoCommitIfRequired
 	| commitResult |
-	RowanService autoCommit == true ifTrue:[
+	Rowan serviceClass autoCommit == true ifTrue:[
 		commitResult := System commitTransaction.
-		RowanBrowserService new autoCommit: 
+		RowanAutoCommitService new autoCommit:  
 			(commitResult 
-				ifTrue:[true]
+				ifTrue:[true] 
 				ifFalse:[#failed])].
 %
 
@@ -8865,18 +9253,13 @@ compile: aString frame: anInteger process: aGsProcess
 	selector := oldMethod selector.
 	selector isNil ifTrue: [^result].
 	category := self _behavior: aBehavior categoryOfSelector: selector.
-	result := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [ 
-						[ aBehavior rwCompileMethod: aString category: category ]
+	result := [[ aBehavior rwCompileMethod: aString category: category ]
 							on: RwExecuteClassInitializeMethodsAfterLoadNotification
-							do: [:ex | ex resume: false ] ]
-					ifFalse: 
-						[self
-							compileMethod: aString
-							behavior: aBehavior
-							user: nil
-							inCategory: category].
+							do: [:ex | ex resume: false ]] 
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
+
+					
 	^result
 %
 
@@ -11846,10 +12229,7 @@ method: JadeServer
 sbRemoveMethods: anOrderedCollection
 	| behavior classEntity  notRemoved|
 	behavior := self sbClassFrom: anOrderedCollection.
-	classEntity := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta]
-					ifFalse: [behavior].
+	classEntity := Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta.
 	notRemoved := Array new. 
 	anOrderedCollection do: [:each | classEntity removeSelector: each asSymbol ifAbsent: [notRemoved add: each]].
 	self systemBrowserUpdate.
@@ -12925,8 +13305,7 @@ category: 'category'
 method: JadeServer
 symbolList
 
-	^System myUserProfile symbolList.
-
+	^Rowan image symbolList
 %
 
 category: 'category'
@@ -13119,7 +13498,7 @@ category: 'jadeite'
 method: JadeServer
 updateFromSton: stonString
 	| services organizer resultString |
-	RowanCommandResult initializeResults.
+	Rowan commandResultClass initializeResults. 
 	services := STON fromString: stonString.
 	organizer := ClassOrganizer new.
 	services do: 
@@ -13129,8 +13508,8 @@ updateFromSton: stonString
 			service command ifNil:[service command: #update]. 
 			service servicePerform: service command withArguments: service commandArgs].
 	self autoCommitIfRequired.
-	RowanLoggingService current logSentServices. 
-	resultString := STON toString: RowanCommandResult results.
+	Rowan loggingServiceClass current logSentServices. 
+	resultString := STON toString: Rowan commandResultClass results.
 	^resultString
 %
 
@@ -13836,7 +14215,7 @@ metacelloConfigurations
 
 	| list |
 	list := Array new.
-	GsSession currentSession symbolList do: [:eachSymbolList | 
+	Rowan image symbolList do: [:eachSymbolList | 
 		eachSymbolList do: [:eachGlobal | 
 			(eachGlobal isBehavior and: [
 			(eachGlobal class includesSelector: #'isMetacelloConfig') and: [
@@ -13844,7 +14223,6 @@ metacelloConfigurations
 		].
 	].
 	^list
-
 %
 
 category: 'category'
@@ -13858,20 +14236,16 @@ objectForOop: anInteger
 category: 'category'
 method: JadeServer64bit
 recompile: aMethod withSource: aString
-	| result behavior |
+	| behavior |
 	behavior := aMethod inClass.
-	((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent: [false])
-		ifTrue: 
-			[ [ behavior rwCompileMethod: aString
+	[[ behavior rwCompileMethod: aString
 				category: (self _behavior: behavior categoryOfSelector: aMethod selector) ]
 					on: RwExecuteClassInitializeMethodsAfterLoadNotification
-					do: [:ex | ex resume: false ].
+					do: [:ex | ex resume: false ]]
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
 			Rowan serviceClass rowanFixMe.	"need to handle compile errors"
-			^true]
-		ifFalse: 
-			[result := aMethod _recompileWithSource: aString.
-			result isNil ifTrue: [^true].	"Bug 41195 returns nil if success so assume it is the same method"
-			^result]
+			^true
 %
 
 category: 'category'
@@ -14143,17 +14517,13 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 
 	| method warnings | 
 
-	[[((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent:[false]) ifTrue:[
-			[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
+	[[ 
+			[[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
 					on: RwExecuteClassInitializeMethodsAfterLoadNotification
-					do: [:ex | ex resume: false ] ]
-		ifFalse:[
-			method := aBehavior
-			compileMethod: methodString
-			dictionaries: aSymbolList
-			category: categorySymbol
-			environmentId: environment].
-	] on: CompileError do: [:ex |
+					do: [:ex | ex resume: false ]]
+						on: RwPerformingUnpackagedEditNotification
+						do: [:ex | ex resume ].
+		] on: CompileError do: [:ex |
 		^nil -> (ex gsArguments at: 1)
 	]] on: CompileWarning do: [:ex |
 		warnings := ex gsArguments at: 1.
@@ -15820,6 +16190,212 @@ category: 'private-classes'
 method: RBPatternParser
 variableNodeClass
 	^RBPatternVariableNode
+%
+
+! Class implementation for 'RBTonelParser'
+
+!		Instance methods for 'RBTonelParser'
+
+category: 'accessing'
+method: RBTonelParser
+currentToken
+
+	^currentToken
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelKeywordPattern
+	" do not process $[ token .. caller will do the right thing"
+
+	| keywords args node continue |
+	keywords := OrderedCollection new.
+	args := OrderedCollection new.
+	continue := true.
+	[  continue and: [ currentToken isKeyword ]  ]
+		whileTrue:
+			[keywords add: currentToken.
+			continue := (self peekTonelFor: #special value: $[) not.
+			continue ifTrue: [ self step ].
+			args add: self parseTonelVariableNode].
+	node := self methodNodeClass
+		selectorParts: keywords
+		arguments: args.
+	node comments: (node comments, args last comments).
+	args last comments: nil.
+	^node
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelMessagePattern
+
+	currentToken isLiteralToken ifTrue: [self patchTonelLiteralMessage].
+	^ currentToken isIdentifier 
+		ifTrue: [ self parseTonelUnaryPattern]
+		ifFalse: 
+			[currentToken isKeyword 
+				ifTrue: [self parseTonelKeywordPattern]
+				ifFalse: [self parseTonelBinaryPattern] ]
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelPragmas
+	| pragma start |
+	[ currentToken isBinary and: [ currentToken value = #< ] ] whileTrue: [
+		start := currentToken start.
+		self step.
+		pragma := self parsePragma.
+		(currentToken isBinary and: [ currentToken value = #> ]) 
+			ifFalse: [ self parserError: '''>'' expected' ].
+		pragma left: start; right: currentToken start.
+		pragmas isNil
+			ifTrue: [ pragmas := OrderedCollection new ].
+		pragmas addLast: pragma.
+		self step ]
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelPrimitiveIdentifier
+	| token node |
+	token := currentToken.
+	(self peekTonelFor: #special value: $[)
+		ifFalse: [ self step ].
+	node := self variableNodeClass identifierToken: token.
+	self addCommentsTo: node.
+	^node
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelStatementList: pragmaBoolean into: sequenceNode 
+	| statements return periods returnPosition node |
+	return := false.
+	statements := OrderedCollection new.
+	periods := OrderedCollection new.
+	self addCommentsTo: sequenceNode.
+	pragmaBoolean ifTrue: [self parsePragmas].
+	[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+		[periods add: currentToken start.
+		self step].
+	[self atEnd 
+		or: [currentToken isSpecial and: ['])}' includes: currentToken value]]] 
+			whileFalse: 
+				[return ifTrue: [self parserError: 'End of statement list encounted'].
+				(currentToken isSpecial and: [currentToken value = $^]) 
+					ifTrue: 
+						[returnPosition := currentToken start.
+						self step.
+						node := self returnNodeClass return: returnPosition
+									value: self parseAssignment.
+						statements add: node.
+						return := true]
+					ifFalse: 
+						[node := self parseAssignment.
+						statements add: node].
+				(currentToken isSpecial and: [currentToken value = $.]) 
+					ifTrue: 
+						[periods add: currentToken start.
+						self step.
+						self addCommentsTo: node]
+					ifFalse: [return := true].
+				[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+					[periods add: currentToken start.
+					self step]].
+	statements notEmpty ifTrue: [self addCommentsTo: statements last].
+	sequenceNode
+		statements: statements;
+		periods: periods.
+	^sequenceNode
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelStatements: pragmaBoolean 
+	| args leftBar rightBar |
+	args := #().
+	leftBar := rightBar := nil.
+	currentToken isBinary 
+		ifTrue: 
+			[currentToken value = #| 
+				ifTrue: 
+					[leftBar := currentToken start.
+					self step.
+					args := self parseArgs.
+					(currentToken isBinary and: [currentToken value = #|]) 
+						ifFalse: [self parserError: '''|'' expected'].
+					rightBar := currentToken start.
+					self step]
+				ifFalse: 
+					[currentToken value = #'||' 
+						ifTrue: 
+							[rightBar := (leftBar := currentToken start) + 1.
+							self step]]].
+	^self parseTonelStatementList: pragmaBoolean
+		into: (self sequenceNodeClass 
+				leftBar: leftBar
+				temporaries: args
+				rightBar: rightBar)
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelUnaryPattern
+	"only used when parsing the tonel method selector line"
+
+	| selector |
+	selector := currentToken.
+	^self methodNodeClass selectorParts: (Array with: selector) arguments: #()
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelVariableNode
+	currentToken isIdentifier 
+		ifFalse: [self parserError: 'Variable name expected'].
+	^self parseTonelPrimitiveIdentifier
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+peekTonelFor: characterType value: characterValue
+
+	^ self scanner peekTonelFor: characterType value: characterValue
+%
+
+category: 'accessing'
+method: RBTonelParser
+scanner
+
+	^scanner
+%
+
+category: 'accessing'
+method: RBTonelParser
+scannerClass
+	^RBTonelScanner
+%
+
+category: 'testing'
+method: RBTonelParser
+tonelMethodBodyTerminationToken
+	^ currentToken isSpecial and: [ currentToken value = $] ]
+%
+
+category: 'private'
+method: RBTonelParser
+tonelStep
+	"only used when parsing the tonel method selector line"
+
+	(currentToken notNil and: [currentToken comments notNil]) 
+		ifTrue: [comments addAll: currentToken comments].
+	nextToken notNil 
+		ifTrue: 
+			[currentToken := nextToken.
+			nextToken := nil]
+		ifFalse: [currentToken := scanner tonelNext]
 %
 
 ! Class implementation for 'RBParseTreeRule'
@@ -24323,6 +24899,46 @@ scanToken
 	^super scanToken
 %
 
+! Class implementation for 'RBTonelScanner'
+
+!		Instance methods for 'RBTonelScanner'
+
+category: 'private'
+method: RBTonelScanner
+peekTonelFor: aCharacterType value: aCharacterValue
+
+	^ currentCharacter = aCharacterValue and: [ characterType =  aCharacterType ]
+%
+
+category: 'error handling'
+method: RBTonelScanner
+stream
+	^stream
+%
+
+category: 'accessing'
+method: RBTonelScanner
+tonelNext
+	"only used when parsing the tonel method selector line"
+
+	| token |
+(characterType == #special and: [currentCharacter = $[ ])
+	ifFalse: [ 
+		 characterType ~~ #eof
+			ifTrue: [ self error: 'Cannot parse Tonel method body. Missing ''[''.' ] ].
+	buffer reset.
+	tokenStart := stream position.
+	token := characterType = #eof 
+				ifTrue: 
+					[RBToken start: tokenStart + 1	"The EOF token should occur after the end of input"]
+				ifFalse: [self scanToken].
+	self stripSeparators.
+"don't read comments"
+	false ifTrue: [ token comments: self getComments ].
+"skip the $[ and get next token"
+	^self next
+%
+
 ! Class implementation for 'RBSmallDictionary'
 
 !		Class methods for 'RBSmallDictionary'
@@ -25025,6 +25641,13 @@ automaticClassInitializationBlackList
 
 category: 'public client services'
 classmethod: Rowan
+browserServiceClass
+
+	^ self platform browserServiceClass
+%
+
+category: 'public client services'
+classmethod: Rowan
 classServiceClass
 
 	^ self platform classServiceClass
@@ -25054,6 +25677,13 @@ clearDefaultAutomaticClassInitializationBlackList
 		Individual users may override the black list."
 
 	^ self platform clearAutomaticClassInitializationBlackList_default
+%
+
+category: 'public client services'
+classmethod: Rowan
+commandResultClass
+
+	^ self platform commandResultClass
 %
 
 category: 'public'
@@ -25110,6 +25740,13 @@ classmethod: Rowan
 jadeServerClassNamed: className
 
 	^ self platform jadeServerClassNamed: className
+%
+
+category: 'public client services'
+classmethod: Rowan
+loggingServiceClass
+
+	^ self platform loggingServiceClass
 %
 
 category: 'public client services'
@@ -25450,7 +26087,7 @@ category: 'private'
 method: RowanClassesUpdate
 objectInBaseNamed: aString
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
+	^Rowan image symbolList objectNamed: aString asSymbol
 %
 
 category: 'accessing'
@@ -26676,11 +27313,19 @@ _loadedProject
 
 !		Instance methods for 'RwProject'
 
+category: 'actions'
+method: RwProject
+audit
+	"run audit on the receiver"
+
+	^ self _loadedProject audit
+%
+
 category: 'properties'
 method: RwProject
 canCommit
 
-	^ self _specification canCommit
+	^ self _loadedProject canCommit
 %
 
 category: 'properties'
@@ -26722,6 +27367,13 @@ existsOnDisk
 			ifAbsent: [ false ]
 %
 
+category: 'exporting'
+method: RwProject
+exportSpecification
+
+	self _loadedProject asDefinition exportSpecification
+%
+
 category: 'accessing'
 method: RwProject
 extendedClasses
@@ -26736,11 +27388,35 @@ isDirty
 	^self _loadedProject isDirty
 %
 
+category: 'actions'
+method: RwProject
+load
+	"load the receiver into the image"
+
+	^ self _loadedProject load
+%
+
 category: 'properties'
 method: RwProject
 loadedCommitId
 
 	^ self _loadedProject loadedCommitId
+%
+
+category: 'properties'
+method: RwProject
+loadedConfigurationNames
+	"Answer the list of configuration names that were explicitly specified when the project was loaded"
+
+	^ self _loadedProject loadedConfigurationNames
+%
+
+category: 'properties'
+method: RwProject
+loadedGroupNames
+	"Answer the list of group names that were explicitly specified when the project was loaded"
+
+	^ self _loadedProject loadedGroupNames
 %
 
 category: 'accessing'
@@ -26808,6 +27484,14 @@ method: RwProject
 repositoryRootPath
 
 	^ self repositoryRoot pathString
+%
+
+category: 'actions'
+method: RwProject
+unload
+	"unload the receiver into the image"
+
+	^ self _loadedProject unload
 %
 
 category: 'testing'
@@ -26949,7 +27633,7 @@ createSymbolDictionaryNamed: aName
 	| dictionary size |
 	dictionary := SymbolDictionary new.
 	dictionary at: aName asSymbol put: dictionary.
-	size := System myUserProfile symbolList size.
+	size := Rowan image symbolList size.
 	System myUserProfile insertDictionary: dictionary at: size + 1.
 	^ dictionary
 %
@@ -26987,6 +27671,56 @@ method: RowanService
 excludedInstVars
 
 	^#( #organizer)
+%
+
+category: 'commands support'
+method: RowanService
+extendHierarchies: hierarchies
+	
+	"extend the hierarchies by one level
+	of subclasses"
+
+	| extendedHierarchies |
+	extendedHierarchies := Array new. 
+	hierarchies do:[:hierarchy |
+		| theClass subclasses |
+		theClass := hierarchy last. 
+		(subclasses := organizer subclassesOf: theClass) isEmpty 
+			ifTrue:[extendedHierarchies add: hierarchy]
+			ifFalse:[
+				subclasses do:[:sub |
+					extendedHierarchies add: (hierarchy copy add: sub; yourself)
+				]]].
+	^extendedHierarchies
+%
+
+category: 'commands support'
+method: RowanService
+hierarchiesByLevel: hierarchies
+
+	"Return dictionary of classes by level. 
+	Example: 
+		hierarchies - #(#(Object Collection Array) #(Object AbstractException Exception))
+	Return: 
+		#(#nil->#(Object) Object->#(Collection AbstractException) Collection->#(Array) AbstractException->#(Exception)
+	"
+	| levels |
+	levels := hierarchies inject: Dictionary new into:[:dict :chain | 
+		1 to: chain size do: [:index | 
+			| cls theSuper classSet |
+			cls := chain at: index.
+			classSet := dict at: cls ifAbsentPut: [Array new].
+			index = 1 
+		ifTrue:[
+			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
+			((dict at: #'nil') includes: cls) ifFalse:[(dict at: #'nil') add: cls].
+		]
+		ifFalse:[
+				theSuper := chain at: index - 1.
+				((dict at: theSuper) includes: cls) ifFalse:[(dict at: theSuper) add: cls]
+				]].
+			dict].
+	^levels
 %
 
 category: 'initialization'
@@ -27055,7 +27789,7 @@ method: RowanService
 removeSymbolDictionaryNamed: aName
 
 	| index |
-	index := System myUserProfile symbolList names indexOf: aName asSymbol.
+	index := Rowan image symbolList names indexOf: aName asSymbol.
 	index ~= 0 ifTrue:[
 		System myUserProfile removeDictionaryAt: index]
 %
@@ -27113,6 +27847,25 @@ servicePerform: symbol withArguments: collection
 	^super perform: symbol withArguments: collection.
 %
 
+category: 'commands support'
+method: RowanService
+services: services from: levels expand: toExpand classes: theClasses
+
+	(theClasses collect:[:svc | svc theClass]) do:[:aClass |
+		toExpand addAll: (organizer allSuperclassesOf: aClass)].
+	levels keysAndValuesDo: [:key :value |
+		| newKey service  | 
+		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
+			service := (RowanClassService new classServiceFromOop: key asOop).
+			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
+			service].
+		services at: newKey put: (value collect:[:cls | 
+				service := (RowanClassService new classServiceFromOop: cls asOop).
+				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
+				service
+				])]
+%
+
 category: 'replication'
 method: RowanService
 stonOn: stonWriter
@@ -27136,6 +27889,16 @@ stonStringFor: anObject
 	suitable for replicating on the client."
 
 	^STON toString: anObject
+%
+
+category: 'commands support'
+method: RowanService
+superclassChainsFor: behaviors
+	organizer := ClassOrganizer new. 
+	^behaviors collect:[:behavior | | supers |
+			supers := organizer allSuperclassesOf: behavior. 
+			supers add: behavior. 
+			supers].
 %
 
 category: 'symbol dictionaries'
@@ -27248,7 +28011,7 @@ category: 'client commands'
 method: RowanAnsweringService
 exec: aString context: oop
 
-	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: GsSession currentSession symbolList) asOop] 
+	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: Rowan image symbolList) asOop] 
 		on: CompileError do: [:ex | 
 			false -> ex errorDetails
 	].
@@ -27311,7 +28074,7 @@ runMethodTests: methodServices
 	| behavior |
 	methodServices do:[:methodService |
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
-			behavior := methodService theClass. 
+			behavior := methodService classFromName. 
 			behavior debug: methodService selector]].
 	answer := true. 
 	RowanCommandResult initializeResults. "squash any client updates during server test run"
@@ -27365,6 +28128,29 @@ turnOffTranscriptWrites
 		self flipTranscript]
 %
 
+! Class implementation for 'RowanAutoCommitService'
+
+!		Instance methods for 'RowanAutoCommitService'
+
+category: 'client commands'
+method: RowanAutoCommitService
+autoCommit: boolean
+
+	self class setAutoCommit: boolean.
+	autoCommit := self class autoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanAutoCommitService
+flipAutoCommit
+
+	autoCommit := self class flipAutoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+%
+
 ! Class implementation for 'RowanBrowserService'
 
 !		Instance methods for 'RowanBrowserService'
@@ -27375,6 +28161,7 @@ abortTransaction
 
 	System abortTransaction.
 	self updateProjects.
+	self updateDictionaries. 
 	self packagesWithTests.
 	self updateType: #aborted:browser:.
 %
@@ -27382,7 +28169,6 @@ abortTransaction
 category: 'client commands'
 method: RowanBrowserService
 allClasses
-
 	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
 	allClasses addAll: (organizer classes collect:[:class | 
 			| service |
@@ -27398,12 +28184,38 @@ allClasses
 
 category: 'client commands'
 method: RowanBrowserService
-autoCommit: object
-
-	RowanService setAutoCommit: object.
-	autoCommit := RowanService autoCommit. 
-	updateType := #autoCommitUpdate:.
+classHierarchy
+	| theClasses |
+	theClasses := allClasses collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	updateType := #classHierarchyUpdate:browser:. 
 	RowanCommandResult addResult: self.
+%
+
+category: 'private'
+method: RowanBrowserService
+classHierarchy: theClasses
+	| superclassChains levels services hierarchies toExpand |
+	superclassChains := self superclassChainsFor: theClasses. 
+	hierarchies := self extendHierarchies: superclassChains. 
+	levels := self hierarchiesByLevel: hierarchies.
+	services := Dictionary new. 
+	toExpand := Set new. 
+	self services: services from: levels expand: toExpand.
+	hierarchyServices := services reject:[:array | array isEmpty].
+	hierarchyServices copy keysAndValuesDo:[:key :value | 
+		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
+	^hierarchyServices
+%
+
+category: 'client commands'
+method: RowanBrowserService
+compileClass: definitionString
+
+	|  anonymousMethod |
+	anonymousMethod := definitionString _compileInContext: nil 
+       symbolList: Rowan image symbolList.
+	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 %
 
 category: 'client commands'
@@ -27429,15 +28241,6 @@ findRemovedServices: services
 				RowanCommandResult addResult: service.
 		]
 	].
-%
-
-category: 'client commands'
-method: RowanBrowserService
-flipAutoCommit
-
-	autoCommit := RowanService flipAutoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
 %
 
 category: 'window registry'
@@ -27470,10 +28273,31 @@ packagesWithTests
 
 category: 'client commands'
 method: RowanBrowserService
+recompileMethodsAfterClassCompilation
+  "compileClass: must be run first"
+
+  | theClass classService packageService |
+  theClass := [ (UserGlobals at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    ensure: [ UserGlobals at: #'jadeiteCompileClassMethod' put: nil ].
+  classService := RowanClassService new name: theClass name.
+  classService update.
+  classService isNewClass: true.
+  packageService := RowanPackageService
+    forPackageNamed: classService packageName.
+  packageService update.
+  packageService selectedClass: classService.
+  RowanCommandResult addResult: classService.
+  selectedClass := classService.
+  updateType := #none. 
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanBrowserService
 releaseWindowHandle: integer
 
 	| registry |
-	RowanLoggingService current logComment: 'Release window with handle: ', integer printString. 
+	Rowan loggingServiceClass current logComment: 'Release window with handle: ', integer printString. 
 	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
 	registry removeKey: integer ifAbsent: []
 %
@@ -27487,6 +28311,22 @@ reloadProjects: projectServices andUpdateServices: services
 	projectNames := projectServices collect: [:projectService | projectService name]. 
 	services do:[:service | 
 		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+%
+
+category: 'client commands'
+method: RowanBrowserService
+removeDictionariesNamed: dictionaryNames
+	"remove from both transient & persistent symbol lists" 
+
+	dictionaryNames do:[:dictionaryName | 
+		| dictionaryNameSymbol |
+		dictionaryNameSymbol := dictionaryName asSymbol.
+		(Rowan image symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			Rowan image symbolList removeDictionaryNamed: dictionaryNameSymbol].
+		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
+	self updateDictionaries.
+	System commitTransaction.
 %
 
 category: 'client commands'
@@ -27523,10 +28363,24 @@ saveRootObject: oop windowHandle: integer
 	dictionary at: integer put: (Object _objectForOop: oop).
 %
 
+category: 'other'
+method: RowanBrowserService
+selectedClass
+
+	^selectedClass
+%
+
 category: 'perform'
 method: RowanBrowserService
 servicePerform: symbol withArguments: collection
 	super perform: symbol withArguments: collection.
+%
+
+category: 'command support'
+method: RowanBrowserService
+services: services from: levels expand: toExpand
+
+	^super services: services from: levels expand: toExpand classes: allClasses
 %
 
 category: 'client commands'
@@ -27549,12 +28403,22 @@ update
 
 category: 'client commands'
 method: RowanBrowserService
+updateDictionaries
+
+	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
+	dictionaries := dictionaries asOrderedCollection. 
+	updateType := #dictionaryListUpdate:.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanBrowserService
 updateProjects
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
 	sortedProjects addAll:  Rowan image loadedProjects.
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
-	updateType := #projectsUpdate:.
+	updateType := #projectsUpdate:browser:.
 	RowanCommandResult addResult: self
 %
 
@@ -27625,6 +28489,13 @@ addCategory: string
 	theClass addCategory: string.
 %
 
+category: 'constants'
+method: RowanClassService
+addSubclassWarningString
+
+	^'Superclass is not packaged. Enter the desired package name'
+%
+
 category: 'Accessing'
 method: RowanClassService
 allTests
@@ -27677,8 +28548,9 @@ basicRefreshFrom: theClass
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
 %
 
@@ -27814,16 +28686,18 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 
 	| method warnings |
 	
-	[ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol  ]
+	[ [ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol. Transcript cr; show: method printString]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
-		do: [:ex | ex resume: false ] ] 
+		do: [:ex | ex resume: false ]]
 			on: CompileError
 			do: [:ex | ^nil -> (ex gsArguments at: 1)]]
 				on: CompileWarning
 				do: 
 					[:ex | 
 					warnings := ex warningString.
-					ex resume].
+					ex resume]]
+					on: RwPerformingUnpackagedEditNotification
+					do: [:ex | ex resume ] .
 	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
 		do: [:ex | ex return: method -> warnings]
 %
@@ -28104,8 +28978,9 @@ minimalRefreshFrom: theClass
 	oop := theClass asOop.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	template := self classCreationTemplate.
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
@@ -28140,7 +29015,7 @@ category: 'private'
 method: RowanClassService
 objectInBaseNamed: aString
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
+	^Rowan image symbolList objectNamed: aString asSymbol
 %
 
 category: 'client commands'
@@ -28309,7 +29184,9 @@ removeSelector: selector ifAbsent: absentBlock
 	theClass := self theClass. 
 	meta ifTrue: [theClass := theClass class].
 	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
-	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
+	[self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta]
+		on: RwPerformingUnpackagedEditNotification
+		do: [:ex | ex resume ]
 %
 
 category: 'client commands'
@@ -28416,7 +29293,7 @@ saveMethodSource: source category: category
 	compilationResult := self		
 		compileMethod: source 
 		behavior: behavior 
-		symbolList: System myUserProfile symbolList
+		symbolList: Rowan image symbolList
 		inCategory: updatedCategory asSymbol.
 	(gsNMethod := compilationResult key) isNil ifTrue: [
 		System
@@ -28496,6 +29373,16 @@ setComment
 	comment isNil ifTrue: [comment := String new].
 %
 
+category: 'private'
+method: RowanClassService
+setDictionary: classOrMeta
+	| dictionaryList |
+		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta.
+		dictionaryName := dictionaryList isEmpty 
+		ifTrue:[String new]
+		ifFalse:[dictionaryList first first name asString].
+%
+
 category: 'Updating'
 method: RowanClassService
 setIsTestCase
@@ -28521,11 +29408,18 @@ setVisibleTests
 category: 'client commands'
 method: RowanClassService
 subclassCreationTemplate
-	| answerService |
-	answerService := RowanAnsweringService new. 
-	answerService answer: (self browserTool classCreationTemplateForSubclassOf: name 
-								className: 'NewSubclass' category: self theClass rowanPackageName).
-	RowanCommandResult addResult: answerService.
+  | answerService newClassPackageName |
+  answerService := RowanAnsweringService new.
+  newClassPackageName := self theClass rowanPackageName = Rowan unpackagedName
+    ifTrue: [ self addSubclassWarningString ]
+    ifFalse: [ self theClass rowanPackageName ].
+  answerService
+    answer:
+      (self browserTool
+        classCreationTemplateForSubclassOf: name
+        className: 'NewSubclass'
+        category: newClassPackageName).
+  RowanCommandResult addResult: answerService
 %
 
 category: 'private'
@@ -28632,11 +29526,8 @@ updatePackageProject
 
 	packageService := RowanPackageService new name: packageName. 
 	packageService update. 
-	RowanCommandResult addResult: packageService.
-
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
-	RowanCommandResult addResult: projectService.
 %
 
 category: 'Accessing'
@@ -28710,6 +29601,139 @@ update
 	ProcessorScheduler scheduler suspendedProcesses 	do: [:each | processes add: (RowanProcessService onSuspendedProcess: 	each)].
 	ProcessorScheduler scheduler waitingProcesses 		do: [:each | processes add: (RowanProcessService onWaitingProcess: 		each)].
 	RowanCommandResult addResult: self.
+%
+
+! Class implementation for 'RowanDictionaryService'
+
+!		Instance methods for 'RowanDictionaryService'
+
+category: 'client commands'
+method: RowanDictionaryService
+classHierarchy
+	| theClasses |
+	self update. 
+	theClasses := classes collect:[:classService | classService theClass].
+	"reuse behavior in package service for now" 
+	hierarchyServices := (RowanPackageService new classes: classes) classHierarchy: theClasses. 
+	RowanCommandResult addResult: self.
+%
+
+category: 'Updating'
+method: RowanDictionaryService
+defaultTemplate: newValue
+	defaultTemplate := newValue
+%
+
+category: 'command support'
+method: RowanDictionaryService
+genericClassCreationTemplate
+
+	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: nil packageName: nil
+%
+
+category: 'initialization'
+method: RowanDictionaryService
+initialize
+
+	self setDefaultTemplate
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+insertAt: index
+
+	| theDictionary |
+	theDictionary := SymbolDictionary new. 
+	theDictionary at: name asSymbol put: theDictionary. 
+	System myUserProfile insertDictionary: theDictionary at: index. 
+	RowanBrowserService new updateDictionaries.
+	System commitTransaction.
+%
+
+category: 'accessing'
+method: RowanDictionaryService
+name
+	^name
+%
+
+category: 'accessing'
+method: RowanDictionaryService
+name: object
+	name := object
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+removeClass: classService
+	self removeClassNamed: classService name. 
+	self setDefaultTemplate.
+	classService updateType: #removedClass:.
+	RowanCommandResult addResult: classService
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+removeClassNamed: className
+
+	self browserTool removeClassNamed: className.
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+removeGlobalNamed: symbol
+	| dictionary |
+	dictionary := (System myUserProfile resolveSymbol: name asSymbol) value.
+	dictionary ifNotNil: [
+		dictionary removeKey: symbol ifAbsent:[]].
+	self update.
+%
+
+category: 'perform'
+method: RowanDictionaryService
+servicePerform: symbol withArguments: collection	
+
+	super servicePerform: symbol withArguments: collection.
+	self update.
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+setDefaultTemplate
+
+	defaultTemplate := self genericClassCreationTemplate.
+%
+
+category: 'updates'
+method: RowanDictionaryService
+update
+  | dictionary sorted |
+  classes := Array new.
+  sorted := SortedCollection sortBlock: [ :x :y | x first < y first ].
+  dictionary := Rowan image symbolList objectNamed: name.
+  dictionary ifNil: [ ^ self ].
+  dictionary
+    keysAndValuesDo: [ :key :value | 
+      value isClass
+        ifTrue: [ 
+          | classService |
+          classService := RowanClassService new name: key asString.
+          classService versions: value classHistory size.
+          classService version: (value classHistory indexOf: value).
+          classes add: classService ]
+        ifFalse: [ 
+          | printString |
+          printString := [ value printString ]
+            on: Error
+            do: [ :ex | 'unprintable string. Error - <' , ex printString , '>' ].
+          sorted
+            add:
+              (Array
+                with: name , '.' , key
+                with: value class name
+                with: value asOop
+                with: printString) ] ].
+  globals := sorted asArray.
+  RowanCommandResult addResult: self
 %
 
 ! Class implementation for 'RowanFrameService'
@@ -28805,14 +29829,15 @@ category: 'accessing'
 classmethod: RowanLoggingService
 current
 
-	^Current
+	"lazy initialize for a topaz session test" 
+	^SessionTemps current at: #rowanLoggingService ifAbsentPut: [nil]
 %
 
 category: 'accessing'
 classmethod: RowanLoggingService
 current: anObject
 
-	^Current := anObject
+	SessionTemps current at: #rowanLoggingService put: anObject
 %
 
 !		Instance methods for 'RowanLoggingService'
@@ -28993,7 +30018,7 @@ method: RowanMethodService
 category: 'Accessing'
 method: RowanMethodService
 accessedInstVars
-	^accessedInstVars
+  ^ accessedInstVars
 %
 
 category: 'Updating'
@@ -29017,13 +30042,12 @@ addOrUpdateMethod
 category: 'client commands'
 method: RowanMethodService
 allReferences
-
-	| methods |
-	oop := self gsNMethod asOop. 
-	methods := organizer sendersOf: selector.
-	references := methods first collect:[:gsNMethod | 
-			self class forGsNMethod: gsNMethod organizer: organizer].
-	RowanCommandResult addResult: self
+  | methods |
+  oop := self gsNMethod asOop.
+  methods := organizer sendersOf: selector.
+  references := methods first
+    collect: [ :gsNMethod | self class forGsNMethod: gsNMethod organizer: organizer ].
+  RowanCommandResult addResult: self
 %
 
 category: 'initialization'
@@ -29056,11 +30080,11 @@ category: newValue
 category: 'Accessing'
 method: RowanMethodService
 classFromName
-	
-	"the dictionary browser may have versions numbers in the name"
-	| nameSymbol |
-	nameSymbol := (className copyUpTo: Character space) asSymbol.
-	^(System myUserProfile resolveSymbol: nameSymbol) value
+  "the dictionary browser may have versions numbers in the name"
+
+  | nameSymbol |
+  nameSymbol := (className copyUpTo: Character space) asSymbol.
+  ^ (System myUserProfile resolveSymbol: nameSymbol) value
 %
 
 category: 'Accessing'
@@ -29187,7 +30211,7 @@ gsNMethod
 category: 'comparing'
 method: RowanMethodService
 hash
-	^(selector hash bitXor: className hash) bitXor: meta hash
+  ^ (selector hash bitXor: className hash) bitXor: meta hash
 %
 
 category: 'Accessing'
@@ -29347,6 +30371,14 @@ printOn: aStream
 				nextPut: $)
 %
 
+category: 'client commands'
+method: RowanMethodService
+reformatSource
+  source := (RBParser parseMethod: source) formattedCode.
+  updateType := #'dontUpdateSystem'.	"let browser update the source"
+  RowanCommandResult addResult: self
+%
+
 category: 'rowan'
 method: RowanMethodService
 removeSelector: sel class: clsName
@@ -29413,8 +30445,11 @@ selector: aSymbol
 category: 'perform'
 method: RowanMethodService
 servicePerform: symbol withArguments: collection
+	| theCommand |
+	theCommand := command. 
 	super servicePerform: symbol withArguments: collection.
-	self update.
+	theCommand = #reformatSource ifFalse:[
+		self update].
 %
 
 category: 'client commands'
@@ -29422,6 +30457,7 @@ method: RowanMethodService
 setBreakAt: stepPoint
 	| method |
 	method := self isUnboundMethod 
+
 			ifTrue:[Object _objectForOop: oop] 
 			ifFalse:[self gsNMethod].
 	method setBreakAtStepPoint: stepPoint.
@@ -29571,8 +30607,7 @@ method: RowanPackageService
 category: 'testing'
 method: RowanPackageService
 arePackageAndProjectClean
-
-	^self rowanDirty not and:[self projectIsDirty not]
+  ^ self rowanDirty not and: [ self projectIsDirty not ]
 %
 
 category: 'rowan'
@@ -29583,12 +30618,27 @@ changes
    ^ (Rowan packageTools diff diffForPackageName: name) asString
 %
 
+category: 'other'
+method: RowanPackageService
+classes: collection
+
+	classes := collection
+%
+
 category: 'client commands'
 method: RowanPackageService
 classHierarchy
-	| superclassChains levels services hierarchies theClasses toExpand |
+	| theClasses |
 	self update. 
 	theClasses := classes collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	RowanCommandResult addResult: self.
+%
+
+category: 'private'
+method: RowanPackageService
+classHierarchy: theClasses
+	| superclassChains levels services hierarchies toExpand |
 	superclassChains := self superclassChainsFor: theClasses. 
 	hierarchies := self extendHierarchies: superclassChains. 
 	levels := self hierarchiesByLevel: hierarchies.
@@ -29598,17 +30648,7 @@ classHierarchy
 	hierarchyServices := services reject:[:array | array isEmpty].
 	hierarchyServices copy keysAndValuesDo:[:key :value | 
 		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	RowanCommandResult addResult: self.
-%
-
-category: 'client commands'
-method: RowanPackageService
-compileClass: definitionString
-
-	|  anonymousMethod |
-	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: GsSession currentSession symbolList.
-	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
+	^hierarchyServices
 %
 
 category: 'rowan'
@@ -29653,27 +30693,6 @@ deletePackage
 	self browserTool removePackageNamed: name.
 %
 
-category: 'commands support'
-method: RowanPackageService
-extendHierarchies: hierarchies
-	
-	"extend the hierarchies by one level
-	of subclasses"
-
-	| extendedHierarchies |
-	extendedHierarchies := Array new. 
-	hierarchies do:[:hierarchy |
-		| theClass |
-		theClass := hierarchy last. 
-		theClass subclasses isEmpty 
-			ifTrue:[extendedHierarchies add: hierarchy]
-			ifFalse:[
-				theClass subclasses do:[:sub |
-					extendedHierarchies add: (hierarchy copy add: sub; yourself)
-				]]].
-	^extendedHierarchies
-%
-
 category: 'rowan'
 method: RowanPackageService
 genericClassCreationTemplate
@@ -29685,35 +30704,6 @@ category: 'comparing'
 method: RowanPackageService
 hash
 	^self name hash
-%
-
-category: 'commands support'
-method: RowanPackageService
-hierarchiesByLevel: hierarchies
-
-	"Return dictionary of classes by level. 
-	Example: 
-		hierarchies - #(#(Object Collection Array) #(Object AbstractException Exception))
-	Return: 
-		#(#nil->#(Object) Object->#(Collection AbstractException) Collection->#(Array) AbstractException->#(Exception)
-	"
-	| levels |
-	levels := hierarchies inject: Dictionary new into:[:dict :chain | 
-		1 to: chain size do: [:index | 
-			| cls theSuper classSet |
-			cls := chain at: index.
-			classSet := dict at: cls ifAbsentPut: [Array new].
-			index = 1 
-		ifTrue:[
-			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
-			((dict at: #'nil') includes: cls) ifFalse:[(dict at: #'nil') add: cls].
-		]
-		ifFalse:[
-				theSuper := chain at: index - 1.
-				((dict at: theSuper) includes: cls) ifFalse:[(dict at: theSuper) add: cls]
-				]].
-			dict].
-	^levels
 %
 
 category: 'Accessing'
@@ -29845,29 +30835,6 @@ projectName: newValue
 
 category: 'client commands'
 method: RowanPackageService
-recompileMethodsAfterClassCompilation
-
-	"compileClass: must be run first"
-	| theClass classService packageService |
-
-	theClass := [(UserGlobals at: #jadeiteCompileClassMethod) _executeInContext: nil] 
-		ensure: [UserGlobals at: #jadeiteCompileClassMethod put: nil].
-	classService := RowanClassService new name: theClass name. 
-	classService update. 
-	classService isNewClass: true.
-	classService packageName = name 
-		ifTrue:[
-			self selectedClass: classService
-		]
-		ifFalse:[
-			packageService := RowanPackageService forPackageNamed: classService packageName. 
-			packageService update. 
-			packageService selectedClass: classService].
-	RowanCommandResult addResult: classService.
-%
-
-category: 'client commands'
-method: RowanPackageService
 removeClass: classService
 	self removeClassNamed: classService name. 
 	self setDefaultTemplate.
@@ -29925,19 +30892,7 @@ category: 'commands support'
 method: RowanPackageService
 services: services from: levels expand: toExpand
 
-	(classes collect:[:svc | svc theClass]) do:[:aClass |
-		toExpand addAll: aClass allSuperclasses].
-	levels keysAndValuesDo: [:key :value |
-		| newKey service  | 
-		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService new classServiceFromOop: key asOop).
-			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-			service].
-		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService new classServiceFromOop: cls asOop).
-				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-				service
-				])]
+	^super services: services from: levels expand: toExpand classes: classes
 %
 
 category: 'client commands'
@@ -29945,16 +30900,6 @@ method: RowanPackageService
 setDefaultTemplate
 
 	defaultTemplate := self genericClassCreationTemplate.
-%
-
-category: 'commands support'
-method: RowanPackageService
-superclassChainsFor: behaviors
-
-	^behaviors collect:[:behavior | | supers |
-			supers := behavior allSuperclasses. 
-			supers add: behavior. 
-			supers].
 %
 
 category: 'client commands'
@@ -30159,6 +31104,9 @@ addPackageNamed: packageName
 category: 'initialization'
 method: RowanProjectService
 basicRefresh
+	name = Rowan unpackagedName ifTrue:[
+		isLoaded := false.
+		RowanBrowserService new updateDictionaries. ^self]. 
 	(isLoaded := self projectIsLoaded) ifFalse:[
 		existsOnDisk := false. 
 		updateType := #removedProject:. 
@@ -30634,6 +31582,16 @@ browseClassReferences: className
 
 	| methods |
 	methods := organizer referencesTo: className asSymbol.
+	queryResults := self methodServicesFrom: methods first.
+	self returnQueryToClient.
+%
+
+category: 'queries'
+method: RowanQueryService
+browseReferencesTo: symbol
+
+	| methods |
+	methods := organizer referencesTo: symbol.
 	queryResults := self methodServicesFrom: methods first.
 	self returnQueryToClient.
 %
@@ -31144,6 +32102,13 @@ initializeForImport
 	projectName := nil
 %
 
+category: 'testing'
+method: RwAbstractProjectConfiguration
+isIndependentlyLoadable
+	
+	^ true
+%
+
 category: 'accessing'
 method: RwAbstractProjectConfiguration
 name
@@ -31396,8 +32361,40 @@ initializeForExport
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
+	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
+
+
 	super initializeForExport.
-	conditionalPackageMatchers :=  conditionalPackageMapSpecMatchers := nil
+	conditionalPackageMatchers :=  conditionalPackageMapSpecMatchers := nil.
+
+	self conditionalPackages
+		ifNotNil: [:cp |
+			| orderedConditionalPackages |
+			orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
+			(cp keys asSortedCollection: [:a :b | (a at: 1) <= (b at: 1) ]) do: [:ar |
+				| dict orderedPackageNames |
+				dict := cp at: ar.
+				orderedPackageNames := Rowan platform orderedDictionaryClass new.
+				dict keys asArray sort do: [:group | orderedPackageNames at: group put: (dict at: group) ].
+				orderedConditionalPackages at: ar put: orderedPackageNames ].
+			conditionalPackages := orderedConditionalPackages ].
+
+	conditionalPackageMapSpecs ifNotNil: [
+		| orderedConditionalPackageMapSpecs |
+		orderedConditionalPackageMapSpecs := Rowan platform orderedDictionaryClass new.
+		(conditionalPackageMapSpecs keys asSortedCollection: [:a :b | a <= b ]) do: [:platformName |
+			| orderedUserMap userMap |
+			orderedUserMap := Rowan platform orderedDictionaryClass new.
+			userMap := conditionalPackageMapSpecs at: platformName.
+			(userMap keys  asSortedCollection: [:a :b | a <= b ]) do: [:userName |
+				| attributeMap orderedAttributeMap |
+				attributeMap := userMap at: userName.
+				orderedAttributeMap  := Rowan platform orderedDictionaryClass new.
+				(attributeMap keys asSortedCollection: [:a :b | a <= b ]) do: [:attributeName |
+					orderedAttributeMap at: attributeName put: (attributeMap at: attributeName) ].
+				orderedUserMap at: userName put: orderedAttributeMap ].
+			orderedConditionalPackageMapSpecs at: platformName put: orderedUserMap ].
+		conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
 %
 
 category: 'private'
@@ -31492,6 +32489,14 @@ acceptVisitor: aVisitor
 	^self error: 'nested configuration cannot be used as a top-level configuration. The receiver is nested inside of project load configurations'
 %
 
+category: 'testing'
+method: RwNestedProjectLoadConfiguration
+isIndependentlyLoadable
+	"nested configuration is not independently loadable ... they can only be loaded when referenced from another config"
+
+	^ false
+%
+
 ! Class implementation for 'RwProjectLoadConfiguration'
 
 !		Instance methods for 'RwProjectLoadConfiguration'
@@ -31547,26 +32552,6 @@ acceptVisitor: aVisitor
 	^aVisitor visitComponentLoadConfiguration: self
 %
 
-category: 'initialization'
-method: RwComponentLoadConfiguration
-initializeForExport
-
-	"for export, the keys in the dictionaris of the conditional packages structure need to be put into canonical order"
-
-	| cp orderedConditionalPackages |
-	cp := self conditionalPackages.
-	orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
-
-	(cp keys asSortedCollection: [:a :b | (a at: 1) <= (b at: 1) ]) do: [:ar |
-		| dict orderedPackageNames |
-		dict := cp at: ar.
-		orderedPackageNames := Rowan platform orderedDictionaryClass new.
-		dict keys asArray sort do: [:group | orderedPackageNames at: group put: (dict at: group) ].
-		orderedConditionalPackages at: ar put: orderedPackageNames ].
-	
-	conditionalPackages := orderedConditionalPackages
-%
-
 category: 'accessing'
 method: RwComponentLoadConfiguration
 projectNames
@@ -31579,6 +32564,21 @@ method: RwComponentLoadConfiguration
 projectNames: anArray
 
 	projectNames := anArray
+%
+
+category: 'private'
+method: RwComponentLoadConfiguration
+_processConditionalPackageNames: aProjectLoadConfiguration
+
+	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
+			ifTrue: [
+				groupMap keysAndValuesDo: [:group :map |
+					(self groupNames includes: group)
+						ifTrue: [ 
+							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
+							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #() ] ).
+							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
 %
 
 ! Class implementation for 'RwProjectCompoundConfiguration'
@@ -31738,6 +32738,13 @@ currentProjectDefinition: aRwComponentProjectDefinition
 
 category: 'accessing'
 method: RwAbstractReaderWriterVisitor
+defaultPackageFormat
+
+	self subclassResponsibility: #defaultPackageFormat
+%
+
+category: 'accessing'
+method: RwAbstractReaderWriterVisitor
 packageConvention
 
 	"
@@ -31751,7 +32758,8 @@ packageConvention
 		ppc := self currentProjectDefinition packageConvention.
 		dpc := self _repositoryConventionFor: self packagesRoot.
 		dpc ~= ppc
-			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, ' does not match expected package convention ', ppc printstring. ' for project ', self projectName printString ].
+			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, 
+           ' does not match expected package convention ', ppc printString. ' for project ', self projectName printString ].
 		packageConvention := ppc ]
 %
 
@@ -31832,7 +32840,7 @@ category: 'private'
 method: RwAbstractReaderWriterVisitor
 _repositoryFormatFor: packagesRoot
 
-	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ 'filetree' ]
+	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ self defaultPackageFormat ]
 %
 
 category: 'private'
@@ -32307,6 +33315,12 @@ deletededPackage: aPackageModification
 	"a deleted package is ignored for topaz ... the deleted classes and methods are simply not written out"
 %
 
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitor
+excludeClassInitializers
+  self dynamicInstVarAt: #excludeClassInitializers put: true
+%
+
 category: 'exporting'
 method: RwGsModificationTopazWriterVisitor
 export
@@ -32374,6 +33388,7 @@ exportClassDefinitions: classDefinitionsInOrder
 		ifTrue: [ 
 			stream
 				nextPutAll: '! Class Declarations'; lf;
+				nextPutAll: '! Generated file, do not Edit'; lf;
 				lf ].
 	classDefinitionsInOrder do: [:classDef | 
 		self _fileOutClassDeclaration: classDef on: stream ].
@@ -32382,22 +33397,26 @@ exportClassDefinitions: classDefinitionsInOrder
 category: 'exporting'
 method: RwGsModificationTopazWriterVisitor
 exportClassInitializations
-
-	| stream |
+	| stream exclude |
 	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
-
 	stream := self bufferedStream.
-
-	stream 
-		nextPutAll: '! Class Initialization'; lf;
-		lf;
-		nextPutAll: 'run'; lf.
-
+  exclude := (self dynamicInstVarAt: #excludeClassInitializers) ~~ nil  .
+  exclude ifTrue:[
+    stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
+  ] ifFalse:[
+	  stream 
+		  nextPutAll: '! Class Initialization'; lf;
+      lf;
+		  nextPutAll: 'run'; lf.
+  ].
 	(self classInitializationDefinitions sort: [:a :b | a name <= b name ]) do: [ :classDef |
-		stream nextPutAll: classDef name, ' initialize.'; lf ].
-
-	stream nextPutAll: '%'; lf;
-		lf
+    exclude ifTrue:[ stream nextPutAll:'!  ' ].
+		stream nextPutAll: classDef name, ' initialize.'; lf 
+  ].
+  exclude ifFalse:[
+	  stream nextPutAll: 'true'; lf;
+	  nextPutAll: '%'; lf .
+  ].
 %
 
 category: 'exporting'
@@ -32417,7 +33436,6 @@ exportMethodDefinitions: classDefinitionsInOrder
 category: 'exporting'
 method: RwGsModificationTopazWriterVisitor
 exportMethodDefinitions: classDefinitionsInOrder labeled: label
-
 	| stream |
 	stream := self bufferedStream.
 	classDefinitionsInOrder do: [:classDef | 
@@ -32463,9 +33481,10 @@ category: 'class writing'
 method: RwGsModificationTopazWriterVisitor
 processClass: aClassModification
 
-	| classDefinition symbolDictName |
+	| classDefinition symbolDictName clsName |
 	classDefinition := aClassModification after.
-	(self classDefinitions at: classDefinition name ifAbsent: []) ifNotNil: [ self error: 'duplicate class defintion for ', classDefinition name printString, ' encountered.'].
+	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: []) ifNotNil: [ 
+   self error: 'duplicate class definition for ', clsName printString, ' encountered.'].
 
 	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
 	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
@@ -32629,41 +33648,59 @@ topazFileReference
 category: 'private exporting'
 method: RwGsModificationTopazWriterVisitor
 _fileOutClassDeclaration: classDefinition on: aStream
-  aStream
-    nextPutAll: 'doit';
-    lf;
-    nextPutAll: '(' , classDefinition superclassName;
-    lf.
-  self
-    _writeClassTypeMessage: classDefinition
-    on: aStream
-    hasInstanceVariables: [ aStream
-        nextPutAll:
-            '	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
-        lf ].
-  aStream
-    nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
-    lf;
-    nextPutAll:
-        '	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-    lf;
-    nextPutAll: '	poolDictionaries: #()';
-    lf;
-    nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
-    lf;
-    nextPutAll: '	options: #())';
-    lf;
-    nextPutAll: '		category: ' , classDefinition category printString , ';';
-    lf;
-    nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-    lf;
-    nextPutAll: '		immediateInvariant.';
-    lf;
-    nextPutAll: 'true.';
-    lf;
-    nextPutAll: '%';
-    lf;
-    lf
+	| optionsString reservedOopString hasClassInstVars |
+	aStream
+		nextPutAll: 'doit';
+		lf;
+		nextPutAll: '(' , classDefinition superclassName;
+		lf.
+	hasClassInstVars := self
+		_writeClassTypeMessage: classDefinition
+		on: aStream
+		hasInstanceVariables: [ aStream
+			nextPutAll:
+			'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
+			lf ].
+	optionsString := ''.
+	classDefinition gs_options isEmpty
+		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
+	reservedOopString := ''.
+	classDefinition gs_reservedOop isEmpty
+		ifFalse: [
+			| strm |
+			strm := WriteStream on: String new.
+			strm nextPutAll: '	reservedOop: ', classDefinition gs_reservedOop; lf.
+			reservedOopString := strm contents ].
+	aStream
+		nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
+		lf.
+	hasClassInstVars
+		ifTrue: [ 
+		aStream
+			nextPutAll:
+			'	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+			lf ].
+	aStream
+		nextPutAll: '	poolDictionaries: #()';
+		lf;
+		nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
+		lf;
+		nextPutAll: '	options: #(', optionsString, ')';
+		lf;
+		nextPutAll: reservedOopString;
+		nextPutAll: ')';
+		lf;
+		nextPutAll: '		category: ' , classDefinition category printString , ';';
+		lf;
+		nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+		lf;
+		nextPutAll: '		immediateInvariant.';
+		lf;
+		nextPutAll: 'true.';
+		lf;
+		nextPutAll: '%';
+		lf;
+		lf
 %
 
 category: 'private exporting'
@@ -32709,24 +33746,47 @@ _stringForVariables: variableList
 
 category: 'private exporting'
 method: RwGsModificationTopazWriterVisitor
+_symbolsForVariables: variableList
+
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
+		separatedBy: [stream space].
+	^stream contents
+%
+
+category: 'private exporting'
+method: RwGsModificationTopazWriterVisitor
 _writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock
-  | classType classTypeMessage hasInstanceVariables |
-  hasInstanceVariables := true.
-  classType := classDefinition subclassType.
-  classType = 'variable'
-    ifTrue: [ classTypeMessage := 'indexableSubclass: ' ]
-    ifFalse: [ classType = 'byteSubclass'
-        ifTrue: [ classTypeMessage := 'byteSubclass: '.
-          hasInstanceVariables := false ]
-        ifFalse: [ classType = ''
-            ifTrue: [ classTypeMessage := 'subclass: ' ]
-            ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
-  aStream
-    tab;
-    nextPutAll: classTypeMessage , classDefinition name asString printString;
-    lf.
-  hasInstanceVariables
-    ifTrue: [ instanceVariableBlock value ]
+	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
+	hasInstanceVariables := true.
+	hasReservedOop := classDefinition gs_reservedOop isEmpty not.
+	hasClassInstVars := true.
+	classType := classDefinition subclassType.
+	classType = 'variable'
+		ifTrue: [ 
+			classTypeMessage :=  hasReservedOop
+				ifTrue: [ '_newKernelIndexableSubclass:' ]
+				ifFalse: [ 'indexableSubclass: ' ] ]
+		ifFalse: [ classType = 'byteSubclass'
+			ifTrue: [ 
+				classTypeMessage :=  hasReservedOop
+					ifTrue: [ '_newKernelByteSubclass:' ]
+					ifFalse: [ 'byteSubclass: ' ].
+				hasClassInstVars := hasInstanceVariables := false ]
+			ifFalse: [ classType = ''
+				ifTrue: [ 
+					classTypeMessage :=  hasReservedOop
+						ifTrue: [ '_newKernelSubclass:' ]
+						ifFalse: [ 'subclass: ' ] ]
+				ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+	aStream
+		tab;
+		nextPutAll: classTypeMessage , classDefinition name asString printString;
+		lf.
+	hasInstanceVariables
+		ifTrue: [ instanceVariableBlock value ].
+	^ hasClassInstVars
 %
 
 ! Class implementation for 'RwModificationCypressFamilyWriterVisitor'
@@ -32973,6 +34033,13 @@ changedMethod: aMethodModification
 			<< methodDefinition protocol
 			<< self _newLine
 			<< (methodDefinition source withLineEndings: self _newLine) ]
+%
+
+category: 'accessing'
+method: RwModificationFiletreeWriterVisitor
+defaultPackageFormat
+
+	^ 'filetree'
 %
 
 category: 'actions'
@@ -33350,8 +34417,8 @@ _methodFileNameFor: aMethodDefinition
 		ifFalse: [ selector ]
 		ifTrue: [ 
 		  | output specials |
-		  specials := self class seletorSpecials.
-		  output := String new writeStream.
+		  specials := self class selectorSpecials.
+		  output := WriteStream on: String new.
 		  output nextPut: $^.
 		  selector
 			do: [ :each | 
@@ -33404,6 +34471,9 @@ _typeClassDefinitionOf: aClassDefinition
 	(aClassDefinition instVarNames)
 		ifNotEmpty: [ :vars | definition at: #instvars put: vars asArray ].
 
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
+
 	definition at: #name put: aClassDefinition name.
 
 	((aClassDefinition poolDictionaryNames) collect: [:each | each asString])
@@ -33453,6 +34523,13 @@ addedPackage: aPackageModification
 			<< self  _newLine ].
 
 	self processPackage: aPackageModification
+%
+
+category: 'accessing'
+method: RwModificationTonelWriterVisitor
+defaultPackageFormat
+
+	^ 'tonel'
 %
 
 category: 'actions'
@@ -33507,12 +34584,40 @@ method: RwModificationTonelWriterVisitor
 processProject: aProjectModification
 	"confirm that the project source is written in Tonel format"
 
-	| format |
+	| format propertiesFile |
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
 	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
 
 	(format := self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
+
+	propertiesFile := aProjectModification after packagesRoot /  'properties.st'.
+	propertiesFile exists
+		ifFalse: [
+			propertiesFile writeStreamDo: [ :fileStream | 
+				fileStream 
+					nextPutAll: '{ #format : ' , format printString , '}';
+					lf;
+					nextPutAll: '{ #convention : ' , currentProjectDefinition packageConvention printString , '}';
+					yourself ] ].
+
 	super processProject: aProjectModification.
+%
+
+category: 'private'
+method: RwModificationTonelWriterVisitor
+skipComment: aStream
+  "I assume I'm on top of the begining of a comment"
+  aStream skip: 1.
+  [ aStream atEnd not 
+    and: [ aStream next ~= $" or: [ aStream peek = $" ] ] ]
+  whileTrue.  
+%
+
+category: 'private'
+method: RwModificationTonelWriterVisitor
+skipSeparators: aStream
+  [ aStream peek isSeparator ]
+    whileTrue: [ aStream skip: 1 ]. 
 %
 
 category: 'class extension writing'
@@ -33562,6 +34667,13 @@ _hasCommentOf: aClassDefinition
 
 category: 'class writing'
 method: RwModificationTonelWriterVisitor
+_hasShebangOf: aClassDefinition 
+
+	^  aClassDefinition shebang notNil
+%
+
+category: 'class writing'
+method: RwModificationTonelWriterVisitor
 _methodDefinitionOf: aMethodDefinition
 	^ self _toSTON: (self class orderedDictionaryClass new 
 		at: #category put: aMethodDefinition protocol; 
@@ -33582,6 +34694,13 @@ _selectorIsComplete: keywords in: aString
 		index = 0 ifTrue: [ ^ false ].
 		start := index + each size ].
 	^ true
+%
+
+category: 'class writing'
+method: RwModificationTonelWriterVisitor
+_shebangOf: aClassDefinition
+
+	^ aClassDefinition shebang
 %
 
 category: 'class writing'
@@ -33642,6 +34761,9 @@ _typeClassDefinitionOf: aClassDefinition
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
 
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
+
 	definition 		
 		at: #category put: aClassDefinition category.
 	
@@ -33660,6 +34782,8 @@ _writeClassDefinition: aClassDefinition on: aStream
 	| nl |
 	nl := self _newLine.
 	
+	(self _hasShebangOf: aClassDefinition)
+		ifTrue: [ aStream << '#!' << (self _shebangOf: aClassDefinition) << nl ].
 	(self _hasCommentOf: aClassDefinition) 
 		ifTrue: [ 
 			aStream 
@@ -33764,7 +34888,9 @@ newClassDefinitionFrom: anArray
 			type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
+		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);
 		gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ]);
+		shebang: (metadata at: #'shebang' ifAbsent: [ ]);
 		yourself
 %
 
@@ -34130,14 +35256,16 @@ category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
 readClassesFor: packageName packageRoot: packageRoot
 
-	| classFileExtensions classExtensionFileExtensions |
+	| classFileExtensions classExtensionFileExtensions trace |
+  trace := SessionTemps current at: #ROWAN_TRACE otherwise: nil .
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
-		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	classExtensionFileExtensions := self classExtensionFileExtensions.
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
 		| fileExtensions |
+    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading ', file asString ].
 		fileExtensions := file extensions asArray.
 		fileExtensions = classFileExtensions
 			ifTrue: [ self readClassFile: file inPackage: packageName ]
@@ -34150,10 +35278,12 @@ category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
 readClassExtensionFile: file inPackage: packageName
 
-	file readStreamDo: [:fileStream |
+	| fileReference |
+	fileReference := file asFileReference.
+	fileReference readStreamDo: [:fileStream |
 		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: 20000. "part of workaround for GemTalk/FileSystemGs#9"
+		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassExtension addClassMethodDefinition: mDef ].
@@ -34526,7 +35656,7 @@ _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
 			ifFalse: [ res  add: (RwAuditDetail for: aLoadedClass message: 'PoolDictionaries changed in compiled class v loaded class')].
 	(aLoadedClass classComment isEquivalent: aBehavior rwComment ) 
 			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Comment has changed in compiled class v loaded class')].
-	(aLoadedClass classCategory = aBehavior category ) 
+	(aLoadedClass classCategory = (aBehavior _classCategory ifNil: ['']) ) 
 			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Class category has changed in compiled class v loaded class')].
 	(aDict := System myUserProfile resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol ) 
 			ifNil: [res  add: (RwAuditDetail for: aLoadedClass message: ('Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName))] 
@@ -34669,21 +35799,6 @@ _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoad
 ! Class implementation for 'RwGitTool'
 
 !		Instance methods for 'RwGitTool'
-
-category: 'smalltalk api'
-method: RwGitTool
-createTmpFileWith: fileContents
-
-	| file filename |
-	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
-	[ 
-	| count |
-	file := GsFile openWriteOnServer: filename.
-	(count := file nextPutAll: fileContents withGemstoneLineEndings)
-		ifNil: [ self error: 'failed write' ] ]
-		ensure: [ file close ].
-	^ filename
-%
 
 category: 'smalltalk api'
 method: RwGitTool
@@ -34914,14 +36029,6 @@ performOnServer: commandLine logging: logging
         cr;
         show: result ].
   ^ result
-%
-
-category: 'private'
-method: RwGitTool
-performOnServer: commandLine status: statusBlock
-  | performOnServerStatusArray |
-  performOnServerStatusArray := System _performOnServer: commandLine.
-  ^ statusBlock value: performOnServerStatusArray
 %
 
 ! Class implementation for 'RwPackageTool'
@@ -35428,8 +36535,8 @@ auditForPackage: loadedPackage
 "audit dirty packages"
 	|  res|
 	res := RwAuditReport for: loadedPackage.
-	"GsFile gciLogClient: '===Auditing package ', loadedPackage name."
-		loadedPackage 
+	"self _log: '===Auditing package ', loadedPackage name."
+	loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl]]				
 				loadedClassExtensionsDo: [:aLoadedClass | (self auditLoadedClassExtension: aLoadedClass) 
@@ -35458,13 +36565,6 @@ auditLoadedClassExtension: aLoadedClass
 "look for methods compiled into class without Rowan API"
 
 	^RwClsExtensionAuditTool new auditLoadedClassExtension: aLoadedClass
-%
-
-category: 'other'
-method: RwPkgAuditTool
-checkAll
-"check all packages regardless dirty or not"
-	^(SessionTemps current at: #RwDirtyOnly otherwise: false) not
 %
 
 category: 'other'
@@ -35611,12 +36711,6 @@ revert
 
 category: 'commands'
 classmethod: RwProjectTool
-spec
-  ^ RwPrjSpecTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
 test
 
 	^RwPrjTestTool new
@@ -35635,18 +36729,6 @@ category: 'smalltalk api'
 method: RwProjectTool
 repositoryUrl
   ^ self specification repositoryUrl
-%
-
-category: 'private'
-method: RwProjectTool
-_createLoadedProject: aRwProjectReference
-
-	Rowan image 
-		loadedProjectNamed: aRwProjectReference projectAlias
-		ifAbsent: [
-			| newLoadedProject |
-			newLoadedProject := RwGsLoadedSymbolDictProject newForProjectReference: aRwProjectReference.
-			Rowan image addLoadedProject: newLoadedProject ]
 %
 
 ! Class implementation for 'RwPrjAdoptTool'
@@ -35712,7 +36794,7 @@ auditForProject: aLoadedProject
 	| res |
 
 	res := RwAuditReport for: aLoadedProject.
-	"GsFile gciLogClient: '==============Auditing project ', aLoadedProject name."
+	"self _log: '==============Auditing project ', aLoadedProject name."
 		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
 				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res
@@ -35882,7 +36964,9 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 					^ (Rowan image objectNamed: className)
 						compileMethod: methodSource
 						dictionaries: Rowan image symbolList
-						category: hybridPackageName].
+						category: hybridPackageName
+						environmentId: 0 
+						].
 			loadedClass loadedPackage ].
 
 	^ self
@@ -36630,7 +37714,7 @@ removeClassNamed: className
 			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
 			| theClass |
 			theClass := Rowan image objectNamed: className.
-			(GsCurrentSession currentSession symbolList dictionariesAndSymbolsOf: theClass)
+			(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 				do: [:ar | | dict key |
 					"brute force removal of the class from system dictionaries"
 					dict := ar at: 1.	
@@ -37110,72 +38194,6 @@ cloneRepository: aRwGitRepositoryDefinition
 		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitRepositoryDefinition ].
 %
 
-category: 'smalltalk api'
-method: RwPrjCloneTool
-cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh
-
-	^ self cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh registerProject: true
-%
-
-category: 'smalltalk api'
-method: RwPrjCloneTool
-cloneSpecification: aRwSpecification gitRootPath: gitRootPathOrString useSsh: useSsh registerProject: registerProject
-
-	| gitTool response projectUrl gitRepoPath cloneUrl cloneOption checkout segments gitRootPath |
-	registerProject
-		ifTrue: [ 
-			"Register project show that is shows up as a loaded project in project list ... ready to be explicitly loaded"
-			self specification: aRwSpecification ]
-		ifFalse: [ specification := aRwSpecification ].
-	gitRootPath := gitRootPathOrString asFileReference.
-	gitRepoPath := gitRootPath / aRwSpecification specName.
-	self
-		_validateForGitRootPathForSpecification: gitRootPath
-		gitRepoDir: gitRepoPath
-		useSsh: useSsh
-		ifDone: [ :msg | 
-			"done block is invoked when it is not necessary to perform further processing. Typically,
-		the clone is already present."
-			^ msg ].
-	gitTool := Rowan gitTools.
-	projectUrl := RwUrl fromString: specification projectUrl.
-	cloneUrl := useSsh
-		ifTrue: [ 'git@' , projectUrl authority , ':' ]
-		ifFalse: [ 'https://' , projectUrl authority , '/' ].
-	segments := projectUrl segments.
-	cloneUrl := segments size = 1
-		ifTrue: [ cloneUrl , (segments at: 1) , '.git' ]
-		ifFalse: [ cloneUrl , (segments at: 1) , '/' , (projectUrl segments at: 2) , '.git' ].
-	cloneOption := ' --no-checkout '.
-	checkout := specification repoSpec committish.
-	checkout ifNil: [ cloneOption := '' ].
-	response := gitTool gitcloneIn: gitRootPath  pathString with: cloneOption , cloneUrl.
-	specification
-		repositoryUrl: 'cypress:' , gitRepoPath pathString  , '/' , specification repoPath , '/'.
-	specification repositoryRootPath: gitRepoPath.
-	checkout
-		ifNotNil: [ Rowan projectTools checkout checkoutSpecification: specification ].
-	^ specification
-%
-
-category: 'smalltalk api'
-method: RwPrjCloneTool
-cloneSpecUrl: aString gitRootPath: gitRootPath useSsh: useSsh
-
-	^self 
-		cloneSpecification: (RwSpecification fromUrl: aString) 
-		gitRootPath: gitRootPath 
-		useSsh: useSsh
-%
-
-category: 'smalltalk api'
-method: RwPrjCloneTool
-specification: aRwSpecification
-  "let the validation run before sending #register"
-
-  ^ (super specification: aRwSpecification) register
-%
-
 category: 'private'
 method: RwPrjCloneTool
 _validateForGitRepository: aRwGitRepositoryDefinition ifDone: doneBlock
@@ -37211,112 +38229,9 @@ The project project has been registered with Rowan at the existing location .'.
 	gitRepoPath parent ensureCreateDirectory
 %
 
-category: 'private'
-method: RwPrjCloneTool
-_validateForGitRootPathForSpecification: gitRootPath gitRepoDir: gitRepoPath useSsh: useSsh ifDone: doneBlock
-
-	| gitTool response command cdResponse |
-	gitTool := Rowan gitTools.
-	specification repositoryUrl
-		ifNotNil: [ :repoUrlString | 
-			| repoUrl |
-			repoUrl := RwUrl fromString: repoUrlString.
-			response := gitTool gitrevparseShowTopLevelIn: repoUrl pathString.
-			command := 'set -e; cd ' , gitRepoPath , '; pwd'.
-			cdResponse := gitTool performOnServer: command logging: true.
-			(self readlink: response) = (self readlink: cdResponse)
-				ifTrue: [ 
-					| msg |
-					msg := 'A clone for ' , specification specName printString
-						, ' already exists in ' , gitRepoPath printString , '. Skipping clone.'.
-					self inform: msg.
-					doneBlock value: msg ].
-			self
-				error:
-					'A clone for a different project (' , response printString
-						, ') is already present in ' , gitRepoPath printString ].
-	gitRepoPath exists
-		ifTrue: [ 
-			[ 
-			"if gitRepoDir exists and it is a git repo, then make sure that the clone is for the target
-		project ... if not error out of here."
-			response := gitTool gitrevparseShowTopLevelIn: gitRepoPath pathString.
-			command := 'set -e; cd ' , gitRepoPath pathString , '; pwd'.
-			cdResponse := gitTool performOnServer: command logging: true.
-			(self readlink: response) = (self readlink: cdResponse)
-				ifTrue: [ 
-					| msg |
-					specification
-						repositoryUrl:
-							'cypress:' , gitRepoPath pathString , '/' , specification repoPath , '/'.
-					specification repositoryRootPath: gitRepoPath pathString.
-					msg := 'A clone for '
-						, specification specName printString , ' already exists in '
-						, gitRepoPath printString , ', so the clone operation is being skipped'
-						, '
-The project project has been registered with Rowan at the existing location .'.
-					self inform: msg.
-					doneBlock value: msg ] ]
-				on: Error
-				do: [ :ignored | 
-					self
-						error:
-							'Expected a git repository to present in the directory: '
-								, gitRepoPath pathString printString ] ].
-	gitRootPath ensureCreateDirectory
-%
-
 ! Class implementation for 'RwPrjCommitTool'
 
 !		Instance methods for 'RwPrjCommitTool'
-
-category: 'smalltalk api'
-method: RwPrjCommitTool
-commitPackagesForSpecification: aRwSpecification message: messageString
-
-	"commit repository ... packages must be written out independently with write tool"
-
-	self specification: aRwSpecification.
-	specification canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for ' , specification specName printString
-				,
-					' does not support commit operations. Source written to repository and skipping commit'.
-			self inform: msg.
-			^ msg ].
-	specification commitForTool: self message: messageString.
-	^ specification updateLoadedCommitIdForTool: self
-%
-
-category: 'smalltalk api'
-method: RwPrjCommitTool
-commitPackagesForSpecUrl: aSpecUrlString message: messageString
-
-	"commit repository ... packages must be written out independently with write tool"
-
-	^ self
-		commitPackagesForSpecification: (RwSpecification fromUrl: aSpecUrlString)
-		message: messageString
-%
-
-category: 'smalltalk api'
-method: RwPrjCommitTool
-commitProjectDefinition: projectDefinition message: messageString
-
-	"commit repository ... packages must be written out independently with write tool"
-
-	projectDefinition canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for project ' , projectDefinition name printString
-				, ' does not support commit operations.'.
-			self inform: msg.
-			^ msg ].
-	self specification: projectDefinition specification.
-	specification commitForTool: self message: messageString.
-	^ specification updateLoadedCommitIdForTool: self
-%
 
 category: 'smalltalk api'
 method: RwPrjCommitTool
@@ -37327,16 +38242,7 @@ commitProjectNamed: projectName message: messageString
 	| loadedProject projectDefinition |
 	loadedProject := Rowan image loadedProjectNamed: projectName.
 	projectDefinition := loadedProject asDefinition.
-	projectDefinition canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for project ' , projectDefinition name printString
-				, ' does not support commit operations.'.
-			self inform: msg.
-			^ msg ].
-	self specification: projectDefinition specification.
-	specification commitForTool: self message: messageString.
-	^ specification updateLoadedCommitIdForTool: self
+	projectDefinition commit: messageString
 %
 
 ! Class implementation for 'RwPrjCreateTool'
@@ -37358,298 +38264,6 @@ createComponentProject: componentProjectDefinition
 	componentProjectDefinition register.
 
 	^ componentProjectDefinition
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createDiskBasedProject: projectName packageNames: packageNames format: format root: rootPath
-
-	"Create a new loaded project based on the given attributes. <rootPath> is the parent directory of the Rowan project. If the project exists on disk
-		it will be used, if the project does not exist on disk it will be created. "
-
-	| projectDefinition |
-	projectDefinition := (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
-		packageNames: packageNames;
-		yourself.
-	^ self
-		createProjectFor: projectDefinition 
-		format: format 
-		root: rootPath 
-		configsPath: 'rowan/configs' 
-		repoPath: 'rowan/src' 
-		specsPath: 'rowan/specs'
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createDiskBasedProject: projectName packageNames: packageNames format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath
-
-	"Create a new loaded project based on the given attributes. <rootPath> is the parent directory of the Rowan project. If the project exists on disk
-		it will be used, if the project does not exist on disk it will be created. "
-
-	| projectDefinition |
-	projectDefinition := self 
-		createDiskBasedProjectDefinition: projectName 
-		packageNames: packageNames 
-		format: format 
-		root: rootPath 
-		configsPath: configsPath 
-		repoPath: repoPath 
-		specsPath: specsPath.
-	^ self
-		createProjectFor: projectDefinition 
-		format: format
-%
-
-category: 'project definition creation'
-method: RwPrjCreateTool
-createDiskBasedProjectDefinition: projectName packageNames: packageNames format: format root: rootPath
-	"Create a new project definition for a disk-based Rowan project with the given attributes"
-
-	| utils rootRepoPath |
-	utils := self fileUtilities.
-	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
-	^ (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
-		packageNames: packageNames;
-		repositoryRootPath: rootRepoPath;
-		projectOwnerId: Rowan image currentUserId;
-		yourself.
-%
-
-category: 'project definition creation'
-method: RwPrjCreateTool
-createDiskBasedProjectDefinition: projectName packageNames: packageNames format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath
-	"Create a new project definition for a disk-based Rowan project with the given attributes"
-
-	| utils rootRepoPath |
-	utils := self fileUtilities.
-	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
-	^ (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
-		packageNames: packageNames;
-		configsPath: configsPath;
-		repoPath: repoPath;
-		specsPath: specsPath;
-		repositoryRootPath: rootRepoPath;
-		projectOwnerId: Rowan image currentUserId;
-		yourself.
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createGitBasedProject: projectName packageNames: packageNames format: format root: rootPath
-
-	"Create a new loaded project based on the given attributes. <rootPath> is the parent directory of the Rowan project. If the git project exists on disk
-		it will be used, if the git project does not exist on disk it will be created. "
-
-	| projectDefinition |
-	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
-		packageNames: packageNames;
-		yourself.
-	^ self
-		createProjectFor: projectDefinition 
-		format: format 
-		root: rootPath 
-		configsPath: 'rowan/configs' 
-		repoPath: 'rowan/src' 
-		specsPath: 'rowan/specs'
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createGitBasedProject: projectName packageNames: packageNames format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath
-
-	"Create a new loaded project based on the given attributes. <rootPath> is the parent directory of the Rowan project. If the git project exists on disk
-		it will be used, if the git project does not exist on disk it will be created. "
-
-	| projectDefinition |
-	projectDefinition := self 
-		createGitBasedProjectDefinition: projectName 
-		packageNames: packageNames 
-		format: format 
-		root: rootPath 
-		configsPath: configsPath 
-		repoPath: repoPath 
-		specsPath: specsPath.
-	^ self
-		createProjectFor: projectDefinition 
-		format: format
-%
-
-category: 'project definition creation'
-method: RwPrjCreateTool
-createGitBasedProjectDefinition: projectName packageNames: packageNames format: format root: rootPath
-	"Create a new project definition for a git-based Rowan project with the given attributes"
-
-	| utils rootRepoPath |
-	utils := self fileUtilities.
-	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
-	^(RwProjectDefinition newForGitBasedProjectNamed: projectName)
-		packageNames: packageNames;
-		repositoryRootPath: rootRepoPath;
-		projectOwnerId: Rowan image currentUserId;
-		yourself.
-%
-
-category: 'project definition creation'
-method: RwPrjCreateTool
-createGitBasedProjectDefinition: projectName packageNames: packageNames format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath
-	"Create a new project definition for a git-based Rowan project with the given attributes"
-
-	| utils rootRepoPath |
-	utils := self fileUtilities.
-	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
-	^(RwProjectDefinition newForGitBasedProjectNamed: projectName)
-		packageNames: packageNames;
-		configsPath: configsPath;
-		repoPath: repoPath;
-		specsPath: specsPath;
-		repositoryRootPath: rootRepoPath;
-		projectOwnerId: Rowan image currentUserId;
-		yourself.
-%
-
-category: 'project definition creation'
-method: RwPrjCreateTool
-createProjectDefinitionFromSpecUrl: fileUrlOrString
-	"Answer a project definition based on the given <fileUrlOrString> 
-		<fileUrlOrString> is expected to be an RwFileUrl for a project spec _in_ an existing Rowan project"
-
-	| fileUrl spec specsPath specFilePath index projectRootPath |
-	fileUrl := fileUrlOrString asRwUrl.
-	fileUrl scheme = 'file'
-		ifFalse: [ self error: 'the url ', fileUrlOrString printString, ' is expected to be a file: url referencing a project specification file in an existing Rowan project' ].
-	spec := fileUrl asSpecification.
-	specsPath := spec specsPath.
-    specFilePath := fileUrl pathDirString.
-	index := specFilePath findString: specsPath startingAt: 1.
-	projectRootPath := specFilePath copyFrom: 1 to: index - 1.
-	^ self createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath
-%
-
-category: 'project definition creation'
-method: RwPrjCreateTool
-createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath
-	"Answer a project definition based on the spec given in <fileUrlOrString> 
-		<projectRootPath> is the path to the root directory of the Rowan project"
-
-	| path fileUrl spec projectDefinition projectRootRef |
-	fileUrl := fileUrlOrString asRwUrl.
-	fileUrl scheme = 'file'
-		ifFalse: [ self error: 'the url ', fileUrlOrString printString, ' is expected to be a file: url referencing a project specification file in an existing Rowan project' ].
-	spec := fileUrl asSpecification.
-	projectRootRef := projectRootPath  asFileReference.
-	spec 
-		repositoryRootPath: projectRootRef ;
-		repositoryUrl: 'cypress:', (projectRootRef  / spec repoPath) pathString, '/'.
-	path :=  spec repositoryRootPath / spec repoPath.
-	path exists
-		ifFalse: [ self error: 'No source repository found at ' , path pathString printString ].
-	path :=  spec repositoryRootPath / spec configsPath.
-	path exists
-		ifFalse: [ self error: 'No configuration directory found at ' , path pathString printString ].
-	projectDefinition := spec asDefinition.
-	^ projectDefinition
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createProjectFor: projectDefinition
-
-	"Create a new loaded project based on the given project definition. If the project exists on disk it will be used, if the project 
-		does not exist on disk it will be created."
-
-	"If project does not exist on disk, create project on disk using tonel format"
-
-	^ self createProjectFor: projectDefinition format: 'tonel'
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createProjectFor: projectDefinition format: format
-
-	"Create a new loaded project based on the given project definition. If the project exists on disk it will be used, if the project 
-		does not exist on disk it will be created."
-
-	"format is only used if project does not exist on disk"
-
-	| projectName rootRepoPath dirPath useGit repositoryUrl |
-	projectName := projectDefinition name.
-	useGit := projectDefinition useGit.
-	rootRepoPath := projectDefinition repositoryRootPath asFileReference.
-	repositoryUrl :=  'cypress:' , rootRepoPath pathString , '/' , projectDefinition repoPath , '/'.
-
-	self
-		_createProjectRepositoryDirectory: rootRepoPath
-		useGit: useGit
-		abort: [ 
-			projectDefinition repositoryUrl: repositoryUrl.
-			projectDefinition specification register.
-			^ projectDefinition ].
-
-	projectDefinition repositoryUrl:repositoryUrl.
-
-	dirPath := rootRepoPath asFileReference / projectDefinition repoPath.
-	dirPath ensureCreateDirectory.
-
-	(dirPath /  'properties.st') 
-		writeStreamDo: [ :fileStream | fileStream nextPutAll: '{ #format : ' , format printString , '}' ].
-
-	{projectDefinition configsPath. projectDefinition repoPath. projectDefinition specsPath }
-		do: [ :path |
-			(rootRepoPath / path) ensureCreateDirectory ].
-
-	projectDefinition specification export.
-	projectDefinition specification register.
-	projectDefinition configurationTemplate export.
-
-	^ projectDefinition
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createProjectFor: projectDefinition format: format root: rootPath
-
-	"Create a new loaded project based on the given project definition. If the project exists on disk at <rootPath> it will be used, if the project 
-		does not exist on disk it will be created."
-
-	| projectName utils |
-	projectName := projectDefinition name.
-	utils := self fileUtilities.
-	projectDefinition repositoryRootPath:  rootPath , utils pathNameDelimiter , projectName.
-	^ self createProjectFor: projectDefinition format: format
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createProjectFor: projectDefinition format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath
-
-	"Create a new loaded project based on the given project definition. If the project exists on disk at <rootPath> it will be used, if the project 
-		does not exist on disk it will be created."
-
-	| projectName utils |
-	projectName := projectDefinition name.
-	utils := self fileUtilities.
-	projectDefinition
-		repositoryRootPath: rootPath , utils pathNameDelimiter , projectName;
-		repoPath: repoPath;
-		configsPath: configsPath;
-		repoPath: repoPath;
-		specsPath: specsPath;
-		repositoryRootPath: rootPath , utils pathNameDelimiter , projectName;
-		projectOwnerId: Rowan image currentUserId.
-	^ self createProjectFor: projectDefinition format: format
-%
-
-category: 'loaded project creation'
-method: RwPrjCreateTool
-createProjectFromSpecUrl: fileUrlOrString
-
-	"Create a new loaded project based on the given <fileUrlOrString>. If the project exists on disk it will be used, if the project 
-		does not exist on disk it will be created."
-
-	| projectDefinition |
-	projectDefinition := self createProjectDefinitionFromSpecUrl: fileUrlOrString.
-	^ self createProjectFor: projectDefinition
 %
 
 category: 'project repository creation'
@@ -37760,7 +38374,7 @@ deleteProjectSetDefinition: projectSetDefinitionToDelete
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinitionToDelete.
 
 	loadedProjectSet do: [:loadedProject |
-		Rowan image _removeLoadedProject: loadedProject ]
+		Rowan image _removeLoadedProject: loadedProject  ifAbsent: []  ]
 %
 
 category: 'delete project definitions'
@@ -38062,7 +38676,27 @@ category: 'load project definitions'
 method: RwPrjLoadTool
 loadComponentProjectDefinition: projectDefinition
 
-	^ self loadProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+	^ self loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+%
+
+category: 'load project definitions'
+method: RwPrjLoadTool
+loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
+	| projectSetDefinition |
+	projectSetDefinition := projectDefinition repositoryRoot exists
+		ifTrue: [ 
+			Rowan projectTools read
+				readProjectSetForComponentProjectDefinition: projectDefinition
+				withConfigurations: projectDefinition loadedConfigurationNames
+				groupNames: projectDefinition loadedGroupNames 
+				platformConfigurationAttributes: platformConfigurationAttributes ]
+		ifFalse: [ 
+			RwProjectSetDefinition new
+				addProject: projectDefinition;
+				yourself ].
+	^ self loadProjectSetDefinition: projectSetDefinition
 %
 
 category: 'load project definitions'
@@ -38072,91 +38706,6 @@ loadProjectDefinition: projectDefinition
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	^ self loadProjectSetDefinition: projectSetDefinition
-%
-
-category: 'load project definitions'
-method: RwPrjLoadTool
-loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
-
-	| visitor projectSetDefinition |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
-	visitor := Rowan projectTools read
-			readConfigurationsForProjectComponentDefinition: projectDefinition
-			withConfigurations: projectDefinition loadedConfigurationNames
-			groupNames: projectDefinition loadedGroupNames 
-			platformConfigurationAttributes: platformConfigurationAttributes
-			forLoad: true.
-	visitor projectLoadSpecs do: [:loadSpec |
-		| dependentProjectDefinition |
-		dependentProjectDefinition := loadSpec asDefinition.
-		dependentProjectDefinition clone.
-		dependentProjectDefinition read do: [:readProjectDef |
-			(projectSetDefinition projectNames includes: readProjectDef name)
-				ifTrue: [ self error: 'duplicate dependent projects encountered ', readProjectDef name printString]
-				ifFalse: [ projectSetDefinition addDefinition: readProjectDef ] ] ].
-	^ self loadProjectSetDefinition: projectSetDefinition
-%
-
-category: 'load project by spec url'
-method: RwPrjLoadTool
-loadProjectFromSpecUrl: fileUrlOrString
-
-	| projectDefinition projectSetDefinition res |
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-%
-
-category: 'load project by spec url'
-method: RwPrjLoadTool
-loadProjectFromSpecUrl: fileUrlOrString  projectRootPath: projectRootPath
-
-	| projectDefinition projectSetDefinition res |
-
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-%
-
-category: 'load project by spec url'
-method: RwPrjLoadTool
-loadProjectFromSpecUrl: fileUrlOrString withConfigurations: configNames groupNames: groupNames
-
-	| projectDefinition projectSetDefinition res |
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString.
-	projectSetDefinition := Rowan projectTools read 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: configNames
-		groupNames: groupNames.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-%
-
-category: 'load project by spec url'
-method: RwPrjLoadTool
-loadProjectFromSpecUrl: fileUrlOrString  withConfigurations: configNames groupNames: groupNames projectRootPath: projectRootPath
-
-	| projectDefinition projectSetDefinition res |
-
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath.
-	projectSetDefinition := Rowan projectTools read 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: configNames
-		groupNames: groupNames.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
 %
 
 category: 'load project by name'
@@ -38236,25 +38785,6 @@ loadProjectNamed: projectNamed withGroupNames: groupNames instanceMigrator: inst
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed
 		withGroupNames: groupNames.
-	res := self 
-		_doProjectSetLoad_254: projectSetDefinition
-		instanceMigrator: instanceMigrator 
-		originalProjectSet: projectSetDefinition 
-		processedClassNames: Set new.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-%
-
-category: 'load project by name'
-method: RwPrjLoadTool
-loadProjectNamed_254: projectNamed instanceMigrator: instanceMigrator
-
-	"load the named project from disk, mark the loaded projects not dirty and run initializers"
-
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed.
 	res := self 
 		_doProjectSetLoad_254: projectSetDefinition
 		instanceMigrator: instanceMigrator 
@@ -38377,23 +38907,28 @@ _loadProjectSetDefinition_254: projectSetDefinitionToLoad instanceMigrator: inst
 	projectSetDefinitionToLoad definitions keysAndValuesDo: [:projectName :projectDefinition |
 			projectDefinition packages keysAndValuesDo: [:packageName :packageDefinition |
 				"set the target symbol dictionary name for each incoming package definition"
-				packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ].
+				(packageDefinition gs_symbolDictionary isNil 
+					or: [ (loadedProjectInfo includesKey: projectName) or: [ (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue) not ] ])
+						ifTrue: [ 
+							"set gs_symbolDictionary for the first time, or (potentially) override if project freshly read 
+								from disk (loadedProjectInfo available)"
+							packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
 	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
-			| theProjectDef |
-			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
-				ifNil: [ projectDef ]
-				ifNotNil: [:loadedProject | loadedProject ].
+			| theLoadedProject |
+			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theProjectDef updateLoadedCommitId ].
+				ifTrue: [  
+					theLoadedProject 
+						updateLoadedCommitId;
+						markNotDirty.
+					theLoadedProject
+						loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
-				ifNotNil: [:map |
-					theProjectDef
-						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
-						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
+				ifNotNil: [:map | projectDef updateLoadedComponentInfoFor: theLoadedProject from: map ] ].
 	^ diff
 %
 
@@ -38575,6 +39110,8 @@ method: RwPrjReadTool
 readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
 
 	| theConfigNames theGroupNames |
+	projectComponentDefinition components: Dictionary new. "build new list of components based on (potentially) new list of configNames"
+	projectComponentDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theConfigNames := configNames isEmpty
 		ifTrue: [ projectComponentDefinition defaultConfigurationNames ]
 		ifFalse: [ configNames ].
@@ -38653,6 +39190,9 @@ category: 'read project definitions'
 method: RwPrjReadTool
 readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames
 
+	"read packages and project metadata into projectComponentDefinition ... return a project definition
+		set that contains projectComponentDefinition and any dependent projects"
+
 	^ self 
 		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
 			withConfigurations: configNames 
@@ -38676,14 +39216,22 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		pcd := nextDefArray at: 1. 
 		cn := nextDefArray at: 2.
 		gn := nextDefArray at: 3.
-		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes.
+		visitor := self 
+			readConfigurationsForProjectComponentDefinition: pcd 
+				withConfigurations: cn 
+				groupNames: gn 
+				platformConfigurationAttributes: platformConfigurationAttributes.
+		pcd projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
+		visitor visitedComponents keysAndValuesDo: [:cName :cmp | pcd components at: cName put: cmp ].
 		projectVisitedQueue addLast: { visitor . nextDefArray  }.
 		visitor projectLoadSpecs do: [:loadSpec |
 			| lsd |
 			lsd := loadSpec asDefinition.
+			lsd projectHome: pcd projectHome.
+			lsd cloneRepository.
 			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames } ] ].
 	projectVisitedQueue do: [:visitedArray |
-		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
+		| projectName ndf theVisitor theProjectComponentDefinition theConfigNames
 			theGroupNames thePackageNames thePackageMapSpecs |
 		theVisitor := visitedArray at: 1.
 		ndf := visitedArray at: 2.
@@ -38691,17 +39239,12 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		projectName := theProjectComponentDefinition name.
 		theConfigNames := ndf at: 2.
 		theGroupNames := ndf at: 3.
+		thePackageNames := theProjectComponentDefinition packageNames.
 		theVisitor 
-			ifNotNil: [ 
-				thePackageNames := theVisitor packageNames.
-				thePackageMapSpecs := theVisitor packageMapSpecs ]
-			ifNil: [ 
-				thePackageNames := theProjectComponentDefinition packageNames.
-				thePackageMapSpecs := Dictionary new ].	
-		theProjectSetDefinition := self 
-			_readProjectSetForProjectComponentDefinition: theProjectComponentDefinition 
-			packageNames: thePackageNames.
-		projectSetDefinition addProject: (theProjectSetDefinition projectNamed: projectName).
+			ifNotNil: [ thePackageMapSpecs := theVisitor packageMapSpecs ]
+			ifNil: [ thePackageMapSpecs := Dictionary new ].	
+		theProjectComponentDefinition readPackageNames: thePackageNames.
+		projectSetDefinition addProject: theProjectComponentDefinition.
 		((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
 			at: projectName ifAbsentPut: [ Dictionary new ])
 				at: 'loadedConfigurationNames' put: theConfigNames;
@@ -38742,6 +39285,9 @@ readProjectSetForProjectDefinition: projectDefinition
 category: 'read project definitions'
 method: RwPrjReadTool
 readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
+
+	"read packages and project metadata into projectComponentDefinition ... return a project definition
+		set that contains projectComponentDefinition and any dependent projects"
 
 	| projectName repo spec packageNames projectSetDefinition packageMapSpecs visitor |
 	projectName := projectDefinition name.
@@ -38827,20 +39373,8 @@ _readProjectDefinition: projectDefinition packageNames: packageNames fromRepo: r
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
 			projectDefinition addOrUpdatePackage: packageDefinition ].
-	projectDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
+	projectDefinition projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectDefinition
-%
-
-category: 'private'
-method: RwPrjReadTool
-_readProjectSetForProjectComponentDefinition: projectComponentDefinition packageNames: packageNames
-
-	| projectSetDefinition |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectComponentDefinition readProjectSetForPackageNames: packageNames.
-	projectSetDefinition addProject: projectComponentDefinition.
-	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
-	^ projectSetDefinition
 %
 
 category: 'private'
@@ -38870,6 +39404,7 @@ _visitConfigurations: visitorClass forProjectComponentDefinition: projectCompone
 		groupNames: groupNames;
 		configurationBasePath: configDirectory pathString;
 		projectBasePath: projectsDirectory pathString;
+		projectComponentDefinition: projectComponentDefinition;
 		yourself.
 	configNames do: [:configName |
 		| config url |
@@ -39142,67 +39677,6 @@ _moveClassExtension: theClassExtension toNewPackageNamed: newPackageName clonedF
 	^ newPackageDef
 %
 
-! Class implementation for 'RwPrjSpecTool'
-
-!		Instance methods for 'RwPrjSpecTool'
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportProjectDefinition: projectDefinition
-
-	self specification: projectDefinition specification.
-	^ specification export
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportProjectNamed: projectName
-
-	| loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	self specification: loadedProject specification.
-	^ specification export
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportSpecification: aRwSpecification
-
-	self specification: aRwSpecification.
-	^specification export
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportSpecification: aRwSpecification toUrl: fileUrl
-
-	self specification: aRwSpecification.
-	^specification exportToUrl: fileUrl
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportSpecUrl: aString
-
-	^ self exportSpecification: (RwSpecification fromUrl: aString)
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportSpecUrl: aString toUrl: exportUrl
-
-	^ self exportSpecification: (RwSpecification fromUrl: aString) toUrl: exportUrl
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-specForProjectNamed: projectName
-
-	| loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	^ loadedProject specification
-%
-
 ! Class implementation for 'RwPrjTestTool'
 
 !		Instance methods for 'RwPrjTestTool'
@@ -39262,77 +39736,6 @@ writeComponentProjectDefinition: projectDefinition
 		exportProjects;
 		exportComponents;
 		exportPackages
-%
-
-category: 'deprecated'
-method: RwPrjWriteTool
-writeDeprecatedProjectDefinition: projectDefinition
-
-	| repo repositoryUrl |
-	self deprecated: 'Use RwComponentProjectDefinition instead'.
-	repositoryUrl := projectDefinition repositoryUrl
-		ifNil: [ 
-			projectDefinition repositoryRootPath
-				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
-		ifNotNil: [ :urlString | urlString asRwUrl ].
-	repo := repositoryUrl asRwRepository.
-	projectDefinition packages values
-		do: [ :rwPackageDefinition | 
-			| packageStructure |
-			packageStructure := RwCypressPackageStructure
-				fromPackage: rwPackageDefinition.
-			repo writePackageStructure: packageStructure ]
-%
-
-category: 'deprecated'
-method: RwPrjWriteTool
-writeDeprecatedProjectNamed: projectName
-
-	| loadedProject repo repositoryUrl projectDefinition packageDefinitionSet loadedPackages |
-	self deprecated: 'Use RwComponentProjectDefinition instead'.
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	projectDefinition := loadedProject asDefinition.
-	repositoryUrl := projectDefinition repositoryUrl
-		ifNil: [ 
-			projectDefinition repositoryRootPath
-				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
-		ifNotNil: [ :urlString | urlString asRwUrl ].
-	repo := repositoryUrl asRwRepository.
-	loadedPackages := self _loadedPackagesForProject: projectDefinition.
-	packageDefinitionSet := loadedPackages asPackageDefinitionSet.
-	packageDefinitionSet
-		do: [ :rwPackageDefinition | 
-			| packageStructure |
-			packageStructure := RwCypressPackageStructure
-				fromPackage: rwPackageDefinition.
-			repo writePackageStructure: packageStructure ].
-	"loaded project and loaded packages written to disk - mark them not dirty"
-	loadedProject markNotDirty.
-	loadedPackages do: [:loadedPackage | loadedPackage markNotDirty ].
-%
-
-category: 'deprecated'
-method: RwPrjWriteTool
-writePackageSet: aRwPackageSet specification: aRwSpecification
-
-	| repo repositoryUrl |
-	self deprecated: 'RwPackageSet definition and writing package sets is no longer supported'.
-	self specification: aRwSpecification.
-	repositoryUrl := specification repositoryUrl
-		ifNil: [ 
-			specification repoSpec repositoryRootPath
-				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
-		ifNotNil: [ :urlString | urlString asRwUrl ].
-	repo := repositoryUrl asRwRepository.
-	aRwPackageSet packages values
-		do: [ :rwPackage | 
-			| packageStructure |
-			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
-			repo writePackageStructure: packageStructure ].
-	^ specification
 %
 
 category: 'smalltalk api'
@@ -39589,8 +39992,11 @@ addDefinition: aDefinition to: aDictionary
 
 	| key |
 	key := aDefinition key.
-	(aDictionary includesKey: key)
-		ifTrue: [self error: 'Duplicate definition.'].
+	(aDictionary includesKey: key) ifTrue: [
+     | nam |
+     nam := [ ' in ' , self name ] on: Error do:[:ex | '' ].
+     self error: 'Duplicate definition of ', key , nam .
+   ].
 	^ aDictionary at: key put: aDefinition
 %
 
@@ -40158,6 +40564,21 @@ instVarNames: arrayOfInstanceVariableNames
 
 category: 'accessing'
 method: RwClassDefinition
+shebang
+
+	^ self propertyAt: 'shebang' ifAbsent: []
+%
+
+category: 'accessing'
+method: RwClassDefinition
+shebang: aStringOrNil
+
+	aStringOrNil ifNil: [ ^ self properties removeKey: 'shebang' ifAbsent: [] ].
+	^ self propertyAt: 'shebang' put: aStringOrNil
+%
+
+category: 'accessing'
+method: RwClassDefinition
 superclassName
 
 	^self propertyAt: 'superclass' ifAbsent: [self propertyAt: 'super']
@@ -40223,11 +40644,11 @@ method: RwClassDefinition
 _updateClassTypeFromClass: aClass
 
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
-	"Must be in-synch with RwGsLoadedSymbolDictPatch>>updateClassTypeFromClass"
+	"Must be in-synch with RwGsLoadedSymbolDictClass>>updateClassTypeFromClass"
 
 	| propertyName oldValue newValue |
 	propertyName := 'type'.
@@ -40235,7 +40656,7 @@ _updateClassTypeFromClass: aClass
 	newValue := aClass isBytes
 						ifTrue: [
 							aClass superClass isBytes not
-								ifTrue: [ 'bytes' ]
+								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
 							aClass isSpecial
@@ -40326,8 +40747,9 @@ _updateOptionsFromClass: aClass
 				asSortedCollection asArray.
 	newValue isEmpty 
 		ifTrue: [ self removeProperty: propertyName ]
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
+		ifFalse: [ self propertyAt: propertyName put: newValue ].
+  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedoop' put: resOop asString ]
+                          ifNil:[ self removeProperty:'gs_reservedoop' ].
 %
 
 category: 'utility'
@@ -40344,8 +40766,7 @@ _updatePoolDictionaryNamesFromClass: aClass
 category: 'utility'
 method: RwClassDefinition
 _updateSuperclassNameFromClass: aClass
-
-	self superclassName: aClass superclass name asString
+	self superclassName: (aClass superclass ifNotNil:[:sup | sup name asString] ifNil:['nil'])
 %
 
 category: 'utility'
@@ -40594,6 +41015,13 @@ attach
 	self error: 'not yet implemented'
 %
 
+category: 'testing'
+method: RwAbstractRepositoryDefinition
+canCommit
+
+	^ false
+%
+
 category: 'actions'
 method: RwAbstractRepositoryDefinition
 clone
@@ -40646,6 +41074,13 @@ method: RwAbstractRepositoryDefinition
 create
 
 	self error: 'not yet implemented'
+%
+
+category: 'actions'
+method: RwAbstractRepositoryDefinition
+doCommit: message
+
+	"noop by default"
 %
 
 category: 'accessing'
@@ -40780,6 +41215,13 @@ newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString remote
 
 !		Instance methods for 'RwGitRepositoryDefinition'
 
+category: 'testing'
+method: RwGitRepositoryDefinition
+canCommit
+
+	^ true
+%
+
 category: 'actions'
 method: RwGitRepositoryDefinition
 clone
@@ -40808,6 +41250,25 @@ method: RwGitRepositoryDefinition
 commitLog: logLimit
 
 	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
+%
+
+category: 'actions'
+method: RwGitRepositoryDefinition
+doCommit: message
+
+	| gitTool gitRootPath commitMessageFileName status |
+	gitTool := Rowan gitTools.
+	gitRootPath := self repositoryRoot pathString.
+	commitMessageFileName := gitTool createTmpFileWith: message.
+	gitTool gitaddIn: gitRootPath with: '-A .'.
+	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
+	status := gitTool gitlogIn: gitRootPath with: '-1'.
+	Transcript
+		cr;
+		show: '==============';
+		cr;
+		show: status.
+	^ status
 %
 
 category: 'accessing'
@@ -41053,6 +41514,13 @@ deriveLoadedThings
 			((self definitionNames
 				collect: [ :projectName | Rowan image loadedProjectNamed: projectName ifAbsent: [  ] ])
 				select: [ :each | each notNil ])
+%
+
+category: 'actions'
+method: RwProjectSetDefinition
+load
+
+	^ Rowan projectTools load loadProjectSetDefinition: self
 %
 
 category: 'accessing'
@@ -41476,6 +41944,14 @@ comment: aString
 	self specification comment: aString
 %
 
+category: 'actions'
+method: RwProjectDefinition
+commit: message
+	"lperform commit on the repository associated with receiver ..."
+
+	^ Rowan projectTools commit commitProjectDefinition: self message: message
+%
+
 category: 'properties'
 method: RwProjectDefinition
 configsPath
@@ -41614,6 +42090,13 @@ loadedConfigurationNames: anArray
 
 category: 'properties'
 method: RwProjectDefinition
+loadedGroupNames
+
+	^ self specification loadedGroupNames
+%
+
+category: 'properties'
+method: RwProjectDefinition
 loadedGroupNames: anArray
 
 	^ self specification imageSpec loadedGroupNames: anArray
@@ -41646,7 +42129,7 @@ method: RwProjectDefinition
 packageNames: packageNames
 
 	packageNames
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+		do: [ :packageName | self addPackageNamed: packageName ]
 %
 
 category: 'accessing'
@@ -41672,6 +42155,19 @@ postCopy
 	oldPackages := packages.
 	packages := Dictionary new.
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
+%
+
+category: 'actions'
+method: RwProjectDefinition
+read
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+
+	"return a project definition set that will contain the project definition"
+
+	| projecSetDefinition |
+	projecSetDefinition := RwProjectSetDefinition new.
+	projecSetDefinition addProject: (Rowan projectTools read readProjectDefinition: self).
+	^ projecSetDefinition
 %
 
 category: 'tool api'
@@ -41779,6 +42275,14 @@ specsPath: aDirectoryPathString
 	self specification specsPath: aDirectoryPathString
 %
 
+category: 'actions'
+method: RwProjectDefinition
+unload
+	"unload the receiver from the image"
+
+	^ Rowan projectTools delete deleteProjectDefinition: self copy	"delete operation is destructive to the projectDefinition"
+%
+
 category: 'loading'
 method: RwProjectDefinition
 updateLoadedCommitId
@@ -41790,6 +42294,15 @@ updateLoadedCommitId
 			"most likely no commits yet"
 			^ nil ].
 	self specification imageSpec loadedCommitId: loadedCommitId
+%
+
+category: 'loading'
+method: RwProjectDefinition
+updateLoadedComponentInfoFor: aLoadedProject from: map
+
+	aLoadedProject
+		loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+		loadedGroupNames: (map at: 'loadedGroupNames')
 %
 
 category: 'properties'
@@ -41832,7 +42345,6 @@ newForProjectReference: aRwProjectReferenceDefintion
 				add: 'projectRef' -> aRwProjectReferenceDefintion;
 				yourself)
 		packageDefinitions: Dictionary new
-		componentDefinitions: Dictionary new
 %
 
 category: 'instance creation'
@@ -41847,6 +42359,18 @@ classmethod: RwComponentProjectDefinition
 newForUrl: specUrl
 
 	^ self newForSpecification: specUrl asRwUrl asSpecification
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
+projectName: projectName 
+
+	| projectRef |
+	projectRef := RwProjectReferenceDefinition new
+		projectName: projectName;
+		useGit: true;
+		yourself.
+	^ self newForProjectReference: projectRef
 %
 
 category: 'instance creation'
@@ -41898,70 +42422,6 @@ projectName: projectName componentNamesToLoad: componentNamesToLoad groupNamesTo
 	^ self newForProjectReference: projectRef
 %
 
-category: 'deprecated'
-classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			defaultComponentName: defaultComponentName
-			useGit: useGit 
-			projectUrl: projectUrl 
-			projectHome: projectHomeFileReferenceOrString
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-%
-
-category: 'deprecated'
-classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			comment: comment)
-%
-
-category: 'deprecated'
-classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-%
-
-category: 'deprecated'
-classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			projectHome: projectHomeFileReferenceOrString
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-%
-
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
 projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: useGit comment: comment
@@ -41978,12 +42438,11 @@ projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: u
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
-withProperties: properties packageDefinitions: packageDefinitions componentDefinitions: componentDefinitions
+withProperties: properties packageDefinitions: packageDefinitions
 
 	^ self basicNew
 		properties: properties;
 		packages: packageDefinitions;
-		components: componentDefinitions;
 		yourself
 %
 
@@ -42044,8 +42503,8 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components 
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -42060,8 +42519,8 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -42079,8 +42538,8 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -42102,8 +42561,8 @@ addPackageNamed: packageName withConditions: conditionArray
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: self defaultGroupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components 
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -42122,8 +42581,8 @@ addPackageNamed: packageName withConditions: conditionArray andGroupName: groupN
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: groupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -42142,8 +42601,8 @@ addPackageNamed: packageName withConditions: conditionArray andGroupName: groupN
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: groupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -42165,14 +42624,35 @@ addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbo
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: self defaultGroupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
 			andPackageName: packageName
 			setSymbolDictNameTo: aSymbolDictAssoc value.
 	^package
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+addPackages: somePackageNames forComponent: aComponent
+	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
+		component --- presumably freshly read from disk --- wins"
+
+	| componentName |
+	componentName := aComponent name.
+	(self components 
+		at: componentName 
+		ifAbsent: [])
+			ifNil: [ self components at: componentName put: aComponent ]
+			ifNotNil: [:theComponent |
+				theComponent ~~ aComponent
+					ifTrue: [ 
+						"newest component wins"
+						self components at: componentName put: aComponent ] ].
+	somePackageNames asSet do: [:packageName |
+		super addPackageNamed: packageName ].
 %
 
 category: 'accessing'
@@ -42240,13 +42720,64 @@ addPackagesNamed: packageNames withConditions: conditionArray gemstoneDefaultSym
 		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
 %
 
+category: 'accessing'
+method: RwComponentProjectDefinition
+addRawPackageNamed: packageName
+
+	^ self addPackage: (RwPackageDefinition newNamed: packageName)
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+canCommit
+
+	^ self projectRef canCommit
+%
+
 category: 'actions'
 method: RwComponentProjectDefinition
 clone
 	"clone remote git project to disk"
 
-	self projectRef clone.
+	self cloneRepository.
 	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+cloneRepository
+	"clone remote git project to disk"
+
+	self projectRef clone
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+comment
+
+	^ self projectRef comment
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+comment: aString
+
+	self projectRef comment: aString
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+commit: message
+	"commit the repository associated with receiver ..."
+
+	self canCommit
+		ifFalse: [ 
+			| msg |
+			msg := 'repository for project ' , self name printString
+				, ' does not support commit operations.'.
+			self inform: msg.
+			^ msg ].
+	^ self projectRef doCommit: message
 %
 
 category: 'accessing'
@@ -42269,14 +42800,14 @@ category: 'accessing'
 method: RwComponentProjectDefinition
 components
 
-	^ components
+	^ self projectRef components
 %
 
 category: 'accessing'
 method: RwComponentProjectDefinition
 components: aComponentDefinitionDictionary
 
-	components := aComponentDefinitionDictionary
+	self projectRef components: aComponentDefinitionDictionary
 %
 
 category: 'properties'
@@ -42370,6 +42901,8 @@ category: 'exporting'
 method: RwComponentProjectDefinition
 exportComponents
 
+	self components isEmpty ifTrue: [
+		self addComponentNamed: self defaultComponentName comment: '' ].
 	self components values do: [:component|
 		component exportToUrl: 'file:',  self configsRoot pathString, '/' ].
 	self components isEmpty
@@ -42431,11 +42964,26 @@ exportProjects
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 %
 
+category: 'exporting'
+method: RwComponentProjectDefinition
+exportSpecification
+
+	self projectRef exportSpecification
+%
+
 category: 'accessing'
 method: RwComponentProjectDefinition
 gitRoot: aGitRootReferenceOrString 
 
 	^ self projectRef gitRoot: aGitRootReferenceOrString
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+key
+	"Answer an object that can be used to uniquely identify myself in the context of my container."
+
+	^self projectAlias
 %
 
 category: 'actions'
@@ -42444,6 +42992,14 @@ load
 	"load the receiver into the image"
 
 	^ Rowan projectTools load loadComponentProjectDefinition: self
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+load: platformConfigurationAttributes
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadComponentProjectDefinition: self platformConfigurationAttributes: platformConfigurationAttributes
 %
 
 category: 'accessing'
@@ -42462,9 +43018,16 @@ loadedConfigurationNames
 
 category: 'properties'
 method: RwComponentProjectDefinition
-loadedConfigurationNames: anArray
+loadedConfigurationNames: configNames
 
-	^ self projectRef loadedConfigurationNames: anArray
+	"noop - project ref component keys is list of loaded config names"
+
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
+
+	configNames asArray sort = self loadedConfigurationNames asArray sort
+		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 %
 
 category: 'properties'
@@ -42537,13 +43100,18 @@ packagesRoot
 	^ self projectRef packagesRoot
 %
 
-category: 'copying'
+category: 'accessing'
 method: RwComponentProjectDefinition
-postCopy
+projectAlias
 
-	super postCopy.
-	components := components copy.
-	components keysAndValuesDo: [:key : value | components at: key put: value copy ] .
+	^ self projectRef projectAlias
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+projectAlias: aStringOrNil
+
+	self projectRef projectAlias: aStringOrNil
 %
 
 category: 'accessing'
@@ -42622,6 +43190,43 @@ read
 			groupNames: self defaultGroupNames
 %
 
+category: 'actions'
+method: RwComponentProjectDefinition
+read: platformConfigurationAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools read
+		readProjectSetForComponentProjectDefinition: self 
+			withConfigurations: self defaultConfigurationNames
+			groupNames: self defaultGroupNames
+			platformConfigurationAttributes: platformConfigurationAttributes
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+readPackageNames: packageNames
+
+	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
+
+	| format visitorClass |
+	packages := Dictionary new. 
+	format := self 
+		packageFormatIfAbsent: [  
+			| formatFromDisk |
+			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
+				at: #format ifAbsent: [ 'tonel' ].
+			self packageFormat: formatFromDisk.
+			formatFromDisk ].
+	visitorClass := format = 'tonel'
+		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
+		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
+	^ visitorClass new
+		packageNames: packageNames;
+		visit: self.
+%
+
 category: 'tool api'
 method: RwComponentProjectDefinition
 readProjectSet
@@ -42632,6 +43237,7 @@ readProjectSet
 category: 'actions'
 method: RwComponentProjectDefinition
 readProjectSetForPackageNames: packageNames
+
 	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
 	| format visitorClass |
@@ -42659,22 +43265,6 @@ readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: 
 		readProjectSetForComponentProjectDefinition: self
 			withConfigurations: theConfigNames 
 			groupNames: theGroupNames
-%
-
-category: 'temporary compat'
-method: RwComponentProjectDefinition
-repoPath
-
-	"use packagesPath"
-	^ self shouldNotImplement: #repoPath
-%
-
-category: 'temporary compat'
-method: RwComponentProjectDefinition
-repoPath: astring
-
-	"use packagesPath:"
-	^ self shouldNotImplement: #repoPath:
 %
 
 category: 'properties'
@@ -42736,6 +43326,23 @@ updateLoadedCommitId
 	self projectRef updateLoadedCommitId
 %
 
+category: 'loading'
+method: RwComponentProjectDefinition
+updateLoadedComponentInfoFor: aLoadedProject from: map
+	"really need to update loaded components"
+
+	| theComponentNames |
+	aLoadedProject loadedGroupNames: (map at: 'loadedGroupNames').
+
+	theComponentNames := map at: 'loadedConfigurationNames'.
+	aLoadedProject components keys do: [:aComponentName |
+		(theComponentNames includes: aComponentName)
+			ifFalse: [ aLoadedProject components removeKey: aComponentName ] ].
+
+	theComponentNames do: [:configName |
+		aLoadedProject components at: configName put: (self components at: configName) copy ].
+%
+
 category: 'properties'
 method: RwComponentProjectDefinition
 useGit
@@ -42752,7 +43359,7 @@ classmethod: RwProjectReferenceDefinition
 newForSpecification: aRwSpecification
 
 	^ self
-		newNamed: aRwSpecification projectName 
+		newNamed: aRwSpecification projectName
 			forSpecification: aRwSpecification 
 			projectHome: nil
 %
@@ -42781,7 +43388,7 @@ category: 'instance creation'
 classmethod: RwProjectReferenceDefinition
 newNamed: projectName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString
 
-	^ self
+	^ (self
 		projectName: projectName
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
@@ -42795,7 +43402,9 @@ newNamed: projectName forSpecification: aRwSpecification projectHome: projectHom
 			configsPath: aRwSpecification configsPath
 			packagesPath: aRwSpecification repoPath
 			projectsPath: aRwSpecification projectsPath
-			specsPath: aRwSpecification specsPath
+			specsPath: aRwSpecification specsPath)
+				projectAlias: aRwSpecification projectAlias;
+				yourself
 %
 
 category: 'instance creation'
@@ -42900,43 +43509,18 @@ acceptVisitor: aVisitor
 	^ aVisitor visitProjectReferenceDefinition: self
 %
 
-category: 'conversion'
-method: RwProjectReferenceDefinition
-asSpecification
-
-	| repoSpec platformSpec platformDict |
-	self useGit
-		ifTrue: [
-			repoSpec := RwGitRepositorySpecification new
-				committish: self committish;
-				committishType: self committishType;
-				remoteUrl: self remoteUrl;
-				yourself ]
-		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
-	platformSpec := RwGemStoneSpecification new.
-	platformSpec packageNameToPlatformPropertiesMap: self packageNameToPlatformPropertiesMap.
-	platformDict := (Dictionary new) at: 'gemstone' put: platformSpec; yourself.
-	^ RwComponentSpecification new
-		specName: self projectName;
-		projectUrl: self projectUrl;
-		repoPath: self packagesPath;
-		configsPath: self configsPath;
-		specsPath: self specsPath;
-		projectsPath: self projectsPath;
-		defaultComponentName: self defaultComponentName;
-		defaultConfigurationNames: self configurationNames;
-		defaultGroupNames: self groupNames;
-		comment: self comment;
-		repoSpec: repoSpec;
-		platformSpec: platformDict;
-		yourself.
-%
-
 category: 'accessing'
 method: RwProjectReferenceDefinition
 branch: aString
 
 	self committish: aString committishType: 'branch'
+%
+
+category: 'properties'
+method: RwProjectReferenceDefinition
+canCommit
+
+	^ self repositoryDefinition canCommit
 %
 
 category: 'actions'
@@ -42989,6 +43573,20 @@ method: RwProjectReferenceDefinition
 committishType
 
 	^ self properties at: 'committishType'  ifAbsent: [ 'branch' ]
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+components
+
+	^ self properties at: 'components' ifAbsentPut: [ Dictionary new ]
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+components: aComponentDefinitionDictionary
+
+	^ self properties at: 'components' put: aComponentDefinitionDictionary
 %
 
 category: 'accessing'
@@ -43063,6 +43661,13 @@ defaultGroupName: aString
 	^ self properties at: 'defaultGroupName' put: aString
 %
 
+category: 'actions'
+method: RwProjectReferenceDefinition
+doCommit: message
+
+	^ self repositoryDefinition doCommit: message
+%
+
 category: 'exporting'
 method: RwProjectReferenceDefinition
 exportSpecification
@@ -43083,14 +43688,18 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 groupNames
 
-	^ self properties at: 'groupNames' ifAbsent: [{ self defaultGroupName } ]
+	| gns |
+	gns := self properties at: 'groupNames' ifAbsent: [ {} ].
+	^ gns isEmpty
+		ifTrue: [ { self defaultGroupName } ]
+		ifFalse: [ gns ]
 %
 
 category: 'accessing'
 method: RwProjectReferenceDefinition
-groupNames: anArray
+groupNames: aSet
 
-	^ self properties at: 'groupNames' put: anArray
+	^ self properties at: 'groupNames' put: aSet asSet
 %
 
 category: 'temporary compat'
@@ -43125,12 +43734,18 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 loadedConfigurationNames
 
-	^ self configurationNames
+	^ self components isEmpty
+		ifTrue: [ self configurationNames ]
+		ifFalse: [ (self components values select: [:each | each isIndependentlyLoadable ]) collect: [:each | each name ] ]
 %
 
 category: 'accessing'
 method: RwProjectReferenceDefinition
 loadedConfigurationNames: anArray
+
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
 
 	^ self configurationNames: anArray
 %
@@ -43215,6 +43830,17 @@ packagesRoot
 	^self repositoryRoot / self packagesPath
 %
 
+category: 'copying'
+method: RwProjectReferenceDefinition
+postCopy
+
+	| components |
+	super postCopy.
+	components := self components copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	self components: components
+%
+
 category: 'accessing'
 method: RwProjectReferenceDefinition
 projectAlias
@@ -43258,6 +43884,7 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 projectName: aString
 
+	self repositoryDefinition: nil. "changing project name invalidates the current repository definition"
 	^ self properties at: 'projectName' put: aString
 %
 
@@ -43351,7 +43978,7 @@ method: RwProjectReferenceDefinition
 repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^self projectHome / self projectAlias
+	^self projectHome / self projectName
 %
 
 category: 'accessing'
@@ -43359,10 +43986,24 @@ method: RwProjectReferenceDefinition
 repositoryRoot: aFileReferenceOrPath
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	| fileRef |
+	| fileRef projectDirName |
 	fileRef := aFileReferenceOrPath asFileReference.
-	self projectHome: fileRef parent.
-	self projectAlias: fileRef basename
+	self projectHome: fileRef parent.	 "changing project home invalidates the current repository definition"
+	"the project name should match the name of the directory ... use the alias if the names don't match"
+	projectDirName := fileRef basename.
+	self projectName
+		ifNotNil: [:nm | 
+			nm = projectDirName
+				ifTrue: [
+					"we're done"
+					^ self ].
+			"project name does not equal name project directory"
+			self projectAlias = self projectName
+				ifTrue: [
+					"move the old name to the alias"
+					self projectAlias: self projectName ] ].
+	"set project name to projectDirName "
+	self projectName: projectDirName
 %
 
 category: 'temporary compat'
@@ -43488,24 +44129,14 @@ method: RwProjectReferenceDefinition
 _repositoryDefinitionForProjectHome: projectHomeFileReferenceOrString
 
 
-	| existingProjectRepository |
-	existingProjectRepository := 
-		Rowan image 
-			projectRepositoryNamed: self projectAlias
-				ifAbsent: [
-					| newProjectRepository |
-					newProjectRepository := self _repositoryDefinitionClass
-						newNamed: self projectAlias
-							repositoryRoot: projectHomeFileReferenceOrString asFileReference / self projectAlias
-							projectUrl: self projectUrl
-							committish: self committish 
-							committishType: self committishType.
-					Rowan image addProjectRepository: newProjectRepository.
-					^ newProjectRepository ].
-	"confirm that the existing project repository is compatible with the receiver"
-	existingProjectRepository projectUrl = self projectUrl
-		ifFalse: [ self error: 'incompatible project repository found in registry' ].
-	^ existingProjectRepository
+	| newProjectRepository |
+	newProjectRepository := self _repositoryDefinitionClass
+		newNamed: self projectAlias
+			repositoryRoot: self repositoryRoot	"not a good idea to have repository root stored in two spots"
+			projectUrl: self projectUrl
+			committish: self committish 
+			committishType: self committishType.
+	^ newProjectRepository
 %
 
 ! Class implementation for 'RwElementsModification'
@@ -45236,15 +45867,28 @@ _removeLoadedProject: aRwLoadedProject
 
 	"note that it is not safe to just remove a loaded project from the registry, however this method is supplied as a convenience for tests"
 
+	^ self 
+		_removeLoadedProject: aRwLoadedProject 
+		ifAbsent: [ self error: 'The specified project was not found in the loaded project registry.' ]
+%
+
+category: 'querying'
+classmethod: RwGsImage
+_removeLoadedProject: aRwLoadedProject ifAbsent: absentBlock
+
+	"note that it is not safe to just remove a loaded project from the registry, however this method is supplied as a convenience for tests"
+
 	| projectName projectRegistry |
 	projectName := aRwLoadedProject name.
 	projectRegistry := self
 		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
-	(projectRegistry at: projectName ifAbsent: [ ^ nil ]) == aRwLoadedProject
-		ifFalse: [ 
-			self
-				error:
-					'The specified project is not identical to the loaded project in the registry ... this is not expected' ].
+	(projectRegistry 
+		at: projectName 
+		ifAbsent: [ ^ absentBlock value ]) == aRwLoadedProject
+			ifFalse: [ 
+				self
+					error:
+						'The specified project is not identical to the loaded project in the registry.' ].
 	projectRegistry removeKey: projectName
 %
 
@@ -45840,9 +46484,8 @@ addToNewClassesByName: aDictionary
 category: 'private'
 method: RwGsClassPatch
 basicCreateClassWithSuperclass: superclass
-
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
@@ -45884,7 +46527,7 @@ basicCreateClassWithSuperclass: superclass
 						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
-					type = 'bytes'
+					type = 'byteSubclass'
 						ifTrue: [ 
 							(classDefinition propertyAt: 'instvars') isEmpty
 								ifFalse: [ self error: 'Cannot define byte class with named instvars.' ].
@@ -46037,16 +46680,6 @@ _gemStoneConstraintsFrom:	gs_constraints
 
 category: 'actions'
 method: RwGsClassAdditionSymbolDictPatch
-createAndInstallLoadedClass
-
-	self symbolDictionaryRegistry
-		createAndInstallLoadedClassForClass: newClass 
-		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-%
-
-category: 'actions'
-method: RwGsClassAdditionSymbolDictPatch
 createClassFor: aPatchSet
 	newClass := super createClassFor: aPatchSet.
 	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
@@ -46061,11 +46694,13 @@ installClassInSystem
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	self symbolDictionaryRegistry
+	| loadedClass |
+	loadedClass := self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
 		forClass: newClass
 		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 %
 
 category: 'accessing'
@@ -46217,7 +46852,7 @@ installClassExtensionInSystem
 	(self projectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
 		ifTrue: [ | resolved |
-			((resolved := GsCurrentSession currentSession symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
+			((resolved := Rowan image symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
 				ifFalse: [ 
 					self
 						error:
@@ -46307,7 +46942,7 @@ category: 'installing'
 method: RwGsClassSymbolDictionaryMoveSymDictPatch
 installSymbolDictionaryPatchFor: aPatchSet
 
-	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry |
+	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry loadedClass |
 	theClass := Rowan globalNamed: classDefinition name.
 	before := classModification before.
 	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
@@ -46316,11 +46951,12 @@ installSymbolDictionaryPatchFor: aPatchSet
 	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	newSymbolDictionary := Rowan globalNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
 	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
-	registry 
+	loadedClass := registry 
 		addClassAssociation: assoc 
 			forClass: theClass 
 			toPackageNamed: packageDefinition name
-			implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+			implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 %
 
 category: 'installing'
@@ -47830,8 +48466,7 @@ createLoadedProject
 		ifAbsent: [ nil ].
 	existingLoadedProject
 		ifNotNil: [ self error: 'Internal error -- Attempt to add a project that exists.' ].
-	newLoadedProject := RwGsLoadedSymbolDictProject
-		newForLoadSpecification: projectDefinition specification.
+	newLoadedProject := projectDefinition asLoadedSymbolDictProject.
 	Rowan image addLoadedProject: newLoadedProject.
 	self updateProjectProperties
 %
@@ -48742,7 +49377,7 @@ doMoveMethodsBetweenPackages
 							(aMethodMove projectAfter
 								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
 								ifTrue: [ | resolved |
-									((resolved := GsCurrentSession currentSession symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
+									((resolved := Rowan image symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
 										and: [resolved isBehavior and: [ resolved isMeta not ]])
 										ifFalse: [ 
 											self
@@ -49555,30 +50190,6 @@ classRegistry
    ^classRegistry
 %
 
-category: 'private'
-method: RwGsSymbolDictionaryRegistry
-createAndInstallLoadedClassForClass: class toPackageNamed: packageName
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	^ self class registry_ImplementationClass createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistry
-createAndInstallLoadedClassForClass: class toPackageNamed: packageName implementationClass: implementationClass
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: self
-%
-
 category: 'package - patch api'
 method: RwGsSymbolDictionaryRegistry
 createLoadedPackageFromDefinition: packageDefinition
@@ -50070,7 +50681,8 @@ addClassAssociation: assoc forClass: class toPackageNamed: packageName instance:
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
 					"have yet to come with a test case that takes this path"
-					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
+					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ].
+			loadedClass ].
 
 	self 
 		_symbolDictionary: registryInstance _symbolDictionary 
@@ -50089,7 +50701,7 @@ addClassAssociation: assoc forClass: class toPackageNamed: packageName instance:
 		ifAbsent: [
 			assoc value: class.
 			registryInstance _symbolDictionary add: assoc].
-	^ registryInstance
+	^ loadedClass
 %
 
 category: 'private'
@@ -50349,32 +50961,6 @@ addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_Implementation
-createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: registryInstance
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	| loadedPackage loadedClass |
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
-
-	registryInstance classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-			loadedPackage addLoadedClass: loadedClass.
-			loadedClass updatePropertiesFromClassFor: registryInstance.
-			registryInstance classRegistry at: class classHistory put: loadedClass.
-			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
-				ifNotNil: [ :loadedClassExtension | 
-					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					"have yet to come with a test case that takes this path"
-					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
-	^ registryInstance
 %
 
 category: 'package - patch api'
@@ -51142,7 +51728,7 @@ category: 'accessing'
 method: RwLoadedClass
 classCategory
 
-	^self propertyAt: 'category'
+	^self propertyAt: 'category' ifAbsent: [ '' ]
 %
 
 category: 'accessing'
@@ -51310,6 +51896,27 @@ method: RwLoadedClass
 prettyName
 
 	^' class ', self name
+%
+
+category: 'properties'
+method: RwLoadedClass
+updatePropertiesFromClassDefinition: classDefinition
+	"Copy all properties to the receiver's property dictionary that are not recorded in the class directly"
+
+	| recordedPropertyNames |
+	recordedPropertyNames := self _classBasedProperties asSet.
+	classDefinition properties keysAndValuesDo: [:propertyName :propertyValue |
+		(recordedPropertyNames includes: propertyName)
+			ifFalse: [ self propertyAt: propertyName put: propertyValue ] ]
+%
+
+category: 'private'
+method: RwLoadedClass
+_classBasedProperties
+
+	"Answer the list of properties that are derived from the class instance itself"
+
+	^ #()
 %
 
 ! Class implementation for 'RwGsLoadedSymbolDictClass'
@@ -51498,7 +52105,7 @@ method: RwGsLoadedSymbolDictClass
 updateCategoryFromClass
 
 	| propertyName oldValue newValue absentToken |
-	propertyName := 'category'.
+	propertyName := 'category'.	"needs to be listed in _classBasedProperties method"
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	newValue := handle _classCategory ifNil: [ absentToken ].
@@ -51519,7 +52126,7 @@ updateClassInstvarNamesFromClass
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'classinstvars'.
+	propertyName := 'classinstvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := handle class instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
@@ -51535,7 +52142,7 @@ updateClassNameFromClass
 	oldName = newName
 		ifFalse: 
 			[self name: newName.
-			self propertyAt: 'name' put: name]
+			self propertyAt: 'name' put: name] 	"needs to be listed in _classBasedProperties method"
 %
 
 category: 'private-updating'
@@ -51549,12 +52156,12 @@ updateClassTypeFromClass
 	"Must be in-synch with RwClassDefinition>>_updateClassTypeFromClass:"
 
 	| propertyName oldValue newValue |
-	propertyName := 'type'.
+	propertyName := 'type'. 	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
 	newValue := handle isBytes
 						ifTrue: [
 							handle superClass isBytes not
-								ifTrue: [ 'bytes' ]
+								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
 							handle isSpecial
@@ -51578,7 +52185,7 @@ updateClassVariableNamesFromClass
 	"Order of variable names does not matter to Cypress (at least not for GemStone) so we keep the names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'classvars'.
+	propertyName := 'classvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle classVarNames collect: [:each | each asString])
 				asSortedCollection asArray.
@@ -51590,7 +52197,7 @@ method: RwGsLoadedSymbolDictClass
 updateCommentFromClass
 
 	| propertyName oldValue newValue absentToken |
-	propertyName := 'comment'.
+	propertyName := 'comment'.	"needs to be listed in _classBasedProperties method"
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	(oldValue ~~ absentToken and: [oldValue isEmpty])
@@ -51613,7 +52220,7 @@ category: 'private-updating'
 method: RwGsLoadedSymbolDictClass
 updateConstraintsFromClass
 	| propertyName oldValue newValue sortedConstraints |
-	propertyName := 'gs_constraints'.
+	propertyName := 'gs_constraints'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
 	sortedConstraints := handle _rwSortedConstraints.
 	(sortedConstraints isKindOf: Array ) 
@@ -51644,7 +52251,7 @@ updateInstvarNamesFromClass
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'instvars'.
+	propertyName := 'instvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := handle instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
@@ -51668,8 +52275,9 @@ updateOptionsFromClass
 	from the image, and the image is trusted to only have valid values."
 
 	| propertyName oldValue newValue |
-	propertyName := 'gs_options'.
+	propertyName := 'gs_options'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
+"TODO, may need changes to result of _rwOptionsArray , see RwClassDefinition >> _updateOptionsFromClass "
 	newValue := (handle _rwOptionsArray collect: [:option | option asString])
 				asSortedCollection asArray.
 	newValue isEmpty ifTrue: [newValue := self absentToken].
@@ -51688,7 +52296,7 @@ updatePoolDictionaryNamesFromClass
 	"Order of pool dictionaries *does* matter in GemStone, so we keep the names in the order given in the image."
 
 	| propertyName oldNames newNames |
-	propertyName := 'pools'.
+	propertyName := 'pools'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle sharedPools collect: [ :each | each name asString ])
 		asArray.
@@ -51722,7 +52330,7 @@ category: 'private-updating'
 method: RwGsLoadedSymbolDictClass
 updateSuperclassNameFromClass
   | oldName newName |
-  oldName := self propertyAt: 'superclass'.
+  oldName := self propertyAt: 'superclass'.	"needs to be listed in _classBasedProperties method"
   newName := handle superclass
     ifNil: [ 'nil' ]
     ifNotNil: [ :superclass | superclass name asString ].
@@ -51736,9 +52344,19 @@ updateSymbolDictionaryFromClassFor: aSymbolDictionary
 
 	| newName oldName |
 	newName := aSymbolDictionary name.
-	oldName := self propertyAt: 'gs_SymbolDictionary'.
+	oldName := self propertyAt: 'gs_SymbolDictionary'.	"needs to be listed in _classBasedProperties method"
 	oldName = newName
 		ifFalse: [ self symbolDictionaryName: newName ]
+%
+
+category: 'private'
+method: RwGsLoadedSymbolDictClass
+_classBasedProperties
+
+	"Answer the list of properties that are derived from the class instance itself"
+
+	^ #(  'category' 'classinstvars'  'name' 'type' 'classvars' 'comment' 'gs_constraints' 'instvars'  'gs_options' 
+			'pools' 'superclass' 'gs_SymbolDictionary' )
 %
 
 ! Class implementation for 'RwLoadedClassExtension'
@@ -52548,6 +53166,14 @@ asDefinition
 		packageDefinitions: self loadedPackageDefinitions
 %
 
+category: 'actions'
+method: RwLoadedProject
+audit
+	"run audit on the receiver"
+
+	^ Rowan projectTools audit auditForProject: self
+%
+
 category: 'commit log'
 method: RwLoadedProject
 commitLog: logLimit
@@ -52598,6 +53224,22 @@ method: RwLoadedProject
 key
 
 	^ name
+%
+
+category: 'actions'
+method: RwLoadedProject
+load
+	"load the receiver into the image"
+
+	| projectDefinition projectSetDefinition readProjectDefinition |
+	projectDefinition := self asDefinition.
+	projectSetDefinition := projectDefinition read.
+	readProjectDefinition := projectSetDefinition projectNamed: projectDefinition name.
+	readProjectDefinition == projectDefinition 
+		ifFalse: [
+			"https://github.com/GemTalk/Rowan/issues/488"
+			self halt: 'expected to update the projectDefinition in-place' ].
+	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 %
 
 category: 'accessing'
@@ -52746,6 +53388,16 @@ specification
 	^ properties at: 'spec'
 %
 
+category: 'actions'
+method: RwLoadedProject
+unload
+	"unload the receiver from the image"
+
+	| projectDefinition |
+	projectDefinition := self asDefinition.
+	^ Rowan projectTools delete deleteProjectDefinition: projectDefinition
+%
+
 category: 'testing'
 method: RwLoadedProject
 useGit
@@ -52778,7 +53430,13 @@ asDefinition
 	^ RwComponentProjectDefinition
 		withProperties: self propertiesForDefinition
 		packageDefinitions: self loadedPackageDefinitions
-		componentDefinitions: self loadedComponentDefinitions
+%
+
+category: 'testing'
+method: RwGsLoadedSymbolDictComponentProject
+canCommit
+
+	^ self projectRef canCommit
 %
 
 category: 'commit log'
@@ -52788,12 +53446,11 @@ commitLog: logLimit
 	^ self projectRef commitLog: logLimit
 %
 
-category: 'initialization'
+category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
-initialize
+components
 
-	super initialize.
-	loadedComponents := KeyValueDictionary new.
+	^ self projectRef components
 %
 
 category: 'initialization'
@@ -52809,7 +53466,7 @@ method: RwGsLoadedSymbolDictComponentProject
 initializeForProjectReferenceDefinition: aProjectReferenceDefinition
 
 	self initializeForName: aProjectReferenceDefinition projectAlias.
-	handle := aProjectReferenceDefinition
+	handle := aProjectReferenceDefinition copy
 %
 
 category: 'properties'
@@ -52825,15 +53482,39 @@ loadedComponentDefinitions
 
 	"Create definitions from all of the components I define, and answer the collection of them"
 
-	^ self definitionsFor: loadedComponents
+	| components |
+	components := self componenents copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	^ components
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+loadedConfigurationNames
+
+	^ self projectRef loadedConfigurationNames
 %
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
 loadedConfigurationNames: configNames
 
+	"noop - project ref component keys is list of loaded config names"
 
-	self projectRef loadedConfigurationNames: configNames
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
+
+	| x y |
+	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
+		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+loadedGroupNames
+
+	^ self projectRef loadedGroupNames
 %
 
 category: 'accessing'
@@ -52888,7 +53569,7 @@ propertiesForDefinition
 
 	| props |
 	props := super propertiesForDefinition.
-	props at: 'projectRef' put: handle.
+	props at: 'projectRef' put: handle copy.
 	^ props
 %
 
@@ -52905,6 +53586,13 @@ repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+repositoryRootPath
+
+	^ self repositoryRoot pathString
 %
 
 category: 'accessing'
@@ -52940,6 +53628,13 @@ useGit
 
 !		Instance methods for 'RwGsLoadedSymbolDictProject'
 
+category: 'testing'
+method: RwGsLoadedSymbolDictProject
+canCommit
+
+	^ self specification canCommit
+%
+
 category: 'commit log'
 method: RwGsLoadedSymbolDictProject
 commitLog: logLimit
@@ -52957,9 +53652,23 @@ loadedCommitId
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictProject
+loadedConfigurationNames
+
+	^ self specification loadedConfigurationNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
 loadedConfigurationNames: configNames
 
 	self specification imageSpec loadedConfigurationNames: configNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+loadedGroupNames
+
+	^ self specification loadedGroupNames
 %
 
 category: 'accessing'
@@ -54739,7 +55448,7 @@ initialize
 	visitedConfigurationNames := Set new.
 	configurationNames := Set new.
 	platformAttributes := #().
-	groupNames := {}.
+	groupNames := Set new.
 	configurationBasePath := ''.
 	packageMapSpecs := Dictionary new.
 %
@@ -54823,23 +55532,13 @@ category: 'visiting'
 method: RwProjectLoadConfigurationVisitor
 visitProjectLoadConfiguration: aProjectLoadConfiguration
 
-	| seedGroupNames |
 	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aProjectLoadConfiguration. 
 
 	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
-	seedGroupNames := groupNames asSet copy.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				seedGroupNames addAll: referencedGroupNames ] ].
+	self _processGroupNames.
 
 	self _processConditionalPackageNames: aProjectLoadConfiguration.
 
@@ -54941,6 +55640,29 @@ _processConditionalPackageNames: aProjectLoadConfiguration
 
 category: 'private'
 method: RwProjectLoadConfigurationVisitor
+_processGroupNames
+
+	| seedGroupNames seeded |
+	seedGroupNames := groupNames asSet copy.
+	seeded := Set new.
+	[seedGroupNames isEmpty ]
+		whileFalse: [ 
+			seedGroupNames copy do: [:groupName |
+				| referencedGroupNames |
+				"make sure that required groups are included in group names, recursively"
+				seedGroupNames remove: groupName.
+				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
+				groupNames addAll: referencedGroupNames.
+				referencedGroupNames do: [:refGroupName |
+					(seeded includes: refGroupName)
+						ifFalse: [
+						"ensure that we seed each group only once"
+						seeded add: refGroupName.
+						seedGroupNames add: refGroupName ] ] ] ].
+%
+
+category: 'private'
+method: RwProjectLoadConfigurationVisitor
 _visited: aConfiguration
 
 	visitedConfigurationNames add:  aConfiguration name.
@@ -54956,7 +55678,8 @@ initialize
 
 	super initialize.
 	projectNames := Set new.
-	projectLoadSpecs := Set new
+	projectLoadSpecs := Set new.
+	visitedComponents := Dictionary new
 %
 
 category: 'accessing'
@@ -54971,6 +55694,20 @@ method: RwProjectLoadComponentVisitor
 projectBasePath: aString
 
 	projectBasePath := aString
+%
+
+category: 'accessing'
+method: RwProjectLoadComponentVisitor
+projectComponentDefinition
+
+	^ projectComponentDefinition
+%
+
+category: 'accessing'
+method: RwProjectLoadComponentVisitor
+projectComponentDefinition: aProjectComponentDefinition
+
+	projectComponentDefinition := aProjectComponentDefinition
 %
 
 category: 'accessing'
@@ -54991,23 +55728,13 @@ category: 'visiting'
 method: RwProjectLoadComponentVisitor
 visitComponentLoadConfiguration: aComponentLoadConfiguration
 
-	| seedGroupNames |
 	(visitedConfigurationNames includes: aComponentLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aComponentLoadConfiguration. 
 
 	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
-	seedGroupNames := groupNames asSet copy.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				seedGroupNames addAll: referencedGroupNames ] ].
+	self _processGroupNames.
 
 	self _processConditionalPackageNames: aComponentLoadConfiguration.
 
@@ -55029,6 +55756,20 @@ visitComponentSpecification: aComponentSpecification
 	self projectLoadSpecs add: aComponentSpecification
 %
 
+category: 'accessing'
+method: RwProjectLoadComponentVisitor
+visitedComponents
+
+	^ visitedComponents
+%
+
+category: 'private'
+method: RwProjectLoadComponentVisitor
+_addPackageNames: somePackageNames for: aComponent
+
+	self projectComponentDefinition addPackages: somePackageNames forComponent: aComponent
+%
+
 category: 'private'
 method: RwProjectLoadComponentVisitor
 _projects: projectDirPath forProject: ignored
@@ -55040,9 +55781,15 @@ _projects: projectDirPath forProject: ignored
 		collect: [ :prjName | 
 			| url |
 			url := urlBase , prjName , '.ston'.
-			(RwSpecification fromUrl: url)
-				projectName: prjName;
-				yourself ]
+			RwSpecification fromUrl: url ]
+%
+
+category: 'private'
+method: RwProjectLoadComponentVisitor
+_visited: aComponent
+
+	super _visited: aComponent.
+	visitedComponents at: aComponent name put: aComponent.
 %
 
 ! Class implementation for 'RwProjectLoadConfigurationAnalysisVisitor'
@@ -55627,7 +56374,7 @@ category: 'accessing'
 method: RwProjectSpecification
 defaultGroupNames: anArray
 
-	defaultGroupNames := anArray
+	defaultGroupNames := anArray asArray
 %
 
 category: 'exporting'
@@ -55994,6 +56741,48 @@ method: RwComponentSpecification
 defaultComponentName: aString
 
 	defaultComponentName := aString
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultConfigurationNames
+
+	^ defaultConfigurationNames ifNil: [ defaultConfigurationNames := { self defaultComponentName } ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultGroupName
+
+	^ defaultGroupName ifNil: [ 'core' ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultGroupName: aString
+
+	defaultGroupName := aString
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultGroupNames
+
+	^ defaultGroupNames ifNil: [ defaultGroupNames := { self defaultGroupName } ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+projectAlias
+
+	^ projectAlias ifNil: [ self projectName ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+projectAlias: aString
+
+	projectAlias := aString
 %
 
 category: 'accessing'
@@ -56479,34 +57268,6 @@ authority
 
 category: 'rowan support'
 method: RwUrl
-createRwCypressRepositoryForPath: repositoryDirectoryPath
-  | repo |
-  repo := CypressFileSystemRepository new
-    initializeDefaultRepositoryProperties;
-    codeFormatProperty: 'Cypress';
-    strictCodeFormat: false;
-    initializeForDirectory: repositoryDirectoryPath;
-    url: self printString;
-    yourself.
-  ^ repo
-%
-
-category: 'rowan support'
-method: RwUrl
-createRwFiletreeRepositoryForPath: repositoryDirectoryPath
-
-	^ CypressFileSystemRepository new
-		initializeDefaultRepositoryProperties;
-		initializeForDirectory: repositoryDirectoryPath;
-		codeFormatProperty: 'FileTree';
-		strictCodeFormat: false;
-		initializeReaderAndWriterClasses;
-		url: self printString;
-		yourself
-%
-
-category: 'rowan support'
-method: RwUrl
 createRwRepositoryForFormat: repositoryFormat forPath: repositoryDirectoryPath
   repositoryFormat = 'tonel'
     ifTrue: [ ^ self createRwTonelRepositoryForPath: repositoryDirectoryPath ].
@@ -56550,19 +57311,6 @@ createRwRepositoryForPath: repositoryDirectoryPath
   hasFiletree
     ifTrue: [ ^ self createRwRepositoryForFormat: 'filetree' forPath: repositoryDirectoryPath ].
   ^ self createRwRepositoryForFormat: 'cypress' forPath: repositoryDirectoryPath
-%
-
-category: 'rowan support'
-method: RwUrl
-createRwTonelRepositoryForPath: repositoryDirectoryPath
-  ^ CypressTonelRepository new
-    initializeDefaultRepositoryProperties;
-    initializeForDirectory: repositoryDirectoryPath;
-    codeFormatProperty: 'Tonel';
-    strictCodeFormat: false;
-    initializeReaderAndWriterClasses;
-    url: self printString;
-    yourself
 %
 
 category: 'rowan support'
@@ -59002,6 +59750,88 @@ testValuesDo
 	self assert: values asArray = #('Paris' 'Rome')
 %
 
+! Class implementation for 'NewTonelParser'
+
+!		Instance methods for 'NewTonelParser'
+
+category: 'parsing'
+method: NewTonelParser
+method
+
+	| type start end currentPosition selector count |
+	
+	type := self untilIncluding: '>>'.
+	start := stream position.
+	self methodParser
+		scanner: (methodParser scannerClass on: stream
+				errorBlock: [:errorMessage :errorPosition |self halt]).
+	currentMethodNode := methodParser parseTonelMessagePattern.
+	end := methodParser scanner previousStepPosition.
+	currentPosition := methodParser scanner stream position.
+
+	methodParser scanner stream position: start.
+	count := end - start.
+	selector := String new: count.
+	methodParser scanner stream readInto: selector startingAt: 1 count: count.
+	methodParser scanner stream position: currentPosition.
+	selector := selector trimBoth.
+	type := type trimBoth substrings: ' '.
+	type size = 1 ifTrue: [ type := type copyWith: nil ].
+	methodBodyStart := stream position.
+	methodParser tonelStep.	"eat the $["
+	^ { 
+		type.
+		selector.
+	}
+%
+
+category: 'parsing'
+method: NewTonelParser
+methodBody
+	| source end count currentPosition |
+	self methodParser tonelMethodBodyTerminationToken
+		ifFalse: [
+			methodParser parseTonelPragmas.
+			currentMethodNode body: (methodParser parseTonelStatements: true) ].
+	end := methodParser currentToken start - 1.
+	count :=  end - methodBodyStart.
+	source := String new: count - 2.
+	currentPosition := methodParser scanner stream position.
+	methodParser scanner stream position: methodBodyStart + 1.
+	methodParser scanner stream readInto: source startingAt: 1 count: count - 2.
+	methodParser scanner stream position: currentPosition.
+	^ source
+%
+
+category: 'accessing'
+method: NewTonelParser
+methodParser
+
+	^ methodParser ifNil: [ methodParser := RBTonelParser new ]
+%
+
+category: 'private factory'
+method: NewTonelParser
+newMethodDefinitionFrom: anArray
+	| metadata className meta selector source  |
+	
+	metadata := anArray second ifNil: [ Dictionary new ].
+	className := anArray fourth first first.
+	meta := anArray fourth first second notNil.
+	selector :=  anArray fourth second trimBoth.
+	source := String streamContents: [ :s | 
+		s << selector.
+		anArray fifth ifNotEmpty: [ :src | 
+			s lf.
+			s << src ] ].
+
+	^ self packageReader newMethodDefinitionForClassNamed: className
+		classIsMeta: meta
+		selector: (self extractSelector: selector)
+		category: (metadata at: #category ifAbsent: [ '' ]) 
+		source: source
+%
+
 ! Class extensions for 'Behavior'
 
 !		Instance methods for 'Behavior'
@@ -59716,7 +60546,10 @@ withoutGemstoneLineEndings
 category: '*rowan-gemstone-35x'
 method: Class
 indexableSubclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDict inDictionary: aDictionary newVersionOf: oldClass description: aDescription constraints: constraintsArray options: optionsArray
-	^ self indexableSubclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDict inDictionary: aDictionary newVersionOf: oldClass description: aDescription options: optionsArray
+
+	| newClass |
+	newClass := self indexableSubclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDict inDictionary: aDictionary newVersionOf: oldClass description: aDescription options: optionsArray.
+	^ newClass
 %
 
 category: '*rowan-gemstone-kernel'
@@ -59917,7 +60750,21 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 category: '*rowan-gemstone-35x'
 method: Class
 subclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass description: aDescription constraints: theConstraints options: optionsArray
-	^ self subclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass description: aDescription options: optionsArray
+	"class creation creates a class with no constraints, so if constraints _are_ specified, we need to add them separately"
+
+	| newClass |
+	newClass := self 
+		subclass: aString 
+		instVarNames: anArrayOfInstvarNames 
+		classVars: anArrayOfClassVars 
+		classInstVars: anArrayOfClassInstVars 
+		poolDictionaries: anArrayOfPoolDicts 
+		inDictionary: aDictionary 
+		newVersionOf: oldClass 
+		description: aDescription 
+		options: optionsArray.
+	newClass _installConstraints: theConstraints oldClass: oldClass.
+	^ newClass
 %
 
 category: '*rowan-gemstone-35x'
@@ -59988,6 +60835,69 @@ _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: option
 	 self _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary isKernel: isKernelBool
 %
 
+category: '*rowan-gemstone-35x'
+method: Class
+_installConstraints: theConstraints
+
+	| existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys 
+		existingConstraints myInstVarNames |
+	existingConstraintsMap := Dictionary new.
+	existingVaryingConstraint := self _varyingConstraint.
+	myInstVarNames := self allInstVarNames.
+	existingConstraints := [ self _constraints ifNil: [ {} ] ] on: Deprecated do: [:ex | ex resume ].
+	1 to: existingConstraints size do: [:index |
+		existingConstraintsMap at: (myInstVarNames at: index) put: (existingConstraints at: index ) ].
+	theConstraintsMap := Dictionary new.
+	theVaryingConstraint := Object.
+	theConstraints do: [:arrayOrVaryingConstraintClass |
+		arrayOrVaryingConstraintClass _isArray
+			ifTrue: [ theConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ]
+			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
+	keys := existingConstraintsMap keys copy.
+	keys addAll: theConstraintsMap keys.
+	keys do: [:key | 
+		| existingConstraint theConstraint |
+		existingConstraint := existingConstraintsMap at: key ifAbsent: [].
+		theConstraint := theConstraintsMap at: key ifAbsent: [].
+		existingConstraint == theConstraint
+			ifFalse: [ 
+				| instVarString |
+				instVarString := key asString.
+				existingConstraint == nil
+					ifTrue: [ 
+						"add theConstraint" 
+						self _rwInstVar: instVarString constrainTo: theConstraint ]
+					ifFalse: [ 
+						theConstraint == nil
+							ifTrue: [ 
+								"remove the constraint" 
+								self _rwInstVar: instVarString constrainTo: Object ]
+							ifFalse: [
+								"change the value of the constraint"
+                                self _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
+	existingVaryingConstraint == theVaryingConstraint
+		ifFalse: [
+			"change the varying constraint"
+			[ self _setVaryingConstraint: theVaryingConstraint] on: Deprecated do: [:ex | ex resume ] ].
+%
+
+category: '*rowan-gemstone-35x'
+method: Class
+_installConstraints: theConstraints oldClass: oldClass
+
+	oldClass ifNotNil: [ [ self _installOldConstraints: oldClass _constraints ] on: Deprecated do: [:ex | ex resume ] ].
+	theConstraints 
+		ifNil: [ constraints := nil ]
+		ifNotNil: [ self _installConstraints: theConstraints ]
+%
+
+category: '*rowan-gemstone-35x'
+method: Class
+_installOldConstraints: theConstraints
+
+	constraints := theConstraints copy
+%
+
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwDefinitionOfConstraints
@@ -60036,7 +60946,7 @@ result add: 'constraints: '.
 ^result
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-kernel-32x'
 method: Class
 _rwOptionsArray
   "copy of _optionsArray"
@@ -60069,6 +60979,14 @@ _rwOptionsForDefinition
   1 to: arr size do:[:j | result add: $ ; add: (arr at: j) ].
   result add: $)  .
   ^ result
+%
+
+category: '*rowan-gemstone-kernel'
+method: Class
+_rwReservedOop
+ "returns nil or the SmallInteger specifying a reserved oopNumber"
+  | oop|
+  ^ (oop := self asOopNumber) <= System _lastReservedOopNumber ifTrue:[ oop ] ifFalse:[ nil ].
 %
 
 category: '*rowan-gemstone-kernel'
@@ -60705,6 +61623,11 @@ rbStoreOn: aStream
 
 !		Instance methods for 'Object'
 
+category: '*ast-kernel-core'
+method: Object
+acceptVisitor: aVisitor
+%
+
 category: '*gemstone-interactions-kernel'
 method: Object
 confirm: aString
@@ -60723,6 +61646,13 @@ category: '*gemstone-interactions-kernel'
 method: Object
 inspect
   ^ (GsInspectInteraction theObject: self) signal
+%
+
+category: '*ast-kernel-core'
+method: Object
+isValue
+
+	^false
 %
 
 category: '*rowan-gemstone-kernel'
@@ -60880,6 +61810,22 @@ name
   ^ self key
 %
 
+! Class extensions for 'RwAbstractTool'
+
+!		Instance methods for 'RwAbstractTool'
+
+category: '*rowan-tools-gemstone'
+method: RwAbstractTool
+_log: aString
+
+"
+If the client is a topaz process, the default logger writes to the 
+ current output file as controlled by topaz OUTPUT PUSH statements, 
+ else to stdout.
+"
+	GsFile gciLogClient: aString
+%
+
 ! Class extensions for 'RwClassDefinition'
 
 !		Class methods for 'RwClassDefinition'
@@ -61026,13 +61972,32 @@ gs_options
 category: '*rowan-gemstone-definitions'
 method: RwClassDefinition
 gs_options: optionsArray
+	"preserver optionsArray order"
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])
 		ifTrue: [ 
 			self properties
 				at: 'gs_options'
 				put:
-					(optionsArray collect: [ :each | each asString ]) asSortedCollection asArray ]
+					(optionsArray collect: [ :each | each asString ]) asArray ]
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwClassDefinition
+gs_reservedOop
+
+	^self properties
+				at: 'gs_reservedoop'
+				ifAbsent: [ '' ]
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwClassDefinition
+gs_reservedOop: aString
+
+	self properties
+		at: 'gs_reservedoop'
+		put: aString
 %
 
 category: '*rowan-gemstone-definitions'
@@ -61180,6 +62145,13 @@ addMovedClassToPatchSet: aPatchSet
 
 category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
+asLoadedSymbolDictProject
+
+	^ RwGsLoadedSymbolDictComponentProject newForProjectReferenceDefinition: self projectRef.
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
 defaultSymbolDictName
 
 	^ self projectRef defaultSymbolDictName
@@ -61213,6 +62185,12 @@ methodEnvForPackageNamed: packageName
 	^self projectRef methodEnvForPackageNamed: packageName
 %
 
+category: '*rowan-cypress-definitions'
+method: RwComponentProjectDefinition
+name
+  ^ self projectAlias
+%
+
 category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
 packageNameToPlatformPropertiesMap
@@ -61243,7 +62221,17 @@ category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
 setSymbolDictName: symbolDictName forPackageNamed: packageName
 
+	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
 	^self projectRef setSymbolDictName: symbolDictName forPackageNamed: packageName
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwComponentProjectDefinition
+setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
+
+	self projectRef
+		setUseSessionMethodsForExtensions: aBool
+		forPackageNamed: packageName
 %
 
 category: '*rowan-gemstone-components-extensions'
@@ -61253,9 +62241,40 @@ symbolDictNameForPackageNamed: packageName
 	^self projectRef symbolDictNameForPackageNamed: packageName
 %
 
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+updateGsPlatformSpecLoadedProjectInfo: projectInfo
+
+	| thePackageMapSpecs |
+	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+		ifNotNil: [:name | self defaultSymbolDictName: name ].
+	(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+		ifNotNil: [:boolean | 
+			self defaultUseSessionMethodsForExtensions: boolean  ].
+	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+		ifNotNil: [:map | self packageNameToPlatformPropertiesMap: map]
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+useSessionMethodsForExtensionsForPackageNamed: packageName
+
+	^ self projectRef useSessionMethodsForExtensionsForPackageNamed: packageName
+%
+
 ! Class extensions for 'RwComponentSpecification'
 
 !		Instance methods for 'RwComponentSpecification'
+
+category: '*rowan-gemstone-specifications'
+method: RwComponentSpecification
+initialize
+
+	super initialize.
+	defaultConfigurationNames := nil.
+	defaultGroupNames := nil.
+%
 
 category: '*rowan-gemstone-components-extensions'
 method: RwComponentSpecification
@@ -61315,27 +62334,36 @@ asSpecification
   ^ RwSpecification fromUrl: self
 %
 
+! Class extensions for 'RwGitTool'
+
+!		Instance methods for 'RwGitTool'
+
+category: '*rowan-tools-gemstone'
+method: RwGitTool
+createTmpFileWith: fileContents
+
+	| file filename |
+	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
+	[ 
+	| count |
+	file := GsFile openWriteOnServer: filename.
+	(count := file nextPutAll: fileContents withGemstoneLineEndings)
+		ifNil: [ self error: 'failed write' ] ]
+		ensure: [ file close ].
+	^ filename
+%
+
+category: '*rowan-tools-gemstone'
+method: RwGitTool
+performOnServer: commandLine status: statusBlock
+  | performOnServerStatusArray |
+  performOnServerStatusArray := System _performOnServer: commandLine.
+  ^ statusBlock value: performOnServerStatusArray
+%
+
 ! Class extensions for 'RwGsImage'
 
 !		Class methods for 'RwGsImage'
-
-category: '*rowan-gemstone-components'
-classmethod: RwGsImage
-addProjectRepository: newProjectRepository
-
-	"Register a repository"
-
-	| repositoryName projectRepositoryRegistry |
-	repositoryName := newProjectRepository name.
-	projectRepositoryRegistry := self
-		_projectRepositoryRegistry.
-	projectRepositoryRegistry
-		at: repositoryName
-		ifAbsent: [ ^ projectRepositoryRegistry at: repositoryName put: newProjectRepository ].
-	self
-		error:
-			'There is already a project repository named ' , repositoryName printString , ' registered'
-%
 
 category: '*rowan-gemstone-loader-extensions'
 classmethod: RwGsImage
@@ -61383,26 +62411,6 @@ applyModification_254: aProjectSetModification visitorClass: visitorClass instan
 	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
 %
 
-category: '*rowan-gemstone-components'
-classmethod: RwGsImage
-projectRepositoryNamed: aString
-
-	^ self
-		projectRepositoryNamed: aString
-		ifAbsent: [ self error: 'No project repository named ' , aString printString , ' found' ]
-%
-
-category: '*rowan-gemstone-components'
-classmethod: RwGsImage
-projectRepositoryNamed: aString ifAbsent: absentBlock
-
-	"Look up a project repository."
-
-	^ self _projectRepositoryRegistry
-		at: aString
-		ifAbsent: absentBlock
-%
-
 category: '*rowan-gemstone-loader-extensions'
 classmethod: RwGsImage
 _cloneRowanLoaderSymbolDictionary
@@ -61418,49 +62426,6 @@ _cloneRowanLoaderSymbolDictionary
 		symbolList: GsCurrentSession currentSession symbolList.
 	Transcript cr; show: 'RowanLoader symbol dictionary cloned'.
 	^ clonedSymDict
-%
-
-category: '*rowan-gemstone-components'
-classmethod: RwGsImage
-_projectRepositoryRegistry
-
-	^ self _projectRepositoryRegistryForUserId: self currentUserId
-%
-
-category: '*rowan-gemstone-components'
-classmethod: RwGsImage
-_projectRepositoryRegistryForUserId: aUserId
-
-	| userProfile userPlatformDict |
-	userProfile := AllUsers userWithId: aUserId.
-	(userProfile defaultObjectSecurityPolicy ifNil: [true] ifNotNil: [:x |x currentUserCanRead])
-		ifFalse: [
-			"do not have permissions to read objects created by <aUserId>"
-			^ nil ].
-	userPlatformDict := RwPlatform _userPlatformDictionaryForUser: aUserId.
-	^ userPlatformDict
-		at: #'RwGsProjectRepositoryRegistry'
-		ifAbsent: [ 
-			(self currentUserId = aUserId)
-				ifFalse: [ ^ nil ].
-			userPlatformDict at: #'RwGsProjectRepositoryRegistry' put: StringKeyValueDictionary new ]
-%
-
-category: '*rowan-gemstone-components'
-classmethod: RwGsImage
-_removeProjectRepository:  aRwProjectRepository
-
-	"note that it is not safe to just remove a project repository from the registry, however this method is supplied as a convenience for tests"
-
-	| repositoryName repositoryRegistry |
-	repositoryName := aRwProjectRepository name.
-	repositoryRegistry := self _projectRepositoryRegistry.
-	(repositoryRegistry at: repositoryName ifAbsent: [ ^ nil ]) == aRwProjectRepository
-		ifFalse: [ 
-			self
-				error:
-					'The specified project repository is not identical to the project repository in the registry ... this is not expected' ].
-	repositoryRegistry removeKey: repositoryName
 %
 
 category: '*rowan-gemstone-loader-extensions'
@@ -61481,12 +62446,19 @@ _shouldCloneRowanLoader: aProjectSetModification
 
 category: '*rowan-services-extensions'
 method: RwGsPlatform
+browserServiceClass
+
+	^ RowanBrowserService
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
 classServiceClass
 
 	^ RowanClassService
 %
 
-category: '*rowan-tools-extensions'
+category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 classTools
 
@@ -61495,7 +62467,14 @@ classTools
 	^ RwClassTool
 %
 
-category: '*rowan-tools-extensions'
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+commandResultClass
+
+	^ RowanCommandResult
+%
+
+category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 gitTools
 
@@ -61516,6 +62495,13 @@ jadeServerClassNamed: className
 
 category: '*rowan-services-extensions'
 method: RwGsPlatform
+loggingServiceClass
+
+	^ RowanLoggingService
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
 methodServiceClass
 
 	^ RowanMethodService
@@ -61528,7 +62514,7 @@ packageServiceClass
 	^ RowanPackageService
 %
 
-category: '*rowan-tools-extensions'
+category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 packageTools
 	"Answer the platform-specific class for package tools"
@@ -61543,7 +62529,7 @@ projectServiceClass
 	^ RowanProjectService
 %
 
-category: '*rowan-tools-extensions'
+category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 projectTools
 	"Answer the platform-specific class for project tools"
@@ -61563,7 +62549,7 @@ method: RwGsPlatform
 serviceClasses
 	"Explicitly add each class rather than sending #allSubclasses so
 	that users other than SystemUser have visibility. Visibility in Rowan
-	is determined at compile time."
+	is determined at compile time. See STONReader>>lookupClass:"
 	
 	| array |
 	array := Array with: RowanService. 
@@ -61572,6 +62558,7 @@ serviceClasses
 		add: RowanClassService; 
 		add: RowanDebuggerService; 
 		add: RowanFrameService;
+		add: RowanLoggingService;
 		add: RowanMethodService;
 		add: RowanPackageService; 
 		add: RowanProcessService;
@@ -61924,6 +62911,13 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 !		Instance methods for 'RwProjectDefinition'
 
+category: '*rowan-gemstone-definitions'
+method: RwProjectDefinition
+asLoadedSymbolDictProject
+
+	^ RwGsLoadedSymbolDictProject newForLoadSpecification: self specification.
+%
+
 category: '*rowan-core-definitions-extensions'
 method: RwProjectDefinition
 compareAgainstBase: aDefinition
@@ -61986,6 +62980,14 @@ projectDefinitionSourceProperty
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
 %
 
+category: '*rowan-core-definitions-extensions'
+method: RwProjectDefinition
+projectDefinitionSourceProperty: sourceKeyOrNil
+
+	sourceKeyOrNil ifNil: [ ^ properties removeKey: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [] ].
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil
+%
+
 category: '*rowan-gemstone-definitions'
 method: RwProjectDefinition
 projectOwnerId
@@ -62002,8 +63004,16 @@ projectOwnerId: aUserId
 
 category: '*rowan-gemstone-definitions'
 method: RwProjectDefinition
+register
+
+	self specification register
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwProjectDefinition
 setSymbolDictName: symbolDictName forPackageNamed: packageName
 
+	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
 	(self specification platformSpec at: 'gemstone')
 		setSymbolDictName: symbolDictName
 		forPackageNamed: packageName
@@ -62062,11 +63072,12 @@ category: '*rowan-core-definitions-extensions'
 method: RwProjectDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 
-	({ 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
+	({ 'projectOwnerId' . 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
 		ifTrue: [ 
 		"projectRef entries are considered to be equal for comparison purposes"
 		"spec entries are considered to be equal for comparison purposes"
 		"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
+		"projectOwnerId entries are considered equal for comparison purpposes"
 		^ true ].
 	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 %
@@ -62077,10 +63088,48 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 
 category: '*rowan-gemstone-components-extensions'
 method: RwProjectReferenceDefinition
+asSpecification
+
+	| repoSpec platformSpec platformDict |
+	self useGit
+		ifTrue: [
+			repoSpec := RwGitRepositorySpecification new
+				committish: self committish;
+				committishType: self committishType;
+				remoteUrl: self remoteUrl;
+				yourself ]
+		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
+	platformSpec := RwGemStoneSpecification new.
+	platformSpec packageNameToPlatformPropertiesMap: self packageNameToPlatformPropertiesMap.
+	platformDict := (Dictionary new) at: 'gemstone' put: platformSpec; yourself.
+	^ RwComponentSpecification new
+		specName: self projectName;
+		projectUrl: self projectUrl;
+		repoPath: self packagesPath;
+		configsPath: self configsPath;
+		specsPath: self specsPath;
+		projectsPath: self projectsPath;
+		defaultComponentName: self defaultComponentName;
+		defaultConfigurationNames: self configurationNames;
+		defaultGroupNames: self groupNames;
+		comment: self comment;
+		repoSpec: repoSpec;
+		platformSpec: platformDict;
+		yourself.
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
 defaultMethodEnv
 
-self deprecated: 'temporary patch .. this is probably the right spot, but it is worth double checking'.
-	^ 0
+	^ self properties at: 'defaultMethodEnv' ifAbsent: [ 0 ]
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+defaultMethodEnv: anInteger
+
+	^ self properties at: 'defaultMethodEnv' put: anInteger
 %
 
 category: '*rowan-gemstone-components-extensions'
@@ -62116,7 +63165,6 @@ method: RwProjectReferenceDefinition
 methodEnvForPackageNamed: packageName
 
 	| packageProperties |
-self deprecated: 'temporary patch .. see RwGemStoneSpecification>>methodEnvForPackageNamed: for full implementation'.
 	packageProperties :=self packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ ^ self defaultMethodEnv ].
@@ -62156,16 +63204,45 @@ setSymbolDictName: symbolDictName forPackageNamed: packageName
 
 category: '*rowan-gemstone-components-extensions'
 method: RwProjectReferenceDefinition
+setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ self packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	aBool 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'useSessionMethodsForExtensions' ifAbsent: [].
+			^self ].
+	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
+	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
 symbolDictNameForPackageNamed: packageName
 
 	| packageProperties |
-self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
 	packageProperties := self packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ ^ self defaultSymbolDictName ].
 	^ packageProperties
 		at: 'symbolDictName'
 		ifAbsent: [ ^ self defaultSymbolDictName ]
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+useSessionMethodsForExtensionsForPackageNamed: packageName
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ].
+	^ packageProperties
+		at: 'useSessionMethodsForExtensions'
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ]
 %
 
 ! Class extensions for 'RwProjectSetDefinition'
@@ -62300,6 +63377,49 @@ httpFromString: aString
   ^CypressUrl absoluteFromText: aString
 %
 
+!		Instance methods for 'RwUrl'
+
+category: '*rowan-url-cypress'
+method: RwUrl
+createRwCypressRepositoryForPath: repositoryDirectoryPath
+  | repo |
+  repo := CypressFileSystemRepository new
+    initializeDefaultRepositoryProperties;
+    codeFormatProperty: 'Cypress';
+    strictCodeFormat: false;
+    initializeForDirectory: repositoryDirectoryPath;
+    url: self printString;
+    yourself.
+  ^ repo
+%
+
+category: '*rowan-url-cypress'
+method: RwUrl
+createRwFiletreeRepositoryForPath: repositoryDirectoryPath
+
+	^ CypressFileSystemRepository new
+		initializeDefaultRepositoryProperties;
+		initializeForDirectory: repositoryDirectoryPath;
+		codeFormatProperty: 'FileTree';
+		strictCodeFormat: false;
+		initializeReaderAndWriterClasses;
+		url: self printString;
+		yourself
+%
+
+category: '*rowan-url-cypress'
+method: RwUrl
+createRwTonelRepositoryForPath: repositoryDirectoryPath
+  ^ CypressTonelRepository new
+    initializeDefaultRepositoryProperties;
+    initializeForDirectory: repositoryDirectoryPath;
+    codeFormatProperty: 'Tonel';
+    strictCodeFormat: false;
+    initializeReaderAndWriterClasses;
+    url: self printString;
+    yourself
+%
+
 ! Class extensions for 'SequenceableCollection'
 
 !		Class methods for 'SequenceableCollection'
@@ -62408,7 +63528,7 @@ rowanSymbolDictionaryRegistry
 	^ self at: #'RwSymbolDictionaryRegistry' ifAbsent: [  ]
 %
 
-category: '*rowan-gemstone-35x'
+category: '*rowan-gemstone-kernel-32x'
 method: SymbolDictionary
 _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 
@@ -62447,6 +63567,7 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 				_subclass: oldClassName asString 
 				instVarNames: oldClass instVarNames
 				format: oldClass format  
+				constraints: #() 
 				classVars: oldClass classVarNames
 				classInstVars: oldClass class instVarNames
 				poolDictionaries: #()
@@ -62556,6 +63677,17 @@ defaultAction
   ^ Processor activeProcess terminate
 %
 
+! Class extensions for 'ZnBufferedReadStream'
+
+!		Instance methods for 'ZnBufferedReadStream'
+
+category: '*rowan-components-kernel'
+method: ZnBufferedReadStream
+buffer
+
+	^ buffer
+%
+
 ! Class Initialization
 
 run
@@ -62565,5 +63697,5 @@ RBScanner initialize.
 Rowan initialize.
 RwLoadedThing initialize.
 RwModificationFiletreeWriterVisitor initialize.
+true
 %
-

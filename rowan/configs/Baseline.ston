@@ -1,0 +1,14 @@
+RwProjectLoadConfiguration{
+	#name : 'Baseline',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[ 'common' ] : {
+			'core' : {
+				#packageNames : [
+					'BaselineOfRowan'
+					]
+				}
+			}
+		},
+	#comment : 'Used to load BaselineOfRowan as part of Pharo ... '
+}

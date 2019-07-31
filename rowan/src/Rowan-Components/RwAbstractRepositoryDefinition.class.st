@@ -89,6 +89,12 @@ RwAbstractRepositoryDefinition >> attach [
 	self error: 'not yet implemented'
 ]
 
+{ #category : 'testing' }
+RwAbstractRepositoryDefinition >> canCommit [
+
+	^ false
+]
+
 { #category : 'actions' }
 RwAbstractRepositoryDefinition >> clone [
 
@@ -134,6 +140,12 @@ RwAbstractRepositoryDefinition >> committishType [
 RwAbstractRepositoryDefinition >> create [
 
 	self error: 'not yet implemented'
+]
+
+{ #category : 'actions' }
+RwAbstractRepositoryDefinition >> doCommit: message [
+
+	"noop by default"
 ]
 
 { #category : 'accessing' }

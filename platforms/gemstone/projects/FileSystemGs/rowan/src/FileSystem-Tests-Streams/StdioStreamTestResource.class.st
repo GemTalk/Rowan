@@ -29,8 +29,6 @@ StdioStreamTestResource >> fileStream [
 StdioStreamTestResource >> setUp [
 	"Create the temporary file and StdioStream"
 
-	| handle |
-
 	fileReference := FileReference newTempFilePrefix: 'StdioStreamTest.' suffix: '.bin'.
 	contents := '01234567890123456789'.
 	

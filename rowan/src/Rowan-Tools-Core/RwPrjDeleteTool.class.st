@@ -58,7 +58,7 @@ RwPrjDeleteTool >> deleteProjectSetDefinition: projectSetDefinitionToDelete [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinitionToDelete.
 
 	loadedProjectSet do: [:loadedProject |
-		Rowan image _removeLoadedProject: loadedProject ]
+		Rowan image _removeLoadedProject: loadedProject  ifAbsent: []  ]
 
 ]
 

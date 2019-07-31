@@ -125,6 +125,7 @@ self error: 'not yet implmented'
 
 ]
 
+
 { #category : 'file creation' }
 File class >> named: fileName [
 	"Open a file with the given name for reading and writing. If the name has no directory part, then the file will be created in the default directory. If the file already exists, its prior contents may be modified or replaced, but the file will not be truncated on close."
@@ -301,4 +302,9 @@ File >> writeStreamDo: aBlock [
 	stream := self writeStream.
 	^ [ aBlock value: stream ]
 		ensure: [ stream close ]
+]
+{ #category : 'printing' }
+File >> asString [
+  "Needed for topaz debugging"
+  ^ name
 ]

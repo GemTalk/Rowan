@@ -30,6 +30,12 @@ RwProjectSetDefinition >> deriveLoadedThings [
 
 ]
 
+{ #category : 'actions' }
+RwProjectSetDefinition >> load [
+
+	^ Rowan projectTools load loadProjectSetDefinition: self
+]
+
 { #category : 'accessing' }
 RwProjectSetDefinition >> projectNamed: projectName [
 

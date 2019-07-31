@@ -184,7 +184,7 @@ ZnCharacterEncoderTests >> testDetectEncoding [
 
 { #category : 'testing' }
 ZnCharacterEncoderTests >> testKnownEncodingIdentifiers [
-	| all minimal asciiString aCollection |
+	| all minimal asciiString |
 	all := ZnCharacterEncoder knownEncodingIdentifiers asSet.
 	minimal := #('utf8' 'latin1' 'null' 'ascii' 'iso88591') asSet.
 	"make sure at least a minimal set is present"

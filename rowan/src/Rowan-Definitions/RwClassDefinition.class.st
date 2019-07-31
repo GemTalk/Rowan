@@ -79,11 +79,11 @@ RwClassDefinition >> _updateClassNameFromClass: aClass [
 RwClassDefinition >> _updateClassTypeFromClass: aClass [
 
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
-	"Must be in-synch with RwGsLoadedSymbolDictPatch>>updateClassTypeFromClass"
+	"Must be in-synch with RwGsLoadedSymbolDictClass>>updateClassTypeFromClass"
 
 	| propertyName oldValue newValue |
 	propertyName := 'type'.
@@ -91,7 +91,7 @@ RwClassDefinition >> _updateClassTypeFromClass: aClass [
 	newValue := aClass isBytes
 						ifTrue: [
 							aClass superClass isBytes not
-								ifTrue: [ 'bytes' ]
+								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
 							aClass isSpecial
@@ -177,8 +177,9 @@ RwClassDefinition >> _updateOptionsFromClass: aClass [
 				asSortedCollection asArray.
 	newValue isEmpty 
 		ifTrue: [ self removeProperty: propertyName ]
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
+		ifFalse: [ self propertyAt: propertyName put: newValue ].
+  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedoop' put: resOop asString ]
+                          ifNil:[ self removeProperty:'gs_reservedoop' ].
 ]
 
 { #category : 'utility' }
@@ -193,8 +194,7 @@ RwClassDefinition >> _updatePoolDictionaryNamesFromClass: aClass [
 
 { #category : 'utility' }
 RwClassDefinition >> _updateSuperclassNameFromClass: aClass [
-
-	self superclassName: aClass superclass name asString
+	self superclassName: (aClass superclass ifNotNil:[:sup | sup name asString] ifNil:['nil'])
 ]
 
 { #category : 'utility' }
@@ -240,6 +240,19 @@ RwClassDefinition >> instVarNames [
 RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
 
 	^ properties at: 'instvars' put: arrayOfInstanceVariableNames
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> shebang [
+
+	^ self propertyAt: 'shebang' ifAbsent: []
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> shebang: aStringOrNil [
+
+	aStringOrNil ifNil: [ ^ self properties removeKey: 'shebang' ifAbsent: [] ].
+	^ self propertyAt: 'shebang' put: aStringOrNil
 ]
 
 { #category : 'accessing' }

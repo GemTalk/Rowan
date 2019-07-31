@@ -568,13 +568,14 @@ currentOrNil
 	#(
     'Kernel-Methods' 'Network-UUID'
     'FileSystem-Base-Errors' 'FileSystem-Base-ErrorGroups' 'FileSystem-Base-FileOptions' 'FileSystem-GemStone-Kernel' 'FileSystem-Streams'
+		'FileSystem-Core-32x'
     'FileSystem-Core' 'FileSystem-Core-GemStone' 'FileSystem-Disk' 'FileSystem-Memory' 'FileSystem-Path'
     'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-GemStone' 
     'FileSystem-Client-Core' 'Zinc-Resource-Meta-Core' 'Zinc-Resource-Meta-FileSystem'
 
     'FileSystem-Tests-Base-ErrorGroups' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core'   'Network-UUID-Tests' 'Zinc-Character-Encoding-Tests'
     'FileSystem-Tests-Streams'
-    'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory'  'FileSystem-Tests-Client' 'Zinc-Resource-Meta-Tests')
+    'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory'  'FileSystem-Tests-Client')
 		do: [ :packageName |
 			packageManager
 				addResolvedReference:
@@ -622,7 +623,7 @@ commit
   run
   CypressBootstrapRowanBlock
     value: 'RowanKernel'
-    value: #('Rowan-Kernel' 'Rowan-Url-Core').
+    value: #('Rowan-Kernel' 'Rowan-Url-Core' 'Rowan-Url-Cypress').
 %
   commit
 
@@ -649,7 +650,8 @@ commit
   CypressBootstrapRowanBlock
     value: 'RowanTools'
     value: #('Rowan-Tools-Core' 'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
-							'Rowan-GemStone-Specifications' 'Rowan-Components' 
+							'Rowan-GemStone-Specifications' 'Rowan-Components' 'Rowan-Tools-GemStone' 
+							'Rowan-Definitions-Deprecated' 'Rowan-Tools-Deprecated'
 	).	"Rowan Tools"
 %
   commit
@@ -666,6 +668,7 @@ commit
     value: 'RowanKernel'
     value: #('Rowan-Tools-Extensions' 'Rowan-Tests' 'Rowan-Tests-32x' 
 			'Rowan-Services-Tests' 'Rowan-GemStone-Components'
+			'Rowan-Tests-GemStone' 'Rowan-Tools-Extensions-GemStone'
 	).	"Tool extension methods for RowanKernel classes "
 %
   commit
@@ -673,7 +676,7 @@ commit
   run
   CypressBootstrapRowanBlock
     value: 'RowanLoader'
-    value: #('Rowan-GemStone-Loader' 'Rowan-GemStone-Loader32x'
+    value: #('Rowan-GemStone-Loader' 'Rowan-GemStone-Loader32x' 'Rowan-GemStone-Loader-Deprecated'
 	).		"GemStone Rowan loader classes"
 %
   commit
@@ -681,7 +684,7 @@ commit
   run
   CypressBootstrapRowanBlock
     value: 'RowanKernel'
-    value: #('Rowan-GemStone-Loader-Extensions'
+    value: #('Rowan-GemStone-Loader-Extensions' 'Rowan-GemStone-Loader-Extensions-Deprecated'
 	).	"Extension methods in non-loader classes"
 %
   commit
@@ -691,7 +694,7 @@ commit
     value: 'Globals'
     value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
       'Rowan-Tools-Kernel' 'Rowan-GemStone-3215' 'AST-Kernel-Core' 'Rowan-GemStone-32x' 
-			'Rowan-Components-Kernel'
+			'Rowan-Components-Kernel' 'Rowan-GemStone-Kernel-32x'
 	).		"Extension methods for GemStone kernel classes"
 %
   commit

@@ -62,10 +62,9 @@ RwUrlTest >> sampleUrlStrings [
 { #category : 'tests' }
 RwUrlTest >> testAsRwRepository [
 
-	| repos loadSpec repoRoot testRepoPath loadedProject |
+	| repos repoRoot testRepoPath loadedProject |
 	loadedProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	loadSpec := loadedProject specification.
-	repoRoot := loadSpec repoSpec repositoryRootPath.
+	repoRoot :=  loadedProject repositoryRootPath.
 	testRepoPath := repoRoot , '/test/testRepositories/repos'.
 	repos := {('cypress:' , testRepoPath , '/cypress/').
 	('filetree://' , testRepoPath , '/filetree/').

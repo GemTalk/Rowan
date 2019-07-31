@@ -10,6 +10,14 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'Testing' }
+RowanServicesTest class >> isAbstract [
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #RowanServicesTest
+]
+
 { #category : 'unicode method' }
 RowanServicesTest >> compileUnicodeMethod [
 	"RowanServicesTest new compileUnicodeMethod"
@@ -159,17 +167,17 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 
 { #category : 'support' }
 RowanServicesTest >> loadRowanSample1 [
-	| specUrlString projectTools rowanSpec gitRootPath projectName projectDefinition spec |
+	| specUrlString projectTools rowanProject gitRootPath projectName projectDefinition spec |
 
 	projectName := 'RowanSample1'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [])
 		ifNotNil: [ :prj |  Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	specUrlString := 'file:' , rowanSpec repositoryRootPath , '/samples/RowanSample1.ston'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1.ston'.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
 		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
@@ -228,9 +236,38 @@ RowanServicesTest >> servicesTestProjectName [
 
 { #category : 'setup teardown' }
 RowanServicesTest >> setUp [
-	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
 
+	| user symListP symListT dictP dictT index |
+"ensure results are clean as service requests not coming through #updateFromSton: like the client"
 	RowanCommandResult initializeResults.
+"ensure that project is unloaded"
+	(Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+"ensure that the default symbol dictionary has been removed and that any classes used in tests are not preset"
+	user := System myUserProfile.
+	symListP := user symbolList.
+	symListT := GsCurrentSession currentSession symbolList.
+
+	{self defaultSymbolDictionaryName}
+		do: [ :symDictName | 
+			dictP := symListP objectNamed: symDictName.
+			dictP
+				ifNotNil: [ 
+					(dictP at: GsPackagePolicy globalName otherwise: nil)
+						ifNotNil: [ :policy | policy disable ].
+					index := symListP indexOf: dictP.
+					index > 0
+						ifTrue: [ user removeDictionaryAt: index ] ].
+
+			dictT := symListT objectNamed: symDictName.
+			dictT
+				ifNotNil: [ 
+					(dictT at: GsPackagePolicy globalName otherwise: nil)
+						ifNotNil: [ :policy | policy disable ].
+					index := symListT indexOf: dictT.
+					index > 0
+						ifTrue: [ symListT removeAtIndex: index ] ] ].
+	GsPackagePolicy current refreshSessionMethodDictionary.
 ]
 
 { #category : 'setup teardown' }

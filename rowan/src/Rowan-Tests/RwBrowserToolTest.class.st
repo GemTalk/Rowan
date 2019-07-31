@@ -247,24 +247,26 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
-		comment: comment;
+	projectDefinition := (RwComponentProjectDefinition 
+		projectName: projectName 
+			projectHome: rootPath "?" 
+			useGit: true 
+			comment: comment)
 		defaultSymbolDictName: defaultSymbolDictName;
+		configsPath: 'configs';
+		packagesPath: 'src';
+		projectsPath: 'projects';
+		specsPath: 'specs';
 		packageNames: packageNames;
 		yourself.
 
+	(rootPath asFileReference / projectName) ensureDeleteAll.
+
 	self
-		handleConfirmationDuring: [ 
-			projectTools create
-				createProjectFor: projectDefinition
-				format: format
-				root: rootPath
-				configsPath: 'configs'
-				repoPath: 'src' 
-				specsPath: 'specs' ].
+		handleConfirmationDuring: [ projectDefinition create ].
 
-	projectTools load loadProjectDefinition: projectDefinition
-
+	projectTools load loadProjectDefinition: projectDefinition.
+	^ projectDefinition
 ]
 
 { #category : 'private' }
@@ -626,21 +628,4 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 		defaultSymbolDictName: defaultSymbolDictName
 		defaultUseSessionMethodsForExtensions: false
 		comment: comment
-]
-
-{ #category : 'private' }
-RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment [
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
-		comment: comment;
-		packageNames: packageNames;
-		defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions;
-		yourself.
-	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
-
-	^ projectDefinition
-
 ]

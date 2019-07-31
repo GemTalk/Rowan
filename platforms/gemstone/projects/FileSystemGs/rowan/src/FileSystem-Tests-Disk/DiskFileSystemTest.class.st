@@ -19,7 +19,7 @@ DiskFileSystemTest >> testBinaryReadWriteStream [
 	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
 	self should: [ stream := reference readRawStream ] raise: FileDoesNotExistException.
 
-	reference writeStreamDo: [:stream | stream nextPutAll: '0123456789' ].
+	reference writeStreamDo: [:strm | strm nextPutAll: '0123456789' ].
 	stream := reference binaryReadWriteStream.
 	stream sizeBuffer: 8.
 

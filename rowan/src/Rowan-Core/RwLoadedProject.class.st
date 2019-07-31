@@ -68,6 +68,13 @@ RwLoadedProject >> asDefinition [
 		packageDefinitions: self loadedPackageDefinitions
 ]
 
+{ #category : 'actions' }
+RwLoadedProject >> audit [
+	"run audit on the receiver"
+
+	^ Rowan projectTools audit auditForProject: self
+]
+
 { #category : 'commit log' }
 RwLoadedProject >> commitLog: logLimit [
 
@@ -114,6 +121,21 @@ RwLoadedProject >> isEmpty [
 RwLoadedProject >> key [
 
 	^ name
+]
+
+{ #category : 'actions' }
+RwLoadedProject >> load [
+	"load the receiver into the image"
+
+	| projectDefinition projectSetDefinition readProjectDefinition |
+	projectDefinition := self asDefinition.
+	projectSetDefinition := projectDefinition read.
+	readProjectDefinition := projectSetDefinition projectNamed: projectDefinition name.
+	readProjectDefinition == projectDefinition 
+		ifFalse: [
+			"https://github.com/GemTalk/Rowan/issues/488"
+			self halt: 'expected to update the projectDefinition in-place' ].
+	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 ]
 
 { #category : 'accessing' }
@@ -243,6 +265,15 @@ RwLoadedProject >> repositoryCommitId [
 RwLoadedProject >> specification [
 
 	^ properties at: 'spec'
+]
+
+{ #category : 'actions' }
+RwLoadedProject >> unload [
+	"unload the receiver from the image"
+
+	| projectDefinition |
+	projectDefinition := self asDefinition.
+	^ Rowan projectTools delete deleteProjectDefinition: projectDefinition
 ]
 
 { #category : 'testing' }

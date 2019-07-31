@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (ByteArray
@@ -8,8 +9,25 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Network-UUID';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Error
+	subclass: 'AssertionFailure'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
 		comment: '';
 		immediateInvariant.
 true.
@@ -23,8 +41,9 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
-		category: 'Files';
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
 		comment: 'Common superclass for exceptions while using file streams';
 		immediateInvariant.
 true.
@@ -38,8 +57,9 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
-		category: 'Files';
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
 		comment: 'Notfify when not able to delete';
 		immediateInvariant.
 true.
@@ -53,8 +73,9 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
-		category: 'Files';
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
 		comment: 'I am an exception that notifies that a file already exists.';
 		immediateInvariant.
 true.
@@ -68,13 +89,14 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
-		category: 'Files';
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
 		comment: 'I am raised when an operation is attempted on a file that does not exist.
 
 The method used to signal the exception depends on the form the file name exists in:
 
-- For strings: (FileDoesNotExistException file fileName: aString) signal 
+- For strings: (FileDoesNotExistException file fileName: aString) signal
 - For Files: FileDoesNotExistException signalOnFile: aFile
 - For FileReferences: FileDoesNotExistException signalWith: aFileReference
 
@@ -89,15 +111,314 @@ true.
 
 doit
 (FileException
+	subclass: 'FileReadError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileException
 	subclass: 'FileWriteError'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
-		category: 'Files';
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
 		comment: 'Notify about an error when trying to attempt to write to a file';
+		immediateInvariant.
+true.
+%
+
+doit
+(Error
+	subclass: 'FilePosixError'
+	instVarNames: #( reference platformErrorNumber errorGroupName sourceReference options )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'This is the abstract class for File/Directory Posix Errors.
+
+Instance Vareables:
+platformErrorNumber - the platform error number which resulted in this error.
+errorGroupName - this gives the context of the error.
+sourceReference - this is only used for copy/rename actions - it is the source reference. The target reference is stored in the reference instance variable.
+options - if the error had options, this is where the options are stored.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileAccessError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'Search permission is denied on a component of the path prefix, or the file exists and the permissions specified by oflag are denied, or the file does not exist and write permission is denied for the parent directory of the file to be created, or O_TRUNC is specified and write permission is denied.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileBadFileDescriptorError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'Bad file descriptor (POSIX.1-2001).';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileBusyError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'Device or resource busy';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileDeviceNotSameError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileExistsError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'O_CREAT and O_EXCL are set, and the named file exists.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileInvalidOptionError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'The value of an file option argument is not valid.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileIOError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'I/O error.
+
+The path argument names a STREAMS file and a hangup or error occurred during the open().';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileIsDirectoryError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'The named file is a directory and oflag includes O_WRONLY or O_RDWR';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileMaxFilesOpenError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'The maximum allowable number of files is currently open in the system';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileNameToLongError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'The length of the path argument exceeds {PATH_MAX} or a pathname component is longer than {NAME_MAX}.
+
+This is used with sockets.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileNoEntryError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'O_CREAT is not set and the named file does not exist; or O_CREAT is set and either the path prefix does not exist or the path argument points to an empty string.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileNoSpaceError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'The directory or file system that would contain the new file cannot be expanded, the file does not exist, and O_CREAT is specified';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FilePermissionDeniedError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'Operation not permitted error. Concerning capability to mount a file system.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileReadOnlyFileSystemError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileSynchronizedIONotSupportedError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePosixError
+	subclass: 'FileTooManySymbolicLinksError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-Errors';
+		comment: 'More than {SYMLOOP_MAX} symbolic links were encountered during resolution of the path argument.';
 		immediateInvariant.
 true.
 %
@@ -110,7 +431,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for errors that may occur during filesystem operations.';
 		immediateInvariant.
@@ -125,7 +447,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised when I an operation is attempted inside a directory that does not exist. ';
 		immediateInvariant.
@@ -140,7 +463,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a directory that already exists.';
 		immediateInvariant.
@@ -155,9 +479,42 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to delete a directory when is not empty.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileSystemError
+	subclass: 'FileDeletionError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileSystemError
+	subclass: 'FileDoesNotExist'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -170,9 +527,42 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a file or directory over top of an existing file.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileSystemError
+	subclass: 'FileOpenError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileSystemError
+	subclass: 'FileOptionFeatureNotSupported'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Disk';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -185,10 +575,47 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to use an illegal file name
 ';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileSystemError
+	subclass: 'SubscriptOutOfBounds'
+	instVarNames: #( signaler subscript lowerBound upperBound )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Error
+	subclass: 'ZnByteStringBecameWideString'
+	instVarNames: #( byteString wideString )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnByteStringBecameWideString, a resumable Error signalled to indicate that some byteString was changed to a wideString.
+
+Used by ZnUTF8Encoder>>#readInto:startingAt:count:fromStream: to avoid a #becomeForward: when a ByteString automagically changes into a WideString.
+
+Part of Zinc HTTP Components.';
 		immediateInvariant.
 true.
 %
@@ -201,12 +628,61 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterEncodingError.
 I am an Error.
 
 I signal when something goes wrong while encoding or decoding characters.
+
+Part of Zinc HTTP Components';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnCharacterEncodingError
+	subclass: 'ZnIncomplete'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnIncomplete.
+I am a ZnCharacterEncodingError.
+I am an Error.
+
+I signal when the binary stream from which a character is read does not contain enough data to form a full character. This typically occurs when the stream is #atEnd, a file is EOF or a network connection is closed - when the end of a stream is reached when more data is expected/needed.
+
+I can be used to ignore wrongly encoded input by resuming me. By default a question mark will be inserted for each problem and decoding will continue. This is not recommended, as faulty input should not be accepted.
+
+Part of Zinc HTTP Components';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnCharacterEncodingError
+	subclass: 'ZnInvalidUTF8'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnInvalidUTF8.
+I am a ZnCharacterEncodingError.
+I am an Error.
+
+I signal when something goes wrong while encoding or decoding UTF8.
+
+I can be used to ignore wrongly encoded input by resuming me. By default a question mark will be inserted for each problem and decoding will continue. This is not recommended, as faulty input should not be accepted.
 
 Part of Zinc HTTP Components';
 		immediateInvariant.
@@ -221,9 +697,46 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I represent a request for user assistance in resolving an origin. I am a resumable exception that gets raised when there is no way of automatically resolving a particular origin. ';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'AbstractFileAdaptor'
+	instVarNames: #( file )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: 'I provide an abstraction layer to adapt the theoretical file implementation in the FileSystem package with the actual file implemenation in the target Smalltalk dialect.
+
+Each Smalltalk dialect can create its own subclass.
+
+To change which file class to use, update the method FileSystem class>>#fileClass. This should be implemented in dialect dependent package.';
+		immediateInvariant.
+true.
+%
+
+doit
+(AbstractFileAdaptor
+	subclass: 'GsFileAdaptor'
+	instVarNames: #( options )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core-GemStone';
+		comment: 'I provide an abstraction layer to adapt the theoretical file implementation in the FileSystem package with the actual file implemenation in the target Smalltalk dialect.';
 		immediateInvariant.
 true.
 %
@@ -236,7 +749,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for FileLocator and FileReference. By implementing most of the methods on myself most code duplucation between the locator and the reference can be avoided';
 		immediateInvariant.
@@ -251,7 +765,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am a late-bound reference. I refer to a file or directory in relation to a well-known location on the filesystem, called an origin. When asked to perform concrete operation, I look up the current location of my origin, and resolve my path against it. 
 
@@ -296,7 +811,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I combine a filesystem and path, which is sufficient to refer to a concrete file or directory. I provide methods for navigating my filesystem, performing filesystem operations and opening and closing files.  I am the primary mechanism for working with files and directories. 
 
@@ -314,13 +830,94 @@ true.
 
 doit
 (Object
+	subclass: 'AbstractStreamSpec'
+	instVarNames: #( fileOptions store )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(AbstractStreamSpec
+	subclass: 'BinaryStreamSpec'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(AbstractStreamSpec
+	subclass: 'BufferedStreamSpec'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(AbstractStreamSpec
+	subclass: 'EncodedStreamSpec'
+	instVarNames: #( encoding )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(EncodedStreamSpec
+	subclass: 'EncodedBufferedStreamSpec'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'FastUUIDGenerator'
 	instVarNames: #( bits1 bits2 bits3 bits4 random semaphoreForGenerator )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Network-UUID';
 		comment: '';
 		immediateInvariant.
@@ -329,53 +926,45 @@ true.
 
 doit
 (Object
-	subclass: 'File'
-	instVarNames: #( name )
+	subclass: 'FileOptions'
+	instVarNames: #( openModeFlag mode posixFlags fileType share permissionFlags parent store )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
-		category: 'Files';
-		comment: 'I represent a sequential binary File. I provide the minimum operations to:
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'This class contains options for a file. The options available are based on the POSIX standards.
 
-- move the cursor fo the file
-- reading
-- writing
+This gives a more flexible and nuanced way of defining how a file is to be opened and used. This is following the POSIX file open options. Much of this
+information has been garnered from the VA Smalltalk POSIX implmenetion of CfsFielDescriptior and CfsDirectoryDescriptor.
 
-I am also the entry point of the FilePlugin primitives.
+Instance Variables:
+openModeFlag -	This contains the access mode of the file - O_RDONLY | O_RDWR | O_WRONLY.
+						These modes are represented by the classes FileOpenReadOnlyMode, FileOpenReadWriteMode, and FileOpenWriteOnlyMode.
+posixFlags		- 	This contains a collection of the options which are used to further define how the file is opened, created if missing, truncate, append, etc.
+						Options contais instances of subclasses of FileCreateOption
+fileType			-   This defines the file type. Available types are Binary, Text, Gzip (Currently GemStone only). The former two are only relevant to Windows.
+						The difference between Binary and Text is how cr/lf is handled. In Unicode this distinction is non-sensical so Binary is recommended for Unicode files.
+share 			-	Indicates how the file is to be shared with others.
 
-!Examples of usage
+API:
+modeString	-	Returns the traditional unix mode string. (See table below.) This is implemented to support GemStone''s GsFile file class.
+isWritable		-	Returns true/false based on the access mode - O_RDONLY | O_RDWR | O_WRONLY. This is implemen to support Pharo''s File file class.
 
-"Creating a file"
-file := File named: ''asd.txt'' asFileReference fullName.
+This table shows the mapping between the file options and the traditional unix string for defining file open mode.
 
-"Opening / closing it"
-file open.
-file openForAppend.
-file close.
+Mode                 File Options (Flags)
+------				-----------------------------------------
+	r     				O_RDONLY
+	w            		O_WRONLY | O_CREAT | O_TRUNC
+	a    				O_WRONLY | O_CREAT | O_APPEND
+	r+            		O_RDWR
+	w+				O_RDWR | O_CREAT | O_TRUNC
+	a+				O_RDWR | O_CREAT | O_APPEND
 
-"Accessing the file properties"
-file size.
-file position.
-file position: 0.
-file seekAbsolute: 10.
-file seekRelative: 10.
-file atEnd.
-
-"Writing"
-file nextPutAll: ''sdd''.
-
-"Reading"
-file next: 2.
-
-"Buffered write"
-file next: 2 putAll: ''abc'' startingAt: 2.
-
-"Buffered read"
-buffer := ByteArray new: 5.
-file readInto: buffer startingAt: 1 count: 5.
-buffer asString.';
+See https://linux.die.net/man/3/fopen for more details on the fopen open modes.';
 		immediateInvariant.
 true.
 %
@@ -388,7 +977,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I present a low-level protocol for interacting with filesystems. I hold a reference to
 a store (a subinstance of FileSystemStore) which takes care of the details of performing 
@@ -416,7 +1006,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am a cache for metadata about a file or directory. The information I hold is as follows:
 
@@ -448,7 +1039,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that fulfill the Guide role in the Guide/Visitor pattern. My subclasses know how to traverse a filesystem in a specific order, "showing" the files and directories they encounter to a visitor.
 
@@ -469,7 +1061,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in breadth-first order. Given this hierarchy:
 
@@ -495,7 +1088,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first post order. Given this hierarchy:
 
@@ -520,7 +1114,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first pre order. Given this hierarchy:
 
@@ -540,12 +1135,13 @@ true.
 doit
 (Object
 	subclass: 'FileSystemHandle'
-	instVarNames: #( reference writable )
+	instVarNames: #( reference options )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for file handle implementations. I provide a uniform interface that streams can use for read and write operations on a file regardless of the filesystem. I encapsulate the actual IO primitives.';
 		immediateInvariant.
@@ -560,7 +1156,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I provide an interface for doing IO on an open file. I keep an id, which as an opaque identifier used by the FilePlugin primitives. I translate positions from the 1-based indexes used in Smalltalk to the 0-based offsets used by the primitives.
 
@@ -577,7 +1174,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I provide "primitives" for doing IO on files in a MemoryFileSystem. I delegate most of my actions to the MemoryFile. This way there is only one place needed where the data is stored.';
 		immediateInvariant.
@@ -592,7 +1190,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I''m a set of permissions for a Directory Entry';
 		immediateInvariant.
@@ -607,7 +1206,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can resolve origins into references. Such objects use the Chain of Responsibility pattern, and when unable to resolve a particular origin, delegate that resolution request to the next resolver in the list.
 
@@ -626,7 +1226,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I resolve origins by consulting the user. I maintain a cache of the user''s responses.';
 		immediateInvariant.
@@ -641,9 +1242,26 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for platform-specific resolvers.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PlatformResolver
+	subclass: 'ClientResolver'
+	instVarNames: #( resolver )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Client-Core';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -656,7 +1274,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Mac OS X filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
@@ -671,7 +1290,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Unix filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
@@ -686,7 +1306,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Windows filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
@@ -701,7 +1322,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I resolve origins that are related to the currently running Smalltalk system, using primitives provided by the VM. ';
 		immediateInvariant.
@@ -716,7 +1338,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
 
@@ -735,13 +1358,30 @@ doit
 	subclass: 'DiskStore'
 	instVarNames: #( maxFileNameLength )
 	classVars: #( CurrentFS DefaultWorkingDirectory )
-	classInstVars: #(  )
+	classInstVars: #( PosixValues PosixErrorNumbers )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I am an abstract superclass for disk store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
 ';
+		immediateInvariant.
+true.
+%
+
+doit
+(DiskStore
+	subclass: 'ClientStore'
+	instVarNames: #( store defaultWorkingDirectory )
+	classVars: #(  )
+	classInstVars: #( CurrentFS DefaultWorkingDirectory )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Client-Core';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -754,7 +1394,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Unix file systems';
 		immediateInvariant.
@@ -769,7 +1410,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for OSX file systems';
 		immediateInvariant.
@@ -784,7 +1426,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Windows file systems';
 		immediateInvariant.
@@ -799,7 +1442,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I''m a specific store for memory file system';
 		immediateInvariant.
@@ -814,7 +1458,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can perform operations on directory trees. My subclasses implement the visitor protocol, and process filesystem nodes shown to them by guides.';
 		immediateInvariant.
@@ -829,7 +1474,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I''m an abstract superclass for enumeration operations on directory entries. ';
 		immediateInvariant.
@@ -844,7 +1490,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am a visitor that collects objects from the nodes I visit. I take a block similar to those passed to Collection>>collect:. I evaluate the block with DirectoryEntries for the nodes I visit, and collect the objects answered into an array.
 
@@ -861,7 +1508,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am a visitor that selects objects from the nodes I visit. I take a block similar to those passed to Collection>>select:. I evaluate the block with DirectoryEntries for the nodes I visit.
 
@@ -878,7 +1526,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I create a copy of the directory tree that I visit. I use the PreorderGuide so that I can create directories before creating their contents. ';
 		immediateInvariant.
@@ -893,7 +1542,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I delete the directory tree that I visit. I use the PostorderGuide so that I can delete files before deleting their containing directories.';
 		immediateInvariant.
@@ -908,7 +1558,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I am an abstract file system entry for a memory file system.
 My subclasses should specialize on the kind of file they are.';
@@ -924,7 +1575,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a directory';
 		immediateInvariant.
@@ -939,7 +1591,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a regular file';
 		immediateInvariant.
@@ -954,9 +1607,26 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'A file write stream - but within memory';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'NumberParser'
+	instVarNames: #( sourceStream base neg integerPart fractionPart exponent scale nDigits lastNonZero requestor failBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -969,7 +1639,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Path';
 		comment: 'I''m a private and abstract filesystem path, independent of the string representation used to describe paths on a specific filesystem. I provide methods for navigating the filesystem hierarchy and working with absolute and relative paths. I only refer to a concrete file or directory with regard to a specific filesystem. Normally users should not use me directly. 
 
@@ -996,7 +1667,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Path';
 		comment: 'I represent an absolute path (a position starting from Path root)';
 		immediateInvariant.
@@ -1011,9 +1683,1768 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Path';
 		comment: 'I represent a relative path (a position starting from Path workingDirectory)';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'PosixErrorGroup'
+	instVarNames: #( errorClasses )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'ChangeDirectoryErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'ChangeModeErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'CloseDirectoryErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'CloseFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'CopyFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: 'POSIX defines valid errors for each file/directory action - ex: Read, Write, Open, etc.
+
+THis is the abstract superclass whose subclasses model the valid error messages for each file/directory action which produce error messages.
+
+The class method #posixNames needs to be defined with posix names of the errors supported by the action.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'FileControlErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'FileSeekErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'FileSizeErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'FlushErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'FlushFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'GetCurrentWorkingDirectoryErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'LockFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'MakeDirectoryErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'OpenDirectoryErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'OpenFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'ReadDirectoryErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'ReadFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'RemoveDirectoryErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'RemoveFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'RenameErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'RenameFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'TouchFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: 'This is the error group for calls to update the file access and modification times.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'UnlockFileErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroup
+	subclass: 'WritingErrorGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'PosixFlag'
+	instVarNames: #( parent )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'This an abstract class. All POSIX flags are to be implemented as subclasses of this class.
+
+Each concrete subclass should implement the following class methods:
+- #posixName - the posix name - ex: O_RDONLY.
+- #defaultPlatformValue - the default (Linux) value of the flag - ex: 0 for O_RDONLY.
+- #windowsValue - optional - if the Windows value is different from the Linux value, implement this method.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixFlag
+	subclass: 'FileControlFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'These are flags that can be used with fcntl() calls for managing the file descriptor';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileCloseOnExecutionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'close-on-exec flag';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileGetDescriptorFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Read the file descriptor flags; arg is ignored.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileGetLockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'see https://linux.die.net/man/2/fcntl';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileGetStatusFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileSetDescriptorFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Set the file descriptor flags to the value specified by arg';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileSetLockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Acquire a lock (when l_type is F_RDLCK or F_WRLCK) or release a lock (when l_type is F_UNLCK) on the bytes specified by the l_whence, l_start, and l_len fields of lock. If a conflicting lock is held by another process, this call returns -1 and sets errno to EACCES or EAGAIN.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileSetLockWaitFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'As for F_SETLK, but if a conflicting lock is held on the file, then wait for that lock to be released. If a signal is caught while waiting, then the call is interrupted and (after the signal handler has returned) returns immediately (with return value -1 and errno set to EINTR; see signal(7)).';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileSetStatusFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Set the file status flags to the value specified by arg.
+
+File access mode (O_RDONLY, O_WRONLY, O_RDWR) and file creation flags (i.e., O_CREAT, O_EXCL, O_NOCTTY, O_TRUNC) in arg are ignored.
+
+On Linux this command can change only the O_APPEND, O_ASYNC, O_DIRECT, O_NOATIME, and O_NONBLOCK flags.
+
+https://linux.die.net/man/2/fcntl';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileControlFlag
+	subclass: 'FileSetUnlockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Remove our lease from the file.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixFlag
+	subclass: 'FileDirectoryStreamFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'The subclasses are flags for filtering the items returned from the directory stream';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileDirectoryStreamFlag
+	subclass: 'FileDirectoryEntryFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'This flag is used to get directory entries from the directory stream';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileDirectoryStreamFlag
+	subclass: 'FileRegularFileEntryFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'This flag is used to get regular file entries from the directory stream';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileDirectoryStreamFlag
+	subclass: 'FileSpecialFileEntryFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'The subclasses are flags for filtering the items returned from the directory stream.
+Specifying all three flags will result in all entries in the directory stream being returned.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixFlag
+	subclass: 'FileLockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileLockFlag
+	subclass: 'FileMandatoryLockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Exclusive MANDATORY lock.
+
+Windows supports this type of lock.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileLockFlag
+	subclass: 'FileReadLockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Used to indicate a shared (read) ADVISORY lock when the file is opened.
+
+Linux supports this type of lock.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileLockFlag
+	subclass: 'FileUnlockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'These are file locking flags for use in Linux';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileLockFlag
+	subclass: 'FileWriteLockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Used to indicate a exclusive (write) ADVISORY lock when the file is opened.
+
+Linux supports this type of lock.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixFlag
+	subclass: 'FileOpeningFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'File Creation Flags:
+   These are the options (flags) that control various aspects of the behavior of the open() call, as well as options for subsequent I/O operations.
+   These flags cant be retrieved or changed.
+
+For more details see: https://linux.die.net/man/3/open';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileAppendFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'The following is from http://man7.org/linux/man-pages/man2/open.2.html
+
+O_APPEND
+              The file is opened in append mode.  Before each write(2), the
+              file offset is positioned at the end of the file, as if with
+              lseek(2).  The modification of the file offset and the write
+              operation are performed as a single atomic step.
+
+              O_APPEND may lead to corrupted files on NFS filesystems if
+              more than one process appends data to a file at once.  This is
+              because NFS does not support appending to a file, so the
+              client kernel has to simulate it, which can''t be done without
+              a race condition.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileCloseOnExecFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'From http://man7.org/linux/man-pages/man2/open.2.html
+
+O_CLOEXEC
+
+Enable the close-on-exec flag for the new file descriptor.
+Specifying this flag permits a program to avoid additional
+fcntl(2) F_SETFD operations to set the FD_CLOEXEC flag.
+
+Note that the use of this flag is essential in some
+multithreaded programs, because using a separate fcntl(2)
+F_SETFD operation to set the FD_CLOEXEC flag does not suffice
+to avoid race conditions where one thread opens a file
+descriptor and attempts to set its close-on-exec flag using
+fcntl(2) at the same time as another thread does a fork(2)
+plus execve(2).  Depending on the order of execution, the race
+may lead to the file descriptor returned by open() being
+unintentionally leaked to the program executed by the child
+process created by fork(2).  (This kind of race is in
+principle possible for any system call that creates a file
+descriptor whose close-on-exec flag should be set, and various
+other Linux system calls provide an equivalent of the
+O_CLOEXEC flag to deal with this problem.)';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileCreateFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'O_CREAT
+
+If the file doesnt already exist, it is created as a new, empty file.
+This flag is effective even if the file is being opened only for reading.
+If we specify O_CREAT, then we must supply a mode argument in the open() call;
+otherwise, the permissions of the new file will be set to some random value from the stack.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileDirectFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'O_DIRECT
+
+Try to minimize cache effects of the I/O to and from this file.  In general this will degrade performance, but it is useful in special situations, such as when applications do their own caching.  File I/O is done directly to/from user-space buffers.  The O_DIRECT flag on its own makes an effort to transfer data synchronously, but does not give the guarantees of the O_SYNC flag that data and necessary metadata are transferred.  To guarantee synchronous I/O, O_SYNC must be used in addition to O_DIRECT.
+
+====
+
+Allow file I/O to bypass the buffer cache. The _GNU_SOURCE feature test macro must be defined in order to make this constant definition available from <fcntl.h>.
+
+O_DIRECT alone only promises that the kernel will avoid copying data from user space to kernel space, and will instead write it directly via DMA (Direct memory access; if possible). Data does not go into caches. There is no strict guarantee that the function will return only after all data has been transferred.
+
+O_SYNC guarantees that the call will not return before all data has been transferred to the disk (as far as the OS can tell). This still does not guarantee that the data isn''t somewhere in the harddisk write cache, but it is as much as the OS can guarantee.
+
+O_DIRECT|O_SYNC is the combination of these, i.e. "DMA + guarantee".';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileDirectoryFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'O_DIRECTORY
+
+Return an error (errno equals ENOTDIR) if pathname is not a directory.
+This flag is an extension designed specifically for implementing opendir().
+The _GNU_SOURCE feature test macro must be defined in order to make this constant definition available from <fcntl.h>.
+
+If path resolves to a non-directory file, fail and set errno to [ENOTDIR].';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileExclusiveFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'The following is from: http://man7.org/linux/man-pages/man2/open.2.html
+
+O_EXCL   Ensure that this call creates the file: if this flag is
+              specified in conjunction with O_CREAT, and pathname already
+              exists, then open() fails with the error EEXIST.
+
+              When these two flags are specified, symbolic links are not
+              followed: if pathname is a symbolic link, then open() fails
+              regardless of where the symbolic link points.
+
+              In general, the behavior of O_EXCL is undefined if it is used
+              without O_CREAT.  There is one exception: on Linux 2.6 and
+              later, O_EXCL can be used without O_CREAT if pathname refers
+              to a block device.  If the block device is in use by the
+              system (e.g., mounted), open() fails with the error EBUSY.
+
+              On NFS, O_EXCL is supported only when using NFSv3 or later on
+              kernel 2.6 or later.  In NFS environments where O_EXCL support
+              is not provided, programs that rely on it for performing
+              locking tasks will contain a race condition.  Portable
+              programs that want to perform atomic file locking using a
+              lockfile, and need to avoid reliance on NFS support for
+              O_EXCL, can create a unique file on the same filesystem (e.g.,
+              incorporating hostname and PID), and use link(2) to make a
+              link to the lockfile.  If link(2) returns 0, the lock is
+              successful.  Otherwise, use stat(2) on the unique file to
+              check if its link count has increased to 2, in which case the
+              lock is also successful.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileKeepSymbolicLinksFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Dont dereference symbolic links. If path names a symbolic link, fail and set errno to [ELOOP].
+
+Normally, open() dereferences pathname if it is a symbolic link. However, if the O_NOFOLLOW flag is specified, then open() fails (with errno set to ELOOP) if pathname is a symbolic link. This flag is useful, especially in privileged programs, for ensuring that open() doesnt dereference a symbolic link. To expose the definition of this flag from <fcntl.h>, we must define the _GNU_SOURCE feature test macro.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileNonBlockFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileNotControllingTerminalFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Dont let pathname become the controlling terminal.
+
+If the file being opened is a terminal device, prevent it from becoming the controlling terminal. If the file being opened is not a terminal, this flag has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileOpenModeFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'File access mode flags:
+
+The subclasses implement the modes for opening a Posix compliant file.
+These modes are mutually exclusive.
+
+In C they can be retrieved using the fcntl() F_GETFL operation';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpenModeFlag
+	subclass: 'FileOpenReadOnlyFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Open the file for reading only';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpenModeFlag
+	subclass: 'FileOpenReadWriteFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Open the file for both reading and writing';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpenModeFlag
+	subclass: 'FileOpenWriteOnlyFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Open the file for writing only';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileReadSynchronousFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Write I/O operations on the file descriptor shall complete as defined by synchronized I/O file integrity completion.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileSychronizedDataFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Write I/O operations on the file descriptor shall complete as defined by synchronized I/O data integrity completion.
+
+If both the O_SYNC and O_DSYNC flags are set, the effect is as if only the O_SYNC flag was set.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileSynchronizedIOFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Write I/O operations on the file descriptor shall complete as defined by synchronized I/O file integrity completion.
+
+If both the O_SYNC and O_DSYNC flags are set, the effect is as if only the O_SYNC flag was set.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileSynchronizedReadFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'close-on-exec flag.
+
+if the FD_CLOEXEC bit is 0, the file descriptor will remain open across an execve(2), otherwise it will be closed.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOpeningFlag
+	subclass: 'FileTruncateFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'If the file already exists and is a regular file, then truncate it to zero length, destroying any existing data.
+
+On Linux, truncation occurs whether the file is being opened for reading or writing (in both cases, we must have write permission on the file). SUSv3 leaves the combination of O_RDONLY and O_TRUNC unspecified, but most other UNIX implementations behave in the same way as Linux.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixFlag
+	subclass: 'FilePermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'The subclasses of this class define POSIX style permission options.
+
+For Windows, there are only two applicable options: Read and Write.
+So one only needs to use FileOwnerReadPermissionFlag, FileOwnerWritePermissionFlag, or FileOwnerAllPermissionFlag with Windows files.
+All other PermissionFlags are ignored.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileGroupAllPermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file group class either:
+
+    To read, write, and search, if the file is a directory
+    To read, write, and execute, for a file other than a directory
+
+This value has the same effect as specifying all three parameters (SIRGRP, SIWGRP, and SIXGRP).
+
+If applied to a WindowsStore, this has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileGroupExecutePermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file group class either:
+
+    To search, if the file is a directory
+    To execute the program in the file, for a file other than a directory.
+
+If applied to a WindowsStore, this has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileGroupReadPermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file group class to read the file.
+
+If applied to a WindowsStore, this has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileGroupWritePermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file owner class either:
+
+    To search, if the file is a directory
+    To execute the program in the file, for a file other than a directory.
+
+If applied to a WindowsStore, this has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileOtherAllPermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file other class either:
+
+-   To read, write, and search, if the file is a directory
+-   To read, write, and execute, for a file other than a directory
+
+This value has the same effect as specifying all three parameters (SIROTH, SIWOTH, and SIXOTH).
+
+If applied to a WindowsStore, this has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileOtherExecutePermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file other class either:
+
+    To search, if the file is a directory
+    To execute the program in the file, for a file other than a directory.
+
+If applied to a WindowsStore, this has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileOtherReadPermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file other class to read the file.
+
+If applied to a WindowsStore, this has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileOtherWritePermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file other class to write the file.
+
+If applied to a WindowsStore, this has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileOwnerAllPermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for the file owner either:
+
+-    To read, write, and search, if the file is a directory
+-    To read, write, and execute, for a file other than a directory
+
+This value has the same effect as specifying all three parameters (SIRUSR, SIWUSR, and SIXUSR)';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileOwnerExecutePermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file owner class either:
+
+    To search, if the file is a directory
+    To execute the program in the file, for a file other than a directory.
+
+In windows this option has no effect.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileOwnerReadPermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file owner class either:
+
+    To read the file or directory
+
+For Windows, this returns a 1 for read.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePermissionFlag
+	subclass: 'FileOwnerWritePermissionFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Specifies permission for users in the file owner class either:
+
+    To write to the file or directory
+
+For Windows, this returns a 2.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixFlag
+	subclass: 'FilePositioning'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePositioning
+	subclass: 'FileSeekCurrentPosition'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'SEEK_CUR  It moves file pointer position to given location.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePositioning
+	subclass: 'FileSeekEndPosition'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'SEEK_END  It moves file pointer position to the end of file.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FilePositioning
+	subclass: 'FileSeekSetPosition'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'SEEK_SET  It moves file pointer position to the beginning of the file.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixFlag
+	subclass: 'FileShareFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileShareFlag
+	subclass: 'FileDenyNoneFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Other processes can open the file for any access: read-only, write-only, or read-write.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileShareFlag
+	subclass: 'FileDenyReadFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Other processes can open the file for write-only access, but they cannot open it for read-only or read-write access.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileShareFlag
+	subclass: 'FileDenyReadWriteFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'The current process has exclusive access to the file.
+Other processes may not open the file.   It is unspecified whether
+the file may be opened by the current process.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileShareFlag
+	subclass: 'FileDenyWriteFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Other processes can open the file for read-only access, but they cannot open it for write-only or read-write access.';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixFlag
+	subclass: 'FileTypeFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Abstract class to support file options. These are used when opening the file.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileTypeFlag
+	subclass: 'FileBinaryTypeFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'A binary file is basically any file that is not "line-oriented". Any file where besides the actual written characters and newlines there are other symbols as well.
+
+No CR-LF translation: Explicitly opens the file in binary mode.
+
+This is Windows only';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileTypeFlag
+	subclass: 'FileGzipTypeFlag'
+	instVarNames: #( compressionLevel )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'GemStone has a gzipped compression option which this class supports.
+
+Gemstone supports levels of: none, 1 and 9.
+
+The main prupose of this class is to ensure the file opening mode string is properly created.';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileTypeFlag
+	subclass: 'FileTextTypeFlag'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Base-FileOptions';
+		comment: 'Used to indicate a exclusive (write) ADVISORY lock when the file is opened.
+
+Take out a write lease. This will cause the caller to be notified when the file is opened for reading or writing or is truncated. A write lease may be placed on a file only if there are no other open file descriptors for the file.
+
+Linux supports this type of lock.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'ProcessSpecificVariable'
+	instVarNames: #( index )
+	classVars: #(  )
+	classInstVars: #( soleInstance )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(ProcessSpecificVariable
+	subclass: 'DynamicVariable'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(DynamicVariable
+	subclass: 'ZnDefaultCharacterEncoder'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'Stdio'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Core';
+		comment: 'I am a facade class to access standard output streams:
+
+- standard input
+- standard output
+- standard error
+
+I initialize standard streams in a lazy fashion, asking to the VM for the #stdioHandles. I cache those standard streams and release them on shutdown.
+
+The possible scenarios, i.e. for each of stdin, stderr and stdout:
+
+    the stream is attached to a terminal (default on posix platforms, PharoConsole.exe on Windows (see below for Pharo.exe))
+    the stream is redirected to a normal file, e.g. pharo pharo.image > output.txt
+    the stream is redirected to a pipe, e.g. pharo pharo.image | tee output.txt
+
+To know exactly which kind of stream you are using, you can use File >> #fileDescriptorType: (args are 0 1 2 for the stdios).
+
+
+Windows Subtleties - This is from Pharo
+=====================
+
+If launched as a desktop app (not from the console), Pharo.exe will not be linked to external streams because none is created. To overcome that, the default behavior of this class is to create a normal file for the three stdio. This can be modified to:
+	not create a file (execute #useNullStreams)
+	use a memory stream (execute #useMemoryStreams).';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'ZnBase64Encoder'
+	instVarNames: #( alphabet inverse lineLength lineEnd whitespace )
+	classVars: #( DefaultAlphabet DefaultInverse )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnBase64Encoder.
+
+Base64 encoding is a technique to encode binary data as a string of characters that can be safely transported over various protocols. Basically, every 3 bytes are encoded using 4 characters from an alphabet of 64. Each encoded character represents 6 bits.
+
+The most commonly used alphabet is ''ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/''. One or two equal signs (= or ==) are used for padding.
+
+  ZnBase64Encoder new encode: #[0 1 2 3 4 5].
+  ZnBase64Encoder new encode: #[10 20]
+  ZnBase64Encoder new decode: ''BQQDAgEA''.
+  ZnBase64Encoder new decode: ''FAo=''.
+
+The encoded data can optionally be broken into lines. Characters not part of the alphabet are considered as white space and are ignored when inbetween groups of 4 characters.
+
+My #encode: method works from ByteArray to String, while my #decode: method works from String to ByteArray.
+
+Note that to encode a String as Base64, you first have to encode the characters as bytes using a character encoder.
+
+See also http://en.wikipedia.org/wiki/Base64
+
+Part of Zinc HTTP Components.';
 		immediateInvariant.
 true.
 %
@@ -1026,7 +3457,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedReadStream.
 
@@ -1049,7 +3481,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedReadWriteStream.
 I wrap a buffered read stream and a buffered write stream on the same file.
@@ -1074,7 +3507,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedWriteStream.
 I wrap a write stream and add buffering.
@@ -1098,7 +3532,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterEncoder, I encode and decode Character objects to and from a binary stream.
 I am an abstract class with following protocol:
@@ -1140,13 +3575,160 @@ true.
 
 doit
 (ZnCharacterEncoder
-	subclass: 'ZnUTF8Encoder'
+	subclass: 'ZnNullEncoder'
 	instVarNames: #(  )
-	classVars: #( Default )
+	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnNullEncoder, a concrete subclass of ZnCharacterEncoder.
+I perform no encoding or decoding at all for all characters with a code value below 256.
+
+Note that in principle I could handle Latin1 (ISO-8859-1) or ASCII, although that is not completely correct. To get maximum efficiency, it remains an option.
+	
+Part of Zinc HTTP Components.';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnCharacterEncoder
+	subclass: 'ZnSimplifiedByteEncoder'
+	instVarNames: #( identifier byteToUnicode unicodeToByte strict )
+	classVars: #(  )
+	classInstVars: #( byteTextConverters )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnSimplifiedByteEncoder, a concrete subclass of ZnCharacterEncoder.
+I handle single byte encodings where byte values 0 to 127 map to ASCII and 128 to 255 are a permutation to Unicode characters.
+
+I am like ZnByteEncoder, a subclass of me, but I implement just two mappings, latin1 or iso-8859-1 and ASCII, to conserve memory.';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnSimplifiedByteEncoder
+	subclass: 'ZnByteEncoder'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnByteEncoder, a concrete subclass of ZnCharacterEncoder.
+I handle single byte encodings where byte values 0 to 127 map to ASCII and 128 to 255 are a permutation to Unicode characters.
+
+I derive my mappings by parsing official unicode.org specifications.
+
+The list of encodings and their names/aliases was taken from http://encoding.spec.whatwg.org/#legacy-single-byte-encodings
+
+I basically support ISO/IEC 8859 1, 2, 3, 4, 5, 6, 7, 8, 10, 13, 14, 15 and 16, Windows Codepages 866, 874, 1250, 1251, 1252, 1253, 1253, 1254, 1255, 1256, 1257, 1258, KOI8 R & U as well as Mac Roman & Cyrillic - each of these with a number of aliases like latin1, latin2, latin3, latin4, latin5, latin6, cyrillic, arabic, greek and hebrew. See #mappingToIdentifiers
+
+Note that most/all of these encodings should be considered legacy, with UTF-8 being the preferred encoding going forward.  
+
+Part of Zinc HTTP Components.';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnCharacterEncoder
+	subclass: 'ZnUTFEncoder'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnUTFEncoder. I am a ZnCharacterEncoder. My subclasses deal with the full range of Unicode character code points.';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnUTFEncoder
+	subclass: 'ZnEndianSensitiveUTFEncoder'
+	instVarNames: #( endianness )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnEndianSensitiveUTFEncoder.
+I am a ZnCharacterEncoder.
+I add support for UTF encodings that are sensitive to endianness.
+The default is big endian.';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnEndianSensitiveUTFEncoder
+	subclass: 'ZnUTF16Encoder'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnUTF16Encoder, a concrete subclass of ZnCharacterEncoder.
+I implement the variable length UTF-16 encoding and decoding of Unicode according to RFC 2781.
+
+Wikipedia reference http://en.wikipedia.org/wiki/UTF-16
+
+Part of Zinc HTTP Components.';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnEndianSensitiveUTFEncoder
+	subclass: 'ZnUTF32Encoder'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnUTF32Encoder, a concrete subclass of ZnCharacterEncoder.
+I implement the fixed length UTF-32 encoding and decoding of Unicode according to http://www.unicode.org/versions/Unicode8.0.0/ch03.pdf definitions D90, D99, D100 and D101.
+
+Wikipedia reference http://en.wikipedia.org/wiki/UTF-32
+
+UCS-4 is another name for the same encoding.
+
+Part of Zinc HTTP Components.';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnUTFEncoder
+	subclass: 'ZnUTF8Encoder'
+	instVarNames: #(  )
+	classVars: #( ByteASCIISet ByteUTF8Encoding Default )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am the GemStone/S implementation of ZnUTF8Encoder.
 I implement the variable length UTF-8 encoding and decoding of Unicode according to RFC 3629.
@@ -1168,7 +3750,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am a read-write character stream. I am mainly used to open the Pharo source and changes files.';
 		immediateInvariant.
@@ -1183,7 +3766,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedStream, an abstract support class for read and write streams on an encoded binary stream.
 
@@ -1200,7 +3784,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedReadStream, an abstract support class for read streams on a binary encoded wrapped stream.
 
@@ -1217,15 +3802,36 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterReadStream.
 I wrap another binary ReadStream and use a ZnCharacerEncoder to allow Characters to be read.
 
 I am not positionable, but I do allow a one character peek using a one character internal buffer.
 
-Part of Zinc HTTP Components.
-';
+Part of Zinc HTTP Components.';
+		immediateInvariant.
+true.
+%
+
+doit
+(ZnEncodedReadStream
+	subclass: 'ZnCodePointReadStream'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnCodePointReadStream.
+I wrap another binary ReadStream and use a ZnCharacerEncoder to allow Integer code points to be read.
+
+I am not positionable, but I do allow a one code point peek using a one code point internal buffer.
+
+Part of Zinc HTTP Components.';
 		immediateInvariant.
 true.
 %
@@ -1238,7 +3844,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedWriteStream, an abstract support class for write streams on a binary encoded wrapped stream.
 
@@ -1255,7 +3862,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterWriteStream.
 I wrap another binary WriteStream and use a ZnCharacerEncoder to allow Characters to be written.
@@ -1266,15 +3874,149 @@ true.
 %
 
 doit
-(Stream
-	subclass: 'AbstractBinaryFileStream'
-	instVarNames: #( file handle forWrite )
+(ZnEncodedWriteStream
+	subclass: 'ZnCodePointWriteStream'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
-		category: 'Files';
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnCodePointWriteStream.
+I wrap another binary WriteStream and use a ZnCharacerEncoder to allow Integer code points to be written.
+
+Part of Zinc HTTP Components.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'ZnEndianessReadWriteStream'
+	instVarNames: #( stream )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am a stream decorator that knows how to read and write little endian numbers from my underlying stream.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'ZnFastLineReader'
+	instVarNames: #( readStream cr lf bufferStream )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnFastLineReader, a helper to efficiently read CR, LF or CRLF terminated lines from a character stream.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'ZnPercentEncoder'
+	instVarNames: #( characterEncoder safeSet decodePlusAsSpace )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnPositionableReadStream.
+I am polymorphic with (the most used/important methods of) ReadStream and PositionableStream.
+
+I wrap another read stream and store the elements that I read in a sliding circular buffer so that I am able to go back to any position inside that buffer. 
+
+Essentially, I implement #position and #position: to be used to back out of reading ahead.
+
+Note that the size of my buffer limits how far I can go backwards. A SubscriptOutOfBounds exception will be signalled when an attempt is made to go too far backwards.
+
+The index returned by #position should be considered abstract, without concrete meaning, but it is currently implemented as the count of elements read by #next on the wrapped stream. On a simple stream over an in memory collection, that will be equivalent to an integer index into that collection. But on network streams or streams that were already further along, this will no longer be the case.
+
+The most elementary example of my capabilities can be seen in my implementation of #peek. See also the unit tests #testPlainExcursion and #testSearch
+
+Of course, backing out of an excursion is only possible within the window of the buffer size.
+
+Implementation
+
+- stream <ReadStream> the read stream that I wrap and add positioning to
+- buffer <String|ByteArray> sliding, circular buffer
+- index <PositiveInteger> zero based index into buffer, where next will be stored
+- count <PositiveInteger> number of next operations done on wrapped stream
+- delta <PositiveInteger> number of positions that I was moved backwards
+
+The real core methods are #next, #atEnd, #position and #position: and are used to implement the rest.
+
+Part of Zinc HTTP Components';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'ZnPositionableReadStream'
+	instVarNames: #( stream buffer count index delta )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am ZnPositionableReadStream.
+I am polymorphic with (the most used/important methods of) ReadStream and PositionableStream.
+
+I wrap another read stream and store the elements that I read in a sliding circular buffer so that I am able to go back to any position inside that buffer. 
+
+Essentially, I implement #position and #position: to be used to back out of reading ahead.
+
+Note that the size of my buffer limits how far I can go backwards. A SubscriptOutOfBounds exception will be signalled when an attempt is made to go too far backwards.
+
+The index returned by #position should be considered abstract, without concrete meaning, but it is currently implemented as the count of elements read by #next on the wrapped stream. On a simple stream over an in memory collection, that will be equivalent to an integer index into that collection. But on network streams or streams that were already further along, this will no longer be the case.
+
+The most elementary example of my capabilities can be seen in my implementation of #peek. See also the unit tests #testPlainExcursion and #testSearch
+
+Of course, backing out of an excursion is only possible within the window of the buffer size.
+
+Implementation
+
+- stream <ReadStream> the read stream that I wrap and add positioning to
+- buffer <String|ByteArray> sliding, circular buffer
+- index <PositiveInteger> zero based index into buffer, where next will be stored
+- count <PositiveInteger> number of next operations done on wrapped stream
+- delta <PositiveInteger> number of positions that I was moved backwards
+
+The real core methods are #next, #atEnd, #position and #position: and are used to implement the rest.
+
+Part of Zinc HTTP Components';
+		immediateInvariant.
+true.
+%
+
+doit
+(Stream
+	subclass: 'AbstractBinaryFileStream'
+	instVarNames: #( terminal )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Streams';
 		comment: 'Provides a simple, platform-independent, file stream. I am 
    - binary
    - not buffered
@@ -1318,14 +4060,55 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
-		category: 'Files';
+	options: #()
+)
+		category: 'FileSystem-Streams';
 		comment: 'I am a concrete subclass of AbstractBinaryFileStream for normal files. Regardless the position of the file, I will make my operarions on my position and then return the file it''s own position.
 
 In addition to my superclass'' API I provide the following methods.
 
 stream upToEnd
 "reads the full stream up to the end and returns the contents"';
+		immediateInvariant.
+true.
+%
+
+doit
+(AbstractBinaryFileStream
+	subclass: 'StdioStream'
+	instVarNames: #( peekBuffer )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Streams';
+		comment: 'I am a concrete subclass of AbstractBinaryFileStream for stdio streams.
+
+StdioStreams map to one of three types of underlying file: 
+
+- Terminal input/output.
+- Piped input/output and named pipes (FIFO files) such as created with the shell pipe character "|".
+- A file mounted on the file system.
+  This includes all the files that can be opened with a FileReference, including sysfs files such as /proc/cpuinfo and character devices such as /dev/urandom.
+
+The operations that can be performed on these vary, e.g. it is possible to position the stream for a regular file, but not for piped input.  Currently it is up to the user of StdioStream to know which type of input they are dealing with.
+
+As pipes can''t be positioned and FilePlugin doesn''t provide a peek primitive, simulate #peek by reading the next character and holding on to it until it is consumed.
+
+Despite providing both input and output methods, StdioStreams are either read-only or write-only.  Currently it is up to the user to know which type of stream they are dealing with.
+
+Normally instances of StdioStream are not created directly but via Stdio, e.g: 
+
+Stdio stdin.
+Stdio stdout.
+Stdio stderr.
+
+
+Instance Variables:
+
+- peekBuffer     <SmallInteger or nil> The next character to be read from the stream or nil.';
 		immediateInvariant.
 true.
 %
@@ -1338,7 +4121,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Network-UUID-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1353,8 +4137,57 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Network-UUID-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'BinaryFileStreamTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Streams';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'BinaryStreamSpecTest'
+	instVarNames: #( reference )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Disk';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'BufferedStreamSpecTest'
+	instVarNames: #( reference )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Disk';
 		comment: '';
 		immediateInvariant.
 true.
@@ -1368,9 +4201,26 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemDirectoryEntry';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'EncodedBufferedStreamSpecTest'
+	instVarNames: #( reference )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Disk';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1383,9 +4233,58 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit test for FileLocator';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'FileOptionsTest'
+	instVarNames: #( stream )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Disk';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOptionsTest
+	subclass: 'FileUnixOptionsTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Disk';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileOptionsTest
+	subclass: 'FileWindowsOptionsTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Disk';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1398,7 +4297,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Attributes';
 		comment: 'Try and test file attribute access from FileReference.
 
@@ -1416,7 +4316,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for file reference';
 		immediateInvariant.
@@ -1431,7 +4332,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemHandle';
 		immediateInvariant.
@@ -1446,7 +4348,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for file handles, the tests may be found in superclass';
 		immediateInvariant.
@@ -1461,7 +4364,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Memory';
 		comment: 'SUnit tests for memory handles, the tests may be found in superclass';
 		immediateInvariant.
@@ -1476,9 +4380,26 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemResolver';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileSystemResolverTest
+	subclass: 'ClientResolverTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Client';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1491,7 +4412,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for InteractiveResolver';
 		immediateInvariant.
@@ -1506,7 +4428,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for PlatformResolver';
 		immediateInvariant.
@@ -1521,7 +4444,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for SystemResolver';
 		immediateInvariant.
@@ -1536,12 +4460,29 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'I am an abstract file system test. 
 I directly test 
 - the public interface of a FileSystem using these methods directly
 - the FileSystem in general through the operation methods of the FileReference';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileSystemTest
+	subclass: 'ClientFileSystemTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Client';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1554,7 +4495,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for the disk filesystem';
 		immediateInvariant.
@@ -1569,7 +4511,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Memory';
 		comment: 'SUnit tests for MemoryFileSystem';
 		immediateInvariant.
@@ -1584,7 +4527,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for a file system tree';
 		immediateInvariant.
@@ -1599,7 +4543,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for CopyVisitor';
 		immediateInvariant.
@@ -1614,7 +4559,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for a single file system tree (depth one)';
 		immediateInvariant.
@@ -1629,7 +4575,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for AbstractEnumerationVisitor';
 		immediateInvariant.
@@ -1644,7 +4591,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class CollectVisitor';
 		immediateInvariant.
@@ -1659,7 +4607,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class SelectVistor
 ';
@@ -1675,7 +4624,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class DeleteVisitor';
 		immediateInvariant.
@@ -1690,7 +4640,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'Common superclass for tests of guidance through the filesystem';
 		immediateInvariant.
@@ -1705,7 +4656,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class BreadthFirstGuide';
 		immediateInvariant.
@@ -1720,7 +4672,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class PostorderGuide';
 		immediateInvariant.
@@ -1735,24 +4688,10 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class PreorderGuide';
-		immediateInvariant.
-true.
-%
-
-doit
-(TestCase
-	subclass: 'FileTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Files-Tests';
-		comment: 'Unit tests for file operations';
 		immediateInvariant.
 true.
 %
@@ -1765,8 +4704,25 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-GemStone';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'NumberParserTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Core';
 		comment: '';
 		immediateInvariant.
 true.
@@ -1780,9 +4736,106 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for file system paths';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'PosixErrorGroupTest'
+	instVarNames: #( fileReference errorGroup posixErrorClass fileSystem oldFileReference filesToDelete directoriesToDelete )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroupTest
+	subclass: 'PosixErrorGroupClientTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Client';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroupTest
+	subclass: 'PosixErrorGroupUnixTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(PosixErrorGroupTest
+	subclass: 'PosixErrorGroupWindowsTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Base-ErrorGroups';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'StdioStreamTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Streams';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'StdioTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Disk';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1795,9 +4848,26 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for class WindowsStore';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'ZnBase64EncoderTests'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Tests';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1810,7 +4880,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: 'I am ZnBufferedReadStreamTests.';
 		immediateInvariant.
@@ -1825,7 +4896,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1840,7 +4912,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: 'Tests for bufferer read/write streams that are assumed to contain bytes.
 
@@ -1862,7 +4935,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1877,7 +4951,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1892,7 +4967,88 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'ZnCrPortableWriteStreamTests'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'ZnFastLineReaderTests'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'ZnNewLineWriterStreamTests'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'ZnPercentEncoderTests'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'ZnPositionableReadStreamTests'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1907,7 +5063,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Attributes';
 		comment: 'DiskFileAttributesTestsResources provides a file with known attributes that can be used to test attribute retrieval in the File System.
 
@@ -1925,6 +5082,22 @@ true.
 %
 
 doit
+(TestResource
+	subclass: 'StdioStreamTestResource'
+	instVarNames: #( fileReference contents fileStream stdioStream )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'FileSystem-Tests-Streams';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (WriteStream
 	subclass: 'MemoryWriteStream'
 	instVarNames: #(  )
@@ -1932,10 +5105,61 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I am like a WriteStream but I have more capacities than it.
 I am closer to a FileStream so I delegate some operations to my handle (collection instance variable)';
+		immediateInvariant.
+true.
+%
+
+doit
+(WriteStream
+	subclass: 'ZnCrPortableWriteStream'
+	instVarNames: #( stream cr lf previous )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am a write stream wrapping a second stream. Whenever they ask me to write a cr, a lf, or a crlf I''ll instead print a portable new line depending on the platform I''m on.
+
+stream := '''' writeStream.
+converter := ZnCrPortableWriteStream on: stream.
+converter cr; cr; lf; nextPut: $a.
+stream contents';
+		immediateInvariant.
+true.
+%
+
+doit
+(WriteStreamPortable
+	subclass: 'ZnNewLineWriterStream'
+	instVarNames: #( stream cr lf previous lineEnding )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Zinc-Character-Encoding-Core';
+		comment: 'I am a write stream wrapping a second stream. Whenever they ask me to write a cr, a lf, or a crlf I''ll instead print a new line depending on a configured convention. By default I use the current platform convention. 
+
+| stream converter |
+stream := '''' writeStream.
+converter := ZnNewLineWriterStream on: stream.
+converter cr; cr; lf; nextPut: $a.
+stream contents
+
+A ZnNewLineWriterStream can be configured with the desired line ending convention using the methods 
+
+converter forCr.
+converter forLf.
+converter forCrLf.
+converter forPlatformLineEnding.';
 		immediateInvariant.
 true.
 %
@@ -2137,7 +5361,7 @@ category: 'instance creation'
 classmethod: FileException
 signalOnFile: aFile 
 	
-	(self fileName: aFile basename) signal
+	(self fileName: aFile basename) signal: aFile name
 %
 
 category: 'instance creation'
@@ -2145,8 +5369,8 @@ classmethod: FileException
 signalWith: aReference
 	"Signal a new instance of the receiver with the supplied reference.
 	aReference is something that can be converted to a path, e.g. a String, Path or FileReference"
-
-	^(self fileName: aReference asPath pathString) signal
+  | str |
+	^(self fileName: (str := aReference asPath pathString)) signal: str
 %
 
 !		Instance methods for 'FileException'
@@ -2187,11 +5411,11 @@ messageText
 
 category: 'instance creation'
 classmethod: FileAlreadyExistsException
-signalOnFile: aFile 
-	
+signalOnFile: aFile
+
 	self new
 		file: aFile;
-		signal
+		signal: aFile name "use signal: so filename shows up in exception printString"
 %
 
 !		Instance methods for 'FileAlreadyExistsException'
@@ -2205,7 +5429,7 @@ file
 category: 'accessing'
 method: FileAlreadyExistsException
 file: aFile
-	
+
 	file := aFile
 %
 
@@ -2224,9 +5448,11 @@ category: 'signalling'
 classmethod: FileDoesNotExistException
 signalWithFile: aFile writeMode: writeMode
 
-	^ (self fileName: aFile basename)
+	| ex |
+	ex := (self fileName:  ( aFile isString ifTrue: [aFile] ifFalse: [aFile basename])).
+	ex
 		readOnly: writeMode not;
-		signal
+		signal: ex fileName  "use signal: so file name shows up in  ex printString"
 %
 
 !		Instance methods for 'FileDoesNotExistException'
@@ -2243,6 +5469,550 @@ readOnly: aBoolean
 	readOnly := aBoolean
 %
 
+! Class implementation for 'FilePosixError'
+
+!		Class methods for 'FilePosixError'
+
+category: 'querry'
+classmethod: FilePosixError
+allConcreteFilePosixErrorClasses
+	^self allSubclasses select: [:ea |
+		ea subclasses isEmpty and: [(ea class includesSelector: #defaultErrorNumber)]]
+%
+
+category: 'querry'
+classmethod: FilePosixError
+classWithPosixName: aString
+	" FilePosixError classWithPosixName: 'EINVAL' "
+	^self allSubclasses detect: [:ea |
+		(ea class includesSelector: #posixName) and: [ea posixName = aString]] ifNone: []
+%
+
+category: 'querry'
+classmethod: FilePosixError
+classWithPosixNumber: aString
+	" (FilePosixError classWithPosixNumber: 18) posixName "
+	^self allSubclasses detect: [:ea |
+		(ea class includesSelector: #defaultErrorNumber) and: [ea defaultErrorNumber = aString]] ifNone: []
+%
+
+category: 'access'
+classmethod: FilePosixError
+defaultErrorNumber
+	self subclassResponsibility
+%
+
+category: 'access'
+classmethod: FilePosixError
+errorDescription
+	self subclassResponsibility
+%
+
+category: 'querry'
+classmethod: FilePosixError
+errorForPlatformError: aNumber
+
+	^self
+%
+
+category: 'reporting'
+classmethod: FilePosixError
+errorNumberForSelector: valueSelector
+	^(self class canUnderstand: valueSelector)
+		ifTrue: [self perform: valueSelector]
+		ifFalse: [self defaultErrorNumber]
+%
+
+category: 'printing'
+classmethod: FilePosixError
+posixErrorsReport
+	" FilePosixError posixErrorsReport "
+	| aStream |
+	aStream := WriteStream on: String new.
+	self reportOn: aStream indent: 0.
+	^aStream contents
+%
+
+category: 'access'
+classmethod: FilePosixError
+posixName
+	self subclassResponsibility
+%
+
+category: 'querry'
+classmethod: FilePosixError
+posixNamesWithClasses
+	" FilePosixError posixNamesWithClasses"
+	| aDictionary |
+	aDictionary := Dictionary new.
+	self allSubclasses do: [:ea |
+		(ea class includesSelector: #posixName) ifTrue: [aDictionary at: ea posixName put: ea] ].
+	^aDictionary
+%
+
+category: 'instance creation'
+classmethod: FilePosixError
+reference: anObject
+
+	^self new
+		reference: anObject;
+		yourself
+%
+
+category: 'printing'
+classmethod: FilePosixError
+reportOn: aStream indent: indent
+	| aSize aValue |
+	indent timesRepeat: [aStream tab].
+
+	aStream nextPutAll: self name asString.
+	(45 - ((indent * 4) + self name asString size)) timesRepeat: [aStream space].
+
+	((self name = #FilePosixError) not and: [self class includesSelector: #posixName])
+		ifTrue: [
+			aSize := self posixName size.
+			aStream nextPutAll: self posixName].
+	(15 - (aSize ifNil: [0])) timesRepeat: [aStream space].
+
+	((self name = #FilePosixError) not and: [self class includesSelector: #defaultErrorNumber])
+		ifTrue: [aValue := self defaultErrorNumber asString]
+		ifFalse: [aValue := (self subclasses isEmpty not) ifTrue: [''] ifFalse: ['value not defined']].
+	aSize :=  aValue size.
+	(15 - aSize) timesRepeat: [aStream space].
+	aStream nextPutAll: aValue asString.
+
+	aStream crlf.
+
+	(self subclasses asSortedCollection: [:a :b | a name <= b name]) 
+		do: [:ea | ea reportOn: aStream indent: indent + 1]
+%
+
+!		Instance methods for 'FilePosixError'
+
+category: 'accessing'
+method: FilePosixError
+errorGroupName
+	^errorGroupName
+%
+
+category: 'accessing'
+method: FilePosixError
+errorGroupName: aString
+	errorGroupName := aString
+%
+
+category: 'accessing'
+method: FilePosixError
+options
+	^options
+%
+
+category: 'accessing'
+method: FilePosixError
+options: anObject
+	options := anObject
+%
+
+category: 'accessing'
+method: FilePosixError
+platformErrorNumber
+	^platformErrorNumber
+%
+
+category: 'accessing'
+method: FilePosixError
+platformErrorNumber: anInteger
+	platformErrorNumber := anInteger
+%
+
+category: 'printing'
+method: FilePosixError
+printOn: aStream
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: '(';
+		nextPutAll: self class posixName;
+		nextPutAll: '-';
+		nextPutAll: self errorGroupName;
+		nextPutAll: ')'
+%
+
+category: 'accessing'
+method: FilePosixError
+reference
+	^reference
+%
+
+category: 'accessing'
+method: FilePosixError
+reference: anObject
+	reference := anObject
+%
+
+category: 'accessing'
+method: FilePosixError
+sourceReference
+	^sourceReference
+%
+
+category: 'accessing'
+method: FilePosixError
+sourceReference: aFileReference
+	sourceReference := aFileReference
+%
+
+! Class implementation for 'FileAccessError'
+
+!		Class methods for 'FileAccessError'
+
+category: 'access'
+classmethod: FileAccessError
+defaultErrorNumber
+	^13
+%
+
+category: 'access'
+classmethod: FileAccessError
+errorDescription
+	^'Invalid path or access denied'
+%
+
+category: 'access'
+classmethod: FileAccessError
+posixName
+	^'EACCES'
+%
+
+! Class implementation for 'FileBadFileDescriptorError'
+
+!		Class methods for 'FileBadFileDescriptorError'
+
+category: 'accessing'
+classmethod: FileBadFileDescriptorError
+defaultErrorNumber
+	^9
+%
+
+category: 'accessing'
+classmethod: FileBadFileDescriptorError
+errorDescription
+	^'Bad file descriptor'
+%
+
+category: 'accessing'
+classmethod: FileBadFileDescriptorError
+posixName
+	^'EBADF'
+%
+
+! Class implementation for 'FileBusyError'
+
+!		Class methods for 'FileBusyError'
+
+category: 'accessing'
+classmethod: FileBusyError
+defaultErrorNumber
+	^16
+%
+
+category: 'accessing'
+classmethod: FileBusyError
+errorDescription
+	^'Devince or resource busy'
+%
+
+category: 'accessing'
+classmethod: FileBusyError
+posixName
+	^'EBUSY'
+%
+
+! Class implementation for 'FileDeviceNotSameError'
+
+!		Class methods for 'FileDeviceNotSameError'
+
+category: 'accessing'
+classmethod: FileDeviceNotSameError
+defaultErrorNumber
+	^18
+%
+
+category: 'accessing'
+classmethod: FileDeviceNotSameError
+errorDescription
+	^'Invalid cross-device link'
+%
+
+category: 'accessing'
+classmethod: FileDeviceNotSameError
+posixName
+	^'EXDEV'
+%
+
+! Class implementation for 'FileExistsError'
+
+!		Class methods for 'FileExistsError'
+
+category: 'accessing'
+classmethod: FileExistsError
+defaultErrorNumber
+	^17
+%
+
+category: 'accessing'
+classmethod: FileExistsError
+errorDescription
+	^'File exists'
+%
+
+category: 'accessing'
+classmethod: FileExistsError
+posixName
+	^'EEXIST'
+%
+
+! Class implementation for 'FileInvalidOptionError'
+
+!		Class methods for 'FileInvalidOptionError'
+
+category: 'accessing'
+classmethod: FileInvalidOptionError
+defaultErrorNumber
+	^22
+%
+
+category: 'accessing'
+classmethod: FileInvalidOptionError
+errorDescription
+	^'The function is being used incorrectly.  An argument may be invalid.'
+%
+
+category: 'accessing'
+classmethod: FileInvalidOptionError
+posixName
+	^'EINVAL'
+%
+
+! Class implementation for 'FileIOError'
+
+!		Class methods for 'FileIOError'
+
+category: 'accessing'
+classmethod: FileIOError
+defaultErrorNumber
+	^5
+%
+
+category: 'accessing'
+classmethod: FileIOError
+errorDescription
+	^'I/O error'
+%
+
+category: 'accessing'
+classmethod: FileIOError
+posixName
+	^'EIO'
+%
+
+! Class implementation for 'FileIsDirectoryError'
+
+!		Class methods for 'FileIsDirectoryError'
+
+category: 'accessing'
+classmethod: FileIsDirectoryError
+defaultErrorNumber
+	^21
+%
+
+category: 'accessing'
+classmethod: FileIsDirectoryError
+errorDescription
+	^'Is a directory'
+%
+
+category: 'accessing'
+classmethod: FileIsDirectoryError
+posixName
+	^'EISDIR'
+%
+
+! Class implementation for 'FileMaxFilesOpenError'
+
+!		Class methods for 'FileMaxFilesOpenError'
+
+category: 'accessing'
+classmethod: FileMaxFilesOpenError
+defaultErrorNumber
+	^23
+%
+
+category: 'accessing'
+classmethod: FileMaxFilesOpenError
+errorDescription
+	^'Too many open files'
+%
+
+category: 'accessing'
+classmethod: FileMaxFilesOpenError
+posixName
+	^'ENFILE'
+%
+
+! Class implementation for 'FileNameToLongError'
+
+!		Class methods for 'FileNameToLongError'
+
+category: 'accessing'
+classmethod: FileNameToLongError
+defaultErrorNumber
+	^36
+%
+
+category: 'accessing'
+classmethod: FileNameToLongError
+errorDescription
+	^'Name is too long'
+%
+
+category: 'accessing'
+classmethod: FileNameToLongError
+posixName
+	^'ENAMETOOLONG'
+%
+
+! Class implementation for 'FileNoEntryError'
+
+!		Class methods for 'FileNoEntryError'
+
+category: 'accessing'
+classmethod: FileNoEntryError
+defaultErrorNumber
+	^2
+%
+
+category: 'accessing'
+classmethod: FileNoEntryError
+errorDescription
+	^'No such file or directory'
+%
+
+category: 'accessing'
+classmethod: FileNoEntryError
+posixName
+	^'ENOENT'
+%
+
+! Class implementation for 'FileNoSpaceError'
+
+!		Class methods for 'FileNoSpaceError'
+
+category: 'accessing'
+classmethod: FileNoSpaceError
+defaultErrorNumber
+	^28
+%
+
+category: 'accessing'
+classmethod: FileNoSpaceError
+errorDescription
+	^'No space left on device'
+%
+
+category: 'accessing'
+classmethod: FileNoSpaceError
+posixName
+	^'ENOSPC'
+%
+
+! Class implementation for 'FilePermissionDeniedError'
+
+!		Class methods for 'FilePermissionDeniedError'
+
+category: 'accessing'
+classmethod: FilePermissionDeniedError
+defaultErrorNumber
+	^1
+%
+
+category: 'accessing'
+classmethod: FilePermissionDeniedError
+errorDescription
+	^'Permission denied or not owner'
+%
+
+category: 'accessing'
+classmethod: FilePermissionDeniedError
+posixName
+	^'EPERM'
+%
+
+! Class implementation for 'FileReadOnlyFileSystemError'
+
+!		Class methods for 'FileReadOnlyFileSystemError'
+
+category: 'accessing'
+classmethod: FileReadOnlyFileSystemError
+defaultErrorNumber
+	^30
+%
+
+category: 'accessing'
+classmethod: FileReadOnlyFileSystemError
+errorDescription
+	^'Read only file system'
+%
+
+category: 'accessing'
+classmethod: FileReadOnlyFileSystemError
+posixName
+	^'EROFS'
+%
+
+! Class implementation for 'FileSynchronizedIONotSupportedError'
+
+!		Class methods for 'FileSynchronizedIONotSupportedError'
+
+category: 'accessing'
+classmethod: FileSynchronizedIONotSupportedError
+defaultErrorNumber
+	^4
+%
+
+category: 'accessing'
+classmethod: FileSynchronizedIONotSupportedError
+errorDescription
+	^'Interrupted system call'
+%
+
+category: 'accessing'
+classmethod: FileSynchronizedIONotSupportedError
+posixName
+	^'EINTR'
+%
+
+! Class implementation for 'FileTooManySymbolicLinksError'
+
+!		Class methods for 'FileTooManySymbolicLinksError'
+
+category: 'accessing'
+classmethod: FileTooManySymbolicLinksError
+defaultErrorNumber
+	^40
+%
+
+category: 'accessing'
+classmethod: FileTooManySymbolicLinksError
+errorDescription
+	^'Too many levels of symbolic links'
+%
+
+category: 'accessing'
+classmethod: FileTooManySymbolicLinksError
+posixName
+	^'ELOOP'
+%
+
 ! Class implementation for 'FileSystemError'
 
 !		Class methods for 'FileSystemError'
@@ -2250,7 +6020,13 @@ readOnly: aBoolean
 category: 'instance creation'
 classmethod: FileSystemError
 reference: aReference
-	^ self basicNew initializeWithReference: aReference
+	^ self reference: aReference text: aReference printString
+%
+
+category: 'instance creation'
+classmethod: FileSystemError
+reference: aReference text: aString
+	^ self basicNew initializeWithReference: aReference text: aString
 %
 
 category: 'instance creation'
@@ -2259,13 +6035,19 @@ signalWith: aReference
 	^ (self reference: aReference) signal
 %
 
+category: 'instance creation'
+classmethod: FileSystemError
+signalWith: aReference text: aString
+	^ (self reference: aReference text: aString) signal
+%
+
 !		Instance methods for 'FileSystemError'
 
 category: 'initialize-release'
 method: FileSystemError
-initializeWithReference: aReference
+initializeWithReference: aReference text: aString
 	reference := aReference.
-	messageText := aReference printString
+	messageText := aString
 %
 
 category: 'testing'
@@ -2311,6 +6093,251 @@ name
 	^ name
 %
 
+! Class implementation for 'SubscriptOutOfBounds'
+
+!		Class methods for 'SubscriptOutOfBounds'
+
+category: 'signalling'
+classmethod: SubscriptOutOfBounds
+signalFor: subscript lowerBound: lowerBound upperBound: upperBound
+	^ self 
+		signalFor: subscript 
+		lowerBound: lowerBound 
+		upperBound: upperBound 
+		in: nil
+%
+
+category: 'signalling'
+classmethod: SubscriptOutOfBounds
+signalFor: subscript lowerBound: lowerBound upperBound: upperBound in: object
+	^ self new
+		signaler: object;
+		subscript: subscript;
+		lowerBound: lowerBound;
+		upperBound: upperBound;
+		signal
+%
+
+category: 'signalling'
+classmethod: SubscriptOutOfBounds
+standardMessageText
+	"Generate a standard textual description"
+	
+	^ String streamContents: [ :stream |
+		self subscript 
+			ifNil: [
+				stream << 'subscript' ]
+			ifNotNil: [ 
+				stream print: self subscript ].
+		(self lowerBound notNil and: [ self upperBound notNil])
+			ifTrue: [
+				stream << ' is not between '.
+				stream print: self lowerBound.
+				stream << ' and '.
+				stream print: self upperBound ] ]
+%
+
+!		Instance methods for 'SubscriptOutOfBounds'
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+lowerBound
+	^ lowerBound
+%
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+lowerBound: anObject
+	lowerBound := anObject
+%
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+messageText
+	"Overwritten to initialiaze the message text to a standard text if it has not yet been set"
+	
+	^ messageText ifNil: [ messageText := self standardMessageText ]
+%
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+signaler
+	^ signaler
+%
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+signaler: anObject
+	signaler := anObject
+%
+
+category: 'printing'
+method: SubscriptOutOfBounds
+standardMessageText
+	"Generate a standard textual description"
+	
+	^ String streamContents: [ :stream |
+		self subscript 
+			ifNil: [
+				stream << 'subscript' ]
+			ifNotNil: [ 
+				stream print: self subscript ].
+		(self lowerBound notNil and: [ self upperBound notNil])
+			ifTrue: [
+				stream << ' is not between '.
+				stream print: self lowerBound.
+				stream << ' and '.
+				stream print: self upperBound ] ]
+%
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+subscript
+	^ subscript
+%
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+subscript: anObject
+	subscript := anObject
+%
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+upperBound
+	^ upperBound
+%
+
+category: 'accessing'
+method: SubscriptOutOfBounds
+upperBound: anObject
+	upperBound := anObject
+%
+
+! Class implementation for 'ZnByteStringBecameWideString'
+
+!		Class methods for 'ZnByteStringBecameWideString'
+
+category: 'convenience'
+classmethod: ZnByteStringBecameWideString
+convert: byteString
+	"Convert byteString to a wideString, signalling a resumable error"
+	
+	| wideString |
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
+	wideString := String from: byteString.
+	self new
+		byteString: byteString;
+		wideString: wideString;
+		signal.
+	^ wideString
+%
+
+!		Instance methods for 'ZnByteStringBecameWideString'
+
+category: 'convenience'
+method: ZnByteStringBecameWideString
+becomeForward
+	"Switch the identities of byteString and wideString using #becomeForward:.
+		byteString becomeForward: wideString
+	 GemStone's #become: is a two way become. This is an attempt to mimic a one-way become"
+	| a |
+	a := byteString copy.
+	a become: wideString.
+	byteString := a
+%
+
+category: 'accessing'
+method: ZnByteStringBecameWideString
+byteString
+	^ byteString
+%
+
+category: 'accessing'
+method: ZnByteStringBecameWideString
+byteString: anObject
+	byteString := anObject
+%
+
+category: 'testing'
+method: ZnByteStringBecameWideString
+isResumable
+	^ true
+%
+
+category: 'accessing'
+method: ZnByteStringBecameWideString
+wideString
+	^ wideString
+%
+
+category: 'accessing'
+method: ZnByteStringBecameWideString
+wideString: anObject
+	wideString := anObject
+%
+
+! Class implementation for 'ZnCharacterEncodingError'
+
+!		Instance methods for 'ZnCharacterEncodingError'
+
+category: 'private'
+method: ZnCharacterEncodingError
+defaultResumeValue
+	"Answer the value that by default should be returned if the exception is resumed"
+	
+	^ nil
+%
+
+category: 'Handling'
+method: ZnCharacterEncodingError
+resume
+
+"See  resume:  for documentation ."
+
+ self isResumable ifFalse:[ 
+   "cannot resume from a not-resumable Exception."
+   ^ self error:'cannot resume from a not-resumable Exception'
+ ].
+ ^ self _resume: self defaultResumeValue
+%
+
+! Class implementation for 'ZnIncomplete'
+
+!		Instance methods for 'ZnIncomplete'
+
+category: 'private'
+method: ZnIncomplete
+defaultResumeValue
+	"$? codePoint"
+	
+	^ 63
+%
+
+category: 'testing'
+method: ZnIncomplete
+isResumable
+	^ true
+%
+
+! Class implementation for 'ZnInvalidUTF8'
+
+!		Instance methods for 'ZnInvalidUTF8'
+
+category: 'private'
+method: ZnInvalidUTF8
+defaultResumeValue
+	"$? codePoint"
+	
+	^ 63
+%
+
+category: 'testing'
+method: ZnInvalidUTF8
+isResumable
+	^ true
+%
+
 ! Class implementation for 'ResolutionRequest'
 
 !		Class methods for 'ResolutionRequest'
@@ -2342,6 +6369,454 @@ category: 'accessing'
 method: ResolutionRequest
 origin: aSymbol
 	origin := aSymbol
+%
+
+! Class implementation for 'AbstractFileAdaptor'
+
+!		Class methods for 'AbstractFileAdaptor'
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+createDirectory: aPathName
+	self subclassResponsibility
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+currentWorkingDirectoryPath
+
+	self subclassResponsibility
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+deleteDirectory: aPathName
+	self subclassResponsibility
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+deleteFile: aPathName
+	self subclassResponsibility
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+entriesIn: pathString
+	self subclassResponsibility
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+isDirectory: aPathName
+	self subclassResponsibility
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+lookupDirectory: path filename: basename
+
+	self subclassResponsibility
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+lookupDirectoryEntry: fullPath
+	self subclassResponsibility
+%
+
+category: 'instance creation'
+classmethod: AbstractFileAdaptor
+on: aFile
+	^self new
+		file: aFile;
+		yourself
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+open: aFileReference withOptions: aFileOptions
+	| aFileAdaptor |
+	aFileAdaptor := self openPathName: aFileReference fullName withOptions: aFileOptions.
+	aFileAdaptor ifNil: [FileDoesNotExistException signalWith: aFileReference fullName].
+	^aFileAdaptor
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+openPathName: aPathname withOptions: aFileOptions
+	self subclassResponsibility
+%
+
+category: 'accessing'
+classmethod: AbstractFileAdaptor
+rename: oldFileFullName to: newFileFullName
+	self subclassResponsibility
+%
+
+!		Instance methods for 'AbstractFileAdaptor'
+
+category: 'accessing - file'
+method: AbstractFileAdaptor
+atEnd
+	self subclassResponsibility
+%
+
+category: 'accessing'
+method: AbstractFileAdaptor
+file
+	^file
+%
+
+category: 'accessing'
+method: AbstractFileAdaptor
+file: aFile
+	file := aFile
+%
+
+category: 'accessing - file'
+method: AbstractFileAdaptor
+fileSize
+	self subclassResponsibility
+%
+
+category: 'positioning'
+method: AbstractFileAdaptor
+flush
+	self subclassResponsibility
+%
+
+category: 'positioning'
+method: AbstractFileAdaptor
+fullName
+	self subclassResponsibility
+%
+
+category: 'accessing - file'
+method: AbstractFileAdaptor
+isClosed
+
+	self subclassResponsibility
+%
+
+category: 'accessing - file'
+method: AbstractFileAdaptor
+isWritable
+
+	self subclassResponsibility
+%
+
+category: 'accessing - file'
+method: AbstractFileAdaptor
+pathString
+
+	^self file pathString
+%
+
+category: 'positioning'
+method: AbstractFileAdaptor
+sizeOf: handle
+	self subclassResponsibility
+%
+
+category: 'positioning'
+method: AbstractFileAdaptor
+truncate: anInteger
+	self subclassResponsibility
+%
+
+category: 'accessing - file'
+method: AbstractFileAdaptor
+writeFrom: aByteArray startingAt: anIndex count: count
+	self subclassResponsibility
+%
+
+! Class implementation for 'GsFileAdaptor'
+
+!		Class methods for 'GsFileAdaptor'
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+createDirectory: aPathName
+	^GsFile createServerDirectory: aPathName
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+currentWorkingDirectoryPath
+
+	^GsFile _expandEnvVariable: 'PWD' isClient:false
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+deleteDirectory: aPathName
+	^GsFile removeServerDirectory: aPathName
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+deleteFile: aPathName
+	^GsFile removeServerFile: aPathName
+%
+
+category: 'error handling'
+classmethod: GsFileAdaptor
+doesNotUnderstand: aMessage
+	"Redirect message to the resolved version of this GsFile."
+	(GsFile respondsTo: aMessage selector)
+		ifTrue: [ ^ GsFile perform: aMessage selector withArguments: aMessage arguments ].
+	
+	^ super doesNotUnderstand: aMessage.
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+entriesIn: pathString
+	| result |
+	result := self _entriesIn: pathString.
+	^(result ifNil: [#()])
+		reject: [:ea | (ea  endsWith: '.') or: [ea endsWith: '..']]
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+isDirectory: aPathName
+	^GsFile _isDirectory: aPathName onClient: false
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+lookupDirectory: path filename: basename
+
+	| fullPath|
+	fullPath := self _fullPath: path filename: basename.
+	^self lookupDirectoryEntry: fullPath
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+lookupDirectoryEntry: fullPath
+	| gsFileStat |
+	gsFileStat := GsFile stat: fullPath isLstat: true.
+	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
+	^	{
+		(Path from: fullPath) basename.
+		gsFileStat ctimeUtcSeconds .
+		gsFileStat mtimeUtcSeconds .
+		gsFileStat isDirectory .
+		gsFileStat size.
+		gsFileStat mode bitAnd: 8r777. "https://github.com/GemTalk/FileSystemGs/issues/11"
+		(gsFileStat mode bitAnd: 8r0120000) = 8r0120000. "https://github.com/GemTalk/FileSystemGs/issues/10"
+	}
+%
+
+category: 'instance creation'
+classmethod: GsFileAdaptor
+openPathName: aPathName withOptions: aFileOptions
+	"This is the current way of openning a file"
+	| aGsFile |
+	aGsFile := 
+		GsFile 
+			open: aPathName 
+			mode: aFileOptions mode 
+			onClient: aFileOptions isForeignFileSystem 
+			withCompression: aFileOptions isGzipped.
+	^aGsFile ifNotNil: [(self on: aGsFile) options: aFileOptions]
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+rename: oldFileFullName to: newFileFullName
+	^(GsFile renameFileOnServer: oldFileFullName to: newFileFullName) = 0 
+		ifTrue: [0] 
+		ifFalse: [nil]
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+serverErrorString
+	^GsFile serverErrorString
+%
+
+category: 'instance creation'
+classmethod: GsFileAdaptor
+stderr
+
+	| aGsFile |
+	aGsFile := GsFile _getStdFile: 2 onClient: false.
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions newWrite]
+%
+
+category: 'instance creation'
+classmethod: GsFileAdaptor
+stdin
+
+	| aGsFile |
+	aGsFile := GsFile _getStdFile: 0 onClient: false.
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions newRead]
+%
+
+category: 'instance creation'
+classmethod: GsFileAdaptor
+stdout
+
+	| aGsFile |
+	aGsFile := GsFile _getStdFile: 1 onClient: false.
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions newWrite]
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+_entriesIn: pathString
+	| result |
+	result := GsFile _contentsOfServerDirectory: pathString expandPath: true.
+	^result _isArray ifTrue: [result] ifFalse:  [nil]
+%
+
+category: 'accessing - file'
+classmethod: GsFileAdaptor
+_fullPath: path filename: basename
+	"If this is a directory, then the path needs to have a slash on the end"
+	| fullPath |
+	fullPath := path , '/' , basename.
+	(self isDirectory: fullPath) == true ifTrue: [^fullPath , '/'].
+	^fullPath
+%
+
+!		Instance methods for 'GsFileAdaptor'
+
+category: 'accessing - file'
+method: GsFileAdaptor
+atEnd
+	^self file atEnd
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+close
+	self file close
+%
+
+category: 'error handling'
+method: GsFileAdaptor
+doesNotUnderstand: aMessage
+	"Redirect message to the resolved version of this GsFile."
+	(self file respondsTo: aMessage selector)
+		ifTrue: [ ^ self file perform: aMessage selector withArguments: aMessage arguments ].
+	
+	^ super doesNotUnderstand: aMessage.
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+fileSize
+	^self file fileSize
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+flush
+	self file flush
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+fullName
+	^self file pathName
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+isClosed
+	^self isOpen not
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+isOpen
+	^self file notNil and: [self file isOpen]
+%
+
+category: 'testing'
+method: GsFileAdaptor
+isWritable
+	^self options isWritable
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+next: count into: buf
+	^self file next: count into: buf
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+nextPutAll: stringOrByteArray
+	^self file nextPutAll: stringOrByteArray
+%
+
+category: 'accessing'
+method: GsFileAdaptor
+options
+	^options
+%
+
+category: 'accessing'
+method: GsFileAdaptor
+options: aFileOptions
+	options := aFileOptions
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+position
+	^self file position ifNil: [ self error: 'position error' ]
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+position: aPosition
+	(self file position: aPosition) ifNil: [ self error: 'position error' ]
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+readInto: readBuffer startingAt: startIndex count: count
+	^(self file read: count into: readBuffer) ifNil: [FileReadError signal: 'File Read Error']
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+sync
+	"The handle is always nil. This is here for Pharo compatability"
+
+	"On Unix, this syncs any written or flushed data still in the kernel file
+	system buffers to disk. On Windows this and primFlush: do the same thing
+
+	self file sync
+
+
+
+	<primitive: 'primitiveFileSync' module: 'FilePlugin'>
+
+"
+	self error: 'sync not yet implmented'
+
+	"fsync() failing cannot be ignored"
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+truncate: anInteger
+	self file position: anInteger
+%
+
+category: 'accessing - file'
+method: GsFileAdaptor
+writeFrom: aByteArray startingAt: anIndex count: count
+	^(self nextPutAll: aByteArray) ifNil: [
+		(FileWriteError fileName: self fullName) signal: ('File ' , self file name , ' write failed')]
 %
 
 ! Class implementation for 'AbstractFileReference'
@@ -2496,16 +6971,13 @@ basenameWithoutExtension: anExtension
 category: 'streams-compatibility'
 method: AbstractFileReference
 binaryReadStream
-	^ self subclassResponsibility
+	^BufferedStreamSpec newRead on: self
 %
 
 category: 'streams-compatibility'
 method: AbstractFileReference
 binaryReadStreamDo: aBlock
-	| stream |
-	stream := self binaryReadStream.
-	^ [ aBlock value: stream ] 
-		ensure: [ stream close ]
+	^self stream: self binaryReadStream do: aBlock
 %
 
 category: 'streams-compatibility'
@@ -2513,7 +6985,7 @@ method: AbstractFileReference
 binaryReadStreamDo: doBlock ifAbsent: absentBlock
 	^ self isFile 
 		ifTrue: [ self binaryReadStreamDo: doBlock ]
-		ifFalse: absentBlock
+		ifFalse: [ absentBlock value ]
 %
 
 category: 'streams-compatibility'
@@ -2521,34 +6993,32 @@ method: AbstractFileReference
 binaryReadStreamIfAbsent: absentBlock
 	^ self isFile
 		ifTrue: [ self binaryReadStream ]
-		ifFalse: absentBlock
+		ifFalse: [ absentBlock value ]
+%
+
+category: 'streams'
+method: AbstractFileReference
+binaryReadWriteStream
+	^BufferedStreamSpec newReadWrite on: self
 %
 
 category: 'streams'
 method: AbstractFileReference
 binaryWriteStream
-	"Answer a binary write stream on the receiver"
-
-	^ self subclassResponsibility
+	^BufferedStreamSpec newWrite on: self
 %
 
 category: 'streams'
 method: AbstractFileReference
 binaryWriteStreamDo: aBlock
-	"Pass a binary write stream on the receiver to the supplied block, and ensure that the stream is closed after evaluation."
-
-	| stream |
-
-	stream := self binaryWriteStream.
-	^ [ aBlock value: stream ] 
-		ensure: [ stream close ]
+	^self stream: self binaryWriteStream do: aBlock
 %
 
 category: 'streams'
 method: AbstractFileReference
 binaryWriteStreamDo: doBlock ifPresent: presentBlock
 	^ self isFile
-		ifTrue: presentBlock
+		ifTrue: [ presentBlock ]
 		ifFalse: [ self binaryWriteStreamDo: doBlock ]
 %
 
@@ -3038,8 +7508,15 @@ nextVersion
 
 category: 'streams'
 method: AbstractFileReference
-openWritable: aBoolean
-	^ self resolve openWritable: aBoolean
+openOptions: aFileOptions
+	^ self resolve openOptions: aFileOptions
+%
+
+category: 'streams'
+method: AbstractFileReference
+openWithOptions: aFileOptions
+	"This returns an instance of a file"
+	^ self resolve openWithOptions: aFileOptions
 %
 
 category: 'delegated'
@@ -3075,17 +7552,20 @@ permissions
 
 category: 'streams'
 method: AbstractFileReference
+readRawStream
+	^BinaryStreamSpec newRead on: self
+%
+
+category: 'streams'
+method: AbstractFileReference
 readStream
-	self subclassResponsibility
+	^EncodedBufferedStreamSpec newRead on: self
 %
 
 category: 'streams'
 method: AbstractFileReference
 readStreamDo: aBlock
-	| stream |
-	stream := self readStream.
-	^ [ aBlock value: stream ] 
-		ensure: [ stream close ]
+	^self stream: self readStream do: aBlock
 %
 
 category: 'streams'
@@ -3093,25 +7573,20 @@ method: AbstractFileReference
 readStreamDo: doBlock ifAbsent: absentBlock
 	^ self isFile 
 		ifTrue: [ self readStreamDo: doBlock ]
-		ifFalse: absentBlock
+		ifFalse: [absentBlock value]
 %
 
 category: 'streams'
 method: AbstractFileReference
 readStreamEncoded: anEncoding
 
-	^ ZnCharacterReadStream
-		on: self binaryReadStream
-		encoding: anEncoding
+	^ (EncodedBufferedStreamSpec newRead encoding: anEncoding) on: self
 %
 
 category: 'streams'
 method: AbstractFileReference
 readStreamEncoded: anEncoding do: aBlock
-	| stream |
-	stream := self readStreamEncoded: anEncoding.
-	^ [ aBlock value: stream ] 
-		ensure: [ stream close ]
+	^self stream: (self readStreamEncoded: anEncoding) do: aBlock
 %
 
 category: 'streams'
@@ -3119,7 +7594,7 @@ method: AbstractFileReference
 readStreamIfAbsent: absentBlock
 	^ self isFile
 		ifTrue: [ self readStream ]
-		ifFalse: absentBlock
+		ifFalse: [absentBlock value]
 %
 
 category: 'navigating'
@@ -3195,6 +7670,34 @@ size
 	^ self resolve size
 %
 
+category: 'delegated'
+method: AbstractFileReference
+store
+	"Answer the receiver with references to the current folder (.) and parent folder (..) removed"
+
+	^ self fileSystem store
+%
+
+category: 'streams'
+method: AbstractFileReference
+stream: aStream do: aBlock
+	^ [ aBlock value: aStream ] 
+		ensure: [ aStream close ]
+%
+
+category: 'streams'
+method: AbstractFileReference
+streamFrom: aStreamSpec
+	"Answer a stream on a file"
+	^ aStreamSpec on: self
+%
+
+category: 'streams'
+method: AbstractFileReference
+streamFrom: aStreamSpec do: aBlock
+	^self stream: (aStreamSpec streamFrom: self) do: aBlock
+%
+
 category: 'streams'
 method: AbstractFileReference
 streamWritable: writable do: aBlock
@@ -3235,24 +7738,27 @@ withPath: newPath
 
 category: 'streams'
 method: AbstractFileReference
+writeRawStream
+	^BinaryStreamSpec newWrite on: self
+%
+
+category: 'streams'
+method: AbstractFileReference
 writeStream
-	self subclassResponsibility
+	^ EncodedBufferedStreamSpec newWrite on: self
 %
 
 category: 'streams'
 method: AbstractFileReference
 writeStreamDo: aBlock
-	| stream |
-	stream := self writeStream.
-	^ [ aBlock value: stream ]
-		ensure: [ stream close ]
+	^self stream: self writeStream do: aBlock
 %
 
 category: 'streams'
 method: AbstractFileReference
 writeStreamDo: doBlock ifPresent: presentBlock
 	^ self isFile
-		ifTrue: presentBlock
+		ifTrue: [presentBlock value ]
 		ifFalse: [ self writeStreamDo: doBlock ]
 %
 
@@ -3260,25 +7766,20 @@ category: 'streams'
 method: AbstractFileReference
 writeStreamEncoded: anEncoding
 
-	^ ZnCharacterWriteStream
-		on: self binaryWriteStream
-		encoding: anEncoding
+	^(EncodedBufferedStreamSpec newWrite encoding: anEncoding) on: self
 %
 
 category: 'streams'
 method: AbstractFileReference
 writeStreamEncoded: anEncoding do: aBlock
-	| stream |
-	stream := self writeStreamEncoded: anEncoding.
-	^ [ aBlock value: stream ]
-		ensure: [ stream close ]
+	^self stream: (self writeStreamEncoded: anEncoding) do: aBlock
 %
 
 category: 'streams'
 method: AbstractFileReference
 writeStreamIfPresent: presentBlock
 	^ self isFile 
-		ifTrue: presentBlock
+		ifTrue: [ presentBlock value ]
 		ifFalse: [ self writeStream ]
 %
 
@@ -3314,12 +7815,6 @@ category: 'origins'
 classmethod: FileLocator
 cache
 	^ self origin: #cache
-%
-
-category: 'gemstone-origins'
-classmethod: FileLocator
-clientWorkingDirectory
-	^ FileSystem client referenceTo: RelativePath new
 %
 
 category: 'origins'
@@ -3700,6 +8195,12 @@ binaryReadStream
 
 category: 'streams-compatibility'
 method: FileLocator
+binaryReadWriteStream
+	^ self resolve binaryReadWriteStream
+%
+
+category: 'streams-compatibility'
+method: FileLocator
 binaryWriteStream
 	"Answer a binary write stream on the receiver"
 
@@ -3788,6 +8289,12 @@ printOn: aStream
 
 category: 'streams'
 method: FileLocator
+readRawStream
+	^ self resolve readRawStream
+%
+
+category: 'streams'
+method: FileLocator
 readStream
 	^ self resolve readStream 
 %
@@ -3816,6 +8323,18 @@ resolveString: aString
 	filesystem := (self class resolver resolve: origin) fileSystem.
 	thePath := filesystem pathFromString: aString.
 	^ self withPath: (path resolvePath: thePath)
+%
+
+category: 'streams'
+method: FileLocator
+streamFrom: aStreamSpec
+	^self resolve streamFor: aStreamSpec
+%
+
+category: 'streams'
+method: FileLocator
+writeRawStream
+	^ self resolve writeRawStream
 %
 
 category: 'streams'
@@ -3905,21 +8424,6 @@ asPath
 	"Answer the receivers path"
 
 	^path
-%
-
-category: 'streams'
-method: FileReference
-binaryReadStream
-	
-	^ filesystem binaryReadStreamOn: self path
-%
-
-category: 'streams'
-method: FileReference
-binaryWriteStream
-	"Answer a binary write stream on the receiver"
-
-	^ ZnBufferedWriteStream on: (filesystem binaryWriteStreamOn: self path)
 %
 
 category: 'comparing'
@@ -4181,10 +8685,17 @@ nextVersion
 	^ parent / (nameWithoutExtension , '.', version asString) , self extension
 %
 
-category: 'streams'
+category: 'operations'
 method: FileReference
-openWritable: aBoolean 
-	^ filesystem open: path writable: aBoolean
+openOptions: aFileOptions 
+	^self fileSystem open: self options: aFileOptions
+%
+
+category: 'operations'
+method: FileReference
+openWithOptions: aFileOptions 
+	"This will return an instance of the File or FileAdaptor, depending on installation"
+	^filesystem open: self withOptions: aFileOptions
 %
 
 category: 'accessing'
@@ -4213,13 +8724,6 @@ method: FileReference
 printOn: aStream
 	filesystem forReferencePrintOn: aStream.
 	filesystem printPath: path on: aStream
-%
-
-category: 'streams'
-method: FileReference
-readStream
-
-	^ self readStreamEncoded: 'utf8'
 %
 
 category: 'operations'
@@ -4281,11 +8785,514 @@ size
 	^ filesystem sizeOf: path
 %
 
+! Class implementation for 'AbstractStreamSpec'
+
+!		Class methods for 'AbstractStreamSpec'
+
+category: 'instance creation'
+classmethod: AbstractStreamSpec
+new
+	^self basicNew
+		initialize;
+		store: (FileSystem disk) store;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: AbstractStreamSpec
+newAppend
+
+	^self new
+		initializeForAppend;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: AbstractStreamSpec
+newRead
+	^self new
+		initializeForRead;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: AbstractStreamSpec
+newReadWrite
+
+	^self new
+		initializeForReadWrite;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: AbstractStreamSpec
+newWrite
+
+	^self new
+		initializeForWrite;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: AbstractStreamSpec
+on: aFileReference options: aFileOptions
+	"Note: This returns an instance of the stream on the fileReference"
+	^self basicNew
+		initalizeOn: aFileReference options: aFileOptions
+		yourself
+%
+
+category: 'instance creation'
+classmethod: AbstractStreamSpec
+onOptions: aFileOptions
+	^self basicNew
+		initalizeOnOptions: aFileOptions
+		yourself
+%
+
+!		Instance methods for 'AbstractStreamSpec'
+
+category: 'private'
+method: AbstractStreamSpec
+alignStoreWith: aFileReference
+	"Stream Spec is built with the local filesystem. If a foreign filesystem
+     was used to build the reference, switch to the foreign filesystem"
+
+	aFileReference fileSystem isForeignFileSystem 
+		ifTrue: [self store: aFileReference fileSystem store]
+%
+
+category: 'file options configuration'
+method: AbstractStreamSpec
+append
+	self fileOptions append
+%
+
+category: 'private'
+method: AbstractStreamSpec
+beUnixStore
+	self store: UnixStore createDefault
+%
+
+category: 'private'
+method: AbstractStreamSpec
+beWindowsStore
+	self store: WindowsStore createDefault
+%
+
+category: 'file type configuration'
+method: AbstractStreamSpec
+binaryFileType
+	self fileOptions binaryFileType
+%
+
+category: 'private'
+method: AbstractStreamSpec
+containedStreamOn: aFileReference
+	^(self containedStreamSpec onOptions: self fileOptions) on: aFileReference
+%
+
+category: 'configuration'
+method: AbstractStreamSpec
+containedStreamSpec
+	self subclassResponsibility
+%
+
+category: 'file options configuration'
+method: AbstractStreamSpec
+create
+	self fileOptions create
+%
+
+category: 'file options configuration'
+method: AbstractStreamSpec
+exclusive
+	self fileOptions exclusive
+%
+
+category: 'accessing'
+method: AbstractStreamSpec
+fileOptions
+	^fileOptions
+%
+
+category: 'accessing'
+method: AbstractStreamSpec
+fileOptions: aFileOptions
+	aFileOptions parent: self.
+	fileOptions := aFileOptions
+%
+
+category: 'file type configuration'
+method: AbstractStreamSpec
+fileType
+	^self fileOptions fileType
+%
+
+category: 'file type configuration'
+method: AbstractStreamSpec
+gzipHighCompression
+	self fileOptions gzipHighCompression
+%
+
+category: 'file type configuration'
+method: AbstractStreamSpec
+gzipLowCompression
+	self fileOptions gzipLowCompression
+%
+
+category: 'initialization'
+method: AbstractStreamSpec
+initalizeOn: aFileReference options: aFileOptions
+	self initialize.
+	self fileOptions: aFileOptions.
+	^self on: aFileReference
+%
+
+category: 'initialization'
+method: AbstractStreamSpec
+initalizeOnOptions: aFileOptions
+	self initialize.
+	self fileOptions: aFileOptions copy.
+	self store: (
+		aFileOptions parent 
+			ifNil: [FileSystem disk] 
+			ifNotNil: [:streamSpec | streamSpec store])
+%
+
+category: 'initialization'
+method: AbstractStreamSpec
+initialize
+	self fileOptions: FileOptions new
+%
+
+category: 'initialization'
+method: AbstractStreamSpec
+initializeForAppend
+	self fileOptions write create append
+%
+
+category: 'initialization'
+method: AbstractStreamSpec
+initializeForRead
+	self fileOptions read
+%
+
+category: 'initialization'
+method: AbstractStreamSpec
+initializeForReadWrite
+	self fileOptions readWrite
+%
+
+category: 'initialization'
+method: AbstractStreamSpec
+initializeForWrite
+	self fileOptions write create truncate
+%
+
+category: 'testing'
+method: AbstractStreamSpec
+isGzipped
+
+	^self fileOptions isGzipped
+%
+
+category: 'testing'
+method: AbstractStreamSpec
+isReadable
+
+	^self fileOptions isReadable
+%
+
+category: 'testing'
+method: AbstractStreamSpec
+isReadWritable
+
+	^self fileOptions isReadWritable
+%
+
+category: 'testing'
+method: AbstractStreamSpec
+isWritable
+
+	^self fileOptions isWritable
+%
+
+category: 'printing'
+method: AbstractStreamSpec
+mode
+	^self fileOptions mode
+%
+
 category: 'streams'
-method: FileReference
-writeStream
-	
-	^ self writeStreamEncoded: 'utf8'
+method: AbstractStreamSpec
+on: aFileReference
+	self alignStoreWith: aFileReference.
+	^ self streamClass on: (self containedStreamOn: aFileReference)
+%
+
+category: 'streams'
+method: AbstractStreamSpec
+on: aFileReference do: aBlock
+	| aStream |
+	aStream := self on: aFileReference.
+	^ [ aBlock value: aStream ]
+			ensure: [ aStream close ]
+%
+
+category: 'streams'
+method: AbstractStreamSpec
+on: aFileReference do: aBlock ifAbsent: anAbsentBlock
+	^aFileReference isFile
+		ifTrue: [self on: aFileReference do: aBlock]
+		ifFalse: [anAbsentBlock value]
+%
+
+category: 'streams'
+method: AbstractStreamSpec
+on: aFileReference do: aBlock ifPresent: anAbsentBlock
+	^aFileReference isFile
+		ifTrue: [anAbsentBlock value]
+		ifFalse: [ self on: aFileReference do: aBlock]
+%
+
+category: 'file options configuration'
+method: AbstractStreamSpec
+read
+	self fileOptions read
+%
+
+category: 'configuration'
+method: AbstractStreamSpec
+readStreamClass
+	self subclassResponsibility
+%
+
+category: 'file options configuration'
+method: AbstractStreamSpec
+readWrite
+	self fileOptions readWrite
+%
+
+category: 'configuration'
+method: AbstractStreamSpec
+readWriteStreamClass
+	self subclassResponsibility
+%
+
+category: 'accessing'
+method: AbstractStreamSpec
+store
+	^store ifNil: [^FileSystem disk store]
+%
+
+category: 'accessing'
+method: AbstractStreamSpec
+store: anObject
+	store := anObject
+%
+
+category: 'configuration'
+method: AbstractStreamSpec
+streamClass
+	self isReadWritable ifTrue: [^self readWriteStreamClass].
+	self isWritable ifTrue: [^self writeStreamClass] .
+	^self readStreamClass
+%
+
+category: 'file type configuration'
+method: AbstractStreamSpec
+textFileType
+	self fileOptions textFileType
+%
+
+category: 'file options configuration'
+method: AbstractStreamSpec
+truncate
+	self fileOptions truncate
+%
+
+category: 'file options configuration'
+method: AbstractStreamSpec
+write
+	self fileOptions write
+%
+
+category: 'configuration'
+method: AbstractStreamSpec
+writeStreamClass
+	self subclassResponsibility
+%
+
+! Class implementation for 'BinaryStreamSpec'
+
+!		Instance methods for 'BinaryStreamSpec'
+
+category: 'configuration'
+method: BinaryStreamSpec
+containedStreamSpec
+	^self error: 'This is the lowest level of nested streams'
+%
+
+category: 'streams'
+method: BinaryStreamSpec
+on: aFileReference
+	self alignStoreWith: aFileReference.
+	^(aFileReference fileSystem open: aFileReference options: self fileOptions) binaryStream
+%
+
+category: 'configuration'
+method: BinaryStreamSpec
+readStreamClass
+	^self error: 'This is the lowest level of nested streams'
+%
+
+category: 'configuration'
+method: BinaryStreamSpec
+readWriteStreamClass
+	^self error: 'This is not supported by the BinaryFileStream'
+%
+
+category: 'configuration'
+method: BinaryStreamSpec
+writeStreamClass
+	^self error: 'This is the lowest level of nested streams'
+%
+
+! Class implementation for 'BufferedStreamSpec'
+
+!		Instance methods for 'BufferedStreamSpec'
+
+category: 'configuration'
+method: BufferedStreamSpec
+containedStreamSpec
+	^BinaryStreamSpec
+%
+
+category: 'configuration'
+method: BufferedStreamSpec
+readStreamClass
+	^ZnBufferedReadStream
+%
+
+category: 'configuration'
+method: BufferedStreamSpec
+readWriteStreamClass
+	^ZnBufferedReadWriteStream
+%
+
+category: 'configuration'
+method: BufferedStreamSpec
+writeStreamClass
+	^ZnBufferedWriteStream
+%
+
+! Class implementation for 'EncodedStreamSpec'
+
+!		Instance methods for 'EncodedStreamSpec'
+
+category: 'encoding'
+method: EncodedStreamSpec
+ascii
+	self encoding: 'ascii'
+%
+
+category: 'configuration'
+method: EncodedStreamSpec
+containedStreamSpec
+	^BinaryStreamSpec
+%
+
+category: 'accessing'
+method: EncodedStreamSpec
+encoding
+	^encoding
+%
+
+category: 'accessing'
+method: EncodedStreamSpec
+encoding: anObject
+	encoding := anObject
+%
+
+category: 'initialization'
+method: EncodedStreamSpec
+initialize
+	super initialize.
+	self utf8
+%
+
+category: 'encoding'
+method: EncodedStreamSpec
+iso88591
+	self encoding: 'iso88591'
+%
+
+category: 'encoding'
+method: EncodedStreamSpec
+latin1
+	self encoding: 'latin1'
+%
+
+category: 'encoding'
+method: EncodedStreamSpec
+null
+	self encoding: 'null'
+%
+
+category: 'streams'
+method: EncodedStreamSpec
+on: aFileReference
+	self alignStoreWith: aFileReference.
+	^ self streamClass
+		on: (self containedStreamOn: aFileReference)
+		encoding: self encoding
+%
+
+category: 'configuration'
+method: EncodedStreamSpec
+readStreamClass
+	^ZnCharacterReadStream
+%
+
+category: 'configuration'
+method: EncodedStreamSpec
+readWriteStreamClass
+	^ZnCharacterReadWriteStream
+%
+
+category: 'encoding'
+method: EncodedStreamSpec
+utf16
+	self encoding: 'utf16'
+%
+
+category: 'encoding'
+method: EncodedStreamSpec
+utf32
+	self encoding: 'utf32'
+%
+
+category: 'encoding'
+method: EncodedStreamSpec
+utf8
+	self encoding: 'utf8'
+%
+
+category: 'configuration'
+method: EncodedStreamSpec
+writeStreamClass
+	^ZnCharacterWriteStream
+%
+
+! Class implementation for 'EncodedBufferedStreamSpec'
+
+!		Instance methods for 'EncodedBufferedStreamSpec'
+
+category: 'configuration'
+method: EncodedBufferedStreamSpec
+containedStreamSpec
+	^BufferedStreamSpec
 %
 
 ! Class implementation for 'FastUUIDGenerator'
@@ -4382,532 +9389,655 @@ placeFields: aPlaceHolder
 		unsigned32At: 13 put: bits4
 %
 
-! Class implementation for 'File'
-
-!		Class methods for 'File'
-
-category: 'primitives-file'
-classmethod: File
-atEnd: aGsFile
-	"Answer true if the file position is at the end of the file."
-
-	^ aGsFile atEnd
-%
-
-category: 'primitives-file'
-classmethod: File
-close: aGsFile
-	"Close this file."
-
-	aGsFile ifNil: [ ^ self ].
-	aGsFile close
-%
-
-category: 'primitives-file'
-classmethod: File
-closed: aGsFile
-	^ aGsFile isNil or: [ (self sizeOrNil: aGsFile) isNil ]
-%
-
-category: 'primitives-file'
-classmethod: File
-connectToFile: filePointer writable: writableFlag
-	"Open the file with the supplied FILE* pointer, and return the file ID obtained.
-	writeableFlag indicates whether to allow write operations and must be compatible with the way the file was opened.
-	It is the responsibility of the caller to coordinate closing the file."
-
-"
-	<primitive: 'primitiveConnectToFile' module: 'FilePlugin' error: error>
-	error = #'bad argument' ifTrue: [ 
-		(filePointer isKindOf: ByteArray) ifFalse: 
-			[ ^self error: 'filePointer must be a ByteArray' ].
-		(writableFlag isKindOf: Boolean) ifFalse: 
-			[ ^self error: 'writableFlag must be a boolean' ] ].
-	^ self primitiveFailed 
-"
-self error: 'not yet implmented'
-%
-
-category: 'primitives-file'
-classmethod: File
-connectToFileDescriptor: fileDescriptor writable: writableFlag
-	"Connect to the file with fileDescriptor number, and return the file ID obtained.
-	writeableFlag indicates whether to allow write operations and must be compatible with the way the file was opened.
-	It is the responsibility of the caller to coordinate closing the file."
-
-"
-	<primitive: 'primitiveConnectToFileDescriptor' module: 'FilePlugin' error: error>
-	error = #'bad argument' ifTrue: [ 
-		fileDescriptor isInteger ifFalse: 
-			[ ^self error: 'fileDescriptor must be an integer' ].
-		(writableFlag isKindOf: Boolean) ifFalse: 
-			[ ^self error: 'writableFlag must be a boolean' ] ].
-	^ self primitiveFailed 
-"
-self error: 'not yet implmented'
-
-%
-
-category: 'primitives-path'
-classmethod: File
-createDirectory: fullPath
-	"Create a directory named by the given path. 
-	Fail if the path is bad or if a file or directory by that name already exists."
-
-	^ GsFile createServerDirectory: fullPath
-%
-
-category: 'primitives-path'
-classmethod: File
-deleteDirectory: fullPath
-	"Delete the directory named by the given path. 
-	Fail if the path is bad or if a directory by that name does not exist."
-
-	(GsFile removeServerDirectory: fullPath)
-		ifNil: [ self error: 'Error deleting directory ', fullPath printString, ' :: ', GsFile serverErrorString ]
-%
-
-category: 'primitives-path'
-classmethod: File
-deleteFile: aFileName
-	"Delete the file of the given name. 
-	Return self if the primitive succeeds, nil otherwise."
-
-	^ GsFile _removeFile: aFileName onClient: false
-%
-
-category: 'primitives-path'
-classmethod: File
-delimiter
-	"Return the path delimiter for the underlying platform's file system."
-
-	"Was a primitive ... only needed to resolve whether or not we're on Windows"
-
-	^ $/
-%
-
-category: 'primitives-file'
-classmethod: File
-fileDescriptorIsAvailable: anInteger
-	"Answer a boolean indicating whether the supplied file descriptor (anInteger) is available.
-	A file descriptor is considered available if it is connected to a console / terminal, pipe or a file.  cygwin terminals are currently not supported (the pipe is created, but nothing appears in the terminal)"
-
-	^ (self fileDescriptorType: anInteger) between: 1 and: 3
-%
-
-category: 'primitives-file'
-classmethod: File
-fileDescriptorType: fdNum
-	"Allow to test if the standard input/output files are from a console or not
-	Return values:
-	* -1 - Error
-	* 0 - no console (windows only)
-	* 1 - normal terminal (unix terminal / windows console)
-	* 2 - pipe
-	* 3 - file
-	* 4 - cygwin terminal (windows only)"
-
-"
-	<primitive: 'primitiveFileDescriptorType' module: 'FilePlugin' error: error>
-	error = #'bad argument'
-		ifTrue: [ fdNum isInteger
-				ifFalse: [ ^ self error: 'File Descriptor must be an integer!' ] ].
-	^ self primitiveFailed
-"
-self error: 'not yet implmented'
-%
-
-category: 'primitives-file'
-classmethod: File
-flush: aGsFile
-	"On Unix, the FilePlugin uses stdio FILE* structs which maintain their
-	own internal buffer to minimize write() syscalls. This flushes that buffer.
-	On Windows this and primSync: do the same thing."
-
-	aGsFile flush
-%
-
-category: 'primitives-path'
-classmethod: File
-getMacFile: fileName type: typeString creator: creatorString
-	"Get the Macintosh file type and creator info for the file with the given name. Fails if the file does not exist or if the type and creator type arguments are not strings of length 4. This primitive is Mac specific; it is a noop on other platforms."
-
-"
- 	<primitive: 'primitiveDirectoryGetMacTypeAndCreator' module: 'FilePlugin'>
-"
-self error: 'not yet implmented'
-
-%
-
-category: 'primitives-file'
-classmethod: File
-getPosition: aGsFile
-	"Get this files current position."
-
-	^ aGsFile position
-%
-
-category: 'primitives-path'
-classmethod: File
-lookupDirectory: fullPath filename: fileName
-
-	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
-
-	^ self lookupPath: fullPath, '/', fileName
-%
-
-category: 'primitives-path'
-classmethod: File
-lookupPath: fullPath
-
-	"Look up the file or directory identified by <fullPath> and return an array containing:
-
-	<fileName> 			
-	<creationTime> 			(in seconds since the start of the Linux time epoch)
-	<modificationTime> 	(in seconds since the start of the Linux time epoch)
-	<dirFlag> 				DirFlag is true if the entry is a directory
-	<fileSize> 				FileSize the file size in bytes or zero for directories
-	<posixPermissions> 	Numeric Notation 
-	<symLinkFlag>			seemingly, symLinkFlag is true if the entry is a symLink
-
-	On Unix, the empty path denotes '/'. 
-   On Macs and PCs, it is the container of the system volumes."
-
-	| gsFileStat |
-	gsFileStat := GsFile stat: fullPath isLstat: true.
-	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
-	^	{
-		(Path from: fullPath) basename.
-		gsFileStat ctimeUtcSeconds .
-		gsFileStat mtimeUtcSeconds .
-		gsFileStat isDirectory .
-		gsFileStat size.
-		gsFileStat mode bitAnd: 8r777. "https://github.com/GemTalk/FileSystemGs/issues/11"
-		(gsFileStat mode bitAnd: 8r0120000) = 8r0120000. "https://github.com/GemTalk/FileSystemGs/issues/10"
-	}
-%
-
-category: 'file creation'
-classmethod: File
-named: fileName
-	"Open a file with the given name for reading and writing. If the name has no directory part, then the file will be created in the default directory. If the file already exists, its prior contents may be modified or replaced, but the file will not be truncated on close."
-
-	^ self new named: fileName
-%
-
-category: 'primitives-file'
-classmethod: File
-open: fileName writable: writeMode
-	"Open a file of the given name, and return the GsFile obtained.
-	If writableFlag is true, then
-		if there is none with this name, then create one
-		else prepare to overwrite the existing from the beginning
-	otherwise
-		if the file exists, open it read-only
-		else return nil"
-
-	"writeMode - #read, #append, #write"
-
-	| mode |
-	mode := writeMode == #write 
-		ifTrue: [ 'w+' ] 
-		ifFalse: [ 
-			writeMode = #read
-				ifTrue: [ 'r+' ]
-				ifFalse: [ 'a+' ] ].
-	^ GsFile
-		open: fileName 
-		mode: mode 
-		onClient: false
-%
-
-category: 'file creation'
-classmethod: File
-openAndTruncateForWriteFileNamed: aName
-
-	^ (self named: aName)
-		delete;
-		openForWrite
-%
-
-category: 'file creation'
-classmethod: File
-openForReadFileNamed: aName
-
-	^ (self named: aName)
-		openForRead
-%
-
-category: 'file creation'
-classmethod: File
-openForWriteFileNamed: aName
-
-	^ (self named: aName) openForWrite
-%
-
-category: 'primitives-file'
-classmethod: File
-read: aGsFile into: byteArray startingAt: startIndex count: count
-	"Read up to count bytes of data from this file into the given string or byte array starting at the given index. 
-		Answer the number of bytes actually read."
-
-	| buf cnt |
-	buf := byteArray species new: count.
-	cnt := aGsFile next: count into: buf.
-	cnt ifNil: [ 
-		(self closed: aGsFile)
-			ifTrue: [ ^ self error: 'File is closed' ].
-		self error: 'File read failed: ' , (GsFile serverErrorString ifNil: [ '']) ].
-	byteArray replaceFrom: startIndex to: startIndex + cnt - 1 with: buf.
-	^cnt
-%
-
-category: 'primitives-path'
-classmethod: File
-rename: oldFileFullName to: newFileFullName 
-	"Rename the file of the given name to the new name. Fail if there is no file of the old name 
-	or if there is an existing file with the new name."
-
-	(GsFile renameFileOnServer: oldFileFullName to: newFileFullName) = 0
-		ifFalse: [ self error: 'Rename file failed'].
-%
-
-category: 'primitives-file'
-classmethod: File
-setPosition: aGsFile to: anInteger
-	"Set this file to the given position."
-
-	| pos |
-	pos := aGsFile position: anInteger.
-	pos ifNil: [ self error: 'position error' ].
-%
-
-category: 'primitives-file'
-classmethod: File
-sizeOf: aGsFile
-	"Answer the size of this file."
-
-	^ aGsFile fileSize
-%
-
-category: 'primitives-file'
-classmethod: File
-sizeOrNil: aGsFile
-	"Answer the size of this file."
-
-	aGsFile ifNil: [ ^ nil ].
-	^ aGsFile fileSize
-%
-
-category: 'primitives-file'
-classmethod: File
-stdioHandles
-"
-	<primitive: 'primitiveFileStdioHandles' module: 'FilePlugin' error: ec>
-	self primitiveFailed
-"
-self error: 'not yet implmented'
-%
-
-category: 'primitives-file'
-classmethod: File
-stdioIsAvailable
-	"Answer a boolean indicating whether stdio is available on the current platform.
-	stdio is considered available if any one of the three files (stdin, stdout, stderr) is available."
-
-	^ (0 to: 2)
-		anySatisfy: [ :fdNum | self fileDescriptorIsAvailable: fdNum ]
-%
-
-category: 'primitives-file'
-classmethod: File
-sync: id
-	"On Unix, this syncs any written or flushed data still in the kernel file
-	system buffers to disk. On Windows this and primFlush: do the same thing"
-
-"
-	<primitive: 'primitiveFileSync' module: 'FilePlugin'>
-
-"
-self error: 'not yet implmented'
-
-	"fsync() failing cannot be ignored"
-	self primitiveFailed
-%
-
-category: 'primitives-file'
-classmethod: File
-truncate: id to: anInteger
-	"Truncate this file to the given position."
-"
-	<primitive: 'primitiveFileTruncate' module: 'FilePlugin'>
-	self primitiveFailed
-"
-self error: 'not yet implmented'
-%
-
-category: 'primitives-file'
-classmethod: File
-write: aGsFile from: stringOrByteArray startingAt: startIndex count: count
-	"Write count bytes onto this file from the given string or byte array starting at the given index. 	Answer the number of bytes written."
-
-	| written |
-	written := (startIndex = 1 and: [ count = stringOrByteArray size])
-		ifTrue: [ aGsFile nextPutAll: stringOrByteArray ]
-		ifFalse: [ aGsFile nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
-	written ifNil: [ self error: 'failed write' ].
-	^ written
-%
-
-!		Instance methods for 'File'
-
-category: 'accessing'
-method: File
-basename
-	^self name
-%
-
-category: 'open/close'
-method: File
-basicOpenForWrite: writeMode 
-	"Open the file with the given name. If writeMode is true, allow writing, otherwise open the file in read-only mode."
-
-	"writeMode - #read, #append, #write"
-
-	^ self class open: name writable: writeMode
-%
-
-category: 'testing'
-method: File
-checkDoesNotExist
-	"This method implements a backwards compatible logic to #newFileNamed:
-	
-	If the file does not exist, this method has no effect, and returns self.
-	
-	If the file exists, it will throw a FileAlreadyExistsException.
-	If unhandled, this will open a pop-up asking the user to enter a new name or to override the existing file.
-	In this case, this method returns a new file with the options selected by the user.
-	"
-	self exists ifTrue: [
-		^ FileAlreadyExistsException signalOnFile: self ]
-%
-
-category: 'open/close'
-method: File
-delete
-	"We retries with GC because in some platforms open files cannot be open"
-	self class deleteFile: name.
-	self exists
-		ifTrue: [ (CannotDeleteFileException new messageText: 'Could not delete file ' , name,'. Check the file is not open.') signal ].
-%
-
-category: 'testing'
-method: File
-exists
-
-	| handle |
-	"We open it for read. If the returned handle is nil, the file could not be opened"
-	handle := self basicOpenForWrite: #read.
-	handle ifNil: [^ false].
-	self class close: handle.
-	^ true
+! Class implementation for 'FileOptions'
+
+!		Class methods for 'FileOptions'
+
+category: 'instance creation'
+classmethod: FileOptions
+new
+	^self basicNew
+		initialize;
+		yourself
 %
 
 category: 'instance creation'
-method: File
-name
-
-	^ name
+classmethod: FileOptions
+newAppend
+	^self new
+		initializeAppend;
+		yourself
 %
 
 category: 'instance creation'
-method: File
-named: fileName
-
-	name := fileName
+classmethod: FileOptions
+newRead
+	^self new
+		initializeRead;
+		yourself
 %
 
-category: 'open/close'
-method: File
-openForAppend
-
-	| stream |
-	stream := self openForWrite: #append.
-	^ stream setToEnd; yourself
+category: 'instance creation'
+classmethod: FileOptions
+newReadWrite
+	^self new
+		initializeReadWrite;
+		yourself
 %
 
-category: 'open/close'
-method: File
-openForRead
-
-	^ self openForWrite: #read
+category: 'instance creation'
+classmethod: FileOptions
+newWrite
+	^self new
+		initializeWrite;
+		yourself
 %
 
-category: 'open/close'
-method: File
-openForWrite
+!		Instance methods for 'FileOptions'
 
-	^ self openForWrite: #write
+category: 'permissions'
+method: FileOptions
+accessPermissions
+
+	self permissionFlags isEmpty ifTrue: [^#FileSystemPermission default posixPermission].
+	^self permissionFlags inject: 0 into: [:total :ea | total bitOr: ea posixFlagValue]
 %
 
-category: 'open/close'
-method: File
-openForWrite: writeMode
-	"Open the file with the given name. If writeMode is true, allow writing, otherwise open the file in read-only mode."
-
-	"writeMode - #read, #append, #write"
-
-	| fileHandle |
-	fileHandle := self basicOpenForWrite: writeMode.
-	fileHandle ifNil: [
-		"Opening the file failed.
-		If the file does not exist, we throw an explicit FileDoesNotExistException.
-		Otherwise, we throw a generic FileException."
-		self exists
-			ifFalse: [ ^ FileDoesNotExistException signalWithFile: self writeMode: writeMode == #write ].
-		CannotDeleteFileException signal: name
-	].
-
-	^ BinaryFileStream handle: fileHandle file: self forWrite: writeMode ~~ #read
+category: 'convenience'
+method: FileOptions
+accessRule
+	^self openModeFlag accessRule
 %
 
-category: 'streaming'
-method: File
-readStream
-	
-	^ self openForRead
+category: 'posix flags - adding and removing'
+method: FileOptions
+addAppendFlag
+	self removeTruncateFlag.
+	self addPosixFlag: FileAppendFlag new
 %
 
-category: 'streaming'
-method: File
-readStreamDo: aBlock
-	| stream |
-	stream := self readStream.
-	^ [ aBlock value: stream ]
-		ensure: [ stream close ]
+category: 'posix flags - adding and removing'
+method: FileOptions
+addCreateFlag
+
+	self addPosixFlag: FileCreateFlag new
+%
+
+category: 'posix flags - adding and removing'
+method: FileOptions
+addExclusiveFlag
+
+	self addPosixFlag: FileExclusiveFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+addPermissionFlag: aPermissionFlag
+	(self hasPermissionsFlag: aPermissionFlag class) ifTrue: [^self].
+	aPermissionFlag parent: self.
+	self permissionFlags add: aPermissionFlag
+%
+
+category: 'posix flags - adding and removing'
+method: FileOptions
+addPosixFlag: aPosixFlag
+	(self hasPosixFlag: aPosixFlag class) ifTrue: [^self].
+	aPosixFlag parent: self.
+	self posixFlags add: aPosixFlag
+%
+
+category: 'posix flags - adding and removing'
+method: FileOptions
+addTruncateFlag
+	self removeAppendFlag.
+	self addPosixFlag: FileTruncateFlag new
+%
+
+category: 'initialization'
+method: FileOptions
+alignStoreWith: anObject
+	"FileOptions is built with the local filesystem. If a foreign filesystem
+     was used to build the reference, switch to the foreign filesystem"
+
+	anObject store isForeignFileSystem 
+		ifTrue: [self store: anObject store]
+%
+
+category: 'commands'
+method: FileOptions
+append
+	self hasNoReadOrWriteMode ifTrue: [^self signalOpenModeFlagNotDefined].
+	self addAppendFlag
+%
+
+category: 'posix flags'
+method: FileOptions
+appendFlag
+	^self posixFlagForClass: FileAppendFlag
+%
+
+category: 'sharing'
+method: FileOptions
+beNonShared
+	self share: FileDenyReadWriteFlag new
+%
+
+category: 'open mode flag'
+method: FileOptions
+beReadMode
+	self openModeFlag: FileOpenReadOnlyFlag new.
+%
+
+category: 'sharing'
+method: FileOptions
+beReadOnlyShared
+	self share: FileDenyWriteFlag new
+%
+
+category: 'open mode flag'
+method: FileOptions
+beReadWriteMode
+	self openModeFlag: FileOpenReadWriteFlag new.
+%
+
+category: 'sharing'
+method: FileOptions
+beShared
+	self share: FileDenyNoneFlag new
+%
+
+category: 'open mode flag'
+method: FileOptions
+beWriteMode
+	self openModeFlag: FileOpenWriteOnlyFlag new.
+%
+
+category: 'sharing'
+method: FileOptions
+beWriteOnlyShared
+	self share: FileDenyReadFlag new
+%
+
+category: 'file type'
+method: FileOptions
+binaryFileType
+	self fileType: FileBinaryTypeFlag new
+%
+
+category: 'commands'
+method: FileOptions
+create
+	self hasNoReadOrWriteMode ifTrue: [^self signalOpenModeFlagNotDefined].
+	self addCreateFlag
+%
+
+category: 'convenience'
+method: FileOptions
+createRule
+	^self fileCreateFlag
+		ifNil: [self store class openExistingRule]
+		ifNotNil: [:option | option createRule]
+%
+
+category: 'commands'
+method: FileOptions
+exclusive
+	self hasNoReadOrWriteMode ifTrue: [^self signalOpenModeFlagNotDefined].
+	self addExclusiveFlag
+%
+
+category: 'posix flags'
+method: FileOptions
+fileCreateFlag
+	^self posixFlagForClass: FileCreateFlag
+%
+
+category: 'posix flags'
+method: FileOptions
+fileExclusiveFlag
+	^self posixFlagForClass: FileExclusiveFlag
+%
+
+category: 'posix flags'
+method: FileOptions
+fileOpenFlagsTotalValue
+	^self fileOpenModeValue bitOr: self posixFlagsTotalValue
+%
+
+category: 'posix flags'
+method: FileOptions
+fileOpenModeValue
+	^self openModeFlag posixFlagValue
 %
 
 category: 'accessing'
-method: File
-size
-
-	^ self readStreamDo: [ :stream | stream size ]
+method: FileOptions
+fileType
+	^fileType
 %
 
-category: 'streaming'
-method: File
-writeStream
-
-	^ self openForWrite
+category: 'accessing'
+method: FileOptions
+fileType: aFileTypeFlag
+	aFileTypeFlag parent: self.
+	fileType := aFileTypeFlag
 %
 
-category: 'streaming'
-method: File
-writeStreamDo: aBlock
-	| stream |
-	stream := self writeStream.
-	^ [ aBlock value: stream ]
-		ensure: [ stream close ]
+category: 'permissions'
+method: FileOptions
+groupAll
+	(self permissionsFlagForClass: FileGroupExecutePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileGroupReadPermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileGroupWritePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	self addPermissionFlag: FileGroupAllPermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+groupExecute
+	(self hasPermissionsFlag: FileGroupAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileGroupExecutePermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+groupRead
+	(self hasPermissionsFlag: FileGroupAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileGroupReadPermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+groupWrite
+	(self hasPermissionsFlag: FileGroupAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileGroupWritePermissionFlag new
+%
+
+category: 'file type'
+method: FileOptions
+gzipHighCompression
+	self fileType: FileGzipTypeFlag high
+%
+
+category: 'file type'
+method: FileOptions
+gzipLowCompression
+	self fileType: FileGzipTypeFlag low
+%
+
+category: 'testing'
+method: FileOptions
+hasExclsiveFlag
+	^self hasPosixFlag: FileExclusiveFlag
+%
+
+category: 'testing'
+method: FileOptions
+hasFileAppendFlag
+	^self hasPosixFlag: FileAppendFlag
+%
+
+category: 'testing'
+method: FileOptions
+hasFileCreateFlag
+	^self hasPosixFlag: FileCreateFlag
+%
+
+category: 'testing'
+method: FileOptions
+hasFileTruncateFlag
+	^self hasPosixFlag: FileTruncateFlag
+%
+
+category: 'testing'
+method: FileOptions
+hasNoReadOrWriteMode
+	^self openModeFlag isNil
+%
+
+category: 'testing'
+method: FileOptions
+hasPermissionsFlag: anPosixFlagClass
+	^(self permissionsFlagForClass: anPosixFlagClass) notNil
+%
+
+category: 'testing'
+method: FileOptions
+hasPosixFlag: anPosixFlagClass
+	^(self posixFlagForClass: anPosixFlagClass) notNil
+%
+
+category: 'initialization'
+method: FileOptions
+initialize
+	self posixFlags: OrderedCollection new.
+	self permissionFlags: OrderedCollection new.
+	self beShared
+%
+
+category: 'initialization'
+method: FileOptions
+initializeAppend
+	self beWriteMode.
+	self addCreateFlag.
+	self addAppendFlag
+%
+
+category: 'initialization'
+method: FileOptions
+initializeRead
+	self beReadMode
+%
+
+category: 'initialization'
+method: FileOptions
+initializeReadWrite
+	self beReadWriteMode
+%
+
+category: 'initialization'
+method: FileOptions
+initializeWrite
+	self beWriteMode.
+	self addCreateFlag.
+	self addTruncateFlag
+%
+
+category: 'testing'
+method: FileOptions
+isForeignFileSystem
+	^self store isForeignFileSystem
+%
+
+category: 'testing'
+method: FileOptions
+isGzipped
+	^(self fileType  ifNil: [^false]) isGzipped
+%
+
+category: 'testing'
+method: FileOptions
+isReadable
+	^self openModeFlag isReadable
+%
+
+category: 'testing'
+method: FileOptions
+isReadWritable
+	^self openModeFlag isReadable and: [self openModeFlag isWritable]
+%
+
+category: 'testing'
+method: FileOptions
+isWritable
+	^self openModeFlag isWritable
+%
+
+category: 'printing'
+method: FileOptions
+mode
+	| aStream |
+	aStream := WriteStream on: String new.
+	self printOpenModeStringOn: aStream.
+	^aStream contents
+%
+
+category: 'accessing'
+method: FileOptions
+openModeFlag
+	^openModeFlag
+%
+
+category: 'accessing'
+method: FileOptions
+openModeFlag: aFileOpenMode
+	aFileOpenMode parent: self.
+	openModeFlag :=  aFileOpenMode
+%
+
+category: 'permissions'
+method: FileOptions
+otherAll
+	(self permissionsFlagForClass: FileOtherExecutePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileOtherReadPermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileOtherWritePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	self addPermissionFlag: FileOtherAllPermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+otherExecute
+	(self hasPermissionsFlag: FileOtherAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOtherExecutePermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+otherRead
+	(self hasPermissionsFlag: FileOtherAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOtherReadPermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+otherWrite
+	(self hasPermissionsFlag: FileOtherAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOtherWritePermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+ownerAll
+	(self permissionsFlagForClass: FileOwnerExecutePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileOwnerReadPermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileOwnerWritePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	self addPermissionFlag: FileOwnerAllPermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+ownerExecute
+	(self hasPermissionsFlag: FileOwnerAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOwnerExecutePermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+ownerRead
+	(self hasPermissionsFlag: FileOwnerAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOwnerReadPermissionFlag new
+%
+
+category: 'permissions'
+method: FileOptions
+ownerWrite
+	(self hasPermissionsFlag: FileOwnerAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOwnerWritePermissionFlag new
+%
+
+category: 'accessing'
+method: FileOptions
+parent
+	^parent
+%
+
+category: 'accessing'
+method: FileOptions
+parent: anObject
+	parent := anObject
+%
+
+category: 'accessing'
+method: FileOptions
+permissionFlags
+	^permissionFlags
+%
+
+category: 'accessing'
+method: FileOptions
+permissionFlags: aCollection
+	permissionFlags := aCollection
+%
+
+category: 'permissions'
+method: FileOptions
+permissionsFlagForClass: anPermissionFlagClass
+	^self permissionFlags detect: [:ea | ea isKindOf: anPermissionFlagClass] ifNone: [nil]
+%
+
+category: 'posix flags'
+method: FileOptions
+posixFlagForClass: anPosixFlagClass
+	^self posixFlags detect: [:ea | ea isKindOf: anPosixFlagClass] ifNone: [nil]
+%
+
+category: 'accessing'
+method: FileOptions
+posixFlags
+	^posixFlags
+%
+
+category: 'accessing'
+method: FileOptions
+posixFlags: aCollection
+	posixFlags := aCollection
+%
+
+category: 'posix flags'
+method: FileOptions
+posixFlagsTotalValue
+	^self posixFlags inject: 0 into: [:total :ea | total bitOr: ea posixFlagValue]
+%
+
+category: 'printing'
+method: FileOptions
+printOn: aStream
+	super printOn: aStream.
+	aStream
+		nextPutAll: '(';
+		nextPutAll: (self openModeFlag ifNil: ['nil'] ifNotNil: [:f | f posixName ifNil: ['nil']]);
+		nextPutAll: ')'
+%
+
+category: 'printing'
+method: FileOptions
+printOpenModeStringOn: aStream
+
+	self openModeFlag printOpenModeStringOn: aStream.
+	self fileType ifNotNil: [:ft | ft printOpenModeStringOn: aStream.]
+%
+
+category: 'commands'
+method: FileOptions
+read
+	self hasNoReadOrWriteMode ifTrue: [^self initializeRead].
+	self isWritable ifTrue: [self beReadWriteMode]
+%
+
+category: 'commands'
+method: FileOptions
+readWrite
+	self initializeReadWrite
+%
+
+category: 'posix flags - adding and removing'
+method: FileOptions
+removeAppendFlag
+	self appendFlag ifNotNil: [:flag | self removePosixFlag: flag]
+%
+
+category: 'permissions'
+method: FileOptions
+removePermissionFlag: aPermissionFlag
+	aPermissionFlag parent: nil.
+	self permissionFlags remove: aPermissionFlag ifAbsent: []
+%
+
+category: 'posix flags - adding and removing'
+method: FileOptions
+removePosixFlag: aPosixFlag
+	aPosixFlag parent: nil.
+	self posixFlags remove: aPosixFlag ifAbsent: []
+%
+
+category: 'posix flags - adding and removing'
+method: FileOptions
+removeTruncateFlag
+	self truncateFlag ifNotNil: [:flag | self removePosixFlag: flag]
+%
+
+category: 'accessing'
+method: FileOptions
+share
+	^share
+%
+
+category: 'accessing'
+method: FileOptions
+share: aFileShareFlag
+	aFileShareFlag parent: self.
+	share := aFileShareFlag
+%
+
+category: 'convenience'
+method: FileOptions
+shareRule
+	^self share shareRule
+%
+
+category: 'errors'
+method: FileOptions
+signalOpenModeFlagNotDefined
+
+	self error: 'Attempting to add an open flag without first defining the open mode of #read, #write or #readWrite'
+%
+
+category: 'accessing'
+method: FileOptions
+store
+	^store ifNil: [
+		self parent isNil ifTrue: [^FileSystem disk store].
+		^self parent store]
+%
+
+category: 'accessing'
+method: FileOptions
+store: aDiskStore
+	store := aDiskStore
+%
+
+category: 'file type'
+method: FileOptions
+textFileType
+	self fileType: FileTextTypeFlag new
+%
+
+category: 'commands'
+method: FileOptions
+truncate
+	self hasNoReadOrWriteMode ifTrue: [^self signalOpenModeFlagNotDefined].
+	self addTruncateFlag
+%
+
+category: 'posix flags'
+method: FileOptions
+truncateFlag
+	^self posixFlagForClass: FileTruncateFlag
+%
+
+category: 'convenience'
+method: FileOptions
+truncateRule
+	^self truncateFlag
+		ifNil: [self store class noTruncateRule]
+		ifNotNil: [:option | option truncateRule]
+%
+
+category: 'commands'
+method: FileOptions
+write
+	self hasNoReadOrWriteMode ifTrue: [^self initializeWrite].
+	self isReadable ifTrue: [self beReadWriteMode]
 %
 
 ! Class implementation for 'FileSystem'
@@ -4953,7 +10083,7 @@ binaryReadStreamOn: aResolvable
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable writable: false) binaryReadStream.
+	^ (self open: aResolvable options: FileOptions newRead) binaryStream.
 %
 
 category: 'public'
@@ -4962,7 +10092,7 @@ binaryWriteStreamOn: aResolvable
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a binary write stream for reading the file."
 
-	^ (self open: aResolvable writable: true) binaryWriteStream.
+	^ (self open: aResolvable options: FileOptions newWrite) binaryStream.
 %
 
 category: 'public'
@@ -5350,6 +10480,13 @@ isFile: aResolvable
 
 category: 'public-testing'
 method: FileSystem
+isForeignFileSystem
+
+	^self store ifNil: [false] ifNotNil: [self store isForeignFileSystem]
+%
+
+category: 'public-testing'
+method: FileSystem
 isReadable: aResolvable
 	"Resolve the argument, and answer true if the there is
 	a file or directory that can be read from."
@@ -5427,38 +10564,43 @@ open
 
 category: 'public'
 method: FileSystem
-open: aResolvable writable: aBoolean 
+open: aResolvable options: aFileOptions 
 	"Resolve aResolvable into an absolute path, then ask the store to open the file at
 	that path using the specified access mode."
 	
 	| path |
+	aFileOptions alignStoreWith: self.
 	path := self resolve: aResolvable.
 	^ store handleClass 
 		open: (FileReference fileSystem: self path: path) 
-		writable: aBoolean
-		
+		options: aFileOptions
 %
 
-category: 'delegated'
+category: 'public'
 method: FileSystem
-openFileStream: aResolvable writable: aBoolean
-	^ store 
-		openFileStream: (self resolve: aResolvable) 
-		writable: aBoolean
+open: aReference withOptions: aFileOptions 
+	"Resolve aResolvable into an absolute path, then ask the store to open the file at
+	that path using the specified access mode."
+
+	"This returns an instance of the dialects File or FileAdaptor class - see FileSystem class>>fileClass"
+	
+	| path |
+	path := self resolve: aReference path.
+	^ store handleClass 
+		open: (FileReference fileSystem: self path: path) 
+		withOptions: aFileOptions
 %
 
 category: 'private'
 method: FileSystem
-openStreamDescription: aResolvable writable: writeMode
-	"I am  a helper method to delegate basicOpen:writable: to the store.
+openStreamDescription: aResolvable options: aFileOptions
+	"I am  a helper method to delegate basicOpen:options: to the store.
 	 I am called from FileSystemHandle implementations."
-	
-	"writeMode - #read, #append, #write"
 
 	| path |
 	
 	path := self resolve: aResolvable.
-	^ store basicOpen: path writable: writeMode
+	^ store basicOpen: path options: aFileOptions
 %
 
 category: 'converting'
@@ -5470,7 +10612,7 @@ pathFromObject: anObject
 category: 'converting'
 method: FileSystem
 pathFromString: aString
-	^ store pathFromString: aString
+	^store pathFromString: aString
 %
 
 category: 'public'
@@ -5479,6 +10621,16 @@ permissions: aResolvable
 	"Resolve the argument and return the Permissions for this file or directory "
 
 	^ store permissions: (self resolve: aResolvable)
+%
+
+category: 'printing'
+method: FileSystem
+printOn: aStream
+	super printOn: aStream.
+	aStream 
+		nextPutAll: '('; 
+		nextPutAll: (self store ifNil: ['nil'] ifNotNil: [self store printString]); 
+		nextPutAll: ')'
 %
 
 category: 'printing'
@@ -5493,7 +10645,7 @@ readStreamOn: aResolvable
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable writable: false) readStream.
+	^ (self open: aResolvable options: FileOptions newRead) readStream.
 %
 
 category: 'public'
@@ -5625,7 +10777,7 @@ method: FileSystem
 writeStreamOn: aResolvable
 	"Open a write stream on the file referred by the argument. It can be a string or a path"
 
-	^ (self open: aResolvable writable: true) writeStream.
+	^ (self open: aResolvable options: FileOptions newWrite) writeStream.
 %
 
 ! Class implementation for 'FileSystemDirectoryEntry'
@@ -5815,7 +10967,7 @@ printOn: aStream
 category: 'delegate'
 method: FileSystemDirectoryEntry
 readStream
-	^ reference readStreamPortable
+	^ reference readStream
 %
 
 category: 'delegate'
@@ -6055,14 +11207,20 @@ visitNextEntry: entry
 
 category: 'instance creation'
 classmethod: FileSystemHandle
-on: aReference writable: aBoolean
-	^ self new setReference: aReference writable: aBoolean
+on: aReference options: aFileOptions
+	^ self new setReference: aReference options: aFileOptions
 %
 
 category: 'instance creation'
 classmethod: FileSystemHandle
-open: aReference writable: aBoolean
-	^ (self on: aReference writable: aBoolean) open
+open: aReference options: aFileOptions
+	^ (self on: aReference options: aFileOptions) open
+%
+
+category: 'instance creation'
+classmethod: FileSystemHandle
+open: aReference withOptions: aFileOptions
+	^ (self on: aReference options: aFileOptions) open
 %
 
 !		Instance methods for 'FileSystemHandle'
@@ -6105,7 +11263,7 @@ basicOpen
 	"get the raw stream description from the filesystem's store"
 	^ self fileSystem 
 		openStreamDescription: reference path
-		writable: (writable ifTrue: [ #write ] ifFalse: [ #read ])
+		options: self options
 %
 
 category: 'streams'
@@ -6161,7 +11319,8 @@ isOpen
 category: 'testing'
 method: FileSystemHandle
 isWritable
-	^ writable
+
+	^ self options isWritable
 %
 
 category: 'public'
@@ -6172,8 +11331,33 @@ open
 
 category: 'accessing'
 method: FileSystemHandle
+options
+	^options
+%
+
+category: 'accessing'
+method: FileSystemHandle
+options: aFileOptions
+	options := aFileOptions
+%
+
+category: 'public'
+method: FileSystemHandle
+pathString
+
+	^self reference pathString
+%
+
+category: 'accessing'
+method: FileSystemHandle
 reference
 	^ reference
+%
+
+category: 'accessing'
+method: FileSystemHandle
+reference: aFileReference
+	reference := aFileReference
 %
 
 category: 'public'
@@ -6185,9 +11369,9 @@ reopen
 
 category: 'initialize-release'
 method: FileSystemHandle
-setReference: aReference writable: aBoolean
-	reference := aReference resolve.
-	writable := aBoolean
+setReference: aReference options: aFileOptions
+	self reference: aReference resolve.
+	self options: aFileOptions
 %
 
 category: 'public'
@@ -6206,6 +11390,13 @@ truncateTo: anInteger
 
 !		Class methods for 'FileHandle'
 
+category: 'accessing'
+classmethod: FileHandle
+open: aFileReference withOptions: aFileOptions
+	"This returns an instance of the dialects File or FileAdaptor class - see FileSystem class>>fileClass"
+	^FileSystem fileClass open: aFileReference withOptions: aFileOptions
+%
+
 category: 'class initialization'
 classmethod: FileHandle
 startUp: resuming
@@ -6221,7 +11412,7 @@ category: 'public'
 method: FileHandle
 assureOpen
 	"Compatibility method to make the FileHandle Tests pass"
-	self isOpen ifFalse: [ id := self basicOpen ].
+	self isOpen ifFalse: [ self id: self basicOpen ].
 %
 
 category: 'public'
@@ -6231,9 +11422,9 @@ at: index read: buffer startingAt: start count: count
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
 	
-	^ File 
-		setPosition: id to: index - 1;
-		read: id into: buffer startingAt: start count: count
+	^ self 
+		setPositionTo: index - 1;
+		readInto: buffer startingAt: start count: count
 %
 
 category: 'public'
@@ -6243,34 +11434,47 @@ at: index write: buffer startingAt: start count: count
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
 	
-	File 
-		setPosition: id to: index - 1;
-		write: id from: buffer startingAt: start count: count
+	self 
+		setPositionTo: index - 1;
+		writeFrom: buffer startingAt: start count: count
+%
+
+category: 'public'
+method: FileHandle
+binaryFileStream
+	^self binaryStream
 %
 
 category: 'public'
 method: FileHandle
 binaryReadStream
-	^ ZnBufferedReadStream on: (File named: reference fullName) readStream
+	^self binaryStream
+%
+
+category: 'public'
+method: FileHandle
+binaryStream
+	^BinaryFileStream on: (FileSystem fileClass open: reference withOptions: self options)
 %
 
 category: 'public'
 method: FileHandle
 binaryWriteStream
-	^ (File named: reference fullName) writeStream
+	^self binaryStream
 %
 
 category: 'public'
 method: FileHandle
 close
-	File close: id.
-	id := nil
+	self id ifNil: [ ^ self ].
+	self id close.
+	self id: nil
 %
 
 category: 'finalization'
 method: FileHandle
 finalize
-	File close: id
+	self close
 %
 
 category: 'public'
@@ -6280,23 +11484,72 @@ flush
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
 	
-	File flush: id
+	self id flush
+%
+
+category: 'accessing'
+method: FileHandle
+id
+	^id
+%
+
+category: 'accessing'
+method: FileHandle
+id: anObject
+	id := anObject
 %
 
 category: 'testing'
 method: FileHandle
 isOpen
-	^ (File sizeOrNil: id) notNil
+	^self id ifNil: [false] ifNotNil: [self id isOpen] 
 %
 
 category: 'public'
 method: FileHandle
 open
-	self flag: 'TODO: for now we solely rely on the old FileStreams'
-	"id := self basicOpen.
-	id ifNil: 	[
-		reference exists ifFalse: [FileDoesNotExist signalWith: reference].
-		self error: 'Unable to open file ' , reference printString]"
+	self flag: 'TODO: for now we solely rely on the old FileStreams'.
+"	self id: self basicOpen.
+	self id ifNil: 	[self signalOpenError]"
+%
+
+category: 'public'
+method: FileHandle
+readInto: byteArray startingAt: startIndex count: count
+	"Read up to count bytes of data from this file into the given string or byte array starting at the given index. 
+		Answer the number of bytes actually read."
+
+	| buf cnt |
+	buf := byteArray species new: count.
+	cnt := self id next: count into: buf.
+	cnt ifNil: [ 
+		self id isNil
+			ifTrue: [ ^ self error: 'File is closed' ].
+		self error: 'File read failed: ' , (self id class serverErrorString ifNil: [ ' - No error reason found']) ].
+	byteArray replaceFrom: startIndex to: startIndex + cnt - 1 with: buf.
+	^cnt
+%
+
+category: 'public'
+method: FileHandle
+setPositionTo: anInteger
+	"Set this file to the given position."
+
+	| pos |
+	pos := self id position: anInteger.
+	pos ifNil: [ self error: 'position error' ].
+%
+
+category: 'public'
+method: FileHandle
+signalOpenError
+	self reference exists ifFalse: [
+		FileDoesNotExistException signalWith: self reference text: 'Attempting to open non existent file - ' , self reference fullName].
+	self reference isDirectory ifTrue: [
+		FileDoesNotExistException signalWith: self reference text: 'Attempting to open directory - ' , self reference fullName].
+	FileOpenError 
+		signalWith: self reference 
+		text: ('Unable to open'  , self reference fullName)
 %
 
 category: 'public'
@@ -6306,7 +11559,7 @@ size
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
 	
-	^ File sizeOf: id
+	^ self id fileSize
 %
 
 category: 'private'
@@ -6325,9 +11578,9 @@ startUp
 category: 'public'
 method: FileHandle
 streamError
-	reference exists
-		ifFalse: [FileDoesNotExistException signalWith: reference].
-	self error: 'Unable to open file ' , reference printString
+	self reference exists
+		ifFalse: [FileDoesNotExistException signalWith: self reference].
+	self error: 'Unable to open file ' , self reference printString
 %
 
 category: 'public'
@@ -6336,16 +11589,27 @@ sync
 	
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
-	
-	File sync: id
+	"This needs to be implemented in GsFile or this function removed"
+	self id sync
 %
 
 category: 'public'
 method: FileHandle
 truncateTo: anInteger
-	File setPosition: id to: anInteger.
-	File truncate: id to: anInteger.
-	self reopen
+	self id truncate: anInteger
+%
+
+category: 'public'
+method: FileHandle
+writeFrom: stringOrByteArray startingAt: startIndex count: count
+	"Write count bytes onto this file from the given string or byte array starting at the given index. 	Answer the number of bytes written."
+
+	| written |
+	written := (startIndex = 1 and: [ count = stringOrByteArray size])
+		ifTrue: [ self id nextPutAll: stringOrByteArray ]
+		ifFalse: [ self id nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
+	written ifNil: [ self error: 'failed write' ].
+	^ written
 %
 
 ! Class implementation for 'MemoryHandle'
@@ -6373,7 +11637,7 @@ at: index read: aCollection startingAt: start count: count
 category: 'public'
 method: MemoryHandle
 at: first write: aCollection startingAt: start count: count 
-	writable ifFalse: [ self primitiveFailed ].
+	self isWritable ifFalse: [ self primitiveFailed ].
 	entry at: first write: aCollection startingAt: start count: count.
 %
 
@@ -6382,6 +11646,14 @@ method: MemoryHandle
 binaryReadStream
 
 	^ entry binaryReadStream
+%
+
+category: 'streams'
+method: MemoryHandle
+binaryStream
+	^self options isWritable 
+		ifTrue: [entry binaryWriteStream] 
+		ifFalse: [entry binaryReadStream]
 %
 
 category: 'streams'
@@ -6648,6 +11920,12 @@ canResolve: aSymbol
 	^ self supportedOrigins includes: aSymbol
 %
 
+category: 'resolving'
+method: FileSystemResolver
+fileSystem
+	^ FileSystem disk
+%
+
 category: 'accessing'
 method: FileSystemResolver
 flushCaches
@@ -6682,14 +11960,26 @@ resolve: aSymbol
 category: 'resolving'
 method: FileSystemResolver
 resolveString: aString
+	| decoded |
+	"The argument string is actually a byte array encoded differently on each platform.
+	We are transforming it to an image string.
+	We assume for now that the string is utf8 encoded."
+	decoded := aString decodeFromUTF8 asString.
+	^ FileReference 
+		fileSystem: self fileSystem 
+		path: (self fileSystem pathFromString: decoded)
+%
+
+category: 'resolving'
+method: FileSystemResolver
+resolveString: aString fileSystem: aFileSystem
 	| decoded fs |
 	"The argument string is actually a byte array encoded differently on each platform.
 	We are transforming it to an image string.
 	We assume for now that the string is utf8 encoded."
 	decoded := aString decodeFromUTF8 asString.
-	fs := FileSystem disk.
 	^ FileReference 
-		fileSystem: fs 
+		fileSystem: aFileSystem 
 		path: (fs pathFromString: decoded)
 %
 
@@ -6744,15 +12034,19 @@ unknownOrigin: origin
 category: 'instance creation'
 classmethod: PlatformResolver
 forCurrentPlatform
-	| platformName |
-	platformName :=  System gemVersionAt: 'osName' .
-	^ (self allSubclasses detect: [:ea | ea platformName = platformName]) new
+	^(self resolverClassFor: System osName) new
 %
 
 category: 'accessing'
 classmethod: PlatformResolver
-platformName
-	^ nil
+platformNames
+	^ {}
+%
+
+category: 'instance creation'
+classmethod: PlatformResolver
+resolverClassFor: anOsName
+	^PlatformResolver allSubclasses detect: [:ea | ea platformNames includes: anOsName]
 %
 
 !		Instance methods for 'PlatformResolver'
@@ -6786,12 +12080,12 @@ category: 'private'
 method: PlatformResolver
 directoryFromEnvVariableNamed: aString or: aBlock
 	| envValue |
-	envValue := [ System gemEnvironmentVariable: aString ]
+	envValue := [ self osEnvironmentVariable: aString ]
 		on: Error
 		do: [ ^ aBlock value ].
 	^ envValue isEmptyOrNil
 		ifTrue: [ aBlock value ]
-		ifFalse: [ self resolveString: envValue ]
+		ifFalse: [ self resolveString: envValue ].
 %
 
 category: 'origins'
@@ -6803,7 +12097,20 @@ documents
 category: 'origins'
 method: PlatformResolver
 home
+	^ self directoryFromEnvVariableNamed: self homeEnvironmentVariableName
+%
+
+category: 'origins'
+method: PlatformResolver
+homeEnvironmentVariableName
 	^ self subclassResponsibility
+%
+
+category: 'private'
+method: PlatformResolver
+osEnvironmentVariable: aString
+
+	^System gemEnvironmentVariable: aString
 %
 
 category: 'origins'
@@ -6825,14 +12132,95 @@ temp
 	^ self subclassResponsibility 
 %
 
+! Class implementation for 'ClientResolver'
+
+!		Class methods for 'ClientResolver'
+
+category: 'instance creation'
+classmethod: ClientResolver
+forCurrentPlatform
+	^self new
+		resolver: (self resolverClassFor: System clientOsName) new;
+		yourself
+%
+
+!		Instance methods for 'ClientResolver'
+
+category: 'origins'
+method: ClientResolver
+cache
+	^ self resolver cache
+%
+
+category: 'origins'
+method: ClientResolver
+desktop
+	^ self resolver desktop
+%
+
+category: 'origins'
+method: ClientResolver
+documents
+	^ self resolver documents
+%
+
+category: 'resolving'
+method: ClientResolver
+fileSystem
+	^ ClientStore currentFileSystem
+%
+
+category: 'origins'
+method: ClientResolver
+homeEnvironmentVariableName
+	^ self resolver homeEnvironmentVariableName
+%
+
+category: 'private'
+method: ClientResolver
+osEnvironmentVariable: aString
+
+	^System clientEnvironmentVariable: aString
+%
+
+category: 'origins'
+method: ClientResolver
+preferences
+	^ self resolver preferences
+%
+
+category: 'accessing'
+method: ClientResolver
+resolver
+	^resolver
+%
+
+category: 'accessing'
+method: ClientResolver
+resolver: aPlatformResolver
+	resolver := aPlatformResolver
+%
+
+category: 'resolving'
+method: ClientResolver
+supportedOrigins
+	^ self resolver supportedOrigins
+%
+
+category: 'origins'
+method: ClientResolver
+temp
+	^ self resolver temp
+%
+
 ! Class implementation for 'MacOSResolver'
 
 !		Class methods for 'MacOSResolver'
 
 category: 'accessing'
 classmethod: MacOSResolver
-platformName
-	^  'Mac OS'
+platformNames
+	^  {'Darwin'}
 %
 
 !		Instance methods for 'MacOSResolver'
@@ -6857,8 +12245,8 @@ documents
 
 category: 'origins'
 method: MacOSResolver
-home
-	^ self directoryFromEnvVariableNamed: 'HOME'
+homeEnvironmentVariableName
+	^'HOME'
 %
 
 category: 'origins'
@@ -6915,8 +12303,8 @@ userLibrary
 
 category: 'accessing'
 classmethod: UnixResolver
-platformName
-	^  'Linux'
+platformNames
+	^  {'Linux'}
 %
 
 !		Instance methods for 'UnixResolver'
@@ -6943,8 +12331,8 @@ documents
 
 category: 'origins'
 method: UnixResolver
-home
-	^ self directoryFromEnvVariableNamed: 'HOME'
+homeEnvironmentVariableName
+	^'HOME'
 %
 
 category: 'origins'
@@ -7012,8 +12400,8 @@ xdgUserDir: userDirName
 
 category: 'accessing'
 classmethod: WindowsResolver
-platformName
-	^ 'Win32'
+platformNames
+	^ {'Win32' . 'Windows NT'}
 %
 
 !		Instance methods for 'WindowsResolver'
@@ -7037,12 +12425,10 @@ documents
 	^ self home / 'Documents'
 %
 
-category: 'origins'
+category: 'private'
 method: WindowsResolver
-home
-	"Value of the $USERPROFILE environment variable."
-
-	^ self directoryFromEnvVariableNamed: 'USERPROFILE'
+homeEnvironmentVariableName
+	^'USERPROFILE'
 %
 
 category: 'origins'
@@ -7195,6 +12581,12 @@ new
 
 category: 'accessing'
 classmethod: FileSystemStore
+osName
+	^System osName
+%
+
+category: 'accessing'
+classmethod: FileSystemStore
 separator
 	self shouldBeImplemented
 %
@@ -7219,7 +12611,7 @@ basicCreationTimeOf: aNode
 category: 'abstract'
 method: FileSystemStore
 basicEntry: directoryEntry path: aPath nodesDo: aBlock
-	self subclassResponsibility 
+	self subclassResponsibility: #basicEntry:path:nodesDo:
 %
 
 category: 'abstract'
@@ -7263,7 +12655,7 @@ basicModificationTime: aNode
 
 category: 'error signalling'
 method: FileSystemStore
-basicOpen: aPath writable: aBoolean
+basicOpen: aPath  options: aFileOptions
 	"open the file at the given path and return an identifier"
 	self subclassResponsibility
 %
@@ -7422,6 +12814,27 @@ entryFromNode: node path: path for: aFileystem
 	^ self entryFromNode: node fileSystem: aFileystem path: entryPath
 %
 
+category: 'error handling'
+method: FileSystemStore
+errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: anErrorGroup
+
+	^anErrorGroup errorClassForDefaultPlatformError: anErrorNumber fileReference: aFileReference
+%
+
+category: 'error handling'
+method: FileSystemStore
+errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: fileOptions errorGroup: anErrorGroup
+
+	^anErrorGroup errorClassForDefaultPlatformError: anErrorNumber fileReference: aFileReference options: fileOptions
+%
+
+category: 'error handling'
+method: FileSystemStore
+errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference errorGroup: anErrorGroup
+
+	^anErrorGroup errorClassForDefaultPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+%
+
 category: 'public'
 method: FileSystemStore
 exists: aPath
@@ -7471,6 +12884,12 @@ isFile: aPath
 	
 %
 
+category: 'testing'
+method: FileSystemStore
+isForeignFileSystem
+	^ false
+%
+
 category: 'public'
 method: FileSystemStore
 isSymlink: aPath
@@ -7514,7 +12933,7 @@ nodeAt: aPath
 category: 'abstract'
 method: FileSystemStore
 nodeAt: aPath ifPresent: presentBlock ifAbsent: absentBlock
-	self subclassResponsibility 
+	self subclassResponsibility: #nodeAt:ifPresent:ifAbsent:
 %
 
 category: 'abstract'
@@ -7525,13 +12944,13 @@ open
 
 category: 'public'
 method: FileSystemStore
-openFileStream: path writable: writable
+openFileStream: path options: aFileOptions
 	self subclassResponsibility
 %
 
 category: 'converting'
 method: FileSystemStore
-pathFromString: aString
+pathFromString: aString	
 	"Use the unix convention by default, since many filesystems are based on it."
 	
 	^ Path from: aString delimiter: self delimiter
@@ -7595,8 +13014,7 @@ category: 'error signalling'
 method: FileSystemStore
 signalFileDoesNotExist: aPath
 	^ FileDoesNotExistException
-		signalWithFile: (File named: aPath asPath pathString)
-		writeMode: false
+		signalWith: aPath
 %
 
 category: 'error signalling'
@@ -7630,15 +13048,39 @@ stringFromPath: aPath
 category: 'current'
 classmethod: DiskStore
 activeClass
+	^DiskStore activeClassFor: self osName
+%
+
+category: 'current'
+classmethod: DiskStore
+activeClassFor: anOsName
 	self allSubclasses do: [:ea | 
-		ea isActiveClass ifTrue: [^ ea]].
+		(ea platformNames includes: anOsName) ifTrue: [^ ea] ].
 	^ self
+%
+
+category: 'class initialization'
+classmethod: DiskStore
+allConcreteFilePosixErrorClasses
+	^FilePosixError allConcreteFilePosixErrorClasses
+%
+
+category: 'class initialization'
+classmethod: DiskStore
+allConcretePosixFlagClasses
+	^PosixFlag allConcretePosixFlagClasses
 %
 
 category: 'current'
 classmethod: DiskStore
 createDefault
 	^ self new
+%
+
+category: 'create rules'
+classmethod: DiskStore
+createNewRule
+	FileOptionFeatureNotSupported signal: 'createNewRule'
 %
 
 category: 'current'
@@ -7659,10 +13101,9 @@ classmethod: DiskStore
 defaultWorkingDirectory
 	"Ask the VM for the default working directory.
 	Clients should normally use the instance side method which caches this value."
-	| pathString |
 
-	pathString := (GsFile _expandEnvVariable: 'PWD' isClient:false).
-	^(Path from: pathString delimiter: self delimiter).
+	DefaultWorkingDirectory ifNil: [DefaultWorkingDirectory := FileSystem fileClass currentWorkingDirectoryPath].
+	^(Path from: DefaultWorkingDirectory delimiter: self delimiter).
 %
 
 category: 'public'
@@ -7671,10 +13112,65 @@ delimiter
 	^ self current delimiter
 %
 
-category: 'current'
+category: 'share rules'
 classmethod: DiskStore
-isActiveClass
-	^ self delimiter = File delimiter
+denyNoneShareRule
+	FileOptionFeatureNotSupported signal: 'denyNoneShareRule'
+%
+
+category: 'share rules'
+classmethod: DiskStore
+denyReadShareRule
+	FileOptionFeatureNotSupported signal: 'denyReadShareRule'
+%
+
+category: 'share rules'
+classmethod: DiskStore
+denyReadWriteShareRule
+	FileOptionFeatureNotSupported signal: 'denyReadWriteShareRule'
+%
+
+category: 'share rules'
+classmethod: DiskStore
+denyWriteShareRule
+	FileOptionFeatureNotSupported signal: 'denyWriteShareRule'
+%
+
+category: 'class initialization'
+classmethod: DiskStore
+initialize
+	"DiskStore initialize"
+	self initializePosixFlagValues.
+	self initializePosixErrorValues.
+	self allSubclasses do: [:ea | ea initialize]
+%
+
+category: 'class initialization'
+classmethod: DiskStore
+initializeDefaultWorkingDirectory
+	^DefaultWorkingDirectory := self defaultWorkingDirectory
+%
+
+category: 'class initialization'
+classmethod: DiskStore
+initializePosixErrorValues
+	" DiskStore initializePosixErrorValues"
+	| errorNumberSelector |
+	errorNumberSelector := ((self name copyFrom: 1 to: self name size - 5) , 'ErrorNumber') asValidSelector.
+	self posixErrorNumbers: Dictionary new. 
+	self allConcreteFilePosixErrorClasses do: [:eaClass |  
+			self posixErrorNumbers at: eaClass posixName put: (eaClass errorNumberForSelector: errorNumberSelector)]
+%
+
+category: 'class initialization'
+classmethod: DiskStore
+initializePosixFlagValues
+	" DiskStore initializePosixFlagValues "
+	| valueSelector |
+	valueSelector := ((self name copyFrom: 1 to: self name size - 5) , 'Value') asValidSelector.
+	self posixValues: Dictionary new. 
+	self allConcretePosixFlagClasses do: [:eaClass |  
+			self posixValues at: eaClass posixName put: (eaClass valueForSelector: valueSelector)]
 %
 
 category: 'public'
@@ -7683,11 +13179,79 @@ maxFileNameLength
 	self subclassResponsibility 
 %
 
+category: 'create rules'
+classmethod: DiskStore
+noTruncateRule
+	FileOptionFeatureNotSupported signal: 'noTruncateRule'
+%
+
+category: 'create rules'
+classmethod: DiskStore
+openAlwaysRule
+	FileOptionFeatureNotSupported signal: 'openAlwaysRule'
+%
+
+category: 'create rules'
+classmethod: DiskStore
+openExistingRule
+	FileOptionFeatureNotSupported signal: 'openExistingRule'
+%
+
+category: 'posix'
+classmethod: DiskStore
+optionPlatformValueFor: aPosixName
+
+	^self posixValues at: aPosixName ifAbsent: []
+%
+
+category: 'current'
+classmethod: DiskStore
+platformNames
+	^{}
+%
+
+category: 'accessing'
+classmethod: DiskStore
+posixErrorNumbers
+	^PosixErrorNumbers
+%
+
+category: 'accessing'
+classmethod: DiskStore
+posixErrorNumbers: aCollection
+	PosixErrorNumbers := aCollection
+%
+
+category: 'accessing'
+classmethod: DiskStore
+posixValues
+	^PosixValues
+%
+
+category: 'accessing'
+classmethod: DiskStore
+posixValues: aCollection
+	PosixValues := aCollection
+%
+
+category: 'access rules'
+classmethod: DiskStore
+readOnlyAccessRule
+	FileOptionFeatureNotSupported signal: 'readOnlyAccessRule'
+%
+
+category: 'access rules'
+classmethod: DiskStore
+readWriteAccessRule
+	FileOptionFeatureNotSupported signal: 'readWriteAccessRule'
+%
+
 category: 'current'
 classmethod: DiskStore
 reset
-	DefaultWorkingDirectory := nil.
-	CurrentFS := nil
+	self posixValues: nil.
+	CurrentFS := nil.
+	DefaultWorkingDirectory := nil
 %
 
 category: 'system startup'
@@ -7703,6 +13267,18 @@ startUp: resuming
 	resuming 
 		ifTrue: [ self reset ].
 	DefaultWorkingDirectory := self defaultWorkingDirectory.
+%
+
+category: 'create rules'
+classmethod: DiskStore
+truncateExistingRule
+	FileOptionFeatureNotSupported signal: 'truncateExistingRule'
+%
+
+category: 'access rules'
+classmethod: DiskStore
+writeOnlyAccessRule
+	FileOptionFeatureNotSupported signal: 'readWriteAccessRule'
 %
 
 !		Instance methods for 'DiskStore'
@@ -7731,16 +13307,19 @@ basicCreationTimeOf: anEntry
 
 category: 'private'
 method: DiskStore
+basicEntriesIn: aPath
+	^FileSystem fileClass entriesIn: aPath
+%
+
+category: 'private'
+method: DiskStore
 basicEntry: ignored path: aPath nodesDo: aBlock
-	| pathString intOrArray |
+
+	| pathString |
 		
 	pathString := self stringFromPath: aPath.
-	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
-	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
-	intOrArray
-		do: [:entryPathString |
-			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (File lookupPath: entryPathString) ] ]
+	(self basicEntriesIn: pathString) do: [:eaEntry |
+		aBlock value: (FileSystem fileClass lookupDirectoryEntry: eaEntry)]
 %
 
 category: 'public'
@@ -7751,14 +13330,15 @@ basicEntryAt: aPath
 	path := self stringFromPath: aPath parent.
 	basename := aPath basename.
 	
-	^ (File lookupDirectory: path filename: basename)
+	^ (FileSystem fileClass lookupDirectory: path filename: basename)
 		ifNil: [ #badDirectoryPath ].
 %
 
 category: 'private'
 method: DiskStore
 basicIsDirectory: anEntry
-	^ anEntry at: 4
+
+	^anEntry at: 4
 %
 
 category: 'private'
@@ -7788,13 +13368,11 @@ basicModificationTimeOf: anEntry
 
 category: 'public'
 method: DiskStore
-basicOpen: aPath writable: writeMode
-
-	"writeMode - #read, #append, #write"
+basicOpen: aPath options: aFileOptions
 
 	| string |
 	string := self stringFromPath: aPath.
-	^ File open: string writable: writeMode
+	^FileSystem fileClass openPathName: string withOptions: aFileOptions
 %
 
 category: 'private'
@@ -7836,7 +13414,7 @@ createDirectory: path
 
 	| parent pathString result |
 	pathString := self stringFromPath: path.
-	result := File createDirectory: pathString.
+	result := self _createDirectory: pathString.
 	result
 		ifNil: [ 
 			parent := path parent.
@@ -7855,9 +13433,9 @@ category: 'accessing'
 method: DiskStore
 defaultWorkingDirectory
 	"Answer the default working directory, which is defined as the directory where the image resides."
-
-	^ DefaultWorkingDirectory
-		ifNil: [ self class defaultWorkingDirectory ]
+ 
+	DefaultWorkingDirectory  ifNil: [self class initializeDefaultWorkingDirectory].
+	^DefaultWorkingDirectory
 %
 
 category: 'public'
@@ -7865,15 +13443,30 @@ method: DiskStore
 delete: path
 	| pathString |
 	
-	(self exists: path)
+	(self exists: path) 
 		ifFalse: [ ^ FileDoesNotExistException signalWith: path ].
 		
 	pathString := self stringFromPath: path.
 	
 	(self isDirectory: path)
-		ifTrue: [ File deleteDirectory: pathString ]
-		ifFalse: [ 
-			(File named: pathString) delete ]
+		ifTrue: [ self deleteDirectory: pathString ]
+		ifFalse: [ self deleteFile: pathString ]
+%
+
+category: 'public'
+method: DiskStore
+deleteDirectory: pathString
+	(self _deleteDirectory: pathString)
+		ifNil: [ self error: 'Error deleting directory ', pathString printString, ' :: ', FileSystem fileClass serverErrorString ]
+%
+
+category: 'public'
+method: DiskStore
+deleteFile: pathString
+	(self _deleteFile: pathString)
+		ifNil: [ FileDeletionError 
+					signalWith: pathString  
+					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ]
 %
 
 category: 'printing'
@@ -7898,7 +13491,7 @@ category: 'initialization'
 method: DiskStore
 initialize
 	super initialize.
-	maxFileNameLength := 255.
+	maxFileNameLength := 255
 %
 
 category: 'public'
@@ -7942,9 +13535,9 @@ method: DiskStore
 isReadable: aPath
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath writable: #read) 
+	(self basicOpen: aPath options: FileOptions newRead ) 
 		ifNotNil: [ :id|
-			File close: id.
+			id close.
 			^ true].
 	^ false
 %
@@ -7969,9 +13562,9 @@ method: DiskStore
 isWritable: aPath
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath writable: #write) 
+	(self basicOpen: aPath options: FileOptions newWrite) 
 		ifNotNil: [ :id|
-			File close: id.
+			id close.
 			^ true].
 	^ false
 %
@@ -7999,31 +13592,298 @@ nodeAt: aPath ifPresent: presentBlock ifAbsent: absentBlock
 			presentBlock value: entry ].
 %
 
-category: 'public'
+category: 'posix'
 method: DiskStore
-openFileStream: path writable: writable
-	| fullPath |
-	fullPath := self stringFromPath: path.
-	"redirect over the default implementation"
-	^ writable 
-		ifFalse: [ FileStream readOnlyFileNamed: fullPath ]
-		ifTrue: [ FileStream fileNamed: fullPath ]
+optionPlatformValueFor: aPosixName
+
+	^self class optionPlatformValueFor: aPosixName
 %
 
 category: 'public'
 method: DiskStore
-rename: sourcePath to: destinationPath
+rename: sourcePath to: destinationPath 
+	"Rename the file of the given name to the new name. Fail if there is no file of the old name 
+	or if there is an existing file with the new name."
 
 	| sourcePathString targetPathString |
 	sourcePathString := self stringFromPath: sourcePath.
 	targetPathString := self stringFromPath: destinationPath.
-	^ File rename: sourcePathString to: targetPathString.
+	^self _rename: sourcePathString to: targetPathString
 %
 
 category: 'private'
 method: DiskStore
 rootNode
 	^ #('' 0 0 true 0 8r555)
+%
+
+category: 'accessing'
+method: DiskStore
+workingDirectoryEnvironmentVariableName
+	^'PWD'
+%
+
+category: 'public'
+method: DiskStore
+_createDirectory: path
+	^FileSystem fileClass createDirectory: path.
+%
+
+category: 'public'
+method: DiskStore
+_deleteDirectory: pathString
+	^FileSystem fileClass deleteDirectory: pathString
+%
+
+category: 'public'
+method: DiskStore
+_deleteFile: pathString
+	^FileSystem fileClass deleteFile: pathString
+%
+
+category: 'public'
+method: DiskStore
+_rename: sourcePathString to: targetPathString
+	^FileSystem fileClass rename: sourcePathString to: targetPathString
+%
+
+! Class implementation for 'ClientStore'
+
+!		Class methods for 'ClientStore'
+
+category: 'current'
+classmethod: ClientStore
+currentFileSystem
+	self currentFS ifNil: [self initializeClientFS].
+	^self currentFS
+%
+
+category: 'accessing'
+classmethod: ClientStore
+currentFS
+	^CurrentFS
+%
+
+category: 'accessing'
+classmethod: ClientStore
+currentFS: aFileSystem
+	CurrentFS := aFileSystem
+%
+
+category: 'accessing'
+classmethod: ClientStore
+defaultWorkingDirectory
+	^self currentFs store defaultWorkingDirectory
+%
+
+category: 'class initialization'
+classmethod: ClientStore
+initialize
+%
+
+category: 'class initialization'
+classmethod: ClientStore
+initializeClientFS
+
+	self currentFS: (FileSystem store: ClientStore new)
+%
+
+category: 'accessing'
+classmethod: ClientStore
+osName
+	^System clientOsName
+%
+
+category: 'current'
+classmethod: ClientStore
+reset
+	self initializeClientFS
+%
+
+!		Instance methods for 'ClientStore'
+
+category: 'private'
+method: ClientStore
+basicCreationTimeOf: anEntry
+	" the entry contains the seconds since the squeak epoch in local time"
+	| dt |
+	dt := DateAndTime posixSeconds:  ((anEntry at: 2) ifNil: [0]) offset: (Duration seconds: 0).
+	dt offset: (Duration seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC).
+	^ dt
+%
+
+category: 'private'
+method: ClientStore
+basicEntriesIn: aPath
+	^self error: 'Not implemented for the client'
+%
+
+category: 'public'
+method: ClientStore
+basicEntryAt: aPath
+	| anEntryType |
+	"This is required becuase GemStone's lookup method only works on the server"
+	anEntryType := self fileTypeOf: aPath.
+	(anEntryType  isNil or: [anEntryType  > 1]) ifTrue: [^#badDirectoryPath].
+	^{
+		aPath basename.
+		nil.
+		nil.
+		anEntryType = 1.
+		nil.
+		nil.
+		nil }
+%
+
+category: 'private'
+method: ClientStore
+basicIsSymlink: anEntry
+	^(anEntry size >= 7)
+		ifTrue: [ (anEntry at: 7) ifNil: [false] ]
+		ifFalse: [ false ]
+%
+
+category: 'private'
+method: ClientStore
+basicModificationTimeOf: anEntry
+	" the entry contains the seconds since the squeak epoch in local time"
+
+	| dt |
+	dt := DateAndTime posixSeconds:  ((anEntry at: 3) ifNil: [0]) offset: (Duration seconds: 0).
+	dt offset: (Duration seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC).
+	^ dt
+%
+
+category: 'accessing'
+method: ClientStore
+defaultWorkingDirectory
+	^defaultWorkingDirectory
+%
+
+category: 'accessing'
+method: ClientStore
+defaultWorkingDirectory: aPath
+	defaultWorkingDirectory := aPath
+%
+
+category: 'accessing'
+method: ClientStore
+defaultWorkingDirectoryString
+	"Answer the default working directory, which is defined as the directory where the image resides."
+	^System clientEnvironmentVariable: self store workingDirectoryEnvironmentVariableName
+%
+
+category: 'wip'
+method: ClientStore
+delimiter
+	"Use the unix convention by default, since many filesystems are based on it."
+	
+	^ self store delimiter
+%
+
+category: 'error handling'
+method: ClientStore
+errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: anErrorGroup
+
+	^self store errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: anErrorGroup
+%
+
+category: 'error handling'
+method: ClientStore
+errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: fileOptions errorGroup: anErrorGroup
+
+	^self store errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: fileOptions errorGroup: anErrorGroup
+%
+
+category: 'error handling'
+method: ClientStore
+errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference errorGroup: anErrorGroup
+
+	^anErrorGroup errorClassForDefaultPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+%
+
+category: 'public'
+method: ClientStore
+exists: aPath
+	| result |
+	result := self fileTypeOf: aPath.
+	^result notNil and: [result < 2]
+%
+
+category: 'private'
+method: ClientStore
+fileTypeOf: aPath
+	^FileSystem fileClass _fileKind: (self store stringFromPath: aPath) onClient: true
+%
+
+category: 'initialize'
+method: ClientStore
+initialize
+	super initialize.
+	self store: self class activeClass new.
+	self defaultWorkingDirectory: (Path from: self defaultWorkingDirectoryString delimiter: self delimiter)
+%
+
+category: 'testing'
+method: ClientStore
+isForeignFileSystem
+	^true
+%
+
+category: 'testing'
+method: ClientStore
+isWindowsStoreClient
+	^self store class name = #WindowsStore
+%
+
+category: 'converting'
+method: ClientStore
+pathFromString: aString	
+
+	^self store pathFromString: aString
+%
+
+category: 'converting'
+method: ClientStore
+printPath: aPath on: out
+	
+	^self store printPath: aPath on: out
+%
+
+category: 'accessing'
+method: ClientStore
+store
+	^store
+%
+
+category: 'accessing'
+method: ClientStore
+store: aDiskStore
+	store := aDiskStore
+%
+
+category: 'private'
+method: ClientStore
+_createDirectory: path
+	^FileSystem fileClass createClientDirectory: path
+%
+
+category: 'private'
+method: ClientStore
+_deleteDirectory: pathString
+	^FileSystem fileClass deleteClientDirectory: pathString
+%
+
+category: 'private'
+method: ClientStore
+_deleteFile: pathString
+	^FileSystem fileClass deleteClientFile: pathString
+%
+
+category: 'private'
+method: ClientStore
+_rename: sourcePathString to: targetPathString
+	^FileSystem fileClass renameOnClient: sourcePathString to: targetPathString
 %
 
 ! Class implementation for 'UnixStore'
@@ -8034,12 +13894,6 @@ category: 'public'
 classmethod: UnixStore
 delimiter
 	^ $/
-%
-
-category: 'current'
-classmethod: UnixStore
-isActiveClass
-	^ ((System gemVersionAt: 'osName') = 'Linux') and: [ super isActiveClass ]
 %
 
 category: 'public'
@@ -8054,6 +13908,12 @@ classmethod: UnixStore
 maxFileNameLength
 
 	^ 255
+%
+
+category: 'public'
+classmethod: UnixStore
+platformNames
+	^ {'Linux'}
 %
 
 category: 'public'
@@ -8083,12 +13943,6 @@ checkName: aFileName fixErrors: fixing
 
 !		Class methods for 'MacStore'
 
-category: 'current'
-classmethod: MacStore
-isActiveClass
-	^ ((System gemVersionAt: 'osName') = 'OSX') and: [ super isActiveClass ]
-%
-
 category: 'public'
 classmethod: MacStore
 isCaseSensitive
@@ -8096,14 +13950,63 @@ isCaseSensitive
 	^ true
 %
 
+category: 'public'
+classmethod: MacStore
+platformNames
+	^ {'Darwin'}
+%
+
 ! Class implementation for 'WindowsStore'
 
 !		Class methods for 'WindowsStore'
+
+category: 'create rules'
+classmethod: WindowsStore
+createNewRule
+	^1
+%
 
 category: 'accessing'
 classmethod: WindowsStore
 delimiter
 	^ $\
+%
+
+category: 'share rules'
+classmethod: WindowsStore
+denyNoneShareRule
+	^3
+%
+
+category: 'share rules'
+classmethod: WindowsStore
+denyReadShareRule
+	^2
+%
+
+category: 'share rules'
+classmethod: WindowsStore
+denyReadWriteShareRule
+	^0
+%
+
+category: 'share rules'
+classmethod: WindowsStore
+denyWriteShareRule
+	^1
+%
+
+category: 'file constants'
+classmethod: WindowsStore
+fileAttributeNormal
+	^128
+%
+
+category: 'file constants'
+classmethod: WindowsStore
+invalidHandleValue
+	"The value is returned if a file handle was not created"
+	^4294967295
 %
 
 category: 'accessing'
@@ -8119,10 +14022,58 @@ maxFileNameLength
 	^ 255
 %
 
+category: 'create rules'
+classmethod: WindowsStore
+noTruncateRule
+	^nil
+%
+
+category: 'create rules'
+classmethod: WindowsStore
+openAlwaysRule
+	^4
+%
+
+category: 'create rules'
+classmethod: WindowsStore
+openExistingRule
+	^3
+%
+
+category: 'accessing'
+classmethod: WindowsStore
+platformNames
+	^ {'Win32' . 'Windows NT'}
+%
+
+category: 'access rules'
+classmethod: WindowsStore
+readOnlyAccessRule
+	^2147483648
+%
+
+category: 'access rules'
+classmethod: WindowsStore
+readWriteAccessRule
+	^self readOnlyAccessRule bitOr: self writeOnlyAccessRule
+%
+
 category: 'accessing'
 classmethod: WindowsStore
 separator 
 	^ $\
+%
+
+category: 'create rules'
+classmethod: WindowsStore
+truncateExistingRule
+	^5
+%
+
+category: 'access rules'
+classmethod: WindowsStore
+writeOnlyAccessRule
+	^1073741824
 %
 
 !		Instance methods for 'WindowsStore'
@@ -8151,6 +14102,27 @@ category: 'converting'
 method: WindowsStore
 currentDisk
 	^ disk ifNil: [  disk := FileSystem workingDirectory path segments first ]
+%
+
+category: 'error handling'
+method: WindowsStore
+errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: anErrorGroup
+
+	^anErrorGroup errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+%
+
+category: 'error handling'
+method: WindowsStore
+errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: fileOptions errorGroup: anErrorGroup
+
+	^anErrorGroup errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference options: fileOptions
+%
+
+category: 'error handling'
+method: WindowsStore
+errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference errorGroup: anErrorGroup
+
+	^anErrorGroup errorClassForWindowsPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
 %
 
 category: 'converting'
@@ -8192,6 +14164,12 @@ category: 'converting'
 method: WindowsStore
 stripDrive: pathElements
 	pathElements ifNotEmpty: [ pathElements at: 1 put: ( ($: split: pathElements first) last)  ]
+%
+
+category: 'accessing'
+method: WindowsStore
+workingDirectoryEnvironmentVariableName
+	^'USERPROFILE'
 %
 
 ! Class implementation for 'MemoryStore'
@@ -8288,16 +14266,16 @@ basicModificationTimeOf: aMemoryFileSystemEntry
 
 category: 'private'
 method: MemoryStore
-basicOpen: path writable: writeMode
+basicOpen: path options: aFileOptions
 	^ self
 		nodeAt: path
 		ifPresent: [ :aMemoryFileSystemEntry | 
 			aMemoryFileSystemEntry
 				basicOpen;
 				yourself ]
-		ifAbsent: [ writeMode == #write
-				ifFalse: [ self signalFileDoesNotExist: path ]
-				ifTrue: [ self createFile: path ] ]
+		ifAbsent: [ (aFileOptions isWritable or: [aFileOptions hasFileCreateFlag])
+				ifTrue: [ self createFile: path ] 
+				ifFalse: [ self signalFileDoesNotExist: path ] ]
 %
 
 category: 'private'
@@ -8431,13 +14409,11 @@ nodeAt: aPath ifPresent: presentBlock ifAbsent: absentBlock
 
 category: 'public'
 method: MemoryStore
-openFileStream: path writable: writeMode
-
-	"writeMode - #read, #append, #write"
+openFileStream: path options: aFileOptions
 
 	| entry |
-	entry := self basicOpen: path writable: writeMode.
-	^ writeMode == #write
+	entry := self basicOpen: path options: aFileOptions.
+	^ aFileOptions isWritable
 		ifTrue: [ entry writeStream ]
 		ifFalse: [ entry readStreamPortable ]
 %
@@ -9236,6 +15212,581 @@ stream
 	^ stream ifNil: [ stream := WriteStreamPortable on: file bytes from: 1 to: file size ]
 %
 
+! Class implementation for 'NumberParser'
+
+!		Class methods for 'NumberParser'
+
+category: 'testing'
+classmethod: NumberParser
+isNumber: aStringOrStream
+
+	| stream |
+	stream := aStringOrStream readStreamPortable.
+	self parse: stream onError: [ ^ false ].
+	^ stream atEnd
+%
+
+category: 'instance creation'
+classmethod: NumberParser
+on: aStringOrStream
+	^self new on: aStringOrStream
+%
+
+category: 'instance creation'
+classmethod: NumberParser
+parse: aStringOrStream 
+	^self new
+		on: aStringOrStream;
+		nextNumber
+%
+
+category: 'instance creation'
+classmethod: NumberParser
+parse: aStringOrStream onError: failBlock 
+	^(self new)
+		on: aStringOrStream;
+		failBlock: failBlock;
+		nextNumber
+%
+
+category: 'instance creation'
+classmethod: NumberParser
+squeezeNumberOutOfString: stringOrStream
+	"Try and find a number in this string. First, look if the string 
+	starts with a number. Then, see if it ends with a number. Then,
+	remove a character from the front and see if the remaining 
+	string makes a number. Repeat the process until no characters
+	are left or the number has been found. As soon as a number is
+	found, it is returned. Otherwise, the method fails."
+	^ self squeezeNumberOutOfString: stringOrStream onError: [self error: 'Reading a number failed']
+%
+
+category: 'instance creation'
+classmethod: NumberParser
+squeezeNumberOutOfString: stringOrStream onError: errorBlock
+	"Try and find a number in this string. First, look if the string 
+	starts with a number. Then, see if it ends with a number. Then,
+	remove a character from the front and see if the remaining 
+	string makes a number. Repeat the process until no characters
+	are left or the number has been found. As soon as a number is
+	found, it is returned. Otherwise, the method fails."
+	
+	| string |
+
+	string := stringOrStream.
+				
+	stringOrStream size timesRepeat: [
+		(self parse: string onError: [ nil ])
+			ifNotNil: [ :result| ^ result ].
+		string := string allButFirst ].
+	
+	^ errorBlock value
+%
+
+!		Instance methods for 'NumberParser'
+
+category: 'accessing'
+method: NumberParser
+allowPlusSign
+	"return a boolean indicating if plus sign is allowed or not"
+
+	^false
+%
+
+category: 'accessing'
+method: NumberParser
+allowPlusSignInExponent
+	"return a boolean indicating if plus sign is allowed or not in exponent"
+
+	^self allowPlusSign
+%
+
+category: 'error'
+method: NumberParser
+expected: aString 
+	| errorString |
+	errorString := aString , ' expected'.
+	requestor isNil
+		ifFalse: [requestor
+				notify: errorString
+				at: sourceStream position + 1
+				in: sourceStream].
+	failBlock ifNotNil: [^failBlock cull: errorString cull: sourceStream position + 1].
+	self error: 'Reading a number failed: ' , errorString
+%
+
+category: 'accessing'
+method: NumberParser
+exponentLetters
+	"answer the list of possible exponents for Numbers.
+	Note: this parser will not honour precision attached to the exponent.
+	different exponent do not lead to different precisions.
+	only IEEE 754 floating point numbers will be created"
+	
+	^'edq'
+%
+
+category: 'error'
+method: NumberParser
+fail
+	failBlock ifNotNil: [^failBlock value].
+	self error: 'Reading a number failed'
+%
+
+category: 'accessing'
+method: NumberParser
+failBlock: aBlockOrNil
+	failBlock := aBlockOrNil
+%
+
+category: 'parsing-private'
+method: NumberParser
+makeFloatFromMantissa: m exponent: k base: aRadix 
+	"Convert infinite precision arithmetic into Floating point.
+	This alogrithm rely on correct IEEE rounding mode
+	being implemented in Integer>>asFloat and Fraction>>asFloat"
+
+	^(k positive
+		ifTrue: [m * (aRadix raisedToInteger: k)]
+		ifFalse: [Fraction numerator: m denominator: (aRadix raisedToInteger: k negated)]) asFloat
+%
+
+category: 'parsing-private'
+method: NumberParser
+makeIntegerOrScaledIntegerOrFloat
+	"at this point, there is no digit, nor fractionPart.
+	maybe it can be a scaled decimal with fraction omitted...
+	integer with negative exponent can be floats not fractions"
+	
+	neg
+		ifTrue: [integerPart := integerPart negated].
+	self readExponent ifTrue:
+		["Check that the result is an integer, otherwise answer a Float.  Fractions are /not/ valid literals."
+		 (exponent >= 0 or: [(integerPart * (base raisedToInteger: exponent)) _isInteger]) ifFalse:
+			[base := base asFloat].
+		^integerPart * (base raisedToInteger: exponent)].
+	(self readScaleWithDefaultNumberOfDigits: 0)
+		ifTrue: [^integerPart asScaledDecimal: scale].
+	^ integerPart
+%
+
+category: 'parsing-private'
+method: NumberParser
+makeScaledDecimalWithNumberOfNonZeroFractionDigits: numberOfNonZeroFractionDigits andNumberOfTrailingZeroInFractionPart: numberOfTrailingZeroInFractionPart
+	"at this point integerPart fractionPart and scale have been read out (in inst var).
+	Form a ScaledDecimal.
+	Care of eliminating trailing zeroes from the fractionPart"
+	
+	| decimalMultiplier decimalFraction |
+	decimalMultiplier := base raisedToInteger: numberOfNonZeroFractionDigits.
+	decimalFraction := integerPart * decimalMultiplier + (fractionPart // (base raisedTo: numberOfTrailingZeroInFractionPart)) / decimalMultiplier.
+	neg
+		ifTrue: [decimalFraction := decimalFraction negated].
+	^decimalFraction asScaledDecimal: scale
+%
+
+category: 'parsing-large int'
+method: NumberParser
+nextElementaryLargeIntegerBase: aRadix
+	"Form an unsigned integer with incoming digits from sourceStream.
+	Return this integer, or zero if no digits found.
+	Stop reading if end of digits or if a LargeInteger is formed.
+	Count the number of digits and the position of lastNonZero digit and store them in instVar."
+
+	| value digit char |
+	value := 0.
+	nDigits := 0.
+	lastNonZero := 0.
+	[value isLarge or: [(char := sourceStream next) isNil
+		or: [digit := char numberParserDigitalValue.
+			(0 > digit or: [digit >= aRadix])
+				and: [sourceStream skip: -1.
+					true]]]]
+		whileFalse: [
+			nDigits := nDigits + 1.
+			0 = digit
+				ifFalse: [lastNonZero := nDigits].
+			value := value * aRadix + digit].
+	^value
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextFraction
+	| numerator denominator |
+	numerator := self nextInteger.
+	(sourceStream peekFor: $/) ifFalse: [^numerator].
+	denominator := self nextInteger.
+	^numerator / denominator
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextInteger
+	"Main method for reading an Integer.
+	This won't try to read a Float nor a ScaledDecimal."
+	
+	base := 10.
+	neg := self peekSignIsMinus.
+	integerPart := self nextUnsignedIntegerOrNilBase: base.
+	integerPart ifNil: [self fail].
+	(sourceStream peekFor: $r)
+		ifTrue: ["<base>r<integer>"
+			(base := integerPart) < 2
+				ifTrue: ["A radix currently need to be greater than 1, ungobble the r and return the integer part"
+					sourceStream skip: -1.
+					^neg
+						ifTrue: [base negated]
+						ifFalse: [base]].
+			self peekSignIsMinus ifTrue: [neg := neg not].
+			integerPart := self nextUnsignedIntegerOrNilBase: base.
+			integerPart ifNil: [self fail]].
+	neg
+		ifTrue: [integerPart := integerPart negated].
+	self readExponent
+		ifTrue: [^integerPart * (base raisedToInteger: exponent)].
+	^ integerPart
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextIntegerBase: aRadix
+	"Form an integer with following digits.
+	Fail if no digit found"
+	
+	| isNeg value |
+	isNeg := self peekSignIsMinus.
+	value := self nextUnsignedIntegerBase: aRadix.
+	^isNeg
+		ifTrue: [value negated]
+		ifFalse: [value]
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextIntegerBase: aRadix ifFail: aBlock
+	"Form an integer with optional sign and following digits from sourceStream."
+	
+	| isNeg value |
+	isNeg := self peekSignIsMinus.
+	value := self nextUnsignedIntegerOrNilBase: aRadix.
+	value ifNil: [^aBlock value].
+	^isNeg
+		ifTrue: [value negated]
+		ifFalse: [value]
+%
+
+category: 'parsing-large int'
+method: NumberParser
+nextLargeIntegerBase: aRadix nPackets: nPackets 
+	"Form a Large integer with incoming digits from sourceStream.
+	Return this integer, or zero if no digits found.
+	Stop reading when no more digits or when nPackets elementary LargeInteger have been encountered.
+	Count the number of digits and the lastNonZero digit and store them in instVar"
+	
+	| high nDigitsHigh lastNonZeroHigh low nDigitsLow halfPackets |
+	halfPackets := nPackets bitShift: -1.
+	halfPackets = 0 ifTrue: [^self nextElementaryLargeIntegerBase: aRadix].
+	high := self nextLargeIntegerBase: aRadix nPackets: halfPackets.
+	high isLarge ifFalse: [^high].
+	nDigitsHigh := nDigits.
+	lastNonZeroHigh := lastNonZero.
+	low := self nextLargeIntegerBase: aRadix nPackets: halfPackets.
+	nDigitsLow := nDigits.
+	nDigits := nDigitsHigh + nDigitsLow.
+	lastNonZero := lastNonZero = 0
+		ifTrue: [lastNonZeroHigh]
+		ifFalse: [lastNonZero + nDigitsHigh].
+	^high * (aRadix raisedToInteger: nDigitsLow) + low
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextNumber
+	"main method for reading a number.
+	This one can read Float Integer and ScaledDecimal"
+	
+	| numberOfTrailingZeroInIntegerPart |
+	base := 10.
+	neg := self peekSignIsMinus.
+	integerPart := self nextUnsignedIntegerOrNilBase: base.
+	integerPart ifNil: [
+		"This is not a regular number beginning with a digit
+		It is time to check for exceptional condition NaN and Infinity"
+		^self readNamedFloatOrFail].
+	numberOfTrailingZeroInIntegerPart := nDigits - lastNonZero.
+	(sourceStream peekFor: $r)
+		ifTrue: ["<base>r<integer>"
+			(base := integerPart) < 2
+				ifTrue: [
+					sourceStream skip: -1.
+					^ self expected: 'an integer greater than 1 as valid radix'].
+			self peekSignIsMinus
+				ifTrue: [neg := neg not].
+			integerPart := self nextUnsignedIntegerBase: base.
+			numberOfTrailingZeroInIntegerPart := nDigits - lastNonZero].
+	^ (sourceStream peekFor: $.)
+		ifTrue: [self readNumberWithFractionPartNumberOfTrailingZeroInIntegerPart: numberOfTrailingZeroInIntegerPart]
+		ifFalse: [self makeIntegerOrScaledIntegerOrFloat]
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextNumberBase: b
+	"Method for reading a number without radix prefix.
+	This one can read Float Integer and ScaledDecimal"
+	
+	| numberOfTrailingZeroInIntegerPart |
+	base := b.
+	neg := sourceStream peekFor: $-.
+	integerPart := self nextUnsignedIntegerOrNilBase: base.
+	integerPart ifNil: [
+		"This is not a regular number beginning with a digit
+		It is time to check for exceptional condition NaN and Infinity"
+		^self readNamedFloatOrFail].
+	numberOfTrailingZeroInIntegerPart := nDigits - lastNonZero.
+	^ (sourceStream peekFor: $.)
+		ifTrue: [self readNumberWithFractionPartNumberOfTrailingZeroInIntegerPart: numberOfTrailingZeroInIntegerPart]
+		ifFalse: [self makeIntegerOrScaledIntegerOrFloat]
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextScaledDecimal
+	"Main method for reading a (scaled) decimal number.
+	Good Gracious, do not accept a decimal in another base than 10!
+	In other words, do not accept radix notation like 2r1.1, even not 10r5.3
+	Do not accept exponent notation neither, like 1.0e-3"
+	
+	| numberOfNonZeroFractionDigits numberOfTrailingZeroInFractionPart |
+	base := 10.
+	neg := sourceStream peekFor: $-.
+	integerPart := self nextUnsignedIntegerBase: base.
+	(sourceStream peekFor: $.)
+		ifTrue: [fractionPart := self nextUnsignedIntegerOrNilBase: base.
+			fractionPart ifNil: ["Oops, the decimal point seems not part of this number"
+							sourceStream skip: -1.
+							^ neg
+								ifTrue: [integerPart negated asScaledDecimal: 0]
+								ifFalse: [integerPart asScaledDecimal: 0]].
+			numberOfNonZeroFractionDigits := lastNonZero.
+			numberOfTrailingZeroInFractionPart := nDigits - lastNonZero.
+			(self readScaleWithDefaultNumberOfDigits: nDigits)
+				ifFalse: ["No scale were provided. use number of digits after decimal point as scale"
+					scale := nDigits].
+			^self makeScaledDecimalWithNumberOfNonZeroFractionDigits: numberOfNonZeroFractionDigits andNumberOfTrailingZeroInFractionPart: numberOfTrailingZeroInFractionPart].
+	self readScaleWithDefaultNumberOfDigits: 0.
+	neg	ifTrue: [integerPart := integerPart negated].
+	^integerPart asScaledDecimal: scale
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextUnsignedIntegerBase: aRadix 
+	"Form an unsigned integer with incoming digits from sourceStream.
+	Fail if no digit found.
+	Count the number of digits and the lastNonZero digit and store int in instVar "
+	
+	| value |
+	value := self nextUnsignedIntegerOrNilBase: aRadix.
+	value ifNil: [^self expected: ('a digit between 0 and ' copyWith: (Character digitValue: aRadix - 1))].
+	^value
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextUnsignedIntegerBase: aRadix ifFail: errorBlock
+	"Form an unsigned integer with incoming digits from sourceStream.
+	Answer this integer, or execute errorBlock if no digit found.
+	Count the number of digits and the position of lastNonZero digit and store them in instVar"
+	
+	| value |
+	value := self nextUnsignedIntegerOrNilBase: aRadix.
+	value ifNil: [^errorBlock value].
+	^value
+%
+
+category: 'parsing-public'
+method: NumberParser
+nextUnsignedIntegerOrNilBase: aRadix
+	"Form an unsigned integer with incoming digits from sourceStream.
+	Answer this integer, or nil if no digit found.
+	Count the number of digits and the position of lastNonZero digit and store them in instVar"
+	
+	| nPackets high nDigitsHigh lastNonZeroHigh low |
+	"read no more digits than one elementary LargeInteger"
+	high :=  self nextElementaryLargeIntegerBase: aRadix.
+	nDigits = 0 ifTrue: [^nil].
+	
+	"Not enough digits to form a LargeInteger, stop iteration"
+	high isLarge ifFalse: [^high].
+
+	"We now have to engage arithmetic with LargeInteger
+	Decompose the integer in a high and low packets of growing size:"
+	nPackets := 1.
+	nDigitsHigh := nDigits.
+	lastNonZeroHigh := lastNonZero.
+	[
+	low := self nextLargeIntegerBase: aRadix nPackets: nPackets .
+	high := high * (aRadix raisedToInteger: nDigits) + low.
+	lastNonZero = 0 ifFalse: [lastNonZeroHigh := lastNonZero + nDigitsHigh].
+	nDigitsHigh := nDigitsHigh + nDigits.
+	low isLarge]
+		whileTrue: [nPackets := nPackets * 2].
+
+	nDigits := nDigitsHigh.
+	lastNonZero := lastNonZeroHigh.
+	^high
+%
+
+category: 'initialize-release'
+method: NumberParser
+on: aStringOrStream 
+	sourceStream := aStringOrStream isString 
+		ifTrue: [ aStringOrStream readStreamPortable ]
+		ifFalse: [ aStringOrStream ].
+	base := 10.
+	neg := false.
+	integerPart := fractionPart := exponent := scale := 0.
+	requestor := failBlock := nil
+%
+
+category: 'parsing-private'
+method: NumberParser
+peekSignIsMinus
+	"Peek an optional sign from sourceStream.
+	Answer true if it is minus sign"
+
+	| isMinus |
+	isMinus := sourceStream peekFor: $-.
+	isMinus ifFalse: [self allowPlusSign ifTrue: [sourceStream peekFor: $+]].
+	^isMinus
+%
+
+category: 'parsing-private'
+method: NumberParser
+readExponent
+	"read the exponent if any (stored in instVar).
+	Answer true if found, answer false if none.
+	If exponent letter is not followed by a digit,
+	this is not considered as an error.
+	Exponent are always read in base 10."
+
+	| eneg epos |
+	exponent := 0.
+	sourceStream atEnd
+		ifTrue: [ ^ false ].
+	(self exponentLetters includes: sourceStream peek)
+		ifFalse: [ ^ false ].
+	sourceStream next.
+	eneg := sourceStream peekFor: $-.
+	epos := eneg not
+		and: [ self allowPlusSignInExponent and: [ sourceStream peekFor: $+ ] ].
+	exponent := self nextUnsignedIntegerOrNilBase: 10.
+	exponent
+		ifNil:
+			[ "Oops, there was no digit after the exponent letter.Ungobble the letter"
+			exponent := 0.
+			sourceStream
+				skip:
+					((eneg or: [ epos ])
+						ifTrue: [ -2 ]
+						ifFalse: [ -1 ]).
+			^ false ].
+	eneg
+		ifTrue: [ exponent := exponent negated ].
+	exponent abs > 1023
+		ifTrue:
+			[ "Number literals should have a maximun of 1023 and a minumum of -1022 as exponent, in exponential notation"
+			self fail ].
+	^ true
+%
+
+category: 'parsing-private'
+method: NumberParser
+readNamedFloatOrFail
+	"This method is used when there is no digit encountered:
+	It try and read a named Float NaN or Infinity.
+	Negative sign for -Infinity has been read before sending this method, and is indicated in the neg inst.var.
+	Fail if no named Float is found"
+		
+	neg ifFalse: [(sourceStream nextMatchAll: 'NaN')
+			ifTrue: [^ Float nan]].
+	(sourceStream nextMatchAll: 'Infinity')
+		ifTrue: [^ neg
+			ifTrue: [Float infinity negated]
+			ifFalse: [Float infinity]].
+	^self expected: 'a digit between 0 and ' , (String with: (Character digitValue: base - 1))
+%
+
+category: 'parsing-private'
+method: NumberParser
+readNumberWithFractionPartNumberOfTrailingZeroInIntegerPart: numberOfTrailingZeroInIntegerPart
+	"at this stage, sign integerPart and a decimal point have been read.
+	try and form a number with a fractionPart"
+	
+	| numberOfNonZeroFractionDigits numberOfTrailingZeroInFractionPart mantissa value |
+	fractionPart := self nextUnsignedIntegerOrNilBase: base.
+	fractionPart ifNil: ["No fractionPart found,ungobble the decimal point and return the integerPart"
+					sourceStream skip: -1.
+					^ neg
+						ifTrue: [integerPart negated]
+						ifFalse: [integerPart]].
+	numberOfNonZeroFractionDigits := lastNonZero.
+	numberOfTrailingZeroInFractionPart := nDigits - lastNonZero.
+	self readExponent
+		ifFalse: [(self readScaleWithDefaultNumberOfDigits: nDigits)
+				ifTrue: [^self makeScaledDecimalWithNumberOfNonZeroFractionDigits: numberOfNonZeroFractionDigits
+					andNumberOfTrailingZeroInFractionPart: numberOfTrailingZeroInFractionPart]].
+
+	fractionPart = 0
+		ifTrue: [mantissa := integerPart
+						// (base raisedToInteger: numberOfTrailingZeroInIntegerPart).
+			exponent := exponent + numberOfTrailingZeroInIntegerPart]
+		ifFalse: [mantissa := integerPart
+						* (base raisedToInteger: numberOfNonZeroFractionDigits) + (fractionPart // (base raisedToInteger: numberOfTrailingZeroInFractionPart)).
+			exponent := exponent - numberOfNonZeroFractionDigits].
+
+	value := self makeFloatFromMantissa: mantissa exponent: exponent base: base.
+	^ neg
+		ifTrue: [value = 0
+				ifTrue: [Float negativeZero]
+				ifFalse: [value negated]]
+		ifFalse: [value]
+%
+
+category: 'parsing-private'
+method: NumberParser
+readScaleWithDefaultNumberOfDigits: anInteger
+	"Read the scale if any and store it into scale instance Variable.
+	Answer true if found, answer false if none.
+	The scale is specified by letter s, optionnally followed by a positive integer in base 10.
+	If no integer is specified, that means using as many digits as provided after the fraction separator, as provided by parameter anInteger.
+	A letter s followed by another letter is not considered as a scale specification, because it could be part of a message."
+
+	scale := 0.
+	sourceStream atEnd
+		ifTrue: [ ^ false ].
+	(sourceStream peekFor: $s)
+		ifFalse: [ ^ false ].
+	scale := self nextUnsignedIntegerOrNilBase: 10.
+	scale
+		ifNil: [ 
+			scale := anInteger.
+			(sourceStream peek ifNil: [ false ] ifNotNil: [ :nextChar | nextChar isLetter ])
+				ifTrue: [ 
+					sourceStream skip: -1.	"ungobble the s"
+					^ false ]
+				ifFalse: [ ^ true ] ].
+	^ true
+%
+
+category: 'accessing'
+method: NumberParser
+requestor: anObjectOrNil
+	requestor := anObjectOrNil
+%
+
 ! Class implementation for 'Path'
 
 !		Class methods for 'Path'
@@ -9405,7 +15956,8 @@ removeRedundantSegments: segments
 	"Remove redundant elements ('.' and '') from the supplied segments"
 
 	^segments select:
-		[ :segment | segment notEmpty and: [ segment ~= '.' ] ]
+		[ :segment | segment notEmpty and: [
+				segment ~= (segment isUnicodeString ifTrue: ['.' asUnicodeString] ifFalse: ['.'])] ]
 %
 
 category: 'instance creation'
@@ -9970,6 +16522,17 @@ from: aString delimiter: aDelimiterCharater
 
 !		Instance methods for 'AbsolutePath'
 
+category: 'printing'
+method: AbsolutePath
+asString
+  "used by topaz stack display"
+  | str sz |
+  str := '/' copy .
+  1 to: (sz := self size) - 1 do:[:j | str addAll: (self at: j) ; add: $/ ].
+  str add: (self at: sz ).
+  ^ str
+%
+
 category: 'testing'
 method: AbsolutePath
 isAbsolute
@@ -10063,6 +16626,2762 @@ method: RelativePath
 printOn: aStream delimiter: aCharacter
 	self isWorkingDirectory ifTrue: [aStream nextPut: $.. ^ self].
 	super printOn: aStream delimiter: aCharacter
+%
+
+! Class implementation for 'PosixErrorGroup'
+
+!		Class methods for 'PosixErrorGroup'
+
+category: 'constants'
+classmethod: PosixErrorGroup
+ioFileErrorClass
+	^FileIOError
+%
+
+category: 'instance creation'
+classmethod: PosixErrorGroup
+new
+	^self basicNew
+		initialize;
+		yourself
+%
+
+category: 'constants'
+classmethod: PosixErrorGroup
+posixErrorNames
+	^#()
+%
+
+!		Instance methods for 'PosixErrorGroup'
+
+category: 'accessing'
+method: PosixErrorGroup
+errorClasses
+	^errorClasses
+%
+
+category: 'accessing'
+method: PosixErrorGroup
+errorClasses: aCollection
+	errorClasses := aCollection
+%
+
+category: 'errors - default'
+method: PosixErrorGroup
+errorClassForDefaultPlatformError: anErrorNumber fileReference: aFileReference
+
+	^self errorClassForErrorNumber: anErrorNumber
+%
+
+category: 'errors - default'
+method: PosixErrorGroup
+errorClassForDefaultPlatformError: anErrorNumber fileReference: aFileReference options: aFileOptions
+
+	^self errorClassForErrorNumber: anErrorNumber
+%
+
+category: 'errors - default'
+method: PosixErrorGroup
+errorClassForDefaultPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+
+	^self errorClassForErrorNumber: anErrorNumber
+%
+
+category: 'private'
+method: PosixErrorGroup
+errorClassForErrorNumber: anErrorNumber
+	^self errorClasses detect: [:ea | ea defaultErrorNumber = anErrorNumber] ifNone: [self error: 'Unexpected Posix Error was discoverd']
+%
+
+category: 'api'
+method: PosixErrorGroup
+errorClassForErrorNumber: anErrorNumber fileReference: aFileReference
+
+	^aFileReference store errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: self
+%
+
+category: 'api'
+method: PosixErrorGroup
+errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: aFileOptions
+
+	^aFileReference store errorClassForErrorNumber: anErrorNumber fileReference: aFileReference  options: aFileOptions errorGroup: self
+%
+
+category: 'api'
+method: PosixErrorGroup
+errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+
+	^aNewFileReference store errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference errorGroup: self
+%
+
+category: 'errors - windows'
+method: PosixErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	self subclassResponsibility
+%
+
+category: 'errors - windows'
+method: PosixErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference options: fileOptions
+
+	self subclassResponsibility
+%
+
+category: 'errors - windows'
+method: PosixErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+
+	self subclassResponsibility
+%
+
+category: 'private'
+method: PosixErrorGroup
+errorClassWithPosixName: aPosixName
+	^self errorClasses detect: [:ea | ea posixName = aPosixName] ifNone: [nil]
+%
+
+category: 'api'
+method: PosixErrorGroup
+errorForNumber: anErrorNumber fileReference: aFileReference
+	| aFilePosixErrorClass |
+	aFilePosixErrorClass := self errorClassForErrorNumber: anErrorNumber fileReference: aFileReference.
+	^(aFilePosixErrorClass reference: aFileReference)
+		platformErrorNumber: anErrorNumber;
+		errorGroupName: self class name asString;
+		yourself
+%
+
+category: 'api'
+method: PosixErrorGroup
+errorForNumber: anErrorNumber fileReference: aFileReference options: aFileOptions
+	| aFilePosixErrorClass |
+	aFilePosixErrorClass := self errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: aFileOptions.
+	^(aFilePosixErrorClass reference: aFileReference)
+		platformErrorNumber: anErrorNumber;
+		errorGroupName: self class name asString;
+		options: aFileOptions
+%
+
+category: 'api'
+method: PosixErrorGroup
+errorForNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+	| aFilePosixErrorClass |
+	aFilePosixErrorClass := self errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference.
+	^(aFilePosixErrorClass reference: aNewFileReference)
+		platformErrorNumber: anErrorNumber;
+		sourceReference: anOldFileReference;
+		errorGroupName: self class name asString;
+		yourself
+%
+
+category: 'initialization'
+method: PosixErrorGroup
+initialize
+	self initializeErrorClasses
+%
+
+category: 'initialization'
+method: PosixErrorGroup
+initializeErrorClasses
+	errorClasses := OrderedCollection new.
+	self class posixErrorNames do: [:ea | self errorClasses add: (FilePosixError classWithPosixName: ea)]
+%
+
+category: 'constants'
+method: PosixErrorGroup
+ioFileErrorClass
+	^self class ioFileErrorClass
+%
+
+category: 'private'
+method: PosixErrorGroup
+posixErrorNamed: aPosixName
+	^self errorClassWithPosixName: aPosixName
+%
+
+category: 'constants'
+method: PosixErrorGroup
+posixErrorNames
+	^self class posixErrorNames
+%
+
+category: 'initialization'
+method: PosixErrorGroup
+selector: aSelector errorNames: posixErrorNames
+
+	self selector: aSelector.
+	posixErrorNames collect: [:ea | self errorClasses add: (FilePosixError classWithPosixName: ea)]
+%
+
+category: 'api'
+method: PosixErrorGroup
+signalErrorNumber: anErrorNumber fileReference: aFileReference
+	(self errorForNumber: anErrorNumber fileReference: aFileReference) signal
+%
+
+category: 'api'
+method: PosixErrorGroup
+signalErrorNumber: anErrorNumber fileReference: aFileReference options: aFileOptions
+	(self errorForNumber: anErrorNumber fileReference: aFileReference options: aFileOptions) signal
+%
+
+category: 'api'
+method: PosixErrorGroup
+signalErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+	(self errorForNumber: anErrorNumber  newFileReference: aNewFileReference oldFileReference: anOldFileReference) signal
+%
+
+! Class implementation for 'ChangeDirectoryErrorGroup'
+
+!		Class methods for 'ChangeDirectoryErrorGroup'
+
+category: 'constants'
+classmethod: ChangeDirectoryErrorGroup
+posixErrorNames
+	^#('EACCES' 'ENOENT' 'EIO')
+%
+
+!		Instance methods for 'ChangeDirectoryErrorGroup'
+
+category: 'errors - windows'
+method: ChangeDirectoryErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	((#(161 2 3 5) includes: anErrorNumber) and: [aFileReference isDirectory not])
+		ifTrue: [^self posixErrorNamed: 'ENOENT'].
+	((#(0 3 123 267 87) includes: anErrorNumber) and: [aFileReference isDirectory])
+		ifTrue: [^self posixErrorNamed: 'EACCES'].
+	^self ioFileErrorClass
+%
+
+category: 'constants'
+method: ChangeDirectoryErrorGroup
+posixErrorNames
+	^#('EACCES' 'ENOENT' 'EIO')
+%
+
+! Class implementation for 'ChangeModeErrorGroup'
+
+!		Class methods for 'ChangeModeErrorGroup'
+
+category: 'constants'
+classmethod: ChangeModeErrorGroup
+posixErrorNames
+	^#('EACCES' 'ENOENT' 'EPERM' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'ChangeModeErrorGroup'
+
+category: 'errors - windows'
+method: ChangeModeErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+	"#isInUse - needs to be implemented - ^(CfsStat stat: path) isCfsError not -
+		Answer true iff the name specified by path is in use (i.e. it is a file or directory).
+		Otherwise, answer false."
+	(anErrorNumber = 2 and:[aFileReference exists not]) ifTrue: [^self posixErrorNamed: 'ENOENT'].
+	anErrorNumber = 123 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'CloseDirectoryErrorGroup'
+
+!		Class methods for 'CloseDirectoryErrorGroup'
+
+category: 'constants'
+classmethod: CloseDirectoryErrorGroup
+posixErrorNames
+	^#('EBADF'  'EIO')
+%
+
+!		Instance methods for 'CloseDirectoryErrorGroup'
+
+category: 'errors - windows'
+method: CloseDirectoryErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'CloseFileErrorGroup'
+
+!		Class methods for 'CloseFileErrorGroup'
+
+category: 'constants'
+classmethod: CloseFileErrorGroup
+posixErrorNames
+	^#('EBADF'  'EIO')
+%
+
+!		Instance methods for 'CloseFileErrorGroup'
+
+category: 'errors - windows'
+method: CloseFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'CopyFileErrorGroup'
+
+!		Class methods for 'CopyFileErrorGroup'
+
+category: 'constants'
+classmethod: CopyFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBUSY' 'EEXIST' 'EIO' 'EISDIR' 'ENOENT' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'CopyFileErrorGroup'
+
+category: 'errors - windows'
+method: CopyFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+
+	(#(3 21) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 5 ifTrue: [
+		aNewFileReference isDirectory ifTrue: [^self posixErrorNamed: 'EEXIST'].
+		aNewFileReference isFile ifTrue: [^self posixErrorNamed: 'EEXIST'].
+		anOldFileReference exists ifFalse: [^self posixErrorNamed: 'ENOENT'].
+		anOldFileReference isFile
+			ifTrue: [^self posixErrorNamed: 'EACCES']
+			ifFalse: [^self posixErrorNamed: 'EISDIR']. ].
+	(#(16 32 33) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EBUSY'].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	anErrorNumber = 80 ifTrue: [^self posixErrorNamed: 'EEXIST'].
+	anErrorNumber = 87 ifTrue: [
+		^anOldFileReference exists not
+			ifTrue: [self posixErrorNamed: 'ENOENT']
+			ifFalse: [self posixErrorNamed: 'EACCES']].
+	anErrorNumber = 123 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 161 ifTrue: [^self posixErrorNamed: 'ENOENT'].
+	anErrorNumber = 183 ifTrue: [^self posixErrorNamed: 'EEXIST'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'FileControlErrorGroup'
+
+!		Class methods for 'FileControlErrorGroup'
+
+category: 'constants'
+classmethod: FileControlErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBADF' 'EINVAL'  'EIO')
+%
+
+!		Instance methods for 'FileControlErrorGroup'
+
+category: 'errors - windows'
+method: FileControlErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 5 ifTrue: [ ^self posixErrorNamed: 'EACCES' ].
+	anErrorNumber = 6 ifTrue: [ ^self posixErrorNamed: 'EBADF' ].
+	anErrorNumber = 7 ifTrue: [ ^self posixErrorNamed: 'EINVAL' ].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'FileSeekErrorGroup'
+
+!		Class methods for 'FileSeekErrorGroup'
+
+category: 'constants'
+classmethod: FileSeekErrorGroup
+posixErrorNames
+	^#('EBADF' 'EINVAL'  'EIO')
+%
+
+!		Instance methods for 'FileSeekErrorGroup'
+
+category: 'errors - windows'
+method: FileSeekErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	(#(87 131) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EINVAL'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'FileSizeErrorGroup'
+
+!		Class methods for 'FileSizeErrorGroup'
+
+category: 'constants'
+classmethod: FileSizeErrorGroup
+posixErrorNames
+	^#('EBADF'  'EIO')
+%
+
+!		Instance methods for 'FileSizeErrorGroup'
+
+category: 'api'
+method: FileSizeErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'FlushErrorGroup'
+
+!		Class methods for 'FlushErrorGroup'
+
+category: 'constants'
+classmethod: FlushErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBADF'  'EIO')
+%
+
+!		Instance methods for 'FlushErrorGroup'
+
+category: 'errors - windows'
+method: FlushErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 5 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'FlushFileErrorGroup'
+
+!		Class methods for 'FlushFileErrorGroup'
+
+category: 'constants'
+classmethod: FlushFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBADF'  'EIO')
+%
+
+!		Instance methods for 'FlushFileErrorGroup'
+
+category: 'errors - windows'
+method: FlushFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 5 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'GetCurrentWorkingDirectoryErrorGroup'
+
+!		Instance methods for 'GetCurrentWorkingDirectoryErrorGroup'
+
+category: 'errors - windows'
+method: GetCurrentWorkingDirectoryErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'LockFileErrorGroup'
+
+!		Class methods for 'LockFileErrorGroup'
+
+category: 'constants'
+classmethod: LockFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBADF' 'EBUSY' 'EINVAL' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'LockFileErrorGroup'
+
+category: 'errors - windows'
+method: LockFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 1 ifTrue: [^self posixErrorNamed: 'EINVAL'].
+	anErrorNumber = 5 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	(#(32 33) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EBUSY'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'MakeDirectoryErrorGroup'
+
+!		Class methods for 'MakeDirectoryErrorGroup'
+
+category: 'constants'
+classmethod: MakeDirectoryErrorGroup
+posixErrorNames
+	^#('EACCES' 'EEXIST' 'ENOSPC' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'MakeDirectoryErrorGroup'
+
+category: 'errors - windows'
+method: MakeDirectoryErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 3 ifTrue: [
+		aFileReference exists
+			ifTrue: [^self posixErrorNamed: 'EEXIST']
+			ifFalse: [^self posixErrorNamed: 'EACCES'] ].
+	anErrorNumber = 5 ifTrue: [
+		aFileReference exists
+			ifTrue: [^self posixErrorNamed: 'EEXIST']
+			ifFalse: [^self posixErrorNamed: 'EACCES'] ].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	anErrorNumber = 123 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 161 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 183 ifTrue: [^self posixErrorNamed: 'EEXIST'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'OpenDirectoryErrorGroup'
+
+!		Class methods for 'OpenDirectoryErrorGroup'
+
+category: 'constants'
+classmethod: OpenDirectoryErrorGroup
+posixErrorNames
+	^#('EACCES' 'EINVAL' 'ENFILE' 'ENOENT'  'EIO')
+%
+
+!		Instance methods for 'OpenDirectoryErrorGroup'
+
+category: 'errors - windows'
+method: OpenDirectoryErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 2 ifTrue: [
+		aFileReference exists ifFalse: [^self posixErrorNamed: 'ENOENT'] ].
+	(#(3 5 123 267) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 84 ifTrue: [^self posixErrorNamed: 'ENFILE'].
+	anErrorNumber = 87 ifTrue: [^self posixErrorNamed: 'EINVAL'].
+	anErrorNumber = 161 ifTrue: [^self posixErrorNamed: 'ENOENT'].
+
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'OpenFileErrorGroup'
+
+!		Class methods for 'OpenFileErrorGroup'
+
+category: 'constants'
+classmethod: OpenFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBUSY' 'EEXIST' 'EINVAL' 'ENFILE' 'ENOENT' 'ENOSPC' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'OpenFileErrorGroup'
+
+category: 'errors - windows'
+method: OpenFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference options: fileOptions
+
+	anErrorNumber = 2 ifTrue: [
+		aFileReference isDirectory
+			ifTrue: [^self posixErrorNamed: 'EACCES']
+			ifFalse: [^self posixErrorNamed: 'ENOENT']].
+	(#(3 123 161) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 4 ifTrue: [^self posixErrorNamed: 'ENFILE'].
+	(#(5 87) includes: anErrorNumber) ifTrue: [
+		aFileReference isDirectory ifTrue: [^self posixErrorNamed: 'EACCES'].
+		fileOptions hasFileTruncateFlag ifTrue: [^self posixErrorNamed: 'EINVAL'].
+		fileOptions hasFileCreateFlag ifTrue: [^self posixErrorNamed: 'EACCES'].
+		aFileReference isFile ifTrue: [^self posixErrorNamed: 'EEXIST'].
+		^self posixErrorNamed: 'EINVAL'].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	(#(32 33) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EBUSY'].
+	anErrorNumber = 36 ifTrue: [^self posixErrorNamed: 'ENFILE']. "no more buffers available. Too many in use"
+	anErrorNumber = 80   "file exists"
+		ifTrue: [
+			fileOptions hasExclsiveFlag
+				ifTrue: [^self posixErrorNamed: 'EACCES']
+				ifFalse: [^self posixErrorNamed: 'EEXIST'] ].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'ReadDirectoryErrorGroup'
+
+!		Class methods for 'ReadDirectoryErrorGroup'
+
+category: 'constants'
+classmethod: ReadDirectoryErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBADF'  'EIO')
+%
+
+!		Instance methods for 'ReadDirectoryErrorGroup'
+
+category: 'api'
+method: ReadDirectoryErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 3 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 7 ifTrue: [^self posixErrorNamed: 'EINVAL'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'ReadFileErrorGroup'
+
+!		Class methods for 'ReadFileErrorGroup'
+
+category: 'constants'
+classmethod: ReadFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBADF' 'EBUSY' 'EINVAL'  'EIO')
+%
+
+!		Instance methods for 'ReadFileErrorGroup'
+
+category: 'errors - windows'
+method: ReadFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	(#(5 112) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	anErrorNumber = 7 ifTrue: [^self posixErrorNamed: 'EINVAL'].
+	anErrorNumber = 33 ifTrue: [^self posixErrorNamed: 'EBUSY'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'RemoveDirectoryErrorGroup'
+
+!		Class methods for 'RemoveDirectoryErrorGroup'
+
+category: 'constants'
+classmethod: RemoveDirectoryErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBUSY' 'EEXIST' 'EINVAL' 'ENOENT' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'RemoveDirectoryErrorGroup'
+
+category: 'errors - windows'
+method: RemoveDirectoryErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aDirectoryReference
+
+	anErrorNumber = 2 ifTrue: [^self posixErrorNamed: 'ENOENT'].
+	anErrorNumber = 3 ifTrue: [
+		aDirectoryReference exists not ifTrue: [^self posixErrorNamed: 'ENOENT'].
+		aDirectoryReference entries isEmpty ifTrue: [^self posixErrorNamed: 'EEXIST'].
+		^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 5 ifTrue: [
+		aDirectoryReference exists not ifTrue: [^self posixErrorNamed: 'ENOENT'].
+		aDirectoryReference entries isEmpty ifTrue: [^self posixErrorNamed: 'EEXIST'].
+		^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 16 ifTrue: [^self posixErrorNamed: 'EBUSY'].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	anErrorNumber = 123 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 145 ifTrue: [^self posixErrorNamed: 'EEXIST'].
+	anErrorNumber = 161 ifTrue: [^self posixErrorNamed: 'ENOENT'].
+	anErrorNumber = 267 ifTrue: [^self posixErrorNamed: 'ENOENT'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'RemoveFileErrorGroup'
+
+!		Class methods for 'RemoveFileErrorGroup'
+
+category: 'constants'
+classmethod: RemoveFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBUSY' 'EEXIST' 'EINVAL' 'EISDIR' 'ENOENT' 'EPERM' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'RemoveFileErrorGroup'
+
+category: 'errors - windows'
+method: RemoveFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	anErrorNumber = 2 ifTrue: [
+		aFileReference isDirectory
+			ifTrue: [^self posixErrorNamed: 'EISDIR']
+			ifFalse: [^self posixErrorNamed: 'ENOENT']].
+	anErrorNumber = 3 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 5 ifTrue: [
+		aFileReference isDirectory
+			ifTrue: [^self posixErrorNamed: 'EISDIR']
+			ifFalse: [^self posixErrorNamed: 'EACCES']].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	anErrorNumber = 123 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 145 ifTrue: [^self posixErrorNamed: 'EEXIST'].
+	anErrorNumber = 161 ifTrue: [^self posixErrorNamed: 'ENOENT'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'RenameErrorGroup'
+
+!		Class methods for 'RenameErrorGroup'
+
+category: 'constants'
+classmethod: RenameErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBUSY' 'EEXIST' 'EINVAL' 'ENOENT' 'ENOSPC' 'EROFS' 'EXDEV'  'EIO')
+%
+
+!		Instance methods for 'RenameErrorGroup'
+
+category: 'errors - windows'
+method: RenameErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+
+	anErrorNumber = 2 ifTrue: [
+		aNewFileReference isDirectory
+			ifTrue: [ ^self posixErrorNamed: 'EISDIR' ]
+			ifFalse: [ ^self posixErrorNamed: 'ENOENT' ] ].
+	anErrorNumber = 5 ifTrue: [
+		aNewFileReference isDirectory
+			ifTrue: [ ^self posixErrorNamed: 'EISDIR' ]
+			ifFalse: [ ^self posixErrorNamed: 'EACCES' ] ].
+	( #( 3 123 ) includes: anErrorNumber ) ifTrue: [ ^self posixErrorNamed: 'EACCES' ].
+	anErrorNumber =  19 ifTrue: [ ^self posixErrorNamed: 'EROFS' ].
+	anErrorNumber = 145 ifTrue: [ ^self posixErrorNamed: 'EEXIST' ].
+	anErrorNumber = 161 ifTrue: [ ^self posixErrorNamed: 'ENOENT' ].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'RenameFileErrorGroup'
+
+!		Class methods for 'RenameFileErrorGroup'
+
+category: 'constants'
+classmethod: RenameFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBUSY' 'EEXIST' 'EINVAL' 'ENOENT' 'ENOSPC' 'EROFS' 'EXDEV'  'EIO')
+%
+
+!		Instance methods for 'RenameFileErrorGroup'
+
+category: 'errors - windows'
+method: RenameFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+
+	anErrorNumber = 2 ifTrue: [
+		aNewFileReference isDirectory
+			ifTrue: [ ^self posixErrorNamed: 'EISDIR' ]
+			ifFalse: [ ^self posixErrorNamed: 'ENOENT' ] ].
+	anErrorNumber = 5 ifTrue: [
+		aNewFileReference isDirectory
+			ifTrue: [ ^self posixErrorNamed: 'EISDIR' ]
+			ifFalse: [ ^self posixErrorNamed: 'EACCES' ] ].
+	( #( 3 123 ) includes: anErrorNumber ) ifTrue: [ ^self posixErrorNamed: 'EACCES' ].
+	anErrorNumber =  19 ifTrue: [ ^self posixErrorNamed: 'EROFS' ].
+	anErrorNumber = 145 ifTrue: [ ^self posixErrorNamed: 'EEXIST' ].
+	anErrorNumber = 161 ifTrue: [ ^self posixErrorNamed: 'ENOENT' ].
+	anErrorNumber = 183 ifTrue: [ ^self posixErrorNamed: 'EEXIST' ].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'TouchFileErrorGroup'
+
+!		Class methods for 'TouchFileErrorGroup'
+
+category: 'constants'
+classmethod: TouchFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'ENFILE' 'ENOENT' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'TouchFileErrorGroup'
+
+category: 'api'
+method: TouchFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	(#(2 3 161) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'ENOENT'].
+	anErrorNumber = 4 ifTrue: [^self posixErrorNamed: 'ENFILE'].
+	(#(5 123) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'UnlockFileErrorGroup'
+
+!		Class methods for 'UnlockFileErrorGroup'
+
+category: 'constants'
+classmethod: UnlockFileErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBADF' 'EINVAL' 'EROFS' 'EBUSY'  'EIO')
+%
+
+!		Instance methods for 'UnlockFileErrorGroup'
+
+category: 'errors - windows'
+method: UnlockFileErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	(#(1 158) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EINVAL'].
+	anErrorNumber = 5 ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	(#(32 33) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EBUSY'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'WritingErrorGroup'
+
+!		Class methods for 'WritingErrorGroup'
+
+category: 'constants'
+classmethod: WritingErrorGroup
+posixErrorNames
+	^#('EACCES' 'EBADF' 'EBUSY' 'EINVAL' 'ENOSPC' 'EROFS'  'EIO')
+%
+
+!		Instance methods for 'WritingErrorGroup'
+
+category: 'errors - windows'
+method: WritingErrorGroup
+errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+
+	(#(5 112) includes: anErrorNumber) ifTrue: [^self posixErrorNamed: 'EACCES'].
+	anErrorNumber = 6 ifTrue: [^self posixErrorNamed: 'EBADF'].
+	anErrorNumber = 19 ifTrue: [^self posixErrorNamed: 'EROFS'].
+	anErrorNumber = 33 ifTrue: [^self posixErrorNamed: 'EBUSY'].
+	^self ioFileErrorClass
+%
+
+! Class implementation for 'PosixFlag'
+
+!		Class methods for 'PosixFlag'
+
+category: 'querry'
+classmethod: PosixFlag
+allConcretePosixFlagClasses
+	^self allSubclasses select: [:ea | ea subclasses isEmpty and: [(ea class includesSelector: #defaultPlatformValue)]]
+%
+
+category: 'accessing'
+classmethod: PosixFlag
+defaultPlatformValue
+	^self error: 'Not implmented'
+%
+
+category: 'printing'
+classmethod: PosixFlag
+posixFlagsReport
+	" PosixFlag posixFlagsReport "
+	| aStream |
+	aStream := WriteStream on: String new.
+	self reportOn: aStream indent: 0.
+	^aStream contents
+%
+
+category: 'accessing'
+classmethod: PosixFlag
+posixName
+	self subclassResponsibility
+%
+
+category: 'querry'
+classmethod: PosixFlag
+posixNamesWithClasses
+	" PosixFlag posixNamesWithClasses"
+	| aDictionary |
+	aDictionary := Dictionary new.
+	self allSubclasses do: [:ea |
+		(ea class includesSelector: #posixName) ifTrue: [aDictionary at: ea posixName put: ea] ].
+	^aDictionary
+%
+
+category: 'private'
+classmethod: PosixFlag
+reportOn: aStream indent: indent
+	| aSize aValue |
+	indent timesRepeat: [aStream tab].
+
+	aStream nextPutAll: self name asString.
+	"(45 - ((indent * 4) + self name asString size)) timesRepeat: [aStream space]."
+	aStream tab.
+
+	((self name = #PosixFlag) not and: [self class includesSelector: #posixName])
+		ifTrue: [
+			aSize := self posixName size.
+			aStream nextPutAll: self posixName].
+	"(15 - (aSize ifNil: [0])) timesRepeat: [aStream space]."
+	aStream tab.
+
+	((self name = #PosixFlag) not and: [self class includesSelector: #defaultPlatformValue])
+		ifTrue: [aValue := self defaultPlatformValue asString]
+		ifFalse: [aValue := (self subclasses isEmpty not) ifTrue: [''] ifFalse: ['value not defined']].
+	aSize :=  aValue size.
+	"(15 - aSize) timesRepeat: [aStream space]."
+	aStream tab.
+	aStream nextPutAll: aValue asString.
+
+	((self name = #PosixFlag) not and: [self class includesSelector: #windowsValue])
+		ifTrue: [
+			aSize := self windowsValue asString size.
+			"(15 - aSize) timesRepeat: [aStream space]."
+			aStream tab.
+			aStream nextPutAll: self windowsValue asString].
+
+	aStream crlf.
+
+	self subclasses do: [:ea | ea reportOn: aStream indent: indent + 1]
+%
+
+category: 'querry'
+classmethod: PosixFlag
+valueForSelector: valueSelector
+	^(self class canUnderstand: valueSelector)
+		ifTrue: [self perform: valueSelector]
+		ifFalse: [self defaultPlatformValue]
+%
+
+!		Instance methods for 'PosixFlag'
+
+category: 'accessing'
+method: PosixFlag
+parent
+	^parent
+%
+
+category: 'accessing'
+method: PosixFlag
+parent: anObject
+	parent := anObject
+%
+
+category: 'querry'
+method: PosixFlag
+posixFlagValue
+	^self store optionPlatformValueFor: self class posixName
+%
+
+category: 'querry'
+method: PosixFlag
+posixName
+	^self class posixName
+%
+
+category: 'querry'
+method: PosixFlag
+store
+	^self parent store
+%
+
+! Class implementation for 'FileCloseOnExecutionFlag'
+
+!		Class methods for 'FileCloseOnExecutionFlag'
+
+category: 'access'
+classmethod: FileCloseOnExecutionFlag
+defaultPlatformValue
+	^1
+%
+
+category: 'access'
+classmethod: FileCloseOnExecutionFlag
+posixName
+	^'FD_CLOEXEC'
+%
+
+! Class implementation for 'FileGetDescriptorFlag'
+
+!		Class methods for 'FileGetDescriptorFlag'
+
+category: 'accessing'
+classmethod: FileGetDescriptorFlag
+defaultPlatformValue
+	^1
+%
+
+category: 'accessing'
+classmethod: FileGetDescriptorFlag
+posixName
+	^'F_GETFD'
+%
+
+! Class implementation for 'FileGetLockFlag'
+
+!		Class methods for 'FileGetLockFlag'
+
+category: 'access'
+classmethod: FileGetLockFlag
+defaultPlatformValue
+	^14
+%
+
+category: 'access'
+classmethod: FileGetLockFlag
+posixName
+	^'F_GETLK'
+%
+
+! Class implementation for 'FileGetStatusFlag'
+
+!		Class methods for 'FileGetStatusFlag'
+
+category: 'access'
+classmethod: FileGetStatusFlag
+defaultPlatformValue
+	^3
+%
+
+category: 'access'
+classmethod: FileGetStatusFlag
+posixName
+	^'F_GETFL'
+%
+
+! Class implementation for 'FileSetDescriptorFlag'
+
+!		Class methods for 'FileSetDescriptorFlag'
+
+category: 'accessing'
+classmethod: FileSetDescriptorFlag
+defaultPlatformValue
+	^2
+%
+
+category: 'accessing'
+classmethod: FileSetDescriptorFlag
+posixName
+	^'F_SETFD'
+%
+
+! Class implementation for 'FileSetLockFlag'
+
+!		Class methods for 'FileSetLockFlag'
+
+category: 'accessing'
+classmethod: FileSetLockFlag
+defaultPlatformValue
+	^6
+%
+
+category: 'accessing'
+classmethod: FileSetLockFlag
+posixName
+	^'F_SETLK'
+%
+
+! Class implementation for 'FileSetLockWaitFlag'
+
+!		Class methods for 'FileSetLockWaitFlag'
+
+category: 'accessing'
+classmethod: FileSetLockWaitFlag
+defaultPlatformValue
+	^7
+%
+
+category: 'accessing'
+classmethod: FileSetLockWaitFlag
+posixName
+	^'F_SETLKW'
+%
+
+! Class implementation for 'FileSetStatusFlag'
+
+!		Class methods for 'FileSetStatusFlag'
+
+category: 'accessing'
+classmethod: FileSetStatusFlag
+defaultPlatformValue
+	^4
+%
+
+category: 'accessing'
+classmethod: FileSetStatusFlag
+posixName
+	^'F_SETFL'
+%
+
+! Class implementation for 'FileSetUnlockFlag'
+
+!		Class methods for 'FileSetUnlockFlag'
+
+category: 'accessing'
+classmethod: FileSetUnlockFlag
+defaultPlatformValue
+	^3
+%
+
+category: 'accessing'
+classmethod: FileSetUnlockFlag
+posixName
+	^'F_UNLCK'
+%
+
+! Class implementation for 'FileDirectoryEntryFlag'
+
+!		Class methods for 'FileDirectoryEntryFlag'
+
+category: 'accessing'
+classmethod: FileDirectoryEntryFlag
+defaultPlatformValue
+	^2
+%
+
+category: 'accessing'
+classmethod: FileDirectoryEntryFlag
+posixName
+	^'F_DIR'
+%
+
+category: 'accessing'
+classmethod: FileDirectoryEntryFlag
+windowsValue
+	^16r100
+%
+
+! Class implementation for 'FileRegularFileEntryFlag'
+
+!		Class methods for 'FileRegularFileEntryFlag'
+
+category: 'accessing'
+classmethod: FileRegularFileEntryFlag
+defaultPlatformValue
+	^1
+%
+
+category: 'accessing'
+classmethod: FileRegularFileEntryFlag
+posixName
+	^'F_REG'
+%
+
+category: 'accessing'
+classmethod: FileRegularFileEntryFlag
+windowsValue
+	^16r010
+%
+
+! Class implementation for 'FileSpecialFileEntryFlag'
+
+!		Class methods for 'FileSpecialFileEntryFlag'
+
+category: 'accessing'
+classmethod: FileSpecialFileEntryFlag
+defaultPlatformValue
+	^4
+%
+
+category: 'accessing'
+classmethod: FileSpecialFileEntryFlag
+posixName
+	^'F_SPECIAL'
+%
+
+category: 'accessing'
+classmethod: FileSpecialFileEntryFlag
+windowsValue
+	^16r006
+%
+
+! Class implementation for 'FileMandatoryLockFlag'
+
+!		Class methods for 'FileMandatoryLockFlag'
+
+category: 'accessing'
+classmethod: FileMandatoryLockFlag
+defaultPlatformValue
+	^0
+%
+
+category: 'accessing'
+classmethod: FileMandatoryLockFlag
+posixName
+	^'F_MDLCK'
+%
+
+! Class implementation for 'FileReadLockFlag'
+
+!		Class methods for 'FileReadLockFlag'
+
+category: 'accessing'
+classmethod: FileReadLockFlag
+defaultPlatformValue
+	^1
+%
+
+category: 'accessing'
+classmethod: FileReadLockFlag
+posixName
+	^'F_RDLCK'
+%
+
+! Class implementation for 'FileUnlockFlag'
+
+!		Class methods for 'FileUnlockFlag'
+
+category: 'accessing'
+classmethod: FileUnlockFlag
+defaultPlatformValue
+	^3
+%
+
+category: 'accessing'
+classmethod: FileUnlockFlag
+posixName
+	^'F_UNLCK'
+%
+
+! Class implementation for 'FileWriteLockFlag'
+
+!		Class methods for 'FileWriteLockFlag'
+
+category: 'accessing'
+classmethod: FileWriteLockFlag
+defaultPlatformValue
+	^2
+%
+
+category: 'accessing'
+classmethod: FileWriteLockFlag
+posixName
+	^'F_WRLCK'
+%
+
+! Class implementation for 'FileAppendFlag'
+
+!		Class methods for 'FileAppendFlag'
+
+category: 'accessing'
+classmethod: FileAppendFlag
+defaultPlatformValue
+	^16r00400
+%
+
+category: 'accessing'
+classmethod: FileAppendFlag
+posixName
+	^'O_APPEND'
+%
+
+category: 'accessing'
+classmethod: FileAppendFlag
+windowsValue
+	^16r10000
+%
+
+! Class implementation for 'FileCloseOnExecFlag'
+
+!		Class methods for 'FileCloseOnExecFlag'
+
+category: 'accessing'
+classmethod: FileCloseOnExecFlag
+posixName
+	^'O_CLOEXEC'
+%
+
+! Class implementation for 'FileCreateFlag'
+
+!		Class methods for 'FileCreateFlag'
+
+category: 'accessing'
+classmethod: FileCreateFlag
+defaultPlatformValue
+	^16r00040
+%
+
+category: 'accessing'
+classmethod: FileCreateFlag
+posixName
+	^'O_CREAT'
+%
+
+category: 'accessing'
+classmethod: FileCreateFlag
+windowsValue
+	^16r20000
+%
+
+!		Instance methods for 'FileCreateFlag'
+
+category: 'convenience'
+method: FileCreateFlag
+createRule
+	^self parent fileExclusiveFlag ifNil: [self store class openAlwaysRule] ifNotNil: [:option | self store class createNewRule]
+%
+
+! Class implementation for 'FileDirectFlag'
+
+!		Class methods for 'FileDirectFlag'
+
+category: 'accessing'
+classmethod: FileDirectFlag
+posixName
+	^'O_DIRECT'
+%
+
+! Class implementation for 'FileDirectoryFlag'
+
+!		Class methods for 'FileDirectoryFlag'
+
+category: 'accessing'
+classmethod: FileDirectoryFlag
+posixName
+	^'O_DIRECTORY'
+%
+
+! Class implementation for 'FileExclusiveFlag'
+
+!		Class methods for 'FileExclusiveFlag'
+
+category: 'accessing'
+classmethod: FileExclusiveFlag
+defaultPlatformValue
+	^16r0080
+%
+
+category: 'accessing'
+classmethod: FileExclusiveFlag
+posixName
+	^'O_EXCL'
+%
+
+category: 'accessing'
+classmethod: FileExclusiveFlag
+windowsValue
+	^16r40000
+%
+
+! Class implementation for 'FileKeepSymbolicLinksFlag'
+
+!		Class methods for 'FileKeepSymbolicLinksFlag'
+
+category: 'accessing'
+classmethod: FileKeepSymbolicLinksFlag
+posixName
+	^'O_NOFOLLOW'
+%
+
+! Class implementation for 'FileNonBlockFlag'
+
+!		Class methods for 'FileNonBlockFlag'
+
+category: 'accessing'
+classmethod: FileNonBlockFlag
+defaultPlatformValue
+	^16r00080
+%
+
+category: 'accessing'
+classmethod: FileNonBlockFlag
+posixName
+	^'O_NONBLOCK'
+%
+
+! Class implementation for 'FileNotControllingTerminalFlag'
+
+!		Class methods for 'FileNotControllingTerminalFlag'
+
+category: 'accessing'
+classmethod: FileNotControllingTerminalFlag
+posixName
+	^'O_NOCTTY'
+%
+
+! Class implementation for 'FileOpenModeFlag'
+
+!		Instance methods for 'FileOpenModeFlag'
+
+category: 'convenience'
+method: FileOpenModeFlag
+accessRule
+	self subclassResponsibility
+%
+
+category: 'testing'
+method: FileOpenModeFlag
+isReadable
+	^false
+%
+
+category: 'testing'
+method: FileOpenModeFlag
+isWritable
+	^false
+%
+
+category: 'printing'
+method: FileOpenModeFlag
+printOpenModeStringOn: aStream
+
+	aStream nextPutAll: self mode
+%
+
+! Class implementation for 'FileOpenReadOnlyFlag'
+
+!		Class methods for 'FileOpenReadOnlyFlag'
+
+category: 'accessing'
+classmethod: FileOpenReadOnlyFlag
+defaultPlatformValue
+	^16r00000
+%
+
+category: 'accessing'
+classmethod: FileOpenReadOnlyFlag
+posixName
+	^'O_RDONLY'
+%
+
+!		Instance methods for 'FileOpenReadOnlyFlag'
+
+category: 'convenience'
+method: FileOpenReadOnlyFlag
+accessRule
+	^self store class readOnlyAccessRule
+%
+
+category: 'testing'
+method: FileOpenReadOnlyFlag
+isReadable
+	^true
+%
+
+category: 'accessing'
+method: FileOpenReadOnlyFlag
+mode
+	^'r'
+%
+
+! Class implementation for 'FileOpenReadWriteFlag'
+
+!		Class methods for 'FileOpenReadWriteFlag'
+
+category: 'accessing'
+classmethod: FileOpenReadWriteFlag
+defaultPlatformValue
+	^16r00002
+%
+
+category: 'accessing'
+classmethod: FileOpenReadWriteFlag
+posixName
+	^'O_RDWR'
+%
+
+!		Instance methods for 'FileOpenReadWriteFlag'
+
+category: 'convenience'
+method: FileOpenReadWriteFlag
+accessRule
+	^self store class readWriteAccessRule
+%
+
+category: 'testing'
+method: FileOpenReadWriteFlag
+isReadable
+	^true
+%
+
+category: 'testing'
+method: FileOpenReadWriteFlag
+isWritable
+	^true
+%
+
+category: 'accessing'
+method: FileOpenReadWriteFlag
+mode
+	"Truncate and Append are mutually exclusive"
+	self parent hasFileTruncateFlag ifTrue: [^'w+'].
+	self parent hasFileAppendFlag ifTrue: [^'a+'].
+	^'r+'
+%
+
+! Class implementation for 'FileOpenWriteOnlyFlag'
+
+!		Class methods for 'FileOpenWriteOnlyFlag'
+
+category: 'accessing'
+classmethod: FileOpenWriteOnlyFlag
+defaultPlatformValue
+	^16r00001
+%
+
+category: 'accessing'
+classmethod: FileOpenWriteOnlyFlag
+posixName
+	^'O_WRONLY'
+%
+
+!		Instance methods for 'FileOpenWriteOnlyFlag'
+
+category: 'convenience'
+method: FileOpenWriteOnlyFlag
+accessRule
+	^self store class writeOnlyAccessRule
+%
+
+category: 'testing'
+method: FileOpenWriteOnlyFlag
+isWritable
+	^true
+%
+
+category: 'accessing'
+method: FileOpenWriteOnlyFlag
+mode
+	^self parent hasFileAppendFlag
+		ifTrue: ['a']
+		ifFalse: ['w']
+%
+
+! Class implementation for 'FileReadSynchronousFlag'
+
+!		Class methods for 'FileReadSynchronousFlag'
+
+category: 'accessing'
+classmethod: FileReadSynchronousFlag
+posixName
+	^'O_RSYNC'
+%
+
+! Class implementation for 'FileSychronizedDataFlag'
+
+!		Class methods for 'FileSychronizedDataFlag'
+
+category: 'accessing'
+classmethod: FileSychronizedDataFlag
+posixName
+	^'O_DSYNC'
+%
+
+! Class implementation for 'FileSynchronizedIOFlag'
+
+!		Class methods for 'FileSynchronizedIOFlag'
+
+category: 'accessing'
+classmethod: FileSynchronizedIOFlag
+posixName
+	^'O_SYNC'
+%
+
+! Class implementation for 'FileSynchronizedReadFlag'
+
+!		Class methods for 'FileSynchronizedReadFlag'
+
+category: 'accessing'
+classmethod: FileSynchronizedReadFlag
+posixName
+	^'O_RSYNC'
+%
+
+! Class implementation for 'FileTruncateFlag'
+
+!		Class methods for 'FileTruncateFlag'
+
+category: 'accessing'
+classmethod: FileTruncateFlag
+defaultPlatformValue
+	^16r00200
+%
+
+category: 'accessing'
+classmethod: FileTruncateFlag
+posixName
+	^'O_TRUNC'
+%
+
+category: 'accessing'
+classmethod: FileTruncateFlag
+windowsValue
+	^16r80000
+%
+
+!		Instance methods for 'FileTruncateFlag'
+
+category: 'convenience'
+method: FileTruncateFlag
+truncateRule
+	^self store class truncateExistingRule
+%
+
+! Class implementation for 'FileGroupAllPermissionFlag'
+
+!		Class methods for 'FileGroupAllPermissionFlag'
+
+category: 'access'
+classmethod: FileGroupAllPermissionFlag
+defaultPlatformValue
+	^16r38
+%
+
+category: 'access'
+classmethod: FileGroupAllPermissionFlag
+posixName
+	^'SIRWXG'
+%
+
+category: 'access'
+classmethod: FileGroupAllPermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileGroupExecutePermissionFlag'
+
+!		Class methods for 'FileGroupExecutePermissionFlag'
+
+category: 'access'
+classmethod: FileGroupExecutePermissionFlag
+defaultPlatformValue
+	^16r008
+%
+
+category: 'access'
+classmethod: FileGroupExecutePermissionFlag
+posixName
+	^'SIXGRP'
+%
+
+category: 'access'
+classmethod: FileGroupExecutePermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileGroupReadPermissionFlag'
+
+!		Class methods for 'FileGroupReadPermissionFlag'
+
+category: 'access'
+classmethod: FileGroupReadPermissionFlag
+defaultPlatformValue
+	^16r020
+%
+
+category: 'access'
+classmethod: FileGroupReadPermissionFlag
+posixName
+	^'SIRGRP'
+%
+
+category: 'access'
+classmethod: FileGroupReadPermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileGroupWritePermissionFlag'
+
+!		Class methods for 'FileGroupWritePermissionFlag'
+
+category: 'access'
+classmethod: FileGroupWritePermissionFlag
+defaultPlatformValue
+	^16r010
+%
+
+category: 'access'
+classmethod: FileGroupWritePermissionFlag
+posixName
+	^'SIWGRP'
+%
+
+category: 'access'
+classmethod: FileGroupWritePermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileOtherAllPermissionFlag'
+
+!		Class methods for 'FileOtherAllPermissionFlag'
+
+category: 'accessing'
+classmethod: FileOtherAllPermissionFlag
+defaultPlatformValue
+	^16r007
+%
+
+category: 'accessing'
+classmethod: FileOtherAllPermissionFlag
+posixName
+	^'SIRWXO'
+%
+
+category: 'accessing'
+classmethod: FileOtherAllPermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileOtherExecutePermissionFlag'
+
+!		Class methods for 'FileOtherExecutePermissionFlag'
+
+category: 'accessing'
+classmethod: FileOtherExecutePermissionFlag
+defaultPlatformValue
+	^16r001
+%
+
+category: 'accessing'
+classmethod: FileOtherExecutePermissionFlag
+posixName
+	^'SIXOTH'
+%
+
+category: 'accessing'
+classmethod: FileOtherExecutePermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileOtherReadPermissionFlag'
+
+!		Class methods for 'FileOtherReadPermissionFlag'
+
+category: 'accessing'
+classmethod: FileOtherReadPermissionFlag
+defaultPlatformValue
+	^16r004
+%
+
+category: 'accessing'
+classmethod: FileOtherReadPermissionFlag
+posixName
+	^'SIROTH'
+%
+
+category: 'accessing'
+classmethod: FileOtherReadPermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileOtherWritePermissionFlag'
+
+!		Class methods for 'FileOtherWritePermissionFlag'
+
+category: 'accessing'
+classmethod: FileOtherWritePermissionFlag
+defaultPlatformValue
+	^16r002
+%
+
+category: 'accessing'
+classmethod: FileOtherWritePermissionFlag
+posixName
+	^'SIWOTH'
+%
+
+category: 'accessing'
+classmethod: FileOtherWritePermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileOwnerAllPermissionFlag'
+
+!		Class methods for 'FileOwnerAllPermissionFlag'
+
+category: 'accessing'
+classmethod: FileOwnerAllPermissionFlag
+defaultPlatformValue
+	^16r1C0
+%
+
+category: 'accessing'
+classmethod: FileOwnerAllPermissionFlag
+posixName
+	^'SIRWXU'
+%
+
+category: 'accessing'
+classmethod: FileOwnerAllPermissionFlag
+windowsValue
+	^3
+%
+
+! Class implementation for 'FileOwnerExecutePermissionFlag'
+
+!		Class methods for 'FileOwnerExecutePermissionFlag'
+
+category: 'accessing'
+classmethod: FileOwnerExecutePermissionFlag
+defaultPlatformValue
+	^16r40
+%
+
+category: 'accessing'
+classmethod: FileOwnerExecutePermissionFlag
+posixName
+	^'SIXUSR'
+%
+
+category: 'accessing'
+classmethod: FileOwnerExecutePermissionFlag
+windowsValue
+	^0
+%
+
+! Class implementation for 'FileOwnerReadPermissionFlag'
+
+!		Class methods for 'FileOwnerReadPermissionFlag'
+
+category: 'accessing'
+classmethod: FileOwnerReadPermissionFlag
+defaultPlatformValue
+	^16r100
+%
+
+category: 'accessing'
+classmethod: FileOwnerReadPermissionFlag
+posixName
+	^'SIRUSR'
+%
+
+category: 'accessing'
+classmethod: FileOwnerReadPermissionFlag
+windowsValue
+	^1
+%
+
+! Class implementation for 'FileOwnerWritePermissionFlag'
+
+!		Class methods for 'FileOwnerWritePermissionFlag'
+
+category: 'accessing'
+classmethod: FileOwnerWritePermissionFlag
+defaultPlatformValue
+	^16r80
+%
+
+category: 'accessing'
+classmethod: FileOwnerWritePermissionFlag
+posixName
+	^'SIWUSR'
+%
+
+category: 'accessing'
+classmethod: FileOwnerWritePermissionFlag
+windowsValue
+	^2
+%
+
+! Class implementation for 'FileSeekCurrentPosition'
+
+!		Class methods for 'FileSeekCurrentPosition'
+
+category: 'accessing'
+classmethod: FileSeekCurrentPosition
+defaultPlatformValue
+	^1
+%
+
+category: 'accessing'
+classmethod: FileSeekCurrentPosition
+posixName
+	^'SEEK_CUR'
+%
+
+! Class implementation for 'FileSeekEndPosition'
+
+!		Class methods for 'FileSeekEndPosition'
+
+category: 'accessing'
+classmethod: FileSeekEndPosition
+defaultPlatformValue
+	^2
+%
+
+category: 'accessing'
+classmethod: FileSeekEndPosition
+posixName
+	^'SEEK_END'
+%
+
+! Class implementation for 'FileSeekSetPosition'
+
+!		Class methods for 'FileSeekSetPosition'
+
+category: 'accessing'
+classmethod: FileSeekSetPosition
+defaultPlatformValue
+	^0
+%
+
+category: 'accessing'
+classmethod: FileSeekSetPosition
+posixName
+	^'SEEK_SET'
+%
+
+! Class implementation for 'FileDenyNoneFlag'
+
+!		Class methods for 'FileDenyNoneFlag'
+
+category: 'access'
+classmethod: FileDenyNoneFlag
+defaultPlatformValue
+	^16r00000
+%
+
+category: 'access'
+classmethod: FileDenyNoneFlag
+posixName
+	^'O_DENYNONE'
+%
+
+category: 'access'
+classmethod: FileDenyNoneFlag
+windowsValue
+	^16r00040
+%
+
+!		Instance methods for 'FileDenyNoneFlag'
+
+category: 'convenience'
+method: FileDenyNoneFlag
+shareRule
+	^self store class denyNoneShareRule
+%
+
+! Class implementation for 'FileDenyReadFlag'
+
+!		Class methods for 'FileDenyReadFlag'
+
+category: 'access'
+classmethod: FileDenyReadFlag
+defaultPlatformValue
+	^16r00001
+%
+
+category: 'access'
+classmethod: FileDenyReadFlag
+posixName
+	^'O_DENYRD'
+%
+
+category: 'access'
+classmethod: FileDenyReadFlag
+windowsValue
+	^16r00030
+%
+
+!		Instance methods for 'FileDenyReadFlag'
+
+category: 'convenience'
+method: FileDenyReadFlag
+shareRule
+	^self store class denyReadShareRule
+%
+
+! Class implementation for 'FileDenyReadWriteFlag'
+
+!		Class methods for 'FileDenyReadWriteFlag'
+
+category: 'access'
+classmethod: FileDenyReadWriteFlag
+defaultPlatformValue
+	^16r00002
+%
+
+category: 'access'
+classmethod: FileDenyReadWriteFlag
+posixName
+	^'O_DENYRDWR'
+%
+
+category: 'access'
+classmethod: FileDenyReadWriteFlag
+windowsValue
+	^16r00010
+%
+
+!		Instance methods for 'FileDenyReadWriteFlag'
+
+category: 'convenience'
+method: FileDenyReadWriteFlag
+shareRule
+	^self store class denyReadWriteShareRule
+%
+
+! Class implementation for 'FileDenyWriteFlag'
+
+!		Class methods for 'FileDenyWriteFlag'
+
+category: 'access'
+classmethod: FileDenyWriteFlag
+defaultPlatformValue
+	^16r00003
+%
+
+category: 'access'
+classmethod: FileDenyWriteFlag
+posixName
+	^'O_DENYWR'
+%
+
+category: 'access'
+classmethod: FileDenyWriteFlag
+windowsValue
+	^16r00020
+%
+
+!		Instance methods for 'FileDenyWriteFlag'
+
+category: 'convenience'
+method: FileDenyWriteFlag
+shareRule
+	^self store class denyWriteShareRule
+%
+
+! Class implementation for 'FileTypeFlag'
+
+!		Instance methods for 'FileTypeFlag'
+
+category: 'testing'
+method: FileTypeFlag
+isGzipped
+	^false
+%
+
+category: 'printing'
+method: FileTypeFlag
+printOpenModeStringOn: aStream
+%
+
+! Class implementation for 'FileBinaryTypeFlag'
+
+!		Class methods for 'FileBinaryTypeFlag'
+
+category: 'accessing'
+classmethod: FileBinaryTypeFlag
+defaultPlatformValue
+	^0
+%
+
+category: 'accessing'
+classmethod: FileBinaryTypeFlag
+posixName
+	^'O_BINARY'
+%
+
+category: 'accessing'
+classmethod: FileBinaryTypeFlag
+windowsValue
+	^1
+%
+
+!		Instance methods for 'FileBinaryTypeFlag'
+
+category: 'printing'
+method: FileBinaryTypeFlag
+printOpenModeStringOn: aStream
+
+	aStream nextPutAll: 'b'
+%
+
+! Class implementation for 'FileGzipTypeFlag'
+
+!		Class methods for 'FileGzipTypeFlag'
+
+category: 'accessing'
+classmethod: FileGzipTypeFlag
+defaultPlatformValue
+	^0
+%
+
+category: 'instance creation'
+classmethod: FileGzipTypeFlag
+high
+	^self new
+		compressionLevel: '9';
+		yourself
+%
+
+category: 'instance creation'
+classmethod: FileGzipTypeFlag
+low
+	^self new
+		compressionLevel: '1';
+		yourself
+%
+
+category: 'instance creation'
+classmethod: FileGzipTypeFlag
+none
+	^self new
+%
+
+category: 'accessing'
+classmethod: FileGzipTypeFlag
+posixName
+	^'O_GZIP'
+%
+
+!		Instance methods for 'FileGzipTypeFlag'
+
+category: 'accessing'
+method: FileGzipTypeFlag
+compressionLevel
+	^compressionLevel ifNil: ['']
+%
+
+category: 'accessing'
+method: FileGzipTypeFlag
+compressionLevel: aString
+	compressionLevel := aString
+%
+
+category: 'testing'
+method: FileGzipTypeFlag
+isGzipped
+	^self compressionLevel = '1' or: [self compressionLevel = '9' ]
+%
+
+category: 'printing'
+method: FileGzipTypeFlag
+printOpenModeStringOn: aStream
+	aStream nextPutAll: self compressionLevel
+%
+
+! Class implementation for 'FileTextTypeFlag'
+
+!		Class methods for 'FileTextTypeFlag'
+
+category: 'accessing'
+classmethod: FileTextTypeFlag
+defaultPlatformValue
+	^0
+%
+
+category: 'accessing'
+classmethod: FileTextTypeFlag
+posixName
+	^'O_TEXT'
+%
+
+! Class implementation for 'ProcessSpecificVariable'
+
+!		Class methods for 'ProcessSpecificVariable'
+
+category: 'ps - session temps'
+classmethod: ProcessSpecificVariable
+allocatePSKey: aPSVariable
+
+	"Add a new process-specific key. 
+	If an object already registered as a key, answer its index,
+	if object is not registered, first search for an empty slot for insertion and if not found, grow an array to add new object"
+
+	| anArray index |
+	self psKeysSemaphore critical: [
+		anArray := self psKeys.
+		index := anArray indexOf: aPSVariable.
+		index = 0 ifTrue: [
+			anArray addLast: aPSVariable. 
+			index := anArray size] ].
+
+	aPSVariable isInheritable ifTrue: [ 
+		(self inheritablePSKeys includes: index) ifFalse: [self inheritablePSKeys add: index]].
+
+	^index
+%
+
+category: 'ps - session temps'
+classmethod: ProcessSpecificVariable
+inheritablePSKeys
+	"In Pharo, this is class variable in Process"
+	^SessionTemps current at: #InheritablePSKeys ifAbsentPut: [Array new]
+%
+
+category: 'class initialization'
+classmethod: ProcessSpecificVariable
+initialize
+	self resetSoleInstance
+%
+
+category: 'testing'
+classmethod: ProcessSpecificVariable
+isInheritable
+	^false
+%
+
+category: 'instance creation'
+classmethod: ProcessSpecificVariable
+new
+	| instance |
+	instance := super new.
+	instance index: (self allocatePSKey: instance).
+	^ instance
+%
+
+category: 'ps - session temps'
+classmethod: ProcessSpecificVariable
+psKeys
+	"In Pharo, this is class variable in Process"
+	^SessionTemps current at: #PSKeys ifAbsentPut: [Array new]
+%
+
+category: 'ps - session temps'
+classmethod: ProcessSpecificVariable
+psKeysSemaphore
+	"In Pharo, this is class variable in Process"
+	^SessionTemps current at: #PSKeysSemaphore ifAbsentPut: [Semaphore forMutualExclusion]
+%
+
+category: 'class initialization'
+classmethod: ProcessSpecificVariable
+resetAllSoleInstances
+	" ProcessSpecificVariable resetAllSoleInstances "
+	self resetSoleInstance.
+	self resetPsKeys.
+	self resetInheritablePSKeys.
+	self allSubclasses do: [:ea | ea resetSoleInstance]
+%
+
+category: 'ps - session temps'
+classmethod: ProcessSpecificVariable
+resetInheritablePSKeys
+	^SessionTemps current at: #InheritablePSKeys put: [Array new]
+%
+
+category: 'ps - session temps'
+classmethod: ProcessSpecificVariable
+resetPsKeys
+	^SessionTemps current at: #PSKeys put: Array new
+%
+
+category: 'class initialization'
+classmethod: ProcessSpecificVariable
+resetSoleInstance
+	soleInstance := nil.
+%
+
+category: 'accessing'
+classmethod: ProcessSpecificVariable
+soleInstance
+	^ soleInstance ifNil: [ soleInstance := self new ]
+%
+
+category: 'accessing'
+classmethod: ProcessSpecificVariable
+value
+	"Answer the current value for this variable in the current context."
+	^ self soleInstance value
+%
+
+!		Instance methods for 'ProcessSpecificVariable'
+
+category: 'accessing'
+method: ProcessSpecificVariable
+default
+	"Answer the default value for the variable. The default for the default value is nil."
+	^nil
+%
+
+category: 'accessing'
+method: ProcessSpecificVariable
+index
+	^index
+%
+
+category: 'accessing'
+method: ProcessSpecificVariable
+index: anInteger
+	index := anInteger
+%
+
+category: 'inheriting'
+method: ProcessSpecificVariable
+isInheritable
+	^self class isInheritable
+%
+
+category: 'process'
+method: ProcessSpecificVariable
+psValueAt: anIndex
+	"In Pharo, this logic is in Process"
+	^self _psValueAt: anIndex inProcess: Processor activeProcess
+%
+
+category: 'process'
+method: ProcessSpecificVariable
+psValueAt: anIndex put: anObject
+	"In Pharo, this logic is in Process"
+	self _psValueAt: anIndex put: anObject inProcess: Processor activeProcess
+%
+
+category: 'accessing'
+method: ProcessSpecificVariable
+value
+	"This is a hack. There may need to be something implemented to tie a value to a process in the future."
+
+	^(self psValueAt: index) ifNil: [ self default ]
+%
+
+category: 'accessing'
+method: ProcessSpecificVariable
+valueOrNil
+	"a faster version, which doesn't using ifAbsent: to avoid using block closure"
+
+	^self psValueAt: index
+%
+
+category: 'process - private'
+method: ProcessSpecificVariable
+_growArrayInProcess: aProcess
+
+	| currentSize cacheSize  |
+	currentSize := (self _psArrayInProcess: aProcess) size.
+	cacheSize := self class psKeys size.
+	currentSize < cacheSize ifTrue: [
+		self 
+			_psArray: ((self _psArrayInProcess: aProcess) grownBy: cacheSize - currentSize) 
+			inProcess: aProcess].
+%
+
+category: 'process - private'
+method: ProcessSpecificVariable
+_psArray: anArray inProcess: aProcess 
+
+	aProcess environmentAt: #ProcessSpecificVariables put: anArray
+%
+
+category: 'process - private'
+method: ProcessSpecificVariable
+_psArrayInProcess: aProcess
+
+	^aProcess 
+			environmentAt: #ProcessSpecificVariables 
+			ifAbsent: [aProcess environmentAt: #ProcessSpecificVariables put: (Array new: self class psKeys size)]
+%
+
+category: 'process - private'
+method: ProcessSpecificVariable
+_psValueAt: anIndex inProcess: aProcess
+
+	^(aProcess environmentAt: #ProcessSpecificVariables ifAbsent: [nil]) 
+		ifNotNil: [:a | a at: index ifAbsent: [] ]
+%
+
+category: 'process - private'
+method: ProcessSpecificVariable
+_psValueAt: anIndex put: anObject inProcess: aProcess
+
+	self _growArrayInProcess: aProcess.
+	^(self _psArrayInProcess: aProcess) at: anIndex put: anObject
+%
+
+! Class implementation for 'DynamicVariable'
+
+!		Class methods for 'DynamicVariable'
+
+category: 'accessing'
+classmethod: DynamicVariable
+value: anObject during: aBlock
+
+	^ self soleInstance value: anObject during: aBlock
+%
+
+!		Instance methods for 'DynamicVariable'
+
+category: 'accessing'
+method: DynamicVariable
+value: anObject during: aBlock
+
+"	The following is the Pharo code "
+
+	| oldValue |
+	"oldValue will be nil if the variable has not yet been set"
+	oldValue := self psValueAt: index.
+	^ [ self
+			psValueAt: index
+			put: anObject.
+		aBlock value ] ensure: [ 
+			self
+				psValueAt: index
+				put: oldValue ]
+%
+
+! Class implementation for 'ZnDefaultCharacterEncoder'
+
+!		Instance methods for 'ZnDefaultCharacterEncoder'
+
+category: 'accessing'
+method: ZnDefaultCharacterEncoder
+default
+	^ ZnCharacterEncoder utf8
+%
+
+! Class implementation for 'Stdio'
+
+!		Class methods for 'Stdio'
+
+category: 'initialize'
+classmethod: Stdio
+cleanStdioHandles
+	#(stdin stdout stderr) do: [:ea | SessionTemps current removeKey: ea ifAbsent: []]
+%
+
+category: 'accessing'
+classmethod: Stdio
+createReadStreamBlock
+	^ SessionTemps current at: #StdioCreateReadStreamBlock ifAbsentPut: [ self useDefaultStreams]
+%
+
+category: 'accessing'
+classmethod: Stdio
+createReadStreamBlock: aBlock
+	SessionTemps current at: #StdioCreateReadStreamBlock put: aBlock.
+	self cleanStdioHandles
+%
+
+category: 'accessing'
+classmethod: Stdio
+createWriteStreamBlock
+	^ SessionTemps current at: #StdioCreateWriteStreamBlock ifAbsentPut: [ self useDefaultStreams]
+%
+
+category: 'accessing'
+classmethod: Stdio
+createWriteStreamBlock: aBlock
+	SessionTemps current at: #StdioCreateWriteStreamBlock put: aBlock.
+	self cleanStdioHandles
+%
+
+category: 'accessing'
+classmethod: Stdio
+stderr
+	^self stdioWriteStreamFor: #stderr
+%
+
+category: 'accessing'
+classmethod: Stdio
+stdin
+	^self stdioReadStreamFor: #stdin
+%
+
+category: 'stdio'
+classmethod: Stdio
+stdioReadStreamFor: aSymbol
+	SessionTemps current at: #StdioCreateReadStreamBlock ifAbsent: [self useDefaultStreams].
+	^SessionTemps current at: aSymbol ifAbsentPut: [
+		self createReadStreamBlock value: aSymbol]
+%
+
+category: 'stdio'
+classmethod: Stdio
+stdioWriteStreamFor: aSymbol
+	SessionTemps current at: #StdioCreateWriteStreamBlock ifAbsent: [self useDefaultStreams].
+	^SessionTemps current at: aSymbol ifAbsentPut: [
+		self createWriteStreamBlock value: aSymbol]
+%
+
+category: 'accessing'
+classmethod: Stdio
+stdout
+	^self stdioWriteStreamFor: #stdout
+%
+
+category: 'stdio'
+classmethod: Stdio
+useDefaultStreams
+	<script>
+	| aBlock |
+	aBlock := [ :aName | StdioStream on: (FileSystem fileClass perform: aName asSymbol) ].
+	self createWriteStreamBlock: aBlock.
+	self createReadStreamBlock: aBlock
+%
+
+category: 'stdio'
+classmethod: Stdio
+useMemoryStreams
+	<script>
+	self createWriteStreamBlock: 
+		[ :aName | (FileSystem memory / aName asString) writeStream ].
+	self createReadStreamBlock: 
+		[ :aName | 
+			EncodedBufferedStreamSpec newRead create on: (FileSystem memory / aName asString)  ].
+%
+
+! Class implementation for 'ZnBase64Encoder'
+
+!		Class methods for 'ZnBase64Encoder'
+
+category: 'class initialization'
+classmethod: ZnBase64Encoder
+defaultAlphabet
+	^DefaultAlphabet
+%
+
+category: 'class initialization'
+classmethod: ZnBase64Encoder
+defaultInverse
+	^DefaultInverse
+%
+
+category: 'class initialization'
+classmethod: ZnBase64Encoder
+initialize
+	DefaultAlphabet := String withAll: ($A to: $Z) , ($a to: $z) , ($0 to: $9) , #($+ $/).
+	DefaultInverse := Array new: 128.
+	0 to: 127 do: [ :each | 
+		| offset |
+		offset := DefaultAlphabet indexOf: each asCharacter ifAbsent: [ nil ].
+		DefaultInverse at: each + 1 put: (offset ifNotNil: [ offset - 1 ]) ]
+%
+
+category: 'instance creation'
+classmethod: ZnBase64Encoder
+new
+	^self basicNew
+		initialize;
+		yourself
+%
+
+category: 'class initialization'
+classmethod: ZnBase64Encoder
+reset
+	DefaultAlphabet := nil.
+	DefaultInverse := nil
+%
+
+!		Instance methods for 'ZnBase64Encoder'
+
+category: 'accessing'
+method: ZnBase64Encoder
+alphabet
+	"Return the alphabet that I am using to encode byte values"
+	
+	^ alphabet
+%
+
+category: 'initialization'
+method: ZnBase64Encoder
+alphabet: string
+	"Set the alphabet to use to string, containing 64 characters to represent 64 byte values.
+	I automatically compute the inverse used for fast decoding."
+	
+	self assert: string size = 64 description: '64 characters are needed for a Base64 alphabet'.
+	alphabet := string.
+	inverse := Array new: 128.
+	0 to: 127 do: [ :each | 
+		| offset |
+		offset := alphabet indexOf: each asCharacter ifAbsent: [ nil ].
+		inverse at: each + 1 put: (offset ifNotNil: [ offset - 1 ]) ]
+%
+
+category: 'initialization'
+method: ZnBase64Encoder
+breakLines
+	"Configure me to break lines and insert newlines every 76 characters while encoding"
+
+	self breakLinesAt: 76
+%
+
+category: 'initialization'
+method: ZnBase64Encoder
+breakLinesAt: length
+	"Configure me to break lines at lenth, a multiple of 4, and insert newlines"
+
+	self assert: (length \\ 4) = 0 description: 'line length should be a multiple of 4'.
+	lineLength := length.
+	lineEnd ifNil: [ self lineEndConvention: #crlf ]
+%
+
+category: 'private'
+method: ZnBase64Encoder
+byteCountFor: string	
+	| n byteCount |
+	"This assumes there are no line breaks in string"
+	n := string size.
+	byteCount := n // 4 * 3.
+	(n > 1 and: [ (string at: n) = $= ])
+		ifTrue: [ 
+			(n > 2 and: [ (string at: n - 1) = $= ])
+				ifTrue: [ byteCount := byteCount - 2 ]
+				ifFalse: [ byteCount := byteCount - 1 ] ].
+	^ byteCount
+%
+
+category: 'private'
+method: ZnBase64Encoder
+characterCountFor: bytes
+	| n characterCount | 
+	n := bytes size.
+	characterCount := n // 3 + (n \\ 3) sign * 4.
+	^ lineLength isNil
+		ifTrue: [ characterCount ]
+		ifFalse: [ characterCount + ((characterCount // lineLength ) * lineEnd size) ]
+%
+
+category: 'private'
+method: ZnBase64Encoder
+characterForValue: value
+	^ alphabet at: value + 1
+%
+
+category: 'converting'
+method: ZnBase64Encoder
+decode: string
+	"Decode a Base64 encoded string and return the resulting byte array"
+	
+	^ ByteArray 
+		new: (self byteCountFor: string)
+		streamContents: [ :byteStream | 
+			self decode: string readStream to: byteStream ]
+%
+
+category: 'private'
+method: ZnBase64Encoder
+decode: char1 and: char2 and: char3 and: char4 to: stream
+	| v1 v2 v3 v4 |
+	v1 := self valueForCharacter: char1.
+	v2 := self valueForCharacter: char2.
+	stream nextPut: (v1 bitShift: 2) + (v2 bitShift: -4).
+	char3 == $=
+		ifFalse: [ 
+			v3 := self valueForCharacter: char3.
+			stream nextPut: ((v2 bitAnd: 2r1111) bitShift: 4) + (v3 bitShift: -2).
+			char4 == $=
+				ifFalse: [ 
+						v4 := self valueForCharacter: char4.
+						stream nextPut: ((v3 bitAnd: 2r11) bitShift: 6) + v4 ] ]
+%
+
+category: 'converting'
+method: ZnBase64Encoder
+decode: stringStream to: byteStream
+	| char1 char2 char3 char4 |
+	[ stringStream atEnd ] whileFalse: [ 
+		self skipWhitespace: stringStream.
+		stringStream atEnd ifTrue: [ ^ self ].
+		char1 := stringStream next.
+		char2 := stringStream next.
+		char3 := stringStream next.
+		char4 := stringStream next.
+		char1 isNil | char2 isNil | char3 isNil | char4 isNil
+			ifTrue: [ ZnCharacterEncodingError signal: 'Illegal Base64 input' ].
+		self decode: char1 and: char2 and: char3 and: char4 to: byteStream ]
+%
+
+category: 'converting'
+method: ZnBase64Encoder
+encode: byteArray
+	"Encode byteArray using Base64 encoding and return the resulting string"
+	
+	^ String 
+		new: (self characterCountFor: byteArray) 
+		streamContents: [ :stringStream | 
+			self encode: byteArray readStream to: stringStream ]
+%
+
+category: 'private'
+method: ZnBase64Encoder
+encode: byte1 and: byte2 and: byte3 to: stream
+	stream nextPut: (self characterForValue: (byte1 bitShift: -2)).
+	byte2
+		ifNil: [ 
+			stream nextPut: (self characterForValue: ((byte1 bitAnd: 2r11) bitShift: 4)).
+			stream nextPutAll: '==' ]
+		ifNotNil: [ 
+			stream nextPut: (self characterForValue: (((byte1 bitAnd: 2r11) bitShift: 4) + (byte2 bitShift: -4))).
+			byte3
+				ifNil: [ 
+					stream nextPut: (self characterForValue: ((byte2 bitAnd: 2r1111) bitShift: 2)).
+					stream nextPut: $= ]
+				ifNotNil: [ 
+					stream nextPut: (self characterForValue: (((byte2 bitAnd: 2r1111) bitShift: 2) + (byte3 bitShift: -6))).
+					stream nextPut: (self characterForValue: (byte3 bitAnd: 2r111111)) ] ]
+%
+
+category: 'converting'
+method: ZnBase64Encoder
+encode: byteStream to: stringStream
+	| byte1 byte2 byte3 count |
+	lineLength
+		ifNil: [ 
+			[ byteStream atEnd ] whileFalse: [ 
+				byte1 := byteStream next.
+				byte2 := byteStream next.
+				byte3 := byteStream next.
+				self encode: byte1 and: byte2 and: byte3 to: stringStream ] ]
+		ifNotNil: [ 
+			count := 0.
+			[ byteStream atEnd ] whileFalse: [ 
+				byte1 := byteStream next.
+				byte2 := byteStream next.
+				byte3 := byteStream next.
+				self encode: byte1 and: byte2 and: byte3 to: stringStream.
+				(count := count + 4) = lineLength
+					ifTrue: [ 
+						stringStream nextPutAll: lineEnd.
+						count := 0 ] ] ]
+%
+
+category: 'initialization'
+method: ZnBase64Encoder
+initialize
+	alphabet := DefaultAlphabet.
+	inverse := DefaultInverse.
+	self whitespace: #any
+%
+
+category: 'private'
+method: ZnBase64Encoder
+isLegalCharacter: character
+	"Return true when character is part of my alphabet"
+
+	| code |
+	^ (code := character asciiValue) < 128 
+			and: [ (inverse at: code + 1) notNil ]
+%
+
+category: 'private'
+method: ZnBase64Encoder
+isWhitespaceCharacter: character
+	"Return true when character should be considered whitespace"
+
+	whitespace 
+		ifNil: [ "No whitespace allowed" 
+			^ false ].
+	whitespace = #separator
+		ifTrue: [ "Only separators are considered whitespace" 
+			^ character isSeparator ].
+	whitespace = #any
+		ifTrue: [ "All non-legal (non-alphabet) characters are considered whitespace" 
+			^ (self isLegalCharacter: character) not ].
+	^ false
+%
+
+category: 'initialization'
+method: ZnBase64Encoder
+lineEndConvention: symbol
+	"Set the end of line convention to be used.
+	Either #cr, #lf or #crlf (the default)."
+	
+	self assert: (#(cr lf crlf) includes: symbol).
+	lineEnd := String perform: symbol
+%
+
+category: 'private'
+method: ZnBase64Encoder
+skipWhitespace: stream
+	[ stream atEnd not and: [ (self isWhitespaceCharacter: stream peek) ] ] 
+		whileTrue: [ stream next ]
+%
+
+category: 'private'
+method: ZnBase64Encoder
+valueForCharacter: char
+	| code |
+	(code := char asciiValue) < 128
+		ifTrue: [ 
+			(inverse at: code + 1)
+				ifNotNil: [ :byteValue | ^ byteValue ] ].
+	ZnCharacterEncodingError signal: 'Illegal Base64 input'
+%
+
+category: 'initialization'
+method: ZnBase64Encoder
+whitespace: mode
+	"Set the whitespace mode: 
+	nil is no whitespace allowed, 
+	#separator is CR, LF, FF, SPACE, TAB allowed,
+	#any is all non-alphabet characters allowed (the default)"
+	
+	self assert: (#(nil separator any) includes: mode).
+	whitespace := mode
 %
 
 ! Class implementation for 'ZnBufferedReadStream'
@@ -10320,6 +19639,13 @@ peek
 	^ position <= limit
 		ifTrue: [ buffer at: position ]
 		ifFalse: [ nil ]
+%
+
+category: 'accessing'
+method: ZnBufferedReadStream
+peek: count
+  self peek .
+  ^ buffer copyFrom: position to: (position + count min: limit)
 %
 
 category: 'accessing'
@@ -10863,8 +20189,12 @@ method: ZnBufferedWriteStream
 flushBuffer
 	position = 0 ifTrue: [ ^ self ].
 	position = self bufferSize
-		ifTrue: [ stream nextPutAll: buffer ]
-		ifFalse: [ stream nextPutAll: (buffer copyFrom: 1 to: position) ].
+		ifTrue: [ 
+			stream nextPutAll: buffer ]
+		ifFalse: [ 
+			(stream respondsTo: #next:putAll:startingAt:)  "This was added from Pharo"
+				ifTrue: [ stream next: position putAll: buffer startingAt: 1 ]
+				ifFalse: [ stream nextPutAll: (buffer copyFrom: 1 to: position) ] ].
 	position := 0
 %
 
@@ -11103,9 +20433,21 @@ uint8: integer
 	^ self nextIntegerOfSize: 1 signed: false bigEndian: true put: integer
 %
 
+category: 'accessing'
+method: ZnBufferedWriteStream
+wrappedStream
+	^stream
+%
+
 ! Class implementation for 'ZnCharacterEncoder'
 
 !		Class methods for 'ZnCharacterEncoder'
+
+category: 'convenience'
+classmethod: ZnCharacterEncoder
+ascii
+	^ self newForEncoding: 'ASCII'
+%
 
 category: 'accessing'
 classmethod: ZnCharacterEncoder
@@ -11115,10 +20457,47 @@ canonicalEncodingIdentifier: string
 
 category: 'accessing'
 classmethod: ZnCharacterEncoder
+default
+	"Return the default ZnCharacterEncoder to be used 
+	when none is otherwise specified."
+	
+	^ ZnDefaultCharacterEncoder value
+%
+
+category: 'instance creation'
+classmethod: ZnCharacterEncoder
+detectEncoding: bytes
+	"Return one of my instances capable of decoding bytes.
+	This is done by successively trying known encodings in a specific order.
+	If no one is found, signal ZnCharacterEncodingError.
+	This is a heuristic and unreliable [https://en.wikipedia.org/wiki/Charset_detection]."
+	
+	| candidates |
+	"Set up an ordered candidates list, 7-bit ascii and utf8 are reasonably reliable, iso88591 is a reasonable default"
+
+	candidates := #(ascii utf8 iso88591).
+	candidates := candidates , (ZnByteEncoder knownEncodingIdentifiers difference: candidates) asArray.
+	candidates := candidates , (self knownEncodingIdentifiers difference: candidates) asArray.
+
+	"Try each and return the first one that succeeeds."
+	candidates do: [ :identifier | | encoder |
+		encoder := self newForEncoding: identifier.
+		[ ^ encoder decodeBytes: bytes; yourself ] on: ZnCharacterEncodingError do: [:s | s return: nil ] ]. "s return: nil <== This is needed to mimic Pharo"
+	ZnCharacterEncodingError signal: 'No suitable encoder found'
+%
+
+category: 'accessing'
+classmethod: ZnCharacterEncoder
 handlesEncoding: string
 	"Return true when my instances handle the encoding described by string"
 	
 	self subclassResponsibility: #handlesEncoding:
+%
+
+category: 'convenience'
+classmethod: ZnCharacterEncoder
+iso88591
+	^ self newForEncoding: 'iso-8859-1'
 %
 
 category: 'accessing'
@@ -11132,6 +20511,20 @@ knownEncodingIdentifiers
 			all nextPutAll: subClass knownEncodingIdentifiers ] ]
 %
 
+category: 'convenience'
+classmethod: ZnCharacterEncoder
+latin1
+	^ self newForEncoding: 'latin1'
+%
+
+category: 'instance creation'
+classmethod: ZnCharacterEncoder
+new
+	^super new
+		initialize;
+		yourself
+%
+
 category: 'instance creation'
 classmethod: ZnCharacterEncoder
 newForEncoding: string
@@ -11141,11 +20534,23 @@ newForEncoding: string
 	| concreteSubclass |
 	concreteSubclass := self allSubclasses 
 		detect: [ :each | each handlesEncoding: string ] 
-		ifNone: [ ^ self error: 'The ', string printString, ' is not currently supported.' ].
+		ifNone: [ ^ self default ].
 	^ concreteSubclass newForEncoding: string
 %
 
+category: 'convenience'
+classmethod: ZnCharacterEncoder
+utf8
+	^ ZnUTF8Encoder default
+%
+
 !		Instance methods for 'ZnCharacterEncoder'
+
+category: 'comparing'
+method: ZnCharacterEncoder
+= anObject
+	^ self class == anObject class
+%
 
 category: 'converting'
 method: ZnCharacterEncoder
@@ -11161,12 +20566,34 @@ backOnStream: stream
 	self subclassResponsibility: #backOnStream:
 %
 
+category: 'initialize-release'
+method: ZnCharacterEncoder
+beLenient
+	"Don't be strict, which is the default"
+%
+
 category: 'convenience'
 method: ZnCharacterEncoder
 decodeAsCodePoints: bytes
 	"Decode bytes and return the resulting code points"
 	
-	self subclassResponsibility: #decodeAsCodePoints:
+	| byteStream |
+	byteStream := bytes readStream.
+	^ Array streamContents: [ :stream |
+		[ byteStream atEnd ] whileFalse: [
+			stream nextPut: (self nextCodePointFromStream: byteStream) ] ]
+%
+
+category: 'convenience'
+method: ZnCharacterEncoder
+decodeBytes: bytes
+	"Decode bytes and return the resulting string"
+	
+	| byteStream |
+	byteStream := bytes readStream.
+	^ String streamContents: [ :stream |
+		[ byteStream atEnd ] whileFalse: [
+			stream nextPut: (self nextFromStream: byteStream) ] ]
 %
 
 category: 'convenience'
@@ -11174,7 +20601,9 @@ method: ZnCharacterEncoder
 encodeCodePoints: codePoints
 	"Encode codePoints and return the resulting byte array"
 	
-	^ self subclassResponsibility: #encodeCodePoints:
+	^ ByteArray streamContents: [ :stream |
+		codePoints do: [ :each | 
+			self nextPutCodePoint: each toStream: stream ] ]
 %
 
 category: 'converting'
@@ -11187,12 +20616,23 @@ encodedByteCountFor: character
 	^ self encodedByteCountForCodePoint: character asInteger
 %
 
+category: 'converting'
+method: ZnCharacterEncoder
+encodedByteCountForCodePoint: codePoint
+	"Return how many bytes are needed to encode integer code point"
+	
+	self subclassResponsibility: #encodedByteCountForCodePoint:
+%
+
 category: 'convenience'
 method: ZnCharacterEncoder
 encodedByteCountForCodePoints: codePoints
 	"Return the exact number of bytes it would take to encode codePoints as a byte array"
 
-	^self subclassResponsibility: #encodedByteCountForCodePoints:
+	^ codePoints 
+		inject: 0 
+		into: [ :sum :each |
+			sum + (self encodedByteCountForCodePoint: each) ]
 %
 
 category: 'convenience'
@@ -11200,7 +20640,54 @@ method: ZnCharacterEncoder
 encodedByteCountForString: string
 	"Return the exact number of bytes it would take to encode string as a byte array"
 
-	^self subclassResponsibility: #encodedByteCountForCodePoints:
+	^ string 
+		inject: 0 
+		into: [ :sum :each |
+			sum + (self encodedByteCountFor: each) ]
+%
+
+category: 'convenience'
+method: ZnCharacterEncoder
+encodeString: string
+	"Encode string and return the resulting byte array"
+	
+	^ ByteArray streamContents: [ :stream |
+		self next: string size putAll: string startingAt: 1 toStream: stream ]
+%
+
+category: 'error handling'
+method: ZnCharacterEncoder
+error: message
+	^ ZnCharacterEncodingError signal: message
+%
+
+category: 'error handling'
+method: ZnCharacterEncoder
+errorIncomplete
+	^ ZnIncomplete signal: 'Incomplete input for character decoding'
+%
+
+category: 'error handling'
+method: ZnCharacterEncoder
+errorOutsideRange
+	^ self error: 'Character Unicode code point outside encoder range'
+%
+
+category: 'comparing'
+method: ZnCharacterEncoder
+hash
+	^ self class hash
+%
+
+category: 'accessing'
+method: ZnCharacterEncoder
+identifier
+	^ self subclassResponsibility
+%
+
+category: 'initialization'
+method: ZnCharacterEncoder
+initialize
 %
 
 category: 'convenience'
@@ -11227,7 +20714,7 @@ nextFromStream: stream
 	
 	"We should use #codePoint: but #value: is faster"
 	
-	^ Character value: (self nextCodePointFromStream: stream)
+	^ Character withValue: (self nextCodePointFromStream: stream)
 %
 
 category: 'converting'
@@ -11240,9 +20727,1751 @@ nextPut: character toStream: stream
 	self nextPutCodePoint: character asInteger toStream: stream
 %
 
+category: 'converting'
+method: ZnCharacterEncoder
+nextPutCodePoint: codePoint toStream: stream
+	"Write the encoding for Integer code point to stream"
+	
+	self subclassResponsibility: #nextPutCodePoint:toStream:
+%
+
+category: 'convenience'
+method: ZnCharacterEncoder
+readInto: string startingAt: offset count: requestedCount fromStream: stream
+	"Read requestedCount characters into string starting at offset,
+	returning the number read, there could be less available when stream is atEnd"
+
+	offset to: offset + requestedCount - 1 do: [ :index |
+		stream atEnd ifTrue: [ ^ index - offset ].  
+		string at: index put: (self nextFromStream: stream) ].
+	^ requestedCount
+%
+
+! Class implementation for 'ZnNullEncoder'
+
+!		Class methods for 'ZnNullEncoder'
+
+category: 'accessing'
+classmethod: ZnNullEncoder
+handlesEncoding: string
+	"Return true when my instances handle the encoding described by string.
+	Note that in principle I could handle latin1 (iso-8859-1) and ASCII, 
+	although that is not completely correct. 
+	To get maximum efficiency, it remains an option."
+	
+	^ (self canonicalEncodingIdentifier: string) = 'null'
+%
+
+category: 'accessing'
+classmethod: ZnNullEncoder
+knownEncodingIdentifiers
+	^ #( 'null' )
+%
+
+category: 'instance creation'
+classmethod: ZnNullEncoder
+newForEncoding: string
+	"No further parametrization needed"
+	
+	^ self new
+%
+
+!		Instance methods for 'ZnNullEncoder'
+
+category: 'converting'
+method: ZnNullEncoder
+backOnStream: stream
+	"Move back one character on stream"
+
+	stream back
+%
+
+category: 'convenience'
+method: ZnNullEncoder
+decodeBytes: bytes
+	"Decode bytes and return the resulting string"
+	"Overwritten for performance reasons"
+
+	^ bytes asString
+%
+
+category: 'converting'
+method: ZnNullEncoder
+encodedByteCountFor: character
+	"Return how many bytes are needed to encode character"
+	"Overwritten for performance reasons"
+
+	^ 1
+%
+
+category: 'converting'
+method: ZnNullEncoder
+encodedByteCountForCodePoint: codePoint
+	"Return how many bytes are needed to encode integer code point"
+
+	^ 1
+%
+
+category: 'convenience'
+method: ZnNullEncoder
+encodedByteCountForCodePoints: codePoints
+	"Return the exact number of bytes it would take to encode codePoints as a byte array"
+	"Overwritten for performance reasons"
+
+	^ codePoints size
+%
+
+category: 'convenience'
+method: ZnNullEncoder
+encodedByteCountForString: string
+	"Return the exact number of bytes it would take to encode string as a byte array"
+	"Overwritten for performance reasons"
+
+	^ string size
+%
+
+category: 'convenience'
+method: ZnNullEncoder
+encodeString: string
+	"Encode string and return the resulting byte array"
+	"Overwritten for performance reasons"
+
+	^ string asByteArray
+%
+
+category: 'accessing'
+method: ZnNullEncoder
+identifier
+	^ #ascii
+%
+
+category: 'convenience'
+method: ZnNullEncoder
+next: count putAll: string startingAt: offset toStream: stream
+	"Write count bytes from string starting at offset to stream."
+	"Overwritten for performance reasons"
+
+	string isByteString
+		ifTrue: [ 
+			offset to: offset + count - 1 do: [ :index | 
+				stream nextPut: (string byteAt: index) ] ]
+		ifFalse: [ 
+			super next: count putAll: string startingAt: offset toStream: stream ]
+%
+
+category: 'converting'
+method: ZnNullEncoder
+nextCodePointFromStream: stream
+	"Read and return the next integer code point from stream"
+
+	^ stream next
+%
+
+category: 'converting'
+method: ZnNullEncoder
+nextPutCodePoint: codePoint toStream: stream
+	"Write the encoding for Integer code point to stream"
+
+	codePoint < 256
+		ifTrue: [ stream nextPut: codePoint ]
+		ifFalse: [ self errorOutsideRange ]
+%
+
+category: 'convenience'
+method: ZnNullEncoder
+readInto: string startingAt: offset count: requestedCount fromStream: stream
+	"Read requestedCount characters into string starting at offset,
+	returning the number read, there could be less available when stream is atEnd"
+	"Overwritten for performance reasons"
+
+	offset to: offset + requestedCount - 1 do: [ :index |
+		stream atEnd ifTrue: [ ^ index - offset ].  
+		string byteAt: index put: stream next ].
+	^ requestedCount
+%
+
+! Class implementation for 'ZnSimplifiedByteEncoder'
+
+!		Class methods for 'ZnSimplifiedByteEncoder'
+
+category: 'mappings'
+classmethod: ZnSimplifiedByteEncoder
+asciiMapping
+	"ASCII is only defined for the first 127 codes (7-bit)"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil )
+%
+
+category: 'private'
+classmethod: ZnSimplifiedByteEncoder
+byteTextConverters
+	^ byteTextConverters ifNil: [ self initializeByteTextConverters ]
+%
+
+category: 'accessing'
+classmethod: ZnSimplifiedByteEncoder
+handlesEncoding: string
+	"Return true when my instances handle the encoding described by string"
+	
+	^ self byteTextConverters includesKey: (self canonicalEncodingIdentifier: string)
+%
+
+category: 'class initialization'
+classmethod: ZnSimplifiedByteEncoder
+initialize
+	"Initialize and cache the converters that I know of.
+	This includes all of their aliases.
+	This method must be changed to make sure it runs 
+	when loading in images where it is already present."
+	
+	self initializeByteTextConverters
+%
+
+category: 'private'
+classmethod: ZnSimplifiedByteEncoder
+initializeByteTextConverters
+	"Initialize and cache convertors based on specifications in methods that were autogenerated."
+
+	byteTextConverters := Dictionary new.
+	self mappingToIdentifiers
+		keysAndValuesDo: [ :mapping :identifiers | 
+			| tables |
+			tables := self tablesFromSpec: (self perform: mapping).
+			identifiers do: [ :each | byteTextConverters at: each put: tables ] ].
+	^ byteTextConverters
+%
+
+category: 'mappings'
+classmethod: ZnSimplifiedByteEncoder
+iso88591Mapping
+	"Specification generated by my optional subclass, ZnByteEncoder."
+	"ZnByteEncoder generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-1.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r00A1 16r00A2 16r00A3 16r00A4 16r00A5 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r00AA 16r00AB 16r00AC 16r00AD 16r00AE 16r00AF 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00B8 16r00B9 16r00BA 16r00BB 16r00BC 16r00BD 16r00BE 16r00BF 
+	16r00C0 16r00C1 16r00C2 16r00C3 16r00C4 16r00C5 16r00C6 16r00C7 
+	16r00C8 16r00C9 16r00CA 16r00CB 16r00CC 16r00CD 16r00CE 16r00CF 
+	16r00D0 16r00D1 16r00D2 16r00D3 16r00D4 16r00D5 16r00D6 16r00D7 
+	16r00D8 16r00D9 16r00DA 16r00DB 16r00DC 16r00DD 16r00DE 16r00DF 
+	16r00E0 16r00E1 16r00E2 16r00E3 16r00E4 16r00E5 16r00E6 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r00EC 16r00ED 16r00EE 16r00EF 
+	16r00F0 16r00F1 16r00F2 16r00F3 16r00F4 16r00F5 16r00F6 16r00F7 
+	16r00F8 16r00F9 16r00FA 16r00FB 16r00FC 16r00FD 16r00FE 16r00FF )
+%
+
+category: 'accessing'
+classmethod: ZnSimplifiedByteEncoder
+knownEncodingIdentifiers
+	^ self byteTextConverters keys
+%
+
+category: 'mappings'
+classmethod: ZnSimplifiedByteEncoder
+mappingToIdentifiers
+	"Return a dictionay mapping from encoding specifications to a list of encoding names."
+	
+	^ Dictionary newFromPairs: #( 
+		#iso88591Mapping #('iso88591' 'latin1')
+		#asciiMapping #('ascii') )
+%
+
+category: 'instance creation'
+classmethod: ZnSimplifiedByteEncoder
+newForEncoding: string
+	"Return a new character encoder object for an encoding described by string.
+	We use our precomputed ByteTextConverters tables."
+
+	| tables canonicalName |
+	canonicalName := self canonicalEncodingIdentifier: string.
+	tables := self byteTextConverters at: canonicalName.
+	^ self new
+		identifier: canonicalName;
+		byteToUnicode: tables first;
+		unicodeToByte: tables second;
+		yourself
+%
+
+category: 'private'
+classmethod: ZnSimplifiedByteEncoder
+tablesFromSpec: mapping
+	"Initialize the mappings to and from Unicode based on the 128 element array mapping"
+
+	| byteToUnicode unicodeToByte |
+	byteToUnicode := Array new: 128.
+	unicodeToByte := Dictionary new.	
+	"Mind the offset because first 128 characters are not stored into byteToUnicodeSpec"	
+	"Note that some entries are nil"
+	mapping
+		keysAndValuesDo: [ :index :unicode | 
+			unicode ifNotNil: [ 
+				byteToUnicode at: index put: (Character value: unicode).
+				unicodeToByte at: unicode put: 127 + index ] ].
+	^ Array with: byteToUnicode with: unicodeToByte
+%
+
+!		Instance methods for 'ZnSimplifiedByteEncoder'
+
+category: 'comparing'
+method: ZnSimplifiedByteEncoder
+= anObject
+	^ super = anObject and: [ self identifier = anObject identifier ]
+%
+
+category: 'converting'
+method: ZnSimplifiedByteEncoder
+backOnStream: stream
+	stream back
+%
+
+category: 'initialize-release'
+method: ZnSimplifiedByteEncoder
+beLenient
+	"Don't be strict, which is the default.
+	This means that holes in the mapping are let to pass through."
+
+	strict := false
+%
+
+category: 'accessing'
+method: ZnSimplifiedByteEncoder
+byteDomain
+	"Return an array with the byte values that are in my domain, that I can decode"
+	| a b index |
+	a := (0 to: 127) asArray.
+	index := 1.
+	b := (byteToUnicode collect: [ :each | 
+				each ifNotNil: [ index + 127 ]. 
+				index := index + 1 ]) reject: [ :each | each isNil ].
+	^  a , b
+%
+
+category: 'initialize-release'
+method: ZnSimplifiedByteEncoder
+byteToUnicode: map
+	byteToUnicode := map
+%
+
+category: 'accessing'
+method: ZnSimplifiedByteEncoder
+characterDomain
+	"Return a set with the characters that are in my domain, that I can encode"
+
+	^ ((0 to: 127) asSet addAll: unicodeToByte keys; yourself) collect: [ :each | Character value: each  ]
+%
+
+category: 'converting'
+method: ZnSimplifiedByteEncoder
+encodedByteCountFor: character
+	"Overwritten for performance reasons"
+	
+	^ 1
+%
+
+category: 'converting'
+method: ZnSimplifiedByteEncoder
+encodedByteCountForCodePoint: character
+	^ 1
+%
+
+category: 'comparing'
+method: ZnSimplifiedByteEncoder
+hash
+	^ self identifier hash
+%
+
+category: 'accessing'
+method: ZnSimplifiedByteEncoder
+identifier
+	^ identifier
+%
+
+category: 'initialize-release'
+method: ZnSimplifiedByteEncoder
+identifier: object
+	identifier := object
+%
+
+category: 'initialization'
+method: ZnSimplifiedByteEncoder
+initialize
+	super initialize.
+	strict := true
+%
+
+category: 'testing'
+method: ZnSimplifiedByteEncoder
+isLenient
+	^ strict not
+%
+
+category: 'testing'
+method: ZnSimplifiedByteEncoder
+isStrict
+	^ strict
+%
+
+category: 'converting'
+method: ZnSimplifiedByteEncoder
+nextCodePointFromStream: stream
+	"In non-strict mode, we let byte values for holes in our mapping pass through"
+
+	| byteValue |
+	^ (byteValue := stream next) < 128
+		ifTrue: [ byteValue ]
+		ifFalse: [ 
+			(byteToUnicode at: byteValue - 127 ifAbsent: [ nil ])
+				ifNotNil: [ :unicode | unicode asInteger ]
+				ifNil: [ 
+					strict
+						ifTrue: [ self errorOutsideRange ]
+						ifFalse: [ byteValue ] ] ]
+%
+
+category: 'converting'
+method: ZnSimplifiedByteEncoder
+nextFromStream: stream
+	"In non-strict mode, we let byte values for holes in our mapping pass through.
+	Overwritten for performance reasons"
+
+	| byteValue |
+	^ (byteValue := stream next ifNil: [ ^ self errorIncomplete asCharacter ]) < 128
+		ifTrue: [ Character value: byteValue ]
+		ifFalse: [ 
+			(byteToUnicode at: byteValue - 127 ifAbsent: [ nil ])
+				ifNotNil: [ :unicode | unicode ]
+				ifNil: [ 
+					strict
+						ifTrue: [ self errorOutsideRange ]
+						ifFalse: [ Character value: byteValue ] ] ]
+%
+
+category: 'converting'
+method: ZnSimplifiedByteEncoder
+nextPutCodePoint: codePoint toStream: stream
+	"In non-strict mode, we let code points for holes in our mapping table pass through"
+	
+	codePoint < 128
+		ifTrue: [ stream nextPut: codePoint ]
+		ifFalse: [ 
+			| byte |
+			byte := unicodeToByte at: codePoint ifAbsent: [ nil ].
+			(byte isNil and: [ strict or: [ codePoint > 255 ] ])
+				ifTrue: [ self errorOutsideRange ].
+			stream nextPut: (byte ifNil: [ codePoint ]) ]
+%
+
+category: 'printing'
+method: ZnSimplifiedByteEncoder
+printOn: stream
+	super printOn: stream.
+	stream
+		nextPut: $(;
+		print: identifier.
+	strict
+		ifTrue: [ stream nextPutAll: ' strict' ].
+	stream nextPut: $)
+%
+
+category: 'initialize-release'
+method: ZnSimplifiedByteEncoder
+unicodeToByte: map
+	unicodeToByte := map
+%
+
+! Class implementation for 'ZnByteEncoder'
+
+!		Class methods for 'ZnByteEncoder'
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1250Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1250.TXT'"
+
+	^ #(
+	16r20AC nil 16r201A nil 16r201E 16r2026 16r2020 16r2021 
+	nil 16r2030 16r0160 16r2039 16r015A 16r0164 16r017D 16r0179 
+	nil 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	nil 16r2122 16r0161 16r203A 16r015B 16r0165 16r017E 16r017A 
+	16r00A0 16r02C7 16r02D8 16r0141 16r00A4 16r0104 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r015E 16r00AB 16r00AC 16r00AD 16r00AE 16r017B 
+	16r00B0 16r00B1 16r02DB 16r0142 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00B8 16r0105 16r015F 16r00BB 16r013D 16r02DD 16r013E 16r017C 
+	16r0154 16r00C1 16r00C2 16r0102 16r00C4 16r0139 16r0106 16r00C7 
+	16r010C 16r00C9 16r0118 16r00CB 16r011A 16r00CD 16r00CE 16r010E 
+	16r0110 16r0143 16r0147 16r00D3 16r00D4 16r0150 16r00D6 16r00D7 
+	16r0158 16r016E 16r00DA 16r0170 16r00DC 16r00DD 16r0162 16r00DF 
+	16r0155 16r00E1 16r00E2 16r0103 16r00E4 16r013A 16r0107 16r00E7 
+	16r010D 16r00E9 16r0119 16r00EB 16r011B 16r00ED 16r00EE 16r010F 
+	16r0111 16r0144 16r0148 16r00F3 16r00F4 16r0151 16r00F6 16r00F7 
+	16r0159 16r016F 16r00FA 16r0171 16r00FC 16r00FD 16r0163 16r02D9 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1251Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1251.TXT'"
+
+	^ #(
+	16r0402 16r0403 16r201A 16r0453 16r201E 16r2026 16r2020 16r2021 
+	16r20AC 16r2030 16r0409 16r2039 16r040A 16r040C 16r040B 16r040F 
+	16r0452 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	nil 16r2122 16r0459 16r203A 16r045A 16r045C 16r045B 16r045F 
+	16r00A0 16r040E 16r045E 16r0408 16r00A4 16r0490 16r00A6 16r00A7 
+	16r0401 16r00A9 16r0404 16r00AB 16r00AC 16r00AD 16r00AE 16r0407 
+	16r00B0 16r00B1 16r0406 16r0456 16r0491 16r00B5 16r00B6 16r00B7 
+	16r0451 16r2116 16r0454 16r00BB 16r0458 16r0405 16r0455 16r0457 
+	16r0410 16r0411 16r0412 16r0413 16r0414 16r0415 16r0416 16r0417 
+	16r0418 16r0419 16r041A 16r041B 16r041C 16r041D 16r041E 16r041F 
+	16r0420 16r0421 16r0422 16r0423 16r0424 16r0425 16r0426 16r0427 
+	16r0428 16r0429 16r042A 16r042B 16r042C 16r042D 16r042E 16r042F 
+	16r0430 16r0431 16r0432 16r0433 16r0434 16r0435 16r0436 16r0437 
+	16r0438 16r0439 16r043A 16r043B 16r043C 16r043D 16r043E 16r043F 
+	16r0440 16r0441 16r0442 16r0443 16r0444 16r0445 16r0446 16r0447 
+	16r0448 16r0449 16r044A 16r044B 16r044C 16r044D 16r044E 16r044F )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1252Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT'"
+
+	^ #(
+	16r20AC nil 16r201A 16r0192 16r201E 16r2026 16r2020 16r2021 
+	16r02C6 16r2030 16r0160 16r2039 16r0152 nil 16r017D nil 
+	nil 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	16r02DC 16r2122 16r0161 16r203A 16r0153 nil 16r017E 16r0178 
+	16r00A0 16r00A1 16r00A2 16r00A3 16r00A4 16r00A5 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r00AA 16r00AB 16r00AC 16r00AD 16r00AE 16r00AF 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00B8 16r00B9 16r00BA 16r00BB 16r00BC 16r00BD 16r00BE 16r00BF 
+	16r00C0 16r00C1 16r00C2 16r00C3 16r00C4 16r00C5 16r00C6 16r00C7 
+	16r00C8 16r00C9 16r00CA 16r00CB 16r00CC 16r00CD 16r00CE 16r00CF 
+	16r00D0 16r00D1 16r00D2 16r00D3 16r00D4 16r00D5 16r00D6 16r00D7 
+	16r00D8 16r00D9 16r00DA 16r00DB 16r00DC 16r00DD 16r00DE 16r00DF 
+	16r00E0 16r00E1 16r00E2 16r00E3 16r00E4 16r00E5 16r00E6 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r00EC 16r00ED 16r00EE 16r00EF 
+	16r00F0 16r00F1 16r00F2 16r00F3 16r00F4 16r00F5 16r00F6 16r00F7 
+	16r00F8 16r00F9 16r00FA 16r00FB 16r00FC 16r00FD 16r00FE 16r00FF )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1253Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1253.TXT'"
+
+	^ #(
+	16r20AC nil 16r201A 16r0192 16r201E 16r2026 16r2020 16r2021 
+	nil 16r2030 nil 16r2039 nil nil nil nil 
+	nil 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	nil 16r2122 nil 16r203A nil nil nil nil 
+	16r00A0 16r0385 16r0386 16r00A3 16r00A4 16r00A5 16r00A6 16r00A7 
+	16r00A8 16r00A9 nil 16r00AB 16r00AC 16r00AD 16r00AE 16r2015 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r0384 16r00B5 16r00B6 16r00B7 
+	16r0388 16r0389 16r038A 16r00BB 16r038C 16r00BD 16r038E 16r038F 
+	16r0390 16r0391 16r0392 16r0393 16r0394 16r0395 16r0396 16r0397 
+	16r0398 16r0399 16r039A 16r039B 16r039C 16r039D 16r039E 16r039F 
+	16r03A0 16r03A1 nil 16r03A3 16r03A4 16r03A5 16r03A6 16r03A7 
+	16r03A8 16r03A9 16r03AA 16r03AB 16r03AC 16r03AD 16r03AE 16r03AF 
+	16r03B0 16r03B1 16r03B2 16r03B3 16r03B4 16r03B5 16r03B6 16r03B7 
+	16r03B8 16r03B9 16r03BA 16r03BB 16r03BC 16r03BD 16r03BE 16r03BF 
+	16r03C0 16r03C1 16r03C2 16r03C3 16r03C4 16r03C5 16r03C6 16r03C7 
+	16r03C8 16r03C9 16r03CA 16r03CB 16r03CC 16r03CD 16r03CE nil )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1254Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1254.TXT'"
+
+	^ #(
+	16r20AC nil 16r201A 16r0192 16r201E 16r2026 16r2020 16r2021 
+	16r02C6 16r2030 16r0160 16r2039 16r0152 nil nil nil 
+	nil 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	16r02DC 16r2122 16r0161 16r203A 16r0153 nil nil 16r0178 
+	16r00A0 16r00A1 16r00A2 16r00A3 16r00A4 16r00A5 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r00AA 16r00AB 16r00AC 16r00AD 16r00AE 16r00AF 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00B8 16r00B9 16r00BA 16r00BB 16r00BC 16r00BD 16r00BE 16r00BF 
+	16r00C0 16r00C1 16r00C2 16r00C3 16r00C4 16r00C5 16r00C6 16r00C7 
+	16r00C8 16r00C9 16r00CA 16r00CB 16r00CC 16r00CD 16r00CE 16r00CF 
+	16r011E 16r00D1 16r00D2 16r00D3 16r00D4 16r00D5 16r00D6 16r00D7 
+	16r00D8 16r00D9 16r00DA 16r00DB 16r00DC 16r0130 16r015E 16r00DF 
+	16r00E0 16r00E1 16r00E2 16r00E3 16r00E4 16r00E5 16r00E6 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r00EC 16r00ED 16r00EE 16r00EF 
+	16r011F 16r00F1 16r00F2 16r00F3 16r00F4 16r00F5 16r00F6 16r00F7 
+	16r00F8 16r00F9 16r00FA 16r00FB 16r00FC 16r0131 16r015F 16r00FF )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1255Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1255.TXT'"
+
+	^ #(
+	16r20AC nil 16r201A 16r0192 16r201E 16r2026 16r2020 16r2021 
+	16r02C6 16r2030 nil 16r2039 nil nil nil nil 
+	nil 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	16r02DC 16r2122 nil 16r203A nil nil nil nil 
+	16r00A0 16r00A1 16r00A2 16r00A3 16r20AA 16r00A5 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r00D7 16r00AB 16r00AC 16r00AD 16r00AE 16r00AF 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00B8 16r00B9 16r00F7 16r00BB 16r00BC 16r00BD 16r00BE 16r00BF 
+	16r05B0 16r05B1 16r05B2 16r05B3 16r05B4 16r05B5 16r05B6 16r05B7 
+	16r05B8 16r05B9 nil 16r05BB 16r05BC 16r05BD 16r05BE 16r05BF 
+	16r05C0 16r05C1 16r05C2 16r05C3 16r05F0 16r05F1 16r05F2 16r05F3 
+	16r05F4 nil nil nil nil nil nil nil 
+	16r05D0 16r05D1 16r05D2 16r05D3 16r05D4 16r05D5 16r05D6 16r05D7 
+	16r05D8 16r05D9 16r05DA 16r05DB 16r05DC 16r05DD 16r05DE 16r05DF 
+	16r05E0 16r05E1 16r05E2 16r05E3 16r05E4 16r05E5 16r05E6 16r05E7 
+	16r05E8 16r05E9 16r05EA nil nil 16r200E 16r200F nil )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1256Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1256.TXT'"
+
+	^ #(
+	16r20AC 16r067E 16r201A 16r0192 16r201E 16r2026 16r2020 16r2021 
+	16r02C6 16r2030 16r0679 16r2039 16r0152 16r0686 16r0698 16r0688 
+	16r06AF 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	16r06A9 16r2122 16r0691 16r203A 16r0153 16r200C 16r200D 16r06BA 
+	16r00A0 16r060C 16r00A2 16r00A3 16r00A4 16r00A5 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r06BE 16r00AB 16r00AC 16r00AD 16r00AE 16r00AF 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00B8 16r00B9 16r061B 16r00BB 16r00BC 16r00BD 16r00BE 16r061F 
+	16r06C1 16r0621 16r0622 16r0623 16r0624 16r0625 16r0626 16r0627 
+	16r0628 16r0629 16r062A 16r062B 16r062C 16r062D 16r062E 16r062F 
+	16r0630 16r0631 16r0632 16r0633 16r0634 16r0635 16r0636 16r00D7 
+	16r0637 16r0638 16r0639 16r063A 16r0640 16r0641 16r0642 16r0643 
+	16r00E0 16r0644 16r00E2 16r0645 16r0646 16r0647 16r0648 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r0649 16r064A 16r00EE 16r00EF 
+	16r064B 16r064C 16r064D 16r064E 16r00F4 16r064F 16r0650 16r00F7 
+	16r0651 16r00F9 16r0652 16r00FB 16r00FC 16r200E 16r200F 16r06D2 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1257Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1257.TXT'"
+
+	^ #(
+	16r20AC nil 16r201A nil 16r201E 16r2026 16r2020 16r2021 
+	nil 16r2030 nil 16r2039 nil 16r00A8 16r02C7 16r00B8 
+	nil 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	nil 16r2122 nil 16r203A nil 16r00AF 16r02DB nil 
+	16r00A0 nil 16r00A2 16r00A3 16r00A4 nil 16r00A6 16r00A7 
+	16r00D8 16r00A9 16r0156 16r00AB 16r00AC 16r00AD 16r00AE 16r00C6 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00F8 16r00B9 16r0157 16r00BB 16r00BC 16r00BD 16r00BE 16r00E6 
+	16r0104 16r012E 16r0100 16r0106 16r00C4 16r00C5 16r0118 16r0112 
+	16r010C 16r00C9 16r0179 16r0116 16r0122 16r0136 16r012A 16r013B 
+	16r0160 16r0143 16r0145 16r00D3 16r014C 16r00D5 16r00D6 16r00D7 
+	16r0172 16r0141 16r015A 16r016A 16r00DC 16r017B 16r017D 16r00DF 
+	16r0105 16r012F 16r0101 16r0107 16r00E4 16r00E5 16r0119 16r0113 
+	16r010D 16r00E9 16r017A 16r0117 16r0123 16r0137 16r012B 16r013C 
+	16r0161 16r0144 16r0146 16r00F3 16r014D 16r00F5 16r00F6 16r00F7 
+	16r0173 16r0142 16r015B 16r016B 16r00FC 16r017C 16r017E 16r02D9 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp1258Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1258.TXT'"
+
+	^ #(
+	16r20AC nil 16r201A 16r0192 16r201E 16r2026 16r2020 16r2021 
+	16r02C6 16r2030 nil 16r2039 16r0152 nil nil nil 
+	nil 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	16r02DC 16r2122 nil 16r203A 16r0153 nil nil 16r0178 
+	16r00A0 16r00A1 16r00A2 16r00A3 16r00A4 16r00A5 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r00AA 16r00AB 16r00AC 16r00AD 16r00AE 16r00AF 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00B8 16r00B9 16r00BA 16r00BB 16r00BC 16r00BD 16r00BE 16r00BF 
+	16r00C0 16r00C1 16r00C2 16r0102 16r00C4 16r00C5 16r00C6 16r00C7 
+	16r00C8 16r00C9 16r00CA 16r00CB 16r0300 16r00CD 16r00CE 16r00CF 
+	16r0110 16r00D1 16r0309 16r00D3 16r00D4 16r01A0 16r00D6 16r00D7 
+	16r00D8 16r00D9 16r00DA 16r00DB 16r00DC 16r01AF 16r0303 16r00DF 
+	16r00E0 16r00E1 16r00E2 16r0103 16r00E4 16r00E5 16r00E6 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r0301 16r00ED 16r00EE 16r00EF 
+	16r0111 16r00F1 16r0323 16r00F3 16r00F4 16r01A1 16r00F6 16r00F7 
+	16r00F8 16r00F9 16r00FA 16r00FB 16r00FC 16r01B0 16r20AB 16r00FF )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp850Mapping
+	"This is not included in the MS mappings on the Unicode site, 
+	but still in modern use as the default codepage in 
+	the Windows Command Shell for multilingual locales"
+	"Technically, due to structure of ByteEncoder, it is incomplete, 
+	as the lower range corresponds not to ASCII, but to cp437, 
+	where character 0 - 31 and 127 have different meanings."
+	"See also http://en.wikipedia.org/wiki/Code_page_850"
+	
+	^ #(
+	16r00C7 16r00FC 16r00E9 16r00E2 16r00E4 16r00E0 16r00E5 16r00E7 
+	16r00EA 16r00EB 16r00E8 16r00EF 16r00EE 16r00EC 16r00C4 16r00C5 
+	16r00C9 16r00E6 16r00C6 16r00F4 16r00F6 16r00F2 16r00FB 16r00F9 
+	16r00FF 16r00D6 16r00DC 16r00F8 16r00A3 16r00D8 16r00D7 16r0192 
+	16r00E1 16r00ED 16r00F3 16r00FA 16r00F1 16r00D1 16r00AA 16r00BA 
+	16r00BF 16r00AE 16r00AC 16r00BD 16r00BC 16r00A1 16r00AB 16r00BB 
+	16r2591 16r2592 16r2593 16r2502 16r2524 16r00C1 16r00C2 16r00C0 
+	16r00A9 16r2563 16r2551 16r2557 16r255D 16r00A2 16r00A5 16r2510 
+	16r2514 16r2534 16r252C 16r251C 16r2500 16r253C 16r00E3 16r00C3 
+	16r255A 16r2554 16r2569 16r2566 16r2560 16r2550 16r256C 16r00A4 
+	16r00F0 16r00D0 16r00CA 16r00CB 16r00C8 16r0131 16r00CD 16r00CE 
+	16r00CF 16r2518 16r250C 16r2588 16r2584 16r00A6 16r00CC 16r2580 
+	16r00D3 16r00DF 16r00D4 16r00D2 16r00F5 16r00D5 16r00B5 16r00FE 
+	16r00DE 16r00DA 16r00DB 16r00D9 16r00FD 16r00DD 16r00AF 16r00B4 
+	16r00AD 16r00B1 16r2017 16r00BE 16r00B6 16r00A7 16r00F7 16r00B8 
+	16r00B0 16r00A8 16r00B7 16r00B9 16r00B3 16r00B2 16r25A0 16r00A0 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp866Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/PC/CP866.TXT'"
+
+	^ #(
+	16r0410 16r0411 16r0412 16r0413 16r0414 16r0415 16r0416 16r0417 
+	16r0418 16r0419 16r041A 16r041B 16r041C 16r041D 16r041E 16r041F 
+	16r0420 16r0421 16r0422 16r0423 16r0424 16r0425 16r0426 16r0427 
+	16r0428 16r0429 16r042A 16r042B 16r042C 16r042D 16r042E 16r042F 
+	16r0430 16r0431 16r0432 16r0433 16r0434 16r0435 16r0436 16r0437 
+	16r0438 16r0439 16r043A 16r043B 16r043C 16r043D 16r043E 16r043F 
+	16r2591 16r2592 16r2593 16r2502 16r2524 16r2561 16r2562 16r2556 
+	16r2555 16r2563 16r2551 16r2557 16r255D 16r255C 16r255B 16r2510 
+	16r2514 16r2534 16r252C 16r251C 16r2500 16r253C 16r255E 16r255F 
+	16r255A 16r2554 16r2569 16r2566 16r2560 16r2550 16r256C 16r2567 
+	16r2568 16r2564 16r2565 16r2559 16r2558 16r2552 16r2553 16r256B 
+	16r256A 16r2518 16r250C 16r2588 16r2584 16r258C 16r2590 16r2580 
+	16r0440 16r0441 16r0442 16r0443 16r0444 16r0445 16r0446 16r0447 
+	16r0448 16r0449 16r044A 16r044B 16r044C 16r044D 16r044E 16r044F 
+	16r0401 16r0451 16r0404 16r0454 16r0407 16r0457 16r040E 16r045E 
+	16r00B0 16r2219 16r00B7 16r221A 16r2116 16r00A4 16r25A0 16r00A0 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+cp874Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP874.TXT'"
+
+	^ #(
+	16r20AC nil nil nil nil 16r2026 nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil 16r2018 16r2019 16r201C 16r201D 16r2022 16r2013 16r2014 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r0E01 16r0E02 16r0E03 16r0E04 16r0E05 16r0E06 16r0E07 
+	16r0E08 16r0E09 16r0E0A 16r0E0B 16r0E0C 16r0E0D 16r0E0E 16r0E0F 
+	16r0E10 16r0E11 16r0E12 16r0E13 16r0E14 16r0E15 16r0E16 16r0E17 
+	16r0E18 16r0E19 16r0E1A 16r0E1B 16r0E1C 16r0E1D 16r0E1E 16r0E1F 
+	16r0E20 16r0E21 16r0E22 16r0E23 16r0E24 16r0E25 16r0E26 16r0E27 
+	16r0E28 16r0E29 16r0E2A 16r0E2B 16r0E2C 16r0E2D 16r0E2E 16r0E2F 
+	16r0E30 16r0E31 16r0E32 16r0E33 16r0E34 16r0E35 16r0E36 16r0E37 
+	16r0E38 16r0E39 16r0E3A nil nil nil nil 16r0E3F 
+	16r0E40 16r0E41 16r0E42 16r0E43 16r0E44 16r0E45 16r0E46 16r0E47 
+	16r0E48 16r0E49 16r0E4A 16r0E4B 16r0E4C 16r0E4D 16r0E4E 16r0E4F 
+	16r0E50 16r0E51 16r0E52 16r0E53 16r0E54 16r0E55 16r0E56 16r0E57 
+	16r0E58 16r0E59 16r0E5A 16r0E5B nil nil nil nil )
+%
+
+category: 'utilities'
+classmethod: ZnByteEncoder
+generateByteToUnicodeSpec: url
+	"Return the formatted source code for an array mapping 
+	the top 128 byte to unicode values from a Unicode.org url"
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-2.TXT'."
+
+	| mapping |
+	mapping := self parseUnicodeOrgSpec: url.  
+	^ String streamContents: [ :stream |
+		stream tab; << '"'; << 'self generateByteToUnicodeSpec: '; print: url; << '"'; cr; cr; tab; << '^ #('.
+		(self top128FromUnicodeSpec: mapping) doWithIndex: [ :each :index |
+			index - 1 \\ 8 = 0 ifTrue: [ stream cr; tab ].
+			each isNil
+				ifTrue: [ stream print: nil; space ]  
+				ifFalse: [ stream << '16r' << (each printPaddedWith: $0 to: 4 base: 16); space ] ].
+		stream nextPut: $); cr ]
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso885910Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-10.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r0104 16r0112 16r0122 16r012A 16r0128 16r0136 16r00A7 
+	16r013B 16r0110 16r0160 16r0166 16r017D 16r00AD 16r016A 16r014A 
+	16r00B0 16r0105 16r0113 16r0123 16r012B 16r0129 16r0137 16r00B7 
+	16r013C 16r0111 16r0161 16r0167 16r017E 16r2015 16r016B 16r014B 
+	16r0100 16r00C1 16r00C2 16r00C3 16r00C4 16r00C5 16r00C6 16r012E 
+	16r010C 16r00C9 16r0118 16r00CB 16r0116 16r00CD 16r00CE 16r00CF 
+	16r00D0 16r0145 16r014C 16r00D3 16r00D4 16r00D5 16r00D6 16r0168 
+	16r00D8 16r0172 16r00DA 16r00DB 16r00DC 16r00DD 16r00DE 16r00DF 
+	16r0101 16r00E1 16r00E2 16r00E3 16r00E4 16r00E5 16r00E6 16r012F 
+	16r010D 16r00E9 16r0119 16r00EB 16r0117 16r00ED 16r00EE 16r00EF 
+	16r00F0 16r0146 16r014D 16r00F3 16r00F4 16r00F5 16r00F6 16r0169 
+	16r00F8 16r0173 16r00FA 16r00FB 16r00FC 16r00FD 16r00FE 16r0138 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso885913Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-13.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r201D 16r00A2 16r00A3 16r00A4 16r201E 16r00A6 16r00A7 
+	16r00D8 16r00A9 16r0156 16r00AB 16r00AC 16r00AD 16r00AE 16r00C6 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r201C 16r00B5 16r00B6 16r00B7 
+	16r00F8 16r00B9 16r0157 16r00BB 16r00BC 16r00BD 16r00BE 16r00E6 
+	16r0104 16r012E 16r0100 16r0106 16r00C4 16r00C5 16r0118 16r0112 
+	16r010C 16r00C9 16r0179 16r0116 16r0122 16r0136 16r012A 16r013B 
+	16r0160 16r0143 16r0145 16r00D3 16r014C 16r00D5 16r00D6 16r00D7 
+	16r0172 16r0141 16r015A 16r016A 16r00DC 16r017B 16r017D 16r00DF 
+	16r0105 16r012F 16r0101 16r0107 16r00E4 16r00E5 16r0119 16r0113 
+	16r010D 16r00E9 16r017A 16r0117 16r0123 16r0137 16r012B 16r013C 
+	16r0161 16r0144 16r0146 16r00F3 16r014D 16r00F5 16r00F6 16r00F7 
+	16r0173 16r0142 16r015B 16r016B 16r00FC 16r017C 16r017E 16r2019 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso885914Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-14.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r1E02 16r1E03 16r00A3 16r010A 16r010B 16r1E0A 16r00A7 
+	16r1E80 16r00A9 16r1E82 16r1E0B 16r1EF2 16r00AD 16r00AE 16r0178 
+	16r1E1E 16r1E1F 16r0120 16r0121 16r1E40 16r1E41 16r00B6 16r1E56 
+	16r1E81 16r1E57 16r1E83 16r1E60 16r1EF3 16r1E84 16r1E85 16r1E61 
+	16r00C0 16r00C1 16r00C2 16r00C3 16r00C4 16r00C5 16r00C6 16r00C7 
+	16r00C8 16r00C9 16r00CA 16r00CB 16r00CC 16r00CD 16r00CE 16r00CF 
+	16r0174 16r00D1 16r00D2 16r00D3 16r00D4 16r00D5 16r00D6 16r1E6A 
+	16r00D8 16r00D9 16r00DA 16r00DB 16r00DC 16r00DD 16r0176 16r00DF 
+	16r00E0 16r00E1 16r00E2 16r00E3 16r00E4 16r00E5 16r00E6 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r00EC 16r00ED 16r00EE 16r00EF 
+	16r0175 16r00F1 16r00F2 16r00F3 16r00F4 16r00F5 16r00F6 16r1E6B 
+	16r00F8 16r00F9 16r00FA 16r00FB 16r00FC 16r00FD 16r0177 16r00FF )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso885915Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-15.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r00A1 16r00A2 16r00A3 16r20AC 16r00A5 16r0160 16r00A7 
+	16r0161 16r00A9 16r00AA 16r00AB 16r00AC 16r00AD 16r00AE 16r00AF 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r017D 16r00B5 16r00B6 16r00B7 
+	16r017E 16r00B9 16r00BA 16r00BB 16r0152 16r0153 16r0178 16r00BF 
+	16r00C0 16r00C1 16r00C2 16r00C3 16r00C4 16r00C5 16r00C6 16r00C7 
+	16r00C8 16r00C9 16r00CA 16r00CB 16r00CC 16r00CD 16r00CE 16r00CF 
+	16r00D0 16r00D1 16r00D2 16r00D3 16r00D4 16r00D5 16r00D6 16r00D7 
+	16r00D8 16r00D9 16r00DA 16r00DB 16r00DC 16r00DD 16r00DE 16r00DF 
+	16r00E0 16r00E1 16r00E2 16r00E3 16r00E4 16r00E5 16r00E6 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r00EC 16r00ED 16r00EE 16r00EF 
+	16r00F0 16r00F1 16r00F2 16r00F3 16r00F4 16r00F5 16r00F6 16r00F7 
+	16r00F8 16r00F9 16r00FA 16r00FB 16r00FC 16r00FD 16r00FE 16r00FF )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso885916Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-16.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r0104 16r0105 16r0141 16r20AC 16r201E 16r0160 16r00A7 
+	16r0161 16r00A9 16r0218 16r00AB 16r0179 16r00AD 16r017A 16r017B 
+	16r00B0 16r00B1 16r010C 16r0142 16r017D 16r201D 16r00B6 16r00B7 
+	16r017E 16r010D 16r0219 16r00BB 16r0152 16r0153 16r0178 16r017C 
+	16r00C0 16r00C1 16r00C2 16r0102 16r00C4 16r0106 16r00C6 16r00C7 
+	16r00C8 16r00C9 16r00CA 16r00CB 16r00CC 16r00CD 16r00CE 16r00CF 
+	16r0110 16r0143 16r00D2 16r00D3 16r00D4 16r0150 16r00D6 16r015A 
+	16r0170 16r00D9 16r00DA 16r00DB 16r00DC 16r0118 16r021A 16r00DF 
+	16r00E0 16r00E1 16r00E2 16r0103 16r00E4 16r0107 16r00E6 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r00EC 16r00ED 16r00EE 16r00EF 
+	16r0111 16r0144 16r00F2 16r00F3 16r00F4 16r0151 16r00F6 16r015B 
+	16r0171 16r00F9 16r00FA 16r00FB 16r00FC 16r0119 16r021B 16r00FF )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso88592Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-2.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r0104 16r02D8 16r0141 16r00A4 16r013D 16r015A 16r00A7 
+	16r00A8 16r0160 16r015E 16r0164 16r0179 16r00AD 16r017D 16r017B 
+	16r00B0 16r0105 16r02DB 16r0142 16r00B4 16r013E 16r015B 16r02C7 
+	16r00B8 16r0161 16r015F 16r0165 16r017A 16r02DD 16r017E 16r017C 
+	16r0154 16r00C1 16r00C2 16r0102 16r00C4 16r0139 16r0106 16r00C7 
+	16r010C 16r00C9 16r0118 16r00CB 16r011A 16r00CD 16r00CE 16r010E 
+	16r0110 16r0143 16r0147 16r00D3 16r00D4 16r0150 16r00D6 16r00D7 
+	16r0158 16r016E 16r00DA 16r0170 16r00DC 16r00DD 16r0162 16r00DF 
+	16r0155 16r00E1 16r00E2 16r0103 16r00E4 16r013A 16r0107 16r00E7 
+	16r010D 16r00E9 16r0119 16r00EB 16r011B 16r00ED 16r00EE 16r010F 
+	16r0111 16r0144 16r0148 16r00F3 16r00F4 16r0151 16r00F6 16r00F7 
+	16r0159 16r016F 16r00FA 16r0171 16r00FC 16r00FD 16r0163 16r02D9 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso88593Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-3.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r0126 16r02D8 16r00A3 16r00A4 nil 16r0124 16r00A7 
+	16r00A8 16r0130 16r015E 16r011E 16r0134 16r00AD nil 16r017B 
+	16r00B0 16r0127 16r00B2 16r00B3 16r00B4 16r00B5 16r0125 16r00B7 
+	16r00B8 16r0131 16r015F 16r011F 16r0135 16r00BD nil 16r017C 
+	16r00C0 16r00C1 16r00C2 nil 16r00C4 16r010A 16r0108 16r00C7 
+	16r00C8 16r00C9 16r00CA 16r00CB 16r00CC 16r00CD 16r00CE 16r00CF 
+	nil 16r00D1 16r00D2 16r00D3 16r00D4 16r0120 16r00D6 16r00D7 
+	16r011C 16r00D9 16r00DA 16r00DB 16r00DC 16r016C 16r015C 16r00DF 
+	16r00E0 16r00E1 16r00E2 nil 16r00E4 16r010B 16r0109 16r00E7 
+	16r00E8 16r00E9 16r00EA 16r00EB 16r00EC 16r00ED 16r00EE 16r00EF 
+	nil 16r00F1 16r00F2 16r00F3 16r00F4 16r0121 16r00F6 16r00F7 
+	16r011D 16r00F9 16r00FA 16r00FB 16r00FC 16r016D 16r015D 16r02D9 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso88594Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-4.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r0104 16r0138 16r0156 16r00A4 16r0128 16r013B 16r00A7 
+	16r00A8 16r0160 16r0112 16r0122 16r0166 16r00AD 16r017D 16r00AF 
+	16r00B0 16r0105 16r02DB 16r0157 16r00B4 16r0129 16r013C 16r02C7 
+	16r00B8 16r0161 16r0113 16r0123 16r0167 16r014A 16r017E 16r014B 
+	16r0100 16r00C1 16r00C2 16r00C3 16r00C4 16r00C5 16r00C6 16r012E 
+	16r010C 16r00C9 16r0118 16r00CB 16r0116 16r00CD 16r00CE 16r012A 
+	16r0110 16r0145 16r014C 16r0136 16r00D4 16r00D5 16r00D6 16r00D7 
+	16r00D8 16r0172 16r00DA 16r00DB 16r00DC 16r0168 16r016A 16r00DF 
+	16r0101 16r00E1 16r00E2 16r00E3 16r00E4 16r00E5 16r00E6 16r012F 
+	16r010D 16r00E9 16r0119 16r00EB 16r0117 16r00ED 16r00EE 16r012B 
+	16r0111 16r0146 16r014D 16r0137 16r00F4 16r00F5 16r00F6 16r00F7 
+	16r00F8 16r0173 16r00FA 16r00FB 16r00FC 16r0169 16r016B 16r02D9 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso88595Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-5.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r0401 16r0402 16r0403 16r0404 16r0405 16r0406 16r0407 
+	16r0408 16r0409 16r040A 16r040B 16r040C 16r00AD 16r040E 16r040F 
+	16r0410 16r0411 16r0412 16r0413 16r0414 16r0415 16r0416 16r0417 
+	16r0418 16r0419 16r041A 16r041B 16r041C 16r041D 16r041E 16r041F 
+	16r0420 16r0421 16r0422 16r0423 16r0424 16r0425 16r0426 16r0427 
+	16r0428 16r0429 16r042A 16r042B 16r042C 16r042D 16r042E 16r042F 
+	16r0430 16r0431 16r0432 16r0433 16r0434 16r0435 16r0436 16r0437 
+	16r0438 16r0439 16r043A 16r043B 16r043C 16r043D 16r043E 16r043F 
+	16r0440 16r0441 16r0442 16r0443 16r0444 16r0445 16r0446 16r0447 
+	16r0448 16r0449 16r044A 16r044B 16r044C 16r044D 16r044E 16r044F 
+	16r2116 16r0451 16r0452 16r0453 16r0454 16r0455 16r0456 16r0457 
+	16r0458 16r0459 16r045A 16r045B 16r045C 16r00A7 16r045E 16r045F )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso88596Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-6.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 nil nil nil 16r00A4 nil nil nil 
+	nil nil nil nil 16r060C 16r00AD nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil 16r061B nil nil nil 16r061F 
+	nil 16r0621 16r0622 16r0623 16r0624 16r0625 16r0626 16r0627 
+	16r0628 16r0629 16r062A 16r062B 16r062C 16r062D 16r062E 16r062F 
+	16r0630 16r0631 16r0632 16r0633 16r0634 16r0635 16r0636 16r0637 
+	16r0638 16r0639 16r063A nil nil nil nil nil 
+	16r0640 16r0641 16r0642 16r0643 16r0644 16r0645 16r0646 16r0647 
+	16r0648 16r0649 16r064A 16r064B 16r064C 16r064D 16r064E 16r064F 
+	16r0650 16r0651 16r0652 nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso88597Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-7.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 16r2018 16r2019 16r00A3 16r20AC 16r20AF 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r037A 16r00AB 16r00AC 16r00AD nil 16r2015 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r0384 16r0385 16r0386 16r00B7 
+	16r0388 16r0389 16r038A 16r00BB 16r038C 16r00BD 16r038E 16r038F 
+	16r0390 16r0391 16r0392 16r0393 16r0394 16r0395 16r0396 16r0397 
+	16r0398 16r0399 16r039A 16r039B 16r039C 16r039D 16r039E 16r039F 
+	16r03A0 16r03A1 nil 16r03A3 16r03A4 16r03A5 16r03A6 16r03A7 
+	16r03A8 16r03A9 16r03AA 16r03AB 16r03AC 16r03AD 16r03AE 16r03AF 
+	16r03B0 16r03B1 16r03B2 16r03B3 16r03B4 16r03B5 16r03B6 16r03B7 
+	16r03B8 16r03B9 16r03BA 16r03BB 16r03BC 16r03BD 16r03BE 16r03BF 
+	16r03C0 16r03C1 16r03C2 16r03C3 16r03C4 16r03C5 16r03C6 16r03C7 
+	16r03C8 16r03C9 16r03CA 16r03CB 16r03CC 16r03CD 16r03CE nil )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+iso88598Mapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-8.TXT'"
+
+	^ #(
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	16r00A0 nil 16r00A2 16r00A3 16r00A4 16r00A5 16r00A6 16r00A7 
+	16r00A8 16r00A9 16r00D7 16r00AB 16r00AC 16r00AD 16r00AE 16r00AF 
+	16r00B0 16r00B1 16r00B2 16r00B3 16r00B4 16r00B5 16r00B6 16r00B7 
+	16r00B8 16r00B9 16r00F7 16r00BB 16r00BC 16r00BD 16r00BE nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil nil 
+	nil nil nil nil nil nil nil 16r2017 
+	16r05D0 16r05D1 16r05D2 16r05D3 16r05D4 16r05D5 16r05D6 16r05D7 
+	16r05D8 16r05D9 16r05DA 16r05DB 16r05DC 16r05DD 16r05DE 16r05DF 
+	16r05E0 16r05E1 16r05E2 16r05E3 16r05E4 16r05E5 16r05E6 16r05E7 
+	16r05E8 16r05E9 16r05EA nil nil 16r200E 16r200F nil )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+koi8rMapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MISC/KOI8-R.TXT'"
+
+	^ #(
+	16r2500 16r2502 16r250C 16r2510 16r2514 16r2518 16r251C 16r2524 
+	16r252C 16r2534 16r253C 16r2580 16r2584 16r2588 16r258C 16r2590 
+	16r2591 16r2592 16r2593 16r2320 16r25A0 16r2219 16r221A 16r2248 
+	16r2264 16r2265 16r00A0 16r2321 16r00B0 16r00B2 16r00B7 16r00F7 
+	16r2550 16r2551 16r2552 16r0451 16r2553 16r2554 16r2555 16r2556 
+	16r2557 16r2558 16r2559 16r255A 16r255B 16r255C 16r255D 16r255E 
+	16r255F 16r2560 16r2561 16r0401 16r2562 16r2563 16r2564 16r2565 
+	16r2566 16r2567 16r2568 16r2569 16r256A 16r256B 16r256C 16r00A9 
+	16r044E 16r0430 16r0431 16r0446 16r0434 16r0435 16r0444 16r0433 
+	16r0445 16r0438 16r0439 16r043A 16r043B 16r043C 16r043D 16r043E 
+	16r043F 16r044F 16r0440 16r0441 16r0442 16r0443 16r0436 16r0432 
+	16r044C 16r044B 16r0437 16r0448 16r044D 16r0449 16r0447 16r044A 
+	16r042E 16r0410 16r0411 16r0426 16r0414 16r0415 16r0424 16r0413 
+	16r0425 16r0418 16r0419 16r041A 16r041B 16r041C 16r041D 16r041E 
+	16r041F 16r042F 16r0420 16r0421 16r0422 16r0423 16r0416 16r0412 
+	16r042C 16r042B 16r0417 16r0428 16r042D 16r0429 16r0427 16r042A )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+koi8uMapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/MISC/KOI8-U.TXT'"
+
+	^ #(
+	16r2500 16r2502 16r250C 16r2510 16r2514 16r2518 16r251C 16r2524 
+	16r252C 16r2534 16r253C 16r2580 16r2584 16r2588 16r258C 16r2590 
+	16r2591 16r2592 16r2593 16r2320 16r25A0 16r2219 16r221A 16r2248 
+	16r2264 16r2265 16r00A0 16r2321 16r00B0 16r00B2 16r00B7 16r00F7 
+	16r2550 16r2551 16r2552 16r0451 16r0454 16r2554 16r0456 16r0457 
+	16r2557 16r2558 16r2559 16r255A 16r255B 16r0491 16r255D 16r255E 
+	16r255F 16r2560 16r2561 16r0401 16r0404 16r2563 16r0406 16r0407 
+	16r2566 16r2567 16r2568 16r2569 16r256A 16r0490 16r256C 16r00A9 
+	16r044E 16r0430 16r0431 16r0446 16r0434 16r0435 16r0444 16r0433 
+	16r0445 16r0438 16r0439 16r043A 16r043B 16r043C 16r043D 16r043E 
+	16r043F 16r044F 16r0440 16r0441 16r0442 16r0443 16r0436 16r0432 
+	16r044C 16r044B 16r0437 16r0448 16r044D 16r0449 16r0447 16r044A 
+	16r042E 16r0410 16r0411 16r0426 16r0414 16r0415 16r0424 16r0413 
+	16r0425 16r0418 16r0419 16r041A 16r041B 16r041C 16r041D 16r041E 
+	16r041F 16r042F 16r0420 16r0421 16r0422 16r0423 16r0416 16r0412 
+	16r042C 16r042B 16r0417 16r0428 16r042D 16r0429 16r0427 16r042A )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+macCyrillicMapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/APPLE/CYRILLIC.TXT'"
+
+	^ #(
+	16r0410 16r0411 16r0412 16r0413 16r0414 16r0415 16r0416 16r0417 
+	16r0418 16r0419 16r041A 16r041B 16r041C 16r041D 16r041E 16r041F 
+	16r0420 16r0421 16r0422 16r0423 16r0424 16r0425 16r0426 16r0427 
+	16r0428 16r0429 16r042A 16r042B 16r042C 16r042D 16r042E 16r042F 
+	16r2020 16r00B0 16r0490 16r00A3 16r00A7 16r2022 16r00B6 16r0406 
+	16r00AE 16r00A9 16r2122 16r0402 16r0452 16r2260 16r0403 16r0453 
+	16r221E 16r00B1 16r2264 16r2265 16r0456 16r00B5 16r0491 16r0408 
+	16r0404 16r0454 16r0407 16r0457 16r0409 16r0459 16r040A 16r045A 
+	16r0458 16r0405 16r00AC 16r221A 16r0192 16r2248 16r2206 16r00AB 
+	16r00BB 16r2026 16r00A0 16r040B 16r045B 16r040C 16r045C 16r0455 
+	16r2013 16r2014 16r201C 16r201D 16r2018 16r2019 16r00F7 16r201E 
+	16r040E 16r045E 16r040F 16r045F 16r2116 16r0401 16r0451 16r044F 
+	16r0430 16r0431 16r0432 16r0433 16r0434 16r0435 16r0436 16r0437 
+	16r0438 16r0439 16r043A 16r043B 16r043C 16r043D 16r043E 16r043F 
+	16r0440 16r0441 16r0442 16r0443 16r0444 16r0445 16r0446 16r0447 
+	16r0448 16r0449 16r044A 16r044B 16r044C 16r044D 16r044E 16r20AC )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+macRomanMapping
+	"self generateByteToUnicodeSpec: 'http://unicode.org/Public/MAPPINGS/VENDORS/APPLE/ROMAN.TXT'"
+
+	^ #(
+	16r00C4 16r00C5 16r00C7 16r00C9 16r00D1 16r00D6 16r00DC 16r00E1 
+	16r00E0 16r00E2 16r00E4 16r00E3 16r00E5 16r00E7 16r00E9 16r00E8 
+	16r00EA 16r00EB 16r00ED 16r00EC 16r00EE 16r00EF 16r00F1 16r00F3 
+	16r00F2 16r00F4 16r00F6 16r00F5 16r00FA 16r00F9 16r00FB 16r00FC 
+	16r2020 16r00B0 16r00A2 16r00A3 16r00A7 16r2022 16r00B6 16r00DF 
+	16r00AE 16r00A9 16r2122 16r00B4 16r00A8 16r2260 16r00C6 16r00D8 
+	16r221E 16r00B1 16r2264 16r2265 16r00A5 16r00B5 16r2202 16r2211 
+	16r220F 16r03C0 16r222B 16r00AA 16r00BA 16r03A9 16r00E6 16r00F8 
+	16r00BF 16r00A1 16r00AC 16r221A 16r0192 16r2248 16r2206 16r00AB 
+	16r00BB 16r2026 16r00A0 16r00C0 16r00C3 16r00D5 16r0152 16r0153 
+	16r2013 16r2014 16r201C 16r201D 16r2018 16r2019 16r00F7 16r25CA 
+	16r00FF 16r0178 16r2044 16r20AC 16r2039 16r203A 16rFB01 16rFB02 
+	16r2021 16r00B7 16r201A 16r201E 16r2030 16r00C2 16r00CA 16r00C1 
+	16r00CB 16r00C8 16r00CD 16r00CE 16r00CF 16r00CC 16r00D3 16r00D4 
+	16rF8FF 16r00D2 16r00DA 16r00DB 16r00D9 16r0131 16r02C6 16r02DC 
+	16r00AF 16r02D8 16r02D9 16r02DA 16r00B8 16r02DD 16r02DB 16r02C7 )
+%
+
+category: 'mappings'
+classmethod: ZnByteEncoder
+mappingToIdentifiers
+	"Return a dictionay mapping from encoding specifications to a list of encoding names."
+	
+	^ Dictionary newFromPairs: #(
+		"#asciiMapping #('ascii')"
+		"#iso88591Mapping #('iso88591' 'latin1')"
+		#iso88592Mapping #('iso88592' 'latin2') 
+		#iso88593Mapping #('iso88593' 'latin3') 
+		#iso88594Mapping #('iso88594' 'latin4') 
+		#iso88595Mapping #('iso88595' 'cyrillic') 
+		#iso88596Mapping #('iso88596' 'arabic') 
+		#iso88597Mapping #('iso88597' 'greek') 
+		#iso88598Mapping #('iso88598' 'hebrew') 
+		#iso885910Mapping #('iso885910' 'latin6') 
+		#iso885913Mapping #('iso885913') 
+		#iso885914Mapping #('iso885914') 
+		#iso885915Mapping #('iso885915') 
+		#iso885916Mapping #('iso885916') 
+		#cp1250Mapping #('cp1250' 'windows1250' 'xcp1250') 
+		#cp1251Mapping #('cp1251' 'windows1251' 'xcp1251') 
+		#cp1252Mapping #('cp1252' 'windows1252' 'xcp1252' 'ibm819')
+		#cp1253Mapping #('cp1253' 'windows1253' 'xcp1253')
+		#cp1254Mapping #('cp1254' 'windows1254' 'xcp1254' 'iso88599' 'latin5')
+		#cp1255Mapping #('cp1255' 'windows1255' 'xcp1255')
+		#cp1256Mapping #('cp1256' 'windows1256' 'xcp1256')
+		#cp1257Mapping #('cp1257' 'windows1257' 'xcp1257')
+		#cp1258Mapping #('cp1258' 'windows1258' 'xcp1258')
+		#cp850Mapping #('cp850' 'ibm850' 'oem850' 'doslatin1')
+		#cp866Mapping #('cp866' 'ibm866')
+		#cp874Mapping #('cp874' 'iso885911' 'windows874' 'dos874')
+		#koi8rMapping #('koi8r' 'koi8')
+		#koi8uMapping #('koi8u')
+		#macRomanMapping #('macroman' 'xmacroman' 'mac' 'macintosh')
+		#macCyrillicMapping #('maccyrillic' 'xmaccyrillic') )
+%
+
+category: 'instance creation'
+classmethod: ZnByteEncoder
+newFromUrl: url
+	"Instanciate a new encoder directly from a Unicode.org url"
+	"self newFromUrl: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-2.TXT'"
+	"self newFromUrl: 'http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/PC/CP437.TXT'"
+
+	| mapping spec tables |
+	mapping := self parseUnicodeOrgSpec: url.
+	spec := self top128FromUnicodeSpec: mapping.
+	tables := self tablesFromSpec: spec.
+	^ self new
+		identifier: url;
+		byteToUnicode: tables first;
+		unicodeToByte: tables second;
+		yourself
+%
+
+category: 'utilities'
+classmethod: ZnByteEncoder
+parseUnicodeOrgSpec: url
+	"Parse and return a mapping from byte to unicode values from url."
+	"Basic syntax: lines starting with # are comments, else first two fields are read as 0x hex values"
+	"self parseUnicodeOrgSpec: 'http://unicode.org/Public/MAPPINGS/ISO8859/8859-2.TXT'."
+	
+	| mapping |
+	mapping := Dictionary new: 256.
+	url asZnUrl retrieveContents linesDo: [ :each |
+		(each isEmpty or: [ each beginsWith: '#' ])
+			ifFalse: [ | tokens hexReader |
+				hexReader := [ :string | Integer readFrom: (string readStream skip: 2; yourself) base: 16 ].
+				tokens := each findTokens: String tab. 
+				(tokens size < 3 or: [ tokens last = '<control>' or: [ tokens last = '#UNDEFINED' ] ]) ifFalse: [
+					mapping
+						at: (hexReader value: tokens first)
+						put: (hexReader value: tokens second) ] ] ].
+	^ mapping
+%
+
+category: 'utilities'
+classmethod: ZnByteEncoder
+top128FromUnicodeSpec: mapping
+	"Return an array mapping the top 128 byte to unicode values from a Unicode.org specification map"
+
+	^ Array new: 128 streamContents: [ :stream |
+		128 to: 255 do: [ :each |
+			stream nextPut: (mapping at: each ifAbsent: [ nil ]) ] ]
+%
+
+!		Instance methods for 'ZnByteEncoder'
+
+category: 'convenience'
+method: ZnByteEncoder
+decodeBytesIntoWideString: bytes
+	"Variant of #decodeBytes: that is faster when you know upfront 
+	that a WideString is probably needed"
+
+	| byteStream |
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
+	byteStream := bytes readStream.
+	^ String streamContents: [ :stream |
+		[ byteStream atEnd ] whileFalse: [
+			stream nextPut: (self nextFromStream: byteStream) ] ]
+%
+
+! Class implementation for 'ZnUTFEncoder'
+
+!		Class methods for 'ZnUTFEncoder'
+
+category: 'accessing'
+classmethod: ZnUTFEncoder
+handlesEncoding: string
+	"Return true when my instances handle the encoding described by string"
+	
+	^ false
+%
+
+!		Instance methods for 'ZnUTFEncoder'
+
+category: 'accessing'
+method: ZnUTFEncoder
+byteOrderMark
+	"The code point of the Unicode Byte-Order-Mark or BOM character.
+	See https://en.wikipedia.org/wiki/Byte_order_mark"
+	
+	^ 16rFEFF
+%
+
+category: 'convenience'
+method: ZnUTFEncoder
+decodeBytes: bytes
+	"Overridden to prevent the automagic switch from ByteString to WideString 
+	and the slow #becomeForward: in there. See also #decodeBytesIntoWideString:"
+	
+	| byteStream |
+
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
+	byteStream := bytes readStream.
+	^ String streamContents: [ :stream |
+		[ byteStream atEnd ] whileFalse: [ | codePoint |
+			codePoint := self nextCodePointFromStream: byteStream.
+			(codePoint > 255 and: [ stream originalContents isWideString not ])
+				ifTrue: [ | wideString position |
+					position := stream position.
+					wideString := String from: stream originalContents.
+					stream on: wideString; setFrom: position + 1 to: position ].
+			stream nextPut: (Character value: codePoint) ] ]
+%
+
+category: 'convenience'
+method: ZnUTFEncoder
+decodeBytesIntoWideString: bytes
+	"Variant of #decodeBytes: that is faster when you know upfront that a WideString is probably needed"
+
+	| byteStream |
+	byteStream := bytes readStream.
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
+
+	^ String streamContents: [ :stream |
+		[ byteStream atEnd ] whileFalse: [
+			stream nextPut: (self nextFromStream: byteStream) ] ]
+%
+
+category: 'convenience'
+method: ZnUTFEncoder
+encodeStringWithByteOrderMark: string
+	"Encode string and return the resulting byte array.
+	Always add a Unicode byte order mark (BOM) in front."
+	
+	^ ByteArray streamContents: [ :stream |
+		self nextPutByteOrderMarkToStream: stream.
+		self next: string size putAll: string startingAt: 1 toStream: stream ]
+%
+
+category: 'testing'
+method: ZnUTFEncoder
+isSurrogateCodePoint: codePoint
+	"Surrogate Code Points should not be encoded or decoded because they are not Unicode scalar values"
+	
+	^ codePoint between: 16rD800 and: 16rDFFF
+%
+
+category: 'accessing'
+method: ZnUTFEncoder
+maximumUTFCode
+	^ 16r10FFFF
+%
+
+category: 'convenience'
+method: ZnUTFEncoder
+nextPutByteOrderMarkToStream: stream
+	"Write the encoded byte-order-mark (BOM) to stream"
+	
+	self nextPutCodePoint: self byteOrderMark toStream: stream
+%
+
+! Class implementation for 'ZnEndianSensitiveUTFEncoder'
+
+!		Class methods for 'ZnEndianSensitiveUTFEncoder'
+
+category: 'accessing'
+classmethod: ZnEndianSensitiveUTFEncoder
+handlesEncoding: string
+	"Return true when my instances handle the encoding described by string"
+	
+	^ false
+%
+
+category: 'instance creation'
+classmethod: ZnEndianSensitiveUTFEncoder
+newForEncoding: string
+	"Return a new character encoder object for an encoding described by string.
+	Try to infer endianness from string, defaulting to big endian."
+	
+	| encoder |
+	encoder := self new.
+	(string asLowercase endsWith: 'be') ifTrue: [ encoder beBigEndian ].
+	(string asLowercase endsWith: 'le') ifTrue: [ encoder beLittleEndian ].
+	^ encoder
+%
+
+!		Instance methods for 'ZnEndianSensitiveUTFEncoder'
+
+category: 'comparing'
+method: ZnEndianSensitiveUTFEncoder
+= anObject
+	^ super = anObject and: [ self endianness == anObject endianness ]
+%
+
+category: 'initialize'
+method: ZnEndianSensitiveUTFEncoder
+beBigEndian
+	endianness := #big
+%
+
+category: 'initialize'
+method: ZnEndianSensitiveUTFEncoder
+beLittleEndian
+	endianness := #little
+%
+
+category: 'accessing'
+method: ZnEndianSensitiveUTFEncoder
+endianness
+	^ endianness
+%
+
+category: 'comparing'
+method: ZnEndianSensitiveUTFEncoder
+hash
+	^ super hash bitXor: self endianness hash
+%
+
+category: 'initialize'
+method: ZnEndianSensitiveUTFEncoder
+initialize
+	endianness := #big
+%
+
+category: 'testing'
+method: ZnEndianSensitiveUTFEncoder
+isBigEndian
+	^ endianness = #big
+%
+
+category: 'testing'
+method: ZnEndianSensitiveUTFEncoder
+isLittleEndian
+	^ endianness = #little
+%
+
+category: 'printing'
+method: ZnEndianSensitiveUTFEncoder
+printOn: stream
+	super printOn: stream.
+	stream nextPut: $(.
+	stream nextPutAll: endianness; nextPutAll: ' endian'.
+	stream nextPut: $)
+%
+
+category: 'private'
+method: ZnEndianSensitiveUTFEncoder
+swapEndianness
+	self isLittleEndian
+		ifTrue: [ self beBigEndian ]
+		ifFalse: [ self beLittleEndian ]
+%
+
+! Class implementation for 'ZnUTF16Encoder'
+
+!		Class methods for 'ZnUTF16Encoder'
+
+category: 'accessing'
+classmethod: ZnUTF16Encoder
+handlesEncoding: string
+	"Return true when my instances handle the encoding described by string"
+
+	^ self knownEncodingIdentifiers includes: (self canonicalEncodingIdentifier: string)
+%
+
+category: 'accessing'
+classmethod: ZnUTF16Encoder
+knownEncodingIdentifiers
+	^ #( 'utf16' 'utf16be' 'utf16le' )
+%
+
+!		Instance methods for 'ZnUTF16Encoder'
+
+category: 'private'
+method: ZnUTF16Encoder
+back16BitWordOnStream: stream
+	| firstByte secondByte |
+	firstByte := stream back.
+	secondByte := stream back.
+	^ self isBigEndian 
+		ifTrue: [ secondByte + (firstByte << 8) ]
+		ifFalse: [ firstByte + (secondByte << 8) ]
+%
+
+category: 'converting'
+method: ZnUTF16Encoder
+backOnStream: stream
+	"Move back one character on stream"
+
+	| word |
+	word := self back16BitWordOnStream: stream.
+	(word < 16rD800 or: [ word > 16rDBFF ])
+		ifFalse: [ 
+			self back16BitWordOnStream: stream ]
+%
+
+category: 'converting'
+method: ZnUTF16Encoder
+encodedByteCountForCodePoint: codePoint
+	"Return how many bytes are needed to encode integer code point"
+
+	codePoint <= 65535 ifTrue: [ ^ 2 ].
+	codePoint <= self maximumUTFCode ifTrue: [ ^ 4 ].
+	self errorOutsideRange
+%
+
+category: 'error handling'
+method: ZnUTF16Encoder
+errorIncomplete
+	self error: 'Incomplete utf-16 encoding'
+%
+
+category: 'accessing'
+method: ZnUTF16Encoder
+identifier
+	^ #utf16
+%
+
+category: 'converting'
+method: ZnUTF16Encoder
+nextCodePointFromStream: stream
+	"Read and return the next integer code point from stream"
+
+	| word leadSurrogate trailSurrogate code |
+	word := self read16BitWordFromStream: stream.
+	(self processByteOrderMark: word)
+		ifTrue: [ word := self read16BitWordFromStream: stream ].
+	^ (word < 16rD800 or: [ word > 16rDBFF ])
+		ifTrue: [
+			word ]
+		ifFalse: [ 
+			leadSurrogate := word.
+			trailSurrogate := self read16BitWordFromStream: stream.
+			code := (leadSurrogate - 16rD800) * 16r400 + (trailSurrogate - 16rDC00).
+			16r10000 + code ]
+%
+
+category: 'converting'
+method: ZnUTF16Encoder
+nextPutCodePoint: codePoint toStream: stream
+	"Write the encoding for integer code point to stream"
+
+	| leadSurrogate trailSurrogate shifted |
+	(self isSurrogateCodePoint: codePoint) ifTrue: [ self errorOutsideRange ].
+	codePoint <= 65535
+		ifTrue: [ 
+			^ self write16BitWord: codePoint toStream: stream ].
+	codePoint <= self maximumUTFCode
+		ifTrue: [
+			shifted := codePoint - 16r10000.
+			leadSurrogate := 16rD800 + (shifted // 16r400).
+			trailSurrogate := 16rDC00 + (shifted \\ 16r400).
+			self write16BitWord: leadSurrogate toStream: stream.
+			self write16BitWord: trailSurrogate toStream: stream ]
+		ifFalse: [
+			self errorOutsideRange ]
+%
+
+category: 'private'
+method: ZnUTF16Encoder
+processByteOrderMark: word
+	^ (word = 16rFEFF or: [ word = 16rFFFE ])
+		ifTrue: [ 
+			word = 16rFFFE
+				ifTrue: [ self swapEndianness ].
+			true ]
+		ifFalse: [ false ]
+%
+
+category: 'private'
+method: ZnUTF16Encoder
+read16BitWordFromStream: stream
+	| firstByte secondByte |
+	firstByte := stream next.
+	secondByte := stream next.
+	(firstByte isNil or: [ secondByte isNil ])
+		ifTrue: [ ^ self errorIncomplete ].
+	^ self isBigEndian 
+		ifTrue: [ secondByte + (firstByte << 8) ]
+		ifFalse: [ firstByte + (secondByte << 8) ]
+%
+
+category: 'private'
+method: ZnUTF16Encoder
+write16BitWord: word toStream: stream
+	self isBigEndian
+		ifTrue: [ 
+			stream
+				nextPut: (word digitAt: 2);
+				nextPut: (word digitAt: 1) ]
+		ifFalse: [ 
+			stream
+				nextPut: (word digitAt: 1);
+				nextPut: (word digitAt: 2) ]
+%
+
+! Class implementation for 'ZnUTF32Encoder'
+
+!		Class methods for 'ZnUTF32Encoder'
+
+category: 'accessing'
+classmethod: ZnUTF32Encoder
+handlesEncoding: string
+	"Return true when my instances handle the encoding described by string"
+
+	^ self knownEncodingIdentifiers includes: (self canonicalEncodingIdentifier: string)
+%
+
+category: 'accessing'
+classmethod: ZnUTF32Encoder
+knownEncodingIdentifiers
+	^ #( 'utf32' 'utf32be' 'utf32le' 'ucs4' 'ucs4be' 'ucs4le')
+%
+
+!		Instance methods for 'ZnUTF32Encoder'
+
+category: 'converting'
+method: ZnUTF32Encoder
+backOnStream: stream
+	"Move back one character on stream"
+
+	4 timesRepeat: [ stream back ]
+%
+
+category: 'converting'
+method: ZnUTF32Encoder
+encodedByteCountForCodePoint: codePoint
+	"Return how many bytes are needed to encode integer codePoint"
+
+	codePoint > self maximumUTFCode 
+		ifTrue: [ ^ self errorOutsideRange ].
+	^ 4
+%
+
+category: 'error handling'
+method: ZnUTF32Encoder
+errorIncomplete
+	self error: 'Incomplete utf-32 encoding'
+%
+
+category: 'accessing'
+method: ZnUTF32Encoder
+identifier
+	^ #utf32
+%
+
+category: 'converting'
+method: ZnUTF32Encoder
+nextCodePointFromStream: stream
+	"Read and return the next integer code point from stream"
+
+	| codePoint |
+	codePoint := self readCodePointFrom: stream.
+	(self processByteOrderMark: codePoint)
+		ifTrue: [ codePoint := self readCodePointFrom: stream ].
+	((self isSurrogateCodePoint: codePoint) or: [ codePoint > self maximumUTFCode ]) 
+		ifTrue: [ ^ self errorOutsideRange ].
+	^ codePoint
+%
+
+category: 'converting'
+method: ZnUTF32Encoder
+nextPutCodePoint: codePoint toStream: stream
+	"Write the encoding for integer code point to stream"
+
+	(self isSurrogateCodePoint: codePoint) 
+		ifTrue: [ self errorOutsideRange ].
+	codePoint <= self maximumUTFCode
+		ifTrue: [
+			self writeCodePoint: codePoint to: stream ]
+		ifFalse: [
+			self errorOutsideRange ]
+%
+
+category: 'private'
+method: ZnUTF32Encoder
+processByteOrderMark: codePoint
+	^ (codePoint = 16rFEFF or: [ codePoint = 16rFFFE0000 ])
+		ifTrue: [ 
+			codePoint = 16rFFFE0000
+				ifTrue: [ self swapEndianness ].
+			true ]
+		ifFalse: [ false ]
+%
+
+category: 'private'
+method: ZnUTF32Encoder
+readCodePointFrom: stream
+	| byte1 byte2 byte3 byte4 |
+	byte1 := stream next.
+	byte2 := stream next.
+	byte3 := stream next.
+	byte4 := stream next.
+	(byte1 isNil or: [ byte2 isNil or: [ byte3 isNil or: [ byte4 isNil ] ] ])
+		ifTrue: [ ^ self errorIncomplete ].
+	^ self isBigEndian
+		ifTrue: [ 
+			(byte1 bitShift: 24) + (byte2 bitShift: 16) + (byte3 bitShift: 8) + byte4 ] 
+		ifFalse: [ 
+			(byte4 bitShift: 24) + (byte3 bitShift: 16) + (byte2 bitShift: 8) + byte1 ]
+%
+
+category: 'private'
+method: ZnUTF32Encoder
+writeCodePoint: codePoint to: stream
+	self isBigEndian 
+		ifTrue: [ 
+			stream 
+				nextPut: (codePoint digitAt: 4); 
+				nextPut: (codePoint digitAt: 3); 
+				nextPut: (codePoint digitAt: 2); 
+				nextPut: (codePoint digitAt: 1) ]
+		ifFalse: [ 
+			stream 
+				nextPut: (codePoint digitAt: 1); 
+				nextPut: (codePoint digitAt: 2); 
+				nextPut: (codePoint digitAt: 3); 
+				nextPut: (codePoint digitAt: 4) ]
+%
+
 ! Class implementation for 'ZnUTF8Encoder'
 
 !		Class methods for 'ZnUTF8Encoder'
+
+category: 'accessing'
+classmethod: ZnUTF8Encoder
+byteASCIISet
+	
+	^ ByteASCIISet
+%
+
+category: 'accessing'
+classmethod: ZnUTF8Encoder
+byteUTF8Encoding
+	
+	^ ByteUTF8Encoding
+%
 
 category: 'accessing'
 classmethod: ZnUTF8Encoder
@@ -11261,10 +22490,31 @@ handlesEncoding: string
 	^ (self canonicalEncodingIdentifier: string) = 'utf8'
 %
 
+category: 'class initialization'
+classmethod: ZnUTF8Encoder
+initialize
+	| encoder stream |
+	ByteASCIISet := ByteArray new: 256.
+	ByteUTF8Encoding := Array new: 256.
+	encoder := self new.
+	stream := ByteArray new writeStream.
+	0 to: 255 do: [ :each |
+		| bytes |
+		stream reset.
+		encoder nextPut: (Character value: each) toStream: stream.
+		bytes := stream contents.
+		(bytes size = 1 and: [ bytes first = each ])
+			ifTrue: [
+				ByteASCIISet at: each + 1 put: 0 ]
+			ifFalse: [  
+				ByteASCIISet at: each + 1 put: 1.
+				ByteUTF8Encoding at: each + 1 put: bytes ] ]
+%
+
 category: 'accessing'
 classmethod: ZnUTF8Encoder
 knownEncodingIdentifiers
-	^ #( utf8 )
+	^ #( 'utf8' )
 %
 
 category: 'instance creation'
@@ -11275,6 +22525,14 @@ newForEncoding: string
 	^ self new
 %
 
+category: 'accessing'
+classmethod: ZnUTF8Encoder
+reset
+	"ZnUTF8Encoder reset"
+	
+	^ Default := self new
+%
+
 !		Instance methods for 'ZnUTF8Encoder'
 
 category: 'converting'
@@ -11282,18 +22540,24 @@ method: ZnUTF8Encoder
 backOnStream: stream
 	"Move back one character on stream"
 
-	self error: 'not currently supported'
+	[ (stream back bitAnd: 2r11000000) == 2r10000000 ] whileTrue
 %
 
 category: 'convenience'
 method: ZnUTF8Encoder
 decodeAsCodePoints: bytes
-	"Decode bytes and return the resulting code points"
+	"Decode bytes and return the resulting code points - This is a Gemstone implementation"
 
-	| ar |
-	ar := {}.
-	bytes decodeFromUTF8 do: [:char | ar add: char codePoint ].
-	^ ar
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			| ar |
+			ar := {}.
+			bytes decodeFromUTF8 do: [:char | ar add: char codePoint ].
+			^ ar]
+		ifFalse: [
+			^super decodeAsCodePoints: bytes]
 %
 
 category: 'convenience'
@@ -11301,23 +22565,54 @@ method: ZnUTF8Encoder
 decodeBytes: bytes
 	"Decode bytes and return the resulting string"
 
-	^ bytes decodeFromUTF8
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ [bytes decodeFromUTF8] on: (ExceptionSet with: ArgumentError  with: MessageNotUnderstood) do: [:s | ZnCharacterEncodingError signal]] 
+		ifFalse: [
+			^super decodeBytes: bytes]
 %
 
 category: 'convenience'
 method: ZnUTF8Encoder
 encodeCodePoints: codePoints
 	"Encode codePoints and return the resulting byte array"
-	
-	^ codePoints asByteArray asUnicodeString encodeAsUTF8
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ codePoints asByteArray asUnicodeString encodeAsUTF8]
+		ifFalse: [
+			^super encodeCodePoints: codePoints]
 %
 
 category: 'converting'
 method: ZnUTF8Encoder
 encodedByteCountFor: character
 	"Return how many bytes are needed to encode character"
-		
-	^ character asString encodeAsUTF8 size
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ character asString encodeAsUTF8 size]
+		ifFalse: [
+			^super encodedByteCountFor: character]
+%
+
+category: 'converting'
+method: ZnUTF8Encoder
+encodedByteCountForCodePoint: codePoint
+	"Return how many bytes are needed to encode integer code point"
+
+	codePoint < 128 ifTrue: [ ^ 1 ].
+	codePoint < 2048 ifTrue: [ ^ 2 ].
+	codePoint < 65535 ifTrue: [ ^ 3 ].
+	codePoint <= self maximumUTFCode ifTrue: [ ^ 4 ].
+	self errorOutsideRange.
+	^ 0
 %
 
 category: 'convenience'
@@ -11325,7 +22620,13 @@ method: ZnUTF8Encoder
 encodedByteCountForCodePoints: codePoints
 	"Return the exact number of bytes it would take to encode codePoints as a byte array"
 
-	^ (self encodeCodePoints: codePoints) size
+	self flag: 'GemStone/Pharo code switched for research'.
+	
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ (self encodeCodePoints: codePoints) size]
+		ifFalse: [
+			^ super encodedByteCountForCodePoints: codePoints]
 %
 
 category: 'convenience'
@@ -11333,15 +22634,64 @@ method: ZnUTF8Encoder
 encodedByteCountForString: string
 	"Return the exact number of bytes it would take to encode string as a byte array"
 
-	^ (self encodeString: string) size
+	self flag: 'GemStone/Pharo code switched for research'.
+	
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ (self encodeString: string) size]
+		ifFalse: [
+			^super encodedByteCountForString: string]
 %
 
 category: 'convenience'
 method: ZnUTF8Encoder
 encodeString: string
 	"Encode string and return the resulting Utf8 instance"
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ [string encodeAsUTF8 asByteArray] on: (ExceptionSet with: ArgumentError  with: MessageNotUnderstood) do: [:s | ZnInvalidUTF8 signal]  ]
+		ifFalse: [
+			^super encodeString: string]
+%
+
+category: 'error handling'
+method: ZnUTF8Encoder
+error: message
+	^ZnInvalidUTF8 signal: message
+%
+
+category: 'error handling'
+method: ZnUTF8Encoder
+errorIllegalContinuationByte
+	^ self error: 'Illegal continuation byte for utf-8 encoding'
+%
+
+category: 'error handling'
+method: ZnUTF8Encoder
+errorIllegalLeadingByte
+	^ self error: 'Illegal leading byte for utf-8 encoding'
+%
+
+category: 'error handling'
+method: ZnUTF8Encoder
+errorOverlong
+	^ self error: 'Overlong utf-8 encoding (non-shortest form)'
+%
+
+category: 'private'
+method: ZnUTF8Encoder
+findFirstNonASCIIIn: string startingAt: offset
+	"This calls a fast primitive. Note that string can be a ByteString or ByteArray"
 	
-	^ string encodeAsUTF8 asByteArray
+self error: 'The classes ByteString and ByteASCIISet are not implemented in Gemstone'.
+	offset > string size ifTrue: [ ^ 0 ].
+	^ #ByteString 
+		findFirstInString: string 
+		inSet: ByteASCIISet 
+		startingAt: offset
 %
 
 category: 'accessing'
@@ -11354,8 +22704,51 @@ category: 'convenience'
 method: ZnUTF8Encoder
 next: count putAll: string startingAt: offset toStream: stream
 	"Write count characters from string starting at offset to stream."
+	"Overwritten for performance reasons - create a fast path for byte strings"
 	
-	stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray]
+		ifFalse: [
+			string isByteString
+				ifTrue: [ self next: count putAllByteString: string startingAt: offset toStream: stream ]
+				ifFalse: [ super next: count putAll: string startingAt: offset toStream: stream ] ]
+%
+
+category: 'private'
+method: ZnUTF8Encoder
+next: count putAllASCII: string startingAt: offset toStream: stream
+	"Write count bytes from string starting at offset to stream,
+	assuming all characters are in the ASCII set and need no translation"
+	
+	offset to: offset + count - 1 do: [ :index | 
+		stream nextPut: (string byteAt: index) ]
+%
+
+category: 'private'
+method: ZnUTF8Encoder
+next: count putAllByteString: string startingAt: offset toStream: stream
+	"A faster version when string is a ByteString"
+	
+	| lastIndex nextIndex |
+
+	lastIndex := offset.
+	nextIndex := self findFirstNonASCIIIn: string startingAt: lastIndex.
+	(nextIndex = 0 or: [ offset + count <= nextIndex ]) 
+		ifTrue: [  
+			^ self next: count putAllASCII: string startingAt: offset toStream: stream ].
+	[	nextIndex > lastIndex 
+			ifTrue: [ 
+				self next: nextIndex - lastIndex putAllASCII: string startingAt: lastIndex toStream: stream ].
+		stream nextPutAll: (ByteUTF8Encoding at: (string byteAt: nextIndex) + 1).
+		lastIndex := nextIndex + 1.
+		nextIndex := self findFirstNonASCIIIn: string startingAt: lastIndex.
+		nextIndex = 0 or: [ offset + count <= nextIndex ] ] whileFalse.
+	offset + count <= lastIndex 
+		ifFalse: [ 
+			self next: offset + count - lastIndex putAllASCII: string startingAt: lastIndex toStream: stream ]
 %
 
 category: 'converting'
@@ -11363,7 +22756,40 @@ method: ZnUTF8Encoder
 nextCodePointFromStream: stream
 	"Read and return the next integer code point from stream"
 
-	self error: 'not currently supported'
+	| code byte next |
+	(byte := stream next ifNil: [ ^ self errorIncomplete ]) < 128
+		ifTrue: [ ^ byte ].
+	(byte bitAnd: 2r11100000) == 2r11000000
+		ifTrue: [ 
+			code := byte bitAnd: 2r00011111.
+			((next := stream next ifNil: [ ^ self errorIncomplete ]) bitAnd: 2r11000000) == 2r10000000
+				ifTrue: [ code := (code bitShift: 6) + (next bitAnd: 2r00111111) ]
+				ifFalse: [ ^ self errorIllegalContinuationByte ].
+			code < 128 ifTrue: [ ^ self errorOverlong ].
+			^ code ].
+	(byte bitAnd: 2r11110000) == 2r11100000
+		ifTrue: [ 
+			code := byte bitAnd: 2r00001111.
+			2 timesRepeat: [ 
+				((next := stream next ifNil: [ ^ self errorIncomplete ]) bitAnd: 2r11000000) == 2r10000000
+					ifTrue: [ code := (code bitShift: 6) + (next bitAnd: 2r00111111) ]
+					ifFalse: [ ^ self errorIllegalContinuationByte ] ].
+			code < 2048 ifTrue: [ ^ self errorOverlong ].
+			(self isSurrogateCodePoint: code) ifTrue: [ ^ self errorOutsideRange ].
+			code = 65279 "Unicode Byte Order Mark" ifTrue: [ 
+				stream atEnd ifTrue: [ ^ self errorIncomplete ].
+				^ self nextCodePointFromStream: stream ].
+			^ code ].
+	(byte bitAnd: 2r11111000) == 2r11110000
+		ifTrue: [ 
+			code := byte bitAnd: 2r00000111.
+			3 timesRepeat: [ 
+				((next := stream next ifNil: [ ^ self errorIncomplete ]) bitAnd: 2r11000000) == 2r10000000
+					ifTrue: [ code := (code bitShift: 6) + (next bitAnd: 2r00111111) ]
+					ifFalse: [ ^ self errorIllegalContinuationByte ] ].
+			code < 65535 ifTrue: [ ^ self errorOverlong ].
+			^ code ].
+	^ self errorIllegalLeadingByte
 %
 
 category: 'converting'
@@ -11371,25 +22797,59 @@ method: ZnUTF8Encoder
 nextPutCodePoint: codePoint toStream: stream
 	"Write the encoding for Integer code point to stream"
 
-	^ stream nextPutAll: (Character codePoint: codePoint) asString encodeAsUTF8
+	codePoint < 128 ifTrue: [ 
+		^ stream nextPut: codePoint ].
+	codePoint < 2048 ifTrue: [ 
+		^ stream 
+			nextPut: (2r11000000 + (codePoint bitShift: -6)); 
+			nextPut: (2r10000000 + (codePoint bitAnd: 2r111111)) ].
+	(self isSurrogateCodePoint: codePoint) ifTrue: [ ^ self errorOutsideRange ].
+	codePoint < 65536 ifTrue: [ 
+		^ stream 
+			nextPut: (2r11100000 + (codePoint bitShift: -12));
+			nextPut: (2r10000000 + ((codePoint bitShift: -6) bitAnd: 2r111111)); 
+			nextPut: (2r10000000 + (codePoint bitAnd: 2r111111)) ].
+	codePoint <= self maximumUTFCode ifTrue: [ 
+		^ stream 
+			nextPut: (2r11110000 + (codePoint bitShift: -18));
+			nextPut: (2r10000000 + ((codePoint bitShift: -12) bitAnd: 2r111111));
+			nextPut: (2r10000000 + ((codePoint bitShift: -6) bitAnd: 2r111111)); 
+			nextPut: (2r10000000 + (codePoint bitAnd: 2r111111)) ].
+	^ self errorOutsideRange
 %
 
 category: 'convenience'
 method: ZnUTF8Encoder
-readInto: aCollection startingAt: offset count: requestedCount fromStream: stream
+readInto: string startingAt: offset count: requestedCount fromStream: stream
 	"Read requestedCount characters into string starting at offset,
 	returning the number read, there could be less available when stream is atEnd"
 
-	| decodedCollection pos |
-	pos := stream position.
-	decodedCollection := self decodeBytes: stream contents.
-	aCollection 
-		replaceFrom: offset 
-		to: offset + (requestedCount min: decodedCollection size) - 1
-		with: decodedCollection
-		startingAt: pos + 1.
-	stream setToEnd.
-	^ 	requestedCount min: decodedCollection size
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			| decodedCollection pos |
+
+			pos := stream position.
+			decodedCollection := self decodeBytes: stream contents.
+			string 
+				replaceFrom: offset 
+				to: offset + (requestedCount min: decodedCollection size) - 1
+				with: decodedCollection
+				startingAt: pos + 1.
+			stream setToEnd.
+			^ 	requestedCount min: decodedCollection size]
+		ifFalse: [
+			| stringBuffer |
+
+			stringBuffer := string.
+			offset to: offset + requestedCount - 1 do: [ :index | | codePoint |
+			stream atEnd ifTrue: [ ^ index - offset ].  
+			codePoint := self nextCodePointFromStream: stream.
+			(codePoint > 255 and: [ stringBuffer isWideString not ])
+				ifTrue: [ stringBuffer := ZnByteStringBecameWideString convert: stringBuffer ].
+			stringBuffer at: index put: (Character value: codePoint) ].
+			^ requestedCount]
 %
 
 ! Class implementation for 'ZnCharacterReadWriteStream'
@@ -11705,10 +23165,16 @@ atEnd
 category: 'accessing'
 method: ZnEncodedReadStream
 contents
-	
-	^ self collectionSpecies
-		streamContents: [ :collectionStream | 
-			collectionStream nextPutAll: (self encoder decodeBytes: stream  contents) ]
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ self collectionSpecies
+				streamContents: [ :collectionStream | 
+					collectionStream nextPutAll: (self encoder decodeBytes: stream  contents) ] ]
+		ifFalse: [
+			^self upToEnd]
 %
 
 category: 'testing'
@@ -11900,9 +23366,21 @@ method: ZnCharacterReadStream
 nextLine
 	"Read a CR, LF or CRLF terminated line, returning the contents of the line without the EOL. Return nil when the receiver is #atEnd."
 	
-	self atEnd ifTrue: [ ^ nil ].
+"	self atEnd ifTrue: [ ^ nil ].
 	^ self collectionSpecies streamContents: [ :out |
-		out nextPutAll: (self encoder decodeBytes: stream nextLine) ]
+		out nextPutAll: (self encoder decodeBytes: stream nextLine) ]"
+
+	self atEnd ifTrue: [ ^ nil ].
+	^ self collectionSpecies streamContents: [ :out | | eol char |
+		eol := false.
+		[ eol ] whileFalse: [ 
+			char := self next.
+			(char isNil or: [ char = Character lf ])
+				ifTrue: [ eol := true ]
+				ifFalse: [ 
+					char = Character cr 
+						ifTrue: [ eol := true. self peekFor: Character lf ]
+						ifFalse: [ out nextPut: char ] ] ] ]
 %
 
 category: 'accessing'
@@ -11913,11 +23391,14 @@ readInto: collection startingAt: offset count: requestedCount
 	
 	^ peeked 
 		ifNil: [ | readCount |
-			readCount := self encoder 
+			[ readCount := self encoder 
 					readInto: collection 
 					startingAt: offset 
 					count: requestedCount 
-					fromStream: stream.
+					fromStream: stream ]
+				on: ZnByteStringBecameWideString 			"RK - Added on:do: to make consistent with Pharo"
+				do: [ :byteStringBecameWideString | 
+					byteStringBecameWideString becomeForward; resume ].
 			readCount ]
 		ifNotNil: [ 
 			collection at: offset put: peeked.
@@ -11951,6 +23432,22 @@ upToAll: aCollection
 					partialMatch reset.
 					out nextPut: ch ] ].
 		matched ifFalse: [ out nextPutAll: partialMatch contents ] ]
+%
+
+! Class implementation for 'ZnCodePointReadStream'
+
+!		Instance methods for 'ZnCodePointReadStream'
+
+category: 'accessing'
+method: ZnCodePointReadStream
+collectionSpecies
+	^ Array
+%
+
+category: 'private'
+method: ZnCodePointReadStream
+nextElement
+	^ self encoder nextCodePointFromStream: stream
 %
 
 ! Class implementation for 'ZnEncodedWriteStream'
@@ -12004,7 +23501,10 @@ category: 'accessing'
 method: ZnEncodedWriteStream
 nextPutAll: collection
 
-	stream nextPutAll: (self encoder encodeString: collection)
+	self 
+		next: collection size 
+		putAll: collection 
+		startingAt: 1
 %
 
 ! Class implementation for 'ZnCharacterWriteStream'
@@ -12068,16 +23568,650 @@ tab
 	self nextPut: Character tab
 %
 
+! Class implementation for 'ZnCodePointWriteStream'
+
+!		Instance methods for 'ZnCodePointWriteStream'
+
+category: 'accessing'
+method: ZnCodePointWriteStream
+nextPut: object
+	self encoder 
+		nextPutCodePoint: object 
+		toStream: stream.
+	^ object
+%
+
+! Class implementation for 'ZnEndianessReadWriteStream'
+
+!		Class methods for 'ZnEndianessReadWriteStream'
+
+category: 'instance creation'
+classmethod: ZnEndianessReadWriteStream
+on: writeStream
+	^ self basicNew
+		on: writeStream;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: ZnEndianessReadWriteStream
+on: writeStream do: block
+	"Execute block with as argument a ZnBufferedWriteStream on writeStream,
+	making sure #flush is called at the end. Return the value of block."
+	
+	| bufferedWriteStream result |
+	bufferedWriteStream := self on: writeStream.
+	result := block value: bufferedWriteStream.
+	bufferedWriteStream flush.
+	^ result
+%
+
+!		Instance methods for 'ZnEndianessReadWriteStream'
+
+category: 'endianess'
+method: ZnEndianessReadWriteStream
+nextLittleEndianNumber: n 
+	"Answer the next n bytes as a positive Integer or LargePositiveInteger, where the bytes are ordered from least significant to most significant."
+
+	| bytes s |
+	bytes := stream next: n.
+	s := 0.
+	n to: 1 by: -1 do: [:i | s := (s bitShift: 8) bitOr: (bytes at: i)].
+	^ s
+%
+
+category: 'endianess'
+method: ZnEndianessReadWriteStream
+nextLittleEndianNumber: n put: value
+	"Answer the next n bytes as a positive Integer or LargePositiveInteger, where the bytes are ordered from least significant to most significant."
+	| bytes |
+	bytes := ByteArray new: n.
+	1 to: n do: [:i | bytes at: i put: (value digitAt: i)].
+	stream nextPutAll: bytes
+%
+
+category: 'initialize-release'
+method: ZnEndianessReadWriteStream
+on: aStream
+
+	stream := aStream
+%
+
+! Class implementation for 'ZnFastLineReader'
+
+!		Class methods for 'ZnFastLineReader'
+
+category: 'instance creation'
+classmethod: ZnFastLineReader
+new
+	^self basicNew
+		initialize;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: ZnFastLineReader
+on: characterReadStream
+	^ self new 
+		on: characterReadStream;
+		yourself
+%
+
+!		Instance methods for 'ZnFastLineReader'
+
+category: 'testing'
+method: ZnFastLineReader
+atEnd
+	^ readStream atEnd
+%
+
+category: 'initialize'
+method: ZnFastLineReader
+beWide
+self error: 'The WideString is not implemented in Gemstone'.
+	self bufferStream: (#WideString new: 32) writeStream
+%
+
+category: 'initialize'
+method: ZnFastLineReader
+bufferStream: characterWriteStream
+	^ bufferStream := characterWriteStream
+%
+
+category: 'initialize'
+method: ZnFastLineReader
+close
+	readStream close
+%
+
+category: 'initialize'
+method: ZnFastLineReader
+initialize
+	"super initialize."
+	cr := Character cr.
+	lf := Character lf
+%
+
+category: 'accessing'
+method: ZnFastLineReader
+linesDo: block
+	[ self atEnd ]
+		whileFalse: [ 
+			| line |
+			line := self nextLine.
+			line isNil
+				ifFalse: [ block value: line ] ]
+%
+
+category: 'accessing'
+method: ZnFastLineReader
+nextLine
+	"Read a CR, LF or CRLF terminated line, returning the contents of the line without the EOL. Return nil when the receiver is #atEnd."
+	
+	self atEnd ifTrue: [ ^ nil ].
+	^ self streamContents: [ :out | | eol char |
+		eol := false.
+		[ eol ] whileFalse: [ 
+			char := readStream next.
+			(char isNil or: [ char == lf ])
+				ifTrue: [ eol := true ]
+				ifFalse: [ 
+					char == cr 
+						ifTrue: [ eol := true. readStream peekFor: lf ]
+						ifFalse: [  out nextPut: char ] ] ] ]
+%
+
+category: 'initialize'
+method: ZnFastLineReader
+on: characterReadStream
+	readStream := characterReadStream
+%
+
+category: 'private'
+method: ZnFastLineReader
+streamContents: block
+	"Like readStream collectionSpecies streamContents: block
+	but reusing the underlying buffer for improved efficiency"
+	
+	bufferStream 
+		ifNil: [ 
+			bufferStream := (readStream collectionSpecies new: 32) writeStream ].
+	bufferStream reset.
+	block value: bufferStream.
+	^ bufferStream contents
+%
+
+! Class implementation for 'ZnPercentEncoder'
+
+!		Class methods for 'ZnPercentEncoder'
+
+category: 'accessing'
+classmethod: ZnPercentEncoder
+rfc3986UnreservedCharacters
+	"Return the unreserved characters according to RFC 3986 section 2.3.
+	This is the most narrow safe set to be used in a better safe than sorry approach."
+
+	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~'
+%
+
+!		Instance methods for 'ZnPercentEncoder'
+
+category: 'accessing'
+method: ZnPercentEncoder
+characterEncoder
+	"Return the character encoder that I currently use.
+	If not set, I will default to using UTF-8."
+
+	^ characterEncoder ifNil: [ characterEncoder := ZnDefaultCharacterEncoder value].
+
+"	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			self flag: 'TODO: In Pharo, ZnDefaultCharacterEncoder is a DynamicVariable. This must be handled differently in Gemstone'.
+			^ characterEncoder ifNil: [ characterEncoder := ZnCharacterEncoder utf8 ] ]
+		ifFalse: [
+			^ characterEncoder ifNil: [ characterEncoder := ZnDefaultCharacterEncoder value ] ]"
+%
+
+category: 'initialize-release'
+method: ZnPercentEncoder
+characterEncoder: object
+	"Set the character encoding to use to object."
+	
+	characterEncoder := object
+%
+
+category: 'converting'
+method: ZnPercentEncoder
+decode: string
+	"Decode a percent encoded string and return the resulting byte array.
+	After percent decoding I will use my character encoder to convert byte values to characters."
+
+	| bytes stringStream |
+	stringStream := string readStream.
+	bytes := ByteArray streamContents: [ :byteStream | 
+		self decode: stringStream to: byteStream ].
+	^ self characterEncoder decodeBytes: bytes
+%
+
+category: 'converting'
+method: ZnPercentEncoder
+decode: stringStream to: byteStream
+	| char |
+	self decodePlusAsSpace.
+	[ stringStream atEnd ]
+		whileFalse: [ 
+			((char := stringStream next) == $+ and: [ decodePlusAsSpace ])
+				ifTrue: [ byteStream nextPut: 32 ]
+				ifFalse: [ 
+					char == $%
+						ifTrue: [ byteStream nextPut: (self readHexFrom: stringStream) ]
+						ifFalse: [ 
+							char charCode < 128
+								ifTrue: [ byteStream nextPut: char charCode ]
+								ifFalse: [ self errorAsciiCharacterExpected ] ] ] ]
+%
+
+category: 'accessing'
+method: ZnPercentEncoder
+decodePlusAsSpace
+	"Return if $+ on input should be decoded as Character space.
+	This is normally only done application/x-www-form-urlencoded data,
+	but is is on by default anyway."
+	
+	^ decodePlusAsSpace ifNil: [ decodePlusAsSpace := true ]
+%
+
+category: 'initialize-release'
+method: ZnPercentEncoder
+decodePlusAsSpace: boolean
+	"When boolean is true, $+ on input will be decoded as Character space.
+	Else $+ is treated as a normal character, filtered by the safe set.
+	This is normally only done application/x-www-form-urlencoded data,
+	but is is on by default anyway."
+	
+	decodePlusAsSpace := boolean
+%
+
+category: 'converting'
+method: ZnPercentEncoder
+encode: string
+	"Encode string using percent encoding and return the resulting string.
+	I will use my character encoder to convert string to bytes and then
+	percent encode all byte values that are not in my safe set."
+
+	^ String streamContents: [ :stream | 
+		self encode: string readStream to: stream ]
+%
+
+category: 'converting'
+method: ZnPercentEncoder
+encode: readStream to: writeStream
+	| bytes buffer byte |
+	buffer := (bytes := ByteArray new: 4) writeStream.
+	self safeSet; characterEncoder.
+	[ readStream atEnd ]
+		whileFalse: [ 
+			buffer reset.
+			characterEncoder nextPut: readStream next toStream: buffer.
+			1 to: buffer position do: [ :index | 
+				(safeSet includes: (byte := bytes at: index))
+					ifTrue: [ writeStream nextPut: byte asCharacter ]
+					ifFalse: [ 
+						writeStream nextPut: $%.
+						self writeHex: byte to: writeStream ] ] ]
+%
+
+category: 'converting'
+method: ZnPercentEncoder
+errorAsciiCharacterExpected
+	ZnCharacterEncodingError signal: 'ASCII character expected'
+%
+
+category: 'error handling'
+method: ZnPercentEncoder
+errorHexDigitExpected
+	ZnCharacterEncodingError signal: 'hex digit expected'
+%
+
+category: 'private'
+method: ZnPercentEncoder
+readHexFrom: stream
+	| first second |
+	(stream atEnd not and: [ (first := stream next numberParserDigitalValue) between: 0 and: 15 ])
+		ifFalse: [ self errorHexDigitExpected ].
+	(stream atEnd not and: [ (second := stream next numberParserDigitalValue) between: 0 and: 15 ])
+		ifFalse: [ self errorHexDigitExpected ].
+	^ (first << 4) + second
+%
+
+category: 'accessing'
+method: ZnPercentEncoder
+safeSet
+	"Return the safe set of characters that I will not encode, as a byte array.
+	If not set, I will default to the most commonly used safe set"
+	
+	^ safeSet ifNil: [ safeSet := self class rfc3986UnreservedCharacters asByteArray ]
+%
+
+category: 'initialize-release'
+method: ZnPercentEncoder
+safeSet: string
+	"Set my safe set to be the characters in string, which I will convert to bytes"
+	
+	safeSet := string asByteArray
+%
+
+category: 'private'
+method: ZnPercentEncoder
+writeHex: integer to: stream
+	integer printOn: stream base: 16 length: 2 padded: true
+%
+
+! Class implementation for 'ZnPositionableReadStream'
+
+!		Class methods for 'ZnPositionableReadStream'
+
+category: 'instance creation'
+classmethod: ZnPositionableReadStream
+new
+	^self basicNew
+		initialize;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: ZnPositionableReadStream
+on: readStream
+	"Create an instance of ZnPositionableReadStream that wraps readStream to add limited positioning capabilities to it."
+	
+	^ self new
+		on: readStream;
+		yourself
+%
+
+category: 'convenience'
+classmethod: ZnPositionableReadStream
+on: readStream do: block
+	"Execute block with as argument a ZnPositionableReadStream on readStream.
+	Return the value of block."
+
+	^ block value: (self on: readStream)
+%
+
+!		Instance methods for 'ZnPositionableReadStream'
+
+category: 'testing'
+method: ZnPositionableReadStream
+atEnd
+	"Answer whether I can access any more objects."
+	
+	^ delta = 0 and: [ stream atEnd ]
+%
+
+category: 'positioning'
+method: ZnPositionableReadStream
+back
+	"Go back one element and return it."
+
+	self skip: -1.
+	^ self peek
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+bufferSize
+	"Return the size of my buffer, which limits how far I can be positioned backwards. See #sizeBuffer: to set another buffer size."
+	
+	^ buffer size
+%
+
+category: 'initialize-release'
+method: ZnPositionableReadStream
+close
+	"Close me after which I can no longer be accessed. I delegate this to the stream that I wrap."
+	
+	stream close
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+collectionSpecies
+	"Return the collection class able to hold my elements"
+
+	^ (stream respondsTo: #collectionSpecies)
+		ifTrue: [ stream collectionSpecies ]
+		ifFalse: [ stream isBinary
+				ifTrue: [ ByteArray ]
+				ifFalse: [ String ] ]
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+defaultBufferSize
+	"Return the default size of my buffer, which limits how far I can be positioned backwards. See #sizeBuffer: to set another buffer size."
+	
+	^ 2 raisedToInteger: 8
+%
+
+category: 'initialize-release'
+method: ZnPositionableReadStream
+initialize
+	"super initialize."
+	count := index := delta := 0
+%
+
+category: 'testing'
+method: ZnPositionableReadStream
+isBinary
+	"Return whether I am binary, whether my elements are byte values (8 bit integers between 0 and 255)"
+	
+	^ stream isBinary
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+next
+	"Return the next element and move over it"
+	
+	| next |
+	delta = 0
+		ifTrue: [ 
+			(next := stream next) ifNotNil: [ 
+				count := count + 1.
+				buffer at: index + 1 put: next.
+				index := (index + 1) \\ buffer size ] ]
+		ifFalse: [ 
+			next := buffer at: ((index - delta) \\ buffer size) + 1.
+			delta := delta - 1 ].
+	^ next
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+next: requestedCount 
+	"Read requestedCount elements and return them as a collection.
+	If less are available, a smaller collection will be returned."
+
+	^ self 
+		next: requestedCount 
+		into: (self collectionSpecies new: requestedCount)
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+next: requestedCount into: collection
+	"Read requestedCount elements into collection,
+	returning a copy if less elements are available"
+	
+	^ self 
+		next: requestedCount 
+		into: collection 
+		startingAt: 1
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+next: requestedCount into: collection startingAt: offset
+	"Read requestedCount elements into collection starting at offset,
+	returning a copy if less elements are available"
+	
+	| read |
+	read := self 
+		readInto: collection 
+		startingAt: offset 
+		count: requestedCount.
+	^ read = requestedCount 
+		ifTrue: [ collection ]
+		ifFalse: [ collection copyFrom: 1 to: offset + read - 1 ]
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+nextInto: collection
+	"Read the next elements of the receiver into collection,
+	returning a copy if less elements are available"
+	
+	^ self
+		next: collection size
+		into: collection
+%
+
+category: 'instance creation'
+method: ZnPositionableReadStream
+on: readStream
+	"Initialize me on readStream"
+	
+	stream := readStream.
+	self sizeBuffer: self defaultBufferSize
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+peek
+	"Return the next element but do not move over it"
+	
+	^ self savingPositionDo: [ self next ]
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+peekFor: object
+	"Answer false and do not move over the next element if it is not equal to object, or if the receiver is at the end. 
+	Answer true and move over the next element when it is equal to object."
+
+	^ self peek = object
+		ifTrue: [ 
+			self next.
+			true ]
+		ifFalse: [ false ]
+%
+
+category: 'positioning'
+method: ZnPositionableReadStream
+position
+	"Return my current position. This is an object that can be used as argument to #position: to move back to that position. Although opaque, it is currently an integer count of the number of #next operations done on the stream that I wrap."
+	
+	^ count - delta
+%
+
+category: 'positioning'
+method: ZnPositionableReadStream
+position: newPosition
+	"Move my current position to newPosition, an object obtained by previously calling #position. My buffer size limits how far I can be positioned backwards. A SubscriptOutOfBounds exception will be signalled in case this operation cannot be completed. It is also no possible to go backwards unless data has been read previously."
+	
+	| newDelta |
+	newDelta := count - newPosition.
+	(newDelta between: 0 and: (buffer size min: count))
+		ifFalse: [ 
+			^ SubscriptOutOfBounds 
+					signalFor: self 
+					lowerBound: self position 
+					upperBound: self position - (buffer size min: count) ].
+	^ delta := newDelta
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+readInto: collection startingAt: offset count: requestedCount
+	"Read requestedCount elements into collection starting at offset,
+	returning the number of elements read, there could be less elements available."
+
+	0 to: requestedCount - 1 do: [ :count | | object |
+		(object := self next) ifNil: [ ^ count ].  
+		collection at: offset + count put: object ].
+	^ requestedCount
+%
+
+category: 'positioning'
+method: ZnPositionableReadStream
+savingPositionDo: block
+	"Execute block so that any reading from me in it has no effect afterwards. I remember the current #position and move back to it using #position: after evaluating block. My buffer size limits how long the excursion can be. A SubscriptOutOfBounds exception will be signalled in case this operation cannot be completed."
+	
+	| savedPosition |
+	savedPosition := self position.
+	^ block ensure: [ self position: savedPosition ]
+%
+
+category: 'initialize-release'
+method: ZnPositionableReadStream
+sizeBuffer: size
+	"Change the buffer size. This should be done when I am still in my initial state."
+	
+	buffer := self collectionSpecies new: size
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+skip: integer
+	"Skip over integer count elements."
+	
+	integer > 0
+		ifTrue: [ integer timesRepeat: [ self next ] ]
+		ifFalse: [ self position: (self position + integer) ]
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+upTo: value 
+	"Read upto but not including value and return them as a collection.
+	If value is not found, return the entire contents of the stream."
+	
+	^ self collectionSpecies 
+		streamContents: [ :writeStream | | element |
+			[ self atEnd or: [ (element := self next) = value ] ] whileFalse: [ 
+				writeStream nextPut: element ] ]
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+upToEnd
+	"Read elements until the stream is atEnd and return them as a collection."
+
+	^ self collectionSpecies
+		streamContents: [ :collectionStream | 
+			[ self atEnd ] whileFalse: [ collectionStream nextPut: self next ] ]
+%
+
+category: 'accessing'
+method: ZnPositionableReadStream
+wrappedStream
+	"Return the read stream that I wrap."
+	
+	^ stream
+%
+
 ! Class implementation for 'AbstractBinaryFileStream'
 
 !		Class methods for 'AbstractBinaryFileStream'
 
 category: 'instance creation'
 classmethod: AbstractBinaryFileStream
-handle: aCollection file: aFile forWrite: aTrue
+on: aFileAdapter
 	
-	^ self basicNew
-		handle: aCollection file: aFile forWrite: aTrue;
+	^ self new
+		terminal: aFileAdapter;
 		yourself
 %
 
@@ -12087,10 +24221,10 @@ category: 'testing'
 method: AbstractBinaryFileStream
 atEnd
 
-	^ File atEnd: handle
+	^ self terminal atEnd
 %
 
-category: 'accessing'
+category: 'reading'
 method: AbstractBinaryFileStream
 contents
 	"Answer the contents of the receiver while leaving the position unchanged.
@@ -12122,40 +24256,38 @@ crlf
 
 category: 'accessing'
 method: AbstractBinaryFileStream
-file
-	^ file
-%
-
-category: 'accessing'
-method: AbstractBinaryFileStream
-file: aFile 
-	
-	file := aFile
+fileName
+	^self terminal fullName
 %
 
 category: 'flushing'
 method: AbstractBinaryFileStream
 flush
-	"When writing, this flushes the write buffer the stream uses to reduce
-	the number of write() system calls it makes. This should generally be
-	used before #sync, but on Windows they do the same thing."
-	
-	File flush: handle
-%
-
-category: 'initialization'
-method: AbstractBinaryFileStream
-handle: aCollection file: aFile forWrite: aBoolean
-	
-	handle := aCollection.
-	file := aFile.
-	forWrite := aBoolean
+	self terminal flush
 %
 
 category: 'testing'
 method: AbstractBinaryFileStream
 isBinary
 	^ true
+%
+
+category: 'testing'
+method: AbstractBinaryFileStream
+isReadStream
+	^self isWritable not
+%
+
+category: 'testing'
+method: AbstractBinaryFileStream
+isWritable
+	^self terminal  isNil ifTrue: [false] ifFalse: [self terminal isWritable]
+%
+
+category: 'testing'
+method: AbstractBinaryFileStream
+isWriteStream
+	^self isWritable
 %
 
 category: 'character writing'
@@ -12165,14 +24297,7 @@ lf
 	self nextPut: Character lf asInteger
 %
 
-category: 'accessing'
-method: AbstractBinaryFileStream
-name
-
-	^ file name
-%
-
-category: 'accessing'
+category: 'reading'
 method: AbstractBinaryFileStream
 next
 	"Answer the next byte from this file, or nil if at the end of the file."
@@ -12180,7 +24305,7 @@ next
 	^ (self next: 1) ifEmpty: [ nil ] ifNotEmpty: [ :col | col first ]
 %
 
-category: 'accessing'
+category: 'reading'
 method: AbstractBinaryFileStream
 next: n
 	"Return a string with the next n characters of the filestream in it."
@@ -12188,13 +24313,13 @@ next: n
 	^ self next: n into: (ByteArray new: n)
 %
 
-category: 'accessing'
+category: 'reading'
 method: AbstractBinaryFileStream
 next: n into: aBuffer
 	"Return a string with the next n characters of the filestream in it."
 	| readBuffer read |
 	readBuffer := aBuffer.
-	read := File read: handle into: readBuffer startingAt: 1 count: n.
+	read := self terminal readInto: readBuffer startingAt: 1 count: n.
 	^read = n 
 		ifTrue: [ readBuffer ]
 		ifFalse: [ readBuffer copyFrom: 1 to: read ]
@@ -12217,32 +24342,16 @@ category: 'writing'
 method: AbstractBinaryFileStream
 next: amount putAll: aByteArray
 
-	forWrite
-		ifFalse: [ ^ self error: 'Cannot write a read-only file' ].
-	[ File
-		write: handle
-		from: aByteArray
+	self isWritable
+		ifFalse: [ ^ FileWriteError signalWith: 'Cannot write a read-only file - ' , self terminal fullName ].
+	self terminal
+		writeFrom: aByteArray
 		startingAt: 1
-		count: amount ]
-		on: Error
-		do: [:ex | (FileWriteError fileName: self name)
-				signal:
-					(self close
-						ifTrue: [ 'File ' , self name , ' is closed' ]
-						ifFalse: [ 'File ' , self name , ' write failed' ]) ].
+		count: amount.
 	^ aByteArray
 %
 
-category: 'writing'
-method: AbstractBinaryFileStream
-next: anInteger putAll: aCollection startingAt: startIndex
-"Store the next anInteger elements from the given collection."
-(startIndex = 1 and:[anInteger = aCollection size])
-	ifTrue:[^self nextPutAll: aCollection].
-^self nextPutAll: (aCollection copyFrom: startIndex to: startIndex+anInteger-1)
-%
-
-category: 'accessing'
+category: 'reading'
 method: AbstractBinaryFileStream
 nextInto: aBuffer
 	"Return a string with the next n characters of the filestream in it."
@@ -12287,6 +24396,13 @@ nextPutAll: aByteArray
 
 category: 'accessing'
 method: AbstractBinaryFileStream
+pathString
+
+	^self terminal pathString
+%
+
+category: 'reading'
+method: AbstractBinaryFileStream
 peek
 	"Answer what would be returned if the message next were sent to the receiver. If the receiver is at the end, answer nil.  "
 	self subclassResponsibility
@@ -12296,14 +24412,14 @@ category: 'positioning'
 method: AbstractBinaryFileStream
 position
 
-	^ File getPosition: handle
+	^ self terminal position
 %
 
 category: 'positioning'
 method: AbstractBinaryFileStream
 position: aPosition
 	
-	File setPosition: handle to: aPosition
+	self terminal position: aPosition
 %
 
 category: 'printing'
@@ -12314,14 +24430,14 @@ printOn: aStream
 	aStream
 		nextPutAll: self class name;
 		nextPutAll: ': ';
-		print: file name
+		print: self fileName
 %
 
 category: 'reading'
 method: AbstractBinaryFileStream
 readInto: readBuffer startingAt: startIndex count: count
 
-	^ File read: handle into: readBuffer startingAt: startIndex count: count
+	^self terminal readInto: readBuffer startingAt: startIndex count: count
 %
 
 category: 'positioning'
@@ -12341,7 +24457,7 @@ category: 'accessing'
 method: AbstractBinaryFileStream
 size
 
-	^ File sizeOf: handle
+	^ self terminal fileSize
 %
 
 category: 'positioning'
@@ -12356,21 +24472,30 @@ skip: n
 category: 'flushing'
 method: AbstractBinaryFileStream
 sync	
-	"When writing, this syncs any written/flushed data still in the kernel
-	file system buffers to disk. This should generally be used after #flush,
-	but on Windows they do the same thing."
 
-	File sync: handle
+	self terminal sync
 %
 
 category: 'accessing'
+method: AbstractBinaryFileStream
+terminal
+	^ terminal
+%
+
+category: 'accessing'
+method: AbstractBinaryFileStream
+terminal: aFileAdaptor
+	terminal := aFileAdaptor
+%
+
+category: 'reading'
 method: AbstractBinaryFileStream
 upTo: delim
 
 	^ self upToAnyOf: (ByteArray with: delim)
 %
 
-category: 'accessing'
+category: 'reading'
 method: AbstractBinaryFileStream
 upToAnyOf: delimiters
 
@@ -12379,7 +24504,7 @@ upToAnyOf: delimiters
 			whileFalse: [ stream nextPut: ch ] ]
 %
 
-category: 'accessing'
+category: 'reading'
 method: AbstractBinaryFileStream
 upToEnd
 	"Answer a subcollection from the current access position through the last element of the receiver."
@@ -12397,16 +24522,15 @@ upToEnd
 category: 'open/close'
 method: BinaryFileStream
 close
-	self closed
-		ifTrue: [ ^ self ].
-	handle close.
-	handle := nil
+	self terminal notNil ifTrue: [
+		self terminal close.
+		self terminal: nil]
 %
 
 category: 'testing'
 method: BinaryFileStream
 closed
-	^ handle isOpen not
+	^ self terminal isNil or: [self isClosed]
 %
 
 category: 'finalization'
@@ -12416,7 +24540,7 @@ finalize
 	^ self close
 %
 
-category: 'accessing'
+category: 'reading'
 method: BinaryFileStream
 peek
 	"Answer what would be returned if the message next were sent to the receiver. If the receiver is at the end, answer nil.  "
@@ -12446,7 +24570,39 @@ method: BinaryFileStream
 truncate: pos
 	"Truncate to this position"
 
-	^ File truncate: handle to: pos
+	^ self terminal truncate: pos
+%
+
+! Class implementation for 'StdioStream'
+
+!		Instance methods for 'StdioStream'
+
+category: 'accessing'
+method: StdioStream
+next: n
+	"Return a string with the next n characters of the filestream in it."
+	| readBuffer read startingAt |
+	readBuffer := ByteArray new: n.
+	startingAt := 1.
+	peekBuffer ifNotNil: [ 
+		readBuffer at: 1 put: peekBuffer.
+		startingAt := startingAt + 1.
+		peekBuffer := nil ].
+	read := self terminal readInto: readBuffer startingAt: startingAt count: n - startingAt + 1.
+	^read = (n - startingAt + 1)
+		ifTrue: [ readBuffer ]
+		ifFalse: [ readBuffer copyFrom: 1 to: read ]
+%
+
+category: 'accessing'
+method: StdioStream
+peek
+	"Answer the next element of the stream, but do not advance the stream pointer. 
+	If the receiver is at the end, answer nil."
+
+	self atEnd ifTrue: [ ^ nil ].
+	peekBuffer ifNotNil: [ ^ peekBuffer ].
+	^ peekBuffer := self next
 %
 
 ! Class implementation for 'AbstractUUIDTest'
@@ -12639,6 +24795,316 @@ generatorClass
   ^ FastUUIDGenerator
 %
 
+! Class implementation for 'BinaryFileStreamTest'
+
+!		Instance methods for 'BinaryFileStreamTest'
+
+category: 'running'
+method: BinaryFileStreamTest
+fileStreamForFileNamed: fileName
+	^ (FileSystem * 'testFile') writeRawStream
+%
+
+category: 'running'
+method: BinaryFileStreamTest
+killTestFile
+
+	(FileSystem * 'testFile') exists
+		ifTrue: [ (FileSystem * 'testFile') delete ].
+%
+
+category: 'running'
+method: BinaryFileStreamTest
+readStreamOnTestFile
+	^ (FileSystem * 'testFile') readRawStream
+%
+
+category: 'running'
+method: BinaryFileStreamTest
+setUp
+
+	super setUp.
+	self killTestFile.
+%
+
+category: 'running'
+method: BinaryFileStreamTest
+tearDown
+
+	self killTestFile.
+	"We must ensure that files are collected before running other tests.
+	In windows, we cannot open the same file twice."
+
+	"3 timesRepeat: [ Smalltalk garbageCollect ]."
+
+	super tearDown.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testEmptyFileIsAtEnd
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	self assert: aBinaryFileStream atEnd
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testFileWithSomeBytesSizeIsNotZero
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream nextPut: 1.
+	self assert: aBinaryFileStream position equals: 1.
+	aBinaryFileStream nextPutAll: #[1 2 3].
+	self assert: aBinaryFileStream position equals: 4.
+	aBinaryFileStream nextPut: 1.
+	self assert: aBinaryFileStream position equals: 5.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testFullFileIsAtEnd
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream nextPut: 1.
+	self assert: aBinaryFileStream atEnd.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testOpenFile
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	
+	self assert: aBinaryFileStream terminal notNil
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testPeekDoesNotAdvanceTheStream
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream nextPut: 1.
+	aBinaryFileStream nextPut: 2.
+	aBinaryFileStream nextPut: 3.
+	aBinaryFileStream close.
+	
+	aBinaryFileStream := self writeStreamOnTestFile.
+	self assert: aBinaryFileStream position equals: 0.
+	self assert: aBinaryFileStream peek equals: aBinaryFileStream peek.
+	self assert: aBinaryFileStream position equals: 0.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testReadFullFileIsAtEnd
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream nextPut: 1.
+	aBinaryFileStream close.
+	
+	aBinaryFileStream := self readStreamOnTestFile.
+	aBinaryFileStream next.
+	self assert: aBinaryFileStream atEnd.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testReadLessThanAvailableYieldsJustRead
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self fileStreamForFileNamed: 'testFile'.
+	aBinaryFileStream nextPut: 1.
+	aBinaryFileStream nextPut: 2.
+	aBinaryFileStream nextPut: 3.
+	aBinaryFileStream close.
+	
+	aBinaryFileStream := self readStreamOnTestFile.
+	self assert: (aBinaryFileStream next:2) equals: #[1 2].
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testReadMoreThanAvailableYieldsOnlyAvailable
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	self assert: (aBinaryFileStream next:2) equals: #[].
+	
+	"then we put one element and we close it"
+	aBinaryFileStream nextPut: 1.
+	aBinaryFileStream close.
+	
+	aBinaryFileStream := self readStreamOnTestFile.
+	self assert: (aBinaryFileStream next:2) equals: #[1].
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testReadMultipleBytes
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream nextPut: 1.
+	aBinaryFileStream nextPut: 2.
+	aBinaryFileStream close.
+
+	aBinaryFileStream := self readStreamOnTestFile.
+	self assert: (aBinaryFileStream next: 2) equals: #[1 2].
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testReadWhenNothingAvailableYieldsNil
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	self assert: aBinaryFileStream next equals: nil.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testSkipLecture
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream nextPut: 1.
+	aBinaryFileStream nextPut: 2.
+	aBinaryFileStream nextPut: 3.
+	aBinaryFileStream close.
+	
+	aBinaryFileStream := self readStreamOnTestFile.
+	aBinaryFileStream skip: 2.
+	self assert: aBinaryFileStream next equals: 3.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testWriteMultipleBytes
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream nextPutAll: #[1 2].
+	aBinaryFileStream close.
+
+	aBinaryFileStream := self readStreamOnTestFile.
+	self assert: aBinaryFileStream next equals: 1.
+	self assert: aBinaryFileStream next equals: 2.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testWriteReadInt
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream nextPut: 1.
+	aBinaryFileStream close.
+
+	aBinaryFileStream := self readStreamOnTestFile.
+	self assert: aBinaryFileStream next equals: 1.
+%
+
+category: 'tests'
+method: BinaryFileStreamTest
+testWriteToClosedFileFails
+	
+	| aBinaryFileStream |
+	aBinaryFileStream := self writeStreamOnTestFile.
+	aBinaryFileStream close.
+	self should: [ aBinaryFileStream wrappedStream nextPut: 1 ] raise: Error.
+%
+
+category: 'running'
+method: BinaryFileStreamTest
+writeStreamOnTestFile
+	^ (FileSystem * 'testFile') writeRawStream
+%
+
+! Class implementation for 'BinaryStreamSpecTest'
+
+!		Instance methods for 'BinaryStreamSpecTest'
+
+category: 'running'
+method: BinaryStreamSpecTest
+setUp
+	super setUp.
+	reference := (FileLocator temp  / 'plonk') resolve.
+%
+
+category: 'running'
+method: BinaryStreamSpecTest
+tearDown
+	super tearDown.
+	reference ensureDelete
+%
+
+category: 'tests'
+method: BinaryStreamSpecTest
+testReadCreation
+	| aSpec |
+	reference createFile.
+	aSpec := BinaryStreamSpec newRead on: reference.
+	self assert: aSpec terminal class name = FileSystem fileClass name.
+	self assert: aSpec terminal options mode equals: 'r'
+%
+
+! Class implementation for 'BufferedStreamSpecTest'
+
+!		Instance methods for 'BufferedStreamSpecTest'
+
+category: 'running'
+method: BufferedStreamSpecTest
+setUp
+	super setUp.
+	reference := (FileLocator temp  / 'plonk') resolve.
+%
+
+category: 'running'
+method: BufferedStreamSpecTest
+tearDown
+	super tearDown.
+	reference ensureDelete
+%
+
+category: 'tests'
+method: BufferedStreamSpecTest
+testReadCreation
+	| aSpec |
+	reference createFile.
+	aSpec := BufferedStreamSpec newRead on: reference.
+	self assert: aSpec class name = #ZnBufferedReadStream.
+	self assert: aSpec wrappedStream class name = #BinaryFileStream.
+	self assert: aSpec wrappedStream terminal options mode equals: 'r'
+%
+
+category: 'tests'
+method: BufferedStreamSpecTest
+testReadWrite
+	| aSpec |
+	reference createFile.
+	aSpec := BufferedStreamSpec newReadWrite on: reference.
+	self assert: aSpec class name = #ZnBufferedReadWriteStream.
+	self assert: aSpec wrappedStream class name = #BinaryFileStream.
+	self assert: aSpec wrappedStream terminal options mode equals: 'r+'
+%
+
+category: 'tests'
+method: BufferedStreamSpecTest
+testWriteCreation
+	| aSpec |
+	aSpec := BufferedStreamSpec newWrite on: reference.
+	self assert: aSpec class name = #ZnBufferedWriteStream.
+	self assert: aSpec wrappedStream class name = #BinaryFileStream.
+	self assert: aSpec wrappedStream terminal options mode equals: 'w'
+%
+
 ! Class implementation for 'DirectoryEntryTest'
 
 !		Instance methods for 'DirectoryEntryTest'
@@ -12716,6 +25182,257 @@ category: 'tests'
 method: DirectoryEntryTest
 testSize
 	self assert: self entry size _isInteger
+%
+
+! Class implementation for 'EncodedBufferedStreamSpecTest'
+
+!		Instance methods for 'EncodedBufferedStreamSpecTest'
+
+category: 'running'
+method: EncodedBufferedStreamSpecTest
+setUp
+	super setUp.
+	reference := (FileLocator temp  / 'plonk') resolve.
+%
+
+category: 'running'
+method: EncodedBufferedStreamSpecTest
+tearDown
+	super tearDown.
+	reference ensureDelete
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testAppend
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newAppend textFileType.
+	self assert: aStreamSpec mode = 'a'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testAppendAndRead
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newAppend read.
+	self assert: aStreamSpec mode = 'a+'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testAppendAndReadBinary
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newAppend read binaryFileType.
+	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
+	self assert: aStreamSpec mode = 'a+b'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testAppendBinary
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newAppend binaryFileType.
+	self assert: aStreamSpec mode = 'ab'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testCreation
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newAppend.
+	self assert: (aStreamSpec fileOptions isKindOf: FileOptions).
+	self assert: aStreamSpec fileOptions parent == aStreamSpec
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testOnDo
+	| testString fileRef |
+	testString := 'ße'.
+	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
+
+	[  
+		EncodedBufferedStreamSpec newWrite utf8 on: fileRef do: [ :stream | stream nextPutAll: testString ].
+		EncodedBufferedStreamSpec newRead utf8 on: fileRef do: [: stream |
+			self assert: (stream upToAll: 'e') equals: 'ß'] 
+			] ensure: [ fileRef ensureDelete ].
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testOnDoIfAbsent
+	| fileRef  result |
+
+	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
+	fileRef createFile.
+
+	[ 
+		result := EncodedBufferedStreamSpec newRead 
+						on: fileRef 
+						do: [:stream | stream upToEnd ]
+						ifAbsent: [ self signalFailure: 'Should not reach here.' ].
+		self assert: result isEmpty]
+		ensure: [ fileRef ensureDelete ].
+
+	[ 
+		result := EncodedBufferedStreamSpec newRead 
+						on: fileRef 
+						do: [:stream | stream upToEnd ]
+						ifAbsent: ['Should reach here.' ].
+		self assert: result equals: 'Should reach here.']
+			ensure: [ fileRef ensureDelete ]
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testOnDoIfPresent
+	| fileRef  result |
+
+	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
+	fileRef createFile.
+
+	[ 
+		result := EncodedBufferedStreamSpec newWrite 
+						on: fileRef 
+						do: [:stream | 'Should not reach here' ]
+						ifPresent: [ 'Should reach here' ].
+		self assert: result equals: 'Should reach here' ]
+		ensure: [ fileRef ensureDelete ].
+
+	[ 
+		result := EncodedBufferedStreamSpec newWrite 
+						on: fileRef 
+						do: [:stream | 'Should reach here' ]
+						ifPresent: ['Should not reach here' ].
+		self assert: result equals: 'Should reach here']
+			ensure: [ fileRef ensureDelete ]
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testOnOptions
+	"This tests two ways to create a stream from the spec where the FileOptions is a parameter"
+	| fileRef  stream |
+
+	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
+
+	stream := (EncodedStreamSpec onOptions: FileOptions newWrite) on: fileRef.
+	stream nextPutAll: 'test data'.
+	stream close.
+	stream := (EncodedStreamSpec onOptions: FileOptions newRead) on: fileRef.
+	self assert: stream upToEnd equals: 'test data'.
+
+	stream := (EncodedStreamSpec on: fileRef options: FileOptions newWrite).
+	stream nextPutAll: 'test data'.
+	stream close.
+	stream := (EncodedStreamSpec on: fileRef options: FileOptions newRead).
+	self assert: stream upToEnd equals: 'test data'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testRead
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newRead.
+	self assert: aStreamSpec mode = 'r'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testReadCreation
+	| aSpec |
+	reference createFile.
+	aSpec := EncodedBufferedStreamSpec newRead on: reference.
+	self assert: aSpec encoder class name = #ZnUTF8Encoder.
+	self assert: aSpec wrappedStream class name = #ZnBufferedReadStream.
+	self assert: aSpec wrappedStream wrappedStream class name = #BinaryFileStream.
+	self assert: aSpec wrappedStream wrappedStream terminal options mode equals: 'r'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testReadWrite
+	| aSpec |
+	reference createFile.
+	aSpec := EncodedBufferedStreamSpec newReadWrite on: reference.
+
+	self assert: aSpec class name = #ZnCharacterReadWriteStream.
+	"self assert: aSpec wrappedStream class name = #BinaryFileStream.
+	self assert: aSpec wrappedStream file options mode equals: 'r+'."
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testReadWriteBinary
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newReadWrite binaryFileType.
+	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
+	self assert: aStreamSpec mode = 'r+b'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testReadWriteTruncated
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newReadWrite truncate.
+	self assert: aStreamSpec mode = 'w+'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testReadWriteTruncatedBinary
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newReadWrite truncate binaryFileType.
+	self assert: aStreamSpec mode = 'w+b'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testWrite
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newWrite.
+	self assert: aStreamSpec mode = 'w'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testWriteBinary
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newWrite binaryFileType.
+	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
+	self assert: aStreamSpec mode = 'wb'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testWriteCreation
+	| aSpec |
+	aSpec := EncodedBufferedStreamSpec newWrite on: reference.
+	self assert: aSpec encoder class name = #ZnUTF8Encoder.
+	self assert: aSpec wrappedStream class name = #ZnBufferedWriteStream.
+	self assert: aSpec wrappedStream wrappedStream class name = #BinaryFileStream.
+	self assert: aSpec wrappedStream wrappedStream terminal options mode equals: 'w'
+%
+
+category: 'tests'
+method: EncodedBufferedStreamSpecTest
+testWriteHighZipped
+
+	| aStreamSpec |
+	aStreamSpec := EncodedBufferedStreamSpec newWrite gzipHighCompression.
+	self assert: aStreamSpec isGzipped.
+	self assert: aStreamSpec mode = 'w9'
 %
 
 ! Class implementation for 'FileLocatorTest'
@@ -12952,6 +25669,515 @@ method: FileLocatorTest
 testWithExtensionReplacesExtension
 	locator := FileLocator image / 'griffle.nurp'.
 	self assert: (locator withExtension: 'plonk') basename = 'griffle.plonk'
+%
+
+! Class implementation for 'FileOptionsTest'
+
+!		Class methods for 'FileOptionsTest'
+
+category: 'Testing'
+classmethod: FileOptionsTest
+isAbstract
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #FileOptionsTest
+%
+
+!		Instance methods for 'FileOptionsTest'
+
+category: 'private'
+method: FileOptionsTest
+fileOptions
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+	^aFileOptions
+%
+
+category: 'private'
+method: FileOptionsTest
+groupAllOctalValue
+	^'70'
+%
+
+category: 'private'
+method: FileOptionsTest
+otherAllOctalValue
+	^'7'
+%
+
+category: 'private'
+method: FileOptionsTest
+ownerAllOctalValue
+	^'700'
+%
+
+category: 'private'
+method: FileOptionsTest
+store
+	^self storeClass createDefault
+%
+
+category: 'private'
+method: FileOptionsTest
+storeClass
+	self subclassResponsibity
+%
+
+category: 'tests'
+method: FileOptionsTest
+testAppendFlag
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newAppend fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions appendFlag posixFlagValue equals: (FileAppendFlag perform: self valueAccessor)
+%
+
+category: 'tests'
+method: FileOptionsTest
+testGroupAccessPermissionFlags
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupAll.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupAll groupRead.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupRead groupAll.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupRead groupWrite groupExecute.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupRead groupWrite groupExecute groupAll.
+	self assert: (self fileOptions groupRead groupWrite groupExecute accessPermissions printStringRadix: 8) equals: self groupAllOctalValue.
+%
+
+category: 'tests'
+method: FileOptionsTest
+testIndividualAccessPermissionFlags
+
+	self assert: (self fileOptions groupAll accessPermissions printStringRadix: 8) equals: self groupAllOctalValue.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupAll.
+	self _testPermissionFlag: FileGroupExecutePermissionFlag in: self fileOptions groupExecute.
+	self _testPermissionFlag: FileGroupReadPermissionFlag in: self fileOptions groupRead.
+	self _testPermissionFlag: FileGroupWritePermissionFlag in: self fileOptions groupWrite.
+
+	self assert: (self fileOptions otherAll accessPermissions printStringRadix: 8) equals: self otherAllOctalValue.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherAll.
+	self _testPermissionFlag: FileOtherExecutePermissionFlag in: self fileOptions otherExecute.
+	self _testPermissionFlag: FileOtherReadPermissionFlag in: self fileOptions otherRead.
+	self _testPermissionFlag: FileOtherWritePermissionFlag in: self fileOptions otherWrite.
+
+	self assert: (self fileOptions ownerAll accessPermissions printStringRadix: 8) equals: self ownerAllOctalValue.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerAll.
+	self _testPermissionFlag: FileOwnerExecutePermissionFlag in: self fileOptions ownerExecute.
+	self _testPermissionFlag: FileOwnerReadPermissionFlag in: self fileOptions ownerRead.
+	self _testPermissionFlag: FileOwnerWritePermissionFlag in: self fileOptions ownerWrite.
+%
+
+category: 'tests'
+method: FileOptionsTest
+testOpenAndAppendAndReadMode
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newAppend read fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions isWritable.
+	self assert: aFileOptions isReadable.
+	self assert: aFileOptions posixFlags size equals: 2.
+	self assert: aFileOptions hasFileCreateFlag.
+	self assert: aFileOptions hasFileAppendFlag.
+	self deny: aFileOptions hasFileTruncateFlag.
+	self assert: aFileOptions mode equals: 'a+'.
+	self assert: aFileOptions fileOpenModeValue equals: 2.
+	self assert: aFileOptions fileOpenFlagsTotalValue equals: self openAndAppendAndReadValue
+%
+
+category: 'tests'
+method: FileOptionsTest
+testOpenAppendMode
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newAppend fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions isWritable.
+	self deny: aFileOptions isReadable.
+	self assert: aFileOptions posixFlags size equals: 2.
+	self assert: aFileOptions hasFileCreateFlag.
+	self assert: aFileOptions hasFileAppendFlag.
+	self assert: aFileOptions mode equals: 'a'.
+	self assert: aFileOptions fileOpenModeValue equals: 1.
+	self assert: aFileOptions fileOpenFlagsTotalValue equals: self openAndAppendValue
+%
+
+category: 'tests'
+method: FileOptionsTest
+testOtherAccessPermissionFlags
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherAll.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherAll otherRead.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherRead otherAll.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherRead otherWrite otherExecute.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherRead otherWrite otherExecute otherAll.
+	self assert: (self fileOptions otherRead otherWrite otherExecute accessPermissions printStringRadix: 8) equals: self otherAllOctalValue.
+%
+
+category: 'tests'
+method: FileOptionsTest
+testOwnerAccessPermissionFlags
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerAll.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerAll ownerRead.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerRead ownerAll.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerRead ownerWrite ownerExecute.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerRead ownerWrite ownerExecute ownerAll.
+	self assert: (self fileOptions ownerRead ownerWrite ownerExecute accessPermissions printStringRadix: 8) equals: self ownerAllOctalValue
+%
+
+category: 'tests'
+method: FileOptionsTest
+testReadOpenMode
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+	self deny: aFileOptions isWritable.
+	self assert: aFileOptions isReadable.
+	self assert: aFileOptions posixFlags isEmpty.
+	self deny: aFileOptions hasFileCreateFlag.
+	self deny: aFileOptions hasFileTruncateFlag.
+	self assert: aFileOptions mode equals: 'r'.
+	self assert: aFileOptions fileOpenModeValue equals: 0.
+	self assert: aFileOptions fileOpenFlagsTotalValue equals: 0
+%
+
+category: 'tests'
+method: FileOptionsTest
+testReadWriteOpenMode
+
+	| aFileOptions|
+	aFileOptions := EncodedBufferedStreamSpec newReadWrite fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions isWritable.
+	self assert: aFileOptions isReadable.
+	self deny: aFileOptions hasFileCreateFlag.
+	self deny: aFileOptions hasFileTruncateFlag.
+	self assert: aFileOptions mode equals: 'r+'.
+	self assert: aFileOptions fileOpenModeValue equals: 2.
+	self assert: aFileOptions fileOpenFlagsTotalValue equals: self openReadWriteValue
+%
+
+category: 'tests'
+method: FileOptionsTest
+testReadWriteTruncateOpenMode
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newReadWrite truncate create fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions isWritable.
+	self assert: aFileOptions isReadable.
+	self assert: aFileOptions posixFlags size equals: 2.
+	self assert: aFileOptions hasFileCreateFlag.
+	self assert: aFileOptions hasFileTruncateFlag.
+	self assert: aFileOptions mode equals: 'w+'.
+	self assert: aFileOptions fileOpenModeValue equals: 2.
+	self assert: aFileOptions fileOpenFlagsTotalValue equals: self openReadWriteTruncateValue
+%
+
+category: 'tests'
+method: FileOptionsTest
+testShareFlags
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newAppend fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions share posixFlagValue equals: (FileDenyNoneFlag perform: self valueAccessor).
+	aFileOptions beReadOnlyShared.
+	self assert: aFileOptions share posixFlagValue equals: (FileDenyWriteFlag perform: self valueAccessor).
+	aFileOptions beWriteOnlyShared.
+	self assert: aFileOptions share posixFlagValue equals: (FileDenyReadFlag perform: self valueAccessor).
+	aFileOptions beNonShared.
+	self assert: aFileOptions share posixFlagValue equals: (FileDenyReadWriteFlag perform: self valueAccessor).
+%
+
+category: 'tests'
+method: FileOptionsTest
+testWriteOpenMode
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newWrite fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions isWritable.
+	self deny: aFileOptions isReadable.
+	self assert: aFileOptions posixFlags size equals: 2.
+	self assert: aFileOptions hasFileCreateFlag.
+	self assert: aFileOptions hasFileTruncateFlag.
+	self assert: aFileOptions mode equals: 'w'.
+	self assert: aFileOptions fileOpenModeValue equals: 1.
+	self assert: aFileOptions fileOpenFlagsTotalValue equals: self openWriteValue
+%
+
+category: 'private'
+method: FileOptionsTest
+_testPermissionFlag: aPermissionFlagClass in: aFileOptions
+	self assert: aFileOptions accessPermissions equals: (aPermissionFlagClass perform: self valueAccessor)
+%
+
+! Class implementation for 'FileUnixOptionsTest'
+
+!		Instance methods for 'FileUnixOptionsTest'
+
+category: 'private'
+method: FileUnixOptionsTest
+openAndAppendAndReadValue
+	^1090
+%
+
+category: 'private'
+method: FileUnixOptionsTest
+openAndAppendValue
+	^1089
+%
+
+category: 'private'
+method: FileUnixOptionsTest
+openReadWriteTruncateValue
+	^578
+%
+
+category: 'private'
+method: FileUnixOptionsTest
+openReadWriteValue
+	^2
+%
+
+category: 'private'
+method: FileUnixOptionsTest
+openWriteValue
+	^577
+%
+
+category: 'private'
+method: FileUnixOptionsTest
+storeClass
+	^UnixStore
+%
+
+category: 'tests'
+method: FileUnixOptionsTest
+testAccessRules
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+
+	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
+
+	aFileOptions openModeFlag: FileOpenWriteOnlyFlag new.
+	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
+
+	aFileOptions openModeFlag: FileOpenReadWriteFlag new.
+	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
+%
+
+category: 'tests'
+method: FileUnixOptionsTest
+testCreateRules
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+
+	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
+
+	aFileOptions addPosixFlag: FileCreateFlag new.
+	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
+
+	aFileOptions addPosixFlag: FileExclusiveFlag new.
+	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
+	self should: [aFileOptions truncateRule] raise: FileOptionFeatureNotSupported.
+
+	aFileOptions addPosixFlag: FileTruncateFlag new.
+	self should: [aFileOptions truncateRule] raise: FileOptionFeatureNotSupported.
+%
+
+category: 'tests'
+method: FileUnixOptionsTest
+testFileType
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newAppend fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions fileType isNil
+%
+
+category: 'tests'
+method: FileUnixOptionsTest
+testShareRules
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
+
+	aFileOptions share: FileDenyReadFlag new.
+	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
+
+	aFileOptions share: FileDenyWriteFlag new.
+	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
+
+	aFileOptions share: FileDenyReadWriteFlag new.
+	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
+%
+
+category: 'private'
+method: FileUnixOptionsTest
+valueAccessor
+	^#defaultPlatformValue
+%
+
+! Class implementation for 'FileWindowsOptionsTest'
+
+!		Instance methods for 'FileWindowsOptionsTest'
+
+category: 'private'
+method: FileWindowsOptionsTest
+groupAllOctalValue
+	^'0'
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+openAndAppendAndReadValue
+	^196610
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+openAndAppendValue
+	^196609
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+openReadWriteTruncateValue
+	^655362
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+openReadWriteValue
+	^2
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+openWriteValue
+	^655361
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+otherAllOctalValue
+	^'0'
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+ownerAllOctalValue
+	^'3'
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+storeClass
+	^WindowsStore
+%
+
+category: 'tests'
+method: FileWindowsOptionsTest
+testAccessRules
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+
+	self assert: aFileOptions accessRule equals: WindowsStore readOnlyAccessRule.
+
+	aFileOptions openModeFlag: FileOpenWriteOnlyFlag new.
+	self assert: aFileOptions accessRule equals: WindowsStore writeOnlyAccessRule.
+
+	aFileOptions openModeFlag: FileOpenReadWriteFlag new.
+	self assert: aFileOptions accessRule equals: WindowsStore readWriteAccessRule.
+%
+
+category: 'tests'
+method: FileWindowsOptionsTest
+testCreateRules
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+
+	self assert: aFileOptions createRule equals: WindowsStore openExistingRule.
+
+	aFileOptions addPosixFlag: FileCreateFlag new.
+	self assert: aFileOptions createRule equals: WindowsStore openAlwaysRule.
+
+	aFileOptions addPosixFlag: FileExclusiveFlag new.
+	self assert: aFileOptions createRule equals: WindowsStore createNewRule.
+	self assert: aFileOptions truncateRule equals: WindowsStore noTruncateRule.
+
+	aFileOptions addPosixFlag: FileTruncateFlag new.
+	self assert: aFileOptions truncateRule equals: WindowsStore truncateExistingRule.
+%
+
+category: 'tests'
+method: FileWindowsOptionsTest
+testDefaultReadFileRules
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+
+	self assert: aFileOptions createRule equals: WindowsStore openExistingRule.
+	self assert: aFileOptions shareRule equals: WindowsStore denyNoneShareRule.
+	self assert: aFileOptions accessRule equals: WindowsStore readOnlyAccessRule
+%
+
+category: 'tests'
+method: FileWindowsOptionsTest
+testFileType
+
+	| aFileOptions |
+	aFileOptions := 
+		EncodedBufferedStreamSpec new 
+			initializeForAppend; 
+			beWindowsStore; 
+			fileOptions.
+	aFileOptions binaryFileType.
+
+	self assert: aFileOptions fileType posixFlagValue equals: 1.
+
+	aFileOptions textFileType.
+	self assert: aFileOptions fileType posixFlagValue equals: 0
+%
+
+category: 'tests'
+method: FileWindowsOptionsTest
+testShareRules
+
+	| aFileOptions |
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
+	aFileOptions parent store: self store.
+	self assert: aFileOptions shareRule equals: WindowsStore denyNoneShareRule.
+
+	aFileOptions share: FileDenyReadFlag new.
+	self assert: aFileOptions shareRule equals: WindowsStore denyReadShareRule.
+
+	aFileOptions share: FileDenyWriteFlag new.
+	self assert: aFileOptions shareRule equals: WindowsStore denyWriteShareRule.
+
+	aFileOptions share: FileDenyReadWriteFlag new.
+	self assert: aFileOptions shareRule equals: WindowsStore denyReadWriteShareRule.
+%
+
+category: 'private'
+method: FileWindowsOptionsTest
+valueAccessor
+	^#windowsValue
 %
 
 ! Class implementation for 'FileReferenceAttributeTests'
@@ -14027,17 +27253,11 @@ testUpToAll
 	| testString fileRef |
 	testString := 'ße'.
 	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
-
+ 
 	[  
-	fileRef
-		writeStreamEncoded: 'utf8' do: [ :stream | 
-			stream nextPutAll: testString ].
-
-	fileRef
-		readStreamDo: [ :stream |
-			self assert: (stream upToAll: 'e') equals: 'ß'.
-		] ]
-	ensure: [ fileRef ensureDelete ]
+		fileRef writeStreamEncoded: 'utf8' do: [ :stream | stream nextPutAll: testString ].
+		fileRef readStreamDo: [ :stream | self assert: (stream upToAll: 'e') equals: 'ß'] 
+			] ensure: [ fileRef ensureDelete ].
 %
 
 category: 'tests'
@@ -14199,11 +27419,16 @@ createFileSystem
 
 category: 'running'
 method: FileSystemHandleTest
+reopenForRead
+%
+
+category: 'running'
+method: FileSystemHandleTest
 setUp
 	super setUp.
 	filesystem := self createFileSystem.
 	reference := filesystem * 'plonk'.
-	handle := reference openWritable: true
+	handle := reference openOptions: FileOptions newWrite
 %
 
 category: 'running'
@@ -14218,6 +27443,7 @@ category: 'tests'
 method: FileSystemHandleTest
 testAt
 	handle at: 1 write: (ByteArray with: 3) startingAt: 1 count: 1.
+	self reopenForRead.
 	self assert: (handle at: 1) = 3
 %
 
@@ -14227,6 +27453,7 @@ testAtPut
 	| in |
 	handle at: 1 put: 3.
 	in := ByteArray new: 1.
+	self reopenForRead.
 	handle at: 1 read: in startingAt: 1 count: 1.
 	self assert: in first = 3
 %
@@ -14273,6 +27500,10 @@ testCreatedOpen
 category: 'tests'
 method: FileSystemHandleTest
 testEnsureClosed
+
+	filesystem := self createFileSystem.
+	reference := filesystem * 'plonk'.
+	handle := reference openOptions: FileOptions newWrite.
 	handle ensureClosed.
 	self deny: handle isOpen.
 	handle ensureClosed.
@@ -14289,8 +27520,19 @@ testIO
 	out := #(1 2 3) asByteArray.
 	in := ByteArray new: 3.
 	handle at: 1 write: out startingAt: 1 count: 3.
+	self reopenForRead.
 	handle at: 1 read: in startingAt: 1 count: 3.
 	self assert: out = in.
+%
+
+category: 'tests'
+method: FileSystemHandleTest
+testOpenOptions
+	| aFileOptions |
+	aFileOptions := FileOptions newRead.
+	handle := reference openOptions: aFileOptions.
+	self assert: (handle isKindOf: self targetClass).
+	self assert: handle options == aFileOptions
 %
 
 category: 'tests'
@@ -14301,6 +27543,7 @@ testReadBufferTooLarge
 	in := ByteArray new: 5.
 	in atAllPut: 9.
 	handle at: 1 write: out startingAt: 1 count: 3.
+	self reopenForRead.
 	result := handle at: 1 read: in startingAt: 2 count: 4.
 	self assert: result = 3.
 	self assert: in = #(9 1 2 3 9) asByteArray.
@@ -14310,7 +27553,7 @@ category: 'tests'
 method: FileSystemHandleTest
 testReadOnly
 	handle close.
-	handle := reference openWritable: false.
+	handle := reference openOptions: FileOptions newRead.
 	self 
 		should: 
 			[ handle 
@@ -14352,16 +27595,10 @@ testTruncate
 	| out |
 	out := #(1 2 3 4 5) asByteArray.
 	handle at: 1 write: out startingAt: 1 count: 5.
+	self assert: handle size = 5.
 	handle truncateTo: 3.
+	"The Disk version will fail until the primitive is implemented"
 	self assert: handle size = 3
-%
-
-category: 'tests'
-method: FileSystemHandleTest
-testWriteStream
-	| stream |
-	stream := handle binaryWriteStream.
-	self assert: (stream respondsTo: #nextPut:)
 %
 
 ! Class implementation for 'FileHandleTest'
@@ -14371,7 +27608,65 @@ testWriteStream
 category: 'running'
 method: FileHandleTest
 createFileSystem
+	"Force the filesystem to be created for each test.
+	 Normally use: 'FileSystem disk' which returns the cached file system"
 	^ FileSystem store: DiskStore activeClass createDefault
+%
+
+category: 'running'
+method: FileHandleTest
+reopenForRead
+	handle close.
+	handle := reference openOptions: FileOptions newRead.
+	handle assureOpen
+%
+
+category: 'running'
+method: FileHandleTest
+targetClass
+	^FileHandle
+%
+
+category: 'tests'
+method: FileHandleTest
+testFileWriteError
+	" This test may be not needed depending on what happens with BinaryFileStream "
+	| stream  |
+	stream := FileSystem disk binaryWriteStreamOn: (FileSystem disk workingDirectory / 'foo.txt') path.
+	stream close.
+	stream := FileSystem disk binaryReadStreamOn: (FileSystem disk workingDirectory / 'foo.txt') path.
+	self should: [stream  nextPutAll: 'abdef'] raise: FileWriteError
+%
+
+category: 'tests'
+method: FileHandleTest
+testOpenWithOptions
+	| aFileOptions  result |
+	aFileOptions := FileOptions newWrite.
+	reference := (FileLocator temp / 'tttt') resolve.
+	result := FileHandle open: reference withOptions: aFileOptions.
+	self assert: (result isKindOf: FileSystem fileClass)
+%
+
+category: 'tests'
+method: FileHandleTest
+testTruncate
+	| out |
+	out := #(1 2 3 4 5) asByteArray.
+	handle at: 1 write: out startingAt: 1 count: 5.
+	self assert: handle size = 5.
+	handle truncateTo: 3. "This actually sets the position."
+	"When truncate is implemented in the file, this test will fail as the size should be 3"
+	self assert: handle size = 5
+%
+
+category: 'tests'
+method: FileHandleTest
+testWriteStream
+	| stream |
+	stream := handle binaryStream.
+	self assert: (stream isKindOf: BinaryFileStream).
+	self assert: (stream respondsTo: #nextPut:)
 %
 
 ! Class implementation for 'MemoryHandleTest'
@@ -14382,6 +27677,33 @@ category: 'running'
 method: MemoryHandleTest
 createFileSystem
 	^ FileSystem memory
+%
+
+category: 'running'
+method: MemoryHandleTest
+targetClass
+	^MemoryHandle
+%
+
+category: 'tests'
+method: MemoryHandleTest
+testTruncate
+	| out |
+	out := #(1 2 3 4 5) asByteArray.
+	handle at: 1 write: out startingAt: 1 count: 5.
+	self assert: handle size = 5.
+	handle truncateTo: 3.
+	"The Disk version will fail until the primitive is implemented"
+	self assert: handle size = 3
+%
+
+category: 'tests'
+method: MemoryHandleTest
+testWriteStream
+	| stream |
+	stream := handle binaryStream.
+	self assert: (stream isKindOf: MemoryFileWriteStream).
+	self assert: (stream respondsTo: #nextPut:)
 %
 
 ! Class implementation for 'FileSystemResolverTest'
@@ -14418,6 +27740,28 @@ method: FileSystemResolverTest
 setUp
 	super setUp.
 	resolver := self createResolver.
+%
+
+! Class implementation for 'ClientResolverTest'
+
+!		Instance methods for 'ClientResolverTest'
+
+category: 'running'
+method: ClientResolverTest
+createResolver
+	^ ClientResolver forCurrentPlatform
+%
+
+category: 'tests'
+method: ClientResolverTest
+testClientHome
+	| reference |
+	resolver := ClientResolver forCurrentPlatform.
+	reference := resolver resolve: #home.
+	self assert: (reference isKindOf: FileReference).
+"	self assert: reference exists."	"Currently cannot lookup directory on client"
+	self assert: reference isAbsolute.
+	"self assert: reference isDirectory"  "Currently cannot lookup directory on client"
 %
 
 ! Class implementation for 'InteractiveResolverTest'
@@ -14556,6 +27900,14 @@ shouldInheritSelectors
 
 !		Instance methods for 'FileSystemTest'
 
+category: 'private'
+method: FileSystemTest
+cleanupPaths
+	toDelete
+		select: [ :path | filesystem exists: path ]
+		thenDo: [ :path | filesystem delete: path ]
+%
+
 category: 'initialize-release'
 method: FileSystemTest
 createFileSystem
@@ -14565,6 +27917,7 @@ createFileSystem
 category: 'initialize-release'
 method: FileSystemTest
 markForCleanup: anObject
+	"[filesystem delete: anObject] on: FileDoesNotExistException do: [:s | s resume]."
 	toDelete add: (filesystem resolve: anObject)
 %
 
@@ -14576,13 +27929,17 @@ setUp
 	toDelete := OrderedCollection new.
 %
 
+category: 'private'
+method: FileSystemTest
+store
+	^filesystem store
+%
+
 category: 'running'
 method: FileSystemTest
 tearDown
-	toDelete
-		select: [ :path | filesystem exists: path ]
-		thenDo: [ :path | filesystem delete: path ].
-	super tearDown	
+	self cleanupPaths.
+	super tearDown
 %
 
 category: 'tests-streams-compatibility'
@@ -14695,7 +28052,7 @@ testChildrenSortingRoot
 	self markForCleanup: directory1.
 	self markForCleanup: directory2.
 	
-	self assert: filesystem workingDirectory children sort size = filesystem workingDirectory children size
+	self assert: filesystem workingDirectory children sort size equals: filesystem workingDirectory children size
 %
 
 category: 'tests'
@@ -14878,8 +28235,7 @@ testDelete
 	reference := ( filesystem workingDirectory / 'file') ensureCreateFile.
 	reference delete.
 	
-	self deny: reference exists. 
-		
+	self deny: reference exists.
 %
 
 category: 'tests'
@@ -14946,14 +28302,15 @@ testEntriesAt
 	| directory entries |
 	directory := Path * 'plonk'.
 	
-	filesystem createDirectory: directory.
-	filesystem createDirectory: directory / 'griffle'.
-	filesystem createDirectory: directory / 'bint'.
-	
 	self 
 		markForCleanup: directory / 'griffle';
 		markForCleanup: directory / 'bint';
 		markForCleanup: directory.
+	self cleanupPaths.
+
+	filesystem createDirectory: directory.
+	filesystem createDirectory: directory / 'griffle'.
+	filesystem createDirectory: directory / 'bint'.
 	
 	entries := filesystem entriesAt: directory.
 	self assert: entries size = 2.
@@ -14975,7 +28332,7 @@ testEntryAt
 	self markForCleanup: path2.
 	
 	filesystem createDirectory: path1.
-	(Delay forSeconds: 2) wait. "#creationTime seems limited to 1 second resolution"
+	self waitForSeconds: 4.
 	filesystem createDirectory: path2.
 	
 	entry1 := filesystem entryAt: path1.
@@ -14986,8 +28343,8 @@ testEntryAt
 	self assert: entry1 reference = (filesystem referenceTo: path1) asAbsolute.
 	self assert: entry2 reference = (filesystem referenceTo: path2) asAbsolute.
 
-	self assert: entry1 creationTime < entry2 creationTime.
-	self assert: entry1 modificationTime < entry2 modificationTime.
+	self assert: entry1 creationTime <= entry2 creationTime.
+	self assert: entry1 modificationTime <= entry2 modificationTime.
 %
 
 category: 'tests'
@@ -15155,7 +28512,7 @@ method: FileSystemTest
 testReadStream
 	| reference stream |
 	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
-	self should: [ reference readStream ] raise: FileDoesNotExistException.
+	self should: [ stream := reference readStream ] raise: FileDoesNotExistException.
 	reference writeStreamDo: [ :ws | ws nextPutAll: 'griffle' ].
 	stream := reference readStream.
 	self assert: stream contents asString equals: 'griffle'.
@@ -15296,6 +28653,243 @@ testWriteStreamIfPresent
 	self assert: (reference writeStreamIfPresent: [ true ])
 %
 
+category: 'private'
+method: FileSystemTest
+waitForSeconds: anIngeger
+	"#creationTime seems limited to 1 second resolution"
+	(Delay forSeconds: anIngeger) wait.
+%
+
+! Class implementation for 'ClientFileSystemTest'
+
+!		Instance methods for 'ClientFileSystemTest'
+
+category: 'tests'
+method: ClientFileSystemTest
+createFileSystem
+	^ FileSystem store: ClientStore new
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testChildrenAt
+	| directory entries |
+	directory := Path * 'plonk'.
+	
+	filesystem createDirectory: directory.
+	filesystem createDirectory: directory / 'griffle'.
+	filesystem createDirectory: directory / 'bint'.
+	
+	self markForCleanup: directory / 'griffle'.
+	self markForCleanup: directory / 'bint'.
+	self markForCleanup: directory.
+	
+	self should: [filesystem childrenAt: directory] raise: Error.
+
+"	self assert: entries size = 2.
+	entries do: [ :ea | 
+		self assert: (ea isKindOf: Path).
+		self assert: ea parent = (filesystem resolve: directory).
+		self assert: (#('griffle' 'bint' ) includes: ea basename) ]"
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testChildrenSorting
+	| directory sorted |
+	
+	directory := Path * 'plonk'.
+	
+	filesystem createDirectory: directory.
+	filesystem createDirectory: directory / 'alfa'.
+	filesystem createDirectory: directory / 'beta'.
+	
+	self markForCleanup: directory / 'alfa'.
+	self markForCleanup: directory / 'beta'.
+	self markForCleanup: directory.
+	
+	self should: [sorted := (filesystem childrenAt: directory) sort] raise: Error.
+"	self assert: sorted size = 2.
+	self assert: (sorted at: 1) basename = 'alfa'.
+	self assert: (sorted at: 2) basename = 'beta'."
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testChildrenSortingRoot
+	| directory1 directory2 |
+	"self skip."
+	
+	directory1 := Path * 'plonk1'.
+	directory2 := Path * 'plonk2'.
+	
+	filesystem createDirectory: directory1.
+	filesystem createDirectory: directory2.
+	
+	self markForCleanup: directory1.
+	self markForCleanup: directory2.
+	self should: [filesystem workingDirectory children] raise: Error
+	"self assert: filesystem workingDirectory children sort size = filesystem workingDirectory children size"
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testCopyWithCorrectBasename
+        | directory |
+        self
+                markForCleanup: 'gooly';
+                markForCleanup: 'plonk'.
+        directory := filesystem workingDirectory.
+        (directory / 'gooly') ensureCreateFile.
+        directory / 'gooly' copyTo: directory / 'plonk'.
+        self assert: (directory / 'plonk') exists.
+		"This test is not run because client does not support directory contents querries"
+        "self assert: (directory childNames includes: 'plonk')"
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testCreateDirectory
+	| path directory |
+	directory := filesystem workingDirectory.
+ 	self markForCleanup: directory / 'plonk' / 'griffle'.
+	self markForCleanup: directory / 'plonk'.
+	path := directory / 'plonk' / 'griffle'.
+	(directory / 'plonk') ensureCreateDirectory.
+	self shouldnt: [path createDirectory] raise:Error.
+	self assert: path exists.
+	self should: [(directory / 'plonk' ) deleteAll] raise: Error description: 'GemStone does not support retrieval of client directory entries'
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testCreateFile
+	| directory path |
+	directory := filesystem workingDirectory.
+ 	self markForCleanup: directory / 'plonk' / 'griffles'.
+	self markForCleanup: directory / 'plonk'.
+	path := directory / 'plonk' / 'griffles'.
+	(directory / 'plonk') ensureCreateDirectory.
+	self shouldnt: [ path createFile] raise:Error.
+	self assert:path exists .
+	self should: [(directory / 'plonk' ) deleteAll] raise: Error description: 'GemStone does not support retrieval of client directory entries'
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testCreation
+
+	| aClientStore |
+	aClientStore := ClientStore new.
+	filesystem := FileSystem store: aClientStore.
+	self assert: aClientStore store class equals: ClientStore activeClass.
+	self assert: aClientStore isForeignFileSystem.
+	self assert: aClientStore defaultWorkingDirectory notNil.
+	self assert: (aClientStore defaultWorkingDirectory isKindOf: Path).
+	self assert: filesystem store defaultWorkingDirectory equals: aClientStore defaultWorkingDirectory.
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testDefaultWorkingDirectory
+	| aFileReference |
+	aFileReference := filesystem workingDirectory.
+
+	ClientStore activeClass = WindowsStore ifTrue: [
+		self assert: (aFileReference path at: 1) = 'C:'.
+		self assert: (aFileReference path at: 2) = 'Users'.
+		self assert: aFileReference path size = 3.
+		^self].
+
+	ClientStore activeClass = UnixStore ifTrue: [
+		self assert: (aFileReference path at: 1) = 'Users'.
+		^self].
+
+	self assert: false description: 'Something is wrong here - need to fix the test'
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testDelimiter
+	super testDelimiter.
+	self assert: filesystem store delimiter = ClientStore activeClass delimiter
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testEntriesAt
+	| directory entries |
+	directory := Path * 'plonk'.
+	
+	self 
+		markForCleanup: directory / 'griffle';
+		markForCleanup: directory / 'bint';
+		markForCleanup: directory.
+	self cleanupPaths.
+
+	filesystem createDirectory: directory.
+	filesystem createDirectory: directory / 'griffle'.
+	filesystem createDirectory: directory / 'bint'.
+	
+	self should: [entries := filesystem entriesAt: directory] raise: Error description: 'GemStone client does not support requests for directory entries'.
+"	self assert: entries size = 2.
+	entries do: [ :ea | 
+		self assert: (ea isKindOf: FileSystemDirectoryEntry).
+		self assert: ea reference parent path = (filesystem resolve: directory).
+		self assert: (#('griffle' 'bint' ) includes: ea reference basename).
+		self assert: ea isDirectory ]"
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testEntryAt
+	| path1 path2 entry1 entry2  |
+
+	path1 := Path * 'plonk1'.
+	path2 := Path * 'plonk2'.
+	self markForCleanup: path1.
+	self markForCleanup: path2.
+	
+	filesystem createDirectory: path1.
+	self waitForSeconds: 1.
+	filesystem createDirectory: path2.
+	
+	entry1 := filesystem entryAt: path1.
+	entry2 := filesystem entryAt: path2.
+	
+	self assert: entry1 isDirectory.
+	self assert: entry2 isDirectory.
+	self assert: entry1 reference = (filesystem referenceTo: path1) asAbsolute.
+	self assert: entry2 reference = (filesystem referenceTo: path2) asAbsolute.
+
+"	The following tests are removed because the creationTime is a fantasy since we cannot retrieve the client file information.
+	self assert: entry1 creationTime < entry2 creationTime.
+	self assert: entry1 modificationTime < entry2 modificationTime."
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testFileNames
+	| reference |
+	#('test one' 'test with two' 'test-äöü' 'test.äöü') do: [ :each |
+		reference := filesystem workingDirectory / each.
+		self assert: reference basename = each.
+		self deny: reference exists.
+		reference
+			writeStreamDo: [ :stream | stream nextPutAll: 'gooly' ]
+			ifPresent: [ self fail ].
+		[	self assert: reference exists.
+			"self assert: (filesystem workingDirectory children
+				anySatisfy: [ :ref | ref = reference ]) "]
+		ensure: [ reference delete ] ]
+%
+
+category: 'tests'
+method: ClientFileSystemTest
+testIsDiskFileSystem
+	self assert: filesystem isDiskFileSystem.
+%
+
 ! Class implementation for 'DiskFileSystemTest'
 
 !		Instance methods for 'DiskFileSystemTest'
@@ -15306,12 +28900,36 @@ createFileSystem
 	^ FileSystem store: (DiskStore activeClass createDefault)
 %
 
+category: 'tests-streams'
+method: DiskFileSystemTest
+testBinaryReadWriteStream
+	| reference stream |
+
+	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
+	self should: [ stream := reference readRawStream ] raise: FileDoesNotExistException.
+
+	reference writeStreamDo: [:stream | stream nextPutAll: '0123456789' ].
+	stream := reference binaryReadWriteStream.
+	stream sizeBuffer: 8.
+
+	stream nextPutAll: 'ABCD'.
+
+	self assert: stream peek asCharacter equals: $4. 
+"	self assert: stream position equals: 4."
+	self assert: stream upToEnd asString equals: '456789'.
+"	self assert: stream position equals: 10."
+	self assert: stream atEnd.
+	stream close.
+
+	self assert: reference contents asString equals: 'ABCD456789'.
+%
+
 category: 'tests'
 method: DiskFileSystemTest
 testDefaultWorkingDirectory
 	| ref x y |
 	ref := filesystem workingDirectory.
-	self assert: ((x := GsFile _expandEnvVariable: 'PWD' isClient:false) beginsWith: (y := ref pathString))
+	self assert: ((x := FileSystem fileClass currentWorkingDirectoryPath) beginsWith: (y := ref pathString))
 %
 
 category: 'tests'
@@ -15337,6 +28955,26 @@ testIsDiskFileSystem
 
 category: 'tests'
 method: DiskFileSystemTest
+testIsReadable
+	self assert: (filesystem store isReadable: FileLocator imageDirectory resolve path)
+%
+
+category: 'tests'
+method: DiskFileSystemTest
+testIsWritable
+	| aReference |
+
+	self deny: (filesystem store isWritable: FileLocator imageDirectory resolve path).
+
+	aReference := FileLocator temp / 'plonk'.
+    self markForCleanup: aReference resolve path.
+	self deny: aReference exists.
+	aReference writeStream close. 
+	self assert: (filesystem store isWritable: aReference resolve path).
+%
+
+category: 'tests'
+method: DiskFileSystemTest
 testMoveMemoryToDisk
 	"Test moving a file from the memory filesystem to the disk filesystem.
 	This ensures that the copyAndDelete:to: is called correctly."
@@ -15358,6 +28996,17 @@ testMoveMemoryToDisk
 		old ensureDelete.
 		new ensureDelete.
 	]
+%
+
+category: 'tests'
+method: DiskFileSystemTest
+testOpenWithOptions
+	| aFileOptions  result reference|
+	aFileOptions := FileOptions newWrite.
+	reference := (FileLocator temp / 'tttt') resolve.
+	self markForCleanup: reference.
+	result := reference openWithOptions: aFileOptions.
+	self assert: (result isKindOf: FileSystem fileClass)
 %
 
 ! Class implementation for 'MemoryFileSystemTest'
@@ -15442,9 +29091,11 @@ testModifiedTimeWhenFileWrittenTo
 category: 'tests'
 method: MemoryFileSystemTest
 testModifiedTimeWhenHandleTruncated
+
 	| modifiedTime fileReference handle |
+
 	fileReference := (filesystem / 'file.txt') ensureCreateFile.
-	handle := fileReference openWritable: true.
+	handle := fileReference openOptions: FileOptions newWrite.
 	modifiedTime := self lastModificationTimeOf: fileReference.
 	handle truncate.
 	self assert: modifiedTime notNil.
@@ -15875,113 +29526,6 @@ testAll
 		)
 %
 
-! Class implementation for 'FileTest'
-
-!		Instance methods for 'FileTest'
-
-category: 'running'
-method: FileTest
-tearDown
-
-	'asd.txt' asFileReference ensureDelete.
-	super tearDown
-%
-
-category: 'tests'
-method: FileTest
-testCheckExistenceOfExistingFileThrowsException
-
-	| file |
-	file := File named: 'asd.txt'.
-	file writeStream close.
-	self should: [file checkDoesNotExist] raise: FileAlreadyExistsException.
-%
-
-category: 'tests'
-method: FileTest
-testCheckExistenceOfNonExistingFileDoesNotThrowException
-
-	| file |
-	file := File named: 'asd.txt'.
-	self shouldnt: [file checkDoesNotExist] raise: Error.
-%
-
-category: 'tests'
-method: FileTest
-testFileDelete
-
-	| file |
-	file := File named: 'asd.txt'.
-	file writeStream close.
-	file delete.
-	self deny: file exists.
-%
-
-category: 'tests'
-method: FileTest
-testFileExists
-
-	| file |
-	file := File named: 'asd.txt'.
-	file writeStream close.
-	self assert: file exists.
-	file delete.
-%
-
-category: 'tests'
-method: FileTest
-testOpenFileForReadDoesNotDeleteExistingFile
-
-	| size |
-	(File named: 'asd.txt') writeStreamDo: [ :stream | stream nextPutAll: 'aaa' ].
-
-	size := (File named: 'asd.txt') size.
-	self assert: size equals: 3.
-%
-
-category: 'tests'
-method: FileTest
-testOpeningFileNormallyDoesNotDeleteExistingFile
-
-	| size |
-	(File named: 'asd.txt') writeStreamDo: [ :stream | stream nextPutAll: 'aaa' ].
-
-	size := (File named: 'asd.txt') size.
-	self assert: size equals: 3.
-%
-
-category: 'tests'
-method: FileTest
-testOpeningFileObjectCreatesFile
-
-	(File named: 'asd.txt') writeStream close.
-	"Our File implementation should not cache anything.
-	This test is based on this assumption."
-	self assert: (File named: 'asd.txt') exists.
-%
-
-category: 'tests'
-method: FileTest
-testOpeningFileSetsPositionAtBeggining
-
-	| file |
-	[(File named: 'asd.txt') writeStreamDo: [ :stream | stream nextPutAll: 'aaa' ].
-	file := (File named: 'asd.txt') openForWrite.
-	self assert: file position equals: 0 
-		] ensure: [ file ifNotNil: [ file close ] ]
-%
-
-category: 'tests'
-method: FileTest
-testOpeningForAppendSetsPositionAtEnd
-
-	| file |
-	[ (File named: 'asd.txt') writeStreamDo: [ :stream | stream nextPutAll: 'aaa' ].
-	file := (File named: 'asd.txt') openForAppend.
-	self assert: file position equals: 3
-		] ensure: [ file ifNotNil: [ file close ] ]
-%
-
 ! Class implementation for 'FSGemStoneKernelTests'
 
 !		Instance methods for 'FSGemStoneKernelTests'
@@ -16206,6 +29750,385 @@ testLastIndexOfStartingAtDuplicate
 			lastIndexOf: element
 			startingAt: collection size - 1
 			ifAbsent: [ 55 ]) equals: 1
+%
+
+! Class implementation for 'NumberParserTest'
+
+!		Instance methods for 'NumberParserTest'
+
+category: 'utilities'
+method: NumberParserTest
+areLowercaseDigitsAllowed
+	"Answer true if lowercase letter are allowed digits."
+	
+	^(NumberParser parse: '16re' onError: [-1]) = 16rE
+%
+
+category: 'tests - Integer'
+method: NumberParserTest
+testcheckForCoverage	
+	"Tests for old semantics of Number>>readFrom:"
+	
+	self should: [(NumberParser parse: '.') = 0 ] raise: Error.
+	self should: [(NumberParser parse: '.1') asNumber ] raise: Error.
+	self assert: (NumberParser parse: '0.0') asNumber equals: 0.
+	self assert: (NumberParser parse: '0.1') asNumber equals: 0.1.
+	self assert: (NumberParser parse: '1.1') asNumber equals: 1.1.
+	self assert: (NumberParser parse: '-1') asNumber equals: -1.
+%
+
+category: 'tests - fail'
+method: NumberParserTest
+testFail
+	"Verify that the value of a failblock is returned."
+	self assert: (NumberParser parse: 'blablabla' onError: [42]) equals: 42
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testFloatFromStreamAsNumber
+	"This covers parsing in Number>>readFrom:"
+
+	| rs aFloat |
+	rs := '10r-12.3456' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: -12.3456 equals: aFloat.
+	self assert: rs atEnd.
+
+	rs := '10r-12.3456e2' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: -1234.56 equals: aFloat.
+	self assert: rs atEnd.
+
+	rs := '10r-12.3456e2e2' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: -1234.56 equals: aFloat.
+	self assert: rs upToEnd equals: 'e2'.
+
+	rs := '10r-12.3456d2' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: -1234.56 equals: aFloat.
+	self assert: rs atEnd.
+
+	rs := '10r-12.3456q2' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: -1234.56 equals: aFloat.
+	self assert: rs atEnd.
+
+	rs := '-12.3456q2' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: -1234.56 equals: aFloat.
+	self assert: rs atEnd.
+
+	rs := '12.3456q2' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: 1234.56 equals: aFloat.
+	self assert: rs atEnd.
+
+	rs := '12.3456z2' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: 12.3456 equals: aFloat.
+	self assert: rs upToEnd equals: 'z2'.
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testFloatFromStreamWithExponent
+	"This covers parsing in Number>>readFrom:"
+
+	| rs aFloat |
+	rs := '1.0e-14' readStream.
+	aFloat := NumberParser parse: rs.
+	self assert: 1.0e-14 equals: aFloat.
+	self assert: rs atEnd.
+
+	rs := '1.0e-14 1' readStream.
+	aFloat := NumberParser parse: rs.
+	self assert: 1.0e-14 equals: aFloat.
+	self assert: rs upToEnd equals: ' 1'.
+
+	rs := '1.0e-14eee' readStream.
+	aFloat := NumberParser parse: rs.
+	self assert: 1.0e-14 equals: aFloat.
+	self assert: rs upToEnd equals: 'eee'.
+
+	rs := '1.0e14e10' readStream.
+	aFloat := NumberParser parse: rs.
+	self assert: 1.0e14 equals: aFloat.
+	self assert: rs upToEnd equals: 'e10'.
+
+	rs := '1.0e+14e' readStream. "Plus sign is not parseable"
+	aFloat := NumberParser parse: rs.
+	self assert: 1.0 equals: aFloat.
+	self assert: rs upToEnd equals: 'e+14e'.
+
+	rs := '1.0e' readStream.
+	aFloat := NumberParser parse: rs.
+	self assert: 1.0 equals: aFloat.
+	self assert: rs upToEnd equals: 'e'.
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testFloatGradualUnderflow
+	"Gradual underflow are tricky.
+	This is a non regression test for http://bugs.squeak.org/view.php?id=6976"
+
+	| float trueFraction str |
+	
+	"as a preamble, use a base 16 representation to avoid round off error and check that number parsing is correct"
+	trueFraction := 16r2D2593D58B4FC4 / (16 raisedTo: 256+13).
+	"Parse the number in base 16 if possible - it is impossible if lowercase letter are allowed digits due to exponent letter ambiguity."
+	float := self areLowercaseDigitsAllowed
+		ifFalse: [NumberParser parse: '16r2.D2593D58B4FC4e-256']
+		ifTrue: [trueFraction asFloat].
+	self assert: float asTrueFraction equals: trueFraction.
+	self assert: float equals: trueFraction asFloat.
+
+	"now print in base 10"
+	str := (String new: 32) writeStream.
+	float absPrintExactlyOn: str base: 10.
+	
+	"verify if SqNumberParser can read it back"
+	self assert: (NumberParser parse: str contents) equals: float.
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testFloatMaxAndMin
+	"This covers parsing in Number>>readFrom:"
+
+	| rs aFloat |
+	rs := '2r0.0000000000000000000000000000000000000000000000000001e-1022'
+		readStream.
+	aFloat := NumberParser parse: rs.
+	self assert: Float fminDenormalized equals: aFloat.
+	self assert: rs atEnd.
+	rs := '-2r0.0000000000000000000000000000000000000000000000000001e-1022'
+		readStream.
+	aFloat := NumberParser parse: rs.
+	self assert: Float fminDenormalized negated equals: aFloat.
+	self assert: rs atEnd.
+	rs := '2r1.1111111111111111111111111111111111111111111111111111e1023'
+		readStream.
+	aFloat := NumberParser parse: rs.
+	self assert: Float fmax equals: aFloat.
+	self assert: rs atEnd
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testFloatmin
+	"Note that these are originally tests cases for former bugs of libc dtoa from netlib.
+	ref http://www.exploringbinary.com/gays-strtod-returns-zero-for-inputs-just-above-2-1075/
+	ref http://gcc.gnu.org/viewcvs/gcc/trunk/gcc/testsuite/gcc.dg/float-exact-1.c?view=markup&pathrev=205119
+	They are also non regression for a bug of NumberParser related to incorrect position of last non zero digit.
+	ref https://pharo.manuscript.com/f/cases/12642/"
+	| halfMin moreThanHalfmin |
+	halfMin := NumberParser parse: (Float fmin asTrueFraction / 2 printShowingDecimalPlaces: 1 - Float fmin exponent).
+	self assert: halfMin = 0.0 description: 'nearest even of 0.5*Float fmin is zero'.
+	moreThanHalfmin := NumberParser parse: (Float fmin asTrueFraction / 2 + (10 raisedTo: Float fmin exponent - 4) printShowingDecimalPlaces: 4 - Float fmin exponent).
+	self assert: moreThanHalfmin = Float fmin description: 'nearest Float of a Fraction > 0.5*Float fmin is Float fmin'.
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testFloatPrintString
+
+	" This does not run in GemStone as one cannot use #at:put: with Float"
+		
+"	| f r bases |
+	f := Float basicNew: 2.
+	r := Random new seed: 1234567.
+	'printing a Float in base other than 10 is broken if lowercase digits are allowed'
+	bases := self areLowercaseDigitsAllowed
+		ifTrue: [#(10)]
+		ifFalse: [#(2 8 10 16)].
+	100
+		timesRepeat: [f basicAt: 1 put: (r nextInt: 16r100000000)- 1.
+			f basicAt: 2 put: (r nextInt: 16r100000000) - 1.
+			bases
+				do: [:base | | str |
+						str := (String new: 64) writeStream.
+						f negative ifTrue: [str nextPut: $-].
+						str print: base; nextPut: $r.
+						f absPrintExactlyOn: str base: base.
+						self assert: (NumberParser parse: str contents) = f]].
+	'test big num near infinity'
+	10
+		timesRepeat: [f basicAt: 1 put: 16r7FE00000 + ((r nextInt: 16r100000) - 1).
+			f basicAt: 2 put: (r nextInt: 16r100000000) - 1.
+			bases
+				do: [:base | | str |
+						str := (String new: 64) writeStream.
+						f negative ifTrue: [str nextPut: $-].
+						str print: base; nextPut: $r.
+						f absPrintExactlyOn: str base: base.
+						self assert: (NumberParser parse: str contents) = f]].
+	'test infinitesimal (gradual underflow)'
+	10
+		timesRepeat: [f basicAt: 1 put: 0 + ((r nextInt: 16r100000) - 1).
+			f basicAt: 2 put: (r nextInt: 16r100000000) - 1.
+			bases
+				do: [:base | | str |
+						str := (String new: 64) writeStream.
+						f negative ifTrue: [str nextPut: $-].
+						str print: base; nextPut: $r.
+						f absPrintExactlyOn: str base: base.
+						self assert: (NumberParser parse: str contents) = f]].
+"
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testFloatReadError
+	"This covers parsing in Number>>readFrom:"
+
+	| rs num |
+	rs := '1e' readStream.
+	num := NumberParser parse: rs.
+	self assert: 1 equals: num.
+	self assert: rs upToEnd equals: 'e'.
+	
+	rs := '1s' readStream.
+	num := NumberParser parse: rs.
+	self assert: 1 equals: num.
+	self assert: rs upToEnd equals: ''.
+
+	rs := '1.' readStream.
+	num := NumberParser parse: rs.
+	self assert: 1 equals: num.
+	self assert: num _isInteger.
+	self assert: rs upToEnd equals: '.'.
+	
+	rs := '' readStream.
+	self should: [NumberParser parse: rs] raise: Error.
+	
+	rs := 'foo' readStream.
+	self should: [NumberParser parse: rs] raise: Error.
+
+	rs := 'radix' readStream.
+	self should: [NumberParser parse: rs] raise: Error.
+	
+	rs := '.e0' readStream.
+	self should: [NumberParser parse: rs] raise: Error.
+	
+	rs := '-.e0' readStream.
+	self should: [NumberParser parse: rs] raise: Error.
+	
+	rs := '--1' readStream.
+	self should: [NumberParser parse: rs] raise: Error.
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testFloatReadWithRadix
+	"This covers parsing in Number>>readFrom:
+	Note: In most Smalltalk dialects, the radix notation is not used for numbers
+	with exponents. In Squeak, a string with radix and exponent can be parsed,
+	and the exponent is always treated as base 10 (not the base indicated in the
+	radix prefix). I am not sure if this is a feature, a bug, or both, but the
+	Squeak behavior is documented in this test. -dtl"
+	| rs |
+	self assert: (NumberParser parse: '2r1.0101e9') equals: (1.3125 * (2 raisedTo: 9)).
+	rs := '2r1.0101e9e9' readStream.
+	self assert: (NumberParser parse: rs) equals: 672.0.
+	self assert: rs upToEnd equals: 'e9'
+%
+
+category: 'tests - Integer'
+method: NumberParserTest
+testIntegerReadFrom
+	"Ensure remaining characters in a stream are not lost when parsing an integer."
+	| rs i s |
+	rs := '123s could be confused with a ScaledDecimal' readStream.
+	i := NumberParser parse: rs.
+	self assert: i equals: 123.
+	s := rs upToEnd.
+	self assert: ' could be confused with a ScaledDecimal' equals: s.
+	rs := '123.s could be confused with a ScaledDecimal' readStream.
+	i := NumberParser parse: rs.
+	self assert: i equals: 123.
+	s := rs upToEnd.
+	self assert: '.s could be confused with a ScaledDecimal' equals: s
+%
+
+category: 'tests - Integer'
+method: NumberParserTest
+testIntegerReadWithRadix
+	"This covers parsing in Number>>readFrom:
+	Note: In most Smalltalk dialects, the radix notation is not used for numbers
+	with exponents. In Squeak, a string with radix and exponent can be parsed,
+	and the exponent is always treated as base 10 (not the base indicated in the
+	radix prefix). I am not sure if this is a feature, a bug, or both, but the
+	Squeak behavior is documented in this test. -dtl"
+
+	| rs |
+	self assert: (NumberParser parse: '2r1e26') equals: (2 raisedTo: 26).
+	rs := '2r1e26eee' readStream.
+	self assert: (NumberParser parse: rs) equals: 67108864.
+	self assert: rs upToEnd equals: 'eee'
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testIntegerWithNegExponentIsAFloat
+	"Make sure a float literal like 1e(some possible neg exponent)
+	isn't evaluated to the non-literal Fraction"
+
+	| rs aFloat |
+	rs := '1e-14' readStreamPortable.
+	aFloat := NumberParser parse: rs.
+	self assert: aFloat _isFloat.
+
+	rs := '1e-14' readStreamPortable.
+	aFloat := (NumberParser on: rs ) nextNumberBase: 10.
+	self assert: aFloat _isFloat.
+%
+
+category: 'test - Float'
+method: NumberParserTest
+testIsNumber
+
+	self assert: (NumberParser isNumber: '-1.2') equals: true.
+	self assert: (NumberParser isNumber: '2e-2') equals: true.
+	
+	self assert: (NumberParser isNumber: '') equals: false.
+	self assert: (NumberParser isNumber: '2a') equals: false.
+	self assert: (NumberParser isNumber: '--1') equals: false.
+	self assert: (NumberParser isNumber: '1-') equals: false.
+	self assert: (NumberParser isNumber: '1..2') equals: false.
+%
+
+category: 'tests - ScaledDecimal'
+method: NumberParserTest
+testScaledDecimalWithoutScaleSpecification
+	self assert: (NumberParser parse: '0.050s') equals: 1/20.
+	self assert: (NumberParser parse: '0.050s') scale equals: 3.
+%
+
+category: 'tests - ScaledDecimal'
+method: NumberParserTest
+testScaledDecimalWithTrailingZeroes
+	"This is a non regression tests for http://bugs.squeak.org/view.php?id=7169"
+	
+	self assert: (NumberParser parse: '0.50s2') equals: 1/2.
+	self assert: (NumberParser parse: '0.500s3') equals: 1/2.
+	self assert: (NumberParser parse: '0.050s3') equals: 1/20.
+%
+
+category: 'tests - squeezing'
+method: NumberParserTest
+testSqueezingOutNumbers
+	"test that SqNumberParser squeezeNumberOutOfString finds numbers."
+	
+	self assert: '123blabla' squeezeOutNumber equals: 123.
+	self assert: 'blabla123' squeezeOutNumber equals: 123.
+	self assert: 'blabla12blabla' squeezeOutNumber equals: 12.
+	self assert: ('12.3bla' squeezeOutNumber -12.3 ) abs < 0.0001.
+	self assert: '.1' squeezeOutNumber > 0.
+	
+	self assert: 'blabla1230' squeezeOutNumber equals: 1230.
 %
 
 ! Class implementation for 'PathTest'
@@ -17040,6 +30963,1194 @@ testWorkingDirPrintString
 	self assert: actual equals: 'Path workingDirectory'
 %
 
+! Class implementation for 'PosixErrorGroupTest'
+
+!		Instance methods for 'PosixErrorGroupTest'
+
+category: 'private'
+method: PosixErrorGroupTest
+cleanupPaths
+
+	filesToDelete
+		select: [ :path | fileSystem exists: path ]
+		thenDo: [ :path | fileSystem delete: path ].
+	directoriesToDelete
+		select: [ :path | fileSystem exists: path ]
+		thenDo: [ :path | fileSystem delete: path ]
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+createTemporaryDirectory: aPath	
+
+	| aFileReference |
+
+	aFileReference := fileSystem referenceTo: aPath.
+	self markForCleanupDirectory: aPath.
+	fileSystem store createDirectory: aPath.
+	^aFileReference
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+createTemporaryFile: aPath	containing: aString
+
+	| aFileReference |
+
+	aFileReference := fileSystem referenceTo: aPath.
+	self markForCleanupFile: aFileReference.
+	aFileReference writeStreamDo: [ :ws | ws nextPutAll: aString ].
+	^aFileReference
+%
+
+category: 'testing'
+method: PosixErrorGroupTest
+isWindowsStoreCurrentStore
+
+	^FileSystem disk store class name == #WindowsStore
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+markForCleanupDirectory: aFileReference
+
+	directoriesToDelete add: aFileReference
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+markForCleanupFile: aFileReference
+
+	filesToDelete add: aFileReference
+%
+
+category: 'Running'
+method: PosixErrorGroupTest
+setUp
+	super setUp.
+	self setupFileSystem.
+	filesToDelete := OrderedCollection new.
+	directoriesToDelete := OrderedCollection new.
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupFileSystem
+	self subclassResponsibility
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForChageModeErrorGroup
+
+	errorGroup := ChangeModeErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForCloseDirectoryErrorGroup
+
+	errorGroup := CloseDirectoryErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForCloseFileErrorGroup
+
+	errorGroup := CloseFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForCopyFileErrorGroup
+
+	errorGroup := CopyFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForFileControlErrorGroup
+
+	errorGroup := FileControlErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForFileSeekErrorGroup
+
+	errorGroup := FileSeekErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForFileSizeErrorGroup
+
+	errorGroup := FileSizeErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForFlushFileErrorGroup
+
+	errorGroup := FlushFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForLockFileErrorGroup
+
+	errorGroup := LockFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForOpenDirectoryErrorGroup
+
+	errorGroup := OpenDirectoryErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForOpenFileErrorGroup
+
+	errorGroup := OpenFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForReadDirectoryGroup
+
+	errorGroup := ReadDirectoryErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForReadFileErrorGroup
+
+	errorGroup := ReadFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForRemoveFileErrorGroup
+
+	errorGroup := RemoveFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForRenameFileErrorGroup
+
+	errorGroup := RenameFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForTouchFileErrorGroup
+
+	errorGroup := TouchFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForUnlockFileErrorGroup
+
+	errorGroup := UnlockFileErrorGroup new
+%
+
+category: 'private'
+method: PosixErrorGroupTest
+setupForWritingErrorGroup
+
+	errorGroup := WritingErrorGroup new
+%
+
+category: 'Running'
+method: PosixErrorGroupTest
+tearDown
+	self cleanupPaths.
+	super tearDown
+%
+
+! Class implementation for 'PosixErrorGroupClientTest'
+
+!		Instance methods for 'PosixErrorGroupClientTest'
+
+category: 'private'
+method: PosixErrorGroupClientTest
+setupFileSystem
+	fileSystem := FileSystem clientDisk
+%
+
+category: 'tests'
+method: PosixErrorGroupClientTest
+testDelegationOfFileOpenError
+	| aClass  aFilePosixError|
+	fileReference := fileSystem workingDirectory / 't1'.
+	self assert: fileSystem store class name equals: #ClientStore.
+
+	fileSystem store store class name = #WindowsStore
+		ifTrue: [
+			aClass := OpenFileErrorGroup new errorClassForErrorNumber: 19 fileReference: fileReference options: FileOptions newRead.
+			self assert: aClass posixName equals: 'EROFS'.
+
+			aFilePosixError := OpenFileErrorGroup new errorForNumber: 19 fileReference: fileReference options: FileOptions newRead.
+			self assert: aFilePosixError class posixName equals: 'EROFS'.
+
+		posixErrorClass := ChangeModeErrorGroup new errorClassForErrorNumber: 123 fileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'EACCES'].
+%
+
+! Class implementation for 'PosixErrorGroupUnixTest'
+
+!		Instance methods for 'PosixErrorGroupUnixTest'
+
+category: 'private'
+method: PosixErrorGroupUnixTest
+setupFileSystem
+	fileSystem := FileSystem store: UnixStore new
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupUnixTest
+testChageModeErrorGroup
+
+	self setupForChageModeErrorGroup.
+	fileReference := fileSystem workingDirectory.
+
+	self should: [ errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference ] raise: Error description: 'Error name is not in valid error list'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileIOError defaultErrorNumber fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileAccessError defaultErrorNumber fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+	
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileReadOnlyFileSystemError defaultErrorNumber fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FilePermissionDeniedError defaultErrorNumber fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EPERM'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupUnixTest
+testCopyFileErrorGroup
+	| directory1 directory2 |
+
+	self setupForCopyFileErrorGroup.
+	directory1 := self createTemporaryDirectory: Path * 'plonk1'.
+	directory2 := self createTemporaryDirectory: Path * 'plonk2'.
+	oldFileReference := self createTemporaryFile: directory1 path / 't1'	containing: 'griffle'.
+	fileReference := fileSystem referenceTo: directory2 path / 't2'.
+
+	self should: [ errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference ] raise: Error description: 'Error name is not in valid error list'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileIOError defaultErrorNumber fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 13 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+	
+"	posixErrorClass := errorGroup errorClassForErrorNumber: FileReadOnlyFileSystemError defaultErrorNumber fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FilePermissionDeniedError defaultErrorNumber fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EPERM'"
+%
+
+category: 'tests - create file posix error'
+method: PosixErrorGroupUnixTest
+testCreationOfFilePosixError
+	| fileOptions aPosixError |
+
+	self setupForOpenFileErrorGroup.
+	fileOptions := FileOptions newRead.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	errorGroup := OpenFileErrorGroup new.
+	aPosixError := errorGroup errorForNumber: FileExistsError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: aPosixError class posixName equals: 'EEXIST'.
+	self assert: aPosixError reference equals: fileReference.
+	self assert: aPosixError sourceReference isNil.
+	self assert: aPosixError options equals: fileOptions.
+	self assert: aPosixError errorGroupName = errorGroup class name asString.
+
+	errorGroup := CopyFileErrorGroup new.
+	aPosixError := errorGroup errorForNumber: FileExistsError defaultErrorNumber newFileReference: fileReference oldFileReference: fileSystem workingDirectory.
+	self assert: aPosixError class posixName equals: 'EEXIST'.
+	self assert: aPosixError reference equals: fileReference.
+	self assert: aPosixError sourceReference equals: fileSystem workingDirectory.
+	self assert: aPosixError options isNil.
+	self assert: aPosixError errorGroupName = errorGroup class name asString.
+
+	errorGroup := ChangeModeErrorGroup new.
+	aPosixError := errorGroup errorForNumber: FileAccessError defaultErrorNumber fileReference: fileReference.
+	self assert: aPosixError class posixName equals: 'EACCES'.
+	self assert: aPosixError reference equals: fileReference.
+	self assert: aPosixError sourceReference isNil.
+	self assert: aPosixError options isNil.
+	self assert: aPosixError errorGroupName = errorGroup class name asString
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupUnixTest
+testOpenFileErrorGroup
+	| fileOptions |
+
+	self setupForOpenFileErrorGroup.
+	fileOptions := FileOptions newRead.
+"	directory1 := self createTemporaryDirectory: Path * 'plonk1'.
+	oldFileReference := self createTemporaryFile: directory1 path / 't1'	containing: 'griffle'."
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	self should: [ errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference ] raise: Error description: 'Error name is not in valid error list'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileIOError defaultErrorNumber fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileExistsError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EEXIST'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileReadOnlyFileSystemError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileAccessError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileBusyError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileNoSpaceError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'ENOSPC'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileNoEntryError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'ENOENT'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: FileMaxFilesOpenError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'ENFILE'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber:  FileInvalidOptionError defaultErrorNumber fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EINVAL'
+%
+
+! Class implementation for 'PosixErrorGroupWindowsTest'
+
+!		Instance methods for 'PosixErrorGroupWindowsTest'
+
+category: 'private'
+method: PosixErrorGroupWindowsTest
+nonExistantFileReference
+	"This results in a non sensical path which is what this test requires"
+	^(FileSystem store: WindowsStore new) workingDirectory
+%
+
+category: 'private'
+method: PosixErrorGroupWindowsTest
+setupFileSystem
+	fileSystem := FileSystem store: WindowsStore new
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testChageModeErrorGroup
+
+	self setupForChageModeErrorGroup.
+	fileReference := self nonExistantFileReference.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 1 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 2 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENOENT'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 123 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testCloseDriectoryErrorGroup
+
+	self setupForCloseDirectoryErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testCloseFileErrorGroup
+
+	self setupForCloseFileErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'.
+
+	self should: [errorGroup signalErrorNumber: 6 fileReference: fileReference] raise: FileBadFileDescriptorError
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testCopyFileErrorGroup
+	| directory1 directory2 |
+	
+	self setupForCopyFileErrorGroup.
+	directory1 := fileSystem workingDirectoryPath.
+	directory2 := fileSystem workingDirectoryPath.
+	oldFileReference := self createTemporaryFile: directory1 / 't1'	containing: 'griffle'.
+	fileReference := fileSystem referenceTo: directory2 / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 3 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 newFileReference: directory1 oldFileReference: oldFileReference.
+		self assert: posixErrorClass posixName equals: 'EEXIST' description: 'Target file is a directory that already exists'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 newFileReference: oldFileReference oldFileReference: oldFileReference.
+		self assert: posixErrorClass posixName equals: 'EEXIST' description: 'Target file is a file that already exists'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 newFileReference: fileReference oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'ENOENT' description: 'Source file is a does not exists'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 newFileReference: fileReference oldFileReference: directory2.
+		self assert: posixErrorClass posixName equals: 'EISDIR' description: 'Source file is actually a directory'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 16 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 21 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 32 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 33 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 80 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EEXIST'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 newFileReference: fileReference oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'EEXIST' description: 'Old file does not exist'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 newFileReference: fileReference oldFileReference: oldFileReference.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Old file exists but not able to access'].
+
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 123 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 161 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'ENOENT'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 183 newFileReference: fileReference oldFileReference: oldFileReference.
+	self assert: posixErrorClass posixName equals: 'EEXIST'.
+%
+
+category: 'tests - create file posix error'
+method: PosixErrorGroupWindowsTest
+testCreationOfFilePosixError
+	| fileOptions aPosixError |
+
+	self setupForOpenFileErrorGroup.
+	fileOptions := FileOptions newRead.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	errorGroup := OpenFileErrorGroup new.
+	aPosixError := errorGroup errorForNumber: 3 fileReference: fileReference options: fileOptions.
+	self assert: aPosixError class posixName equals: 'EACCES'.
+	self assert: aPosixError reference equals: fileReference.
+	self assert: aPosixError sourceReference isNil.
+	self assert: aPosixError options equals: fileOptions.
+	self assert: aPosixError errorGroupName = errorGroup class name asString.
+
+	self should: [errorGroup signalErrorNumber: 3 fileReference: fileReference options: fileOptions] raise: FileAccessError.
+
+	errorGroup := CopyFileErrorGroup new.
+	aPosixError := errorGroup errorForNumber: 16 newFileReference: fileReference oldFileReference: fileSystem workingDirectory.
+	self assert: aPosixError class posixName equals: 'EBUSY'.
+	self assert: aPosixError reference equals: fileReference.
+	self assert: aPosixError sourceReference equals: fileSystem workingDirectory.
+	self assert: aPosixError options isNil.
+	self assert: aPosixError errorGroupName = errorGroup class name asString.
+
+	errorGroup := ChangeModeErrorGroup new.
+	aPosixError := errorGroup errorForNumber: 123 fileReference: fileReference.
+	self assert: aPosixError class posixName equals: 'EACCES'.
+	self assert: aPosixError reference equals: fileReference.
+	self assert: aPosixError sourceReference isNil.
+	self assert: aPosixError options isNil.
+	self assert: aPosixError errorGroupName = errorGroup class name asString
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testFileControlErrorGroup
+
+	self setupForFileControlErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 7 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EINVAL'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testFileSeekErrorGroup
+
+	self setupForFileSeekErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EINVAL'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 131 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EINVAL'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testFileSizeErrorGroup
+
+	self setupForFileSizeErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testFlushFileErrorGroup
+
+	self setupForFlushFileErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testLockFileErrorGroup
+
+	self setupForLockFileErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 1 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EINVAL'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 32 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 33 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testOpenDirectoryErrorGroup
+	| fileOptions |
+
+	self setupForOpenDirectoryErrorGroup.
+	fileOptions := FileOptions newRead.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 fileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'ENOENT' description: 'Directory does not exist'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 3 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 84 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENFILE'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EINVAL'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 123 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 161 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENOENT'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 267 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testOpenFileErrorGroup
+	| fileOptions |
+
+	self setupForOpenFileErrorGroup.
+	fileOptions := FileOptions newRead.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 fileReference: fileSystem workingDirectory options: fileOptions.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Access Error - attempted to open a directory'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 fileReference: fileSystem workingDirectory / 't1' options: fileOptions.
+		self assert: posixErrorClass posixName equals: 'ENOENT' description: 'No file entry was found'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 3 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 4 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'ENFILE'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileSystem workingDirectory options: fileOptions.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'File reference is a directory'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions newWrite.
+		self assert: posixErrorClass posixName equals: 'EINVAL' description: 'Attempting to open with a truncate flag'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions newAppend.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to create a file if does not exist'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions read.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to open a file with no access'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions newReadWrite.
+		self assert: posixErrorClass posixName equals: 'EINVAL' description: 'Catchall errors - no flags, file does not exist'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 32 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 33 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 36 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'ENFILE'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 80 fileReference: fileReference options: (FileOptions newWrite addExclusiveFlag).
+	self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to open with an exlusive flag'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 80 fileReference: fileReference options: FileOptions newWrite.
+	self assert: posixErrorClass posixName equals: 'EEXIST' description: 'Attempting to open without an exlusive flag'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileSystem workingDirectory options: fileOptions.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'File reference is a directory'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference options: FileOptions write.
+		self assert: posixErrorClass posixName equals: 'EINVAL' description: 'Attempting to open with a truncate flag'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference options: FileOptions newAppend.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to create a file if does not exist'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference options: FileOptions read.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to open a file with no access'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference options: FileOptions readWrite.
+		self assert: posixErrorClass posixName equals: 'EINVAL' description: 'Catchall errors - no flags, file does not exist'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 123 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 161 fileReference: fileReference options: fileOptions.
+	self assert: posixErrorClass posixName equals: 'EACCES'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testReadDirectoryErrorGroup
+
+	self setupForReadDirectoryGroup.
+	fileReference := fileSystem referenceTo: fileSystem workingDirectoryPath / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 3 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testReadFileErrorGroup
+
+	self setupForReadFileErrorGroup.
+	fileReference := fileSystem referenceTo: fileSystem workingDirectoryPath / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 33 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 112 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testRemoveFileErrorGroup
+
+	self setupForRemoveFileErrorGroup.
+	fileReference := fileSystem referenceTo: fileSystem workingDirectoryPath / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 fileReference: fileSystem workingDirectory.
+		self assert: posixErrorClass posixName equals: 'EISDIR' description: 'Access Error - attempted to open a directory'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 fileReference: fileSystem workingDirectory / 't1'.
+		self assert: posixErrorClass posixName equals: 'ENOENT' description: 'No file entry was found'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 3 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES' description: 'File reference is a directory'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileSystem workingDirectory.
+		self assert: posixErrorClass posixName equals: 'EISDIR' description: 'Access Error - attempted to open a directory'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileSystem workingDirectory / 't1'.
+		self assert: posixErrorClass posixName equals: 'ENOENT' description: 'No file entry was found'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 145 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EEXIST'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 161 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENOENT'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testRenameFileErrorGroup
+
+	| directory1 directory2 |
+
+	directory1 := fileSystem workingDirectoryPath.
+	directory2 := fileSystem workingDirectoryPath.
+	oldFileReference := self createTemporaryFile: directory1 / 't1'	containing: 'griffle'.
+	fileReference := fileSystem referenceTo: directory2 / 't2'.
+
+	self setupForRenameFileErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 newFileReference: fileReference oldFileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	self should: [errorGroup signalErrorNumber: 9999 newFileReference: fileReference oldFileReference: fileReference] raise: FileIOError.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 newFileReference: fileReference oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'ENOENT' description: 'New file does not exist'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 newFileReference: oldFileReference oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'ENOENT' description: 'Old file does not exist'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 newFileReference: oldFileReference oldFileReference: oldFileReference.
+		self assert: posixErrorClass posixName equals: 'EEXIST' description: 'New file does not exist - it should not exist for rename to work'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 2 newFileReference: oldFileReference oldFileReference: oldFileReference.
+		self assert: posixErrorClass posixName equals: 'EXDEV' description: 'No file entry was found'].
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 3 newFileReference: oldFileReference oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'EEXIST' description: 'New file already exists'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 3 newFileReference: fileReference oldFileReference: fileSystem workingDirectory.
+		self assert: posixErrorClass posixName equals: 'EISDIR' description: 'Old file is a directory'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 newFileReference: fileReference oldFileReference: oldFileReference.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Catach all'].
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 newFileReference: oldFileReference oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'EEXIST' description: 'New file already exists'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 newFileReference: fileReference oldFileReference: fileSystem workingDirectory.
+		self assert: posixErrorClass posixName equals: 'EISDIR' description: 'Old file is a directory'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 newFileReference: fileReference oldFileReference: oldFileReference.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Catach all'].
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 17 newFileReference: fileSystem workingDirectory oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'EISDIR'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 17 newFileReference: fileSystem workingDirectory / 't1' oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'EXDEV'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 newFileReference: fileReference oldFileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	self isWindowsStoreCurrentStore ifTrue: [
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 newFileReference: oldFileReference oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'EEXIST' description: 'New file already exists'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 newFileReference: fileReference oldFileReference: fileSystem workingDirectory.
+		self assert: posixErrorClass posixName equals: 'EISDIR' description: 'Old file is a directory'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 newFileReference: fileReference oldFileReference: fileReference.
+		self assert: posixErrorClass posixName equals: 'ENOENT' description: 'Old file does not exist'.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 newFileReference: fileReference oldFileReference: oldFileReference.
+		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Catach all'].
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 123 newFileReference: fileReference oldFileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 161 newFileReference: fileReference oldFileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENOENT'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 183 newFileReference: fileReference oldFileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EEXIST'
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testTouchFileErrorGroup
+
+	self setupForTouchFileErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 2 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENOENT'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 3 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENOENT'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 4 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENFILE'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 123 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 161 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'ENOENT'.
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testUnlockFileErrorGroup
+
+	self setupForUnlockFileErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 1 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EINVAL'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 32 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 33 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 158 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EINVAL'.
+%
+
+category: 'tests - lookup file posix error class'
+method: PosixErrorGroupWindowsTest
+testWritingErrorGroup
+
+	self setupForWritingErrorGroup.
+	fileReference := fileSystem workingDirectory / 't2'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBADF'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 19 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EROFS'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 33 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EBUSY'.
+
+	posixErrorClass := errorGroup errorClassForErrorNumber: 112 fileReference: fileReference.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
+%
+
+! Class implementation for 'StdioStreamTest'
+
+!		Class methods for 'StdioStreamTest'
+
+category: 'tests - manual'
+classmethod: StdioStreamTest
+manualStdinTest
+	"This test can be run headless to manually to check actual stdin.
+	It reads the input and confirms that #atEnd answers as expected and the number of characters read.
+	
+	Example execution (from the shell prompt):
+
+		echo 'hello world' | pharo --headless Pharo.image eval 'StdioStreamTest manualStdinTest'
+		
+		pharo --headless Pharo.image eval 'StdioStreamTest manualStdinTest' < /proc/cpuinfo
+		
+		pharo --headless Pharo.image eval 'StdioStreamTest manualStdinTest'
+		# Type some text, enter and Ctrl-D"
+
+	| stdin stdout atEndBefore atEndAfter contents |
+
+	stdin := #Stdio stdin.
+	stdout := ZnNewLineWriterStream on: #Stdio stdout.
+	atEndBefore := stdin atEnd.
+	contents := stdin upToEnd.
+	atEndAfter := stdin atEnd.
+	stdout
+		<< '#atEnd (before): ';
+		<< atEndBefore displayString;
+		cr;
+		<< '#atEnd (after): ';
+		<< atEndAfter displayString;
+		cr;
+		<< 'Size: ';
+		<< contents size displayString;
+		cr;
+		<< 'Contents:';
+		cr; cr.
+	contents hexDumpOn: stdout max: 128.
+	stdout cr.
+	"SmalltalkImage current snapshot: false andQuit: true."
+%
+
+category: 'accessing'
+classmethod: StdioStreamTest
+resources
+
+	^{ StdioStreamTestResource }.
+%
+
+!		Instance methods for 'StdioStreamTest'
+
+category: 'accessing'
+method: StdioStreamTest
+resource
+	"Answer the receiver's resource object"
+
+	^StdioStreamTestResource current
+%
+
+category: 'running'
+method: StdioStreamTest
+setUp
+	"A stream is shared amongst all the tests to reduce file create, write, delete cycles.
+	Ensure the stream is in the expected state."
+
+	super setUp.
+	self resource stdioStream position: 0.
+%
+
+category: 'accessing'
+method: StdioStreamTest
+stdioStream
+
+	^self resource stdioStream
+%
+
+category: 'tests'
+method: StdioStreamTest
+testAtEnd
+	"Test that #atEnd isn't incorrectly answering true"
+
+	self deny: self stdioStream atEnd
+%
+
+category: 'tests'
+method: StdioStreamTest
+testChangePosition
+	"The shared stream should be put back to the start for each test"
+
+	"| stream |
+	
+	stream := self stdioStream.
+	stream position: 5.
+	self assert: stream position equals: 5.
+	self assert: stream next equals: $5 asciiValue."
+%
+
+category: 'tests'
+method: StdioStreamTest
+testContents
+
+	"self assert: self stdioStream contents equals: self resource contents asByteArray"
+%
+
+category: 'tests'
+method: StdioStreamTest
+testPeek
+
+"	| stream |
+
+	stream := self stdioStream.
+	self assert: stream peek equals: $0 asciiValue.
+	self assert: stream peek equals: stream next."
+%
+
+category: 'tests'
+method: StdioStreamTest
+testPosition
+	"The shared stream should be put back to the start for each test"
+	
+	self assert: self stdioStream position equals: 0.
+%
+
+category: 'tests'
+method: StdioStreamTest
+testSize
+
+	"self assert: self stdioStream size equals: self resource contents size"
+%
+
+category: 'tests'
+method: StdioStreamTest
+testUpToEnd
+
+	"| stream contents |
+
+	stream := self stdioStream.
+	contents := self resource contents.
+	stream position: 5.
+	self assert: stream upToEnd 
+		equals: (contents copyFrom: 6 to: contents size) asByteArray"
+%
+
+! Class implementation for 'StdioTest'
+
+!		Instance methods for 'StdioTest'
+
+category: 'testing'
+method: StdioTest
+clearCache
+	SessionTemps current removeKey: #StdioCreateReadStreamBlock ifAbsent: [].
+	SessionTemps current removeKey: #StdioCreateWriteStreamBlock ifAbsent: [].
+	self deny: (SessionTemps current includesKey: #StdioCreateReadStreamBlock).
+	self deny: (SessionTemps current includesKey: #StdioCreateWriteStreamBlock).
+	Stdio cleanStdioHandles.
+	self verifyStdInstanceCleared.
+%
+
+category: 'testing'
+method: StdioTest
+testInitialization
+	| stdio |
+	self clearCache.
+	stdio := Stdio stdout.
+	self assert: (stdio terminal isKindOf: FileSystem fileClass).
+	self assert: stdio isWritable.
+
+	stdio := Stdio stderr.
+	self assert: (stdio terminal isKindOf: FileSystem fileClass).
+	self assert: stdio isWritable.
+
+	stdio := Stdio stdin.
+	self assert: (stdio terminal isKindOf: FileSystem fileClass).
+	self deny: stdio isWritable
+%
+
+category: 'testing'
+method: StdioTest
+testUseMemoryStreams
+	| stdio |
+	self clearCache.
+	stdio := Stdio stdout.
+	self assert: (stdio terminal isKindOf: FileSystem fileClass).
+	self assert: stdio isWritable.
+
+	Stdio useMemoryStreams.
+	self verifyStdInstanceCleared.
+
+	stdio := Stdio stdout.
+	self assert: (stdio isKindOf: ZnCharacterWriteStream).
+
+	stdio := Stdio stderr.
+	self assert: (stdio isKindOf: ZnCharacterWriteStream).
+
+	stdio := Stdio stdin.
+	self assert: (stdio isKindOf: ZnCharacterReadStream).
+%
+
+category: 'testing'
+method: StdioTest
+verifyStdInstanceCleared
+	#(stdin stdout stderr) do: [:ea | self deny: (SessionTemps current includesKey: ea)].
+%
+
 ! Class implementation for 'WindowsStoreTest'
 
 !		Instance methods for 'WindowsStoreTest'
@@ -17048,6 +32159,7 @@ category: 'testing'
 method: WindowsStoreTest
 testAbsoluteFullName
 	| filesystem |
+
 	filesystem := FileSystem store: WindowsStore new.
 
 	"Check dropping trailing slash."	
@@ -17056,8 +32168,6 @@ testAbsoluteFullName
 	"Check round-trip conversion from String to FileReference back to String again."
 	#( 	'C:\'		'D:\'		'\'		'C:\tmp'		'D:\tmp'		'C:\tmp\xx'      ) 
 		do: [ :pathString | self assert: (filesystem referenceTo: pathString) fullName equals: pathString ].
-	
-	
 %
 
 category: 'testing'
@@ -17112,6 +32222,139 @@ testRelativePath
 	#('a' 'bin\foo' 'temp\test' 'C:temp\test') do: [:each |
 		self assert: (WindowsStore current pathFromString: each) isRelative ] 
 	
+%
+
+! Class implementation for 'ZnBase64EncoderTests'
+
+!		Instance methods for 'ZnBase64EncoderTests'
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testCustomLineBreaking
+	| encoder input output charCount |
+	encoder := ZnBase64Encoder new.
+	encoder breakLinesAt: 16.
+	input := (0 to: 255) asByteArray.
+	output := encoder encode: input.
+	self assert: (encoder decode: output) equals: input.
+	charCount := ((256 // 3) + (256 \\ 3) sign) * 4.
+	self assert: output size equals: (charCount + (charCount // 16 * String crlf size))
+%
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testDecodingErrors
+	| encoder |
+	encoder := ZnBase64Encoder new.
+	self should: [ encoder decode: 'A' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: 'AB' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: 'ABC' ] raise: ZnCharacterEncodingError.
+	encoder whitespace: #separator.
+	self should: [ encoder decode: '*' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: '**' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: '***' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: '****' ] raise: ZnCharacterEncodingError.
+	encoder whitespace: nil.
+	self should: [ encoder decode: '*' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: '**' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: '***' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: '****' ] raise: ZnCharacterEncodingError.
+%
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testEmpty
+	| encoder |
+	encoder := ZnBase64Encoder new.
+	self 
+		assert: (encoder encode: #[])
+		equals: ''.
+	self
+		assert: (encoder decode: '')
+		equals: #[]
+%
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testFullAlphabet
+	| encoder input output |
+	encoder := ZnBase64Encoder new.
+	input := encoder alphabet.
+	output := encoder decode: input.
+	self assert: (encoder encode: output) equals: input.
+	encoder breakLines.
+	output := encoder decode: input.
+	self assert: (encoder encode: output) equals: input
+%
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testFullSpectrum
+	| encoder input output |
+	encoder := ZnBase64Encoder new.
+	input := (0 to: 255) asByteArray , (255 to: 0) asByteArray.
+	output := encoder encode: input.
+	self assert: (encoder decode: output) equals: input.
+	encoder breakLines.
+	output := encoder encode: input.
+	self assert: (encoder decode: output) equals: input.
+%
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testPadding
+	| encoder |
+	encoder := ZnBase64Encoder new.
+	self assert: (encoder encode: 'M' asByteArray) equals: 'TQ=='.
+	self assert: (encoder decode: 'TQ==') equals: 'M' asByteArray.
+	self assert: (encoder encode: 'Ma' asByteArray) equals: 'TWE='.
+	self assert: (encoder decode: 'TWE=') equals: 'Ma' asByteArray
+%
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testQuote
+	| input output encoder break |
+	encoder := ZnBase64Encoder new lineEndConvention: #cr; breakLines; yourself.
+	input := 'Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.'.
+	break := String with: Character cr.
+	output := 'TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlz' , break 
+				, 'IHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2Yg' , break 
+				, 'dGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGlu' , break 
+				, 'dWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRo' , break 
+				, 'ZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4='.
+	self 
+		assert: (encoder encode: input asByteArray)
+		equals: output.
+	self 
+		assert: (encoder decode: output) 
+		equals: input asByteArray
+%
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testSimple
+	| encoder |
+	encoder := ZnBase64Encoder new.
+	self 
+		assert: (encoder encode: 'Man' asByteArray)
+		equals: 'TWFu'.
+	self
+		assert: (encoder decode: 'TWFu')
+		equals: 'Man' asByteArray
+%
+
+category: 'tests'
+method: ZnBase64EncoderTests
+testWhitespaceAtEnd
+	| encoder |
+	encoder := ZnBase64Encoder new.
+	"whitespace is #any non-alphabet character"
+	self assert: (encoder decode: 'TQ==' , String lf) equals: 'M' asByteArray.
+	encoder whitespace: #separator.
+	self assert: (encoder decode: 'TQ==' , String lf) equals: 'M' asByteArray.
+	encoder whitespace: nil.
+	self should: [ encoder decode: 'TQ==' , String lf ] raise: ZnCharacterEncodingError
 %
 
 ! Class implementation for 'ZnBufferedReadStreamTests'
@@ -17611,17 +32854,17 @@ assertCharacterCollection: anObject equals: otherObj
 category: 'private'
 method: ZnCharacterEncoderTests
 decodeBytes: bytes with: encoder
-true 
-	ifTrue: [ 
+
 	"GemStone does not support streamed decoding ... hack for tests"
-	^ bytes decodeFromUTF8
-	] ifFalse: [ 
+	"^ bytes decodeFromUTF8"
+
+	"Uncomment the following code for decoding"
 
 	| input |
 	input := bytes readStream.
 	^ String streamContents: [ :stream |
 		[ input atEnd ] whileFalse: [ 
-			stream nextPut: (encoder nextFromStream: input) ] ] ]
+			stream nextPut: (encoder nextFromStream: input) ] ]
 %
 
 category: 'private'
@@ -17639,6 +32882,41 @@ encodeString: string with: encoder
 
 category: 'testing'
 method: ZnCharacterEncoderTests
+testAllByteEncoderDomains
+	| encoder characterDomain byteDomain encoded |
+	ZnByteEncoder knownEncodingIdentifiers do: [ :identifier |
+		encoder := ZnCharacterEncoder newForEncoding: identifier.
+		self assert: encoder identifier equals: identifier.
+		self assert: encoder isStrict.
+		self assert: encoder isLenient not.
+		self assert: (encoder encodeString: 'hello') equals: #[104 101 108 108 111] .
+		self assert: (encoder decodeBytes: #[104 101 108 108 111] ) equals: 'hello'.
+		characterDomain := encoder characterDomain.
+		byteDomain := encoder byteDomain.
+		characterDomain do: [ :each |
+			self assert: (encoder encodedByteCountFor: each) equals: 1.
+			encoded := ByteArray streamContents: [ :out | encoder nextPut: each toStream: out ].
+			self assert: encoded size equals: 1.
+			self assert: (byteDomain includes: encoded first) ].
+		byteDomain do: [ :each |
+			self assert: (characterDomain includes: (encoder nextFromStream: (ByteArray with: each) readStream)) ] ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testBeLenient
+	| encoder unmapped |
+	encoder := ZnCharacterEncoder newForEncoding: 'iso-8859-1'.
+	unmapped := (128 to: 159) asByteArray.
+	self should: [ encoder encodeString: unmapped asString ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decodeBytes: unmapped ] raise: ZnCharacterEncodingError.
+	encoder beLenient.
+	self assert: (encoder encodeString: unmapped asString) equals: unmapped.
+	self assert: (encoder decodeBytes: unmapped) equals: unmapped asString.
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
 testByteDecoding
 	| encoder bytes |
 	encoder := ZnUTF8Encoder new.
@@ -17652,17 +32930,35 @@ category: 'testing'
 method: ZnCharacterEncoderTests
 testCodePointEncodingDecoding
 	| encoder input output |
-	input := {}.
-	'Düsseldorf Königsallee' do: [:each | input add: each codePoint ].
+	input := 'Düsseldorf Königsallee' asByteArray asArray.
 	self assert: input isCollection.
-	self assert: (input allSatisfy: [:each | each _isInteger ]).
-	#(utf8 ) do: [ :each |
+	self assert: (input allSatisfy: [:ea | ea _isInteger]).
+	#(utf8 utf16 utf32 latin1 null) do: [ :each |
 		encoder := each asZnCharacterEncoder.
 		output := encoder encodeCodePoints: input.
 		self assert: output isCollection.
 		self assert: (output allSatisfy: [ :e | e _isInteger and: [ e between: 0 and: 255 ] ] ).
 		self assert: (encoder encodedByteCountForCodePoints: input) equals: output size.
 		self assert: (encoder decodeAsCodePoints: output) equals: input ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testCodePointStreams
+	| string codePoints bytes result result2 |
+	string := 'Düsseldorf Königsallee'.
+	codePoints := string asByteArray asArray.
+	self assert: codePoints isCollection.
+	self assert: (codePoints allSatisfy: [:ea | ea isKindOf: Integer]).
+	#(utf8 utf16 utf32 latin1 null) do: [ :each |
+		bytes := ByteArray streamContents: [ :out |
+			(ZnCodePointWriteStream on: out encoding: each)
+				nextPutAll: codePoints ].
+		result2 := each asZnCharacterEncoder encodeString: string.
+		self assert: bytes equals: result2.
+		result := (ZnCodePointReadStream on: bytes readStream encoding: each) upToEnd.
+		self assert: result equals: codePoints.
+		self assert: (codePoints collect: [:ea | ea asCharacter] as: String) equals: string ]
 %
 
 category: 'testing'
@@ -17680,12 +32976,45 @@ testConvencienceMethods
 
 category: 'testing'
 method: ZnCharacterEncoderTests
+testDefault
+	| string bytes |  
+	self assert: ZnCharacterEncoder default equals: ZnUTF8Encoder default.
+	string := 'Der Weg zur Hölle ist mit guten Vorsätzen gepflastert.'.
+	bytes := ZnUTF8Encoder new encodeString: string.
+	ZnDefaultCharacterEncoder 
+		value: ZnUTF8Encoder new
+		during: [ 
+			self 
+				assertString: (ZnCharacterEncoder default decodeBytes: bytes) 
+				equalsString: string ].
+	ZnDefaultCharacterEncoder 
+		value: ZnUTF8Encoder new
+		during: [ 
+			self 
+				assertString: ((ZnCharacterEncoder newForEncoding: 'unknown') decodeBytes: bytes) 
+				equalsString: string ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testDetectEncoding
+	| bytes |
+	bytes := 'abc' asByteArray.
+	self assert: (ZnCharacterEncoder detectEncoding: bytes) equals: ZnCharacterEncoder ascii.
+	bytes := ZnCharacterEncoder iso88591 encodeString: 'Les élèves Français'.
+	self assert: (ZnCharacterEncoder detectEncoding: bytes) equals: ZnCharacterEncoder iso88591.
+	bytes := ZnCharacterEncoder utf8 encodeString: 'Les élèves Français'.
+	self assert: (ZnCharacterEncoder detectEncoding: bytes) equals: ZnCharacterEncoder utf8.
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
 testKnownEncodingIdentifiers
-	| all minimal asciiString |
+	| all minimal asciiString aCollection |
 	all := ZnCharacterEncoder knownEncodingIdentifiers asSet.
-	minimal := #(utf8) asSet.
+	minimal := #('utf8' 'latin1' 'null' 'ascii' 'iso88591') asSet.
 	"make sure at least a minimal set is present"
-	self assert: (all  select: [ :each | minimal includes: each ]) equals: minimal.
+	self assert: ( all  select: [ :each | (minimal includes: each) ] ) equals: minimal.
 	asciiString := String withAll: ((($a asciiValue to: $z asciiValue) , 
 		($A asciiValue to: $Z asciiValue) , ($0 asciiValue to: $9 asciiValue)) collect: [:each | Character codePoint: each ]).
 	"make sure that each identifier can be used to instanciate a decoder,
@@ -17695,6 +33024,34 @@ testKnownEncodingIdentifiers
 		encoder := ZnCharacterEncoder newForEncoding: each.
 		bytes := encoder encodeString: asciiString.
 		self assert: ((encoder decodeBytes: bytes) isEquivalent: asciiString) ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testLatin1Encoder
+	| encoder string bytes |
+	encoder := ZnCharacterEncoder newForEncoding: 'latin1'.
+	string := 'élève en Français'.
+	bytes := #(233 108 232 118 101 32 101 110 32 70 114 97 110 231 97 105 115) asByteArray.
+	self assert: (encoder encodeString: string) equals: bytes.
+	self assert: (encoder decodeBytes: bytes) equals: string
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testLatin2Encoder
+	"Example characters taken from http://en.wikipedia.org/wiki/Latin2"
+	
+	| encoder inputBytes outputBytes inputString outputString |
+	encoder := ZnCharacterEncoder newForEncoding: 'latin2'.
+	inputString := String 
+		with: (16r0154 asCharacter) with: (16r0110 asCharacter) 
+		with: ( 16r0155 asCharacter) with: (16r0111 asCharacter).
+	inputBytes := #(192 208 224 240) asByteArray.
+	outputBytes := self encodeString: inputString with: encoder.
+	self assert: outputBytes = inputBytes.
+	outputString := self decodeBytes: inputBytes with: encoder.
+	self assert: outputString = inputString
 %
 
 category: 'testing'
@@ -17714,6 +33071,17 @@ testNextPutAllStartingAtToStream
 				bytes := ByteArray streamContents: [ :out |
 					encoder next: each size putAll: string startingAt: prefix size + 1 toStream: out ].
 				self assertCharacterCollection: (encoder decodeBytes: bytes) equals: each ] ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testNullEncoder
+	| encoder bytes string |
+	encoder := ZnNullEncoder new.
+	bytes := self encodeString: 'abc' with: encoder.
+	self assert: bytes = #(97 98 99) asByteArray.
+	string := self decodeBytes: #(65 66 67) asByteArray with: encoder.
+	self assert: string = 'ABC'
 %
 
 category: 'testing'
@@ -17753,6 +33121,31 @@ testReadIntoStartingAtCountFromStreamAtEnd
 
 category: 'testing'
 method: ZnCharacterEncoderTests
+testReadIntoStartingAtCountFromStreamWide
+	| encoder |
+
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
+
+	encoder := ZnUTF8Encoder new.
+	{ 'abc', (String withAll: { 300 asCharacter. 400 asCharacter. 500 asCharacter}), 'xyz' } do: [ :each |
+			| bytes buffer notified read |
+			bytes := encoder encodeString: each.
+			buffer := String new: each size.
+			notified := false.
+			[ read := encoder readInto: buffer startingAt: 1 count: each size fromStream: bytes readStream ]
+				on: ZnByteStringBecameWideString 
+				do: [ :notification |
+					self deny: notified.
+					notified := true.
+					buffer := notification wideString.
+					notification resume ].
+			self assert: notified.
+			self assert: buffer equals: each.
+			self assert: read equals: each size ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
 testReadIntoStartingAtCountFromStreamWithOffset
 	| input encoder bytes readStream string read |
 	encoder := ZnUTF8Encoder new.
@@ -17782,7 +33175,159 @@ testStringEncoding
 	string := 'élève en Français'.
 	self assert: (string encodeWith: encoder) equals: (encoder encodeString: string).
 	self assert: (string encodeWith: #utf8) equals: (encoder encodeString: string).
-	self assert: string encodeAsUTF8 asByteArray equals: (encoder encodeString: string)
+	"self assert: string encodeAsUTF8 asByteArray equals: (encoder encodeString: string)."
+	self assert: string utf8Encoded equals: (encoder encodeString: string)
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF16Back
+	| encoder stream |
+	encoder := ZnUTF16Encoder new.
+	stream := (encoder encodeString: 'Les élèves Françaises') readStream.
+	self should: [ encoder backOnStream: stream ] raise: Error.
+	4 timesRepeat: [ encoder nextFromStream: stream ].
+	self assert: (encoder nextFromStream: stream) equals: $é.
+	encoder backOnStream: stream.
+	self assert: (encoder nextFromStream: stream) equals: $é.
+	10 timesRepeat: [ encoder nextFromStream: stream ].
+	13 timesRepeat: [ encoder backOnStream: stream ].
+	self assert: (encoder nextFromStream: stream) equals: $s
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF16EncoderBigEndian
+	| string bytes encoder |
+	string := 'élève en Français'.
+	bytes := ByteArray readHexFrom:
+		'00E9006C00E80076006500200065006E0020004600720061006E00E7006100690073'.
+	encoder := ZnUTF16Encoder new.
+	self assert: encoder isBigEndian.
+	self assert: (encoder encodeString: string) equals: bytes.
+	self assert: (encoder decodeBytes: bytes) equals: string
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF16EncoderByteOrderMark
+	| string bytes encoder encoded |
+	string := 'foo'.
+	bytes := ByteArray readHexFrom: 'FEFF0066006f006f'.
+	encoder := ZnUTF16Encoder new.
+	self assert: encoder isBigEndian.
+	encoded := ByteArray streamContents: [ :out |
+		encoder nextPutByteOrderMarkToStream: out.
+		encoder next: string size putAll: string startingAt: 1 toStream: out ].
+	self assert: encoded equals: bytes.
+	self assert: (encoder decodeBytes: bytes) equals: string.
+	encoder beLittleEndian.
+	self assert: encoder isLittleEndian.
+	self assert: (encoder decodeBytes: bytes) equals: string.
+	self assert: encoder isBigEndian.
+	1 to: bytes size by: 2 do: [ :each | bytes swap: each with: each + 1 ].
+	self assert: (encoder decodeBytes: bytes) equals: string.
+	self assert: encoder isLittleEndian
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF16EncoderLittleEndian
+	| string bytes encoder |
+	string := 'élève en Français'.
+	bytes := ByteArray readHexFrom:
+		'E9006C00E80076006500200065006E0020004600720061006E00E700610069007300'.
+	encoder := ZnUTF16Encoder new.
+	encoder beLittleEndian.
+	self assert: encoder isLittleEndian.
+	self assert: (encoder encodeString: string) equals: bytes.
+	self assert: (encoder decodeBytes: bytes) equals: string
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF16EncoderWide1
+	| string bytes encoder |
+	string := (Character codePoint: 16r1d11e) asString. "MUSICAL SYMBOL G CLEF"
+	bytes := ByteArray readHexFrom: 'D834DD1E'.
+	encoder := ZnUTF16Encoder new.
+	self assert: encoder isBigEndian.
+	self assert: (encoder encodeString: string) equals: bytes.
+	self assert: (encoder decodeBytes: bytes) equals: string
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF32EncoderExampleFromD100
+	| string bytes encoder |
+	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: [:ea | ea asCharacter] as: String.
+	bytes := ByteArray readHexFrom: '4D000000300400008C4E000002030100'.
+	encoder := #utf32 asZnCharacterEncoder.
+	encoder beLittleEndian.
+	self assert: encoder isLittleEndian.
+	self assert: (encoder encodeString: string) equals: bytes.
+	self assert: (encoder decodeBytes: bytes) equals: string
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF32EncoderExampleFromD101
+	| string encoder bytesBigEndianWithBom bytesLittleEndianWithBom |
+	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: [:ea | ea asCharacter] as: String.
+	encoder := #utf32 asZnCharacterEncoder.
+	encoder beLittleEndian.
+	"start with the wrong endianness (LE)"
+	bytesBigEndianWithBom := ByteArray readHexFrom: '0000FEFF0000004D0000043000004E8C00010302'.
+	"the correct endianness (BE) should be detected"
+	self assert: (encoder decodeBytes: bytesBigEndianWithBom) equals: string.
+	self assert: encoder isBigEndian.
+	"start with the wrong endianness (BE)"
+	bytesLittleEndianWithBom := ByteArray readHexFrom: 'FFFE00004D000000300400008C4E000002030100'.
+	"the correct endianness (LE) should be detected"
+	self assert: (encoder decodeBytes: bytesLittleEndianWithBom) equals: string.
+	self assert: encoder isLittleEndian.
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF32EncoderExampleFromD99
+	| string bytes encoder |
+	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: [:ea | ea asCharacter] as: String.
+	bytes := ByteArray readHexFrom: '0000004D0000043000004E8C00010302'.
+	encoder := #utf32 asZnCharacterEncoder.
+	encoder beBigEndian.
+	self assert: encoder isBigEndian.
+	self assert: (encoder encodeString: string) equals: bytes.
+	self assert: (encoder decodeBytes: bytes) equals: string
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF32EncoderSimple
+	| string bytes encoder |
+	string := 'élève en Français'.
+	bytes := ByteArray readHexFrom: '000000e90000006c000000e8000000760000006500000020000000650000006e000000200000004600000072000000610000006e000000e7000000610000006900000073'.
+	encoder := #utf32 asZnCharacterEncoder.
+	self assert: encoder isBigEndian.
+	self assert: (encoder encodedByteCountForString: string) equals: 17 * 4.
+	self assert: (encoder encodeString: string) equals: bytes.
+	self assert: (encoder decodeBytes: bytes) equals: string
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF32EncoderWide
+	| encoder |
+	encoder := ZnUTF32Encoder new.
+	{ 
+		'abc'. 
+		'élève en Français'. 
+		'Pra-ská' copy at: 4 put: (Character value: 382); yourself. 
+		(Character codePoint: 16r1d11e) asString. "MUSICAL SYMBOL G CLEF"
+		'' } do: [ :each | 
+			| bytes |
+			bytes := self encodeString: each with: encoder. 
+			self assertString: (encoder decodeBytesIntoWideString: bytes) equalsString: each ]
 %
 
 category: 'testing'
@@ -17819,6 +33364,28 @@ testUTF8Boundaries
 			encoded := utf8Encoder encodeString: string. 
 			self assertCharacterCollection: (utf8Encoder decodeBytes: encoded) equals: string.
 			self assert: encoded size equals: byteCount ] ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF8ByteOrderMark
+	"The Unicode Byte Order Mark (BOM) should be skipped."
+	
+	| bom string bytes encoder decodedString |
+	encoder := ZnUTF8Encoder new.
+	string := 'élève en Français'.
+	bytes := encoder encodeStringWithByteOrderMark: string.
+	self assertString: (encoder decodeBytes: bytes) equalsString: string.
+	
+	string := 'Foo'.
+	bytes := encoder encodeStringWithByteOrderMark: string.
+	decodedString := String new: string size.
+	ZnUTF8Encoder new 
+		readInto: decodedString startingAt: 1 count: string size fromStream: bytes readStream. 
+	self assertString: decodedString equalsString: string.
+	
+	bom := encoder encodeStringWithByteOrderMark: ''.
+	self should: [ encoder decodeBytes: bom ] raise: Error
 %
 
 category: 'testing'
@@ -17860,13 +33427,101 @@ testUTF8EncoderByteCount
 
 category: 'testing'
 method: ZnCharacterEncoderTests
+testUTF8EncoderIncomplete
+	"The examples are taken from http://en.wikipedia.org/wiki/UTF-8#Description"
+	
+	| encoder |
+	encoder := ZnUTF8Encoder new.
+	#( (16rC2 16rA2) (16rE2 16r82 16rAC) (16rF0 16rA4 16rAD 16rA2) ) do: [ :each |
+		2 to: each size do: [ :count |
+			self 
+				should: [ encoder decodeBytes: (each allButLast: count - 1) ] 
+				raise: ZnCharacterEncodingError ] ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF8EncoderRandom
+	#(unicodeCharacterSource latin1CharacterSource asciiCharacterSource) do: [ :source |
+		| string bytes result |
+		string := self class stringOfSize: 256 fromSource: source.
+		bytes := string utf8Encoded.
+		result := bytes utf8Decoded.
+		self assertString: result equalsString: string ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
 testUTF8EncoderWide
 	| encoder |
 	encoder := ZnUTF8Encoder new.
 	{ 'abc'. 'élève en Français'. 'Pra-ská' copy at: 4 put: (Character codePoint: 382); yourself. '' }
 		do: [ :each | | bytes |
 			bytes := self encodeString: each with: encoder. 
-			self assertCharacterCollection: (encoder decodeBytes: bytes) equals: each ]
+"			self assertCharacterCollection: (encoder decodeBytes: bytes) equals: each."
+			self assertCharacterCollection: (encoder decodeBytesIntoWideString: bytes) equals: each ]
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF8Overlong
+	"Overlong encoding, aka Non shortest form characters should be rejected.
+	See http://en.wikipedia.org/wiki/UTF-8#Overlong_encodings"
+	
+	self 
+		should: [ ZnUTF8Encoder new decodeBytes: #[ 16rF0 16r82 16r82 16rAC ] ] 
+		raise: ZnCharacterEncodingError.
+	self 
+		should: [ ZnUTF8Encoder new decodeBytes: #(193 129 193 130 193 131 ) ] 
+		raise: ZnCharacterEncodingError.
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF8ReadFaultyInput
+	"Although not recommended, it is possible to read faulty UTF-8 encoded input by resuming ZnInvalidUTF8"
+	
+	"illegal leading byte"
+	self 
+		should: [ #[102 111 111 160 102 111 111] utf8Decoded ] 
+		raise: ZnInvalidUTF8.
+	self 
+		assert: ([ #[102 111 111 160 102 111 111] utf8Decoded ] on: ZnInvalidUTF8 do: [ :exception | exception resume ]) 
+		equals: 'foo?foo'.
+	self 
+		assert: ([ #[102 111 111 160 102 111 111] utf8Decoded ] on: ZnInvalidUTF8 do: [ :exception | exception resume: $_ codePoint ]) 
+		equals: 'foo_foo'.
+	
+	"illegal continuation byte"
+	self 
+		should: [ #[102 111 111 195 0 102 111 111] utf8Decoded ] 
+		raise: ZnInvalidUTF8.
+	self 
+		assert: ([ #[102 111 111 195 0 102 111 111] utf8Decoded ] on: ZnInvalidUTF8 do: [ :exception | exception resume ]) 
+		equals: 'foo?foo'.
+
+	"incomplete input"
+	self 
+		should: [ #[102 111 111 195 ] utf8Decoded ] 
+		raise: ZnIncomplete.
+	self 
+		assert: ([ #[102 111 111 195 ] utf8Decoded ] on: ZnInvalidUTF8 , ZnIncomplete do: [ :exception | exception resume ]) 
+		equals: 'foo?'
+%
+
+category: 'testing'
+method: ZnCharacterEncoderTests
+testUTF8SurrogateCodePointsShouldFail
+	| encoder surrogateCodePoint |
+	encoder := #utf8 asZnCharacterEncoder.
+	surrogateCodePoint := 16rD801.
+	self assert: (encoder isSurrogateCodePoint: surrogateCodePoint).
+	self 
+		should: [ encoder encodeString: surrogateCodePoint asCharacter asString ]
+		raise: ZnInvalidUTF8.
+	self 
+		should: [ encoder decodeBytes: #[237 160 129] ]
+		raise: ZnCharacterEncodingError
 %
 
 ! Class implementation for 'ZnCharacterStreamTests'
@@ -17882,35 +33537,53 @@ assertUpToAll: array
 	self assert: (utf8Stream upToAll: array second) equals: array third
 %
 
+category: 'private'
+method: ZnCharacterStreamTests
+decodeBytes: bytes with: encoder
+	| input |
+	input := bytes readStream.
+	^ String streamContents: [ :stream |
+		[ input atEnd ] whileFalse: [ 
+			stream nextPut: (encoder nextFromStream: input) ] ]
+%
+
+category: 'private'
+method: ZnCharacterStreamTests
+encodeString: string with: encoder
+	^ ByteArray streamContents: [ :stream |
+		string do: [ :each |
+			encoder nextPut: each toStream: stream ] ]
+%
+
 category: 'testing'
 method: ZnCharacterStreamTests
 testNextLine
 	| stream |
-	stream := ZnCharacterReadStream on: 'abc' asByteArray readStreamPortable.
+	stream := ZnCharacterReadStream on: 'abc' asByteArray readStream.
 	self assert: stream nextLine equals: 'abc'.
 	self assert: stream nextLine  equals: nil.
-	stream := ZnCharacterReadStream on: '' asByteArray readStreamPortable.
+	stream := ZnCharacterReadStream on: '' asByteArray readStream.
 	self assert: stream nextLine equals: nil.
-	stream := ZnCharacterReadStream on: (String withAll: { 
+	stream := ZnCharacterReadStream on: ({ 
 		$a. Character cr. 
 		$b. Character lf. 
-		$c }) readStreamPortable.
+		$c } collect: [:ea | ea charCode]) readStream.
 	self assert: stream nextLine equals: 'a'.
 	self assert: stream nextLine equals: 'b'.
 	self assert: stream nextLine equals: 'c'.
 	self assert: stream nextLine equals: nil.
-	stream := ZnCharacterReadStream on: (String withAll:{ 
+	stream := ZnCharacterReadStream on: ( { 
 		$a. Character cr. Character lf.  
 		$b. Character cr. Character lf. 
-		$c. Character cr. Character lf }) readStreamPortable.
+		$c. Character cr. Character lf }  collect: [:ea | ea charCode]) readStream.
 	self assert: stream nextLine equals: 'a'.
 	self assert: stream nextLine equals: 'b'.
 	self assert: stream nextLine equals: 'c'.
 	self assert: stream nextLine equals: nil.
-	stream := ZnCharacterReadStream on: (String withAll: { 
+	stream := ZnCharacterReadStream on: ({ 
 		$a. Character cr. Character lf.  
 		Character cr. Character lf. 
-		$c. Character cr. Character lf }) readStreamPortable.
+		$c. Character cr. Character lf }  collect: [:ea | ea charCode]) readStream.
 	self assert: stream nextLine equals: 'a'.
 	self assert: stream nextLine equals: ''.
 	self assert: stream nextLine equals: 'c'.
@@ -18045,23 +33718,21 @@ testUTF8ReadStreamReadInto
 	| string bytes stream buffer |
 	string := 'élève en Français'.
 	bytes := ZnUTF8Encoder new encodeString: string.
-	stream := ZnBufferedReadStream on: (ZnCharacterReadStream on: bytes readStreamPortable).
-	stream sizeBuffer: string size.
+	stream := ZnCharacterReadStream on: bytes readStream.
 	buffer := String new: string size.
 	stream next: string size into: buffer. 
 	self assert: buffer equals: string.
 	self assert: stream atEnd.
-	string := 'Czech in Czech is ', 269 asCharacter asString ,'e', 353 asCharacter asString , 'tina.'.
+	string := 'Czech in Czech is {1}e{2}tina.' format: { 269 asCharacter. 353 asCharacter }.
 	bytes := ZnUTF8Encoder new encodeString: string.
-	stream := ZnBufferedReadStream on: (ZnCharacterReadStream on: bytes readStreamPortable).
-	stream sizeBuffer: string size.
+	stream := ZnCharacterReadStream on: bytes readStream.
 	buffer := String new: string size.
 	stream next: string size into: buffer. 
 	self assert: buffer equals: string.
 	self assert: stream atEnd
 %
 
-category: 'testing'
+category: 'private'
 method: ZnCharacterStreamTests
 utf8ReadStreamOn: string
 	| bytes stream |
@@ -18071,6 +33742,439 @@ utf8ReadStreamOn: string
 		encoding: #utf8).
 	stream sizeBuffer: string size.
 	^stream
+%
+
+! Class implementation for 'ZnCrPortableWriteStreamTests'
+
+!		Instance methods for 'ZnCrPortableWriteStreamTests'
+
+category: 'tests'
+method: ZnCrPortableWriteStreamTests
+testNextPut
+	"Ensure that the line ends are written correctly"
+
+	| expectedString stream crStream |
+	expectedString := 'a', System lineEnding  asString, 'b'.
+	{ String cr.
+		String lf.
+		String crlf. } do: [ :lineEnd |
+			stream := String new writeStream.
+			crStream := ZnNewLineWriterStream on: stream.
+			crStream
+				<< 'a';
+				<< lineEnd;
+				<< 'b'.
+			self assert: stream contents equals: expectedString ]
+%
+
+! Class implementation for 'ZnFastLineReaderTests'
+
+!		Instance methods for 'ZnFastLineReaderTests'
+
+category: 'tests'
+method: ZnFastLineReaderTests
+testLinesDo
+	| lines reader |
+	lines := #( 'foo' 'bar' 'last').
+	reader := ZnFastLineReader on: (Character lf join: lines) readStream.
+	self 
+		assert: (Array streamContents: [ :out | 
+					reader linesDo: [ :line | out nextPut: line ] ])
+		equals: lines
+%
+
+category: 'tests'
+method: ZnFastLineReaderTests
+testNextLine
+	| reader |
+	reader := ZnFastLineReader on: 'abc' readStream.
+	self assert: reader nextLine equals: 'abc'.
+	self assert: reader atEnd.
+	self assert: reader nextLine  equals: nil.
+	reader := ZnFastLineReader on: '' readStream.
+	self assert: reader nextLine equals: nil.
+	self assert: reader atEnd.
+	reader := ZnFastLineReader on: (String withAll: { 
+		$a. Character cr. 
+		$b. Character lf. 
+		$c }) readStream.
+	self assert: reader nextLine equals: 'a'.
+	self assert: reader nextLine equals: 'b'.
+	self assert: reader nextLine equals: 'c'.
+	self assert: reader nextLine equals: nil.
+	reader := ZnFastLineReader on: (String withAll: { 
+		$a. Character cr. Character lf.  
+		$b. Character cr. Character lf. 
+		$c. Character cr. Character lf }) readStream.
+	self assert: reader nextLine equals: 'a'.
+	self assert: reader nextLine equals: 'b'.
+	self assert: reader nextLine equals: 'c'.
+	self assert: reader nextLine equals: nil.
+	reader := ZnFastLineReader on: (String withAll: { 
+		$a. Character cr. Character lf.  
+		Character cr. Character lf. 
+		$c. Character cr. Character lf }) readStream.
+	self assert: reader nextLine equals: 'a'.
+	self assert: reader nextLine equals: ''.
+	self assert: reader nextLine equals: 'c'.
+	self assert: reader atEnd
+%
+
+! Class implementation for 'ZnNewLineWriterStreamTests'
+
+!		Instance methods for 'ZnNewLineWriterStreamTests'
+
+category: 'tests'
+method: ZnNewLineWriterStreamTests
+testClose 
+
+	| string fs fileReference znstream |
+
+	fs := FileSystem memory.
+	fileReference := fs / 'test.txt'.
+	string := String streamContents: [ :stream |
+		stream 
+			<< 'abccr';
+			cr ].
+	znstream := ZnNewLineWriterStream on: fileReference writeStream.
+	znstream forLf.
+	[ znstream nextPutAll: string ]
+		ensure: [ znstream close ].
+	string at: string size put: Character lf.
+	self assert: fileReference contents equals: string.
+%
+
+category: 'tests'
+method: ZnNewLineWriterStreamTests
+testNextPut
+	"Ensure that the line ends are written correctly"
+
+	| expectedString stream crStream |
+	expectedString := 'a', System lineEnding , 'b'.
+	{ String cr.
+		String lf.
+		String crlf. } do: [ :lineEnd |
+			stream := String new writeStream.
+			crStream := ZnNewLineWriterStream on: stream.
+			crStream
+				<< 'a';
+				<< lineEnd;
+				<< 'b'.
+			self assert: stream contents equals: expectedString ]
+%
+
+! Class implementation for 'ZnPercentEncoderTests'
+
+!		Instance methods for 'ZnPercentEncoderTests'
+
+category: 'tests'
+method: ZnPercentEncoderTests
+testDecodePlusAsSpace
+	| encoder |
+	encoder := ZnPercentEncoder new.
+	self assertString: (encoder decode: '+') equalsString: ' '.
+	self assert: encoder decodePlusAsSpace.
+	encoder decodePlusAsSpace: false.
+	self assertString: (encoder decode: '+') equalsString: '+'.
+	self deny: encoder decodePlusAsSpace
+%
+
+category: 'tests'
+method: ZnPercentEncoderTests
+testDecodingErrors
+	| encoder |
+	encoder := ZnPercentEncoder new.
+	self should: [ encoder decode: 'foo%%bar' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: 'fooçbar' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: 'foo%' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: '%XX' ] raise: ZnCharacterEncodingError.
+	self should: [ encoder decode: 'foo%F' ] raise: ZnCharacterEncodingError
+%
+
+category: 'tests'
+method: ZnPercentEncoderTests
+testLeadingZero
+	| encoder |
+	encoder := ZnPercentEncoder new.
+	self assertString: (encoder encode: 'foo', Character tab asString, 'bar') equalsString: 'foo%09bar'.
+	self assertString: (encoder decode: 'foo%09bar') equalsString: 'foo', Character tab asString, 'bar'.
+	self assertString: (encoder encode: 'foo', Character lf asString, 'bar') equalsString: 'foo%0Abar'.
+	self assertString: (encoder decode: 'foo%0Abar') equalsString: 'foo', Character lf asString, 'bar'
+%
+
+category: 'tests'
+method: ZnPercentEncoderTests
+testNonAscii
+	| encoder |
+	encoder := ZnPercentEncoder new.
+	self 
+		assert: encoder characterEncoder 
+		equals: (ZnCharacterEncoder newForEncoding: 'utf-8').
+	self 
+		assertString: (encoder encode: 'élève en Français') 
+		equalsString: '%C3%A9l%C3%A8ve%20en%20Fran%C3%A7ais'.
+	self 
+		assertString: (encoder decode: '%C3%A9l%C3%A8ve%20en%20Fran%C3%A7ais') 
+		equalsString: 'élève en Français'
+%
+
+category: 'tests'
+method: ZnPercentEncoderTests
+testSimple
+	| encoder |
+	encoder := ZnPercentEncoder new.
+	self assertString: (encoder encode: 'foo bar') equalsString: 'foo%20bar'.
+	self assertString: (encoder decode: 'foo%20bar') equalsString: 'foo bar'.
+	self assertString: (encoder encode: '') equalsString: ''.
+	self assertString: (encoder decode: '') equalsString: ''.
+	self assertString: (encoder decode: 'foo%25bar') equalsString: 'foo%bar'.
+	self assertString: (encoder decode: 'foo+bar') equalsString: 'foo bar'
+%
+
+category: 'tests'
+method: ZnPercentEncoderTests
+testStringUrlDecoded
+	self assertString: ('foo%20bar' urlDecoded) equalsString: 'foo bar'
+%
+
+category: 'tests'
+method: ZnPercentEncoderTests
+testStringUrlEncoded
+	self assert: ('foo bar' urlEncoded) equals: 'foo%20bar'
+%
+
+! Class implementation for 'ZnPositionableReadStreamTests'
+
+!		Instance methods for 'ZnPositionableReadStreamTests'
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+buildData
+	^ByteArray new: 2000 streamContents: [ :out | 
+		2000 timesRepeat: [ out nextPut: 256 atRandom - 1 ] ]
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testBulkReading
+	| stream buffer |
+	stream := ZnPositionableReadStream on: #(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15) readStream.
+	buffer := Array new: 6.
+	self assert: (stream readInto: buffer startingAt: 1 count: 6) equals: 6.
+	self assert: buffer equals: #(0 1 2 3 4 5).
+	self assert: (stream readInto: buffer startingAt: 4 count: 3) equals: 3.
+	self assert: (stream readInto: buffer startingAt: 1 count: 3) equals: 3.
+	self assert: buffer equals: #(9 10 11 6 7 8).
+	buffer atAllPut: 0.
+	self assert: (stream readInto: buffer startingAt: 1 count: 6) equals: 4.
+	self assert: buffer equals: #(12 13 14 15 0 0)
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testEmpty
+	| stream |
+	stream := ZnPositionableReadStream on: '' readStream.
+	self assert: stream atEnd.
+	self assert: stream peek isNil.
+	self assert: stream next isNil.
+	self assert: stream position = 0
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testNestedExcursion
+	| stream |
+	stream := ZnPositionableReadStream on: 'abcdef---XYZ!1--------' readStream.
+	self assert: (stream next: 3) equals: 'abc'.
+	stream savingPositionDo: [ 
+		self assert: (stream next: 3) equals: 'def'.
+		stream savingPositionDo: [ 
+			stream upTo: $!.
+			self assert: (stream peekFor: $1) ].
+		stream skip: 3.
+		self assert: (stream next: 3) equals: 'XYZ' ].
+	self assert: (stream next: 3) equals: 'def'
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testNew
+	| stream |
+	stream := ZnPositionableReadStream on: 'abc' readStream.
+	self assert: stream position = 0.
+	self assert: stream bufferSize equals: stream defaultBufferSize.
+	self deny: stream atEnd
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testPlainExcursion
+	| stream |
+	stream := ZnPositionableReadStream on: 'abcdef-----------' readStream.
+	self assert: (stream next: 3) equals: 'abc'.
+	self assert: (stream savingPositionDo: [ stream next: 3 ]) equals: 'def'.
+	self assert: (stream next: 3) equals: 'def'
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testPlainNext
+	| stream |
+	stream := ZnPositionableReadStream on: 'abc' readStream.
+	self assert: stream next equals: $a.
+	self deny: stream atEnd.
+	self assert: stream next equals: $b.
+	self assert: stream position equals: 2.
+	self assert: stream next equals: $c.
+	self assert: stream atEnd
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testPlainPeek
+	| stream |
+	stream := ZnPositionableReadStream on: 'abc' readStream.
+	self assert: stream next equals: $a.
+	self assert: stream peek equals: $b.
+	self assert: stream next equals: $b.
+	self assert: stream position equals: 2.
+	self assert: stream peek equals: $c.
+	self assert: stream next equals: $c.
+	self assert: stream atEnd
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testPositionErrors
+	| data stream |
+	data := ByteArray new: 1000 streamContents: [ :out | 
+		100 timesRepeat: [ out nextPutAll: #[ 0 1 2 3 4 5 6 7 8 9 ] ] ].
+	stream := ZnPositionableReadStream on: data readStream.
+	self should: [ stream position: 1 ] raise: SubscriptOutOfBounds.
+	stream next: 100.
+	self should: [ stream position: -1 ] raise: SubscriptOutOfBounds.
+	self should: [ stream position: 101 ] raise: SubscriptOutOfBounds.
+	stream next: 500.
+	self should: [ stream position: 100 ] raise: SubscriptOutOfBounds.
+	self should: [ stream position: 600 - stream bufferSize - 1 ] raise: SubscriptOutOfBounds.
+	stream position: 400.
+	stream next: 599.
+	self assert: stream next equals: 9.
+	self assert: stream atEnd
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testReadAll
+	| data stream |
+	data := String new: 200 streamContents: [ :out | 
+		200 timesRepeat: [ out nextPut: 'abc' atRandom ] ].
+	stream := ZnPositionableReadStream on: data readStream.
+	self deny: stream atEnd.
+	self assert: stream position equals: 0.
+	stream savingPositionDo: [
+		self assert: stream upToEnd equals: data.
+		self assert: stream atEnd.
+		self assert: stream position equals: 200 ].
+	self deny: stream atEnd.
+	self assert: stream position equals: 0.
+	self assert: stream upToEnd equals: data.
+	self assert: stream atEnd.
+	self assert: stream position equals: 200
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testReadAllLargerBuffer
+	| data stream |
+	data := String new: 500 streamContents: [ :out | 
+		500 timesRepeat: [ out nextPut: 'abc' atRandom ] ].
+	stream := ZnPositionableReadStream on: data readStream.
+	stream sizeBuffer: 500.
+	self deny: stream atEnd.
+	self assert: stream position equals: 0.
+	stream savingPositionDo: [
+		self assert: stream upToEnd equals: data.
+		self assert: stream atEnd.
+		self assert: stream position equals: 500 ].
+	self deny: stream atEnd.
+	self assert: stream position equals: 0.
+	self assert: stream upToEnd equals: data.
+	self assert: stream atEnd.
+	self assert: stream position equals: 500
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testSearch
+	| data stream found |
+	data := String new: 2000 streamContents: [ :out | 
+		2000 timesRepeat: [ out nextPut: 'abc' atRandom ] ].
+	data replaceFrom: 1000 to: 1005 with: 'TARGET'.
+	stream := ZnPositionableReadStream on: data readStream.
+	found := false.
+	[ stream atEnd ] whileFalse: [ 
+		stream savingPositionDo: [ 
+			(stream next: 6) = 'TARGET' 
+				ifTrue: [ 
+					found := true.
+					self assert: stream position equals: 1005 ] ].
+		stream next ].
+	self assert: found
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testSearchBinary
+	| data stream pattern found |
+	data := self buildData.
+	pattern := ByteArray readHexFrom: 'FF77ABAB'.
+	data replaceFrom: 1000 to: 1000 + pattern size - 1 with: pattern.
+	stream := ZnPositionableReadStream on: data readStream.
+	found := false.
+	[ stream atEnd ] whileFalse: [ 
+		stream savingPositionDo: [ 
+			(stream next: pattern size) = pattern 
+				ifTrue: [ 
+					found := true.
+					self assert: stream position equals: 1000 + pattern size - 1 ] ].
+		stream next ].
+	self assert: found
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testSkipAndBack
+	| stream |
+	stream := ZnPositionableReadStream on: 'abcdef' readStream.
+	stream skip: 2.
+	self assert: stream next equals: $c.
+	stream skip: 1.
+	self assert: stream back equals: $d.
+	self assert: stream back equals: $c.
+	stream skip: -2.
+	self assert: stream next equals: $a.
+	stream back.
+	self assert: stream upToEnd equals: 'abcdef'.
+%
+
+category: 'tests'
+method: ZnPositionableReadStreamTests
+testUTF8
+	| data stream |
+	data := 'Les élèves Françaises ont 100 '.
+	stream := ZnPositionableReadStream on: (ZnCharacterReadStream on: data utf8Encoded readStream).
+	self assert: (stream next: 3) equals: 'Les'.
+	stream skip: 1.
+	stream savingPositionDo: [ 
+		self assert: (stream next: 6) equals: 'élèves'.
+		self assert: stream next equals: Character space ].
+	self assert: (stream next: 6) equals: 'élèves'.
+	self assert: (stream peekFor: Character space).
+	2 timesRepeat: [ stream upTo: Character space ].
+	self assert: (stream upTo: $) trimBoth asNumber equals: 100.
+	self assert: stream atEnd
 %
 
 ! Class implementation for 'DiskFileAttributesTestsResources'
@@ -18139,6 +34243,63 @@ tearDown
 	file delete.
 %
 
+! Class implementation for 'StdioStreamTestResource'
+
+!		Instance methods for 'StdioStreamTestResource'
+
+category: 'accessing'
+method: StdioStreamTestResource
+contents
+	^ contents
+%
+
+category: 'accessing'
+method: StdioStreamTestResource
+fileReference
+	^ fileReference
+%
+
+category: 'accessing'
+method: StdioStreamTestResource
+fileStream
+	^ fileStream
+%
+
+category: 'running'
+method: StdioStreamTestResource
+setUp
+	"Create the temporary file and StdioStream"
+
+	| handle |
+
+	fileReference := FileReference newTempFilePrefix: 'StdioStreamTest.' suffix: '.bin'.
+	contents := '01234567890123456789'.
+	
+	fileStream := fileReference writeRawStream.
+	fileStream
+		nextPutAll: contents;
+		position: 0.
+	"NOTE: This makes assumptions about the internal structure of BinaryFileStream.
+	This shouldn't be done in general."
+	stdioStream := StdioStream on: (FileSystem fileClass stdout).
+%
+
+category: 'accessing'
+method: StdioStreamTestResource
+stdioStream
+	^ stdioStream
+%
+
+category: 'running'
+method: StdioStreamTestResource
+tearDown
+	"Close the receiver's resources"
+	
+	stdioStream := nil.
+	fileStream close.
+	fileReference ensureDelete.
+%
+
 ! Class implementation for 'MemoryWriteStream'
 
 !		Instance methods for 'MemoryWriteStream'
@@ -18170,6 +34331,186 @@ truncate: anInteger
 	
 %
 
+! Class implementation for 'ZnNewLineWriterStream'
+
+!		Class methods for 'ZnNewLineWriterStream'
+
+category: 'instance creation'
+classmethod: ZnNewLineWriterStream
+on: aStream
+
+	^ self basicNew
+		initialize;
+		stream: aStream;
+		yourself
+%
+
+!		Instance methods for 'ZnNewLineWriterStream'
+
+category: 'open/close'
+method: ZnNewLineWriterStream
+close 
+
+	^stream close
+%
+
+category: 'flushing'
+method: ZnNewLineWriterStream
+flush
+	^ stream flush
+%
+
+category: 'accessing'
+method: ZnNewLineWriterStream
+forCr
+
+	lineEnding := String cr
+%
+
+category: 'accessing'
+method: ZnNewLineWriterStream
+forCrLf
+
+	lineEnding := String crlf
+%
+
+category: 'accessing'
+method: ZnNewLineWriterStream
+forLf
+
+	lineEnding := String lf
+%
+
+category: 'accessing'
+method: ZnNewLineWriterStream
+forPlatformLineEnding
+	lineEnding := System lineEnding
+%
+
+category: 'initialize'
+method: ZnNewLineWriterStream
+initialize
+
+	"super initialize."
+	cr := Character cr.
+	lf := Character lf.
+	self forPlatformLineEnding.
+%
+
+category: 'accessing'
+method: ZnNewLineWriterStream
+newLine
+	previous := nil.
+	stream nextPutAll: lineEnding
+%
+
+category: 'accessing'
+method: ZnNewLineWriterStream
+nextPut: aCharacter
+	"Write aCharacter to the receivers stream.
+	Convert all line end combinations, i.e cr, lf, crlf, to the platform convention"
+
+	(previous == cr and: [ aCharacter == lf ]) ifFalse: [
+		(aCharacter == cr or: [ aCharacter == lf ]) ifTrue: 
+			[ self newLine ]
+		ifFalse:
+			[ stream nextPut: aCharacter ] ].
+	previous := aCharacter.
+%
+
+category: 'accessing'
+method: ZnNewLineWriterStream
+stream: aWriteStream 
+	stream := aWriteStream
+%
+
+! Class extensions for 'AbstractDictionary'
+
+!		Class methods for 'AbstractDictionary'
+
+category: '*filesystem-gemstone-kernel'
+classmethod: AbstractDictionary
+newFromPairs: anArray
+	"Answer an instance of me associating (anArray at: i) to (anArray at: i+1)
+	 for each odd i.  anArray must have an even number of entries."
+
+	"Dictionary newFromPairs: {'Red' . Color red . 'Blue' . Color blue . 'Green' . Color green}."
+
+	| newDictionary |
+	newDictionary := self new: anArray size / 2.
+	1 to: anArray size - 1 by: 2 do: [ :i | newDictionary at: (anArray at: i) put: (anArray at: i + 1) ].
+	^ newDictionary
+%
+
+!		Instance methods for 'AbstractDictionary'
+
+category: '*filesystem-gemstone-kernel'
+method: AbstractDictionary
+at: key ifPresent: aBlock
+	"Lookup the given key in the receiver. If it is present, answer the
+	value of evaluating the given block optionally with the value associated
+	with the key.
+	Otherwise, answer nil."
+
+	^(self at: key ifAbsent: [])
+		ifNotNil: [:aValue | aBlock cull: aValue]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: AbstractDictionary
+fillFrom: aCollection with: aBlock
+	"Evaluate aBlock with each of aCollections's elements as the argument.  
+	Collect the resulting values into self. Answer self."
+
+	aCollection keysAndValuesDo: [ :key :value |
+		self at: key put: (aBlock value: value) ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: AbstractDictionary
+removeAll
+
+	self removeAllKeys: self keys
+%
+
+! Class extensions for 'Array'
+
+!		Instance methods for 'Array'
+
+category: '*filesystem-gemstone-kernel'
+method: Array
+fillFrom: aCollection with: aBlock
+	"Evaluate aBlock with each of aCollections's elements as the argument.  
+	Collect the resulting values into self. Answer self."
+
+	| index |
+	index := 0.
+	aCollection do: [ :each |
+		self at: (index := index + 1) put: (aBlock value: each) ]
+%
+
+! Class extensions for 'BinaryFloat'
+
+!		Class methods for 'BinaryFloat'
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: BinaryFloat
+readFrom: aStream ifFail: aBlock
+	"Answer a new Float as described on the stream, aStream."
+
+	^(super readFrom: aStream ifFail: [^aBlock value]) asFloat
+%
+
+!		Instance methods for 'BinaryFloat'
+
+category: '*FileSystem-GemStone-Kernel'
+method: BinaryFloat
+isPowerOfTwo
+	"Return true if the receiver is an integral power of two.
+	Floats never return true here."
+	^false
+%
+
 ! Class extensions for 'ByteArray'
 
 !		Class methods for 'ByteArray'
@@ -18192,7 +34533,7 @@ asString
   ^ String withBytes: self
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*Zinc-Character-Encoding-GemStone'
 method: ByteArray
 decodeWith: encoding
 	"Produce a String that decodes the receiver, using a specified encoding.
@@ -18203,7 +34544,7 @@ decodeWith: encoding
 	^ encoding asZnCharacterEncoder decodeBytes: self
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*Zinc-Character-Encoding-GemStone'
 method: ByteArray
 utf8Decoded
 	"Produce a String decoding the receiver using UTF-8,
@@ -18211,7 +34552,15 @@ utf8Decoded
 
 	"#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] utf8Decoded"
 	
-	^ self decodeFromUTF8
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ [self decodeFromUTF8]
+				on: ArgumentError
+				do: [:s | ZnInvalidUTF8 signal: 'Illegal leading byte for utf-8 encoding'] ]
+		ifFalse: [
+			^ self decodeWith: ZnCharacterEncoder utf8]
 %
 
 ! Class extensions for 'Character'
@@ -18229,13 +34578,89 @@ digitValue: x
 	^self withValue: (n < 10 ifTrue: [n + 48] ifFalse: [n + 55])
 %
 
+category: '*filesystem-gemstone-kernel'
+classmethod: Character
+numberParserDigitalValues
+	"This is to replicate the Pharo implimentation of Charactr class>>initializeDigitalValues"
+		
+	^{
+			Character numberParserDigitalValuesBlock value.
+		} first
+%
+
+category: '*filesystem-gemstone-kernel'
+classmethod: Character
+numberParserDigitalValuesBlock
+	"This is to replicate the Pharo implimentation of Charactr class>>initializeDigitalValues"
+
+	| aBlock|
+	aBlock := [ | anArray | 
+			"Initialize the well known digit value of ascii characters.
+			Note that the DigitValues table is 1-based while ascii values are 0-based, thus the offset+1."
+			anArray := Array new: 256 withAll: -1.
+			"the digits"
+			0 to: 9 do: [:i | anArray at: 48 + i + 1 put: i].
+			"the uppercase letters"
+			10 to: 35 do: [:i | anArray at: 55 + i + 1 put: i].
+			"the lowercase letters"
+			10 to: 35 do: [:i | anArray at: 87 + i + 1 put: i].
+		anArray].
+	^aBlock
+%
+
+category: '*filesystem-gemstone-kernel'
+classmethod: Character
+to: other
+"Had problems deleting this method. It needs to be removed."
+   ^self
+%
+
+category: '*filesystem-gemstone-kernel'
+classmethod: Character
+value: anInteger
+	"Compatability with Pharo"
+	^self withValue: anInteger
+%
+
 !		Instance methods for 'Character'
+
+category: '*filesystem-gemstone-kernel'
+method: Character
+charCode
+	^ self asInteger bitAnd: 4194303
+%
 
 category: '*filesystem-gemstone-kernel'
 method: Character
 isCharacter
 
 	^ true
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Character
+join: aSequenceableCollection
+	"Append the elements of the argument, aSequenceableCollection, separating them by the receiver."
+	"(Character space join: #('Pharo' 'is' 'cool')) >>> 'Pharo is cool'"
+	^ self asString join: aSequenceableCollection
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Character
+numberParserDigitalValue
+	self asInteger > 255
+		ifTrue: [
+			self error: 'Characters > 255 are not yet supported - or something'
+			"^ self characterSet digitValueOf: self "].
+	^ self class numberParserDigitalValues at: 1 + self asInteger
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Character
+to: other
+	"Answer with a collection in ascii order -- $a to: $z"
+	^ (self asciiValue to: other asciiValue) collect:
+				[:ascii | Character value: ascii]
 %
 
 ! Class extensions for 'CharacterCollection'
@@ -18251,6 +34676,20 @@ crlf
 %
 
 !		Instance methods for 'CharacterCollection'
+
+category: '*FileSystem-Client-Core'
+method: CharacterCollection
+asClientFileReference
+
+	^ FileSystem clientDisk referenceTo: self
+%
+
+category: '*FileSystem-Client-Core'
+method: CharacterCollection
+asClientPath
+
+	^ FileSystem clientDisk resolve: self
+%
 
 category: '*filesystem-core'
 method: CharacterCollection
@@ -18283,18 +34722,25 @@ asResolvedBy: aFileSystem
 	^ aFileSystem resolveString: self
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*Zinc-Character-Encoding-GemStone'
 method: CharacterCollection
 asZnCharacterEncoder
 	"Return a ZnCharacterEncoder instance using the receiver as identifier"
-	
-	" 'UTF-8' asZnCharacterEncoder "
-	
-	((self select: [ :each | each isAlphaNumeric ]) asLowercase) = 'utf8' ifFalse: [ self error: 'Only utf8 encoding supported'].
-	^ ZnUTF8Encoder new
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	self isGemStoneUtf8Encoding
+		ifTrue: [
+			^ ZnCharacterEncoder newForEncoding: self
+			" 'UTF-8' asZnCharacterEncoder 
+			((self select: [ :each | each isAlphaNumeric ]) asLowercase) = 'utf8' 
+				ifFalse: [ self error: 'Only utf8 encoding supported'].
+			^ ZnUTF8Encoder new"]
+		ifFalse: [
+			^ ZnCharacterEncoder newForEncoding: self]
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*Zinc-Character-Encoding-GemStone'
 method: CharacterCollection
 encodeWith: encoding
 	"Produce a ByteArray that encodes the receiver, using a specified encoding.
@@ -18305,9 +34751,115 @@ encodeWith: encoding
 	^ encoding asZnCharacterEncoder encodeString: self
 %
 
+category: '*filesystem-gemstone-kernel'
+method: CharacterCollection
+fillFrom: aCollection with: aBlock
+	"Evaluate aBlock with each of aCollections's elements as the argument.  
+	Collect the resulting values into self. Answer self."
+
+	| index |
+	index := 0.
+	aCollection do: [ :each |
+		self at: (index := index + 1) put: (aBlock value: each) ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: CharacterCollection
+fullName
+	^self
+%
+
+category: '*Zinc-Character-Encoding-GemStone'
+method: CharacterCollection
+isByteString
+
+	^false
+%
+
+category: '*Zinc-Character-Encoding-GemStone'
+method: CharacterCollection
+isWideString
+	"Answer whether the receiver is a WideString"
+	^false
+%
+
+category: '*Zinc-Character-Encoding-GemStone'
+method: CharacterCollection
+urlDecoded
+	"URL Decode the receiver and return the resulting String.
+	This is an encoding where characters that are illegal in a URL are escaped."
+
+    ^ ZnPercentEncoder new decode: self
+%
+
+category: '*Zinc-Character-Encoding-GemStone'
+method: CharacterCollection
+urlEncoded
+	"URL Encode the receiver and return the resulting String.
+	This is an encoding where characters that are illegal in a URL are escaped."
+
+    ^ ZnPercentEncoder new encode: self
+%
+
+category: '*Zinc-Character-Encoding-GemStone'
+method: CharacterCollection
+utf8Encoded
+	"Produce a ByteArray encoding the receiver using UTF-8,
+	the recommended encoding for Strings, unless you know what you are doing."
+	
+	" 'Les élèves français' utf8Encoded "
+	
+	^ self encodeWith: ZnCharacterEncoder utf8
+%
+
 ! Class extensions for 'Collection'
 
 !		Instance methods for 'Collection'
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+atRandom
+	"Answer a random element of the receiver.  Uses a shared random 
+	number generator owned by class Collection.  If you use this a lot, 
+	define your own instance of Random and use #atRandom:.  Causes 
+	an error if self has no elements."
+
+	^ self atRandom: Random new.
+
+"Examples:
+	#('one' 'or' 'the' 'other') atRandom
+	(1 to: 10) atRandom
+	'Just pick one of these letters at random' atRandom
+	#(3 7 4 9 21) asSet atRandom		(just to show it also works for Sets)
+"
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+atRandom: aGenerator
+	"Answer a random element of the receiver. Uses aGenerator which
+    should be kept by the user in a variable and used every time. Use
+    this instead of #atRandom for better uniformity of random numbers because 
+	only you use the generator. Causes an error if self has no elements."
+	| rand index |
+
+	self emptyCheck.
+	rand := aGenerator nextInt: self size.
+	index := 1.
+	self do: [:each |
+		index = rand ifTrue: [^each].
+		index := index + 1].
+	^ self errorEmptyCollection
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+collect: aBlock as: aClass
+	"Evaluate aBlock with each of the receiver's elements as the argument.  
+	Collect the resulting values into an instance of aClass. Answer the resulting collection."
+
+	^(aClass new: self size) fillFrom: self with: aBlock
+%
 
 category: '*filesystem-gemstone-kernel'
 method: Collection
@@ -18319,9 +34871,39 @@ difference: aCollection
 
 category: '*filesystem-gemstone-kernel'
 method: Collection
+fillFrom: aCollection with: aBlock
+	"Evaluate aBlock with each of aCollections's elements as the argument.  
+	Collect the resulting values into self. Answer self."
+
+	aCollection do: [ :each |
+		self add: (aBlock value: each) ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
 ifEmpty: aBlock
   self size == 0
     ifTrue: [ ^ aBlock value ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+ifEmpty: emptyBlock ifNotEmpty: notEmptyBlock
+	"Evaluate emptyBlock if I'm empty, notEmptyBlock otherwise"
+	" If the notEmptyBlock has an argument, eval with the receiver as its argument"
+
+	self isEmpty ifTrue: [ ^emptyBlock value ].
+	^notEmptyBlock cull: self
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+ifNotEmpty: notEmptyBlock ifEmpty: emptyBlock
+	"Evaluate emptyBlock if I'm empty, notEmptyBlock otherwise
+	 If the notEmptyBlock has an argument, eval with the receiver as its argument"
+
+	self isEmpty ifFalse: [ ^notEmptyBlock cull: self ].
+	^emptyBlock value
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -18334,11 +34916,42 @@ isEmptyOrNil
 
 category: '*filesystem-gemstone-kernel'
 method: Collection
+noneSatisfy: aBlock
+	"Evaluate aBlock with the elements of the receiver. If aBlock returns false for all elements return true. Otherwise return false"
+
+	self do: [:item | (aBlock value: item) ifTrue: [^ false]].
+	^ true
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+removeAll
+
+	self removeAll: self
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
 sort
 
 	"Sort this array into ascending order using the '<=' operator."
 
 	^ self sort: [ :a :b | a <= b ]
+%
+
+! Class extensions for 'Dictionary'
+
+!		Instance methods for 'Dictionary'
+
+category: '*filesystem-gemstone-kernel'
+method: Dictionary
+associations
+	"Answer a Collection containing the receiver's associations."
+
+	| result |
+	result := WriteStream on: (Array new: self size).
+	self associationsDo: [ :assoc | result nextPut: assoc ].
+	^ result contents
 %
 
 ! Class extensions for 'DiskFileSystemTest'
@@ -18388,6 +35001,14 @@ classmethod: FileSystem
 	^ self disk / aFileOrDirectoryName
 %
 
+category: '*FileSystem-Client-Core'
+classmethod: FileSystem
+clientDisk
+	"Answer a filesystem that represents the 'on-disk' filesystem used by the host operating system."
+
+	^ ClientStore currentFileSystem
+%
+
 category: '*FileSystem-Memory'
 classmethod: FileSystem
 currentMemoryFileSystem
@@ -18400,6 +35021,12 @@ disk
 	"Answer a filesystem that represents the 'on-disk' filesystem used by the host operating system."
 
 	^ DiskStore currentFileSystem
+%
+
+category: '*FileSystem-Core-GemStone'
+classmethod: FileSystem
+fileClass
+	^GsFileAdaptor
 %
 
 category: '*FileSystem-Memory'
@@ -18450,9 +35077,26 @@ isMemoryFileSystem
 	^ false
 %
 
+! Class extensions for 'Fraction'
+
+!		Instance methods for 'Fraction'
+
+category: '*FileSystem-GemStone-Kernel'
+method: Fraction
+isPowerOfTwo
+	^ numerator = 1 and: [ denominator isPowerOfTwo ]
+%
+
 ! Class extensions for 'GsFile'
 
 !		Class methods for 'GsFile'
+
+category: '*FileSystem-Gemstone-Kernel'
+classmethod: GsFile
+currentWorkingDirectoryPath
+
+	^self _expandEnvVariable: 'PWD' isClient:false
+%
 
 category: '*filesystem-gemstone-kernel-35x'
 classmethod: GsFile
@@ -18461,7 +35105,57 @@ _contentsOfServerDirectory: aPathName expandPath: aBoolean
 	^ self _contentsOfServerDirectory: aPathName expandPath: aBoolean utf8Results: false
 %
 
+! Class extensions for 'GsFileAdaptor'
+
+!		Class methods for 'GsFileAdaptor'
+
+category: '*FileSystem-Client-Core'
+classmethod: GsFileAdaptor
+createClientDirectory: path
+	^GsFile createClientDirectory: path
+%
+
+category: '*FileSystem-Client-Core'
+classmethod: GsFileAdaptor
+deleteClientDirectory: path
+	^GsFile _removeDirectory: path onClient: true 
+%
+
+category: '*FileSystem-Client-Core'
+classmethod: GsFileAdaptor
+deleteClientFile: aPathName
+	^GsFile _removeFile: aPathName onClient: true
+%
+
+category: '*FileSystem-Client-Core'
+classmethod: GsFileAdaptor
+renameOnClient: oldFileFullName to: newFileFullName
+	^(GsFile renameFile: oldFileFullName to: newFileFullName) = 0 
+		ifTrue: [0] 
+		ifFalse: [nil]
+%
+
+category: '*FileSystem-Client-Core'
+classmethod: GsFileAdaptor
+_fileKind: aPathName onClient: aBoolean
+	^GsFile _fileKind: aPathName onClient: aBoolean
+%
+
 ! Class extensions for 'Integer'
+
+!		Class methods for 'Integer'
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: Integer
+readFrom: aStringOrStream ifFail: aBlock
+	"Answer an instance of one of the concrete subclasses if Integer. 
+	Initial minus sign accepted.
+	Imbedded radix specifiers not allowed;  use Number 
+	class readFrom: for that.
+	Execute aBlock if there are no digits."
+
+	^(NumberParser on: aStringOrStream) nextIntegerBase: 10 ifFail: aBlock
+%
 
 !		Instance methods for 'Integer'
 
@@ -18481,6 +35175,26 @@ method: Integer
 	
 	shiftAmount < 0 ifTrue: [self error: 'negative arg'].
 	^ self bitShift: 0 - shiftAmount
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Integer
+atRandom
+	"Answer a random integer from 1 to self.  This implementation uses a
+	shared generator. Heavy users should their own implementation or use
+	Interval>atRandom: directly."
+
+	self = 0 ifTrue: [ ^0 ].
+	self < 0 ifTrue: [ ^self negated atRandom negated ].
+	^ self atRandom: (Random seed: self)
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Integer
+atRandom: aGenerator
+	"Answer a random integer from 1 to self picked from aGenerator."
+
+	^ aGenerator nextInt: self
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -18523,9 +35237,146 @@ humanReadableSIByteSizeOn: s
 		nextPut: $B.
 %
 
+category: '*filesystem-gemstone-kernel'
+method: Integer
+isPowerOfTwo
+	"Return true if the receiver is an integral power of two."
+	^ self ~= 0 and: [(self bitAnd: self-1) = 0]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Integer
+numberOfDigitsInBase: b 
+	"Return how many digits are necessary to print this number in base b.
+	This does not count any place for minus sign, radix prefix or whatever.
+	Note that this algorithm may cost a few operations on LargeInteger."
+
+	| nDigits q total |
+	self negative ifTrue: [^self negated numberOfDigitsInBase: b].
+	self < b ifTrue: [^1].
+	b isPowerOfTwo ifTrue: [^self highBit + b highBit - 2 quo: b highBit - 1].
+	
+	"A conversion from base 2 to base b has to be performed.
+	This algorithm avoids Float computations like (self log: b) floor + 1,
+	1) because they are inexact
+	2) because LargeInteger might overflow
+	3) because this algorithm might be cheaper than conversion"
+
+	q := self.
+	total := 0.
+	["Make an initial nDigits guess that is lower than or equal to required number of digits"
+	nDigits := b = 10
+		ifTrue: [((q highBit - 1) * 1233 >> 12) + 1. "This is because (2 log)/(10 log)*4096 is slightly greater than 1233"]
+		ifFalse: [q highBit quo: b highBit].
+	total := total + nDigits.
+	
+	"See how many digits remains above these first nDigits guess"
+	(q := q quo: (b raisedToInteger: nDigits)) < b] whileFalse.
+	^q = 0
+		ifTrue: [total]
+		ifFalse: [total + 1]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Integer
+print: positiveNumberString on: aStream prefix: prefix length: minimum padded: zeroFlag
+	| padLength |
+	padLength := minimum - positiveNumberString size - prefix size.
+	padLength > 0
+		ifTrue: [zeroFlag
+				ifTrue: [aStream nextPutAll: prefix; nextPutAll: (String new: padLength withAll: $0)]
+				ifFalse: [aStream nextPutAll: (String new: padLength withAll: Character space); nextPutAll: prefix]]
+		ifFalse: [aStream nextPutAll: prefix].
+	aStream nextPutAll: positiveNumberString
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Integer
+printOn: aStream base: base length: minimum padded: zeroFlag
+	| prefix |
+	
+	prefix := self negative ifTrue: ['-'] ifFalse: [ '' ].
+	
+	self print: (self abs printStringBase: base) on: aStream prefix: prefix length: minimum padded: zeroFlag
+%
+
+! Class extensions for 'LargeInteger'
+
+!		Instance methods for 'LargeInteger'
+
+category: '*FileSystem-GemStone-Kernel'
+method: LargeInteger
+isLarge
+	^true
+%
+
+! Class extensions for 'Number'
+
+!		Class methods for 'Number'
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: Number
+readFrom: stringOrStream ifFail: aBlock
+	"Answer a number as described on aStream.  The number may
+	be any accepted Smalltalk literal Number format.
+	It can include a leading radix specification, as in 16rFADE.
+	It can as well be NaN, Infinity or -Infinity for conveniency.
+	If input does not represent a valid number, then execute fail block
+	and leave the stream positioned before offending character"
+	
+	^(NumberParser on: stringOrStream) failBlock: aBlock; nextNumber
+%
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: Number
+squeezeNumberOutOfString: stringOrStream
+	"Try and find a number in this string. First, look if the string 
+	starts with a number. Then, see if it ends with a number. Then,
+	remove a character from the front and see if the remaining 
+	string makes a number. Repeat the process until no characters
+	are left or the number has been found. As soon as a number is
+	found, it is returned. Otherwise, the method fails."
+	^ NumberParser squeezeNumberOutOfString: stringOrStream
+%
+
+!		Instance methods for 'Number'
+
+category: '*FileSystem-GemStone-Kernel'
+method: Number
+asNumber
+	^self
+%
+
+category: '*FileSystem-GemStone-Kernel'
+method: Number
+printStringBase: base
+	^ String streamContents:
+		[:strm | self printOn: strm base: base]
+%
+
 ! Class extensions for 'Object'
 
 !		Instance methods for 'Object'
+
+category: '*filesystem-gemstone-kernel'
+method: Object
+assert: aBlock
+	"Throw an assertion error if aBlock does not evaluates to true.
+	We check for true explicitly to make the assertion fail for non booleans"
+	self assert: aBlock description: 'Assertion failed'.
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Object
+assert: aBlockOrBoolean description: aStringOrBlock
+	"Throw an assertion error if aBlock does not evaluates to true."
+	
+	(aBlockOrBoolean isKindOf: BlockClosure) 
+		ifTrue: [
+			aBlockOrBoolean value ifFalse: [ AssertionFailure signal: aStringOrBlock value ] ]
+		ifFalse: [
+			aBlockOrBoolean ifFalse: [ AssertionFailure signal: aStringOrBlock ] ]
+%
 
 category: '*filesystem-gemstone-kernel'
 method: Object
@@ -18541,6 +35392,19 @@ method: Object
 isCharacter
 
 	^ false
+%
+
+category: '*Zinc-Character-Encoding-Core'
+method: Object
+isGemStoneUtf8Encoding
+	"This is for testing only"
+	self flag: 'GemStone/Pharo code switched for research'.
+
+
+	" Set to Encoder Type To Pharo Style: ' SessionTemps current at: #ZnEncoding put: #Pharo ' " 
+	" Set to Encoder Type To GemStone Style: ' SessionTemps current at: #ZnEncoding put: #GemStone ' " 
+
+	^(SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -18593,6 +35457,26 @@ split: aSequenceableCollection indicesDo: aBlock
 	aBlock value: oldPosition value: aSequenceableCollection size.
 %
 
+! Class extensions for 'OrderedCollection'
+
+!		Instance methods for 'OrderedCollection'
+
+category: '*filesystem-gemstone-kernel'
+method: OrderedCollection
+withIndexCollect: elementAndIndexBlock 
+	"Just like with:collect: except that the iteration index supplies the second argument to the block. Override superclass in order to use addLast:, not at:put:."
+
+	| newCollection |
+	newCollection := self species new: self size.
+	1 to: self size do:
+		[:index |
+		newCollection addLast: (
+			elementAndIndexBlock
+				value: (self at: index)
+				value: index)].
+	^ newCollection
+%
+
 ! Class extensions for 'Path'
 
 !		Instance methods for 'Path'
@@ -18609,9 +35493,54 @@ relativeToReference: aReference
 	^ self relativeToPath: aReference path
 %
 
+! Class extensions for 'PositionableStream'
+
+!		Instance methods for 'PositionableStream'
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStream
+back
+	"Go back one element and return it."
+
+	self position = 0 ifTrue: [self positionError].
+	self skip: -1.
+	^ self peek
+%
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStream
+collectionSpecies
+
+	^self _collection species
+%
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStream
+positionError
+	"Since I am not necessarily writable, it is up to my subclasses to override 
+	position: if expanding the collection is preferrable to giving this error."
+
+	self error: 'Attempt to set the position of a PositionableStream out of bounds'
+%
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStream
+setFrom: newStart to: newStop
+
+	position := newStart - 1.
+	readLimit := newStop
+%
+
 ! Class extensions for 'PositionableStreamPortable'
 
 !		Instance methods for 'PositionableStreamPortable'
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStreamPortable
+collectionSpecies
+
+	^self collection species
+%
 
 category: '*filesystem-gemstone-kernel'
 method: PositionableStreamPortable
@@ -18627,6 +35556,73 @@ nextInto: aCollection
 	Return aCollection or a partial copy if less than aCollection
 	size elements have been read."
 	^self next: aCollection size into: aCollection startingAt: 1.
+%
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStreamPortable
+nextMatchAll: aColl
+    "Answer true if next N objects are the ones in aColl,
+     else false.  Advance stream of true, leave as was if false."
+    | save |
+    save := self position.
+    aColl do: [:each |
+       (self next) = each ifFalse: [
+            self position: save.
+            ^ false]
+        ].
+    ^ true
+%
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStreamPortable
+setFrom: newStart to: newStop
+
+	position := newStart - 1.
+	readLimit := newStop
+%
+
+! Class extensions for 'QuadByteString'
+
+!		Class methods for 'QuadByteString'
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: QuadByteString
+from: aString 
+
+	| newString |
+	(aString isMemberOf: self)
+		ifTrue: [^ aString copy].
+	newString := self new: aString size.
+	1 to: aString size do: [:index | newString at: index put: (aString at: index)].
+	^ newString
+%
+
+!		Instance methods for 'QuadByteString'
+
+category: '*Zinc-Character-Encoding-GemStone'
+method: QuadByteString
+isWideString
+	"Answer whether the receiver is a WideString"
+	^true
+%
+
+! Class extensions for 'Random'
+
+!		Instance methods for 'Random'
+
+category: '*FileSystem-GemStone-Kernel'
+method: Random
+nextInt: anInteger
+	"Answer a random integer in the interval [1, anInteger].
+	Handle large numbers too (for cryptography)."
+	
+	"This is Pharo code that is not implemented at the moment"
+
+	"anInteger strictlyPositive ifFalse: [ self error: 'Range must be positive' ].
+	anInteger asFloat isInfinite
+		ifTrue: [^(self privateNextValue asFraction * anInteger) truncated + 1]."
+
+	^ (self next * anInteger) truncated + 1
 %
 
 ! Class extensions for 'ReadStreamPortable'
@@ -18695,12 +35691,49 @@ allButFirst: n
 
 category: '*filesystem-gemstone-kernel'
 method: SequenceableCollection
+atRandom: aGenerator
+	"Answer a random element of the receiver.  Uses aGenerator which
+	should be kept by the user in a variable and used every time. Use
+	this instead of #atRandom for better uniformity of random numbers 
+	because only you use the generator.  Causes an error if self has no 
+	elements."
+
+	^ self at: (aGenerator nextInt: self size)
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+copyAfter: anElement
+	"Answer a copy of the receiver from after the first occurence
+	of anElement up to the end. If no such element exists, answer 
+	an empty copy."
+
+	^ self allButFirst: (self indexOf: anElement ifAbsent: [^ self copyEmpty])
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
 copyAfterLast: anElement
 	"Answer a copy of the receiver from after the last occurence
 	of anElement up to the end. If no such element exists, answer 
 	an empty copy."
 
 	^ self allButFirst: (self lastIndexOf: anElement ifAbsent: [^ self copyEmpty])
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+copyFrom: start to: stop 
+	"Answer a copy of a subset of the receiver, starting from element at 
+	index start until element at index stop."
+
+	| newSize |
+	newSize := stop - start + 1.
+	^(self species new: newSize)
+		replaceFrom: 1
+		to: newSize
+		with: self
+		startingAt: start
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -18712,6 +35745,15 @@ copyLast: n
 	| size |
 	size := self size.
 	^ self copyFrom: size - n + 1 to: size
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+copyUpThrough: anElement
+    "Answer all elements up to and including anObject. If there
+     is no such object, answer a copy of the receiver."
+
+	^self first: (self indexOf: anElement ifAbsent: [^ self copy])
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -18739,6 +35781,18 @@ copyWithFirst: newElement
 		startingAt: 1.
 	newIC at: 1 put: newElement.
 	^ newIC
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+endsWith: aSequenceableCollection
+	"Answer true if the receiver ends with the argument collection"
+	
+	| start |
+	(aSequenceableCollection isEmpty or: [self size < aSequenceableCollection size]) ifTrue: [^false].
+	start := self size - aSequenceableCollection size.
+	aSequenceableCollection withIndexDo: [:each :index | (self at: start + index) ~= each ifTrue: [^false]].
+	^true
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -18787,6 +35841,13 @@ readStreamPortable
 
 category: '*filesystem-gemstone-kernel'
 method: SequenceableCollection
+removeAll
+
+	self removeFrom: 1 to: self size
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
 replaceAll: oldObject with: newObject
   "Replace all occurences of oldObject with newObject"
 
@@ -18812,6 +35873,128 @@ reversed
 	^ result
 %
 
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+swap: oneIndex with: anotherIndex 
+	"Move the element at oneIndex to anotherIndex, and vice-versa."
+
+	| element |
+	element := self at: oneIndex.
+	self at: oneIndex put: (self at: anotherIndex).
+	self at: anotherIndex put: element
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+withIndexCollect: elementAndIndexBlock 
+	"Just like with:collect: except that the iteration index supplies the second argument to the block. Override superclass in order to use addLast:, not at:put:."
+
+	| newCollection |
+	newCollection := self species new: self size.
+	1 to: self size do:
+		[:index |
+		newCollection at: index put: (
+			elementAndIndexBlock
+				value: (self at: index)
+				value: index)].
+	^ newCollection
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+writeStream
+	^ WriteStream on: self
+%
+
+! Class extensions for 'Set'
+
+!		Instance methods for 'Set'
+
+category: '*FileSystem-GemStone-Kernel'
+method: Set
+atRandom: aGenerator
+	"Answer a random element of the receiver. Uses aGenerator which
+    should be kept by the user in a variable and used every time. Use
+    this instead of #atRandom for better uniformity of random numbers because 
+	only you use the generator. Causes an error if self has no elements."
+	| rand |
+
+	self isEmpty ifTrue: [self error: 'No items in collection - unable to find a random item'].
+	rand := aGenerator nextInt: self size.
+	self doWithIndex:[:each :ind |
+		ind == rand ifTrue:[^each]].
+	^self error: 'No items in collection - unable to find a random item'
+%
+
+! Class extensions for 'SmallInteger'
+
+!		Instance methods for 'SmallInteger'
+
+category: '*FIleSystem-GemStone-Kernel'
+method: SmallInteger
+isLarge
+	^false
+%
+
+category: '*FIleSystem-GemStone-Kernel'
+method: SmallInteger
+numberOfDigitsInBase: b 
+	"Return how many digits are necessary to print this number in base b.
+	Mostly same as super but an optimized version for base 10 case"
+	
+	b = 10 ifFalse: [^super numberOfDigitsInBase: b].
+	self < 0 ifTrue: [^self negated numberOfDigitsInBase: b].
+	^self decimalDigitLength
+%
+
+category: '*FIleSystem-GemStone-Kernel'
+method: SmallInteger
+printOn: stream base: base length: minimumLength padded: padWithZeroes
+
+	| n numberOfDigits totalLength divisor |
+	self < 0
+		ifTrue: [
+			n := self negated.
+			totalLength := 1 ]
+		ifFalse: [
+			n := self.
+			totalLength := 0 ].
+	numberOfDigits := n numberOfDigitsInBase: base.
+	totalLength := totalLength + numberOfDigits.
+	padWithZeroes ifFalse: [
+		[ totalLength < minimumLength ] whileTrue: [
+			stream space.
+			totalLength := totalLength + 1 ] ].
+	n = self ifFalse: [ stream nextPut: $- ].
+	padWithZeroes ifTrue: [
+		[ totalLength < minimumLength ] whileTrue: [
+			stream nextPut: $0.
+			totalLength := totalLength + 1 ] ].
+	divisor := (base raisedToInteger: numberOfDigits - 1).
+	[ divisor > 0 ] whileTrue: [
+		| digit |
+		digit := n // divisor.
+		stream nextPut: ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' at: digit + 1).
+		n := n - (digit * divisor).
+		divisor := divisor // base ]
+%
+
+category: '*FIleSystem-GemStone-Kernel'
+method: SmallInteger
+printStringBase: b 
+	"Return a String representation of this number in base b.
+	For SmallIntegers, it is more efficient to print directly in a String,
+	rather than using a Stream like super."
+
+	self < 0
+		ifTrue: [^ '-'
+				, (self negated printStringBase: b)].
+	self < b
+		ifTrue: [^ String
+				with: (Character digitValue: self)].
+	^ self printStringBase: b nDigits: (self numberOfDigitsInBase: b)
+%
+
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -18822,9 +36005,135 @@ isBinary
 	^false
 %
 
+! Class extensions for 'String'
+
+!		Class methods for 'String'
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: String
+cr
+	"Answer a string containing a single carriage return character."
+
+	^ self with: Character cr
+%
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: String
+crlf
+	"Answer a string containing a carriage return and a linefeed."
+
+	^ self with: Character cr with: Character lf
+%
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: String
+from: aString
+
+	^self withAll: aString
+%
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: String
+lf
+	"Answer a string containing a single carriage return character."
+
+	^ self with: Character lf
+%
+
+!		Instance methods for 'String'
+
+category: '*FileSystem-Gemstone-Kernel'
+method: String
+asValidSelector
+	"Returns a symbol that is a vlida selector: remove any space or forbiddent characters"
+
+	| result |
+	result := String new.
+	self first isAlphaNumeric ifFalse: [self error: 'Not able to create selector - must start with a character'].
+	result add: self first asLowercase.
+	2 to: self size do: [:idx | result add: (self at: idx)].
+	^result
+%
+
+category: '*FileSystem-Gemstone-Kernel'
+method: String
+format: collection 
+	"Format the receiver by interpolating elements from collection, as in the following examples:  
+	'Today is {1}.' format: {Date today}.
+	'Today is {date}.' format: (Dictionary with: #date->Date today). 
+	'In {1} you can escape \{ by prefixing it with \\' format: {'strings'}.  "
+	
+	^ self class new: self size streamContents: [ :result | | stream |
+		stream := self readStream.
+		[ stream atEnd ] whileFalse: [ | currentChar | 
+			(currentChar := stream next) == ${
+				ifTrue: [ | expression index | 
+					expression := stream upTo: $}.
+					index := Integer readFrom: expression ifFail: [ expression ].
+					result nextPutAll: (collection at: index) asString ]
+				ifFalse: [
+					currentChar == $\
+						ifTrue: [ stream atEnd ifFalse: [ result nextPut: stream next ] ]
+						ifFalse: [ result nextPut: currentChar ] ] ] ]
+%
+
+category: '*FileSystem-Gemstone-Kernel'
+method: String
+includesSubstring: substring
+	"Returns whether the receiver contains the argument."
+	"('abcdefgh' includesSubstring: 'de') >>> true"
+	
+	^ substring isEmpty or: [ (self findString: substring startingAt: 1) > 0 ]
+%
+
+category: '*FileSystem-Gemstone-Kernel'
+method: String
+squeezeOutNumber
+	"Try to find a number somewhere in this string, as explained in Number>readFrom:
+	
+	this method returns the first number found"
+	
+	"'th is is29 a stRI4' squeezeOutNumber >>> 29"
+	"'th is is2 9 a stRI4' squeezeOutNumber >>> 2"
+	
+	^ Number squeezeNumberOutOfString: self
+%
+
+! Class extensions for 'System'
+
+!		Class methods for 'System'
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: System
+clientOsName
+	^self clientVersionReport at: 'osName'
+%
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: System
+lineEnding
+  "Answer the os-specific line endings"
+
+  ^ String with: Character lf
+%
+
+category: '*FileSystem-GemStone-Kernel'
+classmethod: System
+osName
+	^self gemVersionAt: 'osName'
+%
+
 ! Class extensions for 'TestAsserter'
 
 !		Instance methods for 'TestAsserter'
+
+category: '*filesystem-gemstone-kernel'
+method: TestAsserter
+assert: anObject equals: otherObj description: aString
+	self
+		assert: anObject = otherObj
+		description: anObject printString , ' is not equal to ' , otherObj printString , ' - ' , aString.
+%
 
 category: '*filesystem-gemstone-kernel'
 method: TestAsserter
@@ -18833,6 +36142,25 @@ assertCollection: actual equals: expected
 	^ self
 		assert: expected = actual
 		description: [ self comparingCollectionBetween: actual and: expected ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: TestAsserter
+assertCollectionOfStrings: actual equalsCollectionOfStrings: expected
+	"Specialized test method that generates a proper error message for collection"
+	actual with: expected do: [:a :b |
+		self
+			assert: (self isString: a equalToString: b)
+			description: a printString , ' is  equal to ' , b printString]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: TestAsserter
+assertString: actual equalsString: expected
+	"Specialized test method that generates a proper error message for collection"
+	^ self
+		assert: (actual isEquivalent: expected)
+		description: actual printString , ' is not equal to ' , expected printString
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -18874,6 +36202,27 @@ comparingCollectionBetween: left and: right
 					tab; print: additionalRight  ]]
 %
 
+category: '*filesystem-gemstone-kernel'
+method: TestAsserter
+isString: actual comparedToDifferentStringClass: expected
+	^(actual isKindOf: String) and: [
+		(expected isKindOf: String) and: [
+			actual class name ~~ expected class name]]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: TestAsserter
+isString: actual equalToString: expected
+	"Support testing strings in two different classes have the same contents"
+	^(self isString: actual comparedToDifferentStringClass: expected)
+		ifTrue: [
+			actual size = expected size ifFalse: [^false].
+			actual with: expected do: [:a :b | a == b ifFalse: [^false] ].
+			true]
+		ifFalse: [
+			actual = expected]
+%
+
 ! Class extensions for 'UndefinedObject'
 
 !		Instance methods for 'UndefinedObject'
@@ -18899,9 +36248,30 @@ asByteArray
 			stream nextPut: each ] ]
 %
 
+! Class extensions for 'WriteStreamPortable'
+
+!		Instance methods for 'WriteStreamPortable'
+
+category: '*FileSystem-GemStone-Kernel'
+method: WriteStreamPortable
+<< anObject
+	"A more readable, shorter alternative to #nextPutAll: that also
+	accepts non-Collection arguments"
+
+	anObject class == collection class
+		ifTrue: [ self nextPutAll: anObject ]
+		ifFalse: [ anObject putOn: self ]
+%
+
 ! Class Initialization
 
 run
+ClientStore initialize.
+DiskStore initialize.
 FastUUIDGenerator initialize.
+ProcessSpecificVariable initialize.
+ZnBase64Encoder initialize.
+ZnSimplifiedByteEncoder initialize.
+ZnUTF8Encoder initialize.
+true
 %
-
