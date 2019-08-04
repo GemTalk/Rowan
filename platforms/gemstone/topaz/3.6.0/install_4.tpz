@@ -29,19 +29,19 @@
 	"install_4.tpz"
 	| projectNames warnings |
 	projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystemGs' ).
-	warnings := {}.
+	warnings := String new .
 	projectNames do: [:projectName |
 		[	Rowan projectTools load
 			loadProjectNamed: projectName
 			withGroupNames: #('core' " 'tests'"  'jadeServer') ]
 				on: CompileWarning do: [:ex |
 					(ex description includesString: 'not optimized')
-						ifFalse: [ warnings add: ex asString printString ].
+						ifFalse: [ warnings add: ex asString ; lf ; lf ].
 					ex resume ] ].
 
  	warnings isEmpty ifFalse: [
 		GsFile gciLogServer: 'COMPILE WARNINGS: '.
-		warnings do: [:warning | GsFile gciLogServer: '	', warning ]. 
+		GsFile gciLogServer: warnings .
 		self error: 'Warnings during project load' ]. 
 
 	System commit.
