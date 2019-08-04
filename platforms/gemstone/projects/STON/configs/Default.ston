@@ -2,7 +2,8 @@ RwProjectLoadConfiguration {
 	#name : 'Default',
 	#version : '0.1.0',
 	#definedGroupNames : {
-		'core' : [ ]
+		'core' : [ ] ,
+		'tests' : [ 'core' ]
 	},
 	#conditionalPackages : { },
 	#configurationNames : [
