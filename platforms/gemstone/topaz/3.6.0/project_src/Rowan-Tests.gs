@@ -9,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -24,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'Used for Jadeite testing';
 		immediateInvariant.
@@ -39,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests-GemStone';
 		comment: '';
 		immediateInvariant.
@@ -54,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -69,7 +73,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -84,7 +89,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'RowanServicesTest subclasses require RowanSample1 project to be loaded.';
 		immediateInvariant.
@@ -99,7 +105,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -114,7 +121,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -129,7 +137,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'Created to test inherited tests on client';
 		immediateInvariant.
@@ -144,7 +153,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -159,7 +169,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -174,7 +185,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -189,7 +201,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -204,7 +217,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -219,7 +233,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -234,7 +249,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -249,7 +265,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -264,7 +281,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -279,7 +297,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -294,7 +313,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'No class-specific documentation for CypLoadingTest, hierarchy is: 
 Object
@@ -314,7 +334,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -329,7 +350,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -344,7 +366,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -359,7 +382,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -374,7 +398,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -389,7 +414,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -404,7 +430,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -419,7 +446,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -434,7 +462,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -449,7 +478,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -464,7 +494,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -479,7 +510,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'keep test cases here';
 		immediateInvariant.
@@ -494,7 +526,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -509,7 +542,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -524,7 +558,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -539,7 +574,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -554,7 +590,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -569,7 +606,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests-GemStone';
 		comment: '';
 		immediateInvariant.
@@ -584,7 +622,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -599,7 +638,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -614,7 +654,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -629,7 +670,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -644,7 +686,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -659,7 +702,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -674,7 +718,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -689,7 +734,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -704,7 +750,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -719,7 +766,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -734,7 +782,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -749,7 +798,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -764,7 +814,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -779,7 +830,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -794,7 +846,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -809,7 +862,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -824,7 +878,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -839,7 +894,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -854,7 +910,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'The tests in this class were extracted from the examples in Semantic Version Specification ...';
 		immediateInvariant.
@@ -869,7 +926,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -884,7 +942,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -21974,6 +22033,7 @@ _expectedGsTopazWriterFileContents_A
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -21983,7 +22043,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -21998,7 +22059,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22013,7 +22075,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22066,6 +22129,7 @@ _expectedGsTopazWriterFileContents_B
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22075,7 +22139,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22090,7 +22155,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22105,7 +22171,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22163,6 +22230,7 @@ _expectedGsTopazWriterFileContents_C_Issue361Core
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22172,7 +22240,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22187,7 +22256,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22202,7 +22272,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22282,6 +22353,7 @@ _expectedGsTopazWriterFileContents_D_Issue361Core
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22291,7 +22363,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22306,7 +22379,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22321,7 +22395,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22365,7 +22440,6 @@ method4 ^4
 run
 Issue361Class1 initialize.
 ', percent, '
-
 '
 %
 
@@ -22383,7 +22457,6 @@ category: ''*issue361-extension1''
 method: Issue361Class1
 method1 ^1
 ', percent, '
-
 '
 %
 
@@ -22416,7 +22489,6 @@ initialize "another noop"
 run
 Issue361Class2 initialize.
 ', percent, '
-
 '
 %
 
@@ -22427,6 +22499,7 @@ _expectedGsTopazWriterFileContents_Multi_A
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22436,7 +22509,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22451,7 +22525,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22466,7 +22541,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22481,7 +22557,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22496,7 +22573,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22511,7 +22589,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22647,6 +22726,7 @@ _expectedGsTopazWriterFileContents_MULTI_B_Issue361Core
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22656,7 +22736,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22671,7 +22752,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22686,7 +22768,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22701,7 +22784,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22716,7 +22800,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22731,7 +22816,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.

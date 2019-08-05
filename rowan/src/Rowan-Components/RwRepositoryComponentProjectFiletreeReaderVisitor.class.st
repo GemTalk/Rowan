@@ -140,11 +140,13 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectory: method
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream methodDef |
+				| protocol methodSource methodStream methodDef offset |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
+        offset := methodStream position .
 				methodSource := methodStream upToEnd.
 				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+        methodDef offset: offset inFile: file name .
 				self 
 					validateMethodDefinitionProtocol: methodDef 
 						className: classDefinition name

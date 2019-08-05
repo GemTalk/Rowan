@@ -83,5 +83,13 @@ RwMethodDefinition >> source [
 RwMethodDefinition >> source: sourceString [
 
 	source := sourceString
-
 ]
+
+{ #category : 'accessing' }
+RwMethodDefinition >> offset: anInteger inFile: aFileName [
+  "these properties are used when handling a CompileError or
+   a tonel parse error."
+  properties at:'_gsFileOffset' put: anInteger .
+  properties at:'_gsFileName' put: aFileName .
+]
+

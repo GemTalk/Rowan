@@ -9,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -24,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'I''m a reader for tonel format.';
 		immediateInvariant.
@@ -39,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'I''m a writer for tonel format';
 		immediateInvariant.
@@ -54,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'No class-specific documentation for CypressTonelRepository, hierarchy is: 
 Object
@@ -74,7 +78,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a parsing error. 
 I happen whenever the parsing of a tonel file is broken in someway.';
@@ -90,7 +95,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a notification to say tonel writer that he should ignore a section. 
 This tipically happens on a MCClassTraitDefinition, because it will be managed on MCTraitDefinition.
@@ -108,7 +114,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-GemStoneCommon-Core';
 		comment: 'I am an implementation of a dictionary. Compared to other dictionaries I am very efficient for small sizes, speed- and space-wise. I also mantain the order in which elements are added when iterating. My implementation features some ideas from the RefactoringBrowser.';
 		immediateInvariant.
@@ -123,7 +130,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a parser for tonel files. 
 I parse a class with the following format: 
@@ -181,7 +189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: '';
 		immediateInvariant.
@@ -196,7 +205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a modified STON writer to make tonel metadata look as we want.
 
@@ -214,7 +224,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -229,7 +240,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -244,7 +256,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -259,7 +272,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -274,7 +288,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -289,7 +304,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -304,7 +320,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Cypress-Tests';
 		comment: '';
 		immediateInvariant.
@@ -319,7 +336,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -334,7 +352,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Cypress-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1391,18 +1410,21 @@ methodDef
 category: 'parsing'
 method: TonelParser
 methodDef: aBlock
-	| ar def |
-	ar := { 
-		self separator.
-		self try: [ self metadata ]. 
-		self separator. 
-		self method. 
-		self methodBody 
-	}.
-	def := self newMethodDefinitionFrom: ar.
-	aBlock 
-		value: ar fourth first second notNil 
-		value: def
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStream wrappedStream wrappedStream name .
+
+  aBlock
+    value: ar fourth first second notNil
+    value: def
 %
 
 category: 'parsing'
@@ -1861,6 +1883,9 @@ typeClassDefinitionOf: aClassDefinition
 
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
+
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedOop' put: gs_reservedOop asString ].
 
 	definition 		
 		at: #category put: aClassDefinition category asSymbol.
@@ -4405,31 +4430,6 @@ putOn: aStream
 
 category: '*tonel-gemstonecommon-core'
 method: PositionableStreamPortable
-match: subCollection
-  "Set the access position of the receiver to be past the next occurrence of the subCollection. Answer whether subCollection is found.  No wildcards, and case does matter."
-
-  | pattern startMatch |
-  pattern := ReadStreamPortable on: subCollection.
-  startMatch := nil.
-  [ pattern atEnd ]
-    whileFalse: [ 
-      self atEnd
-        ifTrue: [ ^ false ].
-      self next = pattern next
-        ifTrue: [ 
-          pattern position = 1
-            ifTrue: [ startMatch := self position ] ]
-        ifFalse: [ 
-          pattern position: 0.
-          startMatch
-            ifNotNil: [ 
-              self position: startMatch.
-              startMatch := nil ] ] ].
-  ^ true
-%
-
-category: '*tonel-gemstonecommon-core'
-method: PositionableStreamPortable
 originalContents
 	"Answer the receiver's actual contents collection, NOT a copy.  1/29/96 sw"
 
@@ -4586,7 +4586,12 @@ method: Stream
 
 category: '*tonel-gemstone-kernel'
 method: Symbol
-keywords
+_keywords
+  "Disabled for now by rename to _keywords ; see if 3.6 base image is ok.
+   NOTE, you also need to override in DoubleByteSymbol and QuadByteSymbol
+   if a reimplementation is needed for Rowan .
+   To override in one place for all Symbol classes, 
+    reimplement Symbol class >> _keywords:    instead ."
 
 	"Answer an array of the keywords that compose the receiver."
 

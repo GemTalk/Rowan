@@ -312,19 +312,21 @@ TonelParser >> methodDef [
 
 { #category : 'parsing' }
 TonelParser >> methodDef: aBlock [
-	| ar def |
-	ar := { 
-		self separator.
-		self try: [ self metadata ]. 
-		self separator. 
-		self method. 
-		self methodBody 
-	}.
-	def := self newMethodDefinitionFrom: ar.
-	aBlock 
-		value: ar fourth first second notNil 
-		value: def
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStream wrappedStream wrappedStream name .
 
+  aBlock
+    value: ar fourth first second notNil
+    value: def
 ]
 
 { #category : 'parsing' }

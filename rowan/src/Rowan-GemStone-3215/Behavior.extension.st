@@ -1,7 +1,7 @@
 Extension { #name : 'Behavior' }
 
 { #category : '*rowan-gemstone-3215' }
-Behavior >> moveMethod: aSelector toCategory: categoryName environmentId: envId [
+Behavior >> _rwMoveMethod: aSelector toCategory: categoryName environmentId: envId [
 
 	"Moves the method aSelector (a String) from its current category to the
  specified category (also a String).  If either aSelector or categoryName is
@@ -10,6 +10,8 @@ Behavior >> moveMethod: aSelector toCategory: categoryName environmentId: envId 
  This method does not account for selectors inherited from superclasses."
 
 	| selSym catSym oldCat |
+
+  self deprecated:'_rwMoveMethod should use base image if possible'.
 	self _validatePrivilege
 		ifFalse: [ ^ nil ].
 	(self includesCategory: categoryName environmentId: envId)

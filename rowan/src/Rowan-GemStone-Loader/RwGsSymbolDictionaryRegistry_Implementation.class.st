@@ -309,7 +309,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _rwMoveMethod: selector toCategory: protocolSymbol environmentId: 0 .
 
 	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
@@ -453,7 +453,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewCompiledMethod: compi
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _rwMoveMethod: selector toCategory: protocolSymbol environmentId: 0 .
 
 	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
@@ -852,7 +852,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+	behavior _rwMoveMethod: selector toCategory: newProtocol environmentId: 0.
 
 	loadedMethod := registryInstance methodRegistry
 		at: compiledMethod

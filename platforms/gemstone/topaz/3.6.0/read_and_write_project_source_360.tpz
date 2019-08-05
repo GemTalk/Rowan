@@ -35,7 +35,7 @@ run
 
 	| platformConfigurationAttributes projectDefinition projectSetDefinition projectSetModification visitor
 		topazFileNameMap repositoryRoot gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo 
-		auditFailures readTool |
+		auditFailures readTool report |
 
 	platformConfigurationAttributes := {
 		'common'.
@@ -111,6 +111,7 @@ run
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src' asFileReference.
 	repositoryRoot ensureCreateDirectory.
 	repositoryRoot deleteAllChildren.
+  report := 'processed ' copy .
 	{ 'Cypress' . 'FileSystemGs' . 'Rowan' . 'Tonel' . 'STON' } do: [:projectName |
 		projectDefinition := projectSetDefinition projectNamed: projectName.
 		projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
@@ -125,5 +126,8 @@ run
 			repositoryRootPath: repositoryRoot;
 			topazFilenamePackageNamesMap: topazFileNameMap;
 			yourself.
-		visitor visit: projectSetModification ].
+		visitor visit: projectSetModification .
+    report add: projectName ; add: ' ' .
+  ].
+  ^ report
 %

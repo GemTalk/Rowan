@@ -9,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -24,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -39,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -54,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '# GemStone version format
 
@@ -71,7 +75,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: 'RwSemanticVersionNumber conforms to version 2.0.0 of  [Semantic Versioning 2.0.0](http://semver.org/)
 
@@ -427,7 +432,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -442,7 +448,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'General way for Cypress to toss things up the stack for consideration by a higher authority.';
 		immediateInvariant.
@@ -457,7 +464,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -472,7 +480,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -487,7 +496,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -502,7 +512,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -517,7 +528,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -532,7 +544,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -547,7 +560,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -562,7 +576,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -577,7 +592,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -592,7 +608,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -607,7 +624,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -622,7 +640,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -637,7 +656,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -652,7 +672,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -667,7 +688,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -682,7 +704,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -697,7 +720,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -712,7 +736,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -727,7 +752,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -742,7 +768,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -757,7 +784,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -772,7 +800,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -787,7 +816,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -802,7 +832,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -817,7 +848,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -832,7 +864,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -847,7 +880,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -862,7 +896,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -877,7 +912,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -892,7 +928,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -907,7 +944,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -922,7 +960,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -937,7 +976,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -952,7 +992,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -967,7 +1008,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBParser takes a source code string and generates an AST for it. This is a hand-written, recursive descent parser and has been optimized for speed. The simplest way to call this is either ''RBParser parseExpression: aString'' if you want the AST for an expression, or ''RBParser parseMethod: aString'' if you want to parse an entire method.
 
@@ -994,7 +1036,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternParser is a subclass of RBParser that allows the extended syntax that creates matching trees. These trees can be used by the ParseTreeMatcher to search and transform source code.
 ';
@@ -1010,7 +1053,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1025,7 +1069,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBParseTreeRule is the abstract superclass of all of the parse tree searching rules. A parse tree rule is the first class representation of a particular rule to search for. The owner of a rule is the algorithm that actually executes the search. This arrangement allows multiple searches to be conducted by a single Searcher.
 
@@ -1046,7 +1091,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReplaceRule is the abstract superclass of all of the transforming rules. The rules change the source code by replacing the node that matches the rule. Subclasses implement different strategies for this replacement.
 
@@ -1070,7 +1116,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBlockReplaceRule replaces the matching node by the result of evaluating replaceBlock. This allows arbitrary computation to come up with a replacement.
 
@@ -1089,7 +1136,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBStringReplaceRule replaces a matched tree with another tree (which may include metavariable from the matching tree). This is a very succint syntax for specifying most rewrites.
 
@@ -1109,7 +1157,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSearchRule is a parse tree rule that simply searches for matches to the rule. Every time a match is found, answerBlock is evaluated with the node that matches and the cureent answer. This two-argument approach allows a collection to be formed from all of the matches (Think inject:into:).
 
@@ -1129,7 +1178,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBProgramNode is an abstract class that represents an abstract syntax tree node in a Smalltalk program.
 
@@ -1166,7 +1216,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBMethodNode is the AST that represents a Smalltalk method.
 
@@ -1193,7 +1244,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternMethodNode is a RBMethodNode that will match other method nodes without their selectors being equal. 
 
@@ -1213,7 +1265,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPragmaNode is an AST node that represents a method pragma.
 
@@ -1235,7 +1288,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1250,7 +1304,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReturnNode is an AST node that represents a return expression.
 
@@ -1271,7 +1326,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSequenceNode is an AST node that represents a sequence of statements. Both RBBlockNodes and RBMethodNodes contain these.
 
@@ -1295,7 +1351,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBValueNode is an abstract class that represents a node that returns some value.
 
@@ -1322,7 +1379,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'A RBArrayNode is an AST node for runtime arrays.
 
@@ -1343,7 +1401,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBAssignmentNode is an AST node for assignment statements
 
@@ -1365,7 +1424,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBlockNode is an AST node that represents a block "[...]".
 
@@ -1390,7 +1450,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternBlockNode is the node in matching parse trees (it never occurs in normal Smalltalk code) that executes a block to determine if a match occurs. valueBlock takes two arguments, the first is the actual node that we are trying to match against, and second node is the dictionary that contains all the metavariable bindings that the matcher has made thus far.
 
@@ -1410,7 +1471,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternWrapperBlockNode allows further matching using a block after a node has been matched by a pattern node.
 
@@ -1428,7 +1490,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1443,7 +1506,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBCascadeNode is an AST node for cascaded messages (e.g., "self print1 ; print2").
 
@@ -1464,7 +1528,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literals.';
 		immediateInvariant.
@@ -1479,7 +1544,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'A RBLiteralArrayNode is an AST node that represents literal arrays and literal byte arrays.
 
@@ -1500,7 +1566,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literal values (e.g., #foo, true, 1, etc.), but not literal arrays.
 
@@ -1518,7 +1585,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBMessageNode is an AST node that represents a message send.
 
@@ -1541,7 +1609,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternMessageNode is a RBMessageNode that will match other message nodes without their selectors being equal. 
 
@@ -1560,7 +1629,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBVariableNode is an AST node that represent a variable (global, inst var, temp, etc.).
 
@@ -1580,7 +1650,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternVariableNode is an AST node that is used to match several other types of nodes (literals, variables, value nodes, statement nodes, and sequences of statement nodes).
 
@@ -1610,7 +1681,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBProgramNodeVisitor is an abstract visitor for the RBProgramNodes.
 
@@ -1627,7 +1699,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBConfigurableFormatter formats the Refactoring Browser''s parse trees. It has many more formatting options than the default formatter used by the RB. To change the RB to use this formatter, execute "RBProgramNode formatterClass: RBConfigurableFormatter". For some refactorings the RB must reformat the code after the change, so it is good to have a formatter configured to your tastes.
 
@@ -1651,7 +1724,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBFormatter formats a parse tree. It is an example of a Visitor. This is rarely called directly. Sending ''formattedCode'' to a parse tree uses this algorithm to return a pretty-printed version.
 
@@ -1674,7 +1748,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'ParseTreeSearcher walks over a normal source code parse tree using the visitor pattern, and then matches these nodes against the meta-nodes using the match:inContext: methods defined for the meta-nodes.
 
@@ -1696,7 +1771,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'ParseTreeRewriter walks over and transforms its RBProgramNode (tree). If the tree is modified, then answer is set to true, and the modified tree can be retrieved by the #tree method.
 
@@ -1714,7 +1790,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReadBeforeWrittenTester is a visitor that identifies variables that may have been read before they are initialized.
 
@@ -1736,7 +1813,8 @@ doit
 	classInstVars: #( classificationTable )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBScanner is a stream that returns a sequence of token from the string that it is created on. The tokens know where they came from in the source code and which comments were attached to them.
 
@@ -1771,7 +1849,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternScanner is a subclass of RBScanner that allows the extended syntax of pattern matching trees.
 ';
@@ -1787,7 +1866,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1802,7 +1882,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSmallDictionary is a special dictionary optimized for small collections. In addition to the normal dictionary protocol, it also supports an #empty message which "empties" the collection but may hang on to the original elements (so it could collect garbage). Without #empty we would either need to create a new dictionary or explicitly remove everything from the dictionary. Both of these take more time and #empty.
 
@@ -1823,7 +1904,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBStringReplacement represents replacing source in the original method with a different string. These are used when reformatting code after a parse tree change has been made. Depending on the change, it may be possible to minimally change the parse tree without needing to format it.
 
@@ -1845,7 +1927,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBToken is the abstract superclass of all of the RB tokens. These tokens (unlike the standard parser''s) remember where they came from in the original source code.
 
@@ -1868,7 +1951,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBAssignmentToken is the first-class representation of the assignment token '':=''
 ';
@@ -1884,7 +1968,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1899,7 +1984,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBValueToken is the abstract superclass of all tokens that have additional information attached. For example, the BinarySelector token holds onto the actual character (e.g. $+).
 
@@ -1919,7 +2005,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBinarySelectorToken is the first-class representation of a binary selector (e.g. +)
 ';
@@ -1935,7 +2022,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBIdentifierToken is the first class representation of an identifier token (e.g. Class)
 ';
@@ -1951,7 +2039,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1966,7 +2055,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBKeywordToken is the first-class representation of a keyword token (e.g. add:)';
 		immediateInvariant.
@@ -1981,7 +2071,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1996,7 +2087,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralToken is the first-class representation of a literal token (entire literals, even literal arrays, are a single token in the ST80 grammar.).
 
@@ -2016,7 +2108,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -2031,7 +2124,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -2046,7 +2140,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternBlockToken is the first-class representation of the pattern block token.
 
@@ -2063,7 +2158,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSpecialCharacterToken is the first class representation of special characters.
 
@@ -2080,7 +2176,8 @@ doit
 	classInstVars: #( configuration )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Kernel';
 		comment: 'No class-specific documentation for Cypress, hierarchy is: 
 Object
@@ -2098,7 +2195,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Simple object with the results of the Jadeite command.';
 		immediateInvariant.
@@ -2113,7 +2211,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2128,7 +2227,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2143,7 +2243,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2158,7 +2259,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2173,7 +2275,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2188,7 +2291,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2203,7 +2307,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2218,7 +2323,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2233,7 +2339,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2248,7 +2355,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2263,7 +2371,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2278,7 +2387,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2293,7 +2403,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2308,7 +2419,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2323,7 +2435,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2338,7 +2451,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2353,7 +2467,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Rowan Service is the abstract service class for classes that represent
 first class entities in Rowan. They are transported to the client via 
@@ -2380,7 +2495,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'A place to put miscellaneous commands that don''t fit 
 well in other services. 
@@ -2400,7 +2516,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2415,7 +2532,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'RowanBrowserService handles services that fall outside
 the scope of other services.';
@@ -2431,7 +2549,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Most class operations done here. 
 
@@ -2448,7 +2567,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2463,7 +2583,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2478,7 +2599,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2493,7 +2615,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2508,7 +2631,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2523,7 +2647,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2538,7 +2663,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2553,7 +2679,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2568,7 +2695,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2583,7 +2711,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2598,7 +2727,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2613,7 +2743,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2628,7 +2759,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2643,7 +2775,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2658,7 +2791,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2673,7 +2807,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2688,7 +2823,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2703,7 +2839,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2718,7 +2855,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2733,7 +2871,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2748,7 +2887,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2763,7 +2903,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2778,7 +2919,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2793,7 +2935,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract class with support for walking a modification tree and writing out the source code in a variety of formats:
 	topaz fileout
@@ -2811,7 +2954,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '  Example script that produces topaz bootstrap files for the Rowan projects:
 
@@ -2871,7 +3015,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2886,7 +3031,8 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2901,7 +3047,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2916,7 +3063,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2931,7 +3079,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2946,7 +3095,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2961,7 +3111,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: 'Fundamental concepts:
 
@@ -2990,7 +3141,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3005,7 +3157,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: 'This class audits individual classes';
 		immediateInvariant.
@@ -3020,7 +3173,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3035,7 +3189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3050,7 +3205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3065,7 +3221,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3080,7 +3237,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3095,7 +3253,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3110,7 +3269,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3125,7 +3285,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3140,7 +3301,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3155,7 +3317,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3170,7 +3333,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3185,7 +3349,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3200,7 +3365,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3215,7 +3381,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3230,7 +3397,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3245,7 +3413,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3260,7 +3429,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3275,7 +3445,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3290,7 +3461,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3305,7 +3477,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3320,7 +3493,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3335,7 +3509,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3350,7 +3525,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3365,7 +3541,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3380,7 +3557,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3395,7 +3573,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3410,7 +3589,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3425,7 +3605,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3440,7 +3621,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3455,7 +3637,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3470,7 +3653,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3485,7 +3669,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3500,7 +3685,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3515,7 +3701,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3530,7 +3717,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassAdditionOrRemoval, hierarchy is: 
 Object
@@ -3548,7 +3736,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Configuration that guides Cypress operation.
 
@@ -3578,7 +3767,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Abstract.
 Defines some "code" entity.
@@ -3600,7 +3790,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3615,7 +3806,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Defines a class.
 Properties should include ''name'' and ''super''.
@@ -3634,7 +3826,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Extends an existing class with additional methods.
 Properties must include ''name'', the name of the class to be extended, but should not include other things like ''super'' or ''instvars''.
@@ -3651,7 +3844,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3666,7 +3860,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3681,7 +3876,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3696,7 +3892,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3711,7 +3908,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3726,7 +3924,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3741,7 +3940,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3756,7 +3956,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3771,7 +3972,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3790,7 +3992,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3809,7 +4012,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3828,7 +4032,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3843,7 +4048,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Defines a package, which is a bunch of class definitions and class extensions.
 Properties include ''name''.
@@ -3861,7 +4067,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3876,7 +4083,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3891,7 +4099,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3906,7 +4115,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3921,7 +4131,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to the elements of some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
 
@@ -3942,7 +4153,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
 		immediateInvariant.
@@ -3957,7 +4169,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassExtensionsModification, hierarchy is: 
 Object
@@ -3976,7 +4189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -3991,7 +4205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
 movedClasses are classes that have moved from one package to another within the package set.
@@ -4008,7 +4223,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
 movedClasses are classes that have moved from one package to another within the package set.
@@ -4025,7 +4241,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the instance or class methods defined by a class or class extension. The elements are method definitions. Key is selector (as string).';
 		immediateInvariant.
@@ -4040,7 +4257,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -4055,7 +4273,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
 		immediateInvariant.
@@ -4070,7 +4289,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the properties of a single entity. The elements are associations of propertyName -> propertyValue. Key is property name.';
 		immediateInvariant.
@@ -4085,7 +4305,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'DELETE ME';
 		immediateInvariant.
@@ -4100,7 +4321,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Holds some number of RwDefinitions or RwLoadedThingss to be operated on together. The entities put into the receiver should be at the same semantic level: all methods, class, packages , or projects.
 
@@ -4117,7 +4339,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypFileUtilities, hierarchy is: 
 Object
@@ -4135,7 +4358,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'No class-specific documentation for CypGemStoneFileUtilities, hierarchy is: 
 Object
@@ -4154,7 +4378,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'Keeps track of what LoadedPackages are in the GemStone repository, and is the gateway for operations to query or change the image.';
 		immediateInvariant.
@@ -4169,7 +4394,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'Walks a diff tree and adds patches to a patchSet that will update the GemStone image (repository) to the code state represented by the ''after'' state of the diff, provided that the ''before'' state of the diff is the current state of the image.';
 		immediateInvariant.
@@ -4184,7 +4410,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4199,7 +4426,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4214,7 +4442,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'Abstract. A patch is a single operation to be performed on a GemStone image (repository).';
 		immediateInvariant.
@@ -4229,7 +4458,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassPatch, hierarchy is: 
 Object
@@ -4248,7 +4478,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassAdditionPatch, hierarchy is: 
 Object
@@ -4267,7 +4498,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4282,7 +4514,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassDeletionPatch, hierarchy is: 
 Object
@@ -4301,7 +4534,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4316,7 +4550,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassPropertiesPatch, hierarchy is: 
 Object
@@ -4336,7 +4571,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4351,7 +4587,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVariableChangePatch, hierarchy is: 
 Object
@@ -4370,7 +4607,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVersioningPatch, hierarchy is: 
 Object
@@ -4389,7 +4627,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVersioningPatch, hierarchy is: 
 Object
@@ -4408,7 +4647,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodPatch, hierarchy is: 
 Object
@@ -4427,7 +4667,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodAdditionPatch, hierarchy is: 
 Object
@@ -4446,7 +4687,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodDeletionPatch, hierarchy is: 
 Object
@@ -4465,7 +4707,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4480,7 +4723,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4495,7 +4739,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodAdditionPatch, hierarchy is: 
 Object
@@ -4514,7 +4759,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4529,7 +4775,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodPropertiesPatch, hierarchy is: 
 Object
@@ -4549,7 +4796,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4564,7 +4812,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4579,7 +4828,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4594,7 +4844,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackagePatch, hierarchy is: 
 Object
@@ -4613,7 +4864,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4632,7 +4884,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4651,7 +4904,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4666,7 +4920,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackagePatch, hierarchy is: 
 Object
@@ -4685,7 +4940,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4704,7 +4960,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'A set of patches (changes) to be applied atomically (or as close to atomically as possible) to a GemStone repository.';
 		immediateInvariant.
@@ -4719,7 +4976,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4734,7 +4992,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'The Rowan-GemStone-Loader implementation does depend upon having a stable and consistent implementation of the RwGsSymbolDictionaryRegistry behavior for the duration of a load.
 
@@ -4777,7 +5036,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'properties: dictionary of properties
 name: name of class or package, selector of method
@@ -4794,7 +5054,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'package: the CypLoadedPackage that defines me and all my methods that are not extension methods.
 extensions: a collection of CypLoadedExtendedClasses for this class. From these we can tell which methods don''t belong to our default package.';
@@ -4810,7 +5071,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4825,7 +5087,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedClassExtension, hierarchy is: 
 Object
@@ -4844,7 +5107,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4859,7 +5123,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -4874,7 +5139,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedMethod, hierarchy is: 
 Object
@@ -4893,7 +5159,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'The MethodRegistry maps GsNMethods to LoadedMethods.';
 		immediateInvariant.
@@ -4908,7 +5175,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'repository: The repository I was loaded from (if known, nil otherwise)
 commitId: A repository-specific way of identifying source code commit, if it''s a type of repository that has that kind of information (nil otherwise)
@@ -4926,7 +5194,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4941,7 +5210,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -4956,7 +5226,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Components';
 		comment: '';
 		immediateInvariant.
@@ -4971,7 +5242,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4986,7 +5258,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -5001,7 +5274,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypMethodAdditionOrRemoval, hierarchy is: 
 Object
@@ -5019,7 +5293,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
 
@@ -5039,7 +5314,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single class definition or class extension.
 
@@ -5060,7 +5336,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5075,7 +5352,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -5090,7 +5368,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single method
 
@@ -5111,7 +5390,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5126,7 +5406,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5141,7 +5422,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5156,7 +5438,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
 
@@ -5177,7 +5460,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
 
@@ -5198,7 +5482,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5213,7 +5498,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5228,7 +5514,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents the move of a class definition from one package to another.';
 		immediateInvariant.
@@ -5243,7 +5530,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents a move of a method from a class definition to a class extension, or from a class extension to a class definition, or between two extensions, of the same class. This should always also result in a change of package, since a class should not be defined and extended in the same package, nor extended twice in the same package.';
 		immediateInvariant.
@@ -5258,7 +5546,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5273,7 +5562,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Kernel';
 		comment: 'Provides services specific to the Smalltalk dialect being run,
 and locates other services that are dialect-specific.';
@@ -5289,7 +5579,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'This class is private to Cypress.
 A GsPlatform is the gateway object for requesting platform-specific actions.';
@@ -5305,7 +5596,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -5320,7 +5612,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -5335,7 +5628,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -5350,7 +5644,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
 Object
@@ -5370,7 +5665,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
 Object
@@ -5390,7 +5686,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5405,7 +5702,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5420,7 +5718,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5435,7 +5734,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5450,7 +5750,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5465,7 +5766,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5480,7 +5782,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -5495,7 +5798,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: 'RwPackageLoadSpecification new
     specName: ''rowanLoadSpec'';
@@ -5519,7 +5823,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5534,7 +5839,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5549,7 +5855,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5564,7 +5871,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5579,7 +5887,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'A Uniform Resource Locator.  It specifies the location of a document on the Internet.  The base class is abstract; child classes break different types of URLs down in ways appropriate for that type.
 
@@ -5637,7 +5946,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class models a file URL according to (somewhat) RFC1738, see http://www.w3.org/Addressing/rfc1738.txt
 
@@ -5699,7 +6009,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the cypress: scheme:
 
@@ -5728,7 +6039,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the tonel: scheme:
 
@@ -5749,7 +6061,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the filetree: scheme[1]:
 
@@ -5770,7 +6083,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the github: scheme[1]:
 
@@ -5791,7 +6105,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'a URL type that can''t be broken down in any systematic way.  For example, mailto: and telnet: URLs.  The part after the scheme name is stored available via the #locator message.';
 		immediateInvariant.
@@ -5806,7 +6121,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'A URL which has a hierarchical encoding.  For instance, http and ftp URLs are hierarchical.';
 		immediateInvariant.
@@ -5821,7 +6137,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the smalltalk: scheme:
 
@@ -5847,7 +6164,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the gitfiletree: scheme:
 
@@ -5885,7 +6203,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5900,7 +6219,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5915,7 +6235,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5930,7 +6251,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5945,7 +6267,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Kernel-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5960,7 +6283,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5975,7 +6299,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5990,7 +6315,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -6005,7 +6331,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -33204,45 +33531,59 @@ topazFileReference
 category: 'private exporting'
 method: RwGsModificationTopazWriterVisitor
 _fileOutClassDeclaration: classDefinition on: aStream
-	 | optionsString |
-  aStream
-    nextPutAll: 'doit';
-    lf;
-    nextPutAll: '(' , classDefinition superclassName;
-    lf.
-  self
-    _writeClassTypeMessage: classDefinition
-    on: aStream
-    hasInstanceVariables: [ aStream
-        nextPutAll:
-            '	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
-        lf ].
+	| optionsString reservedOopString hasClassInstVars |
+	aStream
+		nextPutAll: 'doit';
+		lf;
+		nextPutAll: '(' , classDefinition superclassName;
+		lf.
+	hasClassInstVars := self
+		_writeClassTypeMessage: classDefinition
+		on: aStream
+		hasInstanceVariables: [ aStream
+			nextPutAll:
+			'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
+			lf ].
 	optionsString := ''.
 	classDefinition gs_options isEmpty
 		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
-  aStream
-    nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
-    lf;
-    nextPutAll:
-        '	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-    lf;
-    nextPutAll: '	poolDictionaries: #()';
-    lf;
-    nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
-    lf;
-    nextPutAll: '	options: #(', optionsString, '))';
-    lf;
-    nextPutAll: '		category: ' , classDefinition category printString , ';';
-    lf;
-    nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-    lf;
-    nextPutAll: '		immediateInvariant.';
-    lf;
-    nextPutAll: 'true.';
-    lf;
-    nextPutAll: '%';
-    lf;
-    lf
+	reservedOopString := ''.
+	classDefinition gs_reservedOop isEmpty
+		ifFalse: [
+			| strm |
+			strm := WriteStream on: String new.
+			strm nextPutAll: '	reservedOop: ', classDefinition gs_reservedOop; lf.
+			reservedOopString := strm contents ].
+	aStream
+		nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
+		lf.
+	hasClassInstVars
+		ifTrue: [ 
+		aStream
+			nextPutAll:
+			'	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+			lf ].
+	aStream
+		nextPutAll: '	poolDictionaries: #()';
+		lf;
+		nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
+		lf;
+		nextPutAll: '	options: #(', optionsString, ')';
+		lf;
+		nextPutAll: reservedOopString;
+		nextPutAll: ')';
+		lf;
+		nextPutAll: '		category: ' , classDefinition category printString , ';';
+		lf;
+		nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+		lf;
+		nextPutAll: '		immediateInvariant.';
+		lf;
+		nextPutAll: 'true.';
+		lf;
+		nextPutAll: '%';
+		lf;
+		lf
 %
 
 category: 'private exporting'
@@ -33300,23 +33641,35 @@ _symbolsForVariables: variableList
 category: 'private exporting'
 method: RwGsModificationTopazWriterVisitor
 _writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock
-  | classType classTypeMessage hasInstanceVariables |
-  hasInstanceVariables := true.
-  classType := classDefinition subclassType.
-  classType = 'variable'
-    ifTrue: [ classTypeMessage := 'indexableSubclass: ' ]
-    ifFalse: [ classType = 'byteSubclass'
-        ifTrue: [ classTypeMessage := 'byteSubclass: '.
-          hasInstanceVariables := false ]
-        ifFalse: [ classType = ''
-            ifTrue: [ classTypeMessage := 'subclass: ' ]
-            ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
-  aStream
-    tab;
-    nextPutAll: classTypeMessage , classDefinition name asString printString;
-    lf.
-  hasInstanceVariables
-    ifTrue: [ instanceVariableBlock value ]
+	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
+	hasInstanceVariables := true.
+	hasReservedOop := classDefinition gs_reservedOop isEmpty not.
+	hasClassInstVars := true.
+	classType := classDefinition subclassType.
+	classType = 'variable'
+		ifTrue: [ 
+			classTypeMessage :=  hasReservedOop
+				ifTrue: [ '_newKernelIndexableSubclass:' ]
+				ifFalse: [ 'indexableSubclass: ' ] ]
+		ifFalse: [ classType = 'byteSubclass'
+			ifTrue: [ 
+				classTypeMessage :=  hasReservedOop
+					ifTrue: [ '_newKernelByteSubclass:' ]
+					ifFalse: [ 'byteSubclass: ' ].
+				hasClassInstVars := hasInstanceVariables := false ]
+			ifFalse: [ classType = ''
+				ifTrue: [ 
+					classTypeMessage :=  hasReservedOop
+						ifTrue: [ '_newKernelSubclass:' ]
+						ifFalse: [ 'subclass: ' ] ]
+				ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+	aStream
+		tab;
+		nextPutAll: classTypeMessage , classDefinition name asString printString;
+		lf.
+	hasInstanceVariables
+		ifTrue: [ instanceVariableBlock value ].
+	^ hasClassInstVars
 %
 
 ! Class implementation for 'RwModificationCypressFamilyWriterVisitor'
@@ -34001,6 +34354,9 @@ _typeClassDefinitionOf: aClassDefinition
 	(aClassDefinition instVarNames)
 		ifNotEmpty: [ :vars | definition at: #instvars put: vars asArray ].
 
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
+
 	definition at: #name put: aClassDefinition name.
 
 	((aClassDefinition poolDictionaryNames) collect: [:each | each asString])
@@ -34288,6 +34644,9 @@ _typeClassDefinitionOf: aClassDefinition
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
 
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
+
 	definition 		
 		at: #category put: aClassDefinition category.
 	
@@ -34412,6 +34771,7 @@ newClassDefinitionFrom: anArray
 			type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
+		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);
 		gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ]);
 		shebang: (metadata at: #'shebang' ifAbsent: [ ]);
 		yourself
@@ -34643,11 +35003,13 @@ readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClass
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream methodDef |
+				| protocol methodSource methodStream methodDef offset |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
+        offset := methodStream position .
 				methodSource := methodStream upToEnd.
 				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+        methodDef offset: offset inFile: file name .
 				self 
 					validateMethodDefinitionProtocol: methodDef 
 						className: classDefinition name
@@ -34668,6 +35030,35 @@ _filetreeRepositoryPropertyDictFor: packagesRoot
 ! Class implementation for 'RwRepositoryComponentProjectTonelReaderVisitor'
 
 !		Class methods for 'RwRepositoryComponentProjectTonelReaderVisitor'
+
+category: 'class file reading'
+classmethod: RwRepositoryComponentProjectTonelReaderVisitor
+lineNumberStringForMethod: anRwMethodDefinition
+  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
+		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
+			 ^ self lineNumberStringForOffset: offset fileName: fName
+			] 
+	].
+  ^ '  (Unable to determine line )' .
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryComponentProjectTonelReaderVisitor
+lineNumberStringForOffset: offset fileName: fName
+  | res |
+  res :='  (Unable to determine line number)' .
+  [ | fRef |
+    fRef := fName asFileReference .
+    fRef readStreamDo:[ :fStream |  | buf lf lNum |
+      buf := fStream contents .
+      buf size > offset ifTrue:[ buf size: offset ].
+      lNum := 1 + (buf occurrencesOf: (lf := Character lf)) .
+      res := '', lf , ' near line ' , lNum asString , lf , ' in file ', fName .
+    ]
+  ] on: Error do:[:ex | "ignore" ].
+  ^ res
+%
 
 category: 'class file reading'
 classmethod: RwRepositoryComponentProjectTonelReaderVisitor
@@ -34803,35 +35194,54 @@ readClassExtensionFile: file inPackage: packageName
 
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		| definitions stream |
-		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		definitions := (TonelParser on: stream forReader: self) start.
-		((definitions at: 2) at: 1) do: [:mDef |
-			currentClassExtension addClassMethodDefinition: mDef ].
-		((definitions at: 2) at: 2) do: [:mDef |
-			currentClassExtension addInstanceMethodDefinition: mDef ] ].
+	fileReference readStreamDo: [:fileStream | | stream |
+		[ | definitions |
+		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  currentClassExtension addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  currentClassExtension addInstanceMethodDefinition: mDef ] 
+
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
 %
 
 category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
 readClassFile: file inPackage: packageName
-
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		| definitions stream |
-		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		definitions := (TonelParser on: stream forReader: self) start.
-		self validateClassCategory: currentClassDefinition forPackageNamed: packageName.
-		((definitions at: 2) at: 1) do: [:mDef |
-			currentClassDefinition addClassMethodDefinition: mDef ].
-		((definitions at: 2) at: 2) do: [:mDef |
-			currentClassDefinition addInstanceMethodDefinition: mDef ].
-		(currentProjectDefinition packageNamed: packageName)
-			addClassDefinition: currentClassDefinition ].
+	fileReference readStreamDo: [:fileStream | | stream |
+    [
+		  | definitions clsDef projectDef |
+      "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream := ZnBufferedReadStream on: fileStream. 
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+      clsDef := currentClassDefinition ifNotNil:[:def |
+                  currentClassExtension ifNotNil:[ 
+                    Error signal:'both a class definition and extension in file ', file name ].
+                  def
+                ] ifNil:[ currentClassExtension ].
+		  self validateClassCategory: clsDef forPackageNamed: packageName.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  clsDef addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  clsDef addInstanceMethodDefinition: mDef ].
+
+		  projectDef := currentProjectDefinition packageNamed: packageName .
+      currentClassDefinition ifNotNil:[ projectDef addClassDefinition: clsDef ] .
+                             "ifNil:[ projectDef addClassExtensionDefinition: clsDef]."
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
 %
 
 category: 'package reading'
@@ -40137,6 +40547,21 @@ updatePropertiesFromClass: aClass
 
 category: 'utility'
 method: RwClassDefinition
+_removeSubclassesDisallowed
+  "Only for use in building definitions for bootstap of the base image.
+   image bootstrap code responsible for setting subclassesDisallowed on
+   appropriate classes after they are all defined."
+  | propertyName oldValue newValue |
+  propertyName := 'gs_options'.
+  oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
+  oldValue isEmpty ifFalse:[
+     newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
+     self propertyAt: propertyName put: newValue
+  ]
+%
+
+category: 'utility'
+method: RwClassDefinition
 _updateCategoryFromClass: aClass
 
 	| propertyName newValue |
@@ -40271,8 +40696,8 @@ _updateOptionsFromClass: aClass
 	newValue isEmpty 
 		ifTrue: [ self removeProperty: propertyName ]
 		ifFalse: [ self propertyAt: propertyName put: newValue ].
-  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedOop' put: resOop ]
-                          ifNil:[ self removeProperty:'gs_reservedOop' ].
+  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedoop' put: resOop asString ]
+                          ifNil:[ self removeProperty:'gs_reservedoop' ].
 %
 
 category: 'utility'
@@ -41131,6 +41556,15 @@ key
 
 category: 'accessing'
 method: RwMethodDefinition
+offset: anInteger inFile: aFileName
+  "these properties are used when handling a CompileError or
+   a tonel parse error."
+  properties at:'_gsFileOffset' put: anInteger .
+  properties at:'_gsFileName' put: aFileName .
+%
+
+category: 'accessing'
+method: RwMethodDefinition
 protocol
 
 	^properties at: 'protocol'
@@ -41961,6 +42395,61 @@ projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: u
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
+topazReadTonelFile: fileName
+    "Read a single file and compile the methods within that file.
+     Definition/redefinition of the class not implemented yet "
+  | projectDef package clsName clsDef cls methBlk envId |
+  projectDef := RwRepositoryComponentProjectTonelReaderVisitor
+     readClassFile: fileName
+     projectName: 'TopazLoad'   "synthetic projed and package names"
+     packageName: 'TopazPackage' .
+  package := projectDef packageNamed: 'TopazPackage_1' .
+  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
+  package classDefinitions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class definition in file ' , fileName
+    ].
+    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
+  ].
+  package classExtensions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class extension in file ' , fileName
+    ].
+    sz > 0 ifTrue:[
+      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
+      clsDef :=  defs values at: 1.
+    ].
+  ].   
+  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
+  clsName := clsDef name .
+  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
+    "creating the class not implemented yet"
+    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
+  ].
+  cls := cls"anAssociation" value.
+
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: nil
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  envId
+    ] on: (CompileError, CompileWarning) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+   ].
+  clsDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  clsDef classMethodDefinitions do: methBlk .
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
 withProperties: properties packageDefinitions: packageDefinitions
 
 	^ self basicNew
@@ -42439,9 +42928,8 @@ method: RwComponentProjectDefinition
 exportPackages
 	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
 	| projectSetDefinition |
-	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
-		on: Error
-		do: [:ignored | RwProjectSetDefinition new ].
+	projectSetDefinition := (self class newForProjectReference: self projectRef) readProjectSet .
+
 	self exportPackages: projectSetDefinition.
 %
 
@@ -47259,22 +47747,27 @@ category: 'compiling'
 method: RwGsMethodPatch
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		intoCategories: nil
-		intoPragmas: nil
-		environmentId: self methodEnvironmentId
+  [
+	  | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
+		  intoCategories: nil
+		  intoPragmas: nil
+		  environmentId: self methodEnvironmentId
+  ] on: (CompileError, CompileWarning) do:[:ex |
+    ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methodDefinition).
+    ex pass 
+  ]
 %
 
 category: 'initializers'
@@ -47767,25 +48260,29 @@ category: 'compiling'
 method: RwGsMethodExtensionSessionMethodSymbolDictPatch
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+  [ | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
 
-	methDict := GsMethodDictionary new.
-	catDict := GsMethodDictionary new.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: methDict
-		intoCategories: catDict
-		intoPragmas: pArray
-		environmentId: self methodEnvironmentId
+	  methDict := GsMethodDictionary new.
+	  catDict := GsMethodDictionary new.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: methDict
+		  intoCategories: catDict
+		  intoPragmas: pArray
+		  environmentId: self methodEnvironmentId
+   ] on: (CompileError, CompileWarning) do:[:ex |
+     ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methodDefinition).
+     ex pass
+   ]
 %
 
 category: 'installing'
@@ -50240,7 +50737,7 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _rwMoveMethod: selector toCategory: protocolSymbol environmentId: 0 .
 
 	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
@@ -50385,7 +50882,7 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _rwMoveMethod: selector toCategory: protocolSymbol environmentId: 0 .
 
 	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
@@ -50787,7 +51284,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+	behavior _rwMoveMethod: selector toCategory: newProtocol environmentId: 0.
 
 	loadedMethod := registryInstance methodRegistry
 		at: compiledMethod
@@ -54857,7 +55354,8 @@ method: RwGsPlatform
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.
-	 Returns the compiled method or signals a CompileError."
+	 Returns the compiled method or signals a CompileError.
+   Only used to parse a method to determine the selector.  "
 
 	| undefinedSymbolList undefinedSymbols |
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
@@ -59359,43 +59857,6 @@ newMethodDefinitionFrom: anArray
 
 !		Instance methods for 'Behavior'
 
-category: '*rowan-gemstone-3215'
-method: Behavior
-moveMethod: aSelector toCategory: categoryName environmentId: envId
-
-	"Moves the method aSelector (a String) from its current category to the
- specified category (also a String).  If either aSelector or categoryName is
- not in the receiver's method dictionary, or if aSelector is already in
- categoryName, generates an error..
- This method does not account for selectors inherited from superclasses."
-
-	| selSym catSym oldCat |
-	self _validatePrivilege
-		ifFalse: [ ^ nil ].
-	(self includesCategory: categoryName environmentId: envId)
-		ifFalse: [ ^ self _categoryNotFound: categoryName ].
-	oldCat := self categoryOfSelector: aSelector environmentId: envId.
-
-"Backport of a change in behavior that was made in 3.4 and is needed for Rowan" 
-"
-	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
-"
-
-	catSym := categoryName asSymbol.
-	selSym := aSelector asSymbol.
-
-	(envId ~~ 0
-		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
-		ifTrue: [ 
-			| catDict |
-			catDict := self _baseCategorysForStore: envId.
-			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
-			(catDict at: catSym) add: selSym ]
-		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
-	self _needsAnnouncement
-		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
-%
-
 category: '*ast-kernel-core'
 method: Behavior
 parseTreeFor: aSymbol	
@@ -59717,6 +60178,45 @@ ifTrue: [
 mySubclasses := self subclasses .
 self _rwNewConstraint: aClass atOffset: offset .
 mySubclasses do:[:x| x _rwNewInheritedConstraint: aClass atOffset: offset ] .
+%
+
+category: '*rowan-gemstone-3215'
+method: Behavior
+_rwMoveMethod: aSelector toCategory: categoryName environmentId: envId
+
+	"Moves the method aSelector (a String) from its current category to the
+ specified category (also a String).  If either aSelector or categoryName is
+ not in the receiver's method dictionary, or if aSelector is already in
+ categoryName, generates an error..
+ This method does not account for selectors inherited from superclasses."
+
+	| selSym catSym oldCat |
+
+  self deprecated:'_rwMoveMethod should use base image if possible'.
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+	(self includesCategory: categoryName environmentId: envId)
+		ifFalse: [ ^ self _categoryNotFound: categoryName ].
+	oldCat := self categoryOfSelector: aSelector environmentId: envId.
+
+"Backport of a change in behavior that was made in 3.4 and is needed for Rowan" 
+"
+	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
+"
+
+	catSym := categoryName asSymbol.
+	selSym := aSelector asSymbol.
+
+	(envId ~~ 0
+		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
+		ifTrue: [ 
+			| catDict |
+			catDict := self _baseCategorysForStore: envId.
+			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
+			(catDict at: catSym) add: selSym ]
+		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
+	self _needsAnnouncement
+		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
 %
 
 category: '*rowan-gemstone-kernel'
@@ -60491,9 +60991,10 @@ _rwOptionsForDefinition
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwReservedOop
- "returns nil or the SmallInteger specifying a reserved oopNumber"
-  | oop|
-  ^ (oop := self asOopNumber) <= System _lastReservedOopNumber ifTrue:[ oop ] ifFalse:[ nil ].
+ "returns nil or the SmallInteger specifying a reserved oop"
+  ^ self asOopNumber <= System _lastReservedOopNumber 
+    ifTrue:[ self asOop ] 
+    ifFalse:[ nil ].
 %
 
 category: '*rowan-gemstone-kernel'
@@ -61479,13 +61980,32 @@ gs_options
 category: '*rowan-gemstone-definitions'
 method: RwClassDefinition
 gs_options: optionsArray
+	"preserver optionsArray order"
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])
 		ifTrue: [ 
 			self properties
 				at: 'gs_options'
 				put:
-					(optionsArray collect: [ :each | each asString ]) asSortedCollection asArray ]
+					(optionsArray collect: [ :each | each asString ]) asArray ]
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwClassDefinition
+gs_reservedOop
+
+	^self properties
+				at: 'gs_reservedoop'
+				ifAbsent: [ '' ]
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwClassDefinition
+gs_reservedOop: aString
+
+	self properties
+		at: 'gs_reservedoop'
+		put: aString
 %
 
 category: '*rowan-gemstone-definitions'
