@@ -28,7 +28,8 @@ Class {
 		'isTestMethod',
 		'testRunClassName',
 		'failedCompile',
-		'comparisonSource'
+		'comparisonSource',
+		'firstReference'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -266,6 +267,12 @@ RowanMethodService >> fileout [
 	ws nextPutAll: (self behavior fileOutMethod: selector asString environmentId: 0).
 	answeringService answer: ws contents.
 	RowanCommandResult addResult: answeringService.
+]
+
+{ #category : 'other' }
+RowanMethodService >> firstReference: integer [
+
+	firstReference := integer
 ]
 
 { #category : 'initialization' }
