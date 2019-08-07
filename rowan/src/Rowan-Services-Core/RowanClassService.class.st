@@ -768,29 +768,38 @@ RowanClassService >> renameCategoryFrom: old to: new [
 
 { #category : 'client commands' }
 RowanClassService >> renameClass: oldClassName to: newClassName [
-	| references newMethods |
-	newMethods := Array new. 
-	Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
-	name := newClassName. 
-	organizer := ClassOrganizer new. 
-	references := organizer update referencesTo: oldClassName asSymbol.
-	1 to: references first size do:[:index |
-		| method newSource compileResult failedCompile methodService oldSource |
-		failedCompile := false. 
-		method := references first at: index. 
-		oldSource := method sourceString. 
-		newSource := self replaceSubString: oldClassName in: oldSource with: newClassName.
-		compileResult := [method inClass rwCompileMethod: newSource
-									category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
-		methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
-		failedCompile ifTrue:[
-				methodService comparisonSource: oldClassName]
-			ifFalse:[
-				methodService comparisonSource: oldSource].
-		methodService failedCompile: failedCompile. 
-		newMethods add: methodService.
-		].
-	RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods).
+  | references newMethods |
+  newMethods := Array new.
+  Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
+  name := newClassName.
+  organizer := ClassOrganizer new.
+  references := organizer update referencesTo: oldClassName asSymbol.
+  1 to: references first size do: [ :index | 
+    | method newSource compileResult failedCompile methodService oldSource |
+    failedCompile := false.
+    method := references first at: index.
+    oldSource := method sourceString.
+    newSource := self
+      replaceSubString: oldClassName
+      in: oldSource
+      with: newClassName.
+    compileResult := [ 
+    method inClass
+      rwCompileMethod: newSource
+      category: (method inClass categoryOfSelector: method selector) asSymbol ]
+      on: CompileError
+      do: [ :ex | 
+        failedCompile := true.
+        method ].
+    methodService := RowanMethodService
+      forGsNMethod: compileResult
+      organizer: organizer.
+    failedCompile
+      ifTrue: [ methodService comparisonSource: oldClassName ]
+      ifFalse: [ methodService comparisonSource: oldSource ].
+    methodService failedCompile: failedCompile.
+    newMethods add: methodService ].
+  RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods)
 ]
 
 { #category : 'private' }
