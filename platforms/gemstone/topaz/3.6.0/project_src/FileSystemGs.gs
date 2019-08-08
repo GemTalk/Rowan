@@ -4667,7 +4667,8 @@ category: 'primitives-path'
 classmethod: File
 lookupDirectory: fullPath filename: fileName
 
-	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
+	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and 
+   return entry array or nil "
 
 	^ self lookupPath: fullPath, '/', fileName
 %
@@ -7860,14 +7861,22 @@ category: 'private'
 method: DiskStore
 basicEntry: ignored path: aPath nodesDo: aBlock
 	| pathString intOrArray |
-		
 	pathString := self stringFromPath: aPath.
 	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
 	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
 	intOrArray
 		do: [:entryPathString |
 			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (File lookupPath: entryPathString) ] ]
+				ifFalse: [ | aFile |
+          aFile := File lookupPath: entryPathString .
+          "For now, ignore symLinks which reference a non-existant file."
+          aFile ifNil:[ 
+             (GsFile isSymbolicLink: entryPathString onClient: false) ifFalse:[
+                self signalFileDoesNotExist: entryPathString 
+             ]
+          ] ifNotNil:[
+            aBlock value: aFile 
+          ]]]
 %
 
 category: 'public'
