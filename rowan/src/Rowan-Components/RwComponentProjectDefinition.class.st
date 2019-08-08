@@ -164,7 +164,7 @@ RwComponentProjectDefinition class >> topazReadTonelFile: fileName [
       cls compileMethod: methDef source
       dictionaries: System myUserProfile symbolList
       category: methDef protocol asSymbol
-      intoMethodDict: nil
+      intoMethodDict: nil "install into the class's dictionaries"
       intoCategories: nil
       intoPragmas: nil
       environmentId:  envId
@@ -860,7 +860,7 @@ RwComponentProjectDefinition >> readPackageNames: packageNames [
 
 	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
-	| format visitorClass |
+	| format aVisitor |
 	packages := Dictionary new. 
 	format := self 
 		packageFormatIfAbsent: [  
@@ -869,10 +869,15 @@ RwComponentProjectDefinition >> readPackageNames: packageNames [
 				at: #format ifAbsent: [ 'tonel' ].
 			self packageFormat: formatFromDisk.
 			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
+	format = 'tonel' ifTrue: [ 
+     aVisitor := RwRepositoryComponentProjectTonelReaderVisitor new .
+     self compileWhileReading ifTrue:[
+       aVisitor compileWhileReading: true .
+     ]
+  ] ifFalse: [ 
+     aVisitor := RwRepositoryComponentProjectFiletreeReaderVisitor new .
+  ].
+	^ aVisitor
 		packageNames: packageNames;
 		visit: self.
 ]
@@ -926,6 +931,17 @@ RwComponentProjectDefinition >> repositoryRoot: aFileReferenceOrPath [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot: aFileReferenceOrPath
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> compileWhileReading: aBoolean [
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  properties at: 'CompileWhileReading' put: aBoolean
+]
+{ #category : 'properties' }
+RwComponentProjectDefinition >> compileWhileReading [
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  ^ properties at: 'CompileWhileReading' otherwise: false
 ]
 
 { #category : 'temporary compat' }

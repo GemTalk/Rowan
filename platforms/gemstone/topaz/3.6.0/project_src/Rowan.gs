@@ -35108,6 +35108,47 @@ readClassFiles: fileArray projectName: projectName packageName: packageName
 
 category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
+checkMethodDefinitions: aClassDef
+  | cls clsName methBlk fakeMethDict pkgName |
+
+  self compileWhileReading ifFalse:[ ^ self "do nothing"  ].
+
+  clsName := aClassDef  name asSymbol .
+  (pkgName := currentPackageDefinition name) = 'Filein1C' ifTrue:[ 
+     "lookup in GemStone_Legacy_Streams first"
+     cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
+  ].
+  cls ifNil:[   
+    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+       "creating the class not implemented yet"
+       Warning signal:'class ' , clsName , ' not found by name lookup'.
+       ^ self "can't check syntax on the methods until class is defined"
+    ].
+  ].
+  cls := cls"anAssociation" value.
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: fakeMethDict
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  0
+    ] on: ( CompileError , CompileWarning ) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+  ].
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef classMethodDefinitions do: methBlk .
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
 classExtensionFileExtensions
 
 	^ #( 'extension' 'st' )
@@ -35118,6 +35159,18 @@ method: RwRepositoryComponentProjectTonelReaderVisitor
 classFileExtensions
 
 	^ #( 'class' 'st' )
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
+compileWhileReading
+  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
+compileWhileReading: aBoolean
+  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 %
 
 category: 'tonel parser'
@@ -35202,8 +35255,8 @@ readClassExtensionFile: file inPackage: packageName
 		  ((definitions at: 2) at: 1) do: [:mDef |
 			  currentClassExtension addClassMethodDefinition: mDef ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
-			  currentClassExtension addInstanceMethodDefinition: mDef ] 
-
+			  currentClassExtension addInstanceMethodDefinition: mDef ] .
+      self checkMethodDefinitions: currentClassExtension .
     ] on: ( STONReaderError , TonelParseError) do:[:ex |
       ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
       ex pass .
@@ -35233,7 +35286,7 @@ readClassFile: file inPackage: packageName
 			  clsDef addClassMethodDefinition: mDef ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			  clsDef addInstanceMethodDefinition: mDef ].
-
+      self checkMethodDefinitions: clsDef .
 		  projectDef := currentProjectDefinition packageNamed: packageName .
       currentClassDefinition ifNotNil:[ projectDef addClassDefinition: clsDef ] .
                              "ifNil:[ projectDef addClassExtensionDefinition: clsDef]."
@@ -42434,7 +42487,7 @@ topazReadTonelFile: fileName
       cls compileMethod: methDef source
       dictionaries: System myUserProfile symbolList
       category: methDef protocol asSymbol
-      intoMethodDict: nil
+      intoMethodDict: nil "install into the class's dictionaries"
       intoCategories: nil
       intoPragmas: nil
       environmentId:  envId
@@ -42790,6 +42843,20 @@ commit: message
 			self inform: msg.
 			^ msg ].
 	^ self projectRef doCommit: message
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+compileWhileReading
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  ^ properties at: 'CompileWhileReading' otherwise: false
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+compileWhileReading: aBoolean
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  properties at: 'CompileWhileReading' put: aBoolean
 %
 
 category: 'accessing'
@@ -43221,7 +43288,7 @@ readPackageNames: packageNames
 
 	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
-	| format visitorClass |
+	| format aVisitor |
 	packages := Dictionary new. 
 	format := self 
 		packageFormatIfAbsent: [  
@@ -43230,10 +43297,15 @@ readPackageNames: packageNames
 				at: #format ifAbsent: [ 'tonel' ].
 			self packageFormat: formatFromDisk.
 			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
+	format = 'tonel' ifTrue: [ 
+     aVisitor := RwRepositoryComponentProjectTonelReaderVisitor new .
+     self compileWhileReading ifTrue:[
+       aVisitor compileWhileReading: true .
+     ]
+  ] ifFalse: [ 
+     aVisitor := RwRepositoryComponentProjectFiletreeReaderVisitor new .
+  ].
+	^ aVisitor
 		packageNames: packageNames;
 		visit: self.
 %
