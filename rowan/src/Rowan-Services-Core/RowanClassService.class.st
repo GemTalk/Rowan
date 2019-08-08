@@ -728,8 +728,9 @@ RowanClassService >> removeMethods: methodsToRemove [
 		self removeSelector: methodService selector ifAbsent:[notRemoved add: methodService].
 		(notRemoved includes: methodService) ifFalse:[
 			methodService updateType: #removed:.
-			RowanCommandResult addResult: methodService
+			RowanCommandResult addResult: methodService.
 		]].
+	self updateTests.
 	notRemoved isEmpty ifFalse:[
 		self error: 'These selectors were not removed - ', (notRemoved collect:[:svc | svc selector]) printString].
 ]
@@ -874,6 +875,7 @@ RowanClassService >> saveMethodSource: source category: category [
 			hierarchyImplementorsOf: methodService selector inClass: methodService className. "this will update hierarchy method indicators for client"
 	self selectedMethods: (Array with: methodService).
 	self updateDirtyState.
+	self updateTests.
 ]
 
 { #category : 'other' }
@@ -1076,6 +1078,15 @@ RowanClassService >> updatePackageProject [
 	packageService update. 
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
+]
+
+{ #category : 'updates' }
+RowanClassService >> updateTests [
+  "update the test browsers on certain operations"
+
+  RowanBrowserService new packagesWithTests.
+  (RowanPackageService new name: packageName) testClasses.
+  RowanCommandResult addResult: self update.
 ]
 
 { #category : 'Accessing' }
