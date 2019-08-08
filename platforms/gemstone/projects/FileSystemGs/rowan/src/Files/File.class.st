@@ -202,7 +202,8 @@ File class >> getPosition: aGsFile [
 { #category : 'primitives-path' }
 File class >> lookupDirectory: fullPath filename: fileName [
 
-	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
+	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and 
+   return entry array or nil "
 
 	^ self lookupPath: fullPath, '/', fileName
 ]
