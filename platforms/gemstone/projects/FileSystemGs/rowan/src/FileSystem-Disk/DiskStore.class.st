@@ -19,7 +19,8 @@ Class {
 DiskStore class >> activeClass [
 	self allSubclasses do: [:ea | 
 		ea isActiveClass ifTrue: [^ ea]].
-	^ self
+  "Various methods go into infinite recursion if we return self."
+	Error signal:'Cannot find an active subclass of DiskStore' .
 ]
 
 { #category : 'current' }

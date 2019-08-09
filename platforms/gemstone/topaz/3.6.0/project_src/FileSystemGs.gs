@@ -7760,7 +7760,8 @@ classmethod: DiskStore
 activeClass
 	self allSubclasses do: [:ea | 
 		ea isActiveClass ifTrue: [^ ea]].
-	^ self
+  "Various methods go into infinite recursion if we return self."
+	Error signal:'Cannot find an active subclass of DiskStore' .
 %
 
 category: 'current'
@@ -8175,7 +8176,9 @@ delimiter
 category: 'current'
 classmethod: UnixStore
 isActiveClass
-	^ ((System gemVersionAt: 'osName') = 'Linux') and: [ super isActiveClass ]
+  | osNam |
+  osNam := System gemVersionAt: 'osName'.
+  ^ (#( 'Linux' 'Darwin' 'SunOS' 'AIX') includes: osNam) and:[ super isActiveClass ]
 %
 
 category: 'public'
@@ -8222,7 +8225,7 @@ checkName: aFileName fixErrors: fixing
 category: 'current'
 classmethod: MacStore
 isActiveClass
-	^ ((System gemVersionAt: 'osName') = 'OSX') and: [ super isActiveClass ]
+	^ ((System gemVersionAt: 'osName') = 'Darwin') and: [ super isActiveClass ]
 %
 
 category: 'public'
@@ -9472,11 +9475,13 @@ from: aString delimiter: aDelimiterCharacter
 
 	aString first = $$
 		ifTrue: [
-			| pathElements envVarString envVarElement |
+			| pathElements envVarString envVarElement eVar |
 			"GemStone paths are allowed to start with an environment variable"
 			pathElements := aDelimiterCharacter split: aString.
 			envVarElement := (pathElements at: 1) .
-			envVarString := (System gemEnvironmentVariable: (envVarElement copyFrom: 2 to: envVarElement size)) decodeFromUTF8 asString.
+			envVarString := System gemEnvironmentVariable: (eVar := envVarElement copyFrom: 2 to: envVarElement size). 
+      envVarString ifNil:[ Error signal:'environment variable ' , eVar ,' not defined']. 
+      envVarString := envVarString decodeFromUTF8 asString .
 			pathClass :=  ((self isAbsolutePath: envVarString delimiter: aDelimiterCharacter) or: 
 									[self isAbsoluteWindowsPath: envVarString]) 
 				ifTrue: [ AbsolutePath ]
