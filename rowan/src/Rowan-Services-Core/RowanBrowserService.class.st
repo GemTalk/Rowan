@@ -54,17 +54,59 @@ RowanBrowserService >> classHierarchy [
 
 { #category : 'private' }
 RowanBrowserService >> classHierarchy: theClasses [
-	| superclassChains levels services hierarchies toExpand |
-	superclassChains := self superclassChainsFor: theClasses. 
-	hierarchies := self extendHierarchies: superclassChains. 
-	levels := self hierarchiesByLevel: hierarchies.
-	services := Dictionary new. 
-	toExpand := Set new. 
-	self services: services from: levels expand: toExpand.
-	hierarchyServices := services reject:[:array | array isEmpty].
-	hierarchyServices copy keysAndValuesDo:[:key :value | 
-		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	^hierarchyServices
+  | superclassChains levels services hierarchies toExpand |
+  superclassChains := self superclassChainsFor: theClasses.
+  hierarchies := self extendHierarchies: superclassChains.
+  levels := self hierarchiesByLevel: hierarchies.
+  services := Dictionary new.
+  toExpand := Set new.
+  self
+    services: services
+    from: levels
+    expand: toExpand
+    classes: theClasses.
+  hierarchyServices := services reject: [ :array | array isEmpty ].
+  hierarchyServices copy
+    keysAndValuesDo: [ :key :value | 
+      hierarchyServices
+        at: key
+        put:
+          (value asSet asSortedCollection: [ :x :y | x name < y name ]) asArray ].
+  ^ hierarchyServices
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> classHierarchyForDictionariesNamed: dictionaryNames [
+  | theClasses |
+  theClasses := OrderedCollection new.
+  dictionaryNames
+    do: [ :dictionaryName | 
+      (Rowan globalNamed: dictionaryName)
+        keysAndValuesDo: [ :key :value | 
+          value isClass
+            ifTrue: [ theClasses add: value ] ] ].
+  hierarchyServices := self classHierarchy: theClasses.
+  updateType := #'classHierarchyUpdate:browser:'.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> classHierarchyForPackagesNamed: packageNames [
+  | theClasses |
+  theClasses := OrderedCollection new.
+  packageNames
+    do: [ :packageName | 
+      theClasses
+        addAll:
+          ((Rowan image loadedPackageNamed: packageName) loadedClasses 
+            collect: [ :cls | cls handle]).
+      theClasses
+        addAll:
+          ((Rowan image loadedPackageNamed: packageName) loadedClassExtensions
+            collect: [ :cls | cls handle]) ].
+  hierarchyServices := self classHierarchy: theClasses.
+  updateType := #'classHierarchyUpdate:browser:'.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
@@ -221,12 +263,6 @@ RowanBrowserService >> selectedClass [
 { #category : 'perform' }
 RowanBrowserService >> servicePerform: symbol withArguments: collection [
 	super perform: symbol withArguments: collection.
-]
-
-{ #category : 'command support' }
-RowanBrowserService >> services: services from: levels expand: toExpand [
-
-	^super services: services from: levels expand: toExpand classes: allClasses
 ]
 
 { #category : 'client commands' }

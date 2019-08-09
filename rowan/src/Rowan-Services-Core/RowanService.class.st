@@ -338,7 +338,7 @@ RowanService >> servicePerform: symbol withArguments: collection [
 { #category : 'commands support' }
 RowanService >> services: services from: levels expand: toExpand classes: theClasses [
 
-	(theClasses collect:[:svc | svc theClass]) do:[:aClass |
+	theClasses do:[:aClass |
 		toExpand addAll: (organizer allSuperclassesOf: aClass)].
 	levels keysAndValuesDo: [:key :value |
 		| newKey service  | 

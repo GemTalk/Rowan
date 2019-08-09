@@ -301,8 +301,11 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'commands support' }
 RowanPackageService >> services: services from: levels expand: toExpand [
-
-	^super services: services from: levels expand: toExpand classes: classes
+  ^ self
+    services: services
+    from: levels
+    expand: toExpand
+    classes: (classes collect: [ :classService | classService theClass ])
 ]
 
 { #category : 'client commands' }
