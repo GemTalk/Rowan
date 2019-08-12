@@ -100,11 +100,14 @@ RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName package
 
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
-	packagesRoot directories do: [:packageDir |
-		| packageName |
-		packageName := self _packageNameFromPackageDir: packageDir.
-		(packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
-			ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
+	packagesRoot directories do: [:packageDir | | dir |
+    dir := packageDir path basename .
+    dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
+		  | packageName |
+		  packageName := self _packageNameFromPackageDir: packageDir.
+		  (packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
+			  ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
+    ].
 ]
 
 { #category : 'public' }
