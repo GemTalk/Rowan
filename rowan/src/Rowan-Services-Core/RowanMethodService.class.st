@@ -36,7 +36,6 @@ Class {
 
 { #category : 'instance creation' }
 RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer [
-
 	^self new
 		initialize: aGsNMethod organizer: aClassOrganizer;
 		yourself
@@ -616,7 +615,6 @@ RowanMethodService >> testResult [
 
 { #category : 'updates' }
 RowanMethodService >> update [
-	
 	self isUnboundMethod ifFalse:[
 		self wasRecycled ifTrue:[oop := self gsNMethod asOop].
 		self wasDeleted ifTrue:[
@@ -625,7 +623,7 @@ RowanMethodService >> update [
 		oop ifNil: [oop := self gsNMethod asOop]].
 	self 
 		initialize: (Object _objectForOop: oop) 
-		organizer: ClassOrganizer new.
+		organizer: organizer.
 	RowanCommandResult addResult: self.
 ]
 
