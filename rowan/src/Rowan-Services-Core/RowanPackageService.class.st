@@ -254,10 +254,11 @@ RowanPackageService >> removeClass: classService [
 	self removeClassNamed: classService name. 
 	self setDefaultTemplate.
 	classService updateType: #removedClass:.
+	classService wasRemoved: true. 
 	RowanCommandResult addResult: classService
 ]
 
-{ #category : 'client commands' }
+{ #category : 'commands support' }
 RowanPackageService >> removeClassNamed: className [
 
 	self browserTool removeClassNamed: className.

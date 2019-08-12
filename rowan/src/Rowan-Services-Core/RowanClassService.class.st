@@ -39,7 +39,8 @@ Class {
 		'isNewClass',
 		'updateAfterCommand',
 		'isInSymbolList',
-		'dictionaryName'
+		'dictionaryName',
+		'wasRemoved'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -314,7 +315,7 @@ RowanClassService >> expand: boolean [
 	expand := boolean
 ]
 
-{ #category : 'other' }
+{ #category : 'client commands' }
 RowanClassService >> fastRefresh [
 	"pushes less information to ston so it's faster"
 
@@ -1116,4 +1117,10 @@ RowanClassService >> versions: newValue [
 { #category : 'testing' }
 RowanClassService >> wasDeleted [
 	^(Rowan globalNamed: name) isNil
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> wasRemoved: boolean [
+
+	wasRemoved := boolean
 ]
