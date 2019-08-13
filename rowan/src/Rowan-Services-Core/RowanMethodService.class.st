@@ -35,9 +35,9 @@ Class {
 }
 
 { #category : 'instance creation' }
-RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer [
+RowanMethodService class >> forGsNMethod: aGsNMethod organizer: anOrganizer [
 	^self new
-		initialize: aGsNMethod organizer: aClassOrganizer;
+		initialize: aGsNMethod organizer: anOrganizer;
 		yourself
 ]
 
@@ -50,7 +50,6 @@ RowanMethodService class >> forSelector: sel class: theClass meta: boolean organ
 		meta: boolean.
 	service forClass: theClass organizer: anOrganizer.
 	^service
-
 ]
 
 { #category : 'utility' }
