@@ -272,13 +272,13 @@ RowanClassService >> comment: newValue [
 
 ]
 
-{ #category : 'method compilation' }
+{ #category : 'constants' }
 RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol [
 	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
 
 	| method warnings |
 	
-	[ [ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol. Transcript cr; show: method printString]
+	[ [ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol.]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: false ]]
 			on: CompileError
@@ -911,20 +911,19 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'Accessing' }
 RowanClassService >> setComment [
-
-	| theClass |
-	theClass := self theClass.
-	(theClass canUnderstand: #comment)
-		ifTrue: [comment := theClass comment]
-		ifFalse: 
-			[(theClass canUnderstand: #description)
-					ifTrue: 
-						[| description |
-						description := theClass description.
-						description class name = #GsClassDocumentation
-							ifTrue: [comment := description detailsAboutClass]]].
-	comment isNil ifTrue: [comment := String new].
-
+  | theClass |
+  theClass := self theClass thisClass.	"always get non meta class"
+  (theClass canUnderstand: #'comment')
+    ifTrue: [ comment := theClass comment ]
+    ifFalse: [ 
+      (theClass canUnderstand: #'description')
+        ifTrue: [ 
+          | description |
+          description := theClass description.
+          description class name = #'GsClassDocumentation'
+            ifTrue: [ comment := description detailsAboutClass ] ] ].
+  comment isNil
+    ifTrue: [ comment := String new ]
 ]
 
 { #category : 'private' }
