@@ -39,7 +39,8 @@ Class {
 		'isNewClass',
 		'updateAfterCommand',
 		'isInSymbolList',
-		'dictionaryName'
+		'dictionaryName',
+		'wasRemoved'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -185,15 +186,7 @@ RowanClassService >> classCreationTemplate [
 
 { #category : 'client commands' }
 RowanClassService >> classHierarchy [
-	| behavior |
-	behavior := self theClass. 
-	organizer := ClassOrganizer newWithRoot: behavior. 
-	hierarchyServices := Dictionary new.   
-	organizer hierarchy keysAndValuesDo: [:key :value |
-		| classService |
-		classService := key == #nil ifTrue:[#nil] ifFalse: [(self classServiceFromOop: key asOop) meta: meta].
-		hierarchyServices at: classService put: (self subclassServices: value). 
-	].
+	hierarchyServices := self classHierarchy: (Array with: self theClass). 
 	RowanCommandResult addResult: self.
 ]
 
@@ -238,7 +231,7 @@ RowanClassService >> classServiceFromOop: anOop [
 				ifTrue:[
 					classService basicRefreshFrom: theClass]
 				ifFalse:[
-					classService refreshFrom: theClass]]
+					classService fastRefresh]]
 		ifFalse:[
 			classService minimalRefreshFrom: theClass]
 ]
@@ -279,13 +272,13 @@ RowanClassService >> comment: newValue [
 
 ]
 
-{ #category : 'method compilation' }
+{ #category : 'constants' }
 RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol [
 	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
 
 	| method warnings |
 	
-	[ [ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol. Transcript cr; show: method printString]
+	[ [ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol.]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: false ]]
 			on: CompileError
@@ -314,7 +307,7 @@ RowanClassService >> expand: boolean [
 	expand := boolean
 ]
 
-{ #category : 'other' }
+{ #category : 'client commands' }
 RowanClassService >> fastRefresh [
 	"pushes less information to ston so it's faster"
 
@@ -728,8 +721,9 @@ RowanClassService >> removeMethods: methodsToRemove [
 		self removeSelector: methodService selector ifAbsent:[notRemoved add: methodService].
 		(notRemoved includes: methodService) ifFalse:[
 			methodService updateType: #removed:.
-			RowanCommandResult addResult: methodService
+			RowanCommandResult addResult: methodService.
 		]].
+	self updateTests.
 	notRemoved isEmpty ifFalse:[
 		self error: 'These selectors were not removed - ', (notRemoved collect:[:svc | svc selector]) printString].
 ]
@@ -768,29 +762,38 @@ RowanClassService >> renameCategoryFrom: old to: new [
 
 { #category : 'client commands' }
 RowanClassService >> renameClass: oldClassName to: newClassName [
-	| references newMethods |
-	newMethods := Array new. 
-	Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
-	name := newClassName. 
-	organizer := ClassOrganizer new. 
-	references := organizer update referencesTo: oldClassName asSymbol.
-	1 to: references first size do:[:index |
-		| method newSource compileResult failedCompile methodService oldSource |
-		failedCompile := false. 
-		method := references first at: index. 
-		oldSource := method sourceString. 
-		newSource := self replaceSubString: oldClassName in: oldSource with: newClassName.
-		compileResult := [method inClass rwCompileMethod: newSource
-									category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
-		methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
-		failedCompile ifTrue:[
-				methodService comparisonSource: oldClassName]
-			ifFalse:[
-				methodService comparisonSource: oldSource].
-		methodService failedCompile: failedCompile. 
-		newMethods add: methodService.
-		].
-	RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods).
+  | references newMethods |
+  newMethods := Array new.
+  Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
+  name := newClassName.
+  organizer := ClassOrganizer new.
+  references := organizer update referencesTo: oldClassName asSymbol.
+  1 to: references first size do: [ :index | 
+    | method newSource compileResult failedCompile methodService oldSource |
+    failedCompile := false.
+    method := references first at: index.
+    oldSource := method sourceString.
+    newSource := self
+      replaceSubString: oldClassName
+      in: oldSource
+      with: newClassName.
+    compileResult := [ 
+    method inClass
+      rwCompileMethod: newSource
+      category: (method inClass categoryOfSelector: method selector) asSymbol ]
+      on: CompileError
+      do: [ :ex | 
+        failedCompile := true.
+        method ].
+    methodService := RowanMethodService
+      forGsNMethod: compileResult
+      organizer: organizer.
+    failedCompile
+      ifTrue: [ methodService comparisonSource: oldClassName ]
+      ifFalse: [ methodService comparisonSource: oldSource ].
+    methodService failedCompile: failedCompile.
+    newMethods add: methodService ].
+  RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods)
 ]
 
 { #category : 'private' }
@@ -865,6 +868,7 @@ RowanClassService >> saveMethodSource: source category: category [
 			hierarchyImplementorsOf: methodService selector inClass: methodService className. "this will update hierarchy method indicators for client"
 	self selectedMethods: (Array with: methodService).
 	self updateDirtyState.
+	self updateTests.
 ]
 
 { #category : 'other' }
@@ -907,20 +911,19 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'Accessing' }
 RowanClassService >> setComment [
-
-	| theClass |
-	theClass := self theClass.
-	(theClass canUnderstand: #comment)
-		ifTrue: [comment := theClass comment]
-		ifFalse: 
-			[(theClass canUnderstand: #description)
-					ifTrue: 
-						[| description |
-						description := theClass description.
-						description class name = #GsClassDocumentation
-							ifTrue: [comment := description detailsAboutClass]]].
-	comment isNil ifTrue: [comment := String new].
-
+  | theClass |
+  theClass := self theClass thisClass.	"always get non meta class"
+  (theClass canUnderstand: #'comment')
+    ifTrue: [ comment := theClass comment ]
+    ifFalse: [ 
+      (theClass canUnderstand: #'description')
+        ifTrue: [ 
+          | description |
+          description := theClass description.
+          description class name = #'GsClassDocumentation'
+            ifTrue: [ comment := description detailsAboutClass ] ] ].
+  comment isNil
+    ifTrue: [ comment := String new ]
 ]
 
 { #category : 'private' }
@@ -1069,6 +1072,15 @@ RowanClassService >> updatePackageProject [
 	projectService update.
 ]
 
+{ #category : 'updates' }
+RowanClassService >> updateTests [
+  "update the test browsers on certain operations"
+
+  RowanBrowserService new packagesWithTests.
+  (RowanPackageService new name: packageName) testClasses.
+  RowanCommandResult addResult: self update.
+]
+
 { #category : 'Accessing' }
 RowanClassService >> version [
 	^version
@@ -1096,4 +1108,10 @@ RowanClassService >> versions: newValue [
 { #category : 'testing' }
 RowanClassService >> wasDeleted [
 	^(Rowan globalNamed: name) isNil
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> wasRemoved: boolean [
+
+	wasRemoved := boolean
 ]
