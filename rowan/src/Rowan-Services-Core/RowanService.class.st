@@ -83,6 +83,29 @@ RowanService >> browserTool [
 
 ]
 
+{ #category : 'commands support' }
+RowanService >> classHierarchy: theClasses [
+  | superclassChains levels services hierarchies toExpand hierarchyServices |
+  superclassChains := self superclassChainsFor: theClasses.
+  hierarchies := self extendHierarchies: superclassChains.
+  levels := self hierarchiesByLevel: hierarchies.
+  services := Dictionary new.
+  toExpand := Set new.
+  self
+    services: services
+    from: levels
+    expand: toExpand
+    classes: theClasses.
+  hierarchyServices := services reject: [ :array | array isEmpty ].
+  hierarchyServices copy
+    keysAndValuesDo: [ :key :value | 
+      hierarchyServices
+        at: key
+        put:
+          (value asSet asSortedCollection: [ :x :y | x name < y name ]) asArray ].
+  ^ hierarchyServices
+]
+
 { #category : 'accessing' }
 RowanService >> command [
 
@@ -337,20 +360,38 @@ RowanService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'commands support' }
 RowanService >> services: services from: levels expand: toExpand classes: theClasses [
+  "In order to avoid the expense of creating duplicate services, we cache
+them in the newServices temporary for look up"
 
-	(theClasses collect:[:svc | svc theClass]) do:[:aClass |
-		toExpand addAll: (organizer allSuperclassesOf: aClass)].
-	levels keysAndValuesDo: [:key :value |
-		| newKey service  | 
-		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService new classServiceFromOop: key asOop).
-			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-			service].
-		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService new classServiceFromOop: cls asOop).
-				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-				service
-				])]
+  | newServices |
+  newServices := Array new.
+  theClasses
+    do: [ :aClass | toExpand addAll: (organizer allSuperclassesOf: aClass) ].
+  levels
+    keysAndValuesDo: [ :key :value | 
+      | newKey service |
+      newKey := key = #'nil'
+        ifTrue: [ #'nil' ]
+        ifFalse: [ 
+          service := newServices
+            detect: [ :classService | classService name = key name ]
+            ifNone: [ RowanClassService new classServiceFromOop: key asOop ].
+          (toExpand includes: service theClass)
+            ifTrue: [ service expand: true ]
+            ifFalse: [ service expand: false ].
+          service ].
+      services
+        at: newKey
+        put:
+          (value
+            collect: [ :cls | 
+              service := newServices
+                detect: [ :classService | classService name = cls name ]
+                ifNone: [ RowanClassService new classServiceFromOop: cls asOop ].
+              (toExpand includes: service theClass)
+                ifTrue: [ service expand: true ]
+                ifFalse: [ service expand: false ].
+              service ]) ]
 ]
 
 { #category : 'replication' }

@@ -454,6 +454,23 @@ RowanClassServiceTest >> test_selectedMethod [
 			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
 ]
 
+{ #category : 'tests' }
+RowanClassServiceTest >> test_setClassCommentDuringMetaclassRefresh [
+  | classService behavior meta metaClassService |
+  behavior := Rowan globalNamed: self servicesDefaultClassName.
+  self assert: behavior comment equals: String new.
+  classService := RowanClassService
+    forClassNamed: self servicesDefaultClassName
+    meta: false.
+  classService classComment: 'This is a test'.
+  meta := behavior class.
+  metaClassService := RowanClassService new
+    name: 'RowanClassService';
+    oop: meta asOop.
+  metaClassService fastRefresh.
+  self assert: metaClassService comment equals: 'This is a test'
+]
+
 { #category : 'test method compilation' }
 RowanClassServiceTest >> test_setSuperSubIndicators [
 	| classService superclassMethodService subclassMethodService selector subclassService browserService |
