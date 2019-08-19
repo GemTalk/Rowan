@@ -6,7 +6,9 @@ Class {
 		'method',
 		'stepPoint',
 		'vars',
-		'oop'
+		'oop',
+		'homeMethodSelector',
+		'homeMethodClassName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -22,19 +24,24 @@ RowanFrameService class >> process: aGsProcess level: anInteger organizer: aClas
 
 { #category : 'other' }
 RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: aClassOrganizer [
-	"In 3.2.15 the server does some whacky things with IP, stepPoint, and nested methods.
+  "In 3.2.15 the server does some whacky things with IP, stepPoint, and nested methods.
 	See http://kermit.gemtalksystems.com/bug?bug=45553 --JGF"
 
-	| frameData gsNMethod |
-	frameData := aGsProcess _frameContentsAt: anInteger.
-	oop := (frameData at: 8) asOop.
-	gsNMethod := frameData at: 1.
-	label := aGsProcess _reportAt: anInteger.
-	method := RowanMethodService forGsNMethod: gsNMethod organizer: aClassOrganizer.
-	stepPoint := gsNMethod == gsNMethod homeMethod
-		ifTrue: [aGsProcess _stepPointAt: anInteger]
-		ifFalse: [gsNMethod homeMethod _stepPointForMeth: gsNMethod ip: (frameData at: 2)].
-	vars := self varsFor: frameData.
+  | frameData gsNMethod |
+  frameData := aGsProcess _frameContentsAt: anInteger.
+  oop := (frameData at: 8) asOop.
+  gsNMethod := frameData at: 1.
+  label := aGsProcess _reportAt: anInteger.
+  method := RowanMethodService
+    forGsNMethod: gsNMethod
+    organizer: aClassOrganizer.
+  homeMethodSelector := gsNMethod homeMethod selector.
+  homeMethodClassName := gsNMethod homeMethod inClass
+    ifNotNil: [ :cls | cls name asString ].
+  stepPoint := gsNMethod == gsNMethod homeMethod
+    ifTrue: [ aGsProcess _stepPointAt: anInteger ]
+    ifFalse: [ gsNMethod homeMethod _stepPointForMeth: gsNMethod ip: (frameData at: 2) ].
+  vars := self varsFor: frameData
 ]
 
 { #category : 'perform' }

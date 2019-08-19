@@ -64,19 +64,10 @@ RowanPackageService >> classHierarchy [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'private' }
+{ #category : 'commands support' }
 RowanPackageService >> classHierarchy: theClasses [
-	| superclassChains levels services hierarchies toExpand |
-	superclassChains := self superclassChainsFor: theClasses. 
-	hierarchies := self extendHierarchies: superclassChains. 
-	levels := self hierarchiesByLevel: hierarchies.
-	services := Dictionary new. 
-	toExpand := Set new. 
-	self services: services from: levels expand: toExpand.
-	hierarchyServices := services reject:[:array | array isEmpty].
-	hierarchyServices copy keysAndValuesDo:[:key :value | 
-		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	^hierarchyServices
+  hierarchyServices := super classHierarchy: theClasses.
+  ^ hierarchyServices
 ]
 
 { #category : 'rowan' }
@@ -254,10 +245,11 @@ RowanPackageService >> removeClass: classService [
 	self removeClassNamed: classService name. 
 	self setDefaultTemplate.
 	classService updateType: #removedClass:.
+	classService wasRemoved: true. 
 	RowanCommandResult addResult: classService
 ]
 
-{ #category : 'client commands' }
+{ #category : 'commands support' }
 RowanPackageService >> removeClassNamed: className [
 
 	self browserTool removeClassNamed: className.
@@ -301,8 +293,11 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'commands support' }
 RowanPackageService >> services: services from: levels expand: toExpand [
-
-	^super services: services from: levels expand: toExpand classes: classes
+  ^ self
+    services: services
+    from: levels
+    expand: toExpand
+    classes: (classes collect: [ :classService | classService theClass ])
 ]
 
 { #category : 'client commands' }
@@ -313,23 +308,40 @@ RowanPackageService >> setDefaultTemplate [
 
 { #category : 'client commands' }
 RowanPackageService >> testClasses [
-
-	testClasses := Set new. 
-	TestCase allSubclasses do:[:testSubclass |
-		testSubclass isAbstract ifFalse:[
-			testSubclass suite tests do:[:testClassInstance |
-				| implementingClass |
-				implementingClass := testClassInstance class whichClassIncludesSelector: testClassInstance selector. 
-				(implementingClass compiledMethodAt: testClassInstance selector) rowanPackageName = name ifTrue:[
-					| classService |
-					classService := RowanClassService basicForClassNamed: testSubclass name.
-					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
-					(self loadedClassExtensions keys asArray includes: classService name) ifFalse:[
-							"don't include extension classes"
-							testClasses add: classService]]]]]]. 
-	updateType := #testClasses:. 
-	testClasses := testClasses asArray. 
-	RowanCommandResult addResult: self.
+  testClasses := Set new.
+  TestCase allSubclasses
+    do: [ :testSubclass | 
+      testSubclass isAbstract
+        ifFalse: [ 
+          testSubclass suite tests
+            do: [ :testClassInstance | 
+              | implementingClass compiledMethod testIsVisible |
+              compiledMethod := testSubclass
+                compiledMethodAt: testClassInstance selector
+                otherwise: nil.
+              testIsVisible := compiledMethod
+                ifNil: [ 
+                  implementingClass := testClassInstance class
+                    whichClassIncludesSelector: testClassInstance selector.
+                  compiledMethod := implementingClass
+                    compiledMethodAt: testClassInstance selector.
+                  compiledMethod rowanPackageName = name ]
+                ifNotNil: [ testSubclass rowanPackageName = name ].
+              testIsVisible
+                ifTrue: [ 
+                  | classService |
+                  classService := RowanClassService
+                    basicForClassNamed: testSubclass name.
+                  testClasses
+                    detect: [ :testClassService | testClassService name = classService name ]
+                    ifNone: [ 
+                      (self loadedClassExtensions keys asArray includes: classService name)
+                        ifFalse: [ 
+                          "don't include extension classes"
+                          testClasses add: classService ] ] ] ] ] ].
+  updateType := #'testClasses:'.
+  testClasses := testClasses asArray.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'updates' }

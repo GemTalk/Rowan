@@ -28,16 +28,16 @@ Class {
 		'isTestMethod',
 		'testRunClassName',
 		'failedCompile',
-		'comparisonSource'
+		'comparisonSource',
+		'firstReference'
 	],
 	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'instance creation' }
-RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer [
-
+RowanMethodService class >> forGsNMethod: aGsNMethod organizer: anOrganizer [
 	^self new
-		initialize: aGsNMethod organizer: aClassOrganizer;
+		initialize: aGsNMethod organizer: anOrganizer;
 		yourself
 ]
 
@@ -50,7 +50,6 @@ RowanMethodService class >> forSelector: sel class: theClass meta: boolean organ
 		meta: boolean.
 	service forClass: theClass organizer: anOrganizer.
 	^service
-
 ]
 
 { #category : 'utility' }
@@ -266,6 +265,12 @@ RowanMethodService >> fileout [
 	ws nextPutAll: (self behavior fileOutMethod: selector asString environmentId: 0).
 	answeringService answer: ws contents.
 	RowanCommandResult addResult: answeringService.
+]
+
+{ #category : 'other' }
+RowanMethodService >> firstReference: integer [
+
+	firstReference := integer
 ]
 
 { #category : 'initialization' }
@@ -609,7 +614,6 @@ RowanMethodService >> testResult [
 
 { #category : 'updates' }
 RowanMethodService >> update [
-	
 	self isUnboundMethod ifFalse:[
 		self wasRecycled ifTrue:[oop := self gsNMethod asOop].
 		self wasDeleted ifTrue:[
@@ -618,7 +622,7 @@ RowanMethodService >> update [
 		oop ifNil: [oop := self gsNMethod asOop]].
 	self 
 		initialize: (Object _objectForOop: oop) 
-		organizer: ClassOrganizer new.
+		organizer: organizer.
 	RowanCommandResult addResult: self.
 ]
 
