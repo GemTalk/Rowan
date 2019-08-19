@@ -7,6 +7,21 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'private' }
+RowanQueryService >> basicBreakpointMethods [
+  | bpMethods bpArray |
+  bpMethods := Array new.
+  bpArray := (GsNMethod _breakReport: true) at: 2.
+  bpArray do: [ :array | bpMethods add: (array at: 5) ].
+  ^ self methodServicesFrom: bpMethods
+]
+
+{ #category : 'queries' }
+RowanQueryService >> breakPointMethods [
+  queryResults := self basicBreakpointMethods.
+  self returnQueryToClient
+]
+
 { #category : 'queries' }
 RowanQueryService >> browseClassReferences: className [
 
