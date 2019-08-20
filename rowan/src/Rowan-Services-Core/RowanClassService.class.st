@@ -911,19 +911,7 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'Accessing' }
 RowanClassService >> setComment [
-  | theClass |
-  theClass := self theClass thisClass.	"always get non meta class"
-  (theClass canUnderstand: #'comment')
-    ifTrue: [ comment := theClass comment ]
-    ifFalse: [ 
-      (theClass canUnderstand: #'description')
-        ifTrue: [ 
-          | description |
-          description := theClass description.
-          description class name = #'GsClassDocumentation'
-            ifTrue: [ comment := description detailsAboutClass ] ] ].
-  comment isNil
-    ifTrue: [ comment := String new ]
+  comment := self theClass thisClass comment
 ]
 
 { #category : 'private' }
