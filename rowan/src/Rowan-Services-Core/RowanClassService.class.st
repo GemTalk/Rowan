@@ -40,7 +40,8 @@ Class {
 		'updateAfterCommand',
 		'isInSymbolList',
 		'dictionaryName',
-		'wasRemoved'
+		'wasRemoved',
+		'renamedName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -766,6 +767,14 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
   newMethods := Array new.
   Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
   name := newClassName.
+  self update.
+  renamedName := oldClassName.
+  methods
+    do: [ :methodService | 
+      methodService
+        renamedName: oldClassName;
+		className: newClassName. 
+      RowanCommandResult addResult: methodService ].
   organizer := ClassOrganizer new.
   references := organizer update referencesTo: oldClassName asSymbol.
   1 to: references first size do: [ :index | 
@@ -792,6 +801,7 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
       ifTrue: [ methodService comparisonSource: oldClassName ]
       ifFalse: [ methodService comparisonSource: oldSource ].
     methodService failedCompile: failedCompile.
+    methodService renamedName: oldClassName.
     newMethods add: methodService ].
   RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods)
 ]

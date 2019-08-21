@@ -29,7 +29,8 @@ Class {
 		'testRunClassName',
 		'failedCompile',
 		'comparisonSource',
-		'firstReference'
+		'firstReference',
+		'renamedName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -466,6 +467,16 @@ RowanMethodService >> removeSelector: sel class: clsName [
 	self rowanFixMe. "combine remove methods variants"
 	self browserTool removeMethod: sel asSymbol forClassNamed: (clsName subStrings first) isMeta: (clsName subStrings size = 2)
 
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> renamedName [
+	^renamedName
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> renamedName: object [
+	renamedName := object
 ]
 
 { #category : 'rowan' }
