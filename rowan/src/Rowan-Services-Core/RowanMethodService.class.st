@@ -244,6 +244,12 @@ RowanMethodService >> compilationWarnings: newValue [
 	compilationWarnings := newValue
 ]
 
+{ #category : 'accessing' }
+RowanMethodService >> definedPackage [
+
+	^definedPackage
+]
+
 { #category : 'rowan' }
 RowanMethodService >> definitionClass [
 

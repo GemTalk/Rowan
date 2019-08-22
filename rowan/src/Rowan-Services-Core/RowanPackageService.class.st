@@ -308,6 +308,7 @@ RowanPackageService >> setDefaultTemplate [
 
 { #category : 'client commands' }
 RowanPackageService >> testClasses [
+  organizer := ClassOrganizer new.
   testClasses := Set new.
   TestCase allSubclasses
     do: [ :testSubclass | 
@@ -315,30 +316,23 @@ RowanPackageService >> testClasses [
         ifFalse: [ 
           testSubclass suite tests
             do: [ :testClassInstance | 
-              | implementingClass compiledMethod testIsVisible |
+              | implementingClass compiledMethod |
               compiledMethod := testSubclass
                 compiledMethodAt: testClassInstance selector
                 otherwise: nil.
-              testIsVisible := compiledMethod
+              compiledMethod
                 ifNil: [ 
                   implementingClass := testClassInstance class
                     whichClassIncludesSelector: testClassInstance selector.
                   compiledMethod := implementingClass
-                    compiledMethodAt: testClassInstance selector.
-                  compiledMethod rowanPackageName = name ]
-                ifNotNil: [ testSubclass rowanPackageName = name ].
-              testIsVisible
+                    compiledMethodAt: testClassInstance selector ].
+              (compiledMethod rowanPackageName = name
+                or: [ testSubclass rowanPackageName = name ])
                 ifTrue: [ 
                   | classService |
                   classService := RowanClassService
                     basicForClassNamed: testSubclass name.
-                  testClasses
-                    detect: [ :testClassService | testClassService name = classService name ]
-                    ifNone: [ 
-                      (self loadedClassExtensions keys asArray includes: classService name)
-                        ifFalse: [ 
-                          "don't include extension classes"
-                          testClasses add: classService ] ] ] ] ] ].
+                  testClasses add: classService ] ] ] ].
   updateType := #'testClasses:'.
   testClasses := testClasses asArray.
   RowanCommandResult addResult: self

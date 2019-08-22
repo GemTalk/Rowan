@@ -1121,6 +1121,12 @@ RowanClassService >> versions: newValue [
 
 ]
 
+{ #category : 'Accessing' }
+RowanClassService >> visibleTests [
+
+	^visibleTests
+]
+
 { #category : 'testing' }
 RowanClassService >> wasDeleted [
 	^(Rowan globalNamed: name) isNil
