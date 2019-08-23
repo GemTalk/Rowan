@@ -165,9 +165,14 @@ RowanQueryService >> setFirstReferenceUsing: results and: methods [
       gsMethod := methods first
         detect: [ :meth | 
           meth selector = methodService selector
-            and: [ meth inClass name asString = methodService className ] ].
-      index := methods first indexOf: gsMethod.
-      methodService firstReference: (methods last at: index) ]
+            and: [ meth inClass thisClass name asString = methodService className ] ]
+        ifNone: [ 
+          methodService firstReference: nil.
+          nil ].
+      gsMethod
+        ifNotNil: [ 
+          index := methods first indexOf: gsMethod.
+          methodService firstReference: (methods last at: index) ] ]
 ]
 
 { #category : 'ston' }
