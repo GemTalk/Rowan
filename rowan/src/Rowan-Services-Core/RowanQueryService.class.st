@@ -69,7 +69,7 @@ RowanQueryService >> hierarchySendersOf: selector inClass: className [
 	classes addAll: (organizer allSubclassesOf: behavior). 
 	methods := organizer sendersOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods first.
-	self setFirstRefernceUsing: queryResults and: methods. 
+	self setFirstReferenceUsing: queryResults and: methods. 
 	self returnQueryToClient.
 ]
 
@@ -153,17 +153,17 @@ RowanQueryService >> sendersOf: selector [
 	| methods |
 	methods := organizer sendersOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods first.
-	self setFirstRefernceUsing: queryResults and: methods. 
+	self setFirstReferenceUsing: queryResults and: methods. 
 	self returnQueryToClient.
 ]
 
 { #category : 'queryResults' }
-RowanQueryService >> setFirstRefernceUsing: results and: methods [
-  results
-    do: [ :methodService | 
-      | gsMethod index |
-      gsMethod := methods first
-        detect: [ :meth | meth selector = methodService selector ].
+RowanQueryService >> setFirstReferenceUsing: results and: methods [
+  1 to: results size
+    do: [ :resultsIndex | 
+      | gsMethod index methodService |
+	  methodService := results at: resultsIndex. 
+	  gsMethod := methods first at: resultsIndex. 
       index := methods first indexOf: gsMethod.
       methodService firstReference: (methods last at: index) ]
 ]
