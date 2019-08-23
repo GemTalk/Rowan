@@ -159,11 +159,13 @@ RowanQueryService >> sendersOf: selector [
 
 { #category : 'queryResults' }
 RowanQueryService >> setFirstReferenceUsing: results and: methods [
-  1 to: results size
-    do: [ :resultsIndex | 
-      | gsMethod index methodService |
-	  methodService := results at: resultsIndex. 
-	  gsMethod := methods first at: resultsIndex. 
+  results
+    do: [ :methodService | 
+      | gsMethod index |
+      gsMethod := methods first
+        detect: [ :meth | 
+          meth selector = methodService selector
+            and: [ meth inClass name asString = methodService className ] ].
       index := methods first indexOf: gsMethod.
       methodService firstReference: (methods last at: index) ]
 ]
