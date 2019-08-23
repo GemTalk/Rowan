@@ -246,7 +246,8 @@ RowanPackageService >> removeClass: classService [
 	self setDefaultTemplate.
 	classService updateType: #removedClass:.
 	classService wasRemoved: true. 
-	RowanCommandResult addResult: classService
+	RowanCommandResult addResult: classService.
+	RowanBrowserService new packagesWithTests. "sunit browser might need updated"
 ]
 
 { #category : 'commands support' }
