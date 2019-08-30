@@ -316,11 +316,11 @@ RowanClassService >> fastRefresh [
 	theClass := self theClass. 
 	self refreshFrom: theClass. 
 	methods do:[:service1 |
-			service1 source: nil; 
-					stepPoints: Array new.
+			service1 source: nil;
+				stepPoints: Array new].
 	visibleTests do:[:service2 |
-			service2 source: nil; 
-					stepPoints: Array new].
+			service2 source: nil;
+				stepPoints: Array new.
 			].
 	RowanCommandResult addResult: self.
 ]
