@@ -77,14 +77,15 @@ run
 		resultCases := {}.
 		resultsDict 
 			at: #suiteName put: suite name;
-			at: #testProperties put: (Dictionary new
+			at: #timeStamp put: DateAndTime now printString;
+			at: #properties put: (Dictionary new
 				at: #includeDeprecatedPackages put: includeDeprecatedPackages;
 				at: #deprecatedAction put: Deprecated deprecatedAction;
 				yourself);
 			at: #notes put: '';
 			at: #gsVersion put: (System gemVersionAt: #gsVersion);
-			at: #results put: resultCases;
-			at: #testResults put: (Dictionary new
+			at: #testCases put: resultCases;
+			at: #resultsSummary put: (Dictionary new
 				at: #summary put: res printString;
 				at: #failures put: res failureCount;
 				at: #errors put: res errorCount;
@@ -93,6 +94,13 @@ run
 			yourself.
 		strm := WriteStream on: String new.
  		strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
+		res passed do: [:each |
+			resultCases add: (Dictionary new
+					at: #className put: each class asString;
+					at: #selector put: each selector asString;
+					at: #status put: 'passed';
+					yourself) ]. 
+
 		strm nextPutAll: res printString; lf.
 		strm nextPutAll: '  errors'; lf.
 		(res errors collect: [:each |
