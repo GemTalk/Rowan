@@ -104,6 +104,13 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> needsCommit [
+
+	answer := System needsCommit.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> printStringOf: oop toMaxSize: integer [
 
 	answer := (Object _objectForOop: oop) printString. 
