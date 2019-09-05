@@ -1660,7 +1660,7 @@ JadeServer >> gsInteractionInformFailureHandler [
             clientObj: 1
             selector: #'informMessageBox:'
             args: (Array with: interaction message).
-          exception defaultAction.	"expect printString of answer back. Jadeite has limited ability to convert client objects to oops"
+          exception defaultAction.	
           nil ];
     inspectBlock: [ :interaction | 
           | exception |
@@ -1669,7 +1669,7 @@ JadeServer >> gsInteractionInformFailureHandler [
             clientObj: 1
             selector: #'inspectServerObject:'
             args: (Array with: interaction theObject asOop).
-          exception defaultAction.	"expect printString of answer back. Jadeite has limited ability to convert client objects to oops"
+          exception defaultAction.	
           interaction theObject ]
 ]
 
