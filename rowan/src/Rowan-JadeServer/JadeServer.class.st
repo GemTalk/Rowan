@@ -1643,6 +1643,14 @@ JadeServer >> groupListFor: aUserProfile [
 
 { #category : 'jadeite' }
 JadeServer >> gsInteractionInformFailureHandler [
+  self interactionHandlerActive
+    ifFalse: [ 
+      ^ GsInteractionHandler new
+        defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
+        confirmBlock: [ :interaction | interaction ok ];
+        informBlock: [ :interaction |  ];
+        inspectBlock: [ :interaction |  ];
+        yourself ].
   ^ GsInteractionHandler new
     confirmBlock: [ :interaction | 
           | exception answer |
@@ -1660,7 +1668,7 @@ JadeServer >> gsInteractionInformFailureHandler [
             clientObj: 1
             selector: #'informMessageBox:'
             args: (Array with: interaction message).
-          exception defaultAction.	
+          exception defaultAction.
           nil ];
     inspectBlock: [ :interaction | 
           | exception |
@@ -1669,7 +1677,7 @@ JadeServer >> gsInteractionInformFailureHandler [
             clientObj: 1
             selector: #'inspectServerObject:'
             args: (Array with: interaction theObject asOop).
-          exception defaultAction.	
+          exception defaultAction.
           interaction theObject ]
 ]
 
@@ -1857,6 +1865,11 @@ JadeServer >> installTranscript [
 	].
 
 
+]
+
+{ #category : 'jadeite' }
+JadeServer >> interactionHandlerActive [
+  ^ SessionTemps current at: #'rowanServiceInteractionActive' ifAbsent: [ true ]
 ]
 
 { #category : 'category' }
