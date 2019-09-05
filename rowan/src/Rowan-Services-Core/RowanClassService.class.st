@@ -40,7 +40,8 @@ Class {
 		'updateAfterCommand',
 		'isInSymbolList',
 		'dictionaryName',
-		'wasRemoved'
+		'wasRemoved',
+		'renamedName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -762,11 +763,17 @@ RowanClassService >> renameCategoryFrom: old to: new [
 
 { #category : 'client commands' }
 RowanClassService >> renameClass: oldClassName to: newClassName [
-  | references newMethods |
+  | references newMethods newClass |
   newMethods := Array new.
-  Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
+  newClass := Rowan projectTools browser
+    renameClassNamed: oldClassName
+    to: newClassName.
+  oop := newClass asOop.
   name := newClassName.
-  organizer := ClassOrganizer new.
+  self update.
+  renamedName := oldClassName.
+  self updateMethodsAfterRenameFrom: oldClassName to: newClassName. 
+  self updateSubclassesAfterRenameOf: newClass.
   references := organizer update referencesTo: oldClassName asSymbol.
   1 to: references first size do: [ :index | 
     | method newSource compileResult failedCompile methodService oldSource |
@@ -792,6 +799,7 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
       ifTrue: [ methodService comparisonSource: oldClassName ]
       ifFalse: [ methodService comparisonSource: oldSource ].
     methodService failedCompile: failedCompile.
+    methodService renamedName: oldClassName.
     newMethods add: methodService ].
   RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods)
 ]
@@ -911,19 +919,7 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'Accessing' }
 RowanClassService >> setComment [
-  | theClass |
-  theClass := self theClass thisClass.	"always get non meta class"
-  (theClass canUnderstand: #'comment')
-    ifTrue: [ comment := theClass comment ]
-    ifFalse: [ 
-      (theClass canUnderstand: #'description')
-        ifTrue: [ 
-          | description |
-          description := theClass description.
-          description class name = #'GsClassDocumentation'
-            ifTrue: [ comment := description detailsAboutClass ] ] ].
-  comment isNil
-    ifTrue: [ comment := String new ]
+  comment := self theClass thisClass comment
 ]
 
 { #category : 'private' }
@@ -1062,6 +1058,16 @@ RowanClassService >> updateDirtyState [
 	RowanCommandResult addResult: projectService.
 ]
 
+{ #category : 'private' }
+RowanClassService >> updateMethodsAfterRenameFrom: oldClassName to: newClassName [
+  methods
+    do: [ :methodService | 
+      methodService
+        renamedName: oldClassName;
+        className: newClassName. 
+      RowanCommandResult addResult: methodService ]
+]
+
 { #category : 'updates' }
 RowanClassService >> updatePackageProject [
 	| packageService projectService |
@@ -1070,6 +1076,16 @@ RowanClassService >> updatePackageProject [
 	packageService update. 
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
+]
+
+{ #category : 'private' }
+RowanClassService >> updateSubclassesAfterRenameOf: newClass [
+  organizer := ClassOrganizer new.
+  (organizer allSubclassesOf: newClass)
+    do: [ :subclass | 
+      | subclassService |
+      subclassService := RowanClassService minimalForClassNamed: subclass name.
+      RowanCommandResult addResult: subclassService ]
 ]
 
 { #category : 'updates' }
@@ -1103,6 +1119,12 @@ RowanClassService >> versions [
 RowanClassService >> versions: newValue [
 	versions := newValue
 
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> visibleTests [
+
+	^visibleTests
 ]
 
 { #category : 'testing' }

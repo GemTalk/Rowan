@@ -7,6 +7,21 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'private' }
+RowanQueryService >> basicBreakpointMethods [
+  | bpMethods bpArray |
+  bpMethods := Array new.
+  bpArray := (GsNMethod _breakReport: true) at: 2.
+  bpArray do: [ :array | bpMethods add: (array at: 5) ].
+  ^ self methodServicesFrom: bpMethods
+]
+
+{ #category : 'queries' }
+RowanQueryService >> breakPointMethods [
+  queryResults := self basicBreakpointMethods.
+  self returnQueryToClient
+]
+
 { #category : 'queries' }
 RowanQueryService >> browseClassReferences: className [
 
@@ -54,7 +69,7 @@ RowanQueryService >> hierarchySendersOf: selector inClass: className [
 	classes addAll: (organizer allSubclassesOf: behavior). 
 	methods := organizer sendersOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods first.
-	self setFirstRefernceUsing: queryResults and: methods. 
+	self setFirstReferenceUsing: queryResults and: methods. 
 	self returnQueryToClient.
 ]
 
@@ -138,19 +153,26 @@ RowanQueryService >> sendersOf: selector [
 	| methods |
 	methods := organizer sendersOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods first.
-	self setFirstRefernceUsing: queryResults and: methods. 
+	self setFirstReferenceUsing: queryResults and: methods. 
 	self returnQueryToClient.
 ]
 
 { #category : 'queryResults' }
-RowanQueryService >> setFirstRefernceUsing: results and: methods [
+RowanQueryService >> setFirstReferenceUsing: results and: methods [
   results
     do: [ :methodService | 
       | gsMethod index |
       gsMethod := methods first
-        detect: [ :meth | meth selector = methodService selector ].
-      index := methods first indexOf: gsMethod.
-      methodService firstReference: (methods last at: index) ]
+        detect: [ :meth | 
+          meth selector = methodService selector
+            and: [ meth inClass thisClass name asString = methodService className ] ]
+        ifNone: [ 
+          methodService firstReference: nil.
+          nil ].
+      gsMethod
+        ifNotNil: [ 
+          index := methods first indexOf: gsMethod.
+          methodService firstReference: (methods last at: index) ] ]
 ]
 
 { #category : 'ston' }
