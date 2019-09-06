@@ -42,6 +42,15 @@ RowanAnsweringService >> autoCommit [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> clearAllBreaks [
+  | methodServices |
+  methodServices := RowanQueryService new organizer: organizer; basicBreakpointMethods.
+  GsNMethod clearAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> exec: aString [
 
 	"for command line service someday"

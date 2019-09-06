@@ -134,20 +134,31 @@ RowanBrowserService >> openWindows [
 
 { #category : 'client commands' }
 RowanBrowserService >> packagesWithTests [
-	testPackages := Set new. 
-	testCount := 0. 
-	TestCase allSubclasses do:[:testSubclass |
-		testSubclass selectors do:[:selector |
-			| packageName |
-			(selector size >= 4 and:[
-			(selector copyFrom: 1 to: 4) asString = 'test']) ifTrue:[
-				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
-				packageName = Rowan unpackagedName ifFalse:[
-					testCount := testCount + 1. 
-					testPackages add: (RowanPackageService forPackageNamed: packageName)]]]]. 
-	updateType := #testPackages:. 
-	testPackages := testPackages asArray. 
-	RowanCommandResult addResult: self.
+  testPackages := Set new.
+  testCount := 0.
+  TestCase allSubclasses
+    do: [ :testSubclass | 
+      | suite |
+      suite := testSubclass buildSuite.
+      suite tests
+        do: [ :testCase | 
+          | packageName compiledMethod |
+          (testCase isKindOf: TestSuite)
+            ifFalse: [ 
+              compiledMethod := testCase class
+                compiledMethodAt: testCase selector
+                otherwise: nil.
+              packageName := compiledMethod
+                ifNil: [ testCase class rowanPackageName ]
+                ifNotNil: [ compiledMethod rowanPackageName ].
+              packageName = Rowan unpackagedName
+                ifFalse: [ 
+                  testCount := testCount + 1.
+                  testPackages
+                    add: (RowanPackageService forPackageNamed: packageName) ] ] ] ].
+  updateType := #'testPackages:'.
+  testPackages := testPackages asArray.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
