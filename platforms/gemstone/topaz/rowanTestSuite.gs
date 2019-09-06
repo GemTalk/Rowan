@@ -99,34 +99,34 @@ run
 					at: #className put: each class asString;
 					at: #selector put: each selector asString;
 					at: #status put: 'passed';
-					yourself) ]. 
+					yourself) ].
 
 		strm nextPutAll: res printString; lf.
 		strm nextPutAll: '  errors'; lf.
-		(res errors collect: [:each |
+		(res errors collect: [:each |  
 			resultCases add: (Dictionary new
 					at: #className put: each class asString;
 					at: #selector put: each selector asString;
-					at: #status put: 'error';
+					at: #status put: 'errors';
 					yourself). 
 			each printString ]) asArray sort do: [:each |
-				strm tab; nextPutAll: each; lf ].
-		res failures size = 0
-			ifTrue: [ ^ strm contents ].
-		strm nextPutAll: '  failures'; lf.
-			(res failures collect: [:each | 
-				resultCases add: (Dictionary new
-					at: #className put: each class asString;
-					at: #selector put: each selector asString;
-					at: #status put: 'failure';
-					yourself).
-				each printString]) asArray sort do: [:each |
-			strm tab; nextPutAll: each; lf ].
+			strm tab; nextPutAll: each; lf].
+		res failures size > 0
+			ifTrue: [
+				strm nextPutAll: '  failures'; lf.
+				(res failures collect: [:each | 
+					resultCases add: (Dictionary new
+							at: #className put: each class asString;
+							at: #selector put: each selector asString;
+							at: #status put: 'failures';
+							yourself). 
+					each printString]) asArray sort do: [:each |
+					strm tab; nextPutAll: each; lf ] ].
 
 		(FileSystem workingDirectory / 'testResults', 'json')
 			writeStreamDo: [:fileStream | STON put: resultsDict asJsonOnStreamPretty: fileStream ].
-		
-		^ strm contents ]
+
+		^ strm contents ] 
 			ensure: [ 
 				deprecationAction == #ignore
 					ifTrue: [ Deprecated doNothingOnDeprecated ].
