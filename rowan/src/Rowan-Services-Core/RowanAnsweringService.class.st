@@ -86,6 +86,14 @@ RowanAnsweringService >> initializeAutoCommit [
 	RowanService setAutoCommit: false
 ]
 
+{ #category : 'client commands' }
+RowanAnsweringService >> interactionHandlerActive [
+  answer := SessionTemps current
+    at: #'rowanServiceInteractionActive'
+    ifAbsent: [ true ].
+  RowanCommandResult addResult: self
+]
+
 { #category : 'testing' }
 RowanAnsweringService >> isTranscriptInstalled [
 
@@ -100,6 +108,13 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 	answer := (Rowan image loadedPackageNamed: actualName ifAbsent: []) notNil. 
 	command := nil. 
 	commandArgs := nil. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> needsCommit [
+
+	answer := System needsCommit.
 	RowanCommandResult addResult: self.
 ]
 
@@ -139,6 +154,11 @@ RowanAnsweringService >> setAutoCommit: object [
 
 	answer := RowanService setAutoCommit: object.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> setEnableInteractionHandler: boolean [
+  SessionTemps current at: #'rowanServiceInteractionActive' put: boolean
 ]
 
 { #category : 'client commands' }
