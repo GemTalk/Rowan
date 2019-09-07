@@ -89,6 +89,7 @@ RowanQueryService >> literalReferences: string [
 	compilationResult := string evaluate.  
 	methods := organizer referencesToLiteral: compilationResult.
 	queryResults := self methodServicesFrom: methods first.
+	self setFirstReferenceUsing: queryResults and: methods.
 	self returnQueryToClient.
 ]
 

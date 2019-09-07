@@ -229,7 +229,7 @@ RowanServicesTest >> servicesTestProjectName [
 { #category : 'setup teardown' }
 RowanServicesTest >> setUp [
 	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
-
+	RowanAnsweringService new setEnableInteractionHandler: false. 
 	RowanCommandResult initializeResults.
 ]
 
@@ -237,6 +237,7 @@ RowanServicesTest >> setUp [
 RowanServicesTest >> tearDown [
 
 	RowanCommandResult initializeResults.  "squash the gui updates"
+	RowanAnsweringService new setEnableInteractionHandler: true.
 ]
 
 { #category : 'support' }
