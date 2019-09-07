@@ -70,13 +70,13 @@ RowanPackageServiceTest >> test_packageWasDeleted [
 ]
 
 { #category : 'tests' }
-RowanPackageServiceTest >> test_testClassesDoNotIncludeExtensions [
+RowanPackageServiceTest >> test_testClassesIncludesExtensions [
 	| packageService testClassNames |
 	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
 	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-Tests'.
 	packageService testClasses. 
 	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
-	self deny: (testClassNames includes: 'RwRowanProjectIssuesTest').
+	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest'). "extension tests"
 	self assert: (testClassNames includes: 'RowanPackageServiceTest').
 
 	packageService := RowanPackageService forPackageNamed: 'Rowan-Tests'.

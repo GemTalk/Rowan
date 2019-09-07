@@ -25,9 +25,10 @@ Class {
 { #category : 'signalling' }
 FileDoesNotExistException class >> signalWithFile: aFile writeMode: writeMode [
 
-	^ (self fileName: aFile basename)
+  | ex |
+	^ (ex := self fileName: aFile basename)
 		readOnly: writeMode not;
-		signal
+		signal: ex fileName  "use signal: so file name shows up in  ex printString"
 ]
 
 { #category : 'accessing' }

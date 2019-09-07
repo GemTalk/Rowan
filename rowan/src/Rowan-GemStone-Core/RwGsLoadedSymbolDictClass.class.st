@@ -231,7 +231,7 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	newValue := handle isBytes
 						ifTrue: [
 							handle superClass isBytes not
-								ifTrue: [ 'bytes' ]
+								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
 							handle isSpecial
@@ -342,6 +342,7 @@ RwGsLoadedSymbolDictClass >> updateOptionsFromClass [
 	| propertyName oldValue newValue |
 	propertyName := 'gs_options'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
+"TODO, may need changes to result of _rwOptionsArray , see RwClassDefinition >> _updateOptionsFromClass "
 	newValue := (handle _rwOptionsArray collect: [:option | option asString])
 				asSortedCollection asArray.
 	newValue isEmpty ifTrue: [newValue := self absentToken].

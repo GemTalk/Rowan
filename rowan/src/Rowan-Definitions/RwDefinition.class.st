@@ -37,8 +37,11 @@ RwDefinition >> addDefinition: aDefinition to: aDictionary [
 
 	| key |
 	key := aDefinition key.
-	(aDictionary includesKey: key)
-		ifTrue: [self error: 'Duplicate definition.'].
+	(aDictionary includesKey: key) ifTrue: [
+     | nam |
+     nam := [ ' in ' , self name ] on: Error do:[:ex | '' ].
+     self error: 'Duplicate definition of ', key , nam .
+   ].
 	^ aDictionary at: key put: aDefinition
 ]
 

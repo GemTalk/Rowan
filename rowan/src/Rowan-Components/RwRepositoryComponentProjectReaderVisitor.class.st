@@ -58,6 +58,7 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 			type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
+		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);
 		gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ]);
 		shebang: (metadata at: #'shebang' ifAbsent: [ ]);
 		yourself

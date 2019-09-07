@@ -18,15 +18,15 @@ FileException class >> fileName: aFileName [
 { #category : 'instance creation' }
 FileException class >> signalOnFile: aFile [ 
 	
-	(self fileName: aFile basename) signal
+	(self fileName: aFile basename) signal: aFile name
 ]
 
 { #category : 'instance creation' }
 FileException class >> signalWith: aReference [
 	"Signal a new instance of the receiver with the supplied reference.
 	aReference is something that can be converted to a path, e.g. a String, Path or FileReference"
-
-	^(self fileName: aReference asPath pathString) signal
+  | str |
+	^(self fileName: (str := aReference asPath pathString)) signal: str
 ]
 
 { #category : 'exceptiondescription' }

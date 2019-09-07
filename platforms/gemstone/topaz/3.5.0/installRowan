@@ -15,6 +15,5 @@ startTopaz $GEMSTONE_NAME -l << EOF
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3.tpz
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_4.tpz
 
-  exit
 EOF
 

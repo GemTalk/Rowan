@@ -110,7 +110,7 @@ RBConfigurableFormatter class >> initialize [
   InQueryBlock := false.
   CascadedMessageInsideParentheses := false.
   FormatCommentWithStatements := true.
-  IndentString := '  '.
+  IndentString := '	'.
   IndentsForKeywords := 1.
   KeepBlockInMessage := true.
   LineUpBlockBrackets := false.

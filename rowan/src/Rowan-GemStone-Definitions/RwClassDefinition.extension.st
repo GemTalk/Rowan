@@ -81,13 +81,30 @@ RwClassDefinition >> gs_options [
 
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_options: optionsArray [
+	"preserver optionsArray order"
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])
 		ifTrue: [ 
 			self properties
 				at: 'gs_options'
 				put:
-					(optionsArray collect: [ :each | each asString ]) asSortedCollection asArray ]
+					(optionsArray collect: [ :each | each asString ]) asArray ]
+]
+
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_reservedOop [
+
+	^self properties
+				at: 'gs_reservedoop'
+				ifAbsent: [ '' ]
+]
+
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_reservedOop: aString [
+
+	self properties
+		at: 'gs_reservedoop'
+		put: aString
 ]
 
 { #category : '*rowan-gemstone-definitions' }

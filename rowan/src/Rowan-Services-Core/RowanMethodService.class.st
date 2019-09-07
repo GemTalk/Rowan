@@ -282,23 +282,26 @@ RowanMethodService >> firstReference: integer [
 
 { #category : 'initialization' }
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
-	"assume meta and selector are set"
+  "assume meta and selector are set"
 
-	| classOrMeta gsNMethod |
-	organizer := theOrganizer. 
-	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
-	gsNMethod := classOrMeta compiledMethodAt: selector.
-	definedPackage := gsNMethod rowanPackageName. 
-	oop := gsNMethod asOop. 
-	stepPoints := self stepPointsFor: gsNMethod.
-	breakPoints := self breakPointsFor: gsNMethod.
-	self updateSource: gsNMethod sourceString.
-	category := (classOrMeta categoryOfSelector: selector) asString.
-	className := theClass name asString. 
-	packageName := gsNMethod rowanPackageName. 
-	projectName := gsNMethod rowanProjectName.
-	self setSupersAndSubsFor: classOrMeta.
-	isExtension := self rowanIsExtension.
+  | classOrMeta gsNMethod |
+  organizer := theOrganizer.
+  classOrMeta := meta
+    ifTrue: [ theClass class ]
+    ifFalse: [ theClass ].
+  gsNMethod := classOrMeta compiledMethodAt: selector.
+  definedPackage := gsNMethod rowanPackageName.
+  oop := gsNMethod asOop.
+  stepPoints := self stepPointsFor: gsNMethod.
+  breakPoints := self breakPointsFor: gsNMethod.
+  self updateSource: gsNMethod sourceString.
+  category := (classOrMeta categoryOfSelector: selector) asString.
+  className := theClass name asString.
+  packageName := gsNMethod rowanPackageName.
+  projectName := gsNMethod rowanProjectName.
+  self setSupersAndSubsFor: classOrMeta.
+  isExtension := self rowanIsExtension.
+  self initializeTestMethodsFor: classOrMeta thisClass
 ]
 
 { #category : 'Accessing' }
@@ -373,6 +376,19 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
+	self initializeTestMethodsFor: inClass thisClass
+]
+
+{ #category : 'initialization' }
+RowanMethodService >> initializeTestMethodsFor: aClass [
+  | testSelectors |
+  (aClass inheritsFrom: TestCase)
+    ifTrue: [ 
+      aClass isAbstract
+        ifTrue: [ ^ self ].
+      testSelectors := aClass thisClass suite tests
+        collect: [ :method | method selector ].
+      isTestMethod := testSelectors includes: selector ]
 ]
 
 { #category : 'testing' }
@@ -381,7 +397,7 @@ RowanMethodService >> isMethodService [
 	^true
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'other' }
 RowanMethodService >> isTestMethod [
 
 	^isTestMethod

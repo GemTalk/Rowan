@@ -295,6 +295,38 @@ RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList:
 		do: [:ex | ex return: method -> warnings]
 ]
 
+{ #category : 'client commands' }
+RowanClassService >> copyClassTo: newClassName [
+  | newTemplate newClass newClassService index |
+  (Rowan image symbolList resolveSymbol: newClassName)
+    ifNotNil: [ ^ self error: newClassName , ' already exists' ].
+  index := template findPattern: (Array with: name) startingAt: 1.
+  newTemplate := template copy.
+  newTemplate removeFrom: index to: index + name size - 1.
+  newTemplate insertAll: newClassName at: index.
+  newClass := GsCurrentSession currentSession execute: newTemplate.
+  newClassService := RowanClassService new name: newClassName.
+  self theClass thisClass
+    methodsDo: [ :selector :gsMethod | 
+      newClassService
+        compileMethod: gsMethod sourceString
+        behavior: newClass
+        symbolList: Rowan image symbolList
+        inCategory:
+          (self theClass thisClass categoryOfSelector: selector) asSymbol ].
+  self theClass thisClass class
+    methodsDo: [ :selector :gsMethod | 
+      newClassService
+        compileMethod: gsMethod sourceString
+        behavior: newClass class
+        symbolList: Rowan image symbolList
+        inCategory:
+          (self theClass thisClass class categoryOfSelector: selector) asSymbol ].
+  newClassService update.
+  (RowanPackageService new name: newClassService packageName) update.
+  (RowanDictionaryService new name: dictionaryName) update
+]
+
 { #category : 'Updating' }
 RowanClassService >> definedPackageName: newValue [
 
@@ -316,11 +348,11 @@ RowanClassService >> fastRefresh [
 	theClass := self theClass. 
 	self refreshFrom: theClass. 
 	methods do:[:service1 |
-			service1 source: nil; 
-					stepPoints: Array new.
+			service1 source: nil;
+				stepPoints: Array new].
 	visibleTests do:[:service2 |
-			service2 source: nil; 
-					stepPoints: Array new].
+			service2 source: nil;
+				stepPoints: Array new.
 			].
 	RowanCommandResult addResult: self.
 ]

@@ -109,7 +109,8 @@ RwRepositoryComponentProjectTonelReaderVisitor >> packageExtension [
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName packageRoot: packageRoot [
 
-	| classFileExtensions classExtensionFileExtensions |
+	| classFileExtensions classExtensionFileExtensions trace |
+  trace := SessionTemps current at: #ROWAN_TRACE otherwise: nil .
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
 		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
@@ -117,6 +118,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName pa
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
 		| fileExtensions |
+    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading ', file asString ].
 		fileExtensions := file extensions asArray.
 		fileExtensions = classFileExtensions
 			ifTrue: [ self readClassFile: file inPackage: packageName ]

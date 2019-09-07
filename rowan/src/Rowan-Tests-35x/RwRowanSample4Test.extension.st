@@ -19,6 +19,15 @@ RwRowanSample4Test >> _cloneProjectFromSpecUrl_300: specUrlString projectsHome: 
 ]
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
+
+	(RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: projectsHome;
+		clone;
+		register.
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool [
 
 	| projectDefinition |
@@ -27,15 +36,6 @@ RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: proj
 		clone;
 		yourself.
 	aBool ifTrue: [ projectDefinition register ].
-]
-
-{ #category : '*rowan-tests-35x' }
-RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
-
-	(RwComponentProjectDefinition newForUrl: specUrlString)
-		projectHome: projectsHome;
-		clone;
-		register.
 ]
 
 { #category : '*rowan-tests-35x' }
@@ -78,6 +78,14 @@ RwRowanSample4Test >> _projectDefinitionFromSpecUrl: specUrlString projectRootPa
 ]
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> _rowanSample4_208_LoadSpecificationUrl [
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_208_load_v2.ston'
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> _rowanSample4_coreSpecificationUrl: repositoryRootPath [
 
 	^ 'file:' , repositoryRootPath pathString, '/rowan/specs/RowanSample4_core_v2.ston'
@@ -87,14 +95,6 @@ RwRowanSample4Test >> _rowanSample4_coreSpecificationUrl: repositoryRootPath [
 RwRowanSample4Test >> _rowanSample4_loadSpecificationUrl: repositoryRootPath [
 
 	^ 'file:' , repositoryRootPath pathString, '/rowan/specs/RowanSample4_load_v2.ston'
-]
-
-{ #category : '*rowan-tests-35x' }
-RwRowanSample4Test >> _rowanSample4_208_LoadSpecificationUrl [
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_208_load_v2.ston'
 ]
 
 { #category : '*rowan-tests-35x' }
@@ -294,4 +294,3 @@ RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
 	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
 	self assert: (x := project  loadedGroupNames) asArray = #('core').
 ]
-

@@ -1641,6 +1641,46 @@ JadeServer >> groupListFor: aUserProfile [
 
 ]
 
+{ #category : 'jadeite' }
+JadeServer >> gsInteractionInformFailureHandler [
+  self interactionHandlerActive
+    ifFalse: [ 
+      ^ GsInteractionHandler new
+        defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
+        confirmBlock: [ :interaction | interaction ok ];
+        informBlock: [ :interaction |  ];
+        inspectBlock: [ :interaction |  ];
+        yourself ].
+  ^ GsInteractionHandler new
+    confirmBlock: [ :interaction | 
+          | exception answer |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'confirmMessageBox:'
+            args: (Array with: interaction prompt).
+          answer := exception defaultAction.	"expect printString of answer back. Jadeite has limited ability to convert client objects to oops"
+          answer evaluate ];
+    informBlock: [ :interaction | 
+          | exception |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'informMessageBox:'
+            args: (Array with: interaction message).
+          exception defaultAction.
+          nil ];
+    inspectBlock: [ :interaction | 
+          | exception |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'inspectServerObject:'
+            args: (Array with: interaction theObject asOop).
+          exception defaultAction.
+          interaction theObject ]
+]
+
 { #category : 'category' }
 JadeServer >> gsPackagePolicy [
 
@@ -1825,6 +1865,11 @@ JadeServer >> installTranscript [
 	].
 
 
+]
+
+{ #category : 'jadeite' }
+JadeServer >> interactionHandlerActive [
+  ^ SessionTemps current at: #'rowanServiceInteractionActive' ifAbsent: [ true ]
 ]
 
 { #category : 'category' }
@@ -5272,20 +5317,26 @@ JadeServer >> terminate: aGsProcess [
 
 { #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
-	| services organizer resultString |
-	Rowan commandResultClass initializeResults. 
-	services := STON fromString: stonString.
-	organizer := ClassOrganizer new.
-	services do: 
-			[:service |
-			service organizer: organizer. 
-			service updateType: nil.  "Update type is only for returned commands"
-			service command ifNil:[service command: #update]. 
-			service servicePerform: service command withArguments: service commandArgs].
-	self autoCommitIfRequired.
-	Rowan loggingServiceClass current logSentServices. 
-	resultString := STON toString: Rowan commandResultClass results.
-	^resultString
+  | services organizer resultString |
+  Rowan commandResultClass initializeResults.
+  services := STON fromString: stonString.
+  organizer := ClassOrganizer new.
+  [ 
+  services
+    do: [ :service | 
+      service organizer: organizer.
+      service updateType: nil.	"Update type is only for returned commands"
+      service command ifNil: [ service command: #'update' ].
+      service servicePerform: service command withArguments: service commandArgs ] ]
+    on: GsInteractionRequest
+    do: [ :ex | 
+      ex
+        response:
+          (ex interaction interactWith: self gsInteractionInformFailureHandler) ].
+  self autoCommitIfRequired.
+  Rowan loggingServiceClass current logSentServices.
+  resultString := STON toString: Rowan commandResultClass results.
+  ^ resultString
 ]
 
 { #category : 'category' }

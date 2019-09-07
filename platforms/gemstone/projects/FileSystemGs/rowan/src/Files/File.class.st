@@ -262,8 +262,11 @@ File class >> open: fileName writable: writeMode [
 		ifTrue: [ 'w+' ] 
 		ifFalse: [ 
 			writeMode = #read
-				ifTrue: [ 'r+' ]
-				ifFalse: [ 'a+' ] ].
+				ifTrue: [ 'r' ]
+				ifFalse: [ 
+           writeMode == #append 
+             ifTrue:[ 'a+' ] 
+             ifFalse:[ Error signal:'invalid mode']]].
 	^ GsFile
 		open: fileName 
 		mode: mode 
@@ -528,4 +531,9 @@ File >> writeStreamDo: aBlock [
 	stream := self writeStream.
 	^ [ aBlock value: stream ]
 		ensure: [ stream close ]
+]
+{ #category : 'printing' }
+File >> asString [
+  "Needed for topaz debugging"
+  ^ name
 ]
