@@ -236,9 +236,9 @@ RowanServicesTest >> servicesTestProjectName [
 
 { #category : 'setup teardown' }
 RowanServicesTest >> setUp [
-
 	| user symListP symListT dictP dictT index |
-"ensure results are clean as service requests not coming through #updateFromSton: like the client"
+	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
+	RowanAnsweringService new setEnableInteractionHandler: false. 
 	RowanCommandResult initializeResults.
 "ensure that project is unloaded"
 	(Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent: [  ])
@@ -274,6 +274,7 @@ RowanServicesTest >> setUp [
 RowanServicesTest >> tearDown [
 
 	RowanCommandResult initializeResults.  "squash the gui updates"
+	RowanAnsweringService new setEnableInteractionHandler: true.
 ]
 
 { #category : 'support' }

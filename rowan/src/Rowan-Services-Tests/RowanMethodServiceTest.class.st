@@ -104,6 +104,18 @@ RowanMethodServiceTest >> test_classNameIsString [
 ]
 
 { #category : 'tests' }
+RowanMethodServiceTest >> test_isTestMethod [
+	"isTestMethod not getting initialized correctly" 
+	| methodService organizer |
+	self jadeiteIssueTested: #issue512 withTitle: '"run selected" can get disabled after save in debugger (3.0.76)'.
+	organizer := ClassOrganizer new. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodServiceTest compiledMethodAt: #test_isTestMethod) organizer: organizer.
+	self assert: methodService isTestMethod. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodService compiledMethodAt: #initialize) organizer: organizer.
+	self deny: methodService isTestMethod.
+]
+
+{ #category : 'tests' }
 RowanMethodServiceTest >> test_noStepPoints [
 	| classService methodService |
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
