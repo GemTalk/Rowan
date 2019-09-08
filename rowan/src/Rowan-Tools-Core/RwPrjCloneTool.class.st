@@ -27,8 +27,8 @@ RwPrjCloneTool >> _validateForGitRepository: aRwGitRepositoryDefinition ifDone: 
 						, gitRepoPath pathString printString , ', so the clone operation is being skipped'
 						, '
 The project project has been registered with Rowan at the existing location .'.
-					self inform: msg.
-					doneBlock value: msg ] ]
+					doneBlock value: msg ] 
+				ifFalse: [ self error: 'expected repository path does not match gitrevparse result.' ]]
 				on: Error
 				do: [ :ignored | 
 					self

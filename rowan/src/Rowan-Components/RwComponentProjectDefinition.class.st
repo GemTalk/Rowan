@@ -777,6 +777,12 @@ RwComponentProjectDefinition >> projectsRoot [
 	^ self projectRef projectsRoot
 ]
 
+{ #category : 'properties' }
+RwComponentProjectDefinition >> projectUrl [
+
+	^ self projectRef projectUrl
+]
+
 { #category : 'actions' }
 RwComponentProjectDefinition >> read [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"

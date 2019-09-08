@@ -29,37 +29,27 @@ RwRowanSample4Test >> setUp [
 
 { #category : 'tests' }
 RwRowanSample4Test >> test_projectUrl_issue_463 [
-
-	| specUrlString projectTools rowanProject gitRootPath projectName rowanSampleSpec project |
+	| specUrlString rowanProject testProjectHome projectName project projectDef |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
-
-	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
-		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
-
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
-
+	testProjectHome := (rowanProject repositoryRootPath
+		, '/test/testRepositories/repos/') asFileReference.
+	(testProjectHome / projectName) exists
+		ifTrue: [ (testProjectHome / projectName) deleteAll ].
+	projectDef := (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: testProjectHome;
+		yourself.
+	self
+		handleInformDuring: [ projectDef clone ]
+		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
+	self
+		assert: projectDef projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+	projectDef load.
 	project := RwProject newNamed: projectName.
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-
-	self assert: project projectUrl = rowanSampleSpec projectUrl.
-	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
-
-	projectTools load
-		loadProjectNamed: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+	self assert: project projectUrl = projectDef projectUrl
 ]
 
 { #category : 'tests' }
@@ -788,7 +778,9 @@ RwRowanSample4Test >> testIssue200 [
 	self deny: (Rowan globalNamed: 'RowanSample4') notNil.
 
 "load"
-	project load.
+	self
+		handleInformDuring: [ project load ]
+		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
 
 "validate"
 	self assert: (Rowan globalNamed: 'RowanSample5') notNil.
