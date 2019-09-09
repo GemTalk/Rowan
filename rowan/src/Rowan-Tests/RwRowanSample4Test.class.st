@@ -2185,11 +2185,17 @@ RwRowanSample4Test >> testLoadProjectNamed_493 [
 	self 
 		_loadProjectFromSpecUrl: (self _rowanSample4_coreSpecificationUrl: repoRootPath)
 		repoRootPath: repoRootPath.
+
+"validate"
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
+
+"load core group of Load component"
 	projectTools load
 		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Load' ) groupNames: #('core').
 	self assert: (audit := project audit) isEmpty.
+
+"load tests group of Issue_493 component"
 	projectTools load
 		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Issue_493' ) groupNames: #().
 	self assert: (audit := project audit) isEmpty.
