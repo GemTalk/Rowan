@@ -106,7 +106,7 @@ RwBrowserToolApiTest >> testAddMethod [
 	testInstance := testClass new.
 	testInstance ivar1: 3.
 	self assert: testInstance ivar1 = 3.
-	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	self should: [ testInstance  perform: #foo ] raise: MessageNotUnderstood.
 
 	browserTool
 		addOrUpdateMethod: 'foo ^''bar'''
@@ -115,7 +115,7 @@ RwBrowserToolApiTest >> testAddMethod [
 		isMeta: false
 		inPackageNamed: packageName2.
 
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance  perform: #foo) = 'bar'.
 
 	gsNMethod := browserTool
 		addOrUpdateMethod: 'foo ^''baz'''
@@ -124,7 +124,7 @@ RwBrowserToolApiTest >> testAddMethod [
 		isMeta: false
 		inPackageNamed: packageName2.	"add method in a package as a class extension"
 
-	self assert: testInstance foo = 'baz'.
+	self assert: (testInstance  perform: #foo) = 'baz'.
 
 	self assert: testClass rowanProjectName = projectName.
 	self assert: testClass rowanPackageName = packageName1.
@@ -394,7 +394,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	testClass := Rowan globalNamed: className1.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -433,7 +433,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 		isMeta: false
 		inPackageNamed: (packageNames2 at: 1).	"extension method for className1 in projectName2"
 
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance  perform: #bar) = 'bar'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -512,7 +512,6 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
@@ -921,7 +920,7 @@ RwBrowserToolApiTest >> testDeleteGlobalExtensionMethod [
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -934,7 +933,7 @@ RwBrowserToolApiTest >> testDeleteGlobalExtensionMethod [
 
 	browserTool removeMethod: #'foo' forClassNamed: className isMeta: false.
 
-	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	self should: [ testInstance perform: #foo ] raise: MessageNotUnderstood.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -1583,7 +1582,7 @@ RwBrowserToolApiTest >> testMoveGlobalExtensionSessionMethods [
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -1603,7 +1602,7 @@ RwBrowserToolApiTest >> testMoveGlobalExtensionSessionMethods [
 		isMeta: false
 		inPackageNamed: packageName2.	"move method to another package as a class extension"
 
-	self assert: testInstance foo = 'bif'.
+	self assert: (testInstance  perform: #foo) = 'bif'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -1615,7 +1614,6 @@ RwBrowserToolApiTest >> testMoveGlobalExtensionSessionMethods [
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
 		forClassExtensionsIn: className
-
 ]
 
 { #category : 'tests' }
@@ -1673,7 +1671,7 @@ RwBrowserToolApiTest >> testMoveMethod [
 		inPackageNamed: packageName2.	"add method in a package as a class extension"
 
 "validate"
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
@@ -1702,7 +1700,7 @@ RwBrowserToolApiTest >> testMoveMethod [
 		inPackageNamed: packageName2.	"change class extension method"
 
 "validate"
-	self assert: testInstance foo = 'baz'.
+	self assert: (testInstance  perform: #foo) = 'baz'.
 
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
@@ -1718,7 +1716,7 @@ RwBrowserToolApiTest >> testMoveMethod [
 		inPackageNamed: packageName3.	"move method to another package as a class extension"
 
 "validate"
-	self assert: testInstance foo = 'bif'.
+	self assert: (testInstance  perform: #foo) = 'bif'.
 
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
@@ -1738,7 +1736,6 @@ RwBrowserToolApiTest >> testMoveMethod [
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
 		forClassExtensionsIn: className
-
 ]
 
 { #category : 'tests' }
@@ -1800,12 +1797,12 @@ RwBrowserToolApiTest >> testNewClassVersion_260_change_extension_method_protocol
 		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
 
 	browserTool
 		projectsNamed: projectNames
@@ -1834,23 +1831,23 @@ RwBrowserToolApiTest >> testNewClassVersion_260_change_extension_method_protocol
 										protocol: 'boom'
 										source:  'foo "instance" ^''foo''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 	self assert: (testClass categoryOfSelector: #foo) = #accessing.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
+	self assert: (testNewClass  perform: #civar1) = 1.
+	self should: [ testNewClass  perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass  perform: #foo) = 'foo'.
 	self assert: (testNewClass categoryOfSelector: #foo) = #boom.
 
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
+	self should: [ testNewInstance  perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance  perform: #foo) = 'foo'.
 
 	self
 		should: [ 
@@ -1870,7 +1867,6 @@ RwBrowserToolApiTest >> testNewClassVersion_260_change_extension_method_protocol
 				isMeta: true
 				inPackageNamed: project1PackageName2 ]
 		raise: CompileError.
-
 ]
 
 { #category : 'tests' }
@@ -1932,12 +1928,12 @@ RwBrowserToolApiTest >> testNewClassVersion_260_change_extension_method_source [
 		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 
 	browserTool
 		projectsNamed: projectNames
@@ -1966,20 +1962,20 @@ RwBrowserToolApiTest >> testNewClassVersion_260_change_extension_method_source [
 										protocol: 'accessing'
 										source:  'foo "instance side" ^''foo_''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
+	self assert: (testNewClass  perform: #civar1) = 1.
+	self should: [ testNewClass  perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass  perform: #foo) = 'foo'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo_'.
+	self should: [ testNewInstance  perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance  perform: #foo) = 'foo_'.
 	self
 		should: [ 
 			browserTool
@@ -1998,7 +1994,6 @@ RwBrowserToolApiTest >> testNewClassVersion_260_change_extension_method_source [
 				isMeta: true
 				inPackageNamed: project1PackageName2 ]
 		raise: CompileError.
-
 ]
 
 { #category : 'tests' }
@@ -2060,12 +2055,12 @@ RwBrowserToolApiTest >> testNewClassVersion_260_unchanged_extension_method_proto
 		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 
 	browserTool
 		projectsNamed: projectNames
@@ -2089,20 +2084,20 @@ RwBrowserToolApiTest >> testNewClassVersion_260_unchanged_extension_method_proto
 					packageDef := projectDef packageNamed: project1PackageName2.
 					classExtensionDef := packageDef classExtensions at: className1 ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
+	self assert: (testNewClass  perform: #civar1) = 1.
+	self should: [ testNewClass  perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass  perform: #foo) = 'foo'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
+	self should: [ testNewInstance  perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance  perform: #foo) = 'foo_'.
 	self
 		should: [ 
 			browserTool
@@ -2121,7 +2116,6 @@ RwBrowserToolApiTest >> testNewClassVersion_260_unchanged_extension_method_proto
 				isMeta: true
 				inPackageNamed: project1PackageName2 ]
 		raise: CompileError.
-
 ]
 
 { #category : 'tests' }
@@ -2204,14 +2198,14 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 		inPackageNamed: project2PackageName2.
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -2262,29 +2256,29 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 										protocol: 'boom'
 										source:  'bar "class side" ^''bar''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 	self assert: (testClass categoryOfSelector: #foo) = #accessing.
 	self assert: (testClass class categoryOfSelector: #bar) = #accessing.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar = 'bar').
 	self assert: (testNewClass categoryOfSelector: #foo) = #boom.
 	self assert: (testNewClass class categoryOfSelector: #bar) = #boom.
 
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance perform: #foo) = 'foo'.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 
 	self
 		should: [ 
@@ -2313,7 +2307,6 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 					(beh == testNewClass or: [ beh class == testNewClass ])
 						ifTrue: [ sessionMethodsSeen := true ] ] ].
 	self deny: sessionMethodsSeen
-
 ]
 
 { #category : 'tests' }
@@ -2396,14 +2389,14 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 		inPackageNamed: project2PackageName2.	"class extension method for className1 in projectName2"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -2454,24 +2447,24 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 										protocol: 'accessing'
 										source:  'bar "class side" ^''bar_''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar_'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testNewClass perform: #bar) = 'bar_'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo_'.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	(self assert: testNewInstance perform: #foo) = 'foo_'.
+	(self assert: testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool
@@ -2499,7 +2492,6 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 					(beh == testNewClass or: [ beh class == testNewClass ])
 						ifTrue: [ sessionMethodsSeen := true ] ] ].
 	self deny: sessionMethodsSeen
-
 ]
 
 { #category : 'tests' }
@@ -3392,14 +3384,14 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 		inPackageNamed: project2PackageName2.	"class session method extension method for className1 in projectName2"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -3442,24 +3434,24 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 					classExtensionDef := packageDef classExtensions at: className1.
 					classExtensionDef removeClassMethod: #'bar' ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self should: [ testNewClass bar = 'bar' ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #foo = 'foo').
+	self should: [ (testNewClass perform: #bar) = 'bar' ] raise: MessageNotUnderstood.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self should: [ testNewInstance foo = 'foo' ] raise: MessageNotUnderstood.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self should: [ (testNewInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool
@@ -3487,7 +3479,6 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 					(beh == testNewClass or: [ beh class == testNewClass ])
 						ifTrue: [ sessionMethodsSeen := true ] ] ].
 	self assert: sessionMethodsSeen
-
 ]
 
 { #category : 'tests' }

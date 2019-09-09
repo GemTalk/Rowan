@@ -159,12 +159,6 @@ RwAbstractTool >> fileUtilities [
   ^ Rowan fileUtilities
 ]
 
-{ #category : 'smalltalk api' }
-RwAbstractTool >> help [
-
-	^self manPage asText
-]
-
 { #category : 'bash utilities' }
 RwAbstractTool >> readlink: filepath [
 

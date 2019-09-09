@@ -240,6 +240,12 @@ RwGsPlatform >> globalNamed: aString [
 ]
 
 { #category : 'preferences - gemstone' }
+RwGsPlatform >> globalPreferenceFor: preferenceSymbol [
+
+	^ self globalPreferenceFor: preferenceSymbol ifAbsent: [ self error: 'Preference for ', preferenceSymbol printString, ' not found' ].
+]
+
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> globalPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _globalPreferenceDict 
@@ -325,6 +331,12 @@ RwGsPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
 ]
 
 { #category : 'preferences - gemstone' }
+RwGsPlatform >> sessionPreferenceFor: preferenceSymbol [
+
+	^ self sessionPreferenceFor: preferenceSymbol ifAbsent: [ self error: 'Preference for ', preferenceSymbol printString, ' not found' ].
+]
+
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> sessionPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _sessionPreferenceDict 
@@ -365,6 +377,12 @@ RwGsPlatform >> setSessionPreferenceFor: preferenceSymbol to: anObject [
 RwGsPlatform >> setUserPreferenceFor: preferenceSymbol to: anObject [
 
 	self _userPreferenceDict at: preferenceSymbol put: anObject
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> userPreferenceFor: preferenceSymbol [
+
+	^ self userPreferenceFor: preferenceSymbol ifAbsent: [ self error: 'Preference for ', preferenceSymbol printString, ' not found' ].
 ]
 
 { #category : 'preferences - gemstone' }

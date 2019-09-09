@@ -526,15 +526,6 @@ RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forLoadedPackage: l
 
 ]
 
-{ #category : 'class disown api' }
-RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forPackageNamed: packageName [
-
-	"Remove the extension methods in the named class for the named package"
-
-	^ self class registry_ImplementationClass disownClassExtensions: class forPackageNamed: packageName instance: self
-
-]
-
 { #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPackageNamed: packageName [
 

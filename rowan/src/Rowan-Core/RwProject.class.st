@@ -50,7 +50,7 @@ RwProject >> currentBranchName [
 { #category : 'accessing' }
 RwProject >> definedClasses [
 
-	^ self _projectTools query classForProjectNamed: self name
+	^ self _projectTools query classesForProjectNamed: self name
 ]
 
 { #category : 'testing' }

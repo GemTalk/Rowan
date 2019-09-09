@@ -67,7 +67,7 @@ RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 	"Create definitions from all of the components I define, and answer the collection of them"
 
 	| components |
-	components := self componenents copy.
+	components := self components copy.
 	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
 	^ components
 ]

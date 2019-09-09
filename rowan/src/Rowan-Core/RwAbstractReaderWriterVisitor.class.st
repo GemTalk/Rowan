@@ -124,6 +124,12 @@ RwAbstractReaderWriterVisitor >> _validateRowanMonticelloClassCategoryConvention
 ]
 
 { #category : 'validation' }
+RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName [
+
+	self error: 'not yet implemented'
+]
+
+{ #category : 'validation' }
 RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: protocol  forPackageNamed: packageName [
 
 	| canonProtocol expectedProtocol |

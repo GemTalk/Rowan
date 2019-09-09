@@ -118,13 +118,9 @@ RwClsAuditTool >> _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta lo
 				ifNotNil: [:aMethod | aMethod == aLoadedMethod handle 
 						ifTrue: [((aLoadedMethod methodCategory) equalsNoCase: (aClassOrMeta categoryOfSelector: aMethod selector) ) 
 							ifTrue: [nil]
-							ifFalse: [RwAuditDetail for: aClassOrMeta category: aLoadedMethod methodCategory 
-										message: 'Missing method category for loaded class'
-								"aLoadedClassOrExtension name , '#', (aLoadedMethod properties at: 'protocol') -> 'Missing class method category for loaded class'"]
-						]
+							ifFalse: [ RwAuditDetail for: aClassOrMeta  message: 'Missing method category: ', aLoadedMethod methodCategory, ' for loaded class' ] ]
 						ifFalse: [RwAuditDetail for: aLoadedClassOrExtension 
-										message:  'Compiled method is not identical to loaded class method>>' , aLoadedMethod name]		
-			]
+										message:  'Compiled method is not identical to loaded class method>>' , aLoadedMethod name]	]
 ]
 
 { #category : 'audit' }
@@ -193,10 +189,10 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 		"audit loaded class methods"
 		aLoadedClass 
 			loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | (aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil) 
-					ifNil: [(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:a | self errorLog: res add: a]]]
+					ifNil: [(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:a | self errorLog: res add: a]]]
 
 			loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
-					ifNil: [(self _auditLoadedClassMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass)  ifNotNil: [:a | self errorLog: res add: a]]
+					ifNil: [(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass)  ifNotNil: [:a | self errorLog: res add: a]]
 			]
 	].
 	^res

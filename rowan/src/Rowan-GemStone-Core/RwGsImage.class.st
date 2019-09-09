@@ -31,12 +31,6 @@ RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 			userPlatformDict at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
 ]
 
-{ #category : 'cypress (old)' }
-RwGsImage class >> _projectRegistry [
-
-	^ self _projectRegistryForUserId: self currentUserId
-]
-
 { #category : 'querying' }
 RwGsImage class >> _removeLoadedProject: aRwLoadedProject [
 

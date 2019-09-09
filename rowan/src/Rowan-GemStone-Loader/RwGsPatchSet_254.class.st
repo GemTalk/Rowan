@@ -372,7 +372,7 @@ RwGsPatchSet_254 >> addAndUpdateLoadedProjects [
 
 	addedProjects
 		do: [ :projectAdditionPatch | projectAdditionPatch createLoadedProject ].
-	projectsWithPropertyChanges do: [ :patch | patch updateLoadedProject ]
+	projectsWithPropertyChanges do: [ :patch | "patch updateLoadedProject" self error: 'Not yet implmented' ]
 ]
 
 { #category : 'modification dispatching' }

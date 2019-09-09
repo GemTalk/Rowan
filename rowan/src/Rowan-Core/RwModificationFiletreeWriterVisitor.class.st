@@ -376,6 +376,12 @@ RwModificationFiletreeWriterVisitor >> changedMethod: aMethodModification [
 			<< (methodDefinition source withLineEndings: self _newLine) ]
 ]
 
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> changedMethodExtension: aMethodExtensionModification [
+
+	self error: 'not yet implemented'
+]
+
 { #category : 'accessing' }
 RwModificationFiletreeWriterVisitor >> defaultPackageFormat [
 

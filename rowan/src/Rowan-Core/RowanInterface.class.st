@@ -71,5 +71,5 @@ RowanInterface >> name [
 { #category : 'accessing' }
 RowanInterface >> project [
 
-	^ self RwProject newNamed: self _loadedProject name
+	^ RwProject newNamed: self _loadedProject name
 ]

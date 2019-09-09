@@ -597,7 +597,7 @@ RwEditToolTest >> testUpdateClass [
 		ifAbsent: [ 
 			self
 				assert: false
-				decription:
+				description:
 					'expected class definition for class ' , className printString , ' not found.' ].
 
 	classDefinition
@@ -625,7 +625,6 @@ RwEditToolTest >> testUpdateClass [
 	self assert: testClass civar1 = 1.
 	testInstance := testClass new.
 	self should: [ testInstance ivar1 ] raise: MessageNotUnderstood
-
 ]
 
 { #category : 'tests - classes' }
@@ -681,7 +680,7 @@ RwEditToolTest >> testUpdateClassExtension [
 		ifAbsent: [ 
 			self
 				assert: false
-				decription:
+				description:
 					'expected class extension definitions for class ' , className printString
 						, ' not found.' ].
 	self
@@ -710,5 +709,4 @@ RwEditToolTest >> testUpdateClassExtension [
 					self
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'add:') ] ]
-
 ]
