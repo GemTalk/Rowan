@@ -42,10 +42,49 @@ RowanAnsweringService >> autoCommit [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> breakPointsAreDisabled [
+  answer := RowanService breakPointsAreDisabled.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> clearAllBreaks [
   | methodServices |
-  methodServices := RowanQueryService new organizer: organizer; basicBreakpointMethods.
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
   GsNMethod clearAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> clearMethodBreaks: methodServices [
+  methodServices
+    do: [ :methodService | 
+      methodService
+        organizer: organizer;
+        clearMethodBreaks ]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> disableAllBreaks [
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod _disableAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> enableAllBreaks [
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod _enableAllBreaks.
   methodServices
     do: [ :methodService | RowanCommandResult addResult: methodService update ]
 ]
@@ -135,6 +174,11 @@ RowanAnsweringService >> initializeAutoCommit [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> initializeBreakPointsAreDisabled [
+  RowanService setBreakPointsAreDisabled: false
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> interactionHandlerActive [
   answer := SessionTemps current
     at: #'rowanServiceInteractionActive'
@@ -202,6 +246,14 @@ RowanAnsweringService >> setAutoCommit: object [
 
 	answer := RowanService setAutoCommit: object.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> setBreakPointsAreDisabled: boolean [
+  boolean
+    ifTrue: [ self disableAllBreaks ]
+    ifFalse: [ self enableAllBreaks ].
+  RowanService setBreakPointsAreDisabled: boolean
 ]
 
 { #category : 'client commands' }

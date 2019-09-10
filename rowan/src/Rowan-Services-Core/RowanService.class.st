@@ -34,6 +34,12 @@ RowanService class >> autoCommit [
 ]
 
 { #category : 'autocommit' }
+RowanService class >> breakPointsAreDisabled [
+
+	^SessionTemps current at: #'Jadeite_BreakPointsAreDisabled' ifAbsentPut: [false]
+]
+
+{ #category : 'autocommit' }
 RowanService class >> flipAutoCommit [
 	| newValue |
 	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
@@ -65,6 +71,11 @@ RowanService class >> sampleService [
 RowanService class >> setAutoCommit: object [
 
 	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
+]
+
+{ #category : 'autocommit' }
+RowanService class >> setBreakPointsAreDisabled: boolean [
+  ^ SessionTemps current at: #'Jadeite_BreakPointsAreDisabled' put: boolean
 ]
 
 { #category : 'other' }

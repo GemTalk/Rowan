@@ -53,6 +53,28 @@ RowanAnsweringServiceTest >> test_initializeAutoCommit [
 ]
 
 { #category : 'tests' }
+RowanAnsweringServiceTest >> test_initializeBreakPointsAreDisabled [
+  | breakPointsAreDisabled |
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  breakPointsAreDisabled := RowanService breakPointsAreDisabled.
+  self assert: RowanService breakPointsAreDisabled equals: breakPointsAreDisabled.
+  self
+    assert: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled')
+    equals: breakPointsAreDisabled.
+  [ 
+  service initializeBreakPointsAreDisabled.
+  self deny: RowanService breakPointsAreDisabled.
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled') ]
+    ensure: [ 
+      RowanService setBreakPointsAreDisabled: breakPointsAreDisabled.
+      self
+        assert: RowanService breakPointsAreDisabled
+        equals: breakPointsAreDisabled ]
+]
+
+{ #category : 'tests' }
 RowanAnsweringServiceTest >> test_loadedPackageExists [
 	self jadeiteIssueTested: #issue205 withTitle: 'misspelled extension category name causes trouble'.
 	Rowan packageNames do:[:packageName |

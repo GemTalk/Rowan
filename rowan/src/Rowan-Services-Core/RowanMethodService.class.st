@@ -149,6 +149,12 @@ RowanMethodService >> allReferences [
   RowanCommandResult addResult: self
 ]
 
+{ #category : 'other' }
+RowanMethodService >> breakPoints [
+
+	^breakPoints
+]
+
 { #category : 'initialization' }
 RowanMethodService >> breakPointsFor: aGsNMethod [
 	"Answers an Array stepPoints"
@@ -225,6 +231,12 @@ RowanMethodService >> clearBreakAt: stepPoint [
 	method clearBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> clearMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self clearBreakAt: breakPoint ]
 ]
 
 { #category : 'Updating' }
