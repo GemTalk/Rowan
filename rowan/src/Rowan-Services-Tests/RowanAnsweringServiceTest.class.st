@@ -15,6 +15,49 @@ RowanAnsweringServiceTest >> setUp [
 ]
 
 { #category : 'tests' }
+RowanAnsweringServiceTest >> test_disableBreakpoints [
+  | classService methodService bpHit |
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  classService := RowanClassService new name: 'RowanSample1'.
+  classService update.
+  classService saveMethodSource: 'setABreak ^true' category: 'delete me'.
+  [ 
+  methodService := (classService methodsNamed: #'setABreak') first.
+  methodService setBreakAt: 1.
+  self assert: RowanSample1 new setABreak.
+  service setBreakPointsAreDisabled: true.
+  bpHit := false.
+  [ RowanSample1 new setABreak ]
+    on: Error
+    do: [ :ex | bpHit := true ].
+  self deny: bpHit.
+  service setBreakPointsAreDisabled: false.
+  bpHit := false.
+  [ RowanClassService setABreak ]
+    on: Error
+    do: [ :ex | bpHit := true ].
+  self assert: bpHit ]
+    ensure: [ classService removeSelector: #'setABreak' ]
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  service setBreakPointsAreDisabled: true.
+  self assert: service breakPointsAreDisabled.
+  self assert: RowanService breakPointsAreDisabled equals: true.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled').
+  service setBreakPointsAreDisabled: false.
+  self deny: service breakPointsAreDisabled.
+  self assert: RowanService breakPointsAreDisabled equals: false.
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled')
+]
+
+{ #category : 'tests' }
 RowanAnsweringServiceTest >> test_execCompileError [
 
 	self deny: (service exec: '1 +' context: nil asOop) key.

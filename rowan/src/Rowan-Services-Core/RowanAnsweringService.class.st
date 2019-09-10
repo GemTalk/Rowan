@@ -44,7 +44,8 @@ RowanAnsweringService >> autoCommit [
 { #category : 'client commands' }
 RowanAnsweringService >> breakPointsAreDisabled [
   answer := RowanService breakPointsAreDisabled.
-  RowanCommandResult addResult: self
+  RowanCommandResult addResult: self.
+  ^ answer	"for testing"
 ]
 
 { #category : 'client commands' }
