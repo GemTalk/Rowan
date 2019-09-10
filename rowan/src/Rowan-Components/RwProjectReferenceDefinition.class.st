@@ -546,6 +546,12 @@ RwProjectReferenceDefinition >> projectUrl: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> remote [
+
+	^ self properties at: 'remote' ifAbsent: [ 'origin' ]
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> remoteUrl [
 
 	^ self repositoryDefinition remoteUrl

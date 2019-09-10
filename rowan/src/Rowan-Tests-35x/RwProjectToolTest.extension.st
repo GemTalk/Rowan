@@ -14,8 +14,6 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	('/tmp/rowanSimpleProject/' asFileReference)
 		ensureCreateDirectory;
@@ -86,8 +84,6 @@ RwProjectToolTest >> testProjectClassExtensions [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -210,8 +206,6 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -362,8 +356,6 @@ RwProjectToolTest >> testSimpleProject1 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -434,8 +426,6 @@ RwProjectToolTest >> testSimpleProject2 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -490,8 +480,6 @@ RwProjectToolTest >> testSimpleProject3 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition newForGitBasedProjectNamed: projectName)
 		comment: 'This is a simple project created in memory first, then written to disk.';

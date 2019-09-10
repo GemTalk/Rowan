@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanProjectIssuesTest class >> _symbolDictionaryNames [
+
+	^ 	super _symbolDictionaryNames, 
+			#( #'RowanSample4SymbolDict' #'SampleSymbolDict')
+]
+
+{ #category : 'private' }
 RwRowanProjectIssuesTest >> _addClassNamed: className superclassName: superclassName classVars: classVars toPackageNamed: packageName inProjectNamed: projectName validate: validate [
 
 	"validate the dirty state of project before and after class is added"
@@ -144,14 +151,14 @@ RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/issues/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: projectUrlString
-		gitRootPath: rowanProject repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+	(RwComponentProjectDefinition newForUrl: projectUrlString)
+		projectHome: gitRootPath;
+		clone;
+		register.
 ]
 
 { #category : 'private-issue 24' }

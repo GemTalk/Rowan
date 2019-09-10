@@ -148,7 +148,7 @@ RwProject >> register [
 { #category : 'properties' }
 RwProject >> remote [
 
-	^ self _specification remote
+	^ self _loadedProject remote
 ]
 
 { #category : 'accessing' }

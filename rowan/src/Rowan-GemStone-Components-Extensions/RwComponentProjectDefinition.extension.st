@@ -73,6 +73,20 @@ RwComponentProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo [
+
+	|  thePackageMapSpecs |
+	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+		ifNotNil: [:name | aLoadedProject defaultSymbolDictName: name ].
+	(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+		ifNotNil: [:boolean | 
+			aLoadedProject defaultUseSessionMethodsForExtensions: boolean  ].
+	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+		ifNotNil: [:map | aLoadedProject packageNameToPlatformPropertiesMap: map]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> updateGsPlatformSpecLoadedProjectInfo: projectInfo [
 
 	| thePackageMapSpecs |

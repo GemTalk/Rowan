@@ -99,13 +99,6 @@ RwProjectDefinition >> comment: aString [
 	self specification comment: aString
 ]
 
-{ #category : 'actions' }
-RwProjectDefinition >> commit: message [
-	"lperform commit on the repository associated with receiver ..."
-
-	^ Rowan projectTools commit commitProjectDefinition: self message: message
-]
-
 { #category : 'properties' }
 RwProjectDefinition >> configsPath [
 
@@ -170,12 +163,6 @@ RwProjectDefinition >> defaultGroupNames [
 RwProjectDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 
 	^packages at: aKey ifAbsent: absentBlock
-]
-
-{ #category : 'actions' }
-RwProjectDefinition >> export [
-
-	Rowan projectTools write writeDeprecatedProjectDefinition: self
 ]
 
 { #category : 'initialization' }
