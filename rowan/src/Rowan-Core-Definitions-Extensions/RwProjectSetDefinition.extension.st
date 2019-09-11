@@ -1,7 +1,7 @@
 Extension { #name : 'RwProjectSetDefinition' }
 
 { #category : '*rowan-core-definitions-extensions' }
-RwProjectSetDefinition >> compareAgainstBase_254: aDefinition [
+RwProjectSetDefinition >> compareAgainstBase: aDefinition [
 
 	| result |
 	result := RwProjectSetModification new.
@@ -14,5 +14,4 @@ RwProjectSetDefinition >> compareAgainstBase_254: aDefinition [
 		updateForClassMoves;
 		updateForMethodMoves.
 	^ result
-
 ]

@@ -576,7 +576,7 @@ RwComponentProjectDefinition >> exportPackages: diskProjectSetDefinition [
 		ifFalse: [ RwModificationFiletreeWriterVisitor ].
 	projectSetDefinition:= RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition compareAgainstBase_254: diskProjectSetDefinition.
+	projectSetModification := projectSetDefinition compareAgainstBase: diskProjectSetDefinition.
 	visitor := writerVisitorClass new.
 
 	visitor visit: projectSetModification.

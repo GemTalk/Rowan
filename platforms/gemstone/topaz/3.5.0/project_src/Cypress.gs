@@ -9,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -24,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -39,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -66,7 +69,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -81,7 +85,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -106,7 +111,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -121,7 +127,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -136,7 +143,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -151,7 +159,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -166,7 +175,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -181,7 +191,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -196,7 +207,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -211,7 +223,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -226,7 +239,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -241,7 +255,8 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -256,7 +271,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -271,7 +287,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -286,7 +303,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -301,7 +319,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -316,7 +335,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -331,7 +351,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -350,7 +371,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -369,7 +391,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -384,7 +407,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -399,7 +423,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -414,7 +439,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -429,7 +455,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -444,7 +471,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -459,7 +487,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -474,7 +503,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -489,7 +519,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -504,7 +535,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -519,7 +551,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -534,7 +567,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -549,7 +583,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -564,7 +599,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -579,7 +615,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -594,7 +631,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -609,7 +647,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -624,7 +663,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -639,7 +679,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Environmental-Tools';
 		comment: '';
 		immediateInvariant.
@@ -654,7 +695,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -669,7 +711,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Environmental-Tools';
 		comment: '';
 		immediateInvariant.
@@ -684,7 +727,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -699,7 +743,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Environmental-Tools';
 		comment: 'No class-specific documentation for CypressEnvironmentPackageDefinition, hierarchy is: 
 Object
@@ -719,7 +764,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -757,7 +803,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -772,7 +819,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -787,7 +835,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -802,7 +851,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -817,7 +867,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -832,7 +883,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -847,7 +899,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -862,7 +915,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -877,7 +931,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -892,7 +947,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -907,7 +963,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Comparison';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -922,7 +979,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -937,7 +995,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -952,7 +1011,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -967,7 +1027,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Environmental-Tools';
 		comment: '';
 		immediateInvariant.
@@ -982,7 +1043,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Comparison';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -997,7 +1059,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1014,7 +1077,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1031,7 +1095,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1048,7 +1113,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1065,7 +1131,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1129,7 +1196,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1144,7 +1212,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1159,7 +1228,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1174,7 +1244,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1189,7 +1260,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1204,7 +1276,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1219,7 +1292,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1234,7 +1308,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1249,7 +1324,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1264,7 +1340,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1281,7 +1358,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1298,7 +1376,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1315,7 +1394,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1332,7 +1412,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1347,7 +1428,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1372,7 +1454,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -1387,7 +1470,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
 
@@ -1404,7 +1488,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Cypress-MesssageDigest';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.

@@ -2,21 +2,6 @@
 ! Generated file, do not Edit
 
 doit
-(Object
-	subclass: 'RwDiskRepositoryGenerator'
-	instVarNames: #( gs_options gs_constraints )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #())
-		category: 'Rowan-Tests';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
 (RowanLoggingService
 	subclass: 'TestLoggingService'
 	instVarNames: #(  )
@@ -24,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'Used for Jadeite testing';
 		immediateInvariant.
@@ -39,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests-GemStone';
 		comment: '';
 		immediateInvariant.
@@ -54,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -69,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -84,7 +73,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'RowanServicesTest subclasses require RowanSample1 project to be loaded.';
 		immediateInvariant.
@@ -99,7 +89,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -114,7 +105,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -129,7 +121,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'Created to test inherited tests on client';
 		immediateInvariant.
@@ -144,7 +137,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -159,7 +153,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -174,7 +169,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -189,7 +185,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -204,7 +201,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -219,7 +217,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -234,7 +233,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -249,7 +249,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -264,7 +265,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -279,7 +281,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -294,7 +297,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'No class-specific documentation for CypLoadingTest, hierarchy is: 
 Object
@@ -314,7 +318,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -329,7 +334,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -344,7 +350,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -359,7 +366,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -374,7 +382,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -389,7 +398,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -404,7 +414,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -419,7 +430,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -434,7 +446,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -449,7 +462,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -464,7 +478,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -479,7 +494,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'keep test cases here';
 		immediateInvariant.
@@ -494,7 +510,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -509,7 +526,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -524,7 +542,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -539,7 +558,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -554,7 +574,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -569,7 +590,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests-GemStone';
 		comment: '';
 		immediateInvariant.
@@ -584,7 +606,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -599,7 +622,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -614,7 +638,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -629,7 +654,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -644,7 +670,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -659,7 +686,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -674,7 +702,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -689,7 +718,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -704,7 +734,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -719,7 +750,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -734,7 +766,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -749,7 +782,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -764,7 +798,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -779,7 +814,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -794,7 +830,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -809,7 +846,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -824,7 +862,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -839,7 +878,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -854,7 +894,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'The tests in this class were extracted from the examples in Semantic Version Specification ...';
 		immediateInvariant.
@@ -869,7 +910,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -884,249 +926,12 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
 true.
-%
-
-! Class implementation for 'RwDiskRepositoryGenerator'
-
-!		Class methods for 'RwDiskRepositoryGenerator'
-
-category: 'generating'
-classmethod: RwDiskRepositoryGenerator
-generate: aRwLoadSpecification
-  ^ self new
-    generate: aRwLoadSpecification;
-    yourself
-%
-
-category: 'generating'
-classmethod: RwDiskRepositoryGenerator
-generateForUrl: specNameOrUrl
-  ^ self new
-    generateForUrl: specNameOrUrl;
-    yourself
-%
-
-!		Instance methods for 'RwDiskRepositoryGenerator'
-
-category: 'definitions'
-method: RwDiskRepositoryGenerator
-classExtensionMethodDefinitionsForClass: className inPackage: packageName
-
-	^ self
-		methodDefsFromSpec:
-			{{#'testClassExtensionMethod1'.
-			('*' , packageName).
-			'testClassExtensionMethod1 ^ ClassinstVar2'}}
-%
-
-category: 'definitions'
-method: RwDiskRepositoryGenerator
-classMethodsForClass: className
-
-	^ self
-		methodDefsFromSpec:
-			{{#'testClassMethod1'.
-			'accessing'.
-			'testClassMethod1 ^ ClassVar1'}.
-			{#'testClassMethod2'.
-			'accessing'.
-			'testClassMethod2 ^ true'}}
-%
-
-category: 'generator'
-method: RwDiskRepositoryGenerator
-generate: myLoadSpecification
-
-	| myPackageSet |
-	myLoadSpecification repositoryUrl
-		ifNil: [ 
-			| url |
-			url := myLoadSpecification projectUrl asRwUrl.
-			url scheme = 'file'
-				ifFalse: [ 
-					self
-						error:
-							'if ' , myLoadSpecification specName printString
-								,
-									' has not been attached to a cloned repository (repositoryUrl nonNil), then the projectUrl must be a file: url: '
-								, url printString ] ].
-	myPackageSet := self generatePackageSet.
-	Rowan projectTools write
-		writePackageSet: myPackageSet
-		specification: myLoadSpecification
-%
-
-category: 'generator'
-method: RwDiskRepositoryGenerator
-generateForUrl: specNameOrUrl
-
-	| url |
-	url := specNameOrUrl asRwUrl.
-	url scheme = 'file'
-		ifFalse: [ 
-			self
-				error:
-					'Must use a file: url for spec, since generator will write to the disk repository' ].
-	^ self generate: (RwSpecification fromUrl: url)
-%
-
-category: 'generator'
-method: RwDiskRepositoryGenerator
-generatePackageSet
-
-	| packageName1 packageName2 packageNames myPackageSet className1 className2 classDefinitionsDictionary1 classDefinitionsDictionary2 classExtensionDefinitionsDictionary2 |
-	packageName1 := 'CombinedTestPackage1'.
-	packageName2 := 'CombinedTestPackage2'.
-	className1 := 'TestClass1'.
-	className2 := 'TestClass2'.
-	packageNames := {packageName1.
-	packageName2}.
-	classDefinitionsDictionary1 := Dictionary new
-		at: className1
-			put:
-				((RwClassDefinition
-						newForClassNamed: className1
-						super: 'Object'
-						instvars: #('instVar1')
-						classinstvars: #('classInstVar1' 'classInstVar2')
-						classvars: #('ClassVar1')
-						category: packageName1
-						comment:
-							'I am a class generated by Rowan tests. My name is ' , className1
-								, ', what''s yours?'
-						pools: #()
-						type: 'normal')
-						instanceMethodDefinitions: (self instanceMethodsForClass: className1);
-						classMethodDefinitions: (self classMethodsForClass: className1);
-						gs_options: self gs_options;
-						gs_constraints: self gs_constraints;
-						yourself);
-		yourself.
-	classDefinitionsDictionary2 := Dictionary new
-		at: className2
-			put:
-				((RwClassDefinition
-						newForClassNamed: className2
-						super: 'Object'
-						instvars: #('instVar1')
-						classinstvars: #('classInstVar1' 'classInstVar2')
-						classvars: #('ClassVar1')
-						category: packageName2
-						comment:
-							'I am a class generated by Rowan tests. My name is ' , className2
-								, ', what''s yours?'
-						pools: #()
-						type: 'normal')
-						instanceMethodDefinitions: (self instanceMethodsForClass: className2);
-						classMethodDefinitions: (self classMethodsForClass: className2);
-						yourself);
-		yourself.
-	classExtensionDefinitionsDictionary2 := Dictionary new
-		at: className1
-			put:
-				((RwClassExtensionDefinition newForClassNamed: className1)
-						classMethodDefinitions:
-								(self
-										classExtensionMethodDefinitionsForClass: className1
-										inPackage: packageName2);
-						instanceMethodDefinitions:
-								(self
-										instanceExtensionMethodDefinitionsForClass: className1
-										inPackage: packageName2);
-						yourself);
-		yourself.
-	myPackageSet := RwPackageSetDefinition new
-		addPackage:
-				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName1)
-						classDefinitions: classDefinitionsDictionary1
-						classExtensions: Dictionary new);
-		addPackage:
-				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName2)
-						classDefinitions: classDefinitionsDictionary2
-						classExtensions: classExtensionDefinitionsDictionary2);
-		yourself.
-	^ myPackageSet
-%
-
-category: 'accessing'
-method: RwDiskRepositoryGenerator
-gs_constraints
-
-	^gs_constraints ifNil: [ #() ]
-%
-
-category: 'accessing'
-method: RwDiskRepositoryGenerator
-gs_constraints: constraintsArray
-
-	gs_constraints := constraintsArray
-%
-
-category: 'accessing'
-method: RwDiskRepositoryGenerator
-gs_options
-
-	^gs_options ifNil: [ #() ]
-%
-
-category: 'accessing'
-method: RwDiskRepositoryGenerator
-gs_options: optionsArray
-
-	gs_options := optionsArray
-%
-
-category: 'definitions'
-method: RwDiskRepositoryGenerator
-instanceExtensionMethodDefinitionsForClass: className inPackage: packageName
-
-	^ self
-		methodDefsFromSpec:
-			{{#'testInstanceExtensionMethod1'.
-			('*' , packageName).
-			'testInstanceExtensionMethod1 ^ instVar1'}}
-%
-
-category: 'definitions'
-method: RwDiskRepositoryGenerator
-instanceMethodsForClass: className
-
-	^ self
-		methodDefsFromSpec:
-			{{#'testInstanceMethod1'.
-			'accessing'.
-			'testInstanceMethod1 ^ instVar1'}.
-			{#'testInstanceMethod2'.
-			'accessing'.
-			'testInstanceMethod2 ^ classInstVar1'}}
-%
-
-category: 'definitions'
-method: RwDiskRepositoryGenerator
-methodDefsFromSpec: specArray
-  | dict |
-  dict := Dictionary new.
-  specArray
-    do: [ :spec | 
-      | selector protocol source |
-      selector := (spec at: 1) asSymbol.
-      protocol := (spec at: 2) asString.
-      source := (spec at: 3) asString.
-      dict
-        at: selector
-        put:
-          (RwMethodDefinition
-            withProperties:
-              (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
-            source: source) ].
-  ^ dict
 %
 
 ! Class implementation for 'RwGsTestImage'
@@ -2353,9 +2158,9 @@ servicesTestProjectName
 category: 'setup teardown'
 method: RowanServicesTest
 setUp
-
 	| user symListP symListT dictP dictT index |
-"ensure results are clean as service requests not coming through #updateFromSton: like the client"
+	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
+	RowanAnsweringService new setEnableInteractionHandler: false. 
 	RowanCommandResult initializeResults.
 "ensure that project is unloaded"
 	(Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent: [  ])
@@ -2392,6 +2197,7 @@ method: RowanServicesTest
 tearDown
 
 	RowanCommandResult initializeResults.  "squash the gui updates"
+	RowanAnsweringService new setEnableInteractionHandler: true.
 %
 
 category: 'support'
@@ -3033,14 +2839,32 @@ test_selectedMethod
 			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
 %
 
+category: 'tests'
+method: RowanClassServiceTest
+test_setClassCommentDuringMetaclassRefresh
+  | classService behavior meta metaClassService |
+  behavior := Rowan globalNamed: self servicesDefaultClassName.
+  self assert: behavior comment equals: String new.
+  classService := RowanClassService
+    forClassNamed: self servicesDefaultClassName
+    meta: false.
+  classService classComment: 'This is a test'.
+  meta := behavior class.
+  metaClassService := RowanClassService new
+    name: 'RowanClassService';
+    oop: meta asOop.
+  metaClassService fastRefresh.
+  self assert: metaClassService comment equals: 'This is a test'
+%
+
 category: 'test method compilation'
 method: RowanClassServiceTest
 test_setSuperSubIndicators
-	| classService superclassMethodService subclassMethodService selector subclassService packageService |
+	| classService superclassMethodService subclassMethodService selector subclassService browserService |
 	selector := #indicatorTesting. 
 	self loadRowanSample1.
-	[packageService := RowanPackageService forPackageNamed: 'RowanSample1-Core'.
-	packageService compileClass: 
+	[browserService := RowanBrowserService new. 
+	browserService compileClass: 
 		'RowanSample1 rwSubclass: ''RowanSubClass''
 			instVarNames: #()
 			classVars: #()
@@ -3050,7 +2874,7 @@ test_setSuperSubIndicators
 			options: #()'.
 	classService := RowanClassService forClassNamed: 'RowanSample1'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
+	browserService recompileMethodsAfterClassCompilation. 
 	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
 	superclassMethodService := (classService methodsNamed: selector) first.
 	self deny: superclassMethodService hasSupers.
@@ -3447,12 +3271,43 @@ test_classNameIsString
 
 category: 'tests'
 method: RowanMethodServiceTest
+test_isTestMethod
+	"isTestMethod not getting initialized correctly" 
+	| methodService organizer |
+	self jadeiteIssueTested: #issue512 withTitle: '"run selected" can get disabled after save in debugger (3.0.76)'.
+	organizer := ClassOrganizer new. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodServiceTest compiledMethodAt: #test_isTestMethod) organizer: organizer.
+	self assert: methodService isTestMethod. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodService compiledMethodAt: #initialize) organizer: organizer.
+	self deny: methodService isTestMethod.
+%
+
+category: 'tests'
+method: RowanMethodServiceTest
 test_noStepPoints
 	| classService methodService |
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
 	classService saveMethodSource: 'abc' category: 'testing step points'.
 	methodService := RowanMethodService forSelector: #abc class: classService classOrMeta meta: false organizer: ClassOrganizer new.
 	self assert: methodService stepPoints isEmpty.
+%
+
+category: 'tests'
+method: RowanMethodServiceTest
+test_reformatSource
+	| classService methodService source |
+		classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	source := 'abc | abc | abc := 1. abc := abc + abc. ^abc'.
+	classService saveMethodSource: source category: 'other'.
+	self assert: (classService methodsNamed: #abc) size equals: 1.
+	methodService := (classService methodsNamed: #abc) first.
+	self assert: methodService source equals: source.
+	methodService reformatSource.
+	self assert: methodService reformatSource source equals: 'abc
+  | abc |
+  abc := 1.
+  abc := abc + abc.
+  ^ abc'
 %
 
 category: 'tests'
@@ -3564,12 +3419,12 @@ category: 'tests'
 method: RowanPackageServiceTest
 testCompileClassSelectsPackageAndClass
 
-	| package packageService newClassService |
+	| package browserService newClassService |
 
 	self jadeiteIssueTested: #issue228 withTitle: 'lose selected class in project browser when new version created'.
 	package := self createJadeiteTestPackage. 
-	[packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	packageService compileClass: 
+	[browserService := RowanBrowserService new.
+	browserService compileClass: 
 		'RowanServicesTest rwSubclass: ''TestCompileClass''
 			instVarNames: #()
 			classVars: #()
@@ -3578,12 +3433,9 @@ testCompileClassSelectsPackageAndClass
 			category: ''', self servicesTestPackageName, '''
 			options: #()'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
-	newClassService := RowanCommandResult results first.
-	self assert: newClassService name equals: 'TestCompileClass'. 
-	self assert: newClassService selectedPackageServices size equals: 1. 
-	self assert: newClassService selectedPackageServices first name equals: self servicesTestPackageName. 
-	self assert: newClassService selectedPackageServices first selectedClass == newClassService]
+	browserService recompileMethodsAfterClassCompilation. 
+	newClassService := RowanCommandResult results at: 2.
+	self assert: newClassService name equals: 'TestCompileClass'.]
 		ensure:[RowanBrowserService new unloadProjectsNamed: (Array with: self servicesTestProjectName)]
 %
 
@@ -3591,13 +3443,13 @@ category: 'tests'
 method: RowanPackageServiceTest
 test_compileAndSelectClass
 
-	| package packageService |
+	| package browserService |
 	System commitTransaction.
 	[self assert: RowanCommandResult results isEmpty. 
 	package := self createJadeiteTestPackage. 
-	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
+	browserService := RowanBrowserService new.
 	self assert: RowanCommandResult results isEmpty. 
-	packageService compileClass: 
+	browserService compileClass: 
 	'RowanServicesTest rwSubclass: ''RowanTestCompile'' 
 		instVarNames: #()
 		classVars: #()
@@ -3606,11 +3458,10 @@ test_compileAndSelectClass
 		category: ''', self servicesTestPackageName,  '''
 		options: #()'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
-	self assert: RowanCommandResult results size equals: 1. 
-	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
-	self assert: packageService selectedClass name equals: 'RowanTestCompile'.
-	self assert: packageService selectedClass selectedPackageServices first equals: packageService] 
+	browserService recompileMethodsAfterClassCompilation. 
+	self assert: RowanCommandResult results size equals: 3. 
+	self assert: (RowanCommandResult results at: 2) name equals: 'RowanTestCompile'. 
+	self assert: browserService selectedClass name equals: 'RowanTestCompile'.] 
 		ensure:[System abortTransaction.  "get rid of test package and class"]
 %
 
@@ -3618,13 +3469,13 @@ category: 'tests'
 method: RowanPackageServiceTest
 test_compileAndSelectClassDifferentPackage
 
-	| package packageService testsPackage |
+	| package browserService testsPackage |
 	System commitTransaction.
 	[self assert: RowanCommandResult results isEmpty. 
 	package := self createJadeiteTestPackage. 
-	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
+	browserService := RowanBrowserService new. 
 	self assert: RowanCommandResult results isEmpty. 
-	packageService compileClass: 
+	browserService compileClass: 
 	'RowanServicesTest rwSubclass: ''RowanTestCompile''
 		instVarNames: #()
 		classVars: #()
@@ -3633,13 +3484,12 @@ test_compileAndSelectClassDifferentPackage
 		category: ''Rowan-Services-Tests''
 		options: #()'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
-	self assert: RowanCommandResult results size equals: 2. 
-	self assert: RowanCommandResult results last name equals: 'RowanTestCompile'. 
+	browserService recompileMethodsAfterClassCompilation. 
+	self assert: RowanCommandResult results size equals: 3. 
+	self assert: (RowanCommandResult results at: 2) name equals: 'RowanTestCompile'. 
 	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
 	testsPackage := RowanCommandResult results first.
-	self assert: testsPackage selectedClass name equals: 'RowanTestCompile'.
-	self assert: testsPackage selectedClass selectedPackageServices first equals: testsPackage] 
+	self assert: testsPackage selectedClass name equals: 'RowanTestCompile'.] 
 		ensure:[System abortTransaction.  "get rid of test package and class"]
 %
 
@@ -3659,13 +3509,13 @@ test_packageWasDeleted
 
 category: 'tests'
 method: RowanPackageServiceTest
-test_testClassesDoNotIncludeExtensions
+test_testClassesIncludesExtensions
 	| packageService testClassNames |
 	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
 	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-Tests'.
 	packageService testClasses. 
 	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
-	self deny: (testClassNames includes: 'RwRowanProjectIssuesTest').
+	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest'). "extension tests"
 	self assert: (testClassNames includes: 'RowanPackageServiceTest').
 
 	packageService := RowanPackageService forPackageNamed: 'Rowan-Tests'.
@@ -10752,7 +10602,7 @@ testAddMethod
 	testInstance := testClass new.
 	testInstance ivar1: 3.
 	self assert: testInstance ivar1 = 3.
-	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	self should: [ testInstance  perform: #foo ] raise: MessageNotUnderstood.
 
 	browserTool
 		addOrUpdateMethod: 'foo ^''bar'''
@@ -10761,7 +10611,7 @@ testAddMethod
 		isMeta: false
 		inPackageNamed: packageName2.
 
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance  perform: #foo) = 'bar'.
 
 	gsNMethod := browserTool
 		addOrUpdateMethod: 'foo ^''baz'''
@@ -10770,7 +10620,7 @@ testAddMethod
 		isMeta: false
 		inPackageNamed: packageName2.	"add method in a package as a class extension"
 
-	self assert: testInstance foo = 'baz'.
+	self assert: (testInstance  perform: #foo) = 'baz'.
 
 	self assert: testClass rowanProjectName = projectName.
 	self assert: testClass rowanPackageName = packageName1.
@@ -11044,7 +10894,7 @@ testDeleteComplicatedClass
 	testClass := Rowan globalNamed: className1.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -11083,7 +10933,7 @@ testDeleteComplicatedClass
 		isMeta: false
 		inPackageNamed: (packageNames2 at: 1).	"extension method for className1 in projectName2"
 
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance  perform: #bar) = 'bar'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -11572,7 +11422,7 @@ testDeleteGlobalExtensionMethod
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -11585,7 +11435,7 @@ testDeleteGlobalExtensionMethod
 
 	browserTool removeMethod: #'foo' forClassNamed: className isMeta: false.
 
-	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	self should: [ testInstance perform: #foo ] raise: MessageNotUnderstood.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -12239,7 +12089,7 @@ testMoveGlobalExtensionSessionMethods
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -12259,7 +12109,7 @@ testMoveGlobalExtensionSessionMethods
 		isMeta: false
 		inPackageNamed: packageName2.	"move method to another package as a class extension"
 
-	self assert: testInstance foo = 'bif'.
+	self assert: (testInstance  perform: #foo) = 'bif'.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -12329,7 +12179,7 @@ testMoveMethod
 		inPackageNamed: packageName2.	"add method in a package as a class extension"
 
 "validate"
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
@@ -12358,7 +12208,7 @@ testMoveMethod
 		inPackageNamed: packageName2.	"change class extension method"
 
 "validate"
-	self assert: testInstance foo = 'baz'.
+	self assert: (testInstance  perform: #foo) = 'baz'.
 
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
@@ -12374,7 +12224,7 @@ testMoveMethod
 		inPackageNamed: packageName3.	"move method to another package as a class extension"
 
 "validate"
-	self assert: testInstance foo = 'bif'.
+	self assert: (testInstance  perform: #foo) = 'bif'.
 
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
@@ -12564,14 +12414,14 @@ testNewClassVersionB
 		inPackageNamed: project2PackageName2.	"class session method extension method for className1 in projectName2"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -12614,24 +12464,24 @@ testNewClassVersionB
 					classExtensionDef := packageDef classExtensions at: className1.
 					classExtensionDef removeClassMethod: #'bar' ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self should: [ testNewClass bar = 'bar' ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #foo = 'foo').
+	self should: [ (testNewClass perform: #bar) = 'bar' ] raise: MessageNotUnderstood.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self should: [ testNewInstance foo = 'foo' ] raise: MessageNotUnderstood.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self should: [ (testNewInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool
@@ -12721,12 +12571,12 @@ testNewClassVersion_260_change_extension_method_protocol
 		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
 
 	browserTool
 		projectsNamed: projectNames
@@ -12755,23 +12605,23 @@ testNewClassVersion_260_change_extension_method_protocol
 										protocol: 'boom'
 										source:  'foo "instance" ^''foo''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 	self assert: (testClass categoryOfSelector: #foo) = #accessing.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
+	self assert: (testNewClass  perform: #civar1) = 1.
+	self should: [ testNewClass  perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass  perform: #foo) = 'foo'.
 	self assert: (testNewClass categoryOfSelector: #foo) = #boom.
 
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
+	self should: [ testNewInstance  perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance  perform: #foo) = 'foo'.
 
 	self
 		should: [ 
@@ -12853,12 +12703,12 @@ testNewClassVersion_260_change_extension_method_source
 		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 
 	browserTool
 		projectsNamed: projectNames
@@ -12887,20 +12737,20 @@ testNewClassVersion_260_change_extension_method_source
 										protocol: 'accessing'
 										source:  'foo "instance side" ^''foo_''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
+	self assert: (testNewClass  perform: #civar1) = 1.
+	self should: [ testNewClass  perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass  perform: #foo) = 'foo'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo_'.
+	self should: [ testNewInstance  perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance  perform: #foo) = 'foo_'.
 	self
 		should: [ 
 			browserTool
@@ -12981,12 +12831,12 @@ testNewClassVersion_260_unchanged_extension_method_protocol
 		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 
 	browserTool
 		projectsNamed: projectNames
@@ -13010,20 +12860,20 @@ testNewClassVersion_260_unchanged_extension_method_protocol
 					packageDef := projectDef packageNamed: project1PackageName2.
 					classExtensionDef := packageDef classExtensions at: className1 ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
+	self assert: (testNewClass  perform: #civar1) = 1.
+	self should: [ testNewClass  perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass  perform: #foo) = 'foo'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
+	self should: [ testNewInstance  perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance  perform: #foo) = 'foo_'.
 	self
 		should: [ 
 			browserTool
@@ -13125,14 +12975,14 @@ testNewClassVersion_multi_project_change_extension_method_protocol
 		inPackageNamed: project2PackageName2.
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -13183,29 +13033,29 @@ testNewClassVersion_multi_project_change_extension_method_protocol
 										protocol: 'boom'
 										source:  'bar "class side" ^''bar''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 	self assert: (testClass categoryOfSelector: #foo) = #accessing.
 	self assert: (testClass class categoryOfSelector: #bar) = #accessing.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar = 'bar').
 	self assert: (testNewClass categoryOfSelector: #foo) = #boom.
 	self assert: (testNewClass class categoryOfSelector: #bar) = #boom.
 
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance perform: #foo) = 'foo'.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 
 	self
 		should: [ 
@@ -13317,14 +13167,14 @@ testNewClassVersion_multi_project_change_extension_method_source
 		inPackageNamed: project2PackageName2.	"class extension method for className1 in projectName2"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -13375,24 +13225,24 @@ testNewClassVersion_multi_project_change_extension_method_source
 										protocol: 'accessing'
 										source:  'bar "class side" ^''bar_''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self assert: (testClass  perform: #cvar1) = 2.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testInstance  perform: #ivar1) isNil.
+	self assert: (testInstance  perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar_'.
+	self assert: (testClass  perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testClass  perform: #foo) = 'foo'.
+	self assert: (testNewClass perform: #bar) = 'bar_'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo_'.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	(self assert: testNewInstance perform: #foo) = 'foo_'.
+	(self assert: testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool
@@ -21974,6 +21824,7 @@ _expectedGsTopazWriterFileContents_A
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -21983,7 +21834,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -21998,7 +21850,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22013,7 +21866,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22066,6 +21920,7 @@ _expectedGsTopazWriterFileContents_B
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22075,7 +21930,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22090,7 +21946,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22105,7 +21962,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22163,6 +22021,7 @@ _expectedGsTopazWriterFileContents_C_Issue361Core
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22172,7 +22031,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22187,7 +22047,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22202,7 +22063,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22282,6 +22144,7 @@ _expectedGsTopazWriterFileContents_D_Issue361Core
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22291,7 +22154,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22306,7 +22170,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22321,7 +22186,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -22364,8 +22230,8 @@ method4 ^4
 
 run
 Issue361Class1 initialize.
+true
 ', percent, '
-
 '
 %
 
@@ -22415,8 +22281,8 @@ initialize "another noop"
 
 run
 Issue361Class2 initialize.
+true
 ', percent, '
-
 '
 %
 
@@ -22427,6 +22293,7 @@ _expectedGsTopazWriterFileContents_Multi_A
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22436,7 +22303,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22451,7 +22319,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22466,7 +22335,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22481,7 +22351,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22496,7 +22367,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22511,7 +22383,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22635,8 +22508,8 @@ Issue361Class1_1 initialize.
 Issue361Class1_2 initialize.
 Issue361Class2_1 initialize.
 Issue361Class2_2 initialize.
+true
 ', percent, '
-
 '
 %
 
@@ -22647,6 +22520,7 @@ _expectedGsTopazWriterFileContents_MULTI_B_Issue361Core
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -22656,7 +22530,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22671,7 +22546,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22686,7 +22562,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22701,7 +22578,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22716,7 +22594,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -22731,7 +22610,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -22807,8 +22687,8 @@ method2 ^2
 run
 Issue361Class1_1 initialize.
 Issue361Class1_2 initialize.
+true
 ', percent, '
-
 '
 %
 
@@ -22886,8 +22766,8 @@ initialize "another noop"
 run
 Issue361Class2_1 initialize.
 Issue361Class2_2 initialize.
+true
 ', percent, '
-
 '
 %
 
@@ -23145,6 +23025,16 @@ testReconcileGlobalExtensionMethods_issue_290
 %
 
 ! Class implementation for 'RwRowanProjectIssuesTest'
+
+!		Class methods for 'RwRowanProjectIssuesTest'
+
+category: 'private'
+classmethod: RwRowanProjectIssuesTest
+_symbolDictionaryNames
+
+	^ 	super _symbolDictionaryNames, 
+			#( #'RowanSample4SymbolDict' #'SampleSymbolDict')
+%
 
 !		Instance methods for 'RwRowanProjectIssuesTest'
 
@@ -32247,14 +32137,14 @@ _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/issues/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: projectUrlString
-		gitRootPath: rowanProject repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+	(RwComponentProjectDefinition newForUrl: projectUrlString)
+		projectHome: gitRootPath;
+		clone;
+		register.
 %
 
 category: 'private-issue 24'
@@ -34261,7 +34151,7 @@ testUpdateClass
 		ifAbsent: [ 
 			self
 				assert: false
-				decription:
+				description:
 					'expected class definition for class ' , className printString , ' not found.' ].
 
 	classDefinition
@@ -34345,7 +34235,7 @@ testUpdateClassExtension
 		ifAbsent: [ 
 			self
 				assert: false
-				decription:
+				description:
 					'expected class extension definitions for class ' , className printString
 						, ' not found.' ].
 	self
@@ -40433,7 +40323,9 @@ testIssue200
 	self deny: (Rowan globalNamed: 'RowanSample4') notNil.
 
 "load"
-	project load.
+	self
+		handleInformDuring: [ project load ]
+		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
 
 "validate"
 	self assert: (Rowan globalNamed: 'RowanSample5') notNil.
@@ -41859,11 +41751,17 @@ testLoadProjectNamed_493
 	self 
 		_loadProjectFromSpecUrl: (self _rowanSample4_coreSpecificationUrl: repoRootPath)
 		repoRootPath: repoRootPath.
+
+"validate"
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
+
+"load core group of Load component"
 	projectTools load
 		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Load' ) groupNames: #('core').
 	self assert: (audit := project audit) isEmpty.
+
+"load tests group of Issue_493 component"
 	projectTools load
 		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Issue_493' ) groupNames: #().
 	self assert: (audit := project audit) isEmpty.
@@ -41960,37 +41858,27 @@ testSampleProjectLoadConfiguration
 category: 'tests'
 method: RwRowanSample4Test
 test_projectUrl_issue_463
-
-	| specUrlString projectTools rowanProject gitRootPath projectName rowanSampleSpec project |
+	| specUrlString rowanProject testProjectHome projectName project projectDef |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
-
-	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
-		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
-
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
-
+	testProjectHome := (rowanProject repositoryRootPath
+		, '/test/testRepositories/repos/') asFileReference.
+	(testProjectHome / projectName) exists
+		ifTrue: [ (testProjectHome / projectName) deleteAll ].
+	projectDef := (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: testProjectHome;
+		yourself.
+	self
+		handleInformDuring: [ projectDef clone ]
+		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
+	self
+		assert: projectDef projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+	projectDef load.
 	project := RwProject newNamed: projectName.
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-
-	self assert: project projectUrl = rowanSampleSpec projectUrl.
-	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
-
-	projectTools load
-		loadProjectNamed: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+	self assert: project projectUrl = projectDef projectUrl
 %
 
 category: 'private'
@@ -44670,8 +44558,6 @@ testDiskSimpleProject1
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	('/tmp/rowanSimpleProject/' asFileReference)
 		ensureCreateDirectory;
@@ -44743,8 +44629,6 @@ testProjectClassExtensions
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -44868,8 +44752,6 @@ testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -45021,8 +44903,6 @@ testSimpleProject1
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -45094,8 +44974,6 @@ testSimpleProject2
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -45151,8 +45029,6 @@ testSimpleProject3
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition newForGitBasedProjectNamed: projectName)
 		comment: 'This is a simple project created in memory first, then written to disk.';
@@ -45247,7 +45123,7 @@ testIssue150_branches
 		name: projectName;
 		yourself.
 
-	testBranch := 'issue_150'.
+	testBranch := 'issue_150_v2'.
 	service 
 		checkout: testBranch;
 		branch;
@@ -45257,7 +45133,11 @@ testIssue150_branches
 		yourself.
 	Rowan projectTools load loadProjectNamed: projectName.
 	testClass := Rowan globalNamed: 'RowanSample3'.
-	testClass rwCompileMethod: 'foo "', DateAndTime now printString, '"^''foo''' category: 'accessing'.
+	testClass 
+		rwCompileMethod: 'foo
+ "', DateAndTime now printString, '"
+^1 '
+		category: 'accessing'.
 	service
 		commitWithMessage: 'a commit';
 		pushToGit;
