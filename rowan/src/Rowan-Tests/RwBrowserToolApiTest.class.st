@@ -2097,7 +2097,7 @@ RwBrowserToolApiTest >> testNewClassVersion_260_unchanged_extension_method_proto
 	self assert: (testNewClass  perform: #foo) = 'foo'.
 	testNewInstance := testNewClass new.
 	self should: [ testNewInstance  perform: #ivar1 ] raise: MessageNotUnderstood.
-	self assert: (testNewInstance  perform: #foo) = 'foo_'.
+	self assert: (testNewInstance  perform: #foo) = 'foo'.
 	self
 		should: [ 
 			browserTool
@@ -2259,7 +2259,7 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 	self assert: (testClass  perform: #civar1) = 1.
 	self assert: (testClass  perform: #cvar1) = 2.
 	self assert: (testClass  perform: #foo) = 'foo'.
-	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testClass perform: #bar) = 'bar'.
 	self assert: (testInstance  perform: #ivar1) isNil.
 	self assert: (testInstance  perform: #foo) = 'foo'.
 	self assert: (testInstance perform: #bar) = 'bar'.
@@ -2271,7 +2271,7 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 	self assert: (testClass  perform: #civar1) = 1.
 	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
 	self assert: (testClass  perform: #foo) = 'foo'.
-	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testClass perform: #bar) = 'bar'.
 	self assert: (testNewClass categoryOfSelector: #foo) = #boom.
 	self assert: (testNewClass class categoryOfSelector: #bar) = #boom.
 
@@ -2450,7 +2450,7 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 	self assert: (testClass  perform: #civar1) = 1.
 	self assert: (testClass  perform: #cvar1) = 2.
 	self assert: (testClass  perform: #foo) = 'foo'.
-	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testClass perform: #bar) = 'bar'.
 	self assert: (testInstance  perform: #ivar1) isNil.
 	self assert: (testInstance  perform: #foo) = 'foo'.
 	self assert: (testInstance perform: #bar) = 'bar'.
@@ -2463,8 +2463,8 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 	self assert: (testNewClass perform: #bar) = 'bar_'.
 	testNewInstance := testNewClass new.
 	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
-	(self assert: testNewInstance perform: #foo) = 'foo_'.
-	(self assert: testNewInstance perform: #bar) = 'bar'.
+	self assert: (testNewInstance perform: #foo) = 'foo_'.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool

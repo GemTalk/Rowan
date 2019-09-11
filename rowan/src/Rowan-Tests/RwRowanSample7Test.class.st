@@ -644,7 +644,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 
 	"clone a repository from github, attach to an existing git repository, clone to an alternate projectHome"
 
-	| specUrlString rowanProject projectHome projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
+	| specUrlString rowanProject projectHome projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -664,9 +664,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
 
 "1. clone repository"
-	self 
-		handleInformDuring: [ projectReferenceDefinition_1 resolve ] 
-		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
+	projectReferenceDefinition_1 resolve.
 
 "validate"
 	self assert: projectReferenceDefinition_1 repositoryRoot exists.
@@ -676,15 +674,8 @@ RwRowanSample7Test >> testResolveProjectReference [
 		newForSpecification: projectSpec 
 		projectHome: projectHome.
 
-"attach to repository - inform confirms that skip branch was taken"
-	informHappened := false.
-	self 
-		handleInformDuring: [ projectReferenceDefinition_2 resolve ] 
-		interactionBlock: [:inform | 
-			"skipping the clone"
-			Transcript cr; show: inform message.
-			informHappened := true ].
-	self assert: informHappened.
+"attach to repository"
+	projectReferenceDefinition_2 resolve.
 
 "validate"
 	self assert: projectReferenceDefinition_1 projectHome = projectReferenceDefinition_2 projectHome.
@@ -699,9 +690,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 	projectReferenceDefinition_2 projectHome: projectHome.
 
 "clone to new location"
-	self 
-		handleInformDuring: [ projectReferenceDefinition_2 resolve ] 
-		interactionBlock: [:inform | self assert: false dexcription: 'unexpected inform: ', inform message printString ].
+	projectReferenceDefinition_2 resolve.
 
 "validate"
 	self assert: projectReferenceDefinition_2 repositoryRoot exists.

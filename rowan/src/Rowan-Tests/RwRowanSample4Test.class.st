@@ -1005,6 +1005,10 @@ RwRowanSample4Test >> testIssue210 [
 { #category : 'tests' }
 RwRowanSample4Test >> testIssue230 [
 
+	"This test is also important for validating the fix to Issue #504:
+		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
+		At least confirm that it is NOT a good candidate, since this test is now failing
+		with the new error introduced in the partial for for Issue #504"
 	"https://github.com/dalehenrich/Rowan/issues/230"
 
 	"new class version for class being loaded in after adopt --- initial RowanSample4 class created with instancesInvariant option, 
@@ -1144,6 +1148,11 @@ RwRowanSample4Test >> testIssue284 [
 
 { #category : 'tests' }
 RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProject_1 [
+
+	"This test is also important for validating the fix to Issue #504:
+		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
+		At least confirm that it is NOT a good candidate, since this test is now failing
+		with the new error introduced in the partial for for Issue #504"
 
 	"https://github.com/dalehenrich/Rowan/issues/295"
 
@@ -1642,6 +1651,11 @@ projectSetDefinition addProject: oldProjectDefinition.
 
 { #category : 'tests' }
 RwRowanSample4Test >> testIssue460_2 [
+
+	"This test is also important for validating the fix to Issue #504:
+		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
+		At least confirm that it is NOT a good candidate, since this test is now failing
+		with the new error introduced in the partial for for Issue #504"
 
 	"https://github.com/dalehenrich/Rowan/issues/260"
 
