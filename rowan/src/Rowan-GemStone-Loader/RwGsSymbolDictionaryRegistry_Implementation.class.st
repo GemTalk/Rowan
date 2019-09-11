@@ -303,6 +303,14 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
 	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
+
+	(methodDictionary at: selector ifAbsent: [  ])
+		ifNotNil: [ :oldCompiledMethod | 
+			compiledMethod == oldCompiledMethod
+				ifFalse: [ 
+					"only a problem, if the new and old compiled method are not identical"
+					self error: 'internal error - compiled method already exists in method dictionary when new extension method is expected' ] ].
+
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
