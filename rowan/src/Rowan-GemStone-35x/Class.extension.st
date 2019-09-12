@@ -54,7 +54,7 @@ Class >> _constraintsEqual: anArray [
 	].
       ]
     ] ifFalse:[
-      (self varyingConstraint isVersionOf: anArray) ifFalse:[ ^ false ].
+      (self _varyingConstraint isVersionOf: anArray) ifFalse:[ ^ false ].
     ].
     true
   ] onSynchronous: Error do:[:ex| false ].

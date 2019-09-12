@@ -178,7 +178,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -189,7 +189,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.

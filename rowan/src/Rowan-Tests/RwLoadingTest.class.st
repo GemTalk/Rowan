@@ -1745,13 +1745,13 @@ RwLoadingTest >> testClassDelete [
 	self
 		assert:
 				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
-		assert: testClass testClassMethod;
-		assert: testClass testClassMethodSurvivor.
+		assert: (testClass perform: #testClassMethod);
+		assert: (testClass perform: #testClassMethodSurvivor).
 	self
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
-		assert: testInstance testInstanceMethod;
-		assert: testInstance testInstanceMethodSurvivor.
+		assert: (testInstance perform: #testInstanceMethod);
+		assert: (testInstance perform: #testInstanceMethodSurvivor).
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -1763,7 +1763,6 @@ RwLoadingTest >> testClassDelete [
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	self assert: (Rowan image resolveClassNamed: className asSymbol) isNil
-
 ]
 
 { #category : 'tests' }
@@ -1791,7 +1790,7 @@ RwLoadingTest >> testClassExtension [
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
-	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	self should: [ testInstance perform: #foo ] raise: MessageNotUnderstood.
 	packageNames := {packageName2}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -1806,8 +1805,7 @@ RwLoadingTest >> testClassExtension [
 								in: Dictionary new));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	self assert: testInstance foo = 'foo'
-
+	self assert: (testInstance perform: #foo) = 'foo'
 ]
 
 { #category : 'tests' }
@@ -1832,9 +1830,8 @@ RwLoadingTest >> testClassInitialization1 [
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 	testClass := Rowan image resolveClassNamed: className asSymbol.
-	self assert: testClass classVar = 1.
-	self assert: testClass classInstVar1 = 1
-
+	self assert: (testClass perform: #classVar) = 1.
+	self assert: (testClass perform: #classInstVar1) = 1
 ]
 
 { #category : 'tests' }
@@ -1857,9 +1854,9 @@ RwLoadingTest >> testClassInitialization2 [
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
 	testClass := Rowan image resolveClassNamed: className asSymbol.
-	self assert: testClass classVar = 1.
-	self assert: testClass classInstVar1 = 1.
-	self assert: testClass classInstVar2 isNil.	"update the initialization method ... #initialize should run again"
+	self assert: (testClass perform: #classVar) = 1.
+	self assert: (testClass perform: #classInstVar1) = 1.
+	self assert: (testClass perform: #classInstVar2) isNil.	"update the initialization method ... #initialize should run again"
 	packageName := 'ClassInitializationTestPackage'.
 	className := 'TestClassInitializationClass'.
 	packageNames := {packageName}.
@@ -1873,9 +1870,9 @@ RwLoadingTest >> testClassInitialization2 [
 							(self classInitializationClassMethodsForClass2: className));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	self assert: testClass classVar = 1.
-	self assert: testClass classInstVar1 = 1.
-	self assert: testClass classInstVar2 = 2
+	self assert: (testClass perform: #classVar) = 1.
+	self assert: (testClass perform: #classInstVar1) = 1.
+	self assert: (testClass perform: #classInstVar2) = 2
 ]
 
 { #category : 'tests' }
@@ -1902,9 +1899,8 @@ RwLoadingTest >> testClassInitialization3 [
 			self assert: ex candidateClass name asString = className.
 			ex resume: true ].
 	testClass := Rowan image resolveClassNamed: className asSymbol.
-	self assert: testClass classVar = 1.
-	self assert: testClass classInstVar1 = 1
-
+	self assert: (testClass perform: #classVar) = 1.
+	self assert: (testClass perform: #classInstVar1) = 1
 ]
 
 { #category : 'tests' }
@@ -2169,12 +2165,12 @@ RwLoadingTest >> testCombinedChanges [
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self
-		assert: testClass testClassMethod1;
-		assert: testClass testClassMethod2;
-		assert: testClass testClassMethod3 = 1;
-		assert: testInstance testInstanceMethod1;
-		assert: testInstance testInstanceMethod2;
-		assert: testInstance testInstanceMethod3 = 1.
+		assert: (testClass perform: #testClassMethod1);
+		assert: (testClass perform: #testClassMethod2);
+		assert: (testClass perform: #testClassMethod3) = 1;
+		assert: (testInstance perform: #testInstanceMethod1);
+		assert: (testInstance perform: #testInstanceMethod2);
+		assert: (testInstance perform: #testInstanceMethod3) = 1.
 	packageNames := {packageName}.
 	classDefinitionsDictionary := (self basicClassDefinitions: packageName)
 		at: className
@@ -2200,16 +2196,15 @@ RwLoadingTest >> testCombinedChanges [
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	self
-		assert: testClass testClassMethod1;
+		assert: (testClass perform: #testClassMethod1);
 		assert:
 				(testClass class compiledMethodAt: #'testClassMethod2' otherwise: false)
 						== false;
-		assert: testClass testClassMethod3 = 2;
+		assert: (testClass perform: #testClassMethod3) = 2;
 		assert: testInstance testInstanceMethod1;
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod2' otherwise: false) == false;
-		assert: testInstance testInstanceMethod3 = 2
-
+		assert: (testInstance perform: #testInstanceMethod3) = 2
 ]
 
 { #category : 'tests' }
@@ -2299,13 +2294,13 @@ RwLoadingTest >> testMethodDelete [
 	self
 		assert:
 				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
-		assert: testClass testClassMethod;
-		assert: testClass testClassMethodSurvivor.
+		assert: (testClass perform: #testClassMethod);
+		assert: (testClass perform: #testClassMethodSurvivor).
 	self
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
-		assert: testInstance testInstanceMethod;
-		assert: testInstance testInstanceMethodSurvivor.
+		assert: (testInstance perform: #testInstanceMethod);
+		assert: (testInstance perform: #testInstanceMethodSurvivor).
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2322,11 +2317,11 @@ RwLoadingTest >> testMethodDelete [
 	self
 		assert:
 				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) == false;
-		assert: testClass testClassMethodSurvivor.
+		assert: (testClass perform: #testClassMethodSurvivor).
 	self
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) == false;
-		assert: testInstance testInstanceMethodSurvivor
+		assert: (testInstance perform: #testInstanceMethodSurvivor)
 ]
 
 { #category : 'tests' }
@@ -2353,10 +2348,10 @@ RwLoadingTest >> testMethodProtocolChange [
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self
-		assert: testClass testClassMethod1;
-		assert: testClass testClassMethod2;
-		assert: testInstance testInstanceMethod1;
-		assert: testInstance testInstanceMethod2.
+		assert: (testClass perform: #testClassMethod1);
+		assert: (testClass perform: #testClassMethod2);
+		assert: (testInstance perform: #testInstanceMethod1);
+		assert: (testInstance perform: #testInstanceMethod2).
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2371,10 +2366,10 @@ RwLoadingTest >> testMethodProtocolChange [
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	self
-		assert: testClass testClassMethod1;
-		assert: testClass testClassMethod2;
-		assert: testInstance testInstanceMethod1;
-		assert: testInstance testInstanceMethod2
+		assert: (testClass perform: #testClassMethod1);
+		assert: (testClass perform: #testClassMethod2);
+		assert: (testInstance perform: #testInstanceMethod1);
+		assert: (testInstance perform: #testInstanceMethod2)
 ]
 
 { #category : 'tests' }
@@ -2482,7 +2477,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
-	self assert: testInstance1 foo = 'foo'.
+	self assert: (testInstance1 perform: #foo) = 'foo'.
 	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
 
 	packageNames := {packageName}.
@@ -2502,9 +2497,8 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'foo'.
+	self assert: (testInstance2 perform: #foo) = 'foo'.
 	self assert: (testClass2 categoryOfSelector: #foo) = #'accessing'.
-
 ]
 
 { #category : 'tests' }
@@ -2533,7 +2527,7 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
-	self assert: testInstance1 foo = 'foo'.
+	self assert: (testInstance1 perform: #foo) = 'foo'.
 	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
 
 	packageNames := {packageName}.
@@ -2553,9 +2547,8 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'bar'.
+	self assert: (testInstance2 perform: #foo) = 'bar'.
 	self assert: (testClass2 categoryOfSelector: #foo) = #'accessing'.
-
 ]
 
 { #category : 'tests' }
@@ -2584,7 +2577,7 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
-	self assert: testInstance1 foo = 'foo'.
+	self assert: (testInstance1 perform: #foo) = 'foo'.
 	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
 
 	packageNames := {packageName}.
@@ -2604,7 +2597,6 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'foo'.
+	self assert: (testInstance2 perform: #foo) = 'foo'.
 	self assert: (testClass2 categoryOfSelector: #foo) = #'fooing'.
-
 ]

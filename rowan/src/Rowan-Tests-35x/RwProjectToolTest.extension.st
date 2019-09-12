@@ -130,7 +130,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo.
+	self assert: (testInstance perform: #foo).
 
 	classExtensionDefinition := RwClassExtensionDefinition
 		newForClassNamed: className.
@@ -161,9 +161,9 @@ RwProjectToolTest >> testProjectClassExtensions [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 == 1.
+	self assert: (testClass perform: #civar1) == 1.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 
 	projectDefinition 
@@ -252,7 +252,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	testClass2 := Rowan globalNamed: className2.
 	self assert: testClass2 isNil.
 	testInstance1 := testClass1 new.
-	self should: [ testInstance1 ivar1 ] raise: MessageNotUnderstood.
+	self should: [ testInstance1 perform: #ivar1 ] raise: MessageNotUnderstood.
 
 	dictionariesAndSymbols := Rowan image symbolList
 		dictionariesAndSymbolsOf: testClass1.
@@ -317,7 +317,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
-	self assert: testClass1 civar1 = 1.
+	self assert: (testClass1 perform: #civar1) = 1.
 
 	projectDefinition
 		export;
@@ -533,9 +533,9 @@ RwProjectToolTest >> testSimpleProject3 [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 == 1.
+	self assert: (testClass perform: #civar1) == 1.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].

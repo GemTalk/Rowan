@@ -124,7 +124,7 @@ RwRowanIssue188Test >> testBaselineScenario [
 	oldTheClass1 := theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 
-	self assert: theClass2 new w == oldTheClass1.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
 
 	theClass1 := Object
 		rwSubclass: className1
@@ -137,8 +137,7 @@ RwRowanIssue188Test >> testBaselineScenario [
 
 	self assert: theClass1 ~~ oldTheClass1.
 	self assert: (theClass1 classHistory includes: oldTheClass1).
-	self assert: theClass2 new w == theClass1.
-
+	self assert: (theClass2 new perform: #w) == theClass1.
 ]
 
 { #category : 'tests' }
@@ -181,7 +180,7 @@ RwRowanIssue188Test >> testNewClassAndNewClassReferences [
 	oldTheClass1 := theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 
-	self assert: theClass2 new w == oldTheClass1.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
 
 	"Setup new class and new class reference:"
 	self 
@@ -191,8 +190,8 @@ RwRowanIssue188Test >> testNewClassAndNewClassReferences [
 
 	oldTheClass3 := theClass3 := Rowan globalNamed: className3.
 
-	self assert: theClass2 new w == oldTheClass1.
-	self assert: theClass2 new x == oldTheClass3.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
+	self assert: (theClass2 new perform: #x) == oldTheClass3.
 
 	"Failure: the methods compiled with references to C as a newly created class are incorrect"
 	theClass3 := Object
@@ -206,9 +205,8 @@ RwRowanIssue188Test >> testNewClassAndNewClassReferences [
 
 	self assert: theClass3 ~~ oldTheClass3.
 	self assert: (theClass3 classHistory includes: oldTheClass3).
-	self assert: theClass2 new w == theClass1.		"association in method #w is still correct"
-	self assert: theClass2 new x == theClass3.		"association in method #x is correct"
-
+	self assert: (theClass2 new perform: #w) == theClass1.		"association in method #w is still correct"
+	self assert: (theClass2 new perform: #x) == theClass3.		"association in method #x is correct"
 ]
 
 { #category : 'tests' }
@@ -245,7 +243,7 @@ RwRowanIssue188Test >> testOriginalFailureMode [
 	oldTheClass1 := theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 
-	self assert: theClass2 new w == oldTheClass1.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
 
 	theClass1 := Object
 		rwSubclass: className1
@@ -258,7 +256,7 @@ RwRowanIssue188Test >> testOriginalFailureMode [
 
 	self assert: theClass1 ~~ oldTheClass1.
 	self assert: (theClass1 classHistory includes: oldTheClass1).
-	self assert: theClass2 new w == theClass1.
+	self assert: (theClass2 new perform: #w) == theClass1.
 
 	"Original Setup: the method #w is compiled with a reference to className1, but it is in an incorrect association -- not yet apparent"
 	theClass2 := Object
@@ -270,7 +268,7 @@ RwRowanIssue188Test >> testOriginalFailureMode [
 		category: packageName
 		options: #().
 
-	self assert: theClass2 new w == theClass1.
+	self assert: (theClass2 new perform: #w) == theClass1.
 
 	"Original Failure: the incorrect association in method #w is not updated with the new version of className1 - boom"
 	oldTheClass1 := theClass1.
@@ -285,8 +283,7 @@ RwRowanIssue188Test >> testOriginalFailureMode [
 
 	self assert: theClass1 ~~ oldTheClass1.
 	self assert: (theClass1 classHistory includes: oldTheClass1).
-	self assert: theClass2 new w == theClass1.		"association in method #w incorrect"
-
+	self assert: (theClass2 new perform: #w) == theClass1.		"association in method #w incorrect"
 ]
 
 { #category : 'tests' }
@@ -320,7 +317,7 @@ RwRowanIssue188Test >> testOriginalSetupMode [
 	oldTheClass1 := theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 
-	self assert: theClass2 new w == oldTheClass1.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
 
 	theClass1 := Object
 		rwSubclass: className1
@@ -333,7 +330,7 @@ RwRowanIssue188Test >> testOriginalSetupMode [
 
 	self assert: theClass1 ~~ oldTheClass1.
 	self assert: (theClass1 classHistory includes: oldTheClass1).
-	self assert: theClass2 new w == theClass1.
+	self assert: (theClass2 new perform: #w) == theClass1.
 
 	"Original Setup: the method #w is compiled with a reference to className1, but it is in an incorrect association -- not yet apparent"
 	theClass2 := Object
@@ -345,6 +342,5 @@ RwRowanIssue188Test >> testOriginalSetupMode [
 		category: packageName
 		options: #().
 
-	self assert: theClass2 new w == theClass1.
-
+	self assert: (theClass2 new perform: #w) == theClass1.
 ]

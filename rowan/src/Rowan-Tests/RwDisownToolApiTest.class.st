@@ -36,7 +36,7 @@ RwDisownToolApiTest >> testDisownClass1 [
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*' , packageName asLowercase.
 
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
@@ -45,7 +45,7 @@ RwDisownToolApiTest >> testDisownClass1 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 
@@ -54,10 +54,9 @@ RwDisownToolApiTest >> testDisownClass1 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
-
 ]
 
 { #category : 'tests' }
@@ -97,8 +96,8 @@ RwDisownToolApiTest >> testDisownClass2 [
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -108,8 +107,8 @@ RwDisownToolApiTest >> testDisownClass2 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 	self assert: (x := barMethod rowanPackageName) = packageName2.
@@ -119,12 +118,11 @@ RwDisownToolApiTest >> testDisownClass2 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests' }
@@ -164,8 +162,8 @@ RwDisownToolApiTest >> testDisownExtensionMethods [
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -177,8 +175,8 @@ RwDisownToolApiTest >> testDisownExtensionMethods [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = Rowan unpackagedName.
@@ -190,14 +188,13 @@ RwDisownToolApiTest >> testDisownExtensionMethods [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (x := (Rowan image loadedPackageNamed: packageName2) loadedClassExtensions size) = 1. 
 	self assert: (x := (y := Rowan image loadedClassExtensionsForClass: theClass) size) = 1.
-
 ]
 
 { #category : 'tests' }
@@ -230,7 +227,7 @@ RwDisownToolApiTest >> testDisownMethod [
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*' , packageName asLowercase.
 
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
@@ -239,7 +236,7 @@ RwDisownToolApiTest >> testDisownMethod [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 
@@ -249,9 +246,8 @@ RwDisownToolApiTest >> testDisownMethod [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: fooMethod rowanPackageName = packageName.
-
 ]
 
 { #category : 'tests' }
@@ -289,8 +285,8 @@ RwDisownToolApiTest >> testDisownPackage1 [
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -301,8 +297,8 @@ RwDisownToolApiTest >> testDisownPackage1 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 	self assert: (x := barMethod rowanPackageName) = packageName2.
@@ -315,13 +311,12 @@ RwDisownToolApiTest >> testDisownPackage1 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (Rowan image loadedPackageNamed: packageName1 ifAbsent: []) notNil.
-
 ]
 
 { #category : 'tests' }
@@ -359,8 +354,8 @@ RwDisownToolApiTest >> testDisownPackage2 [
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -372,8 +367,8 @@ RwDisownToolApiTest >> testDisownPackage2 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = Rowan unpackagedName.
@@ -387,13 +382,12 @@ RwDisownToolApiTest >> testDisownPackage2 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (Rowan image loadedPackageNamed: packageName2 ifAbsent: []) notNil.
-
 ]
 
 { #category : 'tests' }
@@ -431,8 +425,8 @@ RwDisownToolApiTest >> testDisownPackage3 [
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName3.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -445,8 +439,8 @@ RwDisownToolApiTest >> testDisownPackage3 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName3.
 	self assert: barMethod rowanPackageName = Rowan unpackagedName.
@@ -461,15 +455,14 @@ RwDisownToolApiTest >> testDisownPackage3 [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName3.
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (Rowan image loadedPackageNamed: packageName2 ifAbsent: []) notNil.
 	self assert: (Rowan image loadedPackageNamed: packageName3 ifAbsent: []) notNil.
 	self assert: (x := (Rowan image loadedClassExtensionsForClass: theClass) size) = 2.
-
 ]
 
 { #category : 'tests' }
@@ -509,8 +502,8 @@ RwDisownToolApiTest >> testDisownProject [
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar)= 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -525,8 +518,8 @@ RwDisownToolApiTest >> testDisownProject [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: (x := theClass rowanPackageName) = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 	self assert: (x := barMethod rowanPackageName) = Rowan unpackagedName.
@@ -542,8 +535,8 @@ RwDisownToolApiTest >> testDisownProject [
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: (x := theClass rowanPackageName) = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.

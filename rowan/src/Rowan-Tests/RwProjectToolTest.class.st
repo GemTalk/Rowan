@@ -187,12 +187,12 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
-	self assert: testClass1 civar1 == 1.
-	self assert: testInstance1 ivar1 isNil.
+	self assert: (testClass1 perform: #civar1) == 1.
+	self assert: (testInstance1 perform: #ivar1) isNil.
 	testClass2 := Rowan globalNamed: className2.
 	self assert: testClass2 notNil.
 	testInstance2 := testClass2 new.
-	self assert: testInstance2 foo
+	self assert: (testInstance2 perform: #foo)
 ]
 
 { #category : 'tests' }
@@ -245,6 +245,6 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 
 	projectTools load loadProjectDefinition: projectDefinition.
 
-	self assert: Object classFoo = 'bar'.
-	self assert: Object new instanceFoo = 'foo'
+	self assert: (Object perform: #classFoo) = 'bar'.
+	self assert: (Object new perform: #instanceFoo) = 'foo'
 ]

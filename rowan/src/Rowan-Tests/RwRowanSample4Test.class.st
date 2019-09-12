@@ -224,7 +224,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -237,7 +237,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -307,7 +307,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -322,7 +322,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass == newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -387,7 +387,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -402,7 +402,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -468,7 +468,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -482,7 +482,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -548,7 +548,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -562,7 +562,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -628,7 +628,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -643,7 +643,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -708,7 +708,7 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -723,7 +723,7 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict'.
@@ -1212,7 +1212,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -1229,7 +1229,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
@@ -1303,7 +1303,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -1336,7 +1336,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
@@ -1407,7 +1407,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -1440,7 +1440,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
@@ -1608,7 +1608,7 @@ RwRowanSample4Test >> testIssue460_1 [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -1641,7 +1641,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
@@ -1716,7 +1716,7 @@ RwRowanSample4Test >> testIssue460_2 [
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -1749,11 +1749,11 @@ projectSetDefinition addProject: oldProjectDefinition.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	subclass := Rowan globalNamed: 'NewRowanSampleSubclass4'.
-	self assert: subclass new foo = 'foo'.
-	self assert: subclass foo = 'foo'.
+	self assert: (subclass new perform: #foo) = 'foo'.
+	self assert: (subclass perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
@@ -1822,7 +1822,7 @@ RwRowanSample4Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -1843,7 +1843,7 @@ RwRowanSample4Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
@@ -1884,7 +1884,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
-	self assert: theClass new foo = 'foo'
+	self assert: (theClass new perform: #foo) = 'foo'
 ]
 
 { #category : 'tests' }
@@ -1915,7 +1915,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
-	self assert: theClass new foo = 'foo'
+	self assert: (theClass new perform: #foo) = 'foo'
 ]
 
 { #category : 'tests' }
@@ -1948,7 +1948,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_1 [
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
-	self assert: theClass new foo = 'foo'
+	self assert: (theClass new perform: #foo) = 'foo'
 ]
 
 { #category : 'tests' }
@@ -2001,7 +2001,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 ]
 
 { #category : 'tests' }

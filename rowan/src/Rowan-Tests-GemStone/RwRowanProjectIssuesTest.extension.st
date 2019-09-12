@@ -119,8 +119,8 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -160,8 +160,8 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 	self assert: (audit := project audit) isEmpty.
 
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 3.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 3.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -246,8 +246,8 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -284,8 +284,8 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -369,8 +369,8 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -407,8 +407,8 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -492,8 +492,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -530,8 +530,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 3.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 3.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -615,8 +615,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -636,8 +636,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -722,8 +722,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -760,8 +760,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -845,8 +845,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -883,8 +883,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
