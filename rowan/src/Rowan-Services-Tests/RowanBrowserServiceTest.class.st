@@ -5,6 +5,50 @@ Class {
 }
 
 { #category : 'tests' }
+RowanBrowserServiceTest >> test_compileClassSelectedMethod [
+  "because the selectedClass is the name of the 
+	class to be compiled, it compiles without a confirmation"
+
+  | browserService |
+  self
+    jadeiteIssueTested: #'issue516'
+    withTitle: 'Deleting classes and project reload (3.0.77)'.
+  browserService := RowanBrowserService new.
+  browserService selectedClass: 'Fubar'.
+  browserService
+    compileClass:
+      'Object rwSubclass: ''Fubar''
+	instVarNames: #( abc def )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: ''RowanSample1-Tests''
+	options: #()'.
+  browserService recompileMethodsAfterClassCompilation.
+  [ 
+  self
+    assert:
+      (Rowan image symbolList resolveSymbol: #'Fubar') value allInstVarNames
+    equals: #(#'abc' #'def').
+  browserService selectedClass: 'Fubar'.
+  browserService
+    compileClass:
+      'Object rwSubclass: ''Fubar''
+	instVarNames: #( abc )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: ''RowanSample1-Tests''
+	options: #()'.
+  browserService recompileMethodsAfterClassCompilation.
+  self
+    assert:
+      (Rowan image symbolList resolveSymbol: #'Fubar') value allInstVarNames
+    equals: #(#'abc') ]
+    ensure: [ Rowan projectTools browser removeClassNamed: 'Fubar' ]
+]
+
+{ #category : 'tests' }
 RowanBrowserServiceTest >> test_flipAutoCommit [
 	| autoCommit service | 
 	self jadeiteIssueTested: #issue396 withTitle: 'Ability to turn on autocommit would be nice'.

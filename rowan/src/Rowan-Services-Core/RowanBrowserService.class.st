@@ -268,6 +268,12 @@ RowanBrowserService >> selectedClass [
 	^selectedClass
 ]
 
+{ #category : 'other' }
+RowanBrowserService >> selectedClass: object [
+
+	selectedClass := object
+]
+
 { #category : 'perform' }
 RowanBrowserService >> servicePerform: symbol withArguments: collection [
 	super perform: symbol withArguments: collection.
