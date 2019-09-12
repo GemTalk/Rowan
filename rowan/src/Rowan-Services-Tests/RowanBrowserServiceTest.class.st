@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'tests' }
-RowanBrowserServiceTest >> test_compileClassSelectedMethod [
+RowanBrowserServiceTest >> test_compileClassWithClassSelected [
   "because the selectedClass is the name of the 
 	class to be compiled, it compiles without a confirmation"
 
