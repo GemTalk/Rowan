@@ -94,11 +94,24 @@ RowanBrowserService >> classHierarchyForPackagesNamed: packageNames [
 
 { #category : 'client commands' }
 RowanBrowserService >> compileClass: definitionString [
+  | anonymousMethod |
+  self confirmDuplicateName: definitionString.
+  anonymousMethod := definitionString
+    _compileInContext: nil
+    symbolList: Rowan image symbolList.
+  UserGlobals at: #'jadeiteCompileClassMethod' put: anonymousMethod
+]
 
-	|  anonymousMethod |
-	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: Rowan image symbolList.
-	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
+{ #category : 'client commands support' }
+RowanBrowserService >> confirmDuplicateName: definitionString [
+  | className |
+  className := (definitionString subStrings at: 3) copyWithout: $'.
+  (Rowan image symbolList resolveSymbol: className asSymbol)
+    ifNotNil: [ 
+      className = selectedClass
+        ifFalse: [ 
+          (self confirm: 'Class name is already an object. Continue?')
+            ifFalse: [ ^ Error signal: 'Class not compiled. Name already exists.' ] ] ]
 ]
 
 { #category : 'client commands' }
