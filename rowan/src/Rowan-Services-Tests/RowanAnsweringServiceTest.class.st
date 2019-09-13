@@ -15,42 +15,6 @@ RowanAnsweringServiceTest >> setUp [
 ]
 
 { #category : 'tests' }
-RowanAnsweringServiceTest >> test_disableBreakpoints [
-  | classService methodService bpHit previousTrappable |
-  self
-    jadeiteIssueTested: #'issue515'
-    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
-  classService := RowanClassService new name: 'RowanSample1'.
-  classService update.
-  classService saveMethodSource: 'setABreak ^true' category: 'delete me'.
-  methodService := (classService methodsNamed: #'setABreak') first.
-  self assert: RowanSample1 new setABreak.	"set a break, expect to hit it"
-  methodService setBreakAt: 1.
-  bpHit := false.
-  previousTrappable := Breakpoint trappable: true.
-  [ RowanSample1 new setABreak ]
-    on: Breakpoint
-    do: [ :ex | bpHit := true ].
-  self assert: bpHit.
-  service setBreakPointsAreDisabled: true.	"breakpoints are disabled, expect not to hit it"
-  bpHit := false.
-  [ RowanSample1 new setABreak ]
-    on: Breakpoint
-    do: [ :ex | bpHit := true ].
-  self deny: bpHit.
-  service setBreakPointsAreDisabled: false.
-  bpHit := false.
-  [ RowanClassService new setABreak ]
-    on: Breakpoint
-    do: [ :ex | bpHit := true ].
- [ self assert: bpHit ]
-    ensure: [ 
-      classService removeSelector: 'setABreak' ifAbsent: [  ].
-      service setBreakPointsAreDisabled: false.
-      Breakpoint trappable: previousTrappable ]
-]
-
-{ #category : 'tests' }
 RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
   self
     jadeiteIssueTested: #'issue515'
@@ -87,31 +51,6 @@ RowanAnsweringServiceTest >> test_execWithContext [
 	self assert: (service exec: 'self' context: 123 asOop) value equals: 123 asOop.
 	self assert: (service exec: 'self size' context: Array new asOop) value equals: 0 asOop.
 	self assert: (service exec: '1 + self' context: 2 asOop) value equals: 3 asOop.
-]
-
-{ #category : 'tests' }
-RowanAnsweringServiceTest >> test_hitBreakpoint [
-  | classService methodService bpHit previousTrappable |
-  self
-    jadeiteIssueTested: #'issue515'
-    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
-  classService := RowanClassService new name: 'RowanSample1'.
-  classService update.
-  classService saveMethodSource: 'setABreak ^true' category: 'delete me'.
-  [ 
-  methodService := (classService methodsNamed: #'setABreak') first.
-  self assert: RowanSample1 new setABreak.	"set a break, expect to hit it"
-  methodService setBreakAt: 1.
-  bpHit := false.
-  previousTrappable := Breakpoint trappable: true.
-  [ RowanSample1 new setABreak ]
-    on: Breakpoint
-    do: [ :ex | bpHit := true ].
-  self assert: bpHit ]
-    ensure: [ 
-      classService removeMethods: (Array with: methodService).
-      service setBreakPointsAreDisabled: false.
-      Breakpoint trappable: previousTrappable ]
 ]
 
 { #category : 'tests' }
