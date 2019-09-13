@@ -161,6 +161,25 @@ RowanAnsweringService >> exec: aString inFrame: level ofProcess: processOop cont
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> expressionSelector: string [
+  "try to uncover a selector in the string. 
+	If it's not possible, return the string and 
+	let the application do with it what it will"
+
+  | messageNode |
+  messageNode := [ RBParser parseExpression: string ]
+    on: Error
+    do: [ :ex | nil ].
+  answer := messageNode
+    ifNil: [ string ]
+    ifNotNil: [ 
+      messageNode isMessage
+        ifTrue: [ messageNode buildSelector ]
+        ifFalse: [ string ] ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> flipTranscript [
 	self isTranscriptInstalled ifTrue:[
 		self jadeiteServer uninstallTranscript]
