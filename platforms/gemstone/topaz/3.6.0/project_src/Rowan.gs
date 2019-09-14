@@ -54112,6 +54112,13 @@ commitLog: logLimit
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictProject
+defaultSymbolDictName: aString
+
+	^ self specification defaultSymbolDictName: aString
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
 loadedCommitId
 
 	^ self specification loadedCommitId
@@ -61310,7 +61317,7 @@ _constraintsEqual: anArray
 	].
       ]
     ] ifFalse:[
-      (self varyingConstraint isVersionOf: anArray) ifFalse:[ ^ false ].
+      (self _varyingConstraint isVersionOf: anArray) ifFalse:[ ^ false ].
     ].
     true
   ] onSynchronous: Error do:[:ex| false ].
@@ -63382,6 +63389,13 @@ defaultSymbolDictName
 
 category: '*rowan-gemstone-core'
 method: RwProject
+defaultSymbolDictName: aString
+
+	^ self _loadedProject defaultSymbolDictName: aString
+%
+
+category: '*rowan-gemstone-core'
+method: RwProject
 defaultUseSessionMethodsForExtensions
 
 	^ self _gemstonePlatformSpec defaultUseSessionMethodsForExtensions
@@ -63771,6 +63785,14 @@ compareAgainstBase: aDefinition
 ! Class extensions for 'RwProjectSpecification'
 
 !		Instance methods for 'RwProjectSpecification'
+
+category: '*rowan-gemstone-specifications'
+method: RwProjectSpecification
+defaultSymbolDictName: aString
+
+
+	(self platformSpec at: 'gemstone') defaultSymbolDictName: aString
+%
 
 category: '*rowan-gemstone-specifications'
 method: RwProjectSpecification

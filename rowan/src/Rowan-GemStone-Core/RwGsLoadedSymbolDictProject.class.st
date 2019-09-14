@@ -18,6 +18,12 @@ RwGsLoadedSymbolDictProject >> commitLog: logLimit [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> defaultSymbolDictName: aString [
+
+	^ self specification defaultSymbolDictName: aString
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictProject >> loadedCommitId [
 
 	^ self specification loadedCommitId

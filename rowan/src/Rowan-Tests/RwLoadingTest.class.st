@@ -2201,7 +2201,7 @@ RwLoadingTest >> testCombinedChanges [
 				(testClass class compiledMethodAt: #'testClassMethod2' otherwise: false)
 						== false;
 		assert: (testClass perform: #testClassMethod3) = 2;
-		assert: testInstance testInstanceMethod1;
+		assert: (testInstance perform: #testInstanceMethod1);
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod2' otherwise: false) == false;
 		assert: (testInstance perform: #testInstanceMethod3) = 2

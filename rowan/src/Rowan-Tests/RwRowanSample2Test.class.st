@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwRowanSample2Test',
-	#superclass : 'RwToolTest',
+	#superclass : 'RwRowanSampleAbstractTest',
 	#category : 'Rowan-Tests'
 }
 
@@ -69,10 +69,9 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	 (gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -144,10 +143,9 @@ RwRowanSample2Test >> testDeferredMigration [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -196,10 +194,9 @@ RwRowanSample2Test >> testNoMigration [
 
 	(gitRootPath /projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -261,10 +258,9 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -326,10 +322,9 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -391,10 +386,9 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -473,10 +467,9 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -520,10 +513,9 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')

@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwRowanSample4Test',
-	#superclass : 'RwToolTest',
+	#superclass : 'RwRowanSampleAbstractTest',
 	#category : 'Rowan-Tests'
 }
 
@@ -2057,10 +2057,9 @@ RwRowanSample4Test >> testLoadProjectNamed_221B [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
@@ -2101,10 +2100,9 @@ RwRowanSample4Test >> testLoadProjectNamed_221C [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
@@ -2145,10 +2143,9 @@ RwRowanSample4Test >> testLoadProjectNamed_221D [
 
 	(gitRootPath  / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
@@ -2231,10 +2228,9 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -2275,10 +2271,9 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.

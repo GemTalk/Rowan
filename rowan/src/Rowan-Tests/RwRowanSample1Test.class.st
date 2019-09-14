@@ -1,24 +1,16 @@
 Class {
 	#name : 'RwRowanSample1Test',
-	#superclass : 'RwToolTest',
+	#superclass : 'RwRowanSampleAbstractTest',
 	#category : 'Rowan-Tests'
 }
-
-{ #category : 'private' }
-RwRowanSample1Test >> _rowanSample1LoadSpecificationUrl [
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1.ston'
-]
 
 { #category : 'tests' }
 RwRowanSample1Test >> testIssue345 [
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec symDict registry |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project symDict registry |
 	projectName := 'RowanSample1'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
@@ -28,26 +20,21 @@ RwRowanSample1Test >> testIssue345 [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
+	project := RwProject newNamed: projectName.
+	project
 		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath asFileReference.
+	gitRootPath := project repositoryRootPath asFileReference.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'issue_345'.
+	gitTool gitcheckoutIn: gitRootPath with: self _issue_345_branch_name.
 "load project"
-	projectTools load 
-		loadProjectNamed: projectName 
-		withConfigurations: #('Default') 
-		groupNames: #().
+	project load.
 
 "validation"
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.

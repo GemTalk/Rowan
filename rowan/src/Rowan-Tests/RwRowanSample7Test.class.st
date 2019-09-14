@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwRowanSample7Test',
-	#superclass : 'RwToolTest',
+	#superclass : 'RwRowanSampleAbstractTest',
 	#instVars : [
 		'repositoryRoot'
 	],

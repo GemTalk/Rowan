@@ -27,22 +27,6 @@ RwRowanSample4Test >> _cloneProjectFromSpecUrl_300: specUrlString projectsHome: 
 ]
 
 { #category : '*rowan-tests-32x' }
-RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
-
-	self _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: true
-]
-
-{ #category : '*rowan-tests-32x' }
-RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool [
-
-	Rowan projectTools clone
-		cloneSpecification: specUrlString asRwUrl asSpecification
-		gitRootPath: projectsHome
-		useSsh: true
-		registerProject: aBool.
-]
-
-{ #category : '*rowan-tests-32x' }
 RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName [
 
 	| gitRootPath spec rowanProject|

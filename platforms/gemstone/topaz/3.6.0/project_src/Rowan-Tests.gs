@@ -776,6 +776,22 @@ true.
 
 doit
 (RwToolTest
+	subclass: 'RwRowanSampleAbstractTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwRowanSampleAbstractTest
 	subclass: 'RwRowanSample1Test'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -791,7 +807,7 @@ true.
 %
 
 doit
-(RwToolTest
+(RwRowanSampleAbstractTest
 	subclass: 'RwRowanSample2Test'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -807,7 +823,7 @@ true.
 %
 
 doit
-(RwToolTest
+(RwRowanSampleAbstractTest
 	subclass: 'RwRowanSample4Test'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -823,7 +839,7 @@ true.
 %
 
 doit
-(RwToolTest
+(RwRowanSampleAbstractTest
 	subclass: 'RwRowanSample7Test'
 	instVarNames: #( repositoryRoot )
 	classVars: #(  )
@@ -6304,13 +6320,13 @@ testClassDelete
 	self
 		assert:
 				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
-		assert: testClass testClassMethod;
-		assert: testClass testClassMethodSurvivor.
+		assert: (testClass perform: #testClassMethod);
+		assert: (testClass perform: #testClassMethodSurvivor).
 	self
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
-		assert: testInstance testInstanceMethod;
-		assert: testInstance testInstanceMethodSurvivor.
+		assert: (testInstance perform: #testInstanceMethod);
+		assert: (testInstance perform: #testInstanceMethodSurvivor).
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -6350,7 +6366,7 @@ testClassExtension
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
-	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	self should: [ testInstance perform: #foo ] raise: MessageNotUnderstood.
 	packageNames := {packageName2}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -6365,7 +6381,7 @@ testClassExtension
 								in: Dictionary new));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	self assert: testInstance foo = 'foo'
+	self assert: (testInstance perform: #foo) = 'foo'
 %
 
 category: 'tests'
@@ -6391,8 +6407,8 @@ testClassInitialization1
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 	testClass := Rowan image resolveClassNamed: className asSymbol.
-	self assert: testClass classVar = 1.
-	self assert: testClass classInstVar1 = 1
+	self assert: (testClass perform: #classVar) = 1.
+	self assert: (testClass perform: #classInstVar1) = 1
 %
 
 category: 'tests'
@@ -6416,9 +6432,9 @@ testClassInitialization2
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
 	testClass := Rowan image resolveClassNamed: className asSymbol.
-	self assert: testClass classVar = 1.
-	self assert: testClass classInstVar1 = 1.
-	self assert: testClass classInstVar2 isNil.	"update the initialization method ... #initialize should run again"
+	self assert: (testClass perform: #classVar) = 1.
+	self assert: (testClass perform: #classInstVar1) = 1.
+	self assert: (testClass perform: #classInstVar2) isNil.	"update the initialization method ... #initialize should run again"
 	packageName := 'ClassInitializationTestPackage'.
 	className := 'TestClassInitializationClass'.
 	packageNames := {packageName}.
@@ -6432,9 +6448,9 @@ testClassInitialization2
 							(self classInitializationClassMethodsForClass2: className));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	self assert: testClass classVar = 1.
-	self assert: testClass classInstVar1 = 1.
-	self assert: testClass classInstVar2 = 2
+	self assert: (testClass perform: #classVar) = 1.
+	self assert: (testClass perform: #classInstVar1) = 1.
+	self assert: (testClass perform: #classInstVar2) = 2
 %
 
 category: 'tests'
@@ -6462,8 +6478,8 @@ testClassInitialization3
 			self assert: ex candidateClass name asString = className.
 			ex resume: true ].
 	testClass := Rowan image resolveClassNamed: className asSymbol.
-	self assert: testClass classVar = 1.
-	self assert: testClass classInstVar1 = 1
+	self assert: (testClass perform: #classVar) = 1.
+	self assert: (testClass perform: #classInstVar1) = 1
 %
 
 category: 'tests'
@@ -6729,12 +6745,12 @@ testCombinedChanges
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self
-		assert: testClass testClassMethod1;
-		assert: testClass testClassMethod2;
-		assert: testClass testClassMethod3 = 1;
-		assert: testInstance testInstanceMethod1;
-		assert: testInstance testInstanceMethod2;
-		assert: testInstance testInstanceMethod3 = 1.
+		assert: (testClass perform: #testClassMethod1);
+		assert: (testClass perform: #testClassMethod2);
+		assert: (testClass perform: #testClassMethod3) = 1;
+		assert: (testInstance perform: #testInstanceMethod1);
+		assert: (testInstance perform: #testInstanceMethod2);
+		assert: (testInstance perform: #testInstanceMethod3) = 1.
 	packageNames := {packageName}.
 	classDefinitionsDictionary := (self basicClassDefinitions: packageName)
 		at: className
@@ -6760,15 +6776,15 @@ testCombinedChanges
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	self
-		assert: testClass testClassMethod1;
+		assert: (testClass perform: #testClassMethod1);
 		assert:
 				(testClass class compiledMethodAt: #'testClassMethod2' otherwise: false)
 						== false;
-		assert: testClass testClassMethod3 = 2;
-		assert: testInstance testInstanceMethod1;
+		assert: (testClass perform: #testClassMethod3) = 2;
+		assert: (testInstance perform: #testInstanceMethod1);
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod2' otherwise: false) == false;
-		assert: testInstance testInstanceMethod3 = 2
+		assert: (testInstance perform: #testInstanceMethod3) = 2
 %
 
 category: 'tests'
@@ -6859,13 +6875,13 @@ testMethodDelete
 	self
 		assert:
 				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
-		assert: testClass testClassMethod;
-		assert: testClass testClassMethodSurvivor.
+		assert: (testClass perform: #testClassMethod);
+		assert: (testClass perform: #testClassMethodSurvivor).
 	self
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
-		assert: testInstance testInstanceMethod;
-		assert: testInstance testInstanceMethodSurvivor.
+		assert: (testInstance perform: #testInstanceMethod);
+		assert: (testInstance perform: #testInstanceMethodSurvivor).
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -6882,11 +6898,11 @@ testMethodDelete
 	self
 		assert:
 				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) == false;
-		assert: testClass testClassMethodSurvivor.
+		assert: (testClass perform: #testClassMethodSurvivor).
 	self
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) == false;
-		assert: testInstance testInstanceMethodSurvivor
+		assert: (testInstance perform: #testInstanceMethodSurvivor)
 %
 
 category: 'tests'
@@ -6914,10 +6930,10 @@ testMethodProtocolChange
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self
-		assert: testClass testClassMethod1;
-		assert: testClass testClassMethod2;
-		assert: testInstance testInstanceMethod1;
-		assert: testInstance testInstanceMethod2.
+		assert: (testClass perform: #testClassMethod1);
+		assert: (testClass perform: #testClassMethod2);
+		assert: (testInstance perform: #testInstanceMethod1);
+		assert: (testInstance perform: #testInstanceMethod2).
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -6932,10 +6948,10 @@ testMethodProtocolChange
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	self
-		assert: testClass testClassMethod1;
-		assert: testClass testClassMethod2;
-		assert: testInstance testInstanceMethod1;
-		assert: testInstance testInstanceMethod2
+		assert: (testClass perform: #testClassMethod1);
+		assert: (testClass perform: #testClassMethod2);
+		assert: (testInstance perform: #testInstanceMethod1);
+		assert: (testInstance perform: #testInstanceMethod2)
 %
 
 category: 'tests'
@@ -7044,7 +7060,7 @@ testSingleClassVersionChange1
 
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
-	self assert: testInstance1 foo = 'foo'.
+	self assert: (testInstance1 perform: #foo) = 'foo'.
 	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
 
 	packageNames := {packageName}.
@@ -7064,7 +7080,7 @@ testSingleClassVersionChange1
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'foo'.
+	self assert: (testInstance2 perform: #foo) = 'foo'.
 	self assert: (testClass2 categoryOfSelector: #foo) = #'accessing'.
 %
 
@@ -7095,7 +7111,7 @@ testSingleClassVersionChange2
 
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
-	self assert: testInstance1 foo = 'foo'.
+	self assert: (testInstance1 perform: #foo) = 'foo'.
 	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
 
 	packageNames := {packageName}.
@@ -7115,7 +7131,7 @@ testSingleClassVersionChange2
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'bar'.
+	self assert: (testInstance2 perform: #foo) = 'bar'.
 	self assert: (testClass2 categoryOfSelector: #foo) = #'accessing'.
 %
 
@@ -7146,7 +7162,7 @@ testSingleClassVersionChange3
 
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
-	self assert: testInstance1 foo = 'foo'.
+	self assert: (testInstance1 perform: #foo) = 'foo'.
 	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
 
 	packageNames := {packageName}.
@@ -7166,7 +7182,7 @@ testSingleClassVersionChange3
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'foo'.
+	self assert: (testInstance2 perform: #foo) = 'foo'.
 	self assert: (testClass2 categoryOfSelector: #foo) = #'fooing'.
 %
 
@@ -7724,7 +7740,7 @@ testMethodAdditionPatch
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self assert: testClass == class.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
@@ -7740,7 +7756,7 @@ testMethodAdditionPatch
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self
 		assert:
 			(testClass categoryOfSelector: methodSelector) = methodProtocol asSymbol.
@@ -7784,7 +7800,7 @@ testMethodDeletionPatch
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance  perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	compiledMethod := self
 		_compileMethodIn: class
@@ -7797,13 +7813,13 @@ testMethodDeletionPatch
 		protocol: 'accessing'
 		toPackageNamed: packageName.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 
 	dict rowanSymbolDictionaryRegistry
 		deleteCompiledMethod: compiledMethod
 		from: class.
 
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance  perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	expectedPackageSet := self
 		packageSetDefinition: packageName
@@ -7849,7 +7865,7 @@ testMethodExtensionPatchInSymbolDictionaryExtension
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self assert: testClass == class.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	expectedPackage1 := self
 		packageDefinition: packageName1
@@ -7870,7 +7886,7 @@ testMethodExtensionPatchInSymbolDictionaryExtension
 		protocol: methodProtocol
 		toPackageNamed: packageName2.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self
 		assert:
 			(testClass categoryOfSelector: methodSelector) = methodProtocol asSymbol.
@@ -7929,7 +7945,7 @@ testMethodPropertiesPatch
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
@@ -7945,7 +7961,7 @@ testMethodPropertiesPatch
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
@@ -7954,7 +7970,7 @@ testMethodPropertiesPatch
 		moveCompiledMethod: compiledMethod
 		toProtocol: methodProtocol.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self assert: (testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
 	expectedPackageSet := self
@@ -7996,7 +8012,7 @@ testMethodSourcePatch
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
@@ -8012,7 +8028,7 @@ testMethodSourcePatch
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
@@ -8024,7 +8040,7 @@ testMethodSourcePatch
 
 	dict rowanSymbolDictionaryRegistry addRecompiledMethod: newCompiledMethod.
 
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
@@ -8041,7 +8057,7 @@ testMethodSourcePatch
 		protocol: methodProtocol
 		toPackageNamed: packageName.	"account for using wrong method to update a method --- perhaps the selector is incorrect?"
 
-	self assert: testInstance foo = 'who'.
+	self assert: (testInstance perform: #foo) = 'who'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
@@ -10600,8 +10616,8 @@ testAddMethod
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	testInstance ivar1: 3.
-	self assert: testInstance ivar1 = 3.
+	testInstance perform: #ivar1: with: 3.
+	self assert: (testInstance  perform: #ivar1) = 3.
 	self should: [ testInstance  perform: #foo ] raise: MessageNotUnderstood.
 
 	browserTool
@@ -11483,8 +11499,8 @@ testDeleteMethod
 	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
 	self assert: (testSymDict at: className) == testClass.
 	testInstance := testClass new.
-	testInstance ivar1: 3.
-	self assert: testInstance ivar1 = 3.
+	testInstance perform: #ivar1: with: 3.
+	self assert: (testInstance  perform: #ivar1) = 3.
 
 	self
 		_assert: [ :classDef :packageDef :projectDef | 
@@ -11498,8 +11514,8 @@ testDeleteMethod
 
 	browserTool removeMethod: #'ivar1:' forClassNamed: className isMeta: false.
 
-	self should: [ testInstance ivar1: 2 ] raise: MessageNotUnderstood.
-	self assert: testInstance ivar1 = 3.
+	self should: [ testInstance  perform: #ivar1: with: 2 ] raise: MessageNotUnderstood.
+	self assert: (testInstance  perform: #ivar1) = 3.
 
 	self
 		_assert: [ :classDef :packageDef :projectDef | 
@@ -11929,10 +11945,10 @@ testLoadFullMultiProjectDefs
 	browserTool := projectTools browser.
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance  perform: #ivar1) isNil.
 
 	browserTool
 		addOrUpdateMethod: 'foo "instance" ^''foo'''
@@ -12019,10 +12035,10 @@ testLoadMultiProjectDefs
 	browserTool := projectTools browser.
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance  perform: #ivar1) isNil.
 
 	browserTool
 		addOrUpdateMethod: 'foo "instance" ^''foo'''
@@ -12160,9 +12176,9 @@ testMoveMethod
 	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
 	self assert: (testSymDict at: className) == testClass.
 	testInstance := testClass new.
-	testInstance ivar1: 3.
-	self assert: testInstance ivar1 = 3.
-	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	testInstance perform: #ivar1: with: 3.
+	self assert: (testInstance  perform: #ivar1) = 3.
+	self should: [ (testInstance  perform: #foo) ] raise: MessageNotUnderstood.
 	self _assertNoClassExtensionsIn: className.
 
 	registry := testSymDict rowanSymbolDictionaryRegistry.
@@ -12179,7 +12195,7 @@ testMoveMethod
 		inPackageNamed: packageName2.	"add method in a package as a class extension"
 
 "validate"
-	self assert: (testInstance perform: #foo) = 'bar'.
+	self assert: (testInstance  perform: #foo) = 'bar'.
 
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
@@ -12287,10 +12303,10 @@ testNewClassVersionA
 	browserTool := projectTools browser.
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance  perform: #ivar1) isNil.
 
 	browserTool
 		classNamed: className1
@@ -12307,16 +12323,16 @@ testNewClassVersionA
 								source: 'initialize civar1 := 1.');
 				yourself	"shouldn't there be a method to simply add method source and protocol to the class definition?" ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testInstance  perform: #ivar1) isNil.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #civar1) = 1.
+	self should: [ (testNewClass perform: #cvar1) ] raise: MessageNotUnderstood.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
+	self should: [ (testNewInstance perform: #ivar1) ] raise: MessageNotUnderstood.
 
 	self
 		should: [ 
@@ -12873,7 +12889,7 @@ testNewClassVersion_260_unchanged_extension_method_protocol
 	self assert: (testNewClass  perform: #foo) = 'foo'.
 	testNewInstance := testNewClass new.
 	self should: [ testNewInstance  perform: #ivar1 ] raise: MessageNotUnderstood.
-	self assert: (testNewInstance  perform: #foo) = 'foo_'.
+	self assert: (testNewInstance  perform: #foo) = 'foo'.
 	self
 		should: [ 
 			browserTool
@@ -13036,7 +13052,7 @@ testNewClassVersion_multi_project_change_extension_method_protocol
 	self assert: (testClass  perform: #civar1) = 1.
 	self assert: (testClass  perform: #cvar1) = 2.
 	self assert: (testClass  perform: #foo) = 'foo'.
-	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testClass perform: #bar) = 'bar'.
 	self assert: (testInstance  perform: #ivar1) isNil.
 	self assert: (testInstance  perform: #foo) = 'foo'.
 	self assert: (testInstance perform: #bar) = 'bar'.
@@ -13048,7 +13064,7 @@ testNewClassVersion_multi_project_change_extension_method_protocol
 	self assert: (testClass  perform: #civar1) = 1.
 	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
 	self assert: (testClass  perform: #foo) = 'foo'.
-	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testClass perform: #bar) = 'bar'.
 	self assert: (testNewClass categoryOfSelector: #foo) = #boom.
 	self assert: (testNewClass class categoryOfSelector: #bar) = #boom.
 
@@ -13228,7 +13244,7 @@ testNewClassVersion_multi_project_change_extension_method_source
 	self assert: (testClass  perform: #civar1) = 1.
 	self assert: (testClass  perform: #cvar1) = 2.
 	self assert: (testClass  perform: #foo) = 'foo'.
-	self assert: (testClass perform: #bar = 'bar').
+	self assert: (testClass perform: #bar) = 'bar'.
 	self assert: (testInstance  perform: #ivar1) isNil.
 	self assert: (testInstance  perform: #foo) = 'foo'.
 	self assert: (testInstance perform: #bar) = 'bar'.
@@ -13241,8 +13257,8 @@ testNewClassVersion_multi_project_change_extension_method_source
 	self assert: (testNewClass perform: #bar) = 'bar_'.
 	testNewInstance := testNewClass new.
 	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
-	(self assert: testNewInstance perform: #foo) = 'foo_'.
-	(self assert: testNewInstance perform: #bar) = 'bar'.
+	self assert: (testNewInstance perform: #foo) = 'foo_'.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool
@@ -13353,14 +13369,14 @@ testNewClassVersion_multi_project_unchanged_extension_method_protocol
 		inPackageNamed: project2PackageName2.	"class extension method for className1 in projectName2"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -13401,24 +13417,24 @@ testNewClassVersion_multi_project_unchanged_extension_method_protocol
 					packageDef := projectDef packageNamed: project2PackageName2.
 					classExtensionDef := packageDef classExtensions at: className1 ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar'.
+	self assert: (testNewClass perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #foo) = 'foo'.
+	self assert: (testNewClass perform: #bar) = 'bar'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance perform: #foo) = 'foo'.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool
@@ -13527,14 +13543,14 @@ testNewClassVersion_session_method_change_extension_method_protocol
 		inPackageNamed: project2PackageName2.	"class session method extension method for className1 in projectName2"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -13585,29 +13601,29 @@ testNewClassVersion_session_method_change_extension_method_protocol
 										protocol: 'boom'
 										source:  'bar "class side" ^''bar''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 	self assert: (testClass categoryOfSelector: #foo) = #accessing.
 	self assert: (testClass class categoryOfSelector: #bar) = #accessing.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar'.
+	self assert: (testNewClass perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #foo) = 'foo'.
+	self assert: (testNewClass perform: #bar) = 'bar'.
 	self assert: (testNewClass categoryOfSelector: #foo) = #boom.
 	self assert: (testNewClass class categoryOfSelector: #bar) = #boom.
 
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance perform: #foo) = 'foo'.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 
 	self
 		should: [ 
@@ -13717,14 +13733,14 @@ testNewClassVersion_session_method_change_extension_method_source
 		inPackageNamed: project2PackageName2.	"class session method extension method for className1 in projectName2"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -13775,24 +13791,24 @@ testNewClassVersion_session_method_change_extension_method_source
 										protocol: 'accessing'
 										source:  'bar "class side" ^''bar_''') ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar_'.
+	self assert: (testNewClass perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #foo) = 'foo'.
+	self assert: (testNewClass perform: #bar) = 'bar_'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo_'.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance perform: #foo) = 'foo_'.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool
@@ -13901,14 +13917,14 @@ testNewClassVersion_session_method_unchanged_extension_method_protocol
 		inPackageNamed: project2PackageName2.	"class session method extension method for className1 in projectName2"
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 
 	sessionMethodsSeen := false.
@@ -13949,24 +13965,24 @@ testNewClassVersion_session_method_unchanged_extension_method_protocol
 					packageDef := projectDef packageNamed: project2PackageName2.
 					classExtensionDef := packageDef classExtensions at: className1 ] ].
 
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass foo = 'foo'.
-	self assert: testClass bar = 'bar'.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
-	self assert: testInstance bar = 'bar'.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #foo) = 'foo'.
+	self assert: (testClass perform: #bar) = 'bar'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
+	self assert: (testInstance perform: #bar) = 'bar'.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
-	self assert: testNewClass civar1 = 1.
-	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar'.
+	self assert: (testNewClass perform: #civar1) = 1.
+	self should: [ testNewClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewClass perform: #foo) = 'foo'.
+	self assert: (testNewClass perform: #bar) = 'bar'.
 	testNewInstance := testNewClass new.
-	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-	self assert: testNewInstance foo = 'foo'.
-	self assert: testNewInstance bar = 'bar'.
+	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self assert: (testNewInstance perform: #foo) = 'foo'.
+	self assert: (testNewInstance perform: #bar) = 'bar'.
 	self
 		should: [ 
 			browserTool
@@ -14908,7 +14924,7 @@ testDisownClass1
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*' , packageName asLowercase.
 
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
@@ -14917,7 +14933,7 @@ testDisownClass1
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 
@@ -14926,7 +14942,7 @@ testDisownClass1
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 %
@@ -14969,8 +14985,8 @@ testDisownClass2
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -14980,8 +14996,8 @@ testDisownClass2
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 	self assert: (x := barMethod rowanPackageName) = packageName2.
@@ -14991,8 +15007,8 @@ testDisownClass2
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15036,8 +15052,8 @@ testDisownExtensionMethods
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15049,8 +15065,8 @@ testDisownExtensionMethods
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = Rowan unpackagedName.
@@ -15062,8 +15078,8 @@ testDisownExtensionMethods
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15102,7 +15118,7 @@ testDisownMethod
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*' , packageName asLowercase.
 
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
@@ -15111,7 +15127,7 @@ testDisownMethod
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 
@@ -15121,7 +15137,7 @@ testDisownMethod
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: fooMethod rowanPackageName = packageName.
 %
 
@@ -15161,8 +15177,8 @@ testDisownPackage1
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15173,8 +15189,8 @@ testDisownPackage1
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 	self assert: (x := barMethod rowanPackageName) = packageName2.
@@ -15187,8 +15203,8 @@ testDisownPackage1
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15231,8 +15247,8 @@ testDisownPackage2
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15244,8 +15260,8 @@ testDisownPackage2
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = Rowan unpackagedName.
@@ -15259,8 +15275,8 @@ testDisownPackage2
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15303,8 +15319,8 @@ testDisownPackage3
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName3.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15317,8 +15333,8 @@ testDisownPackage3
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName3.
 	self assert: barMethod rowanPackageName = Rowan unpackagedName.
@@ -15333,8 +15349,8 @@ testDisownPackage3
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName3.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15381,8 +15397,8 @@ testDisownProject
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar)= 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15397,8 +15413,8 @@ testDisownProject
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: (x := theClass rowanPackageName) = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 	self assert: (x := barMethod rowanPackageName) = Rowan unpackagedName.
@@ -15414,8 +15430,8 @@ testDisownProject
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-	self assert: theClass new bar = 'bar'.
+	self assert: (theClass new perform: #foo) = 'foo'.
+	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: (x := theClass rowanPackageName) = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15497,17 +15513,17 @@ testHybridClassCopy
 		category: 'accessing'.
 	normalClass rwComment: comment.
 
-	self assert: normalClass new foo isNil.
-	self assert: normalClass bar isNil.
-	self assert: normalClass baz isNil.
+	self assert: (normalClass new perform: #foo) isNil.
+	self assert: (normalClass  perform: #bar) isNil.
+	self assert: (normalClass  perform: #baz) isNil.
 	self assert: normalClass comment = comment.
 
 	newClassName := 'SimpleHybridNormal1Copy'.
 	newClass := Rowan projectTools browser copyClassNamed: className to: newClassName.
 
-	self assert: newClass new foo isNil.
-	self assert: newClass bar isNil.
-	self assert: newClass baz isNil.
+	self assert: (newClass new  perform: #foo) isNil.
+	self assert: (newClass  perform: #bar) isNil.
+	self assert: (newClass  perform: #baz) isNil.
 	self assert: newClass comment = comment.
 
 	self assert: (Rowan globalNamed: className) == normalClass
@@ -15704,17 +15720,17 @@ testHybridClassRename
 		category: 'accessing'.
 	normalClass rwComment: comment.
 
-	self assert: normalClass new foo isNil.
-	self assert: normalClass bar isNil.
-	self assert: normalClass baz isNil.
+	self assert: (normalClass new perform: #foo) isNil.
+	self assert: (normalClass perform: #bar) isNil.
+	self assert: (normalClass perform: #baz) isNil.
 	self assert: normalClass comment = comment.
 
 	newClassName := 'SimpleHybridNormal1Copy'.
 	newClass := Rowan projectTools browser renameClassNamed: className to: newClassName.
 
-	self assert: newClass new foo isNil.
-	self assert: newClass bar isNil.
-	self assert: newClass baz isNil.
+	self assert: (newClass new perform: #foo) isNil.
+	self assert: (newClass perform: #bar) isNil.
+	self assert: (newClass perform: #baz) isNil.
 	self assert: newClass comment = comment.
 
 	self assert: (Rowan globalNamed: className) isNil
@@ -15753,9 +15769,9 @@ testHybridCompileMethod
 		category: 'accessing'
 		packageName: packageName2.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2
@@ -15793,9 +15809,9 @@ testHybridCompileMethodMoveToProtocol
 		rwCompileMethod: 'bar ^''bar'''
 		category: 'accessing'.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 	self
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = 'accessing'.
@@ -15806,7 +15822,7 @@ testHybridCompileMethodMoveToProtocol
 		rwCompileMethod: 'bar "" ^''bar'''
 		category: 'new category'.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	self
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = 'new category'.
@@ -15843,9 +15859,9 @@ testHybridCompileMethodRemove
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15853,8 +15869,8 @@ testHybridCompileMethodRemove
 	normalClass rwRemoveSelector: #'foo'.
 	normalClass class rwRemoveSelector: #'bar'.
 
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance foo ] raise: MessageNotUnderstood.
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
+	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood.
 
 	fooMethod := normalClass
 		rwCompileMethod: 'foo ^''foo'''
@@ -15866,14 +15882,14 @@ testHybridCompileMethodRemove
 	self assert: fooMethod rowanPackageName = packageName2.
 	self assert: barMethod rowanPackageName = packageName1.
 
-	self assert: normalClass bar = 'bar'.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	normalClass rwRemoveSelector: #'foo'.
 	normalClass class rwRemoveSelector: #'bar'.
 
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance foo ] raise: MessageNotUnderstood
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
+	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood
 %
 
 category: 'tests'
@@ -15911,9 +15927,9 @@ testHybridCompileMethodRemove_315
 		category: '*' , packageName2 asLowercase.
 
 "validate"
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -15931,8 +15947,8 @@ testHybridCompileMethodRemove_315
 	normalClass class rwRemoveSelector: #'bar'.
 
 "validate"
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance foo ] raise: MessageNotUnderstood.
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
+	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -15954,8 +15970,8 @@ testHybridCompileMethodRemove_315
 	self assert: fooMethod rowanPackageName = packageName2.
 	self assert: barMethod rowanPackageName = packageName1.
 
-	self assert: normalClass bar = 'bar'.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -15970,8 +15986,8 @@ testHybridCompileMethodRemove_315
 	normalClass class rwRemoveSelector: #'bar'.
 
 "validate"
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance foo ] raise: MessageNotUnderstood.
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
+	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -16043,14 +16059,14 @@ testHybridComplicatedClassCopy
 	self assert: meth rowanPackageName = project2PackageName2. 
 
 	self assert: testClass notNil.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass civar1 = 1.
-	self assert: testClass fooClass = 1.
-	self assert: testClass barClass = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #fooClass) = 1.
+	self assert: (testClass perform: #barClass) = 1.
 
-	self assert: testClass new ivar1 isNil.
-	self assert: testClass new foo = 1.
-	self assert: testClass new bar = 1.
+	self assert: (testClass new perform: #ivar1) isNil.
+	self assert: (testClass new perform: #foo) = 1.
+	self assert: (testClass new perform: #bar) = 1.
 
 	self assert: (testClass categoryOfSelector: #foo) = ( '*' , project1PackageName2 asLowercase) asSymbol.
 	self assert: (testClass class categoryOfSelector: #fooClass) = ( '*' , project1PackageName2 asLowercase) asSymbol.
@@ -16063,14 +16079,14 @@ testHybridComplicatedClassCopy
 	self assert: newClass == (Rowan globalNamed: newClassName).
 
 	self assert: newClass ~~ testClass.
-	self assert: newClass cvar1 = 2.
-	self assert: newClass civar1 = 1.
-	self assert: newClass fooClass = 1.
-	self assert: newClass barClass = 1.
+	self assert: (newClass perform: #cvar1) = 2.
+	self assert: (newClass perform: #civar1) = 1.
+	self assert: (newClass perform: #fooClass) = 1.
+	self assert: (newClass perform: #barClass) = 1.
 
-	self assert: newClass new ivar1 isNil.
-	self assert: newClass new foo = 1.
-	self assert: newClass new bar = 1.
+	self assert: (newClass new perform: #ivar1) isNil.
+	self assert: (newClass new perform: #foo) = 1.
+	self assert: (newClass new perform: #bar) = 1.
 
 	self assert: (newClass categoryOfSelector: #foo) = ( '*' , project1PackageName2 asLowercase) asSymbol.
 	self assert: (newClass class categoryOfSelector: #fooClass) = ( '*' , project1PackageName2 asLowercase) asSymbol.
@@ -16125,9 +16141,9 @@ testHybridComplicatedProjectLoad
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: normalClass1 bar = 'bar'.
+	self assert: (normalClass1 perform: #bar) = 'bar'.
 	normalInstance1 := normalClass1 new.
-	self assert: normalInstance1 foo = 'foo'.
+	self assert: (normalInstance1 perform: #foo) = 'foo'.
 
 	normalClass2 := Object
 		rwSubclass: className2
@@ -16140,8 +16156,8 @@ testHybridComplicatedProjectLoad
 	self assert: normalClass2 rowanPackageName = packageName1.
 
 	normalInstance2 := normalClass2 new.
-	self should: [ normalInstance2 biz ] raise: MessageNotUnderstood.
-	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
+	self should: [ normalInstance2 perform: #biz ] raise: MessageNotUnderstood.
+	self should: [ normalInstance2 perform: #biff ] raise: MessageNotUnderstood.
 
 	projectTools := Rowan projectTools.
 	projectDefinition exportSpecification.	"when should the spec be exported? ... not on every write since we do expect the spec to manually modified over time"
@@ -16244,10 +16260,10 @@ testHybridComplicatedProjectLoad
 		category: '*' , packageName2 asLowercase.	"add new class-side method"
 	normalClass1 class rwRemoveSelector: #'bar'.	"remove existing method"
 
-	self assert: normalInstance1 foo = 'foo'.
-	self assert: normalInstance1 ivar1 = nil.
-	self assert: normalClass1 baz = 'baz'.
-	self should: [ normalClass1 bar ] raise: MessageNotUnderstood.
+	self assert: (normalInstance1 perform: #foo) = 'foo'.
+	self assert: (normalInstance1 perform: #ivar1) = nil.
+	self assert: (normalClass1 perform: #baz) = 'baz'.
+	self should: [ normalClass1 perform: #bar ] raise: MessageNotUnderstood.
 
 	normalClass2 rwCompileMethod: 'biz ^''biz''' category: 'accessing'.	"add new instance method"
 	normalClass2
@@ -16255,8 +16271,8 @@ testHybridComplicatedProjectLoad
 		category: '*' , packageName2 asLowercase.	"add new class-side method"
 
 	normalInstance2 := normalClass2 new.
-	self assert: normalInstance2 biz = 'biz'.
-	self assert: normalInstance2 biff = 'biff'.
+	self assert: (normalInstance2 perform: #biz) = 'biz'.
+	self assert: (normalInstance2 perform: #biff) = 'biff'.
 
 	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded package structure and verify that it matches the expected structure"
 
@@ -16350,17 +16366,17 @@ testHybridComplicatedProjectLoad
 	normalClass1 := Rowan globalNamed: className1.
 	normalInstance1 := normalClass1 new.
 
-	self assert: normalClass1 bar = 'bar'.
-	self assert: normalInstance1 foo = 'foo'.
-	self should: [ normalInstance1 ivar1 ] raise: MessageNotUnderstood.
-	self should: [ normalClass1 baz = 'baz' ] raise: MessageNotUnderstood.
+	self assert: (normalClass1 perform: #bar) = 'bar'.
+	self assert: (normalInstance1 perform: #foo) = 'foo'.
+	self should: [ normalInstance1 perform: #ivar1 ] raise: MessageNotUnderstood.
+	self should: [ normalClass1 perform: #baz = 'baz' ] raise: MessageNotUnderstood.
 
 	oldNormalClass2 := normalClass2.
 	normalClass2 := Rowan globalNamed: className2.
 	self assert: oldNormalClass2 == normalClass2.
 	normalInstance2 := normalClass2 new.
-	self should: [ normalInstance2 biz ] raise: MessageNotUnderstood.
-	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
+	self should: [ normalInstance2 perform: #biz ] raise: MessageNotUnderstood.
+	self should: [ normalInstance2 perform: #biff ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
 %
@@ -16400,7 +16416,7 @@ testHybridDeletePackage
 	normalClass
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*' , packageName2 asLowercase.
-	self assert: normalClass new foo = 'foo'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
 
 	otherClass := Object
 		rwSubclass: className2
@@ -16415,13 +16431,13 @@ testHybridDeletePackage
 	otherClass
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*' , packageName1 asLowercase.
-	self assert: otherClass new foo = 'foo'.
+	self assert: (otherClass new perform: #foo) = 'foo'.
 
 	Rowan projectTools browser removePackageNamed: packageName1.
 
 	self assert: (Rowan globalNamed: className1) isNil.
 	self assert: (Rowan globalNamed: className2) == otherClass.
-	self should: [ otherClass new foo ] raise: MessageNotUnderstood.
+	self should: [ otherClass new perform: #foo ] raise: MessageNotUnderstood.
 
 	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded thing structure and verify that it matches the expected structure"
 
@@ -16502,13 +16518,13 @@ testHybridModifyExtensionCompileMethod
 	self assert: barMethod rowanPackageName = packageName2.
 
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
 	self assert: fooMethod rowanPackageName = packageName2.
 
 	fooMethod := normalClass rwCompileMethod: 'foo ^''bar''' category: protocol.
 
-	self assert: (x := normalInstance foo) = 'bar'.
+	self assert: (x := normalInstance perform: #foo) = 'bar'.
 	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
 	self assert: fooMethod rowanPackageName = packageName2.
 
@@ -16516,7 +16532,7 @@ testHybridModifyExtensionCompileMethod
 		rwCompileMethod: 'bar ^''foo'''
 		category: protocol.
 
-	self assert: (x := normalClass bar) = 'foo'.
+	self assert: (x := normalClass perform: #bar) = 'foo'.
 	self
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = protocol.
@@ -16966,10 +16982,10 @@ testHybridMoveClassWithMethodsAndExtensionMethodsToExtensionPackage
 		rwCompileMethod: 'ext2 ^''ext2'''
 		category: '*', packageName3 asLowercase.
 
-	self assert: normalClass new foo = 'foo'.
-	self assert: normalClass new ext1 = 'ext1'.
-	self assert: normalClass bar = 'bar'.
-	self assert: normalClass ext2 = 'ext2'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
+	self assert: (normalClass new perform: #ext1) = 'ext1'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalClass perform: #ext2) = 'ext2'.
 
 	self assert: normalClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
@@ -16986,10 +17002,10 @@ testHybridMoveClassWithMethodsAndExtensionMethodsToExtensionPackage
 		category: packageName3
 		options: #().
 
-	self assert: normalClass new foo = 'foo'.
-	self assert: normalClass new ext1 = 'ext1'.
-	self assert: normalClass bar = 'bar'.
-	self assert: normalClass ext2 = 'ext2'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
+	self assert: (normalClass new perform: #ext1) = 'ext1'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalClass perform: #ext2) = 'ext2'.
 
 	fooMethod := movedNormalClass compiledMethodAt: #foo.
 	barMethod := movedNormalClass class compiledMethodAt: #bar.
@@ -17042,10 +17058,10 @@ testHybridMoveClassWithMethodsAndExtensionMethodsToPackage
 		rwCompileMethod: 'ext2 ^''ext2'''
 		category: '*', packageName3 asLowercase.
 
-	self assert: normalClass new foo = 'foo'.
-	self assert: normalClass new ext1 = 'ext1'.
-	self assert: normalClass bar = 'bar'.
-	self assert: normalClass ext2 = 'ext2'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
+	self assert: (normalClass new perform: #ext1) = 'ext1'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalClass perform: #ext2) = 'ext2'.
 
 	self assert: normalClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
@@ -17062,10 +17078,10 @@ testHybridMoveClassWithMethodsAndExtensionMethodsToPackage
 		category: packageName2
 		options: #().
 
-	self assert: normalClass new foo = 'foo'.
-	self assert: normalClass new ext1 = 'ext1'.
-	self assert: normalClass bar = 'bar'.
-	self assert: normalClass ext2 = 'ext2'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
+	self assert: (normalClass new perform: #ext1) = 'ext1'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalClass perform: #ext2) = 'ext2'.
 
 	fooMethod := movedNormalClass compiledMethodAt: #foo.
 	barMethod := movedNormalClass class compiledMethodAt: #bar.
@@ -17636,10 +17652,10 @@ testHybridNewClassVersionWithSubclassesAndMethodsA
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
-	self assert: newSubclassVersion foo = 'foo'.
-	self assert: newSubclassVersion foo1 = 'foo'.
-	self assert: newSubclassVersion new foo = 'foo'.
-	self assert: newSubclassVersion new foo1 = 'foo'
+	self assert: (newSubclassVersion perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion perform: #foo1) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo1) = 'foo'
 %
 
 category: 'tests'
@@ -17692,10 +17708,10 @@ testHybridNewClassVersionWithSubclassesAndMethodsB
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
-	self assert: newSubclassVersion foo = 'foo'.
-	self assert: newSubclassVersion foo1 = 'foo'.
-	self assert: newSubclassVersion new foo = 'foo'.
-	self assert: newSubclassVersion new foo1 = 'foo'
+	self assert: (newSubclassVersion perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion perform: #foo1) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo1) = 'foo'
 %
 
 category: 'tests'
@@ -17752,10 +17768,10 @@ testHybridNewClassVersionWithSubclassesAndMethodsC
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
-	self assert: newSubclassVersion foo = 'foo'.
-	self assert: newSubclassVersion foo1 = 'foo'.
-	self assert: newSubclassVersion new foo = 'foo'.
-	self assert: newSubclassVersion new foo1 = 'foo'
+	self assert: (newSubclassVersion perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion perform: #foo1) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo1) = 'foo'
 %
 
 category: 'tests'
@@ -17888,9 +17904,9 @@ testHybridProjectLoad
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	project := RwProject newNamed: projectName.
 	project exportSpecification.
@@ -17985,10 +18001,10 @@ testHybridProjectLoad
 		category: '*' , packageName2 asLowercase.	"add new class-side method"
 	normalClass class rwRemoveSelector: #'bar'.	"remove existing method"
 
-	self assert: normalInstance foo = 'foo'.
-	self assert: normalInstance ivar1 = nil.
-	self assert: normalClass baz = 'baz'.
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
+	self assert: (normalInstance perform: #foo) = 'foo'.
+	self assert: (normalInstance perform: #ivar1) = nil.
+	self assert: (normalClass perform: #baz) = 'baz'.
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
 
 	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded package structure and verify that it matches the expected structure"
 
@@ -18056,10 +18072,10 @@ testHybridProjectLoad
 	normalClass := Rowan globalNamed: className.
 	normalInstance := normalClass new.
 
-	self assert: normalClass bar = 'bar'.
-	self assert: normalInstance foo = 'foo'.
-	self should: [ normalInstance ivar1 ] raise: MessageNotUnderstood.
-	self should: [ normalClass baz = 'baz' ] raise: MessageNotUnderstood.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
+	self should: [ normalInstance perform: #ivar1 ] raise: MessageNotUnderstood.
+	self should: [ normalClass perform: #baz = 'baz' ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
 %
@@ -23084,7 +23100,7 @@ testIssue114_bothModificationsMustShareCommonAfter_1
 			do: [:ex | ex resume: true ].
 
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 %
 
 category: 'tests-issue 114'
@@ -23169,8 +23185,8 @@ testIssue114_bothModificationsMustShareCommonAfter_3
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
@@ -23186,9 +23202,9 @@ testIssue114_bothModificationsMustShareCommonAfter_3
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 %
 
 category: 'tests-issue 114'
@@ -23226,8 +23242,8 @@ testIssue114_bothModificationsMustShareCommonAfter_4
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
@@ -23249,9 +23265,9 @@ testIssue114_bothModificationsMustShareCommonAfter_4
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 %
 
 category: 'tests-issue 114'
@@ -23290,8 +23306,8 @@ testIssue114_bothModificationsMustShareCommonAfter_5
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 	theClass2 comment: 'a comment'.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
@@ -23314,9 +23330,9 @@ testIssue114_bothModificationsMustShareCommonAfter_5
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 %
 
 category: 'tests-issue 114'
@@ -23566,8 +23582,8 @@ testIssue114_methodSourceIsNotTheSame_0
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 comment = 'a comment'.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -23589,9 +23605,9 @@ testIssue114_methodSourceIsNotTheSame_0
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 %
 
 category: 'tests-issue 114'
@@ -23631,8 +23647,8 @@ testIssue114_methodSourceIsNotTheSame_1
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 comment = 'a comment'.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -23655,9 +23671,9 @@ testIssue114_methodSourceIsNotTheSame_1
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 	self assert: theClass2 comment = 'a new comment'.
 %
 
@@ -23698,8 +23714,8 @@ testIssue114_methodSourceIsNotTheSame_2
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 comment = 'a comment'.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -23727,9 +23743,9 @@ testIssue114_methodSourceIsNotTheSame_2
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 2.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass1 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 	self assert: theClass2 comment = 'a new comment'.
 %
 
@@ -23768,8 +23784,8 @@ testIssue114_missingClassModification
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
@@ -23794,9 +23810,9 @@ testIssue114_missingClassModification
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 2.
-	self assert: theClass1 new ivar1 isNil.
-	self assert: theClass2 new foo = 2.
+	self assert: (theClass1 new perform: #foo) = 2.
+	self assert: (theClass1 new perform: #ivar1) isNil.
+	self assert: (theClass2 new perform: #foo) = 2.
 %
 
 category: 'tests-issue 123'
@@ -23873,12 +23889,12 @@ testIssue123_definition_based_moveExistingClassWithMethodsAndSubclassesToNewPack
 	self assert: (audit := project audit) isEmpty.
 	theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName1.
 	self assert: theClass1 rowanPackageName = packageName1.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'accessing'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 
@@ -23907,13 +23923,13 @@ testIssue123_definition_based_moveExistingClassWithMethodsAndSubclassesToNewPack
 	theClass2 := Rowan globalNamed: className2.
 	self assert: oldClass1 ~~ theClass1.
 	self assert: oldClass2 ~~ theClass2.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName2.
 	self assert: theClass1 rowanPackageName = packageName2.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'accessing'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 %
@@ -23960,12 +23976,12 @@ testIssue123_moveExistingClassWithExtensionMethodsAndSubclassesToNewPackageAndNe
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName1.
 	self assert: theClass1 rowanPackageName = packageName1.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 
@@ -23978,15 +23994,15 @@ testIssue123_moveExistingClassWithExtensionMethodsAndSubclassesToNewPackageAndNe
 		category: packageName2
 		options: #().
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName2.
 	self assert: theClass1 rowanPackageName = packageName2.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
 	self assert: (Rowan globalNamed: className2) ~~ theClass2.
 	theClass2 := Rowan globalNamed: className2.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 %
@@ -24026,7 +24042,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackage
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo)= 1.
 	self assert: theClass category = packageName1.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
@@ -24043,7 +24059,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackage
 
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
 %
@@ -24085,7 +24101,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackageAndNewClassVersion
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName1.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
@@ -24100,7 +24116,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackageAndNewClassVersion
 		category: packageName2
 		options: #().
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
@@ -24149,12 +24165,12 @@ testIssue123_moveExistingClassWithMethodsAndSubclassesToNewPackageAndNewClassVer
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName1.
 	self assert: theClass1 rowanPackageName = packageName1.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 
@@ -24169,15 +24185,15 @@ testIssue123_moveExistingClassWithMethodsAndSubclassesToNewPackageAndNewClassVer
 		options: #().
 
 	self assert: oldClass ~~ theClass1.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName2.
 	self assert: theClass1 rowanPackageName = packageName2.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
 	self assert: (x := Rowan globalNamed: className2) ~~ theClass2.
 	theClass2 := Rowan globalNamed: className2.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1
 %
@@ -24215,7 +24231,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackage
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName1 inProjectNamed: projectName validate: false.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName1.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
@@ -24230,7 +24246,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackage
 		category: packageName2
 		options: #().
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
@@ -24270,7 +24286,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackageAndNewClassVersion
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName1 inProjectNamed: projectName validate: false.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName1.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
@@ -24287,8 +24303,8 @@ testIssue123_moveExistingClassWithMethodsToNewPackageAndNewClassVersion
 		options: #().
 
 	self assert: oldClass ~= theClass.
-	self assert: theClass new foo = 1.
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
@@ -24328,12 +24344,12 @@ testIssue125_1
 		options: #().
 	theClass rwCompileMethod: 'foo ^1' category: 'accessing'.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'accessing'.
 
 	theClass rwCompileMethod: 'foo ^1' category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase)
 %
 
@@ -24370,12 +24386,12 @@ testIssue125_2
 		options: #().
 	theClass rwCompileMethod: 'foo ^1' category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 
 	theClass rwCompileMethod: 'foo ^1' category: 'accessing'.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (x := (theClass categoryOfSelector: #foo) asString) = 'accessing'
 %
 
@@ -24414,12 +24430,12 @@ testIssue125_3
 		options: #().
 	theClass rwCompileMethod: 'foo ^1' category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 
 	theClass rwCompileMethod: 'foo ^1' category:'*' , packageName3 asLowercase.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName3 asLowercase).
 %
 
@@ -24637,8 +24653,8 @@ testIssue185_254_rename_package_move_class_to_symbolDict_add_remove_and_remove_m
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
-	self assert: class new method1 = 1.
-	self assert: class new method2 = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #method2) = 2.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
@@ -24677,10 +24693,10 @@ testIssue185_254_rename_package_move_class_to_symbolDict_add_remove_and_remove_m
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
-	self assert: class new method1 = 1.
-	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: (x := class new method3) = 5.
-	self assert: class new method4 = 4.
+	self assert: (class new perform: #method1) = 1.
+	self should: [ (class new perform: #method2) = 2 ] raise: MessageNotUnderstood.
+	self assert: (x := class new perform: #method3) = 5.
+	self assert: (class new perform: #method4) = 4.
 
 	self assert: class == oldClass.
 %
@@ -24769,7 +24785,7 @@ testIssue185_254_rename_package_move_class_to_symbolDict_add_remove_and_remove_m
 	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 
-	self assert: (x := class new method3) = 5.
+	self assert: (x := class new perform: #method3) = 5.
 %
 
 category: 'tests-issue 185'
@@ -25205,8 +25221,8 @@ testIssue185_rename_package_move_class_to_symbolDict_add_remove_and_remove_metho
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
-	self assert: class new method1 = 1.
-	self assert: class new method2 = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #method2) = 2.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
@@ -25245,10 +25261,10 @@ testIssue185_rename_package_move_class_to_symbolDict_add_remove_and_remove_metho
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
-	self assert: class new method1 = 1.
-	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: (x := class new method3) = 5.
-	self assert: class new method4 = 4.
+	self assert: (class new perform: #method1) = 1.
+	self should: [ (class new perform: #method2) = 2 ] raise: MessageNotUnderstood.
+	self assert: (x := class new perform: #method3) = 5.
+	self assert: (class new perform: #method4) = 4.
 
 	self assert: class == oldClass.
 %
@@ -25336,7 +25352,7 @@ testIssue185_rename_package_move_class_to_symbolDict_add_remove_and_remove_metho
 	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 
-	self assert: (x := class new method3) = 5.
+	self assert: (x := class new perform: #method3) = 5.
 %
 
 category: 'tests-issue 198'
@@ -25476,7 +25492,7 @@ testIssue198B
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
-	self assert: (Rowan globalNamed: className3) new boom == (Rowan globalNamed: className2).
+	self assert: ((Rowan globalNamed: className3) new perform: #boom) == (Rowan globalNamed: className2).
 	self assert: theSubclass rowanPackageName = packageName2.
 %
 
@@ -25666,7 +25682,7 @@ testIssue206_move_extension_method_to_new_package
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #mover) = 2.
 
 	"move the method to new package"
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -25692,7 +25708,7 @@ testIssue206_move_extension_method_to_new_package
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	"validate"
-	self assert: class new mover = 2. "method not installed when class extension does not have a proper class name"
+	self assert: (class new perform: #mover) = 2. "method not installed when class extension does not have a proper class name"
 %
 
 category: 'tests-issue 208'
@@ -25757,7 +25773,7 @@ testIssue208_move_method_from_project_to_project
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
+	self assert: (class new perform: #method1) = 1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
@@ -25798,7 +25814,7 @@ testIssue208_move_method_from_project_to_project
 	self assert: oldClass == class.
 	self assert: class rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName3.
-	self assert: class new method1 = 1.
+	self assert: (class new perform: #method1) = 1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
@@ -25898,7 +25914,7 @@ testIssue215_move_class_and_extension_method_to_new_symbol_dict
 	class := Rowan globalNamed: className1.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #mover) = 2.
 
 	"move the class to different symbol dictionary and move extension methods to new package"
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -25934,7 +25950,7 @@ testIssue215_move_class_and_extension_method_to_new_symbol_dict
 	self assert: class == oldClass.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #mover) = 2.
 %
 
 category: 'tests-issue 217'
@@ -26089,7 +26105,7 @@ testIssue24_loadProject
 	self _addOrUpdateMethod:  'foo ^''bar''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName validate: false.
 
 	self assert: project isDirty.
-	self assert: theClass new foo = 'bar'.
+	self assert: (theClass new perform: #foo) = 'bar'.
 
 	Rowan projectTools load loadProjectNamed: projectName.
 
@@ -26111,7 +26127,7 @@ testIssue24_loadProject
 
 	theClass := Rowan image objectNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 %
 
 category: 'tests-issue 24'
@@ -27926,8 +27942,8 @@ testIssue305_delete_package_with_extension_method
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class foo = 'foo'.
-	self assert: class new foo = 'foo'.
+	self assert: (class perform: #foo) = 'foo'.
+	self assert: (class new perform: #foo) = 'foo'.
 
 "remove package"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -27943,8 +27959,8 @@ testIssue305_delete_package_with_extension_method
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class == oldClass.
-	self should: [ class foo = 'foo' ] raise: MessageNotUnderstood.
-	self should: [ class new foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (class perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (class new perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 %
 
 category: 'tests-issue 310'
@@ -30119,8 +30135,8 @@ testIssue40
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
 			do: [:ex | ex resume: true ].
 
-	self assert: theClass2 cvar1 = 1.
-	self assert: theClass2 cvar2 = 2.
+	self assert: (theClass2 perform: #cvar1) = 1.
+	self assert: (theClass2 perform: #cvar2) = 2.
 %
 
 category: 'tests-issue 41'
@@ -30153,8 +30169,8 @@ testIssue41_addUpdateInitializeExtensionMethods
 			ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) isNil.
 
 	initializeRun := false.
 	[ self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
@@ -30164,8 +30180,8 @@ testIssue41_addUpdateInitializeExtensionMethods
 			ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 %
 
 category: 'tests-issue 41'
@@ -30192,13 +30208,13 @@ testIssue41_interactiveAddUpdateInitializeExtensionMethods
 	
 	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) isNil.
 
 	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 %
 
 category: 'tests-issue 41'
@@ -30230,20 +30246,20 @@ testIssue41_interactiveMoveInitializeExtensionMethodToPackage
 	"create initialize package as an extension method"
 	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) isNil.
 
 	theClass 
-		cvar1: 3;
-		cvar2: 4.
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
+		perform: #cvar1: with: 3;
+		perform: #cvar2: with: 4.
+	self assert: (theClass perform: #cvar1) = 3.
+	self assert: (theClass perform: #cvar2) = 4.
 
 	"initialize method changed in same package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
@@ -30254,16 +30270,16 @@ testIssue41_interactiveMoveInitializeExtensionMethodToPackage
 	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	"initialize method not changed and moved to new package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName3.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
@@ -30274,39 +30290,39 @@ testIssue41_interactiveMoveInitializeExtensionMethodToPackage
 	self deny: ((loadedClassExtensions at: className) classMethodDefinitions includesKey: #initialize).
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	"initialize method not changed and left in same package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	"initialize method not changed and moved to new package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	theClass initialize.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	"initialize method changed and moved to new package"
 	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 %
 
 category: 'tests-issue 41'
@@ -30343,14 +30359,14 @@ testIssue41_moveInitializeExtensionMethodToPackage
 			ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) isNil.
 
 	theClass 
-		cvar1: 3;
-		cvar2: 4.
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
+		perform: #cvar1: with: 3;
+		perform: #cvar2: with: 4.
+	self assert: (theClass perform: #cvar1) = 3.
+	self assert: (theClass perform: #cvar2) = 4.
 
 	initializeRun := false.
 	[	"initialize method changed in same package"
@@ -30361,14 +30377,14 @@ testIssue41_moveInitializeExtensionMethodToPackage
 				ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	initializeRun := false.
 	[	"initialize method changed and moved to new package"
@@ -30379,14 +30395,14 @@ testIssue41_moveInitializeExtensionMethodToPackage
 				ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	initializeRun := false.
 	[	"initialize method not changed and left in same package"
@@ -30397,13 +30413,13 @@ testIssue41_moveInitializeExtensionMethodToPackage
 				ex resume: true ].
 
 	self deny: initializeRun.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	theClass initialize.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 %
 
 category: 'tests-issue 41'
@@ -30440,14 +30456,14 @@ testIssue41_moveUnchangedInitializeExtensionMethodToPackage
 				ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	theClass 
-		cvar1: 3;
-		cvar2: 4.
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
+		perform: #cvar1: with: 3;
+		perform: #cvar2: with: 4.
+	self assert: (theClass perform: #cvar1) = 3.
+	self assert: (theClass perform: #cvar2) = 4.
 
 	initializeRun := false.
 	[	"initialize method not changed and moved to new package"
@@ -30458,13 +30474,13 @@ testIssue41_moveUnchangedInitializeExtensionMethodToPackage
 				ex resume: true ].
 
 	self deny: initializeRun.
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
+	self assert: (theClass perform: #cvar1) = 3.
+	self assert: (theClass perform: #cvar2) = 4.
 
 	theClass initialize.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 %
 
 category: 'tests-issue 467'
@@ -31566,7 +31582,7 @@ testIssue495_move_class_and_extension_method_to_new_symbol_dict
 	class := Rowan globalNamed: className1.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #mover) = 2.
 
 	"move the class to different symbol dictionary and move extension methods to new package"
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -31602,7 +31618,7 @@ testIssue495_move_class_and_extension_method_to_new_symbol_dict
 	self assert: class == oldClass.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #mover) = 2.
 %
 
 category: 'tests-issue 498'
@@ -31959,10 +31975,10 @@ testIssue91
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	testClass
 		rwCompileMethod: 'foo ^''foo'''
@@ -31982,17 +31998,17 @@ testIssue91
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
 
 	fooMethod := testClass
 		rwCompileMethod: 'foo ^''bar'''
 		category: '*' , packageName2 asLowercase. "create extension method"
 
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 	self assert: fooMethod rowanPackageName = packageName2.
 %
 
@@ -32374,10 +32390,10 @@ testClassVarSystemDictionaryClone
 
 	validationBlock := [:aClass :expectedValue |
 		| x |
-		self assert: (x := aClass cv1) = expectedValue.
+		self assert: (x := aClass perform: #cv1) = expectedValue.
 	].
 
-	theOriginalClass cv1: #one.
+	theOriginalClass perform: #cv1: with: #one.
 
 	validationBlock value: theOriginalClass value: #one.
 
@@ -32394,7 +32410,7 @@ testClassVarSystemDictionaryClone
 	validationBlock value: clonedClass value: #one.
 	validationBlock value: theOriginalClass value: #one.
 
-	clonedClass cv1: #ONE.
+	clonedClass perform: #cv1: with: #ONE.
 
 	validationBlock value: clonedClass value: #ONE.
 	validationBlock value: theOriginalClass value: #one.
@@ -32486,19 +32502,19 @@ testMultiDependentClassSystemDictionaryClone
 	theOriginalClass3 class rwCompileMethod: 'civ3 ^civ3' category: 'accessing'.
 	theOriginalClass3 class rwCompileMethod: 'civ3: x civ3 := x' category: 'accessing'.
 
-	theOriginalClass1 cv1: #one; civ1: #one.
-	theOriginalClass2 cv2: #two; civ2: #two.
-	theOriginalClass3 cv3: #three; civ3: #three.
+	theOriginalClass1 perform: #cv1: with: #one; perform: #civ1: with: #one.
+	theOriginalClass2 perform: #cv2: with: #two; perform: #civ2: with: #two.
+	theOriginalClass3 perform: #cv3: with: #three; perform: #civ3: with: #three.
 
 	validationBlock := [:aClass :cv1 :cv2 :cv3|
 		| x |
-		aClass new iv1; iv2.	"no MNU is sufficient"
-		self assert: (x := aClass new civ1) = cv1.
-		self assert: (x := aClass new civ2) = cv2.
-		self assert: (x := aClass new civ3) = cv3.
-		self assert: (x := aClass new cv1) = cv1.
-		self assert: (x := aClass new cv2) = cv2.
-		self assert: (x := aClass new cv3) = cv3.
+		aClass new perform: #iv1; perform: #iv2.	"no MNU is sufficient"
+		self assert: (x := aClass new perform: #civ1) = cv1.
+		self assert: (x := aClass new perform: #civ2) = cv2.
+		self assert: (x := aClass new perform: #civ3) = cv3.
+		self assert: (x := aClass new perform: #cv1) = cv1.
+		self assert: (x := aClass new perform: #cv2) = cv2.
+		self assert: (x := aClass new perform: #cv3) = cv3.
 	].
 
 	validationBlock value: theOriginalClass1 value: #one value: #two value: #three.
@@ -32526,9 +32542,9 @@ testMultiDependentClassSystemDictionaryClone
 	validationBlock value: clonedClass2 value: #one value: #two value: #three.
 	validationBlock value: clonedClass3 value: #one value: #two value: #three.
 
-	clonedClass1 cv1: #ONE; civ1: #ONE.
-	clonedClass2 cv2: #TWO; civ2: #TWO.
-	clonedClass3 cv3: #THREE; civ3: #THREE.
+	clonedClass1 perform: #cv1: with: #ONE; perform: #civ1: with: #ONE.
+	clonedClass2 perform: #cv2: with: #TWO; perform: #civ2: with: #TWO.
+	clonedClass3 perform: #cv3: with: #THREE; perform: #civ3: with: #THREE.
 
 	validationBlock value: theOriginalClass1 value: #one value: #two value: #three.
 	validationBlock value: theOriginalClass2 value: #one value: #two value: #three.
@@ -32592,11 +32608,11 @@ testSimpleSystemDictionaryClone
 
 	theOriginalClass initialize.
 	validationBlock := [:aClass |
-		self assert: aClass cv1 = 2.
-		self assert: aClass civ1 = 1.
-		self assert: aClass bar = 'bar'.
-		self assert: aClass new iv1 = 3.
-		self assert: aClass new foo = 'foo'.
+		self assert: (aClass perform: #cv1) = 2.
+		self assert: (aClass perform: #civ1) = 1.
+		self assert: (aClass perform: #bar) = 'bar'.
+		self assert: (aClass new perform: #iv1) = 3.
+		self assert: (aClass new perform: #foo) = 'foo'.
 	].
 
 	validationBlock value: theOriginalClass.
@@ -32709,7 +32725,7 @@ testBaselineScenario
 	oldTheClass1 := theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 
-	self assert: theClass2 new w == oldTheClass1.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
 
 	theClass1 := Object
 		rwSubclass: className1
@@ -32722,7 +32738,7 @@ testBaselineScenario
 
 	self assert: theClass1 ~~ oldTheClass1.
 	self assert: (theClass1 classHistory includes: oldTheClass1).
-	self assert: theClass2 new w == theClass1.
+	self assert: (theClass2 new perform: #w) == theClass1.
 %
 
 category: 'tests'
@@ -32766,7 +32782,7 @@ testNewClassAndNewClassReferences
 	oldTheClass1 := theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 
-	self assert: theClass2 new w == oldTheClass1.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
 
 	"Setup new class and new class reference:"
 	self 
@@ -32776,8 +32792,8 @@ testNewClassAndNewClassReferences
 
 	oldTheClass3 := theClass3 := Rowan globalNamed: className3.
 
-	self assert: theClass2 new w == oldTheClass1.
-	self assert: theClass2 new x == oldTheClass3.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
+	self assert: (theClass2 new perform: #x) == oldTheClass3.
 
 	"Failure: the methods compiled with references to C as a newly created class are incorrect"
 	theClass3 := Object
@@ -32791,8 +32807,8 @@ testNewClassAndNewClassReferences
 
 	self assert: theClass3 ~~ oldTheClass3.
 	self assert: (theClass3 classHistory includes: oldTheClass3).
-	self assert: theClass2 new w == theClass1.		"association in method #w is still correct"
-	self assert: theClass2 new x == theClass3.		"association in method #x is correct"
+	self assert: (theClass2 new perform: #w) == theClass1.		"association in method #w is still correct"
+	self assert: (theClass2 new perform: #x) == theClass3.		"association in method #x is correct"
 %
 
 category: 'tests'
@@ -32830,7 +32846,7 @@ testOriginalFailureMode
 	oldTheClass1 := theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 
-	self assert: theClass2 new w == oldTheClass1.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
 
 	theClass1 := Object
 		rwSubclass: className1
@@ -32843,7 +32859,7 @@ testOriginalFailureMode
 
 	self assert: theClass1 ~~ oldTheClass1.
 	self assert: (theClass1 classHistory includes: oldTheClass1).
-	self assert: theClass2 new w == theClass1.
+	self assert: (theClass2 new perform: #w) == theClass1.
 
 	"Original Setup: the method #w is compiled with a reference to className1, but it is in an incorrect association -- not yet apparent"
 	theClass2 := Object
@@ -32855,7 +32871,7 @@ testOriginalFailureMode
 		category: packageName
 		options: #().
 
-	self assert: theClass2 new w == theClass1.
+	self assert: (theClass2 new perform: #w) == theClass1.
 
 	"Original Failure: the incorrect association in method #w is not updated with the new version of className1 - boom"
 	oldTheClass1 := theClass1.
@@ -32870,7 +32886,7 @@ testOriginalFailureMode
 
 	self assert: theClass1 ~~ oldTheClass1.
 	self assert: (theClass1 classHistory includes: oldTheClass1).
-	self assert: theClass2 new w == theClass1.		"association in method #w incorrect"
+	self assert: (theClass2 new perform: #w) == theClass1.		"association in method #w incorrect"
 %
 
 category: 'tests'
@@ -32905,7 +32921,7 @@ testOriginalSetupMode
 	oldTheClass1 := theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 
-	self assert: theClass2 new w == oldTheClass1.
+	self assert: (theClass2 new perform: #w) == oldTheClass1.
 
 	theClass1 := Object
 		rwSubclass: className1
@@ -32918,7 +32934,7 @@ testOriginalSetupMode
 
 	self assert: theClass1 ~~ oldTheClass1.
 	self assert: (theClass1 classHistory includes: oldTheClass1).
-	self assert: theClass2 new w == theClass1.
+	self assert: (theClass2 new perform: #w) == theClass1.
 
 	"Original Setup: the method #w is compiled with a reference to className1, but it is in an incorrect association -- not yet apparent"
 	theClass2 := Object
@@ -32930,7 +32946,7 @@ testOriginalSetupMode
 		category: packageName
 		options: #().
 
-	self assert: theClass2 new w == theClass1.
+	self assert: (theClass2 new perform: #w) == theClass1.
 %
 
 category: 'private'
@@ -33836,10 +33852,10 @@ testAddAndRemoveClass
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 
 	projectTools edit
@@ -33884,12 +33900,12 @@ testAddClassExtension
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: (testClass cadd: 1) = 2.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cadd: with: 1) = 2.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	testInstance ivar1: 2.
-	self assert: testInstance ivar1 = 2.
+	(testInstance perform: #ivar1: with: 2).
+	self assert: (testInstance perform: #ivar1) = 2.
 	self assert: (testInstance add: 1) = 3
 %
 
@@ -33939,10 +33955,10 @@ testAddClass_blackList_A
 "validate"
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 isNil.
-	self assert: testClass cvar1 isNil.
+	self assert: (testClass perform: #civar1) isNil.
+	self assert: (testClass perform: #cvar1) isNil.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 %
 
 category: 'tests - classes'
@@ -33991,10 +34007,10 @@ testAddClass_blackList_B
 "validate"
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 isNil.
-	self assert: testClass cvar1 isNil.
+	self assert: (testClass perform: #civar1) isNil.
+	self assert: (testClass perform: #cvar1) isNil.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 %
 
 category: 'tests - classes'
@@ -34033,10 +34049,10 @@ testAddUpdateAndRemoveClass
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	classDefinition
 		instVarNames: #();
@@ -34059,10 +34075,10 @@ testAddUpdateAndRemoveClass
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self should: [ testClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testClass civar1 = 1.
+	self should: [ testClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testClass perform: #civar1) = 1.
 	testInstance := testClass new.
-	self should: [ testInstance ivar1 ] raise: MessageNotUnderstood.
+	self should: [ testInstance perform: #ivar1 ] raise: MessageNotUnderstood.
 
 	projectTools edit
 		removeClass: classDefinition
@@ -34137,10 +34153,10 @@ testUpdateClass
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	projectTools := Rowan projectTools.
 	projectTools edit
@@ -34175,10 +34191,10 @@ testUpdateClass
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self should: [ testClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testClass civar1 = 1.
+	self should: [ testClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testClass perform: #civar1) = 1.
 	testInstance := testClass new.
-	self should: [ testInstance ivar1 ] raise: MessageNotUnderstood
+	self should: [ testInstance perform: #ivar1 ] raise: MessageNotUnderstood
 %
 
 category: 'tests - classes'
@@ -34214,12 +34230,12 @@ testUpdateClassExtension
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: (testClass cadd: 1) = 2.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cadd: with: 1) = 2.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	testInstance ivar1: 2.
-	self assert: testInstance ivar1 = 2.
+	testInstance perform: #ivar1: with: 2.
+	self assert: (testInstance perform: #ivar1) = 2.
 	self assert: (testInstance add: 1) = 3.
 
 	classExtensionDefinitions := {}.
@@ -35666,7 +35682,7 @@ testProjectSet_move_method_between_packages
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	class := Rowan globalNamed: className.
-	self assert: class new mover = 1.
+	self assert: (class new perform: #mover) = 1.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class categoryOfSelector: #mover) asString = 'accessing'.
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName1.
@@ -35710,7 +35726,7 @@ testProjectSet_move_method_between_packages
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class == oldClass.
-	self assert: class new mover = 1.
+	self assert: (class new perform: #mover) = 1.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class categoryOfSelector: #mover) asString =  ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -37881,9 +37897,9 @@ testProjectSet_rename_package_add_change_remove_method
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method2) rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method3) rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new method2 = 2.
-	self assert: class new method3 = 3.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #method2) = 2.
+	self assert: (class new perform: #method3) = 3.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
@@ -37915,10 +37931,10 @@ testProjectSet_rename_package_add_change_remove_method
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method3) rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method4) rowanPackageName = packageName2.
-	self assert: class new method1 = 1.
-	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: (x := class new method3) = 5.
-	self assert: class new method4 = 4.
+	self assert: (class new perform: #method1) = 1.
+	self should: [ (class new perform: #method2) = 2 ] raise: MessageNotUnderstood.
+	self assert: (x := class new perform: #method3) = 5.
+	self assert: (class new perform: #method4) = 4.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -37996,9 +38012,9 @@ testProjectSet_rename_package_and_symbolDict_add_change_remove_method
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method2) rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method3) rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new method2 = 2.
-	self assert: class new method3 = 3.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #method2) = 2.
+	self assert: (class new perform: #method3) = 3.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
@@ -38030,10 +38046,10 @@ testProjectSet_rename_package_and_symbolDict_add_change_remove_method
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method3) rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method4) rowanPackageName = packageName2.
-	self assert: class new method1 = 1.
-	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: (x := class new method3) = 5.
-	self assert: class new method4 = 4.
+	self assert: (class new perform: #method1) = 1.
+	self should: [ (class new perform: #method2) = 2 ] raise: MessageNotUnderstood.
+	self assert: (x := class new perform: #method3) = 5.
+	self assert: (class new perform: #method4) = 4.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -38869,12 +38885,12 @@ testProjectClassExtensionsInSessionMethods
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
-	self assert: testClass1 civar1 == 1.
-	self assert: testInstance1 ivar1 isNil.
+	self assert: (testClass1 perform: #civar1) == 1.
+	self assert: (testInstance1 perform: #ivar1) isNil.
 	testClass2 := Rowan globalNamed: className2.
 	self assert: testClass2 notNil.
 	testInstance2 := testClass2 new.
-	self assert: testInstance2 foo
+	self assert: (testInstance2 perform: #foo)
 %
 
 category: 'tests'
@@ -38928,8 +38944,8 @@ testProjectGlobalsClassesExtensionsInSessionMethods
 
 	projectTools load loadProjectDefinition: projectDefinition.
 
-	self assert: Object classFoo = 'bar'.
-	self assert: Object new instanceFoo = 'foo'
+	self assert: (Object perform: #classFoo) = 'bar'.
+	self assert: (Object new perform: #instanceFoo) = 'foo'
 %
 
 ! Class implementation for 'RwRowanSample1Test'
@@ -38940,10 +38956,10 @@ category: 'tests'
 method: RwRowanSample1Test
 testIssue345
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec symDict registry |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project symDict registry |
 	projectName := 'RowanSample1'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
@@ -38953,26 +38969,21 @@ testIssue345
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
+	project := RwProject newNamed: projectName.
+	project
 		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath asFileReference.
+	gitRootPath := project repositoryRootPath asFileReference.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'issue_345'.
+	gitTool gitcheckoutIn: gitRootPath with: self _issue_345_branch_name.
 "load project"
-	projectTools load 
-		loadProjectNamed: projectName 
-		withConfigurations: #('Default') 
-		groupNames: #().
+	project load.
 
 "validation"
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
@@ -39000,15 +39011,6 @@ testIssue345
 	self assert: registry methodRegistry size = 0.
 %
 
-category: 'private'
-method: RwRowanSample1Test
-_rowanSample1LoadSpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1.ston'
-%
-
 ! Class implementation for 'RwRowanSample2Test'
 
 !		Instance methods for 'RwRowanSample2Test'
@@ -39032,10 +39034,9 @@ testAutomaticMigration
 
 	 (gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -39108,10 +39109,9 @@ testDeferredMigration
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -39161,10 +39161,9 @@ testNoMigration
 
 	(gitRootPath /projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -39227,10 +39226,9 @@ testNoMigration_bitbucket
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -39293,10 +39291,9 @@ testNoMigration_gitlab
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -39359,10 +39356,9 @@ testNoMigration_gitolite
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -39442,10 +39438,9 @@ testRemoveSubclassOfClassWithNewVersion
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -39490,10 +39485,9 @@ testSampleDefaultConfiguration
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -39762,7 +39756,7 @@ testIssue185_move_class_to_symbolDict
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -39775,7 +39769,7 @@ testIssue185_move_class_to_symbolDict
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -39846,7 +39840,7 @@ testIssue185_move_newClassVariable_to_symbolDict
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -39861,7 +39855,7 @@ testIssue185_move_newClassVariable_to_symbolDict
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass == newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -39927,7 +39921,7 @@ testIssue185_move_newClassVersion_to_symbolDict
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -39942,7 +39936,7 @@ testIssue185_move_newClassVersion_to_symbolDict
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -40009,7 +40003,7 @@ testIssue185_rename_package_move_class
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -40023,7 +40017,7 @@ testIssue185_rename_package_move_class
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -40090,7 +40084,7 @@ testIssue185_rename_package_move_classVariable
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -40104,7 +40098,7 @@ testIssue185_rename_package_move_classVariable
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -40171,7 +40165,7 @@ testIssue185_rename_package_move_newClassVersion
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -40186,7 +40180,7 @@ testIssue185_rename_package_move_newClassVersion
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -40252,7 +40246,7 @@ testIssue185_simple_package_rename
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -40267,7 +40261,7 @@ testIssue185_simple_package_rename
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict'.
@@ -40553,6 +40547,10 @@ category: 'tests'
 method: RwRowanSample4Test
 testIssue230
 
+	"This test is also important for validating the fix to Issue #504:
+		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
+		At least confirm that it is NOT a good candidate, since this test is now failing
+		with the new error introduced in the partial for for Issue #504"
 	"https://github.com/dalehenrich/Rowan/issues/230"
 
 	"new class version for class being loaded in after adopt --- initial RowanSample4 class created with instancesInvariant option, 
@@ -40695,6 +40693,11 @@ category: 'tests'
 method: RwRowanSample4Test
 testIssue295_rename_package_move_newClassVersion_newProject_1
 
+	"This test is also important for validating the fix to Issue #504:
+		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
+		At least confirm that it is NOT a good candidate, since this test is now failing
+		with the new error introduced in the partial for for Issue #504"
+
 	"https://github.com/dalehenrich/Rowan/issues/295"
 
 	"Error creating a new class version while moving to a new package in a new project and a new symbol dictionary"
@@ -40753,7 +40756,7 @@ testIssue295_rename_package_move_newClassVersion_newProject_1
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -40770,7 +40773,7 @@ testIssue295_rename_package_move_newClassVersion_newProject_1
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
@@ -40845,7 +40848,7 @@ testIssue295_rename_package_move_newClassVersion_newProject_3
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -40878,7 +40881,7 @@ testIssue295_rename_package_move_newClassVersion_newProject_3
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
@@ -40950,7 +40953,7 @@ testIssue295_rename_package_move_newClassVersion_with_subclass_newProject
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -40983,7 +40986,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
@@ -41154,7 +41157,7 @@ testIssue460_1
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -41187,7 +41190,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
@@ -41198,6 +41201,11 @@ projectSetDefinition addProject: oldProjectDefinition.
 category: 'tests'
 method: RwRowanSample4Test
 testIssue460_2
+
+	"This test is also important for validating the fix to Issue #504:
+		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
+		At least confirm that it is NOT a good candidate, since this test is now failing
+		with the new error introduced in the partial for for Issue #504"
 
 	"https://github.com/dalehenrich/Rowan/issues/260"
 
@@ -41258,7 +41266,7 @@ testIssue460_2
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -41291,11 +41299,11 @@ projectSetDefinition addProject: oldProjectDefinition.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	subclass := Rowan globalNamed: 'NewRowanSampleSubclass4'.
-	self assert: subclass new foo = 'foo'.
-	self assert: subclass foo = 'foo'.
+	self assert: (subclass new perform: #foo) = 'foo'.
+	self assert: (subclass perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
@@ -41365,7 +41373,7 @@ testIssue490_rename_package_move_newClassVersion_newProject_1
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -41386,7 +41394,7 @@ testIssue490_rename_package_move_newClassVersion_newProject_1
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
 	self assert: oldClass ~~ newClass.
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
@@ -41428,7 +41436,7 @@ testLoadProjectFromUrl_1
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
-	self assert: theClass new foo = 'foo'
+	self assert: (theClass new perform: #foo) = 'foo'
 %
 
 category: 'tests'
@@ -41460,7 +41468,7 @@ testLoadProjectFromUrl_2
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
-	self assert: theClass new foo = 'foo'
+	self assert: (theClass new perform: #foo) = 'foo'
 %
 
 category: 'tests'
@@ -41494,7 +41502,7 @@ testLoadProjectFromUrl_300_1
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
-	self assert: theClass new foo = 'foo'
+	self assert: (theClass new perform: #foo) = 'foo'
 %
 
 category: 'tests'
@@ -41548,7 +41556,7 @@ testLoadProjectFromUrl_300_2
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
-	self assert: theClass new foo = 'foo'.
+	self assert: (theClass new perform: #foo) = 'foo'.
 %
 
 category: 'tests'
@@ -41606,10 +41614,9 @@ testLoadProjectNamed_221B
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
@@ -41651,10 +41658,9 @@ testLoadProjectNamed_221C
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
@@ -41696,10 +41702,9 @@ testLoadProjectNamed_221D
 
 	(gitRootPath  / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
@@ -41784,10 +41789,9 @@ testSampleCompoundConfiguration
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -41829,10 +41833,9 @@ testSampleProjectLoadConfiguration
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
@@ -42406,7 +42409,7 @@ testResolveProjectReference
 
 	"clone a repository from github, attach to an existing git repository, clone to an alternate projectHome"
 
-	| specUrlString rowanProject projectHome projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
+	| specUrlString rowanProject projectHome projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -42426,9 +42429,7 @@ testResolveProjectReference
 	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
 
 "1. clone repository"
-	self 
-		handleInformDuring: [ projectReferenceDefinition_1 resolve ] 
-		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
+	projectReferenceDefinition_1 resolve.
 
 "validate"
 	self assert: projectReferenceDefinition_1 repositoryRoot exists.
@@ -42438,15 +42439,8 @@ testResolveProjectReference
 		newForSpecification: projectSpec 
 		projectHome: projectHome.
 
-"attach to repository - inform confirms that skip branch was taken"
-	informHappened := false.
-	self 
-		handleInformDuring: [ projectReferenceDefinition_2 resolve ] 
-		interactionBlock: [:inform | 
-			"skipping the clone"
-			Transcript cr; show: inform message.
-			informHappened := true ].
-	self assert: informHappened.
+"attach to repository"
+	projectReferenceDefinition_2 resolve.
 
 "validate"
 	self assert: projectReferenceDefinition_1 projectHome = projectReferenceDefinition_2 projectHome.
@@ -42461,9 +42455,7 @@ testResolveProjectReference
 	projectReferenceDefinition_2 projectHome: projectHome.
 
 "clone to new location"
-	self 
-		handleInformDuring: [ projectReferenceDefinition_2 resolve ] 
-		interactionBlock: [:inform | self assert: false dexcription: 'unexpected inform: ', inform message printString ].
+	projectReferenceDefinition_2 resolve.
 
 "validate"
 	self assert: projectReferenceDefinition_2 repositoryRoot exists.
@@ -44675,7 +44667,7 @@ testProjectClassExtensions
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo.
+	self assert: (testInstance perform: #foo).
 
 	classExtensionDefinition := RwClassExtensionDefinition
 		newForClassNamed: className.
@@ -44706,9 +44698,9 @@ testProjectClassExtensions
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 == 1.
+	self assert: (testClass perform: #civar1) == 1.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 
 	projectDefinition 
@@ -44798,7 +44790,7 @@ testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 	testClass2 := Rowan globalNamed: className2.
 	self assert: testClass2 isNil.
 	testInstance1 := testClass1 new.
-	self should: [ testInstance1 ivar1 ] raise: MessageNotUnderstood.
+	self should: [ testInstance1 perform: #ivar1 ] raise: MessageNotUnderstood.
 
 	dictionariesAndSymbols := Rowan image symbolList
 		dictionariesAndSymbolsOf: testClass1.
@@ -44863,7 +44855,7 @@ testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
-	self assert: testClass1 civar1 = 1.
+	self assert: (testClass1 perform: #civar1) = 1.
 
 	projectDefinition
 		export;
@@ -45082,9 +45074,9 @@ testSimpleProject3
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 == 1.
+	self assert: (testClass perform: #civar1) == 1.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -45264,8 +45256,8 @@ testIssue185_254_move_extension_method_to_new_package_1
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -45305,8 +45297,8 @@ testIssue185_254_move_extension_method_to_new_package_1
 	self assert: (audit := project audit) isEmpty.
 
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 3.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 3.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -45392,8 +45384,8 @@ testIssue185_254_move_extension_method_to_new_package_3
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -45430,8 +45422,8 @@ testIssue185_254_move_extension_method_to_new_package_3
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -45516,8 +45508,8 @@ testIssue185_254_move_extension_method_to_new_package_4
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -45554,8 +45546,8 @@ testIssue185_254_move_extension_method_to_new_package_4
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -45640,8 +45632,8 @@ testIssue185_move_extension_method_to_new_package_1
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -45678,8 +45670,8 @@ testIssue185_move_extension_method_to_new_package_1
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 3.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 3.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -45764,8 +45756,8 @@ testIssue185_move_extension_method_to_new_package_2
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -45785,8 +45777,8 @@ testIssue185_move_extension_method_to_new_package_2
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -45872,8 +45864,8 @@ testIssue185_move_extension_method_to_new_package_3
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -45910,8 +45902,8 @@ testIssue185_move_extension_method_to_new_package_3
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -45996,8 +45988,8 @@ testIssue185_move_extension_method_to_new_package_4
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -46034,8 +46026,8 @@ testIssue185_move_extension_method_to_new_package_4
 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #mover) = 2.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
@@ -46080,6 +46072,26 @@ _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath
 	project := RwProject newNamed: projectName.
 
 	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
+%
+
+! Class extensions for 'RwRowanSample1Test'
+
+!		Instance methods for 'RwRowanSample1Test'
+
+category: '*rowan-tests-35x'
+method: RwRowanSample1Test
+_issue_345_branch_name
+
+	^ 'issue_345_v2'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample1Test
+_rowanSample1LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1_v2.ston'
 %
 
 ! Class extensions for 'RwRowanSample4Test'
@@ -46144,7 +46156,7 @@ testIssue185_move_class_to_symbolDict_A_v20
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
@@ -46155,7 +46167,7 @@ testIssue185_move_class_to_symbolDict_A_v20
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
-	self assert: newClass new foo = 'foo'.
+	self assert: (newClass new perform: #foo) = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
@@ -46277,28 +46289,6 @@ _cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString projectRootPath: proj
 
 category: '*rowan-tests-35x'
 method: RwRowanSample4Test
-_cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome
-
-	(RwComponentProjectDefinition newForUrl: specUrlString)
-		projectHome: projectsHome;
-		clone;
-		register.
-%
-
-category: '*rowan-tests-35x'
-method: RwRowanSample4Test
-_cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool
-
-	| projectDefinition |
-	projectDefinition := (RwComponentProjectDefinition newForUrl: specUrlString)
-		projectHome: projectsHome;
-		clone;
-		yourself.
-	aBool ifTrue: [ projectDefinition register ].
-%
-
-category: '*rowan-tests-35x'
-method: RwRowanSample4Test
 _cloneProjectFromSpecUrl_300: specUrlString projectsHome: projectsHome registerProject: aBool
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool
@@ -46394,6 +46384,33 @@ method: RwRowanSample4Test
 _rowanSample4_loadSpecificationUrl: repositoryRootPath
 
 	^ 'file:' , repositoryRootPath pathString, '/rowan/specs/RowanSample4_load_v2.ston'
+%
+
+! Class extensions for 'RwRowanSampleAbstractTest'
+
+!		Instance methods for 'RwRowanSampleAbstractTest'
+
+category: '*rowan-tests-35x'
+method: RwRowanSampleAbstractTest
+_cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome
+
+	^ (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: projectsHome;
+		clone;
+		register;
+		yourself.
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSampleAbstractTest
+_cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool
+
+	| projectDefinition |
+	projectDefinition := (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: projectsHome;
+		clone;
+		yourself.
+	aBool ifTrue: [ projectDefinition register ].
 %
 
 ! Class Initialization
