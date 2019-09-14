@@ -800,7 +800,7 @@ doit
 	inDictionary: RowanKernel
 	options: #()
 )
-		category: 'Rowan-Tests';
+		category: 'Rowan-Tests-35x';
 		comment: '';
 		immediateInvariant.
 true.
@@ -38955,6 +38955,22 @@ testProjectGlobalsClassesExtensionsInSessionMethods
 category: 'tests'
 method: RwRowanSample1Test
 testIssue345
+	"This test (for 3.5.0) is actually about being able to change the component
+		properties before loading ... post clone ... Right now I am not completely
+		sure what sematics should be applied:
+			- disallow changing component properteis - if you want different properties
+				edit the component --- NOT COOL
+			- somehow arrange for changes made to the ""loaded project"" to survive
+				the read that ??must happend?? before being able to load the project 
+				from disk
+			- require that the project be read from disk before making changes and
+				then somehow arranging to do a load of the project in memory and avoid
+				re-reading from disk ... THIS PROBABLY THE RIGHT ANSWER ... need to 
+				get second and third opinions on this one ... and expand test coverage,
+				I assume that there are existing tests (the extension methods in this 
+				package are good clues) that have hacked some sort of behavior in this
+				area, but we need a REAL solution with some logic behind it more than
+				""this is how it works:)"""
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project symDict registry |
 	projectName := 'RowanSample1'.
@@ -39009,6 +39025,22 @@ testIssue345
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
+%
+
+category: 'private'
+method: RwRowanSample1Test
+_issue_345_branch_name
+
+	^ 'issue_345_v2'
+%
+
+category: 'private'
+method: RwRowanSample1Test
+_rowanSample1LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1_v2.ston'
 %
 
 ! Class implementation for 'RwRowanSample2Test'
@@ -46072,26 +46104,6 @@ _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath
 	project := RwProject newNamed: projectName.
 
 	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
-%
-
-! Class extensions for 'RwRowanSample1Test'
-
-!		Instance methods for 'RwRowanSample1Test'
-
-category: '*rowan-tests-35x'
-method: RwRowanSample1Test
-_issue_345_branch_name
-
-	^ 'issue_345_v2'
-%
-
-category: '*rowan-tests-35x'
-method: RwRowanSample1Test
-_rowanSample1LoadSpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1_v2.ston'
 %
 
 ! Class extensions for 'RwRowanSample4Test'
