@@ -178,19 +178,22 @@ RowanBrowserService >> packagesWithTests [
 RowanBrowserService >> recompileMethodsAfterClassCompilation [
   "compileClass: must be run first"
 
-  | theClass classService packageService |
+  | theClass classService packageService projectService |
   theClass := [ (UserGlobals at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
     ensure: [ UserGlobals at: #'jadeiteCompileClassMethod' put: nil ].
   classService := RowanClassService new name: theClass name.
   classService update.
-  classService isNewClass: true.
+  classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
+	should be updated. Would like a less heavy weight solution than this, though."
   packageService := RowanPackageService
     forPackageNamed: classService packageName.
   packageService update.
+  projectService := RowanProjectService newNamed: packageService projectName.
+  projectService update.
   packageService selectedClass: classService.
   RowanCommandResult addResult: classService.
   selectedClass := classService.
-  updateType := #none. 
+  updateType := #'none'.
   RowanCommandResult addResult: self
 ]
 
