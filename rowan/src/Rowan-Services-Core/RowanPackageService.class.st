@@ -285,6 +285,7 @@ RowanPackageService >> selectedClass: classService [
 { #category : 'perform' }
 RowanPackageService >> servicePerform: symbol withArguments: collection [
 	| wasClean |
+	self wasDeleted ifTrue:[^self].
 	wasClean := self arePackageAndProjectClean.
 	super servicePerform: symbol withArguments: collection.
 	self update. 
