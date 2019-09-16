@@ -434,8 +434,10 @@ RowanProjectService >> rowanSkew [
 
 { #category : 'perform' }
 RowanProjectService >> servicePerform: symbol withArguments: collection [
-	super servicePerform: symbol withArguments: collection.
-	self update.
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
 ]
 
 { #category : 'client commands' }
@@ -497,6 +499,11 @@ RowanProjectService >> updateInternalService: updatedService [
 		packageService = updatedService ifTrue:[
 			packages at: index put: updatedService
 		]].
+]
+
+{ #category : 'testing' }
+RowanProjectService >> wasDeleted [
+  ^ self projectIsLoaded not
 ]
 
 { #category : 'client commands' }

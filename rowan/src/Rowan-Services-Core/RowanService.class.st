@@ -227,6 +227,12 @@ RowanService >> extendHierarchies: hierarchies [
 	^extendedHierarchies
 ]
 
+{ #category : 'perform' }
+RowanService >> handleDeletedService [
+  updateType := #'removed:'.
+  RowanCommandResult addResult: self
+]
+
 { #category : 'commands support' }
 RowanService >> hierarchiesByLevel: hierarchies [
 
@@ -281,6 +287,17 @@ RowanService >> isPackageService [
 RowanService >> isProjectService [
 
 	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isUpdating [
+
+	^command == #update
+]
+
+{ #category : 'perform' }
+RowanService >> isUpdatingButFoundToBeDeleted [
+  ^ self command == #'update' and: [ self wasDeleted ]
 ]
 
 { #category : 'accessing' }
@@ -363,10 +380,12 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
-	"each service updates itself after performing a command.
+  "each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
-	symbol == #update ifTrue:[^self].
-	^super perform: symbol withArguments: collection.
+
+  symbol == #'update'
+    ifTrue: [ ^ self ].
+  ^ super perform: symbol withArguments: collection
 ]
 
 { #category : 'commands support' }
@@ -467,6 +486,12 @@ RowanService >> updateInternalService: updatedService [
 RowanService >> updateType: aSymbol [
 
 	updateType := aSymbol
+]
+
+{ #category : 'testing' }
+RowanService >> wasDeleted [
+
+	^false
 ]
 
 { #category : 'fileout' }

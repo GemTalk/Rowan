@@ -940,13 +940,15 @@ RowanClassService >> selectors [
 
 { #category : 'perform' }
 RowanClassService >> servicePerform: symbol withArguments: collection [
-	| wasClean |
-	wasClean := self arePackageAndProjectClean.
-	super servicePerform: symbol withArguments: collection.
-	updateAfterCommand == false ifFalse:[
-		self update].
-	wasClean ifTrue:[
-		self updatePackageProject]
+  | wasClean |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  wasClean := self arePackageAndProjectClean.
+  super servicePerform: symbol withArguments: collection.
+  updateAfterCommand == false
+    ifFalse: [ self update ].
+  wasClean
+    ifTrue: [ self updatePackageProject ]
 ]
 
 { #category : 'Accessing' }
