@@ -231,6 +231,15 @@ RowanAnsweringService >> needsCommit [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> newPackageNamed: packageName [
+  | packageService |
+  packageService := RowanPackageService new name: packageName.
+  packageService update.
+  answer := packageService.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> printStringOf: oop toMaxSize: integer [
 
 	answer := (Object _objectForOop: oop) printString. 
