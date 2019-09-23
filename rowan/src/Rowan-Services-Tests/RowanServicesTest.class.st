@@ -227,9 +227,6 @@ RowanServicesTest >> servicesTestProjectName [
 RowanServicesTest >> setUp [
   "ensure results are clean as service requests not coming through #updateFromSton: like the client"
 
-  | auditResults |
-  auditResults := RwPrjAuditTool new auditAll.
-  self assert: auditResults isEmpty.
   super setUp.
   RowanAnsweringService new setEnableInteractionHandler: false.
   RowanCommandResult initializeResults.
@@ -238,13 +235,10 @@ RowanServicesTest >> setUp [
 
 { #category : 'setup teardown' }
 RowanServicesTest >> tearDown [
-  | auditResults |
   super tearDown.
   Rowan platform _alternateImageClass: nil.
   RowanCommandResult initializeResults.	"squash the gui updates"
-  RowanAnsweringService new setEnableInteractionHandler: true.
-  auditResults := RwPrjAuditTool new auditAll.
-  self assert: auditResults isEmpty
+  RowanAnsweringService new setEnableInteractionHandler: true
 ]
 
 { #category : 'support' }
