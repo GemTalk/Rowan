@@ -279,7 +279,6 @@ RowanClassServiceTest >> test_classHierarchyClassSide [
 RowanClassServiceTest >> test_classWasDeleted [
 
 	| classService |
-	System commitTransaction. 
 	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
 	'Object rwSubclass: ''TestClass''
 	instVarNames: #()

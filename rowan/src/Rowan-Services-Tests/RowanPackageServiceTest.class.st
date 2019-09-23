@@ -58,7 +58,6 @@ RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
 RowanPackageServiceTest >> test_packageWasDeleted [
 
 	| package packageService |
-	System commitTransaction. 
 	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
 	package := self createJadeiteTestPackage. 
 	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
