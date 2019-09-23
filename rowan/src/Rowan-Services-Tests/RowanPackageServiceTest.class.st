@@ -23,8 +23,8 @@ RowanPackageServiceTest >> test_compileAndSelectClass [
 		options: #()'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
 	browserService recompileMethodsAfterClassCompilation. 
-	self assert: RowanCommandResult results size equals: 3. 
-	self assert: (RowanCommandResult results at: 2) name equals: 'RowanTestCompile'. 
+	self assert: RowanCommandResult results size equals: 5. 
+	self assert: (RowanCommandResult results at: 4) name equals: 'RowanTestCompile'. 
 	self assert: browserService selectedClass name equals: 'RowanTestCompile'.] 
 		ensure:[System abortTransaction.  "get rid of test package and class"]
 ]
@@ -48,8 +48,8 @@ RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
 		options: #()'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
 	browserService recompileMethodsAfterClassCompilation. 
-	self assert: RowanCommandResult results size equals: 3. 
-	self assert: (RowanCommandResult results at: 2) name equals: 'RowanTestCompile'. 
+	self assert: RowanCommandResult results size equals: 5. 
+	self assert: (RowanCommandResult results at: 4) name equals: 'RowanTestCompile'. 
 	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
 	testsPackage := RowanCommandResult results first.
 	self assert: testsPackage selectedClass name equals: 'RowanTestCompile'.] 
@@ -125,7 +125,7 @@ RowanPackageServiceTest >> testCompileClassSelectsPackageAndClass [
 			options: #()'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
 	browserService recompileMethodsAfterClassCompilation. 
-	newClassService := RowanCommandResult results at: 2.
+	newClassService := RowanCommandResult results at: 4.
 	self assert: newClassService name equals: 'TestCompileClass'.]
 		ensure:[RowanBrowserService new unloadProjectsNamed: (Array with: self servicesTestProjectName)]
 ]
