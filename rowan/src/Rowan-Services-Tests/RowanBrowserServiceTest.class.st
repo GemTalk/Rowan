@@ -13,6 +13,7 @@ RowanBrowserServiceTest >> test_compileClassWithClassSelected [
   self
     jadeiteIssueTested: #'issue516'
     withTitle: 'Deleting classes and project reload (3.0.77)'.
+  self loadRowanSample1.	"ensure we're in a clean state"
   browserService := RowanBrowserService new.
   browserService selectedClass: 'Fubar'.
   browserService
