@@ -8,7 +8,6 @@ Class {
 RowanPackageServiceTest >> test_compileAndSelectClass [
 
 	| package browserService |
-	System commitTransaction.
 	[self assert: RowanCommandResult results isEmpty. 
 	package := self createJadeiteTestPackage. 
 	browserService := RowanBrowserService new.
@@ -33,7 +32,6 @@ RowanPackageServiceTest >> test_compileAndSelectClass [
 RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
 
 	| package browserService testsPackage |
-	System commitTransaction.
 	[self assert: RowanCommandResult results isEmpty. 
 	package := self createJadeiteTestPackage. 
 	browserService := RowanBrowserService new. 
