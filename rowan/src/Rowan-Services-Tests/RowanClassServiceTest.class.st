@@ -155,9 +155,8 @@ RowanClassServiceTest >> servicesClassInstance [
 
 { #category : 'support' }
 RowanClassServiceTest >> setUp [
-
 	super setUp.
-	self createServicesTestClass. 
+	self createServicesTestClass.
 	self loadServicesTestProject.
 ]
 
@@ -277,20 +276,27 @@ RowanClassServiceTest >> test_classHierarchyClassSide [
 
 { #category : 'tests' }
 RowanClassServiceTest >> test_classWasDeleted [
-
-	| classService |
-	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
-	'Object rwSubclass: ''TestClass''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ''Rowan-Services-Tests''
-	options: #()' evaluate.
-	classService := RowanClassService forClassNamed: 'TestClass'. 
-	self deny: classService wasDeleted.
-	System abortTransaction. 
-	self assert: classService wasDeleted.
+  | classService classDefinition packageDefinition |
+  self
+    jadeiteIssueTested: #'issue284'
+    withTitle:
+      '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+  self unloadServicesTestProject.	"test class created in setUp"
+  packageDefinition := self createServicesTestPackage. 
+  [ 
+  self loadServicesTestProject.
+  System commitTransaction.	"commit loaded package, but not class"
+  classDefinition := self
+    createClassDefinitionNamed: self servicesDefaultClassName.
+  packageDefinition addClassDefinition: classDefinition.
+  self loadServicesTestProject.	"reload with class"
+  classService := RowanClassService new name: self servicesDefaultClassName.
+  self deny: classService wasDeleted.
+  System abortTransaction.
+  self assert: classService wasDeleted ]
+    ensure: [ 
+      self unloadServicesTestProject.
+      System commitTransaction ]
 ]
 
 { #category : 'test method compilation' }

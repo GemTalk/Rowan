@@ -229,8 +229,6 @@ RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
 		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
 			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
 	self updateDictionaries.
-	System commitTransaction.
-
 ]
 
 { #category : 'client commands' }

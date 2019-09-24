@@ -90,28 +90,33 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 
 { #category : 'support' }
 RowanServicesTest >> createServicesTestClass [
-
-	| packageDefinition classDefinition |
-	packageDefinition := self createServicesTestPackage.
-	classDefinition := self createClassDefinitionNamed: self servicesDefaultClassName. 
-	packageDefinition addClassDefinition: classDefinition. 
-	^classDefinition
+  | packageDefinition classDefinition |
+  packageDefinition := self createServicesTestPackage.
+  packageDefinition classDefinitions
+    do: [ :classDef | 
+      classDef key = self servicesDefaultClassName
+        ifTrue: [ ^ classDef ] ].
+  classDefinition := self
+    createClassDefinitionNamed: self servicesDefaultClassName.
+  packageDefinition addClassDefinition: classDefinition.
+  ^ classDefinition
 ]
 
 { #category : 'support' }
 RowanServicesTest >> createServicesTestPackage [
-
-	| projectDefinition |
-	projectDefinition := self createServicesTestProject. 
-	projectDefinition addPackageNamed: self servicesTestPackageName.
-	^projectDefinition packageNamed: self servicesTestPackageName
+  | projectDefinition |
+  defaultProjectDefinition
+    ifNotNil: [ :projectDef | ^ projectDef packageNamed: self servicesTestPackageName ].
+  projectDefinition := self servicesTestProjectDefinition.
+  projectDefinition addPackageNamed: self servicesTestPackageName.
+  ^ projectDefinition packageNamed: self servicesTestPackageName
 ]
 
 { #category : 'support' }
 RowanServicesTest >> createServicesTestProject [
-
-	defaultProjectDefinition := self createProjectDefinitionNamed: self servicesTestProjectName.
-	^defaultProjectDefinition
+  defaultProjectDefinition := self
+    createProjectDefinitionNamed: self servicesTestProjectName.
+  ^ defaultProjectDefinition
 ]
 
 { #category : 'support' }
@@ -245,5 +250,6 @@ RowanServicesTest >> tearDown [
 RowanServicesTest >> unloadServicesTestProject [
 
 	Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent:[^self].
-	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName
+	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName.
+	defaultProjectDefinition := nil
 ]

@@ -46,7 +46,6 @@ RowanDictionaryService >> insertAt: index [
 	theDictionary at: name asSymbol put: theDictionary. 
 	System myUserProfile insertDictionary: theDictionary at: index. 
 	RowanBrowserService new updateDictionaries.
-	System commitTransaction.
 ]
 
 { #category : 'accessing' }
