@@ -43,25 +43,6 @@ RowanServicesTest >> createClassDefinitionNamed: className [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> createJadeiteTestPackage [
-	| proj pkg |
-	proj := self createJadeiteTestProject. 
-	pkg := RwPackageDefinition newNamed: self servicesTestPackageName.
-	proj addPackage: pkg.
-	Rowan projectTools load loadProjectDefinition: proj.
-	^pkg.
-]
-
-{ #category : 'support' }
-RowanServicesTest >> createJadeiteTestProject [
-	| proj |
-	proj := RwProjectDefinition newForGitBasedProjectNamed: self servicesTestProjectName. 
-	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/', self servicesTestProjectName. 
-	Rowan projectTools create createProjectFor: proj.
-	^proj
-]
-
-{ #category : 'support' }
 RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: packageName [
 
 	| projectDefinition projectSetDefinition  |
