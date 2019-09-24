@@ -24,10 +24,8 @@ RowanProjectServiceTest >> projectServiceNamed: projectName [
 
 { #category : 'setup teardown' }
 RowanProjectServiceTest >> setUp [
-
-	super setUp.
-	self createServicesTestProject.
-	self loadServicesTestProject.
+  super setUp.
+  self loadServicesTestProject
 ]
 
 { #category : 'setup teardown' }

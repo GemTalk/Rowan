@@ -107,26 +107,20 @@ RowanServicesTest >> createServicesTestPackage [
   | projectDefinition |
   defaultProjectDefinition
     ifNotNil: [ :projectDef | ^ projectDef packageNamed: self servicesTestPackageName ].
-  projectDefinition := self servicesTestProjectDefinition.
+  projectDefinition := self defaultProjectDefinition.
   projectDefinition addPackageNamed: self servicesTestPackageName.
   ^ projectDefinition packageNamed: self servicesTestPackageName
 ]
 
 { #category : 'support' }
-RowanServicesTest >> createServicesTestProject [
-  defaultProjectDefinition := self
-    createProjectDefinitionNamed: self servicesTestProjectName.
-  ^ defaultProjectDefinition
-]
-
-{ #category : 'support' }
 RowanServicesTest >> createServicesTestTestClass [
-
-	| packageDefinition classDefinition |
-	packageDefinition := defaultProjectDefinition packageNamed: self servicesTestPackageName. 
-	classDefinition := self createTestClassDefinitionNamed: self servicesDefaultTestClassName. 
-	packageDefinition addClassDefinition: classDefinition. 
-	^classDefinition
+  | packageDefinition classDefinition |
+  packageDefinition := self defaultProjectDefinition
+    packageNamed: self servicesTestPackageName.
+  classDefinition := self
+    createTestClassDefinitionNamed: self servicesDefaultTestClassName.
+  packageDefinition addClassDefinition: classDefinition.
+  ^ classDefinition
 ]
 
 { #category : 'support' }
@@ -144,6 +138,14 @@ RowanServicesTest >> createTestClassDefinitionNamed: className [
 			pools: #()
 			type: 'normal'.
 	^classDefinition
+]
+
+{ #category : 'support' }
+RowanServicesTest >> defaultProjectDefinition [
+  ^ defaultProjectDefinition
+    ifNil: [ 
+      defaultProjectDefinition := self
+        createProjectDefinitionNamed: self servicesTestProjectName ]
 ]
 
 { #category : 'support' }
@@ -190,12 +192,10 @@ RowanServicesTest >> loadRowanSample1 [
 
 { #category : 'support' }
 RowanServicesTest >> loadServicesTestProject [
-	
-	| projectSetDefinition |
-
-	projectSetDefinition:= RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self servicesTestProjectDefinition.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+  | projectSetDefinition |
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: self defaultProjectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 ]
 
 { #category : 'constants' }
@@ -214,12 +214,6 @@ RowanServicesTest >> servicesDefaultTestClassName [
 RowanServicesTest >> servicesTestPackageName [
 
 	^'RowanServicesTestPackage'
-]
-
-{ #category : 'support' }
-RowanServicesTest >> servicesTestProjectDefinition [
-
-	^defaultProjectDefinition ifNil:[defaultProjectDefinition := self createServicesTestProject]
 ]
 
 { #category : 'constants' }
