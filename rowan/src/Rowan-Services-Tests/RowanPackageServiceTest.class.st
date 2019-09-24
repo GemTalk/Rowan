@@ -53,7 +53,9 @@ RowanPackageServiceTest >> test_compileAndSelectClass [
     assert: (RowanCommandResult results at: 4) name
     equals: 'RowanTestCompile'.
   self assert: browserService selectedClass name equals: 'RowanTestCompile' ]
-    ensure: [ self unloadServicesTestProject ]
+    ensure: [ 
+      Rowan projectTools browser removeClassNamed: 'RowanTestCompile'.
+      self unloadServicesTestProject ]
 ]
 
 { #category : 'tests' }
@@ -84,7 +86,9 @@ RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
     equals: 'Rowan-Services-Tests'.
   testsPackage := RowanCommandResult results first.
   self assert: testsPackage selectedClass name equals: 'RowanTestCompile' ]
-    ensure: [ self unloadServicesTestProject ]
+    ensure: [ 
+      Rowan projectTools browser removeClassNamed: 'RowanTestCompile'.
+      self unloadServicesTestProject ]
 ]
 
 { #category : 'tests' }
