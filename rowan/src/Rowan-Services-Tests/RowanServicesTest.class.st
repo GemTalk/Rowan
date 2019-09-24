@@ -147,27 +147,17 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 
 { #category : 'support' }
 RowanServicesTest >> loadRowanSample1 [
-  | specUrlString projectTools rowanSpec gitRootPath projectName projectDefinition spec |
-  projectName := 'RowanSample1'.
+  | specUrlString rowanSpec gitRootPath projectName |
   (Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
     ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
   rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
   specUrlString := 'file:' , rowanSpec repositoryRootPath
     , '/samples/RowanSample1.ston'.
-  projectTools := Rowan projectTools.
-  gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
-  (Rowan fileUtilities directoryExists: gitRootPath , projectName)
-    ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
-  spec := specUrlString asRwUrl asSpecification.
-  projectTools clone
-    cloneSpecification: spec
-    gitRootPath: gitRootPath
-    useSsh: true
-    registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-  projectDefinition := projectTools create
-    createProjectFromSpecUrl:
-      'file:' , gitRootPath , '/' , projectName , '/' , spec specsPath
-        , '/RowanSample1.ston'.
+  gitRootPath := rowanSpec repositoryRootPath.
+  Rowan projectTools clone
+    cloneSpecUrl: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston'
+    gitRootPath: '$ROWAN_PROJECTS_HOME'
+    useSsh: true.
   Rowan projectTools load loadProjectNamed: 'RowanSample1'
 ]
 

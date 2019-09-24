@@ -362,6 +362,26 @@ RowanClassServiceTest >> test_dirtyState [
 				Rowan projectTools delete deleteProjectNamed: 'RowanSample1'.]
 ]
 
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_dirtyStateNewProject [
+  "dirtiness is based on a comparison to disk.
+	New projects (created in setUp) should be dirty"
+
+  | classService selector |
+  self
+    jadeiteIssueTested: #'issue356'
+    withTitle: 'Add method compilation tests in server services tests'.
+  selector := #'simpleMethod'.
+  [ 
+  self assert: (RowanProjectService newNamed: 'RowanServicesTestProject') isDirty.
+  self
+    assert:
+      (RowanPackageService forPackageNamed: 'RowanServicesTestPackage') isDirty.
+  classService := RowanClassService forClassNamed: 'RowanServicesTestClass'.
+  classService saveMethodSource: selector asString , ' ^123' category: 'abc' ]
+    ensure: [ Rowan projectTools browser removeClassNamed: 'RowanServicesTestClass' ]
+]
+
 { #category : 'tests' }
 RowanClassServiceTest >> test_equality [
 

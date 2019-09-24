@@ -13,7 +13,8 @@ RowanBrowserServiceTest >> test_compileClassWithClassSelected [
   self
     jadeiteIssueTested: #'issue516'
     withTitle: 'Deleting classes and project reload (3.0.77)'.
-  self loadRowanSample1.	"ensure we're in a clean state"
+  self createServicesTestPackage.
+  self loadServicesTestProject.
   browserService := RowanBrowserService new.
   browserService selectedClass: 'Fubar'.
   browserService
@@ -23,8 +24,10 @@ RowanBrowserServiceTest >> test_compileClassWithClassSelected [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	category: ''RowanSample1-Tests''
-	options: #()'.
+		category: ''' , self servicesTestPackageName
+        ,
+          '''
+		options: #()'.
   browserService recompileMethodsAfterClassCompilation.
   [ 
   self
@@ -39,14 +42,18 @@ RowanBrowserServiceTest >> test_compileClassWithClassSelected [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	category: ''RowanSample1-Tests''
-	options: #()'.
+		category: ''' , self servicesTestPackageName
+        ,
+          '''
+		options: #()'.
   browserService recompileMethodsAfterClassCompilation.
   self
     assert:
       (Rowan image symbolList resolveSymbol: #'Fubar') value allInstVarNames
     equals: #(#'abc') ]
-    ensure: [ Rowan projectTools browser removeClassNamed: 'Fubar' ]
+    ensure: [ 
+      Rowan projectTools browser removeClassNamed: 'Fubar'.
+      self unloadServicesTestProject ]
 ]
 
 { #category : 'tests' }
