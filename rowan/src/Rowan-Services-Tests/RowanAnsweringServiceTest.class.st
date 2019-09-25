@@ -143,7 +143,7 @@ RowanAnsweringServiceTest >> test_play [
 
 	"method to safely play with commits" 
 
-	self assert: true
+	self deny: false
 ]
 
 { #category : 'tests' }
