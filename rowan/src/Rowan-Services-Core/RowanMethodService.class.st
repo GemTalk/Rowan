@@ -264,7 +264,10 @@ RowanMethodService >> debugTest: testSelector inClassName: theClassName [
     do: [ :ex | 
       testResult := ex class = TestFailure
         ifTrue: [ 'failure' ]
-        ifFalse: [ 'error' ].
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
       ex signal ].
   testRunClassName := theClassName.
   RowanCommandResult addResult: self
