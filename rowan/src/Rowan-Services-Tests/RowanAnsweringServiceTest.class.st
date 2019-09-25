@@ -31,7 +31,7 @@ RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_execCompileError [
-
+ 
 	self deny: (service exec: '1 +' context: nil asOop) key.
 ]
 
@@ -136,6 +136,14 @@ RowanAnsweringServiceTest >> test_maxPrint [
 	self assert: (service printStringOf: 'ab
 cd' asOop toMaxSize: 25) equals: '''ab
 cd'''.  "includes lf (10) - no ? substitution"
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_play [
+
+	"method to safely play with commits" 
+
+	self assert: true
 ]
 
 { #category : 'tests' }
