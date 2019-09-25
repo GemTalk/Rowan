@@ -256,6 +256,20 @@ RowanMethodService >> compilationWarnings: newValue [
 	compilationWarnings := newValue
 ]
 
+{ #category : 'client commands' }
+RowanMethodService >> debugTest: testSelector inClassName: theClassName [
+  testResult := 'passed'.
+  [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
+    on: Exception
+    do: [ :ex | 
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 'error' ].
+      ex signal ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
+]
+
 { #category : 'accessing' }
 RowanMethodService >> definedPackage [
 
