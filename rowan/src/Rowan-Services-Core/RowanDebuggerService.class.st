@@ -10,23 +10,30 @@ Class {
 
 { #category : 'debug string' }
 RowanDebuggerService >> debugStringFrom: aString [
-	| debugStream newStream char | 
-	debugStream := ReadStream on: aString trimLeadingBlanks.
-	debugStream contents isEmpty ifTrue:[^'nil halt.'].
-	newStream := WriteStream on: String new. 
-	((char := debugStream next) = $|) ifTrue:[
-		newStream nextPut: char. 
-		newStream nextPutAll: (debugStream upTo: $|); 
-			nextPut: $|;
-			nextPut: Character space;
-			nextPutAll: 'nil halt. '
-	]
-	ifFalse: [
-		newStream 
-			nextPutAll: 'nil halt. ';
-			nextPut: char]. 		
-	newStream nextPutAll: debugStream upToEnd. 
-	^newStream contents
+  | debugStream newStream char peekChar |
+  debugStream := ReadStream on: aString trimLeadingBlanks.
+  [ 
+  peekChar := debugStream peek.
+  peekChar = Character tab
+    or: [ peekChar = Character cr or: [ peekChar = Character lf ] ]	"trimLeadingBlanks doesn't look for tab or cr or lf" ]
+    whileTrue: [ debugStream next ].
+  debugStream contents isEmpty
+    ifTrue: [ ^ 'nil halt.' ].
+  newStream := WriteStream on: String new.
+  (char := debugStream next) = $|
+    ifTrue: [ 
+      newStream nextPut: char.
+      newStream
+        nextPutAll: (debugStream upTo: $|);
+        nextPut: $|;
+        nextPut: Character space;
+        nextPutAll: 'nil halt. ' ]
+    ifFalse: [ 
+      newStream
+        nextPutAll: 'nil halt. ';
+        nextPut: char ].
+  newStream nextPutAll: debugStream upToEnd.
+  ^ newStream contents
 ]
 
 { #category : 'perform' }

@@ -13,7 +13,7 @@ RowanQueryService >> basicBreakpointMethods [
   bpMethods := Array new.
   bpArray := (GsNMethod _breakReport: true) at: 2.
   bpArray do: [ :array | bpMethods add: (array at: 5) ].
-  ^ self methodServicesFrom: bpMethods
+  ^ (self methodServicesFrom: bpMethods) asSet asArray
 ]
 
 { #category : 'queries' }
