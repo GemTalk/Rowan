@@ -73,6 +73,7 @@ RwGsPlatform >> serviceClasses [
 		add: RowanBrowserService;
 		add: RowanClassService; 
 		add: RowanDebuggerService; 
+		add: RowanDictionaryService; 
 		add: RowanFrameService;
 		add: RowanLoggingService;
 		add: RowanMethodService;
