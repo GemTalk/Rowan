@@ -99,7 +99,7 @@ RowanBrowserService >> compileClass: definitionString [
   anonymousMethod := definitionString
     _compileInContext: nil
     symbolList: Rowan image symbolList.
-  UserGlobals at: #'jadeiteCompileClassMethod' put: anonymousMethod
+  SessionTemps current at: #'jadeiteCompileClassMethod' put: anonymousMethod
 ]
 
 { #category : 'client commands support' }
@@ -179,8 +179,8 @@ RowanBrowserService >> recompileMethodsAfterClassCompilation [
   "compileClass: must be run first"
 
   | theClass classService packageService projectService |
-  theClass := [ (UserGlobals at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
-    ensure: [ UserGlobals at: #'jadeiteCompileClassMethod' put: nil ].
+  theClass := [ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
   classService := RowanClassService new name: theClass name.
   classService update.
   classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
