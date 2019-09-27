@@ -37,6 +37,13 @@ RwPrjCreateTool >> createComponentProject: componentProjectDefinition [
 	^ componentProjectDefinition
 ]
 
+{ #category : 'component project defintion creation' }
+RwPrjCreateTool >> createComponentProjectNamed: projectName [
+	"Create a new component project with all of the default attributes"
+
+	^ RwComponentProjectDefinition projectName: projectName
+]
+
 { #category : 'project repository creation' }
 RwPrjCreateTool >> createProjectRepository: projectReferenceDefinition [
 

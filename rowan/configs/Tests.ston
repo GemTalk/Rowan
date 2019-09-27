@@ -16,7 +16,8 @@
 					'Rowan-Services-Tests',
 					'AST-Tests-Core',
 					'AST-Kernel-Tests-Core',
-					'Rowan-Tests-GemStone'
+					'Rowan-Tests-GemStone',
+					'Rowan-DataCurator-Tests'
 					]
 				},
 			'deprecated tests' : {

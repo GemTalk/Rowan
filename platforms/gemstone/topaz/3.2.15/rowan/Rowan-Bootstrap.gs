@@ -662,6 +662,7 @@ commit
     value: #('Rowan-Tools-Extensions' 'Rowan-Tests' 'Rowan-Tests-32x' 
 			'Rowan-Services-Tests' 'Rowan-GemStone-Components'
 			'Rowan-Tests-GemStone' 'Rowan-Tools-Extensions-GemStone'
+			'Rowan-DataCurator-Tests'
 	).	"Tool extension methods for RowanKernel classes "
 %
   commit
