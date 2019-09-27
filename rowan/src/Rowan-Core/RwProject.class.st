@@ -172,6 +172,11 @@ RwProject >> repositoryRootPath [
 ]
 
 { #category : 'actions' }
+RwProject >> testSuite [
+	^ Rowan projectTools test testSuiteForProjectNamed: self name
+]
+
+{ #category : 'actions' }
 RwProject >> unload [
 	"unload the receiver into the image"
 

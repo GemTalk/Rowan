@@ -178,6 +178,29 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 ]
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> testLoadComponentProjectFromUrl [
+
+	| specUrlString projectTools rowanProject projectName x project masterBranchSHA |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	projectTools load loadFromUrl: specUrlString.
+
+	masterBranchSHA := 'ea371eb'.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('tests').
+	self deny: (x := project loadedCommitId) = masterBranchSHA.
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
 
 	"https://github.com/dalehenrich/Rowan/issues/221"

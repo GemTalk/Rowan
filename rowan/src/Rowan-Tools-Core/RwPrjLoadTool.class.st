@@ -108,6 +108,14 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 	^ self loadProjectSetDefinition: projectSetDefinition
 ]
 
+{ #category : 'load project by url' }
+RwPrjLoadTool >> loadFromUrl: specUrl [
+
+	^ (RwComponentProjectDefinition newForUrl: specUrl) 
+		clone;
+		load
+]
+
 { #category : 'load project definitions' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 	| projectSetDefinition |

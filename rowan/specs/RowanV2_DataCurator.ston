@@ -5,6 +5,8 @@ RwComponentSpecification {
 	#configsPath : 'rowan/configs',
 	#specsPath : 'rowan/specs',
 	#repoPath : 'rowan/src',
+	#projectAlias : 'Rowan_DataCurator',
+	#projectName: 'Rowan',
 	#projectsPath : 'rowan/projects',
 	#repoSpec : RwGitRepositorySpecification {
 	},
