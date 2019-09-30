@@ -959,7 +959,7 @@ RowanClassService >> setComment [
 { #category : 'private' }
 RowanClassService >> setDictionary: classOrMeta [
 	| dictionaryList |
-		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta.
+		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta thisClass.
 		dictionaryName := dictionaryList isEmpty 
 		ifTrue:[String new]
 		ifFalse:[dictionaryList first first name asString].
