@@ -16,6 +16,17 @@ Class {
 }
 
 { #category : 'client commands' }
+RowanAnsweringService >> allClassesStartingWith: string [
+  answer := SortedCollection new.
+  organizer classes
+    do: [ :cls | 
+      (cls name beginsWith: string)
+        ifTrue: [ answer add: cls name asString ] ].
+  answer := answer asArray.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> allTestsIn: classServices [
 	answer := Array new. 
 	classServices do:[:service | answer addAll: service allTests].

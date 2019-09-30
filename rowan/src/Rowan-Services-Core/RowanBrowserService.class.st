@@ -30,17 +30,25 @@ RowanBrowserService >> abortTransaction [
 
 { #category : 'client commands' }
 RowanBrowserService >> allClasses [
-	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
-	allClasses addAll: (organizer classes collect:[:class | 
-			| service |
-			service := RowanClassService new name: class name. 
-			service packageName: class rowanPackageName.
-			service projectName: class rowanProjectName.
-			service]
-			).
-	allClasses := allClasses asArray. 
+	allClasses := self basicAllClasses.
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands support' }
+RowanBrowserService >> basicAllClasses [
+  | theClasses |
+  theClasses := SortedCollection sortBlock: [ :x :y | x name < y name ].
+  theClasses
+    addAll:
+      (organizer classes
+        collect: [ :class | 
+          | service |
+          service := RowanClassService new name: class name.
+          service packageName: class rowanPackageName.
+          service projectName: class rowanProjectName.
+          service ]).
+  ^ theClasses asArray
 ]
 
 { #category : 'client commands' }
