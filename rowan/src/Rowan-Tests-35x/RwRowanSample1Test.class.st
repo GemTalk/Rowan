@@ -20,6 +20,9 @@ RwRowanSample1Test >> _rowanSample1LoadSpecificationUrl [
 
 { #category : 'tests' }
 RwRowanSample1Test >> testIssue345 [
+
+	"https://github.com/GemTalk/Rowan/issues/514"
+
 	"This test (for 3.5.0) is actually about being able to change the component
 		properties before loading ... post clone ... Right now I am not completely
 		sure what sematics should be applied:
