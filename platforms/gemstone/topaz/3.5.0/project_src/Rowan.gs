@@ -6324,6 +6324,22 @@ true.
 %
 
 doit
+(TestCase
+	subclass: 'RwDataCuratorTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-DataCurator-Tests';
+		comment: 'Set of tests that can be compiled and run as a non-SystemUser user. That means all operations, including the load (see platforms/gemstone/topaz/rowanDataCuratorTestSuite.gs) of the project must be accomplished by referencing only the Published/Globals Rowan classes.';
+		immediateInvariant.
+true.
+%
+
+doit
 (TonelParser
 	subclass: 'NewTonelParser'
 	instVarNames: #( methodParser currentMethodNode methodBodyStart )
@@ -27545,6 +27561,12 @@ repositoryRootPath
 
 category: 'actions'
 method: RwProject
+testSuite
+	^ Rowan projectTools test testSuiteForProjectNamed: self name
+%
+
+category: 'actions'
+method: RwProject
 unload
 	"unload the receiver into the image"
 
@@ -38763,6 +38785,14 @@ createComponentProject: componentProjectDefinition
 	^ componentProjectDefinition
 %
 
+category: 'component project defintion creation'
+method: RwPrjCreateTool
+createComponentProjectNamed: projectName
+	"Create a new component project with all of the default attributes"
+
+	^ RwComponentProjectDefinition projectName: projectName
+%
+
 category: 'project repository creation'
 method: RwPrjCreateTool
 createProjectRepository: projectReferenceDefinition
@@ -39186,6 +39216,15 @@ loadComponentProjectDefinition: projectDefinition platformConfigurationAttribute
 				addProject: projectDefinition;
 				yourself ].
 	^ self loadProjectSetDefinition: projectSetDefinition
+%
+
+category: 'load project by url'
+method: RwPrjLoadTool
+loadFromUrl: specUrl
+
+	^ (RwComponentProjectDefinition newForUrl: specUrl) 
+		clone;
+		load
 %
 
 category: 'load project definitions'
@@ -42133,6 +42172,23 @@ method: RwPackageDefinition
 addClassNamed: className super: superclassName category: categryName
 
 	^ self addClassDefinition: (RwClassDefinition newForClassNamed: className super: superclassName  category: categryName)
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName instvars: instvars category: category comment: comment
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: #()
+				classvars: #()
+				category: category
+				comment: comment
+				pools: #()
+				type: 'normal')
 %
 
 category: 'accessing'
@@ -60245,6 +60301,52 @@ testValuesDo
 	self assert: values asArray = #('Paris' 'Rome')
 %
 
+! Class implementation for 'RwDataCuratorTest'
+
+!		Instance methods for 'RwDataCuratorTest'
+
+category: 'tests'
+method: RwDataCuratorTest
+testCreateProjects
+	"https://github.com/GemTalk/Rowan/issues/510"
+
+	| projectTools projectName projectDef packageName className class project audit classNames extendedClasses |
+	projectTools := Rowan projectTools.
+	projectName := 'MySampleProject'.
+	packageName := projectName , '-Core'.
+	className := 'MySampleClass'.
+	projectDef := projectTools create createComponentProjectNamed: projectName.
+	((projectDef addPackageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		category: '*' , packageName asLowercase)
+		addInstanceMethod: 'foo ^ 1'
+		protocol: 'accessing'.
+	projectDef load.
+	Rowan
+		projectNamed: projectName
+		ifAbsent: [ 
+			self
+				assert: false
+				description: 'The project ' , projectName printString , ' should exist' ].
+	project := Rowan projectNamed: projectName.
+	class := Rowan globalNamed: className.
+	self assert: class notNil.
+	self assert: (class new perform: #'foo') == 1.
+	self assert: (audit := project audit) isEmpty.
+	classNames := project definedClasses asArray collect: [ :each | each name ].
+	self assert: classNames = {(className asSymbol)}.
+	extendedClasses := project extendedClasses asArray.
+	self assert: extendedClasses = {}.
+	project unload.
+	Rowan
+		projectNamed: projectName
+		ifPresent: [ 
+			self
+				assert: false
+				description: 'The project ' , projectName printString , ' should not exist' ]
+%
+
 ! Class implementation for 'NewTonelParser'
 
 !		Instance methods for 'NewTonelParser'
@@ -62690,6 +62792,39 @@ defaultUseSessionMethodsForExtensions: aBool
 
 category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
+exportTopazFormatTo: filePath
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference basename;
+		yourself.
+	visitor visit: projectSetModification
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference basename;
+		topazFilenamePackageNamesMap: packageNamesMap;
+		yourself.
+	visitor visit: projectSetModification
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
 methodEnvForPackageNamed: packageName
 
 	^self projectRef methodEnvForPackageNamed: packageName
@@ -63415,6 +63550,22 @@ method: RwProject
 defaultUseSessionMethodsForExtensions
 
 	^ self _gemstonePlatformSpec defaultUseSessionMethodsForExtensions
+%
+
+category: '*rowan-gemstone-core'
+method: RwProject
+exportTopazFormatTo: filePath
+
+
+	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+%
+
+category: '*rowan-gemstone-core'
+method: RwProject
+exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+
+
+	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
 %
 
 category: '*rowan-gemstone-core'

@@ -36,7 +36,8 @@
 		[ 'gs3.[5-]' ] : {
       'tests': {
 				#packageNames : [
-					'Rowan-Tests-35x'
+					'Rowan-Tests-35x',
+					'Rowan-Tests-GemStone-35x'
 					]
 				}
 			}

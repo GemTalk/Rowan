@@ -31,6 +31,37 @@ RwComponentProjectDefinition >> defaultUseSessionMethodsForExtensions: aBool [
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> exportTopazFormatTo: filePath [
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference basename;
+		yourself.
+	visitor visit: projectSetModification
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference basename;
+		topazFilenamePackageNamesMap: packageNamesMap;
+		yourself.
+	visitor visit: projectSetModification
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> methodEnvForPackageNamed: packageName [
 
 	^self projectRef methodEnvForPackageNamed: packageName

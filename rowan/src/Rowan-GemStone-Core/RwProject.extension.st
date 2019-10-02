@@ -19,6 +19,20 @@ RwProject >> defaultUseSessionMethodsForExtensions [
 ]
 
 { #category : '*rowan-gemstone-core' }
+RwProject >> exportTopazFormatTo: filePath [
+
+
+	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwProject >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+
+
+	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+]
+
+{ #category : '*rowan-gemstone-core' }
 RwProject >> methodEnvForPackageNamed: packageName [
 
 	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName
