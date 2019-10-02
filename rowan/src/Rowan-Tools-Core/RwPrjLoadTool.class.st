@@ -94,8 +94,10 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition |
-	projectSetDefinition := projectDefinition repositoryRoot exists
+	projectSetDefinition := (projectDefinition repositoryRoot exists and: [projectDefinition projectDefinitionSourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue])
 		ifTrue: [ 
+			"only read from disk if the repository exists and the project definition has not 
+				already been loaded from disk"
 			Rowan projectTools read
 				readProjectSetForComponentProjectDefinition: projectDefinition
 				withConfigurations: projectDefinition loadedConfigurationNames

@@ -40,7 +40,8 @@ RwRowanSample1Test >> testIssue345 [
 				area, but we need a REAL solution with some logic behind it more than
 				""this is how it works:)"""
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project symDict registry |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName projectDef 
+		symDict registry |
 	projectName := 'RowanSample1'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -53,21 +54,22 @@ RwRowanSample1Test >> testIssue345 [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	self 
+	projectDef := self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: gitRootPath.
+		projectsHome: gitRootPath
+		registerProject: false.
 
-	project := RwProject newNamed: projectName.
-	project
+	projectDef
 		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
 
-	gitRootPath := project repositoryRootPath asFileReference.
+	gitRootPath := projectDef repositoryRootPath asFileReference.
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: self _issue_345_branch_name.
+
 "load project"
-	project load.
+	projectDef load.
 
 "validation"
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.

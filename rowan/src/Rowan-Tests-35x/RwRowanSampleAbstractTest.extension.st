@@ -2,12 +2,10 @@ Extension { #name : 'RwRowanSampleAbstractTest' }
 
 { #category : '*rowan-tests-35x' }
 RwRowanSampleAbstractTest >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
-
-	^ (RwComponentProjectDefinition newForUrl: specUrlString)
-		projectHome: projectsHome;
-		clone;
-		register;
-		yourself.
+	^ self
+		_cloneProjectFromSpecUrl: specUrlString
+		projectsHome: projectsHome
+		registerProject: true
 ]
 
 { #category : '*rowan-tests-35x' }
@@ -19,4 +17,5 @@ RwRowanSampleAbstractTest >> _cloneProjectFromSpecUrl: specUrlString projectsHom
 		clone;
 		yourself.
 	aBool ifTrue: [ projectDefinition register ].
+	^ projectDefinition
 ]

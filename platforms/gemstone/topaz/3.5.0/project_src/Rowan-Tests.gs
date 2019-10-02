@@ -38955,6 +38955,9 @@ testProjectGlobalsClassesExtensionsInSessionMethods
 category: 'tests'
 method: RwRowanSample1Test
 testIssue345
+
+	"https://github.com/GemTalk/Rowan/issues/514"
+
 	"This test (for 3.5.0) is actually about being able to change the component
 		properties before loading ... post clone ... Right now I am not completely
 		sure what sematics should be applied:
@@ -38998,6 +39001,7 @@ testIssue345
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: self _issue_345_branch_name.
+
 "load project"
 	project load.
 
@@ -39548,15 +39552,6 @@ _migrationClassMap
 	#(#'RowanSample2B' #(#'ivar0' #'b' #'ivar1')).
 	#(#'RowanSample2E' #(#'ivar0' #'b' #'ivar1' #'e' #'ivar2')).
 	#(#'RowanSample2F' #(#'ivar0' #'b' #'ivar1' #'f' #'ivar2'))}
-%
-
-category: 'private'
-method: RwRowanSample2Test
-_rowanSample2SpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample2.ston'
 %
 
 category: 'private'
@@ -46340,6 +46335,19 @@ _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath
 	project := RwProject newNamed: projectName.
 
 	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
+%
+
+! Class extensions for 'RwRowanSample2Test'
+
+!		Instance methods for 'RwRowanSample2Test'
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
+_rowanSample2SpecificationUrl
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_masterV2.ston'
 %
 
 ! Class extensions for 'RwRowanSample4Test'
