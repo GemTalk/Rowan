@@ -795,8 +795,9 @@ RowanClassService >> renameCategoryFrom: old to: new [
 
 { #category : 'client commands' }
 RowanClassService >> renameClass: oldClassName to: newClassName [
-  | references newMethods newClass |
+  | references newMethods newClass oldClass |
   newMethods := Array new.
+  oldClass := Rowan image resolveClassNamed: oldClassName.
   newClass := Rowan projectTools browser
     renameClassNamed: oldClassName
     to: newClassName.
@@ -804,13 +805,12 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
   name := newClassName.
   self update.
   renamedName := oldClassName.
-  self updateMethodsAfterRenameFrom: oldClassName to: newClassName. 
+  self updateMethodsAfterRenameFrom: oldClassName to: newClassName.
   self updateSubclassesAfterRenameOf: newClass.
-  references := organizer update referencesTo: oldClassName asSymbol.
-  1 to: references first size do: [ :index | 
-    | method newSource compileResult failedCompile methodService oldSource |
+  references := organizer update referencesToObject: oldClass.
+  references do: [ :method | 
+    | newSource compileResult failedCompile methodService oldSource |
     failedCompile := false.
-    method := references first at: index.
     oldSource := method sourceString.
     newSource := self
       replaceSubString: oldClassName
