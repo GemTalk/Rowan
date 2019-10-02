@@ -43,14 +43,6 @@ RwRowanSample2Test >> _rowanSample2_gitoliteSpecificationUrl [
 		, '/test/specs/RowanSample2_gitolite.ston'
 ]
 
-{ #category : 'private' }
-RwRowanSample2Test >> _rowanSample2SpecificationUrl [
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample2.ston'
-]
-
 { #category : 'tests' }
 RwRowanSample2Test >> testAutomaticMigration [
 
