@@ -105,7 +105,7 @@ RwRowanSample1Test >> testIssue514 [
 	"Explicitly confirm that the property change was made and propogated to loaded project ... 
 		hmmm and loaded project needs to be dirty because it doesn't match disk"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName projectDef 
+	| specUrlString projectTools rowanProject gitRootPath projectName projectDef propertyModValidationBlock
 		loadedProjectDefinition diskProjectSet imageProjectSet projectSetModification project |
 	projectName := 'RowanSample1'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -128,11 +128,6 @@ RwRowanSample1Test >> testIssue514 [
 		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
 
-	gitRootPath := projectDef repositoryRootPath asFileReference.
-
-	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: self _issue_345_branch_name.
-
 "load project"
 	projectDef load.
 
@@ -144,13 +139,46 @@ RwRowanSample1Test >> testIssue514 [
 	project := Rowan projectNamed: projectName.
 	self assert: project isDirty.	"since project not loaded from source that came from disk, it should be dirty"
 
+"compare"
 	loadedProjectDefinition := project asDefinition.
 	diskProjectSet :=  loadedProjectDefinition copy readProjectSet.
 	imageProjectSet := RwProjectSetDefinition new
 		addProject: loadedProjectDefinition;
 		yourself.
-	projectSetModification := diskProjectSet compareAgainstBase: imageProjectSet.
+	projectSetModification :=  imageProjectSet compareAgainstBase: diskProjectSet. "new vs. old"
 	self deny: projectSetModification isEmpty.
-"at this point we need to verify that the expected changes are present ... which should only be due to the default symbol dictionary"
-self deny: true.
+
+"validate that property changes are correct"
+	propertyModValidationBlock := [ :propertiesModification | 
+		"property modification should have a new value for gs_SymbolDictionary equal to <self _symbolDictionaryName>"
+		| propertyElementsModified propertyModification |
+		self deny: propertiesModification isEmpty.
+		propertyElementsModified := propertiesModification elementsModified.
+		self assert: propertyElementsModified size = 1.
+		propertyModification := propertyElementsModified at: 'gs_SymbolDictionary'.
+		self assert: propertyModification oldValue isNil.
+		self assert: propertyModification newValue = self _symbolDictionaryName asString ].
+	(RwSample1TestValidationVisitor new)
+		defaultNoopBlock: [ self assert: false description: 'unexpected modification' ];
+		changedProjectBlock: [:projectModification | self assert: projectModification propertiesModification isEmpty ];
+		changedPackageBlock: [:packageModification | 
+			| packageName |
+			packageName := packageModification key.
+			(#('RowanSample1-Extensions' 'RowanSample1-Core' 'RowanSample1-Tests' ) includes: packageName)
+				ifTrue: [ 
+					packageName = 'RowanSample1-Extensions'
+						ifTrue: [ self assert: packageModification classesModification isEmpty ]
+						ifFalse: [ self deny: packageModification classesModification isEmpty ].
+					self assert: packageModification classExtensionsModification isEmpty.
+					propertyModValidationBlock value: packageModification propertiesModification ]
+				ifFalse: [
+					self assert: packageModification propertiesModification isEmpty ] ];
+		changedClassBlock: [ :classModification :visitor |
+			| packageName |
+			packageName := visitor currentPackageDefinition key.
+			self assert: (#('RowanSample1-Core' 'RowanSample1-Tests' ) includes: packageName).
+			self assert: classModification instanceMethodsModification isEmpty.
+			self assert: classModification classMethodsModification isEmpty.
+			propertyModValidationBlock value: classModification propertiesModification ];
+		visit: projectSetModification.
 ]
