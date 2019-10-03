@@ -96,3 +96,61 @@ RwRowanSample1Test >> testIssue345 [
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
+
+{ #category : 'tests' }
+RwRowanSample1Test >> testIssue514 [
+
+	"https://github.com/GemTalk/Rowan/issues/514"
+
+	"Explicitly confirm that the property change was made and propogated to loaded project ... 
+		hmmm and loaded project needs to be dirty because it doesn't match disk"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName projectDef 
+		loadedProjectDefinition diskProjectSet imageProjectSet projectSetModification project |
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample1LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath
+		registerProject: false.
+
+	projectDef
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+	gitRootPath := projectDef repositoryRootPath asFileReference.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: self _issue_345_branch_name.
+
+"load project"
+	projectDef load.
+
+"validation"
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
+
+	self assert: (Rowan globalNamed: self _symbolDictionaryName) notNil.
+
+	project := Rowan projectNamed: projectName.
+	self assert: project isDirty.	"since project not loaded from source that came from disk, it should be dirty"
+
+	loadedProjectDefinition := project asDefinition.
+	diskProjectSet :=  loadedProjectDefinition copy readProjectSet.
+	imageProjectSet := RwProjectSetDefinition new
+		addProject: loadedProjectDefinition;
+		yourself.
+	projectSetModification := diskProjectSet compareAgainstBase: imageProjectSet.
+	self deny: projectSetModification isEmpty.
+"at this point we need to verify that the expected changes are present ... which should only be due to the default symbol dictionary"
+self deny: true.
+]

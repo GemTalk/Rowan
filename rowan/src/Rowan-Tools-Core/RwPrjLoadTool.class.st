@@ -104,6 +104,9 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 				groupNames: projectDefinition loadedGroupNames 
 				platformConfigurationAttributes: platformConfigurationAttributes ]
 		ifFalse: [ 
+			"If this project definition _was_ read from disk, we cannot trust that it was 
+				not modified, so clear source property"
+			projectDefinition projectDefinitionSourceProperty: nil.
 			RwProjectSetDefinition new
 				addProject: projectDefinition;
 				yourself ].

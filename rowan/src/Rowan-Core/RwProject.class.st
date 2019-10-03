@@ -17,6 +17,12 @@ RwProject >> _specification [
 ]
 
 { #category : 'actions' }
+RwProject >> asDefinition [
+
+	^ self _loadedProject asDefinition
+]
+
+{ #category : 'actions' }
 RwProject >> audit [
 	"run audit on the receiver"
 
