@@ -27,14 +27,20 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
   "In 3.2.15 the server does some whacky things with IP, stepPoint, and nested methods.
 	See http://kermit.gemtalksystems.com/bug?bug=45553 --JGF"
 
-  | frameData gsNMethod |
+  | frameData gsNMethod homeMethodService |
   frameData := aGsProcess _frameContentsAt: anInteger.
+  frameData isNil
+    ifTrue: [ self halt. ^self].
   oop := (frameData at: 8) asOop.
   gsNMethod := frameData at: 1.
   label := aGsProcess _reportAt: anInteger.
   method := RowanMethodService
     forGsNMethod: gsNMethod
     organizer: aClassOrganizer.
+  homeMethodService := RowanMethodService
+    forGsNMethod: gsNMethod homeMethod
+    organizer: aClassOrganizer.
+  method breakPoints: homeMethodService breakPoints.
   homeMethodSelector := gsNMethod homeMethod selector.
   homeMethodClassName := gsNMethod homeMethod inClass
     ifNotNil: [ :cls | cls name asString ].

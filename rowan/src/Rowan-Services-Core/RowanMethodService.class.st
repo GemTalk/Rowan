@@ -155,6 +155,12 @@ RowanMethodService >> breakPoints [
 	^breakPoints
 ]
 
+{ #category : 'other' }
+RowanMethodService >> breakPoints: collection [
+
+	breakPoints := collection
+]
+
 { #category : 'initialization' }
 RowanMethodService >> breakPointsFor: aGsNMethod [
 	"Answers an Array stepPoints"
