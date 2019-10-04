@@ -30,7 +30,7 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
   | frameData gsNMethod homeMethodService |
   frameData := aGsProcess _frameContentsAt: anInteger.
   frameData isNil
-    ifTrue: [ self halt. ^self].
+    ifTrue: [^self "not sure if bad frame data is a 3.2.15 bug or not"].
   oop := (frameData at: 8) asOop.
   gsNMethod := frameData at: 1.
   label := aGsProcess _reportAt: anInteger.
