@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanSample1Test class >> _symbolDictionaryNames [
+
+	^ 	super _symbolDictionaryNames, 
+			#( #'SampleSymbolDict')
+]
+
+{ #category : 'private' }
 RwRowanSample1Test >> _issue_345_branch_name [
 
 	^ 'issue_345_v2'
