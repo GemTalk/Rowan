@@ -28,7 +28,7 @@ RwPkgDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackage
 
 	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -60,7 +60,7 @@ RwPkgDisownTool >> disownClassNamed: className [
 
 	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -94,7 +94,7 @@ RwPkgDisownTool >> disownMethod: methodSelector inClassNamed: className isMeta: 
 
 	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 

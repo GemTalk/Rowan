@@ -6,9 +6,7 @@ Class {
 
 { #category : 'private' }
 RwRowanSample2Test class >> _symbolDictionaryNames [
-
-	^ 	super _symbolDictionaryNames, 
-			#( #'SampleSymbolDict')
+	^ super _symbolDictionaryNames , #(#'SampleSymbolDict' #'RowanSample2')
 ]
 
 { #category : 'private' }
@@ -79,7 +77,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
-	projectDef  read; load.
+	projectDef  read; load. "needs to use RwGsInstanceMigrator aggressiveMigration"
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -92,7 +90,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
 			instanceMap at: instance put: ar -> class ].
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
 
 	(Rowan projectNamed: projectName) load.
 
