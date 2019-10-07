@@ -155,5 +155,5 @@ RwRowanSample2Test >> testIssue515 [
 
 "load project"
 	projectDef load.
-self halt.
+"watch out ... jadeite won't bhave well with class and symbol dictionary of same name ... but that's okay"
 ]

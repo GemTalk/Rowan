@@ -6,7 +6,7 @@ Class {
 
 { #category : 'private' }
 RwRowanSample2Test class >> _symbolDictionaryNames [
-	^ super _symbolDictionaryNames , #(#'SampleSymbolDict' #'RowanSample2')
+	^ super _symbolDictionaryNames , #(#'SampleSymbolDict'  #'RowanSample2' #'RowanSample2_SD')
 ]
 
 { #category : 'private' }
@@ -66,10 +66,10 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectDef := self 
+	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
 		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
-		registerProject: false.
+		registerProject: false) asDefinition.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
 

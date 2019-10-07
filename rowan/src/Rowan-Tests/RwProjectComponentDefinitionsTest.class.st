@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'private' }
+RwProjectComponentDefinitionsTest class >> _symbolDictionaryNames [
+	^ super _symbolDictionaryNames , #(#'SampleSymbolDict'  #'RowanSample2' #'RowanSample2_SD')
+]
+
 { #category : 'tests' }
 RwProjectComponentDefinitionsTest >> testCloneComponentProject [
 

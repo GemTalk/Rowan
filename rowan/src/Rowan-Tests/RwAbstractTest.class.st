@@ -40,17 +40,17 @@ RwAbstractTest class >> _unmanagedDictionaryName [
 
 { #category : 'cleanup' }
 RwAbstractTest class >> cleanup [
-
 	"self cleanup"
 
 	| user symListP symListT dictP dictT index |
 	user := System myUserProfile.
 	symListP := user symbolList.
 	symListT := GsCurrentSession currentSession symbolList.
-
 	self _symbolDictionaryNames
 		do: [ :symDictName | 
-			dictP := symListP objectNamed: symDictName.
+			dictP := symListP
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+				ifNone: [  ].
 			dictP
 				ifNotNil: [ 
 					(dictP at: GsPackagePolicy globalName otherwise: nil)
@@ -58,19 +58,18 @@ RwAbstractTest class >> cleanup [
 					index := symListP indexOf: dictP.
 					index > 0
 						ifTrue: [ user removeDictionaryAt: index ] ].
-
-			dictT := symListT objectNamed: symDictName.
+			dictT := symListT
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+				ifNone: [  ].
 			dictT
 				ifNotNil: [ 
 					(dictT at: GsPackagePolicy globalName otherwise: nil)
 						ifNotNil: [ :policy | policy disable ].
 					index := symListT indexOf: dictT.
 					index > 0
-						ifTrue: [ symListT removeAtIndex: index ] ].
- ].
+						ifTrue: [ symListT removeAtIndex: index ] ] ].
 	GsPackagePolicy current refreshSessionMethodDictionary.
 	ClassOrganizer clearCachedOrganizer
-
 ]
 
 { #category : 'private' }

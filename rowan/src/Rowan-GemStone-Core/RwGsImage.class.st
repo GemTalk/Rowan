@@ -522,15 +522,23 @@ RwGsImage class >> resolveName: aName [
 RwGsImage class >> symbolDictNamed: symbolDictName [
 	"Search symbol list for a symbol dictionary with the given name"
 
+	^ self
+		symbolDictNamed: symbolDictName
+		ifAbsent: [ 
+			self
+				error:
+					'No symbol dictionary with the name ' , symbolDictName printString , ' found.' ]
+]
+
+{ #category : 'querying' }
+RwGsImage class >> symbolDictNamed: symbolDictName ifAbsent: absentBlock [
+	"Search symbol list for a symbol dictionary with the given name"
+
 	| symbolDictNameSymbol |
 	symbolDictNameSymbol := symbolDictName asString.
 	^ self symbolList
 		detect: [ :each | (each at: symbolDictNameSymbol ifAbsent: [ nil ]) == each ]
-		ifNone: [ 
-			self
-				error:
-					'No symbol dictionary with the name '
-						, symbolDictNameSymbol asString printString , ' found.' ]
+		ifNone: absentBlock
 ]
 
 { #category : 'querying' }
