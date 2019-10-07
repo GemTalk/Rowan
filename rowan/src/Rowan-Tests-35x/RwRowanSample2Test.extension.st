@@ -1,6 +1,11 @@
 Extension { #name : 'RwRowanSample2Test' }
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample2Test >> _migration_0_branchName [
+	^   'masterV2.0'
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample2Test >> _migration_1_branchName [
 	^ 'migration_1_v2'
 ]
@@ -16,6 +21,33 @@ RwRowanSample2Test >> _rowanSample1LoadSpecificationUrl [
 	| rowanProject |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1_v2.ston'
+]
+
+{ #category : '*rowan-tests-35x' }
+RwRowanSample2Test >> _rowanSample2_bitbucketSpecificationUrl [
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_bitbucket_v2.ston'
+]
+
+{ #category : '*rowan-tests-35x' }
+RwRowanSample2Test >> _rowanSample2_gitlabSpecificationUrl [
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_gitlab_v2.ston'
+]
+
+{ #category : '*rowan-tests-35x' }
+RwRowanSample2Test >> _rowanSample2_gitoliteSpecificationUrl [
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_gitolite_v2.ston'
 ]
 
 { #category : '*rowan-tests-35x' }

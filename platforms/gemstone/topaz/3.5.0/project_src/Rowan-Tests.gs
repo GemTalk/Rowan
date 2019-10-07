@@ -39559,7 +39559,7 @@ testAutomaticMigration
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
-	projectDef  read; load.
+	projectDef read; load.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -39601,8 +39601,8 @@ testDeferredMigration
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after deferred migration ..."
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMigrator 
-		classesToMigrate expectedClassesToMigrate |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName 
+		instanceMigrator classesToMigrate expectedClassesToMigrate projectDef |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -39615,33 +39615,26 @@ testDeferredMigration
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	self 
+	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		registerProject: false) asDefinition.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath asFileReference.
+	gitRootPath := projectDef repositoryRoot.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	projectTools load
-		loadProjectNamed: projectName
-		withConfigurations: #( 'Default' )
-		groupNames: #()
-		instanceMigrator: RwGsInstanceMigrator noMigration.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef  read; load.
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
 	instanceMigrator := RwGsDeferredInstanceMigrator noMigration.
-	projectTools load
-		loadProjectNamed: projectName
-		withConfigurations: #( 'Default' )
-		groupNames: #()
-		instanceMigrator: instanceMigrator.
+
+	(Rowan projectNamed: projectName) asDefinition
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load: instanceMigrator.
 
 	classesToMigrate := (instanceMigrator classesToMigrate collect: [:each | each name ]) sort.
 	expectedClassesToMigrate := (self _migrationClassMap collect: [:each | each at: 1 ]) sort.
@@ -39654,7 +39647,8 @@ testNoMigration
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName 
+		instanceMap projectDef |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -39667,21 +39661,18 @@ testNoMigration
 
 	(gitRootPath /projectName) ensureDeleteAll.
 
-	self 
+	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		registerProject: false) asDefinition.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath.
+	gitRootPath := projectDef repositoryRoot.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef read; load.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -39694,8 +39685,12 @@ testNoMigration
 			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
 			instanceMap at: instance put: ar -> class ].
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
+
+	(Rowan projectNamed: projectName) asDefinition
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load: RwGsInstanceMigrator noMigration.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -39719,7 +39714,7 @@ testNoMigration_bitbucket
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName instanceMap projectDef |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -39732,21 +39727,18 @@ testNoMigration_bitbucket
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	self 
+	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		registerProject: false) asDefinition.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath asFileReference.
+	gitRootPath := projectDef repositoryRoot.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef read; load.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -39759,8 +39751,12 @@ testNoMigration_bitbucket
 			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
 			instanceMap at: instance put: ar -> class ].
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
+
+	(Rowan projectNamed: projectName) asDefinition
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -39784,7 +39780,7 @@ testNoMigration_gitlab
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName projectDef instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -39797,21 +39793,18 @@ testNoMigration_gitlab
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	self 
+	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		registerProject: false) asDefinition.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath asFileReference.
+	gitRootPath := projectDef repositoryRoot.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef read; load.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -39824,8 +39817,12 @@ testNoMigration_gitlab
 			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
 			instanceMap at: instance put: ar -> class ].
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
+
+	(Rowan projectNamed: projectName) asDefinition
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -39849,7 +39846,7 @@ testNoMigration_gitolite
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName projectDef instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -39862,21 +39859,18 @@ testNoMigration_gitolite
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	self 
+	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		registerProject: false) asDefinition.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath.
+	gitRootPath := projectDef repositoryRoot.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef read; load.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -39889,8 +39883,12 @@ testNoMigration_gitolite
 			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
 			instanceMap at: instance put: ar -> class ].
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
+
+	(Rowan projectNamed: projectName) asDefinition
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -40022,36 +40020,6 @@ _migrationClassMap
 	#(#'RowanSample2B' #(#'ivar0' #'b' #'ivar1')).
 	#(#'RowanSample2E' #(#'ivar0' #'b' #'ivar1' #'e' #'ivar2')).
 	#(#'RowanSample2F' #(#'ivar0' #'b' #'ivar1' #'f' #'ivar2'))}
-%
-
-category: 'private'
-method: RwRowanSample2Test
-_rowanSample2_bitbucketSpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample2_bitbucket.ston'
-%
-
-category: 'private'
-method: RwRowanSample2Test
-_rowanSample2_gitlabSpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample2_gitlab.ston'
-%
-
-category: 'private'
-method: RwRowanSample2Test
-_rowanSample2_gitoliteSpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample2_gitolite.ston'
 %
 
 ! Class implementation for 'RwRowanSample4Test'
@@ -46973,6 +46941,36 @@ _rowanSample2SpecificationUrl
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	^ 'file:' , rowanProject repositoryRootPath
 		, '/test/specs/RowanSample2_masterV2.ston'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
+_rowanSample2_bitbucketSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_bitbucket_v2.ston'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
+_rowanSample2_gitlabSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_gitlab_v2.ston'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
+_rowanSample2_gitoliteSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_gitolite_v2.ston'
 %
 
 ! Class extensions for 'RwRowanSample4Test'
