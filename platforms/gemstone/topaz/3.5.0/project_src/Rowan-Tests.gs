@@ -18,6 +18,22 @@ true.
 %
 
 doit
+(RwAbstractProjectSetModificationVisitor
+	subclass: 'RwSample1TestValidationVisitor'
+	instVarNames: #( defaultNoopBlock addedClassBlock addedClassExtensionBlock addedMethodBlock addedMethodExtensionBlock addedPackageBlock addedProjectBlock changedClassBlock changedClassExtensionBlock changedMethodBlock changedMethodExtensionBlock changedPackageBlock changedProjectBlock deletedClassBlock deletedClassExtensionBlock deletedMethodBlock deletedMethodExtensionBlock deletedPackageBlock deletedProjectBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-35x';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (RwGsImage
 	subclass: 'RwGsTestImage'
 	instVarNames: #(  )
@@ -948,6 +964,354 @@ doit
 		comment: '';
 		immediateInvariant.
 true.
+%
+
+! Class implementation for 'RwSample1TestValidationVisitor'
+
+!		Instance methods for 'RwSample1TestValidationVisitor'
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedClass: aClassModification
+	currentClassDefinition := aClassModification after.
+	self addedClassBlock cull: aClassModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedClassBlock
+	^ addedClassBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedClassBlock: aBlock
+	addedClassBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedClassExtension: aClassExtensionModification
+	currentClassExtension := aClassExtensionModification after.
+	self addedClassExtensionBlock cull: aClassExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedClassExtensionBlock
+	^ addedClassExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedClassExtensionBlock: aBlock
+	addedClassExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedMethod: aMethodModification
+	self addedMethodBlock cull: aMethodModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedMethodBlock
+	^ addedMethodBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedMethodBlock: aBlock
+	addedMethodBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedMethodExtension: aMethodExtensionModification
+	self addedMethodExtensionBlock cull: aMethodExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedMethodExtensionBlock
+	^ addedMethodExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedMethodExtensionBlock: aBlock
+	addedMethodExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedPackage: aPackageModification
+	currentPackageDefinition := aPackageModification after.
+	self addedPackageBlock cull: aPackageModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedPackageBlock
+	^ addedPackageBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedPackageBlock: aBlock
+	addedPackageBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedProject: aProjectModification
+	currentProjectDefinition := aProjectModification after.
+	self addedProjectBlock cull: aProjectModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedProjectBlock
+	^ addedProjectBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedProjectBlock: aBlock
+	addedProjectBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedClass: aClassModification
+	currentClassDefinition := aClassModification after.
+	self changedClassBlock cull: aClassModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedClassBlock
+	^ changedClassBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedClassBlock: aBlock
+	changedClassBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedClassExtension: aClassExtensionModification
+	currentClassExtension := aClassExtensionModification after.
+	self changedClassExtensionBlock cull: aClassExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedClassExtensionBlock
+	^ changedClassExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedClassExtensionBlock: aBlock
+	changedClassExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedMethod: aMethodModification
+	self changedMethodBlock cull: aMethodModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedMethodBlock
+	^ changedMethodBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedMethodBlock: aBlock
+	changedMethodBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedMethodExtension: aMethodExtensionModification
+	self changedMethodExtensionBlock cull: aMethodExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedMethodExtensionBlock
+	^ changedMethodExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedMethodExtensionBlock: aBlock
+	changedMethodExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedPackage: aPackageModification
+	currentPackageDefinition := aPackageModification after.
+	self changedPackageBlock cull: aPackageModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedPackageBlock
+	^ changedPackageBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedPackageBlock: aBlock
+	changedPackageBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedProject: aProjectModification
+	currentProjectDefinition := aProjectModification after.
+	self changedProjectBlock cull: aProjectModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedProjectBlock
+	^ changedProjectBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedProjectBlock: aBlock
+	changedProjectBlock := aBlock
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+defaultNoopBlock
+	^ defaultNoopBlock ifNil: [ [  ] ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+defaultNoopBlock: aBlock
+	defaultNoopBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedClass: aClassModification
+	self deletedClassBlock cull: aClassModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedClassBlock
+	^ deletedClassBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedClassBlock: aBlock
+	deletedClassBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedClassExtension: aClassExtensionModification
+	self deletedClassExtensionBlock cull: aClassExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedClassExtensionBlock
+	^ deletedClassExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedClassExtensionBlock: aBlock
+	deletedClassExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedMethod: aMethodModification
+	self deletedMethodBlock cull: aMethodModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedMethodBlock
+	^ deletedMethodBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedMethodBlock: aBlock
+	deletedMethodBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedMethodExtension: aMethodExtensionModification
+	self deletedMethodExtensionBlock cull: aMethodExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedMethodExtensionBlock
+	^ deletedMethodExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedMethodExtensionBlock: aBlock
+	deletedMethodExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedPackage: aPackageModification
+	self deletedPackageBlock cull: aPackageModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedPackageBlock
+	^ deletedPackageBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedPackageBlock: aBlock
+	deletedPackageBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedProject: aProjectModification
+	self deletedProjectBlock cull: aProjectModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedProjectBlock
+	^ deletedProjectBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedProjectBlock: aBlock
+	deletedProjectBlock := aBlock
 %
 
 ! Class implementation for 'RwGsTestImage'
@@ -3737,17 +4101,17 @@ test_senders
 category: 'cleanup'
 classmethod: RwAbstractTest
 cleanup
-
 	"self cleanup"
 
 	| user symListP symListT dictP dictT index |
 	user := System myUserProfile.
 	symListP := user symbolList.
 	symListT := GsCurrentSession currentSession symbolList.
-
 	self _symbolDictionaryNames
 		do: [ :symDictName | 
-			dictP := symListP objectNamed: symDictName.
+			dictP := symListP
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+				ifNone: [  ].
 			dictP
 				ifNotNil: [ 
 					(dictP at: GsPackagePolicy globalName otherwise: nil)
@@ -3755,16 +4119,16 @@ cleanup
 					index := symListP indexOf: dictP.
 					index > 0
 						ifTrue: [ user removeDictionaryAt: index ] ].
-
-			dictT := symListT objectNamed: symDictName.
+			dictT := symListT
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+				ifNone: [  ].
 			dictT
 				ifNotNil: [ 
 					(dictT at: GsPackagePolicy globalName otherwise: nil)
 						ifNotNil: [ :policy | policy disable ].
 					index := symListT indexOf: dictT.
 					index > 0
-						ifTrue: [ symListT removeAtIndex: index ] ].
- ].
+						ifTrue: [ symListT removeAtIndex: index ] ] ].
 	GsPackagePolicy current refreshSessionMethodDictionary.
 	ClassOrganizer clearCachedOrganizer
 %
@@ -7195,6 +7559,14 @@ _symbolDictionaryName
 
 ! Class implementation for 'RwProjectComponentDefinitionsTest'
 
+!		Class methods for 'RwProjectComponentDefinitionsTest'
+
+category: 'private'
+classmethod: RwProjectComponentDefinitionsTest
+_symbolDictionaryNames
+	^ super _symbolDictionaryNames , #(#'SampleSymbolDict'  #'RowanSample2' #'RowanSample2_SD')
+%
+
 !		Instance methods for 'RwProjectComponentDefinitionsTest'
 
 category: 'tests'
@@ -9024,7 +9396,7 @@ testAdoptClass
 		defaultSymbolDictName: symDictName
 		comment: 'project for testing package adopt api'.
 
-	symDict := Rowan globalNamed: symDictName.
+	symDict := Rowan image symbolDictNamed: symDictName.
 
 	"Use non-Rowan api to create class and methods"
 	theClass := Object subclass: className
@@ -38950,6 +39322,16 @@ testProjectGlobalsClassesExtensionsInSessionMethods
 
 ! Class implementation for 'RwRowanSample1Test'
 
+!		Class methods for 'RwRowanSample1Test'
+
+category: 'private'
+classmethod: RwRowanSample1Test
+_symbolDictionaryNames
+
+	^ 	super _symbolDictionaryNames, 
+			#( #'SampleSymbolDict')
+%
+
 !		Instance methods for 'RwRowanSample1Test'
 
 category: 'tests'
@@ -38975,7 +39357,8 @@ testIssue345
 				area, but we need a REAL solution with some logic behind it more than
 				""this is how it works:)"""
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project symDict registry |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName projectDef 
+		symDict registry |
 	projectName := 'RowanSample1'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -38988,22 +39371,22 @@ testIssue345
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	self 
+	projectDef := self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: gitRootPath.
+		projectsHome: gitRootPath
+		registerProject: false.
 
-	project := RwProject newNamed: projectName.
-	project
+	projectDef
 		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
 
-	gitRootPath := project repositoryRootPath asFileReference.
+	gitRootPath := projectDef repositoryRootPath asFileReference.
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: self _issue_345_branch_name.
 
 "load project"
-	project load.
+	projectDef load.
 
 "validation"
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
@@ -39031,6 +39414,93 @@ testIssue345
 	self assert: registry methodRegistry size = 0.
 %
 
+category: 'tests'
+method: RwRowanSample1Test
+testIssue514
+
+	"https://github.com/GemTalk/Rowan/issues/514"
+
+	"Explicitly confirm that the property change was made and propogated to loaded project ... 
+		hmmm and loaded project needs to be dirty because it doesn't match disk"
+
+	| specUrlString projectTools rowanProject gitRootPath projectName projectDef propertyModValidationBlock
+		loadedProjectDefinition diskProjectSet imageProjectSet projectSetModification project |
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample1LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath
+		registerProject: false.
+
+	projectDef
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+"load project"
+	projectDef load.
+
+"validation"
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
+
+	self assert: (Rowan globalNamed: self _symbolDictionaryName) notNil.
+
+	project := Rowan projectNamed: projectName.
+	self assert: project isDirty.	"since project not loaded from source that came from disk, it should be dirty"
+
+"compare"
+	loadedProjectDefinition := project asDefinition.
+	diskProjectSet :=  loadedProjectDefinition copy readProjectSet.
+	imageProjectSet := RwProjectSetDefinition new
+		addProject: loadedProjectDefinition;
+		yourself.
+	projectSetModification :=  imageProjectSet compareAgainstBase: diskProjectSet. "new vs. old"
+	self deny: projectSetModification isEmpty.
+
+"validate that property changes are correct"
+	propertyModValidationBlock := [ :propertiesModification | 
+		"property modification should have a new value for gs_SymbolDictionary equal to <self _symbolDictionaryName>"
+		| propertyElementsModified propertyModification |
+		self deny: propertiesModification isEmpty.
+		propertyElementsModified := propertiesModification elementsModified.
+		self assert: propertyElementsModified size = 1.
+		propertyModification := propertyElementsModified at: 'gs_SymbolDictionary'.
+		self assert: propertyModification oldValue isNil.
+		self assert: propertyModification newValue = self _symbolDictionaryName asString ].
+	(RwSample1TestValidationVisitor new)
+		defaultNoopBlock: [ self assert: false description: 'unexpected modification' ];
+		changedProjectBlock: [:projectModification | self assert: projectModification propertiesModification isEmpty ];
+		changedPackageBlock: [:packageModification | 
+			| packageName |
+			packageName := packageModification key.
+			(#('RowanSample1-Extensions' 'RowanSample1-Core' 'RowanSample1-Tests' ) includes: packageName)
+				ifTrue: [ 
+					packageName = 'RowanSample1-Extensions'
+						ifTrue: [ self assert: packageModification classesModification isEmpty ]
+						ifFalse: [ self deny: packageModification classesModification isEmpty ].
+					self assert: packageModification classExtensionsModification isEmpty.
+					propertyModValidationBlock value: packageModification propertiesModification ]
+				ifFalse: [
+					self assert: packageModification propertiesModification isEmpty ] ];
+		changedClassBlock: [ :classModification :visitor |
+			| packageName |
+			packageName := visitor currentPackageDefinition key.
+			self assert: (#('RowanSample1-Core' 'RowanSample1-Tests' ) includes: packageName).
+			self assert: classModification instanceMethodsModification isEmpty.
+			self assert: classModification classMethodsModification isEmpty.
+			propertyModValidationBlock value: classModification propertiesModification ];
+		visit: projectSetModification.
+%
+
 category: 'private'
 method: RwRowanSample1Test
 _issue_345_branch_name
@@ -39049,6 +39519,14 @@ _rowanSample1LoadSpecificationUrl
 
 ! Class implementation for 'RwRowanSample2Test'
 
+!		Class methods for 'RwRowanSample2Test'
+
+category: 'private'
+classmethod: RwRowanSample2Test
+_symbolDictionaryNames
+	^ super _symbolDictionaryNames , #(#'SampleSymbolDict'  #'RowanSample2' #'RowanSample2_SD')
+%
+
 !		Instance methods for 'RwRowanSample2Test'
 
 category: 'tests'
@@ -39057,7 +39535,7 @@ testAutomaticMigration
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName instanceMap projectDef |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -39068,27 +39546,20 @@ testAutomaticMigration
 
 	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	 (gitRootPath / projectName) ensureDeleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
-	self 
+	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		registerProject: false) asDefinition.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath.
+	gitRootPath := projectDef repositoryRoot.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	projectTools load
-		loadProjectNamed: projectName
-		withConfigurations: #( 'Default' )
-		groupNames: #()
-		instanceMigrator: RwGsInstanceMigrator noMigration.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef  read; load.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -39101,13 +39572,12 @@ testAutomaticMigration
 			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
 			instanceMap at: instance put: ar -> class ].
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
 
-	projectTools load
-		loadProjectNamed: projectName
-		withConfigurations: #( 'Default' )
-		groupNames: #()
-		instanceMigrator: RwGsInstanceMigrator aggressiveMigration.
+	(Rowan projectNamed: projectName) asDefinition
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load: RwGsInstanceMigrator aggressiveMigration.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -46343,6 +46813,161 @@ _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath
 
 category: '*rowan-tests-35x'
 method: RwRowanSample2Test
+testIssue493
+
+	"https://github.com/GemTalk/Rowan/issues/493"
+
+	"started as Issue #515 test, but turned into issue #493 test, once #515 fixed"
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName instanceMap projectDef |
+	projectName := 'RowanSample2'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+  	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample2SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		registerProject: false.
+
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
+
+	gitRootPath := projectDef repositoryRoot.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef read; load.
+
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar -> class ].
+
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
+
+	projectDef := (Rowan projectNamed: projectName) asDefinition.
+	projectDef
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		read;
+		load.
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
+testIssue515
+
+	"https://github.com/GemTalk/Rowan/issues/515"
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName instanceMap projectDef |
+	projectName := 'RowanSample2'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+  	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample2SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		registerProject: false.
+
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
+
+	gitRootPath := projectDef repositoryRoot.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef read; load.
+
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar -> class ].
+
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
+
+	projectDef := (Rowan projectNamed: projectName) asDefinition.
+	projectDef
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load.
+
+"load RowanSample1 project into RowanSample2 dictionary"
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+	specUrlString := self _rowanSample1LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath
+		registerProject: false.
+
+	projectDef
+		defaultSymbolDictName: 'RowanSample2';
+		yourself.
+
+"load project"
+	projectDef load.
+"watch out ... jadeite won't bhave well with class and symbol dictionary of same name ... but that's okay"
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
+_migration_1_branchName
+	^ 'migration_1_v2'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
+_migration_2_branchName
+	^ 'migration_2_v2'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
+_rowanSample1LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1_v2.ston'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample2Test
 _rowanSample2SpecificationUrl
 	| rowanProject |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
@@ -46673,12 +47298,10 @@ _rowanSample4_loadSpecificationUrl: repositoryRootPath
 category: '*rowan-tests-35x'
 method: RwRowanSampleAbstractTest
 _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome
-
-	^ (RwComponentProjectDefinition newForUrl: specUrlString)
-		projectHome: projectsHome;
-		clone;
-		register;
-		yourself.
+	^ self
+		_cloneProjectFromSpecUrl: specUrlString
+		projectsHome: projectsHome
+		registerProject: true
 %
 
 category: '*rowan-tests-35x'
@@ -46691,6 +47314,7 @@ _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProje
 		clone;
 		yourself.
 	aBool ifTrue: [ projectDefinition register ].
+	^ projectDefinition
 %
 
 ! Class Initialization

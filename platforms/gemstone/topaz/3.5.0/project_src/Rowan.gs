@@ -2913,6 +2913,22 @@ true.
 
 doit
 (Object
+	subclass: 'RwAbstractProjectSetModificationVisitor'
+	instVarNames: #( currentProjectDefinition currentPackageDefinition currentClassDefinition currentClassExtension )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'RwAbstractReaderWriterVisitor'
 	instVarNames: #( currentProjectDefinition packageConvention currentPackageDefinition currentClassDefinition currentClassExtension )
 	classVars: #(  )
@@ -27388,6 +27404,13 @@ _loadedProject
 
 category: 'actions'
 method: RwProject
+asDefinition
+
+	^ self _loadedProject asDefinition
+%
+
+category: 'actions'
+method: RwProject
 audit
 	"run audit on the receiver"
 
@@ -27467,6 +27490,14 @@ load
 	"load the receiver into the image"
 
 	^ self _loadedProject load
+%
+
+category: 'actions'
+method: RwProject
+load: instanceMigrator
+	"load the receiver into the image"
+
+	^ self _loadedProject load: instanceMigrator
 %
 
 category: 'properties'
@@ -33028,6 +33059,281 @@ _configurations
 				yourself ]
 %
 
+! Class implementation for 'RwAbstractProjectSetModificationVisitor'
+
+!		Class methods for 'RwAbstractProjectSetModificationVisitor'
+
+category: 'instance creation'
+classmethod: RwAbstractProjectSetModificationVisitor
+visit: aProjectSetModification
+	^ self new visit: aProjectSetModification
+%
+
+!		Instance methods for 'RwAbstractProjectSetModificationVisitor'
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+addedClass: aClassModification
+	currentClassDefinition := aClassModification after
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+addedClassExtension: aClassExtensionModification
+	currentClassExtension := aClassExtensionModification after
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+addedMethod: aMethodModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+addedMethodExtension: aMethodExtensionModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+addedPackage: aPackageModification
+	currentPackageDefinition := aPackageModification after
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+addedProject: aProjectModification
+	currentProjectDefinition := aProjectModification after
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+changedClass: aClassModification
+	currentClassDefinition := aClassModification after
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+changedClassExtension: aClassExtensionModification
+	currentClassExtension := aClassExtensionModification after
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+changedMethod: aMethodModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+changedMethodExtension: aMethodExtensionModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+changedPackage: aPackageModification
+	currentPackageDefinition := aPackageModification after
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+changedProject: aProjectModification
+	currentProjectDefinition := aProjectModification after
+%
+
+category: 'accessing'
+method: RwAbstractProjectSetModificationVisitor
+currentClassDefinition
+	^ currentClassDefinition
+%
+
+category: 'accessing'
+method: RwAbstractProjectSetModificationVisitor
+currentClassExtension
+	^ currentClassExtension
+%
+
+category: 'accessing'
+method: RwAbstractProjectSetModificationVisitor
+currentPackageDefinition
+	^ currentPackageDefinition
+%
+
+category: 'accessing'
+method: RwAbstractProjectSetModificationVisitor
+currentPackageDefinition: aRwPackageDefinition
+	currentPackageDefinition := aRwPackageDefinition
+%
+
+category: 'accessing'
+method: RwAbstractProjectSetModificationVisitor
+currentProjectDefinition
+	^ currentProjectDefinition
+%
+
+category: 'accessing'
+method: RwAbstractProjectSetModificationVisitor
+currentProjectDefinition: aRwComponentProjectDefinition
+	currentProjectDefinition := aRwComponentProjectDefinition
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+deletedClass: aClassModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+deletedClassExtension: aClassExtensionModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+deletedMethod: aMethodModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+deletedMethodExtension: aMethodExtensionModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+deletedPackage: aPackageModification
+%
+
+category: 'actions'
+method: RwAbstractProjectSetModificationVisitor
+deletedProject: aProjectModification
+%
+
+category: 'public'
+method: RwAbstractProjectSetModificationVisitor
+visit: aProjectSetModification
+	aProjectSetModification acceptVisitor: self
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitClassesModification: aClassesModification
+	aClassesModification elementsModified do: [ :each | each acceptVisitor: self ]
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitClassExtensionModification: aClassExtensionModification
+	aClassExtensionModification isAddition
+		ifTrue: [ 
+			self addedClassExtension: aClassExtensionModification.
+			aClassExtensionModification instanceMethodsModification acceptVisitor: self.
+			aClassExtensionModification classMethodsModification acceptVisitor: self.
+			^ self ].
+	aClassExtensionModification isDeletion
+		ifTrue: [ ^ self deletedClassExtension: aClassExtensionModification ].
+	self changedClassExtension: aClassExtensionModification.
+	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
+	aClassExtensionModification classMethodsModification acceptVisitor: self.
+	^ self
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitClassExtensionsModification: aClassExtensionsModification
+	aClassExtensionsModification elementsModified
+		do: [ :each | each acceptVisitor: self ]
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitClassModification: aClassModification
+	aClassModification isAddition
+		ifTrue: [ 
+			self addedClass: aClassModification.
+			aClassModification instanceMethodsModification acceptVisitor: self.
+			aClassModification classMethodsModification acceptVisitor: self.
+			^ self ].
+	aClassModification isDeletion
+		ifTrue: [ ^ self deletedClass: aClassModification ].
+	self changedClass: aClassModification.
+	aClassModification instanceMethodsModification acceptVisitor: self.
+	aClassModification classMethodsModification acceptVisitor: self.
+	^ self
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitExtensionMethodModification: aMethodExtensionModification
+	aMethodExtensionModification isAddition
+		ifTrue: [ ^ self addedMethodExtension: aMethodExtensionModification ].
+	aMethodExtensionModification isDeletion
+		ifTrue: [ ^ self deletedMethodExtension: aMethodExtensionModification ].
+	^ self changedMethodExtension: aMethodExtensionModification
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitExtensionMethodsModification: aMethodExtensionsModification
+	aMethodExtensionsModification elementsModified
+		do: [ :each | each acceptVisitor: self ]
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitMethodModification: aMethodModification
+	aMethodModification isAddition
+		ifTrue: [ ^ self addedMethod: aMethodModification ].
+	aMethodModification isDeletion
+		ifTrue: [ ^ self deletedMethod: aMethodModification ].
+	^ self changedMethod: aMethodModification
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitMethodsModification: aMethodsModification
+	aMethodsModification elementsModified do: [ :each | each acceptVisitor: self ]
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitPackageModification: aPackageModification
+	aPackageModification isAddition
+		ifTrue: [ 
+			self addedPackage: aPackageModification.
+			aPackageModification classesModification acceptVisitor: self.
+			aPackageModification classExtensionsModification acceptVisitor: self.
+			^ self ].
+	aPackageModification isDeletion
+		ifTrue: [ ^ self deletedPackage: aPackageModification ].
+	self changedPackage: aPackageModification.
+	aPackageModification classesModification acceptVisitor: self.
+	aPackageModification classExtensionsModification acceptVisitor: self.
+	^ self
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitPackagesModification: aPackagesModification
+	aPackagesModification elementsModified do: [ :each | each acceptVisitor: self ]
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitProjecteSetModification: aProjectSetModification
+	aProjectSetModification elementsModified
+		do: [ :each | each acceptVisitor: self ]
+%
+
+category: 'visiting'
+method: RwAbstractProjectSetModificationVisitor
+visitProjectModification: aProjectModification
+	aProjectModification isAddition
+		ifTrue: [ 
+			self addedProject: aProjectModification.
+			^ aProjectModification packagesModification acceptVisitor: self ].
+	aProjectModification isDeletion
+		ifTrue: [ ^ self deletedProject: aProjectModification ].
+	self changedProject: aProjectModification.
+	^ aProjectModification packagesModification acceptVisitor: self
+%
+
 ! Class implementation for 'RwAbstractReaderWriterVisitor'
 
 !		Class methods for 'RwAbstractReaderWriterVisitor'
@@ -36602,7 +36908,7 @@ adoptMethod: methodSelector protocol: protocolString inClassNamed: className  is
 	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -36651,7 +36957,7 @@ adoptSymbolDictionaryNamed: symDictName intoPackageNamed: packageName
 
 	"create loaded classes in the loaded package <packageName> for the unpackaged classes in the symbol dictionary named <symDictName>"
 
-	^ self adoptSymbolDictionary: (Rowan globalNamed: symDictName) intoPackageNamed: packageName
+	^ self adoptSymbolDictionary: (Rowan image symbolDictNamed: symDictName) intoPackageNamed: packageName
 %
 
 category: 'smalltalk api'
@@ -36751,7 +37057,7 @@ disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName
 
 	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -36784,7 +37090,7 @@ disownClassNamed: className
 
 	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -36819,7 +37125,7 @@ disownMethod: methodSelector inClassNamed: className isMeta: isMeta
 
 	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -39194,8 +39500,19 @@ updateOrAddClass: classDefinition inPackageNamed: packageName inProjectNamed: pr
 category: 'load project definitions'
 method: RwPrjLoadTool
 loadComponentProjectDefinition: projectDefinition
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		instanceMigrator: Rowan platform instanceMigrator
+%
 
-	^ self loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+category: 'load project definitions'
+method: RwPrjLoadTool
+loadComponentProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		instanceMigrator: instanceMigrator
 %
 
 category: 'load project definitions'
@@ -39203,19 +39520,35 @@ method: RwPrjLoadTool
 loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: platformConfigurationAttributes
+		instanceMigrator: Rowan platform instanceMigrator
+%
+
+category: 'load project definitions'
+method: RwPrjLoadTool
+loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
 	| projectSetDefinition |
-	projectSetDefinition := projectDefinition repositoryRoot exists
+	projectSetDefinition := (projectDefinition repositoryRoot exists and: [projectDefinition projectDefinitionSourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue])
 		ifTrue: [ 
+			"only read from disk if the repository exists and the project definition has not 
+				already been loaded from disk"
 			Rowan projectTools read
 				readProjectSetForComponentProjectDefinition: projectDefinition
 				withConfigurations: projectDefinition loadedConfigurationNames
 				groupNames: projectDefinition loadedGroupNames 
 				platformConfigurationAttributes: platformConfigurationAttributes ]
 		ifFalse: [ 
+			"If this project definition _was_ read from disk, we cannot trust that it was 
+				not modified, so clear source property"
+			projectDefinition projectDefinitionSourceProperty: nil.
 			RwProjectSetDefinition new
 				addProject: projectDefinition;
 				yourself ].
-	^ self loadProjectSetDefinition: projectSetDefinition
+	^ self loadProjectSetDefinition: projectSetDefinition  instanceMigrator: instanceMigrator
 %
 
 category: 'load project by url'
@@ -39230,10 +39563,20 @@ loadFromUrl: specUrl
 category: 'load project definitions'
 method: RwPrjLoadTool
 loadProjectDefinition: projectDefinition
+	^ self
+		loadProjectDefinition: projectDefinition
+		instanceMigrator: Rowan platform instanceMigrator
+%
+
+category: 'load project definitions'
+method: RwPrjLoadTool
+loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
-	^ self loadProjectSetDefinition: projectSetDefinition
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
 %
 
 category: 'load project by name'
@@ -42547,6 +42890,14 @@ load
 	^ Rowan projectTools load loadProjectDefinition: self
 %
 
+category: 'actions'
+method: RwProjectDefinition
+load: instanceMigrator
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadProjectDefinition: self instanceMigrator: instanceMigrator
+%
+
 category: 'properties'
 method: RwProjectDefinition
 loadedCommitId
@@ -43476,10 +43827,10 @@ load
 
 category: 'actions'
 method: RwComponentProjectDefinition
-load: platformConfigurationAttributes
+load: instanceMigrator
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadComponentProjectDefinition: self platformConfigurationAttributes: platformConfigurationAttributes
+	^ Rowan projectTools load loadComponentProjectDefinition: self instanceMigrator: instanceMigrator
 %
 
 category: 'accessing'
@@ -46317,6 +46668,31 @@ resolveName: aName
 
 category: 'querying'
 classmethod: RwGsImage
+symbolDictNamed: symbolDictName
+	"Search symbol list for a symbol dictionary with the given name"
+
+	^ self
+		symbolDictNamed: symbolDictName
+		ifAbsent: [ 
+			self
+				error:
+					'No symbol dictionary with the name ' , symbolDictName printString , ' found.' ]
+%
+
+category: 'querying'
+classmethod: RwGsImage
+symbolDictNamed: symbolDictName ifAbsent: absentBlock
+	"Search symbol list for a symbol dictionary with the given name"
+
+	| symbolDictNameSymbol |
+	symbolDictNameSymbol := symbolDictName asString.
+	^ self symbolList
+		detect: [ :each | (each at: symbolDictNameSymbol ifAbsent: [ nil ]) == each ]
+		ifNone: absentBlock
+%
+
+category: 'querying'
+classmethod: RwGsImage
 symbolList
 
 	"Answer the current session (transient) symbol list"
@@ -46924,12 +47300,8 @@ symbolDictionaryFor: aPackageName
 category: 'accessing'
 method: RwGsPatch
 symbolDictionaryFor: aPackageName projectDefinition: aProjectDefinition
-
-	| symDictName symDict |
+	| symDictName |
 	symDictName := aProjectDefinition symbolDictNameForPackageNamed: aPackageName.
-	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
-	symDict
-		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
 %
 
@@ -47445,7 +47817,7 @@ installSymbolDictionaryPatchFor: aPatchSet
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
-	newSymbolDictionary := Rowan globalNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
+	newSymbolDictionary := Rowan image symbolDictNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
 	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 	loadedClass := registry 
 		addClassAssociation: assoc 
@@ -47572,7 +47944,7 @@ addPatchedClassModification: aClassModification inPackage: aPackageDefinition in
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition.
 			^ self ].
-	dict := Rowan image symbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
+	dict := Rowan image symbolDictNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
 		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
@@ -47844,11 +48216,8 @@ method: RwGsClassVersioningSymbolDictPatch
 existingSymbolDictionary
 	"answer the current symbol dictionary for the class ... before being (potentially) moved to a different symbolDictionary"
 
-	| symDictName symDict |
+	| symDictName |
 	symDictName := classModification before gs_symbolDictionary.
-	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
-	symDict
-		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
 %
 
@@ -49863,7 +50232,7 @@ doMoveMethodsBetweenPackages
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
 			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan globalNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
+			registry := (Rowan image symbolDictNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage 
 				classOrExtensionForClassNamed: classOrExtensionDef name 
 				ifAbsent: [ 
@@ -51689,13 +52058,13 @@ moveClassFor: classMove
 	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
 
 	before := classMove classBefore.
-	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
+	originalSymbolDictionary := Rowan image symbolDictNamed: before gs_symbolDictionary.
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	theClass := assoc value.
 	theBehavior := theClass class.
 	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan globalNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newSymbolDictionary := Rowan image symbolDictNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
@@ -53737,6 +54106,22 @@ load
 	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 %
 
+category: 'actions'
+method: RwLoadedProject
+load: instanceMigrator
+	"load the receiver into the image"
+
+	| projectDefinition projectSetDefinition readProjectDefinition |
+	projectDefinition := self asDefinition.
+	projectSetDefinition := projectDefinition read.
+	readProjectDefinition := projectSetDefinition projectNamed: projectDefinition name.
+	readProjectDefinition == projectDefinition 
+		ifFalse: [
+			"https://github.com/GemTalk/Rowan/issues/488"
+			self halt: 'expected to update the projectDefinition in-place' ].
+	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
+%
+
 category: 'accessing'
 method: RwLoadedProject
 loadedCommitId
@@ -53857,7 +54242,7 @@ propertiesForDefinition
 	| props |
 	props := super propertiesForDefinition.
 	props at: 'name' put: name.
-	props at: self class _projectDefinitionSourceKey ifAbsentPut: self class _projectLoadedDefinitionSourceValue.
+	props at: self class _projectDefinitionSourceKey put: self class _projectLoadedDefinitionSourceValue.
 	^ props
 %
 
@@ -57119,6 +57504,14 @@ method: RwProjectSpecification
 repoPath: anObject
 
    repoPath := anObject
+%
+
+category: 'accessing'
+method: RwProjectSpecification
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self repositoryRootPath asFileReference
 %
 
 category: 'accessing'
@@ -63079,7 +63472,7 @@ _cloneRowanLoaderSymbolDictionary
 		in a separate symbol dictionary and then use the isolated copy to execute the update."
 
 	| rowanLoaderSymbolDict clonedSymDictName clonedSymDict |
-	rowanLoaderSymbolDict := Rowan globalNamed: 'RowanLoader'.
+	rowanLoaderSymbolDict := Rowan image symbolDictNamed: 'RowanLoader'.
 	clonedSymDictName := #'RowanLoader_cloned'.
 	clonedSymDict := rowanLoaderSymbolDict 
 		_rowanCloneSymbolDictionaryNamed: clonedSymDictName 

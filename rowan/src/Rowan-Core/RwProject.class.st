@@ -97,6 +97,13 @@ RwProject >> load [
 	^ self _loadedProject load
 ]
 
+{ #category : 'actions' }
+RwProject >> load: instanceMigrator [
+	"load the receiver into the image"
+
+	^ self _loadedProject load: instanceMigrator
+]
+
 { #category : 'properties' }
 RwProject >> loadedCommitId [
 

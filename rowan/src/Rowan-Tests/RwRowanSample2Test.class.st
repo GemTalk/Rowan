@@ -77,7 +77,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
-	projectDef  read; load. "needs to use RwGsInstanceMigrator aggressiveMigration"
+	projectDef  read; load.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -92,7 +92,10 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
 
-	(Rowan projectNamed: projectName) load.
+	(Rowan projectNamed: projectName) asDefinition
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load: RwGsInstanceMigrator aggressiveMigration.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 

@@ -138,6 +138,21 @@ RwLoadedProject >> load [
 	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 ]
 
+{ #category : 'actions' }
+RwLoadedProject >> load: instanceMigrator [
+	"load the receiver into the image"
+
+	| projectDefinition projectSetDefinition readProjectDefinition |
+	projectDefinition := self asDefinition.
+	projectSetDefinition := projectDefinition read.
+	readProjectDefinition := projectSetDefinition projectNamed: projectDefinition name.
+	readProjectDefinition == projectDefinition 
+		ifFalse: [
+			"https://github.com/GemTalk/Rowan/issues/488"
+			self halt: 'expected to update the projectDefinition in-place' ].
+	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
+]
+
 { #category : 'accessing' }
 RwLoadedProject >> loadedCommitId [
 

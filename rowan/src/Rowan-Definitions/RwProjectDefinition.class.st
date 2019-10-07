@@ -199,6 +199,13 @@ RwProjectDefinition >> load [
 	^ Rowan projectTools load loadProjectDefinition: self
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> load: instanceMigrator [
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadProjectDefinition: self instanceMigrator: instanceMigrator
+]
+
 { #category : 'properties' }
 RwProjectDefinition >> loadedCommitId [
 

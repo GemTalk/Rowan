@@ -5907,6 +5907,12 @@ gs_options: aCollection
 	gs_options := aCollection
 %
 
+category: 'accessing'
+method: CypressClassDefinition
+gs_reservedOop
+	^ ''
+%
+
 category: 'comparing'
 method: CypressClassDefinition
 hash
@@ -8368,6 +8374,12 @@ method: CypressClassStructure
 gs_options: anOptionsArray
 
 	^self properties at: 'gs_options' put: anOptionsArray
+%
+
+category: 'accessing'
+method: CypressClassStructure
+gs_reservedOop
+	^ ''
 %
 
 category: 'querying'

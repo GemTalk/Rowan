@@ -85,12 +85,32 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 
 { #category : 'load project definitions' }
 RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition [
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		instanceMigrator: Rowan platform instanceMigrator
+]
 
-	^ self loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+{ #category : 'load project definitions' }
+RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'load project definitions' }
 RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes [
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: platformConfigurationAttributes
+		instanceMigrator: Rowan platform instanceMigrator
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition |
@@ -110,7 +130,7 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 			RwProjectSetDefinition new
 				addProject: projectDefinition;
 				yourself ].
-	^ self loadProjectSetDefinition: projectSetDefinition
+	^ self loadProjectSetDefinition: projectSetDefinition  instanceMigrator: instanceMigrator
 ]
 
 { #category : 'load project by url' }
@@ -123,10 +143,19 @@ RwPrjLoadTool >> loadFromUrl: specUrl [
 
 { #category : 'load project definitions' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
+	^ self
+		loadProjectDefinition: projectDefinition
+		instanceMigrator: Rowan platform instanceMigrator
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadTool >> loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
-	^ self loadProjectSetDefinition: projectSetDefinition
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'load project by name' }

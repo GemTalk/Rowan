@@ -620,10 +620,10 @@ RwComponentProjectDefinition >> load [
 ]
 
 { #category : 'actions' }
-RwComponentProjectDefinition >> load: platformConfigurationAttributes [
+RwComponentProjectDefinition >> load: instanceMigrator [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadComponentProjectDefinition: self platformConfigurationAttributes: platformConfigurationAttributes
+	^ Rowan projectTools load loadComponentProjectDefinition: self instanceMigrator: instanceMigrator
 ]
 
 { #category : 'accessing' }
