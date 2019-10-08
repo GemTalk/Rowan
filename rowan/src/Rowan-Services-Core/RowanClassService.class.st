@@ -434,6 +434,7 @@ RowanClassService >> initialize [
 	isNewClass := false.
 	methods := Array new.
 	isInSymbolList := true.
+	categories := Array new.
 ]
 
 { #category : 'initialization' }
