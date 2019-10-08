@@ -30165,7 +30165,7 @@ logComment: string
 	time := Time now.
 	location := #server.
 	stonString := STON toString: self.
-	ws := FileStream 
+	ws := FileStreamPortable 
 				write: fileName
 				mode: #append.
 	[ws nextPutAll: stonString] ensure: [ws close].
@@ -30177,7 +30177,7 @@ method: RowanLoggingService
 logFileContents
 
 	| rs |
-	rs := [FileStream read: fileName] on: Error do:[:ex | ^String new].
+	rs := [FileStreamPortable read: fileName] on: Error do:[:ex | ^String new].
 	[^rs contents] ensure: [rs close]
 %
 
@@ -30211,7 +30211,7 @@ logServices
 	time := Time now.
 	location := #server.
 	stonString := STON toString: self.
-	ws := FileStream 
+	ws := FileStreamPortable 
 				write: fileName
 				mode: #append.
 	[ws nextPutAll: stonString] ensure: [ws close]

@@ -2032,7 +2032,7 @@ true.
 %
 
 doit
-(WriteStream
+(WriteStreamPortable
 	subclass: 'MemoryWriteStream'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -8133,8 +8133,8 @@ openFileStream: path writable: writable
 	fullPath := self stringFromPath: path.
 	"redirect over the default implementation"
 	^ writable 
-		ifFalse: [ FileStream readOnlyFileNamed: fullPath ]
-		ifTrue: [ FileStream fileNamed: fullPath ]
+		ifFalse: [ FileStreamPortable readOnlyFileNamed: fullPath ]
+		ifTrue: [ FileStreamPortable fileNamed: fullPath ]
 %
 
 category: 'public'
@@ -18528,12 +18528,12 @@ testGsDeleteDirectoryOnError
 	self should: [ filesystem delete: path parent ] raise: Error.
 %
 
-! Class extensions for 'FileStream'
+! Class extensions for 'FileStreamPortable'
 
-!		Class methods for 'FileStream'
+!		Class methods for 'FileStreamPortable'
 
 category: '*FileSystem-Core'
-classmethod: FileStream
+classmethod: FileStreamPortable
 onHandle: aFileSystemHandle
 	^ self concreteStream new
 		open: aFileSystemHandle fullName
