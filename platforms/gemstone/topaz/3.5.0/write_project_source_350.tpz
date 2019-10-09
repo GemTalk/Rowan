@@ -1,4 +1,4 @@
-#!/usr/bin/gemstone/topaz
+#!/usr/local/bin/smalltalk/gemstone/topaz
 #
 #	write project source for loaded projects in a 3.5.0 image
 #

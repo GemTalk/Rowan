@@ -1,4 +1,4 @@
-#!/usr/bin/gemstone/topaz
+#!/usr/local/bin/smalltalk/gemstone/topaz
 #
 # If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
 #	script can be directly executed:
