@@ -156,18 +156,19 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 
 { #category : 'support' }
 RowanServicesTest >> loadRowanSample1 [
-  | specUrlString rowanSpec gitRootPath projectName |
+  | rowanSpec gitRootPath projectName  |
+  projectName := 'RowanSample1'.
   (Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
     ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
   rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-  specUrlString := 'file:' , rowanSpec repositoryRootPath
-    , '/samples/RowanSample1.ston'.
-  gitRootPath := rowanSpec repositoryRootPath.
+  gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+  (Rowan fileUtilities directoryExists: gitRootPath , projectName)
+    ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
   Rowan projectTools clone
     cloneSpecUrl: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston'
-    gitRootPath: '$ROWAN_PROJECTS_HOME'
+    gitRootPath: gitRootPath
     useSsh: true.
-  Rowan projectTools load loadProjectNamed: 'RowanSample1'
+  Rowan projectTools load loadProjectNamed: projectName
 ]
 
 { #category : 'support' }
