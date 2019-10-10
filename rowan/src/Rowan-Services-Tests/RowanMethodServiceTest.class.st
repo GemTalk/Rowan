@@ -79,8 +79,8 @@ RowanMethodServiceTest >> stepPoint3Source [
 { #category : 'support' }
 RowanMethodServiceTest >> tearDown [
 
+	self unloadServicesTestProject.
 	super tearDown.
-	self unloadServicesTestProject
 ]
 
 { #category : 'tests' }
@@ -100,7 +100,6 @@ RowanMethodServiceTest >> test_classNameIsString [
 	methodService := RowanMethodService source: 'fnoodle' selector: #fnoodle category: 'other' className: 'RowanMethodServiceTest' packageName: 'Rowan-Services-Tests' meta: true. 
 	self assert: (methodService className isKindOf: String).
 	self assert: methodService className = 'RowanMethodServiceTest'.
-	System abortTransaction.
 ]
 
 { #category : 'tests' }

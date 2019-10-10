@@ -434,6 +434,7 @@ RowanClassService >> initialize [
 	isNewClass := false.
 	methods := Array new.
 	isInSymbolList := true.
+	categories := Array new.
 ]
 
 { #category : 'initialization' }
@@ -795,8 +796,9 @@ RowanClassService >> renameCategoryFrom: old to: new [
 
 { #category : 'client commands' }
 RowanClassService >> renameClass: oldClassName to: newClassName [
-  | references newMethods newClass |
+  | references newMethods newClass oldClass |
   newMethods := Array new.
+  oldClass := Rowan image resolveClassNamed: oldClassName.
   newClass := Rowan projectTools browser
     renameClassNamed: oldClassName
     to: newClassName.
@@ -804,13 +806,12 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
   name := newClassName.
   self update.
   renamedName := oldClassName.
-  self updateMethodsAfterRenameFrom: oldClassName to: newClassName. 
+  self updateMethodsAfterRenameFrom: oldClassName to: newClassName.
   self updateSubclassesAfterRenameOf: newClass.
-  references := organizer update referencesTo: oldClassName asSymbol.
-  1 to: references first size do: [ :index | 
-    | method newSource compileResult failedCompile methodService oldSource |
+  references := organizer update referencesToObject: oldClass.
+  references do: [ :method | 
+    | newSource compileResult failedCompile methodService oldSource |
     failedCompile := false.
-    method := references first at: index.
     oldSource := method sourceString.
     newSource := self
       replaceSubString: oldClassName
@@ -940,13 +941,15 @@ RowanClassService >> selectors [
 
 { #category : 'perform' }
 RowanClassService >> servicePerform: symbol withArguments: collection [
-	| wasClean |
-	wasClean := self arePackageAndProjectClean.
-	super servicePerform: symbol withArguments: collection.
-	updateAfterCommand == false ifFalse:[
-		self update].
-	wasClean ifTrue:[
-		self updatePackageProject]
+  | wasClean |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  wasClean := self arePackageAndProjectClean.
+  super servicePerform: symbol withArguments: collection.
+  updateAfterCommand == false
+    ifFalse: [ self update ].
+  wasClean
+    ifTrue: [ self updatePackageProject ]
 ]
 
 { #category : 'Accessing' }
@@ -957,7 +960,7 @@ RowanClassService >> setComment [
 { #category : 'private' }
 RowanClassService >> setDictionary: classOrMeta [
 	| dictionaryList |
-		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta.
+		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta thisClass.
 		dictionaryName := dictionaryList isEmpty 
 		ifTrue:[String new]
 		ifFalse:[dictionaryList first first name asString].

@@ -16,6 +16,17 @@ Class {
 }
 
 { #category : 'client commands' }
+RowanAnsweringService >> allClassesStartingWith: string [
+  answer := SortedCollection new.
+  organizer classes
+    do: [ :cls | 
+      (cls name beginsWith: string)
+        ifTrue: [ answer add: cls name asString ] ].
+  answer := answer asArray.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> allTestsIn: classServices [
 	answer := Array new. 
 	classServices do:[:service | answer addAll: service allTests].
@@ -42,10 +53,50 @@ RowanAnsweringService >> autoCommit [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> breakPointsAreDisabled [
+  answer := RowanService breakPointsAreDisabled.
+  RowanCommandResult addResult: self.
+  ^ answer	"for testing"
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> clearAllBreaks [
   | methodServices |
-  methodServices := RowanQueryService new organizer: organizer; basicBreakpointMethods.
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
   GsNMethod clearAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> clearMethodBreaks: methodServices [
+  methodServices
+    do: [ :methodService | 
+      methodService
+        organizer: organizer;
+        clearMethodBreaks ]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> disableAllBreaks [
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod _disableAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> enableAllBreaks [
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod _enableAllBreaks.
   methodServices
     do: [ :methodService | RowanCommandResult addResult: methodService update ]
 ]
@@ -73,6 +124,73 @@ RowanAnsweringService >> exec: aString context: oop [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> exec: aString inFrame: level ofProcess: processOop context: oop [
+  | symbolList frameContents symbolDictionary process |
+  symbolList := Rowan image symbolList.
+  process := Object _objectForOop: processOop.
+  frameContents := process _frameContentsAt: 4.
+  symbolDictionary := SymbolDictionary new.
+  1 to: (frameContents at: 9) size do: [ :index | 
+    ((frameContents at: 9) at: index) first = $.
+      ifFalse: [ 
+        symbolDictionary
+          at: ((frameContents at: 9) at: index) asSymbol
+          put: (frameContents at: 11 + index - 1) ] ].
+  symbolList add: symbolDictionary before: symbolList first.
+  [ 
+  answer := [ 
+  true
+    ->
+      (aString evaluateInContext: (Object _objectForOop: oop) symbolList: symbolList)
+        asOop ]
+    on: CompileError
+    do: [ :ex | false -> ex errorDetails ].
+  answer key
+    ifTrue: [ 
+      RowanService autoCommit == true
+        ifTrue: [ System commitTransaction ] ].
+  RowanCommandResult addResult: self ]
+    ensure: [ 
+      1 to: (frameContents at: 9) size do: [ :index | 
+        | argsAndTemps |
+        argsAndTemps := frameContents at: 9.
+        (argsAndTemps at: index) first = $.
+          ifFalse: [ 
+            | variableService |
+            process
+              _frameAt: level
+              tempAt: index
+              put: (symbolDictionary at: (argsAndTemps at: index)). 
+            variableService := RowanVariableService
+              oop: (symbolDictionary at: (argsAndTemps at: index)) asOop
+              key: (argsAndTemps at: index)
+              value: (symbolDictionary at: (argsAndTemps at: index))
+              className: (frameContents at: 8) class name asString.
+            RowanCommandResult addResult: variableService ] ].
+      symbolList remove: symbolDictionary ].	"return answer for testing"
+  ^ answer
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> expressionSelector: string [
+  "try to uncover a selector in the string. 
+	If it's not possible, return the string and 
+	let the application do with it what it will"
+
+  | messageNode |
+  messageNode := [ RBParser parseExpression: string ]
+    on: Error
+    do: [ :ex | nil ].
+  answer := messageNode
+    ifNil: [ string ]
+    ifNotNil: [ 
+      messageNode isMessage
+        ifTrue: [ messageNode buildSelector ]
+        ifFalse: [ string ] ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> flipTranscript [
 	self isTranscriptInstalled ifTrue:[
 		self jadeiteServer uninstallTranscript]
@@ -84,6 +202,11 @@ RowanAnsweringService >> flipTranscript [
 RowanAnsweringService >> initializeAutoCommit [
 
 	RowanService setAutoCommit: false
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> initializeBreakPointsAreDisabled [
+  RowanService setBreakPointsAreDisabled: false
 ]
 
 { #category : 'client commands' }
@@ -116,6 +239,15 @@ RowanAnsweringService >> needsCommit [
 
 	answer := System needsCommit.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> newPackageNamed: packageName [
+  | packageService |
+  packageService := RowanPackageService new name: packageName.
+  packageService update.
+  answer := packageService.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
@@ -154,6 +286,14 @@ RowanAnsweringService >> setAutoCommit: object [
 
 	answer := RowanService setAutoCommit: object.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> setBreakPointsAreDisabled: boolean [
+  boolean
+    ifTrue: [ self disableAllBreaks ]
+    ifFalse: [ self enableAllBreaks ].
+  RowanService setBreakPointsAreDisabled: boolean
 ]
 
 { #category : 'client commands' }

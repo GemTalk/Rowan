@@ -163,19 +163,16 @@ RowanClassServiceTest >> servicesClassInstance [
 
 { #category : 'support' }
 RowanClassServiceTest >> setUp [
-
 	super setUp.
 	self createServicesTestClass. 
-	Rowan platform _alternateImageClass: Rowan image testImageClass.
 	self loadServicesTestProject.
 ]
 
 { #category : 'support' }
 RowanClassServiceTest >> tearDown [
 
-	super tearDown.
 	self unloadServicesTestProject.
-	Rowan platform _alternateImageClass: nil.
+	super tearDown.
 ]
 
 { #category : 'tests' }
@@ -288,21 +285,27 @@ RowanClassServiceTest >> test_classHierarchyClassSide [
 
 { #category : 'tests' }
 RowanClassServiceTest >> test_classWasDeleted [
-
-	| classService |
-	System commitTransaction. 
-	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
-	'Object rwSubclass: ''TestClass''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ''Rowan-Services-Tests''
-	options: #()' evaluate.
-	classService := RowanClassService forClassNamed: 'TestClass'. 
-	self deny: classService wasDeleted.
-	System abortTransaction. 
-	self assert: classService wasDeleted.
+  | classService classDefinition packageDefinition |
+  self
+    jadeiteIssueTested: #'issue284'
+    withTitle:
+      '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+  self unloadServicesTestProject.	"test class created in setUp"
+  packageDefinition := self createServicesTestPackage. 
+  [ 
+  self loadServicesTestProject.
+  System commitTransaction.	"commit loaded package, but not class"
+  classDefinition := self
+    createClassDefinitionNamed: self servicesDefaultClassName.
+  packageDefinition addClassDefinition: classDefinition.
+  self loadServicesTestProject.	"reload with class"
+  classService := RowanClassService new name: self servicesDefaultClassName.
+  self deny: classService wasDeleted.
+  System abortTransaction.
+  self assert: classService wasDeleted ]
+    ensure: [ 
+      self unloadServicesTestProject.
+      System commitTransaction ]
 ]
 
 { #category : 'test method compilation' }
@@ -366,6 +369,26 @@ RowanClassServiceTest >> test_dirtyState [
 	self assert: (RowanPackageService new name: 'RowanSample1-Core') isDirty.]
 			ensure: [
 				Rowan projectTools delete deleteProjectNamed: 'RowanSample1'.]
+]
+
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_dirtyStateNewProject [
+  "dirtiness is based on a comparison to disk.
+	New projects (created in setUp) should be dirty"
+
+  | classService selector |
+  self
+    jadeiteIssueTested: #'issue356'
+    withTitle: 'Add method compilation tests in server services tests'.
+  selector := #'simpleMethod'.
+  [ 
+  self assert: (RowanProjectService newNamed: 'RowanServicesTestProject') isDirty.
+  self
+    assert:
+      (RowanPackageService forPackageNamed: 'RowanServicesTestPackage') isDirty.
+  classService := RowanClassService forClassNamed: 'RowanServicesTestClass'.
+  classService saveMethodSource: selector asString , ' ^123' category: 'abc' ]
+    ensure: [ Rowan projectTools browser removeClassNamed: 'RowanServicesTestClass' ]
 ]
 
 { #category : 'tests' }
