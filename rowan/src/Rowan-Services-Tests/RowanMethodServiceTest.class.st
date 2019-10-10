@@ -100,7 +100,18 @@ RowanMethodServiceTest >> test_classNameIsString [
 	methodService := RowanMethodService source: 'fnoodle' selector: #fnoodle category: 'other' className: 'RowanMethodServiceTest' packageName: 'Rowan-Services-Tests' meta: true. 
 	self assert: (methodService className isKindOf: String).
 	self assert: methodService className = 'RowanMethodServiceTest'.
-	System abortTransaction.
+]
+
+{ #category : 'tests' }
+RowanMethodServiceTest >> test_isTestMethod [
+	"isTestMethod not getting initialized correctly" 
+	| methodService organizer |
+	self jadeiteIssueTested: #issue512 withTitle: '"run selected" can get disabled after save in debugger (3.0.76)'.
+	organizer := ClassOrganizer new. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodServiceTest compiledMethodAt: #test_isTestMethod) organizer: organizer.
+	self assert: methodService isTestMethod. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodService compiledMethodAt: #initialize) organizer: organizer.
+	self deny: methodService isTestMethod.
 ]
 
 { #category : 'tests' }

@@ -70,9 +70,11 @@ RwGsPlatform >> serviceClasses [
 	| array |
 	array := Array with: RowanService. 
 	array add: RowanAnsweringService; 
+		add: RowanAutoCommitService; 
 		add: RowanBrowserService;
 		add: RowanClassService; 
 		add: RowanDebuggerService; 
+		add: RowanDictionaryService; 
 		add: RowanFrameService;
 		add: RowanLoggingService;
 		add: RowanMethodService;

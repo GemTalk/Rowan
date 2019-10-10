@@ -13,7 +13,7 @@ RowanQueryService >> basicBreakpointMethods [
   bpMethods := Array new.
   bpArray := (GsNMethod _breakReport: true) at: 2.
   bpArray do: [ :array | bpMethods add: (array at: 5) ].
-  ^ self methodServicesFrom: bpMethods
+  ^ (self methodServicesFrom: bpMethods) asSet asArray
 ]
 
 { #category : 'queries' }
@@ -83,12 +83,43 @@ RowanQueryService >> implementorsOf: selector [
 ]
 
 { #category : 'queries' }
+RowanQueryService >> instVarReaders: instVarName in: className [
+  | methods symbolAssociation theClass |
+  symbolAssociation := Rowan image symbolList resolveSymbol: className.
+  symbolAssociation ifNil: [ ^ self ].
+  theClass := symbolAssociation value.
+  methods := Array new.
+  theClass
+    methodsDo: [ :selector :method | 
+      (method instVarsRead includes: instVarName asSymbol)
+        ifTrue: [ methods add: method ] ].
+  queryResults := self methodServicesFrom: methods.
+  self returnQueryToClient
+]
+
+{ #category : 'queries' }
+RowanQueryService >> instVarWriters: instVarName in: className [
+  | methods symbolAssociation theClass |
+  symbolAssociation := Rowan image symbolList resolveSymbol: className.
+  symbolAssociation ifNil: [ ^ self ].
+  theClass := symbolAssociation value.
+  methods := Array new.
+  theClass
+    methodsDo: [ :selector :method | 
+      (method instVarsWritten includes: instVarName asSymbol)
+        ifTrue: [ methods add: method ] ].
+  queryResults := self methodServicesFrom: methods.
+  self returnQueryToClient
+]
+
+{ #category : 'queries' }
 RowanQueryService >> literalReferences: string [
 
 	| methods compilationResult |
 	compilationResult := string evaluate.  
 	methods := organizer referencesToLiteral: compilationResult.
 	queryResults := self methodServicesFrom: methods first.
+	self setFirstReferenceUsing: queryResults and: methods.
 	self returnQueryToClient.
 ]
 
