@@ -223,6 +223,7 @@ RowanServicesTest >> setUp [
   super setUp.
 	RowanAnsweringService new setEnableInteractionHandler: false. 
 	RowanCommandResult initializeResults.
+	Rowan platform _alternateImageClass: Rowan image testImageClass.
 "ensure that project is unloaded"
 	(Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -251,7 +252,6 @@ RowanServicesTest >> setUp [
 					index > 0
 						ifTrue: [ symListT removeAtIndex: index ] ] ].
 	GsPackagePolicy current refreshSessionMethodDictionary.
-	Rowan platform _alternateImageClass: Rowan image testImageClass
 ]
 
 { #category : 'setup teardown' }
