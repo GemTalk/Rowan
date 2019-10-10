@@ -163,8 +163,8 @@ RowanClassServiceTest >> setUp [
 { #category : 'support' }
 RowanClassServiceTest >> tearDown [
 
-	super tearDown.
 	self unloadServicesTestProject.
+	super tearDown.
 ]
 
 { #category : 'tests' }

@@ -31,8 +31,8 @@ RowanProjectServiceTest >> setUp [
 { #category : 'setup teardown' }
 RowanProjectServiceTest >> tearDown [
 
+	self unloadServicesTestProject.
 	super tearDown.
-	self unloadServicesTestProject
 ]
 
 { #category : 'tests' }
