@@ -34,6 +34,12 @@ RowanService class >> autoCommit [
 ]
 
 { #category : 'autocommit' }
+RowanService class >> breakPointsAreDisabled [
+
+	^SessionTemps current at: #'Jadeite_BreakPointsAreDisabled' ifAbsentPut: [false]
+]
+
+{ #category : 'autocommit' }
 RowanService class >> flipAutoCommit [
 	| newValue |
 	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
@@ -65,6 +71,11 @@ RowanService class >> sampleService [
 RowanService class >> setAutoCommit: object [
 
 	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
+]
+
+{ #category : 'autocommit' }
+RowanService class >> setBreakPointsAreDisabled: boolean [
+  ^ SessionTemps current at: #'Jadeite_BreakPointsAreDisabled' put: boolean
 ]
 
 { #category : 'other' }
@@ -216,6 +227,12 @@ RowanService >> extendHierarchies: hierarchies [
 	^extendedHierarchies
 ]
 
+{ #category : 'perform' }
+RowanService >> handleDeletedService [
+  updateType := #'removed:'.
+  RowanCommandResult addResult: self
+]
+
 { #category : 'commands support' }
 RowanService >> hierarchiesByLevel: hierarchies [
 
@@ -270,6 +287,17 @@ RowanService >> isPackageService [
 RowanService >> isProjectService [
 
 	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isUpdating [
+
+	^command == #update
+]
+
+{ #category : 'perform' }
+RowanService >> isUpdatingButFoundToBeDeleted [
+  ^ self command == #'update' and: [ self wasDeleted ]
 ]
 
 { #category : 'accessing' }
@@ -352,10 +380,12 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
-	"each service updates itself after performing a command.
+  "each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
-	symbol == #update ifTrue:[^self].
-	^super perform: symbol withArguments: collection.
+
+  symbol == #'update'
+    ifTrue: [ ^ self ].
+  ^ super perform: symbol withArguments: collection
 ]
 
 { #category : 'commands support' }
@@ -456,6 +486,12 @@ RowanService >> updateInternalService: updatedService [
 RowanService >> updateType: aSymbol [
 
 	updateType := aSymbol
+]
+
+{ #category : 'testing' }
+RowanService >> wasDeleted [
+
+	^false
 ]
 
 { #category : 'fileout' }

@@ -46,7 +46,6 @@ RowanDictionaryService >> insertAt: index [
 	theDictionary at: name asSymbol put: theDictionary. 
 	System myUserProfile insertDictionary: theDictionary at: index. 
 	RowanBrowserService new updateDictionaries.
-	System commitTransaction.
 ]
 
 { #category : 'accessing' }
@@ -84,10 +83,11 @@ RowanDictionaryService >> removeGlobalNamed: symbol [
 ]
 
 { #category : 'perform' }
-RowanDictionaryService >> servicePerform: symbol withArguments: collection [	
-
-	super servicePerform: symbol withArguments: collection.
-	self update.
+RowanDictionaryService >> servicePerform: symbol withArguments: collection [
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
 ]
 
 { #category : 'client commands' }
@@ -126,4 +126,9 @@ RowanDictionaryService >> update [
                 with: printString) ] ].
   globals := sorted asArray.
   RowanCommandResult addResult: self
+]
+
+{ #category : 'testing' }
+RowanDictionaryService >> wasDeleted [
+  ^ (Rowan globalNamed: name) isNil
 ]

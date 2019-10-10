@@ -149,6 +149,18 @@ RowanMethodService >> allReferences [
   RowanCommandResult addResult: self
 ]
 
+{ #category : 'other' }
+RowanMethodService >> breakPoints [
+
+	^breakPoints
+]
+
+{ #category : 'other' }
+RowanMethodService >> breakPoints: collection [
+
+	breakPoints := collection
+]
+
 { #category : 'initialization' }
 RowanMethodService >> breakPointsFor: aGsNMethod [
 	"Answers an Array stepPoints"
@@ -227,6 +239,12 @@ RowanMethodService >> clearBreakAt: stepPoint [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'client commands' }
+RowanMethodService >> clearMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self clearBreakAt: breakPoint ]
+]
+
 { #category : 'Updating' }
 RowanMethodService >> comparisonSource: string [
 
@@ -242,6 +260,23 @@ RowanMethodService >> compilationWarnings [
 { #category : 'Updating' }
 RowanMethodService >> compilationWarnings: newValue [
 	compilationWarnings := newValue
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> debugTest: testSelector inClassName: theClassName [
+  testResult := 'passed'.
+  [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
+    on: Exception
+    do: [ :ex | 
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
+      ex signal ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'accessing' }
@@ -343,7 +378,7 @@ RowanMethodService >> hasSupers: aBoolean [
 
 ]
 
-{ #category : 'initialization' }
+{ #category : 'other' }
 RowanMethodService >> initialize [
 
 	super initialize. 
@@ -556,11 +591,13 @@ RowanMethodService >> selector: aSymbol [
 
 { #category : 'perform' }
 RowanMethodService >> servicePerform: symbol withArguments: collection [
-	| theCommand |
-	theCommand := command. 
-	super servicePerform: symbol withArguments: collection.
-	theCommand = #reformatSource ifFalse:[
-		self update].
+  | theCommand |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  theCommand := command.
+  super servicePerform: symbol withArguments: collection.
+  theCommand = #'reformatSource'
+    ifFalse: [ self update ]
 ]
 
 { #category : 'client commands' }

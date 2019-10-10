@@ -30,17 +30,25 @@ RowanBrowserService >> abortTransaction [
 
 { #category : 'client commands' }
 RowanBrowserService >> allClasses [
-	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
-	allClasses addAll: (organizer classes collect:[:class | 
-			| service |
-			service := RowanClassService new name: class name. 
-			service packageName: class rowanPackageName.
-			service projectName: class rowanProjectName.
-			service]
-			).
-	allClasses := allClasses asArray. 
+	allClasses := self basicAllClasses.
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands support' }
+RowanBrowserService >> basicAllClasses [
+  | theClasses |
+  theClasses := SortedCollection sortBlock: [ :x :y | x name < y name ].
+  theClasses
+    addAll:
+      (organizer classes
+        collect: [ :class | 
+          | service |
+          service := RowanClassService new name: class name.
+          service packageName: class rowanPackageName.
+          service projectName: class rowanProjectName.
+          service ]).
+  ^ theClasses asArray
 ]
 
 { #category : 'client commands' }
@@ -94,11 +102,24 @@ RowanBrowserService >> classHierarchyForPackagesNamed: packageNames [
 
 { #category : 'client commands' }
 RowanBrowserService >> compileClass: definitionString [
+  | anonymousMethod |
+  self confirmDuplicateName: definitionString.
+  anonymousMethod := definitionString
+    _compileInContext: nil
+    symbolList: Rowan image symbolList.
+  SessionTemps current at: #'jadeiteCompileClassMethod' put: anonymousMethod
+]
 
-	|  anonymousMethod |
-	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: Rowan image symbolList.
-	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
+{ #category : 'client commands support' }
+RowanBrowserService >> confirmDuplicateName: definitionString [
+  | className |
+  className := (definitionString subStrings at: 3) copyWithout: $'.
+  (Rowan image symbolList resolveSymbol: className asSymbol)
+    ifNotNil: [ 
+      className = selectedClass
+        ifFalse: [ 
+          (self confirm: 'Class name is already an object. Continue?')
+            ifFalse: [ ^ Error signal: 'Class not compiled. Name already exists.' ] ] ]
 ]
 
 { #category : 'client commands' }
@@ -165,29 +186,34 @@ RowanBrowserService >> packagesWithTests [
 RowanBrowserService >> recompileMethodsAfterClassCompilation [
   "compileClass: must be run first"
 
-  | theClass classService packageService |
-  theClass := [ (UserGlobals at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
-    ensure: [ UserGlobals at: #'jadeiteCompileClassMethod' put: nil ].
+  | theClass classService packageService projectService |
+  theClass := [ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
   classService := RowanClassService new name: theClass name.
   classService update.
-  classService isNewClass: true.
+  classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
+	should be updated. Would like a less heavy weight solution than this, though."
   packageService := RowanPackageService
     forPackageNamed: classService packageName.
   packageService update.
+  projectService := RowanProjectService newNamed: packageService projectName.
+  projectService update.
   packageService selectedClass: classService.
   RowanCommandResult addResult: classService.
   selectedClass := classService.
-  updateType := #none. 
+  updateType := #'none'.
   RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
 RowanBrowserService >> releaseWindowHandle: integer [
-
-	| registry |
-	Rowan loggingServiceClass current logComment: 'Release window with handle: ', integer printString. 
-	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
-	registry removeKey: integer ifAbsent: []
+  | registry |
+  Rowan loggingServiceClass current
+    logComment: 'Release window with handle: ' , integer printString.
+  registry := SessionTemps current
+    at: #'rowanServicesWindowRegistry'
+    ifAbsent: [ ^ self ].
+  registry removeKey: integer ifAbsent: [  ]
 ]
 
 { #category : 'client commands' }
@@ -213,8 +239,6 @@ RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
 		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
 			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
 	self updateDictionaries.
-	System commitTransaction.
-
 ]
 
 { #category : 'client commands' }
@@ -253,6 +277,12 @@ RowanBrowserService >> saveRootObject: oop windowHandle: integer [
 RowanBrowserService >> selectedClass [
 
 	^selectedClass
+]
+
+{ #category : 'other' }
+RowanBrowserService >> selectedClass: object [
+
+	selectedClass := object
 ]
 
 { #category : 'perform' }
