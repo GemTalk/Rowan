@@ -79,8 +79,8 @@ RowanMethodServiceTest >> stepPoint3Source [
 { #category : 'support' }
 RowanMethodServiceTest >> tearDown [
 
+	self unloadServicesTestProject.
 	super tearDown.
-	self unloadServicesTestProject
 ]
 
 { #category : 'tests' }
