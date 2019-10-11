@@ -80,8 +80,8 @@ RowanAnsweringServiceTest >> test_initializeBreakPointsAreDisabled [
     equals: breakPointsAreEnabled.
   [ 
   service initializeBreakPointsAreEnabled.
-  self deny: RowanService breakPointsAreEnabled.
-  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
+  self assert:  RowanService breakPointsAreEnabled.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
     ensure: [ 
       RowanService setBreakPointsAreEnabled: breakPointsAreEnabled.
       self
