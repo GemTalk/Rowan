@@ -19,14 +19,14 @@ RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
   self
     jadeiteIssueTested: #'issue515'
     withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
-  service setBreakPointsAreDisabled: true.
-  self assert: service breakPointsAreDisabled.
-  self assert: RowanService breakPointsAreDisabled equals: true.
-  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled').
-  service setBreakPointsAreDisabled: false.
-  self deny: service breakPointsAreDisabled.
-  self assert: RowanService breakPointsAreDisabled equals: false.
-  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled')
+  service setBreakPointsAreEnabled: true.
+  self assert: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: true.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled').
+  service setBreakPointsAreEnabled: false.
+  self deny: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: false.
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
 ]
 
 { #category : 'tests' }
@@ -69,24 +69,24 @@ RowanAnsweringServiceTest >> test_initializeAutoCommit [
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_initializeBreakPointsAreDisabled [
-  | breakPointsAreDisabled |
+  | breakPointsAreEnabled |
   self
     jadeiteIssueTested: #'issue515'
     withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
-  breakPointsAreDisabled := RowanService breakPointsAreDisabled.
-  self assert: RowanService breakPointsAreDisabled equals: breakPointsAreDisabled.
+  breakPointsAreEnabled := RowanService breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: breakPointsAreEnabled.
   self
-    assert: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled')
-    equals: breakPointsAreDisabled.
+    assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+    equals: breakPointsAreEnabled.
   [ 
-  service initializeBreakPointsAreDisabled.
-  self deny: RowanService breakPointsAreDisabled.
-  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled') ]
+  service initializeBreakPointsAreEnabled.
+  self deny: RowanService breakPointsAreEnabled.
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
     ensure: [ 
-      RowanService setBreakPointsAreDisabled: breakPointsAreDisabled.
+      RowanService setBreakPointsAreEnabled: breakPointsAreEnabled.
       self
-        assert: RowanService breakPointsAreDisabled
-        equals: breakPointsAreDisabled ]
+        assert: RowanService breakPointsAreEnabled
+        equals: breakPointsAreEnabled ]
 ]
 
 { #category : 'tests' }

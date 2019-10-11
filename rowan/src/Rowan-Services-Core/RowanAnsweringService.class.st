@@ -53,8 +53,9 @@ RowanAnsweringService >> autoCommit [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> breakPointsAreDisabled [
-  answer := RowanService breakPointsAreDisabled.
+RowanAnsweringService >> breakPointsAreEnabled [
+  answer := RowanService breakPointsAreEnabled.
+  updateType := #'breakpointSettingChanged:'.
   RowanCommandResult addResult: self.
   ^ answer	"for testing"
 ]
@@ -205,8 +206,8 @@ RowanAnsweringService >> initializeAutoCommit [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> initializeBreakPointsAreDisabled [
-  RowanService setBreakPointsAreDisabled: false
+RowanAnsweringService >> initializeBreakPointsAreEnabled [
+  RowanService setBreakPointsAreEnabled: true
 ]
 
 { #category : 'client commands' }
@@ -288,12 +289,15 @@ RowanAnsweringService >> setAutoCommit: object [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'client commands' }
-RowanAnsweringService >> setBreakPointsAreDisabled: boolean [
+{ #category : 'other' }
+RowanAnsweringService >> setBreakPointsAreEnabled: boolean [
   boolean
-    ifTrue: [ self disableAllBreaks ]
-    ifFalse: [ self enableAllBreaks ].
-  RowanService setBreakPointsAreDisabled: boolean
+    ifTrue: [ self enableAllBreaks ]
+    ifFalse: [ self disableAllBreaks ].
+  RowanService setBreakPointsAreEnabled: boolean.
+  answer := boolean.
+  updateType := #'breakpointSettingChanged:'.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
