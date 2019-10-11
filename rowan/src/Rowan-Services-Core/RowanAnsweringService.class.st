@@ -27,6 +27,14 @@ RowanAnsweringService >> allClassesStartingWith: string [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> allClassNames [
+  answer := SortedCollection new.
+  answer addAll: (organizer classes collect: [ :cls | cls name asString ]).
+  answer := answer asArray.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> allTestsIn: classServices [
 	answer := Array new. 
 	classServices do:[:service | answer addAll: service allTests].
@@ -303,6 +311,15 @@ RowanAnsweringService >> setBreakPointsAreEnabled: boolean [
 { #category : 'client commands' }
 RowanAnsweringService >> setEnableInteractionHandler: boolean [
   SessionTemps current at: #'rowanServiceInteractionActive' put: boolean
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> sortedSymbols [
+  answer := SortedCollection new.
+  ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
+    keysDo: [ :symbol | answer add: symbol ].
+  answer := answer asArray.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
