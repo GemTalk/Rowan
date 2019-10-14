@@ -7,5 +7,5 @@ Interval class >> fromSton: stonReader [
 	stonReader parseMapDo: [:key :value | values add: value].
 	values size = 2 ifTrue: [result := self from: values first to: values second].
 	values size = 3 ifTrue: [result := self from: values first to: values second by: values third].
-	^Interval from: 0 to: 0
+	^result
 ]
