@@ -1,6 +1,6 @@
 Extension { #name : 'FileStreamPortable' }
 
-{ #category : '*FileSystem-Core' }
+{ #category : '*filesystem-gemstone-kernel' }
 FileStreamPortable class >> onHandle: aFileSystemHandle [
 	^ self concreteStream new
 		open: aFileSystemHandle fullName

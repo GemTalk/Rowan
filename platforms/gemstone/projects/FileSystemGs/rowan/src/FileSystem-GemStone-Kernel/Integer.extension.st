@@ -34,3 +34,24 @@ Integer >> digitAt: n [
 		ifFalse: [ (self bitShift: 8 - (n bitShift: 3)) bitAnd: 255 ]
 
 ]
+
+{ #category : '*filesystem-gemstone-kernel' }
+Integer >> humanReadableSIByteSize [
+	^ String streamContents: [ :s|
+		self humanReadableSIByteSizeOn: s ]
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+Integer >> humanReadableSIByteSizeOn: s [
+	| exponent base |
+	"Print a string with an SI binary unit represation of myself."
+	base := 1000.
+	self < base
+		ifTrue: [ ^ s print: self; space; nextPut: $B ].
+	exponent := (self log / base log) asInteger.
+	(self / (base ** exponent)) printOn: s showingDecimalPlaces: 2.
+	s 
+		space;
+		nextPut: ('kMGTPE' at: exponent);
+		nextPut: $B.
+]

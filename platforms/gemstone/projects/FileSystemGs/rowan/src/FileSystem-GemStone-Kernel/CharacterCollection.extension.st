@@ -28,3 +28,30 @@ CharacterCollection class >> crlf [
 
 	^ self with: Character cr with: Character lf
 ]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> asFileReference [
+
+	^ FileSystem disk referenceTo: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> asPath [
+	"convert myself to a path"
+	"Examples:
+		'.' asPath
+		'~/Desktop' asPath
+		'/home/foo' asPath
+		'../../foo.bar' asPath"
+	^ FileSystem disk resolve: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> asPathWith: anObject [ 
+	^ anObject pathFromString: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> asResolvedBy: aFileSystem [
+	^ aFileSystem resolveString: self
+]
