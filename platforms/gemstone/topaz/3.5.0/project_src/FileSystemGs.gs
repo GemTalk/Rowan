@@ -8,7 +8,7 @@ doit
 	classVars: #( GeneratorClass )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Network-UUID';
@@ -24,7 +24,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -40,7 +40,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -56,7 +56,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -72,7 +72,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -100,7 +100,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -116,7 +116,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -132,7 +132,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -148,7 +148,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -164,7 +164,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -180,7 +180,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -196,7 +196,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -213,7 +213,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -234,7 +234,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -250,7 +250,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -266,7 +266,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -312,7 +312,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -337,7 +337,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Network-UUID';
@@ -353,7 +353,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -407,7 +407,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -436,7 +436,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -469,7 +469,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -491,7 +491,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -518,7 +518,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -544,7 +544,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -570,7 +570,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -586,7 +586,7 @@ doit
 	classVars: #( Registry )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -604,7 +604,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -620,7 +620,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -636,7 +636,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -656,7 +656,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -672,7 +672,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -688,7 +688,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -704,7 +704,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -720,7 +720,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -736,7 +736,7 @@ doit
 	classVars: #( UserLocalDirectory )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -752,7 +752,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -775,7 +775,7 @@ doit
 	classVars: #( CurrentFS DefaultWorkingDirectory )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -792,7 +792,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -808,7 +808,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -824,7 +824,7 @@ doit
 	classVars: #( Disks )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -840,7 +840,7 @@ doit
 	classVars: #( CurrentFS )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -856,7 +856,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -872,7 +872,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -888,7 +888,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -906,7 +906,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -924,7 +924,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -940,7 +940,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -956,7 +956,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -973,7 +973,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -989,7 +989,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -1005,7 +1005,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -1021,7 +1021,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Path';
@@ -1049,7 +1049,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Path';
@@ -1065,7 +1065,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Path';
@@ -1081,7 +1081,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1105,7 +1105,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1131,7 +1131,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1156,7 +1156,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1205,7 +1205,7 @@ doit
 	classVars: #( Default )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1228,7 +1228,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1244,7 +1244,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1262,7 +1262,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1280,7 +1280,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1302,7 +1302,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1320,7 +1320,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -1339,7 +1339,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -1385,7 +1385,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -1406,7 +1406,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Network-UUID-Tests';
@@ -1422,7 +1422,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Network-UUID-Tests';
@@ -1438,7 +1438,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1454,7 +1454,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1470,7 +1470,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Attributes';
@@ -1489,7 +1489,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1505,7 +1505,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1521,7 +1521,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Disk';
@@ -1537,7 +1537,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Memory';
@@ -1553,7 +1553,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1569,7 +1569,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1585,7 +1585,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1601,7 +1601,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1617,7 +1617,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1636,7 +1636,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Disk';
@@ -1652,7 +1652,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Memory';
@@ -1668,7 +1668,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1684,7 +1684,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1700,7 +1700,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1716,7 +1716,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1732,7 +1732,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1748,7 +1748,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1765,7 +1765,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1781,7 +1781,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1797,7 +1797,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1813,7 +1813,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1829,7 +1829,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1845,7 +1845,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files-Tests';
@@ -1861,7 +1861,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-GemStone';
@@ -1877,7 +1877,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Core';
@@ -1893,7 +1893,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Disk';
@@ -1909,7 +1909,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Tests';
@@ -1925,7 +1925,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Tests';
@@ -1941,7 +1941,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Tests';
@@ -1964,7 +1964,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Tests';
@@ -1980,7 +1980,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Tests';
@@ -1996,7 +1996,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Tests';
@@ -2012,7 +2012,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Tests-Attributes';
@@ -2038,7 +2038,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
