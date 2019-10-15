@@ -53,7 +53,7 @@ RwProjectLoadConfiguration {
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'SystemUser' : {
-				#defaultSymbolDictName : 'Globals'
+				#defaultSymbolDictName : 'RowanFileSystem'
 			}
 		}
 	},
