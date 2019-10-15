@@ -137,15 +137,21 @@ RowanAnsweringService >> exec: aString inFrame: level ofProcess: processOop cont
   | symbolList frameContents symbolDictionary process |
   symbolList := Rowan image symbolList.
   process := Object _objectForOop: processOop.
-  frameContents := process _frameContentsAt: 4.
-  symbolDictionary := SymbolDictionary new.
-  1 to: (frameContents at: 9) size do: [ :index | 
-    ((frameContents at: 9) at: index) first = $.
-      ifFalse: [ 
-        symbolDictionary
-          at: ((frameContents at: 9) at: index) asSymbol
-          put: (frameContents at: 11 + index - 1) ] ].
-  symbolList add: symbolDictionary before: symbolList first.
+  process _isTerminated
+    ifTrue: [ 
+      RowanCommandResult addResult: self.
+      ^ self ].
+  frameContents := process _frameContentsAt: level.
+  frameContents
+    ifNotNil: [ 
+      symbolDictionary := SymbolDictionary new.
+      1 to: (frameContents at: 9) size do: [ :index | 
+        ((frameContents at: 9) at: index) first = $.
+          ifFalse: [ 
+            symbolDictionary
+              at: ((frameContents at: 9) at: index) asSymbol
+              put: (frameContents at: 11 + index - 1) ] ].
+      symbolList add: symbolDictionary before: symbolList first ].
   [ 
   answer := [ 
   true
@@ -169,7 +175,7 @@ RowanAnsweringService >> exec: aString inFrame: level ofProcess: processOop cont
             process
               _frameAt: level
               tempAt: index
-              put: (symbolDictionary at: (argsAndTemps at: index)). 
+              put: (symbolDictionary at: (argsAndTemps at: index)).
             variableService := RowanVariableService
               oop: (symbolDictionary at: (argsAndTemps at: index)) asOop
               key: (argsAndTemps at: index)
