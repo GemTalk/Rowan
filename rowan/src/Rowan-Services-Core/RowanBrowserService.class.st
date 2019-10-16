@@ -187,7 +187,10 @@ RowanBrowserService >> recompileMethodsAfterClassCompilation [
   "compileClass: must be run first"
 
   | theClass classService packageService projectService |
-  theClass := [ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+  theClass := [ 
+  [ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    on: CompileWarning
+    do: [ :ex | ex resume ] ]
     ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
   classService := RowanClassService new name: theClass name.
   classService update.
