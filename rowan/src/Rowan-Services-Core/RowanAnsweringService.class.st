@@ -27,6 +27,14 @@ RowanAnsweringService >> allClassesStartingWith: string [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> allClassNames [
+  answer := SortedCollection new.
+  answer addAll: (organizer classes collect: [ :cls | cls name asString ]).
+  answer := answer asArray.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> allTestsIn: classServices [
 	answer := Array new. 
 	classServices do:[:service | answer addAll: service allTests].
@@ -53,8 +61,9 @@ RowanAnsweringService >> autoCommit [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> breakPointsAreDisabled [
-  answer := RowanService breakPointsAreDisabled.
+RowanAnsweringService >> breakPointsAreEnabled [
+  answer := RowanService breakPointsAreEnabled.
+  updateType := #'breakpointSettingChanged:'.
   RowanCommandResult addResult: self.
   ^ answer	"for testing"
 ]
@@ -128,15 +137,21 @@ RowanAnsweringService >> exec: aString inFrame: level ofProcess: processOop cont
   | symbolList frameContents symbolDictionary process |
   symbolList := Rowan image symbolList.
   process := Object _objectForOop: processOop.
-  frameContents := process _frameContentsAt: 4.
-  symbolDictionary := SymbolDictionary new.
-  1 to: (frameContents at: 9) size do: [ :index | 
-    ((frameContents at: 9) at: index) first = $.
-      ifFalse: [ 
-        symbolDictionary
-          at: ((frameContents at: 9) at: index) asSymbol
-          put: (frameContents at: 11 + index - 1) ] ].
-  symbolList add: symbolDictionary before: symbolList first.
+  process _isTerminated
+    ifTrue: [ 
+      RowanCommandResult addResult: self.
+      ^ self ].
+  frameContents := process _frameContentsAt: level.
+  frameContents
+    ifNotNil: [ 
+      symbolDictionary := SymbolDictionary new.
+      1 to: (frameContents at: 9) size do: [ :index | 
+        ((frameContents at: 9) at: index) first = $.
+          ifFalse: [ 
+            symbolDictionary
+              at: ((frameContents at: 9) at: index) asSymbol
+              put: (frameContents at: 11 + index - 1) ] ].
+      symbolList add: symbolDictionary before: symbolList first ].
   [ 
   answer := [ 
   true
@@ -160,7 +175,7 @@ RowanAnsweringService >> exec: aString inFrame: level ofProcess: processOop cont
             process
               _frameAt: level
               tempAt: index
-              put: (symbolDictionary at: (argsAndTemps at: index)). 
+              put: (symbolDictionary at: (argsAndTemps at: index)).
             variableService := RowanVariableService
               oop: (symbolDictionary at: (argsAndTemps at: index)) asOop
               key: (argsAndTemps at: index)
@@ -205,8 +220,8 @@ RowanAnsweringService >> initializeAutoCommit [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> initializeBreakPointsAreDisabled [
-  RowanService setBreakPointsAreDisabled: false
+RowanAnsweringService >> initializeBreakPointsAreEnabled [
+  RowanService setBreakPointsAreEnabled: true
 ]
 
 { #category : 'client commands' }
@@ -288,17 +303,29 @@ RowanAnsweringService >> setAutoCommit: object [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'client commands' }
-RowanAnsweringService >> setBreakPointsAreDisabled: boolean [
+{ #category : 'other' }
+RowanAnsweringService >> setBreakPointsAreEnabled: boolean [
   boolean
-    ifTrue: [ self disableAllBreaks ]
-    ifFalse: [ self enableAllBreaks ].
-  RowanService setBreakPointsAreDisabled: boolean
+    ifTrue: [ self enableAllBreaks ]
+    ifFalse: [ self disableAllBreaks ].
+  RowanService setBreakPointsAreEnabled: boolean.
+  answer := boolean.
+  updateType := #'breakpointSettingChanged:'.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
 RowanAnsweringService >> setEnableInteractionHandler: boolean [
   SessionTemps current at: #'rowanServiceInteractionActive' put: boolean
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> sortedSymbols [
+  answer := SortedCollection new.
+  ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
+    keysDo: [ :symbol | answer add: symbol ].
+  answer := answer asArray.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }

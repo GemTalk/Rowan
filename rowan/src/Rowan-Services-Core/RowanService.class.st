@@ -34,9 +34,9 @@ RowanService class >> autoCommit [
 ]
 
 { #category : 'autocommit' }
-RowanService class >> breakPointsAreDisabled [
+RowanService class >> breakPointsAreEnabled [
 
-	^SessionTemps current at: #'Jadeite_BreakPointsAreDisabled' ifAbsentPut: [false]
+	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
 ]
 
 { #category : 'autocommit' }
@@ -74,8 +74,8 @@ RowanService class >> setAutoCommit: object [
 ]
 
 { #category : 'autocommit' }
-RowanService class >> setBreakPointsAreDisabled: boolean [
-  ^ SessionTemps current at: #'Jadeite_BreakPointsAreDisabled' put: boolean
+RowanService class >> setBreakPointsAreEnabled: boolean [
+  ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
 ]
 
 { #category : 'other' }
