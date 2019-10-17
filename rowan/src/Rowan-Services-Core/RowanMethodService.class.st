@@ -30,7 +30,9 @@ Class {
 		'failedCompile',
 		'comparisonSource',
 		'firstReference',
-		'renamedName'
+		'renamedName',
+		'isMethodForBlock',
+		'homeMethodOop'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -149,31 +151,37 @@ RowanMethodService >> allReferences [
   RowanCommandResult addResult: self
 ]
 
-{ #category : 'other' }
+{ #category : 'Accessing' }
 RowanMethodService >> breakPoints [
 
 	^breakPoints
 ]
 
-{ #category : 'other' }
+{ #category : 'Accessing' }
 RowanMethodService >> breakPoints: collection [
-
-	breakPoints := collection
+  breakPoints := collection
 ]
 
 { #category : 'initialization' }
 RowanMethodService >> breakPointsFor: aGsNMethod [
-	"Answers an Array stepPoints"
+  "Answers an Array stepPoints"
 
-	| list |
-	list := Array new.
-	aGsNMethod _allBreakpoints ifNil: [^#()] ifNotNil: [:anArray | 
-		1 to: anArray size by: 3 do: [:i | 
-			list add: (aGsNMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)).
-		].
-	].
-	^list
-
+  | list theMethod |
+  list := OrderedCollection new.
+  theMethod := aGsNMethod isMethodForBlock
+    ifTrue: [ 
+      isMethodForBlock := true.
+      aGsNMethod homeMethod ]
+    ifFalse: [ aGsNMethod ].
+  homeMethodOop := theMethod asOop.
+  theMethod _allBreakpoints
+    ifNil: [ ^ OrderedCollection new ]
+    ifNotNil: [ :anArray | 
+      1 to: anArray size by: 3 do: [ :i | 
+        list
+          add:
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
+  ^ list asOrderedCollection
 ]
 
 { #category : 'Accessing' }
@@ -232,7 +240,7 @@ RowanMethodService >> classService: newValue [
 RowanMethodService >> clearBreakAt: stepPoint [
 	| method |
 	method := self isUnboundMethod 
-			ifTrue:[Object _objectForOop: oop] 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
 			ifFalse:[self gsNMethod].
 	method clearBreakAtStepPoint: stepPoint.
 	self update. 
@@ -279,7 +287,7 @@ RowanMethodService >> debugTest: testSelector inClassName: theClassName [
   RowanCommandResult addResult: self
 ]
 
-{ #category : 'accessing' }
+{ #category : 'Accessing' }
 RowanMethodService >> definedPackage [
 
 	^definedPackage
@@ -309,7 +317,7 @@ RowanMethodService >> fileout [
 	RowanCommandResult addResult: answeringService.
 ]
 
-{ #category : 'other' }
+{ #category : 'Accessing' }
 RowanMethodService >> firstReference: integer [
 
 	firstReference := integer
@@ -378,7 +386,7 @@ RowanMethodService >> hasSupers: aBoolean [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'initialization' }
 RowanMethodService >> initialize [
 
 	super initialize. 
@@ -387,6 +395,7 @@ RowanMethodService >> initialize [
 	accessedInstVars := Array new.
 	isTestMethod := false.
 	failedCompile := false.
+	isMethodForBlock := false.
 ]
 
 { #category : 'initialization' }
@@ -432,7 +441,7 @@ RowanMethodService >> isMethodService [
 	^true
 ]
 
-{ #category : 'other' }
+{ #category : 'testing' }
 RowanMethodService >> isTestMethod [
 
 	^isTestMethod
@@ -526,12 +535,12 @@ RowanMethodService >> removeSelector: sel class: clsName [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'Accessing' }
 RowanMethodService >> renamedName [
 	^renamedName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'Accessing' }
 RowanMethodService >> renamedName: object [
 	renamedName := object
 ]
@@ -602,14 +611,13 @@ RowanMethodService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'client commands' }
 RowanMethodService >> setBreakAt: stepPoint [
-	| method |
-	method := self isUnboundMethod 
-
-			ifTrue:[Object _objectForOop: oop] 
-			ifFalse:[self gsNMethod].
-	method setBreakAtStepPoint: stepPoint.
-	self update. 
-	RowanCommandResult addResult: self.
+  | method |
+  method := self isUnboundMethod
+    ifTrue: [ (Object _objectForOop: oop) homeMethod ]
+    ifFalse: [ self gsNMethod ].
+  method setBreakAtStepPoint: stepPoint.
+  self update.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'initialization' }
