@@ -323,7 +323,9 @@ RowanAnsweringService >> setEnableInteractionHandler: boolean [
 RowanAnsweringService >> sortedSymbols [
   answer := SortedCollection new.
   ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
-    keysDo: [ :symbol | answer add: symbol ].
+    keysDo: [ :symbol | 
+      symbol charSize = 1
+        ifTrue: [ answer add: symbol ] ].
   answer := answer asArray.
   RowanCommandResult addResult: self
 ]
