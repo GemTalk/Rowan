@@ -11,6 +11,22 @@ Class {
 }
 
 { #category : 'unicode method' }
+RowanServicesTest >> addUnicodeSymbolKeyToUserGlobals [
+  "RowanServicesTest new addUnicodeSymbolKeyToUserGlobals"
+
+  UserGlobals
+    at: (String with: (Character withValue: 16r3DA)) asSymbol
+    put: 'fnoodle'
+]
+
+{ #category : 'unicode method' }
+RowanServicesTest >> addUnicodeValueToUserGlobals [
+  "RowanServicesTest new addUnicodeValueToUserGlobals"
+
+  UserGlobals at: #'bad' put: '£¥' asSymbol
+]
+
+{ #category : 'unicode method' }
 RowanServicesTest >> compileUnicodeMethod [
 	"RowanServicesTest new compileUnicodeMethod"
 
@@ -177,6 +193,16 @@ RowanServicesTest >> loadServicesTestProject [
   projectSetDefinition := RwProjectSetDefinition new.
   projectSetDefinition addDefinition: self defaultProjectDefinition.
   Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+]
+
+{ #category : 'unicode method' }
+RowanServicesTest >> removeUnicodeSymbolsFromUserGlobals [
+  "RowanServicesTest new addUnicodeSymbolToUserGlobals"
+
+  UserGlobals
+    removeKey: (String with: (Character withValue: 16r3DA)) asSymbol
+    ifAbsent: [  ].
+  UserGlobals removeKey: #'bad' ifAbsent: [  ]
 ]
 
 { #category : 'constants' }
