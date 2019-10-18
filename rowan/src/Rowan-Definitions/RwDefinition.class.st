@@ -168,9 +168,15 @@ RwDefinition >> removeDefinition: aDefinition from: aDictionary [
 { #category : 'private' }
 RwDefinition >> removeKey: key from: aDictionary [
 
+	self removeKey: key from: aDictionary  ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+]
+
+{ #category : 'private' }
+RwDefinition >> removeKey: key from: aDictionary ifAbsent: absentBlock [
+
 	aDictionary
 		removeKey: key
-		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+		ifAbsent: absentBlock
 ]
 
 { #category : 'properties' }
