@@ -1,6 +1,17 @@
 Extension { #name : 'Interval' }
 
 { #category : '*Rowan-GemStone-Kernel' }
+Interval >> stonOn: stonWriter [
+  stonWriter
+    writeObject: self
+    streamMap: [ :dictionary | 
+      dictionary
+        at: #'start' put: from;
+        at: #'stop' put: to;
+        at: #'step' put: by ]
+]
+
+{ #category : '*Rowan-GemStone-Kernel' }
 Interval class >> fromSton: stonReader [
 	| result values |
 	values := OrderedCollection new.
