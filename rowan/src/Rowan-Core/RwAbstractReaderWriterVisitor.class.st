@@ -27,7 +27,14 @@ RwAbstractReaderWriterVisitor class >> _repositoryPropertyDictFor: packagesRoot 
 	| propertiesFile |
 	propertiesFile := packagesRoot / 'properties', 'st'.
 	propertiesFile exists
-		ifFalse: [ ^ Dictionary new ].
+		ifFalse: [
+			| propertiesDict |
+			propertiesFile := packagesRoot / '.filetree'.
+			propertiesFile exists
+					ifFalse: [^ Dictionary new ].
+			propertiesDict := self _readObjectFrom: propertiesFile.
+			propertiesDict at: #format put: 'filetree'.
+			^ propertiesDict ].
 	^ self _readObjectFrom: propertiesFile
 ]
 
