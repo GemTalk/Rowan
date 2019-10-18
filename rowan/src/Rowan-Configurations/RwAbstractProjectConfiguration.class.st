@@ -188,6 +188,12 @@ RwAbstractProjectConfiguration >> currentVersion [
 
 ]
 
+{ #category : 'ston' }
+RwAbstractProjectConfiguration >> excludedInstVars [
+
+	^#()
+]
+
 { #category : 'exporting' }
 RwAbstractProjectConfiguration >> export [
 
@@ -285,6 +291,20 @@ RwAbstractProjectConfiguration >> resolvePackageNames: visitedConfigurationNames
 		Do not visit configurations already listed in visitedConfigurationNames "
 
 	self subclassResponsibility: #'resolvePackageNames:'
+]
+
+{ #category : 'ston' }
+RwAbstractProjectConfiguration >> stonOn: stonWriter [
+    | instanceVariableNames |
+    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
+    stonWriter writeObject: self
+        streamMap: 
+            [:dictionary |
+            instanceVariableNames do: 
+                    [:each |
+                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
+                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
+                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
 ]
 
 { #category : 'accessing' }

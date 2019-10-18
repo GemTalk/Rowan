@@ -623,6 +623,12 @@ Path >> segments [
 	^ segments asArray 
 ]
 
+{ #category : 'ston' }
+Path >> stonOn: stonWriter [
+
+	stonWriter writeString: self asString
+]
+
 { #category : 'navigating' }
 Path >> withExtension: extension [ 
 	| basename name |

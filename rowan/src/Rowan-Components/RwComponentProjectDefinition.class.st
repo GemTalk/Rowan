@@ -867,6 +867,22 @@ RwComponentProjectDefinition >> readProjectSetReadTool: readTool withConfigurati
 			groupNames: theGroupNames
 ]
 
+{ #category : 'actions' }
+RwComponentProjectDefinition >> report [
+	"create a written description of the receiver"
+
+	| stream |
+	stream := WriteStreamPortable on: String new.
+	self report: stream.
+	^ stream contents
+]
+
+{ #category : 'actions' }
+RwComponentProjectDefinition >> report: writeStream [
+
+	STON put: self onStreamPretty: writeStream
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."

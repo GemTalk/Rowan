@@ -199,6 +199,12 @@ RwAbstractProjectLoadConfiguration >> definedGroupNames [
 
 ]
 
+{ #category : 'ston' }
+RwAbstractProjectLoadConfiguration >> excludedInstVars [
+
+	^#(  conditionalPackageMatchers conditionalPackageMapSpecMatchers )
+]
+
 { #category : 'initialization' }
 RwAbstractProjectLoadConfiguration >> initializeForExport [
 
