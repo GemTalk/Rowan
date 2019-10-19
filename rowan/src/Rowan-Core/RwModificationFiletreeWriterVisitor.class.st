@@ -450,7 +450,7 @@ RwModificationFiletreeWriterVisitor >> deletedMethodExtension: aMethodExtensionM
 RwModificationFiletreeWriterVisitor >> monticelloMetadata [
 	"monticello metadata  --- for writing metadataless is the only supported format"
 
-	^ monticelloMetadata ifNil: [ monticelloMetadata := false ]
+	^ monticelloMetadata ifNil: [ monticelloMetadata := 'false' ]
 ]
 
 { #category : 'package writing' }
@@ -537,7 +537,7 @@ RwModificationFiletreeWriterVisitor >> processProject: aProjectModification [
 		ifTrue: [
 			"properties file includes leading $., so strip it"
 			packageExtension := packageExtension copyFrom: 2 to: packageExtension size ].
-	(projectProperties at: 'Metadata' ifAbsent: [ true ])
+	(projectProperties at: 'Metadata' ifAbsent: [ 'true' ])  = 'true'
 		ifTrue: [
 			"Rowan can read filetree repositories with Monticello metadata, but cannot write Monticello metadata"
 			self error: 'Monticello metadata not supported.' ].

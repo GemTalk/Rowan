@@ -192,6 +192,12 @@ RwPackageDefinition >> removeClassNamed: className [
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> removeClassNamed: className ifAbsent: absentBlock [
+
+	self removeKey: className from: classDefinitions ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> updateClassDefinition: aClassDefinition [
 
 	self updateDefinition: aClassDefinition in: classDefinitions
