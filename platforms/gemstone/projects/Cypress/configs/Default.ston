@@ -1,19 +1,19 @@
 RwProjectLoadConfiguration {
 	#name : 'Default',
+	#comment : 'For now we load Gs3215 by default',
 	#version : '0.1.0',
-	#definedGroupNames : {
-		'core' : [ ]
-	},
-	#conditionalPackages : { },
 	#configurationNames : [
 		'Gs3215'
 	],
-  #conditionalPackageMapSpecs : {
+	#conditionalPackages : { },
+	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'SystemUser' : {
 				#defaultSymbolDictName : 'Globals'
 			}
 		}
 	},
-	#comment : 'For now we load Gs3215 by default'
+	#definedGroupNames : {
+		'core' : [ ]
+	}
 }
