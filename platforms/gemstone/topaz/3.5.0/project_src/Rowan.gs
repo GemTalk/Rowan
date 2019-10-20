@@ -2626,7 +2626,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanMethodService'
-	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName )
+	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -26937,7 +26937,7 @@ category: 'accessing'
 method: RowanMethodUpdate
 breakPoints: anObject
 
-	gsMethod breakPoints: anObject asArray
+	gsMethod breakPoints: anObject asOrderedCollection
 %
 
 category: 'accessing'
@@ -27638,6 +27638,13 @@ autoCommit
 
 category: 'autocommit'
 classmethod: RowanService
+breakPointsAreEnabled
+
+	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
+%
+
+category: 'autocommit'
+classmethod: RowanService
 flipAutoCommit
 	| newValue |
 	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
@@ -27670,6 +27677,12 @@ classmethod: RowanService
 setAutoCommit: object
 
 	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
+%
+
+category: 'autocommit'
+classmethod: RowanService
+setBreakPointsAreEnabled: boolean
+  ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
 %
 
 !		Instance methods for 'RowanService'
@@ -27828,6 +27841,13 @@ extendHierarchies: hierarchies
 	^extendedHierarchies
 %
 
+category: 'perform'
+method: RowanService
+handleDeletedService
+  updateType := #'removed:'.
+  RowanCommandResult addResult: self
+%
+
 category: 'commands support'
 method: RowanService
 hierarchiesByLevel: hierarchies
@@ -27888,6 +27908,19 @@ method: RowanService
 isProjectService
 
 	^false
+%
+
+category: 'testing'
+method: RowanService
+isUpdating
+
+	^command == #update
+%
+
+category: 'perform'
+method: RowanService
+isUpdatingButFoundToBeDeleted
+  ^ self command == #'update' and: [ self wasDeleted ]
 %
 
 category: 'accessing'
@@ -27975,10 +28008,12 @@ sampleSymbolDictionaryName
 category: 'perform'
 method: RowanService
 servicePerform: symbol withArguments: collection
-	"each service updates itself after performing a command.
+  "each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
-	symbol == #update ifTrue:[^self].
-	^super perform: symbol withArguments: collection.
+
+  symbol == #'update'
+    ifTrue: [ ^ self ].
+  ^ super perform: symbol withArguments: collection
 %
 
 category: 'commands support'
@@ -28086,6 +28121,13 @@ updateType: aSymbol
 	updateType := aSymbol
 %
 
+category: 'testing'
+method: RowanService
+wasDeleted
+
+	^false
+%
+
 category: 'fileout'
 method: RowanService
 writeFileOutHeaderOn: stream
@@ -28122,6 +28164,27 @@ writeFileOutHeaderOn: stream
 
 category: 'client commands'
 method: RowanAnsweringService
+allClassesStartingWith: string
+  answer := SortedCollection new.
+  organizer classes
+    do: [ :cls | 
+      (cls name beginsWith: string)
+        ifTrue: [ answer add: cls name asString ] ].
+  answer := answer asArray.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+allClassNames
+  answer := SortedCollection new.
+  answer addAll: (organizer classes collect: [ :cls | cls name asString ]).
+  answer := answer asArray.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 allTestsIn: classServices
 	answer := Array new. 
 	classServices do:[:service | answer addAll: service allTests].
@@ -28152,10 +28215,55 @@ autoCommit
 
 category: 'client commands'
 method: RowanAnsweringService
+breakPointsAreEnabled
+  answer := RowanService breakPointsAreEnabled.
+  updateType := #'breakpointSettingChanged:'.
+  RowanCommandResult addResult: self.
+  ^ answer	"for testing"
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 clearAllBreaks
   | methodServices |
-  methodServices := RowanQueryService new organizer: organizer; basicBreakpointMethods.
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
   GsNMethod clearAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+clearMethodBreaks: methodServices
+  methodServices
+    do: [ :methodService | 
+      methodService
+        organizer: organizer;
+        clearMethodBreaks ]
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+disableAllBreaks
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod _disableAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+enableAllBreaks
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod _enableAllBreaks.
   methodServices
     do: [ :methodService | RowanCommandResult addResult: methodService update ]
 %
@@ -28186,6 +28294,81 @@ exec: aString context: oop
 
 category: 'client commands'
 method: RowanAnsweringService
+exec: aString inFrame: level ofProcess: processOop context: oop
+  | symbolList frameContents symbolDictionary process |
+  symbolList := Rowan image symbolList.
+  process := Object _objectForOop: processOop.
+  process _isTerminated
+    ifTrue: [ 
+      RowanCommandResult addResult: self.
+      ^ self ].
+  frameContents := process _frameContentsAt: level.
+  frameContents
+    ifNotNil: [ 
+      symbolDictionary := SymbolDictionary new.
+      1 to: (frameContents at: 9) size do: [ :index | 
+        ((frameContents at: 9) at: index) first = $.
+          ifFalse: [ 
+            symbolDictionary
+              at: ((frameContents at: 9) at: index) asSymbol
+              put: (frameContents at: 11 + index - 1) ] ].
+      symbolList add: symbolDictionary before: symbolList first ].
+  [ 
+  answer := [ 
+  true
+    ->
+      (aString evaluateInContext: (Object _objectForOop: oop) symbolList: symbolList)
+        asOop ]
+    on: CompileError
+    do: [ :ex | false -> ex errorDetails ].
+  answer key
+    ifTrue: [ 
+      RowanService autoCommit == true
+        ifTrue: [ System commitTransaction ] ].
+  RowanCommandResult addResult: self ]
+    ensure: [ 
+      1 to: (frameContents at: 9) size do: [ :index | 
+        | argsAndTemps |
+        argsAndTemps := frameContents at: 9.
+        (argsAndTemps at: index) first = $.
+          ifFalse: [ 
+            | variableService |
+            process
+              _frameAt: level
+              tempAt: index
+              put: (symbolDictionary at: (argsAndTemps at: index)).
+            variableService := RowanVariableService
+              oop: (symbolDictionary at: (argsAndTemps at: index)) asOop
+              key: (argsAndTemps at: index)
+              value: (symbolDictionary at: (argsAndTemps at: index))
+              className: (frameContents at: 8) class name asString.
+            RowanCommandResult addResult: variableService ] ].
+      symbolList remove: symbolDictionary ].	"return answer for testing"
+  ^ answer
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+expressionSelector: string
+  "try to uncover a selector in the string. 
+	If it's not possible, return the string and 
+	let the application do with it what it will"
+
+  | messageNode |
+  messageNode := [ RBParser parseExpression: string ]
+    on: Error
+    do: [ :ex | nil ].
+  answer := messageNode
+    ifNil: [ string ]
+    ifNotNil: [ 
+      messageNode isMessage
+        ifTrue: [ messageNode buildSelector ]
+        ifFalse: [ string ] ].
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 flipTranscript
 	self isTranscriptInstalled ifTrue:[
 		self jadeiteServer uninstallTranscript]
@@ -28198,6 +28381,12 @@ method: RowanAnsweringService
 initializeAutoCommit
 
 	RowanService setAutoCommit: false
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+initializeBreakPointsAreEnabled
+  RowanService setBreakPointsAreEnabled: true
 %
 
 category: 'client commands'
@@ -28234,6 +28423,16 @@ needsCommit
 
 	answer := System needsCommit.
 	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+newPackageNamed: packageName
+  | packageService |
+  packageService := RowanPackageService new name: packageName.
+  packageService update.
+  answer := packageService.
+  RowanCommandResult addResult: self
 %
 
 category: 'client commands'
@@ -28278,10 +28477,34 @@ setAutoCommit: object
 	RowanCommandResult addResult: self.
 %
 
+category: 'other'
+method: RowanAnsweringService
+setBreakPointsAreEnabled: boolean
+  boolean
+    ifTrue: [ self enableAllBreaks ]
+    ifFalse: [ self disableAllBreaks ].
+  RowanService setBreakPointsAreEnabled: boolean.
+  answer := boolean.
+  updateType := #'breakpointSettingChanged:'.
+  RowanCommandResult addResult: self
+%
+
 category: 'client commands'
 method: RowanAnsweringService
 setEnableInteractionHandler: boolean
   SessionTemps current at: #'rowanServiceInteractionActive' put: boolean
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+sortedSymbols
+  answer := SortedCollection new.
+  ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
+    keysDo: [ :symbol | 
+      symbol charSize = 1
+        ifTrue: [ answer add: symbol ] ].
+  answer := answer asArray.
+  RowanCommandResult addResult: self
 %
 
 category: 'client commands'
@@ -28354,17 +28577,26 @@ abortTransaction
 category: 'client commands'
 method: RowanBrowserService
 allClasses
-	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
-	allClasses addAll: (organizer classes collect:[:class | 
-			| service |
-			service := RowanClassService new name: class name. 
-			service packageName: class rowanPackageName.
-			service projectName: class rowanProjectName.
-			service]
-			).
-	allClasses := allClasses asArray. 
+	allClasses := self basicAllClasses.
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
+%
+
+category: 'client commands support'
+method: RowanBrowserService
+basicAllClasses
+  | theClasses |
+  theClasses := SortedCollection sortBlock: [ :x :y | x name < y name ].
+  theClasses
+    addAll:
+      (organizer classes
+        collect: [ :class | 
+          | service |
+          service := RowanClassService new name: class name.
+          service packageName: class rowanPackageName.
+          service projectName: class rowanProjectName.
+          service ]).
+  ^ theClasses asArray
 %
 
 category: 'client commands'
@@ -28423,11 +28655,25 @@ classHierarchyForPackagesNamed: packageNames
 category: 'client commands'
 method: RowanBrowserService
 compileClass: definitionString
+  | anonymousMethod |
+  self confirmDuplicateName: definitionString.
+  anonymousMethod := definitionString
+    _compileInContext: nil
+    symbolList: Rowan image symbolList.
+  SessionTemps current at: #'jadeiteCompileClassMethod' put: anonymousMethod
+%
 
-	|  anonymousMethod |
-	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: Rowan image symbolList.
-	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
+category: 'client commands support'
+method: RowanBrowserService
+confirmDuplicateName: definitionString
+  | className |
+  className := (definitionString subStrings at: 3) copyWithout: $'.
+  (Rowan image symbolList resolveSymbol: className asSymbol)
+    ifNotNil: [ 
+      className = selectedClass
+        ifFalse: [ 
+          (self confirm: 'Class name is already an object. Continue?')
+            ifFalse: [ ^ Error signal: 'Class not compiled. Name already exists.' ] ] ]
 %
 
 category: 'client commands'
@@ -28499,30 +28745,38 @@ method: RowanBrowserService
 recompileMethodsAfterClassCompilation
   "compileClass: must be run first"
 
-  | theClass classService packageService |
-  theClass := [ (UserGlobals at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
-    ensure: [ UserGlobals at: #'jadeiteCompileClassMethod' put: nil ].
+  | theClass classService packageService projectService |
+  theClass := [ 
+  [ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    on: CompileWarning
+    do: [ :ex | ex resume ] ]
+    ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
   classService := RowanClassService new name: theClass name.
   classService update.
-  classService isNewClass: true.
+  classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
+	should be updated. Would like a less heavy weight solution than this, though."
   packageService := RowanPackageService
     forPackageNamed: classService packageName.
   packageService update.
+  projectService := RowanProjectService newNamed: packageService projectName.
+  projectService update.
   packageService selectedClass: classService.
   RowanCommandResult addResult: classService.
   selectedClass := classService.
-  updateType := #none. 
+  updateType := #'none'.
   RowanCommandResult addResult: self
 %
 
 category: 'client commands'
 method: RowanBrowserService
 releaseWindowHandle: integer
-
-	| registry |
-	Rowan loggingServiceClass current logComment: 'Release window with handle: ', integer printString. 
-	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
-	registry removeKey: integer ifAbsent: []
+  | registry |
+  Rowan loggingServiceClass current
+    logComment: 'Release window with handle: ' , integer printString.
+  registry := SessionTemps current
+    at: #'rowanServicesWindowRegistry'
+    ifAbsent: [ ^ self ].
+  registry removeKey: integer ifAbsent: [  ]
 %
 
 category: 'client commands'
@@ -28550,7 +28804,6 @@ removeDictionariesNamed: dictionaryNames
 		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
 			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
 	self updateDictionaries.
-	System commitTransaction.
 %
 
 category: 'client commands'
@@ -28592,6 +28845,13 @@ method: RowanBrowserService
 selectedClass
 
 	^selectedClass
+%
+
+category: 'other'
+method: RowanBrowserService
+selectedClass: object
+
+	selectedClass := object
 %
 
 category: 'perform'
@@ -29060,6 +29320,7 @@ initialize
 	isNewClass := false.
 	methods := Array new.
 	isInSymbolList := true.
+	categories := Array new.
 %
 
 category: 'initialization'
@@ -29450,8 +29711,9 @@ renameCategoryFrom: old to: new
 category: 'client commands'
 method: RowanClassService
 renameClass: oldClassName to: newClassName
-  | references newMethods newClass |
+  | references newMethods newClass oldClass |
   newMethods := Array new.
+  oldClass := Rowan image resolveClassNamed: oldClassName.
   newClass := Rowan projectTools browser
     renameClassNamed: oldClassName
     to: newClassName.
@@ -29459,13 +29721,12 @@ renameClass: oldClassName to: newClassName
   name := newClassName.
   self update.
   renamedName := oldClassName.
-  self updateMethodsAfterRenameFrom: oldClassName to: newClassName. 
+  self updateMethodsAfterRenameFrom: oldClassName to: newClassName.
   self updateSubclassesAfterRenameOf: newClass.
-  references := organizer update referencesTo: oldClassName asSymbol.
-  1 to: references first size do: [ :index | 
-    | method newSource compileResult failedCompile methodService oldSource |
+  references := organizer update referencesToObject: oldClass.
+  references do: [ :method | 
+    | newSource compileResult failedCompile methodService oldSource |
     failedCompile := false.
-    method := references first at: index.
     oldSource := method sourceString.
     newSource := self
       replaceSubString: oldClassName
@@ -29606,13 +29867,15 @@ selectors
 category: 'perform'
 method: RowanClassService
 servicePerform: symbol withArguments: collection
-	| wasClean |
-	wasClean := self arePackageAndProjectClean.
-	super servicePerform: symbol withArguments: collection.
-	updateAfterCommand == false ifFalse:[
-		self update].
-	wasClean ifTrue:[
-		self updatePackageProject]
+  | wasClean |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  wasClean := self arePackageAndProjectClean.
+  super servicePerform: symbol withArguments: collection.
+  updateAfterCommand == false
+    ifFalse: [ self update ].
+  wasClean
+    ifTrue: [ self updatePackageProject ]
 %
 
 category: 'Accessing'
@@ -29625,7 +29888,7 @@ category: 'private'
 method: RowanClassService
 setDictionary: classOrMeta
 	| dictionaryList |
-		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta.
+		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta thisClass.
 		dictionaryName := dictionaryList isEmpty 
 		ifTrue:[String new]
 		ifFalse:[dictionaryList first first name asString].
@@ -29861,23 +30124,30 @@ wasRemoved: boolean
 category: 'debug string'
 method: RowanDebuggerService
 debugStringFrom: aString
-	| debugStream newStream char | 
-	debugStream := ReadStream on: aString trimLeadingBlanks.
-	debugStream contents isEmpty ifTrue:[^'nil halt.'].
-	newStream := WriteStream on: String new. 
-	((char := debugStream next) = $|) ifTrue:[
-		newStream nextPut: char. 
-		newStream nextPutAll: (debugStream upTo: $|); 
-			nextPut: $|;
-			nextPut: Character space;
-			nextPutAll: 'nil halt. '
-	]
-	ifFalse: [
-		newStream 
-			nextPutAll: 'nil halt. ';
-			nextPut: char]. 		
-	newStream nextPutAll: debugStream upToEnd. 
-	^newStream contents
+  | debugStream newStream char peekChar |
+  debugStream := ReadStream on: aString trimLeadingBlanks.
+  [ 
+  peekChar := debugStream peek.
+  peekChar = Character tab
+    or: [ peekChar = Character cr or: [ peekChar = Character lf ] ]	"trimLeadingBlanks doesn't look for tab or cr or lf" ]
+    whileTrue: [ debugStream next ].
+  debugStream contents isEmpty
+    ifTrue: [ ^ 'nil halt.' ].
+  newStream := WriteStream on: String new.
+  (char := debugStream next) = $|
+    ifTrue: [ 
+      newStream nextPut: char.
+      newStream
+        nextPutAll: (debugStream upTo: $|);
+        nextPut: $|;
+        nextPut: Character space;
+        nextPutAll: 'nil halt. ' ]
+    ifFalse: [ 
+      newStream
+        nextPutAll: 'nil halt. ';
+        nextPut: char ].
+  newStream nextPutAll: debugStream upToEnd.
+  ^ newStream contents
 %
 
 category: 'perform'
@@ -29889,12 +30159,16 @@ servicePerform: symbol withArguments: collection
 category: 'other'
 method: RowanDebuggerService
 update
-
-	processes := OrderedCollection with: (RowanProcessService onActiveProcess: (Object _objectForOop: initialProcessOop)).
-	ProcessorScheduler scheduler readyProcesses 			do: [:each | processes add: (RowanProcessService onReadyProcess: 		each)].
-	ProcessorScheduler scheduler suspendedProcesses 	do: [:each | processes add: (RowanProcessService onSuspendedProcess: 	each)].
-	ProcessorScheduler scheduler waitingProcesses 		do: [:each | processes add: (RowanProcessService onWaitingProcess: 		each)].
-	RowanCommandResult addResult: self.
+  processes := OrderedCollection
+    with:
+      (RowanProcessService onActiveProcess: (Object _objectForOop: initialProcessOop)).
+  ProcessorScheduler scheduler readyProcesses
+    do: [ :each | processes add: (RowanProcessService onReadyProcess: each) ].
+  ProcessorScheduler scheduler suspendedProcesses
+    do: [ :each | processes add: (RowanProcessService onSuspendedProcess: each) ].
+  ProcessorScheduler scheduler waitingProcesses
+    do: [ :each | processes add: (RowanProcessService onWaitingProcess: each) ].
+  RowanCommandResult addResult: self
 %
 
 ! Class implementation for 'RowanDictionaryService'
@@ -29941,7 +30215,6 @@ insertAt: index
 	theDictionary at: name asSymbol put: theDictionary. 
 	System myUserProfile insertDictionary: theDictionary at: index. 
 	RowanBrowserService new updateDictionaries.
-	System commitTransaction.
 %
 
 category: 'accessing'
@@ -29984,10 +30257,11 @@ removeGlobalNamed: symbol
 
 category: 'perform'
 method: RowanDictionaryService
-servicePerform: symbol withArguments: collection	
-
-	super servicePerform: symbol withArguments: collection.
-	self update.
+servicePerform: symbol withArguments: collection
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
 %
 
 category: 'client commands'
@@ -30030,6 +30304,12 @@ update
   RowanCommandResult addResult: self
 %
 
+category: 'testing'
+method: RowanDictionaryService
+wasDeleted
+  ^ (Rowan globalNamed: name) isNil
+%
+
 ! Class implementation for 'RowanFrameService'
 
 !		Class methods for 'RowanFrameService'
@@ -30051,14 +30331,20 @@ initializeProcess: aGsProcess level: anInteger organizer: aClassOrganizer
   "In 3.2.15 the server does some whacky things with IP, stepPoint, and nested methods.
 	See http://kermit.gemtalksystems.com/bug?bug=45553 --JGF"
 
-  | frameData gsNMethod |
+  | frameData gsNMethod homeMethodService |
   frameData := aGsProcess _frameContentsAt: anInteger.
+  frameData isNil
+    ifTrue: [^self "not sure if bad frame data is a 3.2.15 bug or not"].
   oop := (frameData at: 8) asOop.
   gsNMethod := frameData at: 1.
   label := aGsProcess _reportAt: anInteger.
   method := RowanMethodService
     forGsNMethod: gsNMethod
     organizer: aClassOrganizer.
+  homeMethodService := RowanMethodService
+    forGsNMethod: gsNMethod homeMethod
+    organizer: aClassOrganizer.
+  method breakPoints: homeMethodService breakPoints.
   homeMethodSelector := gsNMethod homeMethod selector.
   homeMethodClassName := gsNMethod homeMethod inClass
     ifNotNil: [ :cls | cls name asString ].
@@ -30348,19 +30634,40 @@ allReferences
   RowanCommandResult addResult: self
 %
 
+category: 'Accessing'
+method: RowanMethodService
+breakPoints
+
+	^breakPoints
+%
+
+category: 'Accessing'
+method: RowanMethodService
+breakPoints: collection
+  breakPoints := collection
+%
+
 category: 'initialization'
 method: RowanMethodService
 breakPointsFor: aGsNMethod
-	"Answers an Array stepPoints"
+  "Answers an Array stepPoints"
 
-	| list |
-	list := Array new.
-	aGsNMethod _allBreakpoints ifNil: [^#()] ifNotNil: [:anArray | 
-		1 to: anArray size by: 3 do: [:i | 
-			list add: (aGsNMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)).
-		].
-	].
-	^list
+  | list theMethod |
+  list := OrderedCollection new.
+  theMethod := aGsNMethod isMethodForBlock
+    ifTrue: [ 
+      isMethodForBlock := true.
+      aGsNMethod homeMethod ]
+    ifFalse: [ aGsNMethod ].
+  homeMethodOop := theMethod asOop.
+  theMethod _allBreakpoints
+    ifNil: [ ^ OrderedCollection new ]
+    ifNotNil: [ :anArray | 
+      1 to: anArray size by: 3 do: [ :i | 
+        list
+          add:
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
+  ^ list asOrderedCollection
 %
 
 category: 'Accessing'
@@ -30424,11 +30731,18 @@ method: RowanMethodService
 clearBreakAt: stepPoint
 	| method |
 	method := self isUnboundMethod 
-			ifTrue:[Object _objectForOop: oop] 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
 			ifFalse:[self gsNMethod].
 	method clearBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanMethodService
+clearMethodBreaks
+  self update.
+  breakPoints do: [ :breakPoint | self clearBreakAt: breakPoint ]
 %
 
 category: 'Updating'
@@ -30451,7 +30765,25 @@ compilationWarnings: newValue
 	compilationWarnings := newValue
 %
 
-category: 'accessing'
+category: 'client commands'
+method: RowanMethodService
+debugTest: testSelector inClassName: theClassName
+  testResult := 'passed'.
+  [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
+    on: Exception
+    do: [ :ex | 
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
+      ex signal ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
+%
+
+category: 'Accessing'
 method: RowanMethodService
 definedPackage
 
@@ -30484,7 +30816,7 @@ fileout
 	RowanCommandResult addResult: answeringService.
 %
 
-category: 'other'
+category: 'Accessing'
 method: RowanMethodService
 firstReference: integer
 
@@ -30567,6 +30899,7 @@ initialize
 	accessedInstVars := Array new.
 	isTestMethod := false.
 	failedCompile := false.
+	isMethodForBlock := false.
 %
 
 category: 'initialization'
@@ -30615,7 +30948,7 @@ isMethodService
 	^true
 %
 
-category: 'other'
+category: 'testing'
 method: RowanMethodService
 isTestMethod
 
@@ -30716,13 +31049,13 @@ removeSelector: sel class: clsName
 	self browserTool removeMethod: sel asSymbol forClassNamed: (clsName subStrings first) isMeta: (clsName subStrings size = 2)
 %
 
-category: 'accessing'
+category: 'Accessing'
 method: RowanMethodService
 renamedName
 	^renamedName
 %
 
-category: 'accessing'
+category: 'Accessing'
 method: RowanMethodService
 renamedName: object
 	renamedName := object
@@ -30786,24 +31119,25 @@ selector: aSymbol
 category: 'perform'
 method: RowanMethodService
 servicePerform: symbol withArguments: collection
-	| theCommand |
-	theCommand := command. 
-	super servicePerform: symbol withArguments: collection.
-	theCommand = #reformatSource ifFalse:[
-		self update].
+  | theCommand |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  theCommand := command.
+  super servicePerform: symbol withArguments: collection.
+  theCommand = #'reformatSource'
+    ifFalse: [ self update ]
 %
 
 category: 'client commands'
 method: RowanMethodService
 setBreakAt: stepPoint
-	| method |
-	method := self isUnboundMethod 
-
-			ifTrue:[Object _objectForOop: oop] 
-			ifFalse:[self gsNMethod].
-	method setBreakAtStepPoint: stepPoint.
-	self update. 
-	RowanCommandResult addResult: self.
+  | method |
+  method := self isUnboundMethod
+    ifTrue: [ (Object _objectForOop: oop) homeMethod ]
+    ifFalse: [ self gsNMethod ].
+  method setBreakAtStepPoint: stepPoint.
+  self update.
+  RowanCommandResult addResult: self
 %
 
 category: 'initialization'
@@ -31213,12 +31547,14 @@ selectedClass: classService
 category: 'perform'
 method: RowanPackageService
 servicePerform: symbol withArguments: collection
-	| wasClean |
-	wasClean := self arePackageAndProjectClean.
-	super servicePerform: symbol withArguments: collection.
-	self update. 
-	wasClean ifTrue:[
-		self updateProject]
+  | wasClean |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  wasClean := self arePackageAndProjectClean.
+  super servicePerform: symbol withArguments: collection.
+  self update.
+  wasClean
+    ifTrue: [ self updateProject ]
 %
 
 category: 'commands support'
@@ -31487,18 +31823,20 @@ category: 'client commands'
 method: RowanProjectService
 changes
 
-	| jadeServer |
+	| jadeServer projectNames |
 	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
-	(Rowan projectTools diff
-		patchesForProjectNamed: 'Rowan') do: [:assoc | 
-			"key is packageName, value is a CypressPatch"
-			| patch |
-			patch := assoc value.
-			changes add:(jadeServer new
-				_mcDescriptionOfPatch: patch
-				baseName: 'closest ancestor'
-				alternateName: nil) ].
+	projectNames := name ifNil: [ Rowan projectNames ] ifNotNil: [ { name } ].
+	projectNames do: [:aProjectName | 
+		(Rowan projectTools diff
+			patchesForProjectNamed: aProjectName) do: [:assoc | 
+				"key is packageName, value is a CypressPatch"
+				| patch |
+				patch := assoc value.
+				changes add:(jadeServer new
+					_mcDescriptionOfPatch: patch
+					baseName: 'closest ancestor'
+					alternateName: nil) ] ].
 	self refresh.
 	RowanCommandResult addResult: self.
 %
@@ -31841,8 +32179,10 @@ rowanSkew
 category: 'perform'
 method: RowanProjectService
 servicePerform: symbol withArguments: collection
-	super servicePerform: symbol withArguments: collection.
-	self update.
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
 %
 
 category: 'client commands'
@@ -31910,6 +32250,12 @@ updateInternalService: updatedService
 		]].
 %
 
+category: 'testing'
+method: RowanProjectService
+wasDeleted
+  ^ self projectIsLoaded not
+%
+
 category: 'client commands'
 method: RowanProjectService
 write
@@ -31934,7 +32280,7 @@ basicBreakpointMethods
   bpMethods := Array new.
   bpArray := (GsNMethod _breakReport: true) at: 2.
   bpArray do: [ :array | bpMethods add: (array at: 5) ].
-  ^ self methodServicesFrom: bpMethods
+  ^ (self methodServicesFrom: bpMethods) asSet asArray
 %
 
 category: 'queries'
@@ -32008,6 +32354,38 @@ implementorsOf: selector
 	methods := organizer implementorsOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods.
 	self returnQueryToClient.
+%
+
+category: 'queries'
+method: RowanQueryService
+instVarReaders: instVarName in: className
+  | methods symbolAssociation theClass |
+  symbolAssociation := Rowan image symbolList resolveSymbol: className.
+  symbolAssociation ifNil: [ ^ self ].
+  theClass := symbolAssociation value.
+  methods := Array new.
+  theClass
+    methodsDo: [ :selector :method | 
+      (method instVarsRead includes: instVarName asSymbol)
+        ifTrue: [ methods add: method ] ].
+  queryResults := self methodServicesFrom: methods.
+  self returnQueryToClient
+%
+
+category: 'queries'
+method: RowanQueryService
+instVarWriters: instVarName in: className
+  | methods symbolAssociation theClass |
+  symbolAssociation := Rowan image symbolList resolveSymbol: className.
+  symbolAssociation ifNil: [ ^ self ].
+  theClass := symbolAssociation value.
+  methods := Array new.
+  theClass
+    methodsDo: [ :selector :method | 
+      (method instVarsWritten includes: instVarName asSymbol)
+        ifTrue: [ methods add: method ] ].
+  queryResults := self methodServicesFrom: methods.
+  self returnQueryToClient
 %
 
 category: 'queries'
@@ -33356,7 +33734,14 @@ _repositoryPropertyDictFor: packagesRoot
 	| propertiesFile |
 	propertiesFile := packagesRoot / 'properties', 'st'.
 	propertiesFile exists
-		ifFalse: [ ^ Dictionary new ].
+		ifFalse: [
+			| propertiesDict |
+			propertiesFile := packagesRoot / '.filetree'.
+			propertiesFile exists
+					ifFalse: [^ Dictionary new ].
+			propertiesDict := self _readObjectFrom: propertiesFile.
+			propertiesDict at: #format put: 'filetree'.
+			^ propertiesDict ].
 	^ self _readObjectFrom: propertiesFile
 %
 
@@ -34791,7 +35176,7 @@ method: RwModificationFiletreeWriterVisitor
 monticelloMetadata
 	"monticello metadata  --- for writing metadataless is the only supported format"
 
-	^ monticelloMetadata ifNil: [ monticelloMetadata := false ]
+	^ monticelloMetadata ifNil: [ monticelloMetadata := 'false' ]
 %
 
 category: 'package writing'
@@ -34883,7 +35268,7 @@ processProject: aProjectModification
 		ifTrue: [
 			"properties file includes leading $., so strip it"
 			packageExtension := packageExtension copyFrom: 2 to: packageExtension size ].
-	(projectProperties at: 'Metadata' ifAbsent: [ true ])
+	(projectProperties at: 'Metadata' ifAbsent: [ 'true' ])  = 'true'
 		ifTrue: [
 			"Rowan can read filetree repositories with Monticello metadata, but cannot write Monticello metadata"
 			self error: 'Monticello metadata not supported.' ].
@@ -35127,6 +35512,15 @@ _methodInstanceExtensionDir
 	^ self _classExtensionSourceDir / 'instance'
 %
 
+category: 'private'
+method: RwModificationFiletreeWriterVisitor
+_toJSON: anObject
+	| str |
+	str := WriteStreamPortable on: String new.
+	anObject _writeCypressJsonOn: str.
+	^ str contents
+%
+
 category: 'class writing'
 method: RwModificationFiletreeWriterVisitor
 _typeClassDefinitionOf: aClassDefinition
@@ -35138,11 +35532,9 @@ _typeClassDefinitionOf: aClassDefinition
 	definition 		
 		at: #category put: aClassDefinition category.
 
-	(aClassDefinition classInstVarNames)
-		ifNotEmpty: [ :vars | definition at: #classinstvars put: vars asArray ].
+	definition at: #classinstvars put: (aClassDefinition classInstVarNames) asArray.
 
-	(aClassDefinition classVarNames)
-		ifNotEmpty: [ :vars | definition at: #classvars put: vars asArray ].
+	definition at: #classvars put: (aClassDefinition classVarNames) asArray.
 
 	(aClassDefinition gs_constraints)
 		ifNotEmpty: [:gs_constraints | definition at: #'gs_constraints' put: gs_constraints asArray ].
@@ -35150,16 +35542,16 @@ _typeClassDefinitionOf: aClassDefinition
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
 
-	(aClassDefinition instVarNames)
-		ifNotEmpty: [ :vars | definition at: #instvars put: vars asArray ].
+	definition at: #commentStamp put: ''.
+
+	definition at: #instvars put: (aClassDefinition instVarNames) asArray.
 
 	(aClassDefinition gs_reservedOop)
 		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
 
 	definition at: #name put: aClassDefinition name.
 
-	((aClassDefinition poolDictionaryNames) collect: [:each | each asString])
-		ifNotEmpty: [ :vars | definition at: #pools put: vars asArray ].
+	definition at: #pools put: ((aClassDefinition poolDictionaryNames) collect: [:each | each asString]) asArray.
 
 	definition at: #super put: aClassDefinition superclassName.
 
@@ -40960,9 +41352,16 @@ category: 'private'
 method: RwDefinition
 removeKey: key from: aDictionary
 
+	self removeKey: key from: aDictionary  ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+%
+
+category: 'private'
+method: RwDefinition
+removeKey: key from: aDictionary ifAbsent: absentBlock
+
 	aDictionary
 		removeKey: key
-		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+		ifAbsent: absentBlock
 %
 
 category: 'properties'
@@ -42666,6 +43065,13 @@ method: RwPackageDefinition
 removeClassNamed: className
 
 	self removeKey: className from: classDefinitions
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+removeClassNamed: className ifAbsent: absentBlock
+
+	self removeKey: className from: classDefinitions ifAbsent: absentBlock
 %
 
 category: 'accessing'
@@ -56154,7 +56560,7 @@ method: RwGsPlatform
 platformConfigurationAttributes
 	"Answer the configuration attributes for the current platform."
 
-	^ super platformConfigurationAttributes, {self basePlatformAttribute. 'gemstone-kernel'. (System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
+	^ super platformConfigurationAttributes, {self basePlatformAttribute. 'gemstone-kernel'. (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
 %
 
 category: 'preferences'
@@ -62517,7 +62923,7 @@ fromSton: stonReader
 	stonReader parseMapDo: [:key :value | values add: value].
 	values size = 2 ifTrue: [result := self from: values first to: values second].
 	values size = 3 ifTrue: [result := self from: values first to: values second by: values third].
-	^Interval from: 0 to: 0
+	^result
 %
 
 ! Class extensions for 'MemoryStore'
@@ -63607,9 +64013,11 @@ serviceClasses
 	| array |
 	array := Array with: RowanService. 
 	array add: RowanAnsweringService; 
+		add: RowanAutoCommitService; 
 		add: RowanBrowserService;
 		add: RowanClassService; 
 		add: RowanDebuggerService; 
+		add: RowanDictionaryService; 
 		add: RowanFrameService;
 		add: RowanLoggingService;
 		add: RowanMethodService;

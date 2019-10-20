@@ -229,14 +229,6 @@ RwModificationFiletreeWriterVisitor >> _methodInstanceExtensionDir [
 	^ self _classExtensionSourceDir / 'instance'
 ]
 
-{ #category : 'private' }
-RwModificationFiletreeWriterVisitor >> _toJSON: anObject [
-	| str |
-	str := WriteStreamPortable on: String new.
-	anObject _writeCypressJsonOn: str.
-	^ str contents
-]
-
 { #category : 'class writing' }
 RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition [
 	"order is alphabetical"
@@ -256,8 +248,6 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
-
-	definition at: #commentStamp put: ''.
 
 	definition at: #instvars put: (aClassDefinition instVarNames) asArray.
 
