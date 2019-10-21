@@ -100,6 +100,21 @@ RowanAnsweringService >> disableAllBreaks [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> doClientAndServerVersionsMatch: clientVersion [
+  "Not to be sent through services. Sent immediately after login"
+
+  clientVersion = RowanService version
+    ifTrue: [ 
+      answer := true.
+      SessionTemps current at: #'versionsVerified' put: true ]
+    ifFalse: [ 
+      answer := clientVersion > RowanService version
+        ifTrue: [ 'Server is more recent than client' ]
+        ifFalse: [ 'Client is more recent than server' ] ].
+  ^ answer
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> enableAllBreaks [
   | methodServices |
   methodServices := RowanQueryService new
