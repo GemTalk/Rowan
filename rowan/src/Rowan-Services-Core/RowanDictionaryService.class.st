@@ -115,7 +115,7 @@ RowanDictionaryService >> update [
         ifFalse: [ 
           | printString theKey |
           printString := [ 
-          value charSize > 1
+          value printString charSize > 1
             ifTrue: [ '<<unprintable string. charSize > 1>>' ]
             ifFalse: [ value printString ] ]
             on: Error
