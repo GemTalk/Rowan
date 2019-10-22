@@ -100,6 +100,23 @@ RowanAnsweringService >> disableAllBreaks [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> doClientAndServerVersionsMatch: clientVersion [
+  "Not to be sent through services so return an answer directly.
+	Sent immediately after Jadeite login"
+
+  SessionTemps current at: #'versionsVerified' put: false.
+  clientVersion = RowanService version
+    ifTrue: [ 
+      answer := true.
+      SessionTemps current at: #'versionsVerified' put: true ]
+    ifFalse: [ 
+      answer := clientVersion > RowanService version
+        ifTrue: [ 'Client is more recent than server' ]
+        ifFalse: [ 'Server is more recent than client' ] ].
+  ^ answer
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> enableAllBreaks [
   | methodServices |
   methodServices := RowanQueryService new
