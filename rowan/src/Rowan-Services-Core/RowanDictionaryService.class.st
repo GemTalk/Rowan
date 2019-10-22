@@ -114,7 +114,10 @@ RowanDictionaryService >> update [
           classes add: classService ]
         ifFalse: [ 
           | printString theKey |
-          printString := [ value printString ]
+          printString := [ 
+          value charSize > 1
+            ifTrue: [ '<<unprintable string. charSize > 1>>' ]
+            ifFalse: [ value printString ] ]
             on: Error
             do: [ :ex | 'unprintable string. Error - <' , ex printString , '>' ].
           key charSize = 1
