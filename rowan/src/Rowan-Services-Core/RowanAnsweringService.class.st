@@ -310,11 +310,12 @@ RowanAnsweringService >> runMethodTests: methodServices [
 
 { #category : 'client commands' }
 RowanAnsweringService >> selectorsMatchingPattern: pattern [
-
-	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
-	answer := answer select: [:each |each _matchPatternNoCase: pattern].
-	answer := answer asSortedCollection asArray.
-	RowanCommandResult addResult: self.
+  answer := ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols')
+    value.
+  answer := answer
+    select: [ :each | each charSize = 1 and: [ each _matchPatternNoCase: pattern ] ].
+  answer := answer asSortedCollection asArray.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
