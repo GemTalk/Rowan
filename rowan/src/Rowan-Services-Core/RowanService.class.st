@@ -80,7 +80,10 @@ RowanService class >> setBreakPointsAreEnabled: boolean [
 
 { #category : 'accessing' }
 RowanService class >> version [
-  ^ '3.0.82'
+  "change this method carefully and only at Jadeite release boundaries.
+	Failure to do so will prevent logins"
+
+  ^ 3082
 ]
 
 { #category : 'other' }

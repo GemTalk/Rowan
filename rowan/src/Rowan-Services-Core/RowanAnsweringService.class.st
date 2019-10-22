@@ -111,8 +111,12 @@ RowanAnsweringService >> doClientAndServerVersionsMatch: clientVersion [
       SessionTemps current at: #'versionsVerified' put: true ]
     ifFalse: [ 
       answer := clientVersion > RowanService version
-        ifTrue: [ 'Client is more recent than server' ]
-        ifFalse: [ 'Server is more recent than client' ] ].
+        ifTrue: [ 
+          'Client (' , clientVersion printString , ') is more recent than server ('
+            , RowanService version printString , ')' ]
+        ifFalse: [ 
+          'Server (' , RowanService version printString , ') is more recent than client ('
+            , clientVersion printString , ')' ] ].
   ^ answer
 ]
 
