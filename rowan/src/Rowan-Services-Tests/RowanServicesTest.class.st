@@ -234,6 +234,7 @@ RowanServicesTest >> setUp [
   "ensure results are clean as service requests not coming through #updateFromSton: like the client"
 
   super setUp.
+  SessionTemps current at: #'versionsVerified' put: false.
   RowanAnsweringService new setEnableInteractionHandler: false.
   RowanCommandResult initializeResults.
   Rowan platform _alternateImageClass: Rowan image testImageClass
