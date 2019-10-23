@@ -1,6 +1,11 @@
 Extension { #name : 'RwGsPlatform' }
 
 { #category : '*rowan-services-extensions' }
+RwGsPlatform >> answeringServiceClass [
+  ^ RowanAnsweringService
+]
+
+{ #category : '*rowan-services-extensions' }
 RwGsPlatform >> browserServiceClass [
 
 	^ RowanBrowserService

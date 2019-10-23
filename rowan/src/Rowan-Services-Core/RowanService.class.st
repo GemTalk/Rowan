@@ -394,10 +394,10 @@ RowanService >> servicePerform: symbol withArguments: collection [
   SessionTemps current
     at: #'versionsVerified'
     ifAbsent: [ 
-      Error
-        signal:
-          'Version mismatch failure. Client version is older than server version.'.
-      System logout ].
+      SessionTemps current at: #'versionsVerified' put: false.
+      self
+        inform:
+          'Version mismatch failure. Client version is older than server version.' ].
   symbol == #'update'
     ifTrue: [ ^ self ].
   ^ super perform: symbol withArguments: collection
