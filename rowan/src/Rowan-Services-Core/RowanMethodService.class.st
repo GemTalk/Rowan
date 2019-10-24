@@ -180,7 +180,7 @@ RowanMethodService >> breakPointsFor: aGsNMethod [
       1 to: anArray size by: 3 do: [ :i | 
         list
           add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2) abs) ] ].
   ^ list asOrderedCollection
 ]
 
