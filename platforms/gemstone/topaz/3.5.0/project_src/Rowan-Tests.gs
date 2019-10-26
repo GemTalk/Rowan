@@ -1414,9 +1414,17 @@ jadeiteServer
 category: 'tests'
 method: JadeServerTest
 test_jadeServerCanonicalLocation
-	self assert: (JadeServer theJadeiteServer isKindOf: JadeServer64bit32).
-	self assert: (JadeServer theJadeiteServer class canUnderstand: #updateFromSton:).
-	self assert: (JadeServer theJadeiteServer == (SessionTemps current at: #jadeiteServer))
+  | jadeServerClass |
+  (System _gemVersion beginsWith: '3.2')
+    ifTrue: [ jadeServerClass := JadeServer64bit32 ]
+    ifFalse: [ jadeServerClass := JadeServer64bit35 ].
+  self assert: (JadeServer theJadeiteServer isKindOf: jadeServerClass).
+  self
+    assert:
+      (JadeServer theJadeiteServer class canUnderstand: #'updateFromSton:').
+  self
+    assert:
+      JadeServer theJadeiteServer == (SessionTemps current at: #'jadeiteServer')
 %
 
 category: 'tests'
@@ -1455,7 +1463,8 @@ test_jadeServerHierarchyValid
 						JadeServer64bit32.
 
 	See RsGsPlatform>>jadeServerClassNamed: for symbol list JadeServer*
-	lives in. Note that method will only lookup JadeServer & JadeServer64bit32"
+	lives in. Note that method will only lookup JadeServer, JadeServer64bit32,
+	and JadeServer64bit35"
 				
 	| jadeServerClass subclasses |
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer. 
@@ -1476,6 +1485,9 @@ test_jadeServerHierarchyValid
 	self assert: subclasses asArray first name = #JadeServer64bit32.
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit32. 
 	subclasses :=  jadeServerClass subclasses asArray.
+	self assert: subclasses asArray first name = #JadeServer64bit35.
+	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit35. 
+	subclasses :=  jadeServerClass subclasses asArray.
 	self assert: subclasses isEmpty
 %
 
@@ -1485,15 +1497,22 @@ test_rowanCanFindJadeServer
 
 	self assert: (Rowan class canUnderstand: #jadeServerClassNamed:).
 	self assert: (RwGsPlatform canUnderstand: #jadeServerClassNamed:).
-	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32
+	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32.
+	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit35)equals: JadeServer64bit35
 %
 
 category: 'tests'
 method: JadeServerTest
 test_serviceUsesCanonicalJadeServer
-	
-	self assert: (RowanAnsweringService new jadeiteServer isKindOf: JadeServer64bit32).
-	self assert: RowanAnsweringService new jadeiteServer == JadeServer theJadeiteServer
+  | jadeServerClass |
+  (System _gemVersion beginsWith: '3.2')
+    ifTrue: [ jadeServerClass := JadeServer64bit32 ]
+    ifFalse: [ jadeServerClass := JadeServer64bit35 ].
+  self
+    assert: (RowanAnsweringService new jadeiteServer isKindOf: jadeServerClass).
+  self
+    assert:
+      RowanAnsweringService new jadeiteServer == JadeServer theJadeiteServer
 %
 
 category: 'tests'
@@ -2301,6 +2320,24 @@ isAbstract
 
 category: 'unicode method'
 method: RowanServicesTest
+addUnicodeSymbolKeyToUserGlobals
+  "RowanServicesTest new addUnicodeSymbolKeyToUserGlobals"
+
+  UserGlobals
+    at: (String with: (Character withValue: 16r3DA)) asSymbol
+    put: 'fnoodle'
+%
+
+category: 'unicode method'
+method: RowanServicesTest
+addUnicodeValueToUserGlobals
+  "RowanServicesTest new addUnicodeValueToUserGlobals"
+
+  UserGlobals at: #'bad' put: '£¥' asSymbol
+%
+
+category: 'unicode method'
+method: RowanServicesTest
 compileUnicodeMethod
 	"RowanServicesTest new compileUnicodeMethod"
 
@@ -2434,16 +2471,6 @@ defaultSymbolDictionaryName
 	^'ServicesTestDictionary'
 %
 
-category: 'unicode method'
-method: RowanServicesTest
-iAmAUnicodeMethod
-
-		| abc |
-		abc := 'Ϛ'.
-		self halt. 
-		^abc
-%
-
 category: 'support'
 method: RowanServicesTest
 jadeiteIssueTested: aSymbol withTitle: anObject
@@ -2487,6 +2514,17 @@ loadServicesTestProject
   Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 %
 
+category: 'unicode method'
+method: RowanServicesTest
+removeUnicodeSymbolsFromUserGlobals
+  "RowanServicesTest new addUnicodeSymbolToUserGlobals"
+
+  UserGlobals
+    removeKey: (String with: (Character withValue: 16r3DA)) asSymbol
+    ifAbsent: [  ].
+  UserGlobals removeKey: #'bad' ifAbsent: [  ]
+%
+
 category: 'constants'
 method: RowanServicesTest
 servicesDefaultClassName
@@ -2521,6 +2559,7 @@ setUp
 	| user symListP symListT dictP dictT index |
 	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
   super setUp.
+  SessionTemps current at: #'versionsVerified' put: false.
 	RowanAnsweringService new setEnableInteractionHandler: false. 
 	RowanCommandResult initializeResults.
 	Rowan platform _alternateImageClass: Rowan image testImageClass.
@@ -2590,14 +2629,14 @@ test_disableBreakpointsInterface
   self
     jadeiteIssueTested: #'issue515'
     withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
-  service setBreakPointsAreDisabled: true.
-  self assert: service breakPointsAreDisabled.
-  self assert: RowanService breakPointsAreDisabled equals: true.
-  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled').
-  service setBreakPointsAreDisabled: false.
-  self deny: service breakPointsAreDisabled.
-  self assert: RowanService breakPointsAreDisabled equals: false.
-  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled')
+  service setBreakPointsAreEnabled: true.
+  self assert: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: true.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled').
+  service setBreakPointsAreEnabled: false.
+  self deny: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: false.
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
 %
 
 category: 'tests'
@@ -2645,24 +2684,24 @@ test_initializeAutoCommit
 category: 'tests'
 method: RowanAnsweringServiceTest
 test_initializeBreakPointsAreDisabled
-  | breakPointsAreDisabled |
+  | breakPointsAreEnabled |
   self
     jadeiteIssueTested: #'issue515'
     withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
-  breakPointsAreDisabled := RowanService breakPointsAreDisabled.
-  self assert: RowanService breakPointsAreDisabled equals: breakPointsAreDisabled.
+  breakPointsAreEnabled := RowanService breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: breakPointsAreEnabled.
   self
-    assert: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled')
-    equals: breakPointsAreDisabled.
+    assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+    equals: breakPointsAreEnabled.
   [ 
-  service initializeBreakPointsAreDisabled.
-  self deny: RowanService breakPointsAreDisabled.
-  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreDisabled') ]
+  service initializeBreakPointsAreEnabled.
+  self assert:  RowanService breakPointsAreEnabled.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
     ensure: [ 
-      RowanService setBreakPointsAreDisabled: breakPointsAreDisabled.
+      RowanService setBreakPointsAreEnabled: breakPointsAreEnabled.
       self
-        assert: RowanService breakPointsAreDisabled
-        equals: breakPointsAreDisabled ]
+        assert: RowanService breakPointsAreEnabled
+        equals: breakPointsAreEnabled ]
 %
 
 category: 'tests'
