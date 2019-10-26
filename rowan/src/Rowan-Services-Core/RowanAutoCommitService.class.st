@@ -1,3 +1,6 @@
+"
+Simple service that provides updates to the client related to auto commit.
+"
 Class {
 	#name : 'RowanAutoCommitService',
 	#superclass : 'RowanService',

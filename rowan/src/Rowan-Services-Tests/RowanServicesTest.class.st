@@ -19,6 +19,22 @@ RowanServicesTest class >> isAbstract [
 ]
 
 { #category : 'unicode method' }
+RowanServicesTest >> addUnicodeSymbolKeyToUserGlobals [
+  "RowanServicesTest new addUnicodeSymbolKeyToUserGlobals"
+
+  UserGlobals
+    at: (String with: (Character withValue: 16r3DA)) asSymbol
+    put: 'fnoodle'
+]
+
+{ #category : 'unicode method' }
+RowanServicesTest >> addUnicodeValueToUserGlobals [
+  "RowanServicesTest new addUnicodeValueToUserGlobals"
+
+  UserGlobals at: #'bad' put: '£¥' asSymbol
+]
+
+{ #category : 'unicode method' }
 RowanServicesTest >> compileUnicodeMethod [
 	"RowanServicesTest new compileUnicodeMethod"
 
@@ -143,15 +159,6 @@ RowanServicesTest >> defaultSymbolDictionaryName [
 	^'ServicesTestDictionary'
 ]
 
-{ #category : 'unicode method' }
-RowanServicesTest >> iAmAUnicodeMethod [
-
-		| abc |
-		abc := 'Ϛ'.
-		self halt. 
-		^abc
-]
-
 { #category : 'support' }
 RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 	"send this to help identify which tests test which issues
@@ -192,6 +199,16 @@ RowanServicesTest >> loadServicesTestProject [
   Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 ]
 
+{ #category : 'unicode method' }
+RowanServicesTest >> removeUnicodeSymbolsFromUserGlobals [
+  "RowanServicesTest new addUnicodeSymbolToUserGlobals"
+
+  UserGlobals
+    removeKey: (String with: (Character withValue: 16r3DA)) asSymbol
+    ifAbsent: [  ].
+  UserGlobals removeKey: #'bad' ifAbsent: [  ]
+]
+
 { #category : 'constants' }
 RowanServicesTest >> servicesDefaultClassName [
 
@@ -221,6 +238,7 @@ RowanServicesTest >> setUp [
 	| user symListP symListT dictP dictT index |
 	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
   super setUp.
+  SessionTemps current at: #'versionsVerified' put: false.
 	RowanAnsweringService new setEnableInteractionHandler: false. 
 	RowanCommandResult initializeResults.
 	Rowan platform _alternateImageClass: Rowan image testImageClass.
