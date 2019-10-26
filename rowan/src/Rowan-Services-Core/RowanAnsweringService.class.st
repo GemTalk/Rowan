@@ -100,6 +100,27 @@ RowanAnsweringService >> disableAllBreaks [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> doClientAndServerVersionsMatch: clientVersion [
+  "Not to be sent through services so return an answer directly.
+	Sent immediately after Jadeite login"
+
+  SessionTemps current at: #'versionsVerified' put: false.
+  clientVersion = RowanService version
+    ifTrue: [ 
+      answer := true.
+      SessionTemps current at: #'versionsVerified' put: true ]
+    ifFalse: [ 
+      answer := clientVersion > RowanService version
+        ifTrue: [ 
+          'Client (' , clientVersion printString , ') is more recent than server ('
+            , RowanService version printString , ')' ]
+        ifFalse: [ 
+          'Server (' , RowanService version printString , ') is more recent than client ('
+            , clientVersion printString , ')' ] ].
+  ^ answer
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> enableAllBreaks [
   | methodServices |
   methodServices := RowanQueryService new
@@ -289,11 +310,12 @@ RowanAnsweringService >> runMethodTests: methodServices [
 
 { #category : 'client commands' }
 RowanAnsweringService >> selectorsMatchingPattern: pattern [
-
-	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
-	answer := answer select: [:each |each _matchPatternNoCase: pattern].
-	answer := answer asSortedCollection asArray.
-	RowanCommandResult addResult: self.
+  answer := ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols')
+    value.
+  answer := answer
+    select: [ :each | each charSize = 1 and: [ each _matchPatternNoCase: pattern ] ].
+  answer := answer asSortedCollection asArray.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
@@ -323,7 +345,9 @@ RowanAnsweringService >> setEnableInteractionHandler: boolean [
 RowanAnsweringService >> sortedSymbols [
   answer := SortedCollection new.
   ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
-    keysDo: [ :symbol | answer add: symbol ].
+    keysDo: [ :symbol | 
+      symbol charSize = 1
+        ifTrue: [ answer add: symbol ] ].
   answer := answer asArray.
   RowanCommandResult addResult: self
 ]

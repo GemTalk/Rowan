@@ -113,14 +113,20 @@ RowanDictionaryService >> update [
           classService version: (value classHistory indexOf: value).
           classes add: classService ]
         ifFalse: [ 
-          | printString |
-          printString := [ value printString ]
+          | printString theKey |
+          printString := [ 
+          value printString charSize > 1
+            ifTrue: [ '<<unprintable string. charSize > 1>>' ]
+            ifFalse: [ value printString ] ]
             on: Error
             do: [ :ex | 'unprintable string. Error - <' , ex printString , '>' ].
+          key charSize = 1
+            ifTrue: [ theKey := key ]
+            ifFalse: [ theKey := '<<unprintable string. charSize > 1>>' ].
           sorted
             add:
               (Array
-                with: name , '.' , key
+                with: name , '.' , theKey
                 with: value class name
                 with: value asOop
                 with: printString) ] ].

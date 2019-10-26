@@ -180,7 +180,7 @@ RowanMethodService >> breakPointsFor: aGsNMethod [
       1 to: anArray size by: 3 do: [ :i | 
         list
           add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2) abs) ] ].
   ^ list asOrderedCollection
 ]
 
@@ -616,6 +616,8 @@ RowanMethodService >> setBreakAt: stepPoint [
     ifTrue: [ (Object _objectForOop: oop) homeMethod ]
     ifFalse: [ self gsNMethod ].
   method setBreakAtStepPoint: stepPoint.
+  self class breakPointsAreEnabled
+    ifFalse: [ GsNMethod _disableAllBreaks ].
   self update.
   RowanCommandResult addResult: self
 ]
