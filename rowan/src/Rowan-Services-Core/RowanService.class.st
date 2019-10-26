@@ -78,6 +78,14 @@ RowanService class >> setBreakPointsAreEnabled: boolean [
   ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
 ]
 
+{ #category : 'accessing' }
+RowanService class >> version [
+  "change this method carefully and only at Jadeite release boundaries.
+	Failure to do so will prevent logins"
+
+  ^ 3085
+]
+
 { #category : 'other' }
 RowanService >> answer: anObject [
 
@@ -383,6 +391,13 @@ RowanService >> servicePerform: symbol withArguments: collection [
   "each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
 
+  SessionTemps current
+    at: #'versionsVerified'
+    ifAbsent: [ 
+      SessionTemps current at: #'versionsVerified' put: false.
+      self
+        inform:
+          'Version mismatch failure. Client version is older than server version.' ].
   symbol == #'update'
     ifTrue: [ ^ self ].
   ^ super perform: symbol withArguments: collection

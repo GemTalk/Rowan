@@ -13,6 +13,12 @@ Class {
 	#category : 'Rowan-Kernel'
 }
 
+{ #category : 'public client services' }
+Rowan class >> answeringServiceClass [
+
+	^ self platform answeringServiceClass
+]
+
 { #category : 'public' }
 Rowan class >> automaticClassInitializationBlackList [
 

@@ -299,7 +299,7 @@ RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList:
 RowanClassService >> copyClassTo: newClassName [
   | newTemplate newClass newClassService index |
   (Rowan image symbolList resolveSymbol: newClassName)
-    ifNotNil: [ ^ self error: newClassName , ' already exists' ].
+    ifNotNil: [ ^ self inform: newClassName , ' already exists' ].
   index := template findPattern: (Array with: name) startingAt: 1.
   newTemplate := template copy.
   newTemplate removeFrom: index to: index + name size - 1.
