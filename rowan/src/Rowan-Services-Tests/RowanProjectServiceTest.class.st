@@ -24,23 +24,21 @@ RowanProjectServiceTest >> projectServiceNamed: projectName [
 
 { #category : 'setup teardown' }
 RowanProjectServiceTest >> setUp [
-
-	super setUp.
-	self createServicesTestProject.
-	self loadServicesTestProject.
+  super setUp.
+  self loadServicesTestProject
 ]
 
 { #category : 'setup teardown' }
 RowanProjectServiceTest >> tearDown [
 
+	self unloadServicesTestProject.
 	super tearDown.
-	self unloadServicesTestProject
 ]
 
 { #category : 'tests' }
 RowanProjectServiceTest >> test_addedProjectNotOnDisk [
 
-	| proj projectService projectName |
+	| projectService projectName |
 	projectName := 'Tashkent'. 
 	self jadeiteIssueTested: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
 	self createNonDiskTestProjectNamed:  projectName packageName: 'Packagekent'. 

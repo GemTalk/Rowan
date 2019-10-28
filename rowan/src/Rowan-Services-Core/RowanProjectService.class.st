@@ -64,6 +64,9 @@ RowanProjectService >> addPackageNamed: packageName [
 
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
+	name = Rowan unpackagedName ifTrue:[
+		isLoaded := false.
+		RowanBrowserService new updateDictionaries. ^self]. 
 	(isLoaded := self projectIsLoaded) ifFalse:[
 		existsOnDisk := false. 
 		updateType := #removedProject:. 
@@ -96,7 +99,7 @@ RowanProjectService >> branch: anObject [
 { #category : 'client commands' }
 RowanProjectService >> changes [
 
-	| projectService jadeServer |
+	| jadeServer |
 	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
 	self packageNames do:[:packageName |
@@ -361,10 +364,14 @@ RowanProjectService >> refresh [
 
 { #category : 'client commands' }
 RowanProjectService >> reloadProject [
-
-	[Rowan projectTools load loadProjectNamed: name] 
-		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ]
+  [ Rowan projectTools load loadProjectNamed: name ]
+    on: Warning
+    do: [ :ex | 
+      Transcript
+        cr;
+        show: ex description.
+      ex resume ].
+  RowanBrowserService new packagesWithTests
 ]
 
 { #category : 'rowan' }
@@ -427,8 +434,10 @@ RowanProjectService >> rowanSkew [
 
 { #category : 'perform' }
 RowanProjectService >> servicePerform: symbol withArguments: collection [
-	super servicePerform: symbol withArguments: collection.
-	self update.
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
 ]
 
 { #category : 'client commands' }
@@ -490,6 +499,11 @@ RowanProjectService >> updateInternalService: updatedService [
 		packageService = updatedService ifTrue:[
 			packages at: index put: updatedService
 		]].
+]
+
+{ #category : 'testing' }
+RowanProjectService >> wasDeleted [
+  ^ self projectIsLoaded not
 ]
 
 { #category : 'client commands' }

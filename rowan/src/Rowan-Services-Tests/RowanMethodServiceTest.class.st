@@ -79,8 +79,8 @@ RowanMethodServiceTest >> stepPoint3Source [
 { #category : 'support' }
 RowanMethodServiceTest >> tearDown [
 
+	self unloadServicesTestProject.
 	super tearDown.
-	self unloadServicesTestProject
 ]
 
 { #category : 'tests' }
@@ -100,7 +100,18 @@ RowanMethodServiceTest >> test_classNameIsString [
 	methodService := RowanMethodService source: 'fnoodle' selector: #fnoodle category: 'other' className: 'RowanMethodServiceTest' packageName: 'Rowan-Services-Tests' meta: true. 
 	self assert: (methodService className isKindOf: String).
 	self assert: methodService className = 'RowanMethodServiceTest'.
-	System abortTransaction.
+]
+
+{ #category : 'tests' }
+RowanMethodServiceTest >> test_isTestMethod [
+	"isTestMethod not getting initialized correctly" 
+	| methodService organizer |
+	self jadeiteIssueTested: #issue512 withTitle: '"run selected" can get disabled after save in debugger (3.0.76)'.
+	organizer := ClassOrganizer new. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodServiceTest compiledMethodAt: #test_isTestMethod) organizer: organizer.
+	self assert: methodService isTestMethod. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodService compiledMethodAt: #initialize) organizer: organizer.
+	self deny: methodService isTestMethod.
 ]
 
 { #category : 'tests' }
@@ -110,6 +121,23 @@ RowanMethodServiceTest >> test_noStepPoints [
 	classService saveMethodSource: 'abc' category: 'testing step points'.
 	methodService := RowanMethodService forSelector: #abc class: classService classOrMeta meta: false organizer: ClassOrganizer new.
 	self assert: methodService stepPoints isEmpty.
+]
+
+{ #category : 'tests' }
+RowanMethodServiceTest >> test_reformatSource [
+	| classService methodService source |
+		classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	source := 'abc | abc | abc := 1. abc := abc + abc. ^abc'.
+	classService saveMethodSource: source category: 'other'.
+	self assert: (classService methodsNamed: #abc) size equals: 1.
+	methodService := (classService methodsNamed: #abc) first.
+	self assert: methodService source equals: source.
+	methodService reformatSource.
+	self assert: methodService reformatSource source equals: 'abc
+  | abc |
+  abc := 1.
+  abc := abc + abc.
+  ^ abc'
 ]
 
 { #category : 'tests' }

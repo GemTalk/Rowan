@@ -7304,7 +7304,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7402,7 +7402,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7498,7 +7498,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7628,7 +7628,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7759,8 +7759,8 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_ex
 	"new test case:superclass has new class version ... the subclass has an extension method removed --- simplest case"
 	"https://github.com/dalehenrich/Rowan/issues/393"
 
-	| projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 oldClass1 oldClass2 oldClass3 newClass1 audit classExtensionDefinition |
+	| projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1  
+		projectSetDefinition audit classExtensionDefinition |
 
 	projectName := 'Issue326'.
 	packageName1 := 'Issue326-Core'.
@@ -7862,7 +7862,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/393"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7995,7 +7995,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/393"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -8125,8 +8125,8 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 	"new test case:superclass has new class version ... the subclass has a method removed --- simplest case"
 	"https://github.com/dalehenrich/Rowan/issues/393"
 
-	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 oldClass1 oldClass2 oldClass3 newClass1 audit |
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1  
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -9619,6 +9619,203 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_6 [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests-issue 498' }
+RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/498 -- expanded validation over https://github.com/dalehenrich/Rowan/issues/293"
+
+	"constraints should be displayed in inst var order, not alphabetical order"
+
+	"non-rowan variant of test ... _2 uses Rowan api"
+
+	| className1 className2 className3 class constraintBlock1 constraintBlock2 constraintBlock3 x
+		class1 class2 class3 |
+	className1 := 'Issue293Class1'.
+	className2 := 'Issue293Subclass2'.
+	className3 := 'Issue293Subclass3'.
+
+	{className1 . className2. className3 }
+		do: [ :className | 
+			UserGlobals removeKey: className1 asSymbol ifAbsent: [].
+			UserGlobals removeKey: className2 asSymbol  ifAbsent: [].
+			UserGlobals removeKey: className3 asSymbol  ifAbsent: [] ].
+
+	[ 
+	class1 := Object
+		subclass: className1
+		instVarNames: #( ivar2 ivar3 ivar4 ivar1)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		constraints: { { 'ivar4' . Association }. { 'ivar3' . Association }. { 'ivar2' . Association}. { 'ivar1' . Association }. }
+		options: {}.
+
+	class2 := class1
+		subclass: className2
+		instVarNames: #( ivar7 ivar6)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		constraints: { { 'ivar7' . Association }. { 'ivar6' . Association }. }
+		options: {}.
+
+	class3 := class2
+		subclass: className3
+		instVarNames: #( ivar8 ivar9)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		constraints: { { 'ivar9' . Association }. { 'ivar8' . Association }. }
+		options: {} ] 
+			on: Deprecated 
+			do: [:ex | 
+				"ignore any Deprecation errors ... we're using the deprecated class creation on purpose"
+				ex resume ].
+
+"validate"
+	class := Rowan globalNamed: className1.
+	self assert: (class _constraintsEqual: {  { #'ivar1' . Association }.  { #'ivar2' . Association }. { #'ivar3' . Association }. { #'ivar4' . Association }.  }).
+
+	class := Rowan globalNamed: className2.
+	self assert: (class _constraintsEqual: {  { #'ivar7' . Association }.  { #'ivar6' . Association }. }).
+
+	class := Rowan globalNamed: className3.
+	self assert: (class _constraintsEqual: {  { #'ivar8' . Association }.  { #'ivar9' . Association }. }).
+
+	constraintBlock1 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar1) == Association.
+		self assert: (x := theClass _constraintOn: #ivar2) == Association.
+		self assert: (x := theClass _constraintOn: #ivar3) == Association.
+		self assert: (x := theClass _constraintOn: #ivar4) == Association ].
+	constraintBlock2 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar6) == Association.
+		self assert: (x := theClass _constraintOn: #ivar7) == Association ].
+	constraintBlock3 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar8) == Association.
+		self assert: (x := theClass _constraintOn: #ivar9) == Association ].
+
+	constraintBlock1 value: (Rowan globalNamed: className1).
+
+	constraintBlock1 value: (Rowan globalNamed: className2).
+	constraintBlock2 value: (Rowan globalNamed: className2).
+
+	constraintBlock1 value: (Rowan globalNamed: className3).
+	constraintBlock2 value: (Rowan globalNamed: className3).
+	constraintBlock3 value: (Rowan globalNamed: className3).
+]
+
+{ #category : 'tests-issue 498' }
+RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/498 -- expanded validation over https://github.com/dalehenrich/Rowan/issues/293"
+
+	"constraints should be displayed in inst var order, not alphabetical order"
+
+	"rowan variant of test ... _1 uses non-Rowan api"
+
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 
+		className3 projectSetDefinition class constraintBlock1 constraintBlock2 constraintBlock3 x |
+	projectName := 'Issue255'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Subclass2'.
+	className3 := 'Issue255Subclass3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #( ivar2 ivar3 ivar4 ivar1)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar4' . 'Association' }. { 'ivar3' . 'Association' }. { 'ivar2' . 'Association' }. { 'ivar1' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: className1
+		instvars: #( ivar7 ivar6)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar7' . 'Association' }. { 'ivar6' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className2
+		instvars: #( ivar8 ivar9)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar9' . 'Association' }. { 'ivar8' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class := Rowan globalNamed: className1.
+	self assert: (class _constraintsEqual: {  { #'ivar1' . Association }.  { #'ivar2' . Association }. { #'ivar3' . Association }. { #'ivar4' . Association }.  }).
+
+	class := Rowan globalNamed: className2.
+	self assert: (class _constraintsEqual: {  { #'ivar7' . Association }.  { #'ivar6' . Association }. }).
+
+	class := Rowan globalNamed: className3.
+	self assert: (class _constraintsEqual: {  { #'ivar8' . Association }.  { #'ivar9' . Association }. }).
+
+	constraintBlock1 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar1) == Association.
+		self assert: (x := theClass _constraintOn: #ivar2) == Association.
+		self assert: (x := theClass _constraintOn: #ivar3) == Association.
+		self assert: (x := theClass _constraintOn: #ivar4) == Association ].
+	constraintBlock2 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar6) == Association.
+		self assert: (x := theClass _constraintOn: #ivar7) == Association ].
+	constraintBlock3 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar8) == Association.
+		self assert: (x := theClass _constraintOn: #ivar9) == Association ].
+
+	constraintBlock1 value: (Rowan globalNamed: className1).
+
+	constraintBlock1 value: (Rowan globalNamed: className2).
+	constraintBlock2 value: (Rowan globalNamed: className2).
+
+	constraintBlock1 value: (Rowan globalNamed: className3).
+	constraintBlock2 value: (Rowan globalNamed: className3).
+	constraintBlock3 value: (Rowan globalNamed: className3).
 ]
 
 { #category : 'tests-issue 72' }

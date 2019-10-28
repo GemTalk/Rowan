@@ -1,6 +1,7 @@
 run
-	| deprecationAction suite strm res projectNames |
+	| deprecationAction suite strm res projectNames warnings resultsDict resultCases |
 	deprecationAction := Deprecated deprecatedAction.
+	warnings := {}.
 	[
 		Deprecated doErrorOnDeprecated.
 		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' ).
@@ -11,9 +12,18 @@ run
 			audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ] ].
 		projectNames do: [:projectName |
 			"make sure test group is loaded ... include deprecated packages for now"
-			Rowan projectTools load
+			[ Rowan projectTools load
 				loadProjectNamed: projectName
-				withGroupNames: #('tests' 'deprecated' 'jadeServer') ].
+				withGroupNames: #('tests' 'deprecated' 'jadeServer') ]
+					on: CompileWarning do: [:ex |
+						warnings add: ex asString printString.
+						ex resume ] ].
+
+ 		warnings isEmpty ifFalse: [
+			GsFile gciLogServer: 'COMPILE WARNINGS: '.
+			warnings do: [:warning | GsFile gciLogServer: '	', warning ]. 
+			self error: 'Warnings during project load' ]. 
+		
 
 		System commit. "do a commit immediately after test code is loaded, to avoid losing test classes if a test does an apport"
 
@@ -25,17 +35,60 @@ run
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 		res := suite run.
+
+		resultsDict := Dictionary new.
+		resultCases := {}.
+		resultsDict 
+			at: #suiteName put: suite name;
+			at: #timeStamp put: DateAndTime now printString;
+			at: #properties put: Dictionary new;
+			at: #notes put: '';
+			at: #gsVersion put: (System gemVersionAt: #gsVersion);
+			at: #testCases put: resultCases;
+			at: #resultsSummary put: (Dictionary new
+				at: #summary put: res printString;
+				at: #failures put: res failureCount;
+				at: #errors put: res errorCount;
+				at: #passed put: res passedCount;
+				yourself)
+			yourself.
+
 		strm := WriteStream on: String new.
- 	 strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
+		strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
+		res passed do: [:each |
+			resultCases add: (Dictionary new
+					at: #className put: each class asString;
+					at: #selector put: each selector asString;
+					at: #status put: 'passed';
+					yourself) ].
+
 		strm nextPutAll: res printString; lf.
 		strm nextPutAll: '  errors'; lf.
-		(res errors collect: [:each | each printString ]) asArray sort do: [:each |
+		(res errors collect: [:each |  
+			resultCases add: (Dictionary new
+					at: #className put: each class asString;
+					at: #selector put: each selector asString;
+					at: #status put: 'errors';
+					yourself). 
+			each printString ]) asArray sort do: [:each |
 			strm tab; nextPutAll: each; lf].
 		res failures size = 0
 			ifTrue: [ ^ strm contents ].
 		strm nextPutAll: '  failures'; lf.
-			(res failures collect: [:each | each printString]) asArray sort do: [:each |
+		(res failures collect: [:each | 
+			resultCases add: (Dictionary new
+					at: #className put: each class asString;
+					at: #selector put: each selector asString;
+					at: #status put: 'failures';
+					yourself). 
+			each printString]) asArray sort do: [:each |
 			strm tab; nextPutAll: each; lf].
+
+		Rowan fileUtilities
+			writeStreamFor: 'testResults.json'
+			in: '$PWD/'
+			do: [:fileStream | STON put: resultsDict asJsonOnStreamPretty: fileStream ].
+
 		^ strm contents ] 
 			ensure: [ 
 				deprecationAction == #ignore

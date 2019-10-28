@@ -15,31 +15,42 @@ RowanAnsweringServiceTest >> setUp [
 ]
 
 { #category : 'tests' }
-RowanAnsweringServiceTest >> test_execCompileError [
-	| gotError |
+RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  service setBreakPointsAreEnabled: true.
+  self assert: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: true.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled').
+  service setBreakPointsAreEnabled: false.
+  self deny: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: false.
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+]
 
-	gotError := [service exec: '1 +' context: nil] on: CompileError do:[:ex |
-		true].
-	self assert: gotError.
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_execCompileError [
+ 
+	self deny: (service exec: '1 +' context: nil asOop) key.
 ]
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_execNilContext [
 
-	self assert: (service exec: '123' context: nil) equals: 123.
-	self assert: (service exec: '$a' context: nil) equals: $a.
-	self assert: (service exec: '''abc''' context: nil) equals: 'abc'.
-	self assert: (service exec: '3+4' context: nil) equals: 7.
-	self assert: (service exec: 'true' context: nil) equals: true.
-	self assert: (service exec: 'false' context: nil) equals: false.
+	self assert: (service exec: '123' context: nil asOop) value equals: 123 asOop.
+	self assert: (service exec: '$a' context: nil asOop) value equals: $a asOop.
+	self assert: (service exec: '3+4' context: nil asOop) value equals: 7 asOop.
+	self assert: (service exec: 'true' context: nil asOop) value equals: true asOop.
+	self assert: (service exec: 'false' context: nil asOop) value equals: false asOop.
 ]
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_execWithContext [
 
-	self assert: (service exec: 'self' context: 123) equals: 123.
-	self assert: (service exec: 'self size' context: Array new) equals: 0.
-	self assert: (service exec: '1 + self' context: 2) equals: 3.
+	self assert: (service exec: 'self' context: 123 asOop) value equals: 123 asOop.
+	self assert: (service exec: 'self size' context: Array new asOop) value equals: 0 asOop.
+	self assert: (service exec: '1 + self' context: 2 asOop) value equals: 3 asOop.
 ]
 
 { #category : 'tests' }
@@ -57,6 +68,28 @@ RowanAnsweringServiceTest >> test_initializeAutoCommit [
 ]
 
 { #category : 'tests' }
+RowanAnsweringServiceTest >> test_initializeBreakPointsAreDisabled [
+  | breakPointsAreEnabled |
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  breakPointsAreEnabled := RowanService breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: breakPointsAreEnabled.
+  self
+    assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+    equals: breakPointsAreEnabled.
+  [ 
+  service initializeBreakPointsAreEnabled.
+  self assert:  RowanService breakPointsAreEnabled.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
+    ensure: [ 
+      RowanService setBreakPointsAreEnabled: breakPointsAreEnabled.
+      self
+        assert: RowanService breakPointsAreEnabled
+        equals: breakPointsAreEnabled ]
+]
+
+{ #category : 'tests' }
 RowanAnsweringServiceTest >> test_loadedPackageExists [
 	self jadeiteIssueTested: #issue205 withTitle: 'misspelled extension category name causes trouble'.
 	Rowan packageNames do:[:packageName |
@@ -69,7 +102,7 @@ RowanAnsweringServiceTest >> test_loadedPackageExists [
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_matchingPattern [
-	| randomSymbol | 
+
 	self jadeiteIssueTested: #issue235 withTitle: 'Need Find Class/Method from console'.
 	service selectorsMatchingPattern: #('size'). 
 	self assert: service answer size equals: 1. 
@@ -103,6 +136,14 @@ RowanAnsweringServiceTest >> test_maxPrint [
 	self assert: (service printStringOf: 'ab
 cd' asOop toMaxSize: 25) equals: '''ab
 cd'''.  "includes lf (10) - no ? substitution"
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_play [
+
+	"method to safely play with commits" 
+
+	self deny: false
 ]
 
 { #category : 'tests' }

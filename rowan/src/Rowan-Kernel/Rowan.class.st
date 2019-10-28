@@ -13,12 +13,24 @@ Class {
 	#category : 'Rowan-Kernel'
 }
 
+{ #category : 'public client services' }
+Rowan class >> answeringServiceClass [
+
+	^ self platform answeringServiceClass
+]
+
 { #category : 'public' }
 Rowan class >> automaticClassInitializationBlackList [
 
 	"Answer list of project names for which automatic class initialiation should be disabled."
 
 	^ self platform automaticClassInitializationBlackList
+]
+
+{ #category : 'public client services' }
+Rowan class >> browserServiceClass [
+
+	^ self platform browserServiceClass
 ]
 
 { #category : 'public client services' }
@@ -43,6 +55,12 @@ Rowan class >> clearDefaultAutomaticClassInitializationBlackList [
 		Individual users may override the black list."
 
 	^ self platform clearAutomaticClassInitializationBlackList_default
+]
+
+{ #category : 'public client services' }
+Rowan class >> commandResultClass [
+
+	^ self platform commandResultClass
 ]
 
 { #category : 'public' }
@@ -92,6 +110,12 @@ Rowan class >> image [
 Rowan class >> jadeServerClassNamed: className [
 
 	^ self platform jadeServerClassNamed: className
+]
+
+{ #category : 'public client services' }
+Rowan class >> loggingServiceClass [
+
+	^ self platform loggingServiceClass
 ]
 
 { #category : 'public client services' }

@@ -5,70 +5,7 @@ Class {
 }
 
 { #category : 'tests' }
-RowanPackageServiceTest >> test_compileAndSelectClass [
-
-	| package packageService |
-	System commitTransaction.
-	[self assert: RowanCommandResult results isEmpty. 
-	package := self createJadeiteTestPackage. 
-	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	self assert: RowanCommandResult results isEmpty. 
-	packageService compileClass: 
-	'RowanServicesTest rwSubclass: ''RowanTestCompile'' 
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: ''', self servicesTestPackageName,  '''
-		options: #()'.
-	self assert: RowanCommandResult results size equals: 1. 
-	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
-	self assert: packageService selectedClass name equals: 'RowanTestCompile'.
-	self assert: packageService selectedClass selectedPackageServices first equals: packageService] 
-		ensure:[System abortTransaction.  "get rid of test package and class"]
-]
-
-{ #category : 'tests' }
-RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
-
-	| package packageService testsPackage |
-	System commitTransaction.
-	[self assert: RowanCommandResult results isEmpty. 
-	package := self createJadeiteTestPackage. 
-	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	self assert: RowanCommandResult results isEmpty. 
-	packageService compileClass: 
-	'RowanServicesTest rwSubclass: ''RowanTestCompile''
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: ''Rowan-Services-Tests''
-		options: #()'.
-	self assert: RowanCommandResult results size equals: 2. 
-	self assert: RowanCommandResult results last name equals: 'RowanTestCompile'. 
-	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
-	testsPackage := RowanCommandResult results first.
-	self assert: testsPackage selectedClass name equals: 'RowanTestCompile'.
-	self assert: testsPackage selectedClass selectedPackageServices first equals: testsPackage] 
-		ensure:[System abortTransaction.  "get rid of test package and class"]
-]
-
-{ #category : 'tests' }
-RowanPackageServiceTest >> test_packageWasDeleted [
-
-	| package packageService |
-	System commitTransaction. 
-	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
-	package := self createJadeiteTestPackage. 
-	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	self deny: packageService wasDeleted.
-	System abortTransaction. 
-	self assert: packageService wasDeleted.
-]
-
-{ #category : 'tests' }
-RowanPackageServiceTest >> testClassHierarchy [
+RowanPackageServiceTest >> test_classHierarchy [
 
 	"format for client is:
 		#nil-> #(<class serviceA1> <class service A2) ...
@@ -90,26 +27,142 @@ RowanPackageServiceTest >> testClassHierarchy [
 ]
 
 { #category : 'tests' }
-RowanPackageServiceTest >> testCompileClassSelectsPackageAndClass [
+RowanPackageServiceTest >> test_compileAndSelectClass [
+  | package browserService |
+  [ 
+  self assert: RowanCommandResult results isEmpty.
+  package := self createServicesTestPackage.
+  self loadServicesTestProject.
+  browserService := RowanBrowserService new.
+  self assert: RowanCommandResult results isEmpty.
+  browserService
+    compileClass:
+      'RowanServicesTest rwSubclass: ''RowanTestCompile'' 
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: ''' , self servicesTestPackageName
+        ,
+          '''
+		options: #()'.
+  self assert: RowanCommandResult results size equals: 0.	"we no longer return a service on first stage of compile"
+  browserService recompileMethodsAfterClassCompilation.
+  self assert: RowanCommandResult results size equals: 5.
+  self
+    assert: (RowanCommandResult results at: 4) name
+    equals: 'RowanTestCompile'.
+  self assert: browserService selectedClass name equals: 'RowanTestCompile' ]
+    ensure: [ 
+      Rowan projectTools browser removeClassNamed: 'RowanTestCompile'.
+      self unloadServicesTestProject ]
+]
 
-	| package packageService newPackageService newClassService |
+{ #category : 'tests' }
+RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
+  | package browserService testsPackage |
+  [ 
+  self assert: RowanCommandResult results isEmpty.
+  package := self createServicesTestPackage.
+  browserService := RowanBrowserService new.
+  self assert: RowanCommandResult results isEmpty.
+  browserService
+    compileClass:
+      'RowanServicesTest rwSubclass: ''RowanTestCompile''
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: ''Rowan-Services-Tests''
+		options: #()'.
+  self assert: RowanCommandResult results size equals: 0.	"we no longer return a service on first stage of compile"
+  browserService recompileMethodsAfterClassCompilation.
+  self assert: RowanCommandResult results size equals: 5.
+  self
+    assert: (RowanCommandResult results at: 4) name
+    equals: 'RowanTestCompile'.
+  self
+    assert: RowanCommandResult results first name
+    equals: 'Rowan-Services-Tests'.
+  testsPackage := RowanCommandResult results first.
+  self assert: testsPackage selectedClass name equals: 'RowanTestCompile' ]
+    ensure: [ 
+      Rowan projectTools browser removeClassNamed: 'RowanTestCompile'.
+      self unloadServicesTestProject ]
+]
 
-	self jadeiteIssueTested: #issue228 withTitle: 'lose selected class in project browser when new version created'.
-	package := self createJadeiteTestPackage. 
-	[packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	packageService compileClass: 
-		'RowanServicesTest rwSubclass: ''TestCompileClass''
+{ #category : 'tests' }
+RowanPackageServiceTest >> test_compileClassSelectsPackageAndClass [
+  | package browserService newClassService |
+  self
+    jadeiteIssueTested: #'issue228'
+    withTitle: 'lose selected class in project browser when new version created'.
+  package := self createServicesTestPackage.
+  self loadServicesTestProject.
+  [ 
+  browserService := RowanBrowserService new.
+  browserService
+    compileClass:
+      'RowanServicesTest rwSubclass: ''TestCompileClass''
 			instVarNames: #()
 			classVars: #()
 			classInstVars: #()
 			poolDictionaries: #()
-			category: ''', self servicesTestPackageName, '''
+			category: ''' , self servicesTestPackageName
+        ,
+          '''
 			options: #()'.
-	self assert: RowanCommandResult results size equals: 1.
-	newClassService := RowanCommandResult results first.
-	self assert: newClassService name equals: 'TestCompileClass'. 
-	self assert: newClassService selectedPackageServices size equals: 1. 
-	self assert: newClassService selectedPackageServices first name equals: self servicesTestPackageName. 
-	self assert: newClassService selectedPackageServices first selectedClass == newClassService]
-		ensure:[RowanBrowserService new unloadProjectsNamed: (Array with: self servicesTestProjectName)]
+  self assert: RowanCommandResult results size equals: 0.	"we no longer return a service on first stage of compile"
+  browserService recompileMethodsAfterClassCompilation.
+  newClassService := RowanCommandResult results at: 4.
+  self assert: newClassService name equals: 'TestCompileClass' ]
+    ensure: [ 
+      RowanBrowserService new
+        unloadProjectsNamed: (Array with: self servicesTestProjectName) ]
+]
+
+{ #category : 'tests' }
+RowanPackageServiceTest >> test_packageWasDeleted [
+  "NOTE - use commit/abort in tests carefully. 
+	Can cause hard-to-diagnose problems later 
+	in test runs"
+
+  | packageService projectDef packageDef |
+  self
+    jadeiteIssueTested: #'issue284'
+    withTitle:
+      '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+  projectDef := self defaultProjectDefinition.
+  [ 
+  System commitTransaction.	"commit project but not package"
+  projectDef
+    packageNamed: self servicesTestPackageName
+    ifAbsent: [ 
+      packageDef := RwPackageDefinition newNamed: self servicesTestPackageName.
+      projectDef addPackage: packageDef ].
+  Rowan projectTools load loadProjectDefinition: projectDef.
+  packageService := RowanPackageService
+    forPackageNamed: self servicesTestPackageName.
+  self deny: packageService wasDeleted.
+  System abortTransaction.
+  self assert: packageService wasDeleted ]
+    ensure: [ 
+      self unloadServicesTestProject.
+      System commitTransaction ]
+]
+
+{ #category : 'tests' }
+RowanPackageServiceTest >> test_testClassesIncludesExtensions [
+	| packageService testClassNames |
+	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-Tests'.
+	packageService testClasses. 
+	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
+	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest'). "extension tests"
+	self assert: (testClassNames includes: 'RowanPackageServiceTest').
+
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Tests'.
+	packageService testClasses. 
+	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
+	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest').
 ]

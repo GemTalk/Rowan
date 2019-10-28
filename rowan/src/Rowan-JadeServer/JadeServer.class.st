@@ -24,9 +24,16 @@ Class {
 
 { #category : 'jadeite server' }
 JadeServer class >> theJadeiteServer [
-
-	^SessionTemps current at: #jadeiteServer ifAbsentPut: [
-		(Rowan jadeServerClassNamed: #JadeServer64bit32) new initialize; yourself]
+  ^ SessionTemps current
+    at: #'jadeiteServer'
+    ifAbsentPut: [ 
+      | jadeServerClass |
+      jadeServerClass := (System _gemVersion beginsWith: '3.2')
+        ifTrue: [ Rowan jadeServerClassNamed: #'JadeServer64bit32' ]
+        ifFalse: [ Rowan jadeServerClassNamed: #'JadeServer64bit35' ].
+      jadeServerClass new
+        initialize;
+        yourself ]
 ]
 
 { #category : 'category' }
@@ -185,7 +192,8 @@ JadeServer >> _describeMCDefinition: anMCDefinition on: aStream [
 
 { #category : 'category' }
 JadeServer >> _describeMCMethodDefinition: anMCMethodDefinition on: aStream [
-
+	| unicodeFreeSource |
+	unicodeFreeSource := RowanMethodService removeUnicodeFromSource: anMCMethodDefinition source.
 	aStream
 		nextPut: $M; tab;
 		nextPutAll: anMCMethodDefinition timeStamp; tab;
@@ -193,10 +201,8 @@ JadeServer >> _describeMCMethodDefinition: anMCMethodDefinition on: aStream [
 		nextPutAll: anMCMethodDefinition classIsMeta printString; tab;
 		nextPutAll: anMCMethodDefinition category; tab;
 		nextPutAll: anMCMethodDefinition selector; tab;
-		nextPutAll: anMCMethodDefinition source size printString; tab;
-		nextPutAll: anMCMethodDefinition source; lf.
-
-
+		nextPutAll: unicodeFreeSource size printString; tab;
+		nextPutAll: unicodeFreeSource; lf.
 ]
 
 { #category : 'category' }
@@ -260,7 +266,7 @@ JadeServer >> _describeMethod: aMethod [
 "4"		selector: aMethod selector;
 "5"		category: (self categoryOfMethod: aMethod);
 "6"		isReadOnly: (self currentUserMayEditMethod: aMethod);
-			source: aMethod sourceString.
+			source: (RowanMethodService removeUnicodeFromSource: aMethod sourceString).
 
 	"unimplemented selectors"			"https://github.com/jgfoster/Jade/issues/117"
 	((aMethod class includesSelector: #'_selectorPool') and: [aMethod class includesSelector: #'_sourceOffsetOfFirstSendOf:']) ifTrue: [
@@ -294,10 +300,6 @@ JadeServer >> _describeMethod: aMethod [
 	string isNil ifTrue: [string := ''].
 	methodUpdate compilationWarnings: string.
 	methodUpdate writeMethodTo: writeStream.
-
- 
-
-
 ]
 
 { #category : 'category' }
@@ -856,6 +858,17 @@ JadeServer >> authorInitials: aString [
 
 ]
 
+{ #category : 'jadeite' }
+JadeServer >> autoCommitIfRequired [
+	| commitResult |
+	Rowan serviceClass autoCommit == true ifTrue:[
+		commitResult := System commitTransaction.
+		RowanAutoCommitService new autoCommit:  
+			(commitResult 
+				ifTrue:[true] 
+				ifFalse:[#failed])].
+]
+
 { #category : 'category' }
 JadeServer >> beginTransaction [
 
@@ -1035,18 +1048,13 @@ JadeServer >> compile: aString frame: anInteger process: aGsProcess [
 	selector := oldMethod selector.
 	selector isNil ifTrue: [^result].
 	category := self _behavior: aBehavior categoryOfSelector: selector.
-	result := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [ 
-						[ aBehavior rwCompileMethod: aString category: category ]
+	result := [[ aBehavior rwCompileMethod: aString category: category ]
 							on: RwExecuteClassInitializeMethodsAfterLoadNotification
-							do: [:ex | ex resume: false ] ]
-					ifFalse: 
-						[self
-							compileMethod: aString
-							behavior: aBehavior
-							user: nil
-							inCategory: category].
+							do: [:ex | ex resume: false ]] 
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
+
+					
 	^result
 ]
 
@@ -1640,6 +1648,46 @@ JadeServer >> groupListFor: aUserProfile [
 
 ]
 
+{ #category : 'jadeite' }
+JadeServer >> gsInteractionInformFailureHandler [
+  self interactionHandlerActive
+    ifFalse: [ 
+      ^ GsInteractionHandler new
+        defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
+        confirmBlock: [ :interaction | interaction ok ];
+        informBlock: [ :interaction |  ];
+        inspectBlock: [ :interaction |  ];
+        yourself ].
+  ^ GsInteractionHandler new
+    confirmBlock: [ :interaction | 
+          | exception answer |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'confirmMessageBox:'
+            args: (Array with: interaction prompt).
+          answer := exception defaultAction.	"expect printString of answer back. Jadeite has limited ability to convert client objects to oops"
+          answer evaluate ];
+    informBlock: [ :interaction | 
+          | exception |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'informMessageBox:'
+            args: (Array with: interaction message).
+          exception defaultAction.
+          nil ];
+    inspectBlock: [ :interaction | 
+          | exception |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'inspectServerObject:'
+            args: (Array with: interaction theObject asOop).
+          exception defaultAction.
+          interaction theObject ]
+]
+
 { #category : 'category' }
 JadeServer >> gsPackagePolicy [
 
@@ -1745,8 +1793,6 @@ JadeServer >> inspect: anObject [
 	^stream 
 		nextPutAll: string; 
 		contents.
-
-
 ]
 
 { #category : 'category' }
@@ -1826,6 +1872,11 @@ JadeServer >> installTranscript [
 	].
 
 
+]
+
+{ #category : 'jadeite' }
+JadeServer >> interactionHandlerActive [
+  ^ SessionTemps current at: #'rowanServiceInteractionActive' ifAbsent: [ true ]
 ]
 
 { #category : 'category' }
@@ -3933,7 +3984,7 @@ JadeServer >> sbRecompileSubclassesOf: newClass andCopyMethods: aBoolean [
 
 { #category : 'category' }
 JadeServer >> sbRemoveClasses [
-	| isPackages containers classNames |
+	| containers classNames |
 	self nextLine = 'packageList'. "ignore this" 
 	containers := self nextLineAsList.
 	classNames := (self nextLineAsList reject: [:each | each isEmpty])
@@ -3943,7 +3994,6 @@ JadeServer >> sbRemoveClasses [
 			classNames
 				do: [:className | (Rowan packageServiceClass forPackageNamed: packageName) removeClassNamed: className]].
 	^self systemBrowserUpdate
-
 ]
 
 { #category : 'category' }
@@ -4010,15 +4060,11 @@ JadeServer >> sbRemoveMethodCategories: anOrderedCollection [
 JadeServer >> sbRemoveMethods: anOrderedCollection [
 	| behavior classEntity  notRemoved|
 	behavior := self sbClassFrom: anOrderedCollection.
-	classEntity := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta]
-					ifFalse: [behavior].
+	classEntity := Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta.
 	notRemoved := Array new. 
 	anOrderedCollection do: [:each | classEntity removeSelector: each asSymbol ifAbsent: [notRemoved add: each]].
 	self systemBrowserUpdate.
 	notRemoved isEmpty ifFalse:[self error: 'The following selectors were not removed. Possibly in a superclass? ', notRemoved printString].
-
 ]
 
 { #category : 'category' }
@@ -4303,7 +4349,7 @@ JadeServer >> sbUpdateClassHierarchy [
 
 { #category : 'category' }
 JadeServer >> sbUpdateClassInfo [
-	| classComment classInfoUpdate |
+	| classInfoUpdate |
 	selectedClass isNil ifTrue: [
 		^self sbClassTemplate. 
 ].
@@ -5088,9 +5134,7 @@ JadeServer >> superclassesOf: aClass isMeta: aBoolean [
 { #category : 'category' }
 JadeServer >> symbolList [
 
-	^System myUserProfile symbolList.
-
-
+	^Rowan image symbolList
 ]
 
 { #category : 'category' }
@@ -5280,20 +5324,26 @@ JadeServer >> terminate: aGsProcess [
 
 { #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
-	| services organizer resultString |
-	RowanCommandResult initializeResults.
-	services := STON fromString: stonString.
-	organizer := ClassOrganizer new.
-	services do: 
-			[:service |
-			service organizer: organizer. 
-			service updateType: nil.  "Update type is only for returned commands"
-			service command
-				ifNil: [service update]
-				ifNotNil: [service servicePerform: service command withArguments: service commandArgs]].
-	resultString := STON toString: RowanCommandResult results.
-	RowanService autoCommit ifTrue:[System commitTransaction]. 
-	^resultString
+  | services organizer resultString |
+  Rowan commandResultClass initializeResults.
+  services := STON fromString: stonString.
+  organizer := ClassOrganizer new.
+  [ 
+  services
+    do: [ :service | 
+      service organizer: organizer.
+      service updateType: nil.	"Update type is only for returned commands"
+      service command ifNil: [ service command: #'update' ].
+      service servicePerform: service command withArguments: service commandArgs ] ]
+    on: GsInteractionRequest
+    do: [ :ex | 
+      ex
+        response:
+          (ex interaction interactWith: self gsInteractionInformFailureHandler) ].
+  self autoCommitIfRequired.
+  Rowan loggingServiceClass current logSentServices.
+  resultString := STON toString: Rowan commandResultClass results.
+  ^ resultString
 ]
 
 { #category : 'category' }

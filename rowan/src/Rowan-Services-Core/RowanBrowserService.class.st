@@ -12,7 +12,8 @@ Class {
 		'hierarchyServices',
 		'testPackages',
 		'testCount',
-		'autoCommit'
+		'dictionaries',
+		'selectedClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -22,33 +23,103 @@ RowanBrowserService >> abortTransaction [
 
 	System abortTransaction.
 	self updateProjects.
+	self updateDictionaries. 
 	self packagesWithTests.
 	self updateType: #aborted:browser:.
 ]
 
 { #category : 'client commands' }
 RowanBrowserService >> allClasses [
-
-	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
-	allClasses addAll: (organizer classes collect:[:class | 
-			| service |
-			service := RowanClassService new name: class name. 
-			service packageName: class rowanPackageName.
-			service projectName: class rowanProjectName.
-			service]
-			).
-	allClasses := allClasses asArray. 
+	allClasses := self basicAllClasses.
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
 ]
 
-{ #category : 'client commands' }
-RowanBrowserService >> autoCommit: boolean [
+{ #category : 'client commands support' }
+RowanBrowserService >> basicAllClasses [
+  | theClasses |
+  theClasses := SortedCollection sortBlock: [ :x :y | x name < y name ].
+  theClasses
+    addAll:
+      (organizer classes
+        collect: [ :class | 
+          | service |
+          service := RowanClassService new name: class name.
+          service packageName: class rowanPackageName.
+          service projectName: class rowanProjectName.
+          service ]).
+  ^ theClasses asArray
+]
 
-	RowanService setAutoCommit: boolean.
-	autoCommit := RowanService autoCommit. 
-	updateType := #autoCommitUpdate:.
+{ #category : 'client commands' }
+RowanBrowserService >> classHierarchy [
+	| theClasses |
+	theClasses := allClasses collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	updateType := #classHierarchyUpdate:browser:. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanBrowserService >> classHierarchy: theClasses [
+  hierarchyServices := super classHierarchy: theClasses.
+  ^ hierarchyServices
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> classHierarchyForDictionariesNamed: dictionaryNames [
+  | theClasses |
+  theClasses := OrderedCollection new.
+  dictionaryNames
+    do: [ :dictionaryName | 
+      (Rowan globalNamed: dictionaryName)
+        keysAndValuesDo: [ :key :value | 
+          value isClass
+            ifTrue: [ theClasses add: value ] ] ].
+  hierarchyServices := self classHierarchy: theClasses.
+  updateType := #'classHierarchyUpdate:browser:'.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> classHierarchyForPackagesNamed: packageNames [
+  | theClasses |
+  theClasses := OrderedCollection new.
+  packageNames
+    do: [ :packageName | 
+      theClasses
+        addAll:
+          ((Rowan image loadedPackageNamed: packageName) loadedClasses 
+            collect: [ :cls | cls handle]).
+      theClasses
+        addAll:
+          ((Rowan image loadedPackageNamed: packageName) loadedClassExtensions
+            collect: [ :cls | cls handle]) ].
+  hierarchyServices := self classHierarchy: theClasses.
+  updateType := #'classHierarchyUpdate:browser:'.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> compileClass: definitionString [
+  | anonymousMethod |
+  self confirmDuplicateName: definitionString.
+  anonymousMethod := definitionString
+    _compileInContext: nil
+    symbolList: Rowan image symbolList.
+  SessionTemps current at: #'jadeiteCompileClassMethod' put: anonymousMethod
+]
+
+{ #category : 'client commands support' }
+RowanBrowserService >> confirmDuplicateName: definitionString [
+  | className |
+  className := (definitionString subStrings at: 3) copyWithout: $'.
+  (Rowan image symbolList resolveSymbol: className asSymbol)
+    ifNotNil: [ 
+      className = selectedClass
+        ifFalse: [ 
+          (self confirm: 'Class name is already an object. Continue?')
+            ifFalse: [ ^ Error signal: 'Class not compiled. Name already exists.' ] ] ]
 ]
 
 { #category : 'client commands' }
@@ -74,14 +145,6 @@ RowanBrowserService >> findRemovedServices: services [
 	].
 ]
 
-{ #category : 'client commands' }
-RowanBrowserService >> flipAutoCommit [
-
-	autoCommit := RowanService flipAutoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
-]
-
 { #category : 'window registry' }
 RowanBrowserService >> openWindows [
 
@@ -92,38 +155,93 @@ RowanBrowserService >> openWindows [
 
 { #category : 'client commands' }
 RowanBrowserService >> packagesWithTests [
-	testPackages := Set new. 
-	testCount := 0. 
-	TestCase allSubclasses do:[:testSubclass |
-		testSubclass selectors do:[:selector |
-			| packageName |
-			(selector size >= 4 and:[
-			(selector copyFrom: 1 to: 4) asString = 'test']) ifTrue:[
-				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
-				packageName = Rowan unpackagedName ifFalse:[
-					testCount := testCount + 1. 
-					testPackages add: (RowanPackageService forPackageNamed: packageName)]]]]. 
-	updateType := #testPackages:. 
-	testPackages := testPackages asArray. 
-	RowanCommandResult addResult: self.
+  testPackages := Set new.
+  testCount := 0.
+  TestCase allSubclasses
+    do: [ :testSubclass | 
+      | suite |
+      suite := testSubclass buildSuite.
+      suite tests
+        do: [ :testCase | 
+          | packageName compiledMethod |
+          (testCase isKindOf: TestSuite)
+            ifFalse: [ 
+              compiledMethod := testCase class
+                compiledMethodAt: testCase selector
+                otherwise: nil.
+              packageName := compiledMethod
+                ifNil: [ testCase class rowanPackageName ]
+                ifNotNil: [ compiledMethod rowanPackageName ].
+              packageName = Rowan unpackagedName
+                ifFalse: [ 
+                  testCount := testCount + 1.
+                  testPackages
+                    add: (RowanPackageService forPackageNamed: packageName) ] ] ] ].
+  updateType := #'testPackages:'.
+  testPackages := testPackages asArray.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> recompileMethodsAfterClassCompilation [
+  "compileClass: must be run first"
+
+  | theClass classService packageService projectService |
+  theClass := [ 
+  [ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    on: CompileWarning
+    do: [ :ex | ex resume ] ]
+    ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
+  classService := RowanClassService new name: theClass name.
+  classService update.
+  classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
+	should be updated. Would like a less heavy weight solution than this, though."
+  packageService := RowanPackageService
+    forPackageNamed: classService packageName.
+  packageService update.
+  projectService := RowanProjectService newNamed: packageService projectName.
+  projectService update.
+  packageService selectedClass: classService.
+  RowanCommandResult addResult: classService.
+  selectedClass := classService.
+  updateType := #'none'.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
 RowanBrowserService >> releaseWindowHandle: integer [
-
-	| registry |
-	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
-	registry removeKey: integer ifAbsent: []
+  | registry |
+  Rowan loggingServiceClass current
+    logComment: 'Release window with handle: ' , integer printString.
+  registry := SessionTemps current
+    at: #'rowanServicesWindowRegistry'
+    ifAbsent: [ ^ self ].
+  registry removeKey: integer ifAbsent: [  ]
 ]
 
 { #category : 'client commands' }
 RowanBrowserService >> reloadProjects: projectServices andUpdateServices: services [
 	| projectNames |
+	services do: [:service | service organizer: organizer]. 
 	projectServices do:[:projectService |
 		projectService reloadProject].
 	projectNames := projectServices collect: [:projectService | projectService name]. 
 	services do:[:service | 
 		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
+	"remove from both transient & persistent symbol lists" 
+
+	dictionaryNames do:[:dictionaryName | 
+		| dictionaryNameSymbol |
+		dictionaryNameSymbol := dictionaryName asSymbol.
+		(Rowan image symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			Rowan image symbolList removeDictionaryNamed: dictionaryNameSymbol].
+		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
+	self updateDictionaries.
 ]
 
 { #category : 'client commands' }
@@ -158,6 +276,18 @@ RowanBrowserService >> saveRootObject: oop windowHandle: integer [
 	dictionary at: integer put: (Object _objectForOop: oop).
 ]
 
+{ #category : 'other' }
+RowanBrowserService >> selectedClass [
+
+	^selectedClass
+]
+
+{ #category : 'other' }
+RowanBrowserService >> selectedClass: object [
+
+	selectedClass := object
+]
+
 { #category : 'perform' }
 RowanBrowserService >> servicePerform: symbol withArguments: collection [
 	super perform: symbol withArguments: collection.
@@ -180,11 +310,20 @@ RowanBrowserService >> update [
 ]
 
 { #category : 'client commands' }
+RowanBrowserService >> updateDictionaries [
+
+	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
+	dictionaries := dictionaries asOrderedCollection. 
+	updateType := #dictionaryListUpdate:.
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> updateProjects [
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
 	sortedProjects addAll:  Rowan image loadedProjects.
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
-	updateType := #projectsUpdate:.
+	updateType := #projectsUpdate:browser:.
 	RowanCommandResult addResult: self
 ]

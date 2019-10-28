@@ -12,9 +12,17 @@ JadeServerTest >> jadeiteServer [
 
 { #category : 'tests' }
 JadeServerTest >> test_jadeServerCanonicalLocation [
-	self assert: (JadeServer theJadeiteServer isKindOf: JadeServer64bit32).
-	self assert: (JadeServer theJadeiteServer class canUnderstand: #updateFromSton:).
-	self assert: (JadeServer theJadeiteServer == (SessionTemps current at: #jadeiteServer))
+  | jadeServerClass |
+  (System _gemVersion beginsWith: '3.2')
+    ifTrue: [ jadeServerClass := JadeServer64bit32 ]
+    ifFalse: [ jadeServerClass := JadeServer64bit35 ].
+  self assert: (JadeServer theJadeiteServer isKindOf: jadeServerClass).
+  self
+    assert:
+      (JadeServer theJadeiteServer class canUnderstand: #'updateFromSton:').
+  self
+    assert:
+      JadeServer theJadeiteServer == (SessionTemps current at: #'jadeiteServer')
 ]
 
 { #category : 'tests' }
@@ -51,7 +59,8 @@ JadeServerTest >> test_jadeServerHierarchyValid [
 						JadeServer64bit32.
 
 	See RsGsPlatform>>jadeServerClassNamed: for symbol list JadeServer*
-	lives in. Note that method will only lookup JadeServer & JadeServer64bit32"
+	lives in. Note that method will only lookup JadeServer, JadeServer64bit32,
+	and JadeServer64bit35"
 				
 	| jadeServerClass subclasses |
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer. 
@@ -72,6 +81,9 @@ JadeServerTest >> test_jadeServerHierarchyValid [
 	self assert: subclasses asArray first name = #JadeServer64bit32.
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit32. 
 	subclasses :=  jadeServerClass subclasses asArray.
+	self assert: subclasses asArray first name = #JadeServer64bit35.
+	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit35. 
+	subclasses :=  jadeServerClass subclasses asArray.
 	self assert: subclasses isEmpty
 ]
 
@@ -80,14 +92,21 @@ JadeServerTest >> test_rowanCanFindJadeServer [
 
 	self assert: (Rowan class canUnderstand: #jadeServerClassNamed:).
 	self assert: (RwGsPlatform canUnderstand: #jadeServerClassNamed:).
-	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32
+	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32.
+	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit35)equals: JadeServer64bit35
 ]
 
 { #category : 'tests' }
 JadeServerTest >> test_serviceUsesCanonicalJadeServer [
-	
-	self assert: (RowanAnsweringService new jadeiteServer isKindOf: JadeServer64bit32).
-	self assert: RowanAnsweringService new jadeiteServer == JadeServer theJadeiteServer
+  | jadeServerClass |
+  (System _gemVersion beginsWith: '3.2')
+    ifTrue: [ jadeServerClass := JadeServer64bit32 ]
+    ifFalse: [ jadeServerClass := JadeServer64bit35 ].
+  self
+    assert: (RowanAnsweringService new jadeiteServer isKindOf: jadeServerClass).
+  self
+    assert:
+      RowanAnsweringService new jadeiteServer == JadeServer theJadeiteServer
 ]
 
 { #category : 'tests' }
@@ -105,10 +124,11 @@ JadeServerTest >> test_updateFromSton [
 	stonString := STON toString: (Array with: service).
 	resultString := self jadeiteServer updateFromSton: stonString. 
 	[services := STON fromString: resultString.
-	self assert: services size equals: 2.
+	self assert: services size equals: 3.
 	self assert: (services first isKindOf: RowanMethodService).
-	self assert: (services last isKindOf: RowanQueryService).
-	self assert: (services last queryResults first isKindOf: RowanMethodService).
-	self assert: services last queryResults first selector == #test_updateFromSton]
+	self assert: ((services at: 2) isKindOf: RowanQueryService).
+	self assert: ((services at: 2) queryResults first isKindOf: RowanMethodService).
+	self assert: (services at: 2) queryResults first selector == #test_updateFromSton.
+	self assert: (services last isKindOf: RowanLoggingService)]
 		ensure: [RowanCommandResult initializeResults.]
 ]

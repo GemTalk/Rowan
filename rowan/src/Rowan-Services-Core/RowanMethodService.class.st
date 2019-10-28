@@ -20,23 +20,27 @@ Class {
 		'references',
 		'stepPoints',
 		'selectedPackageServices',
-		'superSource',
 		'superDisplayString',
 		'accessedInstVars',
 		'breakPoints',
 		'testResult',
 		'definedPackage',
 		'isTestMethod',
-		'testRunClassName'
+		'testRunClassName',
+		'failedCompile',
+		'comparisonSource',
+		'firstReference',
+		'renamedName',
+		'isMethodForBlock',
+		'homeMethodOop'
 	],
 	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'instance creation' }
-RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer [
-
+RowanMethodService class >> forGsNMethod: aGsNMethod organizer: anOrganizer [
 	^self new
-		initialize: aGsNMethod organizer: aClassOrganizer;
+		initialize: aGsNMethod organizer: anOrganizer;
 		yourself
 ]
 
@@ -49,7 +53,47 @@ RowanMethodService class >> forSelector: sel class: theClass meta: boolean organ
 		meta: boolean.
 	service forClass: theClass organizer: anOrganizer.
 	^service
+]
 
+{ #category : 'utility' }
+RowanMethodService class >> put: string onStreamWithoutUnicode: stream [
+
+	string do:[:char | 
+			char asInteger > 255 ifTrue:[
+				stream nextPutAll: '$\x', char asInteger asHexString]
+			ifFalse:[
+				stream nextPut: char
+			]].
+]
+
+{ #category : 'utility' }
+RowanMethodService class >> removeUnicode: string [
+
+		| ws | 
+		ws := WriteStream on: String new. 
+		self put: string onStreamWithoutUnicode: ws. 
+		^ws contents
+]
+
+{ #category : 'utility' }
+RowanMethodService class >> removeUnicodeFromSource: string [
+
+	"possibly a unicode string which is not yet 
+	presentable in Jadeite."
+
+	(string isKindOf: MultiByteString) ifTrue:[
+		| ws | 
+		ws := WriteStream on: String new. 
+		ws nextPutAll: '''METHOD SOURCE CANNOT BE DISPLAYED
+This method source contains unicode and is not displayable in Jadeite. 
+An approximation of the source code is given printed below with $\x<char hex value>
+replacing the actual unicode character.''';
+			cr; 
+			cr.
+		self put: string onStreamWithoutUnicode: ws. 
+		^ws contents]
+	ifFalse:[
+		^string].
 ]
 
 { #category : 'instance creation' }
@@ -78,7 +122,7 @@ RowanMethodService >> = methodService [
 
 { #category : 'Accessing' }
 RowanMethodService >> accessedInstVars [
-	^accessedInstVars
+  ^ accessedInstVars
 ]
 
 { #category : 'Updating' }
@@ -99,28 +143,45 @@ RowanMethodService >> addOrUpdateMethod [
 
 { #category : 'client commands' }
 RowanMethodService >> allReferences [
+  | methods |
+  oop := self gsNMethod asOop.
+  methods := organizer sendersOf: selector.
+  references := methods first
+    collect: [ :gsNMethod | self class forGsNMethod: gsNMethod organizer: organizer ].
+  RowanCommandResult addResult: self
+]
 
-	| methods |
-	oop := self gsNMethod asOop. 
-	methods := organizer sendersOf: selector.
-	references := methods first collect:[:gsNMethod | 
-			self class forGsNMethod: gsNMethod organizer: organizer].
-	RowanCommandResult addResult: self
+{ #category : 'Accessing' }
+RowanMethodService >> breakPoints [
+
+	^breakPoints
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> breakPoints: collection [
+  breakPoints := collection
 ]
 
 { #category : 'initialization' }
 RowanMethodService >> breakPointsFor: aGsNMethod [
-	"Answers an Array stepPoints"
+  "Answers an Array stepPoints"
 
-	| list |
-	list := Array new.
-	aGsNMethod _allBreakpoints ifNil: [^#()] ifNotNil: [:anArray | 
-		1 to: anArray size by: 3 do: [:i | 
-			list add: (aGsNMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)).
-		].
-	].
-	^list
-
+  | list theMethod |
+  list := OrderedCollection new.
+  theMethod := aGsNMethod isMethodForBlock
+    ifTrue: [ 
+      isMethodForBlock := true.
+      aGsNMethod homeMethod ]
+    ifFalse: [ aGsNMethod ].
+  homeMethodOop := theMethod asOop.
+  theMethod _allBreakpoints
+    ifNil: [ ^ OrderedCollection new ]
+    ifNotNil: [ :anArray | 
+      1 to: anArray size by: 3 do: [ :i | 
+        list
+          add:
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2) abs) ] ].
+  ^ list asOrderedCollection
 ]
 
 { #category : 'Accessing' }
@@ -136,11 +197,11 @@ RowanMethodService >> category: newValue [
 
 { #category : 'Accessing' }
 RowanMethodService >> classFromName [
-	
-	"the dictionary browser may have versions numbers in the name"
-	| nameSymbol |
-	nameSymbol := (className copyUpTo: Character space) asSymbol.
-	^(System myUserProfile resolveSymbol: nameSymbol) value
+  "the dictionary browser may have versions numbers in the name"
+
+  | nameSymbol |
+  nameSymbol := (className copyUpTo: Character space) asSymbol.
+  ^ (System myUserProfile resolveSymbol: nameSymbol) value
 ]
 
 { #category : 'Accessing' }
@@ -179,11 +240,23 @@ RowanMethodService >> classService: newValue [
 RowanMethodService >> clearBreakAt: stepPoint [
 	| method |
 	method := self isUnboundMethod 
-			ifTrue:[Object _objectForOop: oop] 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
 			ifFalse:[self gsNMethod].
 	method clearBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> clearMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self clearBreakAt: breakPoint ]
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> comparisonSource: string [
+
+	comparisonSource := string
 ]
 
 { #category : 'Accessing' }
@@ -197,11 +270,40 @@ RowanMethodService >> compilationWarnings: newValue [
 	compilationWarnings := newValue
 ]
 
+{ #category : 'client commands' }
+RowanMethodService >> debugTest: testSelector inClassName: theClassName [
+  testResult := 'passed'.
+  [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
+    on: Exception
+    do: [ :ex | 
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
+      ex signal ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> definedPackage [
+
+	^definedPackage
+]
+
 { #category : 'rowan' }
 RowanMethodService >> definitionClass [
 
 	^RwMethodDefinition
 
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> failedCompile: boolean [	
+	
+	failedCompile := boolean
 ]
 
 { #category : 'client commands' }
@@ -215,25 +317,34 @@ RowanMethodService >> fileout [
 	RowanCommandResult addResult: answeringService.
 ]
 
+{ #category : 'Accessing' }
+RowanMethodService >> firstReference: integer [
+
+	firstReference := integer
+]
+
 { #category : 'initialization' }
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
-	"assume meta and selector are set"
+  "assume meta and selector are set"
 
-	| classOrMeta gsNMethod |
-	organizer := theOrganizer. 
-	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
-	gsNMethod := classOrMeta compiledMethodAt: selector.
-	definedPackage := gsNMethod rowanPackageName. 
-	oop := gsNMethod asOop. 
-	stepPoints := self stepPointsFor: gsNMethod.
-	breakPoints := self breakPointsFor: gsNMethod.
-	source := gsNMethod sourceString.
-	category := (classOrMeta categoryOfSelector: selector) asString.
-	className := theClass name asString. 
-	packageName := gsNMethod rowanPackageName. 
-	projectName := gsNMethod rowanProjectName.
-	self setSupersAndSubsFor: classOrMeta.
-	isExtension := self rowanIsExtension.
+  | classOrMeta gsNMethod |
+  organizer := theOrganizer.
+  classOrMeta := meta
+    ifTrue: [ theClass class ]
+    ifFalse: [ theClass ].
+  gsNMethod := classOrMeta compiledMethodAt: selector.
+  definedPackage := gsNMethod rowanPackageName.
+  oop := gsNMethod asOop.
+  stepPoints := self stepPointsFor: gsNMethod.
+  breakPoints := self breakPointsFor: gsNMethod.
+  self updateSource: gsNMethod sourceString.
+  category := (classOrMeta categoryOfSelector: selector) asString.
+  className := theClass name asString.
+  packageName := gsNMethod rowanPackageName.
+  projectName := gsNMethod rowanProjectName.
+  self setSupersAndSubsFor: classOrMeta.
+  isExtension := self rowanIsExtension.
+  self initializeTestMethodsFor: classOrMeta thisClass
 ]
 
 { #category : 'Accessing' }
@@ -244,7 +355,7 @@ RowanMethodService >> gsNMethod [
 
 { #category : 'comparing' }
 RowanMethodService >> hash [
-	^(selector hash bitXor: className hash) bitXor: meta hash
+  ^ (selector hash bitXor: className hash) bitXor: meta hash
 ]
 
 { #category : 'Accessing' }
@@ -283,6 +394,8 @@ RowanMethodService >> initialize [
 	hasSubs := false.
 	accessedInstVars := Array new.
 	isTestMethod := false.
+	failedCompile := false.
+	isMethodForBlock := false.
 ]
 
 { #category : 'initialization' }
@@ -296,7 +409,7 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	breakPoints := self breakPointsFor: aGsNMethod.
 	((inClass := aGsNMethod inClass) isNil or: [selector isNil]) ifTrue: [
 		meta := false.
-		source := aGsNMethod sourceString.
+		self updateSource: aGsNMethod sourceString.
 		hasSupers := false.
 		hasSubs := false.
 		organizer := aClassOrganizer. 
@@ -307,6 +420,19 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
+	self initializeTestMethodsFor: inClass thisClass
+]
+
+{ #category : 'initialization' }
+RowanMethodService >> initializeTestMethodsFor: aClass [
+  | testSelectors |
+  (aClass inheritsFrom: TestCase)
+    ifTrue: [ 
+      aClass isAbstract
+        ifTrue: [ ^ self ].
+      testSelectors := aClass thisClass suite tests
+        collect: [ :method | method selector ].
+      isTestMethod := testSelectors includes: selector ]
 ]
 
 { #category : 'testing' }
@@ -315,13 +441,13 @@ RowanMethodService >> isMethodService [
 	^true
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'testing' }
 RowanMethodService >> isTestMethod [
 
 	^isTestMethod
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Updating' }
 RowanMethodService >> isTestMethod: boolean [
 
 	isTestMethod := boolean
@@ -351,7 +477,6 @@ RowanMethodService >> meta: aBoolean [
 RowanMethodService >> method [
 
 	^self classFromName compiledMethodAt: selector otherwise: nil
-
 ]
 
 { #category : 'Accessing' }
@@ -395,12 +520,29 @@ RowanMethodService >> printOn: aStream [
 				nextPut: $)
 ]
 
+{ #category : 'client commands' }
+RowanMethodService >> reformatSource [
+  source := (RBParser parseMethod: source) formattedCode.
+  updateType := #'dontUpdateSystem'.	"let browser update the source"
+  RowanCommandResult addResult: self
+]
+
 { #category : 'rowan' }
 RowanMethodService >> removeSelector: sel class: clsName [
 	
 	self rowanFixMe. "combine remove methods variants"
 	self browserTool removeMethod: sel asSymbol forClassNamed: (clsName subStrings first) isMeta: (clsName subStrings size = 2)
 
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> renamedName [
+	^renamedName
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> renamedName: object [
+	renamedName := object
 ]
 
 { #category : 'rowan' }
@@ -449,7 +591,7 @@ RowanMethodService >> selector [
 
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Updating' }
 RowanMethodService >> selector: aSymbol [
 
 	selector := aSymbol
@@ -458,19 +600,26 @@ RowanMethodService >> selector: aSymbol [
 
 { #category : 'perform' }
 RowanMethodService >> servicePerform: symbol withArguments: collection [
-	super servicePerform: symbol withArguments: collection.
-	self update.
+  | theCommand |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  theCommand := command.
+  super servicePerform: symbol withArguments: collection.
+  theCommand = #'reformatSource'
+    ifFalse: [ self update ]
 ]
 
 { #category : 'client commands' }
 RowanMethodService >> setBreakAt: stepPoint [
-	| method |
-	method := self isUnboundMethod 
-			ifTrue:[Object _objectForOop: oop] 
-			ifFalse:[self gsNMethod].
-	method setBreakAtStepPoint: stepPoint.
-	self update. 
-	RowanCommandResult addResult: self.
+  | method |
+  method := self isUnboundMethod
+    ifTrue: [ (Object _objectForOop: oop) homeMethod ]
+    ifFalse: [ self gsNMethod ].
+  method setBreakAtStepPoint: stepPoint.
+  self class breakPointsAreEnabled
+    ifFalse: [ GsNMethod _disableAllBreaks ].
+  self update.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'initialization' }
@@ -482,7 +631,7 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 	[theSuper notNil and:[hasSupers not]] whileTrue:[
 		hasSupers := theSuper selectors includes: selector.
 		hasSupers ifTrue:[
-			superSource := theSuper sourceCodeAt: selector.
+			comparisonSource := theSuper sourceCodeAt: selector.
 			superDisplayString := theSuper name, '>>', selector].
 		theSuper := theSuper superClass].
 	(organizer allSubclassesOf: theClass thisClass) do:[:cls |
@@ -499,11 +648,10 @@ RowanMethodService >> source [
 
 ]
 
-{ #category : 'Accessing' }
-RowanMethodService >> source: aString [
+{ #category : 'Updating' }
+RowanMethodService >> source: string [
 	
-	source := aString
-
+	self updateSource: string
 ]
 
 { #category : 'Accessing' }
@@ -546,7 +694,6 @@ RowanMethodService >> testResult [
 
 { #category : 'updates' }
 RowanMethodService >> update [
-	
 	self isUnboundMethod ifFalse:[
 		self wasRecycled ifTrue:[oop := self gsNMethod asOop].
 		self wasDeleted ifTrue:[
@@ -555,8 +702,14 @@ RowanMethodService >> update [
 		oop ifNil: [oop := self gsNMethod asOop]].
 	self 
 		initialize: (Object _objectForOop: oop) 
-		organizer: ClassOrganizer new.
+		organizer: organizer.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanMethodService >> updateSource: string [
+
+	source := self class removeUnicodeFromSource: string
 ]
 
 { #category : 'testing' }

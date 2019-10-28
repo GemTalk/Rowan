@@ -16,7 +16,7 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 	(self projectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
 		ifTrue: [ | resolved |
-			((resolved := GsCurrentSession currentSession symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
+			((resolved := Rowan image symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
 				ifFalse: [ 
 					self
 						error:
@@ -26,5 +26,4 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 				ensureExtensionClassNamed: self className
 				existsForPackageNamed: self packageName
 				implementationClass: RwGsSymbolDictionaryRegistry_Implementation ]
-
 ]
