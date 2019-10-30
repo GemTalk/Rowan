@@ -13,7 +13,9 @@ Class {
 		'testPackages',
 		'testCount',
 		'dictionaries',
-		'selectedClass'
+		'selectedClass',
+		'newCachedSelectors',
+		'newCachedClasses'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -145,6 +147,33 @@ RowanBrowserService >> findRemovedServices: services [
 	].
 ]
 
+{ #category : 'initialize' }
+RowanBrowserService >> initialize [
+  super initialize.
+  newCachedSelectors := Array new.
+  newCachedClasses := Array new
+]
+
+{ #category : 'accessing' }
+RowanBrowserService >> newCachedClasses [
+	^newCachedClasses
+]
+
+{ #category : 'accessing' }
+RowanBrowserService >> newCachedClasses: object [
+	newCachedClasses := object
+]
+
+{ #category : 'accessing' }
+RowanBrowserService >> newCachedSelectors [
+	^newCachedSelectors
+]
+
+{ #category : 'accessing' }
+RowanBrowserService >> newCachedSelectors: object [
+	newCachedSelectors := object
+]
+
 { #category : 'window registry' }
 RowanBrowserService >> openWindows [
 
@@ -205,6 +234,7 @@ RowanBrowserService >> recompileMethodsAfterClassCompilation [
   RowanCommandResult addResult: classService.
   selectedClass := classService.
   updateType := #'none'.
+  self updateSymbols: theClass name.
   RowanCommandResult addResult: self
 ]
 
@@ -326,4 +356,13 @@ RowanBrowserService >> updateProjects [
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
 	updateType := #projectsUpdate:browser:.
 	RowanCommandResult addResult: self
+]
+
+{ #category : 'update' }
+RowanBrowserService >> updateSymbols: className [
+  | browserService |
+  browserService := RowanBrowserService new.
+  browserService newCachedClasses add: className.
+  browserService updateType: #'addCachedSymbols:'.
+  RowanCommandResult addResult: browserService
 ]

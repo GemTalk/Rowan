@@ -61,6 +61,17 @@ RowanAnsweringService >> autoCommit [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> autocompleteSymbols [
+  answer := Dictionary new.
+  organizer classes
+    do: [ :cls | 
+      answer
+        at: cls name asString
+        put: cls selectors asArray , cls class selectors asArray ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> breakPointsAreEnabled [
   answer := RowanService breakPointsAreEnabled.
   updateType := #'breakpointSettingChanged:'.
