@@ -1001,6 +1001,22 @@ true.
 %
 
 doit
+(JadeServer64bit32
+	subclass: 'JadeServer64bit35'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #()
+)
+		category: 'Rowan-JadeServer';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'RBParser'
 	instVarNames: #( scanner currentToken nextToken errorBlock source comments pragmas )
@@ -2519,7 +2535,7 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
+		comment: 'Simple service that provides updates to the client related to auto commit.';
 		immediateInvariant.
 true.
 %
@@ -8830,9 +8846,16 @@ textBlock: anObject
 category: 'jadeite server'
 classmethod: JadeServer
 theJadeiteServer
-
-	^SessionTemps current at: #jadeiteServer ifAbsentPut: [
-		(Rowan jadeServerClassNamed: #JadeServer64bit32) new initialize; yourself]
+  ^ SessionTemps current
+    at: #'jadeiteServer'
+    ifAbsentPut: [ 
+      | jadeServerClass |
+      jadeServerClass := (System _gemVersion beginsWith: '3.2')
+        ifTrue: [ Rowan jadeServerClassNamed: #'JadeServer64bit32' ]
+        ifFalse: [ Rowan jadeServerClassNamed: #'JadeServer64bit35' ].
+      jadeServerClass new
+        initialize;
+        yourself ]
 %
 
 !		Instance methods for 'JadeServer'
@@ -15194,6 +15217,22 @@ gsPackagePolicy
 	class enabled ifFalse: [^nil].
 	^class current
 
+%
+
+category: 'category'
+method: JadeServer64bit32
+stepThrough: aGsProcess inFrame: anInteger
+  aGsProcess _stepThrough
+%
+
+! Class implementation for 'JadeServer64bit35'
+
+!		Instance methods for 'JadeServer64bit35'
+
+category: 'other'
+method: JadeServer64bit35
+stepThrough: aGsProcess inFrame: anInteger
+  aGsProcess stepThroughFromLevel: anInteger
 %
 
 ! Class implementation for 'RBParser'
@@ -25715,6 +25754,13 @@ length
 
 !		Class methods for 'Rowan'
 
+category: 'public client services'
+classmethod: Rowan
+answeringServiceClass
+
+	^ self platform answeringServiceClass
+%
+
 category: 'public'
 classmethod: Rowan
 automaticClassInitializationBlackList
@@ -27685,6 +27731,15 @@ setBreakPointsAreEnabled: boolean
   ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
 %
 
+category: 'accessing'
+classmethod: RowanService
+version
+  "change this method carefully and only at Jadeite release boundaries.
+	Failure to do so will prevent logins"
+
+  ^ 3085
+%
+
 !		Instance methods for 'RowanService'
 
 category: 'other'
@@ -28011,6 +28066,13 @@ servicePerform: symbol withArguments: collection
   "each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
 
+  SessionTemps current
+    at: #'versionsVerified'
+    ifAbsent: [ 
+      SessionTemps current at: #'versionsVerified' put: false.
+      self
+        inform:
+          'Version mismatch failure. Client version is older than server version.' ].
   symbol == #'update'
     ifTrue: [ ^ self ].
   ^ super perform: symbol withArguments: collection
@@ -28258,6 +28320,28 @@ disableAllBreaks
 
 category: 'client commands'
 method: RowanAnsweringService
+doClientAndServerVersionsMatch: clientVersion
+  "Not to be sent through services so return an answer directly.
+	Sent immediately after Jadeite login"
+
+  SessionTemps current at: #'versionsVerified' put: false.
+  clientVersion = RowanService version
+    ifTrue: [ 
+      answer := true.
+      SessionTemps current at: #'versionsVerified' put: true ]
+    ifFalse: [ 
+      answer := clientVersion > RowanService version
+        ifTrue: [ 
+          'Client (' , clientVersion printString , ') is more recent than server ('
+            , RowanService version printString , ')' ]
+        ifFalse: [ 
+          'Server (' , RowanService version printString , ') is more recent than client ('
+            , clientVersion printString , ')' ] ].
+  ^ answer
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 enableAllBreaks
   | methodServices |
   methodServices := RowanQueryService new
@@ -28462,11 +28546,12 @@ runMethodTests: methodServices
 category: 'client commands'
 method: RowanAnsweringService
 selectorsMatchingPattern: pattern
-
-	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
-	answer := answer select: [:each |each _matchPatternNoCase: pattern].
-	answer := answer asSortedCollection asArray.
-	RowanCommandResult addResult: self.
+  answer := ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols')
+    value.
+  answer := answer
+    select: [ :each | each charSize = 1 and: [ each _matchPatternNoCase: pattern ] ].
+  answer := answer asSortedCollection asArray.
+  RowanCommandResult addResult: self
 %
 
 category: 'client commands'
@@ -29176,7 +29261,7 @@ method: RowanClassService
 copyClassTo: newClassName
   | newTemplate newClass newClassService index |
   (Rowan image symbolList resolveSymbol: newClassName)
-    ifNotNil: [ ^ self error: newClassName , ' already exists' ].
+    ifNotNil: [ ^ self inform: newClassName , ' already exists' ].
   index := template findPattern: (Array with: name) startingAt: 1.
   newTemplate := template copy.
   newTemplate removeFrom: index to: index + name size - 1.
@@ -30289,14 +30374,20 @@ update
           classService version: (value classHistory indexOf: value).
           classes add: classService ]
         ifFalse: [ 
-          | printString |
-          printString := [ value printString ]
+          | printString theKey |
+          printString := [ 
+          value printString charSize > 1
+            ifTrue: [ '<<unprintable string. charSize > 1>>' ]
+            ifFalse: [ value printString ] ]
             on: Error
             do: [ :ex | 'unprintable string. Error - <' , ex printString , '>' ].
+          key charSize = 1
+            ifTrue: [ theKey := key ]
+            ifFalse: [ theKey := '<<unprintable string. charSize > 1>>' ].
           sorted
             add:
               (Array
-                with: name , '.' , key
+                with: name , '.' , theKey
                 with: value class name
                 with: value asOop
                 with: printString) ] ].
@@ -30666,7 +30757,7 @@ breakPointsFor: aGsNMethod
       1 to: anArray size by: 3 do: [ :i | 
         list
           add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2) abs) ] ].
   ^ list asOrderedCollection
 %
 
@@ -31136,6 +31227,8 @@ setBreakAt: stepPoint
     ifTrue: [ (Object _objectForOop: oop) homeMethod ]
     ifFalse: [ self gsNMethod ].
   method setBreakAtStepPoint: stepPoint.
+  self class breakPointsAreEnabled
+    ifFalse: [ GsNMethod _disableAllBreaks ].
   self update.
   RowanCommandResult addResult: self
 %
@@ -32359,15 +32452,19 @@ implementorsOf: selector
 category: 'queries'
 method: RowanQueryService
 instVarReaders: instVarName in: className
-  | methods symbolAssociation theClass |
+  | methods symbolAssociation theClasses |
   symbolAssociation := Rowan image symbolList resolveSymbol: className.
   symbolAssociation ifNil: [ ^ self ].
-  theClass := symbolAssociation value.
+  theClasses := symbolAssociation value allSuperclasses.
+  theClasses add: symbolAssociation value.
+  theClasses addAll: (organizer allSubclassesOf: symbolAssociation value).
   methods := Array new.
-  theClass
-    methodsDo: [ :selector :method | 
-      (method instVarsRead includes: instVarName asSymbol)
-        ifTrue: [ methods add: method ] ].
+  theClasses
+    do: [ :theClass | 
+      theClass
+        methodsDo: [ :selector :method | 
+          (method instVarsRead includes: instVarName asSymbol)
+            ifTrue: [ methods add: method ] ] ].
   queryResults := self methodServicesFrom: methods.
   self returnQueryToClient
 %
@@ -32375,15 +32472,19 @@ instVarReaders: instVarName in: className
 category: 'queries'
 method: RowanQueryService
 instVarWriters: instVarName in: className
-  | methods symbolAssociation theClass |
+  | methods symbolAssociation theClasses |
   symbolAssociation := Rowan image symbolList resolveSymbol: className.
   symbolAssociation ifNil: [ ^ self ].
-  theClass := symbolAssociation value.
+  theClasses := symbolAssociation value allSuperclasses.
+  theClasses add: symbolAssociation value.
+  theClasses addAll: (organizer allSubclassesOf: symbolAssociation value).
   methods := Array new.
-  theClass
-    methodsDo: [ :selector :method | 
-      (method instVarsWritten includes: instVarName asSymbol)
-        ifTrue: [ methods add: method ] ].
+  theClasses
+    do: [ :theClass | 
+      theClass
+        methodsDo: [ :selector :method | 
+          (method instVarsWritten includes: instVarName asSymbol)
+            ifTrue: [ methods add: method ] ] ].
   queryResults := self methodServicesFrom: methods.
   self returnQueryToClient
 %
@@ -62926,6 +63027,20 @@ fromSton: stonReader
 	^result
 %
 
+!		Instance methods for 'Interval'
+
+category: '*Rowan-GemStone-Kernel'
+method: Interval
+stonOn: stonWriter
+  stonWriter
+    writeObject: self
+    streamMap: [ :dictionary | 
+      dictionary
+        at: #'start' put: from;
+        at: #'stop' put: to;
+        at: #'step' put: by ]
+%
+
 ! Class extensions for 'MemoryStore'
 
 !		Instance methods for 'MemoryStore'
@@ -63905,6 +64020,12 @@ _shouldCloneRowanLoader: aProjectSetModification
 
 category: '*rowan-services-extensions'
 method: RwGsPlatform
+answeringServiceClass
+  ^ RowanAnsweringService
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
 browserServiceClass
 
 	^ RowanBrowserService
@@ -63949,6 +64070,7 @@ jadeServerClassNamed: className
 	| jadeClasses |
 	jadeClasses := Array with: (UserGlobals at: #JadeServer). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
+	jadeClasses add: (UserGlobals at: #JadeServer64bit35). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
 %
 

@@ -41,12 +41,46 @@ RwRowanSample4Test >> test_projectUrl_issue_463 [
 		ifTrue: [ (testProjectHome / projectName) deleteAll ].
 	projectDef := (RwComponentProjectDefinition newForUrl: specUrlString)
 		projectHome: testProjectHome;
+		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
 	self
 		handleInformDuring: [ projectDef clone ]
 		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
 	self
 		assert: projectDef projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+	projectDef load.
+	project := RwProject newNamed: projectName.
+	self assert: project projectUrl = projectDef projectUrl
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> test_projectUrl_issue_527 [
+	"https://github.com/GemTalk/Rowan/issues/527"
+
+	| specUrlString rowanProject testProjectHome projectName project projectDef  gitTool |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	testProjectHome := (rowanProject repositoryRootPath
+		, '/test/testRepositories/repos/') asFileReference.
+	(testProjectHome / projectName) exists
+		ifTrue: [ (testProjectHome / projectName) deleteAll ].
+	projectDef := (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: testProjectHome;
+"		defaultSymbolDictName: self _symbolDictionaryName1;"
+		yourself.
+	self
+		handleInformDuring: [ projectDef clone ]
+		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
+
+	gitTool := Rowan projectTools git.
+	gitTool gitcheckoutIn: (testProjectHome / projectName) with: 'fb3fdc5'.
+
+	self
+		assert: projectDef projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+self error: 'run tests interactivly, since loading project into UserGlobals (this is the bug) gums up the testing works'.
 	projectDef load.
 	project := RwProject newNamed: projectName.
 	self assert: project projectUrl = projectDef projectUrl
@@ -1911,7 +1945,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 		_loadProjectFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: projectRootPath)
 		repoRootPath: projectRootPath.
 
-	self assert: (x := (Rowan projectNamed: projectName) loadedCommitId) = 'ea371eb'.
+	self assert: (x := (Rowan projectNamed: projectName) loadedCommitId) = 'fb3fdc5'.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
@@ -2292,6 +2326,6 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
-	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := rowanSampleSpec loadedGroupNames) asArray = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) asArray = #('Load').
 ]
