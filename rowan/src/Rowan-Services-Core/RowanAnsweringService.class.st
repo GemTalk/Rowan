@@ -63,7 +63,6 @@ RowanAnsweringService >> autoCommit [
 { #category : 'client commands' }
 RowanAnsweringService >> autocompleteSymbols [
   | newClassNames newSelectors |
-  answer := Dictionary new.
   newClassNames := Array new.
   newSelectors := Array new.
   organizer classes
@@ -72,9 +71,10 @@ RowanAnsweringService >> autocompleteSymbols [
       newSelectors addAll: cls selectors asArray.
       newSelectors addAll: cls class selectors asArray ].
   newSelectors := newSelectors asSet asArray.
-  SessionTemps
+  SessionTemps current
     at: #'autocompleteSymbolCache'
     put: (Array with: newClassNames with: newSelectors).
+  answer := Array with: newClassNames with: newSelectors.
   RowanCommandResult addResult: self
 ]
 
@@ -398,7 +398,7 @@ RowanAnsweringService >> turnOffTranscriptWrites [
 { #category : 'client commands' }
 RowanAnsweringService >> updateAutocompleteSymbols [
   | cache newClassNames newSelectors |
-  cache := SessionTemps at: #'autocompleteSymbolCache'.
+  cache := SessionTemps current at: #'autocompleteSymbolCache'.
   newClassNames := Array new.
   newSelectors := Array new.
   organizer classes
@@ -412,8 +412,10 @@ RowanAnsweringService >> updateAutocompleteSymbols [
         addAll:
           (cls class selectors reject: [ :selector | cache last includes: selector ]) ].
   newSelectors := newSelectors asSet asArray.
-  (SessionTemps at: #'autocompleteSymbolCache') first addAll: newClassNames.
-  (SessionTemps at: #'autocompleteSymbolCache') last addAll: newSelectors.
+  (SessionTemps current at: #'autocompleteSymbolCache') first
+    addAll: newClassNames.
+  (SessionTemps current at: #'autocompleteSymbolCache') last
+    addAll: newSelectors.
   answer := Array with: newClassNames with: newSelectors.
   RowanCommandResult addResult: self
 ]
