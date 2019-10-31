@@ -405,15 +405,16 @@ RowanAnsweringService >> updateAutocompleteSymbols [
     do: [ :cls | 
       (cache first includes: cls name asString)
         ifFalse: [ newClassNames add: cls name asString ].
-      newSelectors
-        addAll:
-          (cls selectors reject: [ :selector | cache last includes: selector ]).
-      newSelectors
-        addAll:
-          (cls class selectors reject: [ :selector | cache last includes: selector ]) ].
+      newSelectors addAll: cls selectors.
+      newSelectors addAll: cls class selectors ].
   newSelectors := newSelectors asSet asArray.
   (SessionTemps current at: #'autocompleteSymbolCache') first
     addAll: newClassNames.
+  newSelectors := newSelectors asSet asArray.
+  cache last
+    do: [ :selector | 
+      (newSelectors includes: selector)
+        ifTrue: [ newSelectors remove: selector ] ].
   (SessionTemps current at: #'autocompleteSymbolCache') last
     addAll: newSelectors.
   answer := Array with: newClassNames with: newSelectors.
