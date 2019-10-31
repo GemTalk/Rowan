@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Object
@@ -8,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -23,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'Used for Jadeite testing';
 		immediateInvariant.
@@ -38,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -53,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -68,7 +73,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'RowanServicesTest subclasses require RowanSample1 project to be loaded.';
 		immediateInvariant.
@@ -83,7 +89,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -98,7 +105,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -113,7 +121,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: 'Created to test inherited tests on client';
 		immediateInvariant.
@@ -128,7 +137,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -143,7 +153,24 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
+		category: 'Rowan-Services-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanServicesTest
+	subclass: 'RowanDictionaryServiceTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -158,7 +185,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -173,7 +201,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -188,7 +217,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -203,7 +233,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Tests';
 		comment: '';
 		immediateInvariant.
@@ -218,7 +249,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -233,7 +265,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -248,7 +281,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -263,7 +297,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'No class-specific documentation for CypLoadingTest, hierarchy is: 
 Object
@@ -283,7 +318,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -298,7 +334,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -313,7 +350,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -328,7 +366,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -343,7 +382,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -358,7 +398,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -373,7 +414,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -388,7 +430,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -403,7 +446,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -418,7 +462,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -433,7 +478,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -448,7 +494,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'keep test cases here';
 		immediateInvariant.
@@ -463,7 +510,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -478,7 +526,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -493,7 +542,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -508,7 +558,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -523,7 +574,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -538,7 +590,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -553,7 +606,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -568,7 +622,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -583,7 +638,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -598,7 +654,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -613,7 +670,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -628,7 +686,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -643,7 +702,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -658,7 +718,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -673,7 +734,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -688,7 +750,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -703,7 +766,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -718,7 +782,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -733,7 +798,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -748,7 +814,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -763,7 +830,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -778,7 +846,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -793,7 +862,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -808,7 +878,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: 'The tests in this class were extracted from the examples in Semantic Version Specification ...';
 		immediateInvariant.
@@ -823,7 +894,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -838,7 +910,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1183,9 +1256,17 @@ jadeiteServer
 category: 'tests'
 method: JadeServerTest
 test_jadeServerCanonicalLocation
-	self assert: (JadeServer theJadeiteServer isKindOf: JadeServer64bit32).
-	self assert: (JadeServer theJadeiteServer class canUnderstand: #updateFromSton:).
-	self assert: (JadeServer theJadeiteServer == (SessionTemps current at: #jadeiteServer))
+  | jadeServerClass |
+  (System _gemVersion beginsWith: '3.2')
+    ifTrue: [ jadeServerClass := JadeServer64bit32 ]
+    ifFalse: [ jadeServerClass := JadeServer64bit35 ].
+  self assert: (JadeServer theJadeiteServer isKindOf: jadeServerClass).
+  self
+    assert:
+      (JadeServer theJadeiteServer class canUnderstand: #'updateFromSton:').
+  self
+    assert:
+      JadeServer theJadeiteServer == (SessionTemps current at: #'jadeiteServer')
 %
 
 category: 'tests'
@@ -1224,7 +1305,8 @@ test_jadeServerHierarchyValid
 						JadeServer64bit32.
 
 	See RsGsPlatform>>jadeServerClassNamed: for symbol list JadeServer*
-	lives in. Note that method will only lookup JadeServer & JadeServer64bit32"
+	lives in. Note that method will only lookup JadeServer, JadeServer64bit32,
+	and JadeServer64bit35"
 				
 	| jadeServerClass subclasses |
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer. 
@@ -1245,6 +1327,9 @@ test_jadeServerHierarchyValid
 	self assert: subclasses asArray first name = #JadeServer64bit32.
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit32. 
 	subclasses :=  jadeServerClass subclasses asArray.
+	self assert: subclasses asArray first name = #JadeServer64bit35.
+	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit35. 
+	subclasses :=  jadeServerClass subclasses asArray.
 	self assert: subclasses isEmpty
 %
 
@@ -1254,15 +1339,22 @@ test_rowanCanFindJadeServer
 
 	self assert: (Rowan class canUnderstand: #jadeServerClassNamed:).
 	self assert: (RwGsPlatform canUnderstand: #jadeServerClassNamed:).
-	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32
+	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32.
+	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit35)equals: JadeServer64bit35
 %
 
 category: 'tests'
 method: JadeServerTest
 test_serviceUsesCanonicalJadeServer
-	
-	self assert: (RowanAnsweringService new jadeiteServer isKindOf: JadeServer64bit32).
-	self assert: RowanAnsweringService new jadeiteServer == JadeServer theJadeiteServer
+  | jadeServerClass |
+  (System _gemVersion beginsWith: '3.2')
+    ifTrue: [ jadeServerClass := JadeServer64bit32 ]
+    ifFalse: [ jadeServerClass := JadeServer64bit35 ].
+  self
+    assert: (RowanAnsweringService new jadeiteServer isKindOf: jadeServerClass).
+  self
+    assert:
+      RowanAnsweringService new jadeiteServer == JadeServer theJadeiteServer
 %
 
 category: 'tests'
@@ -1293,6 +1385,24 @@ test_updateFromSton
 ! Class implementation for 'RowanServicesTest'
 
 !		Instance methods for 'RowanServicesTest'
+
+category: 'unicode method'
+method: RowanServicesTest
+addUnicodeSymbolKeyToUserGlobals
+  "RowanServicesTest new addUnicodeSymbolKeyToUserGlobals"
+
+  UserGlobals
+    at: (String with: (Character withValue: 16r3DA)) asSymbol
+    put: 'fnoodle'
+%
+
+category: 'unicode method'
+method: RowanServicesTest
+addUnicodeValueToUserGlobals
+  "RowanServicesTest new addUnicodeValueToUserGlobals"
+
+  UserGlobals at: #'bad' put: '£¥' asSymbol
+%
 
 category: 'unicode method'
 method: RowanServicesTest
@@ -1330,27 +1440,6 @@ createClassDefinitionNamed: className
 
 category: 'support'
 method: RowanServicesTest
-createJadeiteTestPackage
-	| proj pkg |
-	proj := self createJadeiteTestProject. 
-	pkg := RwPackageDefinition newNamed: self servicesTestPackageName.
-	proj addPackage: pkg.
-	Rowan projectTools load loadProjectDefinition: proj.
-	^pkg.
-%
-
-category: 'support'
-method: RowanServicesTest
-createJadeiteTestProject
-	| proj |
-	proj := RwProjectDefinition newForGitBasedProjectNamed: self servicesTestProjectName. 
-	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/', self servicesTestProjectName. 
-	Rowan projectTools create createProjectFor: proj.
-	^proj
-%
-
-category: 'support'
-method: RowanServicesTest
 createNonDiskTestProjectNamed: projectName packageName: packageName
 
 	| projectDefinition projectSetDefinition  |
@@ -1381,41 +1470,39 @@ createProjectDefinitionNamed: projectName
 category: 'support'
 method: RowanServicesTest
 createServicesTestClass
-
-	| packageDefinition classDefinition |
-	packageDefinition := self createServicesTestPackage.
-	classDefinition := self createClassDefinitionNamed: self servicesDefaultClassName. 
-	packageDefinition addClassDefinition: classDefinition. 
-	^classDefinition
+  | packageDefinition classDefinition |
+  packageDefinition := self createServicesTestPackage.
+  packageDefinition classDefinitions
+    do: [ :classDef | 
+      classDef key = self servicesDefaultClassName
+        ifTrue: [ ^ classDef ] ].
+  classDefinition := self
+    createClassDefinitionNamed: self servicesDefaultClassName.
+  packageDefinition addClassDefinition: classDefinition.
+  ^ classDefinition
 %
 
 category: 'support'
 method: RowanServicesTest
 createServicesTestPackage
-
-	| projectDefinition |
-	projectDefinition := self createServicesTestProject. 
-	projectDefinition addPackageNamed: self servicesTestPackageName.
-	^projectDefinition packageNamed: self servicesTestPackageName
-%
-
-category: 'support'
-method: RowanServicesTest
-createServicesTestProject
-
-	defaultProjectDefinition := self createProjectDefinitionNamed: self servicesTestProjectName.
-	^defaultProjectDefinition
+  | projectDefinition |
+  defaultProjectDefinition
+    ifNotNil: [ :projectDef | ^ projectDef packageNamed: self servicesTestPackageName ].
+  projectDefinition := self defaultProjectDefinition.
+  projectDefinition addPackageNamed: self servicesTestPackageName.
+  ^ projectDefinition packageNamed: self servicesTestPackageName
 %
 
 category: 'support'
 method: RowanServicesTest
 createServicesTestTestClass
-
-	| packageDefinition classDefinition |
-	packageDefinition := defaultProjectDefinition packageNamed: self servicesTestPackageName. 
-	classDefinition := self createTestClassDefinitionNamed: self servicesDefaultTestClassName. 
-	packageDefinition addClassDefinition: classDefinition. 
-	^classDefinition
+  | packageDefinition classDefinition |
+  packageDefinition := self defaultProjectDefinition
+    packageNamed: self servicesTestPackageName.
+  classDefinition := self
+    createTestClassDefinitionNamed: self servicesDefaultTestClassName.
+  packageDefinition addClassDefinition: classDefinition.
+  ^ classDefinition
 %
 
 category: 'support'
@@ -1434,6 +1521,15 @@ createTestClassDefinitionNamed: className
 			pools: #()
 			type: 'normal'.
 	^classDefinition
+%
+
+category: 'support'
+method: RowanServicesTest
+defaultProjectDefinition
+  ^ defaultProjectDefinition
+    ifNil: [ 
+      defaultProjectDefinition := self
+        createProjectDefinitionNamed: self servicesTestProjectName ]
 %
 
 category: 'support'
@@ -1457,42 +1553,39 @@ jadeiteIssueTested: aSymbol withTitle: anObject
 category: 'support'
 method: RowanServicesTest
 loadRowanSample1
-	| specUrlString projectTools rowanSpec gitRootPath projectName projectDefinition spec |
-
-	projectName := 'RowanSample1'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [])
-		ifNotNil: [ :prj |  Rowan image _removeLoadedProject: prj ].
-
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	specUrlString := 'file:' , rowanSpec repositoryRootPath , '/samples/RowanSample1.ston'.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
-
-	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
-		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
-
-	spec := specUrlString asRwUrl asSpecification.
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRootPath
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
-	
-	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectDefinition := projectTools create createProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
-	Rowan projectTools load loadProjectNamed: 'RowanSample1'.
+  | rowanSpec gitRootPath projectName  |
+  projectName := 'RowanSample1'.
+  (Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+    ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+  rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+  gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+  (Rowan fileUtilities directoryExists: gitRootPath , projectName)
+    ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+  Rowan projectTools clone
+    cloneSpecUrl: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston'
+    gitRootPath: gitRootPath
+    useSsh: true.
+  Rowan projectTools load loadProjectNamed: projectName
 %
 
 category: 'support'
 method: RowanServicesTest
 loadServicesTestProject
-	
-	| projectSetDefinition |
+  | projectSetDefinition |
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: self defaultProjectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+%
 
-	projectSetDefinition:= RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self servicesTestProjectDefinition.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+category: 'unicode method'
+method: RowanServicesTest
+removeUnicodeSymbolsFromUserGlobals
+  "RowanServicesTest new addUnicodeSymbolToUserGlobals"
+
+  UserGlobals
+    removeKey: (String with: (Character withValue: 16r3DA)) asSymbol
+    ifAbsent: [  ].
+  UserGlobals removeKey: #'bad' ifAbsent: [  ]
 %
 
 category: 'constants'
@@ -1516,13 +1609,6 @@ servicesTestPackageName
 	^'RowanServicesTestPackage'
 %
 
-category: 'support'
-method: RowanServicesTest
-servicesTestProjectDefinition
-
-	^defaultProjectDefinition ifNil:[defaultProjectDefinition := self createServicesTestProject]
-%
-
 category: 'constants'
 method: RowanServicesTest
 servicesTestProjectName
@@ -1533,16 +1619,22 @@ servicesTestProjectName
 category: 'setup teardown'
 method: RowanServicesTest
 setUp
-	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
+  "ensure results are clean as service requests not coming through #updateFromSton: like the client"
 
-	RowanCommandResult initializeResults.
+  super setUp.
+  SessionTemps current at: #'versionsVerified' put: false.
+  RowanAnsweringService new setEnableInteractionHandler: false.
+  RowanCommandResult initializeResults.
+  Rowan platform _alternateImageClass: Rowan image testImageClass
 %
 
 category: 'setup teardown'
 method: RowanServicesTest
 tearDown
-
-	RowanCommandResult initializeResults.  "squash the gui updates"
+  super tearDown.
+  Rowan platform _alternateImageClass: nil.
+  RowanCommandResult initializeResults.	"squash the gui updates"
+  RowanAnsweringService new setEnableInteractionHandler: true
 %
 
 category: 'support'
@@ -1550,7 +1642,8 @@ method: RowanServicesTest
 unloadServicesTestProject
 
 	Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent:[^self].
-	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName
+	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName.
+	defaultProjectDefinition := nil
 %
 
 ! Class implementation for 'RowanAnsweringServiceTest'
@@ -1567,8 +1660,24 @@ setUp
 
 category: 'tests'
 method: RowanAnsweringServiceTest
-test_execCompileError
+test_disableBreakpointsInterface
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  service setBreakPointsAreEnabled: true.
+  self assert: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: true.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled').
+  service setBreakPointsAreEnabled: false.
+  self deny: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: false.
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+%
 
+category: 'tests'
+method: RowanAnsweringServiceTest
+test_execCompileError
+ 
 	self deny: (service exec: '1 +' context: nil asOop) key.
 %
 
@@ -1605,6 +1714,29 @@ test_initializeAutoCommit
 	self deny: (SessionTemps current at: #'Jadeite_AutoCommit')] ensure: [
 		RowanService setAutoCommit: autoCommit.
 		self assert: RowanService autoCommit equals: autoCommit.]
+%
+
+category: 'tests'
+method: RowanAnsweringServiceTest
+test_initializeBreakPointsAreDisabled
+  | breakPointsAreEnabled |
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  breakPointsAreEnabled := RowanService breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: breakPointsAreEnabled.
+  self
+    assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+    equals: breakPointsAreEnabled.
+  [ 
+  service initializeBreakPointsAreEnabled.
+  self assert:  RowanService breakPointsAreEnabled.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
+    ensure: [ 
+      RowanService setBreakPointsAreEnabled: breakPointsAreEnabled.
+      self
+        assert: RowanService breakPointsAreEnabled
+        equals: breakPointsAreEnabled ]
 %
 
 category: 'tests'
@@ -1661,6 +1793,15 @@ cd'''.  "includes lf (10) - no ? substitution"
 
 category: 'tests'
 method: RowanAnsweringServiceTest
+test_play
+
+	"method to safely play with commits" 
+
+	self deny: false
+%
+
+category: 'tests'
+method: RowanAnsweringServiceTest
 test_setAutoCommit
 	| autoCommit | 
 	self jadeiteIssueTested: #issue396 withTitle: 'Ability to turn on autocommit would be nice'.
@@ -1681,11 +1822,64 @@ test_setAutoCommit
 
 category: 'tests'
 method: RowanBrowserServiceTest
+test_compileClassWithClassSelected
+  "because the selectedClass is the name of the 
+	class to be compiled, it compiles without a confirmation"
+
+  | browserService |
+  self
+    jadeiteIssueTested: #'issue516'
+    withTitle: 'Deleting classes and project reload (3.0.77)'.
+  self createServicesTestPackage.
+  self loadServicesTestProject.
+  browserService := RowanBrowserService new.
+  browserService selectedClass: 'Fubar'.
+  browserService
+    compileClass:
+      'Object rwSubclass: ''Fubar''
+	instVarNames: #( abc def )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+		category: ''' , self servicesTestPackageName
+        ,
+          '''
+		options: #()'.
+  browserService recompileMethodsAfterClassCompilation.
+  [ 
+  self
+    assert:
+      (Rowan image symbolList resolveSymbol: #'Fubar') value allInstVarNames
+    equals: #(#'abc' #'def').
+  browserService selectedClass: 'Fubar'.
+  browserService
+    compileClass:
+      'Object rwSubclass: ''Fubar''
+	instVarNames: #( abc )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+		category: ''' , self servicesTestPackageName
+        ,
+          '''
+		options: #()'.
+  browserService recompileMethodsAfterClassCompilation.
+  self
+    assert:
+      (Rowan image symbolList resolveSymbol: #'Fubar') value allInstVarNames
+    equals: #(#'abc') ]
+    ensure: [ 
+      Rowan projectTools browser removeClassNamed: 'Fubar'.
+      self unloadServicesTestProject ]
+%
+
+category: 'tests'
+method: RowanBrowserServiceTest
 test_flipAutoCommit
 	| autoCommit service | 
 	self jadeiteIssueTested: #issue396 withTitle: 'Ability to turn on autocommit would be nice'.
 	autoCommit := RowanService autoCommit. 
-	service := RowanBrowserService new. 
+	service := RowanAutoCommitService new. 
 	[service flipAutoCommit. 
 	self assert: RowanService autoCommit equals: autoCommit not. 
 	self assert: (SessionTemps current at: #'Jadeite_AutoCommit') equals: autoCommit not.
@@ -1865,20 +2059,17 @@ servicesClassInstance
 category: 'support'
 method: RowanClassServiceTest
 setUp
-
 	super setUp.
-	self createServicesTestClass. 
+	self createServicesTestClass.
 	self loadServicesTestProject.
-	Rowan platform _alternateImageClass: Rowan image testImageClass
 %
 
 category: 'support'
 method: RowanClassServiceTest
 tearDown
 
-	super tearDown.
-	Rowan platform _alternateImageClass: nil.
 	self unloadServicesTestProject.
+	super tearDown.
 %
 
 category: 'tests'
@@ -1998,21 +2189,27 @@ test_classHierarchyClassSide
 category: 'tests'
 method: RowanClassServiceTest
 test_classWasDeleted
-
-	| classService |
-	System commitTransaction. 
-	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
-	'Object rwSubclass: ''TestClass''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ''Rowan-Services-Tests''
-	options: #()' evaluate.
-	classService := RowanClassService forClassNamed: 'TestClass'. 
-	self deny: classService wasDeleted.
-	System abortTransaction. 
-	self assert: classService wasDeleted.
+  | classService classDefinition packageDefinition |
+  self
+    jadeiteIssueTested: #'issue284'
+    withTitle:
+      '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+  self unloadServicesTestProject.	"test class created in setUp"
+  packageDefinition := self createServicesTestPackage. 
+  [ 
+  self loadServicesTestProject.
+  System commitTransaction.	"commit loaded package, but not class"
+  classDefinition := self
+    createClassDefinitionNamed: self servicesDefaultClassName.
+  packageDefinition addClassDefinition: classDefinition.
+  self loadServicesTestProject.	"reload with class"
+  classService := RowanClassService new name: self servicesDefaultClassName.
+  self deny: classService wasDeleted.
+  System abortTransaction.
+  self assert: classService wasDeleted ]
+    ensure: [ 
+      self unloadServicesTestProject.
+      System commitTransaction ]
 %
 
 category: 'test method compilation'
@@ -2081,6 +2278,27 @@ test_dirtyState
 				Rowan projectTools delete deleteProjectNamed: 'RowanSample1'.]
 %
 
+category: 'test method compilation'
+method: RowanClassServiceTest
+test_dirtyStateNewProject
+  "dirtiness is based on a comparison to disk.
+	New projects (created in setUp) should be dirty"
+
+  | classService selector |
+  self
+    jadeiteIssueTested: #'issue356'
+    withTitle: 'Add method compilation tests in server services tests'.
+  selector := #'simpleMethod'.
+  [ 
+  self assert: (RowanProjectService newNamed: 'RowanServicesTestProject') isDirty.
+  self
+    assert:
+      (RowanPackageService forPackageNamed: 'RowanServicesTestPackage') isDirty.
+  classService := RowanClassService forClassNamed: 'RowanServicesTestClass'.
+  classService saveMethodSource: selector asString , ' ^123' category: 'abc' ]
+    ensure: [ Rowan projectTools browser removeClassNamed: 'RowanServicesTestClass' ]
+%
+
 category: 'tests'
 method: RowanClassServiceTest
 test_equality
@@ -2095,6 +2313,17 @@ test_equality
 	self deny: classService1 equals: (RowanPackageService forPackageNamed: 'Rowan-Services-Tests').
 	self deny: classService1 equals: (RowanProjectService newNamed: 'Rowan').
 	self deny: classService1 equals: (RowanMethodService forSelector: #test_equality class: RowanClassServiceTest meta: false organizer: ClassOrganizer new)
+%
+
+category: 'tests'
+method: RowanClassServiceTest
+test_instVarNamesIsArray
+	"instVarNames was getting set to a collection which
+	was not handled well by STON"
+	| classService |
+	
+	classService := RowanClassService forClassNamed: 'UnauthorizedObjectStub' meta: false. 
+	self assert: (classService instVarNames isKindOf: Array).
 %
 
 category: 'tests'
@@ -2131,6 +2360,19 @@ test_nameIsString
 
 category: 'test method compilation'
 method: RowanClassServiceTest
+test_rowanCompileGone
+
+	"#rowanCompile was used to tell Rowan
+	to compile a method in a Rowan package
+	or in the traditional manner. That is no 
+	longer needed. Make sure it's not referenced
+	anywhere." 
+
+	self assert: (ClassOrganizer new referencesToLiteral: '#rowanCompile' evaluate) first isEmpty
+%
+
+category: 'test method compilation'
+method: RowanClassServiceTest
 test_selectedMethod
 	| classService methodService selector |
 	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
@@ -2148,14 +2390,32 @@ test_selectedMethod
 			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
 %
 
+category: 'tests'
+method: RowanClassServiceTest
+test_setClassCommentDuringMetaclassRefresh
+  | classService behavior meta metaClassService |
+  behavior := Rowan globalNamed: self servicesDefaultClassName.
+  self assert: behavior comment equals: String new.
+  classService := RowanClassService
+    forClassNamed: self servicesDefaultClassName
+    meta: false.
+  classService classComment: 'This is a test'.
+  meta := behavior class.
+  metaClassService := RowanClassService new
+    name: 'RowanClassService';
+    oop: meta asOop.
+  metaClassService fastRefresh.
+  self assert: metaClassService comment equals: 'This is a test'
+%
+
 category: 'test method compilation'
 method: RowanClassServiceTest
 test_setSuperSubIndicators
-	| classService superclassMethodService subclassMethodService selector subclassService packageService |
+	| classService superclassMethodService subclassMethodService selector subclassService browserService |
 	selector := #indicatorTesting. 
 	self loadRowanSample1.
-	[packageService := RowanPackageService forPackageNamed: 'RowanSample1-Core'.
-	packageService compileClass: 
+	[browserService := RowanBrowserService new. 
+	browserService compileClass: 
 		'RowanSample1 rwSubclass: ''RowanSubClass''
 			instVarNames: #()
 			classVars: #()
@@ -2165,7 +2425,7 @@ test_setSuperSubIndicators
 			options: #()'.
 	classService := RowanClassService forClassNamed: 'RowanSample1'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
+	browserService recompileMethodsAfterClassCompilation. 
 	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
 	superclassMethodService := (classService methodsNamed: selector) first.
 	self deny: superclassMethodService hasSupers.
@@ -2434,6 +2694,23 @@ test_malformed
 	self assert: debugString equals: 'nil halt. abc | def | ^abc'.
 %
 
+! Class implementation for 'RowanDictionaryServiceTest'
+
+!		Instance methods for 'RowanDictionaryServiceTest'
+
+category: 'tests'
+method: RowanDictionaryServiceTest
+test_insertRemoveDictionary
+	| dictionaryService browserService |
+	dictionaryService := RowanDictionaryService new name: 'FnoodleDictionary'. 
+	dictionaryService insertAt: 1. 
+	self assert: Rowan image symbolList first name equals: #FnoodleDictionary.
+
+	browserService := RowanBrowserService new. 
+	browserService removeDictionariesNamed: #('FnoodleDictionary').
+	self deny: Rowan image symbolList first name equals: #FnoodleDictionary.
+%
+
 ! Class implementation for 'RowanMethodServiceTest'
 
 !		Instance methods for 'RowanMethodServiceTest'
@@ -2518,8 +2795,8 @@ category: 'support'
 method: RowanMethodServiceTest
 tearDown
 
+	self unloadServicesTestProject.
 	super tearDown.
-	self unloadServicesTestProject
 %
 
 category: 'tests'
@@ -2540,7 +2817,19 @@ test_classNameIsString
 	methodService := RowanMethodService source: 'fnoodle' selector: #fnoodle category: 'other' className: 'RowanMethodServiceTest' packageName: 'Rowan-Services-Tests' meta: true. 
 	self assert: (methodService className isKindOf: String).
 	self assert: methodService className = 'RowanMethodServiceTest'.
-	System abortTransaction.
+%
+
+category: 'tests'
+method: RowanMethodServiceTest
+test_isTestMethod
+	"isTestMethod not getting initialized correctly" 
+	| methodService organizer |
+	self jadeiteIssueTested: #issue512 withTitle: '"run selected" can get disabled after save in debugger (3.0.76)'.
+	organizer := ClassOrganizer new. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodServiceTest compiledMethodAt: #test_isTestMethod) organizer: organizer.
+	self assert: methodService isTestMethod. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodService compiledMethodAt: #initialize) organizer: organizer.
+	self deny: methodService isTestMethod.
 %
 
 category: 'tests'
@@ -2551,6 +2840,24 @@ test_noStepPoints
 	classService saveMethodSource: 'abc' category: 'testing step points'.
 	methodService := RowanMethodService forSelector: #abc class: classService classOrMeta meta: false organizer: ClassOrganizer new.
 	self assert: methodService stepPoints isEmpty.
+%
+
+category: 'tests'
+method: RowanMethodServiceTest
+test_reformatSource
+	| classService methodService source |
+		classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	source := 'abc | abc | abc := 1. abc := abc + abc. ^abc'.
+	classService saveMethodSource: source category: 'other'.
+	self assert: (classService methodsNamed: #abc) size equals: 1.
+	methodService := (classService methodsNamed: #abc) first.
+	self assert: methodService source equals: source.
+	methodService reformatSource.
+	self assert: methodService reformatSource source equals: 'abc
+  | abc |
+  abc := 1.
+  abc := abc + abc.
+  ^ abc'
 %
 
 category: 'tests'
@@ -2637,7 +2944,7 @@ self assert: (methodService stepPoints at: 9) value equals: #asOop.
 
 category: 'tests'
 method: RowanPackageServiceTest
-testClassHierarchy
+test_classHierarchy
 
 	"format for client is:
 		#nil-> #(<class serviceA1> <class service A2) ...
@@ -2660,110 +2967,142 @@ testClassHierarchy
 
 category: 'tests'
 method: RowanPackageServiceTest
-testCompileClassSelectsPackageAndClass
-
-	| package packageService newClassService |
-
-	self jadeiteIssueTested: #issue228 withTitle: 'lose selected class in project browser when new version created'.
-	package := self createJadeiteTestPackage. 
-	[packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	packageService compileClass: 
-		'RowanServicesTest rwSubclass: ''TestCompileClass''
-			instVarNames: #()
-			classVars: #()
-			classInstVars: #()
-			poolDictionaries: #()
-			category: ''', self servicesTestPackageName, '''
-			options: #()'.
-	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
-	newClassService := RowanCommandResult results first.
-	self assert: newClassService name equals: 'TestCompileClass'. 
-	self assert: newClassService selectedPackageServices size equals: 1. 
-	self assert: newClassService selectedPackageServices first name equals: self servicesTestPackageName. 
-	self assert: newClassService selectedPackageServices first selectedClass == newClassService]
-		ensure:[RowanBrowserService new unloadProjectsNamed: (Array with: self servicesTestProjectName)]
-%
-
-category: 'tests'
-method: RowanPackageServiceTest
 test_compileAndSelectClass
-
-	| package packageService |
-	System commitTransaction.
-	[self assert: RowanCommandResult results isEmpty. 
-	package := self createJadeiteTestPackage. 
-	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	self assert: RowanCommandResult results isEmpty. 
-	packageService compileClass: 
-	'RowanServicesTest rwSubclass: ''RowanTestCompile'' 
+  | package browserService |
+  [ 
+  self assert: RowanCommandResult results isEmpty.
+  package := self createServicesTestPackage.
+  self loadServicesTestProject.
+  browserService := RowanBrowserService new.
+  self assert: RowanCommandResult results isEmpty.
+  browserService
+    compileClass:
+      'RowanServicesTest rwSubclass: ''RowanTestCompile'' 
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		category: ''', self servicesTestPackageName,  '''
+		category: ''' , self servicesTestPackageName
+        ,
+          '''
 		options: #()'.
-	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
-	self assert: RowanCommandResult results size equals: 1. 
-	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
-	self assert: packageService selectedClass name equals: 'RowanTestCompile'.
-	self assert: packageService selectedClass selectedPackageServices first equals: packageService] 
-		ensure:[System abortTransaction.  "get rid of test package and class"]
+  self assert: RowanCommandResult results size equals: 0.	"we no longer return a service on first stage of compile"
+  browserService recompileMethodsAfterClassCompilation.
+  self assert: RowanCommandResult results size equals: 5.
+  self
+    assert: (RowanCommandResult results at: 4) name
+    equals: 'RowanTestCompile'.
+  self assert: browserService selectedClass name equals: 'RowanTestCompile' ]
+    ensure: [ 
+      Rowan projectTools browser removeClassNamed: 'RowanTestCompile'.
+      self unloadServicesTestProject ]
 %
 
 category: 'tests'
 method: RowanPackageServiceTest
 test_compileAndSelectClassDifferentPackage
-
-	| package packageService testsPackage |
-	System commitTransaction.
-	[self assert: RowanCommandResult results isEmpty. 
-	package := self createJadeiteTestPackage. 
-	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	self assert: RowanCommandResult results isEmpty. 
-	packageService compileClass: 
-	'RowanServicesTest rwSubclass: ''RowanTestCompile''
+  | package browserService testsPackage |
+  [ 
+  self assert: RowanCommandResult results isEmpty.
+  package := self createServicesTestPackage.
+  browserService := RowanBrowserService new.
+  self assert: RowanCommandResult results isEmpty.
+  browserService
+    compileClass:
+      'RowanServicesTest rwSubclass: ''RowanTestCompile''
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
 		category: ''Rowan-Services-Tests''
 		options: #()'.
-	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
-	self assert: RowanCommandResult results size equals: 2. 
-	self assert: RowanCommandResult results last name equals: 'RowanTestCompile'. 
-	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
-	testsPackage := RowanCommandResult results first.
-	self assert: testsPackage selectedClass name equals: 'RowanTestCompile'.
-	self assert: testsPackage selectedClass selectedPackageServices first equals: testsPackage] 
-		ensure:[System abortTransaction.  "get rid of test package and class"]
+  self assert: RowanCommandResult results size equals: 0.	"we no longer return a service on first stage of compile"
+  browserService recompileMethodsAfterClassCompilation.
+  self assert: RowanCommandResult results size equals: 5.
+  self
+    assert: (RowanCommandResult results at: 4) name
+    equals: 'RowanTestCompile'.
+  self
+    assert: RowanCommandResult results first name
+    equals: 'Rowan-Services-Tests'.
+  testsPackage := RowanCommandResult results first.
+  self assert: testsPackage selectedClass name equals: 'RowanTestCompile' ]
+    ensure: [ 
+      Rowan projectTools browser removeClassNamed: 'RowanTestCompile'.
+      self unloadServicesTestProject ]
+%
+
+category: 'tests'
+method: RowanPackageServiceTest
+test_compileClassSelectsPackageAndClass
+  | package browserService newClassService |
+  self
+    jadeiteIssueTested: #'issue228'
+    withTitle: 'lose selected class in project browser when new version created'.
+  package := self createServicesTestPackage.
+  self loadServicesTestProject.
+  [ 
+  browserService := RowanBrowserService new.
+  browserService
+    compileClass:
+      'RowanServicesTest rwSubclass: ''TestCompileClass''
+			instVarNames: #()
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			category: ''' , self servicesTestPackageName
+        ,
+          '''
+			options: #()'.
+  self assert: RowanCommandResult results size equals: 0.	"we no longer return a service on first stage of compile"
+  browserService recompileMethodsAfterClassCompilation.
+  newClassService := RowanCommandResult results at: 4.
+  self assert: newClassService name equals: 'TestCompileClass' ]
+    ensure: [ 
+      RowanBrowserService new
+        unloadProjectsNamed: (Array with: self servicesTestProjectName) ]
 %
 
 category: 'tests'
 method: RowanPackageServiceTest
 test_packageWasDeleted
+  "NOTE - use commit/abort in tests carefully. 
+	Can cause hard-to-diagnose problems later 
+	in test runs"
 
-	| package packageService |
-	System commitTransaction. 
-	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
-	package := self createJadeiteTestPackage. 
-	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	self deny: packageService wasDeleted.
-	System abortTransaction. 
-	self assert: packageService wasDeleted.
+  | packageService projectDef packageDef |
+  self
+    jadeiteIssueTested: #'issue284'
+    withTitle:
+      '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+  projectDef := self defaultProjectDefinition.
+  [ 
+  System commitTransaction.	"commit project but not package"
+  projectDef
+    packageNamed: self servicesTestPackageName
+    ifAbsent: [ 
+      packageDef := RwPackageDefinition newNamed: self servicesTestPackageName.
+      projectDef addPackage: packageDef ].
+  Rowan projectTools load loadProjectDefinition: projectDef.
+  packageService := RowanPackageService
+    forPackageNamed: self servicesTestPackageName.
+  self deny: packageService wasDeleted.
+  System abortTransaction.
+  self assert: packageService wasDeleted ]
+    ensure: [ 
+      self unloadServicesTestProject.
+      System commitTransaction ]
 %
 
 category: 'tests'
 method: RowanPackageServiceTest
-test_testClassesDoNotIncludeExtensions
+test_testClassesIncludesExtensions
 	| packageService testClassNames |
 	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
 	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-Tests'.
 	packageService testClasses. 
 	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
-	self deny: (testClassNames includes: 'RwRowanProjectIssuesTest').
+	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest'). "extension tests"
 	self assert: (testClassNames includes: 'RowanPackageServiceTest').
 
 	packageService := RowanPackageService forPackageNamed: 'Rowan-Tests'.
@@ -2799,18 +3138,16 @@ projectServiceNamed: projectName
 category: 'setup teardown'
 method: RowanProjectServiceTest
 setUp
-
-	super setUp.
-	self createServicesTestProject.
-	self loadServicesTestProject.
+  super setUp.
+  self loadServicesTestProject
 %
 
 category: 'setup teardown'
 method: RowanProjectServiceTest
 tearDown
 
+	self unloadServicesTestProject.
 	super tearDown.
-	self unloadServicesTestProject
 %
 
 category: 'tests'
@@ -45553,5 +45890,5 @@ testIssue150_branches
 
 run
 RwLoadingTest initialize.
+true
 %
-

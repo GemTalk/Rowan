@@ -1,7 +1,7 @@
-Extension { #name : 'FileStream' }
+Extension { #name : 'FileStreamPortable' }
 
 { #category : '*FileSystem-Core' }
-FileStream class >> onHandle: aFileSystemHandle [
+FileStreamPortable class >> onHandle: aFileSystemHandle [
 	^ self concreteStream new
 		open: aFileSystemHandle fullName
 		forWrite: aFileSystemHandle isWritable

@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (CypressMethodDefinition
@@ -8,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -23,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -38,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Cypress-Core';
 		comment: '';
 		immediateInvariant.
@@ -53,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '# GemStone version format
 
@@ -70,7 +75,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: 'RwSemanticVersionNumber conforms to version 2.0.0 of  [Semantic Versioning 2.0.0](http://semver.org/)
 
@@ -426,7 +432,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -441,7 +448,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'General way for Cypress to toss things up the stack for consideration by a higher authority.';
 		immediateInvariant.
@@ -456,7 +464,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -471,7 +480,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -486,7 +496,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -501,7 +512,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -516,7 +528,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -531,7 +544,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -546,7 +560,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -561,7 +576,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -576,7 +592,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -591,7 +608,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -606,7 +624,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -621,7 +640,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -636,7 +656,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -651,7 +672,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -666,7 +688,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -681,7 +704,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -696,7 +720,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -711,7 +736,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -726,7 +752,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -741,7 +768,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -756,7 +784,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -771,7 +800,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -786,7 +816,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -801,7 +832,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -816,7 +848,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -831,7 +864,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -846,7 +880,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -861,7 +896,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -876,7 +912,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'GemStone-Interactions-Core';
 		comment: '';
 		immediateInvariant.
@@ -891,7 +928,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -906,7 +944,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -921,7 +960,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -936,7 +976,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -951,7 +992,24 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #())
+	options: #()
+)
+		category: 'Rowan-JadeServer';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(JadeServer64bit32
+	subclass: 'JadeServer64bit35'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #()
+)
 		category: 'Rowan-JadeServer';
 		comment: '';
 		immediateInvariant.
@@ -966,7 +1024,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBParser takes a source code string and generates an AST for it. This is a hand-written, recursive descent parser and has been optimized for speed. The simplest way to call this is either ''RBParser parseExpression: aString'' if you want the AST for an expression, or ''RBParser parseMethod: aString'' if you want to parse an entire method.
 
@@ -993,7 +1052,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternParser is a subclass of RBParser that allows the extended syntax that creates matching trees. These trees can be used by the ParseTreeMatcher to search and transform source code.
 ';
@@ -1009,7 +1069,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBParseTreeRule is the abstract superclass of all of the parse tree searching rules. A parse tree rule is the first class representation of a particular rule to search for. The owner of a rule is the algorithm that actually executes the search. This arrangement allows multiple searches to be conducted by a single Searcher.
 
@@ -1030,7 +1091,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReplaceRule is the abstract superclass of all of the transforming rules. The rules change the source code by replacing the node that matches the rule. Subclasses implement different strategies for this replacement.
 
@@ -1054,7 +1116,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBlockReplaceRule replaces the matching node by the result of evaluating replaceBlock. This allows arbitrary computation to come up with a replacement.
 
@@ -1073,7 +1136,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBStringReplaceRule replaces a matched tree with another tree (which may include metavariable from the matching tree). This is a very succint syntax for specifying most rewrites.
 
@@ -1093,7 +1157,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSearchRule is a parse tree rule that simply searches for matches to the rule. Every time a match is found, answerBlock is evaluated with the node that matches and the cureent answer. This two-argument approach allows a collection to be formed from all of the matches (Think inject:into:).
 
@@ -1113,7 +1178,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBProgramNode is an abstract class that represents an abstract syntax tree node in a Smalltalk program.
 
@@ -1150,7 +1216,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBMethodNode is the AST that represents a Smalltalk method.
 
@@ -1177,7 +1244,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternMethodNode is a RBMethodNode that will match other method nodes without their selectors being equal. 
 
@@ -1197,7 +1265,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPragmaNode is an AST node that represents a method pragma.
 
@@ -1219,7 +1288,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1234,7 +1304,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReturnNode is an AST node that represents a return expression.
 
@@ -1255,7 +1326,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSequenceNode is an AST node that represents a sequence of statements. Both RBBlockNodes and RBMethodNodes contain these.
 
@@ -1279,7 +1351,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBValueNode is an abstract class that represents a node that returns some value.
 
@@ -1306,7 +1379,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'A RBArrayNode is an AST node for runtime arrays.
 
@@ -1327,7 +1401,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBAssignmentNode is an AST node for assignment statements
 
@@ -1349,7 +1424,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBlockNode is an AST node that represents a block "[...]".
 
@@ -1374,7 +1450,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternBlockNode is the node in matching parse trees (it never occurs in normal Smalltalk code) that executes a block to determine if a match occurs. valueBlock takes two arguments, the first is the actual node that we are trying to match against, and second node is the dictionary that contains all the metavariable bindings that the matcher has made thus far.
 
@@ -1394,7 +1471,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternWrapperBlockNode allows further matching using a block after a node has been matched by a pattern node.
 
@@ -1412,7 +1490,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1427,7 +1506,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBCascadeNode is an AST node for cascaded messages (e.g., "self print1 ; print2").
 
@@ -1448,7 +1528,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literals.';
 		immediateInvariant.
@@ -1463,7 +1544,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'A RBLiteralArrayNode is an AST node that represents literal arrays and literal byte arrays.
 
@@ -1484,7 +1566,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literal values (e.g., #foo, true, 1, etc.), but not literal arrays.
 
@@ -1502,7 +1585,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBMessageNode is an AST node that represents a message send.
 
@@ -1525,7 +1609,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternMessageNode is a RBMessageNode that will match other message nodes without their selectors being equal. 
 
@@ -1544,7 +1629,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBVariableNode is an AST node that represent a variable (global, inst var, temp, etc.).
 
@@ -1564,7 +1650,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternVariableNode is an AST node that is used to match several other types of nodes (literals, variables, value nodes, statement nodes, and sequences of statement nodes).
 
@@ -1594,7 +1681,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBProgramNodeVisitor is an abstract visitor for the RBProgramNodes.
 
@@ -1611,7 +1699,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBConfigurableFormatter formats the Refactoring Browser''s parse trees. It has many more formatting options than the default formatter used by the RB. To change the RB to use this formatter, execute "RBProgramNode formatterClass: RBConfigurableFormatter". For some refactorings the RB must reformat the code after the change, so it is good to have a formatter configured to your tastes.
 
@@ -1635,7 +1724,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBFormatter formats a parse tree. It is an example of a Visitor. This is rarely called directly. Sending ''formattedCode'' to a parse tree uses this algorithm to return a pretty-printed version.
 
@@ -1658,7 +1748,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'ParseTreeSearcher walks over a normal source code parse tree using the visitor pattern, and then matches these nodes against the meta-nodes using the match:inContext: methods defined for the meta-nodes.
 
@@ -1680,7 +1771,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'ParseTreeRewriter walks over and transforms its RBProgramNode (tree). If the tree is modified, then answer is set to true, and the modified tree can be retrieved by the #tree method.
 
@@ -1698,7 +1790,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBReadBeforeWrittenTester is a visitor that identifies variables that may have been read before they are initialized.
 
@@ -1720,7 +1813,8 @@ doit
 	classInstVars: #( classificationTable )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBScanner is a stream that returns a sequence of token from the string that it is created on. The tokens know where they came from in the source code and which comments were attached to them.
 
@@ -1755,7 +1849,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternScanner is a subclass of RBScanner that allows the extended syntax of pattern matching trees.
 ';
@@ -1771,7 +1866,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSmallDictionary is a special dictionary optimized for small collections. In addition to the normal dictionary protocol, it also supports an #empty message which "empties" the collection but may hang on to the original elements (so it could collect garbage). Without #empty we would either need to create a new dictionary or explicitly remove everything from the dictionary. Both of these take more time and #empty.
 
@@ -1792,7 +1888,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBStringReplacement represents replacing source in the original method with a different string. These are used when reformatting code after a parse tree change has been made. Depending on the change, it may be possible to minimally change the parse tree without needing to format it.
 
@@ -1814,7 +1911,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBToken is the abstract superclass of all of the RB tokens. These tokens (unlike the standard parser''s) remember where they came from in the original source code.
 
@@ -1837,7 +1935,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBAssignmentToken is the first-class representation of the assignment token '':=''
 ';
@@ -1853,7 +1952,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1868,7 +1968,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBValueToken is the abstract superclass of all tokens that have additional information attached. For example, the BinarySelector token holds onto the actual character (e.g. $+).
 
@@ -1888,7 +1989,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBBinarySelectorToken is the first-class representation of a binary selector (e.g. +)
 ';
@@ -1904,7 +2006,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBIdentifierToken is the first class representation of an identifier token (e.g. Class)
 ';
@@ -1920,7 +2023,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1935,7 +2039,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBKeywordToken is the first-class representation of a keyword token (e.g. add:)';
 		immediateInvariant.
@@ -1950,7 +2055,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -1965,7 +2071,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBLiteralToken is the first-class representation of a literal token (entire literals, even literal arrays, are a single token in the ST80 grammar.).
 
@@ -1985,7 +2092,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -2000,7 +2108,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: '';
 		immediateInvariant.
@@ -2015,7 +2124,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBPatternBlockToken is the first-class representation of the pattern block token.
 
@@ -2032,7 +2142,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Core';
 		comment: 'RBSpecialCharacterToken is the first class representation of special characters.
 
@@ -2049,7 +2160,8 @@ doit
 	classInstVars: #( configuration )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Kernel';
 		comment: 'No class-specific documentation for Cypress, hierarchy is: 
 Object
@@ -2067,7 +2179,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Simple object with the results of the Jadeite command.';
 		immediateInvariant.
@@ -2082,7 +2195,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2097,7 +2211,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2112,7 +2227,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2127,7 +2243,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2142,7 +2259,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2157,7 +2275,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2172,7 +2291,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2187,7 +2307,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2202,7 +2323,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2217,7 +2339,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2232,7 +2355,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2247,7 +2371,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2262,7 +2387,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2277,7 +2403,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2292,7 +2419,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2307,7 +2435,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2322,7 +2451,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Rowan Service is the abstract service class for classes that represent
 first class entities in Rowan. They are transported to the client via 
@@ -2349,7 +2479,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'A place to put miscellaneous commands that don''t fit 
 well in other services. 
@@ -2363,13 +2494,30 @@ true.
 
 doit
 (RowanService
-	subclass: 'RowanBrowserService'
-	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount autoCommit )
+	subclass: 'RowanAutoCommitService'
+	instVarNames: #( autoCommit )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
+		category: 'Rowan-Services-Core';
+		comment: 'Simple service that provides updates to the client related to auto commit.';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanService
+	subclass: 'RowanBrowserService'
+	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries selectedClass )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'RowanBrowserService handles services that fall outside
 the scope of other services.';
@@ -2380,12 +2528,13 @@ true.
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList )
+	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: 'Most class operations done here. 
 
@@ -2402,7 +2551,24 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
+		category: 'Rowan-Services-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanService
+	subclass: 'RowanDictionaryService'
+	instVarNames: #( name classes hierarchyServices globals defaultTemplate )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2412,12 +2578,13 @@ true.
 doit
 (RowanService
 	subclass: 'RowanFrameService'
-	instVarNames: #( label method stepPoint vars oop )
+	instVarNames: #( label method stepPoint vars oop homeMethodSelector homeMethodClassName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2432,7 +2599,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2442,12 +2610,13 @@ true.
 doit
 (RowanService
 	subclass: 'RowanMethodService'
-	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource )
+	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2462,7 +2631,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2477,7 +2647,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2492,7 +2663,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2507,7 +2679,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2522,7 +2695,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2537,7 +2711,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2552,7 +2727,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Services-Core';
 		comment: '';
 		immediateInvariant.
@@ -2567,7 +2743,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2582,7 +2759,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2597,7 +2775,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2612,7 +2791,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2627,7 +2807,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2642,7 +2823,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2657,7 +2839,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2672,7 +2855,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2687,7 +2871,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2702,7 +2887,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -2717,7 +2903,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2732,7 +2919,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract class with support for walking a modification tree and writing out the source code in a variety of formats:
 	topaz fileout
@@ -2750,7 +2938,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'Example script that produces topaz bootstrap files for the Rowan projects:
 
@@ -2810,7 +2999,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2825,7 +3015,8 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2840,7 +3031,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -2855,7 +3047,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2870,7 +3063,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2885,7 +3079,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -2900,7 +3095,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: 'Fundamental concepts:
 
@@ -2929,7 +3125,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -2944,7 +3141,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: 'This class audits individual classes';
 		immediateInvariant.
@@ -2959,7 +3157,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -2974,7 +3173,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -2989,7 +3189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3004,7 +3205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3019,7 +3221,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3034,7 +3237,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3049,7 +3253,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3064,7 +3269,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3079,7 +3285,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3094,7 +3301,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3109,7 +3317,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3124,7 +3333,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3139,7 +3349,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3154,7 +3365,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3169,7 +3381,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3184,7 +3397,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3199,7 +3413,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3214,7 +3429,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3229,7 +3445,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3244,7 +3461,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3259,7 +3477,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3274,7 +3493,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3289,7 +3509,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3304,7 +3525,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3319,7 +3541,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3334,7 +3557,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3349,7 +3573,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3364,7 +3589,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3379,7 +3605,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3394,7 +3621,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3409,7 +3637,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3424,7 +3653,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3439,7 +3669,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3454,7 +3685,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3469,7 +3701,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -3484,7 +3717,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassAdditionOrRemoval, hierarchy is: 
 Object
@@ -3502,7 +3736,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Configuration that guides Cypress operation.
 
@@ -3532,7 +3767,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Abstract.
 Defines some "code" entity.
@@ -3554,7 +3790,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3569,7 +3806,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Defines a class.
 Properties should include ''name'' and ''super''.
@@ -3588,7 +3826,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Extends an existing class with additional methods.
 Properties must include ''name'', the name of the class to be extended, but should not include other things like ''super'' or ''instvars''.
@@ -3605,7 +3844,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3620,7 +3860,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3635,7 +3876,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3650,7 +3892,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3665,7 +3908,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3680,7 +3924,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3695,7 +3940,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3710,7 +3956,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3725,7 +3972,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3744,7 +3992,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3763,7 +4012,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
 Object
@@ -3782,7 +4032,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3797,7 +4048,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Defines a package, which is a bunch of class definitions and class extensions.
 Properties include ''name''.
@@ -3815,7 +4067,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3830,7 +4083,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3845,7 +4099,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: '';
 		immediateInvariant.
@@ -3860,7 +4115,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -3875,7 +4131,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to the elements of some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
 
@@ -3896,7 +4153,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
 		immediateInvariant.
@@ -3911,7 +4169,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassExtensionsModification, hierarchy is: 
 Object
@@ -3930,7 +4189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -3945,7 +4205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
 movedClasses are classes that have moved from one package to another within the package set.
@@ -3962,7 +4223,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
 movedClasses are classes that have moved from one package to another within the package set.
@@ -3979,7 +4241,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the instance or class methods defined by a class or class extension. The elements are method definitions. Key is selector (as string).';
 		immediateInvariant.
@@ -3994,7 +4257,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -4009,7 +4273,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
 		immediateInvariant.
@@ -4024,7 +4289,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the properties of a single entity. The elements are associations of propertyName -> propertyValue. Key is property name.';
 		immediateInvariant.
@@ -4039,7 +4305,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'DELETE ME';
 		immediateInvariant.
@@ -4054,7 +4321,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Definitions';
 		comment: 'Holds some number of RwDefinitions or RwLoadedThingss to be operated on together. The entities put into the receiver should be at the same semantic level: all methods, class, packages , or projects.
 
@@ -4071,7 +4339,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypFileUtilities, hierarchy is: 
 Object
@@ -4089,7 +4358,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'No class-specific documentation for CypGemStoneFileUtilities, hierarchy is: 
 Object
@@ -4108,7 +4378,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'Keeps track of what LoadedPackages are in the GemStone repository, and is the gateway for operations to query or change the image.';
 		immediateInvariant.
@@ -4123,7 +4394,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'Walks a diff tree and adds patches to a patchSet that will update the GemStone image (repository) to the code state represented by the ''after'' state of the diff, provided that the ''before'' state of the diff is the current state of the image.';
 		immediateInvariant.
@@ -4138,7 +4410,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4153,7 +4426,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4168,7 +4442,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'Abstract. A patch is a single operation to be performed on a GemStone image (repository).';
 		immediateInvariant.
@@ -4183,7 +4458,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassPatch, hierarchy is: 
 Object
@@ -4202,7 +4478,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassAdditionPatch, hierarchy is: 
 Object
@@ -4221,7 +4498,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4236,7 +4514,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassDeletionPatch, hierarchy is: 
 Object
@@ -4255,7 +4534,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4270,7 +4550,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassPropertiesPatch, hierarchy is: 
 Object
@@ -4290,7 +4571,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4305,7 +4587,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVariableChangePatch, hierarchy is: 
 Object
@@ -4324,7 +4607,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVersioningPatch, hierarchy is: 
 Object
@@ -4343,7 +4627,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsClassVersioningPatch, hierarchy is: 
 Object
@@ -4362,7 +4647,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodPatch, hierarchy is: 
 Object
@@ -4381,7 +4667,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodAdditionPatch, hierarchy is: 
 Object
@@ -4400,7 +4687,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodDeletionPatch, hierarchy is: 
 Object
@@ -4419,7 +4707,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4434,7 +4723,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4449,7 +4739,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodAdditionPatch, hierarchy is: 
 Object
@@ -4468,7 +4759,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4483,7 +4775,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsMethodPropertiesPatch, hierarchy is: 
 Object
@@ -4503,7 +4796,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4518,7 +4812,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4533,7 +4828,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4548,7 +4844,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackagePatch, hierarchy is: 
 Object
@@ -4567,7 +4864,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4586,7 +4884,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4605,7 +4904,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: '';
 		immediateInvariant.
@@ -4620,7 +4920,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackagePatch, hierarchy is: 
 Object
@@ -4639,7 +4940,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'No class-specific documentation for CypGsPackageAdditionPatch, hierarchy is: 
 Object
@@ -4658,7 +4960,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'A set of patches (changes) to be applied atomically (or as close to atomically as possible) to a GemStone repository.';
 		immediateInvariant.
@@ -4673,7 +4976,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4688,7 +4992,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Loader';
 		comment: 'The Rowan-GemStone-Loader implementation does depend upon having a stable and consistent implementation of the RwGsSymbolDictionaryRegistry behavior for the duration of a load.
 
@@ -4731,7 +5036,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'properties: dictionary of properties
 name: name of class or package, selector of method
@@ -4748,7 +5054,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'package: the CypLoadedPackage that defines me and all my methods that are not extension methods.
 extensions: a collection of CypLoadedExtendedClasses for this class. From these we can tell which methods don''t belong to our default package.';
@@ -4764,7 +5071,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4779,7 +5087,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedClassExtension, hierarchy is: 
 Object
@@ -4798,7 +5107,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4813,7 +5123,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -4828,7 +5139,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedMethod, hierarchy is: 
 Object
@@ -4847,7 +5159,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'The MethodRegistry maps GsNMethods to LoadedMethods.';
 		immediateInvariant.
@@ -4862,7 +5175,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'repository: The repository I was loaded from (if known, nil otherwise)
 commitId: A repository-specific way of identifying source code commit, if it''s a type of repository that has that kind of information (nil otherwise)
@@ -4880,7 +5194,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4895,7 +5210,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -4910,7 +5226,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Components';
 		comment: '';
 		immediateInvariant.
@@ -4925,7 +5242,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -4940,7 +5258,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -4955,7 +5274,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypMethodAdditionOrRemoval, hierarchy is: 
 Object
@@ -4973,7 +5293,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
 
@@ -4993,7 +5314,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single class definition or class extension.
 
@@ -5014,7 +5336,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5029,7 +5352,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: '';
 		immediateInvariant.
@@ -5044,7 +5368,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single method
 
@@ -5065,7 +5390,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5080,7 +5406,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5095,7 +5422,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5110,7 +5438,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
 
@@ -5131,7 +5460,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
 
@@ -5152,7 +5482,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5167,7 +5498,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5182,7 +5514,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents the move of a class definition from one package to another.';
 		immediateInvariant.
@@ -5197,7 +5530,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'Represents a move of a method from a class definition to a class extension, or from a class extension to a class definition, or between two extensions, of the same class. This should always also result in a change of package, since a class should not be defined and extended in the same package, nor extended twice in the same package.';
 		immediateInvariant.
@@ -5212,7 +5546,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: '';
 		immediateInvariant.
@@ -5227,7 +5562,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Kernel';
 		comment: 'Provides services specific to the Smalltalk dialect being run,
 and locates other services that are dialect-specific.';
@@ -5243,7 +5579,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Core';
 		comment: 'This class is private to Cypress.
 A GsPlatform is the gateway object for requesting platform-specific actions.';
@@ -5259,7 +5596,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -5274,7 +5612,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -5289,7 +5628,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Configurations';
 		comment: '';
 		immediateInvariant.
@@ -5304,7 +5644,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
 Object
@@ -5324,7 +5665,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
 Object
@@ -5344,7 +5686,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5359,7 +5702,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5374,7 +5718,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5389,7 +5734,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5404,7 +5750,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-GemStone-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5419,7 +5766,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5434,7 +5782,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
@@ -5449,7 +5798,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: 'RwPackageLoadSpecification new
     specName: ''rowanLoadSpec'';
@@ -5473,7 +5823,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5488,7 +5839,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5503,7 +5855,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5518,7 +5871,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Specifications';
 		comment: '';
 		immediateInvariant.
@@ -5533,7 +5887,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'A Uniform Resource Locator.  It specifies the location of a document on the Internet.  The base class is abstract; child classes break different types of URLs down in ways appropriate for that type.
 
@@ -5591,7 +5946,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class models a file URL according to (somewhat) RFC1738, see http://www.w3.org/Addressing/rfc1738.txt
 
@@ -5653,7 +6009,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the cypress: scheme:
 
@@ -5682,7 +6039,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the tonel: scheme:
 
@@ -5703,7 +6061,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the filetree: scheme[1]:
 
@@ -5724,7 +6083,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the github: scheme[1]:
 
@@ -5745,7 +6105,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'a URL type that can''t be broken down in any systematic way.  For example, mailto: and telnet: URLs.  The part after the scheme name is stored available via the #locator message.';
 		immediateInvariant.
@@ -5760,7 +6121,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'A URL which has a hierarchical encoding.  For instance, http and ftp URLs are hierarchical.';
 		immediateInvariant.
@@ -5775,7 +6137,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the smalltalk: scheme:
 
@@ -5801,7 +6164,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the gitfiletree: scheme:
 
@@ -5839,7 +6203,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5854,7 +6219,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5869,7 +6235,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #())
+	options: #()
+)
 		category: 'Rowan-Tools-Core';
 		comment: '';
 		immediateInvariant.
@@ -5884,7 +6251,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5899,7 +6267,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Kernel-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5914,7 +6283,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5929,7 +6299,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -5944,7 +6315,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #())
+	options: #()
+)
 		category: 'AST-Tests-Core';
 		comment: '';
 		immediateInvariant.
@@ -8410,9 +8782,16 @@ textBlock: anObject
 category: 'jadeite server'
 classmethod: JadeServer
 theJadeiteServer
-
-	^SessionTemps current at: #jadeiteServer ifAbsentPut: [
-		(Rowan jadeServerClassNamed: #JadeServer64bit32) new initialize; yourself]
+  ^ SessionTemps current
+    at: #'jadeiteServer'
+    ifAbsentPut: [ 
+      | jadeServerClass |
+      jadeServerClass := (System _gemVersion beginsWith: '3.2')
+        ifTrue: [ Rowan jadeServerClassNamed: #'JadeServer64bit32' ]
+        ifFalse: [ Rowan jadeServerClassNamed: #'JadeServer64bit35' ].
+      jadeServerClass new
+        initialize;
+        yourself ]
 %
 
 !		Instance methods for 'JadeServer'
@@ -8677,11 +9056,11 @@ category: 'jadeite'
 method: JadeServer
 autoCommitIfRequired
 	| commitResult |
-	RowanService autoCommit == true ifTrue:[
+	Rowan serviceClass autoCommit == true ifTrue:[
 		commitResult := System commitTransaction.
-		RowanBrowserService new autoCommit: 
+		RowanAutoCommitService new autoCommit:  
 			(commitResult 
-				ifTrue:[true]
+				ifTrue:[true] 
 				ifFalse:[#failed])].
 %
 
@@ -8865,18 +9244,13 @@ compile: aString frame: anInteger process: aGsProcess
 	selector := oldMethod selector.
 	selector isNil ifTrue: [^result].
 	category := self _behavior: aBehavior categoryOfSelector: selector.
-	result := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [ 
-						[ aBehavior rwCompileMethod: aString category: category ]
+	result := [[ aBehavior rwCompileMethod: aString category: category ]
 							on: RwExecuteClassInitializeMethodsAfterLoadNotification
-							do: [:ex | ex resume: false ] ]
-					ifFalse: 
-						[self
-							compileMethod: aString
-							behavior: aBehavior
-							user: nil
-							inCategory: category].
+							do: [:ex | ex resume: false ]] 
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
+
+					
 	^result
 %
 
@@ -9471,6 +9845,47 @@ groupListFor: aUserProfile
 
 %
 
+category: 'jadeite'
+method: JadeServer
+gsInteractionInformFailureHandler
+  self interactionHandlerActive
+    ifFalse: [ 
+      ^ GsInteractionHandler new
+        defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
+        confirmBlock: [ :interaction | interaction ok ];
+        informBlock: [ :interaction |  ];
+        inspectBlock: [ :interaction |  ];
+        yourself ].
+  ^ GsInteractionHandler new
+    confirmBlock: [ :interaction | 
+          | exception answer |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'confirmMessageBox:'
+            args: (Array with: interaction prompt).
+          answer := exception defaultAction.	"expect printString of answer back. Jadeite has limited ability to convert client objects to oops"
+          answer evaluate ];
+    informBlock: [ :interaction | 
+          | exception |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'informMessageBox:'
+            args: (Array with: interaction message).
+          exception defaultAction.
+          nil ];
+    inspectBlock: [ :interaction | 
+          | exception |
+          exception := ClientForwarderSend new
+            receiver: self
+            clientObj: 1
+            selector: #'inspectServerObject:'
+            args: (Array with: interaction theObject asOop).
+          exception defaultAction.
+          interaction theObject ]
+%
+
 category: 'category'
 method: JadeServer
 gsPackagePolicy
@@ -9657,6 +10072,12 @@ installTranscript
 		^self.
 	].
 
+%
+
+category: 'jadeite'
+method: JadeServer
+interactionHandlerActive
+  ^ SessionTemps current at: #'rowanServiceInteractionActive' ifAbsent: [ true ]
 %
 
 category: 'category'
@@ -11846,10 +12267,7 @@ method: JadeServer
 sbRemoveMethods: anOrderedCollection
 	| behavior classEntity  notRemoved|
 	behavior := self sbClassFrom: anOrderedCollection.
-	classEntity := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta]
-					ifFalse: [behavior].
+	classEntity := Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta.
 	notRemoved := Array new. 
 	anOrderedCollection do: [:each | classEntity removeSelector: each asSymbol ifAbsent: [notRemoved add: each]].
 	self systemBrowserUpdate.
@@ -12925,8 +13343,7 @@ category: 'category'
 method: JadeServer
 symbolList
 
-	^System myUserProfile symbolList.
-
+	^Rowan image symbolList
 %
 
 category: 'category'
@@ -13118,20 +13535,26 @@ terminate: aGsProcess
 category: 'jadeite'
 method: JadeServer
 updateFromSton: stonString
-	| services organizer resultString |
-	RowanCommandResult initializeResults.
-	services := STON fromString: stonString.
-	organizer := ClassOrganizer new.
-	services do: 
-			[:service |
-			service organizer: organizer. 
-			service updateType: nil.  "Update type is only for returned commands"
-			service command ifNil:[service command: #update]. 
-			service servicePerform: service command withArguments: service commandArgs].
-	self autoCommitIfRequired.
-	RowanLoggingService current logSentServices. 
-	resultString := STON toString: RowanCommandResult results.
-	^resultString
+  | services organizer resultString |
+  Rowan commandResultClass initializeResults.
+  services := STON fromString: stonString.
+  organizer := ClassOrganizer new.
+  [ 
+  services
+    do: [ :service | 
+      service organizer: organizer.
+      service updateType: nil.	"Update type is only for returned commands"
+      service command ifNil: [ service command: #'update' ].
+      service servicePerform: service command withArguments: service commandArgs ] ]
+    on: GsInteractionRequest
+    do: [ :ex | 
+      ex
+        response:
+          (ex interaction interactWith: self gsInteractionInformFailureHandler) ].
+  self autoCommitIfRequired.
+  Rowan loggingServiceClass current logSentServices.
+  resultString := STON toString: Rowan commandResultClass results.
+  ^ resultString
 %
 
 category: 'category'
@@ -13836,7 +14259,7 @@ metacelloConfigurations
 
 	| list |
 	list := Array new.
-	GsSession currentSession symbolList do: [:eachSymbolList | 
+	Rowan image symbolList do: [:eachSymbolList | 
 		eachSymbolList do: [:eachGlobal | 
 			(eachGlobal isBehavior and: [
 			(eachGlobal class includesSelector: #'isMetacelloConfig') and: [
@@ -13844,7 +14267,6 @@ metacelloConfigurations
 		].
 	].
 	^list
-
 %
 
 category: 'category'
@@ -13858,20 +14280,16 @@ objectForOop: anInteger
 category: 'category'
 method: JadeServer64bit
 recompile: aMethod withSource: aString
-	| result behavior |
+	| behavior |
 	behavior := aMethod inClass.
-	((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent: [false])
-		ifTrue: 
-			[ [ behavior rwCompileMethod: aString
+	[[ behavior rwCompileMethod: aString
 				category: (self _behavior: behavior categoryOfSelector: aMethod selector) ]
 					on: RwExecuteClassInitializeMethodsAfterLoadNotification
-					do: [:ex | ex resume: false ].
+					do: [:ex | ex resume: false ]]
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
 			Rowan serviceClass rowanFixMe.	"need to handle compile errors"
-			^true]
-		ifFalse: 
-			[result := aMethod _recompileWithSource: aString.
-			result isNil ifTrue: [^true].	"Bug 41195 returns nil if success so assume it is the same method"
-			^result]
+			^true
 %
 
 category: 'category'
@@ -14143,17 +14561,13 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 
 	| method warnings | 
 
-	[[((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent:[false]) ifTrue:[
-			[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
+	[[ 
+			[[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
 					on: RwExecuteClassInitializeMethodsAfterLoadNotification
-					do: [:ex | ex resume: false ] ]
-		ifFalse:[
-			method := aBehavior
-			compileMethod: methodString
-			dictionaries: aSymbolList
-			category: categorySymbol
-			environmentId: environment].
-	] on: CompileError do: [:ex |
+					do: [:ex | ex resume: false ]]
+						on: RwPerformingUnpackagedEditNotification
+						do: [:ex | ex resume ].
+		] on: CompileError do: [:ex |
 		^nil -> (ex gsArguments at: 1)
 	]] on: CompileWarning do: [:ex |
 		warnings := ex gsArguments at: 1.
@@ -14739,6 +15153,22 @@ gsPackagePolicy
 	class enabled ifFalse: [^nil].
 	^class current
 
+%
+
+category: 'category'
+method: JadeServer64bit32
+stepThrough: aGsProcess inFrame: anInteger
+  aGsProcess _stepThrough
+%
+
+! Class implementation for 'JadeServer64bit35'
+
+!		Instance methods for 'JadeServer64bit35'
+
+category: 'other'
+method: JadeServer64bit35
+stepThrough: aGsProcess inFrame: anInteger
+  aGsProcess stepThroughFromLevel: anInteger
 %
 
 ! Class implementation for 'RBParser'
@@ -25014,6 +25444,13 @@ length
 
 !		Class methods for 'Rowan'
 
+category: 'public client services'
+classmethod: Rowan
+answeringServiceClass
+
+	^ self platform answeringServiceClass
+%
+
 category: 'public'
 classmethod: Rowan
 automaticClassInitializationBlackList
@@ -25021,6 +25458,13 @@ automaticClassInitializationBlackList
 	"Answer list of project names for which automatic class initialiation should be disabled."
 
 	^ self platform automaticClassInitializationBlackList
+%
+
+category: 'public client services'
+classmethod: Rowan
+browserServiceClass
+
+	^ self platform browserServiceClass
 %
 
 category: 'public client services'
@@ -25054,6 +25498,13 @@ clearDefaultAutomaticClassInitializationBlackList
 		Individual users may override the black list."
 
 	^ self platform clearAutomaticClassInitializationBlackList_default
+%
+
+category: 'public client services'
+classmethod: Rowan
+commandResultClass
+
+	^ self platform commandResultClass
 %
 
 category: 'public'
@@ -25110,6 +25561,13 @@ classmethod: Rowan
 jadeServerClassNamed: className
 
 	^ self platform jadeServerClassNamed: className
+%
+
+category: 'public client services'
+classmethod: Rowan
+loggingServiceClass
+
+	^ self platform loggingServiceClass
 %
 
 category: 'public client services'
@@ -25450,7 +25908,7 @@ category: 'private'
 method: RowanClassesUpdate
 objectInBaseNamed: aString
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
+	^Rowan image symbolList objectNamed: aString asSymbol
 %
 
 category: 'accessing'
@@ -26215,7 +26673,7 @@ category: 'accessing'
 method: RowanMethodUpdate
 breakPoints: anObject
 
-	gsMethod breakPoints: anObject asArray
+	gsMethod breakPoints: anObject asOrderedCollection
 %
 
 category: 'accessing'
@@ -26844,6 +27302,13 @@ autoCommit
 
 category: 'autocommit'
 classmethod: RowanService
+breakPointsAreEnabled
+
+	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
+%
+
+category: 'autocommit'
+classmethod: RowanService
 flipAutoCommit
 	| newValue |
 	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
@@ -26878,6 +27343,21 @@ setAutoCommit: object
 	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
 %
 
+category: 'autocommit'
+classmethod: RowanService
+setBreakPointsAreEnabled: boolean
+  ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
+%
+
+category: 'accessing'
+classmethod: RowanService
+version
+  "change this method carefully and only at Jadeite release boundaries.
+	Failure to do so will prevent logins"
+
+  ^ 3085
+%
+
 !		Instance methods for 'RowanService'
 
 category: 'other'
@@ -26895,6 +27375,30 @@ method: RowanService
 browserTool
 
 	^self projectTools browser
+%
+
+category: 'commands support'
+method: RowanService
+classHierarchy: theClasses
+  | superclassChains levels services hierarchies toExpand hierarchyServices |
+  superclassChains := self superclassChainsFor: theClasses.
+  hierarchies := self extendHierarchies: superclassChains.
+  levels := self hierarchiesByLevel: hierarchies.
+  services := Dictionary new.
+  toExpand := Set new.
+  self
+    services: services
+    from: levels
+    expand: toExpand
+    classes: theClasses.
+  hierarchyServices := services reject: [ :array | array isEmpty ].
+  hierarchyServices copy
+    keysAndValuesDo: [ :key :value | 
+      hierarchyServices
+        at: key
+        put:
+          (value asSet asSortedCollection: [ :x :y | x name < y name ]) asArray ].
+  ^ hierarchyServices
 %
 
 category: 'accessing'
@@ -26949,7 +27453,7 @@ createSymbolDictionaryNamed: aName
 	| dictionary size |
 	dictionary := SymbolDictionary new.
 	dictionary at: aName asSymbol put: dictionary.
-	size := System myUserProfile symbolList size.
+	size := Rowan image symbolList size.
 	System myUserProfile insertDictionary: dictionary at: size + 1.
 	^ dictionary
 %
@@ -26989,6 +27493,63 @@ excludedInstVars
 	^#( #organizer)
 %
 
+category: 'commands support'
+method: RowanService
+extendHierarchies: hierarchies
+	
+	"extend the hierarchies by one level
+	of subclasses"
+
+	| extendedHierarchies |
+	extendedHierarchies := Array new. 
+	hierarchies do:[:hierarchy |
+		| theClass subclasses |
+		theClass := hierarchy last. 
+		(subclasses := organizer subclassesOf: theClass) isEmpty 
+			ifTrue:[extendedHierarchies add: hierarchy]
+			ifFalse:[
+				subclasses do:[:sub |
+					extendedHierarchies add: (hierarchy copy add: sub; yourself)
+				]]].
+	^extendedHierarchies
+%
+
+category: 'perform'
+method: RowanService
+handleDeletedService
+  updateType := #'removed:'.
+  RowanCommandResult addResult: self
+%
+
+category: 'commands support'
+method: RowanService
+hierarchiesByLevel: hierarchies
+
+	"Return dictionary of classes by level. 
+	Example: 
+		hierarchies - #(#(Object Collection Array) #(Object AbstractException Exception))
+	Return: 
+		#(#nil->#(Object) Object->#(Collection AbstractException) Collection->#(Array) AbstractException->#(Exception)
+	"
+	| levels |
+	levels := hierarchies inject: Dictionary new into:[:dict :chain | 
+		1 to: chain size do: [:index | 
+			| cls theSuper classSet |
+			cls := chain at: index.
+			classSet := dict at: cls ifAbsentPut: [Array new].
+			index = 1 
+		ifTrue:[
+			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
+			((dict at: #'nil') includes: cls) ifFalse:[(dict at: #'nil') add: cls].
+		]
+		ifFalse:[
+				theSuper := chain at: index - 1.
+				((dict at: theSuper) includes: cls) ifFalse:[(dict at: theSuper) add: cls]
+				]].
+			dict].
+	^levels
+%
+
 category: 'initialization'
 method: RowanService
 initialize
@@ -27020,6 +27581,19 @@ method: RowanService
 isProjectService
 
 	^false
+%
+
+category: 'testing'
+method: RowanService
+isUpdating
+
+	^command == #update
+%
+
+category: 'perform'
+method: RowanService
+isUpdatingButFoundToBeDeleted
+  ^ self command == #'update' and: [ self wasDeleted ]
 %
 
 category: 'accessing'
@@ -27055,7 +27629,7 @@ method: RowanService
 removeSymbolDictionaryNamed: aName
 
 	| index |
-	index := System myUserProfile symbolList names indexOf: aName asSymbol.
+	index := Rowan image symbolList names indexOf: aName asSymbol.
 	index ~= 0 ifTrue:[
 		System myUserProfile removeDictionaryAt: index]
 %
@@ -27107,10 +27681,56 @@ sampleSymbolDictionaryName
 category: 'perform'
 method: RowanService
 servicePerform: symbol withArguments: collection
-	"each service updates itself after performing a command.
+  "each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
-	symbol == #update ifTrue:[^self].
-	^super perform: symbol withArguments: collection.
+
+  SessionTemps current
+    at: #'versionsVerified'
+    ifAbsent: [ 
+      SessionTemps current at: #'versionsVerified' put: false.
+      self
+        inform:
+          'Version mismatch failure. Client version is older than server version.' ].
+  symbol == #'update'
+    ifTrue: [ ^ self ].
+  ^ super perform: symbol withArguments: collection
+%
+
+category: 'commands support'
+method: RowanService
+services: services from: levels expand: toExpand classes: theClasses
+  "In order to avoid the expense of creating duplicate services, we cache
+them in the newServices temporary for look up"
+
+  | newServices |
+  newServices := Array new.
+  theClasses
+    do: [ :aClass | toExpand addAll: (organizer allSuperclassesOf: aClass) ].
+  levels
+    keysAndValuesDo: [ :key :value | 
+      | newKey service |
+      newKey := key = #'nil'
+        ifTrue: [ #'nil' ]
+        ifFalse: [ 
+          service := newServices
+            detect: [ :classService | classService name = key name ]
+            ifNone: [ RowanClassService new classServiceFromOop: key asOop ].
+          (toExpand includes: service theClass)
+            ifTrue: [ service expand: true ]
+            ifFalse: [ service expand: false ].
+          service ].
+      services
+        at: newKey
+        put:
+          (value
+            collect: [ :cls | 
+              service := newServices
+                detect: [ :classService | classService name = cls name ]
+                ifNone: [ RowanClassService new classServiceFromOop: cls asOop ].
+              (toExpand includes: service theClass)
+                ifTrue: [ service expand: true ]
+                ifFalse: [ service expand: false ].
+              service ]) ]
 %
 
 category: 'replication'
@@ -27136,6 +27756,16 @@ stonStringFor: anObject
 	suitable for replicating on the client."
 
 	^STON toString: anObject
+%
+
+category: 'commands support'
+method: RowanService
+superclassChainsFor: behaviors
+	organizer := ClassOrganizer new. 
+	^behaviors collect:[:behavior | | supers |
+			supers := organizer allSuperclassesOf: behavior. 
+			supers add: behavior. 
+			supers].
 %
 
 category: 'symbol dictionaries'
@@ -27169,6 +27799,13 @@ method: RowanService
 updateType: aSymbol
 
 	updateType := aSymbol
+%
+
+category: 'testing'
+method: RowanService
+wasDeleted
+
+	^false
 %
 
 category: 'fileout'
@@ -27207,6 +27844,27 @@ writeFileOutHeaderOn: stream
 
 category: 'client commands'
 method: RowanAnsweringService
+allClassesStartingWith: string
+  answer := SortedCollection new.
+  organizer classes
+    do: [ :cls | 
+      (cls name beginsWith: string)
+        ifTrue: [ answer add: cls name asString ] ].
+  answer := answer asArray.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+allClassNames
+  answer := SortedCollection new.
+  answer addAll: (organizer classes collect: [ :cls | cls name asString ]).
+  answer := answer asArray.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 allTestsIn: classServices
 	answer := Array new. 
 	classServices do:[:service | answer addAll: service allTests].
@@ -27237,6 +27895,83 @@ autoCommit
 
 category: 'client commands'
 method: RowanAnsweringService
+breakPointsAreEnabled
+  answer := RowanService breakPointsAreEnabled.
+  updateType := #'breakpointSettingChanged:'.
+  RowanCommandResult addResult: self.
+  ^ answer	"for testing"
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+clearAllBreaks
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod clearAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+clearMethodBreaks: methodServices
+  methodServices
+    do: [ :methodService | 
+      methodService
+        organizer: organizer;
+        clearMethodBreaks ]
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+disableAllBreaks
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod _disableAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+doClientAndServerVersionsMatch: clientVersion
+  "Not to be sent through services so return an answer directly.
+	Sent immediately after Jadeite login"
+
+  SessionTemps current at: #'versionsVerified' put: false.
+  clientVersion = RowanService version
+    ifTrue: [ 
+      answer := true.
+      SessionTemps current at: #'versionsVerified' put: true ]
+    ifFalse: [ 
+      answer := clientVersion > RowanService version
+        ifTrue: [ 
+          'Client (' , clientVersion printString , ') is more recent than server ('
+            , RowanService version printString , ')' ]
+        ifFalse: [ 
+          'Server (' , RowanService version printString , ') is more recent than client ('
+            , clientVersion printString , ')' ] ].
+  ^ answer
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+enableAllBreaks
+  | methodServices |
+  methodServices := RowanQueryService new
+    organizer: organizer;
+    basicBreakpointMethods.
+  GsNMethod _enableAllBreaks.
+  methodServices
+    do: [ :methodService | RowanCommandResult addResult: methodService update ]
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 exec: aString
 
 	"for command line service someday"
@@ -27248,7 +27983,7 @@ category: 'client commands'
 method: RowanAnsweringService
 exec: aString context: oop
 
-	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: GsSession currentSession symbolList) asOop] 
+	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: Rowan image symbolList) asOop] 
 		on: CompileError do: [:ex | 
 			false -> ex errorDetails
 	].
@@ -27257,6 +27992,81 @@ exec: aString context: oop
 
 	"return answer for testing" 
 	^answer
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+exec: aString inFrame: level ofProcess: processOop context: oop
+  | symbolList frameContents symbolDictionary process |
+  symbolList := Rowan image symbolList.
+  process := Object _objectForOop: processOop.
+  process _isTerminated
+    ifTrue: [ 
+      RowanCommandResult addResult: self.
+      ^ self ].
+  frameContents := process _frameContentsAt: level.
+  frameContents
+    ifNotNil: [ 
+      symbolDictionary := SymbolDictionary new.
+      1 to: (frameContents at: 9) size do: [ :index | 
+        ((frameContents at: 9) at: index) first = $.
+          ifFalse: [ 
+            symbolDictionary
+              at: ((frameContents at: 9) at: index) asSymbol
+              put: (frameContents at: 11 + index - 1) ] ].
+      symbolList add: symbolDictionary before: symbolList first ].
+  [ 
+  answer := [ 
+  true
+    ->
+      (aString evaluateInContext: (Object _objectForOop: oop) symbolList: symbolList)
+        asOop ]
+    on: CompileError
+    do: [ :ex | false -> ex errorDetails ].
+  answer key
+    ifTrue: [ 
+      RowanService autoCommit == true
+        ifTrue: [ System commitTransaction ] ].
+  RowanCommandResult addResult: self ]
+    ensure: [ 
+      1 to: (frameContents at: 9) size do: [ :index | 
+        | argsAndTemps |
+        argsAndTemps := frameContents at: 9.
+        (argsAndTemps at: index) first = $.
+          ifFalse: [ 
+            | variableService |
+            process
+              _frameAt: level
+              tempAt: index
+              put: (symbolDictionary at: (argsAndTemps at: index)).
+            variableService := RowanVariableService
+              oop: (symbolDictionary at: (argsAndTemps at: index)) asOop
+              key: (argsAndTemps at: index)
+              value: (symbolDictionary at: (argsAndTemps at: index))
+              className: (frameContents at: 8) class name asString.
+            RowanCommandResult addResult: variableService ] ].
+      symbolList remove: symbolDictionary ].	"return answer for testing"
+  ^ answer
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+expressionSelector: string
+  "try to uncover a selector in the string. 
+	If it's not possible, return the string and 
+	let the application do with it what it will"
+
+  | messageNode |
+  messageNode := [ RBParser parseExpression: string ]
+    on: Error
+    do: [ :ex | nil ].
+  answer := messageNode
+    ifNil: [ string ]
+    ifNotNil: [ 
+      messageNode isMessage
+        ifTrue: [ messageNode buildSelector ]
+        ifFalse: [ string ] ].
+  RowanCommandResult addResult: self
 %
 
 category: 'client commands'
@@ -27273,6 +28083,21 @@ method: RowanAnsweringService
 initializeAutoCommit
 
 	RowanService setAutoCommit: false
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+initializeBreakPointsAreEnabled
+  RowanService setBreakPointsAreEnabled: true
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+interactionHandlerActive
+  answer := SessionTemps current
+    at: #'rowanServiceInteractionActive'
+    ifAbsent: [ true ].
+  RowanCommandResult addResult: self
 %
 
 category: 'testing'
@@ -27296,6 +28121,24 @@ loadedPackageExists: packageName
 
 category: 'client commands'
 method: RowanAnsweringService
+needsCommit
+
+	answer := System needsCommit.
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+newPackageNamed: packageName
+  | packageService |
+  packageService := RowanPackageService new name: packageName.
+  packageService update.
+  answer := packageService.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 printStringOf: oop toMaxSize: integer
 
 	answer := (Object _objectForOop: oop) printString. 
@@ -27311,7 +28154,7 @@ runMethodTests: methodServices
 	| behavior |
 	methodServices do:[:methodService |
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
-			behavior := methodService theClass. 
+			behavior := methodService classFromName. 
 			behavior debug: methodService selector]].
 	answer := true. 
 	RowanCommandResult initializeResults. "squash any client updates during server test run"
@@ -27321,11 +28164,12 @@ runMethodTests: methodServices
 category: 'client commands'
 method: RowanAnsweringService
 selectorsMatchingPattern: pattern
-
-	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
-	answer := answer select: [:each |each _matchPatternNoCase: pattern].
-	answer := answer asSortedCollection asArray.
-	RowanCommandResult addResult: self.
+  answer := ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols')
+    value.
+  answer := answer
+    select: [ :each | each charSize = 1 and: [ each _matchPatternNoCase: pattern ] ].
+  answer := answer asSortedCollection asArray.
+  RowanCommandResult addResult: self
 %
 
 category: 'client commands'
@@ -27334,6 +28178,36 @@ setAutoCommit: object
 
 	answer := RowanService setAutoCommit: object.
 	RowanCommandResult addResult: self.
+%
+
+category: 'other'
+method: RowanAnsweringService
+setBreakPointsAreEnabled: boolean
+  boolean
+    ifTrue: [ self enableAllBreaks ]
+    ifFalse: [ self disableAllBreaks ].
+  RowanService setBreakPointsAreEnabled: boolean.
+  answer := boolean.
+  updateType := #'breakpointSettingChanged:'.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+setEnableInteractionHandler: boolean
+  SessionTemps current at: #'rowanServiceInteractionActive' put: boolean
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+sortedSymbols
+  answer := SortedCollection new.
+  ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
+    keysDo: [ :symbol | 
+      symbol charSize = 1
+        ifTrue: [ answer add: symbol ] ].
+  answer := answer asArray.
+  RowanCommandResult addResult: self
 %
 
 category: 'client commands'
@@ -27365,6 +28239,29 @@ turnOffTranscriptWrites
 		self flipTranscript]
 %
 
+! Class implementation for 'RowanAutoCommitService'
+
+!		Instance methods for 'RowanAutoCommitService'
+
+category: 'client commands'
+method: RowanAutoCommitService
+autoCommit: boolean
+
+	self class setAutoCommit: boolean.
+	autoCommit := self class autoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanAutoCommitService
+flipAutoCommit
+
+	autoCommit := self class flipAutoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+%
+
 ! Class implementation for 'RowanBrowserService'
 
 !		Instance methods for 'RowanBrowserService'
@@ -27375,6 +28272,7 @@ abortTransaction
 
 	System abortTransaction.
 	self updateProjects.
+	self updateDictionaries. 
 	self packagesWithTests.
 	self updateType: #aborted:browser:.
 %
@@ -27382,28 +28280,103 @@ abortTransaction
 category: 'client commands'
 method: RowanBrowserService
 allClasses
-
-	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
-	allClasses addAll: (organizer classes collect:[:class | 
-			| service |
-			service := RowanClassService new name: class name. 
-			service packageName: class rowanPackageName.
-			service projectName: class rowanProjectName.
-			service]
-			).
-	allClasses := allClasses asArray. 
+	allClasses := self basicAllClasses.
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
 %
 
+category: 'client commands support'
+method: RowanBrowserService
+basicAllClasses
+  | theClasses |
+  theClasses := SortedCollection sortBlock: [ :x :y | x name < y name ].
+  theClasses
+    addAll:
+      (organizer classes
+        collect: [ :class | 
+          | service |
+          service := RowanClassService new name: class name.
+          service packageName: class rowanPackageName.
+          service projectName: class rowanProjectName.
+          service ]).
+  ^ theClasses asArray
+%
+
 category: 'client commands'
 method: RowanBrowserService
-autoCommit: object
-
-	RowanService setAutoCommit: object.
-	autoCommit := RowanService autoCommit. 
-	updateType := #autoCommitUpdate:.
+classHierarchy
+	| theClasses |
+	theClasses := allClasses collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	updateType := #classHierarchyUpdate:browser:. 
 	RowanCommandResult addResult: self.
+%
+
+category: 'private'
+method: RowanBrowserService
+classHierarchy: theClasses
+  hierarchyServices := super classHierarchy: theClasses.
+  ^ hierarchyServices
+%
+
+category: 'client commands'
+method: RowanBrowserService
+classHierarchyForDictionariesNamed: dictionaryNames
+  | theClasses |
+  theClasses := OrderedCollection new.
+  dictionaryNames
+    do: [ :dictionaryName | 
+      (Rowan globalNamed: dictionaryName)
+        keysAndValuesDo: [ :key :value | 
+          value isClass
+            ifTrue: [ theClasses add: value ] ] ].
+  hierarchyServices := self classHierarchy: theClasses.
+  updateType := #'classHierarchyUpdate:browser:'.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanBrowserService
+classHierarchyForPackagesNamed: packageNames
+  | theClasses |
+  theClasses := OrderedCollection new.
+  packageNames
+    do: [ :packageName | 
+      theClasses
+        addAll:
+          ((Rowan image loadedPackageNamed: packageName) loadedClasses 
+            collect: [ :cls | cls handle]).
+      theClasses
+        addAll:
+          ((Rowan image loadedPackageNamed: packageName) loadedClassExtensions
+            collect: [ :cls | cls handle]) ].
+  hierarchyServices := self classHierarchy: theClasses.
+  updateType := #'classHierarchyUpdate:browser:'.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanBrowserService
+compileClass: definitionString
+  | anonymousMethod |
+  self confirmDuplicateName: definitionString.
+  anonymousMethod := definitionString
+    _compileInContext: nil
+    symbolList: Rowan image symbolList.
+  SessionTemps current at: #'jadeiteCompileClassMethod' put: anonymousMethod
+%
+
+category: 'client commands support'
+method: RowanBrowserService
+confirmDuplicateName: definitionString
+  | className |
+  className := (definitionString subStrings at: 3) copyWithout: $'.
+  (Rowan image symbolList resolveSymbol: className asSymbol)
+    ifNotNil: [ 
+      className = selectedClass
+        ifFalse: [ 
+          (self confirm: 'Class name is already an object. Continue?')
+            ifFalse: [ ^ Error signal: 'Class not compiled. Name already exists.' ] ] ]
 %
 
 category: 'client commands'
@@ -27431,15 +28404,6 @@ findRemovedServices: services
 	].
 %
 
-category: 'client commands'
-method: RowanBrowserService
-flipAutoCommit
-
-	autoCommit := RowanService flipAutoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
-%
-
 category: 'window registry'
 method: RowanBrowserService
 openWindows
@@ -27452,41 +28416,97 @@ openWindows
 category: 'client commands'
 method: RowanBrowserService
 packagesWithTests
-	testPackages := Set new. 
-	testCount := 0. 
-	TestCase allSubclasses do:[:testSubclass |
-		testSubclass selectors do:[:selector |
-			| packageName |
-			(selector size >= 4 and:[
-			(selector copyFrom: 1 to: 4) asString = 'test']) ifTrue:[
-				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
-				packageName = Rowan unpackagedName ifFalse:[
-					testCount := testCount + 1. 
-					testPackages add: (RowanPackageService forPackageNamed: packageName)]]]]. 
-	updateType := #testPackages:. 
-	testPackages := testPackages asArray. 
-	RowanCommandResult addResult: self.
+  testPackages := Set new.
+  testCount := 0.
+  TestCase allSubclasses
+    do: [ :testSubclass | 
+      | suite |
+      suite := testSubclass buildSuite.
+      suite tests
+        do: [ :testCase | 
+          | packageName compiledMethod |
+          (testCase isKindOf: TestSuite)
+            ifFalse: [ 
+              compiledMethod := testCase class
+                compiledMethodAt: testCase selector
+                otherwise: nil.
+              packageName := compiledMethod
+                ifNil: [ testCase class rowanPackageName ]
+                ifNotNil: [ compiledMethod rowanPackageName ].
+              packageName = Rowan unpackagedName
+                ifFalse: [ 
+                  testCount := testCount + 1.
+                  testPackages
+                    add: (RowanPackageService forPackageNamed: packageName) ] ] ] ].
+  updateType := #'testPackages:'.
+  testPackages := testPackages asArray.
+  RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanBrowserService
+recompileMethodsAfterClassCompilation
+  "compileClass: must be run first"
+
+  | theClass classService packageService projectService |
+  theClass := [ 
+  [ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    on: CompileWarning
+    do: [ :ex | ex resume ] ]
+    ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
+  classService := RowanClassService new name: theClass name.
+  classService update.
+  classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
+	should be updated. Would like a less heavy weight solution than this, though."
+  packageService := RowanPackageService
+    forPackageNamed: classService packageName.
+  packageService update.
+  projectService := RowanProjectService newNamed: packageService projectName.
+  projectService update.
+  packageService selectedClass: classService.
+  RowanCommandResult addResult: classService.
+  selectedClass := classService.
+  updateType := #'none'.
+  RowanCommandResult addResult: self
 %
 
 category: 'client commands'
 method: RowanBrowserService
 releaseWindowHandle: integer
-
-	| registry |
-	RowanLoggingService current logComment: 'Release window with handle: ', integer printString. 
-	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
-	registry removeKey: integer ifAbsent: []
+  | registry |
+  Rowan loggingServiceClass current
+    logComment: 'Release window with handle: ' , integer printString.
+  registry := SessionTemps current
+    at: #'rowanServicesWindowRegistry'
+    ifAbsent: [ ^ self ].
+  registry removeKey: integer ifAbsent: [  ]
 %
 
 category: 'client commands'
 method: RowanBrowserService
 reloadProjects: projectServices andUpdateServices: services
 	| projectNames |
+	services do: [:service | service organizer: organizer]. 
 	projectServices do:[:projectService |
 		projectService reloadProject].
 	projectNames := projectServices collect: [:projectService | projectService name]. 
 	services do:[:service | 
 		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+%
+
+category: 'client commands'
+method: RowanBrowserService
+removeDictionariesNamed: dictionaryNames
+	"remove from both transient & persistent symbol lists" 
+
+	dictionaryNames do:[:dictionaryName | 
+		| dictionaryNameSymbol |
+		dictionaryNameSymbol := dictionaryName asSymbol.
+		(Rowan image symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			Rowan image symbolList removeDictionaryNamed: dictionaryNameSymbol].
+		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
+	self updateDictionaries.
 %
 
 category: 'client commands'
@@ -27523,6 +28543,20 @@ saveRootObject: oop windowHandle: integer
 	dictionary at: integer put: (Object _objectForOop: oop).
 %
 
+category: 'other'
+method: RowanBrowserService
+selectedClass
+
+	^selectedClass
+%
+
+category: 'other'
+method: RowanBrowserService
+selectedClass: object
+
+	selectedClass := object
+%
+
 category: 'perform'
 method: RowanBrowserService
 servicePerform: symbol withArguments: collection
@@ -27549,12 +28583,22 @@ update
 
 category: 'client commands'
 method: RowanBrowserService
+updateDictionaries
+
+	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
+	dictionaries := dictionaries asOrderedCollection. 
+	updateType := #dictionaryListUpdate:.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanBrowserService
 updateProjects
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
 	sortedProjects addAll:  Rowan image loadedProjects.
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
-	updateType := #projectsUpdate:.
+	updateType := #projectsUpdate:browser:.
 	RowanCommandResult addResult: self
 %
 
@@ -27625,6 +28669,13 @@ addCategory: string
 	theClass addCategory: string.
 %
 
+category: 'constants'
+method: RowanClassService
+addSubclassWarningString
+
+	^'Superclass is not packaged. Enter the desired package name'
+%
+
 category: 'Accessing'
 method: RowanClassService
 allTests
@@ -27677,8 +28728,9 @@ basicRefreshFrom: theClass
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
 %
 
@@ -27710,15 +28762,7 @@ classCreationTemplate
 category: 'client commands'
 method: RowanClassService
 classHierarchy
-	| behavior |
-	behavior := self theClass. 
-	organizer := ClassOrganizer newWithRoot: behavior. 
-	hierarchyServices := Dictionary new.   
-	organizer hierarchy keysAndValuesDo: [:key :value |
-		| classService |
-		classService := key == #nil ifTrue:[#nil] ifFalse: [(self classServiceFromOop: key asOop) meta: meta].
-		hierarchyServices at: classService put: (self subclassServices: value). 
-	].
+	hierarchyServices := self classHierarchy: (Array with: self theClass). 
 	RowanCommandResult addResult: self.
 %
 
@@ -27766,7 +28810,7 @@ classServiceFromOop: anOop
 				ifTrue:[
 					classService basicRefreshFrom: theClass]
 				ifFalse:[
-					classService refreshFrom: theClass]]
+					classService fastRefresh]]
 		ifFalse:[
 			classService minimalRefreshFrom: theClass]
 %
@@ -27807,25 +28851,60 @@ comment: newValue
 	comment := newValue
 %
 
-category: 'method compilation'
+category: 'constants'
 method: RowanClassService
 compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol
 	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
 
 	| method warnings |
 	
-	[ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol  ]
+	[ [ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol.]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
-		do: [:ex | ex resume: false ] ] 
+		do: [:ex | ex resume: false ]]
 			on: CompileError
 			do: [:ex | ^nil -> (ex gsArguments at: 1)]]
 				on: CompileWarning
 				do: 
 					[:ex | 
 					warnings := ex warningString.
-					ex resume].
+					ex resume]]
+					on: RwPerformingUnpackagedEditNotification
+					do: [:ex | ex resume ] .
 	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
 		do: [:ex | ex return: method -> warnings]
+%
+
+category: 'client commands'
+method: RowanClassService
+copyClassTo: newClassName
+  | newTemplate newClass newClassService index |
+  (Rowan image symbolList resolveSymbol: newClassName)
+    ifNotNil: [ ^ self inform: newClassName , ' already exists' ].
+  index := template findPattern: (Array with: name) startingAt: 1.
+  newTemplate := template copy.
+  newTemplate removeFrom: index to: index + name size - 1.
+  newTemplate insertAll: newClassName at: index.
+  newClass := GsCurrentSession currentSession execute: newTemplate.
+  newClassService := RowanClassService new name: newClassName.
+  self theClass thisClass
+    methodsDo: [ :selector :gsMethod | 
+      newClassService
+        compileMethod: gsMethod sourceString
+        behavior: newClass
+        symbolList: Rowan image symbolList
+        inCategory:
+          (self theClass thisClass categoryOfSelector: selector) asSymbol ].
+  self theClass thisClass class
+    methodsDo: [ :selector :gsMethod | 
+      newClassService
+        compileMethod: gsMethod sourceString
+        behavior: newClass class
+        symbolList: Rowan image symbolList
+        inCategory:
+          (self theClass thisClass class categoryOfSelector: selector) asSymbol ].
+  newClassService update.
+  (RowanPackageService new name: newClassService packageName) update.
+  (RowanDictionaryService new name: dictionaryName) update
 %
 
 category: 'Updating'
@@ -27842,7 +28921,7 @@ expand: boolean
 	expand := boolean
 %
 
-category: 'other'
+category: 'client commands'
 method: RowanClassService
 fastRefresh
 	"pushes less information to ston so it's faster"
@@ -27851,11 +28930,11 @@ fastRefresh
 	theClass := self theClass. 
 	self refreshFrom: theClass. 
 	methods do:[:service1 |
-			service1 source: nil; 
-					stepPoints: Array new.
+			service1 source: nil;
+				stepPoints: Array new].
 	visibleTests do:[:service2 |
-			service2 source: nil; 
-					stepPoints: Array new].
+			service2 source: nil;
+				stepPoints: Array new.
 			].
 	RowanCommandResult addResult: self.
 %
@@ -27944,6 +29023,7 @@ initialize
 	isNewClass := false.
 	methods := Array new.
 	isInSymbolList := true.
+	categories := Array new.
 %
 
 category: 'initialization'
@@ -28104,8 +29184,9 @@ minimalRefreshFrom: theClass
 	oop := theClass asOop.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	template := self classCreationTemplate.
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
@@ -28140,7 +29221,7 @@ category: 'private'
 method: RowanClassService
 objectInBaseNamed: aString
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
+	^Rowan image symbolList objectNamed: aString asSymbol
 %
 
 category: 'client commands'
@@ -28289,8 +29370,9 @@ removeMethods: methodsToRemove
 		self removeSelector: methodService selector ifAbsent:[notRemoved add: methodService].
 		(notRemoved includes: methodService) ifFalse:[
 			methodService updateType: #removed:.
-			RowanCommandResult addResult: methodService
+			RowanCommandResult addResult: methodService.
 		]].
+	self updateTests.
 	notRemoved isEmpty ifFalse:[
 		self error: 'These selectors were not removed - ', (notRemoved collect:[:svc | svc selector]) printString].
 %
@@ -28309,7 +29391,9 @@ removeSelector: selector ifAbsent: absentBlock
 	theClass := self theClass. 
 	meta ifTrue: [theClass := theClass class].
 	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
-	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
+	[self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta]
+		on: RwPerformingUnpackagedEditNotification
+		do: [:ex | ex resume ]
 %
 
 category: 'client commands'
@@ -28330,29 +29414,45 @@ renameCategoryFrom: old to: new
 category: 'client commands'
 method: RowanClassService
 renameClass: oldClassName to: newClassName
-	| references newMethods |
-	newMethods := Array new. 
-	Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
-	name := newClassName. 
-	organizer := ClassOrganizer new. 
-	references := organizer update referencesTo: oldClassName asSymbol.
-	1 to: references first size do:[:index |
-		| method newSource compileResult failedCompile methodService oldSource |
-		failedCompile := false. 
-		method := references first at: index. 
-		oldSource := method sourceString. 
-		newSource := self replaceSubString: oldClassName in: oldSource with: newClassName.
-		compileResult := [method inClass rwCompileMethod: newSource
-									category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
-		methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
-		failedCompile ifTrue:[
-				methodService comparisonSource: oldClassName]
-			ifFalse:[
-				methodService comparisonSource: oldSource].
-		methodService failedCompile: failedCompile. 
-		newMethods add: methodService.
-		].
-	RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods).
+  | references newMethods newClass oldClass |
+  newMethods := Array new.
+  oldClass := Rowan image resolveClassNamed: oldClassName.
+  newClass := Rowan projectTools browser
+    renameClassNamed: oldClassName
+    to: newClassName.
+  oop := newClass asOop.
+  name := newClassName.
+  self update.
+  renamedName := oldClassName.
+  self updateMethodsAfterRenameFrom: oldClassName to: newClassName.
+  self updateSubclassesAfterRenameOf: newClass.
+  references := organizer update referencesToObject: oldClass.
+  references do: [ :method | 
+    | newSource compileResult failedCompile methodService oldSource |
+    failedCompile := false.
+    oldSource := method sourceString.
+    newSource := self
+      replaceSubString: oldClassName
+      in: oldSource
+      with: newClassName.
+    compileResult := [ 
+    method inClass
+      rwCompileMethod: newSource
+      category: (method inClass categoryOfSelector: method selector) asSymbol ]
+      on: CompileError
+      do: [ :ex | 
+        failedCompile := true.
+        method ].
+    methodService := RowanMethodService
+      forGsNMethod: compileResult
+      organizer: organizer.
+    failedCompile
+      ifTrue: [ methodService comparisonSource: oldClassName ]
+      ifFalse: [ methodService comparisonSource: oldSource ].
+    methodService failedCompile: failedCompile.
+    methodService renamedName: oldClassName.
+    newMethods add: methodService ].
+  RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods)
 %
 
 category: 'private'
@@ -28416,7 +29516,7 @@ saveMethodSource: source category: category
 	compilationResult := self		
 		compileMethod: source 
 		behavior: behavior 
-		symbolList: System myUserProfile symbolList
+		symbolList: Rowan image symbolList
 		inCategory: updatedCategory asSymbol.
 	(gsNMethod := compilationResult key) isNil ifTrue: [
 		System
@@ -28432,6 +29532,7 @@ saveMethodSource: source category: category
 			hierarchyImplementorsOf: methodService selector inClass: methodService className. "this will update hierarchy method indicators for client"
 	self selectedMethods: (Array with: methodService).
 	self updateDirtyState.
+	self updateTests.
 %
 
 category: 'other'
@@ -28469,31 +29570,31 @@ selectors
 category: 'perform'
 method: RowanClassService
 servicePerform: symbol withArguments: collection
-	| wasClean |
-	wasClean := self arePackageAndProjectClean.
-	super servicePerform: symbol withArguments: collection.
-	updateAfterCommand == false ifFalse:[
-		self update].
-	wasClean ifTrue:[
-		self updatePackageProject]
+  | wasClean |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  wasClean := self arePackageAndProjectClean.
+  super servicePerform: symbol withArguments: collection.
+  updateAfterCommand == false
+    ifFalse: [ self update ].
+  wasClean
+    ifTrue: [ self updatePackageProject ]
 %
 
 category: 'Accessing'
 method: RowanClassService
 setComment
+  comment := self theClass thisClass comment
+%
 
-	| theClass |
-	theClass := self theClass.
-	(theClass canUnderstand: #comment)
-		ifTrue: [comment := theClass comment]
-		ifFalse: 
-			[(theClass canUnderstand: #description)
-					ifTrue: 
-						[| description |
-						description := theClass description.
-						description class name = #GsClassDocumentation
-							ifTrue: [comment := description detailsAboutClass]]].
-	comment isNil ifTrue: [comment := String new].
+category: 'private'
+method: RowanClassService
+setDictionary: classOrMeta
+	| dictionaryList |
+		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta thisClass.
+		dictionaryName := dictionaryList isEmpty 
+		ifTrue:[String new]
+		ifFalse:[dictionaryList first first name asString].
 %
 
 category: 'Updating'
@@ -28521,11 +29622,18 @@ setVisibleTests
 category: 'client commands'
 method: RowanClassService
 subclassCreationTemplate
-	| answerService |
-	answerService := RowanAnsweringService new. 
-	answerService answer: (self browserTool classCreationTemplateForSubclassOf: name 
-								className: 'NewSubclass' category: self theClass rowanPackageName).
-	RowanCommandResult addResult: answerService.
+  | answerService newClassPackageName |
+  answerService := RowanAnsweringService new.
+  newClassPackageName := self theClass rowanPackageName = Rowan unpackagedName
+    ifTrue: [ self addSubclassWarningString ]
+    ifFalse: [ self theClass rowanPackageName ].
+  answerService
+    answer:
+      (self browserTool
+        classCreationTemplateForSubclassOf: name
+        className: 'NewSubclass'
+        category: newClassPackageName).
+  RowanCommandResult addResult: answerService
 %
 
 category: 'private'
@@ -28625,6 +29733,17 @@ updateDirtyState
 	RowanCommandResult addResult: projectService.
 %
 
+category: 'private'
+method: RowanClassService
+updateMethodsAfterRenameFrom: oldClassName to: newClassName
+  methods
+    do: [ :methodService | 
+      methodService
+        renamedName: oldClassName;
+        className: newClassName. 
+      RowanCommandResult addResult: methodService ]
+%
+
 category: 'updates'
 method: RowanClassService
 updatePackageProject
@@ -28632,11 +29751,29 @@ updatePackageProject
 
 	packageService := RowanPackageService new name: packageName. 
 	packageService update. 
-	RowanCommandResult addResult: packageService.
-
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
-	RowanCommandResult addResult: projectService.
+%
+
+category: 'private'
+method: RowanClassService
+updateSubclassesAfterRenameOf: newClass
+  organizer := ClassOrganizer new.
+  (organizer allSubclassesOf: newClass)
+    do: [ :subclass | 
+      | subclassService |
+      subclassService := RowanClassService minimalForClassNamed: subclass name.
+      RowanCommandResult addResult: subclassService ]
+%
+
+category: 'updates'
+method: RowanClassService
+updateTests
+  "update the test browsers on certain operations"
+
+  RowanBrowserService new packagesWithTests.
+  (RowanPackageService new name: packageName) testClasses.
+  RowanCommandResult addResult: self update.
 %
 
 category: 'Accessing'
@@ -28663,10 +29800,24 @@ versions: newValue
 	versions := newValue
 %
 
+category: 'Accessing'
+method: RowanClassService
+visibleTests
+
+	^visibleTests
+%
+
 category: 'testing'
 method: RowanClassService
 wasDeleted
 	^(Rowan globalNamed: name) isNil
+%
+
+category: 'Accessing'
+method: RowanClassService
+wasRemoved: boolean
+
+	wasRemoved := boolean
 %
 
 ! Class implementation for 'RowanDebuggerService'
@@ -28676,23 +29827,30 @@ wasDeleted
 category: 'debug string'
 method: RowanDebuggerService
 debugStringFrom: aString
-	| debugStream newStream char | 
-	debugStream := ReadStream on: aString trimLeadingBlanks.
-	debugStream contents isEmpty ifTrue:[^'nil halt.'].
-	newStream := WriteStream on: String new. 
-	((char := debugStream next) = $|) ifTrue:[
-		newStream nextPut: char. 
-		newStream nextPutAll: (debugStream upTo: $|); 
-			nextPut: $|;
-			nextPut: Character space;
-			nextPutAll: 'nil halt. '
-	]
-	ifFalse: [
-		newStream 
-			nextPutAll: 'nil halt. ';
-			nextPut: char]. 		
-	newStream nextPutAll: debugStream upToEnd. 
-	^newStream contents
+  | debugStream newStream char peekChar |
+  debugStream := ReadStream on: aString trimLeadingBlanks.
+  [ 
+  peekChar := debugStream peek.
+  peekChar = Character tab
+    or: [ peekChar = Character cr or: [ peekChar = Character lf ] ]	"trimLeadingBlanks doesn't look for tab or cr or lf" ]
+    whileTrue: [ debugStream next ].
+  debugStream contents isEmpty
+    ifTrue: [ ^ 'nil halt.' ].
+  newStream := WriteStream on: String new.
+  (char := debugStream next) = $|
+    ifTrue: [ 
+      newStream nextPut: char.
+      newStream
+        nextPutAll: (debugStream upTo: $|);
+        nextPut: $|;
+        nextPut: Character space;
+        nextPutAll: 'nil halt. ' ]
+    ifFalse: [ 
+      newStream
+        nextPutAll: 'nil halt. ';
+        nextPut: char ].
+  newStream nextPutAll: debugStream upToEnd.
+  ^ newStream contents
 %
 
 category: 'perform'
@@ -28704,12 +29862,161 @@ servicePerform: symbol withArguments: collection
 category: 'other'
 method: RowanDebuggerService
 update
+  processes := OrderedCollection
+    with:
+      (RowanProcessService onActiveProcess: (Object _objectForOop: initialProcessOop)).
+  ProcessorScheduler scheduler readyProcesses
+    do: [ :each | processes add: (RowanProcessService onReadyProcess: each) ].
+  ProcessorScheduler scheduler suspendedProcesses
+    do: [ :each | processes add: (RowanProcessService onSuspendedProcess: each) ].
+  ProcessorScheduler scheduler waitingProcesses
+    do: [ :each | processes add: (RowanProcessService onWaitingProcess: each) ].
+  RowanCommandResult addResult: self
+%
 
-	processes := OrderedCollection with: (RowanProcessService onActiveProcess: (Object _objectForOop: initialProcessOop)).
-	ProcessorScheduler scheduler readyProcesses 			do: [:each | processes add: (RowanProcessService onReadyProcess: 		each)].
-	ProcessorScheduler scheduler suspendedProcesses 	do: [:each | processes add: (RowanProcessService onSuspendedProcess: 	each)].
-	ProcessorScheduler scheduler waitingProcesses 		do: [:each | processes add: (RowanProcessService onWaitingProcess: 		each)].
+! Class implementation for 'RowanDictionaryService'
+
+!		Instance methods for 'RowanDictionaryService'
+
+category: 'client commands'
+method: RowanDictionaryService
+classHierarchy
+	| theClasses |
+	self update. 
+	theClasses := classes collect:[:classService | classService theClass].
+	"reuse behavior in package service for now" 
+	hierarchyServices := (RowanPackageService new classes: classes) classHierarchy: theClasses. 
 	RowanCommandResult addResult: self.
+%
+
+category: 'Updating'
+method: RowanDictionaryService
+defaultTemplate: newValue
+	defaultTemplate := newValue
+%
+
+category: 'command support'
+method: RowanDictionaryService
+genericClassCreationTemplate
+
+	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: nil packageName: nil
+%
+
+category: 'initialization'
+method: RowanDictionaryService
+initialize
+
+	self setDefaultTemplate
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+insertAt: index
+
+	| theDictionary |
+	theDictionary := SymbolDictionary new. 
+	theDictionary at: name asSymbol put: theDictionary. 
+	System myUserProfile insertDictionary: theDictionary at: index. 
+	RowanBrowserService new updateDictionaries.
+%
+
+category: 'accessing'
+method: RowanDictionaryService
+name
+	^name
+%
+
+category: 'accessing'
+method: RowanDictionaryService
+name: object
+	name := object
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+removeClass: classService
+	self removeClassNamed: classService name. 
+	self setDefaultTemplate.
+	classService updateType: #removedClass:.
+	RowanCommandResult addResult: classService
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+removeClassNamed: className
+
+	self browserTool removeClassNamed: className.
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+removeGlobalNamed: symbol
+	| dictionary |
+	dictionary := (System myUserProfile resolveSymbol: name asSymbol) value.
+	dictionary ifNotNil: [
+		dictionary removeKey: symbol ifAbsent:[]].
+	self update.
+%
+
+category: 'perform'
+method: RowanDictionaryService
+servicePerform: symbol withArguments: collection
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+setDefaultTemplate
+
+	defaultTemplate := self genericClassCreationTemplate.
+%
+
+category: 'updates'
+method: RowanDictionaryService
+update
+  | dictionary sorted |
+  classes := Array new.
+  sorted := SortedCollection sortBlock: [ :x :y | x first < y first ].
+  dictionary := Rowan image symbolList objectNamed: name.
+  dictionary ifNil: [ ^ self ].
+  dictionary
+    keysAndValuesDo: [ :key :value | 
+      value isClass
+        ifTrue: [ 
+          | classService |
+          classService := RowanClassService new name: key asString.
+          classService versions: value classHistory size.
+          classService version: (value classHistory indexOf: value).
+          classes add: classService ]
+        ifFalse: [ 
+          | printString theKey |
+          printString := [ 
+          value printString charSize > 1
+            ifTrue: [ '<<unprintable string. charSize > 1>>' ]
+            ifFalse: [ value printString ] ]
+            on: Error
+            do: [ :ex | 'unprintable string. Error - <' , ex printString , '>' ].
+          key charSize = 1
+            ifTrue: [ theKey := key ]
+            ifFalse: [ theKey := '<<unprintable string. charSize > 1>>' ].
+          sorted
+            add:
+              (Array
+                with: name , '.' , theKey
+                with: value class name
+                with: value asOop
+                with: printString) ] ].
+  globals := sorted asArray.
+  RowanCommandResult addResult: self
+%
+
+category: 'testing'
+method: RowanDictionaryService
+wasDeleted
+  ^ (Rowan globalNamed: name) isNil
 %
 
 ! Class implementation for 'RowanFrameService'
@@ -28730,19 +30037,30 @@ process: aGsProcess level: anInteger organizer: aClassOrganizer
 category: 'other'
 method: RowanFrameService
 initializeProcess: aGsProcess level: anInteger organizer: aClassOrganizer
-	"In 3.2.15 the server does some whacky things with IP, stepPoint, and nested methods.
+  "In 3.2.15 the server does some whacky things with IP, stepPoint, and nested methods.
 	See http://kermit.gemtalksystems.com/bug?bug=45553 --JGF"
 
-	| frameData gsNMethod |
-	frameData := aGsProcess _frameContentsAt: anInteger.
-	oop := (frameData at: 8) asOop.
-	gsNMethod := frameData at: 1.
-	label := aGsProcess _reportAt: anInteger.
-	method := RowanMethodService forGsNMethod: gsNMethod organizer: aClassOrganizer.
-	stepPoint := gsNMethod == gsNMethod homeMethod
-		ifTrue: [aGsProcess _stepPointAt: anInteger]
-		ifFalse: [gsNMethod homeMethod _stepPointForMeth: gsNMethod ip: (frameData at: 2)].
-	vars := self varsFor: frameData.
+  | frameData gsNMethod homeMethodService |
+  frameData := aGsProcess _frameContentsAt: anInteger.
+  frameData isNil
+    ifTrue: [^self "not sure if bad frame data is a 3.2.15 bug or not"].
+  oop := (frameData at: 8) asOop.
+  gsNMethod := frameData at: 1.
+  label := aGsProcess _reportAt: anInteger.
+  method := RowanMethodService
+    forGsNMethod: gsNMethod
+    organizer: aClassOrganizer.
+  homeMethodService := RowanMethodService
+    forGsNMethod: gsNMethod homeMethod
+    organizer: aClassOrganizer.
+  method breakPoints: homeMethodService breakPoints.
+  homeMethodSelector := gsNMethod homeMethod selector.
+  homeMethodClassName := gsNMethod homeMethod inClass
+    ifNotNil: [ :cls | cls name asString ].
+  stepPoint := gsNMethod == gsNMethod homeMethod
+    ifTrue: [ aGsProcess _stepPointAt: anInteger ]
+    ifFalse: [ gsNMethod homeMethod _stepPointForMeth: gsNMethod ip: (frameData at: 2) ].
+  vars := self varsFor: frameData
 %
 
 category: 'perform'
@@ -28805,14 +30123,15 @@ category: 'accessing'
 classmethod: RowanLoggingService
 current
 
-	^Current
+	"lazy initialize for a topaz session test" 
+	^SessionTemps current at: #rowanLoggingService ifAbsentPut: [nil]
 %
 
 category: 'accessing'
 classmethod: RowanLoggingService
 current: anObject
 
-	^Current := anObject
+	SessionTemps current at: #rowanLoggingService put: anObject
 %
 
 !		Instance methods for 'RowanLoggingService'
@@ -28841,7 +30160,7 @@ logComment: string
 	time := Time now.
 	location := #server.
 	stonString := STON toString: self.
-	ws := FileStream 
+	ws := FileStreamPortable 
 				write: fileName
 				mode: #append.
 	[ws nextPutAll: stonString] ensure: [ws close].
@@ -28853,7 +30172,7 @@ method: RowanLoggingService
 logFileContents
 
 	| rs |
-	rs := [FileStream read: fileName] on: Error do:[:ex | ^String new].
+	rs := [FileStreamPortable read: fileName] on: Error do:[:ex | ^String new].
 	[^rs contents] ensure: [rs close]
 %
 
@@ -28887,7 +30206,7 @@ logServices
 	time := Time now.
 	location := #server.
 	stonString := STON toString: self.
-	ws := FileStream 
+	ws := FileStreamPortable 
 				write: fileName
 				mode: #append.
 	[ws nextPutAll: stonString] ensure: [ws close]
@@ -28899,10 +30218,9 @@ logServices
 
 category: 'instance creation'
 classmethod: RowanMethodService
-forGsNMethod: aGsNMethod organizer: aClassOrganizer
-
+forGsNMethod: aGsNMethod organizer: anOrganizer
 	^self new
-		initialize: aGsNMethod organizer: aClassOrganizer;
+		initialize: aGsNMethod organizer: anOrganizer;
 		yourself
 %
 
@@ -28993,7 +30311,7 @@ method: RowanMethodService
 category: 'Accessing'
 method: RowanMethodService
 accessedInstVars
-	^accessedInstVars
+  ^ accessedInstVars
 %
 
 category: 'Updating'
@@ -29017,28 +30335,48 @@ addOrUpdateMethod
 category: 'client commands'
 method: RowanMethodService
 allReferences
+  | methods |
+  oop := self gsNMethod asOop.
+  methods := organizer sendersOf: selector.
+  references := methods first
+    collect: [ :gsNMethod | self class forGsNMethod: gsNMethod organizer: organizer ].
+  RowanCommandResult addResult: self
+%
 
-	| methods |
-	oop := self gsNMethod asOop. 
-	methods := organizer sendersOf: selector.
-	references := methods first collect:[:gsNMethod | 
-			self class forGsNMethod: gsNMethod organizer: organizer].
-	RowanCommandResult addResult: self
+category: 'Accessing'
+method: RowanMethodService
+breakPoints
+
+	^breakPoints
+%
+
+category: 'Accessing'
+method: RowanMethodService
+breakPoints: collection
+  breakPoints := collection
 %
 
 category: 'initialization'
 method: RowanMethodService
 breakPointsFor: aGsNMethod
-	"Answers an Array stepPoints"
+  "Answers an Array stepPoints"
 
-	| list |
-	list := Array new.
-	aGsNMethod _allBreakpoints ifNil: [^#()] ifNotNil: [:anArray | 
-		1 to: anArray size by: 3 do: [:i | 
-			list add: (aGsNMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)).
-		].
-	].
-	^list
+  | list theMethod |
+  list := OrderedCollection new.
+  theMethod := aGsNMethod isMethodForBlock
+    ifTrue: [ 
+      isMethodForBlock := true.
+      aGsNMethod homeMethod ]
+    ifFalse: [ aGsNMethod ].
+  homeMethodOop := theMethod asOop.
+  theMethod _allBreakpoints
+    ifNil: [ ^ OrderedCollection new ]
+    ifNotNil: [ :anArray | 
+      1 to: anArray size by: 3 do: [ :i | 
+        list
+          add:
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2) abs) ] ].
+  ^ list asOrderedCollection
 %
 
 category: 'Accessing'
@@ -29056,11 +30394,11 @@ category: newValue
 category: 'Accessing'
 method: RowanMethodService
 classFromName
-	
-	"the dictionary browser may have versions numbers in the name"
-	| nameSymbol |
-	nameSymbol := (className copyUpTo: Character space) asSymbol.
-	^(System myUserProfile resolveSymbol: nameSymbol) value
+  "the dictionary browser may have versions numbers in the name"
+
+  | nameSymbol |
+  nameSymbol := (className copyUpTo: Character space) asSymbol.
+  ^ (System myUserProfile resolveSymbol: nameSymbol) value
 %
 
 category: 'Accessing'
@@ -29102,11 +30440,18 @@ method: RowanMethodService
 clearBreakAt: stepPoint
 	| method |
 	method := self isUnboundMethod 
-			ifTrue:[Object _objectForOop: oop] 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
 			ifFalse:[self gsNMethod].
 	method clearBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanMethodService
+clearMethodBreaks
+  self update.
+  breakPoints do: [ :breakPoint | self clearBreakAt: breakPoint ]
 %
 
 category: 'Updating'
@@ -29127,6 +30472,31 @@ category: 'Updating'
 method: RowanMethodService
 compilationWarnings: newValue
 	compilationWarnings := newValue
+%
+
+category: 'client commands'
+method: RowanMethodService
+debugTest: testSelector inClassName: theClassName
+  testResult := 'passed'.
+  [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
+    on: Exception
+    do: [ :ex | 
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
+      ex signal ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
+%
+
+category: 'Accessing'
+method: RowanMethodService
+definedPackage
+
+	^definedPackage
 %
 
 category: 'rowan'
@@ -29155,26 +30525,36 @@ fileout
 	RowanCommandResult addResult: answeringService.
 %
 
+category: 'Accessing'
+method: RowanMethodService
+firstReference: integer
+
+	firstReference := integer
+%
+
 category: 'initialization'
 method: RowanMethodService
 forClass: theClass organizer: theOrganizer
-	"assume meta and selector are set"
+  "assume meta and selector are set"
 
-	| classOrMeta gsNMethod |
-	organizer := theOrganizer. 
-	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
-	gsNMethod := classOrMeta compiledMethodAt: selector.
-	definedPackage := gsNMethod rowanPackageName. 
-	oop := gsNMethod asOop. 
-	stepPoints := self stepPointsFor: gsNMethod.
-	breakPoints := self breakPointsFor: gsNMethod.
-	self updateSource: gsNMethod sourceString.
-	category := (classOrMeta categoryOfSelector: selector) asString.
-	className := theClass name asString. 
-	packageName := gsNMethod rowanPackageName. 
-	projectName := gsNMethod rowanProjectName.
-	self setSupersAndSubsFor: classOrMeta.
-	isExtension := self rowanIsExtension.
+  | classOrMeta gsNMethod |
+  organizer := theOrganizer.
+  classOrMeta := meta
+    ifTrue: [ theClass class ]
+    ifFalse: [ theClass ].
+  gsNMethod := classOrMeta compiledMethodAt: selector.
+  definedPackage := gsNMethod rowanPackageName.
+  oop := gsNMethod asOop.
+  stepPoints := self stepPointsFor: gsNMethod.
+  breakPoints := self breakPointsFor: gsNMethod.
+  self updateSource: gsNMethod sourceString.
+  category := (classOrMeta categoryOfSelector: selector) asString.
+  className := theClass name asString.
+  packageName := gsNMethod rowanPackageName.
+  projectName := gsNMethod rowanProjectName.
+  self setSupersAndSubsFor: classOrMeta.
+  isExtension := self rowanIsExtension.
+  self initializeTestMethodsFor: classOrMeta thisClass
 %
 
 category: 'Accessing'
@@ -29187,7 +30567,7 @@ gsNMethod
 category: 'comparing'
 method: RowanMethodService
 hash
-	^(selector hash bitXor: className hash) bitXor: meta hash
+  ^ (selector hash bitXor: className hash) bitXor: meta hash
 %
 
 category: 'Accessing'
@@ -29228,6 +30608,7 @@ initialize
 	accessedInstVars := Array new.
 	isTestMethod := false.
 	failedCompile := false.
+	isMethodForBlock := false.
 %
 
 category: 'initialization'
@@ -29253,6 +30634,20 @@ initialize: aGsNMethod organizer: aClassOrganizer
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
+	self initializeTestMethodsFor: inClass thisClass
+%
+
+category: 'initialization'
+method: RowanMethodService
+initializeTestMethodsFor: aClass
+  | testSelectors |
+  (aClass inheritsFrom: TestCase)
+    ifTrue: [ 
+      aClass isAbstract
+        ifTrue: [ ^ self ].
+      testSelectors := aClass thisClass suite tests
+        collect: [ :method | method selector ].
+      isTestMethod := testSelectors includes: selector ]
 %
 
 category: 'testing'
@@ -29262,7 +30657,7 @@ isMethodService
 	^true
 %
 
-category: 'Accessing'
+category: 'testing'
 method: RowanMethodService
 isTestMethod
 
@@ -29347,12 +30742,32 @@ printOn: aStream
 				nextPut: $)
 %
 
+category: 'client commands'
+method: RowanMethodService
+reformatSource
+  source := (RBParser parseMethod: source) formattedCode.
+  updateType := #'dontUpdateSystem'.	"let browser update the source"
+  RowanCommandResult addResult: self
+%
+
 category: 'rowan'
 method: RowanMethodService
 removeSelector: sel class: clsName
 	
 	self rowanFixMe. "combine remove methods variants"
 	self browserTool removeMethod: sel asSymbol forClassNamed: (clsName subStrings first) isMeta: (clsName subStrings size = 2)
+%
+
+category: 'Accessing'
+method: RowanMethodService
+renamedName
+	^renamedName
+%
+
+category: 'Accessing'
+method: RowanMethodService
+renamedName: object
+	renamedName := object
 %
 
 category: 'rowan'
@@ -29413,20 +30828,27 @@ selector: aSymbol
 category: 'perform'
 method: RowanMethodService
 servicePerform: symbol withArguments: collection
-	super servicePerform: symbol withArguments: collection.
-	self update.
+  | theCommand |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  theCommand := command.
+  super servicePerform: symbol withArguments: collection.
+  theCommand = #'reformatSource'
+    ifFalse: [ self update ]
 %
 
 category: 'client commands'
 method: RowanMethodService
 setBreakAt: stepPoint
-	| method |
-	method := self isUnboundMethod 
-			ifTrue:[Object _objectForOop: oop] 
-			ifFalse:[self gsNMethod].
-	method setBreakAtStepPoint: stepPoint.
-	self update. 
-	RowanCommandResult addResult: self.
+  | method |
+  method := self isUnboundMethod
+    ifTrue: [ (Object _objectForOop: oop) homeMethod ]
+    ifFalse: [ self gsNMethod ].
+  method setBreakAtStepPoint: stepPoint.
+  self class breakPointsAreEnabled
+    ifFalse: [ GsNMethod _disableAllBreaks ].
+  self update.
+  RowanCommandResult addResult: self
 %
 
 category: 'initialization'
@@ -29507,7 +30929,6 @@ testResult
 category: 'updates'
 method: RowanMethodService
 update
-	
 	self isUnboundMethod ifFalse:[
 		self wasRecycled ifTrue:[oop := self gsNMethod asOop].
 		self wasDeleted ifTrue:[
@@ -29516,7 +30937,7 @@ update
 		oop ifNil: [oop := self gsNMethod asOop]].
 	self 
 		initialize: (Object _objectForOop: oop) 
-		organizer: ClassOrganizer new.
+		organizer: organizer.
 	RowanCommandResult addResult: self.
 %
 
@@ -29571,8 +30992,7 @@ method: RowanPackageService
 category: 'testing'
 method: RowanPackageService
 arePackageAndProjectClean
-
-	^self rowanDirty not and:[self projectIsDirty not]
+  ^ self rowanDirty not and: [ self projectIsDirty not ]
 %
 
 category: 'rowan'
@@ -29583,32 +31003,28 @@ changes
    ^ (Rowan packageTools diff diffForPackageName: name) asString
 %
 
-category: 'client commands'
+category: 'other'
 method: RowanPackageService
-classHierarchy
-	| superclassChains levels services hierarchies theClasses toExpand |
-	self update. 
-	theClasses := classes collect:[:classService | classService theClass].
-	superclassChains := self superclassChainsFor: theClasses. 
-	hierarchies := self extendHierarchies: superclassChains. 
-	levels := self hierarchiesByLevel: hierarchies.
-	services := Dictionary new. 
-	toExpand := Set new. 
-	self services: services from: levels expand: toExpand.
-	hierarchyServices := services reject:[:array | array isEmpty].
-	hierarchyServices copy keysAndValuesDo:[:key :value | 
-		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	RowanCommandResult addResult: self.
+classes: collection
+
+	classes := collection
 %
 
 category: 'client commands'
 method: RowanPackageService
-compileClass: definitionString
+classHierarchy
+	| theClasses |
+	self update. 
+	theClasses := classes collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	RowanCommandResult addResult: self.
+%
 
-	|  anonymousMethod |
-	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: GsSession currentSession symbolList.
-	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
+category: 'commands support'
+method: RowanPackageService
+classHierarchy: theClasses
+  hierarchyServices := super classHierarchy: theClasses.
+  ^ hierarchyServices
 %
 
 category: 'rowan'
@@ -29653,27 +31069,6 @@ deletePackage
 	self browserTool removePackageNamed: name.
 %
 
-category: 'commands support'
-method: RowanPackageService
-extendHierarchies: hierarchies
-	
-	"extend the hierarchies by one level
-	of subclasses"
-
-	| extendedHierarchies |
-	extendedHierarchies := Array new. 
-	hierarchies do:[:hierarchy |
-		| theClass |
-		theClass := hierarchy last. 
-		theClass subclasses isEmpty 
-			ifTrue:[extendedHierarchies add: hierarchy]
-			ifFalse:[
-				theClass subclasses do:[:sub |
-					extendedHierarchies add: (hierarchy copy add: sub; yourself)
-				]]].
-	^extendedHierarchies
-%
-
 category: 'rowan'
 method: RowanPackageService
 genericClassCreationTemplate
@@ -29685,35 +31080,6 @@ category: 'comparing'
 method: RowanPackageService
 hash
 	^self name hash
-%
-
-category: 'commands support'
-method: RowanPackageService
-hierarchiesByLevel: hierarchies
-
-	"Return dictionary of classes by level. 
-	Example: 
-		hierarchies - #(#(Object Collection Array) #(Object AbstractException Exception))
-	Return: 
-		#(#nil->#(Object) Object->#(Collection AbstractException) Collection->#(Array) AbstractException->#(Exception)
-	"
-	| levels |
-	levels := hierarchies inject: Dictionary new into:[:dict :chain | 
-		1 to: chain size do: [:index | 
-			| cls theSuper classSet |
-			cls := chain at: index.
-			classSet := dict at: cls ifAbsentPut: [Array new].
-			index = 1 
-		ifTrue:[
-			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
-			((dict at: #'nil') includes: cls) ifFalse:[(dict at: #'nil') add: cls].
-		]
-		ifFalse:[
-				theSuper := chain at: index - 1.
-				((dict at: theSuper) includes: cls) ifFalse:[(dict at: theSuper) add: cls]
-				]].
-			dict].
-	^levels
 %
 
 category: 'Accessing'
@@ -29845,37 +31211,16 @@ projectName: newValue
 
 category: 'client commands'
 method: RowanPackageService
-recompileMethodsAfterClassCompilation
-
-	"compileClass: must be run first"
-	| theClass classService packageService |
-
-	theClass := [(UserGlobals at: #jadeiteCompileClassMethod) _executeInContext: nil] 
-		ensure: [UserGlobals at: #jadeiteCompileClassMethod put: nil].
-	classService := RowanClassService new name: theClass name. 
-	classService update. 
-	classService isNewClass: true.
-	classService packageName = name 
-		ifTrue:[
-			self selectedClass: classService
-		]
-		ifFalse:[
-			packageService := RowanPackageService forPackageNamed: classService packageName. 
-			packageService update. 
-			packageService selectedClass: classService].
-	RowanCommandResult addResult: classService.
-%
-
-category: 'client commands'
-method: RowanPackageService
 removeClass: classService
 	self removeClassNamed: classService name. 
 	self setDefaultTemplate.
 	classService updateType: #removedClass:.
-	RowanCommandResult addResult: classService
+	classService wasRemoved: true. 
+	RowanCommandResult addResult: classService.
+	RowanBrowserService new packagesWithTests. "sunit browser might need updated"
 %
 
-category: 'client commands'
+category: 'commands support'
 method: RowanPackageService
 removeClassNamed: className
 
@@ -29913,31 +31258,24 @@ selectedClass: classService
 category: 'perform'
 method: RowanPackageService
 servicePerform: symbol withArguments: collection
-	| wasClean |
-	wasClean := self arePackageAndProjectClean.
-	super servicePerform: symbol withArguments: collection.
-	self update. 
-	wasClean ifTrue:[
-		self updateProject]
+  | wasClean |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  wasClean := self arePackageAndProjectClean.
+  super servicePerform: symbol withArguments: collection.
+  self update.
+  wasClean
+    ifTrue: [ self updateProject ]
 %
 
 category: 'commands support'
 method: RowanPackageService
 services: services from: levels expand: toExpand
-
-	(classes collect:[:svc | svc theClass]) do:[:aClass |
-		toExpand addAll: aClass allSuperclasses].
-	levels keysAndValuesDo: [:key :value |
-		| newKey service  | 
-		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService new classServiceFromOop: key asOop).
-			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-			service].
-		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService new classServiceFromOop: cls asOop).
-				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-				service
-				])]
+  ^ self
+    services: services
+    from: levels
+    expand: toExpand
+    classes: (classes collect: [ :classService | classService theClass ])
 %
 
 category: 'client commands'
@@ -29947,36 +31285,37 @@ setDefaultTemplate
 	defaultTemplate := self genericClassCreationTemplate.
 %
 
-category: 'commands support'
-method: RowanPackageService
-superclassChainsFor: behaviors
-
-	^behaviors collect:[:behavior | | supers |
-			supers := behavior allSuperclasses. 
-			supers add: behavior. 
-			supers].
-%
-
 category: 'client commands'
 method: RowanPackageService
 testClasses
-
-	testClasses := Set new. 
-	TestCase allSubclasses do:[:testSubclass |
-		testSubclass isAbstract ifFalse:[
-			testSubclass suite tests do:[:testClassInstance |
-				| implementingClass |
-				implementingClass := testClassInstance class whichClassIncludesSelector: testClassInstance selector. 
-				(implementingClass compiledMethodAt: testClassInstance selector) rowanPackageName = name ifTrue:[
-					| classService |
-					classService := RowanClassService basicForClassNamed: testSubclass name.
-					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
-					(self loadedClassExtensions keys asArray includes: classService name) ifFalse:[
-							"don't include extension classes"
-							testClasses add: classService]]]]]]. 
-	updateType := #testClasses:. 
-	testClasses := testClasses asArray. 
-	RowanCommandResult addResult: self.
+  organizer := ClassOrganizer new.
+  testClasses := Set new.
+  TestCase allSubclasses
+    do: [ :testSubclass | 
+      testSubclass isAbstract
+        ifFalse: [ 
+          testSubclass suite tests
+            do: [ :testClassInstance | 
+              | implementingClass compiledMethod |
+              compiledMethod := testSubclass
+                compiledMethodAt: testClassInstance selector
+                otherwise: nil.
+              compiledMethod
+                ifNil: [ 
+                  implementingClass := testClassInstance class
+                    whichClassIncludesSelector: testClassInstance selector.
+                  compiledMethod := implementingClass
+                    compiledMethodAt: testClassInstance selector ].
+              (compiledMethod rowanPackageName = name
+                or: [ testSubclass rowanPackageName = name ])
+                ifTrue: [ 
+                  | classService |
+                  classService := RowanClassService
+                    basicForClassNamed: testSubclass name.
+                  testClasses add: classService ] ] ] ].
+  updateType := #'testClasses:'.
+  testClasses := testClasses asArray.
+  RowanCommandResult addResult: self
 %
 
 category: 'updates'
@@ -30159,6 +31498,9 @@ addPackageNamed: packageName
 category: 'initialization'
 method: RowanProjectService
 basicRefresh
+	name = Rowan unpackagedName ifTrue:[
+		isLoaded := false.
+		RowanBrowserService new updateDictionaries. ^self]. 
 	(isLoaded := self projectIsLoaded) ifFalse:[
 		existsOnDisk := false. 
 		updateType := #removedProject:. 
@@ -30473,10 +31815,14 @@ refresh
 category: 'client commands'
 method: RowanProjectService
 reloadProject
-
-	[Rowan projectTools load loadProjectNamed: name] 
-		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ]
+  [ Rowan projectTools load loadProjectNamed: name ]
+    on: Warning
+    do: [ :ex | 
+      Transcript
+        cr;
+        show: ex description.
+      ex resume ].
+  RowanBrowserService new packagesWithTests
 %
 
 category: 'rowan'
@@ -30542,8 +31888,10 @@ rowanSkew
 category: 'perform'
 method: RowanProjectService
 servicePerform: symbol withArguments: collection
-	super servicePerform: symbol withArguments: collection.
-	self update.
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
 %
 
 category: 'client commands'
@@ -30611,6 +31959,12 @@ updateInternalService: updatedService
 		]].
 %
 
+category: 'testing'
+method: RowanProjectService
+wasDeleted
+  ^ self projectIsLoaded not
+%
+
 category: 'client commands'
 method: RowanProjectService
 write
@@ -30628,12 +31982,39 @@ _isSkew
 
 !		Instance methods for 'RowanQueryService'
 
+category: 'private'
+method: RowanQueryService
+basicBreakpointMethods
+  | bpMethods bpArray |
+  bpMethods := Array new.
+  bpArray := (GsNMethod _breakReport: true) at: 2.
+  bpArray do: [ :array | bpMethods add: (array at: 5) ].
+  ^ (self methodServicesFrom: bpMethods) asSet asArray
+%
+
+category: 'queries'
+method: RowanQueryService
+breakPointMethods
+  queryResults := self basicBreakpointMethods.
+  self returnQueryToClient
+%
+
 category: 'queries'
 method: RowanQueryService
 browseClassReferences: className
 
 	| methods |
 	methods := organizer referencesTo: className asSymbol.
+	queryResults := self methodServicesFrom: methods first.
+	self returnQueryToClient.
+%
+
+category: 'queries'
+method: RowanQueryService
+browseReferencesTo: symbol
+
+	| methods |
+	methods := organizer referencesTo: symbol.
 	queryResults := self methodServicesFrom: methods first.
 	self returnQueryToClient.
 %
@@ -30670,6 +32051,7 @@ hierarchySendersOf: selector inClass: className
 	classes addAll: (organizer allSubclassesOf: behavior). 
 	methods := organizer sendersOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods first.
+	self setFirstReferenceUsing: queryResults and: methods. 
 	self returnQueryToClient.
 %
 
@@ -30685,12 +32067,53 @@ implementorsOf: selector
 
 category: 'queries'
 method: RowanQueryService
+instVarReaders: instVarName in: className
+  | methods symbolAssociation theClasses |
+  symbolAssociation := Rowan image symbolList resolveSymbol: className.
+  symbolAssociation ifNil: [ ^ self ].
+  theClasses := symbolAssociation value allSuperclasses.
+  theClasses add: symbolAssociation value.
+  theClasses addAll: (organizer allSubclassesOf: symbolAssociation value).
+  methods := Array new.
+  theClasses
+    do: [ :theClass | 
+      theClass
+        methodsDo: [ :selector :method | 
+          (method instVarsRead includes: instVarName asSymbol)
+            ifTrue: [ methods add: method ] ] ].
+  queryResults := self methodServicesFrom: methods.
+  self returnQueryToClient
+%
+
+category: 'queries'
+method: RowanQueryService
+instVarWriters: instVarName in: className
+  | methods symbolAssociation theClasses |
+  symbolAssociation := Rowan image symbolList resolveSymbol: className.
+  symbolAssociation ifNil: [ ^ self ].
+  theClasses := symbolAssociation value allSuperclasses.
+  theClasses add: symbolAssociation value.
+  theClasses addAll: (organizer allSubclassesOf: symbolAssociation value).
+  methods := Array new.
+  theClasses
+    do: [ :theClass | 
+      theClass
+        methodsDo: [ :selector :method | 
+          (method instVarsWritten includes: instVarName asSymbol)
+            ifTrue: [ methods add: method ] ] ].
+  queryResults := self methodServicesFrom: methods.
+  self returnQueryToClient
+%
+
+category: 'queries'
+method: RowanQueryService
 literalReferences: string
 
 	| methods compilationResult |
 	compilationResult := string evaluate.  
 	methods := organizer referencesToLiteral: compilationResult.
 	queryResults := self methodServicesFrom: methods first.
+	self setFirstReferenceUsing: queryResults and: methods.
 	self returnQueryToClient.
 %
 
@@ -30761,7 +32184,27 @@ sendersOf: selector
 	| methods |
 	methods := organizer sendersOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods first.
+	self setFirstReferenceUsing: queryResults and: methods. 
 	self returnQueryToClient.
+%
+
+category: 'queryResults'
+method: RowanQueryService
+setFirstReferenceUsing: results and: methods
+  results
+    do: [ :methodService | 
+      | gsMethod index |
+      gsMethod := methods first
+        detect: [ :meth | 
+          meth selector = methodService selector
+            and: [ meth inClass thisClass name asString = methodService className ] ]
+        ifNone: [ 
+          methodService firstReference: nil.
+          nil ].
+      gsMethod
+        ifNotNil: [ 
+          index := methods first indexOf: gsMethod.
+          methodService firstReference: (methods last at: index) ] ]
 %
 
 category: 'ston'
@@ -35882,7 +37325,9 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 					^ (Rowan image objectNamed: className)
 						compileMethod: methodSource
 						dictionaries: Rowan image symbolList
-						category: hybridPackageName].
+						category: hybridPackageName
+						environmentId: 0 
+						].
 			loadedClass loadedPackage ].
 
 	^ self
@@ -36630,7 +38075,7 @@ removeClassNamed: className
 			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
 			| theClass |
 			theClass := Rowan image objectNamed: className.
-			(GsCurrentSession currentSession symbolList dictionariesAndSymbolsOf: theClass)
+			(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 				do: [:ar | | dict key |
 					"brute force removal of the class from system dictionaries"
 					dict := ar at: 1.	
@@ -46217,7 +47662,7 @@ installClassExtensionInSystem
 	(self projectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
 		ifTrue: [ | resolved |
-			((resolved := GsCurrentSession currentSession symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
+			((resolved := Rowan image symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
 				ifFalse: [ 
 					self
 						error:
@@ -48742,7 +50187,7 @@ doMoveMethodsBetweenPackages
 							(aMethodMove projectAfter
 								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
 								ifTrue: [ | resolved |
-									((resolved := GsCurrentSession currentSession symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
+									((resolved := Rowan image symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
 										and: [resolved isBehavior and: [ resolved isMeta not ]])
 										ifFalse: [ 
 											self
@@ -60597,6 +62042,35 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 	^ aRwSemanticVersonComponent rwSemanticIntegerLessThanSelf: self
 %
 
+! Class extensions for 'Interval'
+
+!		Class methods for 'Interval'
+
+category: '*Rowan-GemStone-Kernel'
+classmethod: Interval
+fromSton: stonReader
+	| result values |
+	values := OrderedCollection new.
+	stonReader parseMapDo: [:key :value | values add: value].
+	values size = 2 ifTrue: [result := self from: values first to: values second].
+	values size = 3 ifTrue: [result := self from: values first to: values second by: values third].
+	^result
+%
+
+!		Instance methods for 'Interval'
+
+category: '*Rowan-GemStone-Kernel'
+method: Interval
+stonOn: stonWriter
+  stonWriter
+    writeObject: self
+    streamMap: [ :dictionary | 
+      dictionary
+        at: #'start' put: from;
+        at: #'stop' put: to;
+        at: #'step' put: by ]
+%
+
 ! Class extensions for 'MemoryStore'
 
 !		Instance methods for 'MemoryStore'
@@ -61481,6 +62955,19 @@ _shouldCloneRowanLoader: aProjectSetModification
 
 category: '*rowan-services-extensions'
 method: RwGsPlatform
+answeringServiceClass
+  ^ RowanAnsweringService
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+browserServiceClass
+
+	^ RowanBrowserService
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
 classServiceClass
 
 	^ RowanClassService
@@ -61493,6 +62980,13 @@ classTools
 	"Answer the platform-specific class for class tools"
 
 	^ RwClassTool
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+commandResultClass
+
+	^ RowanCommandResult
 %
 
 category: '*rowan-tools-extensions'
@@ -61511,7 +63005,15 @@ jadeServerClassNamed: className
 	| jadeClasses |
 	jadeClasses := Array with: (UserGlobals at: #JadeServer). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
+	jadeClasses add: (UserGlobals at: #JadeServer64bit35). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+loggingServiceClass
+
+	^ RowanLoggingService
 %
 
 category: '*rowan-services-extensions'
@@ -61563,15 +63065,18 @@ method: RwGsPlatform
 serviceClasses
 	"Explicitly add each class rather than sending #allSubclasses so
 	that users other than SystemUser have visibility. Visibility in Rowan
-	is determined at compile time."
+	is determined at compile time. See STONReader>>lookupClass:"
 	
 	| array |
 	array := Array with: RowanService. 
 	array add: RowanAnsweringService; 
+		add: RowanAutoCommitService; 
 		add: RowanBrowserService;
 		add: RowanClassService; 
 		add: RowanDebuggerService; 
+		add: RowanDictionaryService; 
 		add: RowanFrameService;
+		add: RowanLoggingService;
 		add: RowanMethodService;
 		add: RowanPackageService; 
 		add: RowanProcessService;
@@ -62565,5 +64070,5 @@ RBScanner initialize.
 Rowan initialize.
 RwLoadedThing initialize.
 RwModificationFiletreeWriterVisitor initialize.
+true
 %
-
