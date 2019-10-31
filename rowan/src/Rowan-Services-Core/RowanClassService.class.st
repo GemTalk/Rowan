@@ -1102,7 +1102,8 @@ RowanClassService >> updateDirtyState [
 
 { #category : 'updates' }
 RowanClassService >> updateLatest [
-  oop := (Rowan image loadedClassNamed: name ifAbsent: [ ^ self ]) asOop.
+  oop := ((Rowan image symbolList resolveSymbol: name) ifNil: [ ^ self ]) value
+    asOop.
   super updateLatest
 ]
 
