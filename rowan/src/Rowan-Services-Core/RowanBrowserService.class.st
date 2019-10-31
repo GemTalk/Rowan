@@ -257,7 +257,7 @@ RowanBrowserService >> reloadProjects: projectServices andUpdateServices: servic
 		projectService reloadProject].
 	projectNames := projectServices collect: [:projectService | projectService name]. 
 	services do:[:service | 
-		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+		(projectNames includes: service rowanProjectName) ifTrue:[service updateLatest]].
 ]
 
 { #category : 'client commands' }

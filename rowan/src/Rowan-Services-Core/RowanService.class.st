@@ -497,6 +497,14 @@ RowanService >> updateInternalService: updatedService [
 	"no internally held services to update"
 ]
 
+{ #category : 'update' }
+RowanService >> updateLatest [
+  "subclasses may want to special behavior to update themselves
+	to their loaded version"
+
+  self update
+]
+
 { #category : 'accessing' }
 RowanService >> updateType: aSymbol [
 

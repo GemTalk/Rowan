@@ -1100,6 +1100,12 @@ RowanClassService >> updateDirtyState [
 	RowanCommandResult addResult: projectService.
 ]
 
+{ #category : 'updates' }
+RowanClassService >> updateLatest [
+  oop := (Rowan image loadedClassNamed: name ifAbsent: [ ^ self ]) asOop.
+  super updateLatest
+]
+
 { #category : 'private' }
 RowanClassService >> updateMethodsAfterRenameFrom: oldClassName to: newClassName [
   methods
