@@ -17,9 +17,11 @@ Class {
 
 { #category : 'private' }
 RowanAnsweringService >> addLowerCaseSymbolsIn: theClass To: array [
-  array addAll: theClass selectors asArray.
-  array addAll: theClass class selectors asArray.
-  array addAll: theClass instVarNames asArray
+  array addAll: theClass selectors.
+  array addAll: theClass class selectors.
+  array addAll: theClass instVarNames.
+  array addAll: theClass class instVarNames.
+  array addAll: theClass classVarNames.
 ]
 
 { #category : 'client commands' }
