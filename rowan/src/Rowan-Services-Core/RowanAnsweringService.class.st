@@ -418,5 +418,6 @@ RowanAnsweringService >> updateAutocompleteSymbols [
   (SessionTemps current at: #'autocompleteSymbolCache') last
     addAll: newSelectors.
   answer := Array with: newClassNames with: newSelectors.
+  updateType := #'updateSymbols:'.
   RowanCommandResult addResult: self
 ]

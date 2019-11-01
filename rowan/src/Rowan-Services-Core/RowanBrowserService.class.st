@@ -251,13 +251,17 @@ RowanBrowserService >> releaseWindowHandle: integer [
 
 { #category : 'client commands' }
 RowanBrowserService >> reloadProjects: projectServices andUpdateServices: services [
-	| projectNames |
-	services do: [:service | service organizer: organizer]. 
-	projectServices do:[:projectService |
-		projectService reloadProject].
-	projectNames := projectServices collect: [:projectService | projectService name]. 
-	services do:[:service | 
-		(projectNames includes: service rowanProjectName) ifTrue:[service updateLatest]].
+  | projectNames answeringService |
+  services do: [ :service | service organizer: organizer ].
+  projectServices do: [ :projectService | projectService reloadProject ].
+  projectNames := projectServices
+    collect: [ :projectService | projectService name ].
+  services
+    do: [ :service | 
+      (projectNames includes: service rowanProjectName)
+        ifTrue: [ service updateLatest ] ].
+  answeringService := RowanAnsweringService new organizer: organizer.
+  answeringService updateAutocompleteSymbols
 ]
 
 { #category : 'client commands' }
