@@ -80,7 +80,9 @@ RowanAnsweringService >> autocompleteSymbols [
   SessionTemps current
     at: #'autocompleteSymbolCache'
     put: (Array with: newClassNames with: newLowerCaseSymbols).
-  answer := Array with: newClassNames with: newLowerCaseSymbols.
+  answer := Array
+    with: newClassNames asOrderedCollection
+    with: newLowerCaseSymbols asOrderedCollection.
   updateType := #'updateSymbols:'.
   RowanCommandResult addResult: self
 ]
