@@ -31,6 +31,16 @@ RowanBrowserService >> abortTransaction [
 ]
 
 { #category : 'client commands' }
+RowanBrowserService >> abortTransactionAndUpdateServices: services [
+  self abortTransaction.
+  services
+    do: [ :service | 
+      service
+        organizer: organizer;
+        updateLatest ]
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> allClasses [
 	allClasses := self basicAllClasses.
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
