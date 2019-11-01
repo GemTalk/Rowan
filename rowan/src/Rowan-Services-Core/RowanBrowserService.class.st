@@ -35,9 +35,13 @@ RowanBrowserService >> abortTransactionAndUpdateServices: services [
   self abortTransaction.
   services
     do: [ :service | 
-      service
-        organizer: organizer;
-        updateLatest ]
+      "we just updated projects, package, & dictionary services"
+      (service isProjectService not
+        and: [ service isDictionaryService not and: [ service isPackageService not ] ])
+        ifTrue: [ 
+          service
+            organizer: organizer;
+            updateLatest ] ]
 ]
 
 { #category : 'client commands' }

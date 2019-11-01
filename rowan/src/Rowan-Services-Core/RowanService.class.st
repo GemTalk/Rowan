@@ -280,6 +280,12 @@ RowanService >> isClassService [
 ]
 
 { #category : 'testing' }
+RowanService >> isDictionaryService [
+
+	^false
+]
+
+{ #category : 'testing' }
 RowanService >> isMethodService [
 
 	^false
