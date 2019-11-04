@@ -22,11 +22,13 @@ Class {
 
 { #category : 'client commands' }
 RowanBrowserService >> abortTransaction [
-
-	System abortTransaction.
-	self updateProjects.
-	self updateDictionaries. 
-	self updateType: #aborted:browser:.
+  | autoCommitService |
+  System abortTransaction.
+  autoCommitService := RowanAutoCommitService new.
+  autoCommitService autoCommit: true.
+  self updateProjects.
+  self updateDictionaries.
+  self updateType: #'aborted:browser:'
 ]
 
 { #category : 'client commands' }
@@ -247,7 +249,7 @@ RowanBrowserService >> recompileMethodsAfterClassCompilation [
   RowanCommandResult addResult: classService.
   selectedClass := classService.
   updateType := #'none'.
-  self updateSymbols: theClass name.
+  self updateSymbols: (Array with: theClass name).
   RowanCommandResult addResult: self
 ]
 

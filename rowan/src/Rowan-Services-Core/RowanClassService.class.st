@@ -916,7 +916,7 @@ RowanClassService >> saveMethodSource: source category: category [
   self selectedMethods: (Array with: methodService).
   self updateDirtyState.
   self updateTests.
-  self updateSymbols: methodService selector
+  self updateSymbols: gsNMethod _selectorPool asArray , (Array with: methodService selector)
 ]
 
 { #category : 'other' }
@@ -1138,11 +1138,11 @@ RowanClassService >> updateSubclassesAfterRenameOf: newClass [
 ]
 
 { #category : 'updates' }
-RowanClassService >> updateSymbols: selector [
+RowanClassService >> updateSymbols: newSymbols [
   | browserService |
   browserService := RowanBrowserService new.
-  browserService newCachedSelectors add: selector.
-  browserService updateType: #'addCachedSymbols:'.
+  browserService newCachedSelectors addAll: newSymbols.
+  browserService updateType: #'addCachedSymbols:'. 
   RowanCommandResult addResult: browserService
 ]
 
