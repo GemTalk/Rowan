@@ -26,7 +26,6 @@ RowanBrowserService >> abortTransaction [
 	System abortTransaction.
 	self updateProjects.
 	self updateDictionaries. 
-	self packagesWithTests.
 	self updateType: #aborted:browser:.
 ]
 
@@ -349,13 +348,11 @@ RowanBrowserService >> unloadProjectsNamed: array [
       project := Rowan image loadedProjectNamed: projectName ifAbsent: [  ].
       project
         ifNotNil: [ Rowan projectTools delete deleteProjectNamed: projectName ] ].
-  self updateProjects.
-  self packagesWithTests
+  self updateProjects
 ]
 
 { #category : 'update' }
 RowanBrowserService >> update [
-
 	self updateProjects
 ]
 
@@ -370,12 +367,14 @@ RowanBrowserService >> updateDictionaries [
 
 { #category : 'client commands' }
 RowanBrowserService >> updateProjects [
-	| sortedProjects | 
-	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
-	sortedProjects addAll:  Rowan image loadedProjects.
-	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
-	updateType := #projectsUpdate:browser:.
-	RowanCommandResult addResult: self
+  | sortedProjects |
+  self packagesWithTests. "make sure tests are always updated" 
+  sortedProjects := SortedCollection sortBlock: [ :a :b | a name < b name ].
+  sortedProjects addAll: Rowan image loadedProjects.
+  projects := sortedProjects
+    collect: [ :project | RowanProjectService newNamed: project name ].
+  updateType := Array with: updateType with: #'projectsUpdate:browser:'. "temporary hack" 
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'update' }

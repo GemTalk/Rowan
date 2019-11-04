@@ -237,7 +237,7 @@ RowanService >> extendHierarchies: hierarchies [
 
 { #category : 'perform' }
 RowanService >> handleDeletedService [
-  updateType := #'removed:'.
+  self updateType: #'removed:'.
   RowanCommandResult addResult: self
 ]
 
