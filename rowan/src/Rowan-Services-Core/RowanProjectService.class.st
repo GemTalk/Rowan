@@ -371,6 +371,8 @@ RowanProjectService >> reloadProject [
         cr;
         show: ex description.
       ex resume ].
+  self update.
+  RowanCommandResult addResult: self.
   RowanBrowserService new packagesWithTests
 ]
 
