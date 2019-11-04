@@ -9,7 +9,7 @@ RwProjectDefinitionV2 class >> projectName: projectName comment: commentString [
 	| projectReferenceDefintion |
 	projectReferenceDefintion := RwProjectReferenceDefinitionV2
 		fromLoadSpecification:
-			(RwProjectLoadSpecification new
+			(RwProjectLoadSpecificationV2 new
 				projectName: projectName;
 				yourself).
 	^ self basicNew

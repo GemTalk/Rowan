@@ -18,6 +18,7 @@ RwRowanSample9Test >> testCreateProject [
 		projectName: projectName
 		comment: 'Example project exposing the standard project creation api'.
 	projectLoadSpecification := projectDefinition projectLoadSpecification.
-	{(projectDefinition printString).
-	(projectLoadSpecification printString)}
+""
+	{(STON toStringPretty: projectDefinition).
+	(STON toStringPretty: projectLoadSpecification)}
 ]

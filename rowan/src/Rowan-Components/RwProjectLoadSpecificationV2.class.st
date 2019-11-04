@@ -2,7 +2,7 @@
 I am used to specify all of the properties that are used to load a project from disk.
 "
 Class {
-	#name : 'RwProjectLoadSpecification',
+	#name : 'RwProjectLoadSpecificationV2',
 	#superclass : 'RwSpecification',
 	#instVars : [
 		'specName',
@@ -24,48 +24,48 @@ Class {
 }
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> comment [
+RwProjectLoadSpecificationV2 >> comment [
 	^ comment ifNil: [ ^ '' ]
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> comment: aString [
+RwProjectLoadSpecificationV2 >> comment: aString [
 	comment := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> commitish [
+RwProjectLoadSpecificationV2 >> commitish [
 	^ commitish
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> commitish: aString [
+RwProjectLoadSpecificationV2 >> commitish: aString [
 	commitish := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> componentNames [
+RwProjectLoadSpecificationV2 >> componentNames [
 	^ componentNames
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> componentNames: anArray [
+RwProjectLoadSpecificationV2 >> componentNames: anArray [
 	componentNames := anArray asArray
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> componentsPath [
+RwProjectLoadSpecificationV2 >> componentsPath [
 
 	^ componentsPath
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> componentsPath: aString [
+RwProjectLoadSpecificationV2 >> componentsPath: aString [
 	componentsPath := aString
 ]
 
 { #category : 'private' }
-RwProjectLoadSpecification >> currentVersion [
+RwProjectLoadSpecificationV2 >> currentVersion [
 	"
 		0.1.0 - first class load specification
 	"
@@ -73,38 +73,38 @@ RwProjectLoadSpecification >> currentVersion [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> defaultSymbolDictName [
+RwProjectLoadSpecificationV2 >> defaultSymbolDictName [
 
 	^ defaultSymbolDictName
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> defaultSymbolDictName: aString [
+RwProjectLoadSpecificationV2 >> defaultSymbolDictName: aString [
 	defaultSymbolDictName := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> defaultUseSessionMethodsForExtensions [
+RwProjectLoadSpecificationV2 >> defaultUseSessionMethodsForExtensions [
 	^ defaultUseSessionMethodsForExtensions ifNil: [ ^ false ]
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> defaultUseSessionMethodsForExtensions: aString [
+RwProjectLoadSpecificationV2 >> defaultUseSessionMethodsForExtensions: aString [
 	defaultUseSessionMethodsForExtensions := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> groupNames [
+RwProjectLoadSpecificationV2 >> groupNames [
 	^ groupNames
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> groupNames: anArray [
+RwProjectLoadSpecificationV2 >> groupNames: anArray [
 	groupNames := anArray asArray
 ]
 
 { #category : 'initialization' }
-RwProjectLoadSpecification >> initialize [
+RwProjectLoadSpecificationV2 >> initialize [
 	super initialize.
 	commitish := 'master'.
 	componentNames := #('Core').
@@ -118,76 +118,76 @@ projectName := 'ProjectName'.
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> packagesPath [
+RwProjectLoadSpecificationV2 >> packagesPath [
 
 	^ packagesPath
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> packagesPath: aString [
+RwProjectLoadSpecificationV2 >> packagesPath: aString [
 	packagesPath := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectAlias [
+RwProjectLoadSpecificationV2 >> projectAlias [
 	^ projectAlias ifNil: [ self projectName ]
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectAlias: aString [
+RwProjectLoadSpecificationV2 >> projectAlias: aString [
 	projectAlias := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectName [
+RwProjectLoadSpecificationV2 >> projectName [
 
 	^ projectName
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectName: aString [
+RwProjectLoadSpecificationV2 >> projectName: aString [
 	projectName := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectsPath [
+RwProjectLoadSpecificationV2 >> projectsPath [
 
 	^ projectsPath
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectsPath: aString [
+RwProjectLoadSpecificationV2 >> projectsPath: aString [
 	projectsPath := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectUrl [
+RwProjectLoadSpecificationV2 >> projectUrl [
 	^ projectUrl ifNil: [ '' ]
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectUrl: aString [
+RwProjectLoadSpecificationV2 >> projectUrl: aString [
 	projectUrl := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> specName [
+RwProjectLoadSpecificationV2 >> specName [
 
 	^ specName
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> specName: aString [
+RwProjectLoadSpecificationV2 >> specName: aString [
 	specName := aString
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> specsPath [
+RwProjectLoadSpecificationV2 >> specsPath [
 
 	^ specsPath
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> specsPath: aString [
+RwProjectLoadSpecificationV2 >> specsPath: aString [
 	specsPath := aString
 ]
