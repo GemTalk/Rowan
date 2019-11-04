@@ -409,7 +409,9 @@ RowanAnsweringService >> turnOffTranscriptWrites [
 { #category : 'client commands' }
 RowanAnsweringService >> updateAutocompleteSymbols [
   | cache newClassNames newLowerCaseSymbols |
-  cache := SessionTemps current at: #'autocompleteSymbolCache'.
+  cache := SessionTemps current
+    at: #'autocompleteSymbolCache'
+    ifAbsent: [ ^ self	"autocomplete not activated" ].
   newClassNames := Array new.
   newLowerCaseSymbols := Array new.
   organizer classes
