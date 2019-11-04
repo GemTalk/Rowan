@@ -26,8 +26,8 @@ RowanBrowserService >> abortTransaction [
   System abortTransaction.
   autoCommitService := RowanAutoCommitService new.
   autoCommitService autoCommit: true.
-  self updateProjects.
-  self updateDictionaries.
+  RowanBrowserService new updateProjects.
+  RowanBrowserService new updateDictionaries.
   self updateType: #'aborted:browser:'
 ]
 
