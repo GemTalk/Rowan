@@ -455,12 +455,16 @@ RwProjectDefinitionV2 >> packagesRoot [
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> projectAlias [
+	"project alias is used as the name of the root directory for the project ... necessary if the project is 
+		embedded in another project's git repository or you want use a non-default directory on disk"
 
 	^ self projectRef projectAlias
 ]
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> projectAlias: aStringOrNil [
+	"project alias is used as the name of the root directory for the project ... necessary if the project is 
+		embedded in another project's git repository or you want use a non-default directory on disk"
 
 	self projectRef projectAlias: aStringOrNil
 ]

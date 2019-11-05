@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwDefinition',
 	#instVars : [
 		'projectName',
-		'projectLoadSpecification'
+		'projectLoadSpecification',
+		'repositoryDefinition'
 	],
 	#category : 'Rowan-Components'
 }
@@ -312,14 +313,19 @@ RwProjectReferenceDefinitionV2 >> postCopy [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectAlias [
+	"project alias is used as the name of the root directory for the project ... necessary if the project is 
+		embedded in another project's git repository or you want use a non-default directory on disk"
 
 	^ self properties at: 'projectAlias' ifAbsent: [ self projectName ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectAlias: aStringOrNil [
+	"project alias is used as the name of the root directory for the project ... necessary if the project is 
+		embedded in another project's git repository or you want use a non-default directory on disk"
 
-	aStringOrNil ifNil: [ ^ self properties removeKey: 'projectAlias' ifAbsent: [] ].
+	aStringOrNil
+		ifNil: [ ^ self properties removeKey: 'projectAlias' ifAbsent: [  ] ].
 	^ self properties at: 'projectAlias' put: aStringOrNil
 ]
 
@@ -428,14 +434,13 @@ RwProjectReferenceDefinitionV2 >> repositoryCommitId [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> repositoryDefinition [
 
-	^ self properties at: 'repositoryDefinition' ifAbsentPut: [ self _repositoryDefinitionForProjectHome: self projectHome ]
+	^ repositoryDefinition ifNil:  [ repositoryDefinition := self _repositoryDefinitionForProjectHome: self projectHome ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> repositoryDefinition: aRepositoryDefinition [
 
-	aRepositoryDefinition ifNil: [ ^ self properties removeKey:  'repositoryDefinition' ifAbsent: [] ].
-	^ self properties at: 'repositoryDefinition' put: aRepositoryDefinition
+	repositoryDefinition := aRepositoryDefinition
 ]
 
 { #category : 'accessing' }
