@@ -11,6 +11,15 @@ RwProject >> _loadedProject [
 ]
 
 { #category : 'private' }
+RwProject >> _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock [
+
+	^ Rowan image
+		loadedProjectNamed: self name
+		ifPresent: presentBlock
+		ifAbsent: absentBlock
+]
+
+{ #category : 'private' }
 RwProject >> _specification [
 
 	^ self _loadedProject specification
@@ -191,9 +200,11 @@ RwProject >> testSuite [
 
 { #category : 'actions' }
 RwProject >> unload [
-	"unload the receiver into the image"
+	"unload the loaded project (if present) from the image"
 
-	^ self _loadedProject unload
+	^ self
+		_loadedProjectIfPresent: [ :loadedProject | loadedProject unload ]
+		ifAbsent: [  ]
 ]
 
 { #category : 'testing' }

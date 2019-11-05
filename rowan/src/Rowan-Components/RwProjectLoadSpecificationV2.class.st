@@ -131,7 +131,7 @@ RwProjectLoadSpecificationV2 >> initialize [
 	componentNames := #('Core').
 	componentsPath := 'rowan/components'.
 	defaultSymbolDictName := 'UserGlobals'.
-	groupNames := #('core').
+	groupNames := #('core' 'tests').
 	packagesPath := 'rowan/src'.
 	projectsPath := 'rowan/projects'.
 	specsPath := 'rowan/specs'.

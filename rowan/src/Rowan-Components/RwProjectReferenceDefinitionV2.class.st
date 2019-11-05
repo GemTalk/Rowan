@@ -156,30 +156,6 @@ RwProjectReferenceDefinitionV2 >> create [
 		createProjectRepository: self.
 ]
 
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> defaultComponentName [
-
-	^ self properties at: 'defaultComponentName' ifAbsent: [ 'Core' ]
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> defaultComponentName: aString [
-
-	^ self properties at: 'defaultComponentName' put: aString
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> defaultGroupName [
-
-	^ self properties at: 'defaultGroupName' ifAbsent: [ 'core' ]
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> defaultGroupName: aString [
-
-	^ self properties at: 'defaultGroupName' put: aString
-]
-
 { #category : 'actions' }
 RwProjectReferenceDefinitionV2 >> doCommit: message [
 
@@ -203,17 +179,13 @@ RwProjectReferenceDefinitionV2 >> gitRoot: aGitRootReferenceOrString [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> groupNames [
 
-	| gns |
-	gns := self properties at: 'groupNames' ifAbsent: [ {} ].
-	^ gns isEmpty
-		ifTrue: [ { self defaultGroupName } ]
-		ifFalse: [ gns ]
+	^self projectLoadSpecification groupNames
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> groupNames: aSet [
+RwProjectReferenceDefinitionV2 >> groupNames: aCollection [
 
-	^ self properties at: 'groupNames' put: aSet asSet
+	^ self projectLoadSpecification groupNames: aCollection asArray
 ]
 
 { #category : 'temporary compat' }

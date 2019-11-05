@@ -27,18 +27,21 @@ RwRowanSample9Test >> testCreateNewProject [
 					yourself)
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'ExampleCore'
 			comment: 'Primary component used for loading entire system.';
-		addPackagesNamed: { 'Example-Core1' . 'Example-Core2' };
-		addPackageNamed: 'Example-Core3'
-			withConditions: { 'common' };
-		addPackageNamed: 'Example-Core4'
-			withConditions: { 'common' };
+		addPackagesNamed: { 'Example-Core1' . 'Example-Core2' }
+			toComponentNamed: 'Core'
+			withConditions: { 'common' }
+			andGroupName: 'tests';
 		addPackageNamed: 'Rowan-Tests'
+			toComponentNamed: 'Core'
 			withConditions: { 'common' }
 			andGroupName: 'tests';
 		addPackageNamed: 'Example-GemStone-Extensions'
+			toComponentNamed: 'Core'
 			withConditions: { 'gemstone' }
+			andGroupName: 'core'
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
 		addPackageNamed: 'Example-GemStone-Test-Extensions'
+			toComponentNamed: 'Core'
 			withConditions: { 'gemstone' }
 			andGroupName: 'tests'
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
@@ -49,5 +52,5 @@ RwRowanSample9Test >> testCreateNewProject [
 	{ 
 		(STON toStringPretty: projectDefinition).
 		(STON toStringPretty: projectLoadSpecification).
-	}" halt."
+	}halt.
 ]

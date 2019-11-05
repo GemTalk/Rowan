@@ -240,3 +240,18 @@ RwAbstractProjectLoadConfiguration >> initializeForExport [
 			orderedConditionalPackageMapSpecs at: platformName put: orderedUserMap ].
 		conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
 ]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadConfiguration >> removePackageNamed: aPackageName [
+	"this can create empty packageName lists or empty packageMapSpecMaps ... the export logic _should_ cleanup empty list, which is sufficient"
+
+	self conditionalPackages
+		keysAndValuesDo: [ :conditionsArray :groupMap | (groupMap at: #'packageNames') remove: aPackageName ].
+	self conditionalPackageMapSpecs
+		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
+			packageMapSpecsMap
+				keysAndValuesDo: [ :userId :packageMapSpecs | 
+					(packageMapSpecs at: #'packageNameToPlatfomrPropertiesMap')
+						removeKey: aPackageName
+						ifAbsent: [  ] ] ]
+]

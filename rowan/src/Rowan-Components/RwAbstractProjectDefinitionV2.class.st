@@ -52,15 +52,7 @@ RwAbstractProjectDefinitionV2 class >> withProperties: properties packageDefinit
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> addOrUpdatePackage: aPackageDefinition [
-
-	| key |
-	key := aPackageDefinition key.
-	packages at: key put: aPackageDefinition
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> addPackage: aPackageDefinition [
+RwAbstractProjectDefinitionV2 >> _addPackage: aPackageDefinition [
 
 	| key |
 	key := aPackageDefinition key.
@@ -69,16 +61,11 @@ RwAbstractProjectDefinitionV2 >> addPackage: aPackageDefinition [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> addPackageNamed: packageName [
+RwAbstractProjectDefinitionV2 >> addOrUpdatePackage: aPackageDefinition [
 
-	^ self addPackage: (RwPackageDefinition newNamed: packageName)
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> addPackagesNamed: packageNames [
-
-	packageNames
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+	| key |
+	key := aPackageDefinition key.
+	packages at: key put: aPackageDefinition
 ]
 
 { #category : 'properties' }
@@ -179,13 +166,6 @@ RwAbstractProjectDefinitionV2 >> packageNamed: aString ifAbsent: absentBlock [
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> packageNames [
   ^ self packages keys asArray
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> packageNames: packageNames [
-
-	packageNames
-		do: [ :packageName | self addPackageNamed: packageName ]
 ]
 
 { #category : 'accessing' }
