@@ -26,9 +26,8 @@ RowanBrowserService >> abortTransaction [
   System abortTransaction.
   autoCommitService := RowanAutoCommitService new.
   autoCommitService autoCommit: true.
-  RowanBrowserService new updateProjects.
-  RowanBrowserService new updateDictionaries.
-  self updateType: #'aborted:browser:'
+  self updateProjects.
+  self updateDictionaries.
 ]
 
 { #category : 'client commands' }
@@ -363,7 +362,8 @@ RowanBrowserService >> updateDictionaries [
 
 	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
 	dictionaries := dictionaries asOrderedCollection. 
-	updateType := #dictionaryListUpdate:.
+	updateType ifNil: [updateType := OrderedCollection new]. 
+	updateType add: #dictionaryListUpdate:.
 	RowanCommandResult addResult: self
 ]
 
