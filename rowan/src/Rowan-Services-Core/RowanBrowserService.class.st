@@ -23,7 +23,9 @@ Class {
 { #category : 'client commands' }
 RowanBrowserService >> abortTransaction [
   | autoCommitService autoCommitState |
-  autoCommitState := RowanService autoCommit.
+  autoCommitState := RowanService autoCommit == #'failed'
+    ifTrue: [ true ]
+    ifFalse: [ RowanService autoCommit ].
   System abortTransaction.
   autoCommitService := RowanAutoCommitService new.
   autoCommitService autoCommit: autoCommitState.
