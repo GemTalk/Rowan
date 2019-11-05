@@ -5,20 +5,27 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwProjectDefinitionV2 class >> projectName: projectName comment: commentString [
+RwProjectDefinitionV2 class >> fromLoadSpecification: aRwProjectLoadSpecificationV2 [
 	| projectReferenceDefintion |
 	projectReferenceDefintion := RwProjectReferenceDefinitionV2
-		fromLoadSpecification:
-			(RwProjectLoadSpecificationV2 new
-				projectName: projectName;
-				yourself).
+		fromLoadSpecification: aRwProjectLoadSpecificationV2.
 	^ self basicNew
 		properties:
 				(Dictionary new
-						add: 'name' -> projectName;
+						add: 'name' -> aRwProjectLoadSpecificationV2 projectName;
 						add: 'projectRef' -> projectReferenceDefintion;
 						yourself);
 		packages: Dictionary new;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwProjectDefinitionV2 class >> projectName: projectName comment: commentString [
+	| projectLoadSpecification |
+	projectLoadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		yourself.
+	^ (self fromLoadSpecification: projectLoadSpecification)
 		comment: commentString;
 		yourself
 ]

@@ -23,6 +23,27 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'instance creation' }
+RwProjectLoadSpecificationV2 class >> specName: specName projectName: projectName comment: commentString [
+	^ self new
+		specName: projectName;
+		projectName: projectName;
+		comment: commentString;
+		yourself
+]
+
+{ #category : 'converting' }
+RwProjectLoadSpecificationV2 >> asProjectDefiniton [
+	^ RwProjectDefinitionV2 fromLoadSpecification: self
+]
+
+{ #category : 'converting' }
+RwProjectLoadSpecificationV2 >> asProjectDefinitonWithComment: commentString [
+	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
+		comment: commentString;
+		yourself
+]
+
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> comment [
 	^ comment ifNil: [ ^ '' ]
@@ -114,7 +135,7 @@ RwProjectLoadSpecificationV2 >> initialize [
 	packagesPath := 'rowan/src'.
 	projectsPath := 'rowan/projects'.
 	specsPath := 'rowan/specs'.
-projectName := 'ProjectName'.
+	projectName := 'ProjectName'
 ]
 
 { #category : 'accessing' }
