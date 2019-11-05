@@ -6,6 +6,10 @@ Class {
 
 { #category : 'tests' }
 RwRowanSample9Test >> testCreateNewProject [
+"should get errors if groups or components are referenced that were not declared"
+
+"the default spec should reflect the entire project as created, so perhaps default values shouldn't be used for components and groups when creating a new project ... forNewProject, which skips initialization of those things that need to be explicitly created in the project"
+
 	| projectName projectDefinition projectLoadSpecification |
 	projectName := 'RowanSample9'.
 	Rowan
@@ -16,6 +20,12 @@ RwRowanSample9Test >> testCreateNewProject [
 		projectName: projectName
 		comment: 'Example project exposing the standard project creation api')
 		addComponentNamed: 'Core'
+			definedGroupNames: 
+				(Dictionary new
+					add: 'core'  -> {};
+					add: 'tests' -> { 'core' };
+					yourself)
+			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'ExampleCore'
 			comment: 'Primary component used for loading entire system.';
 		addPackagesNamed: { 'Example-Core1' . 'Example-Core2' };
 		addPackageNamed: 'Example-Core3'
@@ -34,7 +44,10 @@ RwRowanSample9Test >> testCreateNewProject [
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
 		yourself.
 
-	(STON toStringPretty: projectDefinition) halt.
-
 	projectLoadSpecification := projectDefinition projectLoadSpecification.
+
+	{ 
+		(STON toStringPretty: projectDefinition).
+		(STON toStringPretty: projectLoadSpecification).
+	}" halt."
 ]
