@@ -22,12 +22,13 @@ Class {
 
 { #category : 'client commands' }
 RowanBrowserService >> abortTransaction [
-  | autoCommitService |
+  | autoCommitService autoCommitState |
+  autoCommitState := RowanService autoCommit.
   System abortTransaction.
   autoCommitService := RowanAutoCommitService new.
-  autoCommitService autoCommit: true.
+  autoCommitService autoCommit: autoCommitState.
   self updateProjects.
-  self updateDictionaries.
+  self updateDictionaries
 ]
 
 { #category : 'client commands' }
