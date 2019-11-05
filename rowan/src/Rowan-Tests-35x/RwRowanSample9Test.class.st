@@ -1,24 +1,19 @@
 Class {
 	#name : 'RwRowanSample9Test',
-	#superclass : 'RwRowanSampleAbstractTest',
+	#superclass : 'RwAbstractV2Test',
 	#category : 'Rowan-Tests-35x'
 }
 
 { #category : 'tests' }
 RwRowanSample9Test >> testCreateNewProject [
-"should get errors if groups or components are referenced that were not declared"
 
-"the default spec should reflect the entire project as created, so perhaps default values shouldn't be used for components and groups when creating a new project ... forNewProject, which skips initialization of those things that need to be explicitly created in the project"
 
 	| projectName projectDefinition projectLoadSpecification |
 	projectName := 'RowanSample9'.
-	Rowan
-		projectNamed: projectName
-		ifPresent: [ :prj | Rowan image _removeLoadedProject: prj _loadedProject ].
 
 	projectDefinition := (RwProjectDefinitionV2
 		projectName: projectName
-		comment: 'Example project exposing the standard project creation api')
+		comment: 'Project created using the V2 project creation api ')
 		addComponentNamed: 'Core'
 			definedGroupNames: 
 				(Dictionary new
@@ -27,20 +22,20 @@ RwRowanSample9Test >> testCreateNewProject [
 					yourself)
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'ExampleCore'
 			comment: 'Primary component used for loading entire system.';
-		addPackagesNamed: { 'Example-Core1' . 'Example-Core2' }
+		addPackagesNamed: { projectName, '-Core1' . projectName, '-Core2' }
 			toComponentNamed: 'Core'
 			withConditions: { 'common' }
 			andGroupName: 'tests';
-		addPackageNamed: 'Rowan-Tests'
+		addPackageNamed: projectName, '-Tests'
 			toComponentNamed: 'Core'
 			withConditions: { 'common' }
 			andGroupName: 'tests';
-		addPackageNamed: 'Example-GemStone-Extensions'
+		addPackageNamed:projectName, '-GemStone-Extensions'
 			toComponentNamed: 'Core'
 			withConditions: { 'gemstone' }
 			andGroupName: 'core'
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
-		addPackageNamed: 'Example-GemStone-Test-Extensions'
+		addPackageNamed: projectName, '-GemStone-Test-Extensions'
 			toComponentNamed: 'Core'
 			withConditions: { 'gemstone' }
 			andGroupName: 'tests'
@@ -52,5 +47,5 @@ RwRowanSample9Test >> testCreateNewProject [
 	{ 
 		(STON toStringPretty: projectDefinition).
 		(STON toStringPretty: projectLoadSpecification).
-	}halt.
+	}	"halt."
 ]
