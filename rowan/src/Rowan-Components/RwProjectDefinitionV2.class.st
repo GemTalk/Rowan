@@ -16,6 +16,7 @@ RwProjectDefinitionV2 class >> fromLoadSpecification: aRwProjectLoadSpecificatio
 						add: 'projectRef' -> projectReferenceDefintion;
 						yourself);
 		packages: Dictionary new;
+		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
 		yourself
 ]
 
@@ -234,20 +235,20 @@ RwProjectDefinitionV2 >> components: aComponentDefinitionDictionary [
 ]
 
 { #category : 'properties' }
-RwProjectDefinitionV2 >> configsPath [
+RwProjectDefinitionV2 >> componentsPath [
 
-	^ self projectRef configsPath
+	^ self projectRef componentsPath
 ]
 
 { #category : 'properties' }
-RwProjectDefinitionV2 >> configsPath: aDirectoryPathString [
+RwProjectDefinitionV2 >> componentsPath: aDirectoryPathString [
 
-	self projectRef configsPath: aDirectoryPathString
+	^ self projectRef componentsPath: aDirectoryPathString
 ]
 
 { #category : 'properties' }
-RwProjectDefinitionV2 >> configsRoot [
-	^ self projectRef configsRoot
+RwProjectDefinitionV2 >> componentsRoot [
+	^ self projectRef componentsRoot
 ]
 
 { #category : 'actions' }
@@ -256,14 +257,6 @@ RwProjectDefinitionV2 >> create [
 
 	Rowan projectTools create
 		createComponentProject: self.
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> defaultSymbolDictionary: symDictName forUser: userId [
-
-	(self componentNamed: self defaultComponentName)
-		conditionalPackageMapSpecsAtGemStoneUserId: userId 
-			setDefaultSymbolDictNameTo: symDictName
 ]
 
 { #category : 'actions' }
@@ -374,37 +367,6 @@ RwProjectDefinitionV2 >> loadedCommitId [
 	^ self projectRef loadedCommitId
 ]
 
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> loadedConfigurationNames [
-
-	^ self projectRef loadedConfigurationNames
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> loadedConfigurationNames: configNames [
-
-	"noop - project ref component keys is list of loaded config names"
-
-	"https://github.com/GemTalk/Rowan/issues/308"
-
-	"eventually this method will be completely removed/deprecated"
-
-	configNames asArray sort = self loadedConfigurationNames asArray sort
-		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> loadedGroupNames [
-
-	^ self projectRef loadedGroupNames
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> loadedGroupNames: anArray [
-
-	^ self projectRef loadedGroupNames: anArray
-]
-
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> packageConvention [
 
@@ -433,6 +395,18 @@ RwProjectDefinitionV2 >> packageFormat: aString [
 RwProjectDefinitionV2 >> packageFormatIfAbsent: aBlock [
 
 	^ self projectRef packageFormatIfAbsent: aBlock
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> packageNameToPlatformPropertiesMap [
+
+	^self projectRef packageNameToPlatformPropertiesMap
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> packageNameToPlatformPropertiesMap: aDictionary [
+
+	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
 ]
 
 { #category : 'properties' }

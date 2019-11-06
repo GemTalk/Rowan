@@ -113,15 +113,20 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
-	| projectSetDefinition |
-	projectSetDefinition := (projectDefinition repositoryRoot exists and: [projectDefinition projectDefinitionSourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue])
+	| projectSetDefinition sourceProperty rereadProject |
+	sourceProperty := projectDefinition projectDefinitionSourceProperty.
+	rereadProject := sourceProperty
+		~= RwLoadedProject _projectSourceValueNewProject
+		and: [ sourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue ].
+	projectSetDefinition := (projectDefinition repositoryRoot exists
+		and: [ rereadProject ])
 		ifTrue: [ 
 			"only read from disk if the repository exists and the project definition has not 
 				already been loaded from disk"
 			Rowan projectTools read
 				readProjectSetForComponentProjectDefinition: projectDefinition
 				withConfigurations: projectDefinition loadedConfigurationNames
-				groupNames: projectDefinition loadedGroupNames 
+				groupNames: projectDefinition loadedGroupNames
 				platformConfigurationAttributes: platformConfigurationAttributes ]
 		ifFalse: [ 
 			"If this project definition _was_ read from disk, we cannot trust that it was 
@@ -130,7 +135,9 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 			RwProjectSetDefinition new
 				addProject: projectDefinition;
 				yourself ].
-	^ self loadProjectSetDefinition: projectSetDefinition  instanceMigrator: instanceMigrator
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'load project by url' }

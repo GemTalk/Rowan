@@ -91,20 +91,25 @@ RwProjectReferenceDefinitionV2 >> commitLog: logLimit [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> committish [
 
-	^ self properties at: 'committish' ifAbsent: [ 'master' ]
+	^ self projectLoadSpecification committish
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> committish: aString committishType: committishTypeString [
+RwProjectReferenceDefinitionV2 >> committish: aString [ 
 
-	self properties at: 'committish' put: aString.
-	self properties at: 'committishType' put: committishTypeString.
+	self projectLoadSpecification committish: aString.
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> committishType [
+RwProjectReferenceDefinitionV2 >> componentNames [
 
-	^ self properties at: 'committishType'  ifAbsent: [ 'branch' ]
+	^ self projectLoadSpecification componentNames
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinitionV2 >> componentNames: anArray [
+
+	^ self projectLoadSpecification componentNames: anArray
 ]
 
 { #category : 'accessing' }
@@ -120,33 +125,21 @@ RwProjectReferenceDefinitionV2 >> components: aComponentDefinitionDictionary [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> configsPath [
+RwProjectReferenceDefinitionV2 >> componentsPath [
 
-	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/components' ]
+	^ self projectLoadSpecification componentsPath
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> configsPath: aString [
+RwProjectReferenceDefinitionV2 >> componentsPath: aString [
 
-	^ self properties at: 'configsPath' put: aString
+	^ self projectLoadSpecification componentsPath: aString
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> configsRoot [
+RwProjectReferenceDefinitionV2 >> componentsRoot [
 
-	^self repositoryRoot / self configsPath
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> configurationNames [
-
-	^ self properties at: 'configurationNames' ifAbsent: [ { self defaultComponentName } ]
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> configurationNames: anArray [
-
-	^ self properties at: 'configurationNames' put: anArray
+	^self repositoryRoot / self componentsRoot
 ]
 
 { #category : 'actions' }
@@ -214,36 +207,6 @@ RwProjectReferenceDefinitionV2 >> loadedCommitId:  aCommitId [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> loadedConfigurationNames [
-
-	^ self components isEmpty
-		ifTrue: [ self configurationNames ]
-		ifFalse: [ (self components values select: [:each | each isIndependentlyLoadable ]) collect: [:each | each name ] ]
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> loadedConfigurationNames: anArray [
-
-	"https://github.com/GemTalk/Rowan/issues/308"
-
-	"eventually this method will be completely removed/deprecated"
-
-	^ self configurationNames: anArray
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> loadedGroupNames [
-
-	^ self groupNames
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> loadedGroupNames: anArray [
-
-	^ self groupNames: anArray
-]
-
-{ #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packageConvention [
 
 	^ self properties at: 'packageConvention' ifAbsent: [ 'RowanHybrid' ]
@@ -284,15 +247,27 @@ RwProjectReferenceDefinitionV2 >> packageFormatIfAbsent: absentBlock [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinitionV2 >> packageNameToPlatformPropertiesMap [
+
+	^ self properties at: 'packageNameToPlatformPropertiesMap' ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinitionV2 >> packageNameToPlatformPropertiesMap: aDictionary [
+
+	^ self properties at: 'packageNameToPlatformPropertiesMap' put: aDictionary
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packagesPath [
 
-	^ self properties at: 'packagesPath' ifAbsent: [ 'rowan/src' ]
+	^ self projectLoadSpecification packagesPath
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packagesPath: aString [
 
-	^ self properties at: 'packagesPath' put: aString
+	^ self projectLoadSpecification packagesPath: aString
 ]
 
 { #category : 'accessing' }
@@ -316,7 +291,7 @@ RwProjectReferenceDefinitionV2 >> projectAlias [
 	"project alias is used as the name of the root directory for the project ... necessary if the project is 
 		embedded in another project's git repository or you want use a non-default directory on disk"
 
-	^ self properties at: 'projectAlias' ifAbsent: [ self projectName ]
+	^ self projectLoadSpecification projectAlias
 ]
 
 { #category : 'accessing' }
@@ -324,9 +299,7 @@ RwProjectReferenceDefinitionV2 >> projectAlias: aStringOrNil [
 	"project alias is used as the name of the root directory for the project ... necessary if the project is 
 		embedded in another project's git repository or you want use a non-default directory on disk"
 
-	aStringOrNil
-		ifNil: [ ^ self properties removeKey: 'projectAlias' ifAbsent: [  ] ].
-	^ self properties at: 'projectAlias' put: aStringOrNil
+	self projectLoadSpecification projectAlias: aStringOrNil
 ]
 
 { #category : 'accessing' }
@@ -356,13 +329,13 @@ RwProjectReferenceDefinitionV2 >> projectLoadSpecification: aRwProjectLoadSpecif
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectName [
-	^ projectName
+	^ self projectLoadSpecification projectName
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectName: aString [
 	self repositoryDefinition: nil.	"changing project name invalidates the current repository definition"
-	projectName := aString
+	self projectLoadSpecification: aString
 ]
 
 { #category : 'accessing' }
@@ -380,13 +353,13 @@ RwProjectReferenceDefinitionV2 >> projectNames: anArray [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectsPath [
 
-	^ self properties at: 'projectsPath' ifAbsent: [ 'rowan/projects' ]
+	^ self projectLoadSpecification projectsPath
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectsPath: aString [
 
-	^ self properties at: 'projectsPath' put: aString
+	^ self projectLoadSpecification projectsPath: aString
 ]
 
 { #category : 'accessing' }
@@ -398,13 +371,13 @@ RwProjectReferenceDefinitionV2 >> projectsRoot [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectUrl [
 
-	^ self properties at: 'projectUrl' ifAbsent: [ '' ]
+	^ self projectLoadSpecification projectUrl
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectUrl: aString [
 
-	^ self properties at: 'projectUrl' put: aString
+	^ self projectLoadSpecification projectUrl: aString
 ]
 
 { #category : 'accessing' }
@@ -504,13 +477,13 @@ RwProjectReferenceDefinitionV2 >> SHA: aString [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> specsPath [
 
-	^ self properties at: 'specsPath' ifAbsent: [ 'rowan/specs' ]
+	^ self projectLoadSpecification specsPath
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> specsPath: aString [
 
-	^ self properties at: 'specsPath' put: aString
+	^ self projectLoadSpecification specsPath: aString
 ]
 
 { #category : 'accessing' }

@@ -16,9 +16,7 @@ Class {
 		'packagesPath',
 		'comment',
 		'componentNames',
-		'groupNames',
-		'defaultSymbolDictName',
-		'defaultUseSessionMethodsForExtensions'
+		'groupNames'
 	],
 	#category : 'Rowan-Components'
 }
@@ -94,27 +92,6 @@ RwProjectLoadSpecificationV2 >> currentVersion [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecificationV2 >> defaultSymbolDictName [
-
-	^ defaultSymbolDictName
-]
-
-{ #category : 'accessing' }
-RwProjectLoadSpecificationV2 >> defaultSymbolDictName: aString [
-	defaultSymbolDictName := aString
-]
-
-{ #category : 'accessing' }
-RwProjectLoadSpecificationV2 >> defaultUseSessionMethodsForExtensions [
-	^ defaultUseSessionMethodsForExtensions ifNil: [ ^ false ]
-]
-
-{ #category : 'accessing' }
-RwProjectLoadSpecificationV2 >> defaultUseSessionMethodsForExtensions: aString [
-	defaultUseSessionMethodsForExtensions := aString
-]
-
-{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> groupNames [
 	^ groupNames
 ]
@@ -130,7 +107,6 @@ RwProjectLoadSpecificationV2 >> initialize [
 	commitish := 'master'.
 	componentNames := #('Core').
 	componentsPath := 'rowan/components'.
-	defaultSymbolDictName := 'UserGlobals'.
 	groupNames := #('core' 'tests').
 	packagesPath := 'rowan/src'.
 	projectsPath := 'rowan/projects'.

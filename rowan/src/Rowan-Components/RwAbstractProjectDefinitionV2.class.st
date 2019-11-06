@@ -150,6 +150,11 @@ RwAbstractProjectDefinitionV2 >> loadedCommitId [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> name [
+  ^ self projectAlias
+]
+
+{ #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> packageNamed: aString [
 
 	^ self
