@@ -58,6 +58,12 @@ RwPackageDefinition >> addClassNamed: className super: superclassName category: 
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName category: categryName comment: comment [
+
+	^ self addClassDefinition: (RwClassDefinition newForClassNamed: className super: superclassName  category: categryName comment: comment)
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars category: category comment: comment [
 	^ self
 		addClassDefinition:
