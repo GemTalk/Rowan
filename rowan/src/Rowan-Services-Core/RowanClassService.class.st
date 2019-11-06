@@ -1067,6 +1067,7 @@ RowanClassService >> theClass [
 	theClass := oop ifNil:[Rowan globalNamed: name] ifNotNil: [Object _objectForOop: oop].
 	theClass isMeta ifTrue:[oop := theClass thisClass asOop]. 
 	(Rowan globalNamed: name) ifNil:[isInSymbolList := false]. 
+	theClass ifNil: [^nil]. 
 	^theClass thisClass
 ]
 
@@ -1102,8 +1103,12 @@ RowanClassService >> updateDirtyState [
 
 { #category : 'updates' }
 RowanClassService >> updateLatest [
-  oop := ((Rowan image symbolList resolveSymbol: name) ifNil: [ ^ self ]) value
-    asOop.
+  oop := ((Rowan image symbolList resolveSymbol: name)
+    ifNil: [ 
+      wasRemoved := true.
+      updateType := #'removedClass:'.
+      RowanCommandResult addResult: self.
+      ^ self ]) value asOop.
   super updateLatest
 ]
 
