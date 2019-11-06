@@ -528,7 +528,7 @@ RwProjectReferenceDefinitionV2 >> tag: aString [
 { #category : 'loading' }
 RwProjectReferenceDefinitionV2 >> updateLoadedCommitId [
 
-	self loadedCommitId: self repositoryDefinition commitId
+	self loadedCommitId: self repositoryDefinition repositoryCommitId
 ]
 
 { #category : 'temporary compat' }
