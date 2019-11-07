@@ -58,7 +58,7 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: gr
 		components at: aComponentName 
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
 	groupNameDict keysAndValuesDo: [:groupName :includeGroups |
-		component addDefinedGroupName: groupName includeGroups: includeGroups ].
+		component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
 			setDefaultSymbolDictNameTo: aSymbolDictAssoc value;

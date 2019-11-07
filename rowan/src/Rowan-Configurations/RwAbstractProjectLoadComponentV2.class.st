@@ -163,19 +163,19 @@ RwAbstractProjectLoadComponentV2 >> _validateGemStonePlatform: allDefinedPackage
 			platformPropertiesMap
 				keysAndValuesDo: [ :key :packagePropertiesMap | 
 					key == #'packageNameToPlatformPropertiesMap'
-						ifFalse: [ self error: 'Unknown platformPropertiesMap key ' , key printString ].
+						ifFalse: [ Error signal: 'Unknown platformPropertiesMap key ' , key printString ].
 					packagePropertiesMap
 						keysAndValuesDo: [ :packageName :packageProperties | 
 							(allDefinedPackageNames includes: packageName)
 								ifFalse: [ 
-									self
-										error:
-											'undefined package name ' , packageName printString
+									Error
+										signal:
+											'Undefined package name ' , packageName printString
 												, ' used in plaform properties map' ].
 							packageProperties
 								keysDo: [ :packagePropertyName | 
 									(#('symbolDictName') includes: packagePropertyName)
-										ifFalse: [ self error: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
+										ifFalse: [ Error signal: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
 ]
 
 { #category : 'visiting' }
@@ -461,8 +461,8 @@ RwAbstractProjectLoadComponentV2 >> validate [
 				do: [ :dependentGroupName | 
 					(knownGroupNames includes: dependentGroupName)
 						ifFalse: [ 
-							self
-								error:
+							Error
+								signal:
 									'The group ' , dependentGroupName printString , ' is not a defined group' ] ] ].
 	self conditionalPackages
 		keysAndValuesDo: [ :conditions :groupMap | 
@@ -470,17 +470,17 @@ RwAbstractProjectLoadComponentV2 >> validate [
 				keysAndValuesDo: [ :groupName :packageMap | 
 					(self definedGroupNames keys includes: groupName)
 						ifFalse: [ 
-							self
-								error:
-									'conditional packages includes group name ' , groupName printString
+							Error
+								signal:
+									'Conditional packages includes group name ' , groupName printString
 										, ' that is not a defined group' ].
 					allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformName :userIdMap | 
 			(self class _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
-					self
-						error:
+					Error
+						signal:
 							'Unknown platform name ' , platformName printString
 								, ' in conditional package map specs' ].
 			platformName = 'gemstone'

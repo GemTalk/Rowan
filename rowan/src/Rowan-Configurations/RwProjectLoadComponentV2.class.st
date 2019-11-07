@@ -29,14 +29,6 @@ RwProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentV2 >> definedGroupNamed: groupName toIncludeGroups: includedGroups [
-
-	"add a group that does not include any other groups"
-
-	self definedGroupNames at: groupName put: includedGroups asArray sort
-]
-
-{ #category : 'accessing' }
 RwProjectLoadComponentV2 >> definedGroupNames [
 
 	^ definedGroupNames 
@@ -55,7 +47,15 @@ RwProjectLoadComponentV2 >> defineGroupNamed: groupName [
 
 	"add a group that does not include any other groups"
 
-	self definedGroupNamed: groupName toIncludeGroups: #()
+	self defineGroupNamed: groupName toIncludeGroups: #()
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentV2 >> defineGroupNamed: groupName toIncludeGroups: includedGroups [
+
+	"add a group that does not include any other groups"
+
+	self definedGroupNames at: groupName put: includedGroups asArray sort
 ]
 
 { #category : 'accessing' }
