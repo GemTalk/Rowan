@@ -9,10 +9,11 @@ RwRowanSample9Test >> testCreateNewProject [
 	| projectName projectDefinition project |
 	projectName := 'RowanSample9'.
 	projectDefinition := self _canonicalRowanSample9ProjectFor: projectName.
-	{projectDefinition.
+	projectDefinition components
+		do: [ :component | self assert: component validate ].
+	self assert: projectDefinition projectLoadSpecification validate.
+	{(STON toStringPretty: projectDefinition projectLoadSpecification).
 	(STON toStringPretty: projectDefinition)}.
-	true
-		ifTrue: [ ^ self ].
 	projectDefinition load.
 	project := Rowan projectNamed: projectName.
 	self assert: project audit isEmpty

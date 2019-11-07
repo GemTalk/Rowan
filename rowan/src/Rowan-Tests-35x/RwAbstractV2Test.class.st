@@ -37,14 +37,15 @@ RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
 	projectDefinition := (RwProjectDefinitionV2
 		projectName: projectName
 		comment: 'Project created using the V2 project creation api ')
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultMethodEnvTo: 0;
 		addComponentNamed: 'Core'
 			definedGroupNames:
 				(Dictionary new
-					add: 'core' -> {};
-					add: 'tests' -> {'core'};
-					yourself)
-			gemstoneDefaultSymbolDictionaryForUser:
-				'SystemUser' -> self _sampleSymbolDictionaryName1
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
 			comment: 'Primary component used for loading the system.';
 		addPackagesNamed: {(projectName , '-Core')}
 			toComponentNamed: 'Core'
@@ -68,18 +69,18 @@ RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
 	className := projectName , 'Class1'.
 	((projectDefinition packageNamed: packageName)
 		addClassNamed: className
-			super: 'Object'
-			instvars: #('ivar1')
-			category: '*' , packageName asLowercase
-			comment: 'I am an example class')
+		super: 'Object'
+		instvars: #('ivar1')
+		category: '*' , packageName asLowercase
+		comment: 'I am an example class')
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
 	packageName := projectName , '-Tests'.
 	((projectDefinition packageNamed: packageName)
 		addClassNamed: projectName , 'TestCase'
-			super: 'TestCase'
-			category: '*' , packageName asLowercase
-			comment: 'I test the example class')
+		super: 'TestCase'
+		category: '*' , packageName asLowercase
+		comment: 'I test the example class')
 		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
 			protocol: 'tests';
 		yourself.
@@ -87,17 +88,17 @@ RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
 	className := projectName , 'RcArray'.
 	((projectDefinition packageNamed: packageName)
 		addClassNamed: className
-			super: 'RcArray'
-			category: '*' , packageName asLowercase
-			comment: 'I am an example GemStone class')
+		super: 'RcArray'
+		category: '*' , packageName asLowercase
+		comment: 'I am an example GemStone class')
 		addClassMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
 	packageName := projectName , '-GemStone-Tests'.
 	((projectDefinition packageNamed: packageName)
 		addClassNamed: projectName , 'GsTestCase'
-			super: 'TestCase'
-			category: '*' , packageName asLowercase
-			comment: 'I test the example GemStone class')
+		super: 'TestCase'
+		category: '*' , packageName asLowercase
+		comment: 'I test the example GemStone class')
 		addInstanceMethod: 'test  self assert: ' , className , ' foo = 1'
 			protocol: 'tests';
 		yourself.
@@ -133,5 +134,8 @@ RwAbstractV2Test >> _specListProjectNames [
 RwAbstractV2Test >> setUp [
 	super setUp.
 	self _specListProjectNames
-		do: [ :name | Rowan projectNamed: name ifPresent: [ :project | project unload ] ]
+		do: [ :name | 
+			Rowan
+				projectNamed: name
+				ifPresent: [ :prj | Rowan image _removeLoadedProject: prj _loadedProject ] ]
 ]

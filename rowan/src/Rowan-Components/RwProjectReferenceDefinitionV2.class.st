@@ -18,12 +18,6 @@ RwProjectReferenceDefinitionV2 class >> fromLoadSpecification: aRwProjectLoadSpe
 ]
 
 { #category : 'private' }
-RwProjectReferenceDefinitionV2 >> _createRepositoryFrom: repoDef [ 
-
-	self error: 'not yet implemented'
-]
-
-{ #category : 'private' }
 RwProjectReferenceDefinitionV2 >> _repositoryDefinitionClass [
 
 	self useGit ifTrue: [ ^ RwGitRepositoryDefinition ].

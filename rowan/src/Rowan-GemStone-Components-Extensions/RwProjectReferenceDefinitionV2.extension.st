@@ -2,34 +2,70 @@ Extension { #name : 'RwProjectReferenceDefinitionV2' }
 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinitionV2 >> defaultMethodEnv [
-
-	self halt
+	^ self projectLoadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinitionV2 >> defaultSymbolDictName [
-
-	self halt.
+	^ self projectLoadSpecification
+		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinitionV2 >> defaultUseSessionMethodsForExtensions [
-
-	self halt
+	^ self projectLoadSpecification gemstoneDefaultUseSessionMethodsForExtensionsForUser: Rowan image currentUserId
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectReferenceDefinitionV2 >> methodEnvForPackageNamed: packageName [
+RwProjectReferenceDefinitionV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: aBool [
+	^ self projectLoadSpecification
+		gemstoneSetDefaultMethodEnvForUser: userId
+		to: aBool
+]
 
-	| packageProperties |
-	packageProperties :=self packageNameToPlatformPropertiesMap
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinitionV2 >> gemstoneSetDefaultMethodEnvTo: aBool [
+	^ self projectLoadSpecification gemstoneSetDefaultMethodEnvTo: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinitionV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
+	^ self projectLoadSpecification gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinitionV2 >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
+	^ self projectLoadSpecification gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinitionV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
+	^ self projectLoadSpecification gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinitionV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
+	^ self projectLoadSpecification gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinitionV2 >> gemstoneSetMethodEnv: env forPackageNamed: packageName [
+
+	| packageProperties packageNameToPlatformPropertiesMap |
+	packageNameToPlatformPropertiesMap := self packageNameToPlatformPropertiesMap.
+	packageProperties := packageNameToPlatformPropertiesMap
 		at: packageName
-		ifAbsent: [ ^ self defaultMethodEnv ].
-	^ packageProperties at: 'methodEnv' ifAbsent: [ self defaultMethodEnv ]
+		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	env 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'methodEnv' ifAbsent: [].
+			^self ].
+	packageProperties at: 'methodEnv' put: env
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectReferenceDefinitionV2 >> setSymbolDictName: symbolDictName forPackageNamed: packageName [
+RwProjectReferenceDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 
 	| packageProperties packageNameToPlatformPropertiesMap |
 	packageNameToPlatformPropertiesMap := self packageNameToPlatformPropertiesMap.
@@ -45,7 +81,7 @@ RwProjectReferenceDefinitionV2 >> setSymbolDictName: symbolDictName forPackageNa
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectReferenceDefinitionV2 >> setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+RwProjectReferenceDefinitionV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
 
 	| packageProperties |
 	packageProperties := self packageNameToPlatformPropertiesMap
@@ -58,6 +94,18 @@ RwProjectReferenceDefinitionV2 >> setUseSessionMethodsForExtensions: aBool forPa
 			^self ].
 	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
 	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinitionV2 >> methodEnvForPackageNamed: packageName [
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultMethodEnv ].
+	^ packageProperties
+		at: 'methodEnv'
+		ifAbsent: [ ^ self defaultMethodEnv ]
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

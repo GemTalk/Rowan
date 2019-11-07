@@ -16,7 +16,8 @@ Class {
 		'packagesPath',
 		'comment',
 		'componentNames',
-		'groupNames'
+		'groupNames',
+		'platformProperties'
 	],
 	#category : 'Rowan-Components'
 }
@@ -126,6 +127,11 @@ RwProjectLoadSpecificationV2 >> packagesPath: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> platformProperties [
+	^ platformProperties ifNil: [ platformProperties := Dictionary new ]
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> projectAlias [
 	"project alias is used as the name of the root directory for the project ... necessary if the project is 
 		embedded in another project's git repository or you want use a non-default directory on disk"
@@ -193,4 +199,12 @@ RwProjectLoadSpecificationV2 >> specsPath [
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> specsPath: aString [
 	specsPath := aString
+]
+
+{ #category : 'private' }
+RwProjectLoadSpecificationV2 >> validate [
+	"ensure that the data structures within the receiver contain valid information:
+		1. platform implementation is responsible for validating platform structures"
+
+	^ true
 ]

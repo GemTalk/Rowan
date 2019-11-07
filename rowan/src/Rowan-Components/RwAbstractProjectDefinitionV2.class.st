@@ -7,50 +7,6 @@ Class {
 	#category : 'Rowan-Components'
 }
 
-{ #category : 'instance creation' }
-RwAbstractProjectDefinitionV2 class >> newForDiskBasedProjectNamed: aString [
-
-	| spec |
-	spec := RwSimpleProjectSpecification new
-		specName: aString;
-		repoSpec: RwDiskRepositorySpecification new;
-		yourself.
-	^ self newForSpecification: spec
-
-]
-
-{ #category : 'instance creation' }
-RwAbstractProjectDefinitionV2 class >> newForGitBasedProjectNamed: aString [
-
-	| spec |
-	spec := RwSimpleProjectSpecification new
-		specName: aString;
-		yourself.
-	^ self newForSpecification: spec
-
-]
-
-{ #category : 'instance creation' }
-RwAbstractProjectDefinitionV2 class >> newForSpecification: aRwSpecification [
-
-	^ self
-		withProperties:
-			(Dictionary new
-				add: 'name' -> aRwSpecification specName;
-				add: 'spec' -> aRwSpecification;
-				yourself)
-		packageDefinitions: Dictionary new
-]
-
-{ #category : 'instance creation' }
-RwAbstractProjectDefinitionV2 class >> withProperties: properties packageDefinitions: packageDefinitions [
-
-	^ self basicNew
-		properties: properties;
-		packages: packageDefinitions;
-		yourself
-]
-
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> _addPackage: aPackageDefinition [
 

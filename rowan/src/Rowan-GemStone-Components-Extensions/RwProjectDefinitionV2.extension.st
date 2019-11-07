@@ -38,31 +38,58 @@ RwProjectDefinitionV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: pac
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: aBool [
+	self projectRef gemstoneSetDefaultMethodEnvForUser: userId to: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetDefaultMethodEnvTo: aBool [
+	self projectRef gemstoneSetDefaultMethodEnvTo: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
+	self projectRef gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
+	self projectRef gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
+	self projectRef gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
+	self projectRef gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetMethodEnv: env forPackageNamed: packageName [
+	self projectRef gemstoneSetMethodEnv: env forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
+	^ self projectRef
+		gemstoneSetSymbolDictName: symbolDictName
+		forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+	self projectRef
+		gemstoneSetUseSessionMethodsForExtensions: aBool
+		forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> methodEnvForPackageNamed: packageName [
 
 	^self projectRef methodEnvForPackageNamed: packageName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> setDefaultSymbolDictionary: symDictName forUser: userId [
-
-	(self componentNamed: self defaultComponentName)
-		conditionalPackageMapSpecsAtGemStoneUserId: userId 
-			setDefaultSymbolDictNameTo: symDictName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> setSymbolDictName: symbolDictName forPackageNamed: packageName [
-
-	^self projectRef setSymbolDictName: symbolDictName forPackageNamed: packageName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
-
-	self projectRef
-		setUseSessionMethodsForExtensions: aBool
-		forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

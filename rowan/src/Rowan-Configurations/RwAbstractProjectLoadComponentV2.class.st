@@ -174,7 +174,8 @@ RwAbstractProjectLoadComponentV2 >> _validateGemStonePlatform: allDefinedPackage
 												, ' used in plaform properties map' ].
 							packageProperties
 								keysDo: [ :packagePropertyName | 
-									(#('symbolDictName') includes: packagePropertyName)
+									(#('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
+										includes: packagePropertyName)
 										ifFalse: [ Error signal: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
 ]
 
@@ -261,15 +262,6 @@ RwAbstractProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: 
 			at: #packageNameToPlatformPropertiesMap ifAbsentPut: [ Dictionary new ])
 				at: packageName ifAbsentPut: [ Dictionary new ])
 					at: 'symbolDictName' put: symbolDictName asString
-
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId setDefaultSymbolDictNameTo: defaultSymbolDictName [
-
-	((self conditionalPackageMapSpecs at: 'gemstone' ifAbsentPut: [ Dictionary new ])
-		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultSymbolDictName put: defaultSymbolDictName asString
 
 ]
 

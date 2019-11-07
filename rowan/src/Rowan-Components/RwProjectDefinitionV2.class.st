@@ -51,18 +51,14 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName comment: commentStrin
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc comment: commentString [
-
+RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	| component |
-	component := self 
-		components at: aComponentName 
+	component := self components
+		at: aComponentName
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
-	groupNameDict keysAndValuesDo: [:groupName :includeGroups |
-		component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
-	component
-		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
-			setDefaultSymbolDictNameTo: aSymbolDictAssoc value;
-		comment: commentString.
+	groupNameDict
+		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
+	component comment: commentString.
 	^ component
 ]
 
