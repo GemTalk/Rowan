@@ -43,7 +43,7 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName comment: commentStrin
 	| component |
 	component := self 
 		components at: aComponentName 
-		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: aComponentName for: self projectName ].
+		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
 	^ component 
 		addDefinedGroupName: self defaultGroupName includeGroups: #();
 		comment: commentString;
@@ -56,7 +56,7 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: gr
 	| component |
 	component := self 
 		components at: aComponentName 
-		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: aComponentName for: self projectName ].
+		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
 	groupNameDict keysAndValuesDo: [:groupName :includeGroups |
 		component addDefinedGroupName: groupName includeGroups: includeGroups ].
 	component
@@ -84,7 +84,7 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 	self _addPackage: package.
 	component := self components
 		at: componentName
-		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
+		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
 		andGroup: groupName
@@ -104,7 +104,7 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 	self _addPackage: package.
 	component := self components
 		at: componentName
-		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
+		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
 			andPackageName: packageName
