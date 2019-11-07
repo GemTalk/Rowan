@@ -48,6 +48,11 @@ RowanDictionaryService >> insertAt: index [
 	RowanBrowserService new updateDictionaries.
 ]
 
+{ #category : 'testing' }
+RowanDictionaryService >> isDictionaryService [
+  ^ true
+]
+
 { #category : 'accessing' }
 RowanDictionaryService >> name [
 	^name

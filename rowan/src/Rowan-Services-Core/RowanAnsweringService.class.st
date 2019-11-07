@@ -15,6 +15,15 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'private' }
+RowanAnsweringService >> addLowerCaseSymbolsIn: theClass To: array [
+  array addAll: theClass selectors.
+  array addAll: theClass class selectors.
+  array addAll: theClass instVarNames.
+  array addAll: theClass class instVarNames.
+  array addAll: theClass classVarNames.
+]
+
 { #category : 'client commands' }
 RowanAnsweringService >> allClassesStartingWith: string [
   answer := SortedCollection new.
@@ -58,6 +67,26 @@ RowanAnsweringService >> autoCommit [
 
 	answer := RowanService autoCommit. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> autocompleteSymbols [
+  | newClassNames newLowerCaseSymbols |
+  newClassNames := Array new.
+  newLowerCaseSymbols := Array new.
+  organizer classes
+    do: [ :cls | 
+      newClassNames add: cls name asString.
+      self addLowerCaseSymbolsIn: cls To: newLowerCaseSymbols ].
+  newLowerCaseSymbols := newLowerCaseSymbols asSet asArray.
+  SessionTemps current
+    at: #'autocompleteSymbolCache'
+    put: (Array with: newClassNames with: newLowerCaseSymbols).
+  answer := Array
+    with: newClassNames asOrderedCollection
+    with: newLowerCaseSymbols asOrderedCollection.
+  updateType := #'updateSymbols:'.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
@@ -375,4 +404,31 @@ RowanAnsweringService >> turnOffTranscriptWrites [
 
 	self isTranscriptInstalled ifTrue:[
 		self flipTranscript]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> updateAutocompleteSymbols [
+  | cache newClassNames newLowerCaseSymbols |
+  cache := SessionTemps current
+    at: #'autocompleteSymbolCache'
+    ifAbsent: [ ^ self	"autocomplete not activated" ].
+  newClassNames := Array new.
+  newLowerCaseSymbols := Array new.
+  organizer classes
+    do: [ :cls | 
+      (cache first includes: cls name asString)
+        ifFalse: [ newClassNames add: cls name asString ].
+      self addLowerCaseSymbolsIn: cls To: newLowerCaseSymbols ].
+  (SessionTemps current at: #'autocompleteSymbolCache') first
+    addAll: newClassNames.
+  newLowerCaseSymbols := newLowerCaseSymbols asSet asArray.
+  cache last
+    do: [ :selector | 
+      (newLowerCaseSymbols includes: selector)
+        ifTrue: [ newLowerCaseSymbols remove: selector ] ].
+  (SessionTemps current at: #'autocompleteSymbolCache') last
+    addAll: newLowerCaseSymbols.
+  answer := Array with: newClassNames with: newLowerCaseSymbols.
+  updateType := #'updateSymbols:'.
+  RowanCommandResult addResult: self
 ]

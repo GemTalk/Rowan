@@ -1,0 +1,20 @@
+#
+# install Rowan into a default extent0.dbf: Portable Streams and Legacy String comparison 
+#
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+	run
+	Unicode16 usingUnicodeCompares 
+		ifTrue: [ self error: 'Expected to be in Legacy String comparison mode' ].
+	PositionableStream isLegacyStreamImplementation
+		ifTrue: [ self error: 'Expected to be using Portable streams' ].
+%
+
+  logout
+  input  $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install.tpz
+
