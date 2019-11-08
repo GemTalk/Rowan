@@ -168,7 +168,7 @@ RwRowanSample7Test >> testCreateComponentProject [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox pathString.
 
 "create project definition"
 	cpd := RwComponentProjectDefinition
@@ -285,12 +285,12 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 "1. clone RowanSample7 using non-component API (v1.2.x style)"
 	specUrlString :=  self _rowanSample7SpecificationUrl_12x.
 	projectSpec_1 := specUrlString asRwUrl asSpecification.
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -359,7 +359,7 @@ RwRowanSample7Test >> testCreateProjectReference [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox pathString.
 
 "create definition"
 	prd := RwProjectReferenceDefinition
@@ -401,7 +401,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	projectSpec := RwComponentSpecification new
 		specName: projectName;
@@ -441,7 +441,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -476,7 +476,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinition [
 	| rowanProject gitRootPath repositoryName repositoryDefinition_1  repositoryDefinition_2 repoRoot
 		projectVersionString gitHubProjectUrl gitHubRemoteUrl x y |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	repositoryName := 'RowanSample7'.
 	repoRoot := gitRootPath asFileReference / repositoryName.
@@ -570,7 +570,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -599,7 +599,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := FileLocator rowanProjectsHome resolve / 'Rowan/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -651,7 +651,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox pathString.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -709,7 +709,7 @@ RwRowanSample7Test >> testResolveRepositoryDefinition [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := (rowanProject repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.

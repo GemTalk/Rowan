@@ -18,6 +18,17 @@ RowanServicesTest class >> isAbstract [
 	^self sunitName = #RowanServicesTest
 ]
 
+{ #category : 'private' }
+RowanServicesTest >> _testRowanProjectsSandbox [
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	| rowanProject |
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX')
+		ifNotNil: [ :sandboxPath | ^ sandboxPath asFileReference ].
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ rowanProject repositoryRoot / 'test/testRepositories/repos/'
+]
+
 { #category : 'unicode method' }
 RowanServicesTest >> addUnicodeSymbolKeyToUserGlobals [
   "RowanServicesTest new addUnicodeSymbolKeyToUserGlobals"
@@ -171,23 +182,21 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 
 { #category : 'support' }
 RowanServicesTest >> loadRowanSample1 [
-  | rowanSpec gitRootPath projectName spec projectTools |
+  | gitRoot projectName spec projectTools |
   projectName := 'RowanSample1'.
   (Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
     ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-  rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-  gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
-  (Rowan fileUtilities directoryExists: gitRootPath , projectName)
-    ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+  gitRoot := self _testRowanProjectsSandbox.
+  (gitRoot / projectName) ensureDeleteAll.
 	spec := 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston' asRwUrl asSpecification.
 	projectTools := Rowan projectTools.
 	projectTools clone
 		cloneSpecification: spec
-		gitRootPath: gitRootPath
+		gitRootPath: gitRoot pathString
 		useSsh: true
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectTools create createProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
+	projectTools create createProjectFromSpecUrl: 'file:', gitRoot pathString, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
 	projectTools load loadProjectNamed: 'RowanSample1'.
 ]
 

@@ -240,7 +240,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
 
 	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
+    projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
@@ -449,7 +449,6 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
-
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Core-ProtocolValidationError.ston'.
 
@@ -894,7 +893,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_Rowan_pharo [
 		projectHome rowanProject projectAlias writerVisitorClass |
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := (rowanProject repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
+	projectHome := self _testRowanProjectsSandbox.
 	projectAlias := 'Rowan_', self _repositoryFormat.
 
 	(projectHome / projectAlias / 'src') 

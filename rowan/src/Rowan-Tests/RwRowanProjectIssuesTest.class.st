@@ -151,7 +151,7 @@ RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 

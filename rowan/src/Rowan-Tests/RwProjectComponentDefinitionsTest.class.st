@@ -17,7 +17,7 @@ RwProjectComponentDefinitionsTest >> testCloneComponentProject [
 	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
 
 	projectDefinition := (urlString asRwUrl asSpecification asDefinition)
-		projectHome: (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference;
+		projectHome: self _testRowanProjectsSandbox;
 		yourself.
 
 "setup"
@@ -200,7 +200,7 @@ RwProjectComponentDefinitionsTest >> testLoadRowanSample1_masterV20 [
 			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectsHome := (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference.
+	projectsHome := self self _testRowanProjectsSandbox.
 
 	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
 	projectSample1Definition := (urlString asRwUrl asSpecification asDefinition)
@@ -237,7 +237,7 @@ RwProjectComponentDefinitionsTest >> testReadComponentProject [
 	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample2_masterV2.ston'.
 
 	projectDefinition := (urlString asRwUrl asSpecification asDefinition)
-		projectHome: (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference;
+		projectHome: self _testRowanProjectsSandbox;
 		yourself.
 
 "setup"

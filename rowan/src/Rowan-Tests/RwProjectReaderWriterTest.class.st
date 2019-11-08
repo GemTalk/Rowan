@@ -49,7 +49,7 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 	className3 := 'Issue361Class3'. 
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox pathString.
 
 
 "create definitions"

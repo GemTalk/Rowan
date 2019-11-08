@@ -142,6 +142,17 @@ RwAbstractTest >> _symbolDictionaryName2 [
 ]
 
 { #category : 'private' }
+RwAbstractTest >> _testRowanProjectsSandbox [
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	| rowanProject |
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX')
+		ifNotNil: [ :sandboxPath | ^ sandboxPath asFileReference ].
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ rowanProject repositoryRoot / 'test/testRepositories/repos/'
+]
+
+{ #category : 'private' }
 RwAbstractTest >> _unmanagedDictionaryName [
 
 	^ self class _unmanagedDictionaryName
