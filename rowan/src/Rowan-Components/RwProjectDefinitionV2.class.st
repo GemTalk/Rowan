@@ -32,6 +32,12 @@ RwProjectDefinitionV2 class >> projectName: projectName comment: commentString [
 		yourself
 ]
 
+{ #category : 'actions' }
+RwProjectDefinitionV2 >> _loadTool [
+
+	^ Rowan projectTools loadV2
+]
+
 { #category : 'visiting' }
 RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 
@@ -348,14 +354,14 @@ RwProjectDefinitionV2 >> key [
 RwProjectDefinitionV2 >> load [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadComponentProjectDefinition: self
+	^ self _loadTool loadProjectDefinition: self
 ]
 
 { #category : 'actions' }
 RwProjectDefinitionV2 >> load: instanceMigrator [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadComponentProjectDefinition: self instanceMigrator: instanceMigrator
+	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 ]
 
 { #category : 'accessing' }

@@ -51,6 +51,12 @@ RwProjectDefinition class >> withProperties: properties packageDefinitions: pack
 		yourself
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> _loadTool [
+
+	^ Rowan projectTools load
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> addOrUpdatePackage: aPackageDefinition [
 
@@ -196,14 +202,14 @@ RwProjectDefinition >> keys [
 RwProjectDefinition >> load [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadProjectDefinition: self
+	^ self _loadTool loadProjectDefinition: self
 ]
 
 { #category : 'actions' }
 RwProjectDefinition >> load: instanceMigrator [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadProjectDefinition: self instanceMigrator: instanceMigrator
+	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 ]
 
 { #category : 'properties' }

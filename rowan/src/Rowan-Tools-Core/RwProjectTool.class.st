@@ -79,6 +79,12 @@ RwProjectTool class >> load [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> loadV2 [
+
+	^RwPrjLoadToolV2 new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> log [
 
 	^RwPrjLogTool new

@@ -13,7 +13,7 @@ RwRowanProjectIssuesTest >> testIssue165 [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -44,7 +44,6 @@ RwRowanProjectIssuesTest >> testIssue165 [
 	self assert: (Rowan projectNames includes: projectName).		"project is visible"
 	self deny: (Rowan packageNames includes: packageName1).	"package is NOT visible"
 	self deny: (Rowan globalNamed: className) notNil.				"class is NOT visible"
-
 ]
 
 { #category : '*rowan-tests-gemstone' }

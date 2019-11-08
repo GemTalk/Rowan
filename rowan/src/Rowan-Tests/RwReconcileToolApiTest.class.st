@@ -25,8 +25,8 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'cypress:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: self _testRowanProjectsSandbox pathString, '/rowanTest/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'cypress:', self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -144,8 +144,8 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'tonel:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: self _testRowanProjectsSandbox pathString, '/rowanTest/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'tonel:', self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -246,7 +246,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 "validate"
 
 	Rowan fileUtilities 
-		readStreamFor: '/tmp/rowanTest/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
+		readStreamFor: self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
 		do: [:fileStream | classFileString := fileStream contents ].
 	self deny: (classFileString includesString: 'classSide')
 ]

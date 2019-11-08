@@ -616,14 +616,14 @@ RwComponentProjectDefinition >> key [
 RwComponentProjectDefinition >> load [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadComponentProjectDefinition: self
+	^ self _loadTool loadComponentProjectDefinition: self
 ]
 
 { #category : 'actions' }
 RwComponentProjectDefinition >> load: instanceMigrator [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadComponentProjectDefinition: self instanceMigrator: instanceMigrator
+	^ self _loadTool loadComponentProjectDefinition: self instanceMigrator: instanceMigrator
 ]
 
 { #category : 'accessing' }

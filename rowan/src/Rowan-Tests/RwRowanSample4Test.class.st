@@ -2000,7 +2000,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath_symLink  := '/tmp/rowan_issue_300/'.
+	gitRootPath_symLink  := self _testRowanProjectsSandbox pathString, '/rowan_issue_300/'.
 	gitRootPath :=  self _testRowanProjectsSandbox / 'issue_300_dir/'.
 
 	commandLine := 'set -e;  rm -rf ', gitRootPath pathString.

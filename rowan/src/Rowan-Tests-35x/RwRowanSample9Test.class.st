@@ -5,16 +5,21 @@ Class {
 }
 
 { #category : 'tests' }
-RwRowanSample9Test >> testCreateNewProject [
+RwRowanSample9Test >> testExportNewProject [
 	| projectName projectDefinition project |
 	projectName := 'RowanSample9'.
 	projectDefinition := self _canonicalRowanSample9ProjectFor: projectName.
-	projectDefinition components
-		do: [ :component | self assert: component validate ].
-	self assert: projectDefinition projectLoadSpecification validate.
-	{(STON toStringPretty: projectDefinition projectLoadSpecification).
-	(STON toStringPretty: projectDefinition)}.
-	projectDefinition load.
+	projectDefinition export.
 	project := Rowan projectNamed: projectName.
 	self assert: project audit isEmpty
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadNewProject [
+	| projectName projectDefinition projects |
+	projectName := 'RowanSample9'.
+	projectDefinition := self _canonicalRowanSample9ProjectFor: projectName.
+	projects := projectDefinition load.
+	self assert: projects size = 1.
+	projects do: [ :project | self assert: project audit isEmpty ]
 ]
