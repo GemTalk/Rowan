@@ -31,6 +31,36 @@ RwProjectLoadSpecificationV2 class >> specName: specName projectName: projectNam
 		yourself
 ]
 
+{ #category : 'private' }
+RwProjectLoadSpecificationV2 >> _validateGemStonePlatformUserIdMap: userIdMap [
+	"ensure that the data structures within the receiver contain valid information:
+		1. platform implementation is responsible for validating platform structures"
+
+	| expectedPropertyMap |
+	expectedPropertyMap := Dictionary new
+		add: #'defaultSymbolDictName' -> CharacterCollection;
+		add: #'defaultMethodEnv' -> SmallInteger;
+		add: #'defaultUseSessionMethodsForExtensions' -> Boolean;
+		yourself.
+	userIdMap
+		keysAndValuesDo: [ :userId :platformPropertiesMap | 
+			platformPropertiesMap
+				keysAndValuesDo: [ :propertyKey :propertyValue | 
+					(expectedPropertyMap includesKey: propertyKey)
+						ifTrue: [ 
+							| expectedClass |
+							expectedClass := expectedPropertyMap at: propertyKey.
+							(propertyValue isKindOf: expectedClass)
+								ifFalse: [ 
+									Error
+										signal:
+											'Value of property (' , propertyKey printString , '->'
+												, propertyValue printString , ') is expected to be class '
+												, expectedClass name asString printString , ' not class '
+												, propertyValue class name asString printString ] ]
+						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
+]
+
 { #category : 'converting' }
 RwProjectLoadSpecificationV2 >> asProjectDefiniton [
 	^ RwProjectDefinitionV2 fromLoadSpecification: self
@@ -206,5 +236,22 @@ RwProjectLoadSpecificationV2 >> validate [
 	"ensure that the data structures within the receiver contain valid information:
 		1. platform implementation is responsible for validating platform structures"
 
+	#(#'commitish' #'componentNames' #'componentsPath' #'groupNames' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName')
+		do: [ :messageName | 
+			(self perform: messageName)
+				ifNil: [ 
+					Error
+						signal:
+							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
+	self platformProperties
+		keysAndValuesDo: [ :platformName :userIdMap | 
+			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
+				ifFalse: [ 
+					Error
+						signal:
+							'Unknown platform name ' , platformName printString
+								, ' in platform properties' ].
+			platformName = 'gemstone'
+				ifTrue: [ self _validateGemStonePlatformUserIdMap: userIdMap ] ].
 	^ true
 ]

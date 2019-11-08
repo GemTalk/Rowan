@@ -15,6 +15,11 @@ Class {
 }
 
 { #category : 'private' }
+RwAbstractProjectLoadComponentV2 class >> _gemstoneSupportedPackagePropertyNames [
+	^ #('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
+]
+
+{ #category : 'private' }
 RwAbstractProjectLoadComponentV2 class >> _readStonFrom: stream [
 	| reader component |
 	(reader := STONReader on: stream) allowComplexMapKeys: true.
@@ -174,7 +179,7 @@ RwAbstractProjectLoadComponentV2 >> _validateGemStonePlatform: allDefinedPackage
 												, ' used in plaform properties map' ].
 							packageProperties
 								keysDo: [ :packagePropertyName | 
-									(#('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
+									(self class _gemstoneSupportedPackagePropertyNames
 										includes: packagePropertyName)
 										ifFalse: [ Error signal: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
 ]

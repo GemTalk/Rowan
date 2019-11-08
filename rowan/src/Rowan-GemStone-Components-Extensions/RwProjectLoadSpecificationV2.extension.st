@@ -75,16 +75,16 @@ RwProjectLoadSpecificationV2 >> gemstoneDefaultUseSessionMethodsForExtensionsFor
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectLoadSpecificationV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: aBool [
+RwProjectLoadSpecificationV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: env [
 
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultMethodEnv put: aBool
+			at: #defaultMethodEnv put: env
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectLoadSpecificationV2 >> gemstoneSetDefaultMethodEnvTo: aBool [
-	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: aBool
+RwProjectLoadSpecificationV2 >> gemstoneSetDefaultMethodEnvTo: env [
+	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: env
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

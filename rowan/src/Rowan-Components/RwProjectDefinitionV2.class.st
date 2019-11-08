@@ -25,6 +25,7 @@ RwProjectDefinitionV2 class >> projectName: projectName comment: commentString [
 	| projectLoadSpecification |
 	projectLoadSpecification := RwProjectLoadSpecificationV2 new
 		projectName: projectName;
+		specName: projectName;
 		yourself.
 	^ (self fromLoadSpecification: projectLoadSpecification)
 		comment: commentString;
