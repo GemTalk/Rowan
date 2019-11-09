@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwAbstractV2Test',
 	#superclass : 'RwAbstractTest',
-	#category : 'Rowan-Tests-35x'
+	#category : 'Rowan-Tests'
 }
 
 { #category : 'private' }
@@ -85,10 +85,10 @@ RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
 			protocol: 'tests';
 		yourself.
 	packageName := projectName , '-GemStone-Extensions'.
-	className := projectName , 'RcArray'.
+	className := projectName , 'RcCounter'.
 	((projectDefinition packageNamed: packageName)
 		addClassNamed: className
-		super: 'RcArray'
+		super: 'RcCounter'
 		category: '*' , packageName asLowercase
 		comment: 'I am an example GemStone class')
 		addClassMethod: 'foo ^1' protocol: 'accessing';

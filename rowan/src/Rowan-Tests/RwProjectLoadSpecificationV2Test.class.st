@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwProjectLoadSpecificationV2Test',
 	#superclass : 'RwAbstractV2Test',
-	#category : 'Rowan-Tests-35x'
+	#category : 'Rowan-Tests'
 }
 
 { #category : 'tests' }
