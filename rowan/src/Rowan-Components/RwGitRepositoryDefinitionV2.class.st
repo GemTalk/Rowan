@@ -2,30 +2,18 @@ Class {
 	#name : 'RwGitRepositoryDefinitionV2',
 	#superclass : 'RwDiskRepositoryDefinitionV2',
 	#instVars : [
-		'gitRoot',
 		'remoteUrl'
 	],
 	#category : 'Rowan-Components'
 }
 
 { #category : 'instance creation' }
-RwGitRepositoryDefinitionV2 class >> newNamed: repositoryName forSpecification: aRwSpecification repositoryRoot: repoRoot [
-
-	^ (super newNamed: repositoryName forSpecification: aRwSpecification repositoryRoot: repoRoot)
-		committish: aRwSpecification repoSpec committish committishType: aRwSpecification repoSpec committishType;
-		remoteUrl: aRwSpecification remoteUrl;
-		yourself
-]
-
-{ #category : 'instance creation' }
-RwGitRepositoryDefinitionV2 class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString remoteUrl: aRemoreUrlStrng committish: committish committishType:committishType [
-
+RwGitRepositoryDefinitionV2 class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: aProjectUrlStrng committish: committish [
 	^ self new
 		name: repositoryName;
 		repositoryRoot: repoRoot;
-		projectUrl: anUrlString;
-		remoteUrl: aRemoreUrlStrng;
-		committish: committish committishType:committishType;
+		projectUrl: aProjectUrlStrng;
+		committish: committish;
 		yourself
 ]
 
@@ -85,24 +73,24 @@ RwGitRepositoryDefinitionV2 >> doCommit: message [
 ]
 
 { #category : 'accessing' }
-RwGitRepositoryDefinitionV2 >> gitRoot [
-	"The root directory of the git repository that the project is located in. If the project is not git based
-		or the git root is not explicitly assigned, git root is synonymous with repository root."
+RwGitRepositoryDefinitionV2 >> projectUrl: aProjectUrlStrng [
 
-	^ self properties at: 'gitRoot' ifAbsent: [ self repositoryRoot ]
-]
-
-{ #category : 'accessing' }
-RwGitRepositoryDefinitionV2 >> gitRoot: aGitRootReferenceOrString [
-
-	aGitRootReferenceOrString ifNil: [ ^ self properties removeKey: 'gitRoot' ifAbsent: [] ].
-	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
+	| aProjectUrl aRemoteUrl segments |
+	aProjectUrlStrng
+		ifTrue: [ ^ self ].
+	aProjectUrl := RwUrl fromString: aProjectUrlStrng.
+	aRemoteUrl := 'git@' , aProjectUrl authority , ':'.
+	segments := aProjectUrl segments.
+	aRemoteUrl := segments size = 1
+		ifTrue: [ aRemoteUrl , (segments at: 1) , '.git ' ]
+		ifFalse: [ aRemoteUrl , (segments at: 1) , '/' , (aProjectUrl segments at: 2) , '.git ' ].
+	^ self remoteUrl: aRemoteUrl
 ]
 
 { #category : 'accessing' }
 RwGitRepositoryDefinitionV2 >> remoteUrl [
 
-	^ remoteUrl ifNil: [ remoteUrl := self _createRemoteUrl ]
+	^ remoteUrl
 ]
 
 { #category : 'accessing' }
@@ -123,11 +111,8 @@ RwGitRepositoryDefinitionV2 >> repositoryCommitId [
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> resolve [
+	"attach to existing repository structure or create"
 
-	"attach to existing git repository structure, clone, or create"
-
-	"who wins? resolve or clone"
-
-	Rowan projectTools clone
-		cloneRepository: self
+	self repositoryRoot exists
+		ifFalse: [ self clone ]
 ]

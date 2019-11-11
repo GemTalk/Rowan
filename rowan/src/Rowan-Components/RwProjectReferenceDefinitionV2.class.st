@@ -3,8 +3,7 @@ Class {
 	#superclass : 'RwDefinition',
 	#instVars : [
 		'projectName',
-		'projectLoadSpecification',
-		'repositoryDefinition'
+		'projectLoadSpecification'
 	],
 	#category : 'Rowan-Components'
 }
@@ -398,16 +397,9 @@ RwProjectReferenceDefinitionV2 >> repositoryCommitId [
 	^ self repositoryDefinition repositoryCommitId
 ]
 
-{ #category : 'accessing' }
+{ #category : 'other' }
 RwProjectReferenceDefinitionV2 >> repositoryDefinition [
-
-	^ repositoryDefinition ifNil:  [ repositoryDefinition := self _repositoryDefinitionForProjectHome: self projectHome ]
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> repositoryDefinition: aRepositoryDefinition [
-
-	repositoryDefinition := aRepositoryDefinition
+	^self projectLoadSpecification repositoryDefinition
 ]
 
 { #category : 'accessing' }

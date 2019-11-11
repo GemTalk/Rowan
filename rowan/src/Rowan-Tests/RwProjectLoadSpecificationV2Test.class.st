@@ -28,6 +28,30 @@ RwProjectLoadSpecificationV2Test >> testBasic [
 ]
 
 { #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testBasicResolve [
+	"excercise basic functionality"
+
+	| projectName projectAlias loadSpecification stonString projectsHome repositoryRoot |
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	projectsHome := self _testRowanProjectsSandbox.
+	repositoryRoot := projectsHome / projectAlias.
+	repositoryRoot ensureDeleteAll.
+	self deny: repositoryRoot exists.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	self assert: loadSpecification validate.
+	loadSpecification resolve: projectsHome.
+	self assert: repositoryRoot exists.
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+false
+	ifTrue: [ stonString halt	"what does resolve return? I would think it would return a project definition" ]
+]
+
+{ #category : 'tests' }
 RwProjectLoadSpecificationV2Test >> testInvalidPropertyValue [
 	"error coverage for invalid load specs"
 
@@ -95,7 +119,6 @@ RwProjectLoadSpecificationV2Test >> testNilInstanceVariable [
 	specName := projectName , 'Core'.
 	loadSpecification := RwProjectLoadSpecificationV2 new
 		projectName: projectName;
-		specName: specName;
 		projectsPath: nil;
 		yourself.
 	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"

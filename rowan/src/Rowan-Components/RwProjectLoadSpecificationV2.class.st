@@ -17,7 +17,8 @@ Class {
 		'comment',
 		'componentNames',
 		'groupNames',
-		'platformProperties'
+		'platformProperties',
+		'repositoryDefinition'
 	],
 	#category : 'Rowan-Components'
 }
@@ -145,6 +146,14 @@ RwProjectLoadSpecificationV2 >> initialize [
 	projectName := 'ProjectName'
 ]
 
+{ #category : 'initialization' }
+RwProjectLoadSpecificationV2 >> initializeForExport [
+  "if spec has been exported, clear out any of the fields that represent local disk state"
+
+	super initializeForExport.
+	repositoryDefinition := nil
+]
+
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> packagesPath [
 
@@ -201,7 +210,7 @@ RwProjectLoadSpecificationV2 >> projectsPath: aString [
 
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> projectUrl [
-	^ projectUrl ifNil: [ '' ]
+	^ projectUrl
 ]
 
 { #category : 'accessing' }
@@ -210,9 +219,40 @@ RwProjectLoadSpecificationV2 >> projectUrl: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> repositoryDefinition [
+	^ repositoryDefinition
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> repositoryDefinition: aRwRepositoryDefinition [
+	repositoryDefinition := aRwRepositoryDefinition
+]
+
+{ #category : 'actions' }
+RwProjectLoadSpecificationV2 >> resolve [
+	^ self resolve: FileLocator rowanProjectsHome
+]
+
+{ #category : 'actions' }
+RwProjectLoadSpecificationV2 >> resolve: aProjectHomePath [
+	repositoryDefinition := self projectUrl
+		ifNil: [ 
+			RwDiskRepositoryDefinitionV2
+				newNamed: self projectAlias
+				repositoryRoot: aProjectHomePath asFileReference / self projectAlias ]
+		ifNotNil: [ :urlString | 
+			RwGitRepositoryDefinitionV2
+				newNamed: self projectAlias
+				repositoryRoot: aProjectHomePath asFileReference / self projectAlias
+				projectUrl: urlString
+				committish: self commitish ].
+	repositoryDefinition resolve
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> specName [
 
-	^ specName
+	^ specName ifNil: [ self projectName ]
 ]
 
 { #category : 'accessing' }
