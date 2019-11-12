@@ -16,5 +16,6 @@ RwProjectDefinitionV2Test >> testBasic [
 		yourself.
 	self assert: loadSpecification validate.
 	projectDefinition := loadSpecification resolve: self _testRowanProjectsSandbox.
-	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition.
+	stonString := STON toStringPretty: projectDefinition	"useful in case of error"
 ]

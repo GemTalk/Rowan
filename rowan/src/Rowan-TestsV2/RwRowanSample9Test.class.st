@@ -6,19 +6,39 @@ Class {
 
 { #category : 'tests' }
 RwRowanSample9Test >> testExportNewProject [
-	| projectName projectDefinition project |
+	| projectName projectAlias loadSpecification stonString projectDefinition1 projectDefinition2 projectModification |
 	projectName := 'RowanSample9'.
-	projectDefinition := self _canonicalRowanSample9ProjectFor: projectName.
-	projectDefinition export.
-	project := Rowan projectNamed: projectName.
-	self assert: project audit isEmpty
+	projectAlias := projectName , '_Test'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	self assert: loadSpecification validate.
+	projectDefinition1 := loadSpecification resolve: self _testRowanProjectsSandbox.
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition1.
+	stonString := STON toStringPretty: projectDefinition1.	"useful in case of error"
+	projectDefinition1 export.
+	projectDefinition2 := loadSpecification resolve.
+	projectModification := projectDefinition2
+		compareAgainstBase: projectDefinition1.
+	self assert: projectModification isEmpty
 ]
 
 { #category : 'tests' }
 RwRowanSample9Test >> testLoadNewProject [
-	| projectName projectDefinition projects |
+	| projectName projectAlias loadSpecification stonString projectDefinition projects |
 	projectName := 'RowanSample9'.
-	projectDefinition := self _canonicalRowanSample9ProjectFor: projectName.
+	projectAlias := projectName , '_Test'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	self assert: loadSpecification validate.
+	projectDefinition := loadSpecification resolve: self _testRowanProjectsSandbox.
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition.
+	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
 	projects := projectDefinition load.
 	self assert: projects size = 1.
 	projects do: [ :project | self assert: project audit isEmpty ]

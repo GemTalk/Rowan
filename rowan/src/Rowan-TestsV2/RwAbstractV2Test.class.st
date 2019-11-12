@@ -32,15 +32,10 @@ RwAbstractV2Test class >> _symbolDictionaryNames [
 ]
 
 { #category : 'private' }
-RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
-	| loadSpecification projectDefinition packageName className |
-	loadSpecification := RwProjectLoadSpecificationV2 new
-		projectName: projectName;
-		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
-		gemstoneSetDefaultMethodEnvTo: 0;
-		yourself.
-	projectDefinition := (loadSpecification resolve: self _testRowanProjectsSandbox)
+RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition [
+	| projectName packageName className |
+	projectName := projectDefinition projectName.
+	projectDefinition
 		comment: 'Project created using the V2 project creation api ';
 		addComponentNamed: 'Core'
 			definedGroupNames:
@@ -108,6 +103,19 @@ RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
 		do: [ :component | self assert: component validate ].
 	self assert: projectDefinition projectLoadSpecification validate.
 	^ projectDefinition
+]
+
+{ #category : 'private' }
+RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
+	| loadSpecification projectDefinition |
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		yourself.
+	projectDefinition := loadSpecification resolve: self _testRowanProjectsSandbox.
+	^ self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition
 ]
 
 { #category : 'private' }
