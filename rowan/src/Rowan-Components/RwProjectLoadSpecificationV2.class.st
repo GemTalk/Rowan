@@ -26,6 +26,29 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'actions' }
+RwProjectLoadSpecificationV2 >> _resolve: aProjectHomePath [
+	repositoryDefinition := self gitUrl
+		ifNotNil: [ :urlString | 
+			RwGitRepositoryDefinitionV2
+				newNamed: self projectAlias
+				repositoryRoot: aProjectHomePath asFileReference / self projectAlias
+				repositoryUrl: urlString
+				committish: self revision ]
+		ifNil: [ 
+			repositoryDefinition := self svnUrl
+				ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
+				ifNil: [ 
+					repositoryDefinition := self mercurialUrl
+						ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
+						ifNil: [ 
+							RwDiskRepositoryDefinitionV2
+								newNamed: self projectAlias
+								repositoryRoot: aProjectHomePath asFileReference / self projectAlias
+								repositoryUrl: self diskUrl ] ] ].
+	repositoryDefinition resolve.
+]
+
 { #category : 'private' }
 RwProjectLoadSpecificationV2 >> _validateGemStonePlatformUserIdMap: userIdMap [
 	"ensure that the data structures within the receiver contain valid information:
@@ -183,6 +206,14 @@ RwProjectLoadSpecificationV2 >> platformProperties [
 	^ platformProperties ifNil: [ platformProperties := Dictionary new ]
 ]
 
+{ #category : 'copying' }
+RwProjectLoadSpecificationV2 >> postCopy [
+	"don't forget to copy any compound state objects"
+
+	super postCopy.
+	repositoryDefinition := nil	"repositoryDefinition should not survive a copy?"
+]
+
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> projectAlias [
 	"project alias is used as the name of the root directory for the project ... necessary if the project is 
@@ -222,6 +253,15 @@ RwProjectLoadSpecificationV2 >> projectsPath: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> projectUrl [
+	gitUrl ifNotNil: [ :urlString | ^ urlString ].
+	diskUrl ifNotNil: [ :urlString | ^ urlString ].
+	mercurialUrl ifNotNil: [ :urlString | ^ urlString ].
+	svnUrl ifNotNil: [ :urlString | ^ urlString ].
+	^ self error: 'internal error - no projectUrl has been defined'
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> repositoryDefinition [
 	^ repositoryDefinition
 ]
@@ -238,26 +278,10 @@ RwProjectLoadSpecificationV2 >> resolve [
 
 { #category : 'actions' }
 RwProjectLoadSpecificationV2 >> resolve: aProjectHomePath [
-	repositoryDefinition := self gitUrl
-		ifNotNil: [ :urlString | 
-			RwGitRepositoryDefinitionV2
-				newNamed: self projectAlias
-				repositoryRoot: aProjectHomePath asFileReference / self projectAlias
-				repositoryUrl: urlString
-				committish: self revision ]
-		ifNil: [ 
-			repositoryDefinition := self svnUrl
-				ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
-				ifNil: [ 
-					repositoryDefinition := self mercurialUrl
-						ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
-						ifNil: [ 
-							RwDiskRepositoryDefinitionV2
-								newNamed: self projectAlias
-								repositoryRoot: aProjectHomePath asFileReference / self projectAlias
-								repositoryUrl: self diskUrl ] ] ].
-	repositoryDefinition resolve.
-	^ RwProjectDefinitionV2 fromLoadSpecification: self
+	| projectDefinition |
+	projectDefinition := RwProjectDefinitionV2 fromLoadSpecification: self.	"a copy of the receiver is made when it is added to the new project definition"
+	projectDefinition projectLoadSpecification _resolve: aProjectHomePath.	"actual resolve needs to be made in the context of the new project definition and load specification"
+	^ projectDefinition
 ]
 
 { #category : 'accessing' }

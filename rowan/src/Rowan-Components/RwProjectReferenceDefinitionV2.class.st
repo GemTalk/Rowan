@@ -11,7 +11,6 @@ Class {
 { #category : 'instance creation' }
 RwProjectReferenceDefinitionV2 class >> fromLoadSpecification: aRwProjectLoadSpecification [
 	^ self new
-		projectName: aRwProjectLoadSpecification projectName;
 		projectLoadSpecification: aRwProjectLoadSpecification;
 		yourself
 ]
@@ -317,23 +316,15 @@ RwProjectReferenceDefinitionV2 >> projectLoadSpecification [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectLoadSpecification: aRwProjectLoadSpecification [
-	projectLoadSpecification := aRwProjectLoadSpecification
+	"make a copy of the aRwProjectLoadSpecification, because we need to preserve
+		isolation of the load spec once it has been associated with the project definition"
+
+	projectLoadSpecification := aRwProjectLoadSpecification copy
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectName [
 	^ self projectLoadSpecification projectName
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> projectName: aString [
-	self repositoryDefinition
-		ifNotNil: [ 
-			"self repositoryDefinition: nil."
-			self
-				error:
-					'internal error - deferring decision as to what happens when a project name is renamed until later' ].
-	self projectLoadSpecification: aString
 ]
 
 { #category : 'accessing' }
@@ -519,7 +510,7 @@ RwProjectReferenceDefinitionV2 >> validateRepository [
 	"cofirm that the repository appears to be complete relative to this project"
 
 	{
-		'configs' -> self configsRoot. 
+		'configs' -> self componentsRoot. 
 		'packages' -> self packagesRoot. 
 		'specs' -> self specsRoot. 
 		'projects' -> self projectsRoot
