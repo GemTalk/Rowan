@@ -31,13 +31,13 @@ RwProjectLoadSpecificationV2Test >> testBasic [
 RwProjectLoadSpecificationV2Test >> testBasicResolve [
 	"excercise basic functionality"
 
-	| projectName projectAlias loadSpecification stonString projectsHome repositoryRoot |
+	| projectName projectAlias loadSpecification stonString projectsHome expectedRepositoryRoot |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
-	repositoryRoot := projectsHome / projectAlias.
-	repositoryRoot ensureDeleteAll.
-	self deny: repositoryRoot exists.
+	expectedRepositoryRoot := projectsHome / projectAlias.
+	expectedRepositoryRoot ensureDeleteAll.
+	self deny: expectedRepositoryRoot exists.
 	loadSpecification := RwProjectLoadSpecificationV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
@@ -45,7 +45,7 @@ RwProjectLoadSpecificationV2Test >> testBasicResolve [
 		yourself.
 	self assert: loadSpecification validate.
 	loadSpecification resolve: projectsHome.
-	self assert: repositoryRoot exists.
+	self assert: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
 false
 	ifTrue: [ stonString halt	"what does resolve return? I would think it would return a project definition" ]
@@ -111,6 +111,58 @@ RwProjectLoadSpecificationV2Test >> testInvalidPropertyValueForUser [
 ]
 
 { #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testInvalidRevision [
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		revision: 'boom';
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Invalid revision ''boom''. Should be nil for disk-based repository'.
+			hitError := true ].
+	self assert: hitError
+]
+
+{ #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testMissingRevision [
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/', projectName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: The instance variable ''revision'' must be set for the''gitUrl'''.
+			hitError := true ].
+	self assert: hitError
+]
+
+{ #category : 'tests' }
 RwProjectLoadSpecificationV2Test >> testNilInstanceVariable [
 	"error coverage for invalid load specs"
 
@@ -130,6 +182,32 @@ RwProjectLoadSpecificationV2Test >> testNilInstanceVariable [
 			self
 				assert:
 					(x := ex description) = 'Error: The instance variable ''projectsPath'' cannot be nil'.
+			hitError := true ].
+	self assert: hitError
+]
+
+{ #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testOnlyOneRepositoryUrl [
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		diskUrl: 'ftp://$ROWAN_PROJECTS_HOME/' , projectName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set'.
 			hitError := true ].
 	self assert: hitError
 ]

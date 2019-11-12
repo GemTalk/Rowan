@@ -9,8 +9,11 @@ Class {
 		'projectName',
 		'projectAlias',
 		'projectsPath',
-		'projectUrl',
-		'commitish',
+		'revision',
+		'gitUrl',
+		'diskUrl',
+		'mercurialUrl',
+		'svnUrl',
 		'componentsPath',
 		'specsPath',
 		'packagesPath',
@@ -22,15 +25,6 @@ Class {
 	],
 	#category : 'Rowan-Components'
 }
-
-{ #category : 'instance creation' }
-RwProjectLoadSpecificationV2 class >> specName: specName projectName: projectName comment: commentString [
-	^ self new
-		specName: projectName;
-		projectName: projectName;
-		comment: commentString;
-		yourself
-]
 
 { #category : 'private' }
 RwProjectLoadSpecificationV2 >> _validateGemStonePlatformUserIdMap: userIdMap [
@@ -85,16 +79,6 @@ RwProjectLoadSpecificationV2 >> comment: aString [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecificationV2 >> commitish [
-	^ commitish
-]
-
-{ #category : 'accessing' }
-RwProjectLoadSpecificationV2 >> commitish: aString [
-	commitish := aString
-]
-
-{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> componentNames [
 	^ componentNames
 ]
@@ -124,6 +108,26 @@ RwProjectLoadSpecificationV2 >> currentVersion [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> diskUrl [
+	^ diskUrl
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> diskUrl: anUrlString [
+	diskUrl := anUrlString
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> gitUrl [
+	^ gitUrl
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> gitUrl: anUrlString [
+	gitUrl := anUrlString
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> groupNames [
 	^ groupNames
 ]
@@ -136,7 +140,6 @@ RwProjectLoadSpecificationV2 >> groupNames: anArray [
 { #category : 'initialization' }
 RwProjectLoadSpecificationV2 >> initialize [
 	super initialize.
-	commitish := 'master'.
 	componentNames := #('Core').
 	componentsPath := 'rowan/components'.
 	groupNames := #('core' 'tests').
@@ -152,6 +155,16 @@ RwProjectLoadSpecificationV2 >> initializeForExport [
 
 	super initializeForExport.
 	repositoryDefinition := nil
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> mercurialUrl [
+	^ mercurialUrl
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> mercurialUrl: anUrlString [
+	mercurialUrl := anUrlString
 ]
 
 { #category : 'accessing' }
@@ -209,16 +222,6 @@ RwProjectLoadSpecificationV2 >> projectsPath: aString [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecificationV2 >> projectUrl [
-	^ projectUrl
-]
-
-{ #category : 'accessing' }
-RwProjectLoadSpecificationV2 >> projectUrl: aString [
-	projectUrl := aString
-]
-
-{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> repositoryDefinition [
 	^ repositoryDefinition
 ]
@@ -235,18 +238,39 @@ RwProjectLoadSpecificationV2 >> resolve [
 
 { #category : 'actions' }
 RwProjectLoadSpecificationV2 >> resolve: aProjectHomePath [
-	repositoryDefinition := self projectUrl
-		ifNil: [ 
-			RwDiskRepositoryDefinitionV2
-				newNamed: self projectAlias
-				repositoryRoot: aProjectHomePath asFileReference / self projectAlias ]
+	repositoryDefinition := self gitUrl
 		ifNotNil: [ :urlString | 
 			RwGitRepositoryDefinitionV2
 				newNamed: self projectAlias
 				repositoryRoot: aProjectHomePath asFileReference / self projectAlias
-				projectUrl: urlString
-				committish: self commitish ].
+				repositoryUrl: urlString
+				committish: self revision ]
+		ifNil: [ 
+			repositoryDefinition := self svnUrl
+				ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
+				ifNil: [ 
+					repositoryDefinition := self mercurialUrl
+						ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
+						ifNil: [ 
+							RwDiskRepositoryDefinitionV2
+								newNamed: self projectAlias
+								repositoryRoot: aProjectHomePath asFileReference / self projectAlias
+								repositoryUrl: self diskUrl ] ] ].
 	repositoryDefinition resolve
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> revision [
+	" git :: committish; svn :: revision; mercurial :: changeset; disk :: empty string"
+
+	^ revision
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> revision: aRevisionString [
+	" git :: committish; svn :: revision; mercurial :: changeset; disk :: empty string"
+
+	^ revision := aRevisionString
 ]
 
 { #category : 'accessing' }
@@ -271,26 +295,54 @@ RwProjectLoadSpecificationV2 >> specsPath: aString [
 	specsPath := aString
 ]
 
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> svnUrl [
+	^ svnUrl
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> svnUrlUrl: anUrlString [
+	svnUrl := anUrlString
+]
+
 { #category : 'private' }
 RwProjectLoadSpecificationV2 >> validate [
 	"ensure that the data structures within the receiver contain valid information:
 		1. platform implementation is responsible for validating platform structures"
 
-	#(#'commitish' #'componentNames' #'componentsPath' #'groupNames' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName')
+	| repoUrls |
+	#(#'componentNames' #'componentsPath' #'groupNames' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName')
 		do: [ :messageName | 
 			(self perform: messageName)
 				ifNil: [ 
 					Error
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
+	repoUrls := {}.
+	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
+		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
+	repoUrls size > 1
+		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
+	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
+		ifTrue: [ 
+			self revision
+				ifNotNil: [ :rev | 
+					Error
+						signal:
+							'Invalid revision ' , rev printString
+								, '. Should be nil for disk-based repository' ] ]
+		ifFalse: [ 
+			Error
+				signal:
+					'The instance variable ''revision'' must be set for the'
+						, (repoUrls at: 1) asString printString ].
 	self platformProperties
 		keysAndValuesDo: [ :platformName :userIdMap | 
 			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
 					Error
 						signal:
-							'Unknown platform name ' , platformName printString
-								, ' in platform properties' ].
+							'Unknown platform name ' , platformName printString , ' in platform properties' ].
 			platformName = 'gemstone'
 				ifTrue: [ self _validateGemStonePlatformUserIdMap: userIdMap ] ].
 	^ true

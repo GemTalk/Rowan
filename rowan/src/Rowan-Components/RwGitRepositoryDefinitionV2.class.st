@@ -8,12 +8,12 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwGitRepositoryDefinitionV2 class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: aProjectUrlStrng committish: committish [
+RwGitRepositoryDefinitionV2 class >> newNamed: repositoryName repositoryRoot: repoRoot repositoryUrl: aRepositoryUrlString revision: revision [
 	^ self new
 		name: repositoryName;
 		repositoryRoot: repoRoot;
-		projectUrl: aProjectUrlStrng;
-		committish: committish;
+		repositoryUrl: aRepositoryUrlString;
+		revision: revision;
 		yourself
 ]
 
@@ -100,13 +100,16 @@ RwGitRepositoryDefinitionV2 >> remoteUrl: aRemoteUrlString [
 ]
 
 { #category : 'accessing' }
-RwGitRepositoryDefinitionV2 >> repositoryCommitId [
-
-	^ [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
-			on: Error
-			do: [ :ignored | 
-			"most likely no commits yet"
-			'' ]
+RwGitRepositoryDefinitionV2 >> repositoryUrl: aRepositoryUrlStrng [
+	| aRepositoryUrl aRemoteUrl segments |
+	super repositoryUrl: aRepositoryUrlStrng.
+	aRepositoryUrl := RwUrl fromString: aRepositoryUrlStrng.
+	aRemoteUrl := 'git@' , aRepositoryUrl authority , ':'.
+	segments := aRepositoryUrl segments.
+	aRemoteUrl := segments size = 1
+		ifTrue: [ aRemoteUrl , (segments at: 1) , '.git ' ]
+		ifFalse: [ aRemoteUrl , (segments at: 1) , '/' , (aRepositoryUrl segments at: 2) , '.git ' ].
+	^ self remoteUrl: aRemoteUrl
 ]
 
 { #category : 'actions' }
@@ -115,4 +118,13 @@ RwGitRepositoryDefinitionV2 >> resolve [
 
 	self repositoryRoot exists
 		ifFalse: [ self clone ]
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> revision [
+	^ [ Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			'' ]
 ]

@@ -2,17 +2,18 @@ Class {
 	#name : 'RwDiskRepositoryDefinitionV2',
 	#superclass : 'RwDefinition',
 	#instVars : [
-		'repositoryRoot'
+		'repositoryRoot',
+		'repositoryUrl'
 	],
 	#category : 'Rowan-Components'
 }
 
 { #category : 'instance creation' }
-RwDiskRepositoryDefinitionV2 class >> newNamed: repositoryName repositoryRoot: repoRoot [ 
-
+RwDiskRepositoryDefinitionV2 class >> newNamed: repositoryName repositoryRoot: repoRoot repositoryUrl: aRepositoryUrlString [
 	^ self new
 		name: repositoryName;
 		repositoryRoot: repoRoot;
+		repositoryUrl: aRepositoryUrlString;
 		yourself
 ]
 
@@ -73,12 +74,6 @@ RwDiskRepositoryDefinitionV2 >> name: aString [
 	properties at: 'name' put: aString
 ]
 
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> repositoryCommitId [
-
-	^ ''
-]
-
 { #category : 'testing' }
 RwDiskRepositoryDefinitionV2 >> repositoryExists [
 
@@ -97,10 +92,26 @@ RwDiskRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
 	repositoryRoot := pathStringOrReference asFileReference
 ]
 
+{ #category : 'accessing' }
+RwDiskRepositoryDefinitionV2 >> repositoryUrl [
+	^ repositoryUrl
+]
+
+{ #category : 'accessing' }
+RwDiskRepositoryDefinitionV2 >> repositoryUrl: anUrlString [
+	repositoryUrl := anUrlString
+]
+
 { #category : 'actions' }
 RwDiskRepositoryDefinitionV2 >> resolve [
 	"attach to existing repository structure or create"
 
 	self repositoryRoot exists
 		ifFalse: [ self repositoryRoot ensureCreateDirectory ]
+]
+
+{ #category : 'accessing' }
+RwDiskRepositoryDefinitionV2 >> revision [
+
+	^ ''
 ]
