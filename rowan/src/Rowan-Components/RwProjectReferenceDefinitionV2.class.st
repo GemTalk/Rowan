@@ -131,7 +131,7 @@ RwProjectReferenceDefinitionV2 >> componentsPath: aString [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> componentsRoot [
 
-	^self repositoryRoot / self componentsRoot
+	^self repositoryRoot / self componentsPath
 ]
 
 { #category : 'actions' }
@@ -510,7 +510,7 @@ RwProjectReferenceDefinitionV2 >> validateRepository [
 	"cofirm that the repository appears to be complete relative to this project"
 
 	{
-		'configs' -> self componentsRoot. 
+		'components' -> self componentsRoot. 
 		'packages' -> self packagesRoot. 
 		'specs' -> self specsRoot. 
 		'projects' -> self projectsRoot

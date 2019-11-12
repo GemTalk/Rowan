@@ -265,7 +265,7 @@ RwProjectDefinitionV2 >> create [
 { #category : 'actions' }
 RwProjectDefinitionV2 >> export [
 
-	Rowan projectTools write writeComponentProjectDefinition: self
+	Rowan projectTools writeV2 writeProjectDefinition: self
 ]
 
 { #category : 'exporting' }

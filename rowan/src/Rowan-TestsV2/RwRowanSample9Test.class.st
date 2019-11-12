@@ -20,9 +20,10 @@ RwRowanSample9Test >> testExportNewProject [
 	projectRoot ensureDeleteAll.
 	projectDefinition1 := loadSpecification resolve: projectsHome.
 	self assert: projectDefinition1 projectLoadSpecification ~~ loadSpecification.
+	self assert: projectRoot exists.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition1.
 	stonString := STON toStringPretty: projectDefinition1.	"useful in case of error"
-	projectDefinition1 export: projectsHome.
+	projectDefinition1 export.
 	self assert: projectRoot exists.
 	projectDefinition2 := loadSpecification resolve: projectsHome.
 	projectModification := projectDefinition2
