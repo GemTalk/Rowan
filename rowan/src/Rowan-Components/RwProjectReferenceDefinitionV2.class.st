@@ -327,7 +327,12 @@ RwProjectReferenceDefinitionV2 >> projectName [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectName: aString [
-	self repositoryDefinition: nil.	"changing project name invalidates the current repository definition"
+	self repositoryDefinition
+		ifNotNil: [ 
+			"self repositoryDefinition: nil."
+			self
+				error:
+					'internal error - deferring decision as to what happens when a project name is renamed until later' ].
 	self projectLoadSpecification: aString
 ]
 
@@ -397,9 +402,10 @@ RwProjectReferenceDefinitionV2 >> repositoryCommitId [
 	^ self repositoryDefinition repositoryCommitId
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> repositoryDefinition [
-	^self projectLoadSpecification repositoryDefinition
+	projectLoadSpecification ifNil: [ ^ nil ].
+	^ self projectLoadSpecification repositoryDefinition
 ]
 
 { #category : 'accessing' }

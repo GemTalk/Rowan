@@ -33,13 +33,15 @@ RwAbstractV2Test class >> _symbolDictionaryNames [
 
 { #category : 'private' }
 RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
-	| projectDefinition packageName className |
-	projectDefinition := (RwProjectDefinitionV2
-		projectName: projectName
-		comment: 'Project created using the V2 project creation api ')
+	| loadSpecification projectDefinition packageName className |
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
 		gemstoneSetDefaultMethodEnvTo: 0;
+		yourself.
+	projectDefinition := (loadSpecification resolve: self _testRowanProjectsSandbox)
+		comment: 'Project created using the V2 project creation api ';
 		addComponentNamed: 'Core'
 			definedGroupNames:
 				(Dictionary new

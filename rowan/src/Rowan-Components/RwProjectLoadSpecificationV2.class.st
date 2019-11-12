@@ -256,7 +256,8 @@ RwProjectLoadSpecificationV2 >> resolve: aProjectHomePath [
 								newNamed: self projectAlias
 								repositoryRoot: aProjectHomePath asFileReference / self projectAlias
 								repositoryUrl: self diskUrl ] ] ].
-	repositoryDefinition resolve
+	repositoryDefinition resolve.
+	^ RwProjectDefinitionV2 fromLoadSpecification: self
 ]
 
 { #category : 'accessing' }
