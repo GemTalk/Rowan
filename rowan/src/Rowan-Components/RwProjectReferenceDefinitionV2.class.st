@@ -401,9 +401,9 @@ RwProjectReferenceDefinitionV2 >> repositoryDefinition [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> repositoryRoot [
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+	"Root directory of the project. The componentsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^self projectHome / self projectName
+	^ self projectLoadSpecification repositoryDefinition repositoryRoot
 ]
 
 { #category : 'accessing' }
@@ -441,14 +441,6 @@ RwProjectReferenceDefinitionV2 >> repoSpec [
 
 self deprecated: 'temporary method ... simulating RwSpecification api'.
 	^self
-]
-
-{ #category : 'actions' }
-RwProjectReferenceDefinitionV2 >> resolve [
-
-	"who wins? resolve or clone"
-
-	^ self repositoryDefinition resolve
 ]
 
 { #category : 'accessing' }
@@ -503,19 +495,4 @@ RwProjectReferenceDefinitionV2 >> useGit [
 RwProjectReferenceDefinitionV2 >> useGit: aBool [
 
 	^ self properties at: 'useGit' put: aBool
-]
-
-{ #category : 'actions' }
-RwProjectReferenceDefinitionV2 >> validateRepository [
-	"cofirm that the repository appears to be complete relative to this project"
-
-	{
-		'components' -> self componentsRoot. 
-		'packages' -> self packagesRoot. 
-		'specs' -> self specsRoot. 
-		'projects' -> self projectsRoot
-	}
-		do: [ :assoc | 
-			(assoc value) exists 
-				ifFalse: [ self error: 'The repository at ', self repositoryRootPath printString, ' is missing the ', (assoc key) printString, ' directory.'  ] ].
 ]

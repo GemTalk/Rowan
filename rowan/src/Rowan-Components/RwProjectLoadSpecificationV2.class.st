@@ -28,6 +28,14 @@ Class {
 
 { #category : 'actions' }
 RwProjectLoadSpecificationV2 >> _resolve: aProjectHomePath [
+	repositoryDefinition
+		ifNotNil: [ 
+			repositoryDefinition repositoryRoot parent = aProjectHomePath asFileReference
+				ifFalse: [ 
+					Error
+						signal:
+							'repository definition already created and does not match existing repository root' ].
+			^ self ].
 	repositoryDefinition := self gitUrl
 		ifNotNil: [ :urlString | 
 			RwGitRepositoryDefinitionV2
@@ -46,7 +54,7 @@ RwProjectLoadSpecificationV2 >> _resolve: aProjectHomePath [
 								newNamed: self projectAlias
 								repositoryRoot: aProjectHomePath asFileReference / self projectAlias
 								repositoryUrl: self diskUrl ] ] ].
-	repositoryDefinition resolve.
+	repositoryDefinition resolve
 ]
 
 { #category : 'private' }
@@ -281,6 +289,7 @@ RwProjectLoadSpecificationV2 >> resolve: aProjectHomePath [
 	| projectDefinition |
 	projectDefinition := RwProjectDefinitionV2 fromLoadSpecification: self.	"a copy of the receiver is made when it is added to the new project definition"
 	projectDefinition projectLoadSpecification _resolve: aProjectHomePath.	"actual resolve needs to be made in the context of the new project definition and load specification"
+"probably should read the project definition from disk at this point"
 	^ projectDefinition
 ]
 

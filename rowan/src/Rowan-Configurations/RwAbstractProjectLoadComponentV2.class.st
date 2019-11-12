@@ -83,6 +83,32 @@ RwAbstractProjectLoadComponentV2 class >> newNamed: aName for: projectName [
 
 ]
 
+{ #category : 'exporting' }
+RwAbstractProjectLoadComponentV2 >> _exportToUrl: fileUrl [
+
+	| url |
+	url := fileUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			Rowan fileUtilities
+				writeStreamFor: self name , '.ston'
+				in: url pathForDirectory
+				do: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+  url schemeName = 'memory'
+    ifTrue: [ 
+		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
+			writeStreamDo: [ :stream | 
+			  | string |
+			  string := STON toStringPretty: self.
+			  stream nextPutAll: string.
+			  ^ self ] ].
+	^ nil	"otherwise a noop"
+]
+
 { #category : 'private' }
 RwAbstractProjectLoadComponentV2 >> _platformPatternMatcherFor: pattern [
 

@@ -47,6 +47,11 @@ RwProjectTool class >> create [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> createV2 [
+	^ RwPrjCreateToolV2 new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> delete [
 
 	^ RwPrjDeleteTool new
@@ -136,6 +141,11 @@ RwProjectTool class >> test [
 RwProjectTool class >> write [
 
 	^RwPrjWriteTool new
+]
+
+{ #category : 'commands' }
+RwProjectTool class >> writeV2 [
+	^ RwPrjWriteToolV2 new
 ]
 
 { #category : 'smalltalk api' }

@@ -6,7 +6,7 @@ Class {
 
 { #category : 'tests' }
 RwRowanSample9Test >> testExportNewProject [
-	| projectName projectAlias loadSpecification stonString projectDefinition1 projectDefinition2 projectModification projectsHome projectRoot |
+	| projectName projectAlias loadSpecification stonString1 projectDefinition1 projectDefinition2 projectModification projectsHome projectRoot stonString2 |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	loadSpecification := RwProjectLoadSpecificationV2 new
@@ -22,10 +22,11 @@ RwRowanSample9Test >> testExportNewProject [
 	self assert: projectDefinition1 projectLoadSpecification ~~ loadSpecification.
 	self assert: projectRoot exists.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition1.
-	stonString := STON toStringPretty: projectDefinition1.	"useful in case of error"
+	stonString1 := STON toStringPretty: projectDefinition1.	"useful in case of error"
 	projectDefinition1 export.
 	self assert: projectRoot exists.
 	projectDefinition2 := loadSpecification resolve: projectsHome.
+	stonString2 := STON toStringPretty: projectDefinition2.	"useful in case of error"
 	projectModification := projectDefinition2
 		compareAgainstBase: projectDefinition1.
 	self assert: projectModification isEmpty.
@@ -37,7 +38,7 @@ RwRowanSample9Test >> testExportNewProject [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testLoadNewProject [
-	| projectName projectAlias loadSpecification stonString projectDefinition1 projects projectDefinition2 projectModification |
+	| projectName projectAlias loadSpecification stonString projectDefinition1 projects projectDefinition2 projectModification projectsHome projectRoot |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	(Rowan image loadedProjectNamed: projectAlias ifAbsent: [  ])
@@ -48,6 +49,9 @@ RwRowanSample9Test >> testLoadNewProject [
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 	self assert: loadSpecification validate.
+	projectsHome := self _testRowanProjectsSandbox.
+	projectRoot := projectsHome / projectAlias.
+	projectRoot ensureDeleteAll.
 	projectDefinition1 := loadSpecification resolve: self _testRowanProjectsSandbox.
 	self assert: projectDefinition1 projectLoadSpecification ~~ loadSpecification.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition1.
