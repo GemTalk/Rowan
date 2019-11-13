@@ -140,6 +140,7 @@ RwAbstractV2Test >> _sampleSymbolDictionaryName3 [
 { #category : 'private' }
 RwAbstractV2Test >> _specListProjectNames [
 	^ {'RowanSample9'.
+	'RowanSample9_Test'.
 	'RowanSample10'.
 	'RowanSample11'}
 ]
@@ -147,6 +148,16 @@ RwAbstractV2Test >> _specListProjectNames [
 { #category : 'running' }
 RwAbstractV2Test >> setUp [
 	super setUp.
+	self _specListProjectNames
+		do: [ :name | 
+			Rowan
+				projectNamed: name
+				ifPresent: [ :prj | Rowan image _removeLoadedProject: prj _loadedProject ] ]
+]
+
+{ #category : 'running' }
+RwAbstractV2Test >> tearDown [
+	super tearDown.
 	self _specListProjectNames
 		do: [ :name | 
 			Rowan
