@@ -246,7 +246,7 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 		cloneSpecUrl: url
 		gitRootPath: rootPath
 		useSsh: useSsh.
-	RowanBrowserService new updateProjects.
+	(RowanBrowserService new organizer: organizer) updateProjects.
 ]
 
 { #category : 'rowan' }
@@ -373,7 +373,7 @@ RowanProjectService >> reloadProject [
       ex resume ].
   self update.
   RowanCommandResult addResult: self.
-  RowanBrowserService new packagesWithTests
+  (RowanBrowserService new organizer: organizer) packagesWithTests
 ]
 
 { #category : 'rowan' }

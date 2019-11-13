@@ -1155,9 +1155,12 @@ RowanClassService >> updateSymbols: newSymbols [
 RowanClassService >> updateTests [
   "update the test browsers on certain operations"
 
-  RowanBrowserService new packagesWithTests.
-  (RowanPackageService new name: packageName) testClasses.
-  RowanCommandResult addResult: self update.
+  (RowanBrowserService new organizer: organizer) packagesWithTests.
+  (RowanPackageService new
+    organizer: organizer;
+    name: packageName;
+    yourself) testClasses.
+  RowanCommandResult addResult: self update
 ]
 
 { #category : 'Accessing' }

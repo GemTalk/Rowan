@@ -203,26 +203,15 @@ RowanBrowserService >> openWindows [
 RowanBrowserService >> packagesWithTests [
   testPackages := Set new.
   testCount := 0.
-  TestCase allSubclasses
-    do: [ :testSubclass | 
-      | suite |
-      suite := testSubclass buildSuite.
-      suite tests
-        do: [ :testCase | 
-          | packageName compiledMethod |
-          (testCase isKindOf: TestSuite)
-            ifFalse: [ 
-              compiledMethod := testCase class
-                compiledMethodAt: testCase selector
-                otherwise: nil.
-              packageName := compiledMethod
-                ifNil: [ testCase class rowanPackageName ]
-                ifNotNil: [ compiledMethod rowanPackageName ].
-              packageName = Rowan unpackagedName
-                ifFalse: [ 
-                  testCount := testCount + 1.
-                  testPackages
-                    add: (RowanPackageService forPackageNamed: packageName) ] ] ] ].
+  testPackages := Set new.
+  testCount := 0.
+  (organizer allSubclassesOf: TestCase) 
+    do: [ :sub | 
+      | packageName |
+      testCount := testCount + sub testSelectors size.
+      packageName := sub rowanPackageName.
+      packageName = Rowan unpackagedName
+        ifFalse: [ testPackages add: (RowanPackageService forPackageNamed: packageName) ] ].
   updateType := #'testPackages:'.
   testPackages := testPackages asArray.
   RowanCommandResult addResult: self

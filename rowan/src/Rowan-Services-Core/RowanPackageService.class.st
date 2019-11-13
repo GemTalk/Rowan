@@ -247,7 +247,7 @@ RowanPackageService >> removeClass: classService [
 	classService updateType: #removedClass:.
 	classService wasRemoved: true. 
 	RowanCommandResult addResult: classService.
-	RowanBrowserService new packagesWithTests. "sunit browser might need updated"
+	(RowanBrowserService new organizer: organizer) packagesWithTests. "sunit browser might need updated"
 ]
 
 { #category : 'commands support' }
@@ -311,31 +311,29 @@ RowanPackageService >> setDefaultTemplate [
 
 { #category : 'client commands' }
 RowanPackageService >> testClasses [
-  organizer := ClassOrganizer new.
   testClasses := Set new.
-  TestCase allSubclasses
-    do: [ :testSubclass | 
-      testSubclass isAbstract
-        ifFalse: [ 
-          testSubclass suite tests
-            do: [ :testClassInstance | 
-              | implementingClass compiledMethod |
-              compiledMethod := testSubclass
-                compiledMethodAt: testClassInstance selector
-                otherwise: nil.
-              compiledMethod
-                ifNil: [ 
-                  implementingClass := testClassInstance class
-                    whichClassIncludesSelector: testClassInstance selector.
-                  compiledMethod := implementingClass
-                    compiledMethodAt: testClassInstance selector ].
-              (compiledMethod rowanPackageName = name
-                or: [ testSubclass rowanPackageName = name ])
-                ifTrue: [ 
-                  | classService |
-                  classService := RowanClassService
-                    basicForClassNamed: testSubclass name.
-                  testClasses add: classService ] ] ] ].
+  self loadedClasses
+    valuesDo: [ :loadedClass | 
+      | cls |
+      cls := loadedClass handle.
+      (cls inheritsFrom: TestCase)
+        ifTrue: [ 
+          cls isAbstract
+            ifFalse: [ 
+              | classService |
+              classService := RowanClassService basicForClassNamed: cls name.
+              testClasses add: classService ] ] ].
+  self loadedClassExtensions
+    valuesDo: [ :loadedClass | 
+      | cls |
+      cls := loadedClass handle.
+      (cls inheritsFrom: TestCase)
+        ifTrue: [ 
+          cls isAbstract
+            ifFalse: [ 
+              | classService |
+              classService := RowanClassService basicForClassNamed: cls name.
+              testClasses add: classService ] ] ].
   updateType := #'testClasses:'.
   testClasses := testClasses asArray.
   RowanCommandResult addResult: self
