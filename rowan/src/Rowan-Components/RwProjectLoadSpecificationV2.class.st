@@ -9,6 +9,7 @@ Class {
 		'projectName',
 		'projectAlias',
 		'projectsPath',
+		'repoType',
 		'revision',
 		'gitUrl',
 		'diskUrl',
@@ -27,20 +28,19 @@ Class {
 }
 
 { #category : 'actions' }
-RwProjectLoadSpecificationV2 >> _resolve: aProjectHomePath [
+RwProjectLoadSpecificationV2 >> _resolve [
 	repositoryDefinition
 		ifNotNil: [ 
-			repositoryDefinition repositoryRoot parent = aProjectHomePath asFileReference
+			repositoryDefinition repositoryRoot exists
 				ifFalse: [ 
 					Error
 						signal:
-							'repository definition already created and does not match existing repository root' ].
+							'repository root directory does not exist' ].
 			^ self ].
 	repositoryDefinition := self gitUrl
 		ifNotNil: [ :urlString | 
 			RwGitRepositoryDefinitionV2
 				newNamed: self projectAlias
-				repositoryRoot: aProjectHomePath asFileReference / self projectAlias
 				repositoryUrl: urlString
 				committish: self revision ]
 		ifNil: [ 
@@ -52,7 +52,6 @@ RwProjectLoadSpecificationV2 >> _resolve: aProjectHomePath [
 						ifNil: [ 
 							RwDiskRepositoryDefinitionV2
 								newNamed: self projectAlias
-								repositoryRoot: aProjectHomePath asFileReference / self projectAlias
 								repositoryUrl: self diskUrl ] ] ].
 	repositoryDefinition resolve
 ]
@@ -185,7 +184,7 @@ RwProjectLoadSpecificationV2 >> initializeForExport [
   "if spec has been exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	repositoryDefinition := nil
+	repoType := repositoryDefinition := nil
 ]
 
 { #category : 'accessing' }
@@ -279,18 +278,30 @@ RwProjectLoadSpecificationV2 >> repositoryDefinition: aRwRepositoryDefinition [
 	repositoryDefinition := aRwRepositoryDefinition
 ]
 
-{ #category : 'actions' }
-RwProjectLoadSpecificationV2 >> resolve [
-	^ self resolve: FileLocator rowanProjectsHome
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> repoType [
+	^ repoType ifNil: [ repoType := #disk ]
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> repoType: aSymbol [
+	#(#'disk' #'git')
+		includes: aSymbol asSymbol
+		ifFalse: [ self error: 'Unknown repo type ' , aSymbol asSymbol printString ].
+	^ repoType := aSymbol asSymbol
 ]
 
 { #category : 'actions' }
-RwProjectLoadSpecificationV2 >> resolve: aProjectHomePath [
+RwProjectLoadSpecificationV2 >> resolve [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer a project set definition containing the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
 	| projectDefinition existingRepository |
 	projectDefinition := RwProjectDefinitionV2 fromLoadSpecification: self.	"a copy of the receiver is made when it is added to the new project definition"
-	existingRepository := (aProjectHomePath / projectDefinition projectAlias)
-		exists.
-	projectDefinition projectLoadSpecification _resolve: aProjectHomePath.	"actual resolve needs to be made in the context of the new project definition and load specification"
+	existingRepository := projectDefinition repositoryRoot exists.
+	projectDefinition projectLoadSpecification _resolve.	"actual resolve needs to be made in the context of the new project definition and load specification"
 	^ existingRepository
 		ifTrue: [ projectDefinition read ]
 		ifFalse: [ 

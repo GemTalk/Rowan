@@ -128,7 +128,7 @@ RBConfigurableFormatter class >> initialize [
   OneLineMessages := #(#'to:' #'to:do:' #'to:by:' #'to:by:do:').
   PeriodsAtEndOfBlock := false.
   PeriodsAtEndOfMethod := false.
-  RetainBlankLinesBetweenStatements := false.
+  RetainBlankLinesBetweenStatements := true.
   StringFollowingReturn := ' '.
   StringInsideBlocks := ' '.
   StringInsideParentheses := ''.
@@ -832,11 +832,11 @@ RBConfigurableFormatter >> newLines: anInteger [
 RBConfigurableFormatter >> newLinesBeforeStartingAt: anIndex [ 
 	| count cr lf index char |
 	(anIndex isNil or: [anIndex > originalSource size]) ifTrue: [^0].
-	cr := Character value: 13.
-	lf := Character value: 10.
+	cr := Character codePoint: 13.
+	lf := Character codePoint: 10.
 	count := 0.
 	index := anIndex - 1.
-	[index > 0 and: [(char := originalSource at: index) isSqueakSeparator]] 
+	[index > 0 and: [(char := originalSource at: index) isSeparator]] 
 		whileTrue: 
 			[char == lf 
 				ifTrue: 
