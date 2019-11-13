@@ -121,8 +121,13 @@ RwDiskRepositoryDefinitionV2 >> repositoryUrl: anUrlString [
 RwDiskRepositoryDefinitionV2 >> resolve [
 	"attach to existing repository structure or create"
 
-	self repositoryRoot exists
-		ifFalse: [ self repositoryRoot ensureCreateDirectory ]
+	"answer true if attaching to an existing repository"
+
+	^ self repositoryRoot exists
+		ifTrue: [ true ]
+		ifFalse: [ 
+			self repositoryRoot ensureCreateDirectory.
+			false ]
 ]
 
 { #category : 'accessing' }

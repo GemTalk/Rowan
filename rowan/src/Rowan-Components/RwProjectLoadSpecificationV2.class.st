@@ -30,11 +30,13 @@ Class {
 
 { #category : 'actions' }
 RwProjectLoadSpecificationV2 >> _resolve [
+	"answer true if attaching to an existing repository"
+
 	repositoryDefinition
 		ifNotNil: [ 
 			repositoryDefinition repositoryRoot exists
 				ifFalse: [ Error signal: 'repository root directory does not exist' ].
-			^ repositoryDefinition ].
+			^ true ].
 	repositoryDefinition := self gitUrl
 		ifNotNil: [ :urlString | 
 			RwGitRepositoryDefinitionV2
@@ -43,10 +45,10 @@ RwProjectLoadSpecificationV2 >> _resolve [
 				repositoryUrl: urlString
 				revision: self revision ]
 		ifNil: [ 
-			repositoryDefinition := self svnUrl
+			self svnUrl
 				ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
 				ifNil: [ 
-					repositoryDefinition := self mercurialUrl
+					self mercurialUrl
 						ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
 						ifNil: [ 
 							RwDiskRepositoryDefinitionV2
@@ -313,20 +315,14 @@ RwProjectLoadSpecificationV2 >> repoType: aSymbol [
 { #category : 'actions' }
 RwProjectLoadSpecificationV2 >> resolve [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer a project set definition containing the project definition specified by the receiver and any dependent projects"
+		answer  the project definition specified by the receiver and any dependent projects"
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| projectDefinition existingRepository |
+	| projectDefinition |
 	projectDefinition := RwProjectDefinitionV2 fromLoadSpecification: self.	"a copy of the receiver is made when it is added to the new project definition"
 
-	existingRepository := projectDefinition repositoryRoot
-		ifNil: [ false ]
-		ifNotNil: [ :root | root exists ].
-
-	projectDefinition projectLoadSpecification _resolve.	"actual resolve needs to be made in the context of the new project definition and load specification"
-
-	^ existingRepository
+	^ projectDefinition projectLoadSpecification _resolve
 		ifTrue: [ 
 			"read project definition from disk"
 			projectDefinition read ]

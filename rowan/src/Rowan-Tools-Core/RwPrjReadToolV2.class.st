@@ -67,7 +67,7 @@ RwPrjReadToolV2 >> readComponentsForProjectDefinition: projectDefinition withCom
 		ifTrue: [ projectDefinition groupNames ]
 		ifFalse: [ groupNames ].
 	^ self
-		_visitComponents: RwProjectLoadComponentVisitor
+		_visitComponents: RwProjectLoadComponentVisitorV2
 		forProjectDefinition: projectDefinition
 		withComponentNames: theComponentNames
 		groupNames: theGroupNames

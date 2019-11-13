@@ -105,18 +105,23 @@ RwGitRepositoryDefinitionV2 >> repositoryUrl: aRepositoryUrlStrng [
 RwGitRepositoryDefinitionV2 >> resolve [
 	"attach to existing repository structure or create"
 
-	self repositoryUrl asRwUrl scheme = 'file'
+	"answer true if attaching to an existing repository"
+
+	^ self repositoryUrl asRwUrl scheme = 'file'
 		ifTrue: [ 
 			| gitTool "Creatr a new git repository in repository root" |
 			gitTool := Rowan projectTools git.
 			self repositoryRoot ensureCreateDirectory.
 			(gitTool gitPresentIn: self repositoryRoot pathString)
+				ifTrue: [ true ]
 				ifFalse: [ 
 					"create a git repository"
-					gitTool gitinitIn: self repositoryRoot pathString with: '' ] ]
+					gitTool gitinitIn: self repositoryRoot pathString with: ''.
+					false ] ]
 		ifFalse: [ 
 			"clone from remote"
-			self clone ]
+			self clone.
+			true ]
 ]
 
 { #category : 'accessing' }
