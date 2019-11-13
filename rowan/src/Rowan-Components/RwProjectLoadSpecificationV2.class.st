@@ -8,16 +8,17 @@ Class {
 		'specName',
 		'projectName',
 		'projectAlias',
+		'componentsPath',
+		'packagesPath',
 		'projectsPath',
+		'specsPath',
+		'projectsHome',
 		'repoType',
-		'revision',
 		'gitUrl',
 		'diskUrl',
 		'mercurialUrl',
 		'svnUrl',
-		'componentsPath',
-		'specsPath',
-		'packagesPath',
+		'revision',
 		'comment',
 		'componentNames',
 		'groupNames',
@@ -32,17 +33,15 @@ RwProjectLoadSpecificationV2 >> _resolve [
 	repositoryDefinition
 		ifNotNil: [ 
 			repositoryDefinition repositoryRoot exists
-				ifFalse: [ 
-					Error
-						signal:
-							'repository root directory does not exist' ].
-			^ self ].
+				ifFalse: [ Error signal: 'repository root directory does not exist' ].
+			^ repositoryDefinition ].
 	repositoryDefinition := self gitUrl
 		ifNotNil: [ :urlString | 
 			RwGitRepositoryDefinitionV2
 				newNamed: self projectAlias
+				projectsHome: self projectsHome
 				repositoryUrl: urlString
-				committish: self revision ]
+				revision: self revision ]
 		ifNil: [ 
 			repositoryDefinition := self svnUrl
 				ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
@@ -52,8 +51,9 @@ RwProjectLoadSpecificationV2 >> _resolve [
 						ifNil: [ 
 							RwDiskRepositoryDefinitionV2
 								newNamed: self projectAlias
+								projectsHome: self projectsHome
 								repositoryUrl: self diskUrl ] ] ].
-	repositoryDefinition resolve
+	^ repositoryDefinition resolve
 ]
 
 { #category : 'private' }
@@ -181,10 +181,10 @@ RwProjectLoadSpecificationV2 >> initialize [
 
 { #category : 'initialization' }
 RwProjectLoadSpecificationV2 >> initializeForExport [
-  "if spec has been exported, clear out any of the fields that represent local disk state"
+	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	repoType := repositoryDefinition := nil
+	projectsHome := repoType := repositoryDefinition := nil
 ]
 
 { #category : 'accessing' }
@@ -249,6 +249,20 @@ RwProjectLoadSpecificationV2 >> projectName: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> projectsHome [
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	^ projectsHome ifNil: [FileSystem rowanProjectsHome ]
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> projectsHome: aStringOrFileReference [
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	projectsHome := aStringOrFileReference asFileReference
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> projectsPath [
 
 	^ projectsPath
@@ -279,6 +293,11 @@ RwProjectLoadSpecificationV2 >> repositoryDefinition: aRwRepositoryDefinition [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> repositoryRoot [
+	^ repositoryDefinition ifNotNil: [ self repositoryDefinition repositoryRoot ]
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> repoType [
 	^ repoType ifNil: [ repoType := #disk ]
 ]
@@ -300,14 +319,18 @@ RwProjectLoadSpecificationV2 >> resolve [
 
 	| projectDefinition existingRepository |
 	projectDefinition := RwProjectDefinitionV2 fromLoadSpecification: self.	"a copy of the receiver is made when it is added to the new project definition"
-	existingRepository := projectDefinition repositoryRoot exists.
+
+	existingRepository := projectDefinition repositoryRoot
+		ifNil: [ false ]
+		ifNotNil: [ :root | root exists ].
+
 	projectDefinition projectLoadSpecification _resolve.	"actual resolve needs to be made in the context of the new project definition and load specification"
+
 	^ existingRepository
-		ifTrue: [ projectDefinition read ]
-		ifFalse: [ 
-			RwProjectSetDefinition new
-				addProject: projectDefinition;
-				yourself ]
+		ifTrue: [ 
+			"read project definition from disk"
+			projectDefinition read ]
+		ifFalse: [ projectDefinition ]
 ]
 
 { #category : 'accessing' }
@@ -383,10 +406,12 @@ RwProjectLoadSpecificationV2 >> validate [
 							'Invalid revision ' , rev printString
 								, '. Should be nil for disk-based repository' ] ]
 		ifFalse: [ 
-			Error
-				signal:
-					'The instance variable ''revision'' must be set for the'
-						, (repoUrls at: 1) asString printString ].
+			self gitUrl asRwUrl scheme ~= 'file'
+				ifTrue: [ 
+					Error
+						signal:
+							'The instance variable ''revision'' must be set for the'
+								, (repoUrls at: 1) asString printString ] ].
 	self platformProperties
 		keysAndValuesDo: [ :platformName :userIdMap | 
 			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)

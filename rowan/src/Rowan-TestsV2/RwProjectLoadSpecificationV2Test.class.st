@@ -31,24 +31,30 @@ RwProjectLoadSpecificationV2Test >> testBasic [
 RwProjectLoadSpecificationV2Test >> testBasicResolve [
 	"excercise basic functionality"
 
-	| projectName projectAlias loadSpecification stonString projectsHome expectedRepositoryRoot |
+	| projectName projectAlias loadSpecification stonString projectsHome expectedRepositoryRoot projectDefinition |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
 	expectedRepositoryRoot := projectsHome / projectAlias.
-	expectedRepositoryRoot ensureDeleteAll.
+
 	self deny: expectedRepositoryRoot exists.
+
 	loadSpecification := RwProjectLoadSpecificationV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
+		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
+	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
+
 	self assert: loadSpecification validate.
-	loadSpecification resolve: projectsHome.
+
+	projectDefinition := loadSpecification resolve.
+
 	self assert: expectedRepositoryRoot exists.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
-false
-	ifTrue: [ stonString halt	"what does resolve return? I would think it would return a project definition" ]
+	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
+
+	self assert: projectDefinition packageNames isEmpty
 ]
 
 { #category : 'tests' }

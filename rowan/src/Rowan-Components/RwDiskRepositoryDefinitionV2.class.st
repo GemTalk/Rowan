@@ -2,6 +2,7 @@ Class {
 	#name : 'RwDiskRepositoryDefinitionV2',
 	#superclass : 'RwDefinition',
 	#instVars : [
+		'projectsHome',
 		'repositoryRoot',
 		'repositoryUrl'
 	],
@@ -9,10 +10,10 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwDiskRepositoryDefinitionV2 class >> newNamed: repositoryName repositoryRoot: repoRoot repositoryUrl: aRepositoryUrlString [
+RwDiskRepositoryDefinitionV2 class >> newNamed: repositoryName projectsHome: aFileReference repositoryUrl: aRepositoryUrlString [
 	^ self new
 		name: repositoryName;
-		repositoryRoot: repoRoot;
+		projectsHome: aFileReference;
 		repositoryUrl: aRepositoryUrlString;
 		yourself
 ]
@@ -74,6 +75,16 @@ RwDiskRepositoryDefinitionV2 >> name: aString [
 	properties at: 'name' put: aString
 ]
 
+{ #category : 'accessing' }
+RwDiskRepositoryDefinitionV2 >> projectsHome [
+	^ projectsHome
+]
+
+{ #category : 'accessing' }
+RwDiskRepositoryDefinitionV2 >> projectsHome: aFileReference [
+	projectsHome := aFileReference
+]
+
 { #category : 'testing' }
 RwDiskRepositoryDefinitionV2 >> repositoryExists [
 
@@ -85,6 +96,10 @@ RwDiskRepositoryDefinitionV2 >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ repositoryRoot
+		ifNil: [ 
+			repositoryRoot := repositoryUrl
+				ifNotNil: [ :urlString | urlString asRwUrl pathString asFileReference ]
+				ifNil: [ self projectsHome / self name ] ]
 ]
 
 { #category : 'accessing' }

@@ -364,12 +364,6 @@ RwProjectReferenceDefinitionV2 >> projectUrl [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> projectUrl: aString [
-
-	^ self projectLoadSpecification projectUrl: aString
-]
-
-{ #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> remote [
 
 	^ self properties at: 'remote' ifAbsent: [ 'origin' ]
@@ -403,7 +397,7 @@ RwProjectReferenceDefinitionV2 >> repositoryDefinition [
 RwProjectReferenceDefinitionV2 >> repositoryRoot [
 	"Root directory of the project. The componentsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^ self projectLoadSpecification repositoryDefinition repositoryRoot
+	^ self projectLoadSpecification repositoryRoot
 ]
 
 { #category : 'accessing' }

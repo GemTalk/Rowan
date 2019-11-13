@@ -145,14 +145,43 @@ RwAbstractV2Test >> _specListProjectNames [
 	'RowanSample11'}
 ]
 
+{ #category : 'private' }
+RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: projectDefinition [
+	| repositoryRoot projectName |
+	projectName := projectDefinition projectName.
+	repositoryRoot := projectDefinition repositoryRoot.
+	self assert: repositoryRoot exists.
+	{(projectDefinition componentsRoot).
+	(projectDefinition componentsRoot / 'Core.ston').
+	(projectDefinition packagesRoot).
+	(projectDefinition packagesRoot / (projectName , '-Core')).
+	(projectDefinition packagesRoot / (projectName , '-Core')
+		/ (projectName , 'Class1.class.st')).
+	(projectDefinition packagesRoot / (projectName , '-GemStone-Extensions')).
+	(projectDefinition packagesRoot / (projectName , '-GemStone-Extensions')
+		/ (projectName , 'RcCounter.class.st')).
+	(projectDefinition packagesRoot / (projectName , '-GemStone-Tests')).
+	(projectDefinition packagesRoot / (projectName , '-GemStone-Tests')
+		/ (projectName , 'GsTestCase.class.st')).
+	(projectDefinition packagesRoot / (projectName , '-Tests')).
+	(projectDefinition packagesRoot / (projectName , '-Tests')
+		/ (projectName , 'TestCase.class.st')).
+	(projectDefinition specsRoot).
+	(projectDefinition projectsRoot)}
+		do: [ :fileRef | self assert: fileRef exists ]
+]
+
 { #category : 'running' }
 RwAbstractV2Test >> setUp [
+	| projectsHome |
 	super setUp.
+	projectsHome := self _testRowanProjectsSandbox.
 	self _specListProjectNames
 		do: [ :name | 
 			Rowan
 				projectNamed: name
-				ifPresent: [ :prj | Rowan image _removeLoadedProject: prj _loadedProject ] ]
+				ifPresent: [ :prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+			(projectsHome / name) ensureDeleteAll ]
 ]
 
 { #category : 'running' }
