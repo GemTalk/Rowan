@@ -119,6 +119,11 @@ RwProjectTool class >> read [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> readV2 [
+  ^ RwPrjReadToolV2 new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> reconcile [
 
 	^ RwPrjReconcileTool new

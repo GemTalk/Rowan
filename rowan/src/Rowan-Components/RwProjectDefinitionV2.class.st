@@ -519,14 +519,14 @@ RwProjectDefinitionV2 >> projectUrl [
 
 { #category : 'actions' }
 RwProjectDefinitionV2 >> read [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	^ Rowan projectTools read
-		readProjectSetForComponentProjectDefinition: self 
-			withConfigurations: self defaultConfigurationNames
-			groupNames: self defaultGroupNames
+	^ Rowan projectTools readV2
+		readProjectSetForProjectDefinition: self 
+			withComponentNames: self componentNames
+			groupNames: self groupNames
 ]
 
 { #category : 'actions' }

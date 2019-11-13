@@ -15,7 +15,8 @@ RwProjectDefinitionV2Test >> testBasic [
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 	self assert: loadSpecification validate.
-	projectDefinition := loadSpecification resolve: self _testRowanProjectsSandbox.
+	projectDefinition := (loadSpecification resolve: self _testRowanProjectsSandbox)
+		projectNamed: projectAlias.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition.
 	stonString := STON toStringPretty: projectDefinition	"useful in case of error"
 ]

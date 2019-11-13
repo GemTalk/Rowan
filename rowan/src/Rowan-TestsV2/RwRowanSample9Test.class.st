@@ -18,14 +18,16 @@ RwRowanSample9Test >> testExportNewProject [
 	projectsHome := self _testRowanProjectsSandbox.
 	projectRoot := projectsHome / projectAlias.
 	projectRoot ensureDeleteAll.
-	projectDefinition1 := loadSpecification resolve: projectsHome.
+	projectDefinition1 := (loadSpecification resolve: projectsHome)
+		projectNamed: projectAlias.
 	self assert: projectDefinition1 projectLoadSpecification ~~ loadSpecification.
 	self assert: projectRoot exists.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition1.
 	stonString1 := STON toStringPretty: projectDefinition1.	"useful in case of error"
 	projectDefinition1 export.
 	self assert: projectRoot exists.
-	projectDefinition2 := loadSpecification resolve: projectsHome.
+	projectDefinition2 := (loadSpecification resolve: projectsHome)
+		projectNamed: projectAlias.
 	stonString2 := STON toStringPretty: projectDefinition2.	"useful in case of error"
 	projectModification := projectDefinition2
 		compareAgainstBase: projectDefinition1.
@@ -52,7 +54,8 @@ RwRowanSample9Test >> testLoadNewProject [
 	projectsHome := self _testRowanProjectsSandbox.
 	projectRoot := projectsHome / projectAlias.
 	projectRoot ensureDeleteAll.
-	projectDefinition1 := loadSpecification resolve: self _testRowanProjectsSandbox.
+	projectDefinition1 := (loadSpecification
+		resolve: self _testRowanProjectsSandbox) projectNamed: projectAlias.
 	self assert: projectDefinition1 projectLoadSpecification ~~ loadSpecification.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition1.
 	stonString := STON toStringPretty: projectDefinition1.	"useful in case of error"

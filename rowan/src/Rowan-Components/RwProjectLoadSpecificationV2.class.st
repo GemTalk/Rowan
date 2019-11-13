@@ -286,11 +286,17 @@ RwProjectLoadSpecificationV2 >> resolve [
 
 { #category : 'actions' }
 RwProjectLoadSpecificationV2 >> resolve: aProjectHomePath [
-	| projectDefinition |
+	| projectDefinition existingRepository |
 	projectDefinition := RwProjectDefinitionV2 fromLoadSpecification: self.	"a copy of the receiver is made when it is added to the new project definition"
+	existingRepository := (aProjectHomePath / projectDefinition projectAlias)
+		exists.
 	projectDefinition projectLoadSpecification _resolve: aProjectHomePath.	"actual resolve needs to be made in the context of the new project definition and load specification"
-"probably should read the project definition from disk at this point"
-	^ projectDefinition
+	^ existingRepository
+		ifTrue: [ projectDefinition read ]
+		ifFalse: [ 
+			RwProjectSetDefinition new
+				addProject: projectDefinition;
+				yourself ]
 ]
 
 { #category : 'accessing' }

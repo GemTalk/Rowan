@@ -114,7 +114,8 @@ RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
 		gemstoneSetDefaultMethodEnvTo: 0;
 		yourself.
-	projectDefinition := loadSpecification resolve: self _testRowanProjectsSandbox.
+	projectDefinition := (loadSpecification resolve: self _testRowanProjectsSandbox)
+		projectNamed: projectName.
 	^ self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition
 ]
 
