@@ -4,12 +4,12 @@ Class {
 	#instVars : [
 		'packageNames',
 		'packageMapSpecs',
-		'visitedConfigurationNames',
+		'visitedComponentNames',
 		'platformAttributes',
 		'definedGroupNames',
 		'groupNames',
-		'configurationNames',
-		'configurationBasePath'
+		'componentNames',
+		'componentsRoot'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -29,15 +29,15 @@ RwProjectLoadConfigurationVisitorV2 >> _addPackageNames: somePackageNames for: a
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _configurations: configDirPath forProject: aProjectName [
+RwProjectLoadConfigurationVisitorV2 >> _components: componentDirPath forProject: aProjectName [
 
 	| urlBase |
-	self configurationNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,configDirPath asFileReference pathString, '/'.
-	^ self configurationNames
-		collect: [ :configName | 
+	self componentNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
+	^ self componentNames
+		collect: [ :componentName | 
 			| url |
-			url := urlBase , configName , '.ston'.
+			url := urlBase , componentName , '.ston'.
 			(RwAbstractProjectConfiguration fromUrl: url)
 				projectName: aProjectName;
 				yourself ]
@@ -105,7 +105,7 @@ RwProjectLoadConfigurationVisitorV2 >> _processConditionalPackageNames: aProject
 					(self groupNames includes: group)
 						ifTrue: [ 
 							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #()] ) ] ] ] ].
+							self componentNames addAll: (map at: #componentNames ifAbsent: [ #()] ) ] ] ] ].
 
 ]
 
@@ -132,31 +132,25 @@ RwProjectLoadConfigurationVisitorV2 >> _processGroupNames [
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _visited: aConfiguration [
+RwProjectLoadConfigurationVisitorV2 >> _visited: aComponent [
 
-	visitedConfigurationNames add:  aConfiguration name.
-
+	visitedComponentNames add:  aComponent name.
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> configurationBasePath [
+RwProjectLoadConfigurationVisitorV2 >> componentNames [
 
-	^ configurationBasePath
-
+	^ componentNames
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> configurationBasePath: aString [
-
-	configurationBasePath := aString
-
+RwProjectLoadConfigurationVisitorV2 >> componentsRoot [
+	^ componentsRoot
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> configurationNames [
-
-	^ configurationNames
-
+RwProjectLoadConfigurationVisitorV2 >> componentsRoot: aStringOrFileReference [
+	componentsRoot := aStringOrFileReference asFileReference
 ]
 
 { #category : 'accessing' }
@@ -177,11 +171,10 @@ RwProjectLoadConfigurationVisitorV2 >> groupNames: aColl [
 RwProjectLoadConfigurationVisitorV2 >> initialize [
 
 	packageNames := Set new.
-	visitedConfigurationNames := Set new.
-	configurationNames := Set new.
+	visitedComponentNames := Set new.
+	componentNames := Set new.
 	platformAttributes := #().
 	groupNames := Set new.
-	configurationBasePath := ''.
 	packageMapSpecs := Dictionary new.
 ]
 
@@ -213,67 +206,50 @@ RwProjectLoadConfigurationVisitorV2 >> platformAttributes: aColl [
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitorV2 >> visit: aProjectConfiguration [
+RwProjectLoadConfigurationVisitorV2 >> visit: aProjectComponent [
 
-	^aProjectConfiguration acceptVisitor: self
-
+	^aProjectComponent acceptVisitor: self
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitorV2 >> visitNested: aProjectConfiguration [
+RwProjectLoadConfigurationVisitorV2 >> visitNested: aProjectComponent [
 
-	^aProjectConfiguration acceptNestedVisitor: self
+	^aProjectComponent acceptNestedVisitor: self
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitorV2 >> visitNestedProjectLoadConfiguration: aNestedProjectLoadConfiguration [
+RwProjectLoadConfigurationVisitorV2 >> visitNestedProjectLoadComponent: aNestedProjectLoadComponent [
 
-	(visitedConfigurationNames includes: aNestedProjectLoadConfiguration name)
+	(visitedComponentNames includes: aNestedProjectLoadComponent name)
 		ifTrue: [ ^ self ].
 
-	self _visited: aNestedProjectLoadConfiguration. 
+	self _visited: aNestedProjectLoadComponent. 
 
-	self _processConditionalPackageNames: aNestedProjectLoadConfiguration.
+	self _processConditionalPackageNames: aNestedProjectLoadComponent.
 
-	self _processConditionalPackageMapSpecs: aNestedProjectLoadConfiguration.
+	self _processConditionalPackageMapSpecs: aNestedProjectLoadComponent.
 
-	self configurationNames addAll: aNestedProjectLoadConfiguration configurationNames.
-	(self _configurations: self configurationBasePath, '/' forProject: aNestedProjectLoadConfiguration projectName)
-		do: [:config | config acceptNestedVisitor: self ].
-
+	self visitedComponentNames addAll: aNestedProjectLoadComponent componentNames.
+	(self _components: self componentRoot forProject: aNestedProjectLoadComponent projectName)
+		do: [:component | component acceptNestedVisitor: self ].
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitorV2 >> visitProjectCompoundConfiguration: aProjectCompoundConfiguration [
+RwProjectLoadConfigurationVisitorV2 >> visitProjectLoadComponent: aProjectLoadComponent [
 
-	(visitedConfigurationNames includes: aProjectCompoundConfiguration name)
+	(visitedComponentNames includes: aProjectLoadComponent name)
 		ifTrue: [ ^ self ].
 
-	self _visited: aProjectCompoundConfiguration. 
+	self _visited: aProjectLoadComponent. 
 
-	self _addPackageNames: aProjectCompoundConfiguration packageNames for: aProjectCompoundConfiguration.
-
-	aProjectCompoundConfiguration _configurations
-		do: [:config | config acceptCompoundVisitor: self ].
-
-]
-
-{ #category : 'visiting' }
-RwProjectLoadConfigurationVisitorV2 >> visitProjectLoadConfiguration: aProjectLoadConfiguration [
-
-	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aProjectLoadConfiguration. 
-
-	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
+	definedGroupNames := aProjectLoadComponent definedGroupNames.
 	self _processGroupNames.
 
-	self _processConditionalPackageNames: aProjectLoadConfiguration.
+	self _processConditionalPackageNames: aProjectLoadComponent.
 
-	self _processConditionalPackageMapSpecs: aProjectLoadConfiguration.
+	self _processConditionalPackageMapSpecs: aProjectLoadComponent.
 
-	self configurationNames addAll: aProjectLoadConfiguration configurationNames.
-	(self _configurations: self configurationBasePath, '/' forProject: aProjectLoadConfiguration projectName)
-		do: [:config | config acceptNestedVisitor: self ].
+	self componentNames addAll: aProjectLoadComponent componentNames.
+	(self _components: self componentsRoor forProject: aProjectLoadComponent projectName)
+		do: [:component | component acceptNestedVisitor: self ].
 ]

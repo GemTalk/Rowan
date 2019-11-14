@@ -3,10 +3,11 @@ Class {
 	#superclass : 'RwProjectLoadConfigurationVisitorV2',
 	#instVars : [
 		'projectNames',
-		'projectBasePath',
+		'projectsRoot',
+		'repositoryRoot',
 		'projectLoadSpecs',
 		'visitedComponents',
-		'projectComponentDefinition'
+		'projectDefinition'
 	],
 	#category : 'Rowan-Components'
 }
@@ -14,7 +15,7 @@ Class {
 { #category : 'private' }
 RwProjectLoadComponentVisitorV2 >> _addPackageNames: somePackageNames for: aComponent [
 
-	self projectComponentDefinition addPackages: somePackageNames forComponent: aComponent
+	self projectDefinition addPackages: somePackageNames forComponent: aComponent
 ]
 
 { #category : 'private' }
@@ -47,27 +48,13 @@ RwProjectLoadComponentVisitorV2 >> initialize [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectBasePath [
-
-	^ projectBasePath
+RwProjectLoadComponentVisitorV2 >> projectDefinition [
+	^ projectDefinition
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectBasePath: aString [
-
-	projectBasePath := aString
-]
-
-{ #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectComponentDefinition [
-
-	^ projectComponentDefinition
-]
-
-{ #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectComponentDefinition: aProjectComponentDefinition [
-
-	projectComponentDefinition := aProjectComponentDefinition
+RwProjectLoadComponentVisitorV2 >> projectDefinition: aProjectDefinition [
+	projectDefinition := aProjectDefinition
 ]
 
 { #category : 'accessing' }
@@ -82,10 +69,20 @@ RwProjectLoadComponentVisitorV2 >> projectNames [
 	^ projectNames
 ]
 
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitorV2 >> projectsRoot [
+	^ projectsRoot
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitorV2 >> projectsRoot: aString [
+	projectsRoot := aString asFileReference
+]
+
 { #category : 'visiting' }
 RwProjectLoadComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLoadConfiguration [
 
-	(visitedConfigurationNames includes: aComponentLoadConfiguration name)
+	(visitedComponentNames includes: aComponentLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aComponentLoadConfiguration. 
@@ -97,12 +94,12 @@ RwProjectLoadComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLo
 
 	self _processConditionalPackageMapSpecs: aComponentLoadConfiguration.
 
-	self configurationNames addAll: aComponentLoadConfiguration configurationNames.
-	(self _configurations: self configurationBasePath, '/' forProject: aComponentLoadConfiguration projectName)
-		do: [:config | config acceptNestedVisitor: self ].
+	self componentNames addAll: aComponentLoadConfiguration componentNames.
+	(self _components: self componentsRoot forProject: aComponentLoadConfiguration projectName)
+		do: [:component | component acceptNestedVisitor: self ].
 
 	self projectNames addAll: aComponentLoadConfiguration projectNames.
-	(self _projects: self projectBasePath, '/' forProject: aComponentLoadConfiguration projectName)
+	(self _projects: self projectsRoot forProject: aComponentLoadConfiguration projectName)
 		do: [:projectSpec | projectSpec acceptVisitor: self ].
 ]
 

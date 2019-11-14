@@ -6,7 +6,7 @@ Class {
 
 { #category : 'tests' }
 RwRowanSample9Test >> testExportNewProject [
-	| projectName projectAlias loadSpecification stonString1 projectDefinition1 projectDefinition2 projectModification projectsHome projectRoot stonString2 |
+	| projectName projectAlias loadSpecification stonString1 projectDefinition1 projectDefinition2 projectModification projectsHome projectRoot |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -35,7 +35,6 @@ RwRowanSample9Test >> testExportNewProject [
 	self assert: projectRoot exists.
 
 	projectDefinition2 := loadSpecification resolve.
-	stonString2 := STON toStringPretty: projectDefinition2.	"useful in case of error"
 
 	projectModification := projectDefinition2
 		compareAgainstBase: projectDefinition1.

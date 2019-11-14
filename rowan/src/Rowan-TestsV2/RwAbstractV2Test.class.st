@@ -68,7 +68,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 		addClassNamed: className
 		super: 'Object'
 		instvars: #('ivar1')
-		category: '*' , packageName asLowercase
+		category: packageName
 		comment: 'I am an example class')
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
@@ -76,7 +76,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 	((projectDefinition packageNamed: packageName)
 		addClassNamed: projectName , 'TestCase'
 		super: 'TestCase'
-		category: '*' , packageName asLowercase
+		category: packageName
 		comment: 'I test the example class')
 		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
 			protocol: 'tests';
@@ -86,7 +86,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 	((projectDefinition packageNamed: packageName)
 		addClassNamed: className
 		super: 'RcCounter'
-		category: '*' , packageName asLowercase
+		category: packageName
 		comment: 'I am an example GemStone class')
 		addClassMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
@@ -94,7 +94,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 	((projectDefinition packageNamed: packageName)
 		addClassNamed: projectName , 'GsTestCase'
 		super: 'TestCase'
-		category: '*' , packageName asLowercase
+		category: packageName
 		comment: 'I test the example GemStone class')
 		addInstanceMethod: 'test  self assert: ' , className , ' foo = 1'
 			protocol: 'tests';

@@ -137,7 +137,7 @@ RwProjectDefinitionV2 >> addPackages: somePackageNames forComponent: aComponent 
 					"newest component wins"
 					self components at: componentName put: aComponent ] ].
 	somePackageNames asSet
-		do: [ :packageName | super addPackageNamed: packageName ]
+		do: [ :packageName | self _addPackage: (RwPackageDefinition newNamed: packageName) ]
 ]
 
 { #category : 'accessing' }
@@ -161,7 +161,7 @@ RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 
 	"see similar comment in addPackages:forComponent:"
 
-	^ self addPackage: (RwPackageDefinition newNamed: packageName)
+	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
 ]
 
 { #category : 'properties' }
@@ -523,10 +523,12 @@ RwProjectDefinitionV2 >> read [
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	^ Rowan projectTools readV2
-		readProjectSetForProjectDefinition: self 
-			withComponentNames: self componentNames
-			groupNames: self groupNames
+	| projectSetDefinition |
+	projectSetDefinition := Rowan projectTools readV2
+		readProjectSetForProjectDefinition: self
+		withComponentNames: self componentNames
+		groupNames: self groupNames.
+	^ projectSetDefinition projectNamed: self name
 ]
 
 { #category : 'actions' }

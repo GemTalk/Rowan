@@ -18,7 +18,7 @@ RwProjectLoadComponentV2 >> _processConditionalPackageNames: aProjectLoadConfigu
 					(self groupNames includes: group)
 						ifTrue: [ 
 							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #() ] ).
+							self componentNames addAll: (map at: #componentNames ifAbsent: [ #() ] ).
 							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
 ]
 

@@ -7,8 +7,7 @@ Class {
 { #category : 'visiting' }
 RwNestedProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 
-	^aVisitor visitNestedProjectLoadConfiguration: self
-
+	^aVisitor visitNestedProjectLoadComponent: self
 ]
 
 { #category : 'visiting' }
