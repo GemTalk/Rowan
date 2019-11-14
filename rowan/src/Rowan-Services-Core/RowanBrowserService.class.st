@@ -205,13 +205,18 @@ RowanBrowserService >> packagesWithTests [
   testCount := 0.
   testPackages := Set new.
   testCount := 0.
-  (organizer allSubclassesOf: TestCase) 
+  (organizer allSubclassesOf: TestCase)
     do: [ :sub | 
       | packageName |
       testCount := testCount + sub testSelectors size.
       packageName := sub rowanPackageName.
       packageName = Rowan unpackagedName
-        ifFalse: [ testPackages add: (RowanPackageService forPackageNamed: packageName) ] ].
+        ifFalse: [ testPackages add: (RowanPackageService forPackageNamed: packageName) ].
+      (Rowan image loadedClassExtensionsForClass: sub)
+        do: [ :loadedThing | 
+          testPackages
+            add:
+              (RowanPackageService forPackageNamed: loadedThing loadedPackage name) ] ].
   updateType := #'testPackages:'.
   testPackages := testPackages asArray.
   RowanCommandResult addResult: self
