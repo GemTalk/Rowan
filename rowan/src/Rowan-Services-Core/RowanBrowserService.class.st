@@ -259,6 +259,7 @@ RowanBrowserService >> releaseWindowHandle: integer [
 RowanBrowserService >> reloadProjects: projectServices andUpdateServices: services [
   | projectNames answeringService |
   services do: [ :service | service organizer: organizer ].
+  projectServices do: [ :service | service organizer: organizer ].
   projectServices do: [ :projectService | projectService reloadProject ].
   projectNames := projectServices
     collect: [ :projectService | projectService name ].
