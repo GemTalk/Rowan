@@ -242,12 +242,12 @@ RowanPackageService >> projectName: newValue [
 
 { #category : 'client commands' }
 RowanPackageService >> removeClass: classService [
-	self removeClassNamed: classService name. 
-	self setDefaultTemplate.
-	classService updateType: #removedClass:.
-	classService wasRemoved: true. 
-	RowanCommandResult addResult: classService.
-	(RowanBrowserService new organizer: organizer) packagesWithTests. "sunit browser might need updated"
+  self removeClassNamed: classService name.
+  self setDefaultTemplate.
+  classService updateType: #'removedClass:'.
+  classService wasRemoved: true.
+  RowanCommandResult addResult: classService.
+  RowanBrowserService new packagesWithTests	"sunit browser might need updated"
 ]
 
 { #category : 'commands support' }

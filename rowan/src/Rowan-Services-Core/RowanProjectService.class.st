@@ -373,7 +373,7 @@ RowanProjectService >> reloadProject [
       ex resume ].
   self update.
   RowanCommandResult addResult: self.
-  (RowanBrowserService new organizer: organizer) packagesWithTests
+  RowanBrowserService new packagesWithTests
 ]
 
 { #category : 'rowan' }

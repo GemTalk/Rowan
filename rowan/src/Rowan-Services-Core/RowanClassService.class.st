@@ -1155,7 +1155,7 @@ RowanClassService >> updateSymbols: newSymbols [
 RowanClassService >> updateTests [
   "update the test browsers on certain operations"
 
-  (RowanBrowserService new organizer: organizer) packagesWithTests.
+  RowanBrowserService new packagesWithTests.
   (RowanPackageService new
     organizer: organizer;
     name: packageName;
