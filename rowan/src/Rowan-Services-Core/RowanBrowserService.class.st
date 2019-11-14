@@ -208,15 +208,25 @@ RowanBrowserService >> packagesWithTests [
   (organizer allSubclassesOf: TestCase)
     do: [ :sub | 
       | packageName |
-      testCount := testCount + sub testSelectors size.
+      testCount := testCount
+        + (sub sunitSelectors select: [ :each | each beginsWith: 'test' ]) size.	"sending #testSelectors was slower"
       packageName := sub rowanPackageName.
       packageName = Rowan unpackagedName
-        ifFalse: [ testPackages add: (RowanPackageService forPackageNamed: packageName) ].
+        ifFalse: [ 
+          testPackages
+            add:
+              (RowanPackageService new
+                name: packageName;
+                updateProjectName;
+                yourself) ].
       (Rowan image loadedClassExtensionsForClass: sub)
         do: [ :loadedThing | 
           testPackages
             add:
-              (RowanPackageService forPackageNamed: loadedThing loadedPackage name) ] ].
+              (RowanPackageService new
+                name: loadedThing loadedPackage name;
+                updateProjectName;
+                yourself)	"don't update the entire package for performance improvement" ] ].
   updateType := #'testPackages:'.
   testPackages := testPackages asArray.
   RowanCommandResult addResult: self
