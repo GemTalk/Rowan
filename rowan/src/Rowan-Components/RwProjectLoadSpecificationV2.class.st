@@ -28,34 +28,24 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'private' }
+RwProjectLoadSpecificationV2 >> _checkProjectDirectoryStructure [
+	"answer true if the basic project directory structure is present"
+
+	self projectRoots
+		do: [ :fileRef | 
+			fileRef exists
+				ifFalse: [ ^ false ] ].
+	^ true
+]
+
 { #category : 'actions' }
 RwProjectLoadSpecificationV2 >> _resolve [
 	"answer true if attaching to an existing repository"
 
-	repositoryDefinition
-		ifNotNil: [ 
-			repositoryDefinition repositoryRoot exists
-				ifFalse: [ Error signal: 'repository root directory does not exist' ].
-			^ true ].
-	repositoryDefinition := self gitUrl
-		ifNotNil: [ :urlString | 
-			RwGitRepositoryDefinitionV2
-				newNamed: self projectAlias
-				projectsHome: self projectsHome
-				repositoryUrl: urlString
-				revision: self revision ]
-		ifNil: [ 
-			self svnUrl
-				ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
-				ifNil: [ 
-					self mercurialUrl
-						ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
-						ifNil: [ 
-							RwDiskRepositoryDefinitionV2
-								newNamed: self projectAlias
-								projectsHome: self projectsHome
-								repositoryUrl: self diskUrl ] ] ].
-	^ repositoryDefinition resolve
+	^ self repositoryDefinition resolve
+		ifTrue: [ self _checkProjectDirectoryStructure ]
+		ifFalse: [ false ]
 ]
 
 { #category : 'private' }
@@ -131,6 +121,11 @@ RwProjectLoadSpecificationV2 >> componentsPath: aString [
 	componentsPath := aString
 ]
 
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> componentsRoot [
+	^ self repositoryRoot / self componentsPath
+]
+
 { #category : 'private' }
 RwProjectLoadSpecificationV2 >> currentVersion [
 	"
@@ -147,6 +142,22 @@ RwProjectLoadSpecificationV2 >> diskUrl [
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> diskUrl: anUrlString [
 	diskUrl := anUrlString
+]
+
+{ #category : 'actions' }
+RwProjectLoadSpecificationV2 >> export [
+	^ self exportTo: self specsRoot
+]
+
+{ #category : 'actions' }
+RwProjectLoadSpecificationV2 >> exportTo: directoryReference [
+	self exportTo: directoryReference as: self specName , '.ston'
+]
+
+{ #category : 'actions' }
+RwProjectLoadSpecificationV2 >> exportTo: directoryReference as: fileName [
+	directoryReference / fileName
+		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
 ]
 
 { #category : 'accessing' }
@@ -211,6 +222,11 @@ RwProjectLoadSpecificationV2 >> packagesPath: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> packagesRoot [
+	^ self repositoryRoot / self packagesPath
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> platformProperties [
 	^ platformProperties ifNil: [ platformProperties := Dictionary new ]
 ]
@@ -251,10 +267,18 @@ RwProjectLoadSpecificationV2 >> projectName: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> projectRoots [
+	^ {(self componentsRoot).
+	(self packagesRoot).
+	(self specsRoot).
+	(self projectsRoot)}
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> projectsHome [
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
 
-	^ projectsHome ifNil: [FileSystem rowanProjectsHome ]
+	^ projectsHome ifNil: [FileLocator rowanProjectsHome ]
 ]
 
 { #category : 'accessing' }
@@ -276,6 +300,11 @@ RwProjectLoadSpecificationV2 >> projectsPath: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> projectsRoot [
+	^ self repositoryRoot / self projectsPath
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> projectUrl [
 	gitUrl ifNotNil: [ :urlString | ^ urlString ].
 	diskUrl ifNotNil: [ :urlString | ^ urlString ].
@@ -287,6 +316,27 @@ RwProjectLoadSpecificationV2 >> projectUrl [
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> repositoryDefinition [
 	^ repositoryDefinition
+		ifNil: [ 
+			repositoryDefinition := self gitUrl
+				ifNotNil: [ :urlString | 
+					RwGitRepositoryDefinitionV2
+						newNamed: self projectAlias
+						projectsHome: self projectsHome
+						repositoryUrl: urlString
+						revision: self revision ]
+				ifNil: [ 
+					self svnUrl
+						ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
+						ifNil: [ 
+							self mercurialUrl
+								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
+								ifNil: [ 
+									RwDiskRepositoryDefinitionV2
+										newNamed: self projectAlias
+										projectsHome: self projectsHome
+										repositoryUrl: self diskUrl ] ] ].
+
+			repositoryDefinition ]
 ]
 
 { #category : 'accessing' }
@@ -296,7 +346,8 @@ RwProjectLoadSpecificationV2 >> repositoryDefinition: aRwRepositoryDefinition [
 
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> repositoryRoot [
-	^ repositoryDefinition ifNotNil: [ self repositoryDefinition repositoryRoot ]
+	repositoryDefinition ifNil: [ ^ self projectsHome / self projectAlias ].
+	^ self repositoryDefinition repositoryRoot
 ]
 
 { #category : 'accessing' }
@@ -363,6 +414,11 @@ RwProjectLoadSpecificationV2 >> specsPath [
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> specsPath: aString [
 	specsPath := aString
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> specsRoot [
+	^ self repositoryRoot / self specsPath
 ]
 
 { #category : 'accessing' }

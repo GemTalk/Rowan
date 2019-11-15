@@ -130,8 +130,7 @@ RwProjectReferenceDefinitionV2 >> componentsPath: aString [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> componentsRoot [
-
-	^self repositoryRoot / self componentsPath
+	^ self projectLoadSpecification componentsRoot
 ]
 
 { #category : 'actions' }
@@ -264,8 +263,7 @@ RwProjectReferenceDefinitionV2 >> packagesPath: aString [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packagesRoot [
-
-	^self repositoryRoot / self packagesPath
+	^ self projectLoadSpecification packagesRoot
 ]
 
 { #category : 'copying' }
@@ -353,8 +351,7 @@ RwProjectReferenceDefinitionV2 >> projectsPath: aString [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectsRoot [
-
-	^self repositoryRoot / self projectsPath
+	^ self projectLoadSpecification projectsRoot
 ]
 
 { #category : 'accessing' }
@@ -457,8 +454,7 @@ RwProjectReferenceDefinitionV2 >> specsPath: aString [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> specsRoot [
-
-	^self repositoryRoot / self specsPath
+	^ self projectLoadSpecification specsRoot
 ]
 
 { #category : 'accessing' }

@@ -5,90 +5,54 @@ Class {
 }
 
 { #category : 'tests' }
-RwRowanSample9Test >> testExportNewProject [
-	| projectName projectAlias loadSpecification stonString1 projectDefinition1 projectDefinition2 projectModification projectsHome projectRoot stonString2 |
-	projectName := 'RowanSample9'.
-	projectAlias := projectName , '_Test'.
-	projectsHome := self _testRowanProjectsSandbox.
-	projectRoot := projectsHome / projectAlias.
+RwRowanSample9Test >> testSpec_0001_A [
+	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
 
-	loadSpecification := RwProjectLoadSpecificationV2 new
-		projectName: projectName;
-		projectAlias: projectAlias;
-		projectsHome: projectsHome;
-		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+	"functional variant of testSpec_0001_B"
+
+	| rowanProject fileUrl loadSpecification projectDefinition |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
 		yourself.
 
-	self assert: loadSpecification validate.
-	self deny: projectRoot exists.
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
-	projectDefinition1 := loadSpecification resolve.
-
-	self assert: projectDefinition1 projectLoadSpecification ~~ loadSpecification.
-	self assert: projectRoot exists.
-
-	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition1.
-	stonString1 := STON toStringPretty: projectDefinition1.	"useful in case of error"
-
-	projectDefinition1 export.
-
-	self assert: projectRoot exists.
-
-	projectDefinition2 := loadSpecification resolve.
-	stonString2 := STON toStringPretty: projectDefinition2.	"useful in case of error"
-
-	projectModification := projectDefinition2
-		compareAgainstBase: projectDefinition1.
-
-	self assert: projectModification isEmpty.
-	self
-		assert:
-			projectDefinition2 projectLoadSpecification
-				~~ projectDefinition1 projectLoadSpecification
+	projectDefinition := loadSpecification resolve. "project is not being loaded from disk on resolve"
+	projectDefinition
+		addPackagesNamed: {(loadSpecification projectName , '-Core')}
+		toComponentNamed: 'Core'
+		withConditions: {'common'}
+		andGroupName: 'core'.
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testLoadNewProject [
-	| projectName projectAlias loadSpecification stonString projectDefinition1 projects projectDefinition2 projectModification projectsHome projectRoot |
-	projectName := 'RowanSample9'.
-	projectAlias := projectName , '_Test'.
+RwRowanSample9Test >> testSpec_0001_B [
+	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
 
-	(Rowan image loadedProjectNamed: projectAlias ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+	"testSpec_0001_A behavies correctly"
 
-	projectsHome := self _testRowanProjectsSandbox.
-	projectRoot := projectsHome / projectAlias.
-
-	loadSpecification := RwProjectLoadSpecificationV2 new
-		projectName: projectName;
-		projectAlias: projectAlias;
-		projectsHome: projectsHome;
-		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+	| rowanProject fileUrl loadSpecification projectDefinition repositoryDefinition |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
 		yourself.
 
-	self assert: loadSpecification validate.
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
-	projectDefinition1 := loadSpecification resolve.
+	projectDefinition := loadSpecification resolve.
 
-	self assert: projectDefinition1 projectLoadSpecification ~~ loadSpecification.
+	repositoryDefinition := loadSpecification repositoryDefinition.
+	repositoryDefinition checkout: 'master'.
+	projectDefinition := loadSpecification resolve. "The issue here is that on resolve, the repository does not checkout the expected branch --- time to work out the semantics for checkouts ... exception?"
 
-	self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition1.
-	stonString := STON toStringPretty: projectDefinition1.	"useful in case of error"
-
-	projects := projectDefinition1 load.
-	self assert: projects size = 1.
-	projects do: [ :project | self assert: project audit isEmpty ].
-
-	self
-		assert:
-			(projectDefinition2 := (projects at: 1) asDefinition) class
-				== projectDefinition1 class.	"expected failure for the time being"
-	self
-		assert:
-			projectDefinition2 projectLoadSpecification
-				~~ projectDefinition1 projectLoadSpecification.
-
-	projectModification := projectDefinition2
-		compareAgainstBase: projectDefinition1.
-	self assert: projectModification isEmpty
+	projectDefinition
+		addPackagesNamed: {(loadSpecification projectName , '-Core')}
+		toComponentNamed: 'Core'
+		withConditions: {'common'}
+		andGroupName: 'core'
 ]

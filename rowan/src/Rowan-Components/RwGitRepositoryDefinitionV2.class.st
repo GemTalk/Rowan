@@ -2,6 +2,7 @@ Class {
 	#name : 'RwGitRepositoryDefinitionV2',
 	#superclass : 'RwDiskRepositoryDefinitionV2',
 	#instVars : [
+		'remote',
 		'remoteUrl',
 		'committish'
 	],
@@ -32,10 +33,41 @@ RwGitRepositoryDefinitionV2 >> _createRemoteUrl [
 	^ aRemoteUrl
 ]
 
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> branches [
+	"return an array of branch names for the receiver"
+
+	| str line branches remotesPrefix |
+	str := ReadStream
+		on: (Rowan gitTools gitbranchIn: self repositoryRoot pathString with: '--all').
+	branches := {}.
+	remotesPrefix := 'remotes/origin/'.
+	[ str atEnd ]
+		whileFalse: [ 
+			line := str nextLine trimBlanks.
+			(line at: 1) = $*
+				ifTrue: [ 
+					"ignore current branch"
+					 ]
+				ifFalse: [ 
+					| index |
+					index := line findString: remotesPrefix startingAt: 1.
+					index > 0
+						ifTrue: [ line := (line copyFrom: index + remotesPrefix size to: line size) trimBlanks ].
+					(line findString: 'HEAD' startingAt: 1) = 0
+						ifTrue: [ branches add: line ] ] ].
+	^ branches
+]
+
 { #category : 'testing' }
 RwGitRepositoryDefinitionV2 >> canCommit [
 
 	^ true
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> checkout: aCommittish [
+	Rowan gitTools gitcheckoutIn: self repositoryRoot with: aCommittish
 ]
 
 { #category : 'actions' }
@@ -47,6 +79,34 @@ RwGitRepositoryDefinitionV2 >> clone [
 
 	Rowan projectTools clone
 		cloneRepository: self
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> commit: message [
+	| gitTool gitRootPath commitMessageFileName status |
+	gitTool := Rowan gitTools.
+	gitRootPath := self repositoryRoot pathString.
+	(gitTool gitstatusIn: gitRootPath with: '--short') isEmpty
+		ifTrue: [ 
+			| msg |
+			msg := 'Nothing to commit'.
+			Transcript
+				cr;
+				show: '==============';
+				cr;
+				show: msg.
+			self inform: msg.
+			^ msg ].
+	commitMessageFileName := gitTool createTmpFileWith: message.
+	gitTool gitaddIn: gitRootPath with: '-A .'.
+	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
+	status := gitTool gitlogIn: gitRootPath with: '-1'.
+	Transcript
+		cr;
+		show: '==============';
+		cr;
+		show: status.
+	^ status
 ]
 
 { #category : 'loading' }
@@ -67,21 +127,34 @@ RwGitRepositoryDefinitionV2 >> committish: aString [
 ]
 
 { #category : 'actions' }
-RwGitRepositoryDefinitionV2 >> doCommit: message [
+RwGitRepositoryDefinitionV2 >> createBranch: branchName [
+	Rowan gitTools gitcheckoutIn: self repositoryRoot with: '-b ' , branchName
+]
 
-	| gitTool gitRootPath commitMessageFileName status |
-	gitTool := Rowan gitTools.
-	gitRootPath := self repositoryRoot pathString.
-	commitMessageFileName := gitTool createTmpFileWith: message.
-	gitTool gitaddIn: gitRootPath with: '-A .'.
-	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
-	status := gitTool gitlogIn: gitRootPath with: '-1'.
-	Transcript
-		cr;
-		show: '==============';
-		cr;
-		show: status.
-	^ status
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> pull: remoteName branch: branchName [
+	Rowan gitTools
+		gitpullIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> push: remoteName branch: branchName [
+	Rowan gitTools
+		gitpushIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> remote [
+	^ remote ifNil: [ 'origin' ]
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> remote: remoteName [
+	remote := remoteName
 ]
 
 { #category : 'accessing' }

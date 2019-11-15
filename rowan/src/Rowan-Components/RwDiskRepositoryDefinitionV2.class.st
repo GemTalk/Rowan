@@ -97,9 +97,13 @@ RwDiskRepositoryDefinitionV2 >> repositoryRoot [
 
 	^ repositoryRoot
 		ifNil: [ 
-			repositoryRoot := repositoryUrl
-				ifNotNil: [ :urlString | urlString asRwUrl pathString asFileReference ]
-				ifNil: [ self projectsHome / self name ] ]
+			repositoryUrl
+				ifNotNil: [ :urlString | 
+					| url |
+					url := urlString asRwUrl.
+					url scheme = 'file'
+						ifTrue: [ ^ repositoryRoot := url pathString asFileReference ] ].
+			repositoryRoot := self projectsHome / self name ]
 ]
 
 { #category : 'accessing' }
