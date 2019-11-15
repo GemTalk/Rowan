@@ -311,6 +311,7 @@ RowanPackageService >> setDefaultTemplate [
 
 { #category : 'client commands' }
 RowanPackageService >> testClasses [
+  organizer := ClassOrganizer new.
   testClasses := Set new.
   self loadedClasses
     valuesDo: [ :loadedClass | 

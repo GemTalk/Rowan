@@ -1157,7 +1157,6 @@ RowanClassService >> updateTests [
 
   RowanBrowserService new packagesWithTests.
   (RowanPackageService new
-    organizer: organizer;
     name: packageName;
     yourself) testClasses.
   RowanCommandResult addResult: self update
