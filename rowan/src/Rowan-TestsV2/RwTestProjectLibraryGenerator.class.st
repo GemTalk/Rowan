@@ -4,7 +4,7 @@
 RwTestProjectLibraryGenerator new
 	projectName: 'RowanSample9';
 	projectUrl: 'https://github.com/dalehenrich/RowanSample9';
-	preserveChangesOnGithub: false;
+	preserveChangesOnGithub: true;
 	genSpec_0000: 'generate project definitions for specName_0000';
 	genSpec_0001: 'generate project definitions for specName_0001';
 	yourself
@@ -145,10 +145,11 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 	| repositoryDefinition projectDefinition oldPolicy |
 	oldPolicy := loadSpecification repositoryResolutionPolicy.
 	[ 
-	"force #strict policy to ensure that the revision is checkout out in the repolicy"
+	"force #strict policy to ensure that the revision is checked out out in the repository"
 	loadSpecification repositoryResolutionPolicy: #'strict'.
-	loadSpecification resolve ]
+	projectDefinition := loadSpecification resolve ]
 		ensure: [ loadSpecification repositoryResolutionPolicy: oldPolicy ].
+
 	repositoryDefinition := loadSpecification repositoryDefinition.
 	(repositoryDefinition branches includes: specName)
 		ifTrue: [ 
@@ -160,7 +161,6 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 			repositoryDefinition createBranch: specName ].
 
 	loadSpecification revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	projectDefinition := loadSpecification resolve.
 	addDefinitionsBlock value: projectDefinition.
 
 	loadSpecification projectRoots
