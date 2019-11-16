@@ -4,63 +4,52 @@ Class {
 	#category : 'Rowan-TestsV2'
 }
 
-{ #category : 'tests' }
-RwRowanSample9Test >> testSpec_0001_A [
-	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
+{ #category : 'private' }
+RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 
-	"functional variant of testSpec_0001_B"
-
-	| rowanProject fileUrl loadSpecification projectDefinition |
+	| rowanProject fileUrl |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	fileUrl := 'file:' , rowanProject repositoryRootPath
 		, '/test/specs/RowanSample9_0000.ston'.
-	loadSpecification := (RwSpecification fromUrl: fileUrl)
+	^(RwSpecification fromUrl: fileUrl)
 		projectsHome: self _testRowanProjectsSandbox;
 		yourself.
+]
 
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
-
-	projectDefinition := loadSpecification resolve. "project is not being loaded from disk on resolve"
-	projectDefinition
-		addPackagesNamed: {(loadSpecification projectName , '-Core')}
-		toComponentNamed: 'Core'
-		withConditions: {'common'}
-		andGroupName: 'core'.
+{ #category : 'private' }
+RwRowanSample9Test >> _specListProjectNames [
+	^ {}
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testSpec_0001_B [
-	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
+RwRowanSample9Test >> testIndexCards [
+	| loadSpecification indexCards specsDir loadSpecs projectDefinitions |
+	loadSpecification := self _rowanSample9_0000_load_spec.
+	loadSpecification repositoryRoot ensureDeleteAll.
+	loadSpecification revision: 'master'.
+	loadSpecification resolve.
 
-	"testSpec_0001_A behavies correctly"
+	indexCards := (loadSpecification repositoryRoot / 'indexCards') files
+		collect: [ :file | 
+			file
+				readStreamDo: [ :fileStream | 
+					| stream |
+					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+					STON fromStream: stream ] ].
 
-	| rowanProject fileUrl loadSpecification projectDefinition repositoryDefinition oldPolicy |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	fileUrl := 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample9_0000.ston'.
-	loadSpecification := (RwSpecification fromUrl: fileUrl)
-		projectsHome: self _testRowanProjectsSandbox;
-		repositoryResolutionPolicy: #'strict';
-		yourself.	"force #strict policy to ensure that the revision is checkout out in the repository"
+	indexCards := indexCards sort: [ :a :b | a index <= b index ].
 
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+	specsDir := loadSpecification repositoryRoot / 'specs'.
+	loadSpecs := indexCards
+		collect: [ :indexCard | 
+			specsDir / indexCard specName , 'ston'
+				readStreamDo: [ :fileStream | 
+					| stream |
+					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+					(STON fromStream: stream)
+						repositoryResolutionPolicy: #'strict';
+						yourself ] ].
 
-
-	projectDefinition := loadSpecification resolve.
-
-	repositoryDefinition := loadSpecification repositoryDefinition.
-	repositoryDefinition checkout: 'master'.
-
-	oldPolicy := loadSpecification repositoryResolutionPolicy.
-	[ 
-	"force #strict policy to ensure that the revision is checkout out in the repolicy"
-	loadSpecification repositoryResolutionPolicy: #'strict'.
-	projectDefinition := loadSpecification resolve ]
-		ensure: [ loadSpecification repositoryResolutionPolicy: oldPolicy ].
-
-	projectDefinition
-		addPackagesNamed: {(loadSpecification projectName , '-Core')}
-		toComponentNamed: 'Core'
-		withConditions: {'common'}
-		andGroupName: 'core'
+	projectDefinitions := loadSpecs
+		collect: [ :loadSpec | STON toStringPretty: loadSpec resolve ].
 ]
