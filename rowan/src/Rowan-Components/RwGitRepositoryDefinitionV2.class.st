@@ -38,6 +38,7 @@ RwGitRepositoryDefinitionV2 >> branches [
 	"return an array of branch names for the receiver"
 
 	| str line branches remotesPrefix |
+	self fetch.
 	str := ReadStream
 		on: (Rowan gitTools gitbranchIn: self repositoryRoot pathString with: '--all').
 	branches := {}.
@@ -63,6 +64,21 @@ RwGitRepositoryDefinitionV2 >> branches [
 RwGitRepositoryDefinitionV2 >> canCommit [
 
 	^ true
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> checkAndUpdateRepositoryRevision: aRwProjectLoadSpecificationV2 [
+	| revision |
+	revision := aRwProjectLoadSpecificationV2 revision.
+	self currentBranch = revision
+		ifTrue: [ ^ self ].
+	(aRwProjectLoadSpecificationV2 isStrict
+		or: [ 
+			RwAllowChangeRepositoryRevisionOnResolveNotification
+				signal: aRwProjectLoadSpecificationV2 ])
+		ifTrue: [ 
+			self fetch.
+			self checkout: revision ]
 ]
 
 { #category : 'actions' }
@@ -129,6 +145,22 @@ RwGitRepositoryDefinitionV2 >> committish: aString [
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> createBranch: branchName [
 	Rowan gitTools gitcheckoutIn: self repositoryRoot with: '-b ' , branchName
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> currentBranch [
+	| result |
+	result := Rowan gitTools gitBranchNameIn: self repositoryRoot pathString.
+	(result findString: '(HEAD' startingAt: 1) > 0
+		ifTrue: [ 
+			"if detached head, return the sha of the commit"
+			^ Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ].
+	^ result
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> fetch [
+	Rowan gitTools gitfetchIn: self repositoryRoot with: self remote
 ]
 
 { #category : 'actions' }

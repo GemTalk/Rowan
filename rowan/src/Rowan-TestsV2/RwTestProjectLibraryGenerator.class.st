@@ -72,13 +72,13 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0001: projectDefinition [
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _createCard: postfix [
+RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: title index: index comment: comment [
 	^ RwTestProjectLibraryIndexCard new
 		name: 'index_' , postfix;
-		title: 'Empty project with no packages';
-		specName: 'spec_' , postfix;
-		index: 0;
-		comment: '';
+		title: title;
+		specName: specName;
+		index: index;
+		comment: comment;
 		rowanIssues: {};
 		gemstoneIssues: {};
 		yourself
@@ -133,9 +133,23 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: index
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock [
-	| repositoryDefinition projectDefinition |
+	"Coming in the load spec revision is pointing at the desired starting 
+		point --- the structure to _start_ with. Since we don't know whether the 
+		repository has been cloned or not, we do a resolve, which will ensure
+		that the repository is on the revision specifiied in the incoming load spec.
+	Once we've resolved and read, we reset the revision of the load spec
+		to point to the branch we want to write to. We wipe out the project
+		roots, so we have a clean sarting point and then export the project
+		definition and load spec."
+
+	| repositoryDefinition projectDefinition oldPolicy |
+	oldPolicy := loadSpecification repositoryResolutionPolicy.
+	[ 
+	"force #strict policy to ensure that the revision is checkout out in the repolicy"
+	loadSpecification repositoryResolutionPolicy: #'strict'.
+	loadSpecification resolve ]
+		ensure: [ loadSpecification repositoryResolutionPolicy: oldPolicy ].
 	repositoryDefinition := loadSpecification repositoryDefinition.
-	repositoryDefinition clone.
 	(repositoryDefinition branches includes: specName)
 		ifTrue: [ 
 			"branch exists, so we'll check it out and make the necessary mods"
@@ -145,13 +159,14 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 			"create the branch"
 			repositoryDefinition createBranch: specName ].
 
+	loadSpecification revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	projectDefinition := loadSpecification resolve.
+	addDefinitionsBlock value: projectDefinition.
+
 	loadSpecification projectRoots
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
-
-	projectDefinition := loadSpecification resolve.
-	addDefinitionsBlock value: projectDefinition.
 
 	projectDefinition export.	"write the rowan directory structure"
 	loadSpecification export.
@@ -180,7 +195,12 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 	| indexCard loadSpecification repositoryDefinition specName postfix |
 	postfix := '0000'.
 	specName := 'spec_' , postfix.
-	indexCard := self _createCard: postfix.
+	indexCard := self
+		_createCard: postfix
+		specName: specName
+		title: 'Empty project with no packages'
+		index: 0
+		comment: ''.
 	loadSpecification := (self _createLoadSpecificatione: self projectName)
 		specName: specName;
 		revision: 'master';
@@ -211,7 +231,12 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 	| indexCard loadSpecification repositoryDefinition specName postfix |
 	postfix := '0001'.
 	specName := 'spec_' , postfix.
-	indexCard := self _createCard: postfix.
+	indexCard := self
+		_createCard: postfix
+		specName: specName
+		title: 'Bare bones package structure -Core and -Tests'
+		index: 1
+		comment: 'One class per package'.
 	loadSpecification := (self _createLoadSpecificatione: self projectName)
 		specName: specName;
 		revision: 'spec_0000';

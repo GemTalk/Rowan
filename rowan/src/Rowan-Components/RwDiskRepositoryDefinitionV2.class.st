@@ -30,6 +30,11 @@ RwDiskRepositoryDefinitionV2 >> canCommit [
 ]
 
 { #category : 'actions' }
+RwDiskRepositoryDefinitionV2 >> checkAndUpdateRepositoryRevision: aRwProjectLoadSpecificationV2 [
+	"noop"
+]
+
+{ #category : 'actions' }
 RwDiskRepositoryDefinitionV2 >> clone [
 
 	"attach to existing cloned disk structure or clone project from remote repository"

@@ -23,10 +23,16 @@ Class {
 		'componentNames',
 		'groupNames',
 		'platformProperties',
+		'repositoryResolutionPolicy',
 		'repositoryDefinition'
 	],
 	#category : 'Rowan-Components'
 }
+
+{ #category : 'private' }
+RwProjectLoadSpecificationV2 >> _checkAndUpdateRepositoryRevision [
+	^ self repositoryDefinition checkAndUpdateRepositoryRevision: self
+]
 
 { #category : 'private' }
 RwProjectLoadSpecificationV2 >> _checkProjectDirectoryStructure [
@@ -44,7 +50,9 @@ RwProjectLoadSpecificationV2 >> _resolve [
 	"answer true if attaching to an existing repository"
 
 	^ self repositoryDefinition resolve
-		ifTrue: [ self _checkProjectDirectoryStructure ]
+		ifTrue: [ 
+			self _checkAndUpdateRepositoryRevision.
+			self _checkProjectDirectoryStructure ]
 		ifFalse: [ false ]
 ]
 
@@ -200,6 +208,11 @@ RwProjectLoadSpecificationV2 >> initializeForExport [
 	projectsHome := repoType := repositoryDefinition := nil
 ]
 
+{ #category : 'testing' }
+RwProjectLoadSpecificationV2 >> isStrict [
+	^ self repositoryResolutionPolicy == #strict
+]
+
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> mercurialUrl [
 	^ mercurialUrl
@@ -342,6 +355,20 @@ RwProjectLoadSpecificationV2 >> repositoryDefinition [
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> repositoryDefinition: aRwRepositoryDefinition [
 	repositoryDefinition := aRwRepositoryDefinition
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> repositoryResolutionPolicy [
+	^repositoryResolutionPolicy
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> repositoryResolutionPolicy: aSymbolOrNil [
+	"
+	#strict - repository will be forced to match the specificed revision
+	"
+
+	repositoryResolutionPolicy := aSymbolOrNil
 ]
 
 { #category : 'accessing' }
