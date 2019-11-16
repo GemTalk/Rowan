@@ -6,6 +6,7 @@ Class {
 		'title',
 		'specName',
 		'index',
+		'derivedFrom',
 		'comment',
 		'rowanIssues',
 		'gemstoneIssues'
@@ -21,6 +22,16 @@ RwTestProjectLibraryIndexCard >> comment [
 { #category : 'accessing' }
 RwTestProjectLibraryIndexCard >> comment: object [
 	comment := object
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryIndexCard >> derivedFrom [
+	^derivedFrom
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryIndexCard >> derivedFrom: object [
+	derivedFrom := object
 ]
 
 { #category : 'export' }

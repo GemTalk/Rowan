@@ -72,12 +72,13 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0001: projectDefinition [
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: title index: index comment: comment [
+RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: title index: index derivedFrom: parentbranch comment: comment [
 	^ RwTestProjectLibraryIndexCard new
 		name: 'index_' , postfix;
 		title: title;
 		specName: specName;
 		index: index;
+		derivedFrom: parentbranch;
 		comment: comment;
 		rowanIssues: {};
 		gemstoneIssues: {};
@@ -112,6 +113,9 @@ RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage repositoryDefin
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard loadSpecification: loadSpecification repositoryDefinition: repositoryDefinition commitMessage: commitMessage [
+
+	indexCard exportTo: loadSpecification repositoryRoot.
+
 	self
 		_doCommitAndPush: commitMessage
 		repositoryDefinition: repositoryDefinition
@@ -192,18 +196,21 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification repositoryDefinition specName postfix |
+	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
 	postfix := '0000'.
 	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+
 	indexCard := self
 		_createCard: postfix
 		specName: specName
 		title: 'Empty project with no packages'
 		index: 0
+		derivedFrom: derivedFrom
 		comment: ''.
 	loadSpecification := (self _createLoadSpecificatione: self projectName)
 		specName: specName;
-		revision: 'master';
+		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		yourself.
 
@@ -228,18 +235,21 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification repositoryDefinition specName postfix |
+	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
 	postfix := '0001'.
 	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+
 	indexCard := self
 		_createCard: postfix
 		specName: specName
 		title: 'Bare bones package structure -Core and -Tests'
 		index: 1
+		derivedFrom: derivedFrom
 		comment: 'One class per package'.
 	loadSpecification := (self _createLoadSpecificatione: self projectName)
 		specName: specName;
-		revision: 'spec_0000';
+		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		yourself.
 
