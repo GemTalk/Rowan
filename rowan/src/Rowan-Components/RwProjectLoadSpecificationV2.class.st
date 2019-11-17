@@ -407,6 +407,21 @@ RwProjectLoadSpecificationV2 >> resolve [
 		ifFalse: [ projectDefinition ]
 ]
 
+{ #category : 'actions' }
+RwProjectLoadSpecificationV2 >> resolveStrict [
+	"resolve using #strict repositoryResolutionpolicy"
+
+	| oldPolicy |
+	self isStrict
+		ifTrue: [ ^ self resolve ].
+	oldPolicy := self repositoryResolutionPolicy.
+	[ 
+	"force #strict policy to ensure that the revision is checked out out in the repository"
+	self repositoryResolutionPolicy: #'strict'.
+	^ self resolve ]
+		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
+]
+
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> revision [
 	" git :: committish; svn :: revision; mercurial :: changeset; disk :: empty string"

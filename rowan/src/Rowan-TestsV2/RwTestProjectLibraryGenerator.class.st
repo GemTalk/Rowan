@@ -146,13 +146,8 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 		roots, so we have a clean sarting point and then export the project
 		definition and load spec."
 
-	| repositoryDefinition projectDefinition oldPolicy |
-	oldPolicy := loadSpecification repositoryResolutionPolicy.
-	[ 
-	"force #strict policy to ensure that the revision is checked out out in the repository"
-	loadSpecification repositoryResolutionPolicy: #'strict'.
-	projectDefinition := loadSpecification resolve ]
-		ensure: [ loadSpecification repositoryResolutionPolicy: oldPolicy ].
+	| repositoryDefinition projectDefinition |
+	projectDefinition := loadSpecification resolveStrict.
 
 	repositoryDefinition := loadSpecification repositoryDefinition.
 	(repositoryDefinition branches includes: specName)
