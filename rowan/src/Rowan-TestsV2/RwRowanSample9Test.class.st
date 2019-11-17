@@ -5,6 +5,46 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanSample9Test class >> _clearLoadSpecSessionCache [
+	"self _clearLoadSpecSessionCache"
+
+	SessionTemps current removeKey: self _loadSpecSessionCacheKey ifAbsent: [  ]
+]
+
+{ #category : 'private' }
+RwRowanSample9Test class >> _loadSpecSessionCacheKey [
+	^ #'RowanSample9SpecsDict'
+]
+
+{ #category : 'issue_527' }
+RwRowanSample9Test >> _issue_527_resolve_load_validate: loadSpec className: className expectedSymDictName: expectedSymDictName [
+	| projectDefinition loadedProjects symDictName symDict |
+	projectDefinition := loadSpec resolve.
+	loadedProjects := projectDefinition load.
+
+	self assert: loadedProjects size = 1.
+	loadedProjects do: [ :project | self assert: project audit isEmpty ].
+
+	symDictName := loadSpec
+		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId.
+
+	self assert: symDictName = expectedSymDictName.
+
+	(symDict := Rowan globalNamed: symDictName)
+		ifNil: [ 
+			self
+				assert: false
+				description:
+					'Expected symbol dictionary ' , symDictName printString , ' not present' ].
+
+	self assert: (symDict at: className asSymbol ifAbsent: [  ]) notNil.
+
+	(loadedProjects at: 1) unload.
+
+	self assert: (symDict at: className asSymbol ifAbsent: [  ]) isNil
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _loadSpecNamed: specName [
 	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
 		we'll use `fetch` and `pull` to update the repo and branches as needed"
@@ -13,7 +53,7 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 
 	| loadSpecification repositoryDefinition dict theSpec |
 	loadSpecification := self _rowanSample9_0000_load_spec.
-	theSpec := (SessionTemps current at: #'RowanSample9SpecsDict' ifAbsent: [  ])
+	theSpec := (SessionTemps current at: self _loadSpecSessionCacheKey ifAbsent: [  ])
 		ifNotNil: [ :specsDict | specsDict at: specName ]
 		ifNil: [ 
 			"The first time we access the repository in this session, we'll refresh the 
@@ -28,7 +68,7 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 				yourself.
 
 			dict := SessionTemps current
-				at: #'RowanSample9SpecsDict'
+				at: self _loadSpecSessionCacheKey
 				ifAbsentPut: [ Dictionary new ].
 			(loadSpecification repositoryRoot / 'specs') files
 				do: [ :file | 
@@ -46,6 +86,11 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 		pull: repositoryDefinition remote branch: theSpec revision;
 		yourself.
 	^ theSpec
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _loadSpecSessionCacheKey [
+	^ self class _loadSpecSessionCacheKey
 ]
 
 { #category : 'private' }
@@ -99,8 +144,9 @@ RwRowanSample9Test >> testIndexCards [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_527 [
-	| loadSpec projectDefinition loadedProjects symDictName className projectName symDict |
-	loadSpec := self _loadSpecNamed: 'spec_0001'.
+	| loadSpec symDictName className projectName |
+	loadSpec := (self _loadSpecNamed: 'spec_0001') copy.
+	loadSpec repositoryResolutionPolicy: #'strict'.
 
 	(Rowan image loadedProjectNamed: loadSpec projectAlias ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108,49 +154,18 @@ RwRowanSample9Test >> testIssue_527 [
 	projectName := loadSpec projectAlias.
 	className := projectName , 'Class1'.
 
-	projectDefinition := loadSpec resolve.
-	loadedProjects := projectDefinition load.
-	self assert: loadedProjects size = 1.
-	loadedProjects do: [ :project | self assert: project audit isEmpty ].
-
-	symDictName := loadSpec
-		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId.
-
-	self assert: symDictName = self _sampleSymbolDictionaryName1.
-
-	(symDict := Rowan globalNamed: symDictName)
-		ifNil: [ 
-			self
-				assert: false
-				description:
-					'Expected symbol dictionary ' , symDictName printString , ' not present' ].
-
-	self assert: (symDict at: className asSymbol ifAbsent: [  ]) notNil.
-
-	(loadedProjects at: 1) unload.
-
-	self deny: (symDict at: className asSymbol ifAbsent: [  ]) notNil.
+	self
+		_issue_527_resolve_load_validate: loadSpec
+		className: className
+		expectedSymDictName: self _sampleSymbolDictionaryName1.
 
 	symDictName = self _sampleSymbolDictionaryName2.
 	loadSpec
 		gemstoneSetDefaultSymbolDictNameForUser: Rowan image currentUserId
 		to: symDictName.
 
-	projectDefinition := loadSpec resolve.
-	loadedProjects := projectDefinition load.
-	self assert: loadedProjects size = 1.
-	loadedProjects do: [ :project | self assert: project audit isEmpty ].
-
-	(symDict := Rowan globalNamed: symDictName)
-		ifNil: [ 
-			self
-				assert: false
-				description:
-					'Expected symbol dictionary ' , symDictName printString , ' not present' ].
-
-	self assert: (symDict at: className asSymbol ifAbsent: [  ]) notNil.
-
-	(loadedProjects at: 1) unload.
-
-	self deny: (symDict at: className asSymbol ifAbsent: [  ]) notNil
+	self
+		_issue_527_resolve_load_validate: loadSpec
+		className: className
+		expectedSymDictName: symDictName
 ]
