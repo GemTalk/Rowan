@@ -120,6 +120,11 @@ RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
 ]
 
 { #category : 'private' }
+RwAbstractV2Test >> _deleteProjectRepositoryDir [
+	^ true
+]
+
+{ #category : 'private' }
 RwAbstractV2Test >> _sampleSymbolDictionaryName1 [
 
 	^ self class _sampleSymbolDictionaryName1
@@ -181,7 +186,8 @@ RwAbstractV2Test >> setUp [
 			Rowan
 				projectNamed: name
 				ifPresent: [ :prj | Rowan image _removeLoadedProject: prj _loadedProject ].
-			(projectsHome / name) ensureDeleteAll ]
+			self _deleteProjectRepositoryDir
+				ifTrue: [ (projectsHome / name) ensureDeleteAll ] ]
 ]
 
 { #category : 'running' }
