@@ -45,6 +45,20 @@ RwProjectLoadSpecificationV2 >> _checkProjectDirectoryStructure [
 	^ true
 ]
 
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> _platformProperties [
+	"direct access to IV ... used by ="
+
+	^ platformProperties
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> _repoType [
+	"direct access to IV ... used by ="
+
+	^ repoType
+]
+
 { #category : 'actions' }
 RwProjectLoadSpecificationV2 >> _resolve [
 	"answer true if attaching to an existing repository"
@@ -84,6 +98,51 @@ RwProjectLoadSpecificationV2 >> _validateGemStonePlatformUserIdMap: userIdMap [
 												, expectedClass name asString printString , ' not class '
 												, propertyValue class name asString printString ] ]
 						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
+]
+
+{ #category : 'comparing' }
+RwProjectLoadSpecificationV2 >> = anObject [
+	| lazyEqual |
+	^ self specName = anObject specName
+		and: [ 
+			self projectName = anObject projectName
+				and: [ 
+					self projectAlias = anObject projectAlias
+						and: [ 
+							self componentsPath = anObject componentsPath
+								and: [ 
+									self packagesPath = anObject packagesPath
+										and: [ 
+											self projectsPath = anObject projectsPath
+												and: [ 
+													self specsPath = anObject specsPath
+														and: [ 
+															self projectsHome = anObject projectsHome
+																and: [ 
+																	lazyEqual := self _repoType = anObject _repoType
+																		or: [ self repoType = anObject repoType ].
+																	lazyEqual
+																		and: [ 
+																			self gitUrl = anObject gitUrl
+																				and: [ 
+																					self diskUrl = anObject diskUrl
+																						and: [ 
+																							self mercurialUrl = anObject mercurialUrl
+																								and: [ 
+																									self svnUrl = anObject svnUrl
+																										and: [ 
+																											self revision = anObject revision
+																												and: [ 
+																													self comment = anObject comment
+																														and: [ 
+																															self componentNames asArray sort = anObject componentNames asArray sort
+																																and: [ 
+																																	self groupNames asArray sort = anObject groupNames asArray sort
+																																		and: [ 
+																																			self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
+																																				and: [ 
+																																					self _platformProperties = anObject _platformProperties
+																																						or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'converting' }
@@ -188,12 +247,38 @@ RwProjectLoadSpecificationV2 >> groupNames: anArray [
 	groupNames := anArray asArray
 ]
 
+{ #category : 'comparing' }
+RwProjectLoadSpecificationV2 >> hash [
+	| hashValue |
+	hashValue := self specName hash.
+	hashValue := hashValue bitXor: self projectName hash.
+	hashValue := hashValue bitXor: self projectAlias hash.
+	hashValue := hashValue bitXor: self componentsPath hash.
+	hashValue := hashValue bitXor: self packagesPath hash.
+	hashValue := hashValue bitXor: self projectsPath hash.
+	hashValue := hashValue bitXor: self specsPath hash.
+	hashValue := hashValue bitXor: self projectsHome hash.
+	hashValue := hashValue bitXor: self _repoType hash.
+	hashValue := hashValue bitXor: self gitUrl hash.
+	hashValue := hashValue bitXor: self diskUrl hash.
+	hashValue := hashValue bitXor: self mercurialUrl hash.
+	hashValue := hashValue bitXor: self svnUrl hash.
+	hashValue := hashValue bitXor: self revision hash.
+	hashValue := hashValue bitXor: self comment hash.
+	hashValue := hashValue bitXor: self componentNames hash.
+	hashValue := hashValue bitXor: self groupNames hash.
+	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
+	hashValue := hashValue bitXor: self _platformProperties hash.
+	^ hashValue
+]
+
 { #category : 'initialization' }
 RwProjectLoadSpecificationV2 >> initialize [
 	super initialize.
-	componentNames := #('Core').
+	componentNames := {'Core'}.
 	componentsPath := 'rowan/components'.
-	groupNames := #('core' 'tests').
+	groupNames := {'core'.
+	'tests'}.
 	packagesPath := 'rowan/src'.
 	projectsPath := 'rowan/projects'.
 	specsPath := 'rowan/specs'.
@@ -249,7 +334,29 @@ RwProjectLoadSpecificationV2 >> postCopy [
 	"don't forget to copy any compound state objects"
 
 	super postCopy.
-	repositoryDefinition := nil	"repositoryDefinition should not survive a copy?"
+	repositoryDefinition := nil.	"repositoryDefinition should not survive a copy?"
+	componentNames := componentNames copy.
+	groupNames := groupNames copy.
+	platformProperties
+		ifNotNil: [ 
+			| platformPropertiesCopy |
+			platformPropertiesCopy := platformProperties copy.
+			platformProperties
+				keysAndValuesDo: [ :platformName :userIdMap | 
+					| userIdMapCopy |
+					userIdMapCopy := userIdMap copy.
+					platformPropertiesCopy at: platformName put: userIdMapCopy.
+					platformName = 'gemstone'
+						ifTrue: [ 
+							userIdMap
+								keysAndValuesDo: [ :userId :platformPropertiesMap | 
+									| platformPropertiesMapCopy |
+									platformPropertiesMapCopy := platformPropertiesMap copy.
+									userIdMapCopy at: userId put: platformPropertiesMapCopy.
+									platformPropertiesMap
+										keysAndValuesDo: [ :propertyKey :propertyValue | platformPropertiesMapCopy at: propertyKey put: propertyValue copy ] ] ]
+						ifFalse: [ self error: 'postCopy of ' , platformName printString , ' not yet implemented' ] ].
+			platformProperties := platformPropertiesCopy ]
 ]
 
 { #category : 'accessing' }

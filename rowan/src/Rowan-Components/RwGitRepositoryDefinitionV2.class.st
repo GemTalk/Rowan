@@ -33,6 +33,48 @@ RwGitRepositoryDefinitionV2 >> _createRemoteUrl [
 	^ aRemoteUrl
 ]
 
+{ #category : 'comparing' }
+RwGitRepositoryDefinitionV2 >> = anObject [
+	^ self specName = anObject specName
+		and: [ 
+			self projectName = anObject projectName
+				and: [ 
+					self projectAlias = anObject projectAlias
+						and: [ 
+							self componentsPath = anObject componentsPath
+								and: [ 
+									self packagesPath = anObject packagesPath
+										and: [ 
+											self projectsPath = anObject projectsPath
+												and: [ 
+													self specsPath = anObject specsPath
+														and: [ 
+															self projectsHome = anObject projectsHome
+																and: [ 
+																	self repoType = anObject repoType
+																		and: [ 
+																			self gitUrl = anObject gitUrl
+																				and: [ 
+																					self diskUrl = anObject diskUrl
+																						and: [ 
+																							self mercurialUrl = anObject mercurialUrl
+																								and: [ 
+																									self svnUrl = anObject svnUrl
+																										and: [ 
+																											self revision = anObject revision
+																												and: [ 
+																													self comment = anObject comment
+																														and: [ 
+																															self componentNames asArray sort = anObject componentNames asArray sort
+																																and: [ 
+																																	self groupNames asArray sort = anObject groupNames asArray sort
+																																		and: [ 
+																																			self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
+																																				and: [ 
+																																					self platformProperties = anObject platformProperties
+																																						and: [ self repositoryDefinition = anObject repositoryDefinition ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+]
+
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> branches [
 	"return an array of branch names for the receiver"
@@ -161,6 +203,32 @@ RwGitRepositoryDefinitionV2 >> currentBranch [
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> fetch [
 	Rowan gitTools gitfetchIn: self repositoryRoot with: self remote
+]
+
+{ #category : 'comparing' }
+RwGitRepositoryDefinitionV2 >> hash [
+	| hashValue |
+	hashValue := self specName hash.
+	hashValue := hashValue bitXor: self projectName hash.
+	hashValue := hashValue bitXor: self projectAlias hash.
+	hashValue := hashValue bitXor: self componentsPath hash.
+	hashValue := hashValue bitXor: self packagesPath hash.
+	hashValue := hashValue bitXor: self projectsPath hash.
+	hashValue := hashValue bitXor: self specsPath hash.
+	hashValue := hashValue bitXor: self projectsHome hash.
+	hashValue := hashValue bitXor: self repoType hash.
+	hashValue := hashValue bitXor: self gitUrl hash.
+	hashValue := hashValue bitXor: self diskUrl hash.
+	hashValue := hashValue bitXor: self mercurialUrl hash.
+	hashValue := hashValue bitXor: self svnUrl hash.
+	hashValue := hashValue bitXor: self revision hash.
+	hashValue := hashValue bitXor: self comment hash.
+	hashValue := hashValue bitXor: self componentNames hash.
+	hashValue := hashValue bitXor: self groupNames hash.
+	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
+	hashValue := hashValue bitXor: self platformProperties hash.
+	hashValue := hashValue bitXor: self repositoryDefinition hash.
+	^ hashValue
 ]
 
 { #category : 'actions' }

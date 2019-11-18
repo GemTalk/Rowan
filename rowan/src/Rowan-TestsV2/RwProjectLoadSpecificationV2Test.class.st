@@ -58,6 +58,53 @@ RwProjectLoadSpecificationV2Test >> testBasicResolve [
 ]
 
 { #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testComparison_1 [
+	| projectName loadSpecification specName loadSpecCopy stonString stonStringCopy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	loadSpecCopy := loadSpecification copy.
+
+	stonStringCopy := STON toStringPretty: loadSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: loadSpecCopy = loadSpecification
+]
+
+{ #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testComparison_2 [
+	"compare equal even if lazy initialization has taken place"
+
+	| projectName loadSpecification specName loadSpecCopy stonString stonStringCopy stonStringLazy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	loadSpecCopy := loadSpecification copy.
+
+	stonStringCopy := STON toStringPretty: loadSpecCopy.
+
+	loadSpecCopy
+		repoType;
+		platformProperties.	"trigger the selectors that cause lazy initialization"
+
+	stonStringLazy := STON toStringPretty: loadSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: loadSpecCopy = loadSpecification.
+	self deny: stonStringLazy = stonStringCopy
+]
+
+{ #category : 'tests' }
 RwProjectLoadSpecificationV2Test >> testInvalidPropertyValue [
 	"error coverage for invalid load specs"
 
@@ -140,6 +187,125 @@ RwProjectLoadSpecificationV2Test >> testInvalidRevision [
 							'Error: Invalid revision ''boom''. Should be nil for disk-based repository'.
 			hitError := true ].
 	self assert: hitError
+]
+
+{ #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testIssue_530_1 [
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"original has no predefined platformSpec dictionary"
+
+	| projectName loadSpecification stonStrings specName loadSpecCopy stonString stonStringCopy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	loadSpecCopy := loadSpecification copy.
+	stonStringCopy := STON toStringPretty: loadSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: loadSpecCopy = loadSpecification.
+
+	loadSpecCopy
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	self deny: loadSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: loadSpecCopy)	"copy"}	"useful in case of test failure"
+]
+
+{ #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testIssue_530_2 [
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"predefine platformSpec dictionary in original"
+
+	| projectName loadSpecification stonStrings specName loadSpecCopy stonString |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultSymbolDictNameForUser: 'Bozo'
+			to: self _sampleSymbolDictionaryName2;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	loadSpecCopy := loadSpecification copy.
+
+	self assert: loadSpecCopy = loadSpecification.
+
+	loadSpecCopy
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	self deny: loadSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: loadSpecCopy)	"copy"}.
+	self assert: stonString = (stonStrings at: 1).	"duh"
+	self assert: stonString = (stonStrings at: 2).	"point of test"
+	self deny: stonString = (stonStrings at: 3)	"duh"
+]
+
+{ #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testIssue_530_3 [
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"componentNames and groupNames need to be isolated"
+
+	| projectName loadSpecification stonStrings specName loadSpecCopy stonString |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	loadSpecCopy := loadSpecification copy.
+
+	self assert: loadSpecCopy = loadSpecification.
+
+	loadSpecCopy componentNames add: 'Boom'.
+	loadSpecCopy groupNames add: 'boom'.
+
+	self deny: loadSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: loadSpecCopy)	"copy"}.
+	self assert: stonString = (stonStrings at: 1).	"duh"
+	self assert: stonString = (stonStrings at: 2).	"point of test"
+	self deny: stonString = (stonStrings at: 3)	"duh"
 ]
 
 { #category : 'tests' }

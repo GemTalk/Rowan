@@ -23,6 +23,14 @@ RwDiskRepositoryDefinitionV2 >> _fileSystem [
 	^ FileSystem disk
 ]
 
+{ #category : 'comparing' }
+RwDiskRepositoryDefinitionV2 >> = anObject [
+	^ self projectsHome = anObject projectsHome
+		and: [ 
+			self repositoryRoot = anObject repositoryRoot
+				and: [ self repositoryUrl = anObject repositoryUrl ] ]
+]
+
 { #category : 'testing' }
 RwDiskRepositoryDefinitionV2 >> canCommit [
 
@@ -60,6 +68,15 @@ RwDiskRepositoryDefinitionV2 >> create [
 RwDiskRepositoryDefinitionV2 >> doCommit: message [
 
 	"noop by default"
+]
+
+{ #category : 'comparing' }
+RwDiskRepositoryDefinitionV2 >> hash [
+	| hashValue |
+	hashValue := self projectsHome hash.
+	hashValue := hashValue bitXor: self repositoryRoot hash.
+	hashValue := hashValue bitXor: self repositoryUrl hash.
+	^ hashValue
 ]
 
 { #category : 'accessing' }
