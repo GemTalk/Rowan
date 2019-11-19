@@ -160,6 +160,29 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0003: projectDefinition [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004_b: projectDefinition [
+	| userId |
+	userId := 'SystemUser'.
+	(projectDefinition
+		addComponentNamed: 'Core3'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core1 package')
+		componentNames: #('Core1');
+		yourself.
+	projectDefinition
+		addPackageNamed: projectName , '-Core1'
+			toComponentNamed: 'Core3'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+	^ self _addPackageCore1DefinitionsFor_0004: projectDefinition
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: projectDefinition [
 	| className packageName userId |
 	userId := 'SystemUser'.
@@ -203,16 +226,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: projectDefinition [
 		gemstoneSetDefaultSymbolDictNameForUser: userId
 			to: RwAbstractV2Test _sampleSymbolDictionaryName3;
 		yourself.
-	packageName := projectName , '-Core1'.
-	className := projectName , 'Class1'.
-	((projectDefinition packageNamed: packageName)
-		addClassNamed: className
-		super: 'Object'
-		instvars: #('ivar1')
-		category: packageName
-		comment: 'I am an example class')
-		addInstanceMethod: 'foo ^1' protocol: 'accessing';
-		yourself.
+	self _addPackageCore1DefinitionsFor_0004: projectDefinition.
 	packageName := projectName , '-Core2'.
 	className := projectName , 'Class2'.
 	((projectDefinition packageNamed: packageName)
@@ -231,6 +245,22 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: projectDefinition [
 		comment: 'I test the example class')
 		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
 			protocol: 'tests';
+		yourself.
+	^ projectDefinition
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDefinition [
+	| className packageName |
+	packageName := projectName , '-Core1'.
+	className := projectName , 'Class1'.
+	((projectDefinition packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
 	^ projectDefinition
 ]
@@ -313,6 +343,61 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: index
 		loadSpecification: loadSpecification
 		repositoryDefinition: repositoryDefinition
 		commitMessage: commitMessage
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock [
+	"Create a second set of specs/components in an existing branch"
+
+	| repositoryDefinition projectDefinition |
+	projectDefinition := loadSpecification resolveStrict.
+
+	repositoryDefinition := loadSpecification repositoryDefinition.
+	(repositoryDefinition branches includes: branchName)
+		ifTrue: [ 
+			"branch exists, so we'll check it out and make the necessary mods"
+			repositoryDefinition checkout: branchName.
+			repositoryDefinition pull: repositoryDefinition remote branch: branchName ]
+		ifFalse: [ self error: 'Expected branch ' , branchName printString , ' to already exist' ].
+
+	loadSpecification revision: branchName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	addDefinitionsBlock value: projectDefinition.
+
+	projectDefinition exportComponents.	"write the component directory structure"
+	loadSpecification export.
+
+	^ repositoryDefinition
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock [
+	"Create a second set of specs/components in an existing branch"
+
+	| repositoryDefinition projectDefinition |
+	projectDefinition := loadSpecification resolveStrict.
+
+	repositoryDefinition := loadSpecification repositoryDefinition.
+	(repositoryDefinition branches includes: specName)
+		ifTrue: [ 
+			"branch exists, so we'll check it out and make the necessary mods"
+			repositoryDefinition checkout: specName.
+			repositoryDefinition pull: repositoryDefinition remote branch: specName ]
+		ifFalse: [ 
+			"create the branch"
+			repositoryDefinition createBranch: specName ].
+
+	loadSpecification revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	addDefinitionsBlock value: projectDefinition.
+
+	loadSpecification projectRoots
+		do: [ :rootDir | 
+			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
+			rootDir ensureDeleteAll ].
+
+	projectDefinition export.	"write the rowan directory structure"
+	loadSpecification export.
+
+	^ repositoryDefinition
 ]
 
 { #category : 'private' }
@@ -525,6 +610,50 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 ]
 
 { #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
+	"https://github.com/GemTalk/Rowan/issues/531"
+
+	"The method is NOT idempotent with respect to the branches involved. It must be run whenever genSpec_0004 is run.
+		Right now it is called from genSpec_0004_b, so explicit top-level call is not necessary."
+
+	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom branchName |
+	postfix := '0004_b'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+	branchName := 'spec_0004'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Create inconsistency in component definitions ... duplicate package error expected on load'
+		index: 4
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(500 531);
+		yourself.
+	loadSpecification := (self _createLoadSpecificatione: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: #('Core3');
+		yourself.
+
+	repositoryDefinition := self
+		_genSpecFor_004_b: specName
+		branchName: branchName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :projectDefinition | self _addDefinitionsFor_0004_b: projectDefinition ].
+
+	self
+		_finishCommitAndPush: branchName
+		indexCard: indexCard
+		loadSpecification: loadSpecification
+		repositoryDefinition: repositoryDefinition
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 	"Reconcile inconsistencies for storage of package-specific properties. This set of definitions, uses
 		three methods sent to a project definition to set the symbol dictionary for packages: as a
@@ -585,7 +714,9 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		indexCard: indexCard
 		loadSpecification: loadSpecification
 		repositoryDefinition: repositoryDefinition
-		commitMessage: commitMessage
+		commitMessage: commitMessage.
+
+	self genSpec_0004_b: commitMessage , '_b'
 ]
 
 { #category : 'accessing' }

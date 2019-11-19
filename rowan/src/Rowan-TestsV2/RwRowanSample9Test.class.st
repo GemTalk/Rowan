@@ -259,6 +259,25 @@ RwRowanSample9Test >> testIssue_531_basic [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue_532 [
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/532"
+
+	| loadSpec hitError |
+	hitError := false.
+	[ loadSpec := self _loadSpecNamed: 'spec_0004_b' ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self assert: (x := ex description) = 'UserDefinedError: Duplicate package'.
+			hitError := true ].
+	self assert: hitError description: 'Expected an error'
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_basic [
 
 	| loadSpec projectName projectDefinition loadedProjects project testResult |
