@@ -109,6 +109,11 @@ RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 		yourself.
 ]
 
+{ #category : 'private' }
+RwRowanSample9Test >> _specListProjectNames [
+	^ super _specListProjectNames , {'PrimerSample9'}
+]
+
 { #category : 'tests' }
 RwRowanSample9Test >> testIndexCards [
 	| loadSpecification indexCards specsDir loadSpecs projectDefinitions |
@@ -170,4 +175,35 @@ RwRowanSample9Test >> testIssue_527 [
 		_issue_527_resolve_load_validate: loadSpec
 		className: className
 		expectedSymDictName: self _sampleSymbolDictionaryName2
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testRowanSample4_basic [
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	| loadSpec className projectName projectDefinition loadedProjects project testResult |
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	(Rowan image loadedProjectNamed: loadSpec projectAlias ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	projectName := loadSpec projectAlias.
+	className := projectName , 'Class1'.
+
+	projectDefinition := loadSpec resolve.
+	loadedProjects := projectDefinition load.
+	self assert: loadedProjects size = 1.
+
+	project := loadedProjects at: 1.
+
+	self assert: project audit isEmpty.
+
+	testResult := project testSuite  run.
+
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	project unload
 ]

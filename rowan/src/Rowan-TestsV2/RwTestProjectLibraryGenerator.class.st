@@ -7,6 +7,7 @@ RwTestProjectLibraryGenerator new
 	preserveChangesOnGithub: true;
 	genSpec_0000: 'generate project definitions for specName_0000';
 	genSpec_0001: 'generate project definitions for specName_0001';
+	genSpec_0002: 'generate project definitions for specName_0002';
 	yourself
 "
 Class {
@@ -66,6 +67,78 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0001: projectDefinition [
 		category: packageName
 		comment: 'I test the example class')
 		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	^ projectDefinition
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0002: projectDefinition [
+	"RowanSample4 basic package and class structure"
+
+	| packageName1 packageName2 packageName3 packageName4 packageName5 className gemstoneClassName |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+	projectDefinition
+		addPackagesNamed:
+				{packageName1.
+				packageName2.
+				packageName3}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addPackagesNamed:
+				{packageName4.
+				packageName5}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		yourself.
+	className := projectName , 'Class1'.
+	((projectDefinition packageNamed: packageName1)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #()
+		category: packageName1
+		comment: 'I am an example class')
+		gs_options: #(#'instancesInvariant');
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		addClassMethod: 'bar ^''bar''' protocol: 'accessing';
+		yourself.
+	gemstoneClassName := 'RowanSample4IdentityKeyValueDictionary'.
+	((projectDefinition packageNamed: packageName2)
+		addClassNamed: gemstoneClassName
+		super: 'IdentityKeyValueDictionary'
+		instvars: #()
+		category: packageName2
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	((projectDefinition packageNamed: packageName3)
+		addClassExtensionNamed: gemstoneClassName)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName3 asLowercase;
+		yourself.
+	((projectDefinition packageNamed: packageName4)
+		addClassNamed: projectName , 'GemStoneTestCase'
+		super: 'TestCase'
+		category: packageName4
+		comment: 'I test the GemStone class')
+		addInstanceMethod: 'test1  self assert: ' , gemstoneClassName , ' new foo = 1'
+			protocol: 'tests';
+		addInstanceMethod: 'test2  self assert: ' , gemstoneClassName , ' bar = ''bar'''
+			protocol: 'tests';
+		yourself.
+	((projectDefinition packageNamed: packageName5)
+		addClassNamed: projectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName5
+		comment: 'I test the Core class')
+		addInstanceMethod: 'test1  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		addInstanceMethod: 'test2  self assert: ' , className , ' bar = ''bar'''
 			protocol: 'tests';
 		yourself.
 	^ projectDefinition
@@ -252,6 +325,46 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :projectDefinition | self _addDefinitionsFor_0001: projectDefinition ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		loadSpecification: loadSpecification
+		repositoryDefinition: repositoryDefinition
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
+	"RowanSample4 - basic project definition"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
+	postfix := '0002'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'RowanSample4 basic project definition'
+		index: 2
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #();
+		yourself.
+	loadSpecification := (self _createLoadSpecificatione: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		yourself.
+
+	repositoryDefinition := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :projectDefinition | self _addDefinitionsFor_0002: projectDefinition ].
 
 	self
 		_finishCommitAndPush: specName
