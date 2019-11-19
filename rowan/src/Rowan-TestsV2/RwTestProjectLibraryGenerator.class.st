@@ -163,22 +163,45 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0003: projectDefinition [
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: projectDefinition [
 	| className packageName userId |
 	userId := 'SystemUser'.
+	(projectDefinition
+		addComponentNamed: 'Core1'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core1 package')
+		componentNames: #('Core2');
+		yourself.
+	(projectDefinition
+		addComponentNamed: 'Core2'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core2 package')
+		componentNames: #('Core1');
+		yourself.
 	projectDefinition
 		addPackageNamed: projectName , '-Core1'
-			toComponentNamed: 'Core'
+			toComponentNamed: 'Core1'
 			withConditions: {'common'}
 			andGroupName: 'core'
-			gemstoneDefaultSymbolDictionaryForUser: userId -> RwAbstractV2Test _sampleSymbolDictionaryName1;
+			gemstoneDefaultSymbolDictionaryForUser:
+				userId -> RwAbstractV2Test _sampleSymbolDictionaryName1;
 		addPackageNamed: projectName , '-Core2'
-			toComponentNamed: 'Core'
+			toComponentNamed: 'Core2'
 			withConditions: {'common'}
 			andGroupName: 'core';
-		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName2 forPackageNamed: projectName , '-Core2';
+		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName2
+			forPackageNamed: projectName , '-Core2';
 		addPackageNamed: projectName , '-Tests'
-			toComponentNamed: 'Core'
+			toComponentNamed: 'Core1'
 			withConditions: {'common'}
 			andGroupName: 'tests';
-		gemstoneSetDefaultSymbolDictNameForUser: userId to: RwAbstractV2Test _sampleSymbolDictionaryName3;
+		gemstoneSetDefaultSymbolDictNameForUser: userId
+			to: RwAbstractV2Test _sampleSymbolDictionaryName3;
 		yourself.
 	packageName := projectName , '-Core1'.
 	className := projectName , 'Class1'.
@@ -534,7 +557,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
 	postfix := '0004'.
 	specName := 'spec_' , postfix.
-	derivedFrom := 'spec_0000'.
+	derivedFrom := 'master'.
 
 	indexCard := (self
 		_createCard: postfix
@@ -549,6 +572,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
+		componentNames: #('Core1');
 		yourself.
 
 	repositoryDefinition := self

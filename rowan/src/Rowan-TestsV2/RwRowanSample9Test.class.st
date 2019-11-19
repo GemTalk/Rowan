@@ -244,6 +244,9 @@ RwRowanSample9Test >> testIssue_531_basic [
 "resolve"
 	projectDefinition := loadSpec resolve.
 
+"validate"
+	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
+
 "define symbol dict associatons"
 	userId :=  'SystemUser'.
 	projectDefinition 
