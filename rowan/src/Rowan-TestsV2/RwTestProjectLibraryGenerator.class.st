@@ -185,8 +185,13 @@ RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage repositoryDefin
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard loadSpecification: loadSpecification repositoryDefinition: repositoryDefinition commitMessage: commitMessage [
-
+RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom loadSpecification: loadSpecification repositoryDefinition: repositoryDefinition commitMessage: commitMessage [
+	| derivedIndexCardFile |
+	derivedFrom
+		ifNotNil: [ 
+			derivedIndexCardFile := loadSpecification repositoryRoot / derivedFrom , 'ston'.
+			derivedIndexCardFile exists
+				ifTrue: [ derivedIndexCardFile delete ] ].
 	indexCard exportTo: loadSpecification repositoryRoot.
 
 	self
@@ -206,6 +211,17 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: index
 		_doCommitAndPush: commitMessage
 		repositoryDefinition: repositoryDefinition
 		branchName: 'master'
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard loadSpecification: loadSpecification repositoryDefinition: repositoryDefinition commitMessage: commitMessage [
+	^ self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: nil
+		loadSpecification: loadSpecification
+		repositoryDefinition: repositoryDefinition
+		commitMessage: commitMessage
 ]
 
 { #category : 'private' }
@@ -329,6 +345,7 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
+		derivedFrom:  (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		loadSpecification: loadSpecification
 		repositoryDefinition: repositoryDefinition
 		commitMessage: commitMessage
@@ -369,6 +386,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
+		derivedFrom:  (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		loadSpecification: loadSpecification
 		repositoryDefinition: repositoryDefinition
 		commitMessage: commitMessage
