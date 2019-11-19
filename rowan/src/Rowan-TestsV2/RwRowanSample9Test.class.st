@@ -150,9 +150,8 @@ RwRowanSample9Test >> testIndexCards [
 RwRowanSample9Test >> testIssue_230 [
 	"https://github.com/dalehenrich/Rowan/issues/230"
 
-	| loadSpec projectName projectDefinition loadedProjects project testResult |
-
-false ifTrue: [ ^self ].	"not ready to run"
+	| loadSpec projectName projectDefinition loadedProjects project testResult 
+		packageName1 packageName3 |
 
 	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer"
 	projectName := loadSpec projectAlias.
@@ -160,7 +159,18 @@ false ifTrue: [ ^self ].	"not ready to run"
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-"resolve/load"
+"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
+		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
+	packageName1 := projectName , '-' , 'Core'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	loadSpec
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName3 
+			forPackageNamed: packageName3;
+		yourself.
+
+"resolve/load primer project"
 	projectDefinition := loadSpec resolve.
 	loadedProjects := projectDefinition load.
 
@@ -172,7 +182,7 @@ false ifTrue: [ ^self ].	"not ready to run"
 	self deny: testResult hasErrors.
 	self deny: testResult hasFailures.
 
-	loadSpec := self _loadSpecNamed: 'spec_0002'.	"boom"
+	loadSpec := self _loadSpecNamed: 'spec_0002'.	"basic project (remove instancesInvariant option and move class to default symbol dictionary: self _sampleSymbolDictionaryName1)"
 
 "resolve/load"
 	projectDefinition := loadSpec resolve.
