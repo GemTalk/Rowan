@@ -229,6 +229,33 @@ RwRowanSample9Test >> testIssue_527 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue_531_basic [
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	| loadSpec projectName projectDefinition userId stonString |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectAlias.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve"
+	projectDefinition := loadSpec resolve.
+
+"define symbol dict associatons"
+	userId :=  'SystemUser'.
+	projectDefinition 
+		gemstoneSetSymbolDictName:  RwAbstractV2Test _sampleSymbolDictionaryName2 forPackageNamed: projectName , '-Core2';
+		gemstoneSetDefaultSymbolDictNameForUser: userId to:RwAbstractV2Test _sampleSymbolDictionaryName3;
+		yourself.
+
+"validate"
+	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_basic [
 
 	| loadSpec projectName projectDefinition loadedProjects project testResult |

@@ -9,6 +9,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0001: 'generate project definitions for specName_0001';
 	genSpec_0002: 'generate project definitions for specName_0002';
 	genSpec_0003: 'generate project definitions for specName_0003';
+	genSpec_0004: 'generate project definitions for specName_0004';
 	yourself
 "
 Class {
@@ -154,6 +155,59 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0003: projectDefinition [
 	((projectDefinition packageNamed: packageName1)
 		classDefinitionNamed: className)
 		gs_options: #(#'instancesInvariant');
+		yourself.
+	^ projectDefinition
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: projectDefinition [
+	| className packageName userId |
+	userId := 'SystemUser'.
+	projectDefinition
+		addPackageNamed: projectName , '-Core1'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core'
+			gemstoneDefaultSymbolDictionaryForUser: userId -> RwAbstractV2Test _sampleSymbolDictionaryName1;
+		addPackageNamed: projectName , '-Core2'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName2 forPackageNamed: projectName , '-Core2';
+		addPackageNamed: projectName , '-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		gemstoneSetDefaultSymbolDictNameForUser: userId to: RwAbstractV2Test _sampleSymbolDictionaryName3;
+		yourself.
+	packageName := projectName , '-Core1'.
+	className := projectName , 'Class1'.
+	((projectDefinition packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := projectName , '-Core2'.
+	className := projectName , 'Class2'.
+	((projectDefinition packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := projectName , '-Tests'.
+	((projectDefinition packageNamed: packageName)
+		addClassNamed: projectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
 		yourself.
 	^ projectDefinition
 ]
@@ -408,7 +462,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
-	"RowanSample4 - basic project definition"
+	"RowanSample4 - primer project definition"
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -442,6 +496,69 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 		_finishCommitAndPush: specName
 		indexCard: indexCard
 		derivedFrom:  (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		loadSpecification: loadSpecification
+		repositoryDefinition: repositoryDefinition
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
+	"Reconcile inconsistencies for storage of package-specific properties. This set of definitions, uses
+		three methods sent to a project definition to set the symbol dictionary for packages: as a
+		starting point to see which data structures are written to disk."
+
+	"
+	projectDefinition
+		addPackageNamed: projectName , '-Core1'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core'
+			gemstoneDefaultSymbolDictionaryForUser: userId -> RwAbstractV2Test _sampleSymbolDictionaryName1;
+		addPackageNamed: projectName , '-Core2'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName2 forPackageNamed: projectName , '-Core2';
+		addPackageNamed: projectName , '-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		gemstoneSetDefaultSymbolDictNameForUser: userId to: RwAbstractV2Test _sampleSymbolDictionaryName3;
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/531"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
+	postfix := '0004'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Reconcile inconsistencies for storage of package-specific properties'
+		index: 4
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(500 531);
+		yourself.
+	loadSpecification := (self _createLoadSpecificatione: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		yourself.
+
+	repositoryDefinition := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :projectDefinition | self _addDefinitionsFor_0004: projectDefinition ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
 		loadSpecification: loadSpecification
 		repositoryDefinition: repositoryDefinition
 		commitMessage: commitMessage
