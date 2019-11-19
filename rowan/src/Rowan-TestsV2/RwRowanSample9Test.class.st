@@ -147,6 +147,47 @@ RwRowanSample9Test >> testIndexCards [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue_230 [
+	"https://github.com/dalehenrich/Rowan/issues/230"
+
+	| loadSpec projectName projectDefinition loadedProjects project testResult |
+
+false ifTrue: [ ^self ].	"not ready to run"
+
+	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer"
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve/load"
+	projectDefinition := loadSpec resolve.
+	loadedProjects := projectDefinition load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadSpec := self _loadSpecNamed: 'spec_0002'.	"boom"
+
+"resolve/load"
+	projectDefinition := loadSpec resolve.
+	loadedProjects := projectDefinition load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue_527 [
 	"
 		self _clearLoadSpecSessionCache
@@ -179,31 +220,52 @@ RwRowanSample9Test >> testIssue_527 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_basic [
-	"
-		self _clearLoadSpecSessionCache
-	"
 
-	| loadSpec className projectName projectDefinition loadedProjects project testResult |
+	| loadSpec projectName projectDefinition loadedProjects project testResult |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
-	(Rowan image loadedProjectNamed: loadSpec projectAlias ifAbsent: [  ])
+	projectName := loadSpec projectAlias.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-	projectName := loadSpec projectAlias.
-	className := projectName , 'Class1'.
-
+"resolve/load"
 	projectDefinition := loadSpec resolve.
 	loadedProjects := projectDefinition load.
+
+"validate"
 	self assert: loadedProjects size = 1.
-
 	project := loadedProjects at: 1.
-
 	self assert: project audit isEmpty.
-
-	testResult := project testSuite  run.
-
+	testResult := project testSuite run.
 	self deny: testResult hasErrors.
 	self deny: testResult hasFailures.
 
+"unload project"
+	project unload
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testRowanSample4_primer [
+
+	| loadSpec projectName projectDefinition loadedProjects project testResult |
+	loadSpec := self _loadSpecNamed: 'spec_0003'.
+
+	projectName := loadSpec projectAlias.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve/load"
+	projectDefinition := loadSpec resolve.
+	loadedProjects := projectDefinition load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+"unload project"
 	project unload
 ]
