@@ -257,16 +257,18 @@ RwRowanSample9Test >> testIssue_531_basic [
 
 "validate"
 	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
+	self assert: projectDefinition packageNameToPlatformPropertiesMap isEmpty.
 
 "define symbol dict associatons"
 	userId :=  'SystemUser'.
 	projectDefinition 
-		gemstoneSetSymbolDictName:  RwAbstractV2Test _sampleSymbolDictionaryName2 forPackageNamed: projectName , '-Core2';
+		gemstoneSetSymbolDictName:  RwAbstractV2Test _sampleSymbolDictionaryName2 forPackageNamed: projectName , '-Core2';	"this ends up being specified in project ref properties dict ... should end up in Core2 platform properties"
 		gemstoneSetDefaultSymbolDictNameForUser: userId to:RwAbstractV2Test _sampleSymbolDictionaryName3;
 		yourself.
 
 "validate"
 	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
+	self assert: projectDefinition packageNameToPlatformPropertiesMap isEmpty.
 ]
 
 { #category : 'tests' }

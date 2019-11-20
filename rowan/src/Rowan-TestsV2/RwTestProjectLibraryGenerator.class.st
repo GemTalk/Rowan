@@ -611,7 +611,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
-	"https://github.com/GemTalk/Rowan/issues/531"
+	"https://github.com/GemTalk/Rowan/issues/532"
 
 	"The method is NOT idempotent with respect to the branches involved. It must be run whenever genSpec_0004 is run.
 		Right now it is called from genSpec_0004_b, so explicit top-level call is not necessary."
@@ -630,7 +630,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 		index: 4
 		derivedFrom: derivedFrom
 		comment: '')
-		rowanIssues: #(500 531);
+		rowanIssues: #(532);
 		yourself.
 	loadSpecification := (self _createLoadSpecificatione: self projectName)
 		specName: specName;
