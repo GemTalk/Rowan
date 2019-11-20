@@ -44,6 +44,11 @@ RwProjectDefinitionV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: pac
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
+	^ self projectLoadSpecification gemstoneDefaultSymbolDictNameForUser: userId
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: aBool [
 	self projectRef gemstoneSetDefaultMethodEnvForUser: userId to: aBool
 ]
@@ -109,8 +114,40 @@ RwProjectDefinitionV2 >> methodEnvForPackageNamed: packageName [
 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> symbolDictNameForPackageNamed: packageName [
+	^ self
+		symbolDictNameForPackageNamed: packageName
+		forUser: Rowan image currentUserId
+]
 
-	^self projectRef symbolDictNameForPackageNamed: packageName
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> symbolDictNameForPackageNamed: packageName forUser: userId [
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					| userIdPropertiesMap packagePropertiesMap |
+					userIdPropertiesMap := (component
+						conditionalPackageMapSpecsAtGemStoneUserId: userId)
+						at: #'packageNameToPlatformPropertiesMap'
+						ifAbsent: [ 
+							"no entries for the specific userId, check if there's an entry for allusers"
+							(component
+								conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
+								at: #'packageNameToPlatformPropertiesMap'
+								ifAbsent: [ 
+									"no entry for this package, use the defaultSymbolDictName"
+									^ self gemstoneDefaultSymbolDictNameForUser: userId ] ].
+					packagePropertiesMap := userIdPropertiesMap
+						at: packageName
+						ifAbsent: [ 
+							"no entry for this package, use the defaultSymbolDictName"
+							^ self gemstoneDefaultSymbolDictNameForUser: userId ].
+					^ packagePropertiesMap
+						at: 'symbolDictName'
+						ifAbsent: [ 
+							"no entry for this package, use the defaultSymbolDictName"
+							^ self gemstoneDefaultSymbolDictNameForUser: userId ] ] ].
+	self error: 'No package ' , packageName , ' found in the current project.'
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

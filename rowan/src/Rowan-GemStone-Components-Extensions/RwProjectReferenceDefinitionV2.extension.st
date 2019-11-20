@@ -65,22 +65,6 @@ RwProjectReferenceDefinitionV2 >> gemstoneSetMethodEnv: env forPackageNamed: pac
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectReferenceDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
-
-	| packageProperties packageNameToPlatformPropertiesMap |
-	packageNameToPlatformPropertiesMap := self packageNameToPlatformPropertiesMap.
-	packageProperties := packageNameToPlatformPropertiesMap
-		at: packageName
-		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
-	symbolDictName 
-		ifNil: [
-			"remove the entry if it exists"
-			packageProperties removeKey: 'symbolDictName' ifAbsent: [].
-			^self ].
-	packageProperties at: 'symbolDictName' put: symbolDictName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinitionV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
 
 	| packageProperties |
@@ -106,18 +90,6 @@ RwProjectReferenceDefinitionV2 >> methodEnvForPackageNamed: packageName [
 	^ packageProperties
 		at: 'methodEnv'
 		ifAbsent: [ ^ self defaultMethodEnv ]
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectReferenceDefinitionV2 >> symbolDictNameForPackageNamed: packageName [
-
-	| packageProperties |
-	packageProperties := self packageNameToPlatformPropertiesMap
-		at: packageName
-		ifAbsent: [ ^ self defaultSymbolDictName ].
-	^ packageProperties
-		at: 'symbolDictName'
-		ifAbsent: [ ^ self defaultSymbolDictName ]
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
