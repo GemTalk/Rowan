@@ -50,6 +50,10 @@ RwRowanSample9Test >> _issue_527_resolve_load_validate: loadSpec className: clas
 
 { #category : 'private' }
 RwRowanSample9Test >> _loadSpecNamed: specName [
+	"
+		self _clearLoadSpecSessionCache
+	"
+
 	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
 		we'll use `fetch` and `pull` to update the repo and branches as needed"
 
@@ -57,7 +61,9 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 
 	| loadSpecification repositoryDefinition dict theSpec |
 	loadSpecification := self _rowanSample9_0000_load_spec.
-	theSpec := (SessionTemps current at: self _loadSpecSessionCacheKey ifAbsent: [  ])
+	theSpec := (SessionTemps current
+		at: self _loadSpecSessionCacheKey
+		ifAbsent: [  ])
 		ifNotNil: [ :specsDict | specsDict at: specName ]
 		ifNil: [ 
 			"The first time we access the repository in this session, we'll refresh the 
@@ -83,6 +89,10 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 							spec := STON fromStream: stream.
 							dict at: spec specName put: spec ] ].
 			dict at: specName ].
+	theSpec := theSpec copy.
+	theSpec
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
 	theSpec resolveStrict.	"When we reference a spec, we'll checkout the branch and refresh from remote, as a courtesy"
 	repositoryDefinition := theSpec repositoryDefinition.
 	repositoryDefinition
@@ -139,11 +149,12 @@ RwRowanSample9Test >> testIndexCards [
 				readStreamDo: [ :fileStream | 
 					| stream |
 					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-					(STON fromStream: stream)
-						yourself ] ].
+					STON fromStream: stream ] ].
 
 	projectDefinitions := loadSpecs
-		collect: [ :loadSpec | STON toStringPretty: loadSpec resolve ].
+		collect: [ :loadSpec | 
+			loadSpec projectsHome: self _testRowanProjectsSandbox.
+			STON toStringPretty: loadSpec resolve ]
 ]
 
 { #category : 'tests' }
