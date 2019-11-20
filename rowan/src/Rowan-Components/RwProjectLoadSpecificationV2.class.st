@@ -24,6 +24,7 @@ Class {
 		'groupNames',
 		'platformProperties',
 		'repositoryResolutionPolicy',
+		'packageFormat',
 		'repositoryDefinition'
 	],
 	#category : 'Rowan-Components'
@@ -306,6 +307,27 @@ RwProjectLoadSpecificationV2 >> mercurialUrl [
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> mercurialUrl: anUrlString [
 	mercurialUrl := anUrlString
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> packageFormat [
+	^ self packageFormatIfAbsent: [ 'tonel' ]
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> packageFormat: aString [
+	(#('tonel' 'filetree') includes: aString)
+		ifFalse: [ 
+			self
+				error:
+					'Unknown package format ' , aString printString
+						, '. Should be one of: tonel, or filetree' ].
+	packageFormat := aString
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> packageFormatIfAbsent: absentBlock [
+	^ packageFormat ifNil: absentBlock
 ]
 
 { #category : 'accessing' }

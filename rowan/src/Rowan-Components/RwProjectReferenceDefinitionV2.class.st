@@ -2,7 +2,7 @@ Class {
 	#name : 'RwProjectReferenceDefinitionV2',
 	#superclass : 'RwDefinition',
 	#instVars : [
-		'projectName',
+		'components',
 		'projectLoadSpecification'
 	],
 	#category : 'Rowan-Components'
@@ -106,14 +106,12 @@ RwProjectReferenceDefinitionV2 >> componentNames: anArray [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> components [
-
-	^ self properties at: 'components' ifAbsentPut: [ Dictionary new ]
+	^ components ifNil: [ components := Dictionary new ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> components: aComponentDefinitionDictionary [
-
-	^ self properties at: 'components' put: aComponentDefinitionDictionary
+	^ components := aComponentDefinitionDictionary
 ]
 
 { #category : 'accessing' }
@@ -219,28 +217,18 @@ RwProjectReferenceDefinitionV2 >> packageConvention: aString [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packageFormat [
-
-	^ self packageFormatIfAbsent: [ 'tonel' ]
+	^ self projectLoadSpecification packageFormat
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packageFormat: aString [
-
-	(#( 'tonel' 'filetree' ) includes: aString)
-		ifFalse: [ self error: 'Unknown package format ', aString printString, '. Should be one of: tonel, or filetree' ].
-	^ self properties at: 'packageFormat' put: aString
+	self projectLoadSpecification packageFormat: aString
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packageFormatIfAbsent: absentBlock [
 
 	^ self properties at: 'packageFormat' ifAbsent: absentBlock
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinitionV2 >> packageNameToPlatformPropertiesMap [
-
-	^ self properties at: 'packageNameToPlatformPropertiesMap' ifAbsentPut: [ Dictionary new ]
 ]
 
 { #category : 'accessing' }
@@ -269,11 +257,11 @@ RwProjectReferenceDefinitionV2 >> packagesRoot [
 { #category : 'copying' }
 RwProjectReferenceDefinitionV2 >> postCopy [
 
-	| components |
+	| componentsCopy |
 	super postCopy.
-	components := self components copy.
-	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
-	self components: components
+	componentsCopy := self components copy.
+	componentsCopy keysAndValuesDo: [:key :value | componentsCopy at: key put: value copy ].
+	self components: componentsCopy
 ]
 
 { #category : 'accessing' }

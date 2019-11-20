@@ -133,6 +133,7 @@ RwRowanSample9Test >> _standard_resolve_load_validate: loadSpec [
 	loadedProjects := projectDefinition load.
 
 "validate"
+	self assert: projectDefinition projectRef properties isEmpty.
 	self assert: loadedProjects size = 1.
 	project := loadedProjects at: 1.
 	self assert: project audit isEmpty.
@@ -291,10 +292,6 @@ RwRowanSample9Test >> testIssue_527 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_531_baseline [
-	"
-		self _clearLoadSpecSessionCache
-	"
-
 	"load spec_0004 and validate that symbol dictionary specs are followed"
 
 	"https://github.com/GemTalk/Rowan/issues/531"
@@ -318,7 +315,12 @@ RwRowanSample9Test >> testIssue_531_baseline [
 	self _validateSymbolDictMapping: classesToSymDictMap.
 
 "unload project"
-	(Rowan projectNamed: projectName) unload
+	(Rowan projectNamed: projectName) unload.
+
+"validate"
+	classesToSymDictMap keysDo: [:classNames |
+		classNames do: [:className |
+			self assert: (Rowan globalNamed: className) isNil ] ].
 ]
 
 { #category : 'tests' }
@@ -343,7 +345,7 @@ RwRowanSample9Test >> testIssue_531_testbed [
 
 "validate"
 	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
-	self assert: projectDefinition packageNameToPlatformPropertiesMap isEmpty.
+	self assert: projectDefinition projectRef properties isEmpty.
 
 "define symbol dict associatons"
 	userId :=  'SystemUser'.
@@ -354,7 +356,7 @@ RwRowanSample9Test >> testIssue_531_testbed [
 
 "validate"
 	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
-	self assert: projectDefinition packageNameToPlatformPropertiesMap isEmpty.
+	self assert: projectDefinition projectRef properties isEmpty.
 
 false ifTrue: [ self halt ].
 ]

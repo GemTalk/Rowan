@@ -401,12 +401,6 @@ RwProjectDefinitionV2 >> packageFormatIfAbsent: aBlock [
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> packageNameToPlatformPropertiesMap [
-
-	^self projectRef packageNameToPlatformPropertiesMap
-]
-
-{ #category : 'accessing' }
 RwProjectDefinitionV2 >> packageNameToPlatformPropertiesMap: aDictionary [
 
 	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
