@@ -445,6 +445,19 @@ RwAbstractProjectLoadComponentV2 >> name: anObject [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> packageNames [
+	"Answer the collection of package names defined in the receiver."
+
+	| allDefinedPackageNames |
+	allDefinedPackageNames := Set new.
+	self conditionalPackages
+		keysAndValuesDo: [ :conditions :groupMap | 
+			groupMap
+				keysAndValuesDo: [ :groupName :packageMap | allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
+	^ allDefinedPackageNames
+]
+
+{ #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> projectName [
 
    ^projectName

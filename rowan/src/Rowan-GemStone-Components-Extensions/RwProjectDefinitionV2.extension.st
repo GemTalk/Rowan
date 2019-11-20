@@ -1,6 +1,12 @@
 Extension { #name : 'RwProjectDefinitionV2' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> _gemstoneAllUsersName [
+
+	^ self projectLoadSpecification _gemstoneAllUsersName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> asLoadedSymbolDictProject [
 
 	^ RwGsLoadedSymbolDictComponentProject newForProjectReferenceDefinition: self projectRef.
@@ -74,9 +80,18 @@ RwProjectDefinitionV2 >> gemstoneSetMethodEnv: env forPackageNamed: packageName 
 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
-	^ self projectRef
-		gemstoneSetSymbolDictName: symbolDictName
-		forPackageNamed: packageName
+	"answer true if the package was found in one of the receivers components"
+
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					component
+						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
+						andPackageName: packageName
+						setSymbolDictNameTo: symbolDictName.
+					^ true ] ].
+	^ false
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
