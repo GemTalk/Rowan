@@ -21,7 +21,7 @@ RwRowanSample9Test >> _deleteProjectRepositoryDir [
 	^ false
 ]
 
-{ #category : 'issue_527' }
+{ #category : 'private' }
 RwRowanSample9Test >> _issue_527_resolve_load_validate: loadSpec className: className expectedSymDictName: expectedSymDictName [
 	| projectDefinition loadedProjects symDictName symDict |
 	projectDefinition := loadSpec resolve.
@@ -122,6 +122,56 @@ RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 { #category : 'private' }
 RwRowanSample9Test >> _specListProjectNames [
 	^ super _specListProjectNames , {'PrimerSample9'}
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _standard_resolve_load_validate: loadSpec [
+	| projectDefinition loadedProjects project testResult |
+
+"resolve/load"
+	projectDefinition := loadSpec resolve.
+	loadedProjects := projectDefinition load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
+	| exceptions |
+	exceptions := {}.
+	classesToSymDictMap
+		keysAndValuesDo: [ :classNames :symDictName | 
+			| symDict |
+			(symDict := Rowan globalNamed: symDictName)
+				ifNil: [ 
+					exceptions
+						add:
+							'Expected symbol dictionary ' , symDictName printString , ' not present'.
+					classNames
+						do: [ :className | 
+							"if expected symbol dictionary is not present, confirm that the classes were loaded albeit, the wrong symbol dictionary"
+							(Rowan globalNamed: className)
+								ifNil: [ 
+									exceptions
+										add:
+											'Class named ' , className printString , ' not loaded as expected' ] ] ]
+				ifNotNil: [ 
+					classNames
+						do: [ :className | 
+							(symDict at: className asSymbol ifAbsent: [  ])
+								ifNil: [ 
+									exceptions
+										add:
+											'Class named ' , className printString
+												, ' not present in the expected symbol dictionary '
+												, symDictName printString ] ] ] ].
+	self assert: exceptions isEmpty
 ]
 
 { #category : 'tests' }
@@ -240,10 +290,46 @@ RwRowanSample9Test >> testIssue_527 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testIssue_531_basic [
+RwRowanSample9Test >> testIssue_531_baseline [
 	"
 		self _clearLoadSpecSessionCache
 	"
+
+	"load spec_0004 and validate that symbol dictionary specs are followed"
+
+	"https://github.com/GemTalk/Rowan/issues/531"
+
+	| loadSpec projectName classesToSymDictMap |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectAlias.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve/load/validate"
+	self _standard_resolve_load_validate: loadSpec.
+
+"validate that classes are in the correct symbolDictionary"
+	classesToSymDictMap := Dictionary new
+		at: {projectName , 'Class1'} put: self _sampleSymbolDictionaryName2;
+		at: {projectName , 'Class2'} put: self _sampleSymbolDictionaryName3;
+		at: {projectName , 'TestCase'} put: self _sampleSymbolDictionaryName1;
+		yourself.
+	self _validateSymbolDictMapping: classesToSymDictMap.
+
+"unload project"
+	(Rowan projectNamed: projectName) unload
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue_531_testbed [
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	"Currently using this test as a test bed for looking at state as I work through the issue #531 implementation"
+
+	"https://github.com/GemTalk/Rowan/issues/531"
 
 	| loadSpec projectName projectDefinition userId stonString |
 	loadSpec := self _loadSpecNamed: 'spec_0004'.
@@ -269,6 +355,8 @@ RwRowanSample9Test >> testIssue_531_basic [
 "validate"
 	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
 	self assert: projectDefinition packageNameToPlatformPropertiesMap isEmpty.
+
+false ifTrue: [ self halt ].
 ]
 
 { #category : 'tests' }
@@ -293,51 +381,33 @@ RwRowanSample9Test >> testIssue_532 [
 { #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_basic [
 
-	| loadSpec projectName projectDefinition loadedProjects project testResult |
+	| loadSpec projectName  |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
 	projectName := loadSpec projectAlias.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-"resolve/load"
-	projectDefinition := loadSpec resolve.
-	loadedProjects := projectDefinition load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+"resolve/load/validate"
+	self _standard_resolve_load_validate: loadSpec.
 
 "unload project"
-	project unload
+	(Rowan projectNamed: projectName) unload
 ]
 
 { #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_primer [
 
-	| loadSpec projectName projectDefinition loadedProjects project testResult |
+	| loadSpec projectName |
 	loadSpec := self _loadSpecNamed: 'spec_0003'.
 
 	projectName := loadSpec projectAlias.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-"resolve/load"
-	projectDefinition := loadSpec resolve.
-	loadedProjects := projectDefinition load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+"resolve/load/validate"
+	self _standard_resolve_load_validate: loadSpec.
 
 "unload project"
-	project unload
+	(Rowan projectNamed: projectName) unload
 ]

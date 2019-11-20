@@ -5,11 +5,11 @@ RwTestProjectLibraryGenerator new
 	projectName: 'RowanSample9';
 	projectUrl: 'https://github.com/dalehenrich/RowanSample9';
 	preserveChangesOnGithub: true;
-	genSpec_0000: 'generate project definitions for specName_0000';
-	genSpec_0001: 'generate project definitions for specName_0001';
-	genSpec_0002: 'generate project definitions for specName_0002';
-	genSpec_0003: 'generate project definitions for specName_0003';
-	genSpec_0004: 'generate project definitions for specName_0004';
+	genSpec_0000: 'generate project definitions for spec_0000';
+	genSpec_0001: 'generate project definitions for spec_0001';
+	genSpec_0002: 'generate project definitions for spec_0002';
+	genSpec_0003: 'generate project definitions for spec_0003';
+	genSpec_0004: 'generate project definitions for spec_0004';
 	yourself
 "
 Class {
@@ -185,7 +185,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004_b: projectDefinition [
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: projectDefinition [
 	| className packageName userId |
-	userId := 'SystemUser'.
+	userId := projectDefinition _gemstoneAllUsersName.
 	(projectDefinition
 		addComponentNamed: 'Core1'
 		definedGroupNames:
@@ -212,19 +212,19 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: projectDefinition [
 			withConditions: {'common'}
 			andGroupName: 'core'
 			gemstoneDefaultSymbolDictionaryForUser:
-				userId -> RwAbstractV2Test _sampleSymbolDictionaryName1;
+				userId -> RwAbstractV2Test _sampleSymbolDictionaryName2;
 		addPackageNamed: projectName , '-Core2'
 			toComponentNamed: 'Core2'
 			withConditions: {'common'}
 			andGroupName: 'core';
-		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName2
+		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName3
 			forPackageNamed: projectName , '-Core2';
 		addPackageNamed: projectName , '-Tests'
 			toComponentNamed: 'Core1'
 			withConditions: {'common'}
 			andGroupName: 'tests';
 		gemstoneSetDefaultSymbolDictNameForUser: userId
-			to: RwAbstractV2Test _sampleSymbolDictionaryName3;
+			to: RwAbstractV2Test _sampleSymbolDictionaryName1;
 		yourself.
 	self _addPackageCore1DefinitionsFor_0004: projectDefinition.
 	packageName := projectName , '-Core2'.
