@@ -256,12 +256,13 @@ RwProjectReferenceDefinitionV2 >> packagesRoot [
 
 { #category : 'copying' }
 RwProjectReferenceDefinitionV2 >> postCopy [
-
 	| componentsCopy |
 	super postCopy.
 	componentsCopy := self components copy.
-	componentsCopy keysAndValuesDo: [:key :value | componentsCopy at: key put: value copy ].
-	self components: componentsCopy
+	componentsCopy
+		keysAndValuesDo: [ :key :value | componentsCopy at: key put: value copy ].
+	self components: componentsCopy.
+	self projectLoadSpecification: self projectLoadSpecification copy
 ]
 
 { #category : 'accessing' }

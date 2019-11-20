@@ -54,7 +54,11 @@ RwProjectLoadSpecificationV2Test >> testBasicResolve [
 	self assert: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
 
-	self assert: projectDefinition packageNames isEmpty
+	self assert: projectDefinition packageNames isEmpty.
+	self assert: projectDefinition projectLoadSpecification ~~ loadSpecification.
+	self assert: projectDefinition projectLoadSpecification = loadSpecification.
+	self assert: projectDefinition projectLoadSpecification repositoryDefinition ~~ loadSpecification repositoryDefinition.
+	self assert: projectDefinition projectLoadSpecification repositoryDefinition = loadSpecification repositoryDefinition.
 ]
 
 { #category : 'tests' }

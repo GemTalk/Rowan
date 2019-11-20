@@ -9,7 +9,7 @@ RwProjectDefinitionV2 >> _gemstoneAllUsersName [
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> asLoadedSymbolDictProject [
 
-	^ RwGsLoadedSymbolDictComponentProject newForProjectReferenceDefinition: self projectRef.
+	^ RwGsLoadedSymbolDictComponentProjectV2 newForProjectReferenceDefinition: self projectRef.
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

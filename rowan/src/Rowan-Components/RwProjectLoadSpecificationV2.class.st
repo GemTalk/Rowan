@@ -356,7 +356,7 @@ RwProjectLoadSpecificationV2 >> postCopy [
 	"don't forget to copy any compound state objects"
 
 	super postCopy.
-	repositoryDefinition := nil.	"repositoryDefinition should not survive a copy?"
+	repositoryDefinition := repositoryDefinition copy.
 	componentNames := componentNames copy.
 	groupNames := groupNames copy.
 	platformProperties

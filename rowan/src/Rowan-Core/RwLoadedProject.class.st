@@ -295,7 +295,7 @@ RwLoadedProject >> unload [
 
 	| projectDefinition |
 	projectDefinition := self asDefinition.
-	^ Rowan projectTools delete deleteProjectDefinition: projectDefinition
+	^ projectDefinition _deleteTool deleteProjectDefinition: projectDefinition
 ]
 
 { #category : 'testing' }

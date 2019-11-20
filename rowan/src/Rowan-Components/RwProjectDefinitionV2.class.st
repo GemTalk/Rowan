@@ -20,16 +20,10 @@ RwProjectDefinitionV2 class >> fromLoadSpecification: aRwProjectLoadSpecificatio
 		yourself
 ]
 
-{ #category : 'instance creation' }
-RwProjectDefinitionV2 class >> projectName: projectName comment: commentString [
-	| projectLoadSpecification |
-	projectLoadSpecification := RwProjectLoadSpecificationV2 new
-		projectName: projectName;
-		specName: projectName;
-		yourself.
-	^ (self fromLoadSpecification: projectLoadSpecification)
-		comment: commentString;
-		yourself
+{ #category : 'actions' }
+RwProjectDefinitionV2 >> _deleteTool [
+
+	^ Rowan projectTools delete
 ]
 
 { #category : 'actions' }

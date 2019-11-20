@@ -325,15 +325,11 @@ RwRowanSample9Test >> testIssue_531_baseline [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_531_testbed [
-	"
-		self _clearLoadSpecSessionCache
-	"
-
 	"Currently using this test as a test bed for looking at state as I work through the issue #531 implementation"
 
 	"https://github.com/GemTalk/Rowan/issues/531"
 
-	| loadSpec projectName projectDefinition userId stonString |
+	| loadSpec projectName projectDefinition loadedProjects project loadedProjectDefinition |
 	loadSpec := self _loadSpecNamed: 'spec_0004'.
 
 	projectName := loadSpec projectAlias.
@@ -343,20 +339,22 @@ RwRowanSample9Test >> testIssue_531_testbed [
 "resolve"
 	projectDefinition := loadSpec resolve.
 
-"validate"
-	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
-	self assert: projectDefinition projectRef properties isEmpty.
+"load"
+	loadedProjects := projectDefinition load.
 
-"define symbol dict associatons"
-	userId :=  'SystemUser'.
-	projectDefinition 
-		gemstoneSetSymbolDictName:  RwAbstractV2Test _sampleSymbolDictionaryName2 forPackageNamed: projectName , '-Core2';	"this ends up being specified in project ref properties dict ... should end up in Core2 platform properties"
-		gemstoneSetDefaultSymbolDictNameForUser: userId to:RwAbstractV2Test _sampleSymbolDictionaryName3;
-		yourself.
-
-"validate"
-	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
 	self assert: projectDefinition projectRef properties isEmpty.
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+
+	loadedProjectDefinition := project asDefinition.
+
+	self assert: loadedProjectDefinition class = projectDefinition class.
+	self assert: (Rowan globalNamed: projectName , 'Class1') notNil.
+
+"unload"
+	(Rowan projectNamed: projectName) unload.
+
+	self assert: (Rowan globalNamed: projectName , 'Class1') isNil.
 
 false ifTrue: [ self halt ].
 ]

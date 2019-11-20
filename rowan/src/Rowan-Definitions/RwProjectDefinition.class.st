@@ -52,6 +52,12 @@ RwProjectDefinition class >> withProperties: properties packageDefinitions: pack
 ]
 
 { #category : 'actions' }
+RwProjectDefinition >> _deleteTool [
+
+	^ Rowan projectTools delete
+]
+
+{ #category : 'actions' }
 RwProjectDefinition >> _loadTool [
 
 	^ Rowan projectTools load
