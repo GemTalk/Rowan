@@ -263,6 +263,60 @@ RwRowanSample9Test >> testIssue_230 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue_446 [
+	"Not a real test ... used for V2.0 spec development"
+
+	"https://github.com/GemTalk/Rowan/issues/446"
+
+	"create a project that has 2 components, one component 
+		requires the other component; and two load specs, each spec
+		loads a different component ... needed to consolidate spec_004 
+		creation"
+
+	| loadSpec1 projectName projectsHome projectDefinition stonString |
+	projectName := 'RowanSample9_testbed'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	loadSpec1 := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #'git';
+		yourself.
+
+	projectDefinition := loadSpec1 resolve.
+
+	self assert: (projectsHome / projectName) exists.
+	self assert: (projectsHome / projectName / '.git') exists.
+
+	(projectDefinition
+		addComponentNamed: 'Core1'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core1 package and Core2 component')
+		componentNames: #('Core2');
+		yourself.
+	projectDefinition
+		addComponentNamed: 'Core2'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core2 package'.
+
+	stonString := STON toStringPretty: projectDefinition.
+	false
+		ifTrue: [ self halt ]
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue_527 [
 	"
 		self _clearLoadSpecSessionCache
@@ -324,42 +378,6 @@ RwRowanSample9Test >> testIssue_531_baseline [
 	classesToSymDictMap keysDo: [:classNames |
 		classNames do: [:className |
 			self assert: (Rowan globalNamed: className) isNil ] ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue_531_testbed [
-	"Currently using this test as a test bed for looking at state as I work through the issue #531 implementation"
-
-	"https://github.com/GemTalk/Rowan/issues/531"
-
-	| loadSpec projectName projectDefinition loadedProjects project loadedProjectDefinition |
-	loadSpec := self _loadSpecNamed: 'spec_0004'.
-
-	projectName := loadSpec projectAlias.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"resolve"
-	projectDefinition := loadSpec resolve.
-
-"load"
-	loadedProjects := projectDefinition load.
-
-	self assert: projectDefinition projectRef properties isEmpty.
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-
-	loadedProjectDefinition := project asDefinition.
-
-	self assert: loadedProjectDefinition class = projectDefinition class.
-	self assert: (Rowan globalNamed: projectName , 'Class1') notNil.
-
-"unload"
-	(Rowan projectNamed: projectName) unload.
-
-	self assert: (Rowan globalNamed: projectName , 'Class1') isNil.
-
-false ifTrue: [ self halt ].
 ]
 
 { #category : 'tests' }

@@ -280,7 +280,7 @@ RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: 
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _createLoadSpecificatione: aString [
+RwTestProjectLibraryGenerator >> _createLoadSpecification: aString [
 	^ RwProjectLoadSpecificationV2 new
 		projectName: aString;
 		projectsHome: self projectsHome;
@@ -468,7 +468,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 		index: 0
 		derivedFrom: derivedFrom
 		comment: ''.
-	loadSpecification := (self _createLoadSpecificatione: self projectName)
+	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
@@ -507,7 +507,7 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 		index: 1
 		derivedFrom: derivedFrom
 		comment: 'One class per package'.
-	loadSpecification := (self _createLoadSpecificatione: self projectName)
+	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
@@ -548,7 +548,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		comment: '')
 		rowanIssues: #();
 		yourself.
-	loadSpecification := (self _createLoadSpecificatione: self projectName)
+	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
@@ -589,7 +589,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 		comment: 'RowanSample9Class1 has instancesInvariant option set')
 		rowanIssues: #(230);
 		yourself.
-	loadSpecification := (self _createLoadSpecificatione: self projectName)
+	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
@@ -632,7 +632,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 		comment: '')
 		rowanIssues: #(532);
 		yourself.
-	loadSpecification := (self _createLoadSpecificatione: self projectName)
+	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
@@ -697,7 +697,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		comment: '')
 		rowanIssues: #(500 531);
 		yourself.
-	loadSpecification := (self _createLoadSpecificatione: self projectName)
+	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;

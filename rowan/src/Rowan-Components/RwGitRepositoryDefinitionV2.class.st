@@ -234,7 +234,9 @@ RwGitRepositoryDefinitionV2 >> resolve [
 
 	"answer true if attaching to an existing repository"
 
-	^ self repositoryUrl asRwUrl scheme = 'file'
+	| url |
+	url := self repositoryUrl.
+	^ (url isEmpty or: [ url asRwUrl scheme = 'file' ])
 		ifTrue: [ 
 			| gitTool "Creatr a new git repository in repository root" |
 			gitTool := Rowan projectTools git.

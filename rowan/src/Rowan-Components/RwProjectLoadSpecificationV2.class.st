@@ -276,7 +276,7 @@ RwProjectLoadSpecificationV2 >> hash [
 { #category : 'initialization' }
 RwProjectLoadSpecificationV2 >> initialize [
 	super initialize.
-	componentNames := {'Core'}.
+	componentNames := {}.
 	componentsPath := 'rowan/components'.
 	groupNames := {'core'.
 	'tests'}.
@@ -473,10 +473,18 @@ RwProjectLoadSpecificationV2 >> repositoryDefinition [
 							self mercurialUrl
 								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
 								ifNil: [ 
-									RwDiskRepositoryDefinitionV2
-										newNamed: self projectAlias
-										projectsHome: self projectsHome
-										repositoryUrl: self diskUrl ] ] ].
+									self repoType == #'git'
+										ifTrue: [ 
+											RwGitRepositoryDefinitionV2
+												newNamed: self projectAlias
+												projectsHome: self projectsHome
+												repositoryUrl: ''
+												revision: self revision ]
+										ifFalse: [ 
+											RwDiskRepositoryDefinitionV2
+												newNamed: self projectAlias
+												projectsHome: self projectsHome
+												repositoryUrl: self diskUrl ] ] ] ].
 
 			repositoryDefinition ]
 ]
@@ -513,8 +521,7 @@ RwProjectLoadSpecificationV2 >> repoType [
 
 { #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> repoType: aSymbol [
-	#(#'disk' #'git')
-		includes: aSymbol asSymbol
+	(#(#'disk' #'git') includes: aSymbol asSymbol)
 		ifFalse: [ self error: 'Unknown repo type ' , aSymbol asSymbol printString ].
 	^ repoType := aSymbol asSymbol
 ]

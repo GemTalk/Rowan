@@ -62,6 +62,33 @@ RwProjectLoadSpecificationV2Test >> testBasicResolve [
 ]
 
 { #category : 'tests' }
+RwProjectLoadSpecificationV2Test >> testBasicResolve_git [
+	"Create git repository on resolve"
+
+	| loadSpec1 projectName projectsHome projectDefinition projectAlias expectedRepositoryRoot stonString |
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	projectsHome := self _testRowanProjectsSandbox.
+	expectedRepositoryRoot := projectsHome / projectAlias.
+
+	self deny: expectedRepositoryRoot exists.
+
+	loadSpec1 := RwProjectLoadSpecificationV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #'git';
+		yourself.
+
+	projectDefinition := loadSpec1 resolve.
+	stonString := STON toStringPretty: projectDefinition.
+
+	self assert: expectedRepositoryRoot exists.
+	self assert: (expectedRepositoryRoot / '.git') exists
+]
+
+{ #category : 'tests' }
 RwProjectLoadSpecificationV2Test >> testComparison_1 [
 	| projectName loadSpecification specName loadSpecCopy stonString stonStringCopy |
 	projectName := 'RowanSample9'.
