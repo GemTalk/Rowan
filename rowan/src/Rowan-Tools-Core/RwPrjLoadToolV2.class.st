@@ -51,19 +51,9 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 
 { #category : 'private' }
 RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
-	| loadedProjectSet loadedProjectDefinitionSet diff loadedProjectInfo loadedProjects |
+	| loadedProjectSet loadedProjectDefinitionSet diff loadedProjects |
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
 	loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet.
-	loadedProjectInfo := projectSetDefinitionToLoad properties
-		at: 'loadedProjectInfo'
-		ifAbsent: [ Dictionary new ].
-	loadedProjectInfo
-		keysAndValuesDo: [ :projectName :projectInfo | 
-			| projectDefinition "install the packageMapSpecs for this load into the specification prior to the load" |
-			projectDefinition := projectSetDefinitionToLoad
-				projectNamed: projectName
-				ifAbsent: [  ].
-			projectDefinition updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
 	projectSetDefinitionToLoad definitions
 		keysAndValuesDo: [ :projectName :projectDefinition | 
 			projectDefinition packages
@@ -71,13 +61,11 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 					"set the target symbol dictionary name for each incoming package definition"
 					(packageDefinition gs_symbolDictionary isNil
 						or: [ 
-							(loadedProjectInfo includesKey: projectName)
-								or: [ 
-									(projectDefinition projectDefinitionSourceProperty
-										= RwLoadedProject _projectLoadedDefinitionSourceValue) not ] ])
+							(projectDefinition projectDefinitionSourceProperty
+								= RwLoadedProject _projectLoadedDefinitionSourceValue) not ])
 						ifTrue: [ 
-							"set gs_symbolDictionary for the first time, or (potentially) override if project freshly read 
-								from disk (loadedProjectInfo available)"
+							"set gs_symbolDictionary for the first time, or (potentially) override if project 
+								freshly read from disk"
 							packageDefinition
 								gs_symbolDictionary:
 									(projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
@@ -98,9 +86,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 						updateLoadedCommitId;
 						markNotDirty.
 					theLoadedProject loadedPackages
-						valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ].
-			(loadedProjectInfo at: projectDef name ifAbsent: [  ])
-				ifNotNil: [ :map | projectDef updateLoadedComponentInfoFor: theLoadedProject from: map ] ].
+						valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ] ].
 	^ loadedProjects
 ]
 

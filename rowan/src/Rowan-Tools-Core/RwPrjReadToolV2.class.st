@@ -130,26 +130,11 @@ RwPrjReadToolV2 >> readProjectSetForProjectDefinition: projectDefinition withCom
 							(lsd loadedGroupNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| projectName ndf theVisitor theProjectDefinition theComponentNames theGroupNames thePackageNames thePackageMapSpecs |
+			| ndf theVisitor theProjectDefinition |
 			theVisitor := visitedArray at: 1.
 			ndf := visitedArray at: 2.
 			theProjectDefinition := ndf at: 1.
-			projectName := theProjectDefinition name.
-			theComponentNames := ndf at: 2.
-			theGroupNames := ndf at: 3.
-			thePackageNames := theProjectDefinition packageNames.
-			theVisitor
-				ifNotNil: [ thePackageMapSpecs := theVisitor packageMapSpecs ]
-				ifNil: [ thePackageMapSpecs := Dictionary new ].
-			theProjectDefinition readPackageNames: thePackageNames.
-			projectSetDefinition addProject: theProjectDefinition.
-			((projectSetDefinition properties
-				at: 'loadedProjectInfo'
-				ifAbsentPut: [ Dictionary new ])
-				at: projectName
-				ifAbsentPut: [ Dictionary new ])
-				at: 'loadedConfigurationNames' put: theComponentNames;
-				at: 'loadedGroupNames' put: theGroupNames;
-				at: 'packageMapSpecs' put: thePackageMapSpecs ].
+			theProjectDefinition readPackageNames: theProjectDefinition packageNames.
+			projectSetDefinition addProject: theProjectDefinition ].
 	^ projectSetDefinition
 ]

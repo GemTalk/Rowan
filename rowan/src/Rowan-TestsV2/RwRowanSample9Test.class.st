@@ -126,7 +126,7 @@ RwRowanSample9Test >> _specListProjectNames [
 
 { #category : 'private' }
 RwRowanSample9Test >> _standard_resolve_load_validate: loadSpec [
-	| projectDefinition loadedProjects project testResult |
+	| projectDefinition loadedProjects project testResult loadedProjectDefinition |
 
 "resolve/load"
 	projectDefinition := loadSpec resolve.
@@ -140,6 +140,9 @@ RwRowanSample9Test >> _standard_resolve_load_validate: loadSpec [
 	testResult := project testSuite run.
 	self deny: testResult hasErrors.
 	self deny: testResult hasFailures.
+
+	loadedProjectDefinition := project asDefinition.
+	self assert: loadedProjectDefinition class = projectDefinition class.
 ]
 
 { #category : 'private' }

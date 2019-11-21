@@ -81,26 +81,27 @@ RwProjectLoadComponentVisitorV2 >> projectsRoot: aString [
 
 { #category : 'visiting' }
 RwProjectLoadComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLoadConfiguration [
-
 	(visitedComponentNames includes: aComponentLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
-	self _visited: aComponentLoadConfiguration. 
+	self _visited: aComponentLoadConfiguration.
 
 	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
 	self _processGroupNames.
 
 	self _processConditionalPackageNames: aComponentLoadConfiguration.
 
-	self _processConditionalPackageMapSpecs: aComponentLoadConfiguration.
-
 	self componentNames addAll: aComponentLoadConfiguration componentNames.
-	(self _components: self componentsRoot forProject: aComponentLoadConfiguration projectName)
-		do: [:component | component acceptNestedVisitor: self ].
+	(self
+		_components: self componentsRoot
+		forProject: aComponentLoadConfiguration projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
 
 	self projectNames addAll: aComponentLoadConfiguration projectNames.
-	(self _projects: self projectsRoot forProject: aComponentLoadConfiguration projectName)
-		do: [:projectSpec | projectSpec acceptVisitor: self ].
+	(self
+		_projects: self projectsRoot
+		forProject: aComponentLoadConfiguration projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]
 
 { #category : 'visiting' }

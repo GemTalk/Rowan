@@ -3,7 +3,6 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'packageNames',
-		'packageMapSpecs',
 		'visitedComponentNames',
 		'platformAttributes',
 		'definedGroupNames',
@@ -59,39 +58,6 @@ RwProjectLoadConfigurationVisitorV2 >> _platformAttributeMatchIn: platformMatche
 		(self _matchPlatformAttributes: platformPatternMatcher) 
 			ifTrue: [ ^true ] ].
 	^false
-
-]
-
-{ #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _processConditionalPackageMapSpecs: aProjectLoadConfiguration [
-
-	| currentUserId |
-	currentUserId := Rowan image currentUserId.
-	aProjectLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :thePackageMapSpecsMap | 
-		(self _platformAttributeMatchIn: {platformMatcher})
-			ifTrue: [
-				(thePackageMapSpecsMap 
-					at: currentUserId 
-					ifAbsent: [ 
-						"<allusers> is preferred, but for the alpha, there are outstanding configs that use <default>"
-						thePackageMapSpecsMap at: 'default'  
-							ifAbsent: [ thePackageMapSpecsMap at: 'allusers'  ifAbsent: [] ] ])
-								ifNotNil: [:thePackageMapSpecs |
-									(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-										ifNotNil: [:name | packageMapSpecs at: #defaultSymbolDictName put: name ].
-									(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-										ifNotNil: [:boolean | packageMapSpecs at: #defaultUseSessionMethodsForExtensions put: boolean  ].
-									(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-										ifNotNil: [:theMap | 
-											| map |
-											map := packageMapSpecs at: #packageNameToPlatformPropertiesMap ifAbsentPut: [ Dictionary new ].
-											theMap keysAndValuesDo: [:thePackageName :thePropMap | 
-												thePropMap keysAndValuesDo: [:thePropertyName :thePropertyValue |
-													| packageMap |
-													packageMap  := map at: thePackageName ifAbsentPut: [ Dictionary new ].
-													(#('symbolDictName' 'userId' 'useSessionMethodsForExtensions' ) includes: thePropertyName)
-														ifTrue: [ packageMap at: thePropertyName put: thePropertyValue  ] 
-														ifFalse: [ self error: 'Unrecognized property name ', thePropertyName printString, ' in package name to properties map' ] ] ] ] ] ] ]
 
 ]
 
@@ -169,20 +135,11 @@ RwProjectLoadConfigurationVisitorV2 >> groupNames: aColl [
 
 { #category : 'initialization' }
 RwProjectLoadConfigurationVisitorV2 >> initialize [
-
 	packageNames := Set new.
 	visitedComponentNames := Set new.
 	componentNames := Set new.
 	platformAttributes := #().
-	groupNames := Set new.
-	packageMapSpecs := Dictionary new.
-]
-
-{ #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> packageMapSpecs [
-
-	^ packageMapSpecs
-
+	groupNames := Set new
 ]
 
 { #category : 'accessing' }
@@ -219,37 +176,35 @@ RwProjectLoadConfigurationVisitorV2 >> visitNested: aProjectComponent [
 
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitorV2 >> visitNestedProjectLoadComponent: aNestedProjectLoadComponent [
-
 	(visitedComponentNames includes: aNestedProjectLoadComponent name)
 		ifTrue: [ ^ self ].
 
-	self _visited: aNestedProjectLoadComponent. 
+	self _visited: aNestedProjectLoadComponent.
 
 	self _processConditionalPackageNames: aNestedProjectLoadComponent.
 
-	self _processConditionalPackageMapSpecs: aNestedProjectLoadComponent.
-
 	self visitedComponentNames addAll: aNestedProjectLoadComponent componentNames.
-	(self _components: self componentRoot forProject: aNestedProjectLoadComponent projectName)
-		do: [:component | component acceptNestedVisitor: self ].
+	(self
+		_components: self componentRoot
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ]
 ]
 
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitorV2 >> visitProjectLoadComponent: aProjectLoadComponent [
-
 	(visitedComponentNames includes: aProjectLoadComponent name)
 		ifTrue: [ ^ self ].
 
-	self _visited: aProjectLoadComponent. 
+	self _visited: aProjectLoadComponent.
 
 	definedGroupNames := aProjectLoadComponent definedGroupNames.
 	self _processGroupNames.
 
 	self _processConditionalPackageNames: aProjectLoadComponent.
 
-	self _processConditionalPackageMapSpecs: aProjectLoadComponent.
-
 	self componentNames addAll: aProjectLoadComponent componentNames.
-	(self _components: self componentsRoor forProject: aProjectLoadComponent projectName)
-		do: [:component | component acceptNestedVisitor: self ].
+	(self
+		_components: self componentsRoor
+		forProject: aProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ]
 ]
