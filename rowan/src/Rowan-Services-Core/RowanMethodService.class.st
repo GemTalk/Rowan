@@ -282,7 +282,7 @@ RowanMethodService >> debugTest: testSelector inClassName: theClassName [
           (ex class isSubclassOf: Notification)
             ifTrue: [ 'passed' ]
             ifFalse: [ 'error' ] ].
-      ex signal ].
+      ex pass ].
   testRunClassName := theClassName.
   RowanCommandResult addResult: self
 ]
@@ -704,6 +704,17 @@ RowanMethodService >> update [
 		initialize: (Object _objectForOop: oop) 
 		organizer: organizer.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'updates' }
+RowanMethodService >> updateLatest [
+  | theClass compiledMethod |
+  theClass := (RowanClassService new name: className) theClass.
+  theClass ifNil: [ ^ self ].
+  compiledMethod := theClass compiledMethodAt: selector otherwise: nil.
+  compiledMethod ifNil: [ ^ self ].
+  oop := compiledMethod asOop.
+  super updateLatest
 ]
 
 { #category : 'private' }
