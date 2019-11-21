@@ -121,7 +121,10 @@ RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 
 { #category : 'private' }
 RwRowanSample9Test >> _specListProjectNames [
-	^ super _specListProjectNames , {'PrimerSample9'}
+	^ super _specListProjectNames
+		,
+			{'PrimerSample9'.
+			'RowanSample9_testbed'}
 ]
 
 { #category : 'private' }
@@ -273,7 +276,7 @@ RwRowanSample9Test >> testIssue_446 [
 		loads a different component ... needed to consolidate spec_004 
 		creation"
 
-	| loadSpec1 projectName projectsHome projectDefinition stonString |
+	| loadSpec1 loadSpec2 projectName projectsHome projectDefinition stonString |
 	projectName := 'RowanSample9_testbed'.
 	projectsHome := self _testRowanProjectsSandbox.
 
@@ -288,9 +291,6 @@ RwRowanSample9Test >> testIssue_446 [
 		yourself.
 
 	projectDefinition := loadSpec1 resolve.
-
-	self assert: (projectsHome / projectName) exists.
-	self assert: (projectsHome / projectName / '.git') exists.
 
 	(projectDefinition
 		addComponentNamed: 'Core1'
@@ -310,6 +310,14 @@ RwRowanSample9Test >> testIssue_446 [
 				add: 'tests' -> {'core'};
 				yourself)
 		comment: 'contains ' , projectName , '-Core2 package'.
+
+	projectDefinition
+		componentNames: #('Core1');
+		yourself.	"????"
+
+	loadSpec2 := loadSpec1 copy
+		componentNames:  #('Core2');
+		yourself.	"????"
 
 	stonString := STON toStringPretty: projectDefinition.
 	false
