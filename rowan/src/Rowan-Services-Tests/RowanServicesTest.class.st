@@ -10,6 +10,11 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'testing' }
+RowanServicesTest class >> isAbstract [
+  ^ self sunitName = #'RowanServicesTest'
+]
+
 { #category : 'unicode method' }
 RowanServicesTest >> addUnicodeSymbolKeyToUserGlobals [
   "RowanServicesTest new addUnicodeSymbolKeyToUserGlobals"

@@ -13,19 +13,38 @@ Class {
 		'testPackages',
 		'testCount',
 		'dictionaries',
-		'selectedClass'
+		'selectedClass',
+		'newCachedSelectors',
+		'newCachedClasses'
 	],
 	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'client commands' }
 RowanBrowserService >> abortTransaction [
+  | autoCommitService autoCommitState |
+  autoCommitState := RowanService autoCommit == #'failed'
+    ifTrue: [ true ]
+    ifFalse: [ RowanService autoCommit ].
+  System abortTransaction.
+  autoCommitService := RowanAutoCommitService new.
+  autoCommitService autoCommit: autoCommitState.
+  self updateProjects.
+  self updateDictionaries
+]
 
-	System abortTransaction.
-	self updateProjects.
-	self updateDictionaries. 
-	self packagesWithTests.
-	self updateType: #aborted:browser:.
+{ #category : 'client commands' }
+RowanBrowserService >> abortTransactionAndUpdateServices: services [
+  self abortTransaction.
+  services
+    do: [ :service | 
+      "we just updated projects, package, & dictionary services"
+      (service isProjectService not
+        and: [ service isDictionaryService not and: [ service isPackageService not ] ])
+        ifTrue: [ 
+          service
+            organizer: organizer;
+            updateLatest ] ]
 ]
 
 { #category : 'client commands' }
@@ -145,6 +164,33 @@ RowanBrowserService >> findRemovedServices: services [
 	].
 ]
 
+{ #category : 'initialize' }
+RowanBrowserService >> initialize [
+  super initialize.
+  newCachedSelectors := Array new.
+  newCachedClasses := Array new
+]
+
+{ #category : 'accessing' }
+RowanBrowserService >> newCachedClasses [
+	^newCachedClasses
+]
+
+{ #category : 'accessing' }
+RowanBrowserService >> newCachedClasses: object [
+	newCachedClasses := object
+]
+
+{ #category : 'accessing' }
+RowanBrowserService >> newCachedSelectors [
+	^newCachedSelectors
+]
+
+{ #category : 'accessing' }
+RowanBrowserService >> newCachedSelectors: object [
+	newCachedSelectors := object
+]
+
 { #category : 'window registry' }
 RowanBrowserService >> openWindows [
 
@@ -155,28 +201,36 @@ RowanBrowserService >> openWindows [
 
 { #category : 'client commands' }
 RowanBrowserService >> packagesWithTests [
+  organizer := ClassOrganizer new.	"when we call this method, our world has changed from a reload, etc."
   testPackages := Set new.
   testCount := 0.
-  TestCase allSubclasses
-    do: [ :testSubclass | 
-      | suite |
-      suite := testSubclass buildSuite.
-      suite tests
-        do: [ :testCase | 
-          | packageName compiledMethod |
-          (testCase isKindOf: TestSuite)
+  testPackages := Set new.
+  testCount := 0.
+  (organizer allSubclassesOf: TestCase)
+    do: [ :sub | 
+      | packageName testMethodCount |
+      testMethodCount := (sub sunitSelectors
+        select: [ :each | each beginsWith: 'test' ]) size.	"sending #testSelectors was slower"
+      testCount := testCount + testMethodCount.
+      testMethodCount > 0
+        ifTrue: [ 
+          packageName := sub rowanPackageName.
+          packageName = Rowan unpackagedName
             ifFalse: [ 
-              compiledMethod := testCase class
-                compiledMethodAt: testCase selector
-                otherwise: nil.
-              packageName := compiledMethod
-                ifNil: [ testCase class rowanPackageName ]
-                ifNotNil: [ compiledMethod rowanPackageName ].
-              packageName = Rowan unpackagedName
-                ifFalse: [ 
-                  testCount := testCount + 1.
-                  testPackages
-                    add: (RowanPackageService forPackageNamed: packageName) ] ] ] ].
+              testPackages
+                add:
+                  (RowanPackageService new
+                    name: packageName;
+                    updateProjectName;
+                    yourself) ].
+          (Rowan image loadedClassExtensionsForClass: sub)
+            do: [ :loadedThing | 
+              testPackages
+                add:
+                  (RowanPackageService new
+                    name: loadedThing loadedPackage name;
+                    updateProjectName;
+                    yourself)	"don't update the entire package for performance improvement" ] ] ].
   updateType := #'testPackages:'.
   testPackages := testPackages asArray.
   RowanCommandResult addResult: self
@@ -205,6 +259,7 @@ RowanBrowserService >> recompileMethodsAfterClassCompilation [
   RowanCommandResult addResult: classService.
   selectedClass := classService.
   updateType := #'none'.
+  self updateSymbols: (Array with: theClass name).
   RowanCommandResult addResult: self
 ]
 
@@ -221,13 +276,18 @@ RowanBrowserService >> releaseWindowHandle: integer [
 
 { #category : 'client commands' }
 RowanBrowserService >> reloadProjects: projectServices andUpdateServices: services [
-	| projectNames |
-	services do: [:service | service organizer: organizer]. 
-	projectServices do:[:projectService |
-		projectService reloadProject].
-	projectNames := projectServices collect: [:projectService | projectService name]. 
-	services do:[:service | 
-		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+  | projectNames answeringService |
+  services do: [ :service | service organizer: organizer ].
+  projectServices do: [ :service | service organizer: organizer ].
+  projectServices do: [ :projectService | projectService reloadProject ].
+  projectNames := projectServices
+    collect: [ :projectService | projectService name ].
+  services
+    do: [ :service | 
+      (projectNames includes: service rowanProjectName)
+        ifTrue: [ service updateLatest ] ].
+  answeringService := RowanAnsweringService new organizer: organizer.
+  answeringService updateAutocompleteSymbols
 ]
 
 { #category : 'client commands' }
@@ -295,17 +355,17 @@ RowanBrowserService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'client commands' }
 RowanBrowserService >> unloadProjectsNamed: array [
-	array do:[:projectName |
-		| project |
-		project := Rowan image loadedProjectNamed: projectName ifAbsent:[].
-		project ifNotNil: [
-			Rowan projectTools delete deleteProjectNamed: projectName]]. 
-	self updateProjects
+  array
+    do: [ :projectName | 
+      | project |
+      project := Rowan image loadedProjectNamed: projectName ifAbsent: [  ].
+      project
+        ifNotNil: [ Rowan projectTools delete deleteProjectNamed: projectName ] ].
+  self updateProjects
 ]
 
 { #category : 'update' }
 RowanBrowserService >> update [
-
 	self updateProjects
 ]
 
@@ -314,16 +374,28 @@ RowanBrowserService >> updateDictionaries [
 
 	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
 	dictionaries := dictionaries asOrderedCollection. 
-	updateType := #dictionaryListUpdate:.
+	updateType ifNil: [updateType := OrderedCollection new]. 
+	updateType add: #dictionaryListUpdate:.
 	RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
 RowanBrowserService >> updateProjects [
-	| sortedProjects | 
-	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
-	sortedProjects addAll:  Rowan image loadedProjects.
-	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
-	updateType := #projectsUpdate:browser:.
-	RowanCommandResult addResult: self
+  | sortedProjects |
+  self packagesWithTests. "make sure tests are always updated" 
+  sortedProjects := SortedCollection sortBlock: [ :a :b | a name < b name ].
+  sortedProjects addAll: Rowan image loadedProjects.
+  projects := sortedProjects
+    collect: [ :project | RowanProjectService newNamed: project name ].
+  updateType := Array with: updateType with: #'projectsUpdate:browser:'. "temporary hack" 
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'update' }
+RowanBrowserService >> updateSymbols: className [
+  | browserService |
+  browserService := RowanBrowserService new.
+  browserService newCachedClasses add: className.
+  browserService updateType: #'addCachedSymbols:'.
+  RowanCommandResult addResult: browserService
 ]
