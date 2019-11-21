@@ -109,6 +109,13 @@ RowanClassService >> addSubclassWarningString [
 	^'Superclass is not packaged. Enter the desired package name'
 ]
 
+{ #category : 'client commands' }
+RowanClassService >> allSubclassServices [
+  hierarchyServices := self classHierarchy: (Array with: self theClass).
+  (hierarchyServices at: self ifAbsent:[^self])
+    do: [ :classService | classService allSubclassServices ]
+]
+
 { #category : 'Accessing' }
 RowanClassService >> allTests [
 	| allSelectors theClass |
@@ -413,6 +420,23 @@ RowanClassService >> forClassNamed: className [
 	self refreshFrom: theClass.
 ]
 
+{ #category : 'client commands' }
+RowanClassService >> fullHierarchy [
+  | behavior sortedSubclasses |
+  behavior := self theClass.
+  hierarchyServices := Dictionary new.
+  hierarchyServices at: #'expand' put: Array new.
+  sortedSubclasses := behavior subclasses
+    asSortedCollection: [ :x :y | x name < y name ].
+  RowanCommandResult addResult: self.
+  sortedSubclasses
+    do: [ :subclass | 
+      | classService |
+      classService := (self classServiceFromOop: subclass asOop) meta: meta.
+      (hierarchyServices at: #'expand') add: classService.
+      classService allSubclassServices ]
+]
+
 { #category : 'comparing' }
 RowanClassService >> hash [
 	^self name hash bitXor: meta hash
@@ -620,17 +644,20 @@ RowanClassService >> objectInBaseNamed: aString [
 
 { #category : 'client commands' }
 RowanClassService >> oneLevelClassHierarchy [
-	"good for expanding an existing hierarchy quickly"
-	| behavior sortedSubclasses |
-	behavior := self theClass. 
-	hierarchyServices := Dictionary new. 
-	hierarchyServices at: #expand put: Array new. 
-	sortedSubclasses := behavior subclasses asSortedCollection:[:x :y | x name < y name].
-	sortedSubclasses do: [:subclass |
-		| classService |
-		classService := (self classServiceFromOop: subclass asOop) meta: meta.
-		(hierarchyServices at: #expand) add: classService. 
-	].
+  "good for expanding an existing hierarchy quickly"
+
+  | behavior sortedSubclasses |
+  behavior := self theClass.
+  hierarchyServices := Dictionary new.
+  hierarchyServices at: #'expand' put: Array new.
+  sortedSubclasses := behavior subclasses
+    asSortedCollection: [ :x :y | x name < y name ].
+  sortedSubclasses
+    do: [ :subclass | 
+      | classService |
+      classService := (self classServiceFromOop: subclass asOop) meta: meta.
+      (hierarchyServices at: #'expand') add: classService ].
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'Accessing' }
