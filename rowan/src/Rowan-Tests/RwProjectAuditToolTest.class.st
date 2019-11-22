@@ -283,7 +283,9 @@ RwProjectAuditToolTest >> test_Issue_534 [
     renameClassNamed: className2 to: className4.
 
 "Until Issue #490 is fixed, the audit is expected to fail ..."
-  self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty not.
+  audit := Rowan projectTools audit auditForProjectNamed: projectName.
+  self assert: (audit at: packageName1 ifAbsent: []) isNil.
+   self assert: ((audit at: packageName2) at: className3) size = 1.
 ]
 
 { #category : 'tests' }
@@ -513,7 +515,7 @@ RwProjectAuditToolTest >> testClassVars [
 	self assert: testClassB == (Rowan globalNamed: className) description: 'Rowan does not resolve new version of class'.
 	self deny: testClassB == testClass.
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 4 description: 'expected 4 failures superclass instvars classvars and comment'
+	self assert: ((x at: packageName) at: className) size = 5 description: 'expected 5 failures superclass instvars classvars comment and loaded class not latest'
 
 ]
 

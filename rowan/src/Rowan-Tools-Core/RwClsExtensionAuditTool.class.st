@@ -39,7 +39,7 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 							add:
 								(aLoadedClassExtension name , ' #' , extensionCategoryName)
 									->
-										('extension class (' , aLoadedClassExtension handle asOop printString
+										(' loaded extension class (' , aLoadedClassExtension handle asOop printString
 										, ') not latest version of class ('
 										, aBehavior asOop printString , ') ') ].
 
