@@ -255,19 +255,19 @@ RwProjectAuditToolTest >> test_Issue_534 [
     addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod1 ^1' protocol: '*', packageName2 asLowercase);
     addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod1 ^1' protocol: '*', packageName2 asLowercase); 
     yourself.
-  packageDefinition addClassExtension: classExtensionDefinition.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
   classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className2)
     addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod2 ^2' protocol: '*', packageName2 asLowercase);
     addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod2 ^2' protocol: '*', packageName2 asLowercase); 
     yourself.
-  packageDefinition addClassExtension: classExtensionDefinition.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
   classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className3)
     addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod3 ^3' protocol: '*', packageName2 asLowercase);
     addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod3 ^3' protocol: '*', packageName2 asLowercase); 
     yourself.
-  packageDefinition addClassExtension: classExtensionDefinition.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "load"
   projectSetDefinition := RwProjectSetDefinition new.
