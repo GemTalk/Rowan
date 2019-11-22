@@ -4466,5 +4466,4 @@ RwBrowserToolApiTest >> testRenameClass_Issue_490 [
           (extraMethods at: className ifAbsentPut: [ Dictionary new ])
             at: selector put: ar ] ] ].
   true ifTrue: [ self assert: extraMethods size = 0 ].
-self halt.
 ]
