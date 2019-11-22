@@ -11,7 +11,7 @@ RwProjectDefinitionV2Test >> testBasic [
 	| projectName projectAlias loadSpecification stonString projectDefinition |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: self _testRowanProjectsSandbox;
@@ -33,7 +33,7 @@ RwProjectDefinitionV2Test >> testCreateNewDiskProject [
 	projectsHome := self _testRowanProjectsSandbox.
 	projectRoot := projectsHome / projectAlias.
 
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;
@@ -66,7 +66,7 @@ RwProjectDefinitionV2Test >> testCreateNewGitProject [
 	projectsHome := self _testRowanProjectsSandbox.
 	projectRoot := projectsHome / projectAlias.
 
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;

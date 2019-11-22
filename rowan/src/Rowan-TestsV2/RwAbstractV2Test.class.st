@@ -108,7 +108,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 { #category : 'private' }
 RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
 	| loadSpecification projectDefinition |
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;

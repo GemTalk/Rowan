@@ -1,17 +1,17 @@
 Class {
-	#name : 'RwProjectLoadSpecificationV2Test',
+	#name : 'RwProjectSpecificationV2Test',
 	#superclass : 'RwAbstractV2Test',
 	#category : 'Rowan-TestsV2'
 }
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testBasic [
+RwProjectSpecificationV2Test >> testBasic [
 	"excercise basic functionality"
 
 	| projectName loadSpecification stonString specName |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvTo: 0;
@@ -28,7 +28,7 @@ RwProjectLoadSpecificationV2Test >> testBasic [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testBasicResolve [
+RwProjectSpecificationV2Test >> testBasicResolve [
 	"excercise basic functionality"
 
 	| projectName projectAlias loadSpecification stonString projectsHome expectedRepositoryRoot projectDefinition |
@@ -39,7 +39,7 @@ RwProjectLoadSpecificationV2Test >> testBasicResolve [
 
 	self deny: expectedRepositoryRoot exists.
 
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;
@@ -62,7 +62,7 @@ RwProjectLoadSpecificationV2Test >> testBasicResolve [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testBasicResolve_git [
+RwProjectSpecificationV2Test >> testBasicResolve_git [
 	"Create git repository on resolve"
 
 	| loadSpec1 projectName projectsHome projectDefinition projectAlias expectedRepositoryRoot stonString |
@@ -73,7 +73,7 @@ RwProjectLoadSpecificationV2Test >> testBasicResolve_git [
 
 	self deny: expectedRepositoryRoot exists.
 
-	loadSpec1 := RwProjectLoadSpecificationV2 new
+	loadSpec1 := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;
@@ -89,11 +89,11 @@ RwProjectLoadSpecificationV2Test >> testBasicResolve_git [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testComparison_1 [
+RwProjectSpecificationV2Test >> testComparison_1 [
 	| projectName loadSpecification specName loadSpecCopy stonString stonStringCopy |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
@@ -108,13 +108,13 @@ RwProjectLoadSpecificationV2Test >> testComparison_1 [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testComparison_2 [
+RwProjectSpecificationV2Test >> testComparison_2 [
 	"compare equal even if lazy initialization has taken place"
 
 	| projectName loadSpecification specName loadSpecCopy stonString stonStringCopy stonStringLazy |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
@@ -136,13 +136,13 @@ RwProjectLoadSpecificationV2Test >> testComparison_2 [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testInvalidPropertyValue [
+RwProjectSpecificationV2Test >> testInvalidPropertyValue [
 	"error coverage for invalid load specs"
 
 	| projectName loadSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvTo: 'boom';
@@ -164,13 +164,13 @@ RwProjectLoadSpecificationV2Test >> testInvalidPropertyValue [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testInvalidPropertyValueForUser [
+RwProjectSpecificationV2Test >> testInvalidPropertyValueForUser [
 	"error coverage for invalid load specs"
 
 	| projectName loadSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 'boom';
@@ -195,13 +195,13 @@ RwProjectLoadSpecificationV2Test >> testInvalidPropertyValueForUser [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testInvalidRevision [
+RwProjectSpecificationV2Test >> testInvalidRevision [
 	"error coverage for invalid load specs"
 
 	| projectName loadSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		revision: 'boom';
 		yourself.
@@ -221,7 +221,7 @@ RwProjectLoadSpecificationV2Test >> testInvalidRevision [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testIssue_530_1 [
+RwProjectSpecificationV2Test >> testIssue_530_1 [
 	"https://github.com/GemTalk/Rowan/issues/530"
 
 	"state changes to a copy of a loadSpec should not affect oriinal load spec"
@@ -231,7 +231,7 @@ RwProjectLoadSpecificationV2Test >> testIssue_530_1 [
 	| projectName loadSpecification stonStrings specName loadSpecCopy stonString stonStringCopy |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
@@ -262,7 +262,7 @@ RwProjectLoadSpecificationV2Test >> testIssue_530_1 [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testIssue_530_2 [
+RwProjectSpecificationV2Test >> testIssue_530_2 [
 	"https://github.com/GemTalk/Rowan/issues/530"
 
 	"state changes to a copy of a loadSpec should not affect oriinal load spec"
@@ -272,7 +272,7 @@ RwProjectLoadSpecificationV2Test >> testIssue_530_2 [
 	| projectName loadSpecification stonStrings specName loadSpecCopy stonString |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultSymbolDictNameForUser: 'Bozo'
@@ -306,7 +306,7 @@ RwProjectLoadSpecificationV2Test >> testIssue_530_2 [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testIssue_530_3 [
+RwProjectSpecificationV2Test >> testIssue_530_3 [
 	"https://github.com/GemTalk/Rowan/issues/530"
 
 	"state changes to a copy of a loadSpec should not affect oriinal load spec"
@@ -316,7 +316,7 @@ RwProjectLoadSpecificationV2Test >> testIssue_530_3 [
 	| projectName loadSpecification stonStrings specName loadSpecCopy stonString |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
@@ -340,13 +340,13 @@ RwProjectLoadSpecificationV2Test >> testIssue_530_3 [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testMissingRevision [
+RwProjectSpecificationV2Test >> testMissingRevision [
 	"error coverage for invalid load specs"
 
 	| projectName loadSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		gitUrl: 'https://github.com/user/', projectName;
 		yourself.
@@ -366,13 +366,13 @@ RwProjectLoadSpecificationV2Test >> testMissingRevision [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testNilInstanceVariable [
+RwProjectSpecificationV2Test >> testNilInstanceVariable [
 	"error coverage for invalid load specs"
 
 	| projectName loadSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectsPath: nil;
 		yourself.
@@ -390,13 +390,13 @@ RwProjectLoadSpecificationV2Test >> testNilInstanceVariable [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testOnlyOneRepositoryUrl [
+RwProjectSpecificationV2Test >> testOnlyOneRepositoryUrl [
 	"error coverage for invalid load specs"
 
 	| projectName loadSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		gitUrl: 'https://github.com/user/' , projectName;
 		diskUrl: 'ftp://$ROWAN_PROJECTS_HOME/' , projectName;
@@ -416,7 +416,7 @@ RwProjectLoadSpecificationV2Test >> testOnlyOneRepositoryUrl [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testSpec_0001_A [
+RwProjectSpecificationV2Test >> testSpec_0001_A [
 	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
 
 	"functional variant of testSpec_0001_B"
@@ -440,7 +440,7 @@ RwProjectLoadSpecificationV2Test >> testSpec_0001_A [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testSpec_0001_B [
+RwProjectSpecificationV2Test >> testSpec_0001_B [
 	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
 
 	"testSpec_0001_A behavies correctly"
@@ -477,13 +477,13 @@ RwProjectLoadSpecificationV2Test >> testSpec_0001_B [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testUknownPlatform [
+RwProjectSpecificationV2Test >> testUknownPlatform [
 	"error coverage for invalid load specs"
 
 	| projectName loadSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvTo: 0;
@@ -506,13 +506,13 @@ RwProjectLoadSpecificationV2Test >> testUknownPlatform [
 ]
 
 { #category : 'tests' }
-RwProjectLoadSpecificationV2Test >> testUnknownPropertyKey [
+RwProjectSpecificationV2Test >> testUnknownPropertyKey [
 	"error coverage for invalid load specs"
 
 	| projectName loadSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectLoadSpecificationV2 new
+	loadSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvTo: 0;

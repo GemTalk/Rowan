@@ -283,7 +283,7 @@ RwRowanSample9Test >> testIssue_446 [
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-	loadSpec1 := RwProjectLoadSpecificationV2 new
+	loadSpec1 := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
