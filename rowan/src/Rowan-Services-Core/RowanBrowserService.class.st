@@ -259,7 +259,7 @@ RowanBrowserService >> recompileMethodsAfterClassCompilation [
   RowanCommandResult addResult: classService.
   selectedClass := classService.
   updateType := #'none'.
-  self updateSymbols: (Array with: theClass name).
+  self updateSymbols: (Array with: theClass name asString).
   RowanCommandResult addResult: self
 ]
 
@@ -392,10 +392,7 @@ RowanBrowserService >> updateProjects [
 ]
 
 { #category : 'update' }
-RowanBrowserService >> updateSymbols: className [
-  | browserService |
-  browserService := RowanBrowserService new.
-  browserService newCachedClasses add: className.
-  browserService updateType: #'addCachedSymbols:'.
-  RowanCommandResult addResult: browserService
+RowanBrowserService >> updateSymbols: classNames [
+  newCachedClasses addAll: classNames.
+  updateType := #'addCachedSymbols:'
 ]
