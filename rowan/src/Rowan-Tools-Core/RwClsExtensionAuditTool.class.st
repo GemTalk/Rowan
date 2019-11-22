@@ -32,6 +32,17 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> ' Class does not exists for loaded class '] 
 		ifNotNil: [:aBehavior ||categories | 
 					
+				aBehavior == aLoadedClassExtension handle
+					ifFalse: [ 
+						self
+							errorLog: res
+							add:
+								(aLoadedClassExtension name , ' #' , extensionCategoryName)
+									->
+										(' loaded extension class (' , aLoadedClassExtension handle asOop printString
+										, ') not latest version of class ('
+										, aBehavior asOop printString , ') ') ].
+
 				categories := (aBehavior _baseCategorys: 0) keys.
 				(categories	
 					detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
@@ -59,5 +70,4 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 				]
 		].
 		^res
-
 ]
