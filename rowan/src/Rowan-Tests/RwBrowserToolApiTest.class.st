@@ -4441,8 +4441,8 @@ RwBrowserToolApiTest >> testRenameClass_Issue_490 [
         ifTrue: [
           (extraMethods at: className ifAbsentPut: [ Dictionary new ])
             at: selector put: ar ] ] ].
-  false ifTrue: [ self assert: extraMethods size = 0 ].
- "repair"
+  true ifTrue: [ self assert: extraMethods size = 0 ].
+ false ifTrue: [ "repair"
   extraMethods keysAndValuesDo: [:className :selectorMap |
     selectorMap keysAndValuesDo: [:selector :ar |
       ar do: [:method |
@@ -4465,5 +4465,5 @@ RwBrowserToolApiTest >> testRenameClass_Issue_490 [
         ifTrue: [
           (extraMethods at: className ifAbsentPut: [ Dictionary new ])
             at: selector put: ar ] ] ].
-  true ifTrue: [ self assert: extraMethods size = 0 ].
+  true ifTrue: [ self assert: extraMethods size = 0 ] ].
 ]
