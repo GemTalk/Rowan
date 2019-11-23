@@ -111,8 +111,12 @@ RowanClassService >> addSubclassWarningString [
 
 { #category : 'client commands' }
 RowanClassService >> allSubclassServices [
-  hierarchyServices := self classHierarchy: (Array with: self theClass).
-  (hierarchyServices at: self ifAbsent:[^self])
+  | subclassServices |
+  subclassServices := self theClass subclasses asArray
+    collect: [ :aClass | RowanClassService minimalForClassNamed: aClass name ].
+  hierarchyServices := Dictionary new.
+  hierarchyServices at: #'expand' put: subclassServices.
+  (hierarchyServices at: #'expand')
     do: [ :classService | classService allSubclassServices ]
 ]
 
