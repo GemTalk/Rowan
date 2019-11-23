@@ -530,14 +530,7 @@ RwProjectSpecificationV2 >> resolve [
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| projectDefinition |
-	projectDefinition := RwProjectDefinitionV2 fromLoadSpecification: self.	"a copy of the receiver is made when it is added to the new project definition"
-
-	^ projectDefinition projectLoadSpecification _resolve
-		ifTrue: [ 
-			"read project definition from disk"
-			projectDefinition read ]
-		ifFalse: [ projectDefinition ]
+	^ RwResolvedProjectV2 projectSpecification: self
 ]
 
 { #category : 'actions' }
