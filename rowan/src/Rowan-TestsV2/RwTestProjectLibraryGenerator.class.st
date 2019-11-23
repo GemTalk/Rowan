@@ -1,4 +1,6 @@
 "
+RwRowanSample9Test _clearLoadSpecSessionCache.
+
 (RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
 RwTestProjectLibraryGenerator new
@@ -472,6 +474,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
+		componentNames: {'Core'};
 		yourself.
 
 	repositoryDefinition := self
@@ -511,6 +514,7 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
+		componentNames: {'Core'};
 		yourself.
 
 	repositoryDefinition := self
@@ -521,7 +525,7 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
-		derivedFrom:  (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		loadSpecification: loadSpecification
 		repositoryDefinition: repositoryDefinition
 		commitMessage: commitMessage
@@ -552,6 +556,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
+		componentNames: {'Core'};
 		yourself.
 
 	repositoryDefinition := self
@@ -562,7 +567,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
-		derivedFrom:  (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		loadSpecification: loadSpecification
 		repositoryDefinition: repositoryDefinition
 		commitMessage: commitMessage
@@ -593,6 +598,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
+		componentNames: {'Core'};
 		yourself.
 
 	repositoryDefinition := self
@@ -603,7 +609,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
-		derivedFrom:  (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		loadSpecification: loadSpecification
 		repositoryDefinition: repositoryDefinition
 		commitMessage: commitMessage
@@ -636,7 +642,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: #('Core3');
+		componentNames: {'Core3'};
 		yourself.
 
 	repositoryDefinition := self
@@ -701,7 +707,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: #('Core1');
+		componentNames: {'Core1'};
 		yourself.
 
 	repositoryDefinition := self

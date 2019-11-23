@@ -600,6 +600,11 @@ RwProjectLoadSpecificationV2 >> specsRoot [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadSpecificationV2 >> stonName [
+	^ #RwProjectSpecificationV2
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecificationV2 >> svnUrl [
 	^ svnUrl
 ]
