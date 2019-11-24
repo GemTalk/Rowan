@@ -855,7 +855,6 @@ RwGsPatchSet_254 >> apply [
 		commit;
 		migrateInstances;
 		commit
-
 ]
 
 { #category : 'public' }

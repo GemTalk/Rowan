@@ -162,6 +162,29 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteCompiledMethodFrom
 ]
 
 { #category : 'private' }
+RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassExtensionsFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
+	| loadedClassExtensionSet |
+	(class isKindOf: Class)
+		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
+	loadedClassExtensionSet := registryInstance classExtensionRegistry
+		at: class classHistory
+		ifAbsent: [ 
+			"we're done here"
+			^ self ].
+	loadedClassExtensionSet
+		do: [ :loadedClassExtension | 
+			| classKey |
+			classKey := loadedClassExtension key asSymbol.
+			self
+				_symbolDictionary: registryInstance _symbolDictionary
+				associationAt: classKey
+				ifPresent: [ :assoc | 
+					assoc value == loadedClassExtension handle
+						ifTrue: [ ^ noNewVersionBlock cull: loadedClassExtension ]
+						ifFalse: [ ^ newVersionBlock cull: loadedClassExtension ] ] ]
+]
+
+{ #category : 'private' }
 RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassFor: class noNewVersion: noNewVersionBlock instance: registryInstance [
 
 	self
@@ -201,9 +224,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassFor: class noNe
 	registryInstance
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
-				, classKey asString printString.
-	^ registryInstance
-
+				, classKey asString printString
 ]
 
 { #category : 'private' }
@@ -427,20 +448,27 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewClassVersionToAssocia
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
-	^ self 
+	self 
 		_loadedClassFor: newClass
 		noNewVersion: [ 
 			"newClass is actually not a new class version of existing class, that's okay... update properties anyway"
-			self updateClassProperties: newClass instance: registryInstance.
-			^ registryInstance ]
+			self updateClassProperties: newClass instance: registryInstance.]
 		newVersion: [ :loadedClass :assoc | 
 			"association for class is present, install in association and update the loadedthing"
 			assoc value: newClass.
 			loadedClass handleClassDeletionOrNewVersion
 				ifTrue: [ loadedClass updatePropertiesFromClassFor: registryInstance ]
 				ifFalse: [ registryInstance error: 'internal error - new version of class not properly installed' ] ]
-		instance: registryInstance
-
+		instance: registryInstance.
+	self 
+		_loadedClassExtensionsFor: newClass
+		noNewVersion: [ 
+			"newClass is actually not a new class version of existing class, that's okay... noop"
+]
+		newVersion: [ :loadedClassExtension | 
+			loadedClassExtension handleClassDeletionOrNewVersion
+				ifFalse: [ registryInstance error: 'internal error - new version of class not properly installed' ] ]
+		instance: registryInstance.
 ]
 
 { #category : 'private' }
@@ -738,7 +766,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> ensureExtensionClassNamed: 
 				at: extensionClass classHistory
 				ifAbsentPut: [ IdentitySet new ]) add: loadedClassExtension ].
 	^ registryInstance
-
 ]
 
 { #category : 'package - creation api' }

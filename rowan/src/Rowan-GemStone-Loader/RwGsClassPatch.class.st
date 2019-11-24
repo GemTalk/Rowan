@@ -178,6 +178,13 @@ RwGsClassPatch >> oldClassVersion [
 	^ (self resolveName: classDefinition key) value
 ]
 
+{ #category : 'Formatting' }
+RwGsClassPatch >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream nextPutAll: '(', classDefinition name, ')'
+]
+
 { #category : 'private' }
 RwGsClassPatch >> privateCreateClassFor: aPatchSet [
 
