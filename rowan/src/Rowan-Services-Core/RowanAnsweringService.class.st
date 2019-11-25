@@ -325,6 +325,27 @@ RowanAnsweringService >> printStringOf: oop toMaxSize: integer [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> profile: block [
+  "not used yet. Utility method needs testing.
+	Make sure block execution time is long enough - say 1 second. 
+	Results may not be consistent
+
+	Usage example: 
+| block answeringService | 
+block := [| browserService profMonitor |
+		browserService := (RowanBrowserService new) .
+		10 timesRepeat:[browserService packagesWithTests]]. 
+answeringService := RowanAnsweringService new profile: block.
+answeringService answer. "
+
+  | time ns |
+  time := System millisecondsToRun: block.
+  ns := ProfMonitor computeInterval: time / 1000.
+  answer := ProfMonitor monitorBlock: block intervalNs: ns.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> runMethodTests: methodServices [
 
 	| behavior |

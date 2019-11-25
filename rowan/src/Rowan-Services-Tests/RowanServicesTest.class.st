@@ -10,6 +10,11 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'testing' }
+RowanServicesTest class >> isAbstract [
+  ^ self sunitName = #'RowanServicesTest'
+]
+
 { #category : 'unicode method' }
 RowanServicesTest >> addUnicodeSymbolKeyToUserGlobals [
   "RowanServicesTest new addUnicodeSymbolKeyToUserGlobals"
@@ -149,6 +154,15 @@ RowanServicesTest >> defaultProjectDefinition [
 RowanServicesTest >> defaultSymbolDictionaryName [
 
 	^'ServicesTestDictionary'
+]
+
+{ #category : 'unicode method' }
+RowanServicesTest >> iAmAUnicodeMethod [
+
+		| abc |
+		abc := 'Ϛ'.
+		self halt. 
+		^abc
 ]
 
 { #category : 'support' }

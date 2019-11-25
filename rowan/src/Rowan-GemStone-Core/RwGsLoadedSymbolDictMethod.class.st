@@ -40,6 +40,17 @@ RwGsLoadedSymbolDictMethod >> key [
 	^ name	"This is inadequate because the same selector can be defined in both class and metaclass?"
 ]
 
+{ #category : 'printing' }
+RwGsLoadedSymbolDictMethod >> printOn: aStream [
+
+	super printOn: aStream.
+	name
+		ifNotNil: 
+			[aStream
+				space;
+				nextPutAll: handle inClass printString, ' ( ', handle inClass asOop asString, ' )' ]
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictMethod >> source [
 
