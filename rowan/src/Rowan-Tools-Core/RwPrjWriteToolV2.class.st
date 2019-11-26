@@ -13,3 +13,12 @@ RwPrjWriteToolV2 >> writeProjectDefinition: projectDefinition [
 		exportComponents;
 		exportPackages
 ]
+
+{ #category : 'write' }
+RwPrjWriteToolV2 >> writeResolvedProject: resolvedProject [
+	Rowan projectTools createV2 createResolvedProjectRepository: resolvedProject projectSpecification.
+	resolvedProject 
+		exportProjects;
+		exportComponents;
+		exportPackages
+]

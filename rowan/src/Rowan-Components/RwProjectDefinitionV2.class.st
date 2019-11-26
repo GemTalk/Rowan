@@ -493,6 +493,16 @@ RwProjectDefinitionV2 >> projectsPath: aString [
 	^ self projectRef projectsPath: aString
 ]
 
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> projectSpecification [
+	^ self projectRef projectSpecification
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> projectSpecification: aProjectSpecification [
+	^ self projectRef projectSpecification: aProjectSpecification
+]
+
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectsRoot [
 

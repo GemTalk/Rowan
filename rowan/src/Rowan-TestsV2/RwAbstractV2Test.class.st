@@ -32,10 +32,10 @@ RwAbstractV2Test class >> _symbolDictionaryNames [
 ]
 
 { #category : 'private' }
-RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition [
+RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject [
 	| projectName packageName className |
-	projectName := projectDefinition projectName.
-	projectDefinition
+	projectName := resolvedProject projectName.
+	resolvedProject
 		comment: 'Project created using the V2 project creation api ';
 		addComponentNamed: 'Core'
 			definedGroupNames:
@@ -64,7 +64,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 		yourself.
 	packageName := projectName , '-Core'.
 	className := projectName , 'Class1'.
-	((projectDefinition packageNamed: packageName)
+	((resolvedProject packageNamed: packageName)
 		addClassNamed: className
 		super: 'Object'
 		instvars: #('ivar1')
@@ -73,7 +73,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
 	packageName := projectName , '-Tests'.
-	((projectDefinition packageNamed: packageName)
+	((resolvedProject packageNamed: packageName)
 		addClassNamed: projectName , 'TestCase'
 		super: 'TestCase'
 		category: packageName
@@ -83,7 +83,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 		yourself.
 	packageName := projectName , '-GemStone-Extensions'.
 	className := projectName , 'RcCounter'.
-	((projectDefinition packageNamed: packageName)
+	((resolvedProject packageNamed: packageName)
 		addClassNamed: className
 		super: 'RcCounter'
 		category: packageName
@@ -91,7 +91,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 		addClassMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
 	packageName := projectName , '-GemStone-Tests'.
-	((projectDefinition packageNamed: packageName)
+	((resolvedProject packageNamed: packageName)
 		addClassNamed: projectName , 'GsTestCase'
 		super: 'TestCase'
 		category: packageName
@@ -99,10 +99,10 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefini
 		addInstanceMethod: 'test  self assert: ' , className , ' foo = 1'
 			protocol: 'tests';
 		yourself.
-	projectDefinition components
+	resolvedProject components
 		do: [ :component | self assert: component validate ].
-	self assert: projectDefinition projectLoadSpecification validate.
-	^ projectDefinition
+	self assert: resolvedProject projectSpecification validate.
+	^ resolvedProject
 ]
 
 { #category : 'private' }
@@ -151,28 +151,28 @@ RwAbstractV2Test >> _specListProjectNames [
 ]
 
 { #category : 'private' }
-RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: projectDefinition [
+RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
 	| repositoryRoot projectName |
-	projectName := projectDefinition projectName.
-	repositoryRoot := projectDefinition repositoryRoot.
+	projectName := resolvedProject projectName.
+	repositoryRoot := resolvedProject repositoryRoot.
 	self assert: repositoryRoot exists.
-	{(projectDefinition componentsRoot).
-	(projectDefinition componentsRoot / 'Core.ston').
-	(projectDefinition packagesRoot).
-	(projectDefinition packagesRoot / (projectName , '-Core')).
-	(projectDefinition packagesRoot / (projectName , '-Core')
+	{(resolvedProject componentsRoot).
+	(resolvedProject componentsRoot / 'Core.ston').
+	(resolvedProject packagesRoot).
+	(resolvedProject packagesRoot / (projectName , '-Core')).
+	(resolvedProject packagesRoot / (projectName , '-Core')
 		/ (projectName , 'Class1.class.st')).
-	(projectDefinition packagesRoot / (projectName , '-GemStone-Extensions')).
-	(projectDefinition packagesRoot / (projectName , '-GemStone-Extensions')
+	(resolvedProject packagesRoot / (projectName , '-GemStone-Extensions')).
+	(resolvedProject packagesRoot / (projectName , '-GemStone-Extensions')
 		/ (projectName , 'RcCounter.class.st')).
-	(projectDefinition packagesRoot / (projectName , '-GemStone-Tests')).
-	(projectDefinition packagesRoot / (projectName , '-GemStone-Tests')
+	(resolvedProject packagesRoot / (projectName , '-GemStone-Tests')).
+	(resolvedProject packagesRoot / (projectName , '-GemStone-Tests')
 		/ (projectName , 'GsTestCase.class.st')).
-	(projectDefinition packagesRoot / (projectName , '-Tests')).
-	(projectDefinition packagesRoot / (projectName , '-Tests')
+	(resolvedProject packagesRoot / (projectName , '-Tests')).
+	(resolvedProject packagesRoot / (projectName , '-Tests')
 		/ (projectName , 'TestCase.class.st')).
-	(projectDefinition specsRoot).
-	(projectDefinition projectsRoot)}
+	(resolvedProject specsRoot).
+	(resolvedProject projectsRoot)}
 		do: [ :fileRef | self assert: fileRef exists ]
 ]
 

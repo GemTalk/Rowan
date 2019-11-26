@@ -31,7 +31,8 @@ RwProjectSpecificationV2Test >> testBasic [
 RwProjectSpecificationV2Test >> testBasicResolve [
 	"excercise basic functionality"
 
-	| projectName projectAlias loadSpecification stonString projectsHome expectedRepositoryRoot projectDefinition |
+	| projectName projectAlias projectSpecification stonString projectsHome expectedRepositoryRoot
+		resolvedProject resolvedProjectSpecification|
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -39,26 +40,26 @@ RwProjectSpecificationV2Test >> testBasicResolve [
 
 	self deny: expectedRepositoryRoot exists.
 
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
-	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
 
-	self assert: loadSpecification validate.
+	self assert: projectSpecification validate.
 
-	projectDefinition := loadSpecification resolve.
+	resolvedProject := projectSpecification resolve.
 
 	self assert: expectedRepositoryRoot exists.
-	stonString := STON toStringPretty: projectDefinition.	"useful in case of error"
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
-	self assert: projectDefinition packageNames isEmpty.
-	self assert: projectDefinition projectLoadSpecification ~~ loadSpecification.
-	self assert: projectDefinition projectLoadSpecification = loadSpecification.
-	self assert: projectDefinition projectLoadSpecification repositoryDefinition ~~ loadSpecification repositoryDefinition.
-	self assert: projectDefinition projectLoadSpecification repositoryDefinition = loadSpecification repositoryDefinition.
+	resolvedProjectSpecification := resolvedProject projectSpecification.
+	self assert: resolvedProject packageNames isEmpty.
+	self assert: resolvedProjectSpecification ~~ projectSpecification.
+	self assert: resolvedProjectSpecification = projectSpecification.
+	self assert: resolvedProjectSpecification repositoryDefinition ~~ projectSpecification repositoryDefinition.
+	self assert: resolvedProjectSpecification repositoryDefinition = projectSpecification repositoryDefinition.
 ]
 
 { #category : 'tests' }

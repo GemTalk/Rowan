@@ -25,6 +25,7 @@ RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
 						yourself);
 		packages: Dictionary new;
 		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
+		projectSpecification: projectSpecification;
 		yourself.
 	projectDefinition := projectSpecification _resolve
 		ifTrue: [ 
@@ -34,6 +35,115 @@ RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
 	^ self new
 		projectDefinition: projectDefinition;
 		projectSpecification: projectSpecification
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
+	^ self projectDefinition
+		addComponentNamed: aComponentName
+		definedGroupNames: groupNameDict
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	^ self projectDefinition
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+	^ self projectDefinition
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	^ self projectDefinition
+		addPackagesNamed: packageNames
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> comment [
+	^ self projectDefinition comment
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> comment: aString [
+	self projectDefinition comment: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> commit: message [
+	"commit the repository associated with receiver ..."
+
+	^ self projectDefinition commit: message
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> components [
+	^ self projectDefinition components
+]
+
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> componentsRoot [
+	^ self projectSpecification componentsRoot
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> export [
+	Rowan projectTools writeV2 writeResolvedProject: self
+]
+
+{ #category : 'exporting' }
+RwResolvedProjectV2 >> exportComponents [
+	self components isEmpty
+		ifTrue: [ self addComponentNamed: self defaultComponentName comment: '' ].
+	self components values
+		do: [ :component | component exportToUrl: 'file:' , self componentsRoot pathString , '/' ].
+	self components isEmpty
+		ifTrue: [ 
+			"add README.md as placeholder to ensure that the directory is preserved by git"
+			self componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+]
+
+{ #category : 'exporting' }
+RwResolvedProjectV2 >> exportPackages [
+	self projectDefinition exportPackages
+]
+
+{ #category : 'exporting' }
+RwResolvedProjectV2 >> exportProjects [
+	self projectNames do: [ :projectName | self error: 'not yet implemented' ].
+	self projectNames isEmpty
+		ifTrue: [ 
+			"add README.md as placeholder to ensure that the directory is preserved by git"
+			self projectsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> packageNamed: aString [
+	^ self projectDefinition packageNamed: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> packageNames [
+	^ self projectDefinition packageNames
+]
+
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> packagesRoot [
+	^ self projectSpecification packagesRoot
 ]
 
 { #category : 'accessing' }
@@ -46,6 +156,18 @@ RwResolvedProjectV2 >> projectDefinition: object [
 	projectDefinition := object
 ]
 
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> projectName [
+	^ self projectSpecification projectName
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> projectNames [
+	"not yet implemented"
+
+	^ #()
+]
+
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectSpecification [
 	^projectSpecification
@@ -54,4 +176,19 @@ RwResolvedProjectV2 >> projectSpecification [
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectSpecification: anRwProjectSpecificationV2 [
 	projectSpecification := anRwProjectSpecificationV2
+]
+
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> projectsRoot [
+	^ self projectSpecification projectsRoot
+]
+
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> repositoryRoot [
+	^ self projectSpecification repositoryRoot
+]
+
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> specsRoot [
+	^ self projectSpecification specsRoot
 ]

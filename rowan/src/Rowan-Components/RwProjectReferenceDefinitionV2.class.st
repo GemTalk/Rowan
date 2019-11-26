@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwDefinition',
 	#instVars : [
 		'components',
-		'projectLoadSpecification'
+		'projectLoadSpecification',
+		'projectSpecification'
 	],
 	#category : 'Rowan-Components'
 }
@@ -162,7 +163,7 @@ RwProjectReferenceDefinitionV2 >> gitRoot: aGitRootReferenceOrString [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> groupNames [
 
-	^self projectLoadSpecification groupNames
+	^self projectSpecification groupNames
 ]
 
 { #category : 'accessing' }
@@ -217,7 +218,7 @@ RwProjectReferenceDefinitionV2 >> packageConvention: aString [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packageFormat [
-	^ self projectLoadSpecification packageFormat
+	^ self projectSpecification packageFormat
 ]
 
 { #category : 'accessing' }
@@ -251,7 +252,7 @@ RwProjectReferenceDefinitionV2 >> packagesPath: aString [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packagesRoot [
-	^ self projectLoadSpecification packagesRoot
+	^ self projectSpecification packagesRoot
 ]
 
 { #category : 'copying' }
@@ -270,7 +271,7 @@ RwProjectReferenceDefinitionV2 >> projectAlias [
 	"project alias is used as the name of the root directory for the project ... necessary if the project is 
 		embedded in another project's git repository or you want use a non-default directory on disk"
 
-	^ self projectLoadSpecification projectAlias
+	^ self projectSpecification projectAlias
 ]
 
 { #category : 'accessing' }
@@ -311,7 +312,7 @@ RwProjectReferenceDefinitionV2 >> projectLoadSpecification: aRwProjectLoadSpecif
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectName [
-	^ self projectLoadSpecification projectName
+	^ self projectSpecification projectName
 ]
 
 { #category : 'accessing' }
@@ -336,6 +337,16 @@ RwProjectReferenceDefinitionV2 >> projectsPath [
 RwProjectReferenceDefinitionV2 >> projectsPath: aString [
 
 	^ self projectLoadSpecification projectsPath: aString
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinitionV2 >> projectSpecification [
+	^ projectSpecification
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinitionV2 >> projectSpecification: aRwProjectSpecification [
+	projectSpecification := aRwProjectSpecification
 ]
 
 { #category : 'accessing' }
@@ -375,8 +386,8 @@ RwProjectReferenceDefinitionV2 >> repositoryCommitId [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> repositoryDefinition [
-	projectLoadSpecification ifNil: [ ^ nil ].
-	^ self projectLoadSpecification repositoryDefinition
+	projectSpecification ifNil: [ ^ nil ].
+	^ self projectSpecification repositoryDefinition
 ]
 
 { #category : 'accessing' }
