@@ -2293,8 +2293,8 @@ RwRowanSample4Test >> testIssue490 [
 
 	"https://github.com/GemTalk/Rowan/issues/490"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec
+		project x repoRootPath baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	{ projectName . projectName, '_295'} do: [:pn |
@@ -2364,6 +2364,8 @@ RwRowanSample4Test >> testIssue490 [
 		projectRootPath: repoRootPath.
 
 "expose bug"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self assert: (((Rowan image loadedProjectNamed: 'RowanSample4')
 	loadedPackages at: 'RowanSample4-Extensions')
 		loadedClassExtensions isEmpty).
