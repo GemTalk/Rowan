@@ -173,9 +173,9 @@ RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
 ]
 
 { #category : 'tests' }
-RwProjectAuditToolTest >> test_Issue_534 [
+RwProjectAuditToolTest >> test_Issue_535 [
 
-  "https://github.com/dalehenrich/Rowan/issues/534"
+  "https://github.com/dalehenrich/Rowan/issues/535"
 
   | projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition 
 		packageDefinition className1 className2 className3 className4 projectSetDefinition
@@ -286,10 +286,8 @@ RwProjectAuditToolTest >> test_Issue_534 [
   Rowan projectTools browser
     renameClassNamed: className2 to: className4.
 
-"Until Issue #490 is fixed, the audit is expected to fail ..."
-  audit := Rowan projectTools audit auditForProjectNamed: projectName.
-  self assert: (audit at: packageName1 ifAbsent: []) isNil.
-   self assert: ((audit at: packageName2) at: className3) size = 1.
+"audit"
+  self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
 ]
 
 { #category : 'tests' }

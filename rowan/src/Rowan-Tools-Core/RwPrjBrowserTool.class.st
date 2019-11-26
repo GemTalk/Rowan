@@ -610,6 +610,19 @@ RwPrjBrowserTool >> addRowanSymbolDictionariesToPersistentSymbolListFor: userPro
 
 ]
 
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> addRowanSymbolDictionariesToTransientSymbolList [
+  | systemUser |
+  systemUser := AllUsers userWithId: 'SystemUser'.
+  self _rowanSymbolDictionaryNames
+    do: [ :symDictName | 
+      | aSymbolDictionary anIndex transient |
+      transient := GsSession currentSession symbolList.
+      aSymbolDictionary := systemUser objectNamed: symDictName.
+      anIndex := transient size + 1.
+      transient insertObject: aSymbolDictionary at: anIndex ]
+]
+
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForClass: aClass [
 

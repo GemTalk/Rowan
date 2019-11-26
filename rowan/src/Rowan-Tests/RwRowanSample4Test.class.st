@@ -1804,7 +1804,7 @@ RwRowanSample4Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	{ projectName . projectName, '_295'} do: [:pn |
@@ -1866,6 +1866,9 @@ RwRowanSample4Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 	self
 		_loadProjectFromSpecUrl: specUrlString
 		repoRootPath: repoRootPath.
+
+"expose bug"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self assert: (((Rowan image loadedProjectNamed: projectName)
 	loadedPackages at: 'RowanSample4-Extensions')
