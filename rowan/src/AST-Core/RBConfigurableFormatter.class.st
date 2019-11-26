@@ -914,7 +914,7 @@ RBConfigurableFormatter >> with: firstCollection and: secondCollection do: aBloc
 { #category : 'private' }
 RBConfigurableFormatter >> writeString: aString [ 
 	| index |
-	index := aString lastIndexOf: Character lf ifAbsent: [0].
+	index := aString lastIndexOf: Character lf startingAt: aString size ifAbsent: [0].
 	codeStream nextPutAll: aString.
 	index > 0 
 		ifTrue: [lineStart := codeStream position - (aString size - index)]
