@@ -96,7 +96,7 @@ RwProjectReferenceDefinitionV2 >> committish: aString [
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> componentNames [
 
-	^ self projectLoadSpecification componentNames
+	^ self projectSpecification componentNames
 ]
 
 { #category : 'accessing' }
@@ -129,7 +129,7 @@ RwProjectReferenceDefinitionV2 >> componentsPath: aString [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> componentsRoot [
-	^ self projectLoadSpecification componentsRoot
+	^ self projectSpecification componentsRoot
 ]
 
 { #category : 'actions' }
@@ -223,7 +223,7 @@ RwProjectReferenceDefinitionV2 >> packageFormat [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> packageFormat: aString [
-	self projectLoadSpecification packageFormat: aString
+	self projectSpecification packageFormat: aString
 ]
 
 { #category : 'accessing' }
@@ -351,7 +351,7 @@ RwProjectReferenceDefinitionV2 >> projectSpecification: aRwProjectSpecification 
 
 { #category : 'accessing' }
 RwProjectReferenceDefinitionV2 >> projectsRoot [
-	^ self projectLoadSpecification projectsRoot
+	^ self projectSpecification projectsRoot
 ]
 
 { #category : 'accessing' }

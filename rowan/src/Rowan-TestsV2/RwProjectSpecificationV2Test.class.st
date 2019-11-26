@@ -8,10 +8,10 @@ Class {
 RwProjectSpecificationV2Test >> testBasic [
 	"excercise basic functionality"
 
-	| projectName loadSpecification stonString specName |
+	| projectName projectSpecification stonString specName |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvTo: 0;
@@ -23,8 +23,8 @@ RwProjectSpecificationV2Test >> testBasic [
 		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
 			to: true;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
-	self assert: loadSpecification validate
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
+	self assert: projectSpecification validate
 ]
 
 { #category : 'tests' }
@@ -422,19 +422,19 @@ RwProjectSpecificationV2Test >> testSpec_0001_A [
 
 	"functional variant of testSpec_0001_B"
 
-	| rowanProject fileUrl loadSpecification projectDefinition |
+	| rowanProject fileUrl projectSpecification resolvedProject |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	fileUrl := 'file:' , rowanProject repositoryRootPath
 		, '/test/specs/RowanSample9_0000.ston'.
-	loadSpecification := (RwSpecification fromUrl: fileUrl)
+	projectSpecification := (RwSpecification fromUrl: fileUrl)
 		projectsHome: self _testRowanProjectsSandbox;
 		yourself.
 
 	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
-	projectDefinition := loadSpecification resolve. "project is not being loaded from disk on resolve"
-	projectDefinition
-		addPackagesNamed: {(loadSpecification projectName , '-Core')}
+	resolvedProject := projectSpecification resolve. "project is not being loaded from disk on resolve"
+	resolvedProject
+		addPackagesNamed: {(projectSpecification projectName , '-Core')}
 		toComponentNamed: 'Core'
 		withConditions: {'common'}
 		andGroupName: 'core'.
@@ -446,11 +446,11 @@ RwProjectSpecificationV2Test >> testSpec_0001_B [
 
 	"testSpec_0001_A behavies correctly"
 
-	| rowanProject fileUrl loadSpecification projectDefinition repositoryDefinition oldPolicy |
+	| rowanProject fileUrl projectSpecification resolvedProject repositoryDefinition oldPolicy |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	fileUrl := 'file:' , rowanProject repositoryRootPath
 		, '/test/specs/RowanSample9_0000.ston'.
-	loadSpecification := (RwSpecification fromUrl: fileUrl)
+	projectSpecification := (RwSpecification fromUrl: fileUrl)
 		projectsHome: self _testRowanProjectsSandbox;
 		repositoryResolutionPolicy: #'strict';
 		yourself.	"force #strict policy to ensure that the revision is checkout out in the repository"
@@ -458,20 +458,20 @@ RwProjectSpecificationV2Test >> testSpec_0001_B [
 	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
 
-	projectDefinition := loadSpecification resolve.
+	resolvedProject := projectSpecification resolve.
 
-	repositoryDefinition := loadSpecification repositoryDefinition.
+	repositoryDefinition := projectSpecification repositoryDefinition.
 	repositoryDefinition checkout: 'master'.
 
-	oldPolicy := loadSpecification repositoryResolutionPolicy.
+	oldPolicy := projectSpecification repositoryResolutionPolicy.
 	[ 
 	"force #strict policy to ensure that the revision is checkout out in the repolicy"
-	loadSpecification repositoryResolutionPolicy: #'strict'.
-	projectDefinition := loadSpecification resolve ]
-		ensure: [ loadSpecification repositoryResolutionPolicy: oldPolicy ].
+	projectSpecification repositoryResolutionPolicy: #'strict'.
+	resolvedProject := projectSpecification resolve ]
+		ensure: [ projectSpecification repositoryResolutionPolicy: oldPolicy ].
 
-	projectDefinition
-		addPackagesNamed: {(loadSpecification projectName , '-Core')}
+	resolvedProject
+		addPackagesNamed: {(projectSpecification projectName , '-Core')}
 		toComponentNamed: 'Core'
 		withConditions: {'common'}
 		andGroupName: 'core'
