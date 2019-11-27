@@ -11,8 +11,11 @@ RwProjectLoadComponentV2Test >> testBasic [
 	| componentName projectName component packageName stonString |
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
+
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
 	self assert: component validate.
+
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
@@ -22,6 +25,7 @@ RwProjectLoadComponentV2Test >> testBasic [
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
 			andPackageName: packageName
 			setSymbolDictNameTo: 'UserGlobals'.
+
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	self assert: component validate
 ]
@@ -33,8 +37,11 @@ RwProjectLoadComponentV2Test >> testInvalidConditionalGroupName [
 	| componentName projectName component packageName stonString conditionalPackages hitError |
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
+
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
 	self assert: component validate.
+
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
@@ -46,6 +53,7 @@ RwProjectLoadComponentV2Test >> testInvalidConditionalGroupName [
 			setSymbolDictNameTo: 'UserGlobals'.
 	conditionalPackages := component conditionalPackages.
 	(conditionalPackages at: #('common')) at: 'boom' put: Dictionary new.
+
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	hitError := false.
 	[ component validate ]
@@ -69,9 +77,12 @@ RwProjectLoadComponentV2Test >> testInvalidGroupName [
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
 	self assert: component validate.
+
 	packageName := projectName , '-Core'.
 	component defineGroupNamed: 'core' toIncludeGroups: #('boom').
+
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	hitError := false.
 	[ component validate ]
@@ -94,7 +105,9 @@ RwProjectLoadComponentV2Test >> testUknownPlatform [
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
 	self assert: component validate.
+
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
@@ -105,6 +118,7 @@ RwProjectLoadComponentV2Test >> testUknownPlatform [
 			andPackageName: packageName
 			setSymbolDictNameTo: 'UserGlobals'.
 	component conditionalPackageMapSpecs at: 'boom' put: Dictionary new.
+
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	hitError := false.
 	[ component validate ]
@@ -128,7 +142,9 @@ RwProjectLoadComponentV2Test >> testUknownPlatformPropertiesKey [
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
 	self assert: component validate.
+
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
@@ -141,6 +157,7 @@ RwProjectLoadComponentV2Test >> testUknownPlatformPropertiesKey [
 	((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
 		at: #'boom'
 		put: Dictionary new.
+
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	hitError := false.
 	[ component validate ]
@@ -163,7 +180,9 @@ RwProjectLoadComponentV2Test >> testUndefinedPackageName [
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
 	self assert: component validate.
+
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
@@ -175,6 +194,7 @@ RwProjectLoadComponentV2Test >> testUndefinedPackageName [
 			setSymbolDictNameTo: 'UserGlobals'.
 	(((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
 		at: #'packageNameToPlatformPropertiesMap') at: 'boom' put: Dictionary new.
+
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	hitError := false.
 	[ component validate ]
@@ -198,7 +218,9 @@ RwProjectLoadComponentV2Test >> testUnknownPackagePropertName [
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
 	self assert: component validate.
+
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
@@ -215,6 +237,7 @@ RwProjectLoadComponentV2Test >> testUnknownPackagePropertName [
 			(Dictionary new
 				at: #'boom' put: 'boom';
 				yourself).
+
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	hitError := false.
 	[ component validate ]

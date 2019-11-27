@@ -11,6 +11,7 @@ RwProjectSpecificationV2Test >> testBasic [
 	| projectName projectSpecification stonString specName |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
+
 	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
@@ -23,6 +24,7 @@ RwProjectSpecificationV2Test >> testBasic [
 		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
 			to: true;
 		yourself.
+
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	self assert: projectSpecification validate
 ]
@@ -150,6 +152,7 @@ RwProjectSpecificationV2Test >> testInvalidPropertyValue [
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
 		yourself.
+
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
 	[ projectSpecification validate ]
@@ -181,6 +184,7 @@ RwProjectSpecificationV2Test >> testInvalidPropertyValueForUser [
 		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
 			to: true;
 		yourself.
+
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
 	[ projectSpecification validate ]
@@ -207,6 +211,7 @@ RwProjectSpecificationV2Test >> testInvalidRevision [
 		projectName: projectName;
 		revision: 'boom';
 		yourself.
+
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
 	[ projectSpecification validate ]
@@ -258,11 +263,9 @@ RwProjectSpecificationV2Test >> testIssue_530_1 [
 
 	self deny: projectSpecCopy = projectSpecification.
 
-	stonStrings := {"useful in case of test failure"
-	"useful in case of test failure"
-	stonString.	"original loadSpec"
-	(STON toStringPretty: projectSpecification).	"origiinal after copy modified"
-	(STON toStringPretty: projectSpecCopy)	"copy"}	"useful in case of test failure"	"useful in case of test failure"
+	stonStrings := {
+	(STON toStringPretty: projectSpecification).
+	(STON toStringPretty: projectSpecCopy)}	"useful in case of test failure"
 ]
 
 { #category : 'tests' }
@@ -354,6 +357,7 @@ RwProjectSpecificationV2Test >> testMissingRevision [
 		projectName: projectName;
 		gitUrl: 'https://github.com/user/' , projectName;
 		yourself.
+
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
 	[ projectSpecification validate ]
@@ -380,6 +384,7 @@ RwProjectSpecificationV2Test >> testNilInstanceVariable [
 		projectName: projectName;
 		projectsPath: nil;
 		yourself.
+
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
 	[ projectSpecification validate ]
@@ -406,6 +411,7 @@ RwProjectSpecificationV2Test >> testOnlyOneRepositoryUrl [
 		gitUrl: 'https://github.com/user/' , projectName;
 		diskUrl: 'ftp://$ROWAN_PROJECTS_HOME/' , projectName;
 		yourself.
+
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
 	[ projectSpecification validate ]
@@ -495,6 +501,7 @@ RwProjectSpecificationV2Test >> testUknownPlatform [
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
 		yourself.
+
 	hitError := false.
 	projectSpecification platformProperties at: 'boom' put: Dictionary new.
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
@@ -530,6 +537,7 @@ RwProjectSpecificationV2Test >> testUnknownPropertyKey [
 			(Dictionary new
 				at: #'boom' put: nil;
 				yourself).
+
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
 	[ projectSpecification validate ]
