@@ -91,48 +91,48 @@ RwProjectSpecificationV2Test >> testBasicResolve_git [
 
 { #category : 'tests' }
 RwProjectSpecificationV2Test >> testComparison_1 [
-	| projectName loadSpecification specName loadSpecCopy stonString stonStringCopy |
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.
+	stonString := STON toStringPretty: projectSpecification.
 
-	loadSpecCopy := loadSpecification copy.
+	projectSpecCopy := projectSpecification copy.
 
-	stonStringCopy := STON toStringPretty: loadSpecCopy.
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
 
 	self assert: stonString = stonStringCopy.
-	self assert: loadSpecCopy = loadSpecification
+	self assert: projectSpecCopy = projectSpecification
 ]
 
 { #category : 'tests' }
 RwProjectSpecificationV2Test >> testComparison_2 [
 	"compare equal even if lazy initialization has taken place"
 
-	| projectName loadSpecification specName loadSpecCopy stonString stonStringCopy stonStringLazy |
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy stonStringLazy |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.
+	stonString := STON toStringPretty: projectSpecification.
 
-	loadSpecCopy := loadSpecification copy.
+	projectSpecCopy := projectSpecification copy.
 
-	stonStringCopy := STON toStringPretty: loadSpecCopy.
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
 
-	loadSpecCopy
+	projectSpecCopy
 		repoType;
 		platformProperties.	"trigger the selectors that cause lazy initialization"
 
-	stonStringLazy := STON toStringPretty: loadSpecCopy.
+	stonStringLazy := STON toStringPretty: projectSpecCopy.
 
 	self assert: stonString = stonStringCopy.
-	self assert: loadSpecCopy = loadSpecification.
+	self assert: projectSpecCopy = projectSpecification.
 	self deny: stonStringLazy = stonStringCopy
 ]
 
@@ -140,26 +140,27 @@ RwProjectSpecificationV2Test >> testComparison_2 [
 RwProjectSpecificationV2Test >> testInvalidPropertyValue [
 	"error coverage for invalid load specs"
 
-	| projectName loadSpecification stonString specName hitError |
+	| projectName projectSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvTo: 'boom';
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ loadSpecification validate ]
+	[ projectSpecification validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
 			self
 				assert:
 					(x := ex description)
-						= 'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
+						=
+							'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
 			hitError := true ].
 	self assert: hitError
 ]
@@ -168,10 +169,10 @@ RwProjectSpecificationV2Test >> testInvalidPropertyValue [
 RwProjectSpecificationV2Test >> testInvalidPropertyValueForUser [
 	"error coverage for invalid load specs"
 
-	| projectName loadSpecification stonString specName hitError |
+	| projectName projectSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 'boom';
@@ -180,9 +181,9 @@ RwProjectSpecificationV2Test >> testInvalidPropertyValueForUser [
 		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
 			to: true;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ loadSpecification validate ]
+	[ projectSpecification validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -199,16 +200,16 @@ RwProjectSpecificationV2Test >> testInvalidPropertyValueForUser [
 RwProjectSpecificationV2Test >> testInvalidRevision [
 	"error coverage for invalid load specs"
 
-	| projectName loadSpecification stonString specName hitError |
+	| projectName projectSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		revision: 'boom';
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ loadSpecification validate ]
+	[ projectSpecification validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -229,22 +230,22 @@ RwProjectSpecificationV2Test >> testIssue_530_1 [
 
 	"original has no predefined platformSpec dictionary"
 
-	| projectName loadSpecification stonStrings specName loadSpecCopy stonString stonStringCopy |
+	| projectName projectSpecification stonStrings specName projectSpecCopy stonString stonStringCopy |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.
+	stonString := STON toStringPretty: projectSpecification.
 
-	loadSpecCopy := loadSpecification copy.
-	stonStringCopy := STON toStringPretty: loadSpecCopy.
+	projectSpecCopy := projectSpecification copy.
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
 
 	self assert: stonString = stonStringCopy.
-	self assert: loadSpecCopy = loadSpecification.
+	self assert: projectSpecCopy = projectSpecification.
 
-	loadSpecCopy
+	projectSpecCopy
 		gemstoneSetDefaultMethodEnvTo: 0;
 		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
@@ -255,11 +256,13 @@ RwProjectSpecificationV2Test >> testIssue_530_1 [
 			to: true;
 		yourself.
 
-	self deny: loadSpecCopy = loadSpecification.
+	self deny: projectSpecCopy = projectSpecification.
 
-	stonStrings := {stonString.	"original loadSpec"
-	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
-	(STON toStringPretty: loadSpecCopy)	"copy"}	"useful in case of test failure"
+	stonStrings := {"useful in case of test failure"
+	"useful in case of test failure"
+	stonString.	"original loadSpec"
+	(STON toStringPretty: projectSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}	"useful in case of test failure"	"useful in case of test failure"
 ]
 
 { #category : 'tests' }
@@ -270,22 +273,22 @@ RwProjectSpecificationV2Test >> testIssue_530_2 [
 
 	"predefine platformSpec dictionary in original"
 
-	| projectName loadSpecification stonStrings specName loadSpecCopy stonString |
+	| projectName projectSpecification stonStrings specName projectSpecCopy stonString |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultSymbolDictNameForUser: 'Bozo'
 			to: self _sampleSymbolDictionaryName2;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.
+	stonString := STON toStringPretty: projectSpecification.
 
-	loadSpecCopy := loadSpecification copy.
+	projectSpecCopy := projectSpecification copy.
 
-	self assert: loadSpecCopy = loadSpecification.
+	self assert: projectSpecCopy = projectSpecification.
 
-	loadSpecCopy
+	projectSpecCopy
 		gemstoneSetDefaultMethodEnvTo: 0;
 		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
@@ -296,11 +299,11 @@ RwProjectSpecificationV2Test >> testIssue_530_2 [
 			to: true;
 		yourself.
 
-	self deny: loadSpecCopy = loadSpecification.
+	self deny: projectSpecCopy = projectSpecification.
 
 	stonStrings := {stonString.	"original loadSpec"
-	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
-	(STON toStringPretty: loadSpecCopy)	"copy"}.
+	(STON toStringPretty: projectSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}.
 	self assert: stonString = (stonStrings at: 1).	"duh"
 	self assert: stonString = (stonStrings at: 2).	"point of test"
 	self deny: stonString = (stonStrings at: 3)	"duh"
@@ -314,27 +317,27 @@ RwProjectSpecificationV2Test >> testIssue_530_3 [
 
 	"componentNames and groupNames need to be isolated"
 
-	| projectName loadSpecification stonStrings specName loadSpecCopy stonString |
+	| projectName projectSpecification stonStrings specName projectSpecCopy stonString |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.
+	stonString := STON toStringPretty: projectSpecification.
 
-	loadSpecCopy := loadSpecification copy.
+	projectSpecCopy := projectSpecification copy.
 
-	self assert: loadSpecCopy = loadSpecification.
+	self assert: projectSpecCopy = projectSpecification.
 
-	loadSpecCopy componentNames add: 'Boom'.
-	loadSpecCopy groupNames add: 'boom'.
+	projectSpecCopy componentNames add: 'Boom'.
+	projectSpecCopy groupNames add: 'boom'.
 
-	self deny: loadSpecCopy = loadSpecification.
+	self deny: projectSpecCopy = projectSpecification.
 
 	stonStrings := {stonString.	"original loadSpec"
-	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
-	(STON toStringPretty: loadSpecCopy)	"copy"}.
+	(STON toStringPretty: projectSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}.
 	self assert: stonString = (stonStrings at: 1).	"duh"
 	self assert: stonString = (stonStrings at: 2).	"point of test"
 	self deny: stonString = (stonStrings at: 3)	"duh"
@@ -344,16 +347,16 @@ RwProjectSpecificationV2Test >> testIssue_530_3 [
 RwProjectSpecificationV2Test >> testMissingRevision [
 	"error coverage for invalid load specs"
 
-	| projectName loadSpecification stonString specName hitError |
+	| projectName projectSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
-		gitUrl: 'https://github.com/user/', projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ loadSpecification validate ]
+	[ projectSpecification validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -370,22 +373,23 @@ RwProjectSpecificationV2Test >> testMissingRevision [
 RwProjectSpecificationV2Test >> testNilInstanceVariable [
 	"error coverage for invalid load specs"
 
-	| projectName loadSpecification stonString specName hitError |
+	| projectName projectSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectsPath: nil;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ loadSpecification validate ]
+	[ projectSpecification validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
 			self
 				assert:
-					(x := ex description) = 'Error: The instance variable ''projectsPath'' cannot be nil'.
+					(x := ex description)
+						= 'Error: The instance variable ''projectsPath'' cannot be nil'.
 			hitError := true ].
 	self assert: hitError
 ]
@@ -394,17 +398,17 @@ RwProjectSpecificationV2Test >> testNilInstanceVariable [
 RwProjectSpecificationV2Test >> testOnlyOneRepositoryUrl [
 	"error coverage for invalid load specs"
 
-	| projectName loadSpecification stonString specName hitError |
+	| projectName projectSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		gitUrl: 'https://github.com/user/' , projectName;
 		diskUrl: 'ftp://$ROWAN_PROJECTS_HOME/' , projectName;
 		yourself.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ loadSpecification validate ]
+	[ projectSpecification validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -481,10 +485,10 @@ RwProjectSpecificationV2Test >> testSpec_0001_B [
 RwProjectSpecificationV2Test >> testUknownPlatform [
 	"error coverage for invalid load specs"
 
-	| projectName loadSpecification stonString specName hitError |
+	| projectName projectSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvTo: 0;
@@ -492,9 +496,9 @@ RwProjectSpecificationV2Test >> testUknownPlatform [
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
 		yourself.
 	hitError := false.
-	loadSpecification platformProperties at: 'boom' put: Dictionary new.
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
-	[ loadSpecification validate ]
+	projectSpecification platformProperties at: 'boom' put: Dictionary new.
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
+	[ projectSpecification validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -510,25 +514,25 @@ RwProjectSpecificationV2Test >> testUknownPlatform [
 RwProjectSpecificationV2Test >> testUnknownPropertyKey [
 	"error coverage for invalid load specs"
 
-	| projectName loadSpecification stonString specName hitError |
+	| projectName projectSpecification stonString specName hitError |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
-	loadSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		gemstoneSetDefaultMethodEnvTo: 0;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
 		yourself.
-	(loadSpecification platformProperties at: 'gemstone')
+	(projectSpecification platformProperties at: 'gemstone')
 		at: 'BOOM'
 		put:
 			(Dictionary new
 				at: #'boom' put: nil;
 				yourself).
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ loadSpecification validate ]
+	[ projectSpecification validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
