@@ -394,7 +394,7 @@ RwProjectReferenceDefinitionV2 >> repositoryDefinition [
 RwProjectReferenceDefinitionV2 >> repositoryRoot [
 	"Root directory of the project. The componentsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^ self projectLoadSpecification repositoryRoot
+	^ self projectSpecification repositoryRoot
 ]
 
 { #category : 'accessing' }

@@ -18,7 +18,7 @@ RwGsLoadedSymbolDictComponentProjectV2 >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."
 
 	^ (RwProjectDefinitionV2
-		fromLoadSpecification: handle projectLoadSpecification copy)
+		fromLoadSpecification: handle projectSpecification copy)
 		packages: self loadedPackageDefinitions;
 		yourself
 ]

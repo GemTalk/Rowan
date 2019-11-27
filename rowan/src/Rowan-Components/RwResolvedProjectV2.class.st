@@ -90,6 +90,11 @@ RwResolvedProjectV2 >> commit: message [
 	^ self projectDefinition commit: message
 ]
 
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> componentNames: anArray [
+	^ self projectSpecification componentNames: anArray
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> components [
 	^ self projectDefinition components
@@ -129,6 +134,13 @@ RwResolvedProjectV2 >> exportProjects [
 		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"
 			self projectsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> load [
+	"load the receiver into the image"
+
+	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 
 { #category : 'project definition' }

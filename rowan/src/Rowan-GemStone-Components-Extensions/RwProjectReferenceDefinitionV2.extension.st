@@ -93,7 +93,7 @@ RwProjectReferenceDefinitionV2 >> methodEnvForPackageNamed: packageName [
 
 	"https://github.com/GemTalk/Rowan/issues/533"
 
-	^ self projectLoadSpecification
+	^ self projectSpecification
 		gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 ]
 

@@ -5,14 +5,14 @@ Class {
 }
 
 { #category : 'private' }
-RwRowanSample9Test class >> _clearLoadSpecSessionCache [
-	"self _clearLoadSpecSessionCache"
+RwRowanSample9Test class >> _clearProjectSpecSessionCache [
+	"self _clearProjectSpecSessionCache"
 
-	SessionTemps current removeKey: self _loadSpecSessionCacheKey ifAbsent: [  ]
+	SessionTemps current removeKey: self _projectSpecSessionCacheKey ifAbsent: [  ]
 ]
 
 { #category : 'private' }
-RwRowanSample9Test class >> _loadSpecSessionCacheKey [
+RwRowanSample9Test class >> _projectSpecSessionCacheKey [
 	^ #'RowanSample9SpecsDict'
 ]
 
@@ -22,14 +22,14 @@ RwRowanSample9Test >> _deleteProjectRepositoryDir [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _issue_527_resolve_load_validate: loadSpec className: className expectedSymDictName: expectedSymDictName [
-	| projectDefinition loadedProjects symDictName symDict |
-	projectDefinition := loadSpec resolve.
-	loadedProjects := projectDefinition load.
+RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: className expectedSymDictName: expectedSymDictName [
+	| resolvedProject loadedProjects symDictName symDict |
+	resolvedProject := projectSpec resolve.
+	loadedProjects := resolvedProject load.
 	self assert: loadedProjects size = 1.
 	loadedProjects do: [ :project | self assert: project audit isEmpty ].
 
-	symDictName := loadSpec
+	symDictName := projectSpec
 		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId.
 
 	self assert: symDictName = expectedSymDictName.
@@ -49,7 +49,7 @@ RwRowanSample9Test >> _issue_527_resolve_load_validate: loadSpec className: clas
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _loadSpecNamed: specName [
+RwRowanSample9Test >> _projectSpecNamed: specName [
 	"
 		self _clearLoadSpecSessionCache
 	"
@@ -59,28 +59,28 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 
 	"it is assumed that the load spec on the master branch and the load spec on the branch are the same"
 
-	| loadSpecification repositoryDefinition dict theSpec |
-	loadSpecification := self _rowanSample9_0000_load_spec.
+	| projectSpecification repositoryDefinition dict theSpec |
+	projectSpecification := self _rowanSample9_0000_load_spec.
 	theSpec := (SessionTemps current
-		at: self _loadSpecSessionCacheKey
+		at: self _projectSpecSessionCacheKey
 		ifAbsent: [  ])
 		ifNotNil: [ :specsDict | specsDict at: specName ]
 		ifNil: [ 
 			"The first time we access the repository in this session, we'll refresh the 
 				master branch and cache the session specs"
-			loadSpecification revision: 'master'.
-			loadSpecification resolveStrict.
+			projectSpecification revision: 'master'.
+			projectSpecification resolveStrict.
 
-			repositoryDefinition := loadSpecification repositoryDefinition.
+			repositoryDefinition := projectSpecification repositoryDefinition.
 			repositoryDefinition
 				fetch;
 				pull: repositoryDefinition remote branch: 'master';
 				yourself.
 
 			dict := SessionTemps current
-				at: self _loadSpecSessionCacheKey
+				at: self _projectSpecSessionCacheKey
 				ifAbsentPut: [ Dictionary new ].
-			(loadSpecification repositoryRoot / 'specs') files
+			(projectSpecification repositoryRoot / 'specs') files
 				do: [ :file | 
 					file
 						readStreamDo: [ :fileStream | 
@@ -103,8 +103,8 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _loadSpecSessionCacheKey [
-	^ self class _loadSpecSessionCacheKey
+RwRowanSample9Test >> _projectSpecSessionCacheKey [
+	^ self class _projectSpecSessionCacheKey
 ]
 
 { #category : 'private' }
@@ -128,15 +128,15 @@ RwRowanSample9Test >> _specListProjectNames [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _standard_resolve_load_validate: loadSpec [
-	| projectDefinition loadedProjects project testResult loadedProjectDefinition |
+RwRowanSample9Test >> _standard_resolve_load_validate: projectSpec [
+	| resolvedProject loadedProjects project testResult loadedProjectDefinition |
 
 "resolve/load"
-	projectDefinition := loadSpec resolve.
-	loadedProjects := projectDefinition load.
+	resolvedProject := projectSpec resolve.
+	loadedProjects := resolvedProject load.
 
 "validate"
-	self assert: projectDefinition projectRef properties isEmpty.
+	self assert: resolvedProject projectDefinition projectRef properties isEmpty.
 	self assert: loadedProjects size = 1.
 	project := loadedProjects at: 1.
 	self assert: project audit isEmpty.
@@ -145,7 +145,7 @@ RwRowanSample9Test >> _standard_resolve_load_validate: loadSpec [
 	self deny: testResult hasFailures.
 
 	loadedProjectDefinition := project asDefinition.
-	self assert: loadedProjectDefinition class = projectDefinition class.
+	self assert: loadedProjectDefinition class = resolvedProject projectDefinition class.
 ]
 
 { #category : 'private' }
@@ -183,13 +183,13 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIndexCards [
-	| loadSpecification indexCards specsDir loadSpecs projectDefinitions |
-	loadSpecification := self _rowanSample9_0000_load_spec.
-	loadSpecification repositoryRoot ensureDeleteAll.
-	loadSpecification revision: 'master'.
-	loadSpecification resolveStrict.
+	| projectSpecification indexCards specsDir projectSpecs resolvedProjects |
+	projectSpecification := self _rowanSample9_0000_load_spec.
+	projectSpecification repositoryRoot ensureDeleteAll.
+	projectSpecification revision: 'master'.
+	projectSpecification resolveStrict.
 
-	indexCards := (loadSpecification repositoryRoot / 'indexCards') files
+	indexCards := (projectSpecification repositoryRoot / 'indexCards') files
 		collect: [ :file | 
 			file
 				readStreamDo: [ :fileStream | 
@@ -199,8 +199,8 @@ RwRowanSample9Test >> testIndexCards [
 
 	indexCards := indexCards sort: [ :a :b | a index <= b index ].
 
-	specsDir := loadSpecification repositoryRoot / 'specs'.
-	loadSpecs := indexCards
+	specsDir := projectSpecification repositoryRoot / 'specs'.
+	projectSpecs := indexCards
 		collect: [ :indexCard | 
 			specsDir / indexCard specName , 'ston'
 				readStreamDo: [ :fileStream | 
@@ -208,21 +208,21 @@ RwRowanSample9Test >> testIndexCards [
 					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 					STON fromStream: stream ] ].
 
-	projectDefinitions := loadSpecs
-		collect: [ :loadSpec | 
-			loadSpec projectsHome: self _testRowanProjectsSandbox.
-			STON toStringPretty: loadSpec resolve ]
+	resolvedProjects := projectSpecs
+		collect: [ :projectSpec | 
+			projectSpec projectsHome: self _testRowanProjectsSandbox.
+			STON toStringPretty: projectSpec resolve ]
 ]
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_230 [
 	"https://github.com/dalehenrich/Rowan/issues/230"
 
-	| loadSpec projectName projectDefinition loadedProjects project testResult 
+	| projectSpec projectName resolvedProject loadedProjects project testResult 
 		packageName1 packageName3 |
 
-	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer"
-	projectName := loadSpec projectAlias.
+	projectSpec := self _projectSpecNamed: 'spec_0003'.	"primer"
+	projectName := projectSpec projectAlias.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -231,7 +231,7 @@ RwRowanSample9Test >> testIssue_230 [
 		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
 	packageName1 := projectName , '-' , 'Core'.
 	packageName3 := projectName , '-' , 'GemStone'.
-	loadSpec
+	projectSpec
 		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName3 
@@ -239,8 +239,8 @@ RwRowanSample9Test >> testIssue_230 [
 		yourself.
 
 "resolve/load primer project"
-	projectDefinition := loadSpec resolve.
-	loadedProjects := projectDefinition load.
+	resolvedProject := projectSpec resolve.
+	loadedProjects := resolvedProject load.
 
 "validate"
 	self assert: loadedProjects size = 1.
@@ -250,11 +250,11 @@ RwRowanSample9Test >> testIssue_230 [
 	self deny: testResult hasErrors.
 	self deny: testResult hasFailures.
 
-	loadSpec := self _loadSpecNamed: 'spec_0002'.	"basic project (remove instancesInvariant option and move class to default symbol dictionary: self _sampleSymbolDictionaryName1)"
+	projectSpec := self _projectSpecNamed: 'spec_0002'.	"basic project (remove instancesInvariant option and move class to default symbol dictionary: self _sampleSymbolDictionaryName1)"
 
 "resolve/load"
-	projectDefinition := loadSpec resolve.
-	loadedProjects := projectDefinition load.
+	resolvedProject := projectSpec resolve.
+	loadedProjects := resolvedProject load.
 
 "validate"
 	self assert: loadedProjects size = 1.
@@ -276,23 +276,23 @@ RwRowanSample9Test >> testIssue_446 [
 		loads a different component ... needed to consolidate spec_004 
 		creation"
 
-	| loadSpec1 loadSpec2 projectName projectsHome projectDefinition stonString |
+	| projectSpec1 projectSpec2 projectName projectsHome resolvedProject stonString |
 	projectName := 'RowanSample9_testbed'.
 	projectsHome := self _testRowanProjectsSandbox.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-	loadSpec1 := RwProjectSpecificationV2 new
+	projectSpec1 := RwProjectSpecificationV2 new
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		repoType: #'git';
 		yourself.
 
-	projectDefinition := loadSpec1 resolve.
+	resolvedProject := projectSpec1 resolve.
 
-	(projectDefinition
+	(resolvedProject
 		addComponentNamed: 'Core1'
 		definedGroupNames:
 			(Dictionary new
@@ -302,7 +302,7 @@ RwRowanSample9Test >> testIssue_446 [
 		comment: 'contains ' , projectName , '-Core1 package and Core2 component')
 		componentNames: #('Core2');
 		yourself.
-	projectDefinition
+	resolvedProject
 		addComponentNamed: 'Core2'
 		definedGroupNames:
 			(Dictionary new
@@ -311,15 +311,15 @@ RwRowanSample9Test >> testIssue_446 [
 				yourself)
 		comment: 'contains ' , projectName , '-Core2 package'.
 
-	projectDefinition
+	resolvedProject
 		componentNames: #('Core1');
 		yourself.	"????"
 
-	loadSpec2 := loadSpec1 copy
+	projectSpec2 := projectSpec1 copy
 		componentNames:  #('Core2');
 		yourself.	"????"
 
-	stonString := STON toStringPretty: projectDefinition.
+	stonString := STON toStringPretty: resolvedProject.
 	false
 		ifTrue: [ self halt ]
 ]
@@ -330,27 +330,27 @@ RwRowanSample9Test >> testIssue_527 [
 		self _clearLoadSpecSessionCache
 	"
 
-	| loadSpec symDictName className projectName |
-	loadSpec := self _loadSpecNamed: 'spec_0001'.
+	| projectSpec symDictName className projectName |
+	projectSpec := self _projectSpecNamed: 'spec_0001'.
 
-	(Rowan image loadedProjectNamed: loadSpec projectAlias ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectSpec projectAlias ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-	projectName := loadSpec projectAlias.
+	projectName := projectSpec projectAlias.
 	className := projectName , 'Class1'.
 
 	self
-		_issue_527_resolve_load_validate: loadSpec
+		_issue_527_resolve_load_validate: projectSpec
 		className: className
 		expectedSymDictName: self _sampleSymbolDictionaryName1.
 
 	symDictName := self _sampleSymbolDictionaryName2.
-	loadSpec
+	projectSpec
 		gemstoneSetDefaultSymbolDictNameForUser: Rowan image currentUserId
 		to: symDictName.
 
 	self
-		_issue_527_resolve_load_validate: loadSpec
+		_issue_527_resolve_load_validate: projectSpec
 		className: className
 		expectedSymDictName: self _sampleSymbolDictionaryName2
 ]
@@ -361,15 +361,15 @@ RwRowanSample9Test >> testIssue_531_baseline [
 
 	"https://github.com/GemTalk/Rowan/issues/531"
 
-	| loadSpec projectName classesToSymDictMap |
-	loadSpec := self _loadSpecNamed: 'spec_0004'.
+	| projectSpec projectName classesToSymDictMap |
+	projectSpec := self _projectSpecNamed: 'spec_0004'.
 
-	projectName := loadSpec projectAlias.
+	projectName := projectSpec projectAlias.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve/load/validate"
-	self _standard_resolve_load_validate: loadSpec.
+	self _standard_resolve_load_validate: projectSpec.
 
 "validate that classes are in the correct symbolDictionary"
 	classesToSymDictMap := Dictionary new
@@ -396,9 +396,9 @@ RwRowanSample9Test >> testIssue_532 [
 
 	"https://github.com/GemTalk/Rowan/issues/532"
 
-	| loadSpec hitError |
+	| projectSpec hitError |
 	hitError := false.
-	[ loadSpec := self _loadSpecNamed: 'spec_0004_b' ]
+	[ projectSpec := self _projectSpecNamed: 'spec_0004_b' ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -410,15 +410,15 @@ RwRowanSample9Test >> testIssue_532 [
 { #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_basic [
 
-	| loadSpec projectName  |
-	loadSpec := self _loadSpecNamed: 'spec_0002'.
+	| projectSpec projectName  |
+	projectSpec := self _projectSpecNamed: 'spec_0002'.
 
-	projectName := loadSpec projectAlias.
+	projectName := projectSpec projectAlias.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve/load/validate"
-	self _standard_resolve_load_validate: loadSpec.
+	self _standard_resolve_load_validate: projectSpec.
 
 "unload project"
 	(Rowan projectNamed: projectName) unload
@@ -427,15 +427,15 @@ RwRowanSample9Test >> testRowanSample4_basic [
 { #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_primer [
 
-	| loadSpec projectName |
-	loadSpec := self _loadSpecNamed: 'spec_0003'.
+	| projectSpec projectName |
+	projectSpec := self _projectSpecNamed: 'spec_0003'.
 
-	projectName := loadSpec projectAlias.
+	projectName := projectSpec projectAlias.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve/load/validate"
-	self _standard_resolve_load_validate: loadSpec.
+	self _standard_resolve_load_validate: projectSpec.
 
 "unload project"
 	(Rowan projectNamed: projectName) unload

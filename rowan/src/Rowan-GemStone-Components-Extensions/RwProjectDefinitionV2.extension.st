@@ -3,7 +3,7 @@ Extension { #name : 'RwProjectDefinitionV2' }
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> _gemstoneAllUsersName [
 
-	^ self projectLoadSpecification _gemstoneAllUsersName
+	^ self projectSpecification _gemstoneAllUsersName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
@@ -45,7 +45,7 @@ RwProjectDefinitionV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: pac
 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
-	^ self projectLoadSpecification gemstoneDefaultSymbolDictNameForUser: userId
+	^ self projectSpecification gemstoneDefaultSymbolDictNameForUser: userId
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
