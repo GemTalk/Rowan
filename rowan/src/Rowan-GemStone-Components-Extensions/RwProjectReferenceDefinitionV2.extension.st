@@ -103,6 +103,6 @@ RwProjectReferenceDefinitionV2 >> useSessionMethodsForExtensionsForPackageNamed:
 
 	"https://github.com/GemTalk/Rowan/issues/533"
 
-	^ self projectLoadSpecification
+	^ self projectSpecification
 		gemstoneDefaultUseSessionMethodsForExtensionsForUser: Rowan image currentUserId
 ]

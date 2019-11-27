@@ -12,7 +12,7 @@ Class {
 { #category : 'instance creation' }
 RwProjectReferenceDefinitionV2 class >> fromLoadSpecification: aRwProjectLoadSpecification [
 	^ self new
-		projectLoadSpecification: aRwProjectLoadSpecification;
+		projectSpecification: aRwProjectLoadSpecification;
 		yourself
 ]
 

@@ -51,7 +51,7 @@ RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: c
 { #category : 'private' }
 RwRowanSample9Test >> _projectSpecNamed: specName [
 	"
-		self _clearLoadSpecSessionCache
+		self _clearProjectSpecSessionCache
 	"
 
 	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
@@ -327,7 +327,7 @@ RwRowanSample9Test >> testIssue_446 [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_527 [
 	"
-		self _clearLoadSpecSessionCache
+		self _clearProjectSpecSessionCache
 	"
 
 	| projectSpec symDictName className projectName |
@@ -391,7 +391,7 @@ RwRowanSample9Test >> testIssue_531_baseline [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_532 [
 	"
-		self _clearLoadSpecSessionCache
+		self _clearProjectSpecSessionCache
 	"
 
 	"https://github.com/GemTalk/Rowan/issues/532"
