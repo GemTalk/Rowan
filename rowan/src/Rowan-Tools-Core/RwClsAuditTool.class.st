@@ -172,6 +172,18 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 	(Rowan globalNamed: aLoadedClass name)  
 		ifNil: [self errorLog: res add: aLoadedClass name -> 'Missing gemstone class for loaded class ' ] "there is no matching Class for LoadedClass"
 		ifNotNil: [:aBehavior | 
+
+			aBehavior == aLoadedClass handle
+				ifFalse: [ 
+					self
+						errorLog: res
+						add:
+							aLoadedClass name
+								->
+									('loaded class (' , aLoadedClass handle asOop printString
+									, ') not latest version of class ('
+									, aBehavior asOop printString , ') ') ].
+
 			"audit class properties"
 			self errorLog: res addAll:  (self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
 			"audit categories"
