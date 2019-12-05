@@ -48,7 +48,7 @@ RowanPackageServiceTest >> test_compileAndSelectClass [
 		options: #()'.
   self assert: RowanCommandResult results size equals: 0.	"we no longer return a service on first stage of compile"
   browserService recompileMethodsAfterClassCompilation.
-  self assert: RowanCommandResult results size equals: 6.
+  self assert: RowanCommandResult results size equals: 5.
   self
     assert: (RowanCommandResult results at: 4) name
     equals: 'RowanTestCompile'.
@@ -77,7 +77,7 @@ RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
 		options: #()'.
   self assert: RowanCommandResult results size equals: 0.	"we no longer return a service on first stage of compile"
   browserService recompileMethodsAfterClassCompilation.
-  self assert: RowanCommandResult results size equals: 6.
+  self assert: RowanCommandResult results size equals: 5.
   self
     assert: (RowanCommandResult results at: 4) name
     equals: 'RowanTestCompile'.

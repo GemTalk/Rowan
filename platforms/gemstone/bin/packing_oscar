@@ -38,6 +38,7 @@ set -e
 # 1.2.6 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.6 v1.2.6 Oscar-3.0.65
 # 1.2.7 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.7 v1.2.7 Oscar-3.0.85
 # 1.2.8 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.8 v1.2.8 Oscar-3.0.87
+# 1.2.9 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.9 v1.2.9 Oscar-3.0.89
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
