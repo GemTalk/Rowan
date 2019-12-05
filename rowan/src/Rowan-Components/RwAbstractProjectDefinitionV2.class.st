@@ -2,7 +2,9 @@ Class {
 	#name : 'RwAbstractProjectDefinitionV2',
 	#superclass : 'RwDefinition',
 	#instVars : [
-		'packages'
+		'packages',
+		'components',
+		'comment'
 	],
 	#category : 'Rowan-Components'
 }
@@ -33,25 +35,37 @@ RwAbstractProjectDefinitionV2 >> canCommit [
 { #category : 'properties' }
 RwAbstractProjectDefinitionV2 >> comment [
 
-	^ self projectRef comment
+	^ comment
 ]
 
 { #category : 'properties' }
 RwAbstractProjectDefinitionV2 >> comment: aString [
 
-	self projectRef comment: aString
+	comment := aString
 ]
 
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> componentNames [
+{ #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> componentNamed: aComponentName [
 
-	^ self projectRef componentNames
+	^ self componentNamed: aComponentName ifAbsent: [ self error: 'The component named ', aComponentName printString, ' was not found' ]
 ]
 
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> componentNames: aDirectoryPathString [
+{ #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
 
-	self projectRef componentNames: aDirectoryPathString
+	^ self components 
+		at: aComponentName 
+		ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> components [
+	^ components
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> components: aComponentDefinitionDictionary [
+	components := aComponentDefinitionDictionary
 ]
 
 { #category : 'properties' }
@@ -80,9 +94,9 @@ RwAbstractProjectDefinitionV2 >> groupNames: aDirectoryPathString [
 
 { #category : 'initialization' }
 RwAbstractProjectDefinitionV2 >> initialize [
-
 	super initialize.
-	packages := Dictionary new
+	packages := Dictionary new.
+	components := Dictionary new
 ]
 
 { #category : 'testing' }
@@ -103,11 +117,6 @@ RwAbstractProjectDefinitionV2 >> key [
 RwAbstractProjectDefinitionV2 >> loadedCommitId [
 
 	^ self projectRef loadedCommitId
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> name [
-  ^ self projectAlias
 ]
 
 { #category : 'accessing' }

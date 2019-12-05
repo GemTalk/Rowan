@@ -20,26 +20,46 @@ RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
-						add: 'name' -> projectSpecification projectName;
-						add: 'projectRef' -> RwProjectReferenceDefinitionV2 new;
+						add: 'name' -> projectSpecification projectAlias;
 						yourself);
 		packages: Dictionary new;
+		components: Dictionary new;
 		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
-		projectSpecification: projectSpecification;
 		yourself.
-	projectDefinition := projectSpecification _resolve
-		ifTrue: [ 
-			"read project definition from disk"
-			projectDefinition read ]
-		ifFalse: [ projectDefinition ].
 	^ self new
-		projectDefinition: projectDefinition;
-		projectSpecification: projectSpecification
+		_projectDefinition: projectDefinition;
+		projectSpecification: projectSpecification;
+		_resolve
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> _projectDefinition [
+	"project definition should not be accessed directly -- Rowan private state"
+
+	^ projectDefinition
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> _projectDefinition: object [
+	"project definition should not be accessed directly -- Rowan private state"
+
+	projectDefinition := object
+]
+
+{ #category : 'private' }
+RwResolvedProjectV2 >> _resolve [
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	projectSpecification _resolve
+		ifTrue: [ 
+			"update project definition from disk"
+			self read ]
 ]
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
-	^ self projectDefinition
+	^ self _projectDefinition
 		addComponentNamed: aComponentName
 		definedGroupNames: groupNameDict
 		comment: commentString
@@ -47,7 +67,7 @@ RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: grou
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	^ self projectDefinition
+	^ self _projectDefinition
 		addPackageNamed: packageName
 		toComponentNamed: componentName
 		withConditions: conditionArray
@@ -56,7 +76,9 @@ RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentN
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
-	^ self projectDefinition
+	(self groupNames includes: groupName)
+		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
+	^ self _projectDefinition
 		addPackageNamed: packageName
 		toComponentNamed: componentName
 		withConditions: conditionArray
@@ -66,7 +88,9 @@ RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentN
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	^ self projectDefinition
+	(self groupNames includes: groupName)
+		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
+	^ self _projectDefinition
 		addPackagesNamed: packageNames
 		toComponentNamed: componentName
 		withConditions: conditionArray
@@ -75,12 +99,12 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment [
-	^ self projectDefinition comment
+	^ self _projectDefinition comment
 ]
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment: aString [
-	self projectDefinition comment: aString
+	self _projectDefinition comment: aString
 ]
 
 { #category : 'project definition' }
@@ -91,13 +115,18 @@ RwResolvedProjectV2 >> commit: message [
 ]
 
 { #category : 'project specification' }
+RwResolvedProjectV2 >> componentNames [
+	^ self projectSpecification componentNames
+]
+
+{ #category : 'project specification' }
 RwResolvedProjectV2 >> componentNames: anArray [
 	^ self projectSpecification componentNames: anArray
 ]
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> components [
-	^ self projectDefinition components
+	^ self _projectDefinition components
 ]
 
 { #category : 'project specification' }
@@ -124,7 +153,10 @@ RwResolvedProjectV2 >> exportComponents [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportPackages [
-	self projectDefinition exportPackages
+	self _projectDefinition
+		exportPackagesTo: self packagesRoot
+		packageFormat: self packageFormat
+		packageConvention: self packageConvention
 ]
 
 { #category : 'exporting' }
@@ -136,6 +168,11 @@ RwResolvedProjectV2 >> exportProjects [
 			self projectsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
 ]
 
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> groupNames [
+	^ self projectSpecification groupNames
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
@@ -144,28 +181,28 @@ RwResolvedProjectV2 >> load [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> packageConvention [
+	^ self projectSpecification packageConvention
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> packageFormat [
+	^ self projectSpecification packageFormat
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> packageNamed: aString [
-	^ self projectDefinition packageNamed: aString
+	^ self _projectDefinition packageNamed: aString
 ]
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packageNames [
-	^ self projectDefinition packageNames
+	^ self _projectDefinition packageNames
 ]
 
 { #category : 'project specification' }
 RwResolvedProjectV2 >> packagesRoot [
 	^ self projectSpecification packagesRoot
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> projectDefinition [
-	^projectDefinition
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> projectDefinition: object [
-	projectDefinition := object
 ]
 
 { #category : 'project specification' }
@@ -193,6 +230,29 @@ RwResolvedProjectV2 >> projectSpecification: anRwProjectSpecificationV2 [
 { #category : 'project specification' }
 RwResolvedProjectV2 >> projectsRoot [
 	^ self projectSpecification projectsRoot
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> read [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self readComponentNames: self componentNames groupNames: self groupNames
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	| projectSetDefinition |
+	projectSetDefinition := Rowan projectTools readV2
+		readProjectSetForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: groupNames.
+	projectDefinition := projectSetDefinition projectNamed: self projectName
 ]
 
 { #category : 'project specification' }

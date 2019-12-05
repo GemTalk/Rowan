@@ -7,7 +7,8 @@ Class {
 		'repositoryRoot',
 		'projectLoadSpecs',
 		'visitedComponents',
-		'projectDefinition'
+		'projectDefinition',
+		'resolvedProject'
 	],
 	#category : 'Rowan-Components'
 }
@@ -49,12 +50,7 @@ RwProjectLoadComponentVisitorV2 >> initialize [
 
 { #category : 'accessing' }
 RwProjectLoadComponentVisitorV2 >> projectDefinition [
-	^ projectDefinition
-]
-
-{ #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectDefinition: aProjectDefinition [
-	projectDefinition := aProjectDefinition
+	^ self resolvedProject _projectDefinition
 ]
 
 { #category : 'accessing' }
@@ -77,6 +73,16 @@ RwProjectLoadComponentVisitorV2 >> projectsRoot [
 { #category : 'accessing' }
 RwProjectLoadComponentVisitorV2 >> projectsRoot: aString [
 	projectsRoot := aString asFileReference
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitorV2 >> resolvedProject [
+	^ resolvedProject
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitorV2 >> resolvedProject: aResolvedProject [
+	resolvedProject := aResolvedProject
 ]
 
 { #category : 'visiting' }

@@ -5,17 +5,17 @@ Class {
 }
 
 { #category : 'private' }
-RwPrjReadToolV2 >> _visitComponents: visitorClass forProjectDefinition: projectDefinition withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
+RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
 	| projectName componentDirectory projectsDirectory visitor |
-	projectName := projectDefinition name.
-	componentDirectory := projectDefinition componentsRoot.
+	projectName := resolvedProject projectName.
+	componentDirectory := resolvedProject componentsRoot.
 	componentDirectory exists
 		ifFalse: [ 
 			^ self
 				error:
 					'No component directory (' , componentDirectory pathString printString
 						, ') found for project ' , projectName printString ].
-	projectsDirectory := projectDefinition projectsRoot.
+	projectsDirectory := resolvedProject projectsRoot.
 	projectsDirectory exists
 		ifFalse: [ 
 			^ self
@@ -27,7 +27,7 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forProjectDefinition: projectD
 		groupNames: groupNames;
 		componentsRoot: componentDirectory;
 		projectsRoot: projectsDirectory;
-		projectDefinition: projectDefinition;
+		resolvedProject: resolvedProject;
 		yourself.
 	componentNames
 		do: [ :componentName | 
@@ -45,73 +45,73 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forProjectDefinition: projectD
 	^ visitor
 ]
 
-{ #category : 'read components' }
-RwPrjReadToolV2 >> readComponentsForProjectDefinition: projectDefinition withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
+{ #category : 'read resolved projects' }
+RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
 	^ self
-		readComponentsForProjectDefinition: projectDefinition
+		readComponentsForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
 		platformConfigurationAttributes: platformConfigurationAttributes
 		forLoad: true
 ]
 
-{ #category : 'read components' }
-RwPrjReadToolV2 >> readComponentsForProjectDefinition: projectDefinition withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
+{ #category : 'read resolved projects' }
+RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
 	| theComponentNames theGroupNames |
-	projectDefinition components: Dictionary new.	"build new list of components based on (potentially) new list of configNames"
-	projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
+	resolvedProject _projectDefinition components: Dictionary new.	"build new list of components based on (potentially) new list of configNames"
+	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theComponentNames := componentNames isEmpty
-		ifTrue: [ projectDefinition componentNames ]
+		ifTrue: [ resolvedProject componentNames ]
 		ifFalse: [ componentNames ].
 	theGroupNames := groupNames isEmpty
-		ifTrue: [ projectDefinition groupNames ]
+		ifTrue: [ resolvedProject groupNames ]
 		ifFalse: [ groupNames ].
 	^ self
 		_visitComponents: RwProjectLoadComponentVisitorV2
-		forProjectDefinition: projectDefinition
+		forResolvedProject: resolvedProject
 		withComponentNames: theComponentNames
 		groupNames: theGroupNames
 		platformConfigurationAttributes: platformConfigurationAttributes
 		forLoad: forLoad
 ]
 
-{ #category : 'read project definitions' }
-RwPrjReadToolV2 >> readProjectSetForProjectDefinition: projectDefinition withComponentNames: componentNames groupNames: groupNames [
+{ #category : 'read resolved projects' }
+RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames [
 	"read packages and project metadata into projectDefinition ... return a project definition
 		set that contains projectDefinition and any dependent projects"
 
 	^ self
-		readProjectSetForProjectDefinition: projectDefinition
+		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
 		platformConfigurationAttributes: Rowan platformConfigurationAttributes
 ]
 
-{ #category : 'read project definitions' }
-RwPrjReadToolV2 >> readProjectSetForProjectDefinition: projectDefinition withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
+{ #category : 'read resolved projects' }
+RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
-	projectVisitorQueue := {{projectDefinition.
+	projectVisitorQueue := {{resolvedProject.
 	componentNames.
 	groupNames}}.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| nextDefArray pcd cn gn |
+			| nextDefArray rp cn gn |
 			nextDefArray := projectVisitorQueue removeFirst.
-			pcd := nextDefArray at: 1.
+			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
 			gn := nextDefArray at: 3.
 			visitor := self
-				readComponentsForProjectDefinition: pcd
+				readComponentsForResolvedProject:  rp
 				withComponentNames: cn
 				groupNames: gn
 				platformConfigurationAttributes: platformConfigurationAttributes.
-			pcd
+			rp projectDefinition
 				projectDefinitionSourceProperty:
 					RwLoadedProject _projectDiskDefinitionSourceValue.
 			visitor visitedComponents
-				keysAndValuesDo: [ :cName :cmp | pcd components at: cName put: cmp ].
+				keysAndValuesDo: [ :cName :cmp | rp components at: cName put: cmp ].
 			projectVisitedQueue
 				addLast:
 					{visitor.
@@ -121,7 +121,7 @@ RwPrjReadToolV2 >> readProjectSetForProjectDefinition: projectDefinition withCom
 					| lsd |
 					self halt.	"these should be project load specs and they are to be resolved"
 					lsd := loadSpec asDefinition.
-					lsd projectHome: pcd projectHome.
+					lsd projectHome: rp projectHome.
 					lsd cloneRepository.
 					projectVisitorQueue
 						addLast:
@@ -130,11 +130,12 @@ RwPrjReadToolV2 >> readProjectSetForProjectDefinition: projectDefinition withCom
 							(lsd loadedGroupNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| ndf theVisitor theProjectDefinition |
+			| ndf theVisitor theResolvedProject |
 			theVisitor := visitedArray at: 1.
 			ndf := visitedArray at: 2.
-			theProjectDefinition := ndf at: 1.
-			theProjectDefinition readPackageNames: theProjectDefinition packageNames.
-			projectSetDefinition addProject: theProjectDefinition ].
+			theResolvedProject := ndf at: 1.
+			theResolvedProject readPackageNames: theResolvedProject packageNames.
+			projectSetDefinition addProject: theResolvedProject ].
 	^ projectSetDefinition
+
 ]

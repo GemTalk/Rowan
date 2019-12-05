@@ -22,6 +22,7 @@ Class {
 		'platformProperties',
 		'repositoryResolutionPolicy',
 		'packageFormat',
+		'packageConvention',
 		'repositoryDefinition'
 	],
 	#category : 'Rowan-Components'
@@ -304,6 +305,16 @@ RwProjectSpecificationV2 >> mercurialUrl [
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> mercurialUrl: anUrlString [
 	mercurialUrl := anUrlString
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> packageConvention [
+	^ packageConvention ifNil: [ 'RowanHybrid' ]
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> packageConvention: aString [
+	packageConvention := aString
 ]
 
 { #category : 'accessing' }

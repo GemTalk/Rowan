@@ -72,8 +72,6 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName [
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 	| package component |
-	(self groupNames includes: groupName)
-		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
 	self
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
@@ -92,8 +90,6 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
 	| package component |
-	(self groupNames includes: groupName)
-		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
 	self
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
@@ -179,18 +175,6 @@ RwProjectDefinitionV2 >> cloneRepository [
 	self projectRef clone
 ]
 
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> comment [
-
-	^ self projectRef comment
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> comment: aString [
-
-	self projectRef comment: aString
-]
-
 { #category : 'actions' }
 RwProjectDefinitionV2 >> commit: message [
 	"commit the repository associated with receiver ..."
@@ -203,32 +187,6 @@ RwProjectDefinitionV2 >> commit: message [
 			self inform: msg.
 			^ msg ].
 	^ self projectRef doCommit: message
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> componentNamed: aComponentName [
-
-	^ self componentNamed: aComponentName ifAbsent: [ self error: 'The component named ', aComponentName printString, ' was not found' ]
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
-
-	^ self components 
-		at: aComponentName 
-		ifAbsent: absentBlock
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> components [
-
-	^ self projectRef components
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> components: aComponentDefinitionDictionary [
-
-	self projectRef components: aComponentDefinitionDictionary
 ]
 
 { #category : 'properties' }
@@ -276,42 +234,48 @@ RwProjectDefinitionV2 >> exportComponents [
 ]
 
 { #category : 'exporting' }
-RwProjectDefinitionV2 >> exportPackages [
-	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
-	| projectSetDefinition |
-	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
-		on: Error
-		do: [:ignored | RwProjectSetDefinition new ].
-	self exportPackages: projectSetDefinition.
+RwProjectDefinitionV2 >> exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
+	| projectSetDefinition visitor projectSetModification writerVisitorClass |
+	packagesRoot / 'properties' , 'st'
+		writeStreamDo: [ :fileStream | 
+			fileStream
+				nextPutAll: '{ ';
+				lf;
+				tab;
+				nextPutAll: '#format : ' , packageFormat printString , ',';
+				lf;
+				tab;
+				nextPutAll: '#convention : ' , packageConvention printString;
+				lf;
+				nextPutAll: '}';
+				lf ].	"write out packages"
+	writerVisitorClass := packageFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: diskProjectSetDefinition.
+	visitor := writerVisitorClass new
+		packagesRoot: packagesRoot;
+		yourself.
+
+	visitor visit: projectSetModification
 ]
 
 { #category : 'exporting' }
-RwProjectDefinitionV2 >> exportPackages: diskProjectSetDefinition [
+RwProjectDefinitionV2 >> exportPackagesTo: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
+	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
 
-	| projectSetDefinition visitor projectSetModification writerVisitorClass |
-	(self packagesRoot /  'properties', 'st') 
-		writeStreamDo: [ :fileStream | 
-			fileStream nextPutAll: '{ '; 
-				lf;
-				tab;
-				nextPutAll: '#format : ' , self packageFormat printString, ',' ;
-				lf;
-				tab;
-				nextPutAll: '#convention : ', self packageConvention printString;
-				lf;
-				nextPutAll: '}';
-				lf ].
-
-"write out packages"
-	writerVisitorClass := self packageFormat = 'tonel'
-		ifTrue: [ RwModificationTonelWriterVisitor ]
-		ifFalse: [ RwModificationFiletreeWriterVisitor ].
-	projectSetDefinition:= RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition compareAgainstBase: diskProjectSetDefinition.
-	visitor := writerVisitorClass new.
-
-	visitor visit: projectSetModification.
+	| projectSetDefinition |
+	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
+		on: Error
+		do: [ :ignored | RwProjectSetDefinition new ].
+	self
+		exportPackages: projectSetDefinition
+		packagesRoot: packagesRoot
+		packageFormat: packageFormat
+		packageConvention: packageConvention
 ]
 
 { #category : 'exporting' }
@@ -341,7 +305,7 @@ RwProjectDefinitionV2 >> gitRoot: aGitRootReferenceOrString [
 RwProjectDefinitionV2 >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
-	^self projectAlias
+	^self projectName
 ]
 
 { #category : 'actions' }
@@ -418,11 +382,8 @@ RwProjectDefinitionV2 >> packagesRoot [
 	^ self projectRef packagesRoot
 ]
 
-{ #category : 'accessing' }
+{ #category : 'properties' }
 RwProjectDefinitionV2 >> projectAlias [
-	"project alias is used as the name of the root directory for the project ... necessary if the project is 
-		embedded in another project's git repository or you want use a non-default directory on disk"
-
 	^ self projectRef projectAlias
 ]
 
@@ -452,9 +413,8 @@ RwProjectDefinitionV2 >> projectLoadSpecification [
 ]
 
 { #category : 'properties' }
-RwProjectDefinitionV2 >> projectName [ 
-
-	^ self projectRef projectName
+RwProjectDefinitionV2 >> projectName [
+	^ self propertyAt: 'name'
 ]
 
 { #category : 'accessing' }
@@ -513,20 +473,6 @@ RwProjectDefinitionV2 >> projectsRoot [
 RwProjectDefinitionV2 >> projectUrl [
 
 	^ self projectRef projectUrl
-]
-
-{ #category : 'actions' }
-RwProjectDefinitionV2 >> read [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	| projectSetDefinition |
-	projectSetDefinition := Rowan projectTools readV2
-		readProjectSetForProjectDefinition: self
-		withComponentNames: self componentNames
-		groupNames: self groupNames.
-	^ projectSetDefinition projectNamed: self name
 ]
 
 { #category : 'actions' }
