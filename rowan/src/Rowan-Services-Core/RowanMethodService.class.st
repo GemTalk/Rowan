@@ -141,6 +141,16 @@ RowanMethodService >> addOrUpdateMethod [
                    inPackageNamed: self classService packageName
 ]
 
+{ #category : 'method history' }
+RowanMethodService >> addToMethodHistory [
+  | rowanMethodHistory methodHistory |
+  rowanMethodHistory := UserGlobals
+    at: #'RowanMethodHistory'
+    ifAbsentPut: [ Dictionary new ].
+  methodHistory := rowanMethodHistory at: self ifAbsentPut: [ Array new ].
+  methodHistory add: self
+]
+
 { #category : 'client commands' }
 RowanMethodService >> allReferences [
   | methods |

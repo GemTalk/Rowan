@@ -474,6 +474,35 @@ RowanClassService >> initializeCategoriesFor: classOrMeta [
 	categories := theFilters asOrderedCollection.
 ]
 
+{ #category : 'method history' }
+RowanClassService >> initializeMethodHistoryFor: source [
+  "about to compile a method. If possible, ensure it's method history is setup."
+
+  | rowanMethodHistory methodHistory selector methodService |
+  rowanMethodHistory := UserGlobals
+    at: #'RowanMethodHistory'
+    ifAbsentPut: [ Dictionary new ].
+  selector := (Rowan platform parseSelectorFrom: source) asSymbol.
+  selector = #'_____could_not_parse_selector_from_method_source_____'
+    ifTrue: [ ^ self	"invalid source, continue and let save method fail" ]
+    ifFalse: [ 
+      | compiledMethod |
+      compiledMethod := self theClass
+        compiledMethodAt: selector
+        environmentId: 0
+        otherwise: nil.
+      compiledMethod
+        ifNil: [ ^ self	"we'll create history after the method is compiled" ].
+      methodService := RowanMethodService
+        forSelector: selector
+        class: self theClass
+        meta: meta
+        organizer: organizer.
+      methodHistory := rowanMethodHistory
+        at: methodService
+        ifAbsentPut: [ Array new ] ]
+]
+
 { #category : 'initialization' }
 RowanClassService >> initializeTestMethodsFor: aClass [
 	| testSelectors |
@@ -916,12 +945,13 @@ RowanClassService >> saveMethodSource: source category: category [
   | behavior compilationResult gsNMethod updatedCategory methodService |
   meta
     ifNil: [ 
-      behavior := Object _objectForOop: oop.
-      meta := behavior isMeta ]
+      behavior := Object _objectForOop: oop.  
+      meta := behavior isMeta ] 
     ifNotNil: [ 
       behavior := meta
         ifTrue: [ self theClass class ]
         ifFalse: [ self theClass ] ].
+  self initializeMethodHistoryFor: source.
   updatedCategory := category ifNil: [ 'other' ].
   compilationResult := self
     compileMethod: source
@@ -947,7 +977,10 @@ RowanClassService >> saveMethodSource: source category: category [
   self selectedMethods: (Array with: methodService).
   self updateDirtyState.
   self updateTests.
-  self updateSymbols: gsNMethod _selectorPool asArray , (Array with: methodService selector)
+  self
+    updateSymbols:
+      gsNMethod _selectorPool asArray , (Array with: methodService selector).
+  methodService addToMethodHistory
 ]
 
 { #category : 'other' }

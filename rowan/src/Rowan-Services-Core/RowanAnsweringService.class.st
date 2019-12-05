@@ -300,6 +300,18 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> methodHistoryFor: methodService [
+  | rowanMethodHistory |
+  rowanMethodHistory := UserGlobals
+    at: #'RowanMethodHistory'
+    ifAbsentPut: [ Dictionary new ].
+  answer := rowanMethodHistory at: methodService ifAbsentPut: [ Array new ].
+  answer
+    addLast: (rowanMethodHistory keys detect: [ :svc | svc = methodService ]).
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> needsCommit [
 
 	answer := System needsCommit.
