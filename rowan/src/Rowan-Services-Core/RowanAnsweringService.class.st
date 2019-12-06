@@ -305,10 +305,11 @@ RowanAnsweringService >> methodHistoryFor: methodService [
   rowanMethodHistory := UserGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
-  answer := rowanMethodHistory at: methodService ifAbsentPut: [ Array new ].
+  answer := (rowanMethodHistory at: methodService ifAbsentPut: [ Array new ]) asOrderedCollection.
   answer
-    addLast: (rowanMethodHistory keys detect: [ :svc | svc = methodService ]).
-  RowanCommandResult addResult: self
+    addFirst: (rowanMethodHistory keys detect: [ :svc | svc = methodService ]).
+  RowanCommandResult addResult: self.
+  ^ answer	"for testing"
 ]
 
 { #category : 'client commands' }

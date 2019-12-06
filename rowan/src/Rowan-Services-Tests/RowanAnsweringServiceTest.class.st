@@ -139,6 +139,32 @@ cd'''.  "includes lf (10) - no ? substitution"
 ]
 
 { #category : 'tests' }
+RowanAnsweringServiceTest >> test_methodHistory [
+  "don't change the size of the collection by returning the history"
+
+  | methodService history answeringService |
+  self jadeiteIssueTested: #'issue518' withTitle: 'Add method history'.
+  methodService := RowanMethodService new
+    selector: #'test_methodHistory';
+    className: 'RowanAnsweringServiceTest';
+    meta: false.
+  answeringService := RowanAnsweringService new.
+  history := answeringService methodHistoryFor: methodService.
+  self
+    assert: history size
+    equals: (answeringService methodHistoryFor: methodService) size.
+  self
+    assert: history size
+    equals: (answeringService methodHistoryFor: methodService) size.
+  self
+    assert: history size
+    equals: (answeringService methodHistoryFor: methodService) size.
+  self
+    assert: history size
+    equals: (answeringService methodHistoryFor: methodService) size
+]
+
+{ #category : 'tests' }
 RowanAnsweringServiceTest >> test_play [
 
 	"method to safely play with commits" 
