@@ -99,9 +99,8 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 		addInstanceMethod: 'test  self assert: ' , className , ' foo = 1'
 			protocol: 'tests';
 		yourself.
-	resolvedProject components
-		do: [ :component | self assert: component validate ].
-	self assert: resolvedProject projectSpecification validate.
+	resolvedProject components do: [ :component | self assert: component validate ].
+	self assert: resolvedProject _validate.
 	^ resolvedProject
 ]
 

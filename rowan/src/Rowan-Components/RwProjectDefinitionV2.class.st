@@ -417,6 +417,11 @@ RwProjectDefinitionV2 >> projectName [
 	^ self propertyAt: 'name'
 ]
 
+{ #category : 'properties' }
+RwProjectDefinitionV2 >> projectName: aString [
+	self propertyAt: 'name' put: aString
+]
+
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> projectNames [
 

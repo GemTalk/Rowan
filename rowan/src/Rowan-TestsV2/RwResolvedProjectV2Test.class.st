@@ -8,21 +8,21 @@ Class {
 RwResolvedProjectV2Test >> testBasic [
 	"Create project ... without errors"
 
-	| projectName projectAlias projectSpecification stonString resolvedProject |
+	| projectName projectAlias project stonString  |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
-	projectSpecification := RwProjectSpecificationV2 new
+	project := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 
-	self assert: projectSpecification validate.
+	self assert: project _validate.
 
-	resolvedProject := projectSpecification resolve.
-	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
-	stonString := STON toStringPretty: resolvedProject	"useful in case of error"
+	project resolve.
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: project.
+	stonString := STON toStringPretty: project	"useful to view full structure"
 ]
 
 { #category : 'tests' }

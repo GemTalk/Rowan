@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'specName',
 		'projectName',
-		'projectAlias',
 		'componentsPath',
 		'packagesPath',
 		'projectsPath',
@@ -17,8 +16,6 @@ Class {
 		'svnUrl',
 		'revision',
 		'comment',
-		'componentNames',
-		'groupNames',
 		'platformProperties',
 		'repositoryResolutionPolicy',
 		'packageFormat',
@@ -67,6 +64,51 @@ RwProjectSpecificationV2 >> _resolve [
 			self _checkAndUpdateRepositoryRevision.
 			self _checkProjectDirectoryStructure ]
 		ifFalse: [ false ]
+]
+
+{ #category : 'private' }
+RwProjectSpecificationV2 >> _validate [
+	"ensure that the data structures within the receiver contain valid information:
+		1. platform implementation is responsible for validating platform structures"
+
+	| repoUrls |
+	#(#'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName')
+		do: [ :messageName | 
+			(self perform: messageName)
+				ifNil: [ 
+					Error
+						signal:
+							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
+	repoUrls := {}.
+	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
+		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
+	repoUrls size > 1
+		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
+	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
+		ifTrue: [ 
+			self revision
+				ifNotNil: [ :rev | 
+					Error
+						signal:
+							'Invalid revision ' , rev printString
+								, '. Should be nil for disk-based repository' ] ]
+		ifFalse: [ 
+			self gitUrl asRwUrl scheme ~= 'file'
+				ifTrue: [ 
+					Error
+						signal:
+							'The instance variable ''revision'' must be set for the'
+								, (repoUrls at: 1) asString printString ] ].
+	self platformProperties
+		keysAndValuesDo: [ :platformName :userIdMap | 
+			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
+				ifFalse: [ 
+					Error
+						signal:
+							'Unknown platform name ' , platformName printString , ' in platform properties' ].
+			platformName = 'gemstone'
+				ifTrue: [ self _validateGemStonePlatformUserIdMap: userIdMap ] ].
+	^ true
 ]
 
 { #category : 'private' }
@@ -167,16 +209,6 @@ RwProjectSpecificationV2 >> comment: aString [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecificationV2 >> componentNames [
-	^ componentNames
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> componentNames: anArray [
-	componentNames := anArray asArray
-]
-
-{ #category : 'accessing' }
 RwProjectSpecificationV2 >> componentsPath [
 
 	^ componentsPath
@@ -236,16 +268,6 @@ RwProjectSpecificationV2 >> gitUrl: anUrlString [
 	gitUrl := anUrlString
 ]
 
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> groupNames [
-	^ groupNames
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> groupNames: anArray [
-	groupNames := anArray asArray
-]
-
 { #category : 'comparing' }
 RwProjectSpecificationV2 >> hash [
 	| hashValue |
@@ -271,17 +293,13 @@ RwProjectSpecificationV2 >> hash [
 	^ hashValue
 ]
 
-{ #category : 'initialization' }
+{ #category : 'other' }
 RwProjectSpecificationV2 >> initialize [
 	super initialize.
-	componentNames := {}.
 	componentsPath := 'rowan/components'.
-	groupNames := {'core'.
-	'tests'}.
 	packagesPath := 'rowan/src'.
 	projectsPath := 'rowan/projects'.
-	specsPath := 'rowan/specs'.
-	projectName := 'ProjectName'
+	specsPath := 'rowan/specs'
 ]
 
 { #category : 'initialization' }
@@ -365,8 +383,6 @@ RwProjectSpecificationV2 >> postCopy [
 
 	super postCopy.
 	repositoryDefinition := repositoryDefinition copy.
-	componentNames := componentNames copy.
-	groupNames := groupNames copy.
 	platformProperties
 		ifNotNil: [ 
 			| platformPropertiesCopy |
@@ -387,22 +403,6 @@ RwProjectSpecificationV2 >> postCopy [
 										keysAndValuesDo: [ :propertyKey :propertyValue | platformPropertiesMapCopy at: propertyKey put: propertyValue copy ] ] ]
 						ifFalse: [ self error: 'postCopy of ' , platformName printString , ' not yet implemented' ] ].
 			platformProperties := platformPropertiesCopy ]
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> projectAlias [
-	"project alias is used as the name of the root directory for the project ... necessary if the project is 
-		embedded in another project's git repository or you want use a non-default directory on disk"
-
-	^ projectAlias ifNil: [ self projectName ]
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> projectAlias: aString [
-	"project alias is used as the name of the root directory for the project ... necessary if the project is 
-		embedded in another project's git repository or you want use a non-default directory on disk"
-
-	projectAlias := aString
 ]
 
 { #category : 'accessing' }
@@ -608,49 +608,4 @@ RwProjectSpecificationV2 >> svnUrl [
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> svnUrlUrl: anUrlString [
 	svnUrl := anUrlString
-]
-
-{ #category : 'private' }
-RwProjectSpecificationV2 >> validate [
-	"ensure that the data structures within the receiver contain valid information:
-		1. platform implementation is responsible for validating platform structures"
-
-	| repoUrls |
-	#(#'componentNames' #'componentsPath' #'groupNames' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName')
-		do: [ :messageName | 
-			(self perform: messageName)
-				ifNil: [ 
-					Error
-						signal:
-							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
-	repoUrls := {}.
-	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
-		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
-	repoUrls size > 1
-		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
-		ifTrue: [ 
-			self revision
-				ifNotNil: [ :rev | 
-					Error
-						signal:
-							'Invalid revision ' , rev printString
-								, '. Should be nil for disk-based repository' ] ]
-		ifFalse: [ 
-			self gitUrl asRwUrl scheme ~= 'file'
-				ifTrue: [ 
-					Error
-						signal:
-							'The instance variable ''revision'' must be set for the'
-								, (repoUrls at: 1) asString printString ] ].
-	self platformProperties
-		keysAndValuesDo: [ :platformName :userIdMap | 
-			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
-				ifFalse: [ 
-					Error
-						signal:
-							'Unknown platform name ' , platformName printString , ' in platform properties' ].
-			platformName = 'gemstone'
-				ifTrue: [ self _validateGemStonePlatformUserIdMap: userIdMap ] ].
-	^ true
 ]

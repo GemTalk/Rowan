@@ -1,12 +1,14 @@
 Class {
 	#name : 'RwResolvedProjectV2',
-	#superclass : 'Object',
-	#instVars : [
-		'projectDefinition',
-		'projectSpecification'
-	],
+	#superclass : 'RwAbstractResolvedObjectV2',
 	#category : 'Rowan-Components'
 }
+
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> new [
+
+	^ self basicNew initialize
+]
 
 { #category : 'instance creation' }
 RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
@@ -15,8 +17,9 @@ RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| projectSpecification projectDefinition |
+	| projectSpecification loadSpecification projectDefinition |
 	projectSpecification := anRwProjectSpecificationV2 copy.
+	loadSpecification := RwLoadSpecificationV2 new.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
@@ -26,35 +29,11 @@ RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
 		components: Dictionary new;
 		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
 		yourself.
-	^ self new
+	^ self basicNew
 		_projectDefinition: projectDefinition;
-		projectSpecification: projectSpecification;
+		_projectSpecification: projectSpecification;
+		_loadSpecification: loadSpecification;
 		_resolve
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> _projectDefinition [
-	"project definition should not be accessed directly -- Rowan private state"
-
-	^ projectDefinition
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> _projectDefinition: object [
-	"project definition should not be accessed directly -- Rowan private state"
-
-	projectDefinition := object
-]
-
-{ #category : 'private' }
-RwResolvedProjectV2 >> _resolve [
-	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
-		project from disk, if project is present on disk"
-
-	projectSpecification _resolve
-		ifTrue: [ 
-			"update project definition from disk"
-			self read ]
 ]
 
 { #category : 'project definition' }
@@ -116,12 +95,12 @@ RwResolvedProjectV2 >> commit: message [
 
 { #category : 'project specification' }
 RwResolvedProjectV2 >> componentNames [
-	^ self projectSpecification componentNames
+	^ self _loadSpecification componentNames
 ]
 
 { #category : 'project specification' }
 RwResolvedProjectV2 >> componentNames: anArray [
-	^ self projectSpecification componentNames: anArray
+	self _loadSpecification componentNames: anArray
 ]
 
 { #category : 'project definition' }
@@ -170,7 +149,21 @@ RwResolvedProjectV2 >> exportProjects [
 
 { #category : 'project specification' }
 RwResolvedProjectV2 >> groupNames [
-	^ self projectSpecification groupNames
+	^ self _loadSpecification groupNames
+]
+
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> groupNames: anArray [
+	self _loadSpecification groupNames: anArray
+]
+
+{ #category : 'initialization' }
+RwResolvedProjectV2 >> initialize [
+	"repository must be explicitly created"
+
+	projectSpecification := RwProjectSpecificationV2 new.
+	loadSpecification := RwLoadSpecificationV2 new.
+	projectDefinition := RwProjectDefinitionV2 new
 ]
 
 { #category : 'actions' }
@@ -205,9 +198,25 @@ RwResolvedProjectV2 >> packagesRoot [
 	^ self projectSpecification packagesRoot
 ]
 
-{ #category : 'project specification' }
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> projectAlias [
+	^ self _loadSpecification projectAlias ifNil: [ self projectName ]
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> projectAlias: aString [
+	self _loadSpecification projectAlias: aString
+]
+
+{ #category : 'accessing' }
 RwResolvedProjectV2 >> projectName [
-	^ self projectSpecification projectName
+	^ self _projectSpecification projectName
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> projectName: aString [
+	self _projectSpecification projectName: aString.
+	self _projectDefinition projectName: aString
 ]
 
 { #category : 'accessing' }
@@ -218,13 +227,13 @@ RwResolvedProjectV2 >> projectNames [
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectV2 >> projectSpecification [
-	^projectSpecification
+RwResolvedProjectV2 >> projectsHome [
+	^ self _projectSpecification projectsHome
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectV2 >> projectSpecification: anRwProjectSpecificationV2 [
-	projectSpecification := anRwProjectSpecificationV2
+RwResolvedProjectV2 >> projectsHome: aProjectHomeReferenceOrString [
+	self _projectSpecification projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : 'project specification' }
@@ -258,6 +267,20 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 { #category : 'project specification' }
 RwResolvedProjectV2 >> repositoryRoot [
 	^ self projectSpecification repositoryRoot
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> resolve [
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _repository checkAndUpdateRepositoryRevision: self.
+			self _projectSpecification _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self read ] ]
 ]
 
 { #category : 'project specification' }
