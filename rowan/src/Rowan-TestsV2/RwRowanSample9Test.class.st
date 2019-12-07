@@ -5,15 +5,15 @@ Class {
 }
 
 { #category : 'private' }
-RwRowanSample9Test class >> _clearProjectSpecSessionCache [
-	"self _clearProjectSpecSessionCache"
+RwRowanSample9Test class >> _clearLoadSpecSessionCache [
+	"self _clearLoadSpecSessionCache"
 
-	SessionTemps current removeKey: self _projectSpecSessionCacheKey ifAbsent: [  ]
+	SessionTemps current removeKey: self _loadSpecSessionCacheKey ifAbsent: [  ]
 ]
 
 { #category : 'private' }
-RwRowanSample9Test class >> _projectSpecSessionCacheKey [
-	^ #'RowanSample9SpecsDict'
+RwRowanSample9Test class >> _loadSpecSessionCacheKey [
+	^ #'RowanSample9LoadSpecsDict'
 ]
 
 { #category : 'private' }
@@ -49,9 +49,14 @@ RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: c
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _loadSpecSessionCacheKey [
+	^ self class _loadSpecSessionCacheKey
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _projectSpecNamed: specName [
 	"
-		self _clearProjectSpecSessionCache
+		self _clearLoadSpecSessionCache
 	"
 
 	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
@@ -62,7 +67,7 @@ RwRowanSample9Test >> _projectSpecNamed: specName [
 	| projectSpecification repositoryDefinition dict theSpec |
 	projectSpecification := self _rowanSample9_0000_load_spec.
 	theSpec := (SessionTemps current
-		at: self _projectSpecSessionCacheKey
+		at: self _loadSpecSessionCacheKey
 		ifAbsent: [  ])
 		ifNotNil: [ :specsDict | specsDict at: specName ]
 		ifNil: [ 
@@ -78,7 +83,7 @@ RwRowanSample9Test >> _projectSpecNamed: specName [
 				yourself.
 
 			dict := SessionTemps current
-				at: self _projectSpecSessionCacheKey
+				at: self _loadSpecSessionCacheKey
 				ifAbsentPut: [ Dictionary new ].
 			(projectSpecification repositoryRoot / 'specs') files
 				do: [ :file | 
@@ -100,11 +105,6 @@ RwRowanSample9Test >> _projectSpecNamed: specName [
 		pull: repositoryDefinition remote branch: theSpec revision;
 		yourself.
 	^ theSpec copy
-]
-
-{ #category : 'private' }
-RwRowanSample9Test >> _projectSpecSessionCacheKey [
-	^ self class _projectSpecSessionCacheKey
 ]
 
 { #category : 'private' }
@@ -327,7 +327,7 @@ RwRowanSample9Test >> testIssue_446 [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_527 [
 	"
-		self _clearProjectSpecSessionCache
+		self _clearLoadSpecSessionCache
 	"
 
 	| projectSpec symDictName className projectName |
@@ -391,7 +391,7 @@ RwRowanSample9Test >> testIssue_531_baseline [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_532 [
 	"
-		self _clearProjectSpecSessionCache
+		self _clearLoadSpecSessionCache
 	"
 
 	"https://github.com/GemTalk/Rowan/issues/532"
