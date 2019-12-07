@@ -98,9 +98,9 @@ RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName package
 	^ self subclassResponsibility: #readClassesFor:packageRoot:
 ]
 
-{ #category : 'package reading' }
-RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
-	packagesRoot directories do: [:packageDir |
+{ #category : 'other' }
+RwRepositoryComponentProjectReaderVisitor >> readPackages: aPackagesRoot [
+	aPackagesRoot directories do: [:packageDir |
 		| packageName |
 		packageName := self _packageNameFromPackageDir: packageDir.
 		(packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])

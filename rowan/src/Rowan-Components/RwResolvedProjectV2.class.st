@@ -90,7 +90,14 @@ RwResolvedProjectV2 >> comment: aString [
 RwResolvedProjectV2 >> commit: message [
 	"commit the repository associated with receiver ..."
 
-	^ self projectDefinition commit: message
+	self _projectRepository canCommit
+		ifFalse: [ 
+			| msg |
+			msg := 'repository for project ' , self projectAlias printString
+				, ' does not support commit operations.'.
+			self inform: msg.
+			^ msg ].
+	^ self _projectDefinition commit: message
 ]
 
 { #category : 'project specification' }
@@ -109,8 +116,13 @@ RwResolvedProjectV2 >> components [
 ]
 
 { #category : 'project specification' }
-RwResolvedProjectV2 >> componentsRoot [
-	^ self projectSpecification componentsRoot
+RwResolvedProjectV2 >> diskUrl [
+	^ self _projectSpecification diskUrl
+]
+
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> diskUrl: anUrlString [
+	self _projectSpecification diskUrl: anUrlString
 ]
 
 { #category : 'actions' }
@@ -148,6 +160,16 @@ RwResolvedProjectV2 >> exportProjects [
 ]
 
 { #category : 'project specification' }
+RwResolvedProjectV2 >> gitUrl [
+	^ self _projectSpecification gitUrl
+]
+
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> gitUrl: anUrlString [
+	self _projectSpecification gitUrl: anUrlString
+]
+
+{ #category : 'project specification' }
 RwResolvedProjectV2 >> groupNames [
 	^ self _loadSpecification groupNames
 ]
@@ -175,12 +197,12 @@ RwResolvedProjectV2 >> load [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packageConvention [
-	^ self projectSpecification packageConvention
+	^ self _projectSpecification packageConvention
 ]
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packageFormat [
-	^ self projectSpecification packageFormat
+	^ self _projectSpecification packageFormat
 ]
 
 { #category : 'project definition' }
@@ -193,24 +215,9 @@ RwResolvedProjectV2 >> packageNames [
 	^ self _projectDefinition packageNames
 ]
 
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> packagesRoot [
-	^ self projectSpecification packagesRoot
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> projectAlias [
-	^ self _loadSpecification projectAlias ifNil: [ self projectName ]
-]
-
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectAlias: aString [
 	self _loadSpecification projectAlias: aString
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> projectName [
-	^ self _projectSpecification projectName
 ]
 
 { #category : 'accessing' }
@@ -227,18 +234,8 @@ RwResolvedProjectV2 >> projectNames [
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectV2 >> projectsHome [
-	^ self _projectSpecification projectsHome
-]
-
-{ #category : 'accessing' }
 RwResolvedProjectV2 >> projectsHome: aProjectHomeReferenceOrString [
 	self _projectSpecification projectsHome: aProjectHomeReferenceOrString
-]
-
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> projectsRoot [
-	^ self projectSpecification projectsRoot
 ]
 
 { #category : 'actions' }
@@ -264,11 +261,6 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 	projectDefinition := projectSetDefinition projectNamed: self projectName
 ]
 
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> repositoryRoot [
-	^ self projectSpecification repositoryRoot
-]
-
 { #category : 'actions' }
 RwResolvedProjectV2 >> resolve [
 	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
@@ -281,9 +273,4 @@ RwResolvedProjectV2 >> resolve [
 				ifTrue: [ 
 					"update project definition from disk"
 					self read ] ]
-]
-
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> specsRoot [
-	^ self projectSpecification specsRoot
 ]

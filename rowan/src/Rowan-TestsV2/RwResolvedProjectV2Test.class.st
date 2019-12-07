@@ -33,7 +33,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject [
 	projectsHome := self _testRowanProjectsSandbox.
 	projectRoot := projectsHome / projectAlias.
 
-	projectSpecification := RwProjectSpecificationV2 new
+	projectSpecification := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;

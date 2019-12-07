@@ -48,10 +48,10 @@ RwRepositoryComponentProjectFiletreeReaderVisitor class >> readClassDirectory: d
 	^ self readClassDirectories: {directory} projectName: projectName packageName: packageName
 ]
 
-{ #category : 'private' }
-RwRepositoryComponentProjectFiletreeReaderVisitor >> _filetreeRepositoryPropertyDictFor: packagesRoot [
+{ #category : 'other' }
+RwRepositoryComponentProjectFiletreeReaderVisitor >> _filetreeRepositoryPropertyDictFor: aPackagesRoot [
 
-	^ self _readObjectFrom: packagesRoot / '.filetree'
+	^ self _readObjectFrom: aPackagesRoot / '.filetree'
 ]
 
 { #category : 'accessing' }

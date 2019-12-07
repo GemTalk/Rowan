@@ -16,8 +16,9 @@ RwPrjWriteToolV2 >> writeProjectDefinition: projectDefinition [
 
 { #category : 'write' }
 RwPrjWriteToolV2 >> writeResolvedProject: resolvedProject [
-	Rowan projectTools createV2 createResolvedProjectRepository: resolvedProject projectSpecification.
-	resolvedProject 
+	Rowan projectTools createV2
+		createResolvedProjectRepository: resolvedProject repository.
+	resolvedProject
 		exportProjects;
 		exportComponents;
 		exportPackages

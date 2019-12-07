@@ -250,8 +250,8 @@ RwProjectDefinitionV2 >> exportPackages: diskProjectSetDefinition packagesRoot: 
 				nextPutAll: '}';
 				lf ].	"write out packages"
 	writerVisitorClass := packageFormat = 'tonel'
-		ifTrue: [ RwModificationTonelWriterVisitor ]
-		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
+		ifFalse: [ RwModificationFiletreeWriterVisitorV2 ].
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
