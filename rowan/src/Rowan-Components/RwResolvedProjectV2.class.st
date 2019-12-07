@@ -97,7 +97,7 @@ RwResolvedProjectV2 >> commit: message [
 				, ' does not support commit operations.'.
 			self inform: msg.
 			^ msg ].
-	^ self _projectDefinition commit: message
+	^ self _projectRepository doCommit: message
 ]
 
 { #category : 'project specification' }
