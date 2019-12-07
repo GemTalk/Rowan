@@ -13,7 +13,8 @@ Class {
 		'mercurialUrl',
 		'svnUrl',
 		'revision',
-		'projectSpecFile'
+		'projectSpecFile',
+		'projectsHome'
 	],
 	#category : 'Rowan-Components'
 }
@@ -64,20 +65,22 @@ RwLoadSpecificationV2 >> = anObject [
 				and: [ 
 					self projectAlias = anObject projectAlias
 						and: [ 
-							self componentNames asArray sort = anObject componentNames asArray sort
+							self projectsHome = anObject projectsHome
 								and: [ 
-									self groupNames asArray sort = anObject groupNames asArray sort
+									self componentNames asArray sort = anObject componentNames asArray sort
 										and: [ 
-											self projectSpecFile = anObject projectSpecFile
+											self groupNames asArray sort = anObject groupNames asArray sort
 												and: [ 
-													self gitUrl = anObject gitUrl
+													self projectSpecFile = anObject projectSpecFile
 														and: [ 
-															self diskUrl = anObject diskUrl
+															self gitUrl = anObject gitUrl
 																and: [ 
-																	self mercurialUrl = anObject mercurialUrl
+																	self diskUrl = anObject diskUrl
 																		and: [ 
-																			self svnUrl = anObject svnUrl
-																				and: [ self revision = anObject revision and: [ self comment = anObject comment ] ] ] ] ] ] ] ] ] ] ]
+																			self mercurialUrl = anObject mercurialUrl
+																				and: [ 
+																					self svnUrl = anObject svnUrl
+																						and: [ self revision = anObject revision and: [ self comment = anObject comment ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -116,6 +119,15 @@ RwLoadSpecificationV2 >> exportTo: directoryReference [
 		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
 ]
 
+{ #category : 'ston' }
+RwLoadSpecificationV2 >> fromSton: stonReader [
+	"return an instance of RwResolvedLoadSpecificationV2 that wraps the receiver"
+
+	^ (super fromSton: stonReader)
+		_validate;
+		yourself
+]
+
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> gitUrl [
 	^ gitUrl
@@ -150,6 +162,7 @@ RwLoadSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self revision hash.
 	hashValue := hashValue bitXor: self comment hash.
 	hashValue := hashValue bitXor: self componentNames hash.
+	hashValue := hashValue bitXor: self projectsHome hash.
 	hashValue := hashValue bitXor: self groupNames hash.
 	^ hashValue
 ]
@@ -162,6 +175,14 @@ RwLoadSpecificationV2 >> initialize [
 	'tests'.
 	'deprecated'}.
 	projectSpecFile := 'rowan/project.ston'
+]
+
+{ #category : 'initialization' }
+RwLoadSpecificationV2 >> initializeForExport [
+	"if spec is to be exported, clear out any of the fields that represent local disk state"
+
+	super initializeForExport.
+	projectsHome :=  nil
 ]
 
 { #category : 'accessing' }
@@ -207,6 +228,20 @@ RwLoadSpecificationV2 >> projectName [
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> projectName: aString [
 	projectName := aString
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> projectsHome [
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	^ projectsHome ifNil: [FileLocator rowanProjectsHome ]
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> projectsHome: aStringOrFileReference [
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	projectsHome := aStringOrFileReference asFileReference
 ]
 
 { #category : 'accessing' }

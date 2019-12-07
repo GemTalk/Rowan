@@ -9,7 +9,6 @@ Class {
 		'projectsPath',
 		'specsPath',
 		'projectSpecPath',
-		'projectsHome',
 		'repoType',
 		'comment',
 		'platformProperties',
@@ -134,18 +133,16 @@ RwProjectSpecificationV2 >> = anObject [
 														and: [ 
 															self specsPath = anObject specsPath
 																and: [ 
-																	self projectsHome = anObject projectsHome
+																	lazyEqual := self _repoType = anObject _repoType
+																		or: [ self repoType = anObject repoType ].
+																	lazyEqual
 																		and: [ 
-																			lazyEqual := self _repoType = anObject _repoType
-																				or: [ self repoType = anObject repoType ].
-																			lazyEqual
+																			self comment = anObject comment
 																				and: [ 
-																					self comment = anObject comment
+																					self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
 																						and: [ 
-																							self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
-																								and: [ 
-																									self _platformProperties = anObject _platformProperties
-																										or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ]
+																							self _platformProperties = anObject _platformProperties
+																								or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'converting' }
@@ -210,7 +207,6 @@ RwProjectSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self packagesPath hash.
 	hashValue := hashValue bitXor: self projectsPath hash.
 	hashValue := hashValue bitXor: self specsPath hash.
-	hashValue := hashValue bitXor: self projectsHome hash.
 	hashValue := hashValue bitXor: self _repoType hash.
 	hashValue := hashValue bitXor: self comment hash.
 	hashValue := hashValue bitXor: self packageFormat hash.
@@ -236,7 +232,7 @@ RwProjectSpecificationV2 >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	projectsHome := repoType := nil
+	repoType := nil
 ]
 
 { #category : 'testing' }
@@ -340,20 +336,6 @@ RwProjectSpecificationV2 >> projectRoots [
 	(self packagesRoot).
 	(self specsRoot).
 	(self projectsRoot)}
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> projectsHome [
-	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
-
-	^ projectsHome ifNil: [FileLocator rowanProjectsHome ]
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> projectsHome: aStringOrFileReference [
-	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
-
-	projectsHome := aStringOrFileReference asFileReference
 ]
 
 { #category : 'accessing' }

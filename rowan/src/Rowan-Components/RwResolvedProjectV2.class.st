@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwResolvedProjectV2 class >> new [
-
-	^ self basicNew initialize
-]
-
-{ #category : 'instance creation' }
 RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -190,6 +184,7 @@ RwResolvedProjectV2 >> groupNames: anArray [
 RwResolvedProjectV2 >> initialize [
 	"repository must be explicitly created"
 
+	super initialize.
 	projectSpecification := RwProjectSpecificationV2 new.
 	loadSpecification := RwLoadSpecificationV2 new.
 	projectDefinition := RwProjectDefinitionV2 new
@@ -243,7 +238,7 @@ RwResolvedProjectV2 >> projectNames [
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectsHome: aProjectHomeReferenceOrString [
-	self _projectSpecification projectsHome: aProjectHomeReferenceOrString
+	self _loadSpecification projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : 'actions' }

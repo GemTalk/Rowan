@@ -10,6 +10,12 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'instance creation' }
+RwAbstractResolvedObjectV2 class >> new [
+
+	^ self basicNew initialize
+]
+
 { #category : 'private' }
 RwAbstractResolvedObjectV2 >> _loadSpecification [
 	"load specification should not be accessed directly -- Rowan private state"
@@ -109,6 +115,10 @@ RwAbstractResolvedObjectV2 >> componentsRoot [
 	^ self repositoryRoot / self _projectSpecification componentsPath
 ]
 
+{ #category : 'initialization' }
+RwAbstractResolvedObjectV2 >> initialize [
+]
+
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> loadSpecification [
 	^ RwResolvedLoadSpecificationV2 new
@@ -154,7 +164,7 @@ RwAbstractResolvedObjectV2 >> projectRoots [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectsHome [
-	^ self _projectSpecification projectsHome
+	^ self _loadSpecification projectsHome
 ]
 
 { #category : 'accessing' }
