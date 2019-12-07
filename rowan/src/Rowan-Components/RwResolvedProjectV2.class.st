@@ -269,6 +269,11 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 	projectDefinition := projectSetDefinition projectNamed: self projectName
 ]
 
+{ #category : 'project specification' }
+RwResolvedProjectV2 >> repoType: aSymbol [
+	self _projectSpecification repoType: aSymbol
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> resolve [
 	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 

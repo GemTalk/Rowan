@@ -115,7 +115,8 @@ RwLoadSpecificationV2 >> initialize [
 	super initialize.
 	componentNames := {}.
 	groupNames := {'core'.
-	'tests'}.
+	'tests'.
+	'deprecated'}.
 	projectSpecFile := 'rowan/project.ston'
 ]
 

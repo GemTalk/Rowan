@@ -30,7 +30,7 @@ RwProjectSpecificationV2Test >> testBasic [
 ]
 
 { #category : 'tests' }
-RwProjectSpecificationV2Test >> testBasicResolve [
+RwProjectSpecificationV2Test >> testBasicResolve_1 [
 	"excercise basic functionality"
 
 	| project projectName projectAlias stonString projectsHome expectedRepositoryRoot
@@ -48,7 +48,7 @@ RwProjectSpecificationV2Test >> testBasicResolve [
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
-projectSpecification := project _projectSpecification.
+	projectSpecification := project _projectSpecification.
 	self assert: project _validate.
 
 	project resolve.
@@ -59,30 +59,60 @@ projectSpecification := project _projectSpecification.
 	resolvedProjectSpecification := project _projectSpecification.
 	self assert: project packageNames isEmpty.
 	self assert: resolvedProjectSpecification = projectSpecification.
+]
 
+{ #category : 'tests' }
+RwProjectSpecificationV2Test >> testBasicResolve_2 [
+	"excercise basic functionality"
+
+	"no project alias"
+
+	| project projectName stonString projectsHome expectedRepositoryRoot
+		 resolvedProjectSpecification projectSpecification|
+	projectName := 'RowanSample9'.
+	projectsHome := self _testRowanProjectsSandbox.
+	expectedRepositoryRoot := projectsHome / projectName.
+
+	self deny: expectedRepositoryRoot exists.
+
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	projectSpecification := project _projectSpecification.
+	self assert: project _validate.
+
+	project resolve.
+
+	self assert: expectedRepositoryRoot exists.
+	stonString := STON toStringPretty: project.	"useful in case of error"
+
+	resolvedProjectSpecification := project _projectSpecification.
+	self assert: project packageNames isEmpty.
+	self assert: resolvedProjectSpecification = projectSpecification.
 ]
 
 { #category : 'tests' }
 RwProjectSpecificationV2Test >> testBasicResolve_git [
 	"Create git repository on resolve"
 
-	| loadSpec1 projectName projectsHome projectDefinition projectAlias expectedRepositoryRoot stonString |
+	| projectName projectsHome resolvedProject expectedRepositoryRoot stonString |
 	projectName := 'RowanSample9'.
-	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
-	expectedRepositoryRoot := projectsHome / projectAlias.
+	expectedRepositoryRoot := projectsHome / projectName.
 
 	self deny: expectedRepositoryRoot exists.
 
-	loadSpec1 := RwProjectSpecificationV2 new
+	resolvedProject := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		repoType: #'git';
 		yourself.
 
-	projectDefinition := loadSpec1 resolve.
-	stonString := STON toStringPretty: projectDefinition.
+	resolvedProject resolve.
+	stonString := STON toStringPretty: resolvedProject.
 
 	self assert: expectedRepositoryRoot exists.
 	self assert: (expectedRepositoryRoot / '.git') exists
@@ -152,7 +182,7 @@ RwProjectSpecificationV2Test >> testInvalidPropertyValue [
 
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ projectSpecification validate ]
+	[ projectSpecification _validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -184,7 +214,7 @@ RwProjectSpecificationV2Test >> testInvalidPropertyValueForUser [
 
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ projectSpecification validate ]
+	[ projectSpecification _validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -193,33 +223,6 @@ RwProjectSpecificationV2Test >> testInvalidPropertyValueForUser [
 					(x := ex description)
 						=
 							'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
-			hitError := true ].
-	self assert: hitError
-]
-
-{ #category : 'tests' }
-RwProjectSpecificationV2Test >> testInvalidRevision [
-	"error coverage for invalid load specs"
-
-	| projectName projectSpecification stonString specName hitError |
-	projectName := 'RowanSample9'.
-	specName := projectName , 'Core'.
-	projectSpecification := RwProjectSpecificationV2 new
-		projectName: projectName;
-		revision: 'boom';
-		yourself.
-
-	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
-	hitError := false.
-	[ projectSpecification validate ]
-		on: Error
-		do: [ :ex | 
-			| x |
-			self
-				assert:
-					(x := ex description)
-						=
-							'Error: Invalid revision ''boom''. Should be nil for disk-based repository'.
 			hitError := true ].
 	self assert: hitError
 ]
@@ -310,67 +313,6 @@ RwProjectSpecificationV2Test >> testIssue_530_2 [
 ]
 
 { #category : 'tests' }
-RwProjectSpecificationV2Test >> testIssue_530_3 [
-	"https://github.com/GemTalk/Rowan/issues/530"
-
-	"state changes to a copy of a loadSpec should not affect oriinal load spec"
-
-	"componentNames and groupNames need to be isolated"
-
-	| projectName projectSpecification stonStrings specName projectSpecCopy stonString |
-	projectName := 'RowanSample9'.
-	specName := projectName , 'Core'.
-	projectSpecification := RwProjectSpecificationV2 new
-		projectName: projectName;
-		specName: specName;
-		yourself.
-	stonString := STON toStringPretty: projectSpecification.
-
-	projectSpecCopy := projectSpecification copy.
-
-	self assert: projectSpecCopy = projectSpecification.
-
-	projectSpecCopy componentNames add: 'Boom'.
-	projectSpecCopy groupNames add: 'boom'.
-
-	self deny: projectSpecCopy = projectSpecification.
-
-	stonStrings := {stonString.	"original loadSpec"
-	(STON toStringPretty: projectSpecification).	"origiinal after copy modified"
-	(STON toStringPretty: projectSpecCopy)	"copy"}.
-	self assert: stonString = (stonStrings at: 1).	"duh"
-	self assert: stonString = (stonStrings at: 2).	"point of test"
-	self deny: stonString = (stonStrings at: 3)	"duh"
-]
-
-{ #category : 'tests' }
-RwProjectSpecificationV2Test >> testMissingRevision [
-	"error coverage for invalid load specs"
-
-	| projectName projectSpecification stonString specName hitError |
-	projectName := 'RowanSample9'.
-	specName := projectName , 'Core'.
-	projectSpecification := RwProjectSpecificationV2 new
-		projectName: projectName;
-		gitUrl: 'https://github.com/user/' , projectName;
-		yourself.
-
-	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
-	hitError := false.
-	[ projectSpecification validate ]
-		on: Error
-		do: [ :ex | 
-			| x |
-			self
-				assert:
-					(x := ex description)
-						=
-							'Error: The instance variable ''revision'' must be set for the''gitUrl'''.
-			hitError := true ].
-	self assert: hitError
-]
-
-{ #category : 'tests' }
 RwProjectSpecificationV2Test >> testNilInstanceVariable [
 	"error coverage for invalid load specs"
 
@@ -384,7 +326,7 @@ RwProjectSpecificationV2Test >> testNilInstanceVariable [
 
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ projectSpecification validate ]
+	[ projectSpecification _validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -392,33 +334,6 @@ RwProjectSpecificationV2Test >> testNilInstanceVariable [
 				assert:
 					(x := ex description)
 						= 'Error: The instance variable ''projectsPath'' cannot be nil'.
-			hitError := true ].
-	self assert: hitError
-]
-
-{ #category : 'tests' }
-RwProjectSpecificationV2Test >> testOnlyOneRepositoryUrl [
-	"error coverage for invalid load specs"
-
-	| projectName projectSpecification stonString specName hitError |
-	projectName := 'RowanSample9'.
-	specName := projectName , 'Core'.
-	projectSpecification := RwProjectSpecificationV2 new
-		projectName: projectName;
-		gitUrl: 'https://github.com/user/' , projectName;
-		diskUrl: 'ftp://$ROWAN_PROJECTS_HOME/' , projectName;
-		yourself.
-
-	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
-	hitError := false.
-	[ projectSpecification validate ]
-		on: Error
-		do: [ :ex | 
-			| x |
-			self
-				assert:
-					(x := ex description)
-						= 'Error: Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set'.
 			hitError := true ].
 	self assert: hitError
 ]
@@ -502,7 +417,7 @@ RwProjectSpecificationV2Test >> testUknownPlatform [
 	hitError := false.
 	projectSpecification platformProperties at: 'boom' put: Dictionary new.
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
-	[ projectSpecification validate ]
+	[ projectSpecification _validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
@@ -537,7 +452,7 @@ RwProjectSpecificationV2Test >> testUnknownPropertyKey [
 
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
 	hitError := false.
-	[ projectSpecification validate ]
+	[ projectSpecification _validate ]
 		on: Error
 		do: [ :ex | 
 			| x |
