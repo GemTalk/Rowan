@@ -5,19 +5,19 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
+RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
 	| projectSpecification loadSpecification projectDefinition |
-	projectSpecification := anRwProjectSpecificationV2 copy.
-	loadSpecification := RwLoadSpecificationV2 new.
+	loadSpecification := anRwLoadSpecificationV2 copy.
+	projectSpecification := RwProjectSpecificationV2 new.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
-						add: 'name' -> projectSpecification projectAlias;
+						add: 'name' -> loadSpecification projectAlias;
 						yourself);
 		packages: Dictionary new;
 		components: Dictionary new;
@@ -27,7 +27,18 @@ RwResolvedProjectV2 class >> projectSpecification: anRwProjectSpecificationV2 [
 		_projectDefinition: projectDefinition;
 		_projectSpecification: projectSpecification;
 		_loadSpecification: loadSpecification;
-		_resolve
+		resolve
+]
+
+{ #category : 'private' }
+RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
+	"answer true if the basic project directory structure is present"
+
+	self projectRoots
+		do: [ :fileRef | 
+			fileRef exists
+				ifFalse: [ ^ false ] ].
+	^ true
 ]
 
 { #category : 'project definition' }
@@ -276,9 +287,14 @@ RwResolvedProjectV2 >> resolve [
 
 	self _projectRepository resolve
 		ifTrue: [ 
-			self _repository checkAndUpdateRepositoryRevision: self.
-			self _projectSpecification _checkProjectDirectoryStructure
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
 				ifTrue: [ 
 					"update project definition from disk"
 					self read ] ]
+]
+
+{ #category : 'load specification' }
+RwResolvedProjectV2 >> revision [
+	^ self _loadSpecification revision
 ]

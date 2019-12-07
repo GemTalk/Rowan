@@ -14,7 +14,8 @@ Class {
 		'svnUrl',
 		'revision',
 		'projectSpecFile',
-		'projectsHome'
+		'projectsHome',
+		'repositoryResolutionPolicy'
 	],
 	#category : 'Rowan-Components'
 }
@@ -73,14 +74,16 @@ RwLoadSpecificationV2 >> = anObject [
 												and: [ 
 													self projectSpecFile = anObject projectSpecFile
 														and: [ 
-															self gitUrl = anObject gitUrl
+															self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
 																and: [ 
-																	self diskUrl = anObject diskUrl
+																	self gitUrl = anObject gitUrl
 																		and: [ 
-																			self mercurialUrl = anObject mercurialUrl
+																			self diskUrl = anObject diskUrl
 																				and: [ 
-																					self svnUrl = anObject svnUrl
-																						and: [ self revision = anObject revision and: [ self comment = anObject comment ] ] ] ] ] ] ] ] ] ] ] ]
+																					self mercurialUrl = anObject mercurialUrl
+																						and: [ 
+																							self svnUrl = anObject svnUrl
+																								and: [ self revision = anObject revision and: [ self comment = anObject comment ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -164,6 +167,7 @@ RwLoadSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self componentNames hash.
 	hashValue := hashValue bitXor: self projectsHome hash.
 	hashValue := hashValue bitXor: self groupNames hash.
+	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
 	^ hashValue
 ]
 
@@ -183,6 +187,11 @@ RwLoadSpecificationV2 >> initializeForExport [
 
 	super initializeForExport.
 	projectsHome :=  nil
+]
+
+{ #category : 'testing' }
+RwLoadSpecificationV2 >> isStrict [
+	^ self repositoryResolutionPolicy == #strict
 ]
 
 { #category : 'accessing' }
@@ -252,6 +261,50 @@ RwLoadSpecificationV2 >> projectSpecFile [
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> projectSpecFile: aString [
 	projectSpecFile := aString
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> repositoryResolutionPolicy [
+	^repositoryResolutionPolicy
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> repositoryResolutionPolicy: aSymbolOrNil [
+	"
+	#strict - repository will be forced to match the specificed revision
+	"
+
+	repositoryResolutionPolicy := aSymbolOrNil
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> repositoryRoot [
+	^ self projectsHome / self projectAlias
+]
+
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> resolve [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
+]
+
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> resolveStrict [
+	"resolve using #strict repositoryResolutionpolicy"
+
+	| oldPolicy |
+	self isStrict
+		ifTrue: [ ^ self resolve ].
+	oldPolicy := self repositoryResolutionPolicy.
+	[ 
+	"force #strict policy to ensure that the revision is checked out out in the repository"
+	self repositoryResolutionPolicy: #'strict'.
+	^ self resolve ]
+		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
 ]
 
 { #category : 'accessing' }

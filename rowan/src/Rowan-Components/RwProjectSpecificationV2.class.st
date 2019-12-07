@@ -12,7 +12,6 @@ Class {
 		'repoType',
 		'comment',
 		'platformProperties',
-		'repositoryResolutionPolicy',
 		'packageFormat',
 		'packageConvention'
 	],
@@ -139,10 +138,8 @@ RwProjectSpecificationV2 >> = anObject [
 																		and: [ 
 																			self comment = anObject comment
 																				and: [ 
-																					self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
-																						and: [ 
-																							self _platformProperties = anObject _platformProperties
-																								or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ]
+																					self _platformProperties = anObject _platformProperties
+																						or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'converting' }
@@ -211,7 +208,6 @@ RwProjectSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self comment hash.
 	hashValue := hashValue bitXor: self packageFormat hash.
 	hashValue := hashValue bitXor: self packageConvention hash.
-	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
 	hashValue := hashValue bitXor: self _platformProperties hash.
 	^ hashValue
 ]
@@ -233,11 +229,6 @@ RwProjectSpecificationV2 >> initializeForExport [
 
 	super initializeForExport.
 	repoType := nil
-]
-
-{ #category : 'testing' }
-RwProjectSpecificationV2 >> isStrict [
-	^ self repositoryResolutionPolicy == #strict
 ]
 
 { #category : 'accessing' }
@@ -366,20 +357,6 @@ RwProjectSpecificationV2 >> projectsRoot [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecificationV2 >> repositoryResolutionPolicy [
-	^repositoryResolutionPolicy
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> repositoryResolutionPolicy: aSymbolOrNil [
-	"
-	#strict - repository will be forced to match the specificed revision
-	"
-
-	repositoryResolutionPolicy := aSymbolOrNil
-]
-
-{ #category : 'accessing' }
 RwProjectSpecificationV2 >> repoType [
 	^ repoType ifNil: [ repoType := #disk ]
 ]
@@ -389,31 +366,6 @@ RwProjectSpecificationV2 >> repoType: aSymbol [
 	(#(#'disk' #'git') includes: aSymbol asSymbol)
 		ifFalse: [ self error: 'Unknown repo type ' , aSymbol asSymbol printString ].
 	^ repoType := aSymbol asSymbol
-]
-
-{ #category : 'actions' }
-RwProjectSpecificationV2 >> resolve [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 projectSpecification: self
-]
-
-{ #category : 'actions' }
-RwProjectSpecificationV2 >> resolveStrict [
-	"resolve using #strict repositoryResolutionpolicy"
-
-	| oldPolicy |
-	self isStrict
-		ifTrue: [ ^ self resolve ].
-	oldPolicy := self repositoryResolutionPolicy.
-	[ 
-	"force #strict policy to ensure that the revision is checked out out in the repository"
-	self repositoryResolutionPolicy: #'strict'.
-	^ self resolve ]
-		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
 ]
 
 { #category : 'accessing' }

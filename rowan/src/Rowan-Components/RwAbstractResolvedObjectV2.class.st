@@ -220,7 +220,7 @@ RwAbstractResolvedObjectV2 >> repository [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> repositoryRoot [
-	projectRepository ifNil: [ ^ self projectsHome / self projectAlias ].
+	projectRepository ifNil: [ ^ self _loadSpecification repositoryRoot ].
 	^ projectRepository repositoryRoot
 ]
 
