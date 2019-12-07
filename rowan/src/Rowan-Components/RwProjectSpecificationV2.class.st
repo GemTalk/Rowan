@@ -8,19 +8,14 @@ Class {
 		'packagesPath',
 		'projectsPath',
 		'specsPath',
+		'projectSpecPath',
 		'projectsHome',
 		'repoType',
-		'gitUrl',
-		'diskUrl',
-		'mercurialUrl',
-		'svnUrl',
-		'revision',
 		'comment',
 		'platformProperties',
 		'repositoryResolutionPolicy',
 		'packageFormat',
-		'packageConvention',
-		'repositoryDefinition'
+		'packageConvention'
 	],
 	#category : 'Rowan-Components'
 }
@@ -71,34 +66,13 @@ RwProjectSpecificationV2 >> _validate [
 	"ensure that the data structures within the receiver contain valid information:
 		1. platform implementation is responsible for validating platform structures"
 
-	| repoUrls |
-	#(#'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName')
+	#(#'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName' #'projectSpecPath')
 		do: [ :messageName | 
 			(self perform: messageName)
 				ifNil: [ 
 					Error
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
-	repoUrls := {}.
-	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
-		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
-	repoUrls size > 1
-		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
-		ifTrue: [ 
-			self revision
-				ifNotNil: [ :rev | 
-					Error
-						signal:
-							'Invalid revision ' , rev printString
-								, '. Should be nil for disk-based repository' ] ]
-		ifFalse: [ 
-			self gitUrl asRwUrl scheme ~= 'file'
-				ifTrue: [ 
-					Error
-						signal:
-							'The instance variable ''revision'' must be set for the'
-								, (repoUrls at: 1) asString printString ] ].
 	self platformProperties
 		keysAndValuesDo: [ :platformName :userIdMap | 
 			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
@@ -162,22 +136,12 @@ RwProjectSpecificationV2 >> = anObject [
 																or: [ self repoType = anObject repoType ].
 															lazyEqual
 																and: [ 
-																	self gitUrl = anObject gitUrl
+																	self comment = anObject comment
 																		and: [ 
-																			self diskUrl = anObject diskUrl
+																			self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
 																				and: [ 
-																					self mercurialUrl = anObject mercurialUrl
-																						and: [ 
-																							self svnUrl = anObject svnUrl
-																								and: [ 
-																									self revision = anObject revision
-																										and: [ 
-																											self comment = anObject comment
-																												and: [ 
-																													self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
-																														and: [ 
-																															self _platformProperties = anObject _platformProperties
-																																or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																					self _platformProperties = anObject _platformProperties
+																						or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'converting' }
@@ -226,40 +190,11 @@ RwProjectSpecificationV2 >> currentVersion [
 	^ '0.1.0'
 ]
 
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> diskUrl [
-	^ diskUrl
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> diskUrl: anUrlString [
-	diskUrl := anUrlString
-]
-
-{ #category : 'actions' }
-RwProjectSpecificationV2 >> export [
-	^ self exportTo: self specsRoot
-]
-
-{ #category : 'actions' }
+{ #category : 'exporting' }
 RwProjectSpecificationV2 >> exportTo: directoryReference [
-	self exportTo: directoryReference as: self specName , '.ston'
-]
 
-{ #category : 'actions' }
-RwProjectSpecificationV2 >> exportTo: directoryReference as: fileName [
-	directoryReference / fileName
+	(directoryReference / self projectSpecPath / self specName, 'ston')
 		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> gitUrl [
-	^ gitUrl
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> gitUrl: anUrlString [
-	gitUrl := anUrlString
 ]
 
 { #category : 'comparing' }
@@ -287,13 +222,15 @@ RwProjectSpecificationV2 >> hash [
 	^ hashValue
 ]
 
-{ #category : 'other' }
+{ #category : 'initialization' }
 RwProjectSpecificationV2 >> initialize [
 	super initialize.
 	componentsPath := 'rowan/components'.
 	packagesPath := 'rowan/src'.
 	projectsPath := 'rowan/projects'.
-	specsPath := 'rowan/specs'
+	specsPath := 'rowan/specs'.
+	projectSpecPath := 'rowan'.
+	specName := 'project'
 ]
 
 { #category : 'initialization' }
@@ -301,22 +238,12 @@ RwProjectSpecificationV2 >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	projectsHome := repoType := repositoryDefinition := nil
+	projectsHome := repoType := nil
 ]
 
 { #category : 'testing' }
 RwProjectSpecificationV2 >> isStrict [
 	^ self repositoryResolutionPolicy == #strict
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> mercurialUrl [
-	^ mercurialUrl
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> mercurialUrl: anUrlString [
-	mercurialUrl := anUrlString
 ]
 
 { #category : 'accessing' }
@@ -376,7 +303,6 @@ RwProjectSpecificationV2 >> postCopy [
 	"don't forget to copy any compound state objects"
 
 	super postCopy.
-	repositoryDefinition := repositoryDefinition copy.
 	platformProperties
 		ifNotNil: [ 
 			| platformPropertiesCopy |
@@ -444,56 +370,19 @@ RwProjectSpecificationV2 >> projectsPath: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecificationV2 >> projectSpecPath [
+
+	^ projectSpecPath
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> projectSpecPath: aString [
+	projectSpecPath := aString
+]
+
+{ #category : 'accessing' }
 RwProjectSpecificationV2 >> projectsRoot [
 	^ self repositoryRoot / self projectsPath
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> projectUrl [
-	gitUrl ifNotNil: [ :urlString | ^ urlString ].
-	diskUrl ifNotNil: [ :urlString | ^ urlString ].
-	mercurialUrl ifNotNil: [ :urlString | ^ urlString ].
-	svnUrl ifNotNil: [ :urlString | ^ urlString ].
-	^ self error: 'internal error - no projectUrl has been defined'
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> repositoryDefinition [
-	^ repositoryDefinition
-		ifNil: [ 
-			repositoryDefinition := self gitUrl
-				ifNotNil: [ :urlString | 
-					RwGitRepositoryDefinitionV2
-						newNamed: self projectAlias
-						projectsHome: self projectsHome
-						repositoryUrl: urlString
-						revision: self revision ]
-				ifNil: [ 
-					self svnUrl
-						ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
-						ifNil: [ 
-							self mercurialUrl
-								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
-								ifNil: [ 
-									self repoType == #'git'
-										ifTrue: [ 
-											RwGitRepositoryDefinitionV2
-												newNamed: self projectAlias
-												projectsHome: self projectsHome
-												repositoryUrl: ''
-												revision: self revision ]
-										ifFalse: [ 
-											RwDiskRepositoryDefinitionV2
-												newNamed: self projectAlias
-												projectsHome: self projectsHome
-												repositoryUrl: self diskUrl ] ] ] ].
-
-			repositoryDefinition ]
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> repositoryDefinition: aRwRepositoryDefinition [
-	repositoryDefinition := aRwRepositoryDefinition
 ]
 
 { #category : 'accessing' }
@@ -508,12 +397,6 @@ RwProjectSpecificationV2 >> repositoryResolutionPolicy: aSymbolOrNil [
 	"
 
 	repositoryResolutionPolicy := aSymbolOrNil
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> repositoryRoot [
-	repositoryDefinition ifNil: [ ^ self projectsHome / self projectAlias ].
-	^ self repositoryDefinition repositoryRoot
 ]
 
 { #category : 'accessing' }
@@ -554,23 +437,9 @@ RwProjectSpecificationV2 >> resolveStrict [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecificationV2 >> revision [
-	" git :: committish; svn :: revision; mercurial :: changeset; disk :: empty string"
-
-	^ revision
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> revision: aRevisionString [
-	" git :: committish; svn :: revision; mercurial :: changeset; disk :: empty string"
-
-	^ revision := aRevisionString
-]
-
-{ #category : 'accessing' }
 RwProjectSpecificationV2 >> specName [
 
-	^ specName ifNil: [ self projectName ]
+	^ specName
 ]
 
 { #category : 'accessing' }
@@ -592,14 +461,4 @@ RwProjectSpecificationV2 >> specsPath: aString [
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> specsRoot [
 	^ self repositoryRoot / self specsPath
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> svnUrl [
-	^ svnUrl
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> svnUrlUrl: anUrlString [
-	svnUrl := anUrlString
 ]

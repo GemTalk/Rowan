@@ -4,9 +4,16 @@ Class {
 	#instVars : [
 		'specName',
 		'projectAlias',
+		'projectName',
 		'comment',
 		'componentNames',
-		'groupNames'
+		'groupNames',
+		'gitUrl',
+		'diskUrl',
+		'mercurialUrl',
+		'svnUrl',
+		'revision',
+		'projectSpecFile'
 	],
 	#category : 'Rowan-Components'
 }
@@ -16,13 +23,34 @@ RwLoadSpecificationV2 >> _validate [
 	"ensure that the data structures within the receiver contain valid information:
 		1. platform implementation is responsible for validating platform structures"
 
-	#(#'componentNames' #'groupNames' #'specName')
+	| repoUrls |
+	#(#'componentNames' #'groupNames' #'specName' #'projectSpecFile')
 		do: [ :messageName | 
 			(self perform: messageName)
 				ifNil: [ 
 					Error
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
+	repoUrls := {}.
+	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
+		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
+	repoUrls size > 1
+		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
+	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
+		ifTrue: [ 
+			self revision
+				ifNotNil: [ :rev | 
+					Error
+						signal:
+							'Invalid revision ' , rev printString
+								, '. Should be nil for disk-based repository' ] ]
+		ifFalse: [ 
+			self gitUrl asRwUrl scheme ~= 'file'
+				ifTrue: [ 
+					Error
+						signal:
+							'The instance variable ''revision'' must be set for the'
+								, (repoUrls at: 1) asString printString ] ].
 	^ true
 ]
 
@@ -47,6 +75,32 @@ RwLoadSpecificationV2 >> componentNames: anArray [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecificationV2 >> diskUrl [
+	^ diskUrl
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> diskUrl: anUrlString [
+	diskUrl := anUrlString
+]
+
+{ #category : 'exporting' }
+RwLoadSpecificationV2 >> exportTo: directoryReference [
+	(directoryReference / self specName, 'ston')
+		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> gitUrl [
+	^ gitUrl
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> gitUrl: anUrlString [
+	gitUrl := anUrlString
+]
+
+{ #category : 'accessing' }
 RwLoadSpecificationV2 >> groupNames [
 	^ groupNames
 ]
@@ -62,6 +116,17 @@ RwLoadSpecificationV2 >> initialize [
 	componentNames := {}.
 	groupNames := {'core'.
 	'tests'}.
+	projectSpecFile := 'rowan/project.ston'
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> mercurialUrl [
+	^ mercurialUrl
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> mercurialUrl: anUrlString [
+	mercurialUrl := anUrlString
 ]
 
 { #category : 'copying' }
@@ -90,6 +155,40 @@ RwLoadSpecificationV2 >> projectAlias: aString [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecificationV2 >> projectName [
+	^ projectName
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> projectName: aString [
+	projectName := aString
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> projectSpecFile [
+	^ projectSpecFile
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> projectSpecFile: aString [
+	projectSpecFile := aString
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> revision [
+	" git :: committish; svn :: revision; mercurial :: changeset; disk :: empty string"
+
+	^ revision
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> revision: aRevisionString [
+	" git :: committish; svn :: revision; mercurial :: changeset; disk :: empty string"
+
+	^ revision := aRevisionString
+]
+
+{ #category : 'accessing' }
 RwLoadSpecificationV2 >> specName [
 
 	^ specName ifNil: [ self projectAlias ]
@@ -98,4 +197,14 @@ RwLoadSpecificationV2 >> specName [
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> specName: aString [
 	specName := aString
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> svnUrl [
+	^ svnUrl
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> svnUrlUrl: anUrlString [
+	svnUrl := anUrlString
 ]

@@ -115,14 +115,14 @@ RwResolvedProjectV2 >> components [
 	^ self _projectDefinition components
 ]
 
-{ #category : 'project specification' }
+{ #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl [
-	^ self _projectSpecification diskUrl
+	^ self _loadSpecification diskUrl
 ]
 
-{ #category : 'project specification' }
+{ #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl: anUrlString [
-	self _projectSpecification diskUrl: anUrlString
+	self _loadSpecification diskUrl: anUrlString
 ]
 
 { #category : 'actions' }
@@ -159,14 +159,21 @@ RwResolvedProjectV2 >> exportProjects [
 			self projectsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
 ]
 
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> gitUrl [
-	^ self _projectSpecification gitUrl
+{ #category : 'exporting' }
+RwResolvedProjectV2 >> exportSpecifications [
+
+	self _loadSpecification exportTo: self specsRoot.
+	self _projectSpecification exportTo: self repositoryRoot
 ]
 
-{ #category : 'project specification' }
+{ #category : 'load specification' }
+RwResolvedProjectV2 >> gitUrl [
+	^ self _loadSpecification gitUrl
+]
+
+{ #category : 'load specification' }
 RwResolvedProjectV2 >> gitUrl: anUrlString [
-	self _projectSpecification gitUrl: anUrlString
+	self _loadSpecification gitUrl: anUrlString
 ]
 
 { #category : 'project specification' }
@@ -222,6 +229,7 @@ RwResolvedProjectV2 >> projectAlias: aString [
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectName: aString [
+	self _loadSpecification projectName: aString.
 	self _projectSpecification projectName: aString.
 	self _projectDefinition projectName: aString
 ]

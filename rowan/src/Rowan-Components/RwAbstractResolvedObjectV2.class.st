@@ -48,12 +48,12 @@ RwAbstractResolvedObjectV2 >> _projectRepository [
 						newNamed: self projectAlias
 						projectsHome: self projectsHome
 						repositoryUrl: urlString
-						revision: self _projectSpecification revision ]
+						revision: self _loadSpecification revision ]
 				ifNil: [ 
-					self _projectSpecification svnUrl
+					self _loadSpecification svnUrl
 						ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
 						ifNil: [ 
-							self _projectSpecification mercurialUrl
+							self _loadSpecification mercurialUrl
 								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
 								ifNil: [ 
 									self _projectSpecification repoType == #'git'
@@ -62,7 +62,7 @@ RwAbstractResolvedObjectV2 >> _projectRepository [
 												newNamed: self projectAlias
 												projectsHome: self projectsHome
 												repositoryUrl: ''
-												revision: self _projectSpecification revision ]
+												revision: self _loadSpecification revision ]
 										ifFalse: [ 
 											RwDiskRepositoryDefinitionV2
 												newNamed: self projectAlias
@@ -158,6 +158,24 @@ RwAbstractResolvedObjectV2 >> projectsHome [
 ]
 
 { #category : 'accessing' }
+RwAbstractResolvedObjectV2 >> projectSpecFile [
+	"relative path to the project specification file - default: rowan/project.ston"
+
+	^ self _loadSpecification projectSpecFile
+]
+
+{ #category : 'accessing' }
+RwAbstractResolvedObjectV2 >> projectSpecFile: relativePathString [
+	"relative path to the project specification file - default: rowan/project.ston"
+
+	| path |
+	path := Path * relativePathString .
+	self _projectSpecification projectSpecPath: path parent pathString.
+	self _projectSpecification specName: path base.
+	self _loadSpecification projectSpecFile: relativePathString
+]
+
+{ #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectSpecification [
 	^ RwResolvedProjectSpecificationV2 new
 		_projectDefinition: projectDefinition;
@@ -165,6 +183,14 @@ RwAbstractResolvedObjectV2 >> projectSpecification [
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		yourself
+]
+
+{ #category : 'accessing' }
+RwAbstractResolvedObjectV2 >> projectSpecPath: aString [
+	"full path to the project specification file - default rowan/project.ston"
+
+	self _projectSpecification projectSpecPath: aString.
+	self _loadSpecification projectSpecFile: (aString asFileReference / self projectSpecification projectName, 'ston') asPathString .
 ]
 
 { #category : 'accessing' }

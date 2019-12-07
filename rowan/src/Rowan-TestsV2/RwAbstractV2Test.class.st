@@ -151,11 +151,12 @@ RwAbstractV2Test >> _specListProjectNames [
 
 { #category : 'private' }
 RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
-	| repositoryRoot projectName |
+	| repositoryRoot projectName x |
 	projectName := resolvedProject projectName.
 	repositoryRoot := resolvedProject repositoryRoot.
-	self assert: repositoryRoot exists.
-	{(resolvedProject componentsRoot).
+	{repositoryRoot.
+	(repositoryRoot / resolvedProject projectSpecFile).
+	(resolvedProject componentsRoot).
 	(resolvedProject componentsRoot / 'Core.ston').
 	(resolvedProject packagesRoot).
 	(resolvedProject packagesRoot / (projectName , '-Core')).
@@ -171,8 +172,8 @@ RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
 	(resolvedProject packagesRoot / (projectName , '-Tests')
 		/ (projectName , 'TestCase.class.st')).
 	(resolvedProject specsRoot).
-	(resolvedProject projectsRoot)}
-		do: [ :fileRef | self assert: fileRef exists ]
+	(resolvedProject specsRoot / resolvedProject projectAlias , 'ston').
+	(resolvedProject projectsRoot)} do: [ :fileRef | self assert: fileRef exists ]
 ]
 
 { #category : 'running' }
