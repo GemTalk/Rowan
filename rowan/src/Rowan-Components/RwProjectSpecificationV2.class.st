@@ -148,42 +148,36 @@ RwProjectSpecificationV2 >> = anObject [
 		and: [ 
 			self projectName = anObject projectName
 				and: [ 
-					self projectAlias = anObject projectAlias
+					self componentsPath = anObject componentsPath
 						and: [ 
-							self componentsPath = anObject componentsPath
+							self packagesPath = anObject packagesPath
 								and: [ 
-									self packagesPath = anObject packagesPath
+									self projectsPath = anObject projectsPath
 										and: [ 
-											self projectsPath = anObject projectsPath
+											self specsPath = anObject specsPath
 												and: [ 
-													self specsPath = anObject specsPath
+													self projectsHome = anObject projectsHome
 														and: [ 
-															self projectsHome = anObject projectsHome
+															lazyEqual := self _repoType = anObject _repoType
+																or: [ self repoType = anObject repoType ].
+															lazyEqual
 																and: [ 
-																	lazyEqual := self _repoType = anObject _repoType
-																		or: [ self repoType = anObject repoType ].
-																	lazyEqual
+																	self gitUrl = anObject gitUrl
 																		and: [ 
-																			self gitUrl = anObject gitUrl
+																			self diskUrl = anObject diskUrl
 																				and: [ 
-																					self diskUrl = anObject diskUrl
+																					self mercurialUrl = anObject mercurialUrl
 																						and: [ 
-																							self mercurialUrl = anObject mercurialUrl
+																							self svnUrl = anObject svnUrl
 																								and: [ 
-																									self svnUrl = anObject svnUrl
+																									self revision = anObject revision
 																										and: [ 
-																											self revision = anObject revision
+																											self comment = anObject comment
 																												and: [ 
-																													self comment = anObject comment
+																													self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
 																														and: [ 
-																															self componentNames asArray sort = anObject componentNames asArray sort
-																																and: [ 
-																																	self groupNames asArray sort = anObject groupNames asArray sort
-																																		and: [ 
-																																			self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
-																																				and: [ 
-																																					self _platformProperties = anObject _platformProperties
-																																						or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																															self _platformProperties = anObject _platformProperties
+																																or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'converting' }

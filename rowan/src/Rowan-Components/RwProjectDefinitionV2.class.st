@@ -154,12 +154,6 @@ RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
 ]
 
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> canCommit [
-
-	^ self projectRef canCommit
-]
-
 { #category : 'actions' }
 RwProjectDefinitionV2 >> clone [
 	"clone remote git project to disk"
@@ -173,20 +167,6 @@ RwProjectDefinitionV2 >> cloneRepository [
 	"clone remote git project to disk"
 
 	self projectRef clone
-]
-
-{ #category : 'actions' }
-RwProjectDefinitionV2 >> commit: message [
-	"commit the repository associated with receiver ..."
-
-	self canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for project ' , self name printString
-				, ' does not support commit operations.'.
-			self inform: msg.
-			^ msg ].
-	^ self projectRef doCommit: message
 ]
 
 { #category : 'properties' }

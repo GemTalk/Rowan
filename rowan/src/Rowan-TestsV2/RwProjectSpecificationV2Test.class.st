@@ -26,15 +26,15 @@ RwProjectSpecificationV2Test >> testBasic [
 		yourself.
 
 	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
-	self assert: projectSpecification validate
+	self assert: projectSpecification  _validate
 ]
 
 { #category : 'tests' }
 RwProjectSpecificationV2Test >> testBasicResolve [
 	"excercise basic functionality"
 
-	| projectName projectAlias projectSpecification stonString projectsHome expectedRepositoryRoot
-		resolvedProject resolvedProjectSpecification|
+	| project projectName projectAlias stonString projectsHome expectedRepositoryRoot
+		 resolvedProjectSpecification projectSpecification|
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -42,26 +42,24 @@ RwProjectSpecificationV2Test >> testBasicResolve [
 
 	self deny: expectedRepositoryRoot exists.
 
-	projectSpecification := RwProjectSpecificationV2 new
+	project := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
+projectSpecification := project _projectSpecification.
+	self assert: project _validate.
 
-	self assert: projectSpecification validate.
-
-	resolvedProject := projectSpecification resolve.
+	project resolve.
 
 	self assert: expectedRepositoryRoot exists.
-	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+	stonString := STON toStringPretty: project.	"useful in case of error"
 
-	resolvedProjectSpecification := resolvedProject projectSpecification.
-	self assert: resolvedProject packageNames isEmpty.
-	self assert: resolvedProjectSpecification ~~ projectSpecification.
+	resolvedProjectSpecification := project _projectSpecification.
+	self assert: project packageNames isEmpty.
 	self assert: resolvedProjectSpecification = projectSpecification.
-	self assert: resolvedProjectSpecification repositoryDefinition ~~ projectSpecification repositoryDefinition.
-	self assert: resolvedProjectSpecification repositoryDefinition = projectSpecification repositoryDefinition.
+
 ]
 
 { #category : 'tests' }
@@ -78,7 +76,6 @@ RwProjectSpecificationV2Test >> testBasicResolve_git [
 
 	loadSpec1 := RwProjectSpecificationV2 new
 		projectName: projectName;
-		projectAlias: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		repoType: #'git';

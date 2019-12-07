@@ -109,34 +109,6 @@ RwGitRepositoryDefinitionV2 >> clone [
 		cloneRepository: self
 ]
 
-{ #category : 'actions' }
-RwGitRepositoryDefinitionV2 >> commit: message [
-	| gitTool gitRootPath commitMessageFileName status |
-	gitTool := Rowan gitTools.
-	gitRootPath := self repositoryRoot pathString.
-	(gitTool gitstatusIn: gitRootPath with: '--short') isEmpty
-		ifTrue: [ 
-			| msg |
-			msg := 'Nothing to commit'.
-			Transcript
-				cr;
-				show: '==============';
-				cr;
-				show: msg.
-			self inform: msg.
-			^ msg ].
-	commitMessageFileName := gitTool createTmpFileWith: message.
-	gitTool gitaddIn: gitRootPath with: '-A .'.
-	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
-	status := gitTool gitlogIn: gitRootPath with: '-1'.
-	Transcript
-		cr;
-		show: '==============';
-		cr;
-		show: status.
-	^ status
-]
-
 { #category : 'loading' }
 RwGitRepositoryDefinitionV2 >> commitLog: logLimit [
 
@@ -168,6 +140,34 @@ RwGitRepositoryDefinitionV2 >> currentBranch [
 			"if detached head, return the sha of the commit"
 			^ Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ].
 	^ result
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> doCommit: message [
+	| gitTool gitRootPath commitMessageFileName status |
+	gitTool := Rowan gitTools.
+	gitRootPath := self repositoryRoot pathString.
+	(gitTool gitstatusIn: gitRootPath with: '--short') isEmpty
+		ifTrue: [ 
+			| msg |
+			msg := 'Nothing to commit'.
+			Transcript
+				cr;
+				show: '==============';
+				cr;
+				show: msg.
+			self inform: msg.
+			^ msg ].
+	commitMessageFileName := gitTool createTmpFileWith: message.
+	gitTool gitaddIn: gitRootPath with: '-A .'.
+	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
+	status := gitTool gitlogIn: gitRootPath with: '-1'.
+	Transcript
+		cr;
+		show: '==============';
+		cr;
+		show: status.
+	^ status
 ]
 
 { #category : 'actions' }
