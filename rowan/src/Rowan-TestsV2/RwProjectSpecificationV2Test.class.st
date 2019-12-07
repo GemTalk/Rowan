@@ -134,7 +134,8 @@ RwProjectSpecificationV2Test >> testComparison_1 [
 	stonStringCopy := STON toStringPretty: projectSpecCopy.
 
 	self assert: stonString = stonStringCopy.
-	self assert: projectSpecCopy = projectSpecification
+	self assert: projectSpecCopy = projectSpecification.
+	self assert: projectSpecCopy hash = projectSpecification hash
 ]
 
 { #category : 'tests' }
@@ -162,6 +163,7 @@ RwProjectSpecificationV2Test >> testComparison_2 [
 
 	self assert: stonString = stonStringCopy.
 	self assert: projectSpecCopy = projectSpecification.
+	self assert: projectSpecCopy hash = projectSpecification hash.
 	self deny: stonStringLazy = stonStringCopy
 ]
 

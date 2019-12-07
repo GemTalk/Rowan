@@ -47,11 +47,37 @@ RwLoadSpecificationV2 >> _validate [
 		ifFalse: [ 
 			self gitUrl asRwUrl scheme ~= 'file'
 				ifTrue: [ 
-					Error
-						signal:
-							'The instance variable ''revision'' must be set for the'
-								, (repoUrls at: 1) asString printString ] ].
+					self revision
+						ifNil: [ 
+							Error
+								signal:
+									'The instance variable ''revision'' must be set for the'
+										, (repoUrls at: 1) asString printString ] ] ].
 	^ true
+]
+
+{ #category : 'comparing' }
+RwLoadSpecificationV2 >> = anObject [
+	^ self specName = anObject specName
+		and: [ 
+			self projectName = anObject projectName
+				and: [ 
+					self projectAlias = anObject projectAlias
+						and: [ 
+							self componentNames asArray sort = anObject componentNames asArray sort
+								and: [ 
+									self groupNames asArray sort = anObject groupNames asArray sort
+										and: [ 
+											self projectSpecFile = anObject projectSpecFile
+												and: [ 
+													self gitUrl = anObject gitUrl
+														and: [ 
+															self diskUrl = anObject diskUrl
+																and: [ 
+																	self mercurialUrl = anObject mercurialUrl
+																		and: [ 
+																			self svnUrl = anObject svnUrl
+																				and: [ self revision = anObject revision and: [ self comment = anObject comment ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -108,6 +134,24 @@ RwLoadSpecificationV2 >> groupNames [
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> groupNames: anArray [
 	groupNames := anArray asArray
+]
+
+{ #category : 'comparing' }
+RwLoadSpecificationV2 >> hash [
+	| hashValue |
+	hashValue := self specName hash.
+	hashValue := hashValue bitXor: self projectName hash.
+	hashValue := hashValue bitXor: self projectAlias hash.
+	hashValue := hashValue bitXor: self projectSpecFile hash.
+	hashValue := hashValue bitXor: self gitUrl hash.
+	hashValue := hashValue bitXor: self diskUrl hash.
+	hashValue := hashValue bitXor: self mercurialUrl hash.
+	hashValue := hashValue bitXor: self svnUrl hash.
+	hashValue := hashValue bitXor: self revision hash.
+	hashValue := hashValue bitXor: self comment hash.
+	hashValue := hashValue bitXor: self componentNames hash.
+	hashValue := hashValue bitXor: self groupNames hash.
+	^ hashValue
 ]
 
 { #category : 'initialization' }

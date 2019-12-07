@@ -124,24 +124,28 @@ RwProjectSpecificationV2 >> = anObject [
 				and: [ 
 					self componentsPath = anObject componentsPath
 						and: [ 
-							self packagesPath = anObject packagesPath
+							self packageFormat = anObject packageFormat
 								and: [ 
-									self projectsPath = anObject projectsPath
+									self packageConvention = anObject packageConvention
 										and: [ 
-											self specsPath = anObject specsPath
+											self packagesPath = anObject packagesPath
 												and: [ 
-													self projectsHome = anObject projectsHome
+													self projectsPath = anObject projectsPath
 														and: [ 
-															lazyEqual := self _repoType = anObject _repoType
-																or: [ self repoType = anObject repoType ].
-															lazyEqual
+															self specsPath = anObject specsPath
 																and: [ 
-																	self comment = anObject comment
+																	self projectsHome = anObject projectsHome
 																		and: [ 
-																			self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
+																			lazyEqual := self _repoType = anObject _repoType
+																				or: [ self repoType = anObject repoType ].
+																			lazyEqual
 																				and: [ 
-																					self _platformProperties = anObject _platformProperties
-																						or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ]
+																					self comment = anObject comment
+																						and: [ 
+																							self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
+																								and: [ 
+																									self _platformProperties = anObject _platformProperties
+																										or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'converting' }
@@ -202,21 +206,15 @@ RwProjectSpecificationV2 >> hash [
 	| hashValue |
 	hashValue := self specName hash.
 	hashValue := hashValue bitXor: self projectName hash.
-	hashValue := hashValue bitXor: self projectAlias hash.
 	hashValue := hashValue bitXor: self componentsPath hash.
 	hashValue := hashValue bitXor: self packagesPath hash.
 	hashValue := hashValue bitXor: self projectsPath hash.
 	hashValue := hashValue bitXor: self specsPath hash.
 	hashValue := hashValue bitXor: self projectsHome hash.
 	hashValue := hashValue bitXor: self _repoType hash.
-	hashValue := hashValue bitXor: self gitUrl hash.
-	hashValue := hashValue bitXor: self diskUrl hash.
-	hashValue := hashValue bitXor: self mercurialUrl hash.
-	hashValue := hashValue bitXor: self svnUrl hash.
-	hashValue := hashValue bitXor: self revision hash.
 	hashValue := hashValue bitXor: self comment hash.
-	hashValue := hashValue bitXor: self componentNames hash.
-	hashValue := hashValue bitXor: self groupNames hash.
+	hashValue := hashValue bitXor: self packageFormat hash.
+	hashValue := hashValue bitXor: self packageConvention hash.
 	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
 	hashValue := hashValue bitXor: self _platformProperties hash.
 	^ hashValue
