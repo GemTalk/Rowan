@@ -283,7 +283,7 @@ RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: 
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _createLoadSpecification: aString [
-	^ RwProjectSpecificationV2 new
+	^ RwLoadSpecificationV2 new
 		projectName: aString;
 		projectsHome: self projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;

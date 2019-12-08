@@ -11,35 +11,11 @@ Class {
 		'projectSpecPath',
 		'repoType',
 		'comment',
-		'platformProperties',
 		'packageFormat',
 		'packageConvention'
 	],
 	#category : 'Rowan-Components'
 }
-
-{ #category : 'private' }
-RwProjectSpecificationV2 >> _checkAndUpdateRepositoryRevision [
-	^ self repositoryDefinition checkAndUpdateRepositoryRevision: self
-]
-
-{ #category : 'private' }
-RwProjectSpecificationV2 >> _checkProjectDirectoryStructure [
-	"answer true if the basic project directory structure is present"
-
-	self projectRoots
-		do: [ :fileRef | 
-			fileRef exists
-				ifFalse: [ ^ false ] ].
-	^ true
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> _platformProperties [
-	"direct access to IV ... used by ="
-
-	^ platformProperties
-]
 
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> _repoType [
@@ -71,46 +47,7 @@ RwProjectSpecificationV2 >> _validate [
 					Error
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
-	self platformProperties
-		keysAndValuesDo: [ :platformName :userIdMap | 
-			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
-				ifFalse: [ 
-					Error
-						signal:
-							'Unknown platform name ' , platformName printString , ' in platform properties' ].
-			platformName = 'gemstone'
-				ifTrue: [ self _validateGemStonePlatformUserIdMap: userIdMap ] ].
 	^ true
-]
-
-{ #category : 'private' }
-RwProjectSpecificationV2 >> _validateGemStonePlatformUserIdMap: userIdMap [
-	"ensure that the data structures within the receiver contain valid information:
-		1. platform implementation is responsible for validating platform structures"
-
-	| expectedPropertyMap |
-	expectedPropertyMap := Dictionary new
-		add: #'defaultSymbolDictName' -> CharacterCollection;
-		add: #'defaultMethodEnv' -> SmallInteger;
-		add: #'defaultUseSessionMethodsForExtensions' -> Boolean;
-		yourself.
-	userIdMap
-		keysAndValuesDo: [ :userId :platformPropertiesMap | 
-			platformPropertiesMap
-				keysAndValuesDo: [ :propertyKey :propertyValue | 
-					(expectedPropertyMap includesKey: propertyKey)
-						ifTrue: [ 
-							| expectedClass |
-							expectedClass := expectedPropertyMap at: propertyKey.
-							(propertyValue isKindOf: expectedClass)
-								ifFalse: [ 
-									Error
-										signal:
-											'Value of property (' , propertyKey printString , '->'
-												, propertyValue printString , ') is expected to be class '
-												, expectedClass name asString printString , ' not class '
-												, propertyValue class name asString printString ] ]
-						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
 ]
 
 { #category : 'comparing' }
@@ -134,12 +71,7 @@ RwProjectSpecificationV2 >> = anObject [
 																and: [ 
 																	lazyEqual := self _repoType = anObject _repoType
 																		or: [ self repoType = anObject repoType ].
-																	lazyEqual
-																		and: [ 
-																			self comment = anObject comment
-																				and: [ 
-																					self _platformProperties = anObject _platformProperties
-																						or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ]
+																	lazyEqual and: [ self comment = anObject comment ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'converting' }
@@ -180,14 +112,6 @@ RwProjectSpecificationV2 >> componentsRoot [
 	^ self repositoryRoot / self componentsPath
 ]
 
-{ #category : 'private' }
-RwProjectSpecificationV2 >> currentVersion [
-	"
-		0.1.0 - first class load specification
-	"
-	^ '0.1.0'
-]
-
 { #category : 'exporting' }
 RwProjectSpecificationV2 >> exportTo: directoryReference [
 
@@ -208,7 +132,6 @@ RwProjectSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self comment hash.
 	hashValue := hashValue bitXor: self packageFormat hash.
 	hashValue := hashValue bitXor: self packageConvention hash.
-	hashValue := hashValue bitXor: self _platformProperties hash.
 	^ hashValue
 ]
 
@@ -276,38 +199,6 @@ RwProjectSpecificationV2 >> packagesPath: aString [
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> packagesRoot [
 	^ self repositoryRoot / self packagesPath
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> platformProperties [
-	^ platformProperties ifNil: [ platformProperties := Dictionary new ]
-]
-
-{ #category : 'copying' }
-RwProjectSpecificationV2 >> postCopy [
-	"don't forget to copy any compound state objects"
-
-	super postCopy.
-	platformProperties
-		ifNotNil: [ 
-			| platformPropertiesCopy |
-			platformPropertiesCopy := platformProperties copy.
-			platformProperties
-				keysAndValuesDo: [ :platformName :userIdMap | 
-					| userIdMapCopy |
-					userIdMapCopy := userIdMap copy.
-					platformPropertiesCopy at: platformName put: userIdMapCopy.
-					platformName = 'gemstone'
-						ifTrue: [ 
-							userIdMap
-								keysAndValuesDo: [ :userId :platformPropertiesMap | 
-									| platformPropertiesMapCopy |
-									platformPropertiesMapCopy := platformPropertiesMap copy.
-									userIdMapCopy at: userId put: platformPropertiesMapCopy.
-									platformPropertiesMap
-										keysAndValuesDo: [ :propertyKey :propertyValue | platformPropertiesMapCopy at: propertyKey put: propertyValue copy ] ] ]
-						ifFalse: [ self error: 'postCopy of ' , platformName printString , ' not yet implemented' ] ].
-			platformProperties := platformPropertiesCopy ]
 ]
 
 { #category : 'accessing' }

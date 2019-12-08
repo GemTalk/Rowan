@@ -26,6 +26,95 @@ RwResolvedProjectV2Test >> testBasic [
 ]
 
 { #category : 'tests' }
+RwResolvedProjectV2Test >> testBasicResolve_1 [
+	"excercise basic functionality"
+
+	| project projectName projectAlias stonString projectsHome expectedRepositoryRoot
+		 resolvedProjectSpecification projectSpecification|
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	projectsHome := self _testRowanProjectsSandbox.
+	expectedRepositoryRoot := projectsHome / projectAlias.
+
+	self deny: expectedRepositoryRoot exists.
+
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	projectSpecification := project _projectSpecification.
+	self assert: project _validate.
+
+	project resolve.
+
+	self assert: expectedRepositoryRoot exists.
+	stonString := STON toStringPretty: project.	"useful in case of error"
+
+	resolvedProjectSpecification := project _projectSpecification.
+	self assert: project packageNames isEmpty.
+	self assert: resolvedProjectSpecification = projectSpecification.
+]
+
+{ #category : 'tests' }
+RwResolvedProjectV2Test >> testBasicResolve_2 [
+	"excercise basic functionality"
+
+	"no project alias"
+
+	| project projectName stonString projectsHome expectedRepositoryRoot
+		 resolvedProjectSpecification projectSpecification|
+	projectName := 'RowanSample9'.
+	projectsHome := self _testRowanProjectsSandbox.
+	expectedRepositoryRoot := projectsHome / projectName.
+
+	self deny: expectedRepositoryRoot exists.
+
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	projectSpecification := project _projectSpecification.
+	self assert: project _validate.
+
+	project resolve.
+
+	self assert: expectedRepositoryRoot exists.
+	stonString := STON toStringPretty: project.	"useful in case of error"
+
+	resolvedProjectSpecification := project _projectSpecification.
+	self assert: project packageNames isEmpty.
+	self assert: resolvedProjectSpecification = projectSpecification.
+]
+
+{ #category : 'tests' }
+RwResolvedProjectV2Test >> testBasicResolve_git [
+	"Create git repository on resolve"
+
+	| projectName projectsHome resolvedProject expectedRepositoryRoot stonString |
+	projectName := 'RowanSample9'.
+	projectsHome := self _testRowanProjectsSandbox.
+	expectedRepositoryRoot := projectsHome / projectName.
+
+	self deny: expectedRepositoryRoot exists.
+
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #'git';
+		yourself.
+
+	resolvedProject resolve.
+	stonString := STON toStringPretty: resolvedProject.
+
+	self assert: expectedRepositoryRoot exists.
+	self assert: (expectedRepositoryRoot / '.git') exists
+]
+
+{ #category : 'tests' }
 RwResolvedProjectV2Test >> testCreateNewDiskProject [
 	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject |
 	projectName := 'RowanSample9'.

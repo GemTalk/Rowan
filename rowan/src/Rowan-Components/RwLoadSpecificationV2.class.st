@@ -15,10 +15,18 @@ Class {
 		'revision',
 		'projectSpecFile',
 		'projectsHome',
-		'repositoryResolutionPolicy'
+		'repositoryResolutionPolicy',
+		'platformProperties'
 	],
 	#category : 'Rowan-Components'
 }
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> _platformProperties [
+	"direct access to IV ... used by ="
+
+	^ platformProperties
+]
 
 { #category : 'private' }
 RwLoadSpecificationV2 >> _validate [
@@ -55,7 +63,46 @@ RwLoadSpecificationV2 >> _validate [
 								signal:
 									'The instance variable ''revision'' must be set for the'
 										, (repoUrls at: 1) asString printString ] ] ].
+	self platformProperties
+		keysAndValuesDo: [ :platformName :userIdMap | 
+			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
+				ifFalse: [ 
+					Error
+						signal:
+							'Unknown platform name ' , platformName printString , ' in platform properties' ].
+			platformName = 'gemstone'
+				ifTrue: [ self _validateGemStonePlatformUserIdMap: userIdMap ] ].
 	^ true
+]
+
+{ #category : 'private' }
+RwLoadSpecificationV2 >> _validateGemStonePlatformUserIdMap: userIdMap [
+	"ensure that the data structures within the receiver contain valid information:
+		1. platform implementation is responsible for validating platform structures"
+
+	| expectedPropertyMap |
+	expectedPropertyMap := Dictionary new
+		add: #'defaultSymbolDictName' -> CharacterCollection;
+		add: #'defaultMethodEnv' -> SmallInteger;
+		add: #'defaultUseSessionMethodsForExtensions' -> Boolean;
+		yourself.
+	userIdMap
+		keysAndValuesDo: [ :userId :platformPropertiesMap | 
+			platformPropertiesMap
+				keysAndValuesDo: [ :propertyKey :propertyValue | 
+					(expectedPropertyMap includesKey: propertyKey)
+						ifTrue: [ 
+							| expectedClass |
+							expectedClass := expectedPropertyMap at: propertyKey.
+							(propertyValue isKindOf: expectedClass)
+								ifFalse: [ 
+									Error
+										signal:
+											'Value of property (' , propertyKey printString , '->'
+												, propertyValue printString , ') is expected to be class '
+												, expectedClass name asString printString , ' not class '
+												, propertyValue class name asString printString ] ]
+						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
 ]
 
 { #category : 'comparing' }
@@ -83,7 +130,13 @@ RwLoadSpecificationV2 >> = anObject [
 																					self mercurialUrl = anObject mercurialUrl
 																						and: [ 
 																							self svnUrl = anObject svnUrl
-																								and: [ self revision = anObject revision and: [ self comment = anObject comment ] ] ] ] ] ] ] ] ] ] ] ] ]
+																								and: [ 
+																									self revision = anObject revision
+																										and: [ 
+																											self comment = anObject comment
+																												and: [ 
+																													self _platformProperties = anObject _platformProperties
+																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -168,6 +221,7 @@ RwLoadSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self projectsHome hash.
 	hashValue := hashValue bitXor: self groupNames hash.
 	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
+	hashValue := hashValue bitXor: self _platformProperties hash.
 	^ hashValue
 ]
 
@@ -204,13 +258,38 @@ RwLoadSpecificationV2 >> mercurialUrl: anUrlString [
 	mercurialUrl := anUrlString
 ]
 
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> platformProperties [
+	^ platformProperties ifNil: [ platformProperties := Dictionary new ]
+]
+
 { #category : 'copying' }
 RwLoadSpecificationV2 >> postCopy [
 	"don't forget to copy any compound state objects"
 
 	super postCopy.
 	componentNames := componentNames copy.
-	groupNames := groupNames copy
+	groupNames := groupNames copy.
+	platformProperties
+		ifNotNil: [ 
+			| platformPropertiesCopy |
+			platformPropertiesCopy := platformProperties copy.
+			platformProperties
+				keysAndValuesDo: [ :platformName :userIdMap | 
+					| userIdMapCopy |
+					userIdMapCopy := userIdMap copy.
+					platformPropertiesCopy at: platformName put: userIdMapCopy.
+					platformName = 'gemstone'
+						ifTrue: [ 
+							userIdMap
+								keysAndValuesDo: [ :userId :platformPropertiesMap | 
+									| platformPropertiesMapCopy |
+									platformPropertiesMapCopy := platformPropertiesMap copy.
+									userIdMapCopy at: userId put: platformPropertiesMapCopy.
+									platformPropertiesMap
+										keysAndValuesDo: [ :propertyKey :propertyValue | platformPropertiesMapCopy at: propertyKey put: propertyValue copy ] ] ]
+						ifFalse: [ self error: 'postCopy of ' , platformName printString , ' not yet implemented' ] ].
+			platformProperties := platformPropertiesCopy ]
 ]
 
 { #category : 'accessing' }

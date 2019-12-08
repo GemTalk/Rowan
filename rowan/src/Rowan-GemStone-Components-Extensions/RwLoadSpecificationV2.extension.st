@@ -1,30 +1,30 @@
-Extension { #name : 'RwProjectSpecificationV2' }
+Extension { #name : 'RwLoadSpecificationV2' }
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> _gemstoneAllUsersName [
+RwLoadSpecificationV2 >> _gemstoneAllUsersName [
 
 	^ 'allusers'
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> _gemstoneDefaultMethodEnv [
+RwLoadSpecificationV2 >> _gemstoneDefaultMethodEnv [
 	^ 0
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> _gemstoneDefaultSymbolDictName [
+RwLoadSpecificationV2 >> _gemstoneDefaultSymbolDictName [
 
 	^ 'UserGlobals'
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> _gemstoneDefaultUseSessionMethodsForExtensions [
+RwLoadSpecificationV2 >> _gemstoneDefaultUseSessionMethodsForExtensions [
 
 	^ false
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneDefaultMethodEnvForUser: userId [
+RwLoadSpecificationV2 >> gemstoneDefaultMethodEnvForUser: userId [
 	| gemstoneProperties userProperties |
 	gemstoneProperties := self platformProperties
 		at: 'gemstone'
@@ -41,7 +41,7 @@ RwProjectSpecificationV2 >> gemstoneDefaultMethodEnvForUser: userId [
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
+RwLoadSpecificationV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 	| gemstoneProperties userProperties |
 	gemstoneProperties := self platformProperties
 		at: 'gemstone'
@@ -58,7 +58,7 @@ RwProjectSpecificationV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId [
+RwLoadSpecificationV2 >> gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId [
 	| gemstoneProperties userProperties |
 	gemstoneProperties := self platformProperties
 		at: 'gemstone'
@@ -75,7 +75,7 @@ RwProjectSpecificationV2 >> gemstoneDefaultUseSessionMethodsForExtensionsForUser
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: env [
+RwLoadSpecificationV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: env [
 
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
@@ -83,12 +83,12 @@ RwProjectSpecificationV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: env [
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneSetDefaultMethodEnvTo: env [
+RwLoadSpecificationV2 >> gemstoneSetDefaultMethodEnvTo: env [
 	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: env
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
+RwLoadSpecificationV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
 
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
@@ -96,12 +96,12 @@ RwProjectSpecificationV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: 
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
+RwLoadSpecificationV2 >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
 	self gemstoneSetDefaultSymbolDictNameForUser: self _gemstoneAllUsersName to: symbolDictName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
+RwLoadSpecificationV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
 
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
@@ -109,6 +109,6 @@ RwProjectSpecificationV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForU
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectSpecificationV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
+RwLoadSpecificationV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
 	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
 ]
