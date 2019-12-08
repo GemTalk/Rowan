@@ -413,31 +413,32 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 		roots, so we have a clean sarting point and then export the project
 		definition and load spec."
 
-	| repositoryDefinition projectDefinition |
-	projectDefinition := loadSpecification resolveStrict.
+	| repository resolvedProject |
+	resolvedProject := loadSpecification resolveStrict.
 
-	repositoryDefinition := loadSpecification repositoryDefinition.
-	(repositoryDefinition branches includes: specName)
+	repository := resolvedProject repository.
+	(repository branches includes: specName)
 		ifTrue: [ 
 			"branch exists, so we'll check it out and make the necessary mods"
-			repositoryDefinition checkout: specName.
-			repositoryDefinition pull: repositoryDefinition remote branch: specName ]
+			repository checkout: specName.
+			repository pull: repository remote branch: specName ]
 		ifFalse: [ 
 			"create the branch"
-			repositoryDefinition createBranch: specName ].
+			repository createBranch: specName ].
 
 	loadSpecification revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	addDefinitionsBlock value: projectDefinition.
+	addDefinitionsBlock value: resolvedProject.
 
-	loadSpecification projectRoots
+	resolvedProject projectRoots
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
 
-	projectDefinition export.	"write the rowan directory structure"
-	loadSpecification export.
+	resolvedProject 
+		export;	"write the rowan directory structure"
+		exportLoadSpecification.
 
-	^ repositoryDefinition
+	^ repository
 ]
 
 { #category : 'private' }

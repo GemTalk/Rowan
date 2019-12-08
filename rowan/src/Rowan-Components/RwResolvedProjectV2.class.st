@@ -148,6 +148,11 @@ RwResolvedProjectV2 >> exportComponents [
 ]
 
 { #category : 'exporting' }
+RwResolvedProjectV2 >> exportLoadSpecification [
+	self _loadSpecification exportTo: self specsRoot
+]
+
+{ #category : 'exporting' }
 RwResolvedProjectV2 >> exportPackages [
 	self _projectDefinition
 		exportPackagesTo: self packagesRoot
@@ -165,9 +170,7 @@ RwResolvedProjectV2 >> exportProjects [
 ]
 
 { #category : 'exporting' }
-RwResolvedProjectV2 >> exportSpecifications [
-
-	self _loadSpecification exportTo: self specsRoot.
+RwResolvedProjectV2 >> exportProjectSpecification [
 	self _projectSpecification exportTo: self repositoryRoot
 ]
 

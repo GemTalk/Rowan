@@ -3,20 +3,20 @@ Class {
 	#superclass : 'RwSpecification',
 	#instVars : [
 		'specName',
-		'projectAlias',
 		'projectName',
-		'comment',
-		'componentNames',
-		'groupNames',
+		'projectAlias',
 		'gitUrl',
 		'diskUrl',
 		'mercurialUrl',
 		'svnUrl',
 		'revision',
 		'projectSpecFile',
+		'componentNames',
+		'groupNames',
+		'platformProperties',
+		'comment',
 		'projectsHome',
-		'repositoryResolutionPolicy',
-		'platformProperties'
+		'repositoryResolutionPolicy'
 	],
 	#category : 'Rowan-Components'
 }
@@ -232,7 +232,8 @@ RwLoadSpecificationV2 >> initialize [
 	groupNames := {'core'.
 	'tests'.
 	'deprecated'}.
-	projectSpecFile := 'rowan/project.ston'
+	projectSpecFile := 'rowan/project.ston'.
+	comment := ''
 ]
 
 { #category : 'initialization' }
@@ -240,7 +241,7 @@ RwLoadSpecificationV2 >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	projectsHome :=  nil
+	repositoryResolutionPolicy := projectsHome :=  nil
 ]
 
 { #category : 'testing' }

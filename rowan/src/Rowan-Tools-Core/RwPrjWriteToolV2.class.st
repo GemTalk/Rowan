@@ -19,7 +19,7 @@ RwPrjWriteToolV2 >> writeResolvedProject: resolvedProject [
 	Rowan projectTools createV2
 		createResolvedProjectRepository: resolvedProject repository.
 	resolvedProject
-		exportSpecifications;
+		exportProjectSpecification;
 		exportProjects;
 		exportComponents;
 		exportPackages

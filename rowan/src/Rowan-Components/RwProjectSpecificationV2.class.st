@@ -4,15 +4,15 @@ Class {
 	#instVars : [
 		'specName',
 		'projectName',
+		'projectSpecPath',
 		'componentsPath',
 		'packagesPath',
 		'projectsPath',
 		'specsPath',
-		'projectSpecPath',
-		'repoType',
-		'comment',
 		'packageFormat',
-		'packageConvention'
+		'packageConvention',
+		'comment',
+		'repoType'
 	],
 	#category : 'Rowan-Components'
 }
@@ -143,7 +143,8 @@ RwProjectSpecificationV2 >> initialize [
 	projectsPath := 'rowan/projects'.
 	specsPath := 'rowan/specs'.
 	projectSpecPath := 'rowan'.
-	specName := 'project'
+	specName := 'project'.
+	comment := ''
 ]
 
 { #category : 'initialization' }

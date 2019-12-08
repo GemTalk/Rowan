@@ -136,7 +136,9 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject [
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
 	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
-	resolvedProject export.
+	resolvedProject
+		export;
+		exportLoadSpecification.
 
 	informed := false.
 	self
@@ -171,6 +173,7 @@ RwResolvedProjectV2Test >> testCreateNewGitProject [
 
 	resolvedProject
 		export;
+		exportLoadSpecification;
 		commit: 'first commit'.
 
 	self _validateCanonicalRowanSample9ProjectFor: resolvedProject.
