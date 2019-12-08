@@ -91,20 +91,6 @@ RwResolvedProjectV2 >> comment: aString [
 	self _projectDefinition comment: aString
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> commit: message [
-	"commit the repository associated with receiver ..."
-
-	self _projectRepository canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for project ' , self projectAlias printString
-				, ' does not support commit operations.'.
-			self inform: msg.
-			^ msg ].
-	^ self _projectRepository doCommit: message
-]
-
 { #category : 'project specification' }
 RwResolvedProjectV2 >> componentNames [
 	^ self _loadSpecification componentNames
@@ -300,4 +286,9 @@ RwResolvedProjectV2 >> resolve [
 { #category : 'load specification' }
 RwResolvedProjectV2 >> revision [
 	^ self _loadSpecification revision
+]
+
+{ #category : 'load specification' }
+RwResolvedProjectV2 >> revision: aRevisionString [
+	^ self _loadSpecification revision: aRevisionString
 ]

@@ -30,7 +30,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 	"excercise basic functionality"
 
 	| project projectName projectAlias stonString projectsHome expectedRepositoryRoot
-		 resolvedProjectSpecification projectSpecification|
+		 resolvedProjectSpecification projectSpecification loadSpecification resolvedLoadSpecification|
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -45,6 +45,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 	projectSpecification := project _projectSpecification.
+	loadSpecification := project _loadSpecification.
 	self assert: project _validate.
 
 	project resolve.
@@ -53,8 +54,12 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
+	resolvedLoadSpecification := project _loadSpecification.
 	self assert: project packageNames isEmpty.
 	self assert: resolvedProjectSpecification = projectSpecification.
+	self assert: resolvedProjectSpecification == projectSpecification.
+	self assert: resolvedLoadSpecification = loadSpecification.
+	self assert: resolvedLoadSpecification == loadSpecification.	"did not originate project with a loadSpecification so identity is expected"
 ]
 
 { #category : 'tests' }
@@ -181,4 +186,31 @@ RwResolvedProjectV2Test >> testCreateNewGitProject [
 		assert:
 			(Rowan projectTools git
 				gitPresentIn: resolvedProject repositoryRoot pathString)
+]
+
+{ #category : 'tests' }
+RwResolvedProjectV2Test >> testLoadSpecResolve [
+	"load spect -> resoved project test"
+
+	| projectName loadSpecification stonString specName project projectsHome |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		projectsHome: projectsHome;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate.
+
+	project := loadSpecification resolve.
+
+	self assert: project _loadSpecification = loadSpecification.
+	self assert: project _loadSpecification ~~ loadSpecification.	"load spec is copid on resolve"
 ]

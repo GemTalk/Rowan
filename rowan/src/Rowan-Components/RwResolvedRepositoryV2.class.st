@@ -25,6 +25,11 @@ RwResolvedRepositoryV2 >> pull: remoteName branch: branchName [
 ]
 
 { #category : 'repository' }
+RwResolvedRepositoryV2 >> push: remoteName branch: branchName [
+	^ self _projectRepository push: remoteName branch: branchName
+]
+
+{ #category : 'repository' }
 RwResolvedRepositoryV2 >> remote [
 	^ self _projectRepository remote
 ]

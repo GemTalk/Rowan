@@ -291,10 +291,10 @@ RwTestProjectLibraryGenerator >> _createLoadSpecification: aString [
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage repositoryDefinition: repositoryDefinition branchName: branchName [
+RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage resolvedRepository: resolvedRepository branchName: branchName [
 	| somethingToCommit |
 	somethingToCommit := true.
-	[ repositoryDefinition commit: commitMessage ]
+	[ resolvedRepository commit: commitMessage ]
 		on: GsInteractionRequest
 		do: [ :ex | 
 			ex interaction message = 'Nothing to commit'
@@ -304,46 +304,45 @@ RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage repositoryDefin
 	(somethingToCommit and: [ self preserveChangesOnGithub ])
 		ifTrue: [ 
 			"only push if we really want to preserve the changes during this run and something has changed"
-			repositoryDefinition push: repositoryDefinition remote branch: branchName ]
+			resolvedRepository push: resolvedRepository remote branch: branchName ]
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom loadSpecification: loadSpecification repositoryDefinition: repositoryDefinition commitMessage: commitMessage [
+RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom  resolvedRepository: resolvedRepository commitMessage: commitMessage [
 	| derivedIndexCardFile |
 	derivedFrom
 		ifNotNil: [ 
-			derivedIndexCardFile := loadSpecification repositoryRoot / derivedFrom , 'ston'.
+			derivedIndexCardFile := resolvedRepository repositoryRoot / derivedFrom , 'ston'.
 			derivedIndexCardFile exists
 				ifTrue: [ derivedIndexCardFile delete ] ].
-	indexCard exportTo: loadSpecification repositoryRoot.
+	indexCard exportTo: resolvedRepository repositoryRoot.
 
 	self
 		_doCommitAndPush: commitMessage
-		repositoryDefinition: repositoryDefinition
+		resolvedRepository: resolvedRepository
 		branchName: specName.
 
-	repositoryDefinition checkout: 'master'.	"write the index card and spec on the master branch"
-	repositoryDefinition pull: repositoryDefinition remote branch: 'master'.
+	resolvedRepository checkout: 'master'.	"write the index card and spec on the master branch"
+	resolvedRepository pull: resolvedRepository remote branch: 'master'.
 
-	(loadSpecification repositoryRoot / 'indexCards') ensureCreateDirectory.
-	indexCard exportTo: loadSpecification repositoryRoot / 'indexCards'.
-	(loadSpecification repositoryRoot / 'specs') ensureCreateDirectory.
-	loadSpecification exportTo: loadSpecification repositoryRoot / 'specs'.
+	(resolvedRepository repositoryRoot / 'indexCards') ensureCreateDirectory.
+	indexCard exportTo: resolvedRepository repositoryRoot / 'indexCards'.
+	(resolvedRepository repositoryRoot / 'specs') ensureCreateDirectory.
+	resolvedRepository _loadSpecification exportTo: resolvedRepository repositoryRoot / 'specs'.
 
 	self
 		_doCommitAndPush: commitMessage
-		repositoryDefinition: repositoryDefinition
+		resolvedRepository: resolvedRepository
 		branchName: 'master'
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard loadSpecification: loadSpecification repositoryDefinition: repositoryDefinition commitMessage: commitMessage [
+RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard  resolvedRepository: resolvedRepository commitMessage: commitMessage [
 	^ self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
 		derivedFrom: nil
-		loadSpecification: loadSpecification
-		repositoryDefinition: repositoryDefinition
+		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
 ]
 
@@ -413,20 +412,20 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 		roots, so we have a clean sarting point and then export the project
 		definition and load spec."
 
-	| repository resolvedProject |
+	| resolvedRepository resolvedProject |
 	resolvedProject := loadSpecification resolveStrict.
 
-	repository := resolvedProject repository.
-	(repository branches includes: specName)
+	resolvedRepository := resolvedProject repository.
+	(resolvedRepository branches includes: specName)
 		ifTrue: [ 
 			"branch exists, so we'll check it out and make the necessary mods"
-			repository checkout: specName.
-			repository pull: repository remote branch: specName ]
+			resolvedRepository checkout: specName.
+			resolvedRepository pull: resolvedRepository remote branch: specName ]
 		ifFalse: [ 
 			"create the branch"
-			repository createBranch: specName ].
+			resolvedRepository createBranch: specName ].
 
-	loadSpecification revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
 	addDefinitionsBlock value: resolvedProject.
 
 	resolvedProject projectRoots
@@ -438,7 +437,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 		export;	"write the rowan directory structure"
 		exportLoadSpecification.
 
-	^ repository
+	^ resolvedRepository
 ]
 
 { #category : 'private' }
@@ -459,7 +458,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
 	postfix := '0000'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
@@ -478,7 +477,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 		componentNames: {'Core'};
 		yourself.
 
-	repositoryDefinition := self
+	resolvedRepository := self
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :projectDefinition | self _addDefinitionsFor_0000: projectDefinition ].
@@ -486,8 +485,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
-		loadSpecification: loadSpecification
-		repositoryDefinition: repositoryDefinition
+		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
 ]
 

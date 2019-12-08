@@ -110,6 +110,20 @@ RwAbstractResolvedObjectV2 >> _validate [
 	^ true
 ]
 
+{ #category : 'project definition' }
+RwAbstractResolvedObjectV2 >> commit: message [
+	"commit the repository associated with receiver ..."
+
+	self _projectRepository canCommit
+		ifFalse: [ 
+			| msg |
+			msg := 'repository for project ' , self projectAlias printString
+				, ' does not support commit operations.'.
+			self inform: msg.
+			^ msg ].
+	^ self _projectRepository doCommit: message
+]
+
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> componentsRoot [
 	^ self repositoryRoot / self _projectSpecification componentsPath
