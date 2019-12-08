@@ -3,7 +3,7 @@
 Rowan is a new project/package manager for Smalltalk that supports FileTree and Tonel repositories.
  
 ## GemStone Installation
-### GemStone 3.2.15 or 3.5.0
+### GemStone 3.2.15 
 
 #### Prerequisites
 Installation instructions assume that you have registered SSH Keys with your GitHub account. See [Connecting to GitHub with SSH](https://help.github.com/articles/connecting-to-github-with-ssh/) for more information.
@@ -30,17 +30,12 @@ If you have already performed the clone, and are re-installing Rowan in a new Ge
 Start topaz, and enter the GemStone parameters for login. If you are new to GemStone, see the [Topaz User's Guide](https://downloads.gemtalksystems.com/docs/GemStone64/3.3.x/GS64-Topaz-3.3/1-Tutorial.htm#pgfId-1069219)
 
 The script logs in as SystemUser and DataCurator.  Ensure that the passwords for these users are set to the default.
-For GemStone 3.2.15 use this script:
+
 ```
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install.tpz
 ```
-For GemStone 3.5.0 use this script
-```
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_2.tpz
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3.tpz
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_4.tpz
-```
+
+
 
 ## Acknowledgements
 
@@ -48,4 +43,3 @@ Some portions of this reference implementation came from Pharo. Notably, the URL
 In addition, some scattered methods also came from Pharo.
 
 Thanks to the Pharo project and community for providing such an excellent base.
-
