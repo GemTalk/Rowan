@@ -1,11 +1,6 @@
 Extension { #name : 'RwResolvedProjectV2' }
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwResolvedProjectV2 >> compareAgainstBase: aDefinition [
-	^ self _projectDefinition compareAgainstBase: aDefinition _projectDefinition
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
 RwResolvedProjectV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 	^ self _loadSpecification gemstoneDefaultSymbolDictNameForUser: userId
 ]
