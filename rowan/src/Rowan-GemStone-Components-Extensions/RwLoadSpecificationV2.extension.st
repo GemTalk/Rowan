@@ -1,9 +1,14 @@
 Extension { #name : 'RwLoadSpecificationV2' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwLoadSpecificationV2 class >> _gemstoneAllUsersName [
+	^ 'allusers'
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwLoadSpecificationV2 >> _gemstoneAllUsersName [
 
-	^ 'allusers'
+	^ self class _gemstoneAllUsersName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

@@ -350,55 +350,25 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: index
 RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock [
 	"Create a second set of specs/components in an existing branch"
 
-	| repositoryDefinition projectDefinition |
-	projectDefinition := loadSpecification resolveStrict.
+	| resolvedRepository resolvedProject |
+	resolvedProject := loadSpecification resolveStrict.
 
-	repositoryDefinition := loadSpecification repositoryDefinition.
-	(repositoryDefinition branches includes: branchName)
+	resolvedRepository := resolvedProject repository.
+	(resolvedRepository branches includes: branchName)
 		ifTrue: [ 
 			"branch exists, so we'll check it out and make the necessary mods"
-			repositoryDefinition checkout: branchName.
-			repositoryDefinition pull: repositoryDefinition remote branch: branchName ]
+			resolvedRepository checkout: branchName.
+			resolvedRepository pull: resolvedRepository remote branch: branchName ]
 		ifFalse: [ self error: 'Expected branch ' , branchName printString , ' to already exist' ].
 
-	loadSpecification revision: branchName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	addDefinitionsBlock value: projectDefinition.
+	resolvedProject revision: branchName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	addDefinitionsBlock value: resolvedProject.
 
-	projectDefinition exportComponents.	"write the component directory structure"
-	loadSpecification export.
+	resolvedProject
+		exportComponents;
+		exportLoadSpecification.	"write the component and load spec directory structure"
 
-	^ repositoryDefinition
-]
-
-{ #category : 'private' }
-RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock [
-	"Create a second set of specs/components in an existing branch"
-
-	| repositoryDefinition projectDefinition |
-	projectDefinition := loadSpecification resolveStrict.
-
-	repositoryDefinition := loadSpecification repositoryDefinition.
-	(repositoryDefinition branches includes: specName)
-		ifTrue: [ 
-			"branch exists, so we'll check it out and make the necessary mods"
-			repositoryDefinition checkout: specName.
-			repositoryDefinition pull: repositoryDefinition remote branch: specName ]
-		ifFalse: [ 
-			"create the branch"
-			repositoryDefinition createBranch: specName ].
-
-	loadSpecification revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	addDefinitionsBlock value: projectDefinition.
-
-	loadSpecification projectRoots
-		do: [ :rootDir | 
-			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
-			rootDir ensureDeleteAll ].
-
-	projectDefinition export.	"write the rowan directory structure"
-	loadSpecification export.
-
-	^ repositoryDefinition
+	^ resolvedRepository
 ]
 
 { #category : 'private' }
@@ -624,7 +594,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 	"The method is NOT idempotent with respect to the branches involved. It must be run whenever genSpec_0004 is run.
 		Right now it is called from genSpec_0004_b, so explicit top-level call is not necessary."
 
-	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom branchName |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom branchName |
 	postfix := '0004_b'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
@@ -645,9 +615,12 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core3'};
+		groupNames:
+				{'core'.
+					'tests'};
 		yourself.
 
-	repositoryDefinition := self
+	resolvedRepository := self
 		_genSpecFor_004_b: specName
 		branchName: branchName
 		loadSpecification: loadSpecification
@@ -656,8 +629,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 	self
 		_finishCommitAndPush: branchName
 		indexCard: indexCard
-		loadSpecification: loadSpecification
-		repositoryDefinition: repositoryDefinition
+		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
 ]
 
@@ -691,7 +663,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
 	postfix := '0004'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
@@ -710,9 +682,12 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core1'};
+		groupNames:
+				{'core'.
+					'tests'};
 		yourself.
 
-	repositoryDefinition := self
+	resolvedRepository := self
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :projectDefinition | self _addDefinitionsFor_0004: projectDefinition ].
@@ -720,8 +695,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
-		loadSpecification: loadSpecification
-		repositoryDefinition: repositoryDefinition
+		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage.
 
 	self genSpec_0004_b: commitMessage , '_b'

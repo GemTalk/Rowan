@@ -2,8 +2,7 @@ Extension { #name : 'RwProjectDefinitionV2' }
 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> _gemstoneAllUsersName [
-
-	^ self projectSpecification _gemstoneAllUsersName
+	^ RwLoadSpecificationV2 _gemstoneAllUsersName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
