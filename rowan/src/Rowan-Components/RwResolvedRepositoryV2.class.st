@@ -15,6 +15,11 @@ RwResolvedRepositoryV2 >> checkout: aCommittish [
 ]
 
 { #category : 'repository' }
+RwResolvedRepositoryV2 >> commitId [
+	^ self _projectRepository commitId
+]
+
+{ #category : 'repository' }
 RwResolvedRepositoryV2 >> createBranch: branchName [
 	^ self _projectRepository createBranch: branchName
 ]

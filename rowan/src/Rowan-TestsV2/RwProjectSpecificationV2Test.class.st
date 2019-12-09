@@ -23,13 +23,20 @@ RwProjectSpecificationV2Test >> testBasic [
 
 { #category : 'tests' }
 RwProjectSpecificationV2Test >> testComparison_1 [
-	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy |
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy x |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
 	projectSpecification := RwProjectSpecificationV2 new
 		projectName: projectName;
 		specName: specName;
 		yourself.
+
+	self
+		assert:
+			(x := RwProjectSpecificationV2 allInstVarNames)
+				=
+					#(#'specName' #'projectName' #'projectSpecPath' #'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'comment' #'repoType' #'loadedCommitId').	"If inst vars don't match, copy and hash methods have to change"
+
 	stonString := STON toStringPretty: projectSpecification.
 
 	projectSpecCopy := projectSpecification copy.

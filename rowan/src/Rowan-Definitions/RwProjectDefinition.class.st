@@ -64,6 +64,11 @@ RwProjectDefinition >> _loadTool [
 ]
 
 { #category : 'accessing' }
+RwProjectDefinition >> _projectDefinition [
+	^ self
+]
+
+{ #category : 'accessing' }
 RwProjectDefinition >> addOrUpdatePackage: aPackageDefinition [
 
 	| key |

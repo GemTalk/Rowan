@@ -109,6 +109,16 @@ RwGitRepositoryDefinitionV2 >> clone [
 		cloneRepository: self
 ]
 
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> commitId [
+
+	^ [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			'' ].
+]
+
 { #category : 'loading' }
 RwGitRepositoryDefinitionV2 >> commitLog: logLimit [
 

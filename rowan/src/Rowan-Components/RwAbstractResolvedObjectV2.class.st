@@ -110,6 +110,11 @@ RwAbstractResolvedObjectV2 >> _validate [
 	^ true
 ]
 
+{ #category : 'testing' }
+RwAbstractResolvedObjectV2 >> canCommit [
+	^ self _projectRepository canCommit
+]
+
 { #category : 'project definition' }
 RwAbstractResolvedObjectV2 >> commit: message [
 	"commit the repository associated with receiver ..."

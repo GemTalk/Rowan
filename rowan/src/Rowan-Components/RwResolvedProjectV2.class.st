@@ -41,6 +41,12 @@ RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 	^ true
 ]
 
+{ #category : 'private' }
+RwResolvedProjectV2 >> _loadTool [
+
+	^ self _projectDefinition _loadTool
+]
+
 { #category : 'visiting' }
 RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitResolvedProjectV2: self
@@ -109,6 +115,17 @@ RwResolvedProjectV2 >> componentNames: anArray [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> components [
 	^ self _projectDefinition components
+]
+
+{ #category : 'copying' }
+RwResolvedProjectV2 >> copyForLoadedProject [
+	"project definition is not part of the copy for loaded projects"
+
+	^ RwResolvedProjectV2 new
+		_projectRepository: projectRepository copy;
+		_loadSpecification: loadSpecification copy;
+		_projectSpecification: projectSpecification copy;
+		yourself
 ]
 
 { #category : 'load specification' }
@@ -196,6 +213,11 @@ RwResolvedProjectV2 >> initialize [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> isEmpty [
+	^ self _projectDefinition isEmpty
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> key [
 	^ self projectAlias
 ]
@@ -205,6 +227,14 @@ RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
 
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> name [
+	"sender in loader code that's shared between RwComponentProjectDefinition and RwResolvedProjectV2, 
+		should use projectAlias, but need to wait until we're no longer using RwComponentProjectDefinition"
+
+	^ self projectAlias
 ]
 
 { #category : 'project definition' }
@@ -240,6 +270,11 @@ RwResolvedProjectV2 >> packageNames [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packages [
 	^ self _projectDefinition packages
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> packages: aPackageDictionary [
+	^ self _projectDefinition packages: aPackageDictionary
 ]
 
 { #category : 'accessing' }
@@ -318,6 +353,11 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 		visit: self
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removePackageNamed: packageName [
+	^ self _projectDefinition removePackageNamed: packageName
+]
+
 { #category : 'project specification' }
 RwResolvedProjectV2 >> repoType: aSymbol [
 	self _projectSpecification repoType: aSymbol
@@ -345,4 +385,18 @@ RwResolvedProjectV2 >> revision [
 { #category : 'load specification' }
 RwResolvedProjectV2 >> revision: aRevisionString [
 	^ self _loadSpecification revision: aRevisionString
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> symbolDictNameForPackageNamed: aPackageName [
+	"sender in loader code that's shared between RwComponentProjectDefinition and RwResolvedProjectV2, 
+		should use gemstoneSymbolDictNameForPackageNamed:, but need to wait until we're no longer 
+		using RwComponentProjectDefinition"
+
+	^ self gemstoneSymbolDictNameForPackageNamed: aPackageName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> updateLoadedCommitId [
+	self _projectSpecification loadedCommitId: self _projectRepository commitId
 ]

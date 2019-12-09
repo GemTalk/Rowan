@@ -19,6 +19,11 @@ RwAbstractProjectDefinitionV2 >> _addPackage: aPackageDefinition [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> _projectDefinition [
+	^ self
+]
+
+{ #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> addOrUpdatePackage: aPackageDefinition [
 
 	| key |

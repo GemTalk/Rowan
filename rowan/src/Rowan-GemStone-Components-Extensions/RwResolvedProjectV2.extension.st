@@ -1,6 +1,11 @@
 Extension { #name : 'RwResolvedProjectV2' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwResolvedProjectV2 >> asLoadedSymbolDictProject [
+	^ RwGsLoadedSymbolDictResolvedProjectV2 newForResolvedProject: self
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwResolvedProjectV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 	^ self _loadSpecification gemstoneDefaultSymbolDictNameForUser: userId
 ]
@@ -35,4 +40,10 @@ RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUse
 		ifAbsent: [ 
 			"no entry for this package, use the defaultSymbolDictName"
 			^ self gemstoneDefaultSymbolDictNameForUser: userId ]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwResolvedProjectV2 >> methodEnvForPackageNamed: packageName [
+
+	^self _loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 ]

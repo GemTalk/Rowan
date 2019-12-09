@@ -53,6 +53,11 @@ RwDiskRepositoryDefinitionV2 >> clone [
 ]
 
 { #category : 'accessing' }
+RwDiskRepositoryDefinitionV2 >> commitId [
+	^ ''
+]
+
+{ #category : 'accessing' }
 RwDiskRepositoryDefinitionV2 >> commitLog: logLimit [
 
 	^ ''

@@ -12,7 +12,8 @@ Class {
 		'packageFormat',
 		'packageConvention',
 		'comment',
-		'repoType'
+		'repoType',
+		'loadedCommitId'
 	],
 	#category : 'Rowan-Components'
 }
@@ -71,7 +72,10 @@ RwProjectSpecificationV2 >> = anObject [
 																and: [ 
 																	lazyEqual := self _repoType = anObject _repoType
 																		or: [ self repoType = anObject repoType ].
-																	lazyEqual and: [ self comment = anObject comment ] ] ] ] ] ] ] ] ]
+																	lazyEqual
+																		and: [ 
+																			self comment = anObject comment
+																				and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'converting' }
@@ -132,6 +136,7 @@ RwProjectSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self comment hash.
 	hashValue := hashValue bitXor: self packageFormat hash.
 	hashValue := hashValue bitXor: self packageConvention hash.
+	hashValue := hashValue bitXor: self loadedCommitId hash.
 	^ hashValue
 ]
 
@@ -152,7 +157,17 @@ RwProjectSpecificationV2 >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	repoType := nil
+	loadedCommitId := repoType := nil
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> loadedCommitId [
+	^ loadedCommitId
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> loadedCommitId: aCommitId [
+	loadedCommitId := aCommitId
 ]
 
 { #category : 'accessing' }

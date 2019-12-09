@@ -121,7 +121,7 @@ RwResolvedProjectV2Test >> testBasicResolve_git [
 
 { #category : 'tests' }
 RwResolvedProjectV2Test >> testCreateNewDiskProject [
-	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject |
+	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject resolvedRepository resolvedRepositoryCopy x |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -151,12 +151,23 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject [
 		interactionBlock: [ :inform | informed := true ].
 	self assert: informed description: 'expected an inform'.
 
-	self _validateCanonicalRowanSample9ProjectFor: resolvedProject
+	self _validateCanonicalRowanSample9ProjectFor: resolvedProject.
+
+	self
+		assert:
+			(x := RwDiskRepositoryDefinitionV2 allInstVarNames)
+				= #(#'properties' #'projectsHome' #'repositoryRoot' #'repositoryUrl').	"If inst vars don't match, copy and hash methods have to change"
+
+	resolvedRepository := resolvedProject _projectRepository.
+	resolvedRepositoryCopy := resolvedRepository copy.
+
+	self assert: resolvedRepository = resolvedRepositoryCopy.
+	self assert: resolvedRepository ~~ resolvedRepositoryCopy
 ]
 
 { #category : 'tests' }
 RwResolvedProjectV2Test >> testCreateNewGitProject [
-	| projectName projectAlias projectSpecification stonString resolvedProject projectsHome projectRoot |
+	| projectName projectAlias projectSpecification stonString resolvedProject projectsHome projectRoot resolvedRepository resolvedRepositoryCopy x |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -184,8 +195,19 @@ RwResolvedProjectV2Test >> testCreateNewGitProject [
 	self _validateCanonicalRowanSample9ProjectFor: resolvedProject.
 	self
 		assert:
-			(Rowan projectTools git
-				gitPresentIn: resolvedProject repositoryRoot pathString)
+			(Rowan projectTools git gitPresentIn: resolvedProject repositoryRoot pathString).
+
+	self
+		assert:
+			(x := RwGitRepositoryDefinitionV2 allInstVarNames)
+				=
+					#(#'properties' #'projectsHome' #'repositoryRoot' #'repositoryUrl' #'remote' #'remoteUrl' #'committish').	"If inst vars don't match, copy and hash methods have to change"
+
+	resolvedRepository := resolvedProject _projectRepository.
+	resolvedRepositoryCopy := resolvedRepository copy.
+
+	self assert: resolvedRepository = resolvedRepositoryCopy.
+	self assert: resolvedRepository ~~ resolvedRepositoryCopy
 ]
 
 { #category : 'tests' }

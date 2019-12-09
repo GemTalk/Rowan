@@ -73,9 +73,16 @@ RwLoadSpecificationV2Test >> testBasic_3 [
 
 { #category : 'tests' }
 RwLoadSpecificationV2Test >> testComparison_1 [
-	| projectName loadSpecification specName projectSpecCopy stonString stonStringCopy |
+	| projectName loadSpecification specName projectSpecCopy stonString stonStringCopy x |
 	projectName := 'RowanSample9'.
 	specName := projectName , 'Core'.
+
+	self
+		assert:
+			(x := RwLoadSpecificationV2 allInstVarNames)
+				=
+					#(#'specName' #'projectName' #'projectAlias' #'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #'revision' #'projectSpecFile' #'componentNames' #'groupNames' #'platformProperties' #'comment' #'projectsHome' #'repositoryResolutionPolicy').	"If inst vars don't match, copy and hash methods have to change"
+
 	loadSpecification := RwLoadSpecificationV2 new
 		projectName: projectName;
 		specName: specName;

@@ -151,7 +151,7 @@ RwAbstractV2Test >> _specListProjectNames [
 
 { #category : 'private' }
 RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
-	| repositoryRoot projectName x |
+	| repositoryRoot projectName |
 	projectName := resolvedProject projectName.
 	repositoryRoot := resolvedProject repositoryRoot.
 	{repositoryRoot.
