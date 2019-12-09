@@ -128,3 +128,11 @@ RwRepositoryComponentProjectReaderVisitor >> visitProjectReferenceDefinition: aR
 	self currentProjectReferenceDefinition: aRwProjectReferenceDefinition.
 	self readPackages: aRwProjectReferenceDefinition packagesRoot
 ]
+
+{ #category : 'visiting' }
+RwRepositoryComponentProjectReaderVisitor >> visitResolvedProjectV2: aRwResolvedProjectV2 [
+
+	self currentProjectDefinition: aRwResolvedProjectV2.
+	aRwResolvedProjectV2 _projectDefinition packages: Dictionary new.
+	self readPackages: aRwResolvedProjectV2 packagesRoot
+]

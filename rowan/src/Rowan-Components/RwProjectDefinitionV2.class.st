@@ -495,20 +495,6 @@ RwProjectDefinitionV2 >> readPackageNames: packageNames [
 		visit: self.
 ]
 
-{ #category : 'actions' }
-RwProjectDefinitionV2 >> readPackageNames: packageNames format: format [
-	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
-
-	| visitorClass |
-	packages := Dictionary new.
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
-		packageNames: packageNames;
-		visit: self
-]
-
 { #category : 'tool api' }
 RwProjectDefinitionV2 >> readProjectSet [
 

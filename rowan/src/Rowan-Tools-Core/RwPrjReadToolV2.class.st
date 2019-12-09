@@ -7,7 +7,7 @@ Class {
 { #category : 'private' }
 RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
 	| projectName componentDirectory projectsDirectory visitor |
-	projectName := resolvedProject projectName.
+	projectName := resolvedProject projectAlias.
 	componentDirectory := resolvedProject componentsRoot.
 	componentDirectory exists
 		ifFalse: [ 

@@ -229,9 +229,7 @@ RwLoadSpecificationV2 >> hash [
 RwLoadSpecificationV2 >> initialize [
 	super initialize.
 	componentNames := {}.
-	groupNames := {'core'.
-	'tests'.
-	'deprecated'}.
+	groupNames := {'core'}.
 	projectSpecFile := 'rowan/project.ston'.
 	comment := ''
 ]

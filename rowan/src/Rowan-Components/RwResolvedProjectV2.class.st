@@ -41,6 +41,11 @@ RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 	^ true
 ]
 
+{ #category : 'visiting' }
+RwResolvedProjectV2 >> acceptVisitor: aVisitor [
+	^ aVisitor visitResolvedProjectV2: self
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	^ self _projectDefinition
@@ -276,8 +281,7 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	| projectSetDefinition |
-	projectSetDefinition := Rowan projectTools readV2
+	Rowan projectTools readV2
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
 		groupNames: groupNames
@@ -285,7 +289,7 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> readPackageNames: packageNames [
-	| format |
+	| format visitorClass |
 	format := self
 		packageFormatIfAbsent: [ 
 			| formatFromDisk |
@@ -295,8 +299,13 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 				ifAbsent: [ 'tonel' ].
 			self packageFormat: formatFromDisk.
 			formatFromDisk ].
-
-	^ self _projectDefinition readPackageNames: packageNames format: format
+	self _projectDefinition packages: Dictionary new.
+	visitorClass := format = 'tonel'
+		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
+		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+	^ visitorClass new
+		packageNames: packageNames;
+		visit: self
 ]
 
 { #category : 'project specification' }

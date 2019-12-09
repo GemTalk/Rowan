@@ -536,7 +536,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
 	postfix := '0002'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
@@ -555,9 +555,12 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
 		yourself.
 
-	repositoryDefinition := self
+	resolvedRepository := self
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :projectDefinition | self _addDefinitionsFor_0002: projectDefinition ].
@@ -566,8 +569,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		_finishCommitAndPush: specName
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
-		loadSpecification: loadSpecification
-		repositoryDefinition: repositoryDefinition
+		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
 ]
 
@@ -578,7 +580,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification repositoryDefinition specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
 	postfix := '0003'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0002'.
@@ -597,9 +599,12 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
 		yourself.
 
-	repositoryDefinition := self
+	resolvedRepository := self
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :projectDefinition | self _addDefinitionsFor_0003: projectDefinition ].
@@ -608,8 +613,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 		_finishCommitAndPush: specName
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
-		loadSpecification: loadSpecification
-		repositoryDefinition: repositoryDefinition
+		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
 ]
 
