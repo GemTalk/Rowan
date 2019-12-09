@@ -190,6 +190,11 @@ RwResolvedProjectV2 >> initialize [
 	projectDefinition := RwProjectDefinitionV2 new
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> key [
+	^ self projectAlias
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
@@ -208,6 +213,16 @@ RwResolvedProjectV2 >> packageFormat [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> packageFormat: aString [
+	^ self _projectSpecification packageFormat: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> packageFormatIfAbsent: absentBlock [
+	^ self _projectSpecification packageFormatIfAbsent: absentBlock
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> packageNamed: aString [
 	^ self _projectDefinition packageNamed: aString
 ]
@@ -220,6 +235,11 @@ RwResolvedProjectV2 >> packageNames [
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectAlias: aString [
 	self _loadSpecification projectAlias: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> projectDefinitionSourceProperty: sourceKeyOrNi [
+	self _projectDefinition projectDefinitionSourceProperty: sourceKeyOrNi
 ]
 
 { #category : 'accessing' }
@@ -260,8 +280,23 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 	projectSetDefinition := Rowan projectTools readV2
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
-		groupNames: groupNames.
-	projectDefinition := projectSetDefinition projectNamed: self projectName
+		groupNames: groupNames
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> readPackageNames: packageNames [
+	| format |
+	format := self
+		packageFormatIfAbsent: [ 
+			| formatFromDisk |
+			formatFromDisk := (RwAbstractReaderWriterVisitor
+				_repositoryPropertyDictFor: self packagesRoot)
+				at: #'format'
+				ifAbsent: [ 'tonel' ].
+			self packageFormat: formatFromDisk.
+			formatFromDisk ].
+
+	^ self _projectDefinition readPackageNames: packageNames format: format
 ]
 
 { #category : 'project specification' }

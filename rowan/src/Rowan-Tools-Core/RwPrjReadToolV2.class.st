@@ -103,11 +103,11 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 			cn := nextDefArray at: 2.
 			gn := nextDefArray at: 3.
 			visitor := self
-				readComponentsForResolvedProject:  rp
+				readComponentsForResolvedProject: rp
 				withComponentNames: cn
 				groupNames: gn
 				platformConfigurationAttributes: platformConfigurationAttributes.
-			rp projectDefinition
+			rp
 				projectDefinitionSourceProperty:
 					RwLoadedProject _projectDiskDefinitionSourceValue.
 			visitor visitedComponents
@@ -137,5 +137,4 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 			theResolvedProject readPackageNames: theResolvedProject packageNames.
 			projectSetDefinition addProject: theResolvedProject ].
 	^ projectSetDefinition
-
 ]

@@ -133,6 +133,11 @@ RwAbstractResolvedObjectV2 >> componentsRoot [
 RwAbstractResolvedObjectV2 >> initialize [
 ]
 
+{ #category : 'testing' }
+RwAbstractResolvedObjectV2 >> isStrict [
+	^ self _loadSpecification isStrict
+]
+
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> loadSpecification [
 	^ RwResolvedLoadSpecificationV2 new
