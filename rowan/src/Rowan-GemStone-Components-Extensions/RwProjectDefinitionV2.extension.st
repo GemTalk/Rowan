@@ -106,20 +106,7 @@ RwProjectDefinitionV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPac
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> methodEnvForPackageNamed: packageName [
-
-	^self projectRef methodEnvForPackageNamed: packageName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> symbolDictNameForPackageNamed: packageName [
-	^ self
-		symbolDictNameForPackageNamed: packageName
-		forUser: Rowan image currentUserId
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> symbolDictNameForPackageNamed: packageName forUser: userId [
+RwProjectDefinitionV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock [
 	self components
 		keysAndValuesDo: [ :componentName :component | 
 			(component packageNames includes: packageName)
@@ -133,20 +120,18 @@ RwProjectDefinitionV2 >> symbolDictNameForPackageNamed: packageName forUser: use
 							(component
 								conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
 								at: #'packageNameToPlatformPropertiesMap'
-								ifAbsent: [ 
-									"no entry for this package, use the defaultSymbolDictName"
-									^ self gemstoneDefaultSymbolDictNameForUser: userId ] ].
+								ifAbsent: absentBlock ].
 					packagePropertiesMap := userIdPropertiesMap
 						at: packageName
-						ifAbsent: [ 
-							"no entry for this package, use the defaultSymbolDictName"
-							^ self gemstoneDefaultSymbolDictNameForUser: userId ].
-					^ packagePropertiesMap
-						at: 'symbolDictName'
-						ifAbsent: [ 
-							"no entry for this package, use the defaultSymbolDictName"
-							^ self gemstoneDefaultSymbolDictNameForUser: userId ] ] ].
+						ifAbsent: absentBlock.
+					^ packagePropertiesMap at: 'symbolDictName' ifAbsent: absentBlock ] ].
 	self error: 'No package ' , packageName , ' found in the current project.'
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectDefinitionV2 >> methodEnvForPackageNamed: packageName [
+
+	^self projectRef methodEnvForPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

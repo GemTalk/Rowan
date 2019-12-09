@@ -49,6 +49,60 @@ RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: c
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _loadSpecNamed: specName [
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
+		we'll use `fetch` and `pull` to update the repo and branches as needed"
+
+	"it is assumed that the load spec on the master branch and the load spec on the branch are the same"
+
+	| loadSpecification resolvedProject resolvedRepository dict theSpec |
+	loadSpecification := self _rowanSample9_0000_load_spec.
+	theSpec := (SessionTemps current
+		at: self _loadSpecSessionCacheKey
+		ifAbsent: [  ])
+		ifNotNil: [ :specsDict | specsDict at: specName ]
+		ifNil: [ 
+			"The first time we access the repository in this session, we'll refresh the 
+				master branch and cache the session specs"
+			loadSpecification revision: 'master'.
+			resolvedProject := loadSpecification resolveStrict.
+
+			resolvedRepository := resolvedProject repository.
+			resolvedRepository
+				fetch;
+				pull: resolvedRepository remote branch: 'master';
+				yourself.
+
+			dict := SessionTemps current
+				at: self _loadSpecSessionCacheKey
+				ifAbsentPut: [ Dictionary new ].
+			(resolvedProject repositoryRoot / 'specs') files
+				do: [ :file | 
+					file
+						readStreamDo: [ :fileStream | 
+							| stream spec |
+							stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+							spec := STON fromStream: stream.
+							dict at: spec specName put: spec ] ].
+			dict at: specName ].
+	theSpec := theSpec copy.
+	theSpec
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+	resolvedProject := theSpec resolveStrict.	"When we reference a spec, we'll checkout the branch and refresh from remote, as a courtesy"
+	resolvedRepository := resolvedProject repository.
+	resolvedRepository
+		fetch;
+		pull: resolvedRepository remote branch: theSpec revision;
+		yourself.
+	^ theSpec copy
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _loadSpecSessionCacheKey [
 	^ self class _loadSpecSessionCacheKey
 ]
@@ -276,21 +330,21 @@ RwRowanSample9Test >> testIssue_446 [
 		loads a different component ... needed to consolidate spec_004 
 		creation"
 
-	| projectSpec1 projectSpec2 projectName projectsHome resolvedProject stonString |
+	| project1 project2 projectName projectsHome resolvedProject stonString |
 	projectName := 'RowanSample9_testbed'.
 	projectsHome := self _testRowanProjectsSandbox.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-	projectSpec1 := RwProjectSpecificationV2 new
+	project1 := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		repoType: #'git';
 		yourself.
 
-	resolvedProject := projectSpec1 resolve.
+	resolvedProject := project1 resolve.
 
 	(resolvedProject
 		addComponentNamed: 'Core1'
@@ -315,7 +369,7 @@ RwRowanSample9Test >> testIssue_446 [
 		componentNames: #('Core1');
 		yourself.	"????"
 
-	projectSpec2 := projectSpec1 copy
+	project2 := RwResolvedProjectV2 new
 		componentNames:  #('Core2');
 		yourself.	"????"
 
@@ -330,27 +384,27 @@ RwRowanSample9Test >> testIssue_527 [
 		self _clearLoadSpecSessionCache
 	"
 
-	| projectSpec symDictName className projectName |
-	projectSpec := self _projectSpecNamed: 'spec_0001'.
+	| loadSpec symDictName className projectName |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
-	(Rowan image loadedProjectNamed: projectSpec projectAlias ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: loadSpec projectAlias ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-	projectName := projectSpec projectAlias.
+	projectName := loadSpec projectAlias.
 	className := projectName , 'Class1'.
 
 	self
-		_issue_527_resolve_load_validate: projectSpec
+		_issue_527_resolve_load_validate: loadSpec
 		className: className
 		expectedSymDictName: self _sampleSymbolDictionaryName1.
 
 	symDictName := self _sampleSymbolDictionaryName2.
-	projectSpec
+	loadSpec
 		gemstoneSetDefaultSymbolDictNameForUser: Rowan image currentUserId
 		to: symDictName.
 
 	self
-		_issue_527_resolve_load_validate: projectSpec
+		_issue_527_resolve_load_validate: loadSpec
 		className: className
 		expectedSymDictName: self _sampleSymbolDictionaryName2
 ]

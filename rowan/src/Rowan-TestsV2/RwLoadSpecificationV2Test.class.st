@@ -467,7 +467,7 @@ RwLoadSpecificationV2Test >> testSpec_0001_B [
 
 	"testSpec_0001_A behavies correctly"
 
-	| rowanProject fileUrl loadSpecification resolvedProject repositoryDefinition oldPolicy |
+	| rowanProject fileUrl loadSpecification resolvedProject resolvedRepository oldPolicy |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	fileUrl := 'file:' , rowanProject repositoryRootPath
 		, '/test/specs/RowanSample9_0000.ston'.
@@ -481,8 +481,8 @@ RwLoadSpecificationV2Test >> testSpec_0001_B [
 
 	resolvedProject := loadSpecification resolve.
 
-	repositoryDefinition := loadSpecification repositoryDefinition.
-	repositoryDefinition checkout: 'master'.
+	resolvedRepository := resolvedProject repository.
+	resolvedRepository checkout: 'master'.
 
 	oldPolicy := loadSpecification repositoryResolutionPolicy.
 	[ 

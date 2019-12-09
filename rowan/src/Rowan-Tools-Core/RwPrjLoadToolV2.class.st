@@ -68,7 +68,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 								freshly read from disk"
 							packageDefinition
 								gs_symbolDictionary:
-									(projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
+									(projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) ] ] ].
 	diff := projectSetDefinitionToLoad
 		compareAgainstBase: loadedProjectDefinitionSet.
 	diff isEmpty

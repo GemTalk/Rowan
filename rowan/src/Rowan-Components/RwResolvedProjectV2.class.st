@@ -237,14 +237,24 @@ RwResolvedProjectV2 >> packageNames [
 	^ self _projectDefinition packageNames
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> packages [
+	^ self _projectDefinition packages
+]
+
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectAlias: aString [
 	self _loadSpecification projectAlias: aString
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> projectDefinitionSourceProperty: sourceKeyOrNi [
-	self _projectDefinition projectDefinitionSourceProperty: sourceKeyOrNi
+RwResolvedProjectV2 >> projectDefinitionSourceProperty [
+	^ self _projectDefinition projectDefinitionSourceProperty
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> projectDefinitionSourceProperty: sourceKeyOrNil [
+	self _projectDefinition projectDefinitionSourceProperty: sourceKeyOrNil
 ]
 
 { #category : 'accessing' }

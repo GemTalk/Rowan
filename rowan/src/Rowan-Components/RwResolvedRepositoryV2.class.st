@@ -20,6 +20,11 @@ RwResolvedRepositoryV2 >> createBranch: branchName [
 ]
 
 { #category : 'repository' }
+RwResolvedRepositoryV2 >> fetch [
+	^ self _projectRepository fetch
+]
+
+{ #category : 'repository' }
 RwResolvedRepositoryV2 >> pull: remoteName branch: branchName [
 	^ self _projectRepository pull: remoteName branch: branchName
 ]
