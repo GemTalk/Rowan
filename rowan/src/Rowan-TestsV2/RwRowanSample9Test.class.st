@@ -183,11 +183,18 @@ RwRowanSample9Test >> _specListProjectNames [
 
 { #category : 'private' }
 RwRowanSample9Test >> _standard_resolve_load_validate: projectSpec [
-	| resolvedProject loadedProjects project testResult loadedProjectDefinition |
+	| resolvedProject loadedProjects |
 
 "resolve/load"
 	resolvedProject := projectSpec resolve.
 	loadedProjects := resolvedProject load.
+
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects [
+	| project testResult loadedProjectDefinition |
 
 "validate"
 	self assert: loadedProjects size = 1.
@@ -265,61 +272,6 @@ RwRowanSample9Test >> testIndexCards [
 		collect: [ :projectSpec | 
 			projectSpec projectsHome: self _testRowanProjectsSandbox.
 			STON toStringPretty: projectSpec resolve ]
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue_230 [
-	"https://github.com/dalehenrich/Rowan/issues/230"
-
-	"not getting the same error the RowanSample4Test>>testIssu230 is generating ... back to the drawing board"
-
-	| loadSpec projectName resolvedProject loadedProjects project testResult 
-		packageName1 packageName2 |
-
-	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
-	projectName := loadSpec projectAlias.
-
-	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
-		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
-	packageName1 := projectName , '-' , 'Core'.
-	packageName2 := projectName , '-' , 'Extensions'.
-
-"resolve primer project"
-	resolvedProject := loadSpec resolve.
-	resolvedProject
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
-			forPackageNamed: packageName1;
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
-			forPackageNamed: packageName2;
-		yourself.
-
-"load primer project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
-
-	loadSpec := self _loadSpecNamed: 'spec_0002'.	"basic project (remove instancesInvariant option and move class to default symbol dictionary: self _sampleSymbolDictionaryName1)"
-
-"resolve/load"
-	resolvedProject := loadSpec resolve.
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
 ]
 
 { #category : 'tests' }
@@ -435,6 +387,63 @@ RwRowanSample9Test >> testIssue_446 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue_504 [
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
+
+	| loadSpec projectName resolvedProject loadedProjects project testResult packageName1 packageName2 |
+
+	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+
+	packageName1 := projectName , '-' , 'Core1'.
+	packageName2 := projectName , '-' , 'Core2'.
+	resolvedProject
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Core';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Extensions';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: projectName , '-' , 'GemStone';
+		yourself.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue_527 [
 	"
 		self _clearLoadSpecSessionCache
@@ -518,34 +527,111 @@ RwRowanSample9Test >> testIssue_532 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testRowanSample4_basic [
+RwRowanSample9Test >> testIssue_spec_002_to_003 [
+	"https://github.com/dalehenrich/Rowan/issues/230"
 
-	| loadSpec projectName  |
+	"Passing variation"
+
+	| loadSpec projectName resolvedProject loadedProjects project testResult 
+		packageName1 packageName2 |
+
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
+		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testRowanSample4_basic_230 [
+
+	| loadSpec projectName resolvedProject  loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
 	projectName := loadSpec projectAlias.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-"resolve/load/validate"
-	self _standard_resolve_load_validate: loadSpec.
+"resolve/load"
+	resolvedProject := loadSpec resolve.
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 
 "unload project"
 	(Rowan projectNamed: projectName) unload
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testRowanSample4_primer [
+RwRowanSample9Test >> testRowanSample4_primer_230 [
 
-	| loadSpec projectName |
-	loadSpec := self _loadSpecNamed: 'spec_0003'.
+	| loadSpec projectName resolvedProject packageName1 packageName2 loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0005'.
 
 	projectName := loadSpec projectAlias.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-"resolve/load/validate"
-	self _standard_resolve_load_validate: loadSpec.
+	packageName1 := projectName , '-' , 'Core1'.
+	packageName2 := projectName , '-' , 'Core2'.
+
+"resolve/load"
+	resolvedProject := loadSpec resolve.
+false ifTrue: [ 
+	resolvedProject
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName3
+			forPackageNamed: packageName2;
+		yourself.
+].
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 
 "unload project"
 	(Rowan projectNamed: projectName) unload

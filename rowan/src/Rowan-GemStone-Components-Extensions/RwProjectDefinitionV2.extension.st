@@ -94,8 +94,8 @@ RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNam
 						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
 						andPackageName: packageName
 						setSymbolDictNameTo: symbolDictName.
-					^ true ] ].
-	^ false
+					^ self ] ].
+	self error: 'No package named ', packageName printString, ' found.'.
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
