@@ -595,7 +595,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		index: 2
 		derivedFrom: derivedFrom
 		comment: 'RowanSampe9Class1 has extension methods')
-		rowanIssues: #(230 254);
+		rowanIssues: #( 254 504);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -799,7 +799,7 @@ RwTestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 		index: 1
 		derivedFrom: derivedFrom
 		comment: 'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString, ' and classes in Core2 are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName3 printString, ' and classes in Tests are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
-		rowanIssues: #( 230);
+		rowanIssues: #( 504);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;

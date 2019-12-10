@@ -585,7 +585,7 @@ RwRowanSample9Test >> testIssue_spec_002_to_003 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testRowanSample4_basic_230 [
+RwRowanSample9Test >> testRowanSample4_basic_504 [
 
 	| loadSpec projectName resolvedProject  loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
@@ -598,6 +598,15 @@ RwRowanSample9Test >> testRowanSample4_basic_230 [
 	resolvedProject := loadSpec resolve.
 	loadedProjects := resolvedProject load.
 
+	resolvedProject
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Core';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Extensions';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: projectName , '-' , 'GemStone';
+		yourself.
+
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 
@@ -606,7 +615,7 @@ RwRowanSample9Test >> testRowanSample4_basic_230 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testRowanSample4_primer_230 [
+RwRowanSample9Test >> testRowanSample4_primer_504 [
 
 	| loadSpec projectName resolvedProject packageName1 packageName2 loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0005'.
@@ -620,14 +629,6 @@ RwRowanSample9Test >> testRowanSample4_primer_230 [
 
 "resolve/load"
 	resolvedProject := loadSpec resolve.
-false ifTrue: [ 
-	resolvedProject
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2
-			forPackageNamed: packageName1;
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName3
-			forPackageNamed: packageName2;
-		yourself.
-].
 	loadedProjects := resolvedProject load.
 
 "validate"
