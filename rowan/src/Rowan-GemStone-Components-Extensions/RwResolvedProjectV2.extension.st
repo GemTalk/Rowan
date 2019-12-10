@@ -47,3 +47,14 @@ RwResolvedProjectV2 >> methodEnvForPackageNamed: packageName [
 
 	^self _loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 ]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwResolvedProjectV2 >> useSessionMethodsForExtensionsForPackageNamed: packageName [
+	"Ignore the package name for now ... will do proper package name lookup when we're ready to support method environments"
+
+	"https://github.com/GemTalk/Rowan/issues/533"
+
+	^ self _loadSpecification
+		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
+			Rowan image currentUserId
+]
