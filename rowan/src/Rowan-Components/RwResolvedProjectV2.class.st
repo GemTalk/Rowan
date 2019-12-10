@@ -229,6 +229,11 @@ RwResolvedProjectV2 >> load [
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> loadedCommitId [
+	^ self _projectSpecification loadedCommitId
+]
+
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> name [
 	"sender in loader code that's shared between RwComponentProjectDefinition and RwResolvedProjectV2, 
@@ -309,6 +314,11 @@ RwResolvedProjectV2 >> projectNames [
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectsHome: aProjectHomeReferenceOrString [
 	self _loadSpecification projectsHome: aProjectHomeReferenceOrString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> projectUrl [
+	^ self _loadSpecification projectUrl
 ]
 
 { #category : 'actions' }

@@ -342,6 +342,16 @@ RwLoadSpecificationV2 >> projectSpecFile: aString [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecificationV2 >> projectUrl [
+	^ self gitUrl
+		ifNotNil: [ :urlString | urlString ]
+		ifNil: [ 
+			self svnUrl
+				ifNotNil: [ :urlString | urlString ]
+				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ] ] ]
+]
+
+{ #category : 'accessing' }
 RwLoadSpecificationV2 >> repositoryResolutionPolicy [
 	^repositoryResolutionPolicy
 ]

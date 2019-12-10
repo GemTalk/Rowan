@@ -109,20 +109,20 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0002: projectDefinition [
 		category: packageName1
 		comment: 'I am an example class')
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
-		addClassMethod: 'bar ^''bar''' protocol: 'accessing';
+		yourself.
+	((projectDefinition packageNamed: packageName2)
+		addClassExtensionNamed: className)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName2 asLowercase;
 		yourself.
 	gemstoneClassName := 'RowanSample4IdentityKeyValueDictionary'.
-	((projectDefinition packageNamed: packageName2)
+	((projectDefinition packageNamed: packageName3)
 		addClassNamed: gemstoneClassName
 		super: 'IdentityKeyValueDictionary'
 		instvars: #()
-		category: packageName2
+		category: packageName3
 		comment: 'I am an example class')
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
-		yourself.
-	((projectDefinition packageNamed: packageName3)
-		addClassExtensionNamed: gemstoneClassName)
-		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName3 asLowercase;
+		addClassMethod: 'bar ^''bar''' protocol: 'accessing';
 		yourself.
 	((projectDefinition packageNamed: packageName4)
 		addClassNamed: projectName , 'GemStoneTestCase'
@@ -472,13 +472,15 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
 
-	indexCard := self
+	indexCard := (self
 		_createCard: postfix
 		specName: specName
 		title: 'Bare bones package structure -Core and -Tests'
 		index: 1
 		derivedFrom: derivedFrom
-		comment: 'One class per package'.
+		comment: 'One class per package: RowanSample9-Core and RowanSample9-Tests packages')
+		rowanIssues: #( 527);
+		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
 		revision: derivedFrom;
@@ -517,8 +519,8 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		title: 'RowanSample4 basic project definition'
 		index: 2
 		derivedFrom: derivedFrom
-		comment: '')
-		rowanIssues: #();
+		comment: 'RowanSampe9Class1 has extension methods')
+		rowanIssues: #(230);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;

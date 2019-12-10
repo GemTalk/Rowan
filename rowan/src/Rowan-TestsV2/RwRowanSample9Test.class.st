@@ -272,9 +272,9 @@ RwRowanSample9Test >> testIssue_230 [
 	"https://github.com/dalehenrich/Rowan/issues/230"
 
 	| loadSpec projectName resolvedProject loadedProjects project testResult 
-		packageName1 packageName3 |
+		packageName1 packageName2 |
 
-	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer"
+	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
 	projectName := loadSpec projectAlias.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
@@ -283,16 +283,18 @@ RwRowanSample9Test >> testIssue_230 [
 "set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
 		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
 	packageName1 := projectName , '-' , 'Core'.
-	packageName3 := projectName , '-' , 'GemStone'.
-	loadSpec
+	packageName2 := projectName , '-' , 'Extensions'.
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
 		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
 			forPackageNamed: packageName1;
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName3 
-			forPackageNamed: packageName3;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName2;
 		yourself.
 
-"resolve/load primer project"
-	resolvedProject := loadSpec resolve.
+"load primer project"
 	loadedProjects := resolvedProject load.
 
 "validate"
