@@ -8,7 +8,13 @@ Class {
 RwRowanSample9Test class >> _clearLoadSpecSessionCache [
 	"self _clearLoadSpecSessionCache"
 
-	SessionTemps current removeKey: self _loadSpecSessionCacheKey ifAbsent: [  ]
+	SessionTemps current removeKey: self _loadSpecSessionCacheKey ifAbsent: [  ].
+	SessionTemps current removeKey: self _gitPullSessionCacheKey ifAbsent: [  ]
+]
+
+{ #category : 'private' }
+RwRowanSample9Test class >> _gitPullSessionCacheKey [
+	^ #'RowanSample9GitBranchDict'
 ]
 
 { #category : 'private' }
@@ -19,6 +25,11 @@ RwRowanSample9Test class >> _loadSpecSessionCacheKey [
 { #category : 'private' }
 RwRowanSample9Test >> _deleteProjectRepositoryDir [
 	^ false
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _gitPullSessionCacheKey [
+	^ self class _gitPullSessionCacheKey
 ]
 
 { #category : 'private' }
@@ -59,7 +70,7 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 
 	"it is assumed that the load spec on the master branch and the load spec on the branch are the same"
 
-	| loadSpecification resolvedProject resolvedRepository dict theSpec |
+	| loadSpecification resolvedProject resolvedRepository dict theSpec branchDict |
 	loadSpecification := self _rowanSample9_0000_load_spec.
 	theSpec := (SessionTemps current
 		at: self _loadSpecSessionCacheKey
@@ -93,72 +104,25 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 	theSpec
 		projectsHome: self _testRowanProjectsSandbox;
 		yourself.
-	resolvedProject := theSpec resolveStrict.	"When we reference a spec, we'll checkout the branch and refresh from remote, as a courtesy"
-	resolvedRepository := resolvedProject repository.
-	resolvedRepository
-		fetch;
-		pull: resolvedRepository remote branch: theSpec revision;
-		yourself.
+	resolvedProject := theSpec resolveStrict.	"When we reference a spec, we'll checkout the branch"
+	branchDict := SessionTemps current
+		at: self _gitPullSessionCacheKey
+		ifAbsentPut: [ Dictionary new ].
+	(branchDict at: theSpec revision ifAbsent: [  ])
+		ifNil: [ 
+			"Once per session fetch and pull the latest commits for the branch"
+			resolvedRepository := resolvedProject repository.
+			resolvedRepository
+				fetch;
+				pull: resolvedRepository remote branch: theSpec revision;
+				yourself.
+			branchDict at: theSpec revision put: theSpec ].
 	^ theSpec copy
 ]
 
 { #category : 'private' }
 RwRowanSample9Test >> _loadSpecSessionCacheKey [
 	^ self class _loadSpecSessionCacheKey
-]
-
-{ #category : 'private' }
-RwRowanSample9Test >> _projectSpecNamed: specName [
-	"
-		self _clearLoadSpecSessionCache
-	"
-
-	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
-		we'll use `fetch` and `pull` to update the repo and branches as needed"
-
-	"it is assumed that the load spec on the master branch and the load spec on the branch are the same"
-
-	| projectSpecification repositoryDefinition dict theSpec |
-	projectSpecification := self _rowanSample9_0000_load_spec.
-	theSpec := (SessionTemps current
-		at: self _loadSpecSessionCacheKey
-		ifAbsent: [  ])
-		ifNotNil: [ :specsDict | specsDict at: specName ]
-		ifNil: [ 
-			"The first time we access the repository in this session, we'll refresh the 
-				master branch and cache the session specs"
-			projectSpecification revision: 'master'.
-			projectSpecification resolveStrict.
-
-			repositoryDefinition := projectSpecification repositoryDefinition.
-			repositoryDefinition
-				fetch;
-				pull: repositoryDefinition remote branch: 'master';
-				yourself.
-
-			dict := SessionTemps current
-				at: self _loadSpecSessionCacheKey
-				ifAbsentPut: [ Dictionary new ].
-			(projectSpecification repositoryRoot / 'specs') files
-				do: [ :file | 
-					file
-						readStreamDo: [ :fileStream | 
-							| stream spec |
-							stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-							spec := STON fromStream: stream.
-							dict at: spec specName put: spec ] ].
-			dict at: specName ].
-	theSpec := theSpec copy.
-	theSpec
-		projectsHome: self _testRowanProjectsSandbox;
-		yourself.
-	theSpec resolveStrict.	"When we reference a spec, we'll checkout the branch and refresh from remote, as a courtesy"
-	repositoryDefinition := theSpec repositoryDefinition.
-	repositoryDefinition
-		fetch;
-		pull: repositoryDefinition remote branch: theSpec revision;
-		yourself.
-	^ theSpec copy
 ]
 
 { #category : 'private' }

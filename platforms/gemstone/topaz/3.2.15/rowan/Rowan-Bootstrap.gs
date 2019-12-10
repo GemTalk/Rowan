@@ -632,7 +632,7 @@ commit
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
     value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
-      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
+      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 
       'Rowan-Services-Core' 'Rowan-Url-Extensions'
       'Rowan-Services-Extensions' 'AST-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core'
 	).	"Populate with Rowan implementation classes"
@@ -645,6 +645,7 @@ commit
     value: #('Rowan-Tools-Core' 'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
 							'Rowan-GemStone-Specifications' 'Rowan-Components' 'Rowan-Tools-GemStone' 
 							'Rowan-Definitions-Deprecated' 'Rowan-Tools-Deprecated'
+							'Rowan-Core-Definitions-Extensions'
 	).	"Rowan Tools"
 %
   commit
