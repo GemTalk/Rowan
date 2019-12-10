@@ -387,12 +387,14 @@ RwRowanSample9Test >> testIssue_446 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testIssue_504 [
+RwRowanSample9Test >> testIssue_504_1 [
 	"https://github.com/dalehenrich/Rowan/issues/504"
 
 	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
 
-	| loadSpec projectName resolvedProject loadedProjects project testResult packageName1 packageName2 |
+	"use spec_0002 and modify resolved project to use correct symbol dictionary mappings"
+
+	| loadSpec projectName resolvedProject loadedProjects project testResult |
 
 	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
 
@@ -420,8 +422,6 @@ RwRowanSample9Test >> testIssue_504 [
 "resolve"
 	resolvedProject := loadSpec resolve.
 
-	packageName1 := projectName , '-' , 'Core1'.
-	packageName2 := projectName , '-' , 'Core2'.
 	resolvedProject
 		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
 			forPackageNamed: projectName , '-' , 'Core';
@@ -430,6 +430,54 @@ RwRowanSample9Test >> testIssue_504 [
 		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3 
 			forPackageNamed: projectName , '-' , 'GemStone';
 		yourself.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue_504_2 [
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
+
+	"use spec_0006 ... use component symbol dictionary mappings"
+
+	| loadSpec projectName resolvedProject loadedProjects project testResult |
+
+	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadSpec := self _loadSpecNamed: 'spec_0006'.
+
+"resolve"
+	resolvedProject := loadSpec resolve.
 
 "load"
 	loadedProjects := resolvedProject load.
