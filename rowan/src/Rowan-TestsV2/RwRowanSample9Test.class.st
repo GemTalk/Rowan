@@ -351,6 +351,45 @@ RwRowanSample9Test >> testIssue_446 [
 		ifTrue: [ self halt ]
 ]
 
+{ #category : 'issue 493' }
+RwRowanSample9Test >> testIssue_493 [
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"duplicate of RwRowanSample2Test debug: #testIssue493 (no existing LoadedMethod found for the old compiledMethod.) ... "
+
+	"Cannot duplicate RwRowanSample4Test>>#testLoadProjectNamed_493 (passing in 3.5.0) because: in v1.2 the default symbol 
+		dictionary was a function of the component, so a component without a default
+		explicitly defined, gave a different answer as to the expected symbol dict for 
+		packages without explicitly defined symbol dicts ... in 3.2.15, the test passes, when deprecated methods are loaded"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0008'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project soec_008"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0010"
+	loadSpec := self _loadSpecNamed: 'spec_0010'.
+	resolvedProject := loadSpec resolve.
+
+"load project soec_0010"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_504_1 [
 	"https://github.com/dalehenrich/Rowan/issues/504"
@@ -653,6 +692,42 @@ RwRowanSample9Test >> testIssue_spec_002_to_003 [
 	self deny: testResult hasFailures.
 ]
 
+{ #category : 'issue 493' }
+RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"duplicate of RwRowanIssue493Test debug: #testMoveClassBetweenSymDicts_changeDefaulSymDict_2 (audit failure: Issue493Class>>Missing loaded method>>foo)"
+
+	"move a class with a method from one sym dict to another using defaultSymbolDictName"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0008'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project soec_008"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_009"
+	loadSpec := self _loadSpecNamed: 'spec_0009'.
+	resolvedProject := loadSpec resolve.
+
+"load project soec_009"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
 { #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_basic_504 [
 
@@ -707,11 +782,9 @@ RwRowanSample9Test >> testRowanSample4_primer_504 [
 	(Rowan projectNamed: projectName) unload
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 493' }
 RwRowanSample9Test >> testSpec_008 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
-
-	"make sure that spec_0008 loads properly on it's own and validation tests pass"
 
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
@@ -731,14 +804,34 @@ RwRowanSample9Test >> testSpec_008 [
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 493' }
 RwRowanSample9Test >> testSpec_009 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
-	"make sure that spec_0008 loads properly on it's own and validation tests pass"
-
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0009'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'issue 493' }
+RwRowanSample9Test >> testSpec_010 [
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0010'.
 
 	projectName := loadSpec projectAlias.
 

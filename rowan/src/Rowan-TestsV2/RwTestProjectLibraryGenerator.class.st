@@ -7,6 +7,7 @@ RwTestProjectLibraryGenerator new
 	projectName: 'RowanSample9';
 	projectUrl: 'https://github.com/dalehenrich/RowanSample9';
 	preserveChangesOnGithub: true;
+
 	genSpec_0000: 'generate project definitions for spec_0000';
 	genSpec_0001: 'generate project definitions for spec_0001';
 	genSpec_0002: 'generate project definitions for spec_0002';
@@ -15,6 +16,9 @@ RwTestProjectLibraryGenerator new
 	genSpec_0005: 'generate project definitions for spec_0005';
 	genSpec_0006: 'generate project definitions for spec_0006';
 	genSpec_0007: 'generate project definitions for spec_0007';
+	genSpec_0008: 'generate project definitions for spec_0008';
+	genSpec_0009: 'generate project definitions for spec_0009';
+	genSpec_0010: 'generate project definitions for spec_0010';
 	yourself
 "
 Class {
@@ -429,6 +433,47 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0009: resolvedProject [
 '
 			protocol: 'tests';
 		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0010: resolvedProject [
+	| className1 className2 |
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo:
+			RwRowanSample9Test _sampleSymbolDictionaryName4.
+
+	((resolvedProject packageNamed: projectName , '-' , 'Tests')
+		classDefinitionNamed: projectName , 'TestCase')
+		updateInstanceMethod:
+				'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName4 , ''') includesKey: '''
+						, className1
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName2 , ''') includesKey: '''
+						, className2
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName4 , ''') includesKey: '''
+						, projectName
+						,
+							'TestCase'' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName2 , ''') includesKey: '''
+						, projectName
+						,
+							'GemStoneTestCase'' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+
 	^ resolvedProject
 ]
 
@@ -1106,6 +1151,52 @@ RwTestProjectLibraryGenerator >> genSpec_0009: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0009: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0010: commitMessage [
+	"two symbol dicts ... gemstone in one symbol dict, the rest in the default symbol dict --- default symbol changed from 0009"
+
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0010'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0009'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'one symbol dict specified for gemstone, the rest in default --- default sym dict changed from 0009'
+		index: 10
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
+		rowanIssues: #( 493);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0010: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

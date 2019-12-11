@@ -23,12 +23,19 @@ RwAbstractV2Test class >> _sampleSymbolDictionaryName3 [
 ]
 
 { #category : 'private' }
+RwAbstractV2Test class >> _sampleSymbolDictionaryName4 [
+
+	^ #'RowanSample9_4'
+]
+
+{ #category : 'private' }
 RwAbstractV2Test class >> _symbolDictionaryNames [
 	^ super _symbolDictionaryNames
 		,
 			{(self _sampleSymbolDictionaryName1).
 			(self _sampleSymbolDictionaryName2).
-			(self _sampleSymbolDictionaryName3)}
+			(self _sampleSymbolDictionaryName3).
+			(self _sampleSymbolDictionaryName4)}
 ]
 
 { #category : 'private' }
@@ -139,6 +146,12 @@ RwAbstractV2Test >> _sampleSymbolDictionaryName2 [
 RwAbstractV2Test >> _sampleSymbolDictionaryName3 [
 
 	^ self class _sampleSymbolDictionaryName3
+]
+
+{ #category : 'private' }
+RwAbstractV2Test >> _sampleSymbolDictionaryName4 [
+
+	^ self class _sampleSymbolDictionaryName4
 ]
 
 { #category : 'private' }
