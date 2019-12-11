@@ -421,6 +421,12 @@ RowanAnsweringService >> subclassCreationTemplate: className [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> symbolExists: aSymbol [
+  answer := (Rowan image symbolList resolveSymbol: aSymbol) isNil not.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> transcriptInstalled [
 
 	answer := self isTranscriptInstalled.
