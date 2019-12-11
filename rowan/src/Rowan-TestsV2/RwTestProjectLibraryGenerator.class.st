@@ -14,6 +14,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0004: 'generate project definitions for spec_0004';
 	genSpec_0005: 'generate project definitions for spec_0005';
 	genSpec_0006: 'generate project definitions for spec_0006';
+	genSpec_0007: 'generate project definitions for spec_0007';
 	yourself
 "
 Class {
@@ -116,7 +117,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0002: resolvedProject [
 		addClassExtensionNamed: className)
 		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName2 asLowercase;
 		yourself.
-	gemstoneClassName := 'RowanSample4IdentityKeyValueDictionary'.
+	gemstoneClassName := projectName , 'IdentityKeyValueDictionary'.
 	((resolvedProject packageNamed: packageName3)
 		addClassNamed: gemstoneClassName
 		super: 'IdentityKeyValueDictionary'
@@ -350,6 +351,19 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0006: resolvedProject [
 	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', projectName , 'TestCase'' asSymbol).
 '
 			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0007: resolvedProject [
+	| packageName1 className1 |
+	packageName1 := projectName , '-' , 'Core1'.
+	className1 := projectName , 'Class1'.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		instVarNames: #('iv1');
+		gs_options: #();
 		yourself.
 	^ resolvedProject
 ]
@@ -824,7 +838,7 @@ RwTestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 		_createCard: postfix
 		specName: specName
 		title: 'Two classes, two  packages, plus tests. Primer for Issue 230'
-		index: 1
+		index: 5
 		derivedFrom: derivedFrom
 		comment: 'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString, ' and classes in Core2 are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName3 printString, ' and classes in Tests are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
 		rowanIssues: #( 504);
@@ -870,7 +884,7 @@ RwTestProjectLibraryGenerator >> genSpec_0006: commitMessage [
 		_createCard: postfix
 		specName: specName
 		title: 'spec_0002 with different symbol dict mappings'
-		index: 1
+		index: 6
 		derivedFrom: derivedFrom
 		comment:
 			'RowanSample9-Core, RowanSample9-Extensions, RowanSample9-GemStone, RowanSample9-GemStone-Tests and RowanSample9-Tests packages. Tests ensure that all of the classes are in the proper symbol dictionary')
@@ -890,6 +904,52 @@ RwTestProjectLibraryGenerator >> genSpec_0006: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0006: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0007: commitMessage [
+	"Two classes, two  packages, plus tests"
+
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0007'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0005'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Two classes, two  packages, plus tests. Primer for Issue 230, using ivs instead of instancesInvariant'
+		index: 7
+		derivedFrom: derivedFrom
+		comment: 'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString, ' and classes in Core2 are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName3 printString, ' and classes in Tests are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
+		rowanIssues: #( 504);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0007: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

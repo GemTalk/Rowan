@@ -1684,10 +1684,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 { #category : 'tests' }
 RwRowanSample4Test >> testIssue460_2 [
 
-	"This test is also important for validating the fix to Issue #504:
-		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
-		At least confirm that it is NOT a good candidate, since this test is now failing
-		with the new error introduced in the partial for for Issue #504"
+	"As of today the test is passing, so it's not a candidate for Issue #504"
 
 	"https://github.com/dalehenrich/Rowan/issues/260"
 

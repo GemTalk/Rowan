@@ -158,18 +158,19 @@ RwRowanSample9Test >> _standard_resolve_load_validate: projectSpec [
 
 { #category : 'private' }
 RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects [
-	| project testResult loadedProjectDefinition |
+	| project testResult loadedProjectDefinition x |
 
 "validate"
 	self assert: loadedProjects size = 1.
 	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
+	self assert: (x := project audit) isEmpty.
 	testResult := project testSuite run.
 	self deny: testResult hasErrors.
 	self deny: testResult hasFailures.
 
 	loadedProjectDefinition := project asDefinition.
 	self assert: loadedProjectDefinition class = resolvedProject projectDefinition class.
+
 ]
 
 { #category : 'private' }
@@ -358,7 +359,7 @@ RwRowanSample9Test >> testIssue_504_1 [
 
 	"use spec_0002 and modify resolved project to use correct symbol dictionary mappings"
 
-	| loadSpec projectName resolvedProject loadedProjects project testResult |
+	| loadSpec projectName resolvedProject loadedProjects |
 
 	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
 
@@ -374,12 +375,7 @@ RwRowanSample9Test >> testIssue_504_1 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
@@ -399,12 +395,7 @@ RwRowanSample9Test >> testIssue_504_1 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 ]
 
 { #category : 'tests' }
@@ -415,7 +406,7 @@ RwRowanSample9Test >> testIssue_504_2 [
 
 	"use spec_0006 ... use component symbol dictionary mappings"
 
-	| loadSpec projectName resolvedProject loadedProjects project testResult |
+	| loadSpec projectName resolvedProject loadedProjects |
 
 	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
 
@@ -431,12 +422,7 @@ RwRowanSample9Test >> testIssue_504_2 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 
 	loadSpec := self _loadSpecNamed: 'spec_0006'.
 
@@ -447,12 +433,83 @@ RwRowanSample9Test >> testIssue_504_2 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue_504_3 [
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
+
+	"use spec_0007 ... with instance variables to force the new class version"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	loadSpec := self _loadSpecNamed: 'spec_0006'.
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue_504_4 [
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
+
+	"reverse the use of spec_0007 and spec_0006"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0006'.	
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 ]
 
 { #category : 'tests' }
