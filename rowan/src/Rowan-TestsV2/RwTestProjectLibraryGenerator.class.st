@@ -635,6 +635,63 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0013: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0014: resolvedProject [
+	"Starting with spec_0011, move extension method to a new extension package; move new extension package 
+		to the classes symbol dictionary. This is an legal combination (extension method and class in same symbol
+		dictionary) and should cause an error, but currently we get an audit error."
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName1 packageName2 packageName3 packageName4 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	packageName4 := projectName , '-' , 'Extensions1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addPackagesNamed: {packageName4}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName1 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName1 
+			forPackageNamed: packageName4;
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		classExtensionDefinitionNamed: className1)
+		removeClassMethod: #'bar';
+		yourself.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName4 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		updateInstanceMethod:
+				'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName1 , ''') includesKey: '''
+						, className1
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName1 , ''') includesKey: '''
+						, className2
+						,
+							''' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDefinition [
 	| className packageName |
 	packageName := projectName , '-Core1'.
@@ -1413,8 +1470,7 @@ RwTestProjectLibraryGenerator >> genSpec_0011: commitMessage [
 RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
 	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
 		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
-		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
-		get an audit error."
+		(extension method and class in different symbol dictionaries) and does cause an error."
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
@@ -1431,8 +1487,7 @@ RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
 		specName: specName
 		title: 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
 		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
-		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
-		get an audit error.'
+		(extension method and class in different symbol dictionaries) and does cause an error.'
 		index: 12
 		derivedFrom: derivedFrom
 		comment: 'RowanSample9-Core in one symbol dict, RowanSample9-Extensions1 in another symbol dict, and 
@@ -1466,8 +1521,7 @@ RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
 RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
 	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
 		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
-		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
-		get an audit error."
+		(extension method and class in different symbol dictionaries) and does cause an error."
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
@@ -1484,8 +1538,7 @@ RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
 		specName: specName
 		title: 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
 		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
-		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
-		get an audit error.'
+		(extension method and class in different symbol dictionaries) and does cause an error.'
 		index: 13
 		derivedFrom: derivedFrom
 		comment: 'Swap symbol dicts for RowanSample9-Core and RowanSample9-Extensions1. RowanSample9-Tests
@@ -1506,6 +1559,57 @@ RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0013: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0014: commitMessage [
+	"Starting with spec_0011, move extension method to a new extension package; move new extension package 
+		to the classes symbol dictionary. This is an legal combination (extension method and class in same symbol
+		dictionary) and should cause an error, but currently we get an audit error."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0014'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0011, move extension method to a new extension package; move new extension package 
+		to the classes symbol dictionary. This is an legal combination (extension method and class in same symbol
+		dictionary) and should cause an error, but currently we get an audit error.'
+		index: 14
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
+		to new package. RowanSample9-Tests package in default symbol dictionary.')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0014: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

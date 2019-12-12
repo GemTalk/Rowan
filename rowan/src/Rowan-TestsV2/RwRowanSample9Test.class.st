@@ -394,8 +394,6 @@ RwRowanSample9Test >> testIssue_493 [
 RwRowanSample9Test >> testIssue_495_1 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
-	"duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict (during audit: UndefinedObject does not understand  #'name') ... "
-
 	| loadSpec projectName resolvedProject loadedProjects errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
@@ -434,11 +432,10 @@ RwRowanSample9Test >> testIssue_495_1 [
 RwRowanSample9Test >> testIssue_495_2 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
-	"duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict (during audit: UndefinedObject does not understand  #'name') ... "
-
 	"in this case the class package and extension package are swapping symbol dictionaries"
 
 	| loadSpec projectName resolvedProject loadedProjects errorHit |
+
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
 	projectName := loadSpec projectAlias.
@@ -470,6 +467,43 @@ RwRowanSample9Test >> testIssue_495_2 [
 
 "validate"
 	self assert: errorHit.
+]
+
+{ #category : 'issue 495' }
+RwRowanSample9Test >> testIssue_495_3 [
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict (during audit: UndefinedObject does not understand  #'name') ... "
+
+	"in this case the class package and extension package are swapping symbol dictionaries"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0011"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0014"
+	loadSpec := self _loadSpecNamed: 'spec_0014'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0014"
+	loadedProjects := resolvedProject load .
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 ]
 
 { #category : 'tests' }
@@ -1006,4 +1040,28 @@ RwRowanSample9Test >> testSpec_013 [
 			self assert: ( x:=  ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
 			errorHit := true ].
 	self assert: errorHit.
+]
+
+{ #category : 'issue 495' }
+RwRowanSample9Test >> testSpec_014 [
+	"spec_014 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0014'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 ]
