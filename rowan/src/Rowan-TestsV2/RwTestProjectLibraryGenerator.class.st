@@ -19,6 +19,9 @@ RwTestProjectLibraryGenerator new
 	genSpec_0008: 'generate project definitions for spec_0008';
 	genSpec_0009: 'generate project definitions for spec_0009';
 	genSpec_0010: 'generate project definitions for spec_0010';
+	genSpec_0011: 'generate project definitions for spec_0011';
+	genSpec_0012: 'generate project definitions for spec_0012';
+	genSpec_0013: 'generate project definitions for spec_0013';
 	yourself
 "
 Class {
@@ -474,6 +477,160 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0010: resolvedProject [
 			protocol: 'tests';
 		yourself.
 
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0011: resolvedProject [
+	"Add an extension package for a method in class1 ... load everything into a single symbol dict"
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName1 packageName2 packageName3 className1 className2  |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addPackagesNamed:
+				{
+				packageName2.
+				}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName2 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3)
+		classDefinitionNamed:className2)
+		addInstanceMethod: 'test2  self assert: ' , className1 , ' bar = ''bar'''
+			protocol: 'tests';
+		addInstanceMethod: 'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', className1 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', className2 , ''' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0012: resolvedProject [
+	"Starting with spec_0011, move extension method to a new extension package; move class 
+		package to a different symbol dict; move new extension package to a third symbol dictionary ... 
+		this is an illegal combination that should signal an error ... right now we get an audit error"
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName1 packageName2 packageName3 packageName4 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	packageName4 := projectName , '-' , 'Extensions1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addPackagesNamed: {packageName4}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: packageName4;
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		classExtensionDefinitionNamed: className1)
+		removeClassMethod: #'bar';
+		yourself.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName4 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		updateInstanceMethod:
+				'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName2 , ''') includesKey: '''
+						, className1
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName1 , ''') includesKey: '''
+						, className2
+						,
+							''' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0013: resolvedProject [
+	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
+		get an audit error."
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName1 packageName2 packageName3 packageName4 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	packageName4 := projectName , '-' , 'Extensions1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addPackagesNamed: {packageName4}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName1 
+			forPackageNamed: packageName4;
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		classExtensionDefinitionNamed: className1)
+		removeClassMethod: #'bar';
+		yourself.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName4 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		updateInstanceMethod:
+				'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName2 , ''') includesKey: '''
+						, className1
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName1 , ''') includesKey: '''
+						, className2
+						,
+							''' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
 	^ resolvedProject
 ]
 
@@ -1197,6 +1354,158 @@ RwTestProjectLibraryGenerator >> genSpec_0010: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0010: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0011: commitMessage [
+	"A single class with an extension method in a separate package. All packages loaded into a single symbol dict. Test methods validate classes and symbol dictionary mapping."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0011'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'A single class with an extension method in a separate package. All packages loaded into a single symbol dict. Test methods validate classes and symbol dictionary mapping.'
+		index: 11
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default symbol dictionary.')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0011: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
+	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
+		get an audit error."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0012'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
+		get an audit error.'
+		index: 12
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core in one symbol dict, RowanSample9-Extensions1 in another symbol dict, and 
+		RowanSample9-Tests packages in default symbol dictionary.')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0012: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
+	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
+		get an audit error."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0013'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and should cause an error, but currently we 
+		get an audit error.'
+		index: 13
+		derivedFrom: derivedFrom
+		comment: 'Swap symbol dicts for RowanSample9-Core and RowanSample9-Extensions1. RowanSample9-Tests
+		packages in default symbol dictionary.')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0013: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

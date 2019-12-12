@@ -121,6 +121,12 @@ RwPackageDefinition >> classDefinitions: classDefinitionDictionary [
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> classExtensionDefinitionNamed: className [
+
+	^ self classExtensionDefinitionNamed: className ifAbsent: [ self error: 'No class extension definition found with the name ', className printString ]
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> classExtensionDefinitionNamed: className ifAbsent: absentBlock [
 
 	^ self classExtensions at: className ifAbsent: absentBlock
