@@ -83,6 +83,4 @@ RwRowanIssue493Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2 [
 
 "validate"
 	self assert: (audit := project audit) isEmpty.
-
-self halt.
 ]

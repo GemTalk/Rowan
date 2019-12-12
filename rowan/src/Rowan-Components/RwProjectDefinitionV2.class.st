@@ -4,22 +4,6 @@ Class {
 	#category : 'Rowan-Components'
 }
 
-{ #category : 'instance creation' }
-RwProjectDefinitionV2 class >> fromLoadSpecification: aRwProjectLoadSpecificationV2 [
-	| projectReferenceDefintion |
-	projectReferenceDefintion := RwProjectReferenceDefinitionV2
-		fromLoadSpecification: aRwProjectLoadSpecificationV2.
-	^ self basicNew
-		properties:
-				(Dictionary new
-						add: 'name' -> aRwProjectLoadSpecificationV2 projectName;
-						add: 'projectRef' -> projectReferenceDefintion;
-						yourself);
-		packages: Dictionary new;
-		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
-		yourself
-]
-
 { #category : 'actions' }
 RwProjectDefinitionV2 >> _deleteTool [
 
@@ -412,18 +396,6 @@ RwProjectDefinitionV2 >> projectNames [
 RwProjectDefinitionV2 >> projectNames: anArray [
 
 	self projectRef projectNames: anArray
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectRef [
-
-	^ self propertyAt: 'projectRef' ifAbsent: [ ]
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectRef: aRwProjectReferenceDefinition [
-
-	^ self propertyAt: 'projectRef' put: aRwProjectReferenceDefinition
 ]
 
 { #category : 'properties' }

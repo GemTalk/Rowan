@@ -395,6 +395,7 @@ RwRowanSample9Test >> testIssue_495_1 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
 	| loadSpec projectName resolvedProject loadedProjects errorHit |
+
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
 	projectName := loadSpec projectAlias.
@@ -417,6 +418,7 @@ RwRowanSample9Test >> testIssue_495_1 [
 
 "load project soec_0012"
 	errorHit := false.
+
 	[ loadedProjects := resolvedProject load ]
 		on: Error
 		do: [:ex |

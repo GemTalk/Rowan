@@ -209,30 +209,3 @@ RwResolvedProjectV2Test >> testCreateNewGitProject [
 	self assert: resolvedRepository = resolvedRepositoryCopy.
 	self assert: resolvedRepository ~~ resolvedRepositoryCopy
 ]
-
-{ #category : 'tests' }
-RwResolvedProjectV2Test >> testLoadSpecResolve [
-	"load spect -> resoved project test"
-
-	| projectName loadSpecification stonString specName project projectsHome |
-	projectName := 'RowanSample9'.
-	specName := projectName , 'Core'.
-	projectsHome := self _testRowanProjectsSandbox.
-
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
-		specName: specName;
-		componentNames: #('Default');
-		groupNames: #('core');
-		projectSpecFile: 'rowan/xxx.ston';
-		projectsHome: projectsHome;
-		yourself.
-
-	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
-	self assert: loadSpecification  _validate.
-
-	project := loadSpecification resolve.
-
-	self assert: project _loadSpecification = loadSpecification.
-	self assert: project _loadSpecification ~~ loadSpecification.	"load spec is copid on resolve"
-]

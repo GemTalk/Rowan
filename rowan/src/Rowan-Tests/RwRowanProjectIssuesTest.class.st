@@ -3096,6 +3096,7 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
 		classDefinition packageDefinition className1 className2 projectSetDefinition class
 		classExtensionDefinition oldClass project audit |
+
 	projectName := 'Issue215'.
 	packageName1 := 'Issue215-Core1'.
 	packageName2 := 'Issue215-Tools'.
@@ -3192,6 +3193,7 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition2.
+
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	"validate"

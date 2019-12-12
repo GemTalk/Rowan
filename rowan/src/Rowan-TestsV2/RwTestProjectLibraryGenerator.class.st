@@ -22,6 +22,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0011: 'generate project definitions for spec_0011';
 	genSpec_0012: 'generate project definitions for spec_0012';
 	genSpec_0013: 'generate project definitions for spec_0013';
+	genSpec_0014: 'generate project definitions for spec_0014';
 	yourself
 "
 Class {
