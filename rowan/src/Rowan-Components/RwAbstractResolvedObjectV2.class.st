@@ -5,7 +5,8 @@ Class {
 		'projectDefinition',
 		'projectRepository',
 		'loadSpecification',
-		'projectSpecification'
+		'projectSpecification',
+		'projectStructure'
 	],
 	#category : 'Rowan-Components'
 }
@@ -100,6 +101,20 @@ RwAbstractResolvedObjectV2 >> _projectSpecification: object [
 ]
 
 { #category : 'private' }
+RwAbstractResolvedObjectV2 >> _projectStructure [
+	"project structure should not be accessed directly -- Rowan private state"
+
+	^ projectStructure
+]
+
+{ #category : 'private' }
+RwAbstractResolvedObjectV2 >> _projectStructure: object [
+	"project structure should not be accessed directly -- Rowan private state"
+
+	projectStructure := object
+]
+
+{ #category : 'private' }
 RwAbstractResolvedObjectV2 >> _validate [
 	"ensure that the receiver's specifications contain valid information ... 
 		the specs must be able to stand on their, when they are written to disk, so there is a 
@@ -150,6 +165,7 @@ RwAbstractResolvedObjectV2 >> loadSpecification [
 		_projectRepository: projectRepository;
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
+		_projectStructure: projectStructure;
 		yourself
 ]
 
@@ -170,6 +186,7 @@ RwAbstractResolvedObjectV2 >> projectDefinition [
 		_projectRepository: projectRepository;
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
+		_projectStructure: projectStructure;
 		yourself
 ]
 
@@ -216,6 +233,7 @@ RwAbstractResolvedObjectV2 >> projectSpecification [
 		_projectRepository: projectRepository;
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
+		_projectStructure: projectStructure;
 		yourself
 ]
 
@@ -239,6 +257,7 @@ RwAbstractResolvedObjectV2 >> repository [
 		_projectRepository: projectRepository;
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
+		_projectStructure: projectStructure;
 		yourself
 ]
 

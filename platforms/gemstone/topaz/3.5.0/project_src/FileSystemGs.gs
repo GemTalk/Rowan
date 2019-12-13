@@ -9483,6 +9483,15 @@ from: aString delimiter: aDelimiterCharacter
 	^ pathClass withAll: splitPathElements
 %
 
+category: 'ston'
+classmethod: Path
+fromSton: stonReader
+	| elements |
+	elements := Array streamContents: [ :out |
+		stonReader parseListDo: [ :each | out nextPut: each ] ].
+	^ self withAll: elements
+%
+
 category: 'private'
 classmethod: Path
 isAbsolutePath: aString delimiter: aCharacter
@@ -10038,6 +10047,15 @@ segments
 	].
 	
 	^ segments asArray 
+%
+
+category: 'ston'
+method: Path
+stonOn: stonWriter
+	stonWriter 
+		writeObject: self 
+		streamShortList: [ :listWriter | 
+			self do: [ :each | listWriter add: each ] ]
 %
 
 category: 'navigating'

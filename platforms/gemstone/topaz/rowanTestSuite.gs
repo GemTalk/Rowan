@@ -1,7 +1,7 @@
 run
 	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings resultsDict resultCases |
 
-	includeDeprecatedPackages := true. "true means load deprecated packages"
+	includeDeprecatedPackages := false. "true means load deprecated packages"
 
 	deprecationAction := Deprecated deprecatedAction.
 	warnings := {}.

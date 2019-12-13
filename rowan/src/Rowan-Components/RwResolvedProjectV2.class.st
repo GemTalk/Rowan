@@ -125,6 +125,7 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		_projectRepository: projectRepository copy;
 		_loadSpecification: loadSpecification copy;
 		_projectSpecification: projectSpecification copy;
+		_projectStructure: projectDefinition components copy;
 		yourself
 ]
 

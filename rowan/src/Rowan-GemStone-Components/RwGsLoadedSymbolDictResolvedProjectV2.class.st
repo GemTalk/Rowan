@@ -16,10 +16,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 class >> newForResolvedProject: aResolvedP
 RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."
 
-	^ (RwResolvedProjectV2
+	| resolvedProject |
+	resolvedProject := (RwResolvedProjectV2
 		loadSpecification: handle _loadSpecification copy)
 		packages: self loadedPackageDefinitions;
-		yourself
+		yourself.
+	resolvedProject _projectDefinition components: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
+	^ resolvedProject
 ]
 
 { #category : 'testing' }
@@ -50,20 +53,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> defaultSymbolDictName: symDictName [
 RwGsLoadedSymbolDictResolvedProjectV2 >> defaultUseSessionMethodsForExtensions: aBool [
 
 	self resolvedProject defaultUseSessionMethodsForExtensions: aBool
-]
-
-{ #category : 'initialization' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForLoadSpecification: aLoadSpecification [
-
-	self initializeForName: aLoadSpecification specName.
-	handle := RwProjectReferenceDefinition newForSpecification: aLoadSpecification
-]
-
-{ #category : 'initialization' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForProjectReferenceDefinition: aProjectReferenceDefinition [
-
-	self initializeForName: aProjectReferenceDefinition projectAlias.
-	handle := aProjectReferenceDefinition copy
 ]
 
 { #category : 'initialization' }

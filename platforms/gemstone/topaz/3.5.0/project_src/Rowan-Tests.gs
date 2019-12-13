@@ -2,6 +2,62 @@
 ! Generated file, do not Edit
 
 doit
+(Object
+	subclass: 'RwTestProjectLibraryGenerator'
+	instVarNames: #( projectsHome projectName projectUrl preserveChangesOnGithub )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
+		comment: 'RwRowanSample9Test _clearLoadSpecSessionCache.
+
+(RwAbstractV2Test _testRowanProjectsSandbox / ''RowanSample9'') ensureDeleteAll.
+
+RwTestProjectLibraryGenerator new
+	projectName: ''RowanSample9'';
+	projectUrl: ''https://github.com/dalehenrich/RowanSample9'';
+	preserveChangesOnGithub: true;
+
+	genSpec_0000: ''generate project definitions for spec_0000'';
+	genSpec_0001: ''generate project definitions for spec_0001'';
+	genSpec_0002: ''generate project definitions for spec_0002'';
+	genSpec_0003: ''generate project definitions for spec_0003'';
+	genSpec_0004: ''generate project definitions for spec_0004'';
+	genSpec_0005: ''generate project definitions for spec_0005'';
+	genSpec_0006: ''generate project definitions for spec_0006'';
+	genSpec_0007: ''generate project definitions for spec_0007'';
+	genSpec_0008: ''generate project definitions for spec_0008'';
+	genSpec_0009: ''generate project definitions for spec_0009'';
+	genSpec_0010: ''generate project definitions for spec_0010'';
+	genSpec_0011: ''generate project definitions for spec_0011'';
+	genSpec_0012: ''generate project definitions for spec_0012'';
+	genSpec_0013: ''generate project definitions for spec_0013'';
+	genSpec_0014: ''generate project definitions for spec_0014'';
+	yourself';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RwTestProjectLibraryIndexCard'
+	instVarNames: #( name title specName index derivedFrom comment rowanIssues gemstoneIssues )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (RowanLoggingService
 	subclass: 'TestLoggingService'
 	instVarNames: #(  )
@@ -268,6 +324,102 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractTest
+	subclass: 'RwAbstractV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractV2Test
+	subclass: 'RwLoadSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractV2Test
+	subclass: 'RwProjectLoadComponentV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractV2Test
+	subclass: 'RwProjectSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractV2Test
+	subclass: 'RwResolvedProjectV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractV2Test
+	subclass: 'RwRowanSample9Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -696,6 +848,22 @@ true.
 
 doit
 (RwBrowserToolTest
+	subclass: 'RwRowanProjectIssuesTestV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-TestsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwBrowserToolTest
 	subclass: 'RwUnpackagedBrowserApiTest'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -964,6 +1132,1801 @@ doit
 		comment: '';
 		immediateInvariant.
 true.
+%
+
+! Class implementation for 'RwTestProjectLibraryGenerator'
+
+!		Instance methods for 'RwTestProjectLibraryGenerator'
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0000: commitMessage
+	"Create an initial project template with no packages -- basically an empty project.
+		assume that github project already exists."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0000'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+
+	indexCard := self
+		_createCard: postfix
+		specName: specName
+		title: 'Empty project with no packages'
+		index: 0
+		derivedFrom: derivedFrom
+		comment: ''.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0000: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0001: commitMessage
+	"Create a bare bones package structure -Core and -Tests, the tests should validate 
+		the loaded state of project. Start with spec_0000 and add spec_0001 meat to the bones"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0001'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Bare bones package structure -Core and -Tests'
+		index: 1
+		derivedFrom: derivedFrom
+		comment: 'One class per package: RowanSample9-Core and RowanSample9-Tests packages')
+		rowanIssues: #( 527);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0001: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0002: commitMessage
+	"RowanSample4 - basic project definition"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0002'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'RowanSample4 basic project definition'
+		index: 2
+		derivedFrom: derivedFrom
+		comment: 'RowanSampe9Class1 has extension methods')
+		rowanIssues: #( 254 504);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0002: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0003: commitMessage
+	"RowanSample4 - primer project definition"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0003'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0002'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'RowanSample4 primer project definition'
+		index: 3
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9Class1 has instancesInvariant option set')
+		rowanIssues: #(254);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0003: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0004: commitMessage
+	"Reconcile inconsistencies for storage of package-specific properties. This set of definitions, uses
+		three methods sent to a project definition to set the symbol dictionary for packages: as a
+		starting point to see which data structures are written to disk."
+
+	"
+	projectDefinition
+		addPackageNamed: projectName , '-Core1'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core'
+			gemstoneDefaultSymbolDictionaryForUser: userId -> RwAbstractV2Test _sampleSymbolDictionaryName1;
+		addPackageNamed: projectName , '-Core2'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName2 forPackageNamed: projectName , '-Core2';
+		addPackageNamed: projectName , '-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		gemstoneSetDefaultSymbolDictNameForUser: userId to: RwAbstractV2Test _sampleSymbolDictionaryName3;
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/531"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0004'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Reconcile inconsistencies for storage of package-specific properties'
+		index: 4
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(500 531);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core1'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0004: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage.
+
+	self genSpec_0004_b: commitMessage , '_b'
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0004_b: commitMessage
+	"https://github.com/GemTalk/Rowan/issues/532"
+
+	"The method is NOT idempotent with respect to the branches involved. It must be run whenever genSpec_0004 is run.
+		Right now it is called from genSpec_0004_b, so explicit top-level call is not necessary."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom branchName |
+	postfix := '0004_b'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+	branchName := 'spec_0004'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Create inconsistency in component definitions ... duplicate package error expected on load'
+		index: 4
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(532);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core3'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor_004_b: specName
+		branchName: branchName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0004_b: resolvedProject ].
+
+	self
+		_finishCommitAndPush: branchName
+		indexCard: indexCard
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0005: commitMessage
+	"Two classes, two  packages, plus tests"
+
+	"https://github.com/dalehenrich/Rowan/issues/230"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0005'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Two classes, two  packages, plus tests. Primer for Issue 230'
+		index: 5
+		derivedFrom: derivedFrom
+		comment: 'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString, ' and classes in Core2 are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName3 printString, ' and classes in Tests are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
+		rowanIssues: #( 504);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0005: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0006: commitMessage
+	"spec_0002 with different symbol dict mappings for issue #504"
+
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0006'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0002'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'spec_0002 with different symbol dict mappings'
+		index: 6
+		derivedFrom: derivedFrom
+		comment:
+			'RowanSample9-Core, RowanSample9-Extensions, RowanSample9-GemStone, RowanSample9-GemStone-Tests and RowanSample9-Tests packages. Tests ensure that all of the classes are in the proper symbol dictionary')
+		rowanIssues: #(504);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0006: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0007: commitMessage
+	"Two classes, two  packages, plus tests"
+
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0007'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0005'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Two classes, two  packages, plus tests. Primer for Issue 230, using ivs instead of instancesInvariant'
+		index: 7
+		derivedFrom: derivedFrom
+		comment: 'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString, ' and classes in Core2 are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName3 printString, ' and classes in Tests are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
+		rowanIssues: #( 504);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0007: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0008: commitMessage
+	"two symbol dicts ... gemstone in one, the rest in another"
+
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0008'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0006'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'two symbol dicts ... gemstone in one, the rest in another'
+		index: 8
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString, '. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
+		rowanIssues: #( 493);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0008: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0009: commitMessage
+	"two symbol dicts ... gemstone in one symbol dict, the rest in the default symbol dict"
+
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0009'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0008'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'one symbol dict specified for gemstone, the rest in default (unspecified)'
+		index: 9
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
+		rowanIssues: #( 493);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0009: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0010: commitMessage
+	"two symbol dicts ... gemstone in one symbol dict, the rest in the default symbol dict --- default symbol changed from 0009"
+
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0010'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0009'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'one symbol dict specified for gemstone, the rest in default --- default sym dict changed from 0009'
+		index: 10
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
+		rowanIssues: #( 493);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0010: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0011: commitMessage
+	"A single class with an extension method in a separate package. All packages loaded into a single symbol dict. Test methods validate classes and symbol dictionary mapping."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0011'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'A single class with an extension method in a separate package. All packages loaded into a single symbol dict. Test methods validate classes and symbol dictionary mapping.'
+		index: 11
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default symbol dictionary.')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0011: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0012: commitMessage
+	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and does cause an error."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0012'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and does cause an error.'
+		index: 12
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core in one symbol dict, RowanSample9-Extensions1 in another symbol dict, and 
+		RowanSample9-Tests packages in default symbol dictionary.')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0012: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0013: commitMessage
+	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and does cause an error."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0013'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and does cause an error.'
+		index: 13
+		derivedFrom: derivedFrom
+		comment: 'Swap symbol dicts for RowanSample9-Core and RowanSample9-Extensions1. RowanSample9-Tests
+		packages in default symbol dictionary.')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0013: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0014: commitMessage
+	"Starting with spec_0011, move extension method to a new extension package; move new extension package 
+		to the classes symbol dictionary. This is a legal combination (extension method and class in same symbol
+		dictionary) the V2 classes are handling the symbol dictionary lookup properly, so this combo validates that
+		the bug (#493) is fixed."
+
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0014'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0011, move extension method to a new extension package; move new extension package 
+		to the classes symbol dictionary. This is a legal combination (extension method and class in same symbol
+		dictionary) the V2 classes are handling the symbol dictionary lookup properly, so this combo validates that
+		the bug (#493) is fixed.'
+		index: 14
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
+		to new package. RowanSample9-Tests package in default symbol dictionary.')
+		rowanIssues: #( 493);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0014: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryGenerator
+preserveChangesOnGithub
+	"if true, modifications to git repository will be pushed to remote"
+
+	^ preserveChangesOnGithub ifNil: [ preserveChangesOnGithub := true ]
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryGenerator
+preserveChangesOnGithub: aBool
+	"if true, modifications to git repository will be pushed to remote"
+
+	preserveChangesOnGithub := aBool
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryGenerator
+projectName
+	^projectName
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryGenerator
+projectName: object
+	projectName := object
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryGenerator
+projectsHome
+	^ projectsHome ifNil: [ self _testRowanProjectsSandbox ]
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryGenerator
+projectsHome: aString
+	projectsHome := aString asFileReference
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryGenerator
+projectUrl
+	^projectUrl
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryGenerator
+projectUrl: object
+	projectUrl := object
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0000: resolvedProject
+	resolvedProject
+		comment: 'spec_0000 definitions';
+		addComponentNamed: 'Core'
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
+			comment: 'Primary component used for loading the core classes.';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0001: resolvedProject
+	| className packageName |
+	resolvedProject
+		addPackagesNamed: {(projectName , '-Core')}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addPackageNamed: projectName , '-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		yourself.
+	packageName := projectName , '-Core'.
+	className := projectName , 'Class1'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := projectName , '-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: projectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0002: resolvedProject
+	"RowanSample4 basic package and class structure"
+
+	| packageName1 packageName2 packageName3 packageName4 packageName5 className gemstoneClassName |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+	resolvedProject
+		addPackagesNamed:
+				{packageName1.
+				packageName2.
+				packageName3}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addPackagesNamed:
+				{packageName4.
+				packageName5}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		yourself.
+	className := projectName , 'Class1'.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #()
+		category: packageName1
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addClassExtensionNamed: className)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName2 asLowercase;
+		yourself.
+	gemstoneClassName := projectName , 'IdentityKeyValueDictionary'.
+	((resolvedProject packageNamed: packageName3)
+		addClassNamed: gemstoneClassName
+		super: 'IdentityKeyValueDictionary'
+		instvars: #()
+		category: packageName3
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		addClassMethod: 'bar ^''bar''' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName4)
+		addClassNamed: projectName , 'GemStoneTestCase'
+		super: 'TestCase'
+		category: packageName4
+		comment: 'I test the GemStone class')
+		addInstanceMethod: 'test1  self assert: ' , gemstoneClassName , ' new foo = 1'
+			protocol: 'tests';
+		addInstanceMethod: 'test2  self assert: ' , gemstoneClassName , ' bar = ''bar'''
+			protocol: 'tests';
+		yourself.
+	((resolvedProject packageNamed: packageName5)
+		addClassNamed: projectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName5
+		comment: 'I test the Core class')
+		addInstanceMethod: 'test1  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		addInstanceMethod: 'test2  self assert: ' , className , ' bar = ''bar'''
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0003: resolvedProject
+	"primer for https://github.com/dalehenrich/Rowan/issues/230"
+
+	| packageName1  className  |
+	packageName1 := projectName , '-' , 'Core'.
+	className := projectName , 'Class1'.
+	((resolvedProject packageNamed: packageName1)
+		classDefinitionNamed: className)
+		gs_options: #(#'instancesInvariant');
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0004: resolvedProject
+	| className packageName userId |
+	userId := resolvedProject _gemstoneAllUsersName.
+	(resolvedProject
+		addComponentNamed: 'Core1'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core1 package')
+		componentNames: #('Core2');
+		yourself.
+	(resolvedProject
+		addComponentNamed: 'Core2'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core2 package')
+		componentNames: #('Core1');
+		yourself.
+	resolvedProject
+		addPackageNamed: projectName , '-Core1'
+			toComponentNamed: 'Core1'
+			withConditions: {'common'}
+			andGroupName: 'core'
+			gemstoneDefaultSymbolDictionaryForUser:
+				userId -> RwAbstractV2Test _sampleSymbolDictionaryName2;
+		addPackageNamed: projectName , '-Core2'
+			toComponentNamed: 'Core2'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName3
+			forPackageNamed: projectName , '-Core2';
+		addPackageNamed: projectName , '-Tests'
+			toComponentNamed: 'Core1'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		gemstoneSetDefaultSymbolDictNameForUser: userId
+			to: RwAbstractV2Test _sampleSymbolDictionaryName1;
+		yourself.
+	self _addPackageCore1DefinitionsFor_0004: resolvedProject.
+	packageName := projectName , '-Core2'.
+	className := projectName , 'Class2'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := projectName , '-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: projectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0004_b: resolvedProject
+	| userId |
+	userId := 'SystemUser'.
+	(resolvedProject
+		addComponentNamed: 'Core3'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core1 package')
+		componentNames: #('Core1');
+		yourself.
+	resolvedProject
+		addPackageNamed: projectName , '-Core1'
+			toComponentNamed: 'Core3'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+	^ self _addPackageCore1DefinitionsFor_0004: resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0005: resolvedProject
+
+	| packageName1 packageName2 packageName3  className1 className2 |
+	packageName1 := projectName , '-' , 'Core1'.
+	packageName2 := projectName , '-' , 'Core2'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	resolvedProject
+		addPackagesNamed:
+				{packageName1.
+				packageName2}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addPackagesNamed:
+				{packageName3}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		yourself.
+
+	resolvedProject
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: packageName2;
+		yourself.
+
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		category: packageName1
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		addClassMethod: 'bar ^''bar''' protocol: 'accessing';
+		gs_options: #(#'instancesInvariant');
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: className2
+		super: 'IdentityKeyValueDictionary'
+		instvars: #()
+		category: packageName2
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		addClassMethod: 'bar ^''bar''' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName3)
+		addClassNamed: projectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName3
+		comment: 'I test the Core class')
+		addInstanceMethod: 'test1  self assert: ' , className1 , ' new foo = 1'
+			protocol: 'tests';
+		addInstanceMethod: 'test2  self assert: ' , className1 , ' bar = ''bar'''
+			protocol: 'tests';
+		addInstanceMethod: 'test3  self assert: ' , className2 , ' new foo = 1'
+			protocol: 'tests';
+		addInstanceMethod: 'test4  self assert: ' , className2 , ' bar = ''bar'''
+			protocol: 'tests';
+		addInstanceMethod: 'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName2, ''') includesKey: ''', className1 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName3, ''') includesKey: ''', className2 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', projectName , 'TestCase'' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0006: resolvedProject
+
+	| className1 className2 |
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	resolvedProject
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Core';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Extensions';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: projectName , '-' , 'GemStone';
+		yourself.
+
+	((resolvedProject packageNamed: projectName , '-' , 'Tests')
+		classDefinitionNamed: projectName , 'TestCase')
+		addInstanceMethod: 'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName2, ''') includesKey: ''', className1 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName3, ''') includesKey: ''', className2 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', projectName , 'TestCase'' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0007: resolvedProject
+	| packageName1 className1 |
+	packageName1 := projectName , '-' , 'Core1'.
+	className1 := projectName , 'Class1'.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		instVarNames: #('iv1');
+		gs_options: #();
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0008: resolvedProject
+
+	| className1 className2 |
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	resolvedProject
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: projectName , '-' , 'Core';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3
+			forPackageNamed: projectName , '-' , 'Extensions';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'GemStone';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'GemStone-Tests';
+		yourself.
+
+	((resolvedProject packageNamed: projectName , '-' , 'Tests')
+		classDefinitionNamed: projectName , 'TestCase')
+		updateInstanceMethod: 'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName3, ''') includesKey: ''', className1 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName2, ''') includesKey: ''', className2 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', projectName , 'TestCase'' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName2, ''') includesKey: ''', projectName , 'GemStoneTestCase'' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0009: resolvedProject
+
+	| className1 className2 |
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	resolvedProject
+		gemstoneSetSymbolDictName: nil 
+			forPackageNamed: projectName , '-' , 'Core';
+		gemstoneSetSymbolDictName: nil 
+			forPackageNamed: projectName , '-' , 'Extensions';
+		gemstoneSetSymbolDictName: nil 
+			forPackageNamed: projectName , '-' , 'Tests';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'GemStone';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'GemStone-Tests';
+		yourself.
+
+	((resolvedProject packageNamed: projectName , '-' , 'Tests')
+		classDefinitionNamed: projectName , 'TestCase')
+		updateInstanceMethod: 'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', className1 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName2, ''') includesKey: ''', className2 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', projectName , 'TestCase'' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName2, ''') includesKey: ''', projectName , 'GemStoneTestCase'' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0010: resolvedProject
+	| className1 className2 |
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo:
+			RwRowanSample9Test _sampleSymbolDictionaryName4.
+
+	((resolvedProject packageNamed: projectName , '-' , 'Tests')
+		classDefinitionNamed: projectName , 'TestCase')
+		updateInstanceMethod:
+				'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName4 , ''') includesKey: '''
+						, className1
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName2 , ''') includesKey: '''
+						, className2
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName4 , ''') includesKey: '''
+						, projectName
+						,
+							'TestCase'' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName2 , ''') includesKey: '''
+						, projectName
+						,
+							'GemStoneTestCase'' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0011: resolvedProject
+	"Add an extension package for a method in class1 ... load everything into a single symbol dict"
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName1 packageName2 packageName3 className1 className2  |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addPackagesNamed:
+				{
+				packageName2.
+				}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName2 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3)
+		classDefinitionNamed:className2)
+		addInstanceMethod: 'test2  self assert: ' , className1 , ' bar = ''bar'''
+			protocol: 'tests';
+		addInstanceMethod: 'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', className1 , ''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: ''' , RwRowanSample9Test _sampleSymbolDictionaryName1, ''') includesKey: ''', className2 , ''' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0012: resolvedProject
+	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and does cause an error."
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName1 packageName2 packageName3 packageName4 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	packageName4 := projectName , '-' , 'Extensions1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addPackagesNamed: {packageName4}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: packageName4;
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		classExtensionDefinitionNamed: className1)
+		removeClassMethod: #'bar';
+		yourself.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName4 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		updateInstanceMethod:
+				'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName2 , ''') includesKey: '''
+						, className1
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName1 , ''') includesKey: '''
+						, className2
+						,
+							''' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0013: resolvedProject
+	"Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and does cause an error."
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName1 packageName2 packageName3 packageName4 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	packageName4 := projectName , '-' , 'Extensions1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addPackagesNamed: {packageName4}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName1 
+			forPackageNamed: packageName4;
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		classExtensionDefinitionNamed: className1)
+		removeClassMethod: #'bar';
+		yourself.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName4 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		updateInstanceMethod:
+				'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName2 , ''') includesKey: '''
+						, className1
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName1 , ''') includesKey: '''
+						, className2
+						,
+							''' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0014: resolvedProject
+	"Starting with spec_0011, move extension method to a new extension package; move new extension package 
+		to the classes symbol dictionary. This is an legal combination (extension method and class in same symbol
+		dictionary) and should cause an error, but currently we get an audit error."
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName1 packageName2 packageName3 packageName4 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	packageName4 := projectName , '-' , 'Extensions1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addPackagesNamed: {packageName4}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		yourself.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName1 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName1 
+			forPackageNamed: packageName4;
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		classExtensionDefinitionNamed: className1)
+		removeClassMethod: #'bar';
+		yourself.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar''' protocol: '*' , packageName4 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		updateInstanceMethod:
+				'testSymbolDicts
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName1 , ''') includesKey: '''
+						, className1
+						,
+							''' asSymbol).
+	self assert: ((Rowan image symbolDictNamed: '''
+						, RwRowanSample9Test _sampleSymbolDictionaryName1 , ''') includesKey: '''
+						, className2
+						,
+							''' asSymbol).
+'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addPackageCore1DefinitionsFor_0004: projectDefinition
+	| className packageName |
+	packageName := projectName , '-Core1'.
+	className := projectName , 'Class1'.
+	((projectDefinition packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	^ projectDefinition
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_createCard: postfix specName: specName title: title index: index derivedFrom: parentbranch comment: comment
+	^ RwTestProjectLibraryIndexCard new
+		name: 'index_' , postfix;
+		title: title;
+		specName: specName;
+		index: index;
+		derivedFrom: parentbranch;
+		comment: comment;
+		rowanIssues: {};
+		gemstoneIssues: {};
+		yourself
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_createLoadSpecification: aString
+	^ RwLoadSpecificationV2 new
+		projectName: aString;
+		projectsHome: self projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_doCommitAndPush: commitMessage resolvedRepository: resolvedRepository branchName: branchName
+	| somethingToCommit |
+	somethingToCommit := true.
+	[ resolvedRepository commit: commitMessage ]
+		on: GsInteractionRequest
+		do: [ :ex | 
+			ex interaction message = 'Nothing to commit'
+				ifFalse: [ ex pass ].
+			somethingToCommit := false.
+			ex response: nil ].
+	(somethingToCommit and: [ self preserveChangesOnGithub ])
+		ifTrue: [ 
+			"only push if we really want to preserve the changes during this run and something has changed"
+			resolvedRepository push: resolvedRepository remote branch: branchName ]
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom  resolvedRepository: resolvedRepository commitMessage: commitMessage
+	| derivedIndexCardFile |
+	derivedFrom
+		ifNotNil: [ 
+			derivedIndexCardFile := resolvedRepository repositoryRoot / derivedFrom , 'ston'.
+			derivedIndexCardFile exists
+				ifTrue: [ derivedIndexCardFile delete ] ].
+	indexCard exportTo: resolvedRepository repositoryRoot.
+
+	self
+		_doCommitAndPush: commitMessage
+		resolvedRepository: resolvedRepository
+		branchName: specName.
+
+	resolvedRepository checkout: 'master'.	"write the index card and spec on the master branch"
+	resolvedRepository pull: resolvedRepository remote branch: 'master'.
+
+	(resolvedRepository repositoryRoot / 'indexCards') ensureCreateDirectory.
+	indexCard exportTo: resolvedRepository repositoryRoot / 'indexCards'.
+	(resolvedRepository repositoryRoot / 'specs') ensureCreateDirectory.
+	resolvedRepository _loadSpecification exportTo: resolvedRepository repositoryRoot / 'specs'.
+
+	self
+		_doCommitAndPush: commitMessage
+		resolvedRepository: resolvedRepository
+		branchName: 'master'
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_finishCommitAndPush: specName indexCard: indexCard  resolvedRepository: resolvedRepository commitMessage: commitMessage
+	^ self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: nil
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_genSpecFor: specName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock
+	"Coming in the load spec revision is pointing at the desired starting 
+		point --- the structure to _start_ with. Since we don't know whether the 
+		repository has been cloned or not, we do a resolve, which will ensure
+		that the repository is on the revision specifiied in the incoming load spec.
+	Once we've resolved and read, we reset the revision of the load spec
+		to point to the branch we want to write to. We wipe out the project
+		roots, so we have a clean sarting point and then export the project
+		definition and load spec."
+
+	| resolvedRepository resolvedProject |
+	resolvedProject := loadSpecification resolveStrict.
+
+	resolvedRepository := resolvedProject repository.
+	(resolvedRepository branches includes: specName)
+		ifTrue: [ 
+			"branch exists, so we'll check it out and make the necessary mods"
+			resolvedRepository checkout: specName.
+			resolvedRepository pull: resolvedRepository remote branch: specName ]
+		ifFalse: [ 
+			"create the branch"
+			resolvedRepository createBranch: specName ].
+
+	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	addDefinitionsBlock value: resolvedProject.
+
+	resolvedProject projectRoots
+		do: [ :rootDir | 
+			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
+			rootDir ensureDeleteAll ].
+
+	resolvedProject 
+		export;	"write the rowan directory structure"
+		exportLoadSpecification.
+
+	^ resolvedRepository
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_genSpecFor_004_b: specName branchName: branchName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock
+	"Create a second set of specs/components in an existing branch"
+
+	| resolvedRepository resolvedProject |
+	resolvedProject := loadSpecification resolveStrict.
+
+	resolvedRepository := resolvedProject repository.
+	(resolvedRepository branches includes: branchName)
+		ifTrue: [ 
+			"branch exists, so we'll check it out and make the necessary mods"
+			resolvedRepository checkout: branchName.
+			resolvedRepository pull: resolvedRepository remote branch: branchName ]
+		ifFalse: [ self error: 'Expected branch ' , branchName printString , ' to already exist' ].
+
+	resolvedProject revision: branchName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	addDefinitionsBlock value: resolvedProject.
+
+	resolvedProject
+		exportComponents;
+		exportLoadSpecification.	"write the component and load spec directory structure"
+
+	^ resolvedRepository
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_sampleSymbolDictionaryName1
+	^ RwAbstractV2Test _sampleSymbolDictionaryName1
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_testRowanProjectsSandbox
+	^ RwAbstractV2Test _testRowanProjectsSandbox
+%
+
+! Class implementation for 'RwTestProjectLibraryIndexCard'
+
+!		Instance methods for 'RwTestProjectLibraryIndexCard'
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+comment
+	^comment
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+comment: object
+	comment := object
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+derivedFrom
+	^derivedFrom
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+derivedFrom: object
+	derivedFrom := object
+%
+
+category: 'export'
+method: RwTestProjectLibraryIndexCard
+exportTo: directoryReference
+	self exportTo: directoryReference as: self name , '.ston'
+%
+
+category: 'export'
+method: RwTestProjectLibraryIndexCard
+exportTo: directoryReference as: fileName
+	directoryReference / fileName
+		writeStreamDo: [ :fileStream | STON put: self onStreamPretty: fileStream ]
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+gemstoneIssues
+	^gemstoneIssues
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+gemstoneIssues: object
+	gemstoneIssues := object
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+index
+	^index
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+index: object
+	index := object
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+name
+	^name
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+name: object
+	name := object
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+rowanIssues
+	^rowanIssues
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+rowanIssues: object
+	rowanIssues := object
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+specName
+	^specName
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+specName: object
+	specName := object
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+title
+	^title
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+title: object
+	title := object
 %
 
 ! Class implementation for 'RwSample1TestValidationVisitor'
@@ -2310,10 +4273,7 @@ Options B and Z are available only when matching. Option A is available for both
 category: 'Testing'
 classmethod: RowanServicesTest
 isAbstract
-	"Override to true if a TestCase subclass is Abstract and should not have
-	TestCase instances built from it"
-
-	^self sunitName = #RowanServicesTest
+  ^ self sunitName = #'RowanServicesTest'
 %
 
 !		Instance methods for 'RowanServicesTest'
@@ -2471,6 +4431,16 @@ defaultSymbolDictionaryName
 	^'ServicesTestDictionary'
 %
 
+category: 'unicode method'
+method: RowanServicesTest
+iAmAUnicodeMethod
+
+		| abc |
+		abc := 'Ϛ'.
+		self halt. 
+		^abc
+%
+
 category: 'support'
 method: RowanServicesTest
 jadeiteIssueTested: aSymbol withTitle: anObject
@@ -2485,23 +4455,21 @@ jadeiteIssueTested: aSymbol withTitle: anObject
 category: 'support'
 method: RowanServicesTest
 loadRowanSample1
-  | rowanSpec gitRootPath projectName spec projectTools |
+  | gitRoot projectName spec projectTools |
   projectName := 'RowanSample1'.
   (Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
     ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-  rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-  gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
-  (Rowan fileUtilities directoryExists: gitRootPath , projectName)
-    ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+  gitRoot := self _testRowanProjectsSandbox.
+  (gitRoot / projectName) ensureDeleteAll.
 	spec := 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston' asRwUrl asSpecification.
 	projectTools := Rowan projectTools.
 	projectTools clone
 		cloneSpecification: spec
-		gitRootPath: gitRootPath
+		gitRootPath: gitRoot pathString
 		useSsh: true
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectTools create createProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
+	projectTools create createProjectFromSpecUrl: 'file:', gitRoot pathString, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
 	projectTools load loadProjectNamed: 'RowanSample1'.
 %
 
@@ -2609,6 +4577,18 @@ unloadServicesTestProject
 	Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent:[^self].
 	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName.
 	defaultProjectDefinition := nil
+%
+
+category: 'private'
+method: RowanServicesTest
+_testRowanProjectsSandbox
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	| rowanProject |
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX')
+		ifNotNil: [ :sandboxPath | ^ sandboxPath asFileReference ].
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ rowanProject repositoryRoot / 'test/testRepositories/repos/'
 %
 
 ! Class implementation for 'RowanAnsweringServiceTest'
@@ -3710,11 +5690,11 @@ stepPoint1Source
 
 	| array |
 	array := Array new. 
-						"^1"
+			"^3"		"^2"
 	array add: OrderedCollection new. 
-			"^3"							"^2"
+			"^5"							"^4"
 	array size.
-			"^4"
+			"^6"
 	^array'
 %
 
@@ -3811,16 +5791,6 @@ test_isTestMethod
 
 category: 'tests'
 method: RowanMethodServiceTest
-test_noStepPoints
-	| classService methodService |
-	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
-	classService saveMethodSource: 'abc' category: 'testing step points'.
-	methodService := RowanMethodService forSelector: #abc class: classService classOrMeta meta: false organizer: ClassOrganizer new.
-	self assert: methodService stepPoints isEmpty.
-%
-
-category: 'tests'
-method: RowanMethodServiceTest
 test_reformatSource
 	| classService methodService source |
 		classService := RowanClassService forClassNamed: self servicesDefaultClassName.
@@ -3855,64 +5825,6 @@ test_runMethodTest
 	classService saveMethodSource: 'testMethod2  1 zork' category: 'failing test'.
 	methodService runTest: #testMethod2 inClassName: self servicesDefaultTestClassName.
 	self assert: methodService testResult equals: 'error'.
-%
-
-category: 'tests'
-method: RowanMethodServiceTest
-test_stepPoint1
-	| classService methodService |
-	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
-	classService saveMethodSource: self stepPoint1Source category: 'testing step points'.
-	methodService := RowanMethodService forSelector: #simpleMethod class: classService classOrMeta meta: false organizer: ClassOrganizer new.
-	self assert: methodService stepPoints size equals: 4.		
-	self assert: (methodService source copyFrom: 42 to: 44) asSymbol equals: (methodService stepPoints at: 1) value. "#new"
-	self assert: (methodService source copyFrom: 89 to: 91) asSymbol equals: (methodService stepPoints at: 2) value. "#new"
-	self assert: (methodService source copyFrom: 66 to: 69) asSymbol equals: (methodService stepPoints at: 3) value. "#add:"
-	self assert: (methodService source copyFrom: 121 to: 124) asSymbol equals: (methodService stepPoints at: 4) value. "#size"
-%
-
-category: 'tests'
-method: RowanMethodServiceTest
-test_stepPoint2
-	| classService methodService |
-	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
-	classService saveMethodSource: self stepPoint2Source category: 'testing step points'.
-	methodService := RowanMethodService forSelector: #simpleMethod2 class: classService classOrMeta meta: false organizer: ClassOrganizer new.
-	self assert: methodService stepPoints size equals: 7.		
-	self assert: (methodService source copyFrom: 43 to: 45) asSymbol equals: (methodService stepPoints at: 1) value. "#new"
-	self assert: (methodService source copyFrom: 91 to: 104) asSymbol equals: (methodService stepPoints at: 2) value. "#forClassNamed:"
-	self assert: (methodService source copyFrom: 67 to: 70) asSymbol equals: (methodService stepPoints at: 3) value. "#add:"
-	self assert: (methodService source copyFrom: 145 to: 147) asSymbol equals: (methodService stepPoints at: 4) value. "#do:"
-	self assert: (methodService source copyFrom: 295 to: 298) asSymbol equals: (methodService stepPoints at: 5) value. "#size"
-	self assert: (methodService source copyFrom: 225 to: 234) asSymbol equals: (methodService stepPoints at: 6) value. "#stepPoints"
-	self assert: (methodService source copyFrom: 268 to: 271) asSymbol equals: (methodService stepPoints at: 7) value. "#size"
-%
-
-category: 'tests'
-method: RowanMethodServiceTest
-test_stepPoint3
-	| classService methodService |
-	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
-	classService saveMethodSource: self stepPoint3Source category: 'testing step points'.
-	methodService := RowanMethodService forSelector: #'initialize:status:' class: classService classOrMeta meta: false organizer: ClassOrganizer new.
-	self assert: methodService stepPoints size equals: 9.		
-	self assert: (methodService source copyFrom: 109 to: 111) asSymbol equals: (methodService stepPoints at: 1) value. 
-	self assert: (methodService stepPoints at: 1) value equals: #new.
-	self assert: (methodService source copyFrom: 165 to: 174) asSymbol equals: (methodService stepPoints at: 2) value.
-	self assert: (methodService stepPoints at: 2) value equals: #stackDepth.
-	self assert: (methodService source copyFrom: 149 to: 152) asSymbol equals: (methodService stepPoints at: 3) value. 
-	self assert: (methodService stepPoints at: 3) value equals: #new:.
-	self assert: (methodService source copyFrom: 216 to: 225) asSymbol equals: (methodService stepPoints at: 4) value. 
-	self assert: (methodService stepPoints at: 4) value equals: #stackDepth.
-	self assert: (methodService source copyFrom: 290 to: 297) asSymbol equals: #process:. 
-	self assert: (methodService stepPoints at: 5) value equals: #'process:level:organizer:'. 
-	self assert: (methodService source copyFrom: 260 to: 262) asSymbol equals: #at:. 		
-	self assert: (methodService stepPoints at: 6) value equals: #at:put:.
-
-	"7 & 8 are present in 3.2.15 but are incorrect presumably due to optimization. Later server versions may get this fixed"
-	
-	self assert: (methodService source copyFrom: 392 to: 396) asSymbol equals: (methodService stepPoints at: 9) value. "#asOop"
-self assert: (methodService stepPoints at: 9) value equals: #asOop.
 %
 
 ! Class implementation for 'RowanPackageServiceTest'
@@ -4190,6 +6102,24 @@ test_updateAddsCommandResult
 
 category: 'tests'
 method: RowanQueryServicesTest
+test_dontUseFileStream
+  | queryService results |
+  self
+    jadeiteIssueTested: #'issue611'
+    withTitle: 'Use FileStreamPortable not FileStream'.
+  queryService := RowanQueryService new.
+  queryService organizer: ClassOrganizer new.
+  queryService browseClassReferences: 'FileStream'.
+  results := queryService queryResults.
+  self assert: results size equals: 1.
+  self assert: results first className equals: 'Stream'.
+  self
+    assert: results first selector
+    equals: #'installStreamImplementationFrom:'
+%
+
+category: 'tests'
+method: RowanQueryServicesTest
 test_hierarchyImplementors
 
 	| queryService hierarchyClassNames |
@@ -4344,6 +6274,18 @@ _symbolDictionaryNames
 		(self _symbolDictionaryName1).
 		(self _symbolDictionaryName2).
 		(self _unmanagedDictionaryName)}
+%
+
+category: 'private'
+classmethod: RwAbstractTest
+_testRowanProjectsSandbox
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	| rowanProject |
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX')
+		ifNotNil: [ :sandboxPath | ^ sandboxPath asFileReference ].
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ rowanProject repositoryRoot / 'test/testRepositories/repos/'
 %
 
 category: 'private'
@@ -5028,9 +6970,2523 @@ _symbolDictionaryName2
 
 category: 'private'
 method: RwAbstractTest
+_testRowanProjectsSandbox
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	^ self class _testRowanProjectsSandbox
+%
+
+category: 'private'
+method: RwAbstractTest
 _unmanagedDictionaryName
 
 	^ self class _unmanagedDictionaryName
+%
+
+! Class implementation for 'RwAbstractV2Test'
+
+!		Class methods for 'RwAbstractV2Test'
+
+category: 'private'
+classmethod: RwAbstractV2Test
+_sampleSymbolDictionaryName1
+
+	^ #'RowanSample9_1'
+%
+
+category: 'private'
+classmethod: RwAbstractV2Test
+_sampleSymbolDictionaryName2
+
+	^ #'RowanSample9_2'
+%
+
+category: 'private'
+classmethod: RwAbstractV2Test
+_sampleSymbolDictionaryName3
+
+	^ #'RowanSample9_3'
+%
+
+category: 'private'
+classmethod: RwAbstractV2Test
+_sampleSymbolDictionaryName4
+
+	^ #'RowanSample9_4'
+%
+
+category: 'private'
+classmethod: RwAbstractV2Test
+_symbolDictionaryNames
+	^ super _symbolDictionaryNames
+		,
+			{(self _sampleSymbolDictionaryName1).
+			(self _sampleSymbolDictionaryName2).
+			(self _sampleSymbolDictionaryName3).
+			(self _sampleSymbolDictionaryName4)}
+%
+
+!		Instance methods for 'RwAbstractV2Test'
+
+category: 'running'
+method: RwAbstractV2Test
+setUp
+	| projectsHome |
+	super setUp.
+	projectsHome := self _testRowanProjectsSandbox.
+	self _specListProjectNames
+		do: [ :name | 
+			Rowan
+				projectNamed: name
+				ifPresent: [ :prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+			self _deleteProjectRepositoryDir
+				ifTrue: [ (projectsHome / name) ensureDeleteAll ] ]
+%
+
+category: 'running'
+method: RwAbstractV2Test
+tearDown
+	super tearDown.
+	self _specListProjectNames
+		do: [ :name | 
+			Rowan
+				projectNamed: name
+				ifPresent: [ :prj | Rowan image _removeLoadedProject: prj _loadedProject ] ]
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject
+	| projectName packageName className |
+	projectName := resolvedProject projectName.
+	resolvedProject
+		comment: 'Project created using the V2 project creation api ';
+		addComponentNamed: 'Core'
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
+			comment: 'Primary component used for loading the system.';
+		addPackagesNamed: {(projectName , '-Core')}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addPackageNamed: projectName , '-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		addPackageNamed: projectName , '-GemStone-Extensions'
+			toComponentNamed: 'Core'
+			withConditions: {'gemstone'}
+			andGroupName: 'core'
+			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
+		addPackageNamed: projectName , '-GemStone-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'gemstone'}
+			andGroupName: 'tests';
+		yourself.
+	packageName := projectName , '-Core'.
+	className := projectName , 'Class1'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := projectName , '-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: projectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	packageName := projectName , '-GemStone-Extensions'.
+	className := projectName , 'RcCounter'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'RcCounter'
+		category: packageName
+		comment: 'I am an example GemStone class')
+		addClassMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := projectName , '-GemStone-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: projectName , 'GsTestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example GemStone class')
+		addInstanceMethod: 'test  self assert: ' , className , ' foo = 1'
+			protocol: 'tests';
+		yourself.
+	resolvedProject components do: [ :component | self assert: component validate ].
+	self assert: resolvedProject _validate.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_canonicalRowanSample9ProjectFor: projectName
+	| loadSpecification projectDefinition |
+	loadSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		yourself.
+	projectDefinition := (loadSpecification resolve: self _testRowanProjectsSandbox)
+		projectNamed: projectName.
+	^ self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_deleteProjectRepositoryDir
+	^ true
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_sampleSymbolDictionaryName1
+
+	^ self class _sampleSymbolDictionaryName1
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_sampleSymbolDictionaryName2
+
+	^ self class _sampleSymbolDictionaryName2
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_sampleSymbolDictionaryName3
+
+	^ self class _sampleSymbolDictionaryName3
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_sampleSymbolDictionaryName4
+
+	^ self class _sampleSymbolDictionaryName4
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_specListProjectNames
+	^ {'RowanSample9'.
+	'RowanSample9_Test'.
+	'RowanSample10'.
+	'RowanSample11'}
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_validateCanonicalRowanSample9ProjectFor: resolvedProject
+	| repositoryRoot projectName |
+	projectName := resolvedProject projectName.
+	repositoryRoot := resolvedProject repositoryRoot.
+	{repositoryRoot.
+	(repositoryRoot / resolvedProject projectSpecFile).
+	(resolvedProject componentsRoot).
+	(resolvedProject componentsRoot / 'Core.ston').
+	(resolvedProject packagesRoot).
+	(resolvedProject packagesRoot / (projectName , '-Core')).
+	(resolvedProject packagesRoot / (projectName , '-Core')
+		/ (projectName , 'Class1.class.st')).
+	(resolvedProject packagesRoot / (projectName , '-GemStone-Extensions')).
+	(resolvedProject packagesRoot / (projectName , '-GemStone-Extensions')
+		/ (projectName , 'RcCounter.class.st')).
+	(resolvedProject packagesRoot / (projectName , '-GemStone-Tests')).
+	(resolvedProject packagesRoot / (projectName , '-GemStone-Tests')
+		/ (projectName , 'GsTestCase.class.st')).
+	(resolvedProject packagesRoot / (projectName , '-Tests')).
+	(resolvedProject packagesRoot / (projectName , '-Tests')
+		/ (projectName , 'TestCase.class.st')).
+	(resolvedProject specsRoot).
+	(resolvedProject specsRoot / resolvedProject projectAlias , 'ston').
+	(resolvedProject projectsRoot)} do: [ :fileRef | self assert: fileRef exists ]
+%
+
+! Class implementation for 'RwLoadSpecificationV2Test'
+
+!		Instance methods for 'RwLoadSpecificationV2Test'
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_1
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_2
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		revision: 'master';
+		gitUrl: 'file://x/y/z';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_3
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testComparison_1
+	| projectName loadSpecification specName projectSpecCopy stonString stonStringCopy x |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	self
+		assert:
+			(x := RwLoadSpecificationV2 allInstVarNames)
+				=
+					#(#'specName' #'projectName' #'projectAlias' #'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #'revision' #'projectSpecFile' #'componentNames' #'groupNames' #'platformProperties' #'comment' #'projectsHome' #'repositoryResolutionPolicy').	"If inst vars don't match, copy and hash methods have to change"
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+	self assert: projectSpecCopy hash = loadSpecification hash
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testComparison_2
+	"compare equal even if lazy initialization has taken place"
+
+	| projectName loadSpecification specName projectSpecCopy stonString stonStringCopy stonStringLazy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	projectSpecCopy platformProperties.	"trigger the selectors that cause lazy initialization"
+
+	stonStringLazy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+	self assert: projectSpecCopy hash = loadSpecification hash.
+	self deny: stonStringLazy = stonStringCopy
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidPropertyValue
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 'boom';
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidPropertyValueForUser
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 'boom';
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidRevision
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		revision: 'boom';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Invalid revision ''boom''. Should be nil for disk-based repository'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_1
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"original has no predefined platformSpec dictionary"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString stonStringCopy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {
+	(STON toStringPretty: loadSpecification).
+	(STON toStringPretty: projectSpecCopy)}	"useful in case of test failure"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_2
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"predefine platformSpec dictionary in original"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultSymbolDictNameForUser: 'Bozo'
+			to: self _sampleSymbolDictionaryName2;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}.
+	self assert: stonString = (stonStrings at: 1).	"duh"
+	self assert: stonString = (stonStrings at: 2).	"point of test"
+	self deny: stonString = (stonStrings at: 3)	"duh"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_3
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"componentNames and groupNames need to be isolated"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		revision: 'master';
+		gitUrl: 'file://x/y/z';
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy componentNames add: 'Boom'.
+	projectSpecCopy groupNames add: 'boom'.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}.
+	self assert: stonString = (stonStrings at: 1).	"duh"
+	self assert: stonString = (stonStrings at: 2).	"point of test"
+	self deny: stonString = (stonStrings at: 3)	"duh"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testMissingRevision
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: The instance variable ''revision'' must be set for the''gitUrl'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testNilInstanceVariable
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectSpecFile: nil;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''projectSpecFile'' cannot be nil'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testOnlyOneRepositoryUrl
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		diskUrl: 'ftp://$ROWAN_PROJECTS_HOME/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testRevisionMustBeSet
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''revision'' must be set for the''gitUrl'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testSpec_0001_A
+	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
+
+	"functional variant of testSpec_0001_B"
+
+	| rowanProject fileUrl loadSpecification resolvedProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+
+	resolvedProject := loadSpecification resolve. "project is not being loaded from disk on resolve"
+	resolvedProject
+		addPackagesNamed: {(loadSpecification projectName , '-Core')}
+		toComponentNamed: 'Core'
+		withConditions: {'common'}
+		andGroupName: 'core'.
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testSpec_0001_B
+	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
+
+	"testSpec_0001_A behavies correctly"
+
+	| rowanProject fileUrl loadSpecification resolvedProject resolvedRepository oldPolicy |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		repositoryResolutionPolicy: #'strict';
+		yourself.	"force #strict policy to ensure that the revision is checkout out in the repository"
+
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+
+
+	resolvedProject := loadSpecification resolve.
+
+	resolvedRepository := resolvedProject repository.
+	resolvedRepository checkout: 'master'.
+
+	oldPolicy := loadSpecification repositoryResolutionPolicy.
+	[ 
+	"force #strict policy to ensure that the revision is checkout out in the repolicy"
+	loadSpecification repositoryResolutionPolicy: #'strict'.
+	resolvedProject := loadSpecification resolve ]
+		ensure: [ loadSpecification repositoryResolutionPolicy: oldPolicy ].
+
+	resolvedProject
+		addPackagesNamed: {(loadSpecification projectName , '-Core')}
+		toComponentNamed: 'Core'
+		withConditions: {'common'}
+		andGroupName: 'core'
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testUknownPlatform
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+
+	hitError := false.
+	loadSpecification platformProperties at: 'boom' put: Dictionary new.
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown platform name ''boom'' in platform properties'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testUnknownPropertyKey
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+	(loadSpecification platformProperties at: 'gemstone')
+		at: 'BOOM'
+		put:
+			(Dictionary new
+				at: #'boom' put: nil;
+				yourself).
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description) = 'Error: Unknown platform property key #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+! Class implementation for 'RwProjectLoadComponentV2Test'
+
+!		Instance methods for 'RwProjectLoadComponentV2Test'
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testBasic
+	"excercise basic functionality"
+
+	| componentName projectName component packageName stonString |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self assert: component validate
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testInvalidConditionalGroupName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString conditionalPackages hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	conditionalPackages := component conditionalPackages.
+	(conditionalPackages at: #('common')) at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Conditional packages includes group name ''boom'' that is not a defined group'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testInvalidGroupName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component defineGroupNamed: 'core' toIncludeGroups: #('boom').
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The group ''boom'' is not a defined group'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUknownPlatform
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	component conditionalPackageMapSpecs at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Unknown platform name ''boom'' in conditional package map specs'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUknownPlatformPropertiesKey
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'boom'
+		put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown platformPropertiesMap key #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUndefinedPackageName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	(((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'packageNameToPlatformPropertiesMap') at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Undefined package name ''boom'' used in plaform properties map'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUnknownPackagePropertName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	(((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'packageNameToPlatformPropertiesMap')
+		at: packageName
+		put:
+			(Dictionary new
+				at: #'boom' put: 'boom';
+				yourself).
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown package property name #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+! Class implementation for 'RwProjectSpecificationV2Test'
+
+!		Instance methods for 'RwProjectSpecificationV2Test'
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testBasic
+	"excercise basic functionality"
+
+	| projectName projectSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
+	self assert: projectSpecification  _validate
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testComparison_1
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy x |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+
+	self
+		assert:
+			(x := RwProjectSpecificationV2 allInstVarNames)
+				=
+					#(#'specName' #'projectName' #'projectSpecPath' #'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'comment' #'repoType' #'loadedCommitId').	"If inst vars don't match, copy and hash methods have to change"
+
+	stonString := STON toStringPretty: projectSpecification.
+
+	projectSpecCopy := projectSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = projectSpecification.
+	self assert: projectSpecCopy hash = projectSpecification hash
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testComparison_2
+	"compare equal even if lazy initialization has taken place"
+
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy stonStringLazy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: projectSpecification.
+
+	projectSpecCopy := projectSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	projectSpecCopy repoType.	"trigger the selectors that cause lazy initialization"
+
+	stonStringLazy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = projectSpecification.
+	self assert: projectSpecCopy hash = projectSpecification hash.
+	self deny: stonStringLazy = stonStringCopy
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testNilInstanceVariable
+	"error coverage for invalid load specs"
+
+	| projectName projectSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		projectsPath: nil;
+		yourself.
+
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
+	hitError := false.
+	[ projectSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''projectsPath'' cannot be nil'.
+			hitError := true ].
+	self assert: hitError
+%
+
+! Class implementation for 'RwResolvedProjectV2Test'
+
+!		Instance methods for 'RwResolvedProjectV2Test'
+
+category: 'tests'
+method: RwResolvedProjectV2Test
+testBasic
+	"Create project ... without errors"
+
+	| projectName projectAlias project stonString  |
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+
+	self assert: project _validate.
+
+	project resolve.
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: project.
+	stonString := STON toStringPretty: project	"useful to view full structure"
+%
+
+category: 'tests'
+method: RwResolvedProjectV2Test
+testBasicResolve_1
+	"excercise basic functionality"
+
+	| project projectName projectAlias stonString projectsHome expectedRepositoryRoot
+		 resolvedProjectSpecification projectSpecification loadSpecification resolvedLoadSpecification|
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	projectsHome := self _testRowanProjectsSandbox.
+	expectedRepositoryRoot := projectsHome / projectAlias.
+
+	self deny: expectedRepositoryRoot exists.
+
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	projectSpecification := project _projectSpecification.
+	loadSpecification := project _loadSpecification.
+	self assert: project _validate.
+
+	project resolve.
+
+	self assert: expectedRepositoryRoot exists.
+	stonString := STON toStringPretty: project.	"useful in case of error"
+
+	resolvedProjectSpecification := project _projectSpecification.
+	resolvedLoadSpecification := project _loadSpecification.
+	self assert: project packageNames isEmpty.
+	self assert: resolvedProjectSpecification = projectSpecification.
+	self assert: resolvedProjectSpecification == projectSpecification.
+	self assert: resolvedLoadSpecification = loadSpecification.
+	self assert: resolvedLoadSpecification == loadSpecification.	"did not originate project with a loadSpecification so identity is expected"
+%
+
+category: 'tests'
+method: RwResolvedProjectV2Test
+testBasicResolve_2
+	"excercise basic functionality"
+
+	"no project alias"
+
+	| project projectName stonString projectsHome expectedRepositoryRoot
+		 resolvedProjectSpecification projectSpecification|
+	projectName := 'RowanSample9'.
+	projectsHome := self _testRowanProjectsSandbox.
+	expectedRepositoryRoot := projectsHome / projectName.
+
+	self deny: expectedRepositoryRoot exists.
+
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	projectSpecification := project _projectSpecification.
+	self assert: project _validate.
+
+	project resolve.
+
+	self assert: expectedRepositoryRoot exists.
+	stonString := STON toStringPretty: project.	"useful in case of error"
+
+	resolvedProjectSpecification := project _projectSpecification.
+	self assert: project packageNames isEmpty.
+	self assert: resolvedProjectSpecification = projectSpecification.
+%
+
+category: 'tests'
+method: RwResolvedProjectV2Test
+testBasicResolve_git
+	"Create git repository on resolve"
+
+	| projectName projectsHome resolvedProject expectedRepositoryRoot stonString |
+	projectName := 'RowanSample9'.
+	projectsHome := self _testRowanProjectsSandbox.
+	expectedRepositoryRoot := projectsHome / projectName.
+
+	self deny: expectedRepositoryRoot exists.
+
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #'git';
+		yourself.
+
+	resolvedProject resolve.
+	stonString := STON toStringPretty: resolvedProject.
+
+	self assert: expectedRepositoryRoot exists.
+	self assert: (expectedRepositoryRoot / '.git') exists
+%
+
+category: 'tests'
+method: RwResolvedProjectV2Test
+testCreateNewDiskProject
+	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject resolvedRepository resolvedRepositoryCopy x |
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	projectsHome := self _testRowanProjectsSandbox.
+	projectRoot := projectsHome / projectAlias.
+
+	projectSpecification := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		diskUrl: 'file://' , projectRoot pathString;
+		yourself.
+
+	self deny: projectRoot exists.
+
+	resolvedProject := projectSpecification resolve.
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+
+	resolvedProject
+		export;
+		exportLoadSpecification.
+
+	informed := false.
+	self
+		handleInformDuring: [ resolvedProject commit: 'first commit' ]
+		interactionBlock: [ :inform | informed := true ].
+	self assert: informed description: 'expected an inform'.
+
+	self _validateCanonicalRowanSample9ProjectFor: resolvedProject.
+
+	self
+		assert:
+			(x := RwDiskRepositoryDefinitionV2 allInstVarNames)
+				= #(#'properties' #'projectsHome' #'repositoryRoot' #'repositoryUrl').	"If inst vars don't match, copy and hash methods have to change"
+
+	resolvedRepository := resolvedProject _projectRepository.
+	resolvedRepositoryCopy := resolvedRepository copy.
+
+	self assert: resolvedRepository = resolvedRepositoryCopy.
+	self assert: resolvedRepository ~~ resolvedRepositoryCopy
+%
+
+category: 'tests'
+method: RwResolvedProjectV2Test
+testCreateNewGitProject
+	| projectName projectAlias projectSpecification stonString resolvedProject projectsHome projectRoot resolvedRepository resolvedRepositoryCopy x |
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	projectsHome := self _testRowanProjectsSandbox.
+	projectRoot := projectsHome / projectAlias.
+
+	projectSpecification := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gitUrl: 'file://' , projectRoot pathString;
+		yourself.
+
+	self deny: projectRoot exists.
+
+	resolvedProject := projectSpecification resolve.
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+
+	resolvedProject
+		export;
+		exportLoadSpecification;
+		commit: 'first commit'.
+
+	self _validateCanonicalRowanSample9ProjectFor: resolvedProject.
+	self
+		assert:
+			(Rowan projectTools git gitPresentIn: resolvedProject repositoryRoot pathString).
+
+	self
+		assert:
+			(x := RwGitRepositoryDefinitionV2 allInstVarNames)
+				=
+					#(#'properties' #'projectsHome' #'repositoryRoot' #'repositoryUrl' #'remote' #'remoteUrl' #'committish').	"If inst vars don't match, copy and hash methods have to change"
+
+	resolvedRepository := resolvedProject _projectRepository.
+	resolvedRepositoryCopy := resolvedRepository copy.
+
+	self assert: resolvedRepository = resolvedRepositoryCopy.
+	self assert: resolvedRepository ~~ resolvedRepositoryCopy
+%
+
+! Class implementation for 'RwRowanSample9Test'
+
+!		Class methods for 'RwRowanSample9Test'
+
+category: 'private'
+classmethod: RwRowanSample9Test
+_clearLoadSpecSessionCache
+	"self _clearLoadSpecSessionCache"
+
+	SessionTemps current removeKey: self _loadSpecSessionCacheKey ifAbsent: [  ].
+	SessionTemps current removeKey: self _gitPullSessionCacheKey ifAbsent: [  ]
+%
+
+category: 'private'
+classmethod: RwRowanSample9Test
+_gitPullSessionCacheKey
+	^ #'RowanSample9GitBranchDict'
+%
+
+category: 'private'
+classmethod: RwRowanSample9Test
+_loadSpecSessionCacheKey
+	^ #'RowanSample9LoadSpecsDict'
+%
+
+!		Instance methods for 'RwRowanSample9Test'
+
+category: 'tests'
+method: RwRowanSample9Test
+testIndexCards
+	| projectSpecification indexCards specsDir projectSpecs resolvedProjects |
+	projectSpecification := self _rowanSample9_0000_load_spec.
+	projectSpecification repositoryRoot ensureDeleteAll.
+	projectSpecification revision: 'master'.
+	projectSpecification resolveStrict.
+
+	indexCards := (projectSpecification repositoryRoot / 'indexCards') files
+		collect: [ :file | 
+			file
+				readStreamDo: [ :fileStream | 
+					| stream |
+					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+					STON fromStream: stream ] ].
+
+	indexCards := indexCards sort: [ :a :b | a index <= b index ].
+
+	specsDir := projectSpecification repositoryRoot / 'specs'.
+	projectSpecs := indexCards
+		collect: [ :indexCard | 
+			specsDir / indexCard specName , 'ston'
+				readStreamDo: [ :fileStream | 
+					| stream |
+					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+					STON fromStream: stream ] ].
+
+	resolvedProjects := projectSpecs
+		collect: [ :projectSpec | 
+			projectSpec projectsHome: self _testRowanProjectsSandbox.
+			STON toStringPretty: projectSpec resolve ]
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_254
+	"https://github.com/dalehenrich/Rowan/issues/254"
+
+	| loadSpec projectName resolvedProject loadedProjects project testResult 
+		packageName1 packageName2 |
+
+	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
+		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadSpec := self _loadSpecNamed: 'spec_0002'.	"basic project (remove instancesInvariant option and move class to default symbol dictionary: self _sampleSymbolDictionaryName1)"
+
+"resolve/load"
+	resolvedProject := loadSpec resolve.
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_446
+	"Not a real test ... used for V2.0 spec development"
+
+	"https://github.com/GemTalk/Rowan/issues/446"
+
+	"create a project that has 2 components, one component 
+		requires the other component; and two load specs, each spec
+		loads a different component ... needed to consolidate spec_004 
+		creation"
+
+	| project1 project2 projectName projectsHome resolvedProject stonString |
+	projectName := 'RowanSample9_testbed'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	project1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #'git';
+		yourself.
+
+	resolvedProject := project1 resolve.
+
+	(resolvedProject
+		addComponentNamed: 'Core1'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core1 package and Core2 component')
+		componentNames: #('Core2');
+		yourself.
+	resolvedProject
+		addComponentNamed: 'Core2'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'contains ' , projectName , '-Core2 package'.
+
+	resolvedProject
+		componentNames: #('Core1');
+		yourself.	"????"
+
+	project2 := RwResolvedProjectV2 new
+		componentNames:  #('Core2');
+		yourself.	"????"
+
+	stonString := STON toStringPretty: resolvedProject.
+	false
+		ifTrue: [ self halt ]
+%
+
+category: 'issue 493'
+method: RwRowanSample9Test
+testIssue_493
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"duplicate of RwRowanSample2Test debug: #testIssue493 (no existing LoadedMethod found for the old compiledMethod.) ... "
+
+	"Cannot duplicate RwRowanSample4Test>>#testLoadProjectNamed_493 (passing in 3.5.0) because: in v1.2 the default symbol 
+		dictionary was a function of the component, so a component without a default
+		explicitly defined, gave a different answer as to the expected symbol dict for 
+		packages without explicitly defined symbol dicts ... in 3.2.15, the test passes, when deprecated methods are loaded"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0008'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project soec_0008"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0010"
+	loadSpec := self _loadSpecNamed: 'spec_0010'.
+	resolvedProject := loadSpec resolve.
+
+"load project soec_0010"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testIssue_495_1
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| loadSpec projectName resolvedProject loadedProjects errorHit |
+
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0011"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0012"
+	loadSpec := self _loadSpecNamed: 'spec_0012'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0012"
+	errorHit := false.
+
+	[ loadedProjects := resolvedProject load ]
+		on: Error
+		do: [:ex |
+			| x |
+			self assert: (x := ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_3''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			errorHit := true ].
+
+"validate"
+	self assert: errorHit.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testIssue_495_2
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"in this case the class package and extension package are swapping symbol dictionaries"
+
+	| loadSpec projectName resolvedProject loadedProjects errorHit |
+
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0011"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0013"
+	loadSpec := self _loadSpecNamed: 'spec_0013'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0013"
+	errorHit := false.
+	[ loadedProjects := resolvedProject load ]
+		on: Error
+		do: [:ex |
+			| x |
+			self assert: (x := ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			errorHit := true ].
+
+"validate"
+	self assert: errorHit.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testIssue_495_3
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict (during audit: UndefinedObject does not understand  #'name') ... "
+
+	"in this case the class package and extension package are swapping symbol dictionaries"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0011"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0014"
+	loadSpec := self _loadSpecNamed: 'spec_0014'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0014"
+	loadedProjects := resolvedProject load .
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_504_1
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
+
+	"use spec_0002 and modify resolved project to use correct symbol dictionary mappings"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+
+	resolvedProject
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Core';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Extensions';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: projectName , '-' , 'GemStone';
+		yourself.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_504_2
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
+
+	"use spec_0006 ... use component symbol dictionary mappings"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	loadSpec := self _loadSpecNamed: 'spec_0006'.
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_504_3
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
+
+	"use spec_0007 ... with instance variables to force the new class version"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	loadSpec := self _loadSpecNamed: 'spec_0006'.
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_504_4
+	"https://github.com/dalehenrich/Rowan/issues/504"
+
+	"V2.0 replacement for RowanSample4Test>>testIssue230 ... explicit test for issue #504"
+
+	"reverse the use of spec_0007 and spec_0006"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0006'.	
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_527
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	| loadSpec symDictName className projectName |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	(Rowan image loadedProjectNamed: loadSpec projectAlias ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	projectName := loadSpec projectAlias.
+	className := projectName , 'Class1'.
+
+	self
+		_issue_527_resolve_load_validate: loadSpec
+		className: className
+		expectedSymDictName: self _sampleSymbolDictionaryName1.
+
+	symDictName := self _sampleSymbolDictionaryName2.
+	loadSpec
+		gemstoneSetDefaultSymbolDictNameForUser: Rowan image currentUserId
+		to: symDictName.
+
+	self
+		_issue_527_resolve_load_validate: loadSpec
+		className: className
+		expectedSymDictName: self _sampleSymbolDictionaryName2
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_531_baseline
+	"load spec_0004 and validate that symbol dictionary specs are followed"
+
+	"https://github.com/GemTalk/Rowan/issues/531"
+
+	| loadSpec projectName classesToSymDictMap |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectAlias.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve/load/validate"
+	self _standard_resolve_load_validate: loadSpec.
+
+"validate that classes are in the correct symbolDictionary"
+	classesToSymDictMap := Dictionary new
+		at: {projectName , 'Class1'} put: self _sampleSymbolDictionaryName2;
+		at: {projectName , 'Class2'} put: self _sampleSymbolDictionaryName3;
+		at: {projectName , 'TestCase'} put: self _sampleSymbolDictionaryName1;
+		yourself.
+	self _validateSymbolDictMapping: classesToSymDictMap.
+
+"unload project"
+	(Rowan projectNamed: projectName) unload.
+
+"validate"
+	classesToSymDictMap keysDo: [:classNames |
+		classNames do: [:className |
+			self assert: (Rowan globalNamed: className) isNil ] ].
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_532
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/532"
+
+	| loadSpec hitError |
+	hitError := false.
+	[ loadSpec := self _loadSpecNamed: 'spec_0004_b' ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self assert: (x := ex description) = 'UserDefinedError: Duplicate package'.
+			hitError := true ].
+	self assert: hitError description: 'Expected an error'
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_spec_002_to_003
+	"https://github.com/dalehenrich/Rowan/issues/230"
+
+	"Passing variation"
+
+	| loadSpec projectName resolvedProject loadedProjects project testResult 
+		packageName1 packageName2 |
+
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
+		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+%
+
+category: 'issue 493'
+method: RwRowanSample9Test
+testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"duplicate of RwRowanIssue493Test debug: #testMoveClassBetweenSymDicts_changeDefaulSymDict_2 (audit failure: Issue493Class>>Missing loaded method>>foo)"
+
+	"move a class with a method from one sym dict to another using defaultSymbolDictName"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0008'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project soec_008"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_009"
+	loadSpec := self _loadSpecNamed: 'spec_0009'.
+	resolvedProject := loadSpec resolve.
+
+"load project soec_009"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testRowanSample4_basic_504
+
+	| loadSpec projectName resolvedProject  loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	projectName := loadSpec projectAlias.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve/load"
+	resolvedProject := loadSpec resolve.
+	loadedProjects := resolvedProject load.
+
+	resolvedProject
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Core';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: projectName , '-' , 'Extensions';
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName3 
+			forPackageNamed: projectName , '-' , 'GemStone';
+		yourself.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"unload project"
+	(Rowan projectNamed: projectName) unload
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testRowanSample4_primer_504
+
+	| loadSpec projectName resolvedProject packageName1 packageName2 loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0005'.
+
+	projectName := loadSpec projectAlias.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	packageName1 := projectName , '-' , 'Core1'.
+	packageName2 := projectName , '-' , 'Core2'.
+
+"resolve/load"
+	resolvedProject := loadSpec resolve.
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"unload project"
+	(Rowan projectNamed: projectName) unload
+%
+
+category: 'issue 493'
+method: RwRowanSample9Test
+testSpec_008
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0008'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'issue 493'
+method: RwRowanSample9Test
+testSpec_009
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0009'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'issue 493'
+method: RwRowanSample9Test
+testSpec_010
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0010'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testSpec_011
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testSpec_012
+	"spec_012 should result in an error when loaded"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| loadSpec projectName resolvedProject loadedProjects errorHit |
+	loadSpec := self _loadSpecNamed: 'spec_0012'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project -- expect error"
+	errorHit := false.
+	[ loadedProjects := resolvedProject load ] 
+		on: Error 
+		do: [:ex | 
+			| x |
+			self assert: ( x:=  ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_3''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			errorHit := true ].
+	self assert: errorHit.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testSpec_013
+	"spec_013 should result in an error when loaded"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| loadSpec projectName resolvedProject loadedProjects errorHit |
+	loadSpec := self _loadSpecNamed: 'spec_0013'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project -- expect error"
+	errorHit := false.
+	[ loadedProjects := resolvedProject load ] 
+		on: Error 
+		do: [:ex | 
+			| x |
+			self assert: ( x:=  ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			errorHit := true ].
+	self assert: errorHit.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testSpec_014
+	"spec_014 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0014'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_deleteProjectRepositoryDir
+	^ false
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_gitPullSessionCacheKey
+	^ self class _gitPullSessionCacheKey
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_issue_527_resolve_load_validate: projectSpec className: className expectedSymDictName: expectedSymDictName
+	| resolvedProject loadedProjects symDictName symDict |
+	resolvedProject := projectSpec resolve.
+	loadedProjects := resolvedProject load.
+	self assert: loadedProjects size = 1.
+	loadedProjects do: [ :project | self assert: project audit isEmpty ].
+
+	symDictName := projectSpec
+		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId.
+
+	self assert: symDictName = expectedSymDictName.
+
+	(symDict := Rowan globalNamed: symDictName)
+		ifNil: [ 
+			self
+				assert: false
+				description:
+					'Expected symbol dictionary ' , symDictName printString , ' not present' ].
+
+	self assert: (symDict at: className asSymbol ifAbsent: [  ]) notNil.
+
+	(loadedProjects at: 1) unload.
+
+	self deny: (symDict at: className asSymbol ifAbsent: [  ]) notNil
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_loadSpecNamed: specName
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
+		we'll use `fetch` and `pull` to update the repo and branches as needed"
+
+	"it is assumed that the load spec on the master branch and the load spec on the branch are the same"
+
+	| loadSpecification resolvedProject resolvedRepository dict theSpec branchDict |
+	loadSpecification := self _rowanSample9_0000_load_spec.
+	theSpec := (SessionTemps current
+		at: self _loadSpecSessionCacheKey
+		ifAbsent: [  ])
+		ifNotNil: [ :specsDict | specsDict at: specName ]
+		ifNil: [ 
+			"The first time we access the repository in this session, we'll refresh the 
+				master branch and cache the session specs"
+			loadSpecification revision: 'master'.
+			resolvedProject := loadSpecification resolveStrict.
+
+			resolvedRepository := resolvedProject repository.
+			resolvedRepository
+				fetch;
+				pull: resolvedRepository remote branch: 'master';
+				yourself.
+
+			dict := SessionTemps current
+				at: self _loadSpecSessionCacheKey
+				ifAbsentPut: [ Dictionary new ].
+			(resolvedProject repositoryRoot / 'specs') files
+				do: [ :file | 
+					file
+						readStreamDo: [ :fileStream | 
+							| stream spec |
+							stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+							spec := STON fromStream: stream.
+							dict at: spec specName put: spec ] ].
+			dict at: specName ].
+	theSpec := theSpec copy.
+	theSpec
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+	resolvedProject := theSpec resolveStrict.	"When we reference a spec, we'll checkout the branch"
+	branchDict := SessionTemps current
+		at: self _gitPullSessionCacheKey
+		ifAbsentPut: [ Dictionary new ].
+	(branchDict at: theSpec revision ifAbsent: [  ])
+		ifNil: [ 
+			"Once per session fetch and pull the latest commits for the branch"
+			resolvedRepository := resolvedProject repository.
+			resolvedRepository
+				fetch;
+				pull: resolvedRepository remote branch: theSpec revision;
+				yourself.
+			branchDict at: theSpec revision put: theSpec ].
+	^ theSpec copy
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_loadSpecSessionCacheKey
+	^ self class _loadSpecSessionCacheKey
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_rowanSample9_0000_load_spec
+
+	| rowanProject fileUrl |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	^(RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_specListProjectNames
+	^ super _specListProjectNames
+		,
+			{'PrimerSample9'.
+			'RowanSample9_testbed'}
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_standard_resolve_load_validate: projectSpec
+	| resolvedProject loadedProjects |
+
+"resolve/load"
+	resolvedProject := projectSpec resolve.
+	loadedProjects := resolvedProject load.
+
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_standard_validate: resolvedProject loadedProjects: loadedProjects
+	| project testResult loadedProjectDefinition x |
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (x := project audit) isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadedProjectDefinition := project asDefinition.
+	self assert: loadedProjectDefinition class = resolvedProject projectDefinition class.
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_validateSymbolDictMapping: classesToSymDictMap
+	| exceptions |
+	exceptions := {}.
+	classesToSymDictMap
+		keysAndValuesDo: [ :classNames :symDictName | 
+			| symDict |
+			(symDict := Rowan globalNamed: symDictName)
+				ifNil: [ 
+					exceptions
+						add:
+							'Expected symbol dictionary ' , symDictName printString , ' not present'.
+					classNames
+						do: [ :className | 
+							"if expected symbol dictionary is not present, confirm that the classes were loaded albeit, the wrong symbol dictionary"
+							(Rowan globalNamed: className)
+								ifNil: [ 
+									exceptions
+										add:
+											'Class named ' , className printString , ' not loaded as expected' ] ] ]
+				ifNotNil: [ 
+					classNames
+						do: [ :className | 
+							(symDict at: className asSymbol ifAbsent: [  ])
+								ifNil: [ 
+									exceptions
+										add:
+											'Class named ' , className printString
+												, ' not present in the expected symbol dictionary '
+												, symDictName printString ] ] ] ].
+	self assert: exceptions isEmpty
 %
 
 ! Class implementation for 'RwProjectTest'
@@ -7760,7 +12216,7 @@ testCloneComponentProject
 	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
 
 	projectDefinition := (urlString asRwUrl asSpecification asDefinition)
-		projectHome: (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference;
+		projectHome: self _testRowanProjectsSandbox;
 		yourself.
 
 "setup"
@@ -7947,7 +12403,7 @@ testLoadRowanSample1_masterV20
 			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectsHome := (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference.
+	projectsHome := self self _testRowanProjectsSandbox.
 
 	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
 	projectSample1Definition := (urlString asRwUrl asSpecification asDefinition)
@@ -7985,7 +12441,7 @@ testReadComponentProject
 	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample2_masterV2.ston'.
 
 	projectDefinition := (urlString asRwUrl asSpecification asDefinition)
-		projectHome: (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference;
+		projectHome: self _testRowanProjectsSandbox;
 		yourself.
 
 "setup"
@@ -15371,6 +19827,186 @@ testRenameClass_5
    validateBlock value: class1 value: class2 value: class3.
 %
 
+category: 'tests'
+method: RwBrowserToolApiTest
+testRenameClass_Issue_490
+
+  "rename a class with no subclasses"
+
+  "https://github.com/dalehenrich/Rowan/issues/490"
+
+  | projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition 
+		packageDefinition className1 className2 className3 className4 projectSetDefinition
+		class1 class2 class3 oldClass1 oldClass2 oldClass3 classExtensionDefinition audit symDict 
+		registry extraMethods methodRegistry seenMethodsMap |
+
+  projectName := 'Issue470'.
+  packageName1 := 'Issue490-Core'.
+  packageName2 := 'Issue490-Extensions'.
+  className1 := 'Issue490Class1'.
+  className2 := 'Issue490Class2'.
+  className3 := 'Issue490Class3'.
+  className4 := 'Issue490Class4'.
+
+  {projectName}
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+  projectDefinition := (RwProjectDefinition
+    newForGitBasedProjectNamed: projectName)
+    addPackageNamed: packageName1;
+    addPackageNamed: packageName2;
+    defaultSymbolDictName: self _symbolDictionaryName1;
+    yourself.
+
+  packageDefinition := projectDefinition packageNamed: packageName1.
+
+  classDefinition1 := (RwClassDefinition
+    newForClassNamed: className1
+      super: 'Object'
+      instvars: #(ivar1)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod1 ^1' protocol: 'accessing');
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod1 ^', className2 protocol: 'accessing');
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition1.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className2
+      super: className1
+      instvars: #(ivar2)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod2 ^2' protocol: 'accessing');
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod2 ^', className3 protocol: 'accessing');
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className3
+      super: className2
+      instvars: #(ivar4 ivar3)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod3 ^3' protocol: 'accessing');
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod3 ^', className1 protocol: 'accessing');
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+"create extension methods"
+  packageDefinition := projectDefinition packageNamed: packageName2.
+
+  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className1)
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod1 ^1' protocol: '*', packageName2 asLowercase);
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod1 ^1' protocol: '*', packageName2 asLowercase); 
+    yourself.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className2)
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod2 ^2' protocol: '*', packageName2 asLowercase);
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod2 ^2' protocol: '*', packageName2 asLowercase); 
+    yourself.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className3)
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod3 ^3' protocol: '*', packageName2 asLowercase);
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod3 ^3' protocol: '*', packageName2 asLowercase); 
+    yourself.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"load"
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: projectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+  class1 := Rowan globalNamed: className1.
+  class2 := Rowan globalNamed: className2.
+  class3 := Rowan globalNamed: className3.
+
+"perform rename"
+  Rowan projectTools browser
+    renameClassNamed: className2 to: className4.
+
+  self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+true ifTrue: [ ^self ].	"early exit for now"
+
+"validate"
+  oldClass1 := class1.
+  oldClass2 := class2.
+  oldClass3 := class3.
+ 
+  class1 := Rowan globalNamed: className1.
+  self assert: oldClass1 == class1.
+
+  class2 := Rowan globalNamed: className4.
+  self assert: class2 superClass == class1.
+  self assert: oldClass2 ~~ class2. "renamed class"
+
+  class3 := Rowan globalNamed: className3.
+  self assert: class3 superClass == class2.
+  self assert: oldClass3 ~~ class3. "new version, since superclass renamed"
+
+"audit"
+  symDict := Rowan globalNamed: self _symbolDictionaryName1.
+  self assert: (symDict at: className4 asSymbol) == class2.
+  registry := symDict at: #RwSymbolDictionaryRegistry.
+  methodRegistry := registry methodRegistry.
+  seenMethodsMap := Dictionary new.
+  methodRegistry keysAndValuesDo: [:method :loadedMethod |
+    ((seenMethodsMap at: method inClass name ifAbsentPut: [ Dictionary new])
+		at: method selector ifAbsentPut: [ {} ]) add: method ].
+  extraMethods := Dictionary new.
+  seenMethodsMap keysAndValuesDo: [:className :selectorMap |
+    selectorMap keysAndValuesDo: [:selector :ar |
+      ar size > 1 
+        ifTrue: [
+          (extraMethods at: className ifAbsentPut: [ Dictionary new ])
+            at: selector put: ar ] ] ].
+  true ifTrue: [ self assert: extraMethods size = 0 ].
+ false ifTrue: [ "repair"
+  extraMethods keysAndValuesDo: [:className :selectorMap |
+    selectorMap keysAndValuesDo: [:selector :ar |
+      ar do: [:method |
+        | theClass x|
+        theClass := method inClass.
+         theClass :=theClass isMeta
+           ifTrue: [ (Rowan globalNamed: theClass theNonMetaClass name) class ]
+           ifFalse: [ Rowan globalNamed: theClass name ].
+        (x := theClass compiledMethodAt: selector) == method
+          ifFalse: [ methodRegistry removeKey: method ] ] ] ].
+
+  seenMethodsMap := Dictionary new.
+  methodRegistry keysAndValuesDo: [:method :loadedMethod |
+    ((seenMethodsMap at: method inClass name ifAbsentPut: [ Dictionary new])
+		at: method selector ifAbsentPut: [ {} ]) add: method ].
+  extraMethods := Dictionary new.
+  seenMethodsMap keysAndValuesDo: [:className :selectorMap |
+    selectorMap keysAndValuesDo: [:selector :ar |
+      ar size > 1 
+        ifTrue: [
+          (extraMethods at: className ifAbsentPut: [ Dictionary new ])
+            at: selector put: ar ] ] ].
+  true ifTrue: [ self assert: extraMethods size = 0 ] ].
+%
+
 category: 'private'
 method: RwBrowserToolApiTest
 _expectedAssociationCreationTemplate
@@ -16672,7 +21308,7 @@ testHybridComplicatedProjectLoad
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'.
+		root: self _testRowanProjectsSandbox pathString, '/rowanHybridPatchProject/'.
 	className1 := 'SimpleHybridNormalReload1'.
 	className2 := 'SimpleHybridNormalReload2'.
 	classNames := {className1.
@@ -18440,7 +23076,7 @@ testHybridProjectLoad
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'.
+		root: self _testRowanProjectsSandbox pathString, '/rowanHybridPatchProject/'.
 	className := 'SimpleHybridNormalReload'.
 
 	normalClass := Object
@@ -19153,7 +23789,7 @@ testClassVars
 	self assert: testClassB == (Rowan globalNamed: className) description: 'Rowan does not resolve new version of class'.
 	self deny: testClassB == testClass.
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 4 description: 'expected 4 failures superclass instvars classvars and comment'
+	self assert: ((x at: packageName) at: className) size = 5 description: 'expected 5 failures superclass instvars classvars comment and loaded class not latest'
 %
 
 category: 'tests'
@@ -19403,6 +24039,125 @@ test_issue478
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
 
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
+%
+
+category: 'tests'
+method: RwProjectAuditToolTest
+test_Issue_535
+
+  "https://github.com/dalehenrich/Rowan/issues/535"
+
+  | projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition 
+		packageDefinition className1 className2 className3 className4 projectSetDefinition
+		class1 class2 class3  classExtensionDefinition audit |
+
+  projectName := 'Issue534'.
+  packageName1 := 'Issue534-Core'.
+  packageName2 := 'Issue534-Extensions'.
+  className1 := 'Issue534Class1'.
+  className2 := 'Issue534Class2'.
+  className3 := 'Issue534Class3'.
+  className4 := 'Issue534Class4'.
+
+  {projectName}
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+  projectDefinition := (RwProjectDefinition
+    newForGitBasedProjectNamed: projectName)
+    addPackageNamed: packageName1;
+    addPackageNamed: packageName2;
+    defaultSymbolDictName: self _symbolDictionaryName1;
+    yourself.
+
+  packageDefinition := projectDefinition packageNamed: packageName1.
+
+  classDefinition1 := (RwClassDefinition
+    newForClassNamed: className1
+      super: 'Object'
+      instvars: #(ivar1)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod1 ^1' protocol: 'accessing');
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod1 ^', className2 protocol: 'accessing');
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition1.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className2
+      super: className1
+      instvars: #(ivar2)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod2 ^2' protocol: 'accessing');
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod2 ^', className3 protocol: 'accessing');
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className3
+      super: className2
+      instvars: #(ivar4 ivar3)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod3 ^3' protocol: 'accessing');
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod3 ^', className1 protocol: 'accessing');
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+"create extension methods"
+  packageDefinition := projectDefinition packageNamed: packageName2.
+
+  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className1)
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod1 ^1' protocol: '*', packageName2 asLowercase);
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod1 ^1' protocol: '*', packageName2 asLowercase); 
+    yourself.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className2)
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod2 ^2' protocol: '*', packageName2 asLowercase);
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod2 ^2' protocol: '*', packageName2 asLowercase); 
+    yourself.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className3)
+    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod3 ^3' protocol: '*', packageName2 asLowercase);
+    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod3 ^3' protocol: '*', packageName2 asLowercase); 
+    yourself.
+  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"load"
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: projectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+  class1 := Rowan globalNamed: className1.
+  class2 := Rowan globalNamed: className2.
+  class3 := Rowan globalNamed: className3.
+
+"perform rename"
+  Rowan projectTools browser
+    renameClassNamed: className2 to: className4.
+
+"audit"
+  self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
 %
 
 category: 'tests'
@@ -20112,7 +24867,7 @@ _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat
 	className3 := 'Issue361Class3'. 
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox pathString.
 
 
 "create definitions"
@@ -20253,7 +25008,7 @@ testReadExistingDiskProject
 
 	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
+    projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
@@ -20467,7 +25222,6 @@ testReadExistingDiskProjectWithMethodProtocolValidationError
 	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
-
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Core-ProtocolValidationError.ston'.
 
@@ -20921,7 +25675,7 @@ testWriterReader_Rowan_pharo
 		projectHome rowanProject projectAlias writerVisitorClass |
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := (rowanProject repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
+	projectHome := self _testRowanProjectsSandbox.
 	projectAlias := 'Rowan_', self _repositoryFormat.
 
 	(projectHome / projectAlias / 'src') 
@@ -23367,8 +28121,8 @@ testReconcileGlobalExtensionMethods
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'cypress:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: self _testRowanProjectsSandbox pathString, '/rowanTest/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'cypress:', self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -23487,8 +28241,8 @@ testReconcileGlobalExtensionMethods_issue_290
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'tonel:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: self _testRowanProjectsSandbox pathString, '/rowanTest/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'tonel:', self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -23589,7 +28343,7 @@ testReconcileGlobalExtensionMethods_issue_290
 "validate"
 
 	Rowan fileUtilities 
-		readStreamFor: '/tmp/rowanTest/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
+		readStreamFor: self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
 		do: [:fileStream | classFileString := fileStream contents ].
 	self deny: (classFileString includesString: 'classSide')
 %
@@ -23621,7 +28375,7 @@ testIssue114_bothModificationsMustShareCommonAfter_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -23671,7 +28425,7 @@ testIssue114_bothModificationsMustShareCommonAfter_2
 	packageName2 := 'Issue114-Core2'.
 	comment := 'a class comment'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -23717,7 +28471,7 @@ testIssue114_bothModificationsMustShareCommonAfter_3
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -23774,7 +28528,7 @@ testIssue114_bothModificationsMustShareCommonAfter_4
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -23837,7 +28591,7 @@ testIssue114_bothModificationsMustShareCommonAfter_5
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -23902,7 +28656,7 @@ testIssue114_classComment
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -23953,7 +28707,7 @@ testIssue114_classCommentChange_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -24006,7 +28760,7 @@ testIssue114_classCommentChange_2
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -24059,7 +28813,7 @@ testIssue114_classCommentChange_3
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -24113,7 +28867,7 @@ testIssue114_methodSourceIsNotTheSame_0
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -24178,7 +28932,7 @@ testIssue114_methodSourceIsNotTheSame_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -24245,7 +28999,7 @@ testIssue114_methodSourceIsNotTheSame_2
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -24316,7 +29070,7 @@ testIssue114_missingClassModification
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -24506,7 +29260,7 @@ testIssue123_moveExistingClassWithExtensionMethodsAndSubclassesToNewPackageAndNe
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -24580,7 +29334,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackage
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -24639,7 +29393,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackageAndNewClassVersion
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -24695,7 +29449,7 @@ testIssue123_moveExistingClassWithMethodsAndSubclassesToNewPackageAndNewClassVer
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -24769,7 +29523,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackage
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -24824,7 +29578,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackageAndNewClassVersion
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -24883,7 +29637,7 @@ testIssue125_1
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -24925,7 +29679,7 @@ testIssue125_2
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -24968,7 +29722,7 @@ testIssue125_3
 	packageName3 := 'Issue125-Extensions2'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -26390,123 +31144,6 @@ testIssue208_move_method_from_project_to_project
 	self assert: registry methodRegistry size = 1.
 %
 
-category: 'tests-issue 215'
-method: RwRowanProjectIssuesTest
-testIssue215_move_class_and_extension_method_to_new_symbol_dict
-
-	"https://github.com/dalehenrich/Rowan/issues/215"
-
-	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
-		classDefinition packageDefinition className1 className2 projectSetDefinition class
-		classExtensionDefinition oldClass project audit |
-	projectName := 'Issue215'.
-	packageName1 := 'Issue215-Core1'.
-	packageName2 := 'Issue215-Tools'.
-	packageName3 := 'Issue215-Tools-Extensions'.
-	className1 := 'Issue215Class1'.
-	className2 := 'Issue215Class2'.
-
-	{projectName}
-		do: [ :pn | 
-			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
-
-	projectDefinition1 := (RwProjectDefinition
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName2;
-		yourself.
-
-	packageDefinition := projectDefinition1 packageNamed: packageName1.
-	classDefinition := RwClassDefinition
-		newForClassNamed: className1
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	packageDefinition addClassDefinition: classDefinition.
-
-	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	classDefinition := RwClassDefinition
-		newForClassNamed: className2
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName2
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	packageDefinition addClassDefinition: classDefinition.
-
-	"create extension method in different package"
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-				newForSelector: #'mover'
-				protocol: '*', packageName2 asLowercase
-				source: 'mover ^2').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-	"load"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition1.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-	"validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	class := Rowan globalNamed: className1.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
-	self assert: (class new perform: #mover) = 2.
-
-	"move the class to different symbol dictionary and move extension methods to new package"
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	projectDefinition2
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName2
-			forPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName3.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName2.
-	(packageDefinition classExtensions at: className1) removeInstanceMethod: #mover.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-				newForSelector: #'mover'
-				protocol: '*', packageName3 asLowercase
-				source: 'mover ^2').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-	
-	"load"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition2.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-	"validate"
-	self assert: (audit := project audit) isEmpty.
-	oldClass := class.
-	class := Rowan globalNamed: className1.
-	self assert: class == oldClass.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
-	self assert: (class new perform: #mover) = 2.
-%
-
 category: 'tests-issue 217'
 method: RwRowanProjectIssuesTest
 testIssue217
@@ -26530,7 +31167,7 @@ testIssue24_addProject
 	| projectName |
 	projectName := 'Issue24_addProject'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName
 %
@@ -26543,7 +31180,7 @@ testIssue24_addRemovePackage
 	projectName := 'Issue24_addRemovePackage'.
 	packageName := 'Issue24-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -26565,7 +31202,7 @@ testIssue24_addUpdateRemoveClass
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -26595,7 +31232,7 @@ testIssue24_addUpdateRemoveMethods
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -26641,7 +31278,7 @@ testIssue24_loadProject
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: '/tmp/rowanIssuesProject/'  validate: false.
+	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'  validate: false.
 	theClass := self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName  validate: false.
@@ -26696,7 +31333,7 @@ testIssue24_moveClassBetweenPackages
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -26729,8 +31366,8 @@ testIssue24_moveClassBetweenProjects
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
+	self _createLoadedProjectNamed: projectName1 root: self _testRowanProjectsSandbox pathString,'/rowanIssuesProject1/'.
+	self _createLoadedProjectNamed: projectName2 root: self _testRowanProjectsSandbox pathString,'/rowanIssuesProject2/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -26767,7 +31404,7 @@ testIssue24_moveMethodBetweenPackages
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -26798,8 +31435,8 @@ testIssue24_moveMethodBetweenProjects
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
+	self _createLoadedProjectNamed: projectName1 root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject1/'.
+	self _createLoadedProjectNamed: projectName2 root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject2/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -30651,7 +35288,7 @@ testIssue40
 	projectName := 'Issue40_project'.
 	packageName := 'Issue40-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName toProjectNamed: projectName validate: false.
 
 	theClass1 := self 
@@ -30707,7 +35344,7 @@ testIssue41_addUpdateInitializeExtensionMethods
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -30752,7 +35389,7 @@ testIssue41_interactiveAddUpdateInitializeExtensionMethods
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -30786,7 +35423,7 @@ testIssue41_interactiveMoveInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -30894,7 +35531,7 @@ testIssue41_moveInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -30991,7 +35628,7 @@ testIssue41_moveUnchangedInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -32058,123 +36695,6 @@ testIssue467_new_version_class_with_subclasses_6
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 %
 
-category: 'tests-issue 215'
-method: RwRowanProjectIssuesTest
-testIssue495_move_class_and_extension_method_to_new_symbol_dict
-
-	"https://github.com/dalehenrich/Rowan/issues/495"
-
-	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
-		classDefinition packageDefinition className1 className2 projectSetDefinition class
-		classExtensionDefinition oldClass project audit |
-	projectName := 'Issue215'.
-	packageName1 := 'Issue215-Core1'.
-	packageName2 := 'Issue215-Tools'.
-	packageName3 := 'Issue215-Tools-Extensions'.
-	className1 := 'Issue215Class1'.
-	className2 := 'Issue215Class2'.
-
-	{projectName}
-		do: [ :pn | 
-			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
-
-	projectDefinition1 := (RwProjectDefinition
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName2;
-		yourself.
-
-	packageDefinition := projectDefinition1 packageNamed: packageName1.
-	classDefinition := RwClassDefinition
-		newForClassNamed: className1
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	packageDefinition addClassDefinition: classDefinition.
-
-	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	classDefinition := RwClassDefinition
-		newForClassNamed: className2
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName2
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	packageDefinition addClassDefinition: classDefinition.
-
-	"create extension method in different package"
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-				newForSelector: #'mover'
-				protocol: '*', packageName2 asLowercase
-			source: 'mover ^2').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-	"load"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition1.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-	"validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	class := Rowan globalNamed: className1.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
-	self assert: (class new perform: #mover) = 2.
-
-	"move the class to different symbol dictionary and move extension methods to new package"
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	projectDefinition2
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName2
-			forPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName3.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName2.
-	(packageDefinition classExtensions at: className1) removeInstanceMethod: #mover.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-				newForSelector: #'mover'
-				protocol: 'accessing'
-			source: 'mover ^2').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-	
-	"load"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition2.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-	"validate"
-	self assert: (audit := project audit) isEmpty.
-	oldClass := class.
-	class := Rowan globalNamed: className1.
-	self assert: class == oldClass.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
-	self assert: (class new perform: #mover) = 2.
-%
-
 category: 'tests-issue 498'
 method: RwRowanProjectIssuesTest
 testIssue498_constraint_ordering_2
@@ -32707,7 +37227,7 @@ _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -32924,7 +37444,7 @@ testClassVarSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -32987,7 +37507,7 @@ testMultiDependentClassSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -33136,7 +37656,7 @@ testSimpleSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -33199,7 +37719,7 @@ testSubclassSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -33676,8 +38196,143 @@ testMoveClassBetweenSymDicts_changeDefaulSymDict_2
 
 "validate"
 	self assert: (audit := project audit) isEmpty.
+%
 
-self halt.
+! Class implementation for 'RwRowanProjectIssuesTestV2'
+
+!		Instance methods for 'RwRowanProjectIssuesTestV2'
+
+category: 'tests'
+method: RwRowanProjectIssuesTestV2
+testIssue215_move_class_and_extension_method_to_new_symbol_dictV2
+
+	"https://github.com/dalehenrich/Rowan/issues/215"
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| projectName  packageName1 packageName2 packageName3 project1 project2 
+		classDefinition packageDefinition className1 className2 class projectSetDefinition
+		classExtensionDefinition oldClass project audit |
+	projectName := 'Issue215'.
+	packageName1 := 'Issue215-Core1'.
+	packageName2 := 'Issue215-Tools'.
+	packageName3 := 'Issue215-Tools-Extensions'.
+	className1 := 'Issue215Class1'.
+	className2 := 'Issue215Class2'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	project1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		addComponentNamed: 'Core' 
+			definedGroupNames: 
+				(Dictionary new
+						add: 'core' -> {};
+						yourself) 
+			comment: '';
+		addPackageNamed: packageName1 
+			toComponentNamed: 'Core' 
+			withConditions: #('common') 
+			andGroupName: #('core');
+		addPackageNamed: packageName2 
+			toComponentNamed: 'Core' 
+			withConditions: #('common') 
+			andGroupName: #('core');
+		gemstoneSetSymbolDictName: self _symbolDictionaryName1
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName1
+			forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := project1 packageNamed: packageName1.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	packageDefinition addClassDefinition: classDefinition.
+
+	packageDefinition := project1 packageNamed: packageName2.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName2
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	packageDefinition addClassDefinition: classDefinition.
+
+	"create extension method in different package"
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+				newForSelector: #'mover'
+				protocol: '*', packageName2 asLowercase
+				source: 'mover ^2').
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+	"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: project1.
+	Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition.
+
+	"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	class := Rowan globalNamed: className1.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
+	self assert: (class new perform: #mover) = 2.
+
+	"move the class to different symbol dictionary and move extension methods to new package"
+	project2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	project2
+		addPackageNamed: packageName3 
+			toComponentNamed: 'Core' 
+			withConditions: #('common') 
+			andGroupName: #('core');
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2
+			forPackageNamed: packageName2;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName1
+			forPackageNamed: packageName3.
+
+	packageDefinition := project2 packageNamed: packageName2.
+	(packageDefinition classExtensions at: className1) removeInstanceMethod: #mover.
+
+	packageDefinition := project2 packageNamed: packageName3.
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+				newForSelector: #'mover'
+				protocol: '*', packageName3 asLowercase
+				source: 'mover ^2').
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+	
+	"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: project2.
+	Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition.
+
+	"validate"
+	self assert: (audit := project audit) isEmpty.
+	oldClass := class.
+	class := Rowan globalNamed: className1.
+	self assert: class == oldClass.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
+	self assert: (class new perform: #mover) = 2.
 %
 
 ! Class implementation for 'RwUnpackagedBrowserApiTest'
@@ -39549,7 +44204,7 @@ testIssue345
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -39615,7 +44270,7 @@ testIssue514
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -39726,13 +44381,13 @@ testAutomaticMigration
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false) asDefinition.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -39793,13 +44448,13 @@ testDeferredMigration
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false) asDefinition.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -39839,13 +44494,13 @@ testNoMigration
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath /projectName) ensureDeleteAll.
 
 	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false) asDefinition.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -39905,13 +44560,13 @@ testNoMigration_bitbucket
 	specUrlString := self _rowanSample2_bitbucketSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false) asDefinition.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -39971,13 +44626,13 @@ testNoMigration_gitlab
 	specUrlString := self _rowanSample2_gitlabSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false) asDefinition.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -40037,13 +44692,13 @@ testNoMigration_gitolite
 	specUrlString := self _rowanSample2_gitoliteSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := (self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false) asDefinition.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -40126,7 +44781,7 @@ testRemoveSubclassOfClassWithNewVersion
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40174,7 +44829,7 @@ testSampleDefaultConfiguration
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40248,7 +44903,7 @@ testCreateProjectDefinition
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40310,7 +44965,7 @@ testIssue14
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40368,7 +45023,7 @@ testIssue185_move_class_to_symbolDict
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40451,7 +45106,7 @@ testIssue185_move_newClassVariable_to_symbolDict
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40533,7 +45188,7 @@ testIssue185_move_newClassVersion_to_symbolDict
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40615,7 +45270,7 @@ testIssue185_rename_package_move_class
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40696,7 +45351,7 @@ testIssue185_rename_package_move_classVariable
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40777,7 +45432,7 @@ testIssue185_rename_package_move_newClassVersion
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40858,7 +45513,7 @@ testIssue185_simple_package_rename
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -40943,7 +45598,7 @@ testIssue200
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName3) ensureDeleteAll.
 	(gitRootPath / projectName4) ensureDeleteAll.
@@ -41074,7 +45729,7 @@ testIssue208_adopt_load
 	"load the RowanSample4 project from disk - overly the correct project structure over the primer project classes"
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
@@ -41178,7 +45833,7 @@ testIssue210
 	"now load the RowanSample4 project from disk"
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
@@ -41279,7 +45934,7 @@ testIssue230
 	"now load the RowanSample4 project from disk"
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
@@ -41311,7 +45966,7 @@ testIssue284
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -41368,7 +46023,7 @@ testIssue295_rename_package_move_newClassVersion_newProject_1
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -41460,7 +46115,7 @@ testIssue295_rename_package_move_newClassVersion_newProject_3
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -41565,7 +46220,7 @@ testIssue295_rename_package_move_newClassVersion_with_subclass_newProject
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -41664,7 +46319,7 @@ testIssue304
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -41722,7 +46377,7 @@ testIssue305
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -41769,7 +46424,7 @@ testIssue460_1
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -41853,10 +46508,7 @@ category: 'tests'
 method: RwRowanSample4Test
 testIssue460_2
 
-	"This test is also important for validating the fix to Issue #504:
-		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
-		At least confirm that it is NOT a good candidate, since this test is now failing
-		with the new error introduced in the partial for for Issue #504"
+	"As of today the test is passing, so it's not a candidate for Issue #504"
 
 	"https://github.com/dalehenrich/Rowan/issues/260"
 
@@ -41877,7 +46529,7 @@ testIssue460_2
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
 		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
@@ -41974,7 +46626,7 @@ testIssue490_rename_package_move_newClassVersion_newProject_1
 													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	{ projectName . projectName, '_295'} do: [:pn |
@@ -41985,7 +46637,7 @@ testIssue490_rename_package_move_newClassVersion_newProject_1
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42037,6 +46689,9 @@ testIssue490_rename_package_move_newClassVersion_newProject_1
 		_loadProjectFromSpecUrl: specUrlString
 		repoRootPath: repoRootPath.
 
+"expose bug"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self assert: (((Rowan image loadedProjectNamed: projectName)
 	loadedPackages at: 'RowanSample4-Extensions')
 		loadedClassExtensions isEmpty).
@@ -42067,7 +46722,7 @@ testLoadProjectFromUrl_1
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42103,7 +46758,7 @@ testLoadProjectFromUrl_2
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42115,7 +46770,7 @@ testLoadProjectFromUrl_2
 		_loadProjectFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: projectRootPath)
 		repoRootPath: projectRootPath.
 
-	self assert: (x := (Rowan projectNamed: projectName) loadedCommitId) = 'ea371eb'.
+	self assert: (x := (Rowan projectNamed: projectName) loadedCommitId) = 'fb3fdc5'.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
@@ -42139,7 +46794,7 @@ testLoadProjectFromUrl_300_1
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42174,8 +46829,8 @@ testLoadProjectFromUrl_300_2
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath_symLink  := '/tmp/rowan_issue_300/'.
-	gitRootPath :=  rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/issue_300_dir/'.
+	gitRootPath_symLink  := self _testRowanProjectsSandbox pathString, '/rowan_issue_300/'.
+	gitRootPath :=  self _testRowanProjectsSandbox / 'issue_300_dir/'.
 
 	commandLine := 'set -e;  rm -rf ', gitRootPath pathString.
 	Rowan gitTools performOnServer: commandLine logging: true.
@@ -42225,7 +46880,7 @@ testLoadProjectFromUrl_issue180
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 		(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42261,7 +46916,7 @@ testLoadProjectNamed_221B
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42305,7 +46960,7 @@ testLoadProjectNamed_221C
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42349,7 +47004,7 @@ testLoadProjectNamed_221D
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath  / projectName) ensureDeleteAll.
 
@@ -42392,7 +47047,7 @@ testLoadProjectNamed_493
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42436,7 +47091,7 @@ testSampleCompoundConfiguration
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42480,7 +47135,7 @@ testSampleProjectLoadConfiguration
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42505,8 +47160,8 @@ testSampleProjectLoadConfiguration
 				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
-	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := rowanSampleSpec loadedGroupNames) asArray = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) asArray = #('Load').
 %
 
 category: 'tests'
@@ -42518,18 +47173,51 @@ test_projectUrl_issue_463
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	testProjectHome := (rowanProject repositoryRootPath
-		, '/test/testRepositories/repos/') asFileReference.
+	testProjectHome := self _testRowanProjectsSandbox.
 	(testProjectHome / projectName) exists
 		ifTrue: [ (testProjectHome / projectName) deleteAll ].
 	projectDef := (RwComponentProjectDefinition newForUrl: specUrlString)
 		projectHome: testProjectHome;
+		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
 	self
 		handleInformDuring: [ projectDef clone ]
 		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
 	self
 		assert: projectDef projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+	projectDef load.
+	project := RwProject newNamed: projectName.
+	self assert: project projectUrl = projectDef projectUrl
+%
+
+category: 'tests'
+method: RwRowanSample4Test
+test_projectUrl_issue_527
+	"https://github.com/GemTalk/Rowan/issues/527"
+
+	| specUrlString rowanProject testProjectHome projectName project projectDef  gitTool |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	testProjectHome := self _testRowanProjectsSandbox.
+	(testProjectHome / projectName) exists
+		ifTrue: [ (testProjectHome / projectName) deleteAll ].
+	projectDef := (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: testProjectHome;
+"		defaultSymbolDictName: self _symbolDictionaryName1;"
+		yourself.
+	self
+		handleInformDuring: [ projectDef clone ]
+		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
+
+	gitTool := Rowan projectTools git.
+	gitTool gitcheckoutIn: (testProjectHome / projectName) with: 'fb3fdc5'.
+
+	self
+		assert: projectDef projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+self error: 'run tests interactivly, since loading project into UserGlobals (this is the bug) gums up the testing works'.
 	projectDef load.
 	project := RwProject newNamed: projectName.
 	self assert: project projectUrl = projectDef projectUrl
@@ -42576,7 +47264,7 @@ testCreateComponentProject
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox pathString.
 
 "create project definition"
 	cpd := RwComponentProjectDefinition
@@ -42694,12 +47382,12 @@ testCreateNewProjectFromUrl
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 "1. clone RowanSample7 using non-component API (v1.2.x style)"
 	specUrlString :=  self _rowanSample7SpecificationUrl_12x.
 	projectSpec_1 := specUrlString asRwUrl asSpecification.
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -42769,7 +47457,7 @@ testCreateProjectReference
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox pathString.
 
 "create definition"
 	prd := RwProjectReferenceDefinition
@@ -42812,7 +47500,7 @@ testCreateProjectReferenceFromScratch
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	projectSpec := RwComponentSpecification new
 		specName: projectName;
@@ -42853,7 +47541,7 @@ testCreateProjectReferenceFromUrl
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -42889,7 +47577,7 @@ testCreateRepositoryDefinition
 	| rowanProject gitRootPath repositoryName repositoryDefinition_1  repositoryDefinition_2 repoRoot
 		projectVersionString gitHubProjectUrl gitHubRemoteUrl x y |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	repositoryName := 'RowanSample7'.
 	repoRoot := gitRootPath asFileReference / repositoryName.
@@ -42984,7 +47672,7 @@ testCreateRepositoryDefinitionFromUrl_1
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -43014,7 +47702,7 @@ testCreateRepositoryDefinitionFromUrl_2
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := FileLocator rowanProjectsHome resolve / 'Rowan/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -43067,7 +47755,7 @@ testResolveProjectReference
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox pathString.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -43126,7 +47814,7 @@ testResolveRepositoryDefinition
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	gitRootPath := (rowanProject repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -43385,7 +48073,7 @@ testAsRwRepository
 	| repos repoRoot testRepoPath loadedProject |
 	loadedProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	repoRoot :=  loadedProject repositoryRootPath.
-	testRepoPath := repoRoot , '/test/testRepositories/repos'.
+	testRepoPath := self _testRowanProjectsSandbox pathString.
 	repos := {('cypress:' , testRepoPath , '/cypress/').
 	('filetree://' , testRepoPath , '/filetree/').
 	('tonel:' , testRepoPath , '/tonel/')}
@@ -45171,7 +49859,7 @@ test_issue428_loaded_on_disk
 		newForGitBasedProjectNamed: projectName)
 		addPackagesNamed: packageNames;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/';
 		yourself.
 
 	self
@@ -45202,13 +49890,13 @@ testDiskSimpleProject1
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
 
-	('/tmp/rowanSimpleProject/' asFileReference)
+	((self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/' )asFileReference)
 		ensureCreateDirectory;
 		deleteAllChildren.
 
 	projectDefinition := RwComponentProjectDefinition
 		projectName: projectName 
-			projectHome: '/tmp/rowanSimpleProject/'
+			projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/'
 			useGit: true
 			comment: 'This is a simple project to demonstrate the smalltalk API used for a project lifecycle'.
 	 
@@ -45279,13 +49967,13 @@ testProjectClassExtensions
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleExtensionProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleExtensionProject/';
 		configsPath: 'configs';
 		packagesPath: 'src';
 		specsPath: 'specs';
 		yourself.
 
-	'/tmp/rowanSimpleExtensionProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'rowanSimpleExtensionProject') ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -45403,13 +50091,13 @@ testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanClassExtensionsProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanClassExtensionsProject/';
 		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
 		setSymbolDictName: self _symbolDictionaryName1
 			forPackageNamed: 'Simple-Extensions1';
 		yourself.
 
-	'/tmp/rowanClassExtensionsProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'rowanClassExtensionsProject') ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -45554,10 +50242,10 @@ testSimpleProject1
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/';
 		yourself.
 
-	'/tmp/rowanSimpleProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/') asFileReference ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -45625,13 +50313,13 @@ testSimpleProject2
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject2/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject2/';
 		configsPath: 'configs';
 		packagesPath: 'src';
 		specsPath: 'specs';
 		yourself.
 
-	'/tmp/rowanSimpleProject2/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject2/' ) asFileReference ensureDeleteAll.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: 'Simple2'
@@ -45678,13 +50366,13 @@ testSimpleProject3
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject3/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject3/';
 		configsPath: 'configs';
 		packagesPath: 'src'; 
 		specsPath: 'specs';
  		yourself.
 
-	'/tmp/rowanSimpleProject3/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject3/' )asFileReference ensureDeleteAll.
 
 	className := 'Simple3'.
 	classDefinition := RwClassDefinition
@@ -46037,7 +50725,7 @@ testIssue165
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -46984,13 +51672,13 @@ testIssue493
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -47038,13 +51726,13 @@ testIssue515
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -47081,7 +51769,7 @@ testIssue515
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -47192,7 +51880,7 @@ testIssue185_move_class_to_symbolDict_A_v20
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -47250,13 +51938,12 @@ category: '*rowan-tests-35x'
 method: RwRowanSample4Test
 testLoadComponentProjectFromUrl
 
-	| specUrlString projectTools rowanProject projectName x project masterBranchSHA |
+	| specUrlString projectTools projectName x project masterBranchSHA |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -47289,7 +51976,7 @@ testLoadProjectNamed_221A_v20
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -47395,7 +52082,7 @@ _createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName
 
 	| rowanProject projectHome projectDefinition loadSpecUrl |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox.
 
 	(projectHome / projectName) ensureDeleteAll.
 
