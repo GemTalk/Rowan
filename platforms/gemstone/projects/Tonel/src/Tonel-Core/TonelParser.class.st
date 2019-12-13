@@ -346,14 +346,14 @@ TonelParser >> methodDefList [
 					"skip possible spaces at the end"
 					self separator ]
 			] 
-  ] on: TonelParseError do:[:ex | 
-		lastSelectorParsed ifNotNil:[ | str |
+  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
       str := ex details ifNil:[ '' ].
-      ex details: str, ', after tonel method selector: ', lastSelectorParsed printString 
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
     ].
-		ex pass 
+    ex pass 
   ].
-	^ result
+  ^ result
 ]
 
 { #category : 'private factory' }
