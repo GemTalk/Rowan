@@ -313,6 +313,15 @@ RowanAnsweringService >> methodHistoryFor: methodService [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> methodReferenceCounts: methodServices [
+  answer := Array new.
+  methodServices
+    do: [ :methodService | answer add: (organizer sendersOf: methodService selector) first size ].
+  RowanCommandResult addResult: self.
+  ^ answer	"for testing"
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> needsCommit [
 
 	answer := System needsCommit.
