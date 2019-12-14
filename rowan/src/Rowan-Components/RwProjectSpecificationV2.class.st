@@ -157,7 +157,7 @@ RwProjectSpecificationV2 >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	loadedCommitId := repoType := nil
+	projectName := loadedCommitId := repoType := nil
 ]
 
 { #category : 'accessing' }

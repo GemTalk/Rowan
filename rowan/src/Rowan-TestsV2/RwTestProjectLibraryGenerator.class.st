@@ -696,6 +696,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0014: resolvedProject [
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0015: resolvedProject [
 	"Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
 	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+
+	It seems that assigning a new symbol dictionary to the OLD package ... the package that the class is moved FROM
+	may trigger a bogus package move.
+
 	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
 	showed that #495 wasn't fixed by the V2 implementation."
 
@@ -704,7 +708,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0015: resolvedProject [
 	| packageName2 |
 	packageName2 := projectName , '-' , 'Extensions'.
 
-	resolvedProject removePackageNamed: packageName2.
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
 
 	^ resolvedProject
 ]
@@ -1643,6 +1650,10 @@ RwTestProjectLibraryGenerator >> genSpec_0014: commitMessage [
 RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
 	"Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
 	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+
+	It seems that assigning a new symbol dictionary to the OLD package ... the package that the class is moved FROM
+	may trigger a bogus package move.
+
 	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
 	showed that #495 wasn't fixed by the V2 implementation."
 
@@ -1661,12 +1672,17 @@ RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
 		specName: specName
 		title: 'Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
 	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+
+	It seems that assigning a new symbol dictionary to the OLD package ... the package that the class is moved FROM
+	may trigger a bogus package move.
+
 	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
 	showed that #493 wasn''t fixed by the V2 implementation.'
 		index: 15
 		derivedFrom: derivedFrom
 		comment: 'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
-		to new package. RowanSample9-Tests package in default symbol dictionary. Remove the old (empty) package')
+		to RowanSample9-Extensions1. RowanSample9-Tests package in default symbol dictionary. Move the old (empty) package
+		to a different symbol dictionary.')
 		rowanIssues: #( 495);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)

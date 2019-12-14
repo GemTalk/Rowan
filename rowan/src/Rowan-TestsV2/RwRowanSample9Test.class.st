@@ -764,6 +764,7 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 "resolve project"
 	resolvedProject1 := loadSpec resolve.
 	resolvedProject1 repository checkout: 'rowan_issue_549'.	"tag pointing to inconsistent checkout"
+	resolvedProject1 read.
 
 "load project"
 	errorHit := false.
@@ -771,8 +772,8 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 		on: Error
 		do: [:ex | 
 			| x |
-			self assert: (x := ex description) = 'UserDefinedError: Inconsistency between packages defined and referenced in components:
-	The following packages are referenced in a component, but not defined:
+			self assert: (x := ex description) = 'UserDefinedError: Component references package(s) that are not defined
+	The following packages are defined, but not referenced in a component:
 		RowanSample9-Extensions
 '.
 			errorHit := true].
@@ -838,7 +839,7 @@ RwRowanSample9Test >> testIssue_spec_002_to_003 [
 ]
 
 { #category : 'issue 495' }
-RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2 [
+RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
 	"unsuccessful attempt to duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict 
@@ -868,6 +869,44 @@ UserGlobals at: #ConditionalHalt put: false.
 
 "spec_0014"
 	loadSpec := self _loadSpecNamed: 'spec_0014'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0014"
+UserGlobals at: #ConditionalHalt put: false.
+	loadedProjects := resolvedProject load .
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'issue 495' }
+RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_2 [
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"this time the test results should matchRwRowanProjectIssuesTestV2 testIssue495_move_class_and_extension_method_to_new_symbol_dict"
+
+	"should involve a movePackage and not a classProperty change as in testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+UserGlobals at: #ConditionalHalt put: false.
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0011"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0015"
+	loadSpec := self _loadSpecNamed: 'spec_0015'.
 	resolvedProject := loadSpec resolveStrict.
 
 "load project soec_0014"
@@ -1124,6 +1163,30 @@ RwRowanSample9Test >> testSpec_014 [
 
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0014'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'issue 495' }
+RwRowanSample9Test >> testSpec_015 [
+	"spec_015 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0015'.
 
 	projectName := loadSpec projectAlias.
 

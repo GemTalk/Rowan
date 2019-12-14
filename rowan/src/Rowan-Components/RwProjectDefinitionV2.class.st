@@ -73,9 +73,11 @@ RwProjectDefinitionV2 >> _validate [
 RwProjectDefinitionV2 >> _validate: platformConfigurationAttributes groupNames: groupNames [
 	"ensure that the data structures within the receiver contain valid information"
 
-	"make sure that list of packages is consistent between components and project definition"
+	"make sure that list of packages is consistent between components and project definition
+		It's okay to have a definition that is not managed by a component.
+		It's NOT okay to have component package that is not defined."
 
-	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
+	| definitionPackageNames componentPackageNames missingFromComponent errorMessage |
 	definitionPackageNames := self packageNames asSet.
 	componentPackageNames := Set new.
 	self components
@@ -87,43 +89,25 @@ RwProjectDefinitionV2 >> _validate: platformConfigurationAttributes groupNames: 
 						packageNamesForPlatformConfigurationAttributes:
 							platformConfigurationAttributes
 						groupNames: groupNames) ].
-	missingFromComponent := definitionPackageNames - componentPackageNames.
-	missingFromDefinition := componentPackageNames - definitionPackageNames.
-	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
+	missingFromComponent := componentPackageNames - definitionPackageNames.
+	missingFromComponent isEmpty
 		ifTrue: [ ^ true ].
 	errorMessage := WriteStream on: String new.
 	errorMessage
-		nextPutAll:
-				'Inconsistency between packages defined and referenced in components:';
+		nextPutAll: 'Component references package(s) that are not defined';
 		lf.
-	missingFromComponent isEmpty
-		ifFalse: [ 
+	errorMessage
+		tab;
+		nextPutAll:
+				'The following packages are defined, but not referenced in a component:';
+		lf.
+	missingFromComponent
+		do: [ :packageName | 
 			errorMessage
 				tab;
-				nextPutAll:
-						'The following packages are defined, but not referenced in a component:';
-				lf.
-			missingFromComponent
-				do: [ :packageName | 
-					errorMessage
-						tag;
-						tab;
-						nextPutAll: packageName;
-						lf ] ].
-	missingFromDefinition isEmpty
-		ifFalse: [ 
-			errorMessage
 				tab;
-				nextPutAll:
-						'The following packages are referenced in a component, but not defined:';
-				lf.
-			missingFromDefinition
-				do: [ :packageName | 
-					errorMessage
-						tab;
-						tab;
-						nextPutAll: packageName;
-						lf ] ].
+				nextPutAll: packageName;
+				lf ].
 	self error: errorMessage contents
 ]
 

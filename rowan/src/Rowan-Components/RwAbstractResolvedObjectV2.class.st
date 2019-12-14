@@ -120,10 +120,7 @@ RwAbstractResolvedObjectV2 >> _validate [
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	self _projectDefinition _validate.
-	self _projectSpecification _validate.
-	self _loadSpecification _validate.
-	^ true
+	^ self _validate: Rowan platformConfigurationAttributes
 ]
 
 { #category : 'private' }
