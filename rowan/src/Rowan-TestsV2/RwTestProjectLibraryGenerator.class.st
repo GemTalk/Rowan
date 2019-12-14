@@ -1,28 +1,29 @@
 "
+| comment |
 RwRowanSample9Test _clearLoadSpecSessionCache.
-
 (RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
+comment := ''.
 RwTestProjectLibraryGenerator new
 	projectName: 'RowanSample9';
 	projectUrl: 'https://github.com/dalehenrich/RowanSample9';
 	preserveChangesOnGithub: true;
-
-	genSpec_0000: 'generate project definitions for spec_0000';
-	genSpec_0001: 'generate project definitions for spec_0001';
-	genSpec_0002: 'generate project definitions for spec_0002';
-	genSpec_0003: 'generate project definitions for spec_0003';
-	genSpec_0004: 'generate project definitions for spec_0004';
-	genSpec_0005: 'generate project definitions for spec_0005';
-	genSpec_0006: 'generate project definitions for spec_0006';
-	genSpec_0007: 'generate project definitions for spec_0007';
-	genSpec_0008: 'generate project definitions for spec_0008';
-	genSpec_0009: 'generate project definitions for spec_0009';
-	genSpec_0010: 'generate project definitions for spec_0010';
-	genSpec_0011: 'generate project definitions for spec_0011';
-	genSpec_0012: 'generate project definitions for spec_0012';
-	genSpec_0013: 'generate project definitions for spec_0013';
-	genSpec_0014: 'generate project definitions for spec_0014';
+	genSpec_0000: comment;
+	genSpec_0001: comment;
+	genSpec_0002: comment;
+	genSpec_0003: comment;
+	genSpec_0004: comment;
+	genSpec_0005: comment;
+	genSpec_0006: comment;
+	genSpec_0007: comment;
+	genSpec_0008: comment;
+	genSpec_0009: comment;
+	genSpec_0010: comment;
+	genSpec_0011: comment;
+	genSpec_0012: comment;
+	genSpec_0013: comment;
+	genSpec_0014: comment;
+	genSpec_0015: comment;
 	yourself
 "
 Class {
@@ -688,6 +689,23 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0014: resolvedProject [
 '
 			protocol: 'tests';
 		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0015: resolvedProject [
+	"Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
+	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
+	showed that #495 wasn't fixed by the V2 implementation."
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName2 |
+	packageName2 := projectName , '-' , 'Extensions'.
+
+	resolvedProject removePackageNamed: packageName2.
+
 	^ resolvedProject
 ]
 
@@ -1612,6 +1630,59 @@ RwTestProjectLibraryGenerator >> genSpec_0014: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0014: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
+	"Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
+	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
+	showed that #495 wasn't fixed by the V2 implementation."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0015'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0014'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
+	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
+	showed that #493 wasn''t fixed by the V2 implementation.'
+		index: 15
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
+		to new package. RowanSample9-Tests package in default symbol dictionary. Remove the old (empty) package')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0015: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

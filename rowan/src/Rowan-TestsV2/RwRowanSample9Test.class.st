@@ -471,43 +471,6 @@ RwRowanSample9Test >> testIssue_495_2 [
 	self assert: errorHit.
 ]
 
-{ #category : 'issue 495' }
-RwRowanSample9Test >> testIssue_495_3 [
-	"https://github.com/dalehenrich/Rowan/issues/495"
-
-	"duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict (during audit: UndefinedObject does not understand  #'name') ... "
-
-	"in this case the class package and extension package are swapping symbol dictionaries"
-
-	| loadSpec projectName resolvedProject loadedProjects |
-
-	loadSpec := self _loadSpecNamed: 'spec_0011'.
-
-	projectName := loadSpec projectAlias.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"resolve project"
-	resolvedProject := loadSpec resolveStrict.
-
-"load project soec_0011"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-
-"spec_0014"
-	loadSpec := self _loadSpecNamed: 'spec_0014'.
-	resolvedProject := loadSpec resolveStrict.
-
-"load project soec_0014"
-	loadedProjects := resolvedProject load .
-
-"validate"
-	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-]
-
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_504_1 [
 	"https://github.com/dalehenrich/Rowan/issues/504"
@@ -810,15 +773,59 @@ RwRowanSample9Test >> testIssue_spec_002_to_003 [
 	self deny: testResult hasFailures.
 ]
 
+{ #category : 'issue 495' }
+RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2 [
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"unsuccessful attempt to duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict 
+		(during audit: UndefinedObject does not understand  #'name') ... in this test we're loading from RowanSample9 repo and passing in  
+		RwRowanProjectIssuesTestV2 debug: #testIssue215_move_class_and_extension_method_to_new_symbol_dict we're using original code which modifies 
+		project definition in memory and it fails with the expected error"
+
+	"in this case the class package and extension package are swapping symbol dictionaries"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+UserGlobals at: #ConditionalHalt put: false.
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0011"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0014"
+	loadSpec := self _loadSpecNamed: 'spec_0014'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0014"
+UserGlobals at: #ConditionalHalt put: false.
+	loadedProjects := resolvedProject load .
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
-	"duplicate of RwRowanIssue493Test debug: #testMoveClassBetweenSymDicts_changeDefaulSymDict_2 (audit failure: Issue493Class>>Missing loaded method>>foo)"
+	"duplicate of RwRowanIssue493Test debug: #testMoveClassBetweenSymDicts_changeDefaulSymDict_2
+		(audit failure: Issue493Class>>Missing loaded method>>foo) 
+		original test fails with (during audit: UndefinedObject does not understand  #'name')"
 
 	"move a class with a method from one sym dict to another using defaultSymbolDictName"
 
 	| loadSpec projectName resolvedProject loadedProjects |
+UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
 	projectName := loadSpec projectAlias.
@@ -840,6 +847,7 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	resolvedProject := loadSpec resolve.
 
 "load project soec_009"
+UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load.
 
 "validate"
