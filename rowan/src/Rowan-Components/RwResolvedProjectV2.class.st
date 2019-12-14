@@ -229,7 +229,7 @@ RwResolvedProjectV2 >> key [
 RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
 
-	self _validate.
+	self _validate: Rowan platformConfigurationAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 

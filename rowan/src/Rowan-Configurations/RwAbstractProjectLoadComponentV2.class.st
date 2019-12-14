@@ -462,6 +462,30 @@ RwAbstractProjectLoadComponentV2 >> packageNames [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames [
+	"Answer the collection of package names defined in the receiver."
+
+	| allDefinedPackageNames matchers |
+	allDefinedPackageNames := Set new.
+	matchers := self conditionalPackageMatchers.
+	self conditionalPackages
+		keysAndValuesDo: [ :conditions :ignored | 
+			platformConfigurationAttributes
+				do: [ :anObject | 
+					matchers
+						keysAndValuesDo: [ :ar :groupMap | 
+							ar
+								do: [ :matcher | 
+									(matcher match: anObject)
+										ifTrue: [ 
+											groupMap
+												keysAndValuesDo: [ :groupName :packageMap | 
+													(groupNames includes: groupName)
+														ifTrue: [ allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ] ] ] ] ] ].
+	^ allDefinedPackageNames
+]
+
+{ #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> projectName [
 
    ^projectName
@@ -480,12 +504,14 @@ RwAbstractProjectLoadComponentV2 >> removePackageNamed: aPackageName [
 	"this can create empty packageName lists or empty packageMapSpecMaps ... the export logic _should_ cleanup empty list, which is sufficient"
 
 	self conditionalPackages
-		keysAndValuesDo: [ :conditionsArray :groupMap | (groupMap at: #'packageNames') remove: aPackageName ].
+		keysAndValuesDo: [ :conditionsArray :conditionMap | 
+			conditionMap
+				keysAndValuesDo: [ :groupName :groupMap | (groupMap at: #'packageNames') remove: aPackageName ifAbsent: [  ] ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
 			packageMapSpecsMap
 				keysAndValuesDo: [ :userId :packageMapSpecs | 
-					(packageMapSpecs at: #'packageNameToPlatfomrPropertiesMap')
+					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
 						removeKey: aPackageName
 						ifAbsent: [  ] ] ]
 ]

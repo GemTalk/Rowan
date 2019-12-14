@@ -743,11 +743,40 @@ RwRowanSample9Test >> testIssue_549 [
 	resolvedProject2 := project asDefinition.
 	resolvedProject2 removePackageNamed: 'RowanSample9-Extensions'.
 
-"load project"
-	loadedProjects := resolvedProject2 load.
+"validation should pass"
+	self assert: resolvedProject2 _validate
+]
 
-"validate"
-	self _standard_validate: resolvedProject2 loadedProjects: loadedProjects.
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue_549_errorCondition [
+	"Verify that when component packages and package definitions are inconsistent we generate an error"
+
+	"https://github.com/dalehenrich/Rowan/issues/549"
+
+	| loadSpec projectName  resolvedProject1 errorHit |
+	loadSpec := self _loadSpecNamed: 'spec_0015'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject1 := loadSpec resolve.
+	resolvedProject1 repository checkout: 'rowan_issue_549'.	"tag pointing to inconsistent checkout"
+
+"load project"
+	errorHit := false.
+	[resolvedProject1 _validate ] 
+		on: Error
+		do: [:ex | 
+			| x |
+			self assert: (x := ex description) = 'UserDefinedError: Inconsistency between packages defined and referenced in components:
+	The following packages are referenced in a component, but not defined:
+		RowanSample9-Extensions
+'.
+			errorHit := true].
+	self assert: errorHit
 ]
 
 { #category : 'tests' }

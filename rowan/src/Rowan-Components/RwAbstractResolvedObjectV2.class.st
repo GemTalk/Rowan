@@ -126,6 +126,18 @@ RwAbstractResolvedObjectV2 >> _validate [
 	^ true
 ]
 
+{ #category : 'private' }
+RwAbstractResolvedObjectV2 >> _validate: platformConfigurationAttributes [
+	"ensure that the receiver's specifications contain valid information ... 
+		the specs must be able to stand on their, when they are written to disk, so there is a 
+		responsiblity for them to have valid data"
+
+	self _projectDefinition _validate: platformConfigurationAttributes groupNames: self groupNames.
+	self _projectSpecification _validate.
+	self _loadSpecification _validate.
+	^ true
+]
+
 { #category : 'testing' }
 RwAbstractResolvedObjectV2 >> canCommit [
 	^ self _projectRepository canCommit

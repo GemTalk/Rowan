@@ -18,10 +18,113 @@ RwProjectDefinitionV2 >> _loadTool [
 
 { #category : 'private' }
 RwProjectDefinitionV2 >> _validate [
-	"ensure that the data structures within the receiver contain valid information:
-		1. platform implementation is responsible for validating platform structures"
+	"ensure that the data structures within the receiver contain valid information"
 
-	^ true
+	"make sure that list of packages is consistent between components and project definition"
+
+	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
+	definitionPackageNames := self packageNames asSet.
+	componentPackageNames := Set new.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			component validate.
+			componentPackageNames addAll: component packageNames ].
+	missingFromComponent := definitionPackageNames - componentPackageNames.
+	missingFromDefinition := componentPackageNames - definitionPackageNames.
+	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
+		ifTrue: [ ^ true ].
+	errorMessage := WriteStream on: String new.
+	errorMessage
+		nextPutAll:
+				'Inconsistency between packages defined and referenced in components:';
+		lf.
+	missingFromComponent isEmpty
+		ifFalse: [ 
+			errorMessage
+				tab;
+				nextPutAll:
+						'The following packages are defined, but not referenced in a component:';
+				lf.
+			missingFromComponent
+				do: [ :packageName | 
+					errorMessage
+						tag;
+						tab;
+						nextPutAll: packageName;
+						lf ] ].
+	missingFromDefinition isEmpty
+		ifFalse: [ 
+			errorMessage
+				tab;
+				nextPutAll:
+						'The following packages are referenced in a component, but not defined:';
+				lf.
+			missingFromDefinition
+				do: [ :packageName | 
+					errorMessage
+						tab;
+						tab;
+						nextPutAll: packageName;
+						lf ] ].
+	self error: errorMessage contents
+]
+
+{ #category : 'private' }
+RwProjectDefinitionV2 >> _validate: platformConfigurationAttributes groupNames: groupNames [
+	"ensure that the data structures within the receiver contain valid information"
+
+	"make sure that list of packages is consistent between components and project definition"
+
+	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
+	definitionPackageNames := self packageNames asSet.
+	componentPackageNames := Set new.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			component validate.
+			componentPackageNames
+				addAll:
+					(component
+						packageNamesForPlatformConfigurationAttributes:
+							platformConfigurationAttributes
+						groupNames: groupNames) ].
+	missingFromComponent := definitionPackageNames - componentPackageNames.
+	missingFromDefinition := componentPackageNames - definitionPackageNames.
+	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
+		ifTrue: [ ^ true ].
+	errorMessage := WriteStream on: String new.
+	errorMessage
+		nextPutAll:
+				'Inconsistency between packages defined and referenced in components:';
+		lf.
+	missingFromComponent isEmpty
+		ifFalse: [ 
+			errorMessage
+				tab;
+				nextPutAll:
+						'The following packages are defined, but not referenced in a component:';
+				lf.
+			missingFromComponent
+				do: [ :packageName | 
+					errorMessage
+						tag;
+						tab;
+						nextPutAll: packageName;
+						lf ] ].
+	missingFromDefinition isEmpty
+		ifFalse: [ 
+			errorMessage
+				tab;
+				nextPutAll:
+						'The following packages are referenced in a component, but not defined:';
+				lf.
+			missingFromDefinition
+				do: [ :packageName | 
+					errorMessage
+						tab;
+						tab;
+						nextPutAll: packageName;
+						lf ] ].
+	self error: errorMessage contents
 ]
 
 { #category : 'visiting' }
@@ -342,7 +445,8 @@ RwProjectDefinitionV2 >> readProjectSetReadTool: readTool withConfigurations: th
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
-
+	self components
+		do: [ :component | component removePackageNamed: aPackageDefinition name ].
 	super removePackage: aPackageDefinition
 ]
 
