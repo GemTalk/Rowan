@@ -13,7 +13,9 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 
 	| projectSpecification loadSpecification projectDefinition |
 	loadSpecification := anRwLoadSpecificationV2 copy.
-	projectSpecification := RwProjectSpecificationV2 new.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: loadSpecification projectAlias;
+		yourself.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
@@ -227,6 +229,7 @@ RwResolvedProjectV2 >> key [
 RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
 
+	self _validate.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 

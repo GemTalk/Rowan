@@ -6,12 +6,6 @@ RwProjectDefinitionV2 >> _gemstoneAllUsersName [
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> asLoadedSymbolDictProject [
-
-	^ RwGsLoadedSymbolDictComponentProjectV2 newForProjectReferenceDefinition: self projectRef.
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> exportTopazFormatTo: filePath [
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
@@ -48,41 +42,6 @@ RwProjectDefinitionV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: aBool [
-	self projectRef gemstoneSetDefaultMethodEnvForUser: userId to: aBool
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> gemstoneSetDefaultMethodEnvTo: aBool [
-	self projectRef gemstoneSetDefaultMethodEnvTo: aBool
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
-	self projectRef gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
-	self projectRef gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
-	self projectRef gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
-	self projectRef gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> gemstoneSetMethodEnv: env forPackageNamed: packageName [
-	self projectRef gemstoneSetMethodEnv: env forPackageNamed: packageName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 	"answer true if the package was found in one of the receivers components"
 
@@ -96,13 +55,6 @@ RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNam
 						setSymbolDictNameTo: symbolDictName.
 					^ self ] ].
 	self error: 'No package named ', packageName printString, ' found.'.
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
-	self projectRef
-		gemstoneSetUseSessionMethodsForExtensions: aBool
-		forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
@@ -129,12 +81,6 @@ RwProjectDefinitionV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forU
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> methodEnvForPackageNamed: packageName [
-
-	^self projectRef methodEnvForPackageNamed: packageName
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectDefinitionV2 >> updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo [
 
 	|  thePackageMapSpecs |
@@ -146,10 +92,4 @@ RwProjectDefinitionV2 >> updateGsPlatformLoadedComponentInfoFor: aLoadedProject 
 			aLoadedProject defaultUseSessionMethodsForExtensions: boolean  ].
 	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
 		ifNotNil: [:map | aLoadedProject packageNameToPlatformPropertiesMap: map]
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
-RwProjectDefinitionV2 >> useSessionMethodsForExtensionsForPackageNamed: packageName [
-
-	^ self projectRef useSessionMethodsForExtensionsForPackageNamed: packageName
 ]

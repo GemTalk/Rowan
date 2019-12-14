@@ -16,6 +16,14 @@ RwProjectDefinitionV2 >> _loadTool [
 	^ Rowan projectTools loadV2
 ]
 
+{ #category : 'private' }
+RwProjectDefinitionV2 >> _validate [
+	"ensure that the data structures within the receiver contain valid information:
+		1. platform implementation is responsible for validating platform structures"
+
+	^ true
+]
+
 { #category : 'visiting' }
 RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 
@@ -147,30 +155,6 @@ RwProjectDefinitionV2 >> clone [
 ]
 
 { #category : 'actions' }
-RwProjectDefinitionV2 >> cloneRepository [
-	"clone remote git project to disk"
-
-	self projectRef clone
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> componentsPath [
-
-	^ self projectRef componentsPath
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> componentsPath: aDirectoryPathString [
-
-	^ self projectRef componentsPath: aDirectoryPathString
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> componentsRoot [
-	^ self projectRef componentsRoot
-]
-
-{ #category : 'actions' }
 RwProjectDefinitionV2 >> create [
 	"write the project structure to disk, if it doesn't already exist"
 
@@ -253,18 +237,6 @@ RwProjectDefinitionV2 >> exportProjects [
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 ]
 
-{ #category : 'exporting' }
-RwProjectDefinitionV2 >> exportSpecification [
-
-	self projectRef exportSpecification
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> gitRoot: aGitRootReferenceOrString [ 
-
-	^ self projectRef gitRoot: aGitRootReferenceOrString
-]
-
 { #category : 'properties' }
 RwProjectDefinitionV2 >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
@@ -286,96 +258,6 @@ RwProjectDefinitionV2 >> load: instanceMigrator [
 	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 ]
 
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> loadedCommitId [
-
-	^ self projectRef loadedCommitId
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> packageConvention [
-
-	^ self projectRef packageConvention
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> packageConvention: aString [
-
-	self projectRef packageConvention: aString
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> packageFormat [
-
-	^ self projectRef packageFormat
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> packageFormat: aString [
-
-	self projectRef packageFormat: aString
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> packageFormatIfAbsent: aBlock [
-
-	^ self projectRef packageFormatIfAbsent: aBlock
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> packageNameToPlatformPropertiesMap: aDictionary [
-
-	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> packagesPath [
-
-	^ self projectRef packagesPath
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> packagesPath: aString [
-
-	^ self projectRef packagesPath: aString
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> packagesRoot [
-
-	^ self projectRef packagesRoot
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> projectAlias [
-	^ self projectRef projectAlias
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectAlias: aStringOrNil [
-	"project alias is used as the name of the root directory for the project ... necessary if the project is 
-		embedded in another project's git repository or you want use a non-default directory on disk"
-
-	self projectRef projectAlias: aStringOrNil
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectHome [
-
-	^ self projectRef projectHome
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectHome: aProjectHomeReferenceOrString [
-
-	^ self projectRef projectHome: aProjectHomeReferenceOrString
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectLoadSpecification [
-	^ self projectRef projectLoadSpecification
-]
-
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectName [
 	^ self propertyAt: 'name'
@@ -384,52 +266,6 @@ RwProjectDefinitionV2 >> projectName [
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectName: aString [
 	self propertyAt: 'name' put: aString
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectNames [
-
-	^ self projectRef projectNames
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectNames: anArray [
-
-	self projectRef projectNames: anArray
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> projectsPath [
-
-	^ self projectRef projectsPath
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> projectsPath: aString [
-
-	^ self projectRef projectsPath: aString
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectSpecification [
-	^ self projectRef projectSpecification
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> projectSpecification: aProjectSpecification [
-	^ self projectRef projectSpecification: aProjectSpecification
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> projectsRoot [
-
-	^ self projectRef projectsRoot
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> projectUrl [
-
-	^ self projectRef projectUrl
 ]
 
 { #category : 'actions' }
@@ -510,59 +346,8 @@ RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
 	super removePackage: aPackageDefinition
 ]
 
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> repositoryRoot [
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self projectRef repositoryRoot
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> repositoryRoot: aFileReferenceOrPath [
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self projectRef repositoryRoot: aFileReferenceOrPath
-]
-
 { #category : 'temporary compat' }
 RwProjectDefinitionV2 >> repositoryRootPath [
 
 	^ self repositoryRoot fullName
-]
-
-{ #category : 'temporary compat' }
-RwProjectDefinitionV2 >> specification [
-
-self deprecated: 'temporary patch .. sender should be replaced with projectRef'.
-	^ self projectRef asSpecification
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> specsPath [
-
-	^ self projectRef specsPath
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> specsPath: aDirectoryPathString [
-
-	self projectRef specsPath: aDirectoryPathString
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> specsRoot [
-
-	^ self projectRef specsRoot
-]
-
-{ #category : 'loading' }
-RwProjectDefinitionV2 >> updateLoadedCommitId [
-
-	self projectRef updateLoadedCommitId
-]
-
-{ #category : 'properties' }
-RwProjectDefinitionV2 >> useGit [
-
-	^ self projectRef useGit
 ]

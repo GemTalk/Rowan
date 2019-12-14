@@ -716,6 +716,41 @@ RwRowanSample9Test >> testIssue_532 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue_549 [
+	"RwProjectDefinitionV2>>removePackageNamed: needs to clean up the component references to the removed package name"
+
+	"https://github.com/dalehenrich/Rowan/issues/549"
+
+	| loadSpec projectName  resolvedProject1 resolvedProject2 loadedProjects project |
+	loadSpec := self _loadSpecNamed: 'spec_0014'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject1 := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject1 load.
+
+"validate"
+	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
+
+"remove package RowanSample9-Extensions"
+	project := loadedProjects at: 1.
+	resolvedProject2 := project asDefinition.
+	resolvedProject2 removePackageNamed: 'RowanSample9-Extensions'.
+
+"load project"
+	loadedProjects := resolvedProject2 load.
+
+"validate"
+	self _standard_validate: resolvedProject2 loadedProjects: loadedProjects.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue_spec_002_to_003 [
 	"https://github.com/dalehenrich/Rowan/issues/230"
 

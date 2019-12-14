@@ -32,12 +32,6 @@ RwAbstractProjectDefinitionV2 >> addOrUpdatePackage: aPackageDefinition [
 ]
 
 { #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> canCommit [
-
-	^ self projectRef canCommit
-]
-
-{ #category : 'properties' }
 RwAbstractProjectDefinitionV2 >> comment [
 
 	^ comment
@@ -73,30 +67,6 @@ RwAbstractProjectDefinitionV2 >> components: aComponentDefinitionDictionary [
 	components := aComponentDefinitionDictionary
 ]
 
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> componentsPath [
-
-	^ self projectRef componentsPath
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> componentsPath: aDirectoryPathString [
-
-	self projectRef componentsPath: aDirectoryPathString
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> groupNames [
-
-	^ self projectRef groupNames
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> groupNames: aDirectoryPathString [
-
-	self projectRef groupNames: aDirectoryPathString
-]
-
 { #category : 'initialization' }
 RwAbstractProjectDefinitionV2 >> initialize [
 	super initialize.
@@ -109,19 +79,6 @@ RwAbstractProjectDefinitionV2 >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
 	^super isEmpty & packages isEmpty
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> key [
-	"Answer an object that can be used to uniquely identify myself in the context of my container."
-
-	^self projectRef projectName
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> loadedCommitId [
-
-	^ self projectRef loadedCommitId
 ]
 
 { #category : 'accessing' }
@@ -155,18 +112,6 @@ RwAbstractProjectDefinitionV2 >> packages: aPackageDefinitionDictionary [
 	packages := aPackageDefinitionDictionary
 ]
 
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> packagesPath [
-
-	^ self projectRef packagesPath
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> packagesPath: aDirectoryPathString [
-
-	self projectRef packagesPath: aDirectoryPathString
-]
-
 { #category : 'copying' }
 RwAbstractProjectDefinitionV2 >> postCopy [
 
@@ -175,11 +120,6 @@ RwAbstractProjectDefinitionV2 >> postCopy [
 	oldPackages := packages.
 	packages := Dictionary new.
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> projectRef [
-	^ self subclassResponsibility
 ]
 
 { #category : 'accessing' }
@@ -204,29 +144,4 @@ RwAbstractProjectDefinitionV2 >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self repositoryRootPath asFileReference
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> repositoryRootPath [
-
-	^ self projectRef repositoryRootPath
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> repositoryRootPath: rootRepoPath [
-
-	self projectRef repositoryRootPath: rootRepoPath
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> specsPath [
-
-	^ self projectRef specsPath
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> specsPath: aDirectoryPathString [
-
-	self projectRef specsPath: aDirectoryPathString
-
 ]
