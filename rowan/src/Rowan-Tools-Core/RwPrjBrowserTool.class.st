@@ -789,10 +789,10 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 		ifTrue: [ result addAll: ' rwSubclass: ' ].
 	classType = 'variable'
 		ifTrue: [ result addAll: ' rwIndexableSubclass: ' ].
-	classType = 'bytes'
+	classType = 'byteSubclass'
 		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
 	result addAll: className printString.
-	classType ~= 'bytes'
+	classType ~= 'byteSubclass'
 		ifTrue: [ 
 			result
 				addAll: lfsp;
@@ -819,7 +819,6 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 		add: 'options: #()';
 		add: Character lf.
 	^ result
-
 ]
 
 { #category : 'class browsing' }
@@ -842,7 +841,7 @@ comment: comment category: category [
 		ifTrue: [ result addAll: ' rwSubclass: ' ].
 	classType = 'variable'
 		ifTrue: [ result addAll: ' rwIndexableSubclass: ' ].
-	classType = 'bytes'
+	classType = 'byteSubclass'
 		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
 	result addAll: className.
 	classType ~= 'bytes'

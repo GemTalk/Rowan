@@ -104,7 +104,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
-		type: 'bytes'
+		type: 'byteSubclass'
 		superclass: self name asString
 		instVarNames: #()
 		classVars: anArrayOfClassVars

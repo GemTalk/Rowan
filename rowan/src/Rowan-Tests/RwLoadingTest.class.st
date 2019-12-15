@@ -130,7 +130,7 @@ RwLoadingTest >> basicClassDefinitions: packageName [
         (self
             definitionOfBasicClassNamed: 'TestCustomByteArrayClass'
             superclass: 'Object'
-            type: 'bytes'
+            type: 'byteSubclass'
             instvars: {}
             gs_options: {}
             inPackage: packageName);
@@ -162,7 +162,6 @@ RwLoadingTest >> basicClassDefinitions: packageName [
             gs_options: {}
             inPackage: packageName);
     yourself
-
 ]
 
 { #category : 'support - basic definitions' }
