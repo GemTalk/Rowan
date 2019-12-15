@@ -34,7 +34,7 @@ RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
 			[ classType = 'variable'
 				ifTrue: [ fmt bitOr: 16r4.	"add indexable bit" ]
 				ifFalse: 
-					[ classType = 'bytes'
+					[ classType = 'byteSubclass'
 						ifTrue: [ (fmt bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4 ]
 						ifFalse: [self error: 'Unknown class type']]]
 ]

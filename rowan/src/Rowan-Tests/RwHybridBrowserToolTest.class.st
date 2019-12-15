@@ -236,7 +236,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateB [
 	template := browserTool
 		classCreationTemplateForSubclassOf: 'Object'
 		className: 'SimpleHybridByte1'
-		type: 'bytes'
+		type: 'byteSubclass'
 		category: packageName1
 		packageName: nil.
 	byteClass := template evaluate.
