@@ -787,7 +787,7 @@ RwRowanSample9Test >> testIssue_spec_002_to_003 [
 	"Passing variation"
 
 	| loadSpec projectName resolvedProject loadedProjects project testResult 
-		packageName1 packageName2 |
+		packageName1 packageName2 x |
 
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
@@ -832,7 +832,7 @@ RwRowanSample9Test >> testIssue_spec_002_to_003 [
 "validate"
 	self assert: loadedProjects size = 1.
 	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
+	self assert: (x := project audit) isEmpty.
 	testResult := project testSuite run.
 	self deny: testResult hasErrors.
 	self deny: testResult hasFailures.
@@ -850,7 +850,6 @@ RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol
 	"in this case the class package and extension package are swapping symbol dictionaries"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
 	projectName := loadSpec projectAlias.
@@ -872,7 +871,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolveStrict.
 
 "load project soec_0014"
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load .
 
 "validate"
@@ -888,7 +886,6 @@ RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol
 	"should involve a movePackage and not a classProperty change as in testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
 	projectName := loadSpec projectAlias.
@@ -910,7 +907,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolveStrict.
 
 "load project soec_0014"
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load .
 
 "validate"
@@ -928,7 +924,6 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"move a class with a method from one sym dict to another using defaultSymbolDictName"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
 	projectName := loadSpec projectAlias.
@@ -950,7 +945,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolve.
 
 "load project soec_009"
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load.
 
 "validate"

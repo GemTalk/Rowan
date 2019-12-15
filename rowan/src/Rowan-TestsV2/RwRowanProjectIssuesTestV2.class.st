@@ -15,7 +15,6 @@ RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_ne
 	| projectName  packageName1 packageName2 packageName3 project1 project2 
 		classDefinition packageDefinition className1 className2 class projectSetDefinition
 		classExtensionDefinition oldClass project audit |
-UserGlobals at: #ConditionalHalt put: false.
 	projectName := 'Issue215'.
 	packageName1 := 'Issue215-Core1'.
 	packageName2 := 'Issue215-Tools'.
@@ -127,7 +126,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: project2.
-UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition.
 
 	"validate"
