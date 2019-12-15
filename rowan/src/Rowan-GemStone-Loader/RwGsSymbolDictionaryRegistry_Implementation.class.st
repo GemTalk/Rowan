@@ -902,6 +902,36 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 ]
 
 { #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions instance: fromRegistryInstance [
+	| loadedPackage toRegistryInstance newClassVersionMap |
+	loadedPackage := fromRegistryInstance packageRegistry
+		removeKey: packageName
+		ifAbsent: [ fromRegistryInstance error: 'package ' , packageName printString , ' not found' ].
+	newClassVersionMap := Dictionary new.
+	classesWithNewVersions
+		do: [ :patch | newClassVersionMap at: patch oldClassVersion put: patch newClassVersion ].
+	loadedPackage loadedClassExtensions
+		do: [ :loadedClassExtensions | 
+			"class extensions must be removed from old package, additions are handled elsewhere"
+			"https://github.com/dalehenrich/Rowan/issues/495"
+			loadedClassExtensions moveFrom: fromRegistryInstance.
+			newClassVersionMap
+				at: loadedClassExtensions handle
+				ifPresent: [ :newClassVersion | loadedClassExtensions handle: newClassVersion ] ].
+	toRegistryInstance := (Rowan image
+		newOrExistingSymbolDictionaryNamed: symbolDictionaryName)
+		rowanSymbolDictionaryRegistry.
+	(toRegistryInstance packageRegistry at: packageName ifAbsent: [  ])
+		ifNotNil: [ :unexpectedLoadedPackage | 
+			toRegistryInstance
+				error:
+					'package ' , packageName printString , ' unexpectedly found in '
+						, symbolDictionaryName printString ].
+	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
+	^ fromRegistryInstance
+]
+
+{ #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName instance: fromRegistryInstance [
 	| loadedPackage toRegistryInstance |
 	loadedPackage := fromRegistryInstance packageRegistry
