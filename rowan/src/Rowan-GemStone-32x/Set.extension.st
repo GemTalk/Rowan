@@ -1,13 +1,13 @@
 Extension { #name : 'Set' }
 
-{ #category : '*rowan-gemstone-kernel-32x' }
+{ #category : '*rowan-gemstone-32x' }
 Set >> _keysAndValuesDo: aBlock [
   "aBlock should be a 2 argument block with arguments  element, count "
 
   dict keysAndValuesDo:[ :each :aVal | aBlock value: each value: 1 ]
 ]
 
-{ #category : '*rowan-gemstone-kernel-32x' }
+{ #category : '*rowan-gemstone-32x' }
 Set >> - aBagOrSet [
 
 "Difference. The result containing exactly those elements of

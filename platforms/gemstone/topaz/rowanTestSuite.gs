@@ -1,7 +1,7 @@
 run
 	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings resultsDict resultCases |
 
-	includeDeprecatedPackages := (System stoneVersionReport at: 'gsVersion') >= '3.2.15' 
+	includeDeprecatedPackages := (System stoneVersionReport at: 'gsVersion') = '3.2.15' 
 		ifTrue: [
 			"3.2.15 needs deprecated packages loaded to function"
 			true ]
