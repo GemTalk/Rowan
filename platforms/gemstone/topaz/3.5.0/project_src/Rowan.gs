@@ -34667,6 +34667,31 @@ packageNames
 
 category: 'accessing'
 method: RwAbstractProjectLoadComponentV2
+packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames
+	"Answer the collection of package names defined in the receiver."
+
+	| allDefinedPackageNames matchers |
+	allDefinedPackageNames := Set new.
+	matchers := self conditionalPackageMatchers.
+	self conditionalPackages
+		keysAndValuesDo: [ :conditions :ignored | 
+			platformConfigurationAttributes
+				do: [ :anObject | 
+					matchers
+						keysAndValuesDo: [ :ar :groupMap | 
+							ar
+								do: [ :matcher | 
+									(matcher match: anObject)
+										ifTrue: [ 
+											groupMap
+												keysAndValuesDo: [ :groupName :packageMap | 
+													(groupNames includes: groupName)
+														ifTrue: [ allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ] ] ] ] ] ].
+	^ allDefinedPackageNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
 projectName
 
    ^projectName
@@ -34685,12 +34710,14 @@ removePackageNamed: aPackageName
 	"this can create empty packageName lists or empty packageMapSpecMaps ... the export logic _should_ cleanup empty list, which is sufficient"
 
 	self conditionalPackages
-		keysAndValuesDo: [ :conditionsArray :groupMap | (groupMap at: #'packageNames') remove: aPackageName ].
+		keysAndValuesDo: [ :conditionsArray :conditionMap | 
+			conditionMap
+				keysAndValuesDo: [ :groupName :groupMap | (groupMap at: #'packageNames') remove: aPackageName ifAbsent: [  ] ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
 			packageMapSpecsMap
 				keysAndValuesDo: [ :userId :packageMapSpecs | 
-					(packageMapSpecs at: #'packageNameToPlatfomrPropertiesMap')
+					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
 						removeKey: aPackageName
 						ifAbsent: [  ] ] ]
 %
@@ -39342,6 +39369,17 @@ _validate
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
+	^ self _validate: Rowan platformConfigurationAttributes
+%
+
+category: 'private'
+method: RwAbstractResolvedObjectV2
+_validate: platformConfigurationAttributes
+	"ensure that the receiver's specifications contain valid information ... 
+		the specs must be able to stand on their, when they are written to disk, so there is a 
+		responsiblity for them to have valid data"
+
+	self _projectDefinition _validate: platformConfigurationAttributes groupNames: self groupNames.
 	self _projectSpecification _validate.
 	self _loadSpecification _validate.
 	^ true
@@ -39361,7 +39399,9 @@ loadSpecification: anRwLoadSpecificationV2
 
 	| projectSpecification loadSpecification projectDefinition |
 	loadSpecification := anRwLoadSpecificationV2 copy.
-	projectSpecification := RwProjectSpecificationV2 new.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: loadSpecification projectAlias;
+		yourself.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
@@ -39587,6 +39627,7 @@ method: RwResolvedProjectV2
 load
 	"load the receiver into the image"
 
+	self _validate: Rowan platformConfigurationAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 %
 
@@ -46114,13 +46155,6 @@ addOrUpdatePackage: aPackageDefinition
 
 category: 'properties'
 method: RwAbstractProjectDefinitionV2
-canCommit
-
-	^ self projectRef canCommit
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
 comment
 
 	^ comment
@@ -46161,34 +46195,6 @@ components: aComponentDefinitionDictionary
 	components := aComponentDefinitionDictionary
 %
 
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-componentsPath
-
-	^ self projectRef componentsPath
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-componentsPath: aDirectoryPathString
-
-	self projectRef componentsPath: aDirectoryPathString
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-groupNames
-
-	^ self projectRef groupNames
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-groupNames: aDirectoryPathString
-
-	self projectRef groupNames: aDirectoryPathString
-%
-
 category: 'initialization'
 method: RwAbstractProjectDefinitionV2
 initialize
@@ -46203,21 +46209,6 @@ isEmpty
 	"Answer true if this definition does not actually define anything."
 
 	^super isEmpty & packages isEmpty
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-key
-	"Answer an object that can be used to uniquely identify myself in the context of my container."
-
-	^self projectRef projectName
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-loadedCommitId
-
-	^ self projectRef loadedCommitId
 %
 
 category: 'accessing'
@@ -46256,20 +46247,6 @@ packages: aPackageDefinitionDictionary
 	packages := aPackageDefinitionDictionary
 %
 
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-packagesPath
-
-	^ self projectRef packagesPath
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-packagesPath: aDirectoryPathString
-
-	self projectRef packagesPath: aDirectoryPathString
-%
-
 category: 'copying'
 method: RwAbstractProjectDefinitionV2
 postCopy
@@ -46279,12 +46256,6 @@ postCopy
 	oldPackages := packages.
 	packages := Dictionary new.
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-projectRef
-	^ self subclassResponsibility
 %
 
 category: 'accessing'
@@ -46310,34 +46281,6 @@ repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self repositoryRootPath asFileReference
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-repositoryRootPath
-
-	^ self projectRef repositoryRootPath
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-repositoryRootPath: rootRepoPath
-
-	self projectRef repositoryRootPath: rootRepoPath
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-specsPath
-
-	^ self projectRef specsPath
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-specsPath: aDirectoryPathString
-
-	self projectRef specsPath: aDirectoryPathString
 %
 
 category: 'accessing'
@@ -46503,34 +46446,6 @@ clone
 
 category: 'actions'
 method: RwProjectDefinitionV2
-cloneRepository
-	"clone remote git project to disk"
-
-	self projectRef clone
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-componentsPath
-
-	^ self projectRef componentsPath
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-componentsPath: aDirectoryPathString
-
-	^ self projectRef componentsPath: aDirectoryPathString
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-componentsRoot
-	^ self projectRef componentsRoot
-%
-
-category: 'actions'
-method: RwProjectDefinitionV2
 create
 	"write the project structure to disk, if it doesn't already exist"
 
@@ -46618,20 +46533,6 @@ exportProjects
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 %
 
-category: 'exporting'
-method: RwProjectDefinitionV2
-exportSpecification
-
-	self projectRef exportSpecification
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-gitRoot: aGitRootReferenceOrString 
-
-	^ self projectRef gitRoot: aGitRootReferenceOrString
-%
-
 category: 'properties'
 method: RwProjectDefinitionV2
 key
@@ -46656,111 +46557,6 @@ load: instanceMigrator
 	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 %
 
-category: 'accessing'
-method: RwProjectDefinitionV2
-loadedCommitId
-
-	^ self projectRef loadedCommitId
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-packageConvention
-
-	^ self projectRef packageConvention
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-packageConvention: aString
-
-	self projectRef packageConvention: aString
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-packageFormat
-
-	^ self projectRef packageFormat
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-packageFormat: aString
-
-	self projectRef packageFormat: aString
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-packageFormatIfAbsent: aBlock
-
-	^ self projectRef packageFormatIfAbsent: aBlock
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-packageNameToPlatformPropertiesMap: aDictionary
-
-	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-packagesPath
-
-	^ self projectRef packagesPath
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-packagesPath: aString
-
-	^ self projectRef packagesPath: aString
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-packagesRoot
-
-	^ self projectRef packagesRoot
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-projectAlias
-	^ self projectRef projectAlias
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectAlias: aStringOrNil
-	"project alias is used as the name of the root directory for the project ... necessary if the project is 
-		embedded in another project's git repository or you want use a non-default directory on disk"
-
-	self projectRef projectAlias: aStringOrNil
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectHome
-
-	^ self projectRef projectHome
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectHome: aProjectHomeReferenceOrString
-
-	^ self projectRef projectHome: aProjectHomeReferenceOrString
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectLoadSpecification
-	^ self projectRef projectLoadSpecification
-%
-
 category: 'properties'
 method: RwProjectDefinitionV2
 projectName
@@ -46771,60 +46567,6 @@ category: 'properties'
 method: RwProjectDefinitionV2
 projectName: aString
 	self propertyAt: 'name' put: aString
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectNames
-
-	^ self projectRef projectNames
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectNames: anArray
-
-	self projectRef projectNames: anArray
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-projectsPath
-
-	^ self projectRef projectsPath
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-projectsPath: aString
-
-	^ self projectRef projectsPath: aString
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectSpecification
-	^ self projectRef projectSpecification
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectSpecification: aProjectSpecification
-	^ self projectRef projectSpecification: aProjectSpecification
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-projectsRoot
-
-	^ self projectRef projectsRoot
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-projectUrl
-
-	^ self projectRef projectUrl
 %
 
 category: 'actions'
@@ -46907,24 +46649,9 @@ readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: 
 category: 'accessing'
 method: RwProjectDefinitionV2
 removePackage: aPackageDefinition
-
+	self components
+		do: [ :component | component removePackageNamed: aPackageDefinition name ].
 	super removePackage: aPackageDefinition
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self projectRef repositoryRoot
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-repositoryRoot: aFileReferenceOrPath
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self projectRef repositoryRoot: aFileReferenceOrPath
 %
 
 category: 'temporary compat'
@@ -46932,49 +46659,6 @@ method: RwProjectDefinitionV2
 repositoryRootPath
 
 	^ self repositoryRoot fullName
-%
-
-category: 'temporary compat'
-method: RwProjectDefinitionV2
-specification
-
-self deprecated: 'temporary patch .. sender should be replaced with projectRef'.
-	^ self projectRef asSpecification
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-specsPath
-
-	^ self projectRef specsPath
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-specsPath: aDirectoryPathString
-
-	self projectRef specsPath: aDirectoryPathString
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-specsRoot
-
-	^ self projectRef specsRoot
-%
-
-category: 'loading'
-method: RwProjectDefinitionV2
-updateLoadedCommitId
-
-	self projectRef updateLoadedCommitId
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-useGit
-
-	^ self projectRef useGit
 %
 
 category: 'actions'
@@ -46989,6 +46673,103 @@ method: RwProjectDefinitionV2
 _loadTool
 
 	^ Rowan projectTools loadV2
+%
+
+category: 'private'
+method: RwProjectDefinitionV2
+_validate
+	"ensure that the data structures within the receiver contain valid information"
+
+	"make sure that list of packages is consistent between components and project definition"
+
+	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
+	definitionPackageNames := self packageNames asSet.
+	componentPackageNames := Set new.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			component validate.
+			componentPackageNames addAll: component packageNames ].
+	missingFromComponent := definitionPackageNames - componentPackageNames.
+	missingFromDefinition := componentPackageNames - definitionPackageNames.
+	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
+		ifTrue: [ ^ true ].
+	errorMessage := WriteStream on: String new.
+	errorMessage
+		nextPutAll:
+				'Inconsistency between packages defined and referenced in components:';
+		lf.
+	missingFromComponent isEmpty
+		ifFalse: [ 
+			errorMessage
+				tab;
+				nextPutAll:
+						'The following packages are defined, but not referenced in a component:';
+				lf.
+			missingFromComponent
+				do: [ :packageName | 
+					errorMessage
+						tag;
+						tab;
+						nextPutAll: packageName;
+						lf ] ].
+	missingFromDefinition isEmpty
+		ifFalse: [ 
+			errorMessage
+				tab;
+				nextPutAll:
+						'The following packages are referenced in a component, but not defined:';
+				lf.
+			missingFromDefinition
+				do: [ :packageName | 
+					errorMessage
+						tab;
+						tab;
+						nextPutAll: packageName;
+						lf ] ].
+	self error: errorMessage contents
+%
+
+category: 'private'
+method: RwProjectDefinitionV2
+_validate: platformConfigurationAttributes groupNames: groupNames
+	"ensure that the data structures within the receiver contain valid information"
+
+	"make sure that list of packages is consistent between components and project definition
+		It's okay to have a definition that is not managed by a component.
+		It's NOT okay to have component package that is not defined."
+
+	| definitionPackageNames componentPackageNames missingFromComponent errorMessage |
+	definitionPackageNames := self packageNames asSet.
+	componentPackageNames := Set new.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			component validate.
+			componentPackageNames
+				addAll:
+					(component
+						packageNamesForPlatformConfigurationAttributes:
+							platformConfigurationAttributes
+						groupNames: groupNames) ].
+	missingFromComponent := componentPackageNames - definitionPackageNames.
+	missingFromComponent isEmpty
+		ifTrue: [ ^ true ].
+	errorMessage := WriteStream on: String new.
+	errorMessage
+		nextPutAll: 'Component references package(s) that are not defined';
+		lf.
+	errorMessage
+		tab;
+		nextPutAll:
+				'The following packages are defined, but not referenced in a component:';
+		lf.
+	missingFromComponent
+		do: [ :packageName | 
+			errorMessage
+				tab;
+				tab;
+				nextPutAll: packageName;
+				lf ].
+	self error: errorMessage contents
 %
 
 ! Class implementation for 'RwAbstractRepositoryDefinition'
@@ -65601,7 +65382,7 @@ initializeForExport
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	loadedCommitId := repoType := nil
+	projectName := loadedCommitId := repoType := nil
 %
 
 category: 'accessing'
@@ -72432,13 +72213,6 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 
 category: '*rowan-gemstone-components-extensions'
 method: RwProjectDefinitionV2
-asLoadedSymbolDictProject
-
-	^ RwGsLoadedSymbolDictComponentProjectV2 newForProjectReferenceDefinition: self projectRef.
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
 exportTopazFormatTo: filePath
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
@@ -72478,48 +72252,6 @@ gemstoneDefaultSymbolDictNameForUser: userId
 
 category: '*rowan-gemstone-components-extensions'
 method: RwProjectDefinitionV2
-gemstoneSetDefaultMethodEnvForUser: userId to: aBool
-	self projectRef gemstoneSetDefaultMethodEnvForUser: userId to: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
-gemstoneSetDefaultMethodEnvTo: aBool
-	self projectRef gemstoneSetDefaultMethodEnvTo: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
-gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-	self projectRef gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
-gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-	self projectRef gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
-gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
-	self projectRef gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
-gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
-	self projectRef gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
-gemstoneSetMethodEnv: env forPackageNamed: packageName
-	self projectRef gemstoneSetMethodEnv: env forPackageNamed: packageName
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
 gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 	"answer true if the package was found in one of the receivers components"
 
@@ -72533,14 +72265,6 @@ gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 						setSymbolDictNameTo: symbolDictName.
 					^ self ] ].
 	self error: 'No package named ', packageName printString, ' found.'.
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
-gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
-	self projectRef
-		gemstoneSetUseSessionMethodsForExtensions: aBool
-		forPackageNamed: packageName
 %
 
 category: '*rowan-gemstone-components-extensions'
@@ -72569,13 +72293,6 @@ gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: abs
 
 category: '*rowan-gemstone-components-extensions'
 method: RwProjectDefinitionV2
-methodEnvForPackageNamed: packageName
-
-	^self projectRef methodEnvForPackageNamed: packageName
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
 updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo
 
 	|  thePackageMapSpecs |
@@ -72587,13 +72304,6 @@ updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo
 			aLoadedProject defaultUseSessionMethodsForExtensions: boolean  ].
 	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
 		ifNotNil: [:map | aLoadedProject packageNameToPlatformPropertiesMap: map]
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectDefinitionV2
-useSessionMethodsForExtensionsForPackageNamed: packageName
-
-	^ self projectRef useSessionMethodsForExtensionsForPackageNamed: packageName
 %
 
 category: '*rowan-gemstone-components-extensions'
@@ -73228,6 +72938,37 @@ rbStoreOn: aStream
   (self rbStoreElementsFrom: 1 to: self size on: aStream)
     ifFalse: [ aStream nextPutAll: '; yourself' ].
   aStream nextPut: $)
+%
+
+! Class extensions for 'Set'
+
+!		Instance methods for 'Set'
+
+category: '*rowan-gemstone-kernel-32x'
+method: Set
+- aBagOrSet
+
+"Difference. The result containing exactly those elements of
+ the receiver that have a greater number of occurrences in the receiver than in
+ the argument.
+ If argument is a kind of IdentityBag, result will be an IdentitySet ,
+ otherwise result is an instance of the class of the receiver."
+
+ | res |
+ (aBagOrSet isKindOf: IdentityBag ) ifTrue:[ | s |
+   s := IdentitySet new .
+   dict keysAndValuesDo:[ :each :aVal | s add: each ] .
+   ^ s - aBagOrSet 
+ ].
+ ((aBagOrSet isKindOf: Bag) or:[ aBagOrSet isKindOf: Set ]) ifFalse:[
+   aBagOrSet _validateKindOfClasses: { Bag . Set } .
+ ].
+ res := self copy .
+ aBagOrSet _keysAndValuesDo:[ :each :count | | oldVal |
+   oldVal := dict at: each otherwise: nil .
+   oldVal ifNotNil:[ res remove: each ifAbsent: nil ].
+ ] .
+ ^ res
 %
 
 ! Class extensions for 'String'

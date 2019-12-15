@@ -1,11 +1,6 @@
 Extension { #name : 'RwLoadSpecificationV2' }
 
 { #category : '*rowan-gemstone-components-extensions' }
-RwLoadSpecificationV2 class >> _gemstoneAllUsersName [
-	^ 'allusers'
-]
-
-{ #category : '*rowan-gemstone-components-extensions' }
 RwLoadSpecificationV2 >> _gemstoneAllUsersName [
 
 	^ self class _gemstoneAllUsersName
@@ -116,4 +111,9 @@ RwLoadSpecificationV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser
 { #category : '*rowan-gemstone-components-extensions' }
 RwLoadSpecificationV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
 	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwLoadSpecificationV2 class >> _gemstoneAllUsersName [
+	^ 'allusers'
 ]

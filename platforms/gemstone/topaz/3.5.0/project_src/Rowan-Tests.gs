@@ -12,30 +12,31 @@ doit
 	options: #()
 )
 		category: 'Rowan-TestsV2';
-		comment: 'RwRowanSample9Test _clearLoadSpecSessionCache.
-
+		comment: '| comment |
+RwRowanSample9Test _clearLoadSpecSessionCache.
 (RwAbstractV2Test _testRowanProjectsSandbox / ''RowanSample9'') ensureDeleteAll.
 
+comment := ''''.
 RwTestProjectLibraryGenerator new
 	projectName: ''RowanSample9'';
 	projectUrl: ''https://github.com/dalehenrich/RowanSample9'';
 	preserveChangesOnGithub: true;
-
-	genSpec_0000: ''generate project definitions for spec_0000'';
-	genSpec_0001: ''generate project definitions for spec_0001'';
-	genSpec_0002: ''generate project definitions for spec_0002'';
-	genSpec_0003: ''generate project definitions for spec_0003'';
-	genSpec_0004: ''generate project definitions for spec_0004'';
-	genSpec_0005: ''generate project definitions for spec_0005'';
-	genSpec_0006: ''generate project definitions for spec_0006'';
-	genSpec_0007: ''generate project definitions for spec_0007'';
-	genSpec_0008: ''generate project definitions for spec_0008'';
-	genSpec_0009: ''generate project definitions for spec_0009'';
-	genSpec_0010: ''generate project definitions for spec_0010'';
-	genSpec_0011: ''generate project definitions for spec_0011'';
-	genSpec_0012: ''generate project definitions for spec_0012'';
-	genSpec_0013: ''generate project definitions for spec_0013'';
-	genSpec_0014: ''generate project definitions for spec_0014'';
+	genSpec_0000: comment;
+	genSpec_0001: comment;
+	genSpec_0002: comment;
+	genSpec_0003: comment;
+	genSpec_0004: comment;
+	genSpec_0005: comment;
+	genSpec_0006: comment;
+	genSpec_0007: comment;
+	genSpec_0008: comment;
+	genSpec_0009: comment;
+	genSpec_0010: comment;
+	genSpec_0011: comment;
+	genSpec_0012: comment;
+	genSpec_0013: comment;
+	genSpec_0014: comment;
+	genSpec_0015: comment;
 	yourself';
 		immediateInvariant.
 true.
@@ -1915,6 +1916,69 @@ genSpec_0014: commitMessage
 		commitMessage: commitMessage
 %
 
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0015: commitMessage
+	"Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
+	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+
+	It seems that assigning a new symbol dictionary to the OLD package ... the package that the class is moved FROM
+	may trigger a bogus package move.
+
+	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
+	showed that #495 wasn't fixed by the V2 implementation."
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0015'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0014'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
+	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+
+	It seems that assigning a new symbol dictionary to the OLD package ... the package that the class is moved FROM
+	may trigger a bogus package move.
+
+	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
+	showed that #493 wasn''t fixed by the V2 implementation.'
+		index: 15
+		derivedFrom: derivedFrom
+		comment: 'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
+		to RowanSample9-Extensions1. RowanSample9-Tests package in default symbol dictionary. Move the old (empty) package
+		to a different symbol dictionary.')
+		rowanIssues: #( 495);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0015: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
 category: 'accessing'
 method: RwTestProjectLibraryGenerator
 preserveChangesOnGithub
@@ -2634,6 +2698,31 @@ _addDefinitionsFor_0014: resolvedProject
 '
 			protocol: 'tests';
 		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0015: resolvedProject
+	"Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
+	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
+
+	It seems that assigning a new symbol dictionary to the OLD package ... the package that the class is moved FROM
+	may trigger a bogus package move.
+
+	The test RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict
+	showed that #495 wasn't fixed by the V2 implementation."
+
+	"https://github.com/GemTalk/Rowan/issues/495"
+
+	| packageName2 |
+	packageName2 := projectName , '-' , 'Extensions'.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
+
 	^ resolvedProject
 %
 
@@ -8443,6 +8532,87 @@ testIndexCards
 			STON toStringPretty: projectSpec resolve ]
 %
 
+category: 'issue 495'
+method: RwRowanSample9Test
+testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"unsuccessful attempt to duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict 
+		(during audit: UndefinedObject does not understand  #'name') ... in this test we're loading from RowanSample9 repo and passing in  
+		RwRowanProjectIssuesTestV2 debug: #testIssue215_move_class_and_extension_method_to_new_symbol_dict we're using original code which modifies 
+		project definition in memory and it fails with the expected error"
+
+	"in this case the class package and extension package are swapping symbol dictionaries"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+UserGlobals at: #ConditionalHalt put: false.
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0011"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0014"
+	loadSpec := self _loadSpecNamed: 'spec_0014'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0014"
+UserGlobals at: #ConditionalHalt put: false.
+	loadedProjects := resolvedProject load .
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_2
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	"this time the test results should matchRwRowanProjectIssuesTestV2 testIssue495_move_class_and_extension_method_to_new_symbol_dict"
+
+	"should involve a movePackage and not a classProperty change as in testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+UserGlobals at: #ConditionalHalt put: false.
+	loadSpec := self _loadSpecNamed: 'spec_0011'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0011"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0015"
+	loadSpec := self _loadSpecNamed: 'spec_0015'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project soec_0014"
+UserGlobals at: #ConditionalHalt put: false.
+	loadedProjects := resolvedProject load .
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
 category: 'tests'
 method: RwRowanSample9Test
 testIssue_254
@@ -8678,44 +8848,6 @@ testIssue_495_2
 
 "validate"
 	self assert: errorHit.
-%
-
-category: 'issue 495'
-method: RwRowanSample9Test
-testIssue_495_3
-	"https://github.com/dalehenrich/Rowan/issues/495"
-
-	"duplicate of RwRowanProjectIssuesTest debug: #testIssue495_move_class_and_extension_method_to_new_symbol_dict (during audit: UndefinedObject does not understand  #'name') ... "
-
-	"in this case the class package and extension package are swapping symbol dictionaries"
-
-	| loadSpec projectName resolvedProject loadedProjects |
-
-	loadSpec := self _loadSpecNamed: 'spec_0011'.
-
-	projectName := loadSpec projectAlias.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"resolve project"
-	resolvedProject := loadSpec resolveStrict.
-
-"load project soec_0011"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-
-"spec_0014"
-	loadSpec := self _loadSpecNamed: 'spec_0014'.
-	resolvedProject := loadSpec resolveStrict.
-
-"load project soec_0014"
-	loadedProjects := resolvedProject load .
-
-"validate"
-	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 %
 
 category: 'tests'
@@ -8971,6 +9103,73 @@ testIssue_532
 
 category: 'tests'
 method: RwRowanSample9Test
+testIssue_549
+	"RwProjectDefinitionV2>>removePackageNamed: needs to clean up the component references to the removed package name"
+
+	"https://github.com/dalehenrich/Rowan/issues/549"
+
+	| loadSpec projectName  resolvedProject1 resolvedProject2 loadedProjects project |
+	loadSpec := self _loadSpecNamed: 'spec_0014'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject1 := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject1 load.
+
+"validate"
+	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
+
+"remove package RowanSample9-Extensions"
+	project := loadedProjects at: 1.
+	resolvedProject2 := project asDefinition.
+	resolvedProject2 removePackageNamed: 'RowanSample9-Extensions'.
+
+"validation should pass"
+	self assert: resolvedProject2 _validate
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_549_errorCondition
+	"Verify that when component packages and package definitions are inconsistent we generate an error"
+
+	"https://github.com/dalehenrich/Rowan/issues/549"
+
+	| loadSpec projectName  resolvedProject1 errorHit |
+	loadSpec := self _loadSpecNamed: 'spec_0015'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject1 := loadSpec resolve.
+	resolvedProject1 repository checkout: 'rowan_issue_549'.	"tag pointing to inconsistent checkout"
+	resolvedProject1 read.
+
+"load project"
+	errorHit := false.
+	[resolvedProject1 _validate ] 
+		on: Error
+		do: [:ex | 
+			| x |
+			self assert: (x := ex description) = 'UserDefinedError: Component references package(s) that are not defined
+	The following packages are defined, but not referenced in a component:
+		RowanSample9-Extensions
+'.
+			errorHit := true].
+	self assert: errorHit
+%
+
+category: 'tests'
+method: RwRowanSample9Test
 testIssue_spec_002_to_003
 	"https://github.com/dalehenrich/Rowan/issues/230"
 
@@ -9033,11 +9232,14 @@ method: RwRowanSample9Test
 testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
-	"duplicate of RwRowanIssue493Test debug: #testMoveClassBetweenSymDicts_changeDefaulSymDict_2 (audit failure: Issue493Class>>Missing loaded method>>foo)"
+	"duplicate of RwRowanIssue493Test debug: #testMoveClassBetweenSymDicts_changeDefaulSymDict_2
+		(audit failure: Issue493Class>>Missing loaded method>>foo) 
+		original test fails with (during audit: UndefinedObject does not understand  #'name')"
 
 	"move a class with a method from one sym dict to another using defaultSymbolDictName"
 
 	| loadSpec projectName resolvedProject loadedProjects |
+UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
 	projectName := loadSpec projectAlias.
@@ -9059,6 +9261,7 @@ testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493
 	resolvedProject := loadSpec resolve.
 
 "load project soec_009"
+UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -9280,6 +9483,31 @@ testSpec_014
 
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0014'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
+category: 'issue 495'
+method: RwRowanSample9Test
+testSpec_015
+	"spec_015 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0015'.
 
 	projectName := loadSpec projectAlias.
 
@@ -38204,14 +38432,17 @@ testMoveClassBetweenSymDicts_changeDefaulSymDict_2
 
 category: 'tests'
 method: RwRowanProjectIssuesTestV2
-testIssue215_move_class_and_extension_method_to_new_symbol_dictV2
+testIssue495_move_class_and_extension_method_to_new_symbol_dict
 
-	"https://github.com/dalehenrich/Rowan/issues/215"
+	"Port of RwRowanProjectIssuesTest debug: #testIssue215_move_class_and_extension_method_to_new_symbol_dict
+		to V2 api and reproduce Issue #495"
+
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
 	| projectName  packageName1 packageName2 packageName3 project1 project2 
 		classDefinition packageDefinition className1 className2 class projectSetDefinition
 		classExtensionDefinition oldClass project audit |
+UserGlobals at: #ConditionalHalt put: false.
 	projectName := 'Issue215'.
 	packageName1 := 'Issue215-Core1'.
 	packageName2 := 'Issue215-Tools'.
@@ -38323,6 +38554,7 @@ testIssue215_move_class_and_extension_method_to_new_symbol_dictV2
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: project2.
+UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition.
 
 	"validate"
