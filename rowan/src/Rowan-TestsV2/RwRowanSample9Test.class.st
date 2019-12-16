@@ -780,64 +780,6 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 	self assert: errorHit
 ]
 
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue_spec_002_to_003 [
-	"https://github.com/dalehenrich/Rowan/issues/230"
-
-	"Passing variation"
-
-	| loadSpec projectName resolvedProject loadedProjects project testResult 
-		packageName1 packageName2 x |
-
-	loadSpec := self _loadSpecNamed: 'spec_0002'.
-
-	projectName := loadSpec projectAlias.
-
-	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
-		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
-	packageName1 := projectName , '-' , 'Core'.
-	packageName2 := projectName , '-' , 'Extensions'.
-
-"resolve primer project"
-	resolvedProject := loadSpec resolve.
-
-"load primer project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
-
-	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
-
-"resolve"
-	resolvedProject := loadSpec resolve.
-	resolvedProject
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
-			forPackageNamed: packageName1;
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
-			forPackageNamed: packageName2;
-		yourself.
-
-"load"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: (x := project audit) isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
-]
-
 { #category : 'issue 495' }
 RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
@@ -1003,6 +945,65 @@ RwRowanSample9Test >> testRowanSample4_primer_504 [
 
 "unload project"
 	(Rowan projectNamed: projectName) unload
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_002_to_003 [
+	"https://github.com/dalehenrich/Rowan/issues/230"
+
+	"Passing variation"
+
+	| loadSpec projectName resolvedProject loadedProjects project testResult 
+		packageName1 packageName2 x |
+UserGlobals at: #ConditionalHalt put: false.
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
+		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
+
+"load"
+UserGlobals at: #ConditionalHalt put: false.
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (x := project audit) isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
 ]
 
 { #category : 'issue 493' }
