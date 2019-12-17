@@ -948,7 +948,7 @@ RwRowanSample9Test >> testRowanSample4_primer_504 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testSpec_002_to_003 [
+RwRowanSample9Test >> testSpec_0002_to_0003 [
 	"https://github.com/dalehenrich/Rowan/issues/230"
 
 	"Passing variation"
@@ -1005,7 +1005,7 @@ RwRowanSample9Test >> testSpec_002_to_003 [
 ]
 
 { #category : 'issue 493' }
-RwRowanSample9Test >> testSpec_008 [
+RwRowanSample9Test >> testSpec_0008 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
 	| loadSpec projectName resolvedProject loadedProjects |
@@ -1027,7 +1027,7 @@ RwRowanSample9Test >> testSpec_008 [
 ]
 
 { #category : 'issue 493' }
-RwRowanSample9Test >> testSpec_009 [
+RwRowanSample9Test >> testSpec_0009 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
 	| loadSpec projectName resolvedProject loadedProjects |
@@ -1049,7 +1049,7 @@ RwRowanSample9Test >> testSpec_009 [
 ]
 
 { #category : 'issue 493' }
-RwRowanSample9Test >> testSpec_010 [
+RwRowanSample9Test >> testSpec_0010 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
 	| loadSpec projectName resolvedProject loadedProjects |
