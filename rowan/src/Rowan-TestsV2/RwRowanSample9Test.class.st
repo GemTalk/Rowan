@@ -955,7 +955,6 @@ RwRowanSample9Test >> testSpec_002_to_003 [
 
 	| loadSpec projectName resolvedProject loadedProjects project testResult 
 		packageName1 packageName2 x |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
 	projectName := loadSpec projectAlias.
@@ -994,7 +993,6 @@ UserGlobals at: #ConditionalHalt put: false.
 		yourself.
 
 "load"
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load.
 
 "validate"

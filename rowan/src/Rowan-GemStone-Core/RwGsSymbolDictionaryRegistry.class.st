@@ -525,13 +525,6 @@ RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forLoadedPackage: l
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPackageNamed: packageName [
-
-	^ self class registry_ImplementationClass ensureExtensionClassNamed: className existsForPackageNamed: packageName instance: self
-
-]
-
-{ #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPackageNamed: packageName implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
@@ -654,13 +647,6 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: self
-
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> movePackage: packageName to: symbolDictionaryName [
-
-	^  self class registry_ImplementationClass movePackage: packageName  to: symbolDictionaryName instance: self
 
 ]
 

@@ -131,6 +131,17 @@ RwGsLoadedSymbolDictClassExtension >> moveFrom: fromRegistryInstance [
 		ifTrue: [ fromRegistryInstance classExtensionRegistry removeKey: handle classHistory ]
 ]
 
+{ #category : 'removing' }
+RwGsLoadedSymbolDictClassExtension >> moveTo: toRegistryInstance [
+	"class extensions must be removed from old package, additions are handled elsewhere"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	(toRegistryInstance classExtensionRegistry
+		at: handle classHistory
+		ifAbsentPut: [ IdentitySet new ]) add: self
+]
+
 { #category : 'methods' }
 RwGsLoadedSymbolDictClassExtension >> removeLoadedClassMethod: aLoadedMethod [
 
