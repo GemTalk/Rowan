@@ -25,7 +25,7 @@ RwGsClassPatch class >> for: aClassDefinition inPackage: aPackageDefinition [
 
 { #category : 'private' }
 RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
-	"Legal types are normal, variable, and bytes."
+	"Legal types are normal, variable, and byteSubclass."
 
 	"These values need to be moved into Class"
 	^classType = 'normal'

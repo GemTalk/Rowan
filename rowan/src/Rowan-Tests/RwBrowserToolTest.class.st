@@ -381,11 +381,11 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 				(self
 					_basicClassDefinition: 'SimpleCustomByteArray1'
 					superclass: 'Object'
-					type: 'bytes').
+					type: 'byteSubclass').
 				(self
 					_basicClassDefinition: 'SimpleByteArray1'
 					superclass: 'ByteArray'
-					type: 'bytes').
+					type: 'byteSubclass').
 				(self _basicClassDefinition: 'SimpleProto1' superclass: 'nil' type: 'normal')}
 					do: [ :cd | 
 						cd category: (classPackageNames at: index).
@@ -397,7 +397,6 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 	[ projectTools load loadProjectSetDefinition: projectSetDefinition  ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }

@@ -12,7 +12,7 @@ CypressClassDefinition >> definitionString [
 				ifTrue: [ classType := 'variable' ]
 				ifFalse: [ 
 					type = 'byteSubclass'
-						ifTrue: [ classType := 'bytes' ]
+						ifTrue: [ classType := 'byteSubclass' ]
 						ifFalse: [ self error: 'unknown subclass type: ' , type ] ] ].
 	^ Rowan projectTools browser
 		classCreationTemplateForSubclassOf: superclassName
@@ -24,5 +24,4 @@ CypressClassDefinition >> definitionString [
 		poolDictionariesString: self poolDictionariesString
 		comment: self comment printString
 		category: self category printString
-
 ]

@@ -223,7 +223,7 @@ RwClassDefinition >> _updateSymbolDictionaryFromClass: aClass [
 
 { #category : 'accessing' }
 RwClassDefinition >> classType [
-	"Legal types are normal, variable, and bytes."
+	"Legal types are normal, variable, and byteSubclass."
 
 	^self propertyAt: 'type' ifAbsent: ['normal']
 ]

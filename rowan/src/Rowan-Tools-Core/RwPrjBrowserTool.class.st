@@ -778,7 +778,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className: className type: classType category: category packageName: packageNameOrNil [
 
-	"classType may be 'normal', 'bytes', or 'variable'"
+	"classType may be 'normal', 'byteSubclass', or 'variable'"
 
 	| result lfsp superClass |
 	result := String new.
@@ -825,7 +825,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className: className type: classType instanceVariablesString: instanceVariablesString classVariablesString: classVariablesString classInstanceVariablesString: classInstanceVariablesString poolDictionariesString: poolDictionariesString 
 comment: comment category: category [
 
-	"classType may be 'normal', 'bytes', or 'variable'"
+	"classType may be 'normal', 'byteSubclass', or 'variable'"
 
 	| result lfsp |
 	result := String new.
@@ -844,7 +844,7 @@ comment: comment category: category [
 	classType = 'byteSubclass'
 		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
 	result addAll: className.
-	classType ~= 'bytes'
+	classType ~= 'byteSubclass'
 		ifTrue: [ 
 			result
 				addAll: lfsp;
