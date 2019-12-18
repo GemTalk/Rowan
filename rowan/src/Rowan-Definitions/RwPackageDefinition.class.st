@@ -199,8 +199,7 @@ RwPackageDefinition >> removeClassExtensionDefinitionNamed: className [
 
 { #category : 'accessing' }
 RwPackageDefinition >> removeClassNamed: className [
-
-	self removeKey: className from: classDefinitions
+	^ self removeKey: className from: classDefinitions
 ]
 
 { #category : 'accessing' }

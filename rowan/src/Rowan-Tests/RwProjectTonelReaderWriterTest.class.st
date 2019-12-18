@@ -11,6 +11,12 @@ RwProjectTonelReaderWriterTest >> _classExtensionRemovedArtifactFileReference: r
 ]
 
 { #category : 'private' }
+RwProjectTonelReaderWriterTest >> _classMovedArtifactFileReference: repositoryRoot [
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core' / 'Issue361Class2.class.st'
+]
+
+{ #category : 'private' }
 RwProjectTonelReaderWriterTest >> _classRemovedArtifactFileReference: repositoryRoot [
 
 	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core' / 'Issue361Class1.class.st'

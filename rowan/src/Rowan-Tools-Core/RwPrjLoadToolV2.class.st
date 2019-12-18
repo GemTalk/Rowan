@@ -70,7 +70,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 								gs_symbolDictionary:
 									(projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) ] ] ].
 	diff := projectSetDefinitionToLoad
-		compareAgainstBase: loadedProjectDefinitionSet.
+		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [ Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	loadedProjects := Array new.

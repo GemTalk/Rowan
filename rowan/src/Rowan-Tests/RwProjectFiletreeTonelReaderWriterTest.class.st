@@ -19,6 +19,12 @@ RwProjectFiletreeTonelReaderWriterTest >> _classExtensionRemovedArtifactFileRefe
 ]
 
 { #category : 'private' }
+RwProjectFiletreeTonelReaderWriterTest >> _classMovedArtifactFileReference: repositoryRoot [
+
+	self subclassResponsibility: #_classMovedArtifactFileReference:
+]
+
+{ #category : 'private' }
 RwProjectFiletreeTonelReaderWriterTest >> _classRemovedArtifactFileReference: repositoryRoot [
 
 	self subclassResponsibility: #_classRemovedArtifactFileReference:
@@ -511,6 +517,66 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 	writeProjectSetDefinition := RwProjectSetDefinition new addProject: writtenProjectDefinition; yourself.
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
+]
+
+{ #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_moveClass_518 [
+
+	"https://github.com/GemTalk/Rowan/issues/128"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot 
+		movedClassDef |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _classRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	movedClassDef := (changedProjectDefinition packageNamed: 'Issue361-Core')
+		removeClassNamed: 'Issue361Class2'.
+	movedClassDef category:  'Issue361-Extension1'.
+	(changedProjectDefinition packageNamed: 'Issue361-Extension1')
+		addClassDefinition: movedClassDef.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (self _classMovedArtifactFileReference: repositoryRoot) exists.
 ]
 
 { #category : 'tests' }
