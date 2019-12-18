@@ -91,7 +91,6 @@ RowanAnsweringService >> autocompleteSymbols [
 
 { #category : 'private' }
 RowanAnsweringService >> basicExec: aString context: oop [
-
 	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: Rowan image symbolList) asOop] 
 		on: CompileError do: [:ex | 
 			false -> ex errorDetails

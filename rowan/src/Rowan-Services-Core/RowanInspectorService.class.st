@@ -58,6 +58,19 @@ RowanInspectorService >> executeThenInspect: string context: anOop inWindow: han
       RowanCommandResult addResult: self ]
 ]
 
+{ #category : 'client commands' }
+RowanInspectorService >> executeThenInspect: string inFrame: level process: processOop context: contextOop inWindow: handle [
+  | answer |
+  answer := RowanAnsweringService new exec: string inFrame: level ofProcess: processOop context: contextOop.
+  answer key
+    ifTrue: [ 
+      RowanBrowserService new saveRootObject: answer value windowHandle: handle.
+      self inspect: answer value ]
+    ifFalse: [ 
+      compileErrorArray := answer value.
+      RowanCommandResult addResult: self ]
+]
+
 { #category : 'private' }
 RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
   | namedSize isRcBag anObject indexedVars |
