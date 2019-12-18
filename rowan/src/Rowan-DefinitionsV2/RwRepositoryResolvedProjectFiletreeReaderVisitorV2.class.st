@@ -1,5 +1,5 @@
 Class {
 	#name : 'RwRepositoryResolvedProjectFiletreeReaderVisitorV2',
 	#superclass : 'RwRepositoryComponentProjectFiletreeReaderVisitor',
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV2'
 }

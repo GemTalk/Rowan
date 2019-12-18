@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwDiskRepositoryDefinition',
 	#superclass : 'RwAbstractRepositoryDefinition',
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV1'
 }
 
 { #category : 'private' }

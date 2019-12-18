@@ -6,7 +6,7 @@ Class {
 		'currentDirectory',
 		'currentProjectReferenceDefinition'
 	],
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV2'
 }
 
 { #category : 'package reading' }

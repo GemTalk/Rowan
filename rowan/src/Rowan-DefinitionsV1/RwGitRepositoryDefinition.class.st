@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGitRepositoryDefinition',
 	#superclass : 'RwDiskRepositoryDefinition',
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV1'
 }
 
 { #category : 'instance creation' }

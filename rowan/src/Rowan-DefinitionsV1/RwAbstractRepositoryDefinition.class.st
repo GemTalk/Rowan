@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwAbstractRepositoryDefinition',
 	#superclass : 'RwDefinition',
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV1'
 }
 
 { #category : 'private' }

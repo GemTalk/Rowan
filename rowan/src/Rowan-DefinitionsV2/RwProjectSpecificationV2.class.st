@@ -15,7 +15,7 @@ Class {
 		'repoType',
 		'loadedCommitId'
 	],
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV2'
 }
 
 { #category : 'accessing' }

@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwProjectDefinitionV2',
 	#superclass : 'RwAbstractProjectDefinitionV2',
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV2'
 }
 
 { #category : 'actions' }

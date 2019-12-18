@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwRepositoryResolvedProjectTonelReaderVisitorV2',
 	#superclass : 'RwRepositoryComponentProjectTonelReaderVisitor',
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV2'
 }
 
 { #category : 'class reading' }

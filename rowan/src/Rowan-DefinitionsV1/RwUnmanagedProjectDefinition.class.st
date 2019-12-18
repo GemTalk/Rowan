@@ -1,5 +1,5 @@
 Class {
 	#name : 'RwUnmanagedProjectDefinition',
 	#superclass : 'RwProjectDefinition',
-	#category : 'Rowan-Definitions'
+	#category : 'Rowan-DefinitionsV1'
 }

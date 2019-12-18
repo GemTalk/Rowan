@@ -8,7 +8,7 @@ Class {
 		'projectSpecification',
 		'projectStructure'
 	],
-	#category : 'Rowan-Components'
+	#category : 'Rowan-DefinitionsV2'
 }
 
 { #category : 'instance creation' }
