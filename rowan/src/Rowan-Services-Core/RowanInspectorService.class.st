@@ -5,7 +5,10 @@ Class {
 		'oop',
 		'objects',
 		'myself',
-		'className'
+		'className',
+		'indexedSize',
+		'visibleIndices',
+		'nextIndices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -23,26 +26,12 @@ RowanInspectorService >> addDynamicInstVars: anObject [
 ]
 
 { #category : 'command support' }
-RowanInspectorService >> addIndexedVars: anObject [
-  | indexedSize namedSize isRcBag |
-  namedSize := anObject class allInstVarNames size.
-  isRcBag := self isRcBag: anObject.
-  indexedSize := (anObject class isNsc or: [ anObject class isIndexable ])
-    ifFalse: [ 0 ]
-    ifTrue: [ 
-      isRcBag
-        ifTrue: [ anObject size ]
-        ifFalse: [ anObject _primitiveSize - namedSize ] ].
-  isRcBag
-    ifTrue: [ 
-      | aBag |
-      aBag := anObject _asIdentityBag.
-      1 to: indexedSize do: [ :i | objects add: i printString -> (Reflection oopOf: (aBag _at: i)) ] ]
-    ifFalse: [ 
-      1 to: indexedSize do: [ :i | 
-        objects
-          add:
-            i printString -> (Reflection oopOf: (anObject _primitiveAt: i + namedSize)) ] ]
+RowanInspectorService >> addFirstIndexedVars: anObject to: maxIndexedVars [
+  | max |
+  self setIndexedSize: anObject.
+  max := indexedSize min: maxIndexedVars.
+  objects := self indexedVarsFrom: 1 to: max.
+  visibleIndices := max
 ]
 
 { #category : 'command support' }
@@ -54,6 +43,26 @@ RowanInspectorService >> addInstVars: anObject [
   1 to: namedSize do: [ :i | objects add: (instVarNames at: i) -> (Reflection oopOf: (anObject instVarAt: i)) ]
 ]
 
+{ #category : 'private' }
+RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
+  | namedSize isRcBag anObject indexedVars |
+  indexedVars := OrderedCollection new.
+  anObject := Object _objectForOop: oop.
+  namedSize := anObject class allInstVarNames size.
+  isRcBag := self isRcBag: anObject.
+  isRcBag
+    ifTrue: [ 
+      | aBag |
+      aBag := anObject _asIdentityBag.
+      indexStart to: indexStop do: [ :i | indexedVars add: i printString -> (Reflection oopOf: (aBag _at: i)) ] ]
+    ifFalse: [ 
+      indexStart to: indexStop do: [ :i | 
+        indexedVars
+          add:
+            i printString -> (Reflection oopOf: (anObject _primitiveAt: i + namedSize)) ] ].
+  ^ indexedVars
+]
+
 { #category : 'initialization' }
 RowanInspectorService >> initialize [
 
@@ -62,7 +71,17 @@ RowanInspectorService >> initialize [
 ]
 
 { #category : 'client commands' }
-RowanInspectorService >> inspect: anOop [
+RowanInspectorService >> inspect: anOop from: indexStart to: indexStop [
+  | anObject stop |
+  anObject := Object _objectForOop: anOop.
+  stop := indexStop min: indexedSize.
+  nextIndices := self indexedVarsFrom: indexStart to: stop.
+  visibleIndices := stop.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> inspect: anOop to: maxIndexedVars [
   | anObject |
   self rowanFixMe.	"to do - max size, unicode, "
   anObject := Object _objectForOop: anOop.
@@ -74,7 +93,7 @@ RowanInspectorService >> inspect: anOop [
     ifTrue: [ ^ self inspectDictionary: anObject ].
   self addInstVars: anObject.
   self addDynamicInstVars: anObject.
-  self addIndexedVars: anObject.
+  self addFirstIndexedVars: anObject to: maxIndexedVars.
   RowanCommandResult addResult: self
 ]
 
@@ -104,8 +123,28 @@ RowanInspectorService >> isRcBag: anObject [
   ^ anObject class name == #'RcIdentityBag'
 ]
 
+{ #category : 'client commands' }
+RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
+  | anObject stop |
+  anObject := Object _objectForOop: oop.
+  stop := indexStop min: indexedSize.
+  nextIndices := self indexedVarsFrom: indexStart to: stop.
+  visibleIndices := stop.
+  RowanCommandResult addResult: self
+]
+
 { #category : 'accessing' }
 RowanInspectorService >> oop: anInteger [
 
 	oop := anInteger
+]
+
+{ #category : 'private' }
+RowanInspectorService >> setIndexedSize: anObject [
+  indexedSize := (anObject class isNsc or: [ anObject class isIndexable ])
+    ifFalse: [ 0 ]
+    ifTrue: [ 
+      (self isRcBag: anObject)
+        ifTrue: [ anObject size ]
+        ifFalse: [ anObject _primitiveSize - anObject class allInstVarNames size ] ]
 ]
