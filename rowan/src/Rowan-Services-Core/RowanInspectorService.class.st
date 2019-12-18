@@ -8,7 +8,8 @@ Class {
 		'className',
 		'indexedSize',
 		'visibleIndices',
-		'nextIndices'
+		'nextIndices',
+		'maxIndexedVars'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -26,7 +27,7 @@ RowanInspectorService >> addDynamicInstVars: anObject [
 ]
 
 { #category : 'command support' }
-RowanInspectorService >> addFirstIndexedVars: anObject to: maxIndexedVars [
+RowanInspectorService >> addFirstIndexedVars: anObject [
   | max |
   self setIndexedSize: anObject.
   max := indexedSize min: maxIndexedVars.
@@ -41,6 +42,16 @@ RowanInspectorService >> addInstVars: anObject [
   namedSize := instVarNames size.
   isRcBag := self isRcBag: anObject.
   1 to: namedSize do: [ :i | objects add: (instVarNames at: i) -> (Reflection oopOf: (anObject instVarAt: i)) ]
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> executeThenInspect: string context: anOop inWindow: handle [
+  | answer |
+  answer := RowanAnsweringService new basicExec: string context: anOop.
+  answer key
+    ifTrue: [ 
+      RowanBrowserService new saveRootObject: answer value windowHandle: handle.
+      self inspect: answer value ]
 ]
 
 { #category : 'private' }
@@ -71,19 +82,10 @@ RowanInspectorService >> initialize [
 ]
 
 { #category : 'client commands' }
-RowanInspectorService >> inspect: anOop from: indexStart to: indexStop [
-  | anObject stop |
-  anObject := Object _objectForOop: anOop.
-  stop := indexStop min: indexedSize.
-  nextIndices := self indexedVarsFrom: indexStart to: stop.
-  visibleIndices := stop.
-  RowanCommandResult addResult: self
-]
-
-{ #category : 'client commands' }
-RowanInspectorService >> inspect: anOop to: maxIndexedVars [
+RowanInspectorService >> inspect: anOop [
   | anObject |
   self rowanFixMe.	"to do - max size, unicode, "
+  oop := anOop.
   anObject := Object _objectForOop: anOop.
   (self isClientForwarder: anObject)
     ifTrue: [ ^ self inspectClientForwarder: anObject ].
@@ -93,7 +95,17 @@ RowanInspectorService >> inspect: anOop to: maxIndexedVars [
     ifTrue: [ ^ self inspectDictionary: anObject ].
   self addInstVars: anObject.
   self addDynamicInstVars: anObject.
-  self addFirstIndexedVars: anObject to: maxIndexedVars.
+  self addFirstIndexedVars: anObject.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> inspect: anOop from: indexStart to: indexStop [
+  | anObject stop |
+  anObject := Object _objectForOop: anOop.
+  stop := indexStop min: indexedSize.
+  nextIndices := self indexedVarsFrom: indexStart to: stop.
+  visibleIndices := stop.
   RowanCommandResult addResult: self
 ]
 

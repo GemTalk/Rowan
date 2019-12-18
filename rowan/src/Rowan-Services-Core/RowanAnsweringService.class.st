@@ -89,6 +89,17 @@ RowanAnsweringService >> autocompleteSymbols [
   RowanCommandResult addResult: self
 ]
 
+{ #category : 'private' }
+RowanAnsweringService >> basicExec: aString context: oop [
+
+	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: Rowan image symbolList) asOop] 
+		on: CompileError do: [:ex | 
+			false -> ex errorDetails
+	].
+	answer key ifTrue:[(RowanService autoCommit == true) ifTrue:[System commitTransaction]].
+	^answer
+]
+
 { #category : 'client commands' }
 RowanAnsweringService >> breakPointsAreEnabled [
   answer := RowanService breakPointsAreEnabled.
@@ -171,11 +182,7 @@ RowanAnsweringService >> exec: aString [
 { #category : 'client commands' }
 RowanAnsweringService >> exec: aString context: oop [
 
-	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: Rowan image symbolList) asOop] 
-		on: CompileError do: [:ex | 
-			false -> ex errorDetails
-	].
-	answer key ifTrue:[(RowanService autoCommit == true) ifTrue:[System commitTransaction]].
+	answer := self basicExec: aString context: oop. 
 	RowanCommandResult addResult: self.
 
 	"return answer for testing" 
