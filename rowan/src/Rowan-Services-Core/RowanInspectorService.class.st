@@ -9,7 +9,8 @@ Class {
 		'indexedSize',
 		'visibleIndices',
 		'nextIndices',
-		'maxIndexedVars'
+		'maxIndexedVars',
+		'compileErrorArray'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -22,7 +23,7 @@ RowanInspectorService >> addDynamicInstVars: anObject [
   1 to: dynamicSize do: [ :i | 
     objects
       add:
-        (dynamic at: i)
+        (dynamic at: i) asString
           -> (Reflection oopOf: (anObject dynamicInstVarAt: (dynamic at: i))) ]
 ]
 
@@ -31,7 +32,7 @@ RowanInspectorService >> addFirstIndexedVars: anObject [
   | max |
   self setIndexedSize: anObject.
   max := indexedSize min: maxIndexedVars.
-  objects := self indexedVarsFrom: 1 to: max.
+  objects addAll: (self indexedVarsFrom: 1 to: max).
   visibleIndices := max
 ]
 
@@ -41,7 +42,7 @@ RowanInspectorService >> addInstVars: anObject [
   instVarNames := anObject class allInstVarNames.
   namedSize := instVarNames size.
   isRcBag := self isRcBag: anObject.
-  1 to: namedSize do: [ :i | objects add: (instVarNames at: i) -> (Reflection oopOf: (anObject instVarAt: i)) ]
+  1 to: namedSize do: [ :i | objects add: (instVarNames at: i) asString -> (Reflection oopOf: (anObject instVarAt: i)) ]
 ]
 
 { #category : 'client commands' }
@@ -52,6 +53,9 @@ RowanInspectorService >> executeThenInspect: string context: anOop inWindow: han
     ifTrue: [ 
       RowanBrowserService new saveRootObject: answer value windowHandle: handle.
       self inspect: answer value ]
+    ifFalse: [ 
+      compileErrorArray := answer value.
+      RowanCommandResult addResult: self ]
 ]
 
 { #category : 'private' }
