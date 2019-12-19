@@ -537,7 +537,7 @@ doit
 	inDictionary: RowanKernel
 	options: #()
 )
-		category: 'Rowan-Tests';
+		category: 'Rowan-Tests-Components';
 		comment: '';
 		immediateInvariant.
 true.
@@ -553,7 +553,7 @@ doit
 	inDictionary: RowanKernel
 	options: #()
 )
-		category: 'Rowan-Tests';
+		category: 'Rowan-Tests-Components';
 		comment: '';
 		immediateInvariant.
 true.
@@ -569,7 +569,7 @@ doit
 	inDictionary: RowanKernel
 	options: #()
 )
-		category: 'Rowan-Tests';
+		category: 'Rowan-Tests-Components';
 		comment: '';
 		immediateInvariant.
 true.
@@ -8545,7 +8545,6 @@ testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1
 	"in this case the class package and extension package are swapping symbol dictionaries"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
 	projectName := loadSpec projectAlias.
@@ -8567,7 +8566,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolveStrict.
 
 "load project soec_0014"
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load .
 
 "validate"
@@ -8584,7 +8582,6 @@ testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_2
 	"should involve a movePackage and not a classProperty change as in testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
 	projectName := loadSpec projectAlias.
@@ -8606,7 +8603,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolveStrict.
 
 "load project soec_0014"
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load .
 
 "validate"
@@ -9168,65 +9164,6 @@ testIssue_549_errorCondition
 	self assert: errorHit
 %
 
-category: 'tests'
-method: RwRowanSample9Test
-testIssue_spec_002_to_003
-	"https://github.com/dalehenrich/Rowan/issues/230"
-
-	"Passing variation"
-
-	| loadSpec projectName resolvedProject loadedProjects project testResult 
-		packageName1 packageName2 |
-
-	loadSpec := self _loadSpecNamed: 'spec_0002'.
-
-	projectName := loadSpec projectAlias.
-
-	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
-		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
-	packageName1 := projectName , '-' , 'Core'.
-	packageName2 := projectName , '-' , 'Extensions'.
-
-"resolve primer project"
-	resolvedProject := loadSpec resolve.
-
-"load primer project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
-
-	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
-
-"resolve"
-	resolvedProject := loadSpec resolve.
-	resolvedProject
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
-			forPackageNamed: packageName1;
-		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
-			forPackageNamed: packageName2;
-		yourself.
-
-"load"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
-%
-
 category: 'issue 493'
 method: RwRowanSample9Test
 testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493
@@ -9239,7 +9176,6 @@ testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493
 	"move a class with a method from one sym dict to another using defaultSymbolDictName"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
 	projectName := loadSpec projectAlias.
@@ -9261,7 +9197,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolve.
 
 "load project soec_009"
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -9324,9 +9259,67 @@ testRowanSample4_primer_504
 	(Rowan projectNamed: projectName) unload
 %
 
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0002_to_0003
+	"https://github.com/dalehenrich/Rowan/issues/230"
+
+	"Passing variation"
+
+	| loadSpec projectName resolvedProject loadedProjects project testResult 
+		packageName1 packageName2 x |
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"set up for issue #230 ... RowanSample9Class1 in one symbol dictionary (instancesInvariant);
+		RowanSample4IdentityKeyValueDictionary in another symbol dictionary"
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: project audit isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+
+	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
+
+"resolve"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (x := project audit) isEmpty.
+	testResult := project testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures.
+%
+
 category: 'issue 493'
 method: RwRowanSample9Test
-testSpec_008
+testSpec_0008
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
 	| loadSpec projectName resolvedProject loadedProjects |
@@ -9349,7 +9342,7 @@ testSpec_008
 
 category: 'issue 493'
 method: RwRowanSample9Test
-testSpec_009
+testSpec_0009
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
 	| loadSpec projectName resolvedProject loadedProjects |
@@ -9372,7 +9365,7 @@ testSpec_009
 
 category: 'issue 493'
 method: RwRowanSample9Test
-testSpec_010
+testSpec_0010
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
 	| loadSpec projectName resolvedProject loadedProjects |
@@ -9850,7 +9843,7 @@ basicClassDefinitions: packageName
         (self
             definitionOfBasicClassNamed: 'TestCustomByteArrayClass'
             superclass: 'Object'
-            type: 'bytes'
+            type: 'byteSubclass'
             instvars: {}
             gs_options: {}
             inPackage: packageName);
@@ -13990,11 +13983,11 @@ _loadFullMultiProjectDefinition: projectNames packageNames: packageNames default
 				(self
 					_basicClassDefinition: 'SimpleCustomByteArray1'
 					superclass: 'Object'
-					type: 'bytes').
+					type: 'byteSubclass').
 				(self
 					_basicClassDefinition: 'SimpleByteArray1'
 					superclass: 'ByteArray'
-					type: 'bytes').
+					type: 'byteSubclass').
 				(self _basicClassDefinition: 'SimpleProto1' superclass: 'nil' type: 'normal')}
 					do: [ :cd | 
 						cd category: (classPackageNames at: index).
@@ -21080,7 +21073,7 @@ testHybridClassCreationWithClassCreationTemplateB
 	template := browserTool
 		classCreationTemplateForSubclassOf: 'Object'
 		className: 'SimpleHybridByte1'
-		type: 'bytes'
+		type: 'byteSubclass'
 		category: packageName1
 		packageName: nil.
 	byteClass := template evaluate.
@@ -25517,6 +25510,67 @@ testWriterReader_A
 
 category: 'tests'
 method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_B_moveClass_518
+
+	"https://github.com/GemTalk/Rowan/issues/128"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot 
+		movedClassDef |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _classRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	movedClassDef := (changedProjectDefinition packageNamed: 'Issue361-Core')
+		removeClassNamed: 'Issue361Class2'.
+	movedClassDef category:  'Issue361-Extension1'.
+	(changedProjectDefinition packageNamed: 'Issue361-Extension1')
+		addClassDefinition: movedClassDef.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (self _classMovedArtifactFileReference: repositoryRoot) exists.
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
 testWriterReader_B_removeClass
 
 	"https://github.com/GemTalk/Rowan/issues/361"
@@ -25948,6 +26002,13 @@ _classExtensionRemovedArtifactFileReference: repositoryRoot
 
 category: 'private'
 method: RwProjectFiletreeTonelReaderWriterTest
+_classMovedArtifactFileReference: repositoryRoot
+
+	self subclassResponsibility: #_classMovedArtifactFileReference:
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
 _classRemovedArtifactFileReference: repositoryRoot
 
 	self subclassResponsibility: #_classRemovedArtifactFileReference:
@@ -26177,6 +26238,138 @@ _validateIssue361ProjectDefinitionSet: projectDefinitionSet projectName: project
 
 category: 'tests'
 method: RwProjectFiletreeReaderWriterTest
+testWriterReader_B_moveInstanceClassMethods_518
+
+	"https://github.com/GemTalk/Rowan/issues/518"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	"only applies to filetree, since methods are not stored in separate files for tonel"
+
+	"delete instance/class directory when last instance/class method is removed"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot
+		movedMethod |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _instanceMethodMovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	movedMethod := ((changedProjectDefinition packageNamed: 'Issue361-Core')
+		classDefinitionNamed: 'Issue361Class3'ifAbsent: [])
+		removeInstanceMethod: #method9.
+	((changedProjectDefinition packageNamed: 'Issue361-Core')
+		classDefinitionNamed: 'Issue361Class2'ifAbsent: [])
+		addInstanceMethodDefinition: movedMethod.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (x := self _instanceMethodMovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _instanceMethodMovedArtifactFileReference: repositoryRoot) parent exists.	"instance dir should not be deleted"
+%
+
+category: 'tests'
+method: RwProjectFiletreeReaderWriterTest
+testWriterReader_B_moveLastInstanceClassMethods_518
+
+	"https://github.com/GemTalk/Rowan/issues/518"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	"only applies to filetree, since methods are not stored in separate files for tonel"
+
+	"remove the instance or class method file"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot movedMethod |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _lastInstanceMethodMovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	movedMethod := ((changedProjectDefinition packageNamed: 'Issue361-Core')
+		classDefinitionNamed: 'Issue361Class1'ifAbsent: [])
+		removeInstanceMethod: #method6.
+	((changedProjectDefinition packageNamed: 'Issue361-Core')
+		classDefinitionNamed: 'Issue361Class2'ifAbsent: [])
+		addInstanceMethodDefinition: movedMethod.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (x := self _lastInstanceMethodMovedArtifactFileReference: repositoryRoot) exists.
+%
+
+category: 'tests'
+method: RwProjectFiletreeReaderWriterTest
 testWriterReader_B_removeInstanceClassMethods
 
 	"https://github.com/GemTalk/Rowan/issues/361"
@@ -26323,9 +26516,23 @@ _classMethodRemovedArtifactFileReference: repositoryRoot
 
 category: 'private'
 method: RwProjectFiletreeReaderWriterTest
+_classMovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class2.class'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
 _classRemovedArtifactFileReference: repositoryRoot
 
 	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_instanceMethodMovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class3.class' / 'instance' / 'method9', 'st'
 %
 
 category: 'private'
@@ -26340,6 +26547,13 @@ method: RwProjectFiletreeReaderWriterTest
 _lastClassMethodRemovedArtifactFileReference: repositoryRoot
 
 	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'class'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_lastInstanceMethodMovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'instance'
 %
 
 category: 'private'
@@ -26372,6 +26586,13 @@ method: RwProjectTonelReaderWriterTest
 _classExtensionRemovedArtifactFileReference: repositoryRoot
 
 	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension1' / 'Issue361Class1.extension.st'
+%
+
+category: 'private'
+method: RwProjectTonelReaderWriterTest
+_classMovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core' / 'Issue361Class2.class.st'
 %
 
 category: 'private'
@@ -38442,7 +38663,6 @@ testIssue495_move_class_and_extension_method_to_new_symbol_dict
 	| projectName  packageName1 packageName2 packageName3 project1 project2 
 		classDefinition packageDefinition className1 className2 class projectSetDefinition
 		classExtensionDefinition oldClass project audit |
-UserGlobals at: #ConditionalHalt put: false.
 	projectName := 'Issue215'.
 	packageName1 := 'Issue215-Core1'.
 	packageName2 := 'Issue215-Tools'.
@@ -38554,7 +38774,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: project2.
-UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition.
 
 	"validate"
@@ -49928,7 +50147,7 @@ testHybridClassCreationWithClassCreationTemplate_292
 '.
 	self assert: template = expectedTemplate.
 
-"1 create class - bytes"
+"1 create class - byteSubclass"
 	class := Object
 		rwByteSubclass: 'TestByteClass'
 		classVars: #()
@@ -49949,7 +50168,7 @@ testHybridClassCreationWithClassCreationTemplate_292
 '.
 	self assert: template = expectedTemplate.
 
-"2 create subclass - bytes"
+"2 create subclass - byteSubclass"
 	oldClass := class.
 	class := oldClass
 		rwSubclass: 'TestByteSubclass'

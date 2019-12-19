@@ -7,7 +7,8 @@
 			'tests' : {
 				#packageNames : [
 					'Rowan-Tests',
-					'Rowan-TestsV2'
+					'Rowan-TestsV2',
+					'Rowan-Tests-Components'
 					]
 				}
 			},

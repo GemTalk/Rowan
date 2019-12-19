@@ -59,7 +59,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-Components-Common';
 		comment: '# GemStone version format
 
 GemStone versions are simply an unbounded collection of $. separated positive integers.';
@@ -77,7 +77,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-Components-Common';
 		comment: 'RwSemanticVersionNumber conforms to version 2.0.0 of  [Semantic Versioning 2.0.0](http://semver.org/)
 
 **Semantic Versioning Specification** extracted from [Semantic versioning 2.0.0](https://raw.githubusercontent.com/semver/semver/347f73f880ebe1de61891832bf8702e864ca0998/semver.md):
@@ -594,7 +594,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2793,7 +2793,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-Components-Common';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2809,7 +2809,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-Components-Common';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2825,7 +2825,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-Components-Common';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2841,7 +2841,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-Components-Common';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2953,7 +2953,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-ComponentsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2969,7 +2969,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-ComponentsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2985,7 +2985,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-ComponentsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3209,7 +3209,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3225,7 +3225,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3241,7 +3241,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3257,7 +3257,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3273,7 +3273,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3289,7 +3289,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3305,7 +3305,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3321,7 +3321,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3337,7 +3337,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3353,7 +3353,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4230,7 +4230,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4246,7 +4246,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4262,7 +4262,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4278,7 +4278,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4294,7 +4294,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4310,7 +4310,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4386,7 +4386,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4402,7 +4402,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4453,7 +4453,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Definitions';
+		category: 'Rowan-DefinitionsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -5636,22 +5636,6 @@ true.
 
 doit
 (RwLoadedProject
-	subclass: 'RwGsLoadedSymbolDictComponentProjectV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-GemStone-Components';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwLoadedProject
 	subclass: 'RwGsLoadedSymbolDictProject'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -5676,7 +5660,7 @@ doit
 	inDictionary: RowanKernel
 	options: #()
 )
-		category: 'Rowan-GemStone-Components';
+		category: 'Rowan-GemStone-CoreV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6078,7 +6062,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Configurations';
+		category: 'Rowan-ComponentsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6094,7 +6078,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6200,7 +6184,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6305,7 +6289,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6370,6 +6354,70 @@ doit
 	options: #()
 )
 		category: 'Rowan-Specifications';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RwStructureV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwStructureV2
+	subclass: 'RwComponentStructureV2'
+	instVarNames: #( components loadComponent projectNames )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwStructureV2
+	subclass: 'RwGroupStructureV2'
+	instVarNames: #( components groupName )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwStructureV2
+	subclass: 'RwProjectStructureV2'
+	instVarNames: #( components loadedProject groups )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6692,6 +6740,54 @@ true.
 %
 
 doit
+(Object
+	subclass: 'RwViewV2'
+	instVarNames: #( packageAttributes components )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwViewV2
+	subclass: 'RwComponentViewV2'
+	instVarNames: #( packages loadedComponent )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwViewV2
+	subclass: 'RwProjectViewV2'
+	instVarNames: #( loadedProject )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (StringKeyValueDictionary
 	subclass: 'RwAuditReport'
 	instVarNames: #( owner )
@@ -6845,7 +6941,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components';
+		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -42077,7 +42173,7 @@ category: 'class browsing'
 method: RwPrjBrowserTool
 classCreationTemplateForSubclassOf: superclassName className: className type: classType category: category packageName: packageNameOrNil
 
-	"classType may be 'normal', 'bytes', or 'variable'"
+	"classType may be 'normal', 'byteSubclass', or 'variable'"
 
 	| result lfsp superClass |
 	result := String new.
@@ -42088,10 +42184,10 @@ classCreationTemplateForSubclassOf: superclassName className: className type: cl
 		ifTrue: [ result addAll: ' rwSubclass: ' ].
 	classType = 'variable'
 		ifTrue: [ result addAll: ' rwIndexableSubclass: ' ].
-	classType = 'bytes'
+	classType = 'byteSubclass'
 		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
 	result addAll: className printString.
-	classType ~= 'bytes'
+	classType ~= 'byteSubclass'
 		ifTrue: [ 
 			result
 				addAll: lfsp;
@@ -42125,7 +42221,7 @@ method: RwPrjBrowserTool
 classCreationTemplateForSubclassOf: superclassName className: className type: classType instanceVariablesString: instanceVariablesString classVariablesString: classVariablesString classInstanceVariablesString: classInstanceVariablesString poolDictionariesString: poolDictionariesString 
 comment: comment category: category
 
-	"classType may be 'normal', 'bytes', or 'variable'"
+	"classType may be 'normal', 'byteSubclass', or 'variable'"
 
 	| result lfsp |
 	result := String new.
@@ -42141,10 +42237,10 @@ comment: comment category: category
 		ifTrue: [ result addAll: ' rwSubclass: ' ].
 	classType = 'variable'
 		ifTrue: [ result addAll: ' rwIndexableSubclass: ' ].
-	classType = 'bytes'
+	classType = 'byteSubclass'
 		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
 	result addAll: className.
-	classType ~= 'bytes'
+	classType ~= 'byteSubclass'
 		ifTrue: [ 
 			result
 				addAll: lfsp;
@@ -43797,7 +43893,7 @@ _loadProjectSetDefinition_254: projectSetDefinitionToLoad instanceMigrator: inst
 							"set gs_symbolDictionary for the first time, or (potentially) override if project freshly read 
 								from disk (loadedProjectInfo available)"
 							packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
-	diff := projectSetDefinitionToLoad compareAgainstBase: loadedProjectDefinitionSet.
+	diff := projectSetDefinitionToLoad compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
@@ -43972,7 +44068,7 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 								gs_symbolDictionary:
 									(projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) ] ] ].
 	diff := projectSetDefinitionToLoad
-		compareAgainstBase: loadedProjectDefinitionSet.
+		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [ Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	loadedProjects := Array new.
@@ -45319,17 +45415,16 @@ removeDefinition: aDefinition from: aDictionary
 category: 'private'
 method: RwDefinition
 removeKey: key from: aDictionary
-
-	self removeKey: key from: aDictionary  ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+	^ self
+		removeKey: key
+		from: aDictionary
+		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
 %
 
 category: 'private'
 method: RwDefinition
 removeKey: key from: aDictionary ifAbsent: absentBlock
-
-	aDictionary
-		removeKey: key
-		ifAbsent: absentBlock
+	^ aDictionary removeKey: key ifAbsent: absentBlock
 %
 
 category: 'properties'
@@ -45742,7 +45837,7 @@ newForClassNamed: className super: superClassName instvars: instvars classinstva
 category: 'accessing'
 method: RwClassDefinition
 classType
-	"Legal types are normal, variable, and bytes."
+	"Legal types are normal, variable, and byteSubclass."
 
 	^self propertyAt: 'type' ifAbsent: ['normal']
 %
@@ -48189,8 +48284,7 @@ removeClassExtensionDefinitionNamed: className
 category: 'accessing'
 method: RwPackageDefinition
 removeClassNamed: className
-
-	self removeKey: className from: classDefinitions
+	^ self removeKey: className from: classDefinitions
 %
 
 category: 'accessing'
@@ -51768,6 +51862,12 @@ initialize
 	movedMethods := Set new
 %
 
+category: 'testing'
+method: RwProjectSetModification
+isEmpty
+	^ super isEmpty and: [ movedClasses isEmpty and: [ movedMethods isEmpty ] ]
+%
+
 category: 'private - moves'
 method: RwProjectSetModification
 updateForClassMoveFrom: removal to: addition
@@ -53624,7 +53724,7 @@ superclassName
 category: 'private'
 method: RwGsClassPatch
 _classFormat: fmt forSubclassType: classType
-	"Legal types are normal, variable, and bytes."
+	"Legal types are normal, variable, and byteSubclass."
 
 	"These values need to be moved into Class"
 	^classType = 'normal'
@@ -53633,7 +53733,7 @@ _classFormat: fmt forSubclassType: classType
 			[ classType = 'variable'
 				ifTrue: [ fmt bitOr: 16r4.	"add indexable bit" ]
 				ifFalse: 
-					[ classType = 'bytes'
+					[ classType = 'byteSubclass'
 						ifTrue: [ (fmt bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4 ]
 						ifFalse: [self error: 'Unknown class type']]]
 %
@@ -55399,12 +55499,15 @@ deletePackage
 
 category: 'moving'
 method: RwGsPackageMoveSymbolDictPatch
-movePackage
-
-	"Loader already makes sure that the package is created properly, but we do have to make sure that the old package is deleted from it's original location"
+movePackage: classesWithNewVersions
+	"Loader already makes sure that the package is created properly, but we do have to 
+		make sure that the old package is deleted from it's original location. Class extensions
+		have to be removed as well (https://github.com/dalehenrich/Rowan/issues/495)"
 
 	(Rowan image loadedRegistryForPackageNamed: packageDefinition name)
-		movePackage: packageDefinition name to: packageDefinition gs_symbolDictionary
+		movePackage: packageDefinition name
+		to: packageDefinition gs_symbolDictionary
+		classesWithNewVersions: classesWithNewVersions
 %
 
 ! Class implementation for 'RwGsProjectPatch'
@@ -56118,6 +56221,8 @@ method: RwGsPatchSet_254
 apply
 
 	"Apply the changes I represent to the running image."
+	"UserGlobals at: #ConditionalHalt put: false"
+
 (UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	self
 		setupForApply;
@@ -56476,7 +56581,7 @@ category: 'private - applying'
 method: RwGsPatchSet_254
 movePackages
 
-	movedPackages do: [:each | each movePackage ]
+	movedPackages do: [:each | each movePackage: classesWithNewVersions ]
 %
 
 category: 'private - applying'
@@ -57323,13 +57428,6 @@ disownClassExtensions: class forLoadedPackage: loadedPackage
 
 category: 'class - patch api'
 method: RwGsSymbolDictionaryRegistry
-ensureExtensionClassNamed: className existsForPackageNamed: packageName
-
-	^ self class registry_ImplementationClass ensureExtensionClassNamed: className existsForPackageNamed: packageName instance: self
-%
-
-category: 'class - patch api'
-method: RwGsSymbolDictionaryRegistry
 ensureExtensionClassNamed: className existsForPackageNamed: packageName implementationClass: implementationClass
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
@@ -57459,9 +57557,12 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol implementationClass: 
 
 category: 'method - patch api'
 method: RwGsSymbolDictionaryRegistry
-movePackage: packageName to: symbolDictionaryName
-
-	^  self class registry_ImplementationClass movePackage: packageName  to: symbolDictionaryName instance: self
+movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions
+	^ self class registry_ImplementationClass
+		movePackage: packageName
+		to: symbolDictionaryName
+		classesWithNewVersions: classesWithNewVersions
+		instance: self
 %
 
 category: 'package - creation api'
@@ -58266,15 +58367,32 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 
 category: 'method - patch api'
 classmethod: RwGsSymbolDictionaryRegistry_Implementation
-movePackage: packageName to: symbolDictionaryName instance: fromRegistryInstance
-
-	| loadedPackage toRegistryInstance |
+movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions instance: fromRegistryInstance
+	| loadedPackage toRegistryInstance newClassVersionMap |
 	loadedPackage := fromRegistryInstance packageRegistry
 		removeKey: packageName
 		ifAbsent: [ fromRegistryInstance error: 'package ' , packageName printString , ' not found' ].
-	toRegistryInstance := (Rowan image newOrExistingSymbolDictionaryNamed: symbolDictionaryName) rowanSymbolDictionaryRegistry.
-	(toRegistryInstance packageRegistry at: packageName ifAbsent: [])
-		ifNotNil: [:unexpectedLoadedPackage | toRegistryInstance error: 'package ', packageName printString, ' unexpectedly found in ', symbolDictionaryName printString ].
+	newClassVersionMap := Dictionary new.
+	classesWithNewVersions
+		do: [ :patch | newClassVersionMap at: patch oldClassVersion put: patch newClassVersion ].
+	toRegistryInstance := (Rowan image
+		newOrExistingSymbolDictionaryNamed: symbolDictionaryName)
+		rowanSymbolDictionaryRegistry.
+	loadedPackage loadedClassExtensions
+		do: [ :loadedClassExtensions | 
+			"class extensions must be removed from old package, additions are handled elsewhere"
+			"https://github.com/dalehenrich/Rowan/issues/495"
+			loadedClassExtensions moveFrom: fromRegistryInstance.
+			newClassVersionMap
+				at: loadedClassExtensions handle
+				ifPresent: [ :newClassVersion | loadedClassExtensions handle: newClassVersion ].
+			loadedClassExtensions moveTo: toRegistryInstance.].
+	(toRegistryInstance packageRegistry at: packageName ifAbsent: [  ])
+		ifNotNil: [ :unexpectedLoadedPackage | 
+			toRegistryInstance
+				error:
+					'package ' , packageName printString , ' unexpectedly found in '
+						, symbolDictionaryName printString ].
 	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
 	^ fromRegistryInstance
 %
@@ -59159,7 +59277,7 @@ category: 'private-updating'
 method: RwGsLoadedSymbolDictClass
 updateClassTypeFromClass
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
@@ -59630,6 +59748,31 @@ key
 	"Answer some token that will uniquely identify me relative to any other LoadedExtendedClass in the same package."
 
 	^name
+%
+
+category: 'removing'
+method: RwGsLoadedSymbolDictClassExtension
+moveFrom: fromRegistryInstance
+	"class extensions must be removed from old package, additions are handled elsewhere"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	(fromRegistryInstance classExtensionRegistry at: handle classHistory)
+		remove: self.
+	(fromRegistryInstance classExtensionRegistry at: handle classHistory) isEmpty
+		ifTrue: [ fromRegistryInstance classExtensionRegistry removeKey: handle classHistory ]
+%
+
+category: 'removing'
+method: RwGsLoadedSymbolDictClassExtension
+moveTo: toRegistryInstance
+	"class extensions must be removed from old package, additions are handled elsewhere"
+
+	"https://github.com/dalehenrich/Rowan/issues/495"
+
+	(toRegistryInstance classExtensionRegistry
+		at: handle classHistory
+		ifAbsentPut: [ IdentitySet new ]) add: self
 %
 
 category: 'methods'
@@ -60724,253 +60867,6 @@ updateLoadedCommitId
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
-useGit
-
-	^ self projectRef useGit
-%
-
-! Class implementation for 'RwGsLoadedSymbolDictComponentProjectV2'
-
-!		Class methods for 'RwGsLoadedSymbolDictComponentProjectV2'
-
-category: 'instance creation'
-classmethod: RwGsLoadedSymbolDictComponentProjectV2
-newForProjectReferenceDefinition: aProjectReferenceDefinition
-
-	^ self new
-		initialize;
-		initializeForProjectReferenceDefinition: aProjectReferenceDefinition;
-		yourself
-%
-
-!		Instance methods for 'RwGsLoadedSymbolDictComponentProjectV2'
-
-category: 'definitions'
-method: RwGsLoadedSymbolDictComponentProjectV2
-asDefinition
-	"Create a Definition corresponding to what I define in the image."
-
-	^ (RwProjectDefinitionV2
-		fromLoadSpecification: handle projectSpecification copy)
-		packages: self loadedPackageDefinitions;
-		yourself
-%
-
-category: 'testing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-canCommit
-
-	^ self projectRef canCommit
-%
-
-category: 'commit log'
-method: RwGsLoadedSymbolDictComponentProjectV2
-commitLog: logLimit
-
-	^ self projectRef commitLog: logLimit
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-components
-
-	^ self projectRef components
-%
-
-category: 'properties'
-method: RwGsLoadedSymbolDictComponentProjectV2
-defaultSymbolDictName: symDictName
-
-	self projectRef defaultSymbolDictName: symDictName
-%
-
-category: 'properties'
-method: RwGsLoadedSymbolDictComponentProjectV2
-defaultUseSessionMethodsForExtensions: aBool
-
-	self projectRef defaultUseSessionMethodsForExtensions: aBool
-%
-
-category: 'initialization'
-method: RwGsLoadedSymbolDictComponentProjectV2
-initializeForLoadSpecification: aLoadSpecification
-
-	self initializeForName: aLoadSpecification specName.
-	handle := RwProjectReferenceDefinition newForSpecification: aLoadSpecification
-%
-
-category: 'initialization'
-method: RwGsLoadedSymbolDictComponentProjectV2
-initializeForProjectReferenceDefinition: aProjectReferenceDefinition
-
-	self initializeForName: aProjectReferenceDefinition projectAlias.
-	handle := aProjectReferenceDefinition copy
-%
-
-category: 'properties'
-method: RwGsLoadedSymbolDictComponentProjectV2
-loadedCommitId
-
-	^ self projectRef loadedCommitId
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-loadedComponentDefinitions
-
-	"Create definitions from all of the components I define, and answer the collection of them"
-
-	| components |
-	components := self components copy.
-	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
-	^ components
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-loadedConfigurationNames
-
-	^ self projectRef loadedConfigurationNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-loadedConfigurationNames: configNames
-
-	"noop - project ref component keys is list of loaded config names"
-
-	"https://github.com/GemTalk/Rowan/issues/308"
-
-	"eventually this method will be completely removed/deprecated"
-
-	| x y |
-	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
-		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-loadedGroupNames
-
-	^ self projectRef loadedGroupNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-loadedGroupNames: groupNames
-
-
-	self projectRef loadedGroupNames: groupNames
-%
-
-category: 'private'
-method: RwGsLoadedSymbolDictComponentProjectV2
-markPackageDirty
-	"... indicates that receiver needs to mark it's container as dirty .... "
-
-	self markDirty
-%
-
-category: 'properties'
-method: RwGsLoadedSymbolDictComponentProjectV2
-packageNameToPlatformPropertiesMap: aDictionary
-
-	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-projectOwnerId
-
-	^ self propertyAt: 'projectOwnerId'
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-projectOwnerId: aString
-
-	^ self propertyAt: 'projectOwnerId' put: aString
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-projectRef
-
-	^ self handle
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-projectUrl
-
-	"Return the projectUrl used to clone the project"
-
-	^ self projectRef projectUrl
-%
-
-category: 'definitions'
-method: RwGsLoadedSymbolDictComponentProjectV2
-propertiesForDefinition
-
-	| props |
-	props := super propertiesForDefinition.
-	props at: 'projectRef' put: handle copy.
-	^ props
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-remote
-
-	^ self projectRef remote
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-repositoryCommitId
-
-	^ self projectRef repositoryCommitId
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self projectRef repositoryRoot
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-repositoryRootPath
-
-	^ self repositoryRoot pathString
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-specification
-
-self deprecated: 'temporary patch .. sender should send direct message to receiver'.
-	^ handle
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
-symbolDictNameForPackageNamed: packageName
-
-	^self projectRef symbolDictNameForPackageNamed: packageName
-%
-
-category: 'loading'
-method: RwGsLoadedSymbolDictComponentProjectV2
-updateLoadedCommitId
-
-	self projectRef updateLoadedCommitId
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictComponentProjectV2
 useGit
 
 	^ self projectRef useGit
@@ -69370,7 +69266,7 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
-		type: 'bytes'
+		type: 'byteSubclass'
 		superclass: self name asString
 		instVarNames: #()
 		classVars: anArrayOfClassVars
@@ -69387,7 +69283,7 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
-		type: 'bytes'
+		type: 'byteSubclass'
 		superclass: self name asString
 		instVarNames: #()
 		classVars: anArrayOfClassVars
@@ -69896,7 +69792,7 @@ definitionString
 				ifTrue: [ classType := 'variable' ]
 				ifFalse: [ 
 					type = 'byteSubclass'
-						ifTrue: [ classType := 'bytes' ]
+						ifTrue: [ classType := 'byteSubclass' ]
 						ifFalse: [ self error: 'unknown subclass type: ' , type ] ] ].
 	^ Rowan projectTools browser
 		classCreationTemplateForSubclassOf: superclassName
@@ -70655,7 +70551,7 @@ name
 
 !		Instance methods for 'RwAbstractProjectDefinitionV2'
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwAbstractProjectDefinitionV2
 compareAgainstBase: aDefinition
 
@@ -70673,14 +70569,14 @@ compareAgainstBase: aDefinition
 	^ modification
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwAbstractProjectDefinitionV2
 projectDefinitionSourceProperty
 
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwAbstractProjectDefinitionV2
 projectDefinitionSourceProperty: sourceKeyOrNil
 
@@ -70688,14 +70584,14 @@ projectDefinitionSourceProperty: sourceKeyOrNil
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwAbstractProjectDefinitionV2
 symbolDictionaryRegistryClass
 
 	^ RwGsSymbolDictionaryRegistry
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwAbstractProjectDefinitionV2
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 
@@ -70713,7 +70609,7 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 
 !		Instance methods for 'RwAbstractResolvedObjectV2'
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsV2'
 method: RwAbstractResolvedObjectV2
 _gemstoneAllUsersName
 	^ self _loadSpecification _gemstoneAllUsersName
@@ -71165,7 +71061,7 @@ setSymbolDictName: symbolDictName forPackageNamed: packageName
 	^self projectRef setSymbolDictName: symbolDictName forPackageNamed: packageName
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
 setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
 
@@ -71554,7 +71450,7 @@ registry_ImplementationClass
 
 !		Class methods for 'RwLoadSpecificationV2'
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 classmethod: RwLoadSpecificationV2
 _gemstoneAllUsersName
 	^ 'allusers'
@@ -71562,7 +71458,7 @@ _gemstoneAllUsersName
 
 !		Instance methods for 'RwLoadSpecificationV2'
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneDefaultMethodEnvForUser: userId
 	| gemstoneProperties userProperties |
@@ -71580,7 +71476,7 @@ gemstoneDefaultMethodEnvForUser: userId
 		ifAbsent: [ self _gemstoneDefaultMethodEnv ]
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneDefaultSymbolDictNameForUser: userId
 	| gemstoneProperties userProperties |
@@ -71598,7 +71494,7 @@ gemstoneDefaultSymbolDictNameForUser: userId
 		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
 	| gemstoneProperties userProperties |
@@ -71616,7 +71512,7 @@ gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
 		ifAbsent: [ self _gemstoneDefaultUseSessionMethodsForExtensions ]
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultMethodEnvForUser: userId to: env
 
@@ -71625,13 +71521,13 @@ gemstoneSetDefaultMethodEnvForUser: userId to: env
 			at: #defaultMethodEnv put: env
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultMethodEnvTo: env
 	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: env
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 
@@ -71640,13 +71536,13 @@ gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 			at: #defaultSymbolDictName put: symbolDictName
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self gemstoneSetDefaultSymbolDictNameForUser: self _gemstoneAllUsersName to: symbolDictName
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
 
@@ -71655,33 +71551,33 @@ gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
 			at: #defaultUseSessionMethodsForExtensions put: aBool
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 _gemstoneAllUsersName
 
 	^ self class _gemstoneAllUsersName
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 _gemstoneDefaultMethodEnv
 	^ 0
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 _gemstoneDefaultSymbolDictName
 
 	^ 'UserGlobals'
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 _gemstoneDefaultUseSessionMethodsForExtensions
 
@@ -72036,14 +71932,14 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 !		Instance methods for 'RwProjectDefinition'
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 asLoadedSymbolDictProject
 
 	^ RwGsLoadedSymbolDictProject newForLoadSpecification: self specification.
 %
 
-category: '*rowan-core-definitions-extensions'
+category: '*rowan-core-definitionsv1'
 method: RwProjectDefinition
 compareAgainstBase: aDefinition
 
@@ -72061,14 +71957,14 @@ compareAgainstBase: aDefinition
 	^ modification
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 defaultSymbolDictName
 
 	^ (self specification platformSpec at: 'gemstone') defaultSymbolDictName
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 defaultSymbolDictName: symbolDictName
 
@@ -72076,7 +71972,7 @@ defaultSymbolDictName: symbolDictName
 		defaultSymbolDictName: symbolDictName
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 defaultUseSessionMethodsForExtensions: aBool
 
@@ -72084,7 +71980,7 @@ defaultUseSessionMethodsForExtensions: aBool
 		defaultUseSessionMethodsForExtensions: aBool
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 methodEnvForPackageNamed: packageName
 
@@ -72098,14 +71994,14 @@ name
   ^ self key
 %
 
-category: '*rowan-core-definitions-extensions'
+category: '*rowan-core-definitionsv1'
 method: RwProjectDefinition
 projectDefinitionSourceProperty
 
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
 %
 
-category: '*rowan-core-definitions-extensions'
+category: '*rowan-core-definitionsv1'
 method: RwProjectDefinition
 projectDefinitionSourceProperty: sourceKeyOrNil
 
@@ -72113,28 +72009,28 @@ projectDefinitionSourceProperty: sourceKeyOrNil
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 projectOwnerId
 
 	^ (self specification platformSpec at: 'gemstone') projectOwnerId
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 projectOwnerId: aUserId
 
 	(self specification platformSpec at: 'gemstone') projectOwnerId: aUserId
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 register
 
 	self specification register
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 setSymbolDictName: symbolDictName forPackageNamed: packageName
 
@@ -72144,7 +72040,7 @@ setSymbolDictName: symbolDictName forPackageNamed: packageName
 		forPackageNamed: packageName
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
 
@@ -72153,14 +72049,14 @@ setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
 		forPackageNamed: packageName
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 symbolDictionaryRegistryClass
 
 	^ RwGsSymbolDictionaryRegistry
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 symbolDictNameForPackageNamed: packageName
 
@@ -72168,7 +72064,7 @@ symbolDictNameForPackageNamed: packageName
 		symbolDictNameForPackageNamed: packageName
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 updateGsPlatformSpecLoadedProjectInfo: projectInfo
 
@@ -72185,7 +72081,7 @@ updateGsPlatformSpecLoadedProjectInfo: projectInfo
 		ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map]
 %
 
-category: '*rowan-gemstone-definitions'
+category: '*rowan-gemstone-definitionsv1'
 method: RwProjectDefinition
 useSessionMethodsForExtensionsForPackageNamed: packageName
 
@@ -72193,7 +72089,7 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 		useSessionMethodsForExtensionsForPackageNamed: packageName
 %
 
-category: '*rowan-core-definitions-extensions'
+category: '*rowan-core-definitionsv1'
 method: RwProjectDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 
@@ -72211,7 +72107,7 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 
 !		Instance methods for 'RwProjectDefinitionV2'
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 exportTopazFormatTo: filePath
 	| projectSetDefinition projectSetModification visitor fileReference |
@@ -72227,7 +72123,7 @@ exportTopazFormatTo: filePath
 	visitor visit: projectSetModification
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 	| projectSetDefinition projectSetModification visitor fileReference |
@@ -72244,13 +72140,13 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 	visitor visit: projectSetModification
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 gemstoneDefaultSymbolDictNameForUser: userId
 	^ self projectSpecification gemstoneDefaultSymbolDictNameForUser: userId
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 	"answer true if the package was found in one of the receivers components"
@@ -72267,7 +72163,7 @@ gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 	self error: 'No package named ', packageName printString, ' found.'.
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock
 	self components
@@ -72291,7 +72187,7 @@ gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: abs
 	self error: 'No package ' , packageName , ' found in the current project.'
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo
 
@@ -72306,7 +72202,7 @@ updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo
 		ifNotNil: [:map | aLoadedProject packageNameToPlatformPropertiesMap: map]
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 _gemstoneAllUsersName
 	^ RwLoadSpecificationV2 _gemstoneAllUsersName
@@ -72606,6 +72502,21 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 category: '*rowan-core-definitions-extensions'
 method: RwProjectSetDefinition
 compareAgainstBase: aDefinition
+	| result |
+	result := RwProjectSetModification new.
+	self
+		compareDictionary: definitions
+		againstBaseDictionary: aDefinition definitions
+		into: result
+		elementClass: RwProjectDefinition.
+	^ result
+%
+
+category: '*rowan-core-definitions-extensions'
+method: RwProjectSetDefinition
+compareAgainstBaseForLoader: aDefinition
+	"use this message IFF you are prepared to deal directly with movedClasses and movedMethods.
+		For general purpose comparison, compareAgainstBase: is a better choice"
 
 	| result |
 	result := RwProjectSetModification new.
@@ -72664,13 +72575,13 @@ platformSpec
 
 !		Instance methods for 'RwResolvedProjectV2'
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitions-extensionsv2'
 method: RwResolvedProjectV2
 asLoadedSymbolDictProject
 	^ RwGsLoadedSymbolDictResolvedProjectV2 newForResolvedProject: self
 %
 
-category: '*rowan-core-definitions-extensions'
+category: '*rowan-core-definitionsv2'
 method: RwResolvedProjectV2
 compareAgainstBase: aDefinition
 
@@ -72688,7 +72599,7 @@ compareAgainstBase: aDefinition
 	^ modification
 %
 
-category: '*rowan-core-definitions-extensions'
+category: '*rowan-core-definitionsv2'
 method: RwResolvedProjectV2
 compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass
 
@@ -72705,31 +72616,31 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 				ifFalse: [anElementsModification addElementModification: modification]]
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneDefaultSymbolDictNameForUser: userId
 	^ self _loadSpecification gemstoneDefaultSymbolDictNameForUser: userId
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 	self _loadSpecification gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self _loadSpecification gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 	self _projectDefinition gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSymbolDictNameForPackageNamed: packageName
 	^ self
@@ -72737,7 +72648,7 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 		forUser: Rowan image currentUserId
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId
 	^ self _projectDefinition
@@ -72748,14 +72659,14 @@ gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId
 			^ self gemstoneDefaultSymbolDictNameForUser: userId ]
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 methodEnvForPackageNamed: packageName
 
 	^self _loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 %
 
-category: '*rowan-gemstone-components-extensions'
+category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 useSessionMethodsForExtensionsForPackageNamed: packageName
 	"Ignore the package name for now ... will do proper package name lookup when we're ready to support method environments"
