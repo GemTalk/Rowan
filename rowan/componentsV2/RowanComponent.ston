@@ -1,0 +1,49 @@
+RwProjectLoadComponentV2 {
+	#name : 'RowanComponent',
+	#comment : 'V2 prototype. Currently being used to implement RowanV2. Will eventually be deprecated when RowanV2 can be used to develop itself',
+	#componentNames : [
+			'CommonCore',
+			'CommonCoreV2',
+			'Services'
+		],
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Rowan-Components'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests-Components'
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Components',
+					'Rowan-GemStone-Components-Extensions'
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Components' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Components-Extensions' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+}

@@ -1,0 +1,133 @@
+RwNestedProjectLoadComponentV2 {
+	#name : 'CommonCore',
+	#comment : 'Common code shared by RowanV1, RowanV2 and RowanComponent',
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Rowan-Kernel',
+					'Rowan-Url-Core',
+					'Rowan-Url-Extensions',
+					'Rowan-Definitions',
+					'Rowan-Core-Definitions-Extensions',
+					'Rowan-Specifications',
+					'Rowan-Configurations-Common',
+					'Rowan-Core',
+					'Rowan-Tools-Core',
+					'Rowan-Tools-Extensions',
+					'Rowan-Tools-Kernel',
+					'Rowan-Components-Kernel'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests'
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'AST-Core',
+					'AST-Kernel-Core',
+					'Rowan-GemStone-Core',
+					'Rowan-GemStone-Loader',
+					'Rowan-GemStone-Loader-Extensions',
+					'Rowan-GemStone-Definitions',
+					'Rowan-Tools-GemStone',
+					'Rowan-Tools-Extensions-GemStone',
+					'Rowan-GemStone-Kernel'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'AST-Tests-Core',
+					'AST-Kernel-Tests-Core',
+					'Rowan-Tests-GemStone',
+					'Rowan-DataCurator-Tests'
+				]
+			}
+		},
+		[ 'gs3.[2-]' ] : {
+      'core': {
+				#packageNames : [
+          'GemStone-Interactions-Core',
+					'Rowan-Url-3215',
+					'GemStone-Interactions-Kernel',
+					'Rowan-GemStone-3215',
+					'Rowan-GemStone-32x'
+				]
+			}
+		},
+		[ 'gs3.[2-4]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Loader32x'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests-32x'
+				]
+			}
+		},
+		[ 'gs3.[2-5]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Kernel-32x'
+				]
+			}
+		},
+		[ 'gs3.[5-]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Loader35x'.
+					'Rowan-GemStone-35x'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests-35x',
+					'Rowan-Tests-GemStone-35x'
+				]
+			}
+		},
+		[ 'gs3.[6-]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Kernel-36x'
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Loader32x' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-GemStone-Loader35x' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Configurations-Common' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-GemStone' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel-32x' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel-36x' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
+					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-32x' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-35x' : { 'symbolDictName' : 'Globals' }
+				}
+			}
+		}
+	}
+}

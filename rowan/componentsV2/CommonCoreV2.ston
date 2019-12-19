@@ -1,0 +1,29 @@
+RwNestedProjectLoadComponentV2 {
+	#name : 'CommonCoreV2',
+	#comment : 'Common code shared by RowanV2 and RowanComponent',
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+				]
+			},
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+				}
+			}
+		}
+	}
+}

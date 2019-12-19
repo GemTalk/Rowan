@@ -1,0 +1,73 @@
+RwProjectLoadComponentV2 {
+	#name : 'RowanV1',
+	#comment : 'RowanV1 support',
+	#componentNames : [
+			'CommonCore',
+			'Services'
+		],
+
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Rowan-DefinitionsV1',
+					'Rowan-Core-DefinitionsV1',
+					'Rowan-Configurations',
+					'Rowan-Tools-Deprecated',
+					'Rowan-GemStone-Loader-Deprecated',
+					'Rowan-GemStone-Loader-Extensions-Deprecated',
+					'Rowan-Definitions-Deprecated',
+					'Rowan-Deprecated',
+					'Rowan-Cypress-Kernel'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-Cypress-Core',
+					'Rowan-Cypress-Definitions',
+					'Rowan-Url-Cypress',
+					'Rowan-GemStone-DefinitionsV1',
+					'Rowan-GemStone-Specifications'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests-Deprecated'
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Loader-Deprecated' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Core-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Definitions-Deprecated' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Cypress-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-Deprecated' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' }
+				}
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+}
