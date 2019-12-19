@@ -5,7 +5,9 @@ Class {
 		'name',
 		'comment',
 		'projectName',
+		'projectNames',
 		'componentNames',
+		'definedGroupNames',
 		'conditionalPackages',
 		'conditionalPackageMatchers',
 		'conditionalPackageMapSpecs',
@@ -183,6 +185,20 @@ RwAbstractProjectLoadComponentV2 >> _platformPatternMatcherFor: pattern [
 
 ]
 
+{ #category : 'private' }
+RwAbstractProjectLoadComponentV2 >> _processConditionalPackageNames: aProjectLoadConfiguration [
+
+	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
+			ifTrue: [
+				groupMap keysAndValuesDo: [:group :map |
+					(self groupNames includes: group)
+						ifTrue: [ 
+							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
+							self componentNames addAll: (map at: #componentNames ifAbsent: [ #() ] ).
+							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
+]
+
 { #category : 'validation' }
 RwAbstractProjectLoadComponentV2 >> _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap [
 	"ensure that the data structures within the receiver contain valid information:
@@ -344,10 +360,32 @@ RwAbstractProjectLoadComponentV2 >> conditionalPackagesAtConditions: conditions 
 
 { #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> definedGroupNames [
-	"Empty list by default"
 
-	^ #()
+	^ definedGroupNames 
+		ifNil: [ definedGroupNames :=  Dictionary new]
+]
 
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> definedGroupNames: aColl [
+
+	definedGroupNames := aColl
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> defineGroupNamed: groupName [ 
+
+	"add a group that does not include any other groups"
+
+	self defineGroupNamed: groupName toIncludeGroups: #()
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> defineGroupNamed: groupName toIncludeGroups: includedGroups [
+
+	"add a group that does not include any other groups"
+
+	self definedGroupNames at: groupName put: includedGroups asArray sort
 ]
 
 { #category : 'ston' }
@@ -497,6 +535,18 @@ RwAbstractProjectLoadComponentV2 >> projectName: anObject [
 
    projectName := anObject
 
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> projectNames [
+
+	^ projectNames ifNil: [ #() ]
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> projectNames: anArray [
+
+	projectNames := anArray
 ]
 
 { #category : 'accessing' }

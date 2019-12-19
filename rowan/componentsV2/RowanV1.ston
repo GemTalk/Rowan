@@ -69,5 +69,9 @@ RwProjectLoadComponentV2 {
 			'core'
 		],
 		'core' : [ ]
-	}
+	},
+	#projectNames : [
+		'Cypress',
+		'Tonel'
+	]
 }
