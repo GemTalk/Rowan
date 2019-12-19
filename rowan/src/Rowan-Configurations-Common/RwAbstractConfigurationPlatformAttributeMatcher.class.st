@@ -5,7 +5,7 @@ Class {
 		'pattern',
 		'patternMatchBlock'
 	],
-	#category : 'Rowan-Components-Common'
+	#category : 'Rowan-Configurations-Common'
 }
 
 { #category : 'matching' }

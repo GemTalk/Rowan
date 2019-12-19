@@ -350,7 +350,7 @@ Class {
 		'preReleaseVersion',
 		'buildVersion'
 	],
-	#category : 'Rowan-Components-Common'
+	#category : 'Rowan-Configurations-Common'
 }
 
 { #category : 'private' }

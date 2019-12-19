@@ -623,7 +623,7 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
-    value: #('Rowan-Definitions' 'Rowan-DefinitionsV1' 'Rowan-Configurations' 'Rowan-Components-Common'
+    value: #('Rowan-Definitions' 'Rowan-DefinitionsV1' 'Rowan-Configurations-Common' 'Rowan-Configurations' 
 			'Rowan-Specifications'
 	).	"Rowan Definitions, Configurations and Specifications"
 %

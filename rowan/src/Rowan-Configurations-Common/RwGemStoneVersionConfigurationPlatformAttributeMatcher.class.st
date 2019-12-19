@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGemStoneVersionConfigurationPlatformAttributeMatcher',
 	#superclass : 'RwAbstractConfigurationPlatformAttributeMatcher',
-	#category : 'Rowan-Components-Common'
+	#category : 'Rowan-Configurations-Common'
 }
 
 { #category : 'matching' }

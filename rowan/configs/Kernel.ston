@@ -19,7 +19,7 @@
 					'Rowan-Components',
 					'Rowan-ComponentsV2',
 					'Rowan-Configurations',
-					'Rowan-Components-Common',
+					'Rowan-Configurations-Common',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
 					'Rowan-Tools-Extensions'
@@ -101,7 +101,7 @@
 					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Components-Extensions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-Components-Common' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Configurations-Common' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' },

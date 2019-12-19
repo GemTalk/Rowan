@@ -7,7 +7,7 @@ Class {
 	#name : 'RwGemStoneVersionNumber',
 	#superclass : 'Magnitude',
 	#type : 'variable',
-	#category : 'Rowan-Components-Common'
+	#category : 'Rowan-Configurations-Common'
 }
 
 { #category : 'instance creation' }
