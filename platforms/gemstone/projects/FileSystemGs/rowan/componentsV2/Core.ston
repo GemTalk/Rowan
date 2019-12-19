@@ -1,0 +1,40 @@
+RwProjectLoadComponentV2 {
+	#name : 'Core',
+	#comment : 'FileSystemGs component. For now all packages are expected to be loaded into Globals by SystemUser',
+	#conditionalPackages : {
+		[
+			'gemstone'
+		] : {
+			'core' : {
+				#packageNames : [
+					'FileSystem-Core',
+					'FileSystem-Disk',
+					'FileSystem-GemStone-Kernel',
+					'FileSystem-Memory',
+					'FileSystem-Path',
+					'Zinc-Character-Encoding-Core',
+					'Files',
+					'Network-UUID'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'FileSystem-Tests-Attributes',
+					'FileSystem-Tests-Core',
+					'FileSystem-Tests-Disk',
+					'FileSystem-Tests-Memory',
+					'Zinc-Character-Encoding-Tests',
+					'Files-Tests',
+					'Network-UUID-Tests',
+					'FileSystem-Tests-GemStone'
+				]
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+}
