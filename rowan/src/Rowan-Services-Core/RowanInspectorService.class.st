@@ -10,7 +10,8 @@ Class {
 		'visibleIndices',
 		'nextIndices',
 		'maxIndexedVars',
-		'compileErrorArray'
+		'compileErrorArray',
+		'isOop'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -95,15 +96,15 @@ RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
 RowanInspectorService >> initialize [
 
 	super initialize. 
-	objects := Array new.
+	objects := OrderedCollection new.
 ]
 
 { #category : 'client commands' }
-RowanInspectorService >> inspect: anOop [
+RowanInspectorService >> inspect: oopOrObject [
   | anObject |
-  self rowanFixMe.	"to do - max size, unicode, "
-  oop := anOop.
-  anObject := Object _objectForOop: anOop.
+  self rowanFixMe.	"to do - unicode, "
+  self setOopFrom: oopOrObject.
+  anObject := Object _objectForOop: oop.
   (self isClientForwarder: anObject)
     ifTrue: [ ^ self inspectClientForwarder: anObject ].
   className := anObject class name.
@@ -123,6 +124,25 @@ RowanInspectorService >> inspect: anOop from: indexStart to: indexStop [
   stop := indexStop min: indexedSize.
   nextIndices := self indexedVarsFrom: indexStart to: stop.
   visibleIndices := stop.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> inspect: oopOrObject inWindow: handle [
+  | anObject |
+  self rowanFixMe.	"to do - unicode, "
+  self setOopFrom: oopOrObject.
+  RowanBrowserService new saveRootObject: oop windowHandle: handle.
+  anObject := Object _objectForOop: oop.
+  (self isClientForwarder: anObject)
+    ifTrue: [ ^ self inspectClientForwarder: anObject ].
+  className := anObject class name.
+  myself := 'self' -> anObject printString.
+  (anObject isKindOf: Dictionary)
+    ifTrue: [ ^ self inspectDictionary: anObject ].
+  self addInstVars: anObject.
+  self addDynamicInstVars: anObject.
+  self addFirstIndexedVars: anObject.
   RowanCommandResult addResult: self
 ]
 
@@ -154,8 +174,7 @@ RowanInspectorService >> isRcBag: anObject [
 
 { #category : 'client commands' }
 RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
-  | anObject stop |
-  anObject := Object _objectForOop: oop.
+  | stop |
   stop := indexStop min: indexedSize.
   nextIndices := self indexedVarsFrom: indexStart to: stop.
   visibleIndices := stop.
@@ -176,4 +195,11 @@ RowanInspectorService >> setIndexedSize: anObject [
       (self isRcBag: anObject)
         ifTrue: [ anObject size ]
         ifFalse: [ anObject _primitiveSize - anObject class allInstVarNames size ] ]
+]
+
+{ #category : 'private' }
+RowanInspectorService >> setOopFrom: oopOrObject [
+  oop := isOop
+    ifTrue: [ oopOrObject ]
+    ifFalse: [ Reflection oopOf: oopOrObject ]
 ]
