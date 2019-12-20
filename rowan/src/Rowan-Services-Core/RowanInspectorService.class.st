@@ -203,7 +203,8 @@ RowanInspectorService >> removeIndexedInstVarAt: index [
   theObject remove: removalObject.
   formerlyVisible := visibleIndices.
   objects := OrderedCollection new.
-  self inspect: oop.	"reinspect"
+  isOop := false.
+  self inspect: theObject.	"reinspect"
   self inspect: oop from: visibleIndices to: formerlyVisible	"pick up any additional indexed inst vars the user may have asked for"
 ]
 
