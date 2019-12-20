@@ -11,7 +11,8 @@ Class {
 		'nextIndices',
 		'maxIndexedVars',
 		'compileErrorArray',
-		'isOop'
+		'isOop',
+		'instVarNames'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -39,7 +40,7 @@ RowanInspectorService >> addFirstIndexedVars: anObject [
 
 { #category : 'command support' }
 RowanInspectorService >> addInstVars: anObject [
-  | instVarNames namedSize isRcBag |
+  | namedSize isRcBag |
   instVarNames := anObject class allInstVarNames.
   namedSize := instVarNames size.
   isRcBag := self isRcBag: anObject.
@@ -192,6 +193,18 @@ RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
 RowanInspectorService >> oop: anInteger [
 
 	oop := anInteger
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> removeIndexedInstVarAt: index [
+  | theObject removalObject formerlyVisible |
+  theObject := Object _objectForOop: oop.
+  removalObject := theObject at: index.
+  theObject remove: removalObject.
+  formerlyVisible := visibleIndices.
+  objects := OrderedCollection new.
+  self inspect: oop.	"reinspect"
+  self inspect: oop from: visibleIndices to: formerlyVisible	"pick up any additional indexed inst vars the user may have asked for"
 ]
 
 { #category : 'printing' }
