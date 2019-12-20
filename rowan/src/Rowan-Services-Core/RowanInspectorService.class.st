@@ -12,7 +12,8 @@ Class {
 		'maxIndexedVars',
 		'compileErrorArray',
 		'isOop',
-		'instVarNames'
+		'instVarNames',
+		'instVarsAreRemovable'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -100,9 +101,9 @@ RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
 
 { #category : 'initialization' }
 RowanInspectorService >> initialize [
-
-	super initialize. 
-	objects := OrderedCollection new.
+  super initialize.
+  objects := OrderedCollection new.
+  instVarsAreRemovable := false
 ]
 
 { #category : 'client commands' }
@@ -160,12 +161,16 @@ RowanInspectorService >> inspectClientForwarder: anObject [
 
 { #category : 'command support' }
 RowanInspectorService >> inspectDictionary: aDictionary [
+  instVarsAreRemovable := true.
   aDictionary
     keysDo: [ :key | 
       objects
         add:
           (self stripOutUnicode: key printString)
-            -> (Reflection oopOf: (aDictionary at: key)) ].
+            ->
+              (Array
+                with: (Reflection oopOf: key)
+                with: (Reflection oopOf: (aDictionary at: key))) ].
   RowanCommandResult addResult: self
 ]
 
@@ -208,6 +213,19 @@ RowanInspectorService >> removeIndexedInstVarAt: index [
   self inspect: oop from: visibleIndices to: formerlyVisible	"pick up any additional indexed inst vars the user may have asked for"
 ]
 
+{ #category : 'client commands' }
+RowanInspectorService >> removeKey: keyOop [
+  | theObject formerlyVisible removalKey |
+  theObject := Object _objectForOop: oop.
+  removalKey := Object _objectForOop: keyOop.
+  theObject removeKey: removalKey.
+  formerlyVisible := visibleIndices.
+  objects := OrderedCollection new.
+  isOop := false.
+  self inspect: theObject.	"reinspect"
+  "self inspect: oop from: visibleIndices to: formerlyVisible"	"pick up any additional indexed keys the user may have asked for"
+]
+
 { #category : 'printing' }
 RowanInspectorService >> selfPrintString: anObject [
   ^ [ self stripOutUnicode: anObject printString ]
@@ -223,6 +241,7 @@ RowanInspectorService >> setIndexedSize: anObject [
   indexedSize := (anObject class isNsc or: [ anObject class isIndexable ])
     ifFalse: [ 0 ]
     ifTrue: [ 
+      instVarsAreRemovable := true.
       (self isRcBag: anObject)
         ifTrue: [ anObject size ]
         ifFalse: [ anObject _primitiveSize - anObject class allInstVarNames size ] ]
