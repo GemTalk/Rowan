@@ -11,11 +11,8 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| projectSpecification loadSpecification projectDefinition |
+	| loadSpecification projectDefinition |
 	loadSpecification := anRwLoadSpecificationV2 copy.
-	projectSpecification := RwProjectSpecificationV2 new
-		projectName: loadSpecification projectAlias;
-		yourself.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
@@ -27,7 +24,6 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 		yourself.
 	^ self basicNew
 		_projectDefinition: projectDefinition;
-		_projectSpecification: projectSpecification;
 		_loadSpecification: loadSpecification;
 		resolve
 ]
@@ -343,7 +339,7 @@ RwResolvedProjectV2 >> read: platformConfigurationAttributes [
 	^ self
 		readComponentNames: self componentNames
 		groupNames: self groupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: platformConfigurationAttributes
 ]
 
 { #category : 'actions' }

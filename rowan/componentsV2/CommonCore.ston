@@ -56,15 +56,15 @@ RwNestedProjectLoadComponentV2 {
           'GemStone-Interactions-Core',
 					'Rowan-Url-3215',
 					'GemStone-Interactions-Kernel',
-					'Rowan-GemStone-3215',
-					'Rowan-GemStone-32x'
+					'Rowan-GemStone-3215'
 				]
 			}
 		},
 		[ 'gs3.[2-4]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-GemStone-Loader32x'
+					'Rowan-GemStone-Loader32x',
+					'Rowan-GemStone-32x'
 				]
 			},
 			'tests' : {
@@ -83,7 +83,7 @@ RwNestedProjectLoadComponentV2 {
 		[ 'gs3.[5-]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-GemStone-Loader35x'.
+					'Rowan-GemStone-Loader35x',
 					'Rowan-GemStone-35x'
 				]
 			},

@@ -90,7 +90,19 @@ RwAbstractResolvedObjectV2 >> _projectRepository: object [
 RwAbstractResolvedObjectV2 >> _projectSpecification [
 	"project specification should not be accessed directly -- Rowan private state"
 
+	"lazy initialization, since project specification must be read from disk during resolve
+		if it is present on disk"
+
 	^ projectSpecification
+		ifNil: [ 
+			| projectSpecFileRef |
+			projectSpecFileRef := self repositoryRoot / self projectSpecFile.
+			projectSpecification := projectSpecFileRef exists
+				ifTrue: [ RwSpecification fromFile: projectSpecFileRef ]
+				ifFalse: [ RwProjectSpecificationV2 new ].
+			projectSpecification
+				projectName: self projectAlias;
+				yourself ]
 ]
 
 { #category : 'private' }

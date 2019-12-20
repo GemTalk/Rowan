@@ -183,9 +183,9 @@ RwProjectLoadConfigurationVisitorV2 >> visitNestedProjectLoadComponent: aNestedP
 
 	self _processConditionalPackageNames: aNestedProjectLoadComponent.
 
-	self visitedComponentNames addAll: aNestedProjectLoadComponent componentNames.
+	self componentNames addAll: aNestedProjectLoadComponent componentNames.
 	(self
-		_components: self componentRoot
+		_components: self componentsRoot
 		forProject: aNestedProjectLoadComponent projectName)
 		do: [ :component | component acceptNestedVisitor: self ]
 ]

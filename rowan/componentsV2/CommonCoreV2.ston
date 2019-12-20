@@ -8,7 +8,7 @@ RwNestedProjectLoadComponentV2 {
 			'core' : {
 				#packageNames : [
 				]
-			},
+			}
 		},
 		[ 'gemstone' ] : {
       'core': {
