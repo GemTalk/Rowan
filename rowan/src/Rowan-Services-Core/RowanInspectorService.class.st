@@ -115,7 +115,7 @@ RowanInspectorService >> inspect: oopOrObject [
     ifTrue: [ ^ self inspectClientForwarder: anObject ].
   className := anObject class name.
   myself := 'self' -> (self selfPrintString: anObject).
-  (anObject isKindOf: Dictionary)
+  (anObject isKindOf: Dictionary superclass )
     ifTrue: [ ^ self inspectDictionary: anObject ].
   self addInstVars: anObject.
   self addDynamicInstVars: anObject.
