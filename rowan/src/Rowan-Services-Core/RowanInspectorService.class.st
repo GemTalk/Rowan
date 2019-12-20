@@ -171,6 +171,8 @@ RowanInspectorService >> inspectDictionary: aDictionary [
               (Array
                 with: (Reflection oopOf: key)
                 with: (Reflection oopOf: (aDictionary at: key))) ].
+  objects := (objects asSortedCollection sortBlock: [ :x :y | x key < y key ])
+    asOrderedCollection.
   RowanCommandResult addResult: self
 ]
 
