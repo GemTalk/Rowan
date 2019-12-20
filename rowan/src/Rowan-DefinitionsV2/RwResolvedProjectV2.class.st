@@ -331,7 +331,19 @@ RwResolvedProjectV2 >> read [
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	self readComponentNames: self componentNames groupNames: self groupNames
+	^ self readComponentNames: self componentNames groupNames: self groupNames
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> read: platformConfigurationAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readComponentNames: self componentNames
+		groupNames: self groupNames
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
 ]
 
 { #category : 'actions' }
@@ -340,10 +352,23 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	Rowan projectTools readV2
+	^ self
+		readComponentNames: componentNames
+		groupNames: groupNames
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
 		groupNames: groupNames
+		platformConfigurationAttributes: platformConfigurationAttributes
 ]
 
 { #category : 'project definition' }
