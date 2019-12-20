@@ -469,6 +469,17 @@ RowanService >> stonStringFor: anObject [
 
 ]
 
+{ #category : 'private' }
+RowanService >> stripOutUnicode: string [
+  | asciiString |
+  asciiString := string
+    collect: [ :char | 
+      (char asciiValue < 32 or: [ char asciiValue > 255 ])
+        ifTrue: [ $? ]
+        ifFalse: [ char ] ].
+  ^ asciiString
+]
+
 { #category : 'commands support' }
 RowanService >> superclassChainsFor: behaviors [
 	organizer := ClassOrganizer new. 

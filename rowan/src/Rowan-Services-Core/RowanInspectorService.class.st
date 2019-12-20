@@ -24,7 +24,7 @@ RowanInspectorService >> addDynamicInstVars: anObject [
   1 to: dynamicSize do: [ :i | 
     objects
       add:
-        (dynamic at: i) asString
+        (self stripOutUnicode: (dynamic at: i))
           -> (Reflection oopOf: (anObject dynamicInstVarAt: (dynamic at: i))) ]
 ]
 
@@ -46,7 +46,7 @@ RowanInspectorService >> addInstVars: anObject [
   1 to: namedSize do: [ :i | 
     objects
       add:
-        ('-' , (instVarNames at: i) asString)
+        ('-' , (self stripOutUnicode: (instVarNames at: i) asString))
           -> (Reflection oopOf: (anObject instVarAt: i)) ]
 ]
 
@@ -76,7 +76,7 @@ RowanInspectorService >> executeThenInspect: string inFrame: level process: proc
       RowanCommandResult addResult: self ]
 ]
 
-{ #category : 'private' }
+{ #category : 'command support' }
 RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
   | namedSize isRcBag anObject indexedVars |
   indexedVars := OrderedCollection new.
@@ -92,7 +92,8 @@ RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
       indexStart to: indexStop do: [ :i | 
         indexedVars
           add:
-            i printString -> (Reflection oopOf: (anObject at: i + namedSize)) ] ].
+            (self stripOutUnicode: i printString)
+              -> (Reflection oopOf: (anObject at: i + namedSize)) ] ].
   ^ indexedVars
 ]
 
@@ -106,7 +107,6 @@ RowanInspectorService >> initialize [
 { #category : 'client commands' }
 RowanInspectorService >> inspect: oopOrObject [
   | anObject |
-  self rowanFixMe.	"to do - unicode, "
   self setOopFrom: oopOrObject.
   anObject := Object _objectForOop: oop.
   (self isClientForwarder: anObject)
@@ -134,7 +134,6 @@ RowanInspectorService >> inspect: anOop from: indexStart to: indexStop [
 { #category : 'client commands' }
 RowanInspectorService >> inspect: oopOrObject inWindow: handle [
   | anObject |
-  self rowanFixMe.	"to do - unicode, "
   self setOopFrom: oopOrObject.
   RowanBrowserService new saveRootObject: oop windowHandle: handle.
   anObject := Object _objectForOop: oop.
@@ -161,7 +160,11 @@ RowanInspectorService >> inspectClientForwarder: anObject [
 { #category : 'command support' }
 RowanInspectorService >> inspectDictionary: aDictionary [
   aDictionary
-    keysDo: [ :key | objects add: key printString -> (Reflection oopOf: (aDictionary at: key)) ].
+    keysDo: [ :key | 
+      objects
+        add:
+          (self stripOutUnicode: key printString)
+            -> (Reflection oopOf: (aDictionary at: key)) ].
   RowanCommandResult addResult: self
 ]
 
@@ -193,7 +196,7 @@ RowanInspectorService >> oop: anInteger [
 
 { #category : 'printing' }
 RowanInspectorService >> selfPrintString: anObject [
-  ^ [ anObject printString ]
+  ^ [ self stripOutUnicode: anObject printString ]
     on: Error
     do: [ :ex | 
       | printString |
