@@ -43,7 +43,11 @@ RowanInspectorService >> addInstVars: anObject [
   instVarNames := anObject class allInstVarNames.
   namedSize := instVarNames size.
   isRcBag := self isRcBag: anObject.
-  1 to: namedSize do: [ :i | objects add: (instVarNames at: i) asString -> (Reflection oopOf: (anObject instVarAt: i)) ]
+  1 to: namedSize do: [ :i | 
+    objects
+      add:
+        ('-' , (instVarNames at: i) asString)
+          -> (Reflection oopOf: (anObject instVarAt: i)) ]
 ]
 
 { #category : 'client commands' }
@@ -88,7 +92,7 @@ RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
       indexStart to: indexStop do: [ :i | 
         indexedVars
           add:
-            i printString -> (Reflection oopOf: (anObject _primitiveAt: i + namedSize)) ] ].
+            i printString -> (Reflection oopOf: (anObject at: i + namedSize)) ] ].
   ^ indexedVars
 ]
 
@@ -108,7 +112,7 @@ RowanInspectorService >> inspect: oopOrObject [
   (self isClientForwarder: anObject)
     ifTrue: [ ^ self inspectClientForwarder: anObject ].
   className := anObject class name.
-  myself := 'self' -> anObject printString.
+  myself := 'self' -> (self selfPrintString: anObject).
   (anObject isKindOf: Dictionary)
     ifTrue: [ ^ self inspectDictionary: anObject ].
   self addInstVars: anObject.
@@ -137,7 +141,7 @@ RowanInspectorService >> inspect: oopOrObject inWindow: handle [
   (self isClientForwarder: anObject)
     ifTrue: [ ^ self inspectClientForwarder: anObject ].
   className := anObject class name.
-  myself := 'self' -> anObject printString.
+  myself := 'self' -> (self selfPrintString: anObject).
   (anObject isKindOf: Dictionary)
     ifTrue: [ ^ self inspectDictionary: anObject ].
   self addInstVars: anObject.
@@ -185,6 +189,16 @@ RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
 RowanInspectorService >> oop: anInteger [
 
 	oop := anInteger
+]
+
+{ #category : 'printing' }
+RowanInspectorService >> selfPrintString: anObject [
+  ^ [ anObject printString ]
+    on: Error
+    do: [ :ex | 
+      | printString |
+      printString := 'Error printing object with oop ' , oop printString
+        , '. Error text: ' , ex printString ]
 ]
 
 { #category : 'private' }
