@@ -474,7 +474,8 @@ RowanService >> stripOutUnicode: string [
   | asciiString |
   asciiString := string
     collect: [ :char | 
-      (char asciiValue < 32 or: [ char asciiValue > 255 ])
+      (char ~= Character lf
+        and: [ char asciiValue < 32 or: [ char asciiValue > 255 ] ])
         ifTrue: [ $? ]
         ifFalse: [ char ] ].
   ^ asciiString
