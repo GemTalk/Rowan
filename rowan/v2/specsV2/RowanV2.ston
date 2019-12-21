@@ -1,11 +1,11 @@
 RwLoadSpecificationV2 {
-	#specName : 'RowanV1',
+	#specName : 'RowanV2',
 	#projectName : 'Rowan',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
 	#revision : 'master',
-	#projectSpecFile : 'rowan/project.ston',
+	#projectSpecFile : 'rowan/v2/project.ston',
 	#componentNames : [
-		'RowanV1'
+		'RowanV2'
 	],
 	#groupNames : [
 		'core',
