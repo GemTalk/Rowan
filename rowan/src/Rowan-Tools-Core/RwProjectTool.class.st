@@ -47,11 +47,6 @@ RwProjectTool class >> create [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> createV2 [
-	^ RwPrjCreateToolV2 new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> delete [
 
 	^ RwPrjDeleteTool new
@@ -84,12 +79,6 @@ RwProjectTool class >> load [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> loadV2 [
-
-	^RwPrjLoadToolV2 new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> log [
 
 	^RwPrjLogTool new
@@ -119,11 +108,6 @@ RwProjectTool class >> read [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> readV2 [
-  ^ RwPrjReadToolV2 new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> reconcile [
 
 	^ RwPrjReconcileTool new
@@ -146,11 +130,6 @@ RwProjectTool class >> test [
 RwProjectTool class >> write [
 
 	^RwPrjWriteTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> writeV2 [
-	^ RwPrjWriteToolV2 new
 ]
 
 { #category : 'smalltalk api' }

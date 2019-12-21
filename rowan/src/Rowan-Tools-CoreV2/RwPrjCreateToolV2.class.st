@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwPrjCreateToolV2',
 	#superclass : 'RwProjectTool',
-	#category : 'Rowan-Tools-Core'
+	#category : 'Rowan-Tools-CoreV2'
 }
 
 { #category : 'project repository creation' }

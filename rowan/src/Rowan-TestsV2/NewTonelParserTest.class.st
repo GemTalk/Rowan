@@ -1,7 +1,7 @@
 Class {
 	#name : 'NewTonelParserTest',
 	#superclass : 'TestCase',
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-TestsV2'
 }
 
 { #category : 'private' }

@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwProjectComponentDefinitionsTest',
 	#superclass : 'RwAbstractTest',
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Tests-Components'
 }
 
 { #category : 'private' }

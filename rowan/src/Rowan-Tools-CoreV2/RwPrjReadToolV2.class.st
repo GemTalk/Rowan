@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwPrjReadToolV2',
 	#superclass : 'RwProjectTool',
-	#category : 'Rowan-Tools-Core'
+	#category : 'Rowan-Tools-CoreV2'
 }
 
 { #category : 'private' }

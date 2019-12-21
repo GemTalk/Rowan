@@ -643,8 +643,8 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
-    value: #('Rowan-DefinitionsV2' 'Rowan-Tools-Core' 'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
-							'Rowan-GemStone-DefinitionsV1' 'Rowan-GemStone-DefinitionsV2'
+    value: #('Rowan-DefinitionsV2' 'Rowan-Tools-Core' 'Rowan-Tools-CoreV2' 'Rowan-Cypress-Definitions'
+							'Rowan-GemStone-Definitions' 'Rowan-GemStone-DefinitionsV1' 'Rowan-GemStone-DefinitionsV2'
 							'Rowan-GemStone-Specifications' 'Rowan-Components' 'Rowan-ComponentsV2'
 							'Rowan-Tools-GemStone' 'Rowan-Definitions-Deprecated' 'Rowan-Tools-Deprecated'
 							'Rowan-Core-Definitions-Extensions' 'Rowan-Core-DefinitionsV1' 'Rowan-Core-DefinitionsV2'

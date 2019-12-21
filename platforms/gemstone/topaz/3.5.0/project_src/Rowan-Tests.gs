@@ -132,7 +132,7 @@ doit
 	inDictionary: RowanKernel
 	options: #()
 )
-		category: 'Rowan-Tests';
+		category: 'Rowan-TestsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -489,7 +489,7 @@ doit
 	inDictionary: RowanKernel
 	options: #()
 )
-		category: 'Rowan-Tests';
+		category: 'Rowan-Tests-Components';
 		comment: '';
 		immediateInvariant.
 true.
