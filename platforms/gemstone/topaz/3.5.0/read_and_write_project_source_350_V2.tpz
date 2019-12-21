@@ -43,7 +43,7 @@ run
 
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specsV2/RowanAll.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanAll.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.
 	} 
