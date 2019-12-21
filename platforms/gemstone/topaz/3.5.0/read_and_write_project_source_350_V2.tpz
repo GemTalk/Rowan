@@ -28,9 +28,9 @@
   login
 
 run
-	| platformConfigurationAttributes projectSetDefinition projectSetModification visitor
+	| platformConfigurationAttributes projectSetModification visitor
 		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool 
-		auditFailures |
+		auditFailures gsFileName |
 
 	platformConfigurationAttributes := {
 		'common'.
@@ -38,12 +38,21 @@ run
 		'gemstone-kernel'.
 		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
 	}.
-
-	projectSetDefinition := RwProjectSetDefinition new.
-
+	repositoryRoot := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/rowan_exp_350/rowan_gs' asFileReference.
+	repositoryRoot ensureCreateDirectory.
+	repositoryRoot deleteAllChildren.
 	{
 		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanAll.ston'.
+			'$ROWAN_PROJECTS_HOME'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanV1.ston'.
+			'$ROWAN_PROJECTS_HOME'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanV2.ston'.
+			'$ROWAN_PROJECTS_HOME'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanComponent.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.
 	} 
@@ -53,6 +62,7 @@ run
 		loadSpecUrl := ar at: 1.
 		projectsHome := ar at: 2.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
+		gsFileName := loadSpec specName.
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
@@ -60,23 +70,19 @@ run
 		theProjectSetDefinition
 			do: [:projectDefinition |	
 				GsFile gciLogServer: 'Project: ', projectDefinition name.
-				projectDefinition packageNames do: [:pkgName | GsFile gciLogServer: '	', pkgName ].
-				projectSetDefinition addProject: projectDefinition ] ].
+				projectDefinition packageNames do: [:pkgName | GsFile gciLogServer: '	', pkgName ] ].
 
-	repositoryRoot := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/rowan_exp_350/rowan_gs' asFileReference.
-	repositoryRoot ensureCreateDirectory.
-	repositoryRoot deleteAllChildren.
-	projectSetDefinition keys do: [:projectName |
-		| projectDefinition |
-		projectDefinition := projectSetDefinition projectNamed: projectName.
-		projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 		topazFileNameMap := Dictionary new.
-		topazFileNameMap at: projectName  put: {}.
-		projectDefinition packageNames do: [:packageName |
-			(topazFileNameMap at: projectName) add: packageName ].
-		visitor := RwGsModificationTopazWriterVisitor new
-			repositoryRootPath: repositoryRoot;
-			topazFilenamePackageNamesMap: topazFileNameMap;
-			yourself.
-		visitor visit: projectSetModification ].
+		topazFileNameMap at: gsFileName put: {}.
+		theProjectSetDefinition keys do: [:projectName |
+			| projectDefinition |
+			projectDefinition := theProjectSetDefinition projectNamed: projectName.
+			projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+			projectDefinition packageNames do: [:packageName |
+				(topazFileNameMap at: gsFileName) add: packageName ].
+			visitor := RwGsModificationTopazWriterVisitor new
+				repositoryRootPath: repositoryRoot;
+				topazFilenamePackageNamesMap: topazFileNameMap;
+				yourself.
+			visitor visit: projectSetModification ] ].
 %

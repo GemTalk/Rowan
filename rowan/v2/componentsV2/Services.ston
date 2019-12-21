@@ -13,11 +13,8 @@ RwNestedProjectLoadComponentV2 {
 		[ 'gemstone' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-Services-Extensions'
-				]
-			},
-			'jadeServer' : {
-				#packageNames : [
+					'Rowan-Services-Core',
+					'Rowan-Services-Extensions',
 					'Rowan-JadeServer'
 				]
 			},
