@@ -43,16 +43,16 @@ run
 	repositoryRoot deleteAllChildren.
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanAll.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanAll.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanV1.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanV2.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV2.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specsV2/RowanComponent.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanComponent.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.
 	} 
@@ -67,10 +67,12 @@ run
 			projectsHome: projectsHome;
 			resolve.
 		theProjectSetDefinition :=  resolvedProject read: platformConfigurationAttributes.
+		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
-				GsFile gciLogServer: 'Project: ', projectDefinition name.
-				projectDefinition packageNames do: [:pkgName | GsFile gciLogServer: '	', pkgName ] ].
+				GsFile gciLogServer: '	Project: ', projectDefinition name.
+				projectDefinition packageNames do: [:pkgName | GsFile gciLogServer: '		', pkgName ] ].
+		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
 
 		topazFileNameMap := Dictionary new.
 		topazFileNameMap at: gsFileName put: {}.

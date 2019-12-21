@@ -1,0 +1,33 @@
+RwNestedProjectLoadComponentV2 {
+	#name : 'CommonCoreV1',
+	#comment : 'Common code shared by RowanV1 and RowanComponent',
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Rowan-DefinitionsV1',
+					'Rowan-Configurations'
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-Cypress-Core'
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	}
+}

@@ -1,6 +1,6 @@
 RwProjectLoadComponentV2 {
-	#name : 'RowanComponent',
-	#comment : 'V2 prototype. Currently being used to implement RowanV2. Will eventually be deprecated when RowanV2 can be used to develop itself',
+	#name : 'RowanV2',
+	#comment : 'RowanV2 support',
 	#componentNames : [
 			'CommonCore',
 			'CommonCoreV2',
@@ -12,20 +12,21 @@ RwProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#packageNames : [
-					'Rowan-Components'
+					'Rowan-GemStone-Definitions-ExtensionsV2',
+					'Rowan-Core-DefinitionsV2',
+					'Rowan-GemStone-CoreV2',
+					'Rowan-GemStone-DefinitionsV2'
 				]
 			},
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests-Components'
+					'Rowan-TestsV2'
 				]
 			}
 		},
 		[ 'gemstone' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-GemStone-Components',
-					'Rowan-GemStone-Components-Extensions'
 				]
 			}
 		}
@@ -34,8 +35,9 @@ RwProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'Rowan-Components' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-GemStone-Components-Extensions' : { 'symbolDictName' : 'RowanTools' }
+					'Rowan-GemStone-Definitions-ExtensionsV2' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Core-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
 		}

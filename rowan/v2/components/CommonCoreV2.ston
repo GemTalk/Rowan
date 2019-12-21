@@ -7,6 +7,8 @@ RwNestedProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#packageNames : [
+					'Rowan-ComponentsV2',
+					'Rowan-DefinitionsV2'
 				]
 			}
 		},
@@ -22,6 +24,8 @@ RwNestedProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-ComponentsV2' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
 		}
