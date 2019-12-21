@@ -59,7 +59,7 @@ run
 		theProjectSetDefinition :=  resolvedProject read: platformConfigurationAttributes.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
-				GsFile stdout nextPutAll: 'Project: ', projectDefinition name; lf.
+				GsFile gciLogServer: 'Project: ', projectDefinition name.
 				projectDefinition packageNames do: [:pkgName | GsFile gciLogServer: '	', pkgName ].
 				projectSetDefinition addProject: projectDefinition ] ].
 

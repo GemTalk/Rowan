@@ -18,5 +18,5 @@ RwEmbeddedLoadSpecificationV2 {
 			}
 		}
 	},
-	#comment : 'Cypress --- package loader used with V1 ... deprecated in V2'
+	#comment : 'Tonel--- Tonel format reader used with V1 ... deprecated in V2'
 }
