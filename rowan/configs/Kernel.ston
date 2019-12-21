@@ -22,7 +22,7 @@
 					'Rowan-Configurations-Common',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
-					'Rowan-Tools-Extensions'
+					'Rowan-Tools-Extensions-Components'
 					]
 				},
 			'deprecated' : {
@@ -109,6 +109,7 @@
 					'Rowan-Definitions-Deprecated' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Cypress-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-Extensions-Components' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Deprecated' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-GemStone' : { 'symbolDictName' : 'RowanTools' }
 					}

@@ -59,7 +59,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components-Common';
+		category: 'Rowan-Configurations-Common';
 		comment: '# GemStone version format
 
 GemStone versions are simply an unbounded collection of $. separated positive integers.';
@@ -77,7 +77,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components-Common';
+		category: 'Rowan-Configurations-Common';
 		comment: 'RwSemanticVersionNumber conforms to version 2.0.0 of  [Semantic Versioning 2.0.0](http://semver.org/)
 
 **Semantic Versioning Specification** extracted from [Semantic versioning 2.0.0](https://raw.githubusercontent.com/semver/semver/347f73f880ebe1de61891832bf8702e864ca0998/semver.md):
@@ -2793,7 +2793,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components-Common';
+		category: 'Rowan-Configurations-Common';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2809,7 +2809,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components-Common';
+		category: 'Rowan-Configurations-Common';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2825,7 +2825,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components-Common';
+		category: 'Rowan-Configurations-Common';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2841,7 +2841,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Components-Common';
+		category: 'Rowan-Configurations-Common';
 		comment: '';
 		immediateInvariant.
 true.
@@ -2946,7 +2946,7 @@ true.
 doit
 (Object
 	subclass: 'RwAbstractProjectLoadComponentV2'
-	instVarNames: #( name comment projectName componentNames conditionalPackages conditionalPackageMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers )
+	instVarNames: #( name comment projectName projectNames componentNames definedGroupNames conditionalPackages conditionalPackageMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -2978,7 +2978,7 @@ true.
 doit
 (RwAbstractProjectLoadComponentV2
 	subclass: 'RwProjectLoadComponentV2'
-	instVarNames: #( definedGroupNames projectNames )
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -6178,6 +6178,22 @@ doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
 	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl svnUrl revision projectSpecFile componentNames groupNames platformProperties comment projectsHome repositoryResolutionPolicy )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwLoadSpecificationV2
+	subclass: 'RwEmbeddedLoadSpecificationV2'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -34639,9 +34655,34 @@ conditionalPackagesAtConditions: conditions andGroup: groupName addPackageNames:
 category: 'accessing'
 method: RwAbstractProjectLoadComponentV2
 definedGroupNames
-	"Empty list by default"
 
-	^ #()
+	^ definedGroupNames 
+		ifNil: [ definedGroupNames :=  Dictionary new]
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+definedGroupNames: aColl
+
+	definedGroupNames := aColl
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+defineGroupNamed: groupName 
+
+	"add a group that does not include any other groups"
+
+	self defineGroupNamed: groupName toIncludeGroups: #()
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+defineGroupNamed: groupName toIncludeGroups: includedGroups
+
+	"add a group that does not include any other groups"
+
+	self definedGroupNames at: groupName put: includedGroups asArray sort
 %
 
 category: 'ston'
@@ -34798,6 +34839,20 @@ method: RwAbstractProjectLoadComponentV2
 projectName: anObject
 
    projectName := anObject
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+projectNames
+
+	^ projectNames ifNil: [ #() ]
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+projectNames: anArray
+
+	projectNames := anArray
 %
 
 category: 'accessing'
@@ -34978,6 +35033,21 @@ _platformPatternMatcherFor: pattern
 			yourself
 %
 
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+_processConditionalPackageNames: aProjectLoadConfiguration
+
+	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
+			ifTrue: [
+				groupMap keysAndValuesDo: [:group :map |
+					(self groupNames includes: group)
+						ifTrue: [ 
+							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
+							self componentNames addAll: (map at: #componentNames ifAbsent: [ #() ] ).
+							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
+%
+
 category: 'validation'
 method: RwAbstractProjectLoadComponentV2
 _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap
@@ -35041,68 +35111,6 @@ method: RwProjectLoadComponentV2
 acceptVisitor: aVisitor
 
 	^aVisitor visitComponentLoadConfiguration: self
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentV2
-definedGroupNames
-
-	^ definedGroupNames 
-		ifNil: [ definedGroupNames :=  Dictionary new]
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentV2
-definedGroupNames: aColl
-
-	definedGroupNames := aColl
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentV2
-defineGroupNamed: groupName 
-
-	"add a group that does not include any other groups"
-
-	self defineGroupNamed: groupName toIncludeGroups: #()
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentV2
-defineGroupNamed: groupName toIncludeGroups: includedGroups
-
-	"add a group that does not include any other groups"
-
-	self definedGroupNames at: groupName put: includedGroups asArray sort
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentV2
-projectNames
-
-	^ projectNames ifNil: [ #() ]
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentV2
-projectNames: anArray
-
-	projectNames := anArray
-%
-
-category: 'private'
-method: RwProjectLoadComponentV2
-_processConditionalPackageNames: aProjectLoadConfiguration
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #componentNames ifAbsent: [ #() ] ).
-							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
 %
 
 ! Class implementation for 'RwAbstractProjectSetModificationVisitor'
@@ -39431,7 +39439,19 @@ method: RwAbstractResolvedObjectV2
 _projectSpecification
 	"project specification should not be accessed directly -- Rowan private state"
 
+	"lazy initialization, since project specification must be read from disk during resolve
+		if it is present on disk"
+
 	^ projectSpecification
+		ifNil: [ 
+			| projectSpecFileRef |
+			projectSpecFileRef := self repositoryRoot / self projectSpecFile.
+			projectSpecification := projectSpecFileRef exists
+				ifTrue: [ RwSpecification fromFile: projectSpecFileRef ]
+				ifFalse: [ RwProjectSpecificationV2 new ].
+			projectSpecification
+				projectName: self projectAlias;
+				yourself ]
 %
 
 category: 'private'
@@ -39487,17 +39507,14 @@ _validate: platformConfigurationAttributes
 
 category: 'instance creation'
 classmethod: RwResolvedProjectV2
-loadSpecification: anRwLoadSpecificationV2
+basicLoadSpecification: anRwLoadSpecificationV2
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| projectSpecification loadSpecification projectDefinition |
+	| loadSpecification projectDefinition |
 	loadSpecification := anRwLoadSpecificationV2 copy.
-	projectSpecification := RwProjectSpecificationV2 new
-		projectName: loadSpecification projectAlias;
-		yourself.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
@@ -39509,8 +39526,19 @@ loadSpecification: anRwLoadSpecificationV2
 		yourself.
 	^ self basicNew
 		_projectDefinition: projectDefinition;
-		_projectSpecification: projectSpecification;
 		_loadSpecification: loadSpecification;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProjectV2
+loadSpecification: anRwLoadSpecificationV2
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^(self basicLoadSpecification: anRwLoadSpecificationV2)
 		resolve
 %
 
@@ -39843,7 +39871,20 @@ read
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	self readComponentNames: self componentNames groupNames: self groupNames
+	^ self readComponentNames: self componentNames groupNames: self groupNames
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+read: platformConfigurationAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readComponentNames: self componentNames
+		groupNames: self groupNames
+		platformConfigurationAttributes: platformConfigurationAttributes
 %
 
 category: 'actions'
@@ -39853,10 +39894,24 @@ readComponentNames: componentNames groupNames: groupNames
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	Rowan projectTools readV2
+	^ self
+		readComponentNames: componentNames
+		groupNames: groupNames
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
 		groupNames: groupNames
+		platformConfigurationAttributes: platformConfigurationAttributes
 %
 
 category: 'project definition'
@@ -41686,9 +41741,12 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 			loadedClass := Rowan image 
 				loadedClassNamed: className 
 				ifAbsent: [
+					| theBehavior |
+					theBehavior := Rowan image objectNamed: className.
+					isMeta ifTrue:  [ theBehavior := theBehavior class ].
 					RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString, '. The modification will not be tracked by Rowan'.
 					"Notification resumed, so continue with add/modify"
-					^ (Rowan image objectNamed: className)
+					^ theBehavior
 						compileMethod: methodSource
 						dictionaries: Rowan image symbolList
 						category: hybridPackageName
@@ -42629,9 +42687,12 @@ removeMethod: methodSelector forClassNamed: className isMeta: isMeta
 		inClassNamed: className
 		isMeta: isMeta
 		ifAbsent: [
+			| theBehavior |
+			theBehavior := Rowan globalNamed: className.
+			isMeta ifTrue: [ theBehavior := theBehavior class ].
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged method from the class ', className printString, '. The removal will not be tracked by Rowan'.
 			"Notification resumed, so continue with removal"
-			^ (Rowan globalNamed: className) removeSelector: methodSelector ].
+			^ theBehavior removeSelector: methodSelector ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
 	loadedClassOrExtension := loadedPackage
 		classOrExtensionForClassNamed: className
@@ -43144,31 +43205,6 @@ commitProjectNamed: projectName message: messageString
 
 !		Instance methods for 'RwPrjCreateTool'
 
-category: 'component project defintion creation'
-method: RwPrjCreateTool
-createComponentProject: componentProjectDefinition
-
-	"Create create new repository on `disk`, based on the given repository definition."
-
-	self createProjectRepository: componentProjectDefinition projectRef.
-
-	componentProjectDefinition exportProjects.
-	componentProjectDefinition exportComponents.
-	componentProjectDefinition exportPackages.
-
-	componentProjectDefinition register.
-
-	^ componentProjectDefinition
-%
-
-category: 'component project defintion creation'
-method: RwPrjCreateTool
-createComponentProjectNamed: projectName
-	"Create a new component project with all of the default attributes"
-
-	^ RwComponentProjectDefinition projectName: projectName
-%
-
 category: 'project repository creation'
 method: RwPrjCreateTool
 createProjectRepository: projectReferenceDefinition
@@ -43598,67 +43634,6 @@ updateOrAddClass: classDefinition inPackageNamed: packageName inProjectNamed: pr
 ! Class implementation for 'RwPrjLoadTool'
 
 !		Instance methods for 'RwPrjLoadTool'
-
-category: 'load project definitions'
-method: RwPrjLoadTool
-loadComponentProjectDefinition: projectDefinition
-	^ self
-		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
-		instanceMigrator: Rowan platform instanceMigrator
-%
-
-category: 'load project definitions'
-method: RwPrjLoadTool
-loadComponentProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
-	^ self
-		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
-		instanceMigrator: instanceMigrator
-%
-
-category: 'load project definitions'
-method: RwPrjLoadTool
-loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
-
-	^ self
-		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: platformConfigurationAttributes
-		instanceMigrator: Rowan platform instanceMigrator
-%
-
-category: 'load project definitions'
-method: RwPrjLoadTool
-loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
-
-	| projectSetDefinition sourceProperty rereadProject |
-	sourceProperty := projectDefinition projectDefinitionSourceProperty.
-	rereadProject := sourceProperty
-		~= RwLoadedProject _projectSourceValueNewProject
-		and: [ sourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue ].
-	projectSetDefinition := (projectDefinition repositoryRoot exists
-		and: [ rereadProject ])
-		ifTrue: [ 
-			"only read from disk if the repository exists and the project definition has not 
-				already been loaded from disk"
-			Rowan projectTools read
-				readProjectSetForComponentProjectDefinition: projectDefinition
-				withConfigurations: projectDefinition loadedConfigurationNames
-				groupNames: projectDefinition loadedGroupNames
-				platformConfigurationAttributes: platformConfigurationAttributes ]
-		ifFalse: [ 
-			"If this project definition _was_ read from disk, we cannot trust that it was 
-				not modified, so clear source property"
-			projectDefinition projectDefinitionSourceProperty: nil.
-			RwProjectSetDefinition new
-				addProject: projectDefinition;
-				yourself ].
-	^ self
-		loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator
-%
 
 category: 'load project by url'
 method: RwPrjLoadTool
@@ -44688,16 +44663,13 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 					nextDefArray}.
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| lsd |
-					self halt.	"these should be project load specs and they are to be resolved"
-					lsd := loadSpec asDefinition.
-					lsd projectHome: rp projectHome.
-					lsd cloneRepository.
+					| theResolvedProject |
+					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give enbedded projects a chance"
 					projectVisitorQueue
 						addLast:
-							{lsd.
-							(lsd loadedConfigurationNames).
-							(lsd loadedGroupNames)} ] ].
+							{theResolvedProject.
+							(loadSpec componentNames).
+							(loadSpec groupNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
@@ -63458,23 +63430,6 @@ visitNested: aProjectComponent
 
 category: 'visiting'
 method: RwProjectLoadConfigurationVisitorV2
-visitNestedProjectLoadComponent: aNestedProjectLoadComponent
-	(visitedComponentNames includes: aNestedProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aNestedProjectLoadComponent.
-
-	self _processConditionalPackageNames: aNestedProjectLoadComponent.
-
-	self visitedComponentNames addAll: aNestedProjectLoadComponent componentNames.
-	(self
-		_components: self componentRoot
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ]
-%
-
-category: 'visiting'
-method: RwProjectLoadConfigurationVisitorV2
 visitProjectLoadComponent: aProjectLoadComponent
 	(visitedComponentNames includes: aProjectLoadComponent name)
 		ifTrue: [ ^ self ].
@@ -63663,18 +63618,44 @@ visitComponentLoadConfiguration: aComponentLoadConfiguration
 		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 %
 
-category: 'visiting'
-method: RwProjectLoadComponentVisitorV2
-visitComponentSpecification: aComponentSpecification
-
-	self projectLoadSpecs add: aComponentSpecification
-%
-
 category: 'accessing'
 method: RwProjectLoadComponentVisitorV2
 visitedComponents
 
 	^ visitedComponents
+%
+
+category: 'visiting'
+method: RwProjectLoadComponentVisitorV2
+visitLoadSpecification: aLoadSpecification
+
+	self projectLoadSpecs add: aLoadSpecification
+%
+
+category: 'visiting'
+method: RwProjectLoadComponentVisitorV2
+visitNestedProjectLoadComponent: aNestedProjectLoadComponent
+	(visitedComponentNames includes: aNestedProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aNestedProjectLoadComponent.
+
+	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
+	self _processGroupNames.
+
+	self _processConditionalPackageNames: aNestedProjectLoadComponent.
+
+	self componentNames addAll: aNestedProjectLoadComponent componentNames.
+	(self
+		_components: self componentsRoot
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	self projectNames addAll: aNestedProjectLoadComponent projectNames.
+	(self
+		_projects: self projectsRoot
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 %
 
 category: 'private'
@@ -63780,6 +63761,18 @@ isEmpty
 ! Class implementation for 'RwSpecification'
 
 !		Class methods for 'RwSpecification'
+
+category: 'instance creation'
+classmethod: RwSpecification
+fromFile: filePath
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ (STON fromStream: stream)
+				initializeForImport;
+				yourself ]
+%
 
 category: 'instance creation'
 classmethod: RwSpecification
@@ -63994,6 +63987,13 @@ method: RwLoadSpecificationV2
 																												and: [ 
 																													self _platformProperties = anObject _platformProperties
 																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+%
+
+category: 'visiting'
+method: RwLoadSpecificationV2
+acceptVisitor: aVisitor
+
+	^ aVisitor visitLoadSpecification: self
 %
 
 category: 'accessing'
@@ -64286,6 +64286,15 @@ resolveStrict
 		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
 %
 
+category: 'actions'
+method: RwLoadSpecificationV2
+resolveWithParentProject: aResolvedProject
+	"give embedded projects a chance to resolve cleanly"
+
+	self projectsHome: aResolvedProject projectsHome.
+	^ self resolve
+%
+
 category: 'accessing'
 method: RwLoadSpecificationV2
 revision
@@ -64412,6 +64421,23 @@ _validateGemStonePlatformUserIdMap: userIdMap
 												, expectedClass name asString printString , ' not class '
 												, propertyValue class name asString printString ] ]
 						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
+%
+
+! Class implementation for 'RwEmbeddedLoadSpecificationV2'
+
+!		Instance methods for 'RwEmbeddedLoadSpecificationV2'
+
+category: 'actions'
+method: RwEmbeddedLoadSpecificationV2
+resolveWithParentProject: aResolvedProject
+	"give embedded projects a chance to resolve cleanly"
+
+	| basicProject |
+	self projectsHome: aResolvedProject projectsHome.
+	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
+	basicProject _projectRepository: aResolvedProject _projectRepository copy.
+	self projectsHome: aResolvedProject repositoryRoot.
+	^ basicProject resolve
 %
 
 ! Class implementation for 'RwGemStoneSpecification'
@@ -71863,6 +71889,100 @@ projectNamed: aName ifPresent: presentBlock ifAbsent: absentBlock
 		loadedProjectNamed: aName
 		ifPresent: [:loadedProject |  presentBlock cull: (RwProject newNamed: aName) ]
 		ifAbsent: absentBlock
+%
+
+! Class extensions for 'RwPrjCreateTool'
+
+!		Instance methods for 'RwPrjCreateTool'
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjCreateTool
+createComponentProject: componentProjectDefinition
+
+	"Create create new repository on `disk`, based on the given repository definition."
+
+	self createProjectRepository: componentProjectDefinition projectRef.
+
+	componentProjectDefinition exportProjects.
+	componentProjectDefinition exportComponents.
+	componentProjectDefinition exportPackages.
+
+	componentProjectDefinition register.
+
+	^ componentProjectDefinition
+%
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjCreateTool
+createComponentProjectNamed: projectName
+	"Create a new component project with all of the default attributes"
+
+	^ RwComponentProjectDefinition projectName: projectName
+%
+
+! Class extensions for 'RwPrjLoadTool'
+
+!		Instance methods for 'RwPrjLoadTool'
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjLoadTool
+loadComponentProjectDefinition: projectDefinition
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		instanceMigrator: Rowan platform instanceMigrator
+%
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjLoadTool
+loadComponentProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		instanceMigrator: instanceMigrator
+%
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjLoadTool
+loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
+	^ self
+		loadComponentProjectDefinition: projectDefinition
+		platformConfigurationAttributes: platformConfigurationAttributes
+		instanceMigrator: Rowan platform instanceMigrator
+%
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjLoadTool
+loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
+	| projectSetDefinition sourceProperty rereadProject |
+	sourceProperty := projectDefinition projectDefinitionSourceProperty.
+	rereadProject := sourceProperty
+		~= RwLoadedProject _projectSourceValueNewProject
+		and: [ sourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue ].
+	projectSetDefinition := (projectDefinition repositoryRoot exists
+		and: [ rereadProject ])
+		ifTrue: [ 
+			"only read from disk if the repository exists and the project definition has not 
+				already been loaded from disk"
+			Rowan projectTools read
+				readProjectSetForComponentProjectDefinition: projectDefinition
+				withConfigurations: projectDefinition loadedConfigurationNames
+				groupNames: projectDefinition loadedGroupNames
+				platformConfigurationAttributes: platformConfigurationAttributes ]
+		ifFalse: [ 
+			"If this project definition _was_ read from disk, we cannot trust that it was 
+				not modified, so clear source property"
+			projectDefinition projectDefinitionSourceProperty: nil.
+			RwProjectSetDefinition new
+				addProject: projectDefinition;
+				yourself ].
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
 %
 
 ! Class extensions for 'RwProject'

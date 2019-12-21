@@ -662,7 +662,7 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('Rowan-GemStone-CoreV2' 'Rowan-Tools-Extensions' 'Rowan-Tests' 
+    value: #('Rowan-GemStone-CoreV2' 'Rowan-Tools-Extensions-Components' 'Rowan-Tests' 
 			'Rowan-TestsV2' 'Rowan-Tests-32x' 'Rowan-Tests-Components'
 			'Rowan-Services-Tests' 'Rowan-GemStone-Components'
 			'Rowan-Tests-GemStone' 'Rowan-Tools-Extensions-GemStone'
