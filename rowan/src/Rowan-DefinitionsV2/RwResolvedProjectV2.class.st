@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
+RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
 
@@ -25,6 +25,17 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 	^ self basicNew
 		_projectDefinition: projectDefinition;
 		_loadSpecification: loadSpecification;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^(self basicLoadSpecification: anRwLoadSpecificationV2)
 		resolve
 ]
 

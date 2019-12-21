@@ -66,8 +66,7 @@ run
 	repositoryRoot := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/rowan_exp_350/rowan_gs' asFileReference.
 	repositoryRoot ensureCreateDirectory.
 	repositoryRoot deleteAllChildren.
-"	{ 'Cypress' . 'FileSystemGs' . 'Rowan' . 'Tonel' . 'STON' } "
-	{ 'Rowan'} do: [:projectName |
+	projectSetDefinition keys do: [:projectName |
 		| projectDefinition |
 		projectDefinition := projectSetDefinition projectNamed: projectName.
 		projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.

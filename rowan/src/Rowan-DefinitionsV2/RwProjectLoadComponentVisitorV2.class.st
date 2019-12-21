@@ -110,14 +110,39 @@ RwProjectLoadComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLo
 		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]
 
-{ #category : 'visiting' }
-RwProjectLoadComponentVisitorV2 >> visitComponentSpecification: aComponentSpecification [
-
-	self projectLoadSpecs add: aComponentSpecification
-]
-
 { #category : 'accessing' }
 RwProjectLoadComponentVisitorV2 >> visitedComponents [
 
 	^ visitedComponents
+]
+
+{ #category : 'visiting' }
+RwProjectLoadComponentVisitorV2 >> visitLoadSpecification: aLoadSpecification [
+
+	self projectLoadSpecs add: aLoadSpecification
+]
+
+{ #category : 'visiting' }
+RwProjectLoadComponentVisitorV2 >> visitNestedProjectLoadComponent: aNestedProjectLoadComponent [
+	(visitedComponentNames includes: aNestedProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aNestedProjectLoadComponent.
+
+	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
+	self _processGroupNames.
+
+	self _processConditionalPackageNames: aNestedProjectLoadComponent.
+
+	self componentNames addAll: aNestedProjectLoadComponent componentNames.
+	(self
+		_components: self componentsRoot
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	self projectNames addAll: aNestedProjectLoadComponent projectNames.
+	(self
+		_projects: self projectsRoot
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]

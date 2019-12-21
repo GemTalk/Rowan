@@ -1,4 +1,4 @@
-RwLoadSpecificationV2 {
+RwEmbeddedLoadSpecificationV2 {
 	#specName : 'Cypress',
 	#projectName : 'Cypress',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',

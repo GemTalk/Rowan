@@ -118,16 +118,13 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 					nextDefArray}.
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| lsd |
-					self halt.	"these should be project load specs and they are to be resolved"
-					lsd := loadSpec asDefinition.
-					lsd projectHome: rp projectHome.
-					lsd cloneRepository.
+					| theResolvedProject |
+					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give enbedded projects a chance"
 					projectVisitorQueue
 						addLast:
-							{lsd.
-							(lsd loadedConfigurationNames).
-							(lsd loadedGroupNames)} ] ].
+							{theResolvedProject.
+							(loadSpec componentNames).
+							(loadSpec groupNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |

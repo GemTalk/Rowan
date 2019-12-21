@@ -139,6 +139,12 @@ RwLoadSpecificationV2 >> = anObject [
 																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
+{ #category : 'visiting' }
+RwLoadSpecificationV2 >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitLoadSpecification: self
+]
+
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> comment [
 	^ comment ifNil: [ ^ '' ]
@@ -393,6 +399,14 @@ RwLoadSpecificationV2 >> resolveStrict [
 	self repositoryResolutionPolicy: #'strict'.
 	^ self resolve ]
 		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
+]
+
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
+	"give embedded projects a chance to resolve cleanly"
+
+	self projectsHome: aResolvedProject projectsHome.
+	^ self resolve
 ]
 
 { #category : 'accessing' }
