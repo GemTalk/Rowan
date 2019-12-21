@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwRowanIssue493Test',
 	#superclass : 'RwRowanProjectIssuesTest',
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Tests-Components'
 }
 
 { #category : 'tests' }

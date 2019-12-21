@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'repositoryRoot'
 	],
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Tests-Components'
 }
 
 { #category : 'private' }
