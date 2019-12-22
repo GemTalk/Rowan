@@ -3,7 +3,8 @@ RwProjectLoadComponentV2 {
 	#comment : 'V2 prototype. Equivalent to candidateV2.0 loaded in 3.5.0',
 	#componentNames : [
 			'CommonComponentV2',
-			'RowanV2'
+			'RowanV2',
+			'RowanV1'
 		],
 	#conditionalPackages : {
 		[
