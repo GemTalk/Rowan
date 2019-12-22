@@ -3,6 +3,7 @@ RwProjectLoadComponentV2 {
 	#comment : 'RowanV2 support',
 	#componentNames : [
 			'CommonCore',
+			'CommonComponentV2',
 			'Services'
 		],
 	#conditionalPackages : {
@@ -15,8 +16,7 @@ RwProjectLoadComponentV2 {
 					'Rowan-Core-DefinitionsV2',
 					'Rowan-GemStone-CoreV2',
 					'Rowan-GemStone-DefinitionsV2',
-					'Rowan-Tools-CoreV2',
-					'Rowan-DefinitionsV2'
+					'Rowan-Tools-CoreV2'
 				]
 			},
 			'tests' : {
@@ -39,9 +39,7 @@ RwProjectLoadComponentV2 {
 					'Rowan-GemStone-Definitions-ExtensionsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-Tools-CoreV2' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' }
-				}
+					'Rowan-Tools-CoreV2' : { 'symbolDictName' : 'RowanTools' }				}
 			}
 		}
 	},

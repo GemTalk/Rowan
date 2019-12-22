@@ -2,7 +2,6 @@ RwProjectLoadComponentV2 {
 	#name : 'ComponentV1',
 	#comment : 'V2 prototype. Equivalent to candidateV2.0 loaded in 3.5.0',
 	#componentNames : [
-			'CommonComponent',
 			'CommonComponentV2',
 			'RowanV2'
 		],

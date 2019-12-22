@@ -1,12 +1,16 @@
 RwNestedProjectLoadComponentV2 {
 	#name : 'CommonComponentV1',
 	#comment : 'V2 prototype. Common code shared ComponentCore and RowanV1. Equivalent to old Structure loaded in 3.2.15.',
+	#componentNames : [
+			'CommonComponent'
+		],
 	#conditionalPackages : {
 		[
 			'common'
 		] : {
 			'core' : {
 				#packageNames : [
+					'Rowan-DefinitionsV1',
 					'Rowan-Configurations'
 				]
 			}
@@ -23,6 +27,7 @@ RwNestedProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
