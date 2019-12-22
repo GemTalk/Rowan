@@ -89,5 +89,6 @@ run
 				repositoryRootPath: repositoryRoot;
 				topazFilenamePackageNamesMap: topazFileNameMap;
 				yourself.
-			visitor visit: projectSetModification ] ].
+			visitor visit: projectSetModification ].
+ ].
 %

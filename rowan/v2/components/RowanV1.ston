@@ -12,6 +12,7 @@ RwProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#packageNames : [
+					'Rowan-DefinitionsV1',
 					'Rowan-Core-DefinitionsV1',
 					'Rowan-Tools-Deprecated',
 					'Rowan-GemStone-Loader-Deprecated',
@@ -46,6 +47,7 @@ RwProjectLoadComponentV2 {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-GemStone-Loader-Deprecated' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-DefinitionsV1' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Definitions-Deprecated' : { 'symbolDictName' : 'RowanTools' },
