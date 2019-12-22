@@ -1,0 +1,50 @@
+RwProjectLoadComponentV2 {
+	#name : 'ComponentV1',
+	#comment : 'V2 prototype. Equivalent to candidateV2.0 loaded in 3.2.15',
+	#componentNames : [
+			'CommonComponent',
+			'CommonComponentV1',
+			'RowanV2'
+		],
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests-32x'
+				]
+			}
+		},
+		[ 'gs3.[5-]' ] : {
+      'core': {
+				#packageNames : [
+				]
+			},
+			'tests' : {
+				#packageNames : [
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+				}
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	},
+	#projectNames : [
+	]
+}

@@ -43,16 +43,19 @@ run
 	repositoryRoot deleteAllChildren.
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanAll.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
+			'$ROWAN_PROJECTS_HOME'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV1.ston'.
+			'$ROWAN_PROJECTS_HOME'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV2.ston'.
-			'$ROWAN_PROJECTS_HOME'
-		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanComponent.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.
 	} 

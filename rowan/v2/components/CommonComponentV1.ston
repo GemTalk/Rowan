@@ -1,6 +1,6 @@
 RwNestedProjectLoadComponentV2 {
-	#name : 'CommonCoreV1',
-	#comment : 'Common code shared by RowanV1 and RowanComponent',
+	#name : 'CommonComponentV1',
+	#comment : 'V2 prototype. Common code shared ComponentCore and RowanV1. Equivalent to old Structure loaded in 3.2.15.',
 	#conditionalPackages : {
 		[
 			'common'

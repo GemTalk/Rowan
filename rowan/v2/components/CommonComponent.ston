@@ -1,10 +1,9 @@
 RwProjectLoadComponentV2 {
-	#name : 'RowanComponent',
-	#comment : 'V2 prototype. Currently being used to implement RowanV2. Will eventually be deprecated when RowanV2 can be used to develop itself',
+	#name : 'CommonComponent',
+	#comment : 'V2 prototype. Common code shared by ComponentV1 and ComponentV2',
 	#componentNames : [
 			'CommonCore',
-			'CommonCoreV1',
-			'CommonCoreV2',
+			'CommonComponentV1',
 			'Services'
 		],
 	#conditionalPackages : {

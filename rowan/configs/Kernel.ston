@@ -62,7 +62,6 @@
 		[ 'gs3.[2-4]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-GemStone-Loader32x'
 					]
 				}
 			},
@@ -77,7 +76,6 @@
 		[ 'gs3.[5-]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-GemStone-Loader35x'
 					]
 				}
 			}
@@ -86,8 +84,6 @@
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
-					'Rowan-GemStone-Loader32x' : { 'symbolDictName' : 'RowanLoader' },
-					'Rowan-GemStone-Loader35x' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-GemStone-Loader-Deprecated' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },

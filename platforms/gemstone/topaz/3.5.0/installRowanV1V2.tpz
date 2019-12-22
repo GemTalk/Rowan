@@ -29,7 +29,7 @@
   set u SystemUser p swordfish
   login
 
-	input ./rowan_gs/RowanAll.gs
+	input ./rowan_gs/RowanV1V2.gs
 
 	commit
 

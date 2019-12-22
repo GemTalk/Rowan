@@ -1,13 +1,11 @@
 RwLoadSpecificationV2 {
-	#specName : 'RowanAll',
+	#specName : 'ComponentV2',
 	#projectName : 'Rowan',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
 	#revision : 'master',
 	#projectSpecFile : 'rowan/v2/project.ston',
 	#componentNames : [
-		'RowanV1',
-		'RowanV2',
-		'RowanComponent'
+		'ComponentV2'
 	],
 	#groupNames : [
 		'core',
@@ -25,5 +23,5 @@ RwLoadSpecificationV2 {
 			}
 		}
 	},
-	#comment : ''
+	#comment : 'V2 prototype. Equivalent to candidateV2.0 loaded in 3.5.0. Scheduled to be deprecated, once the tests are converted to straight V2 tests using V2 api'
 }

@@ -60,19 +60,6 @@ RwNestedProjectLoadComponentV2 {
 				]
 			}
 		},
-		[ 'gs3.[2-4]' ] : {
-      'core': {
-				#packageNames : [
-					'Rowan-GemStone-Loader32x',
-					'Rowan-GemStone-32x'
-				]
-			},
-			'tests' : {
-				#packageNames : [
-					'Rowan-Tests-32x'
-				]
-			}
-		},
 		[ 'gs3.[2-5]' ] : {
       'core': {
 				#packageNames : [
@@ -83,14 +70,11 @@ RwNestedProjectLoadComponentV2 {
 		[ 'gs3.[5-]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-GemStone-Loader35x',
 					'Rowan-GemStone-35x'
 				]
 			},
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests-35x',
-					'Rowan-Tests-GemStone-35x'
 				]
 			}
 		},
@@ -108,8 +92,6 @@ RwNestedProjectLoadComponentV2 {
 				#packageNameToPlatformPropertiesMap : {
 					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-Loader32x' : { 'symbolDictName' : 'RowanLoader' },
-					'Rowan-GemStone-Loader35x' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
