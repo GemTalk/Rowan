@@ -2,7 +2,6 @@ RwProjectLoadComponentV2 {
 	#name : 'RowanV2',
 	#comment : 'RowanV2 support',
 	#componentNames : [
-			'CommonComponentV2',
 			'CommonCore',
 			'Services'
 		],

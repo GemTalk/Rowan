@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'packages'
 	],
-	#category : 'Rowan-Definitions'
+	#category : 'Rowan-DefinitionsV1'
 }
 
 { #category : 'instance creation' }
