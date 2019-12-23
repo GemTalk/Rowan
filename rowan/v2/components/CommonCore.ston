@@ -7,6 +7,7 @@ RwNestedProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#packageNames : [
+					'Rowan-Cypress-Core',
 					'Rowan-Kernel',
 					'Rowan-Url-Core',
 					'Rowan-Url-Extensions',

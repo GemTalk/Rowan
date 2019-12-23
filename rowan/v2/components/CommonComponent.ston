@@ -3,7 +3,6 @@ RwProjectLoadComponentV2 {
 	#comment : 'V2 prototype. Common code shared by ComponentV1 and ComponentV2',
 	#componentNames : [
 			'CommonCore',
-			'CommonComponentV1',
 			'Services'
 		],
 	#conditionalPackages : {

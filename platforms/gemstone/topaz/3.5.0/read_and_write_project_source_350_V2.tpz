@@ -46,9 +46,6 @@ run
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV1.ston'.
-			'$ROWAN_PROJECTS_HOME'
-		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
