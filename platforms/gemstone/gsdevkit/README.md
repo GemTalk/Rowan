@@ -31,5 +31,6 @@ In the `stones-r` output, not the `Port` used by `rowan_350_ldi` ... as that wil
 ### Jadeite Installation (Oscar-3.0.91)
 At this point you should download and install [Jadeite Oscar-3.0.91](https://github.com/GemTalk/Jadeite/releases/tag/Oscar-3.0.91), following the [Jadeite installation instructions](https://github.com/GemTalk/Jadeite#runtime-installation).
 
+The `rowan_350_ldi` port number is used in the `NetLDI ServiceName or Port` field in the Jadeite login dialog:
 ![Jadeite login dialog](https://raw.githubusercontent.com/GemTalk/Rowan/issue_308/docs/Jadeite_login_screen.png)
 
