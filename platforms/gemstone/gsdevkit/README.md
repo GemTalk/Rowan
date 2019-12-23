@@ -1,6 +1,6 @@
 # [GsDevKit_home](https://github.com/GsDevKit/GsDevKit_home#open-source-development-kit-for-gemstones-64-bit-) support 
 
-### GemStone/S 3.5.0 Installation (candidateV2.0 branch)
+### GemStone/S 3.5.0 Installation (vast branch)
 ```
 stoneName=rowan_350
 
@@ -8,7 +8,7 @@ cd $GS_HOME/shared/repos
 export ROWAN_PROJECTS_HOME=`pwd`
 
 git clone git@github.com:GemTalk/Rowan.git
-git checkout candidateV2.0
+git checkout vast
 
 createStone -G $stoneName 3.5.0
 
