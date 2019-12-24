@@ -948,6 +948,67 @@ RwRowanSample9Test >> testRowanSample4_primer_504 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0001_A [
+	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
+
+	"functional variant of testSpec_0001_B"
+
+	| rowanProject fileUrl loadSpecification resolvedProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+
+	resolvedProject := loadSpecification resolve. "project is not being loaded from disk on resolve"
+	resolvedProject
+		addPackagesNamed: {(loadSpecification projectName , '-Core')}
+		toComponentNamed: 'Core'
+		withConditions: {'common'}
+		andGroupName: 'core'.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0001_B [
+	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
+
+	"testSpec_0001_A behavies correctly"
+
+	| rowanProject fileUrl loadSpecification resolvedProject resolvedRepository oldPolicy |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		repositoryResolutionPolicy: #'strict';
+		yourself.	"force #strict policy to ensure that the revision is checkout out in the repository"
+
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+
+
+	resolvedProject := loadSpecification resolve.
+
+	resolvedRepository := resolvedProject repository.
+	resolvedRepository checkout: 'master'.
+
+	oldPolicy := loadSpecification repositoryResolutionPolicy.
+	[ 
+	"force #strict policy to ensure that the revision is checkout out in the repolicy"
+	loadSpecification repositoryResolutionPolicy: #'strict'.
+	resolvedProject := loadSpecification resolve ]
+		ensure: [ loadSpecification repositoryResolutionPolicy: oldPolicy ].
+
+	resolvedProject
+		addPackagesNamed: {(loadSpecification projectName , '-Core')}
+		toComponentNamed: 'Core'
+		withConditions: {'common'}
+		andGroupName: 'core'
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSpec_0002_to_0003 [
 	"https://github.com/dalehenrich/Rowan/issues/230"
 

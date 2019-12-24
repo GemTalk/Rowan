@@ -8,6 +8,7 @@
 				#packageNames : [
 					'Rowan-Tests',
 					'Rowan-TestsV2',
+					'Rowan-Tests-DiskConfigurationsV2',
 					'Rowan-Tests-Components'
 					]
 				}
