@@ -3,7 +3,8 @@ RwProjectLoadComponentV2 {
 	#comment : 'RowanV2 support',
 	#componentNames : [
 			'CommonCore',
-			'Services'
+			'Services',
+			'DiskConfigurationsV2'
 		],
 	#conditionalPackages : {
 		[

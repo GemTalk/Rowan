@@ -18,7 +18,7 @@ Class {
 		'projectsHome',
 		'repositoryResolutionPolicy'
 	],
-	#category : 'Rowan-DefinitionsV2'
+	#category : 'Rowan-SpecificationsV2'
 }
 
 { #category : 'accessing' }
@@ -65,7 +65,7 @@ RwLoadSpecificationV2 >> _validate [
 										, (repoUrls at: 1) asString printString ] ] ].
 	self platformProperties
 		keysAndValuesDo: [ :platformName :userIdMap | 
-			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
+			(self class _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
 					Error
 						signal:
@@ -374,16 +374,6 @@ RwLoadSpecificationV2 >> repositoryResolutionPolicy: aSymbolOrNil [
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> repositoryRoot [
 	^ self projectsHome / self projectAlias
-]
-
-{ #category : 'actions' }
-RwLoadSpecificationV2 >> resolve [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecification: self
 ]
 
 { #category : 'actions' }

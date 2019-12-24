@@ -1,6 +1,9 @@
 RwNestedProjectLoadComponentV2 {
 	#name : 'CommonCore',
 	#comment : 'Common code shared by RowanV1, RowanV2, ComponentV1 and ComponentV2',
+	#componentNames : [
+		'DiskConfigurationsCommon'
+	],
 	#conditionalPackages : {
 		[
 			'common'
@@ -13,7 +16,6 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-Url-Extensions',
 					'Rowan-Definitions',
 					'Rowan-Core-Definitions-Extensions',
-					'Rowan-Specifications',
 					'Rowan-Configurations-Common',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
@@ -96,7 +98,6 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Configurations-Common' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },

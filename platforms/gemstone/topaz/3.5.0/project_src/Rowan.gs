@@ -6078,7 +6078,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-ComponentsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6152,7 +6152,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6168,7 +6168,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6184,7 +6184,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6200,7 +6200,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6216,7 +6216,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6232,7 +6232,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-GemStone-Specifications';
+		category: 'Rowan-GemStone-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6248,7 +6248,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6280,7 +6280,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: 'RwPackageLoadSpecification new
     specName: ''rowanLoadSpec'';
     packageNames:
@@ -6305,7 +6305,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6321,7 +6321,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6337,7 +6337,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6353,7 +6353,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6369,7 +6369,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -34508,12 +34508,6 @@ _readStonFrom: stream
 	^ component
 %
 
-category: 'private'
-classmethod: RwAbstractProjectLoadComponentV2
-_supportedPlatformNames
-	^ #('gemstone')
-%
-
 !		Instance methods for 'RwAbstractProjectLoadComponentV2'
 
 category: 'visiting'
@@ -34921,7 +34915,7 @@ validate
 					allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformName :userIdMap | 
-			(self class _supportedPlatformNames includes: platformName)
+			(RwSpecification _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
 					Error
 						signal:
@@ -63669,6 +63663,12 @@ new
 	^self basicNew initialize
 %
 
+category: 'accessing'
+classmethod: RwSpecification
+_supportedPlatformNames
+	^ #('gemstone')
+%
+
 !		Instance methods for 'RwSpecification'
 
 category: 'conversion'
@@ -64108,17 +64108,6 @@ repositoryRoot
 
 category: 'actions'
 method: RwLoadSpecificationV2
-resolve
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecification: self
-%
-
-category: 'actions'
-method: RwLoadSpecificationV2
 resolveStrict
 	"resolve using #strict repositoryResolutionpolicy"
 
@@ -64229,7 +64218,7 @@ _validate
 										, (repoUrls at: 1) asString printString ] ] ].
 	self platformProperties
 		keysAndValuesDo: [ :platformName :userIdMap | 
-			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
+			(self class _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
 					Error
 						signal:
@@ -64268,23 +64257,6 @@ _validateGemStonePlatformUserIdMap: userIdMap
 												, expectedClass name asString printString , ' not class '
 												, propertyValue class name asString printString ] ]
 						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
-%
-
-! Class implementation for 'RwEmbeddedLoadSpecificationV2'
-
-!		Instance methods for 'RwEmbeddedLoadSpecificationV2'
-
-category: 'actions'
-method: RwEmbeddedLoadSpecificationV2
-resolveWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly"
-
-	| basicProject |
-	self projectsHome: aResolvedProject projectsHome.
-	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
-	basicProject _projectRepository: aResolvedProject _projectRepository copy.
-	self projectsHome: aResolvedProject repositoryRoot.
-	^ basicProject resolve
 %
 
 ! Class implementation for 'RwGemStoneSpecification'
@@ -65059,20 +65031,6 @@ method: RwProjectSpecificationV2
 																		and: [ 
 																			self comment = anObject comment
 																				and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ]
-%
-
-category: 'converting'
-method: RwProjectSpecificationV2
-asProjectDefiniton
-	^ RwProjectDefinitionV2 fromLoadSpecification: self
-%
-
-category: 'converting'
-method: RwProjectSpecificationV2
-asProjectDefinitonWithComment: commentString
-	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
-		comment: commentString;
-		yourself
 %
 
 category: 'accessing'
@@ -70991,7 +70949,7 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 !		Instance methods for 'RwComponentSpecification'
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwComponentSpecification
 initialize
 
@@ -71036,6 +70994,23 @@ comparePropertiesAgainstBase: aDefinition
 							oldValue: before
 							newValue: after)]].
 	^modification
+%
+
+! Class extensions for 'RwEmbeddedLoadSpecificationV2'
+
+!		Instance methods for 'RwEmbeddedLoadSpecificationV2'
+
+category: '*rowan-definitionsV2'
+method: RwEmbeddedLoadSpecificationV2
+resolveWithParentProject: aResolvedProject
+	"give embedded projects a chance to resolve cleanly"
+
+	| basicProject |
+	self projectsHome: aResolvedProject projectsHome.
+	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
+	basicProject _projectRepository: aResolvedProject _projectRepository copy.
+	self projectsHome: aResolvedProject repositoryRoot.
+	^ basicProject resolve
 %
 
 ! Class extensions for 'RwFileUrl'
@@ -71428,6 +71403,17 @@ category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
+%
+
+category: '*rowan-definitionsv2'
+method: RwLoadSpecificationV2
+resolve
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
 %
 
 category: '*rowan-gemstone-definitionsv2'
@@ -72634,7 +72620,7 @@ compareAgainstBaseForLoader: aDefinition
 
 !		Instance methods for 'RwProjectSpecification'
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 defaultSymbolDictName: aString
 
@@ -72642,7 +72628,7 @@ defaultSymbolDictName: aString
 	(self platformSpec at: 'gemstone') defaultSymbolDictName: aString
 %
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 initialize
 
@@ -72660,7 +72646,7 @@ initialize
 	defaultGroupNames := {'default'}.
 %
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 platformSpec
 
@@ -72668,6 +72654,24 @@ platformSpec
 		platformSpec := Dictionary new
 			at: 'gemstone' put: RwGemStoneSpecification new;
 			yourself ].
+%
+
+! Class extensions for 'RwProjectSpecificationV2'
+
+!		Instance methods for 'RwProjectSpecificationV2'
+
+category: '*rowan-definitionsv2'
+method: RwProjectSpecificationV2
+asProjectDefiniton
+	^ RwProjectDefinitionV2 fromLoadSpecification: self
+%
+
+category: '*rowan-definitionsv2'
+method: RwProjectSpecificationV2
+asProjectDefinitonWithComment: commentString
+	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
+		comment: commentString;
+		yourself
 %
 
 ! Class extensions for 'RwProjectTool'
@@ -72810,7 +72814,7 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 !		Instance methods for 'RwSpecification'
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwSpecification
 register
 

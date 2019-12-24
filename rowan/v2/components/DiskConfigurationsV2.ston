@@ -1,10 +1,8 @@
 RwProjectLoadComponentV2 {
-	#name : 'ComponentV2',
-	#comment : 'V2 prototype. Equivalent to candidateV2.0 loaded in 3.5.0',
+	#name : 'DiskConfigurationsV2',
+	#comment : 'V2 classes that are exported to disk for specifiying configurations. These class definitions should be shared by all platforms that support the Rowan disk spec.',
 	#componentNames : [
-			'CommonComponentV2',
-			'RowanV2',
-			'RowanV1'
+			'DiskConfigurationsCommon'
 		],
 	#conditionalPackages : {
 		[
@@ -12,11 +10,12 @@ RwProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#packageNames : [
+					'Rowan-SpecificationsV2',
+					'Rowan-ComponentsV2'
 				]
 			},
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests-35x'
 				]
 			}
 		},
@@ -27,7 +26,6 @@ RwProjectLoadComponentV2 {
 			},
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests-GemStone-35x'
 				]
 			}
 		}
@@ -36,6 +34,8 @@ RwProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-SpecificationsV2' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-ComponentsV2' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
 		}

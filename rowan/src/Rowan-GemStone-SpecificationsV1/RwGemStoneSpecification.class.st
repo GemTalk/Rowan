@@ -8,7 +8,7 @@ Class {
 		'packageNameToPlatformPropertiesMap',
 		'projectOwnerId'
 	],
-	#category : 'Rowan-GemStone-Specifications'
+	#category : 'Rowan-GemStone-SpecificationsV1'
 }
 
 { #category : 'accessing' }

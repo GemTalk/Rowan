@@ -32,11 +32,6 @@ RwAbstractProjectLoadComponentV2 class >> _readStonFrom: stream [
 	^ component
 ]
 
-{ #category : 'private' }
-RwAbstractProjectLoadComponentV2 class >> _supportedPlatformNames [
-	^ #('gemstone')
-]
-
 { #category : 'instance creation' }
 RwAbstractProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
 
@@ -612,7 +607,7 @@ RwAbstractProjectLoadComponentV2 >> validate [
 					allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformName :userIdMap | 
-			(self class _supportedPlatformNames includes: platformName)
+			(RwSpecification _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
 					Error
 						signal:

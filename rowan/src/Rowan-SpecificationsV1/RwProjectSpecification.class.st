@@ -15,7 +15,7 @@ Class {
 		'defaultConfigurationNames',
 		'defaultGroupNames'
 	],
-	#category : 'Rowan-Specifications'
+	#category : 'Rowan-SpecificationsV1'
 }
 
 { #category : 'instance creation' }

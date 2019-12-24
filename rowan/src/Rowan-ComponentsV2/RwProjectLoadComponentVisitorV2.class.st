@@ -10,7 +10,7 @@ Class {
 		'projectDefinition',
 		'resolvedProject'
 	],
-	#category : 'Rowan-DefinitionsV2'
+	#category : 'Rowan-ComponentsV2'
 }
 
 { #category : 'private' }

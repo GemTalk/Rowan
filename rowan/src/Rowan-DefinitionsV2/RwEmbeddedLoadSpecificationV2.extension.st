@@ -1,10 +1,6 @@
-Class {
-	#name : 'RwEmbeddedLoadSpecificationV2',
-	#superclass : 'RwLoadSpecificationV2',
-	#category : 'Rowan-DefinitionsV2'
-}
+Extension { #name : 'RwEmbeddedLoadSpecificationV2' }
 
-{ #category : 'actions' }
+{ #category : '*rowan-definitionsV2' }
 RwEmbeddedLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly"
 

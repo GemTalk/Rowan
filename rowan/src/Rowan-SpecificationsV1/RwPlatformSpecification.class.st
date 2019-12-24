@@ -1,5 +1,5 @@
 Class {
 	#name : 'RwPlatformSpecification',
 	#superclass : 'RwSpecification',
-	#category : 'Rowan-Specifications'
+	#category : 'Rowan-SpecificationsV1'
 }

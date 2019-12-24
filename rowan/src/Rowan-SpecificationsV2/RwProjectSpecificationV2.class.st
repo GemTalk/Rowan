@@ -15,7 +15,7 @@ Class {
 		'repoType',
 		'loadedCommitId'
 	],
-	#category : 'Rowan-DefinitionsV2'
+	#category : 'Rowan-SpecificationsV2'
 }
 
 { #category : 'accessing' }
@@ -76,18 +76,6 @@ RwProjectSpecificationV2 >> = anObject [
 																		and: [ 
 																			self comment = anObject comment
 																				and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ]
-]
-
-{ #category : 'converting' }
-RwProjectSpecificationV2 >> asProjectDefiniton [
-	^ RwProjectDefinitionV2 fromLoadSpecification: self
-]
-
-{ #category : 'converting' }
-RwProjectSpecificationV2 >> asProjectDefinitonWithComment: commentString [
-	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
-		comment: commentString;
-		yourself
 ]
 
 { #category : 'accessing' }

@@ -1,13 +1,13 @@
 Extension { #name : 'RwProjectSpecification' }
 
-{ #category : '*rowan-gemstone-specifications' }
+{ #category : '*rowan-gemstone-specificationsv1' }
 RwProjectSpecification >> defaultSymbolDictName: aString [
 
 
 	(self platformSpec at: 'gemstone') defaultSymbolDictName: aString
 ]
 
-{ #category : '*rowan-gemstone-specifications' }
+{ #category : '*rowan-gemstone-specificationsv1' }
 RwProjectSpecification >> initialize [
 
 	super initialize.
@@ -24,7 +24,7 @@ RwProjectSpecification >> initialize [
 	defaultGroupNames := {'default'}.
 ]
 
-{ #category : '*rowan-gemstone-specifications' }
+{ #category : '*rowan-gemstone-specificationsv1' }
 RwProjectSpecification >> platformSpec [
 
    ^platformSpec ifNil: [ 
