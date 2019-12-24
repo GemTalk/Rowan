@@ -32,6 +32,12 @@ self error: 'not yet supported'.
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }
+RwCommonProjectLoadComponentV2 class >> orderedDictionaryClass [
+
+	^ Rowan platform orderedDictionaryClass
+]
+
+{ #category : '*rowan-gemstone-componentsv2' }
 RwCommonProjectLoadComponentV2 >> _exportToUrl: fileUrl [
 
 	| url |

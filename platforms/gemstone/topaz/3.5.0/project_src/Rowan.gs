@@ -34482,6 +34482,13 @@ newNamed: aName for: projectName
 		yourself
 %
 
+category: 'accessing'
+classmethod: RwAbstractProjectLoadComponentV2
+orderedDictionaryClass
+
+	self subclassResponsibility: #orderedDictionaryClass
+%
+
 category: 'private'
 classmethod: RwAbstractProjectLoadComponentV2
 _gemstoneSupportedPackagePropertyNames
@@ -34718,12 +34725,12 @@ initializeForExport
 	self conditionalPackages
 		ifNotNil: [ :cp | 
 			| orderedConditionalPackages |
-			orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
+			orderedConditionalPackages := self class orderedDictionaryClass new.
 			(cp keys asSortedCollection: [ :a :b | (a at: 1) <= (b at: 1) ])
 				do: [ :ar | 
 					| dict orderedPackageNames |
 					dict := cp at: ar.
-					orderedPackageNames := Rowan platform orderedDictionaryClass new.
+					orderedPackageNames := self class orderedDictionaryClass new.
 					dict keys asArray sort
 						do: [ :group | orderedPackageNames at: group put: (dict at: group) ].
 					orderedConditionalPackages at: ar put: orderedPackageNames ].
@@ -34731,18 +34738,18 @@ initializeForExport
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
 			| orderedConditionalPackageMapSpecs |
-			orderedConditionalPackageMapSpecs := Rowan platform orderedDictionaryClass
+			orderedConditionalPackageMapSpecs := self class orderedDictionaryClass
 				new.
 			(conditionalPackageMapSpecs keys asSortedCollection: [ :a :b | a <= b ])
 				do: [ :platformName | 
 					| orderedUserMap userMap |
-					orderedUserMap := Rowan platform orderedDictionaryClass new.
+					orderedUserMap := self class orderedDictionaryClass new.
 					userMap := conditionalPackageMapSpecs at: platformName.
 					(userMap keys asSortedCollection: [ :a :b | a <= b ])
 						do: [ :userName | 
 							| attributeMap orderedAttributeMap |
 							attributeMap := userMap at: userName.
-							orderedAttributeMap := Rowan platform orderedDictionaryClass new.
+							orderedAttributeMap := self class orderedDictionaryClass new.
 							(attributeMap keys asSortedCollection: [ :a :b | a <= b ])
 								do: [ :attributeName | orderedAttributeMap at: attributeName put: (attributeMap at: attributeName) ].
 							orderedUserMap at: userName put: orderedAttributeMap ].
@@ -63278,7 +63285,7 @@ _components: componentDirPath forProject: aProjectName
 		collect: [ :componentName | 
 			| url |
 			url := urlBase , componentName , '.ston'.
-			(RwAbstractProjectConfiguration fromUrl: url)
+			(RwCommonProjectLoadComponentV2 fromUrl: url)
 				projectName: aProjectName;
 				yourself ]
 %
@@ -63590,30 +63597,17 @@ category: 'instance creation'
 classmethod: RwSpecification
 fromUrl: specNameOrUrl
 
-	"self fromUrl: 'file:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston'"
-
-	"self fromUrl: 'sampleLoadSpec'"
-
-	"self fromUrl: 'https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston'"
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
 
 	| url |
 	url := specNameOrUrl asRwUrl.
 	url scheme isNil
-		ifTrue: [ 
-			^ Rowan image
-				loadedProjectNamed: specNameOrUrl
-				ifAbsent: [ self error: 'No project named ' , specNameOrUrl printString , ' found' ] ].
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
 	url scheme = 'file'
-		ifTrue: [ 
-			CypressFileUtilities current
-				readStreamFor: url fileName
-				in: url pathForDirectory
-				do: [ :stream | 
-					^ (STON fromStream: stream)
-						initializeForImport;
-						yourself ] ].
+		ifTrue: [ ^ self fromFile: url pathForFile ].
 	url scheme asString = 'https'
-		ifTrue: [ 
+		ifTrue: [ self error: 'not yet supported'.
+"
 			| client response |
 			GsSecureSocket disableCertificateVerificationOnClient.
 			client := (Rowan globalNamed: 'ZnClient') new.
@@ -63621,9 +63615,8 @@ fromUrl: specNameOrUrl
 				beOneShot;
 				enforceHttpSuccess: true;
 				get: url.
-			^ (STON fromString: response decodeFromUTF8)
-				initializeForImport;
-				yourself ].
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
 	self error: 'Unknown scheme: ' , url scheme printString
 %
 
@@ -70778,6 +70771,13 @@ self error: 'not yet supported'.
 			^ self _readStonFrom: response decodeFromUTF8
 " ].
 	self error: 'Unknown scheme: ' , url scheme printString
+%
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwCommonProjectLoadComponentV2
+orderedDictionaryClass
+
+	^ Rowan platform orderedDictionaryClass
 %
 
 !		Instance methods for 'RwCommonProjectLoadComponentV2'
