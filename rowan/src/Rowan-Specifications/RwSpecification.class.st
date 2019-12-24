@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-Specifications'
 }
 
+{ #category : 'accessing' }
+RwSpecification class >> _supportedPlatformNames [
+	^ #('gemstone')
+]
+
 { #category : 'instance creation' }
 RwSpecification class >> fromFile: filePath [
 	filePath asFileReference

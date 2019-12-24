@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwDiskRepositorySpecification',
 	#superclass : 'RwRepositorySpecification',
-	#category : 'Rowan-Specifications'
+	#category : 'Rowan-SpecificationsV1'
 }
 
 { #category : 'accessing' }

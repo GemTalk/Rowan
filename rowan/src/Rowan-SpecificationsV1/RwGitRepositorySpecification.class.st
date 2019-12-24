@@ -7,7 +7,7 @@ Class {
 		'remote',
 		'remoteUrl'
 	],
-	#category : 'Rowan-Specifications'
+	#category : 'Rowan-SpecificationsV1'
 }
 
 { #category : 'accessing' }

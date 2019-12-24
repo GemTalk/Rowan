@@ -1,6 +1,6 @@
 Extension { #name : 'RwSpecification' }
 
-{ #category : '*rowan-gemstone-specifications' }
+{ #category : '*rowan-gemstone-specificationsv1' }
 RwSpecification >> register [
 
 	Rowan image 

@@ -7,7 +7,7 @@ Class {
 		'loadedGroupNames',
 		'repositoryUrl'
 	],
-	#category : 'Rowan-Specifications'
+	#category : 'Rowan-SpecificationsV1'
 }
 
 { #category : 'accessing' }

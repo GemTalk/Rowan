@@ -2961,6 +2961,22 @@ true.
 
 doit
 (RwAbstractProjectLoadComponentV2
+	subclass: 'RwCommonProjectLoadComponentV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwCommonProjectLoadComponentV2
 	subclass: 'RwNestedProjectLoadComponentV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -2976,7 +2992,7 @@ true.
 %
 
 doit
-(RwAbstractProjectLoadComponentV2
+(RwCommonProjectLoadComponentV2
 	subclass: 'RwProjectLoadComponentV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -6078,7 +6094,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-ComponentsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6152,7 +6168,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6168,7 +6184,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6184,7 +6200,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6200,7 +6216,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6216,7 +6232,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6232,7 +6248,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-GemStone-Specifications';
+		category: 'Rowan-GemStone-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6248,7 +6264,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6280,7 +6296,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: 'RwPackageLoadSpecification new
     specName: ''rowanLoadSpec'';
     packageNames:
@@ -6305,7 +6321,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6321,7 +6337,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6337,7 +6353,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6353,7 +6369,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6369,7 +6385,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -34444,33 +34460,9 @@ _configurations
 category: 'instance creation'
 classmethod: RwAbstractProjectLoadComponentV2
 fromUrl: specNameOrUrl
-
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
 
-	| url |
-	url := specNameOrUrl asRwUrl.
-	url scheme isNil
-		ifTrue: [ self error: 'scheme must be file: or https:' ].
-	url scheme = 'file'
-		ifTrue: [ 
-			CypressFileUtilities current
-				readStreamFor: url fileName
-				in: url pathForDirectory
-				do: [ :stream | ^ self _readStonFrom: stream ] ].
-	url scheme asString = 'https'
-		ifTrue: [ 
-self error: 'not yet supported'.
-"
-			| client response |
-			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (Rowan globalNamed: 'ZnClient') new.
-			response := client
-				beOneShot;
-				enforceHttpSuccess: true;
-				get: url.
-			^ self _readStonFrom: response decodeFromUTF8
-" ].
-	self error: 'Unknown scheme: ' , url scheme printString
+	self subclassResponsibility: #'fromUrl:'
 %
 
 category: 'instance creation'
@@ -34506,12 +34498,6 @@ _readStonFrom: stream
 		yourself.
 	component validate.	"validate when reading from disk, since hand editting could create inconsistencies"
 	^ component
-%
-
-category: 'private'
-classmethod: RwAbstractProjectLoadComponentV2
-_supportedPlatformNames
-	^ #('gemstone')
 %
 
 !		Instance methods for 'RwAbstractProjectLoadComponentV2'
@@ -34921,7 +34907,7 @@ validate
 					allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformName :userIdMap | 
-			(self class _supportedPlatformNames includes: platformName)
+			(RwSpecification _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
 					Error
 						signal:
@@ -34935,28 +34921,7 @@ validate
 category: 'exporting'
 method: RwAbstractProjectLoadComponentV2
 _exportToUrl: fileUrl
-
-	| url |
-	url := fileUrl asRwUrl.
-	url schemeName = 'file'
-		ifTrue: [ 
-			Rowan fileUtilities
-				writeStreamFor: self name , '.ston'
-				in: url pathForDirectory
-				do: [ :stream | 
-					| string |
-					string := STON toStringPretty: self.
-					stream nextPutAll: string.
-					^ self ] ].
-  url schemeName = 'memory'
-    ifTrue: [ 
-		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
-			writeStreamDo: [ :stream | 
-			  | string |
-			  string := STON toStringPretty: self.
-			  stream nextPutAll: string.
-			  ^ self ] ].
-	^ nil	"otherwise a noop"
+	self subclassResponsibility: #'_exportToUrl:'
 %
 
 category: 'private'
@@ -63669,6 +63634,12 @@ new
 	^self basicNew initialize
 %
 
+category: 'accessing'
+classmethod: RwSpecification
+_supportedPlatformNames
+	^ #('gemstone')
+%
+
 !		Instance methods for 'RwSpecification'
 
 category: 'conversion'
@@ -64108,17 +64079,6 @@ repositoryRoot
 
 category: 'actions'
 method: RwLoadSpecificationV2
-resolve
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecification: self
-%
-
-category: 'actions'
-method: RwLoadSpecificationV2
 resolveStrict
 	"resolve using #strict repositoryResolutionpolicy"
 
@@ -64229,7 +64189,7 @@ _validate
 										, (repoUrls at: 1) asString printString ] ] ].
 	self platformProperties
 		keysAndValuesDo: [ :platformName :userIdMap | 
-			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
+			(self class _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
 					Error
 						signal:
@@ -64268,23 +64228,6 @@ _validateGemStonePlatformUserIdMap: userIdMap
 												, expectedClass name asString printString , ' not class '
 												, propertyValue class name asString printString ] ]
 						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
-%
-
-! Class implementation for 'RwEmbeddedLoadSpecificationV2'
-
-!		Instance methods for 'RwEmbeddedLoadSpecificationV2'
-
-category: 'actions'
-method: RwEmbeddedLoadSpecificationV2
-resolveWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly"
-
-	| basicProject |
-	self projectsHome: aResolvedProject projectsHome.
-	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
-	basicProject _projectRepository: aResolvedProject _projectRepository copy.
-	self projectsHome: aResolvedProject repositoryRoot.
-	^ basicProject resolve
 %
 
 ! Class implementation for 'RwGemStoneSpecification'
@@ -65059,20 +65002,6 @@ method: RwProjectSpecificationV2
 																		and: [ 
 																			self comment = anObject comment
 																				and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ]
-%
-
-category: 'converting'
-method: RwProjectSpecificationV2
-asProjectDefiniton
-	^ RwProjectDefinitionV2 fromLoadSpecification: self
-%
-
-category: 'converting'
-method: RwProjectSpecificationV2
-asProjectDefinitonWithComment: commentString
-	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
-		comment: commentString;
-		yourself
 %
 
 category: 'accessing'
@@ -70815,6 +70744,71 @@ addMovedClassToPatchSet: aPatchSet
 	aPatchSet addClassMove: self
 %
 
+! Class extensions for 'RwCommonProjectLoadComponentV2'
+
+!		Class methods for 'RwCommonProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwCommonProjectLoadComponentV2
+fromUrl: specNameOrUrl
+
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme isNil
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
+	url scheme = 'file'
+		ifTrue: [ 
+			CypressFileUtilities current
+				readStreamFor: url fileName
+				in: url pathForDirectory
+				do: [ :stream | ^ self _readStonFrom: stream ] ].
+	url scheme asString = 'https'
+		ifTrue: [ 
+self error: 'not yet supported'.
+"
+			| client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := (Rowan globalNamed: 'ZnClient') new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
+	self error: 'Unknown scheme: ' , url scheme printString
+%
+
+!		Instance methods for 'RwCommonProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+method: RwCommonProjectLoadComponentV2
+_exportToUrl: fileUrl
+
+	| url |
+	url := fileUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			Rowan fileUtilities
+				writeStreamFor: self name , '.ston'
+				in: url pathForDirectory
+				do: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+  url schemeName = 'memory'
+    ifTrue: [ 
+		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
+			writeStreamDo: [ :stream | 
+			  | string |
+			  string := STON toStringPretty: self.
+			  stream nextPutAll: string.
+			  ^ self ] ].
+	^ nil	"otherwise a noop"
+%
+
 ! Class extensions for 'RwComponentProjectDefinition'
 
 !		Instance methods for 'RwComponentProjectDefinition'
@@ -70991,7 +70985,7 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 !		Instance methods for 'RwComponentSpecification'
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwComponentSpecification
 initialize
 
@@ -71036,6 +71030,23 @@ comparePropertiesAgainstBase: aDefinition
 							oldValue: before
 							newValue: after)]].
 	^modification
+%
+
+! Class extensions for 'RwEmbeddedLoadSpecificationV2'
+
+!		Instance methods for 'RwEmbeddedLoadSpecificationV2'
+
+category: '*rowan-definitionsV2'
+method: RwEmbeddedLoadSpecificationV2
+resolveWithParentProject: aResolvedProject
+	"give embedded projects a chance to resolve cleanly"
+
+	| basicProject |
+	self projectsHome: aResolvedProject projectsHome.
+	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
+	basicProject _projectRepository: aResolvedProject _projectRepository copy.
+	self projectsHome: aResolvedProject repositoryRoot.
+	^ basicProject resolve
 %
 
 ! Class extensions for 'RwFileUrl'
@@ -71428,6 +71439,17 @@ category: '*rowan-gemstone-definitionsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
+%
+
+category: '*rowan-definitionsv2'
+method: RwLoadSpecificationV2
+resolve
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
 %
 
 category: '*rowan-gemstone-definitionsv2'
@@ -72634,7 +72656,7 @@ compareAgainstBaseForLoader: aDefinition
 
 !		Instance methods for 'RwProjectSpecification'
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 defaultSymbolDictName: aString
 
@@ -72642,7 +72664,7 @@ defaultSymbolDictName: aString
 	(self platformSpec at: 'gemstone') defaultSymbolDictName: aString
 %
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 initialize
 
@@ -72660,7 +72682,7 @@ initialize
 	defaultGroupNames := {'default'}.
 %
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 platformSpec
 
@@ -72668,6 +72690,24 @@ platformSpec
 		platformSpec := Dictionary new
 			at: 'gemstone' put: RwGemStoneSpecification new;
 			yourself ].
+%
+
+! Class extensions for 'RwProjectSpecificationV2'
+
+!		Instance methods for 'RwProjectSpecificationV2'
+
+category: '*rowan-definitionsv2'
+method: RwProjectSpecificationV2
+asProjectDefiniton
+	^ RwProjectDefinitionV2 fromLoadSpecification: self
+%
+
+category: '*rowan-definitionsv2'
+method: RwProjectSpecificationV2
+asProjectDefinitonWithComment: commentString
+	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
+		comment: commentString;
+		yourself
 %
 
 ! Class extensions for 'RwProjectTool'
@@ -72810,7 +72850,7 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 !		Instance methods for 'RwSpecification'
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwSpecification
 register
 

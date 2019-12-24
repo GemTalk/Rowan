@@ -1,6 +1,6 @@
 Extension { #name : 'RwComponentSpecification' }
 
-{ #category : '*rowan-gemstone-specifications' }
+{ #category : '*rowan-gemstone-specificationsv1' }
 RwComponentSpecification >> initialize [
 
 	super initialize.

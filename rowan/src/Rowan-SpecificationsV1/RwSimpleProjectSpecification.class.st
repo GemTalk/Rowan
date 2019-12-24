@@ -13,5 +13,5 @@ RwPackageLoadSpecification new
 Class {
 	#name : 'RwSimpleProjectSpecification',
 	#superclass : 'RwProjectSpecification',
-	#category : 'Rowan-Specifications'
+	#category : 'Rowan-SpecificationsV1'
 }
