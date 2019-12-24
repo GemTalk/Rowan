@@ -12,7 +12,6 @@ RwNestedProjectLoadComponentV2 {
 				#packageNames : [
 					'Rowan-Cypress-Core',
 					'Rowan-Kernel',
-					'Rowan-Url-Core',
 					'Rowan-Url-Extensions',
 					'Rowan-Definitions',
 					'Rowan-Core-Definitions-Extensions',
@@ -100,7 +99,6 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-GemStone-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-GemStone' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel-32x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel-36x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
@@ -108,6 +106,7 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-32x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-35x' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}

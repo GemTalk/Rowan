@@ -15,6 +15,7 @@
 				#packageNames : [
 					'AST-Kernel-Core',
 					'Rowan-Cypress-Kernel',
+					'Rowan-GemStone-Url',
 					'Rowan-GemStone-Kernel'
 					]
 				}
@@ -63,6 +64,7 @@
 					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Url' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel-32x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel-36x' : { 'symbolDictName' : 'Globals' },

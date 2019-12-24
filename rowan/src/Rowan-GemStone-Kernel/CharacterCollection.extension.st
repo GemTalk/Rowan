@@ -23,14 +23,6 @@ CharacterCollection >> asRwSemanticVersionNumber [
 ]
 
 { #category : '*rowan-gemstone-kernel' }
-CharacterCollection >> asRwUrl [
-
-	""
-
-	^ RwUrl fromString: self
-]
-
-{ #category : '*rowan-gemstone-kernel' }
 CharacterCollection >> indexOfAnyOf: specialChars startingAt: oldPos [
 
 	oldPos to: self size do: [ :i | 
