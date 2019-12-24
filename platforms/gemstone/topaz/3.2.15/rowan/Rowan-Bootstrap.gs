@@ -647,7 +647,7 @@ commit
     value: #('Rowan-DefinitionsV2' 'Rowan-Tools-Core' 'Rowan-Tools-CoreV2' 'Rowan-Cypress-Definitions'
 							'Rowan-GemStone-Definitions' 'Rowan-GemStone-DefinitionsV1' 'Rowan-GemStone-DefinitionsV2'
 							'Rowan-GemStone-Specifications' 'Rowan-GemStone-SpecificationsV1' 'Rowan-Components' 
-							'Rowan-ComponentsV2'
+							'Rowan-ComponentsV2' 'Rowan-GemStone-ComponentsV2'
 							'Rowan-Tools-GemStone' 'Rowan-Definitions-Deprecated' 'Rowan-Tools-Deprecated'
 							'Rowan-Core-Definitions-Extensions' 'Rowan-Core-DefinitionsV1' 'Rowan-Core-DefinitionsV2'
 	).	"Rowan Tools"

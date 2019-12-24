@@ -45,5 +45,8 @@ RwProjectLoadComponentV2 {
 			'core'
 		],
 		'core' : [ ]
-	}
+	},
+	#projectNames : [
+		'STON'
+	]
 }

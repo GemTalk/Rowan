@@ -2961,6 +2961,22 @@ true.
 
 doit
 (RwAbstractProjectLoadComponentV2
+	subclass: 'RwCommonProjectLoadComponentV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwCommonProjectLoadComponentV2
 	subclass: 'RwNestedProjectLoadComponentV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -2976,7 +2992,7 @@ true.
 %
 
 doit
-(RwAbstractProjectLoadComponentV2
+(RwCommonProjectLoadComponentV2
 	subclass: 'RwProjectLoadComponentV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -34444,33 +34460,9 @@ _configurations
 category: 'instance creation'
 classmethod: RwAbstractProjectLoadComponentV2
 fromUrl: specNameOrUrl
-
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
 
-	| url |
-	url := specNameOrUrl asRwUrl.
-	url scheme isNil
-		ifTrue: [ self error: 'scheme must be file: or https:' ].
-	url scheme = 'file'
-		ifTrue: [ 
-			CypressFileUtilities current
-				readStreamFor: url fileName
-				in: url pathForDirectory
-				do: [ :stream | ^ self _readStonFrom: stream ] ].
-	url scheme asString = 'https'
-		ifTrue: [ 
-self error: 'not yet supported'.
-"
-			| client response |
-			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (Rowan globalNamed: 'ZnClient') new.
-			response := client
-				beOneShot;
-				enforceHttpSuccess: true;
-				get: url.
-			^ self _readStonFrom: response decodeFromUTF8
-" ].
-	self error: 'Unknown scheme: ' , url scheme printString
+	self subclassResponsibility: #'fromUrl:'
 %
 
 category: 'instance creation'
@@ -34929,28 +34921,7 @@ validate
 category: 'exporting'
 method: RwAbstractProjectLoadComponentV2
 _exportToUrl: fileUrl
-
-	| url |
-	url := fileUrl asRwUrl.
-	url schemeName = 'file'
-		ifTrue: [ 
-			Rowan fileUtilities
-				writeStreamFor: self name , '.ston'
-				in: url pathForDirectory
-				do: [ :stream | 
-					| string |
-					string := STON toStringPretty: self.
-					stream nextPutAll: string.
-					^ self ] ].
-  url schemeName = 'memory'
-    ifTrue: [ 
-		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
-			writeStreamDo: [ :stream | 
-			  | string |
-			  string := STON toStringPretty: self.
-			  stream nextPutAll: string.
-			  ^ self ] ].
-	^ nil	"otherwise a noop"
+	self subclassResponsibility: #'_exportToUrl:'
 %
 
 category: 'private'
@@ -70771,6 +70742,71 @@ method: RwClassMove
 addMovedClassToPatchSet: aPatchSet
 
 	aPatchSet addClassMove: self
+%
+
+! Class extensions for 'RwCommonProjectLoadComponentV2'
+
+!		Class methods for 'RwCommonProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwCommonProjectLoadComponentV2
+fromUrl: specNameOrUrl
+
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme isNil
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
+	url scheme = 'file'
+		ifTrue: [ 
+			CypressFileUtilities current
+				readStreamFor: url fileName
+				in: url pathForDirectory
+				do: [ :stream | ^ self _readStonFrom: stream ] ].
+	url scheme asString = 'https'
+		ifTrue: [ 
+self error: 'not yet supported'.
+"
+			| client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := (Rowan globalNamed: 'ZnClient') new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
+	self error: 'Unknown scheme: ' , url scheme printString
+%
+
+!		Instance methods for 'RwCommonProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+method: RwCommonProjectLoadComponentV2
+_exportToUrl: fileUrl
+
+	| url |
+	url := fileUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			Rowan fileUtilities
+				writeStreamFor: self name , '.ston'
+				in: url pathForDirectory
+				do: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+  url schemeName = 'memory'
+    ifTrue: [ 
+		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
+			writeStreamDo: [ :stream | 
+			  | string |
+			  string := STON toStringPretty: self.
+			  stream nextPutAll: string.
+			  ^ self ] ].
+	^ nil	"otherwise a noop"
 %
 
 ! Class extensions for 'RwComponentProjectDefinition'

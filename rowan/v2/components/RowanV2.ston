@@ -13,10 +13,7 @@ RwProjectLoadComponentV2 {
 			'core' : {
 				#packageNames : [
 					'Rowan-DefinitionsV2',
-					'Rowan-GemStone-Definitions-ExtensionsV2',
 					'Rowan-Core-DefinitionsV2',
-					'Rowan-GemStone-CoreV2',
-					'Rowan-GemStone-DefinitionsV2',
 					'Rowan-Tools-CoreV2'
 				]
 			},
@@ -29,6 +26,10 @@ RwProjectLoadComponentV2 {
 		[ 'gemstone' ] : {
       'core': {
 				#packageNames : [
+					'Rowan-GemStone-ComponentsV2',
+					'Rowan-GemStone-Definitions-ExtensionsV2',
+					'Rowan-GemStone-CoreV2',
+					'Rowan-GemStone-DefinitionsV2'
 				]
 			}
 		}
@@ -41,6 +42,7 @@ RwProjectLoadComponentV2 {
 					'Rowan-Core-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-CoreV2' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-ComponentsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
