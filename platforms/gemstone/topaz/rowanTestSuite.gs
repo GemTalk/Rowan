@@ -49,7 +49,7 @@ run
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
-		(false 
+		(true
 			and: [(System stoneVersionReport at: 'gsVersion') >= '3.5.0']) 
 				ifTrue: [ Deprecated doErrorOnDeprecated ].
 
