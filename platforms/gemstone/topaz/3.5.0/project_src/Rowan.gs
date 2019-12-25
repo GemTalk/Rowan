@@ -48017,6 +48017,17 @@ source: sourceString
 	source := sourceString
 %
 
+category: 'private'
+method: RwMethodDefinition
+_compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+
+	({'_gsFileOffset'. '_gsFileName' } includes: propertyKey)
+		ifTrue: [ 
+		"_gsFileOffset' '_gsFileName' are informational properties so any differences can be ignored "
+		^ true ].
+	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+%
+
 ! Class implementation for 'RwPackageDefinition'
 
 !		Class methods for 'RwPackageDefinition'
@@ -68626,6 +68637,17 @@ newMethodDefinitionFrom: anArray
 		source: source
 %
 
+! Class extensions for 'AbstractException'
+
+!		Instance methods for 'AbstractException'
+
+category: '*rowan-gemstone-kernel-32x'
+method: AbstractException
+addText: aString
+  messageText ifNil:[ self asString "build the default messageText" ].
+  messageText := (messageText ifNil:[ String new ]), ', ', aString .
+%
+
 ! Class extensions for 'Behavior'
 
 !		Instance methods for 'Behavior'
@@ -69955,6 +69977,12 @@ category: '*rowan-cypress-kernel'
 method: CypressMethodDefinition
 accept: aVisitor
 	^ aVisitor visitMethodDefinition: self
+%
+
+category: '*rowan-cypress-kernel'
+method: CypressMethodDefinition
+offset: anInteger inFile: aFileName
+	"noop"
 %
 
 category: '*rowan-tools-kernel'

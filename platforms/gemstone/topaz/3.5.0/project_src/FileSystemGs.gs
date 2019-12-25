@@ -10714,6 +10714,12 @@ wrappedStream
 	^ stream
 %
 
+category: 'accessing'
+method: ZnBufferedReadStream
+wrappedStreamName
+	^ stream wrappedStreamName
+%
+
 ! Class implementation for 'ZnBufferedReadWriteStream'
 
 !		Class methods for 'ZnBufferedReadWriteStream'
@@ -10954,6 +10960,13 @@ method: ZnBufferedReadWriteStream
 wrappedStream
 
 	^ readStream wrappedStream
+%
+
+category: 'accessing'
+method: ZnBufferedReadWriteStream
+wrappedStreamName
+
+	^ readStream wrappedStreamName
 %
 
 category: 'accessing'
@@ -11892,6 +11905,12 @@ wrappedStream
 	^ stream
 %
 
+category: 'accessing'
+method: ZnEncodedStream
+wrappedStreamName
+	^ stream wrappedStreamName
+%
+
 ! Class implementation for 'ZnEncodedReadStream'
 
 !		Instance methods for 'ZnEncodedReadStream'
@@ -12588,6 +12607,13 @@ upToEnd
 		| next |
 		[ (next := self next) isNil ] whileFalse: [
 			newStream nextPut: next ] ]
+%
+
+category: 'accessing'
+method: AbstractBinaryFileStream
+wrappedStreamName
+
+	^self name
 %
 
 ! Class implementation for 'BinaryFileStream'
@@ -19020,6 +19046,13 @@ category: '*filesystem-gemstone-kernel'
 method: Stream
 isBinary
 	^false
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Stream
+wrappedStreamName
+
+	^''
 %
 
 ! Class extensions for 'TestAsserter'

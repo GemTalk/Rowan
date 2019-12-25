@@ -146,7 +146,7 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectory: method
         offset := methodStream position .
 				methodSource := methodStream upToEnd.
 				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
-        methodDef offset: offset inFile: file name .
+        methodDef offset: offset inFile: file pathString .
 				self 
 					validateMethodDefinitionProtocol: methodDef 
 						className: classDefinition name

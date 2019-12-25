@@ -1458,7 +1458,7 @@ methodDef: aBlock
   }.
   (def := self newMethodDefinitionFrom: ar )
     offset: offset
-    inFile: stream wrappedStream wrappedStream wrappedStream name .
+    inFile: stream wrappedStreamName .
 
   aBlock
     value: ar fourth first second notNil
