@@ -9,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONTestMap is used to support unit tests.
 
@@ -26,7 +27,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONReaderError is the error/exception signalled by STONReader when illegal/incorrect input is seen. 
 ';
@@ -42,7 +44,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONWriterError is the error/exception signalled by STONWriter when illegal/incorrect input is seen. ';
 		immediateInvariant.
@@ -57,7 +60,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STON implements serialization and materialization using the Smalltalk Object Notation format.
  
@@ -165,7 +169,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONReader materializes objects using the Smalltalk Object Notation format.
 
@@ -182,7 +187,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONReference holds a forward reference to another object during materialization.
 ';
@@ -198,7 +204,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONStreamWriter helps in streaming writing STON representations.
 This is an abstract class.';
@@ -214,7 +221,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONArrayWriter helps in writing array based STON representations.
 ';
@@ -230,7 +238,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONShortArrayWriter helps in writing short array based STON representations.
 ';
@@ -246,7 +255,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONDictionaryWriter helps in writing dictionary based STON representations.';
 		immediateInvariant.
@@ -261,7 +271,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONTestDomainObject is used to support unit tests.
 
@@ -287,7 +298,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONTestUser is used to support unit tests.
 
@@ -308,7 +320,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONTestUser2 extends STONTestUser with explicit implementations of #fromSton: and #stonOn:';
 		immediateInvariant.
@@ -323,7 +336,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONTestUser3 extends STONTestUser but wants nil instance variables to be written';
 		immediateInvariant.
@@ -338,7 +352,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Core';
 		comment: 'STONWriter serializes objects using the Smalltalk Object Notation format. 
 
@@ -370,7 +385,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONReaderTests test materialization.
 ';
@@ -386,7 +402,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONTests tests the API offered by STON.
 ';
@@ -402,7 +419,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONWriteReadTests test serialization followed by materialization.';
 		immediateInvariant.
@@ -417,7 +435,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONLargeWriteReadTests test the optimalizations for large structures.';
 		immediateInvariant.
@@ -432,7 +451,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONWritePrettyPrinterReadTests tests pretty printed serialization followed by materialization.';
 		immediateInvariant.
@@ -447,7 +467,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'STON-Tests';
 		comment: 'STONWriterTests test serialization.';
 		immediateInvariant.

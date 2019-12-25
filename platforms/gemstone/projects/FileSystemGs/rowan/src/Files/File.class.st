@@ -401,6 +401,12 @@ File class >> write: aGsFile from: stringOrByteArray startingAt: startIndex coun
 	^ written
 ]
 
+{ #category : 'printing' }
+File >> asString [
+  "Needed for topaz debugging"
+  ^ name
+]
+
 { #category : 'accessing' }
 File >> basename [
 	^self name
@@ -532,9 +538,4 @@ File >> writeStreamDo: aBlock [
 	stream := self writeStream.
 	^ [ aBlock value: stream ]
 		ensure: [ stream close ]
-]
-{ #category : 'printing' }
-File >> asString [
-  "Needed for topaz debugging"
-  ^ name
 ]

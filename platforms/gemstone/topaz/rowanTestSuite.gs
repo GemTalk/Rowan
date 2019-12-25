@@ -1,7 +1,13 @@
 run
-	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings |
+	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings resultsDict resultCases |
 
-	includeDeprecatedPackages := true. "true means load deprecated packages"
+	includeDeprecatedPackages := (System stoneVersionReport at: 'gsVersion') = '3.2.15' 
+		ifTrue: [
+			"3.2.15 needs deprecated packages loaded to function"
+			true ]
+		ifFalse: [
+			"3.5.0 can run with or without deprecated packges"
+			false ].
 
 	deprecationAction := Deprecated deprecatedAction.
 	warnings := {}.
@@ -73,17 +79,59 @@ run
 					ex resignalAs: (Error new messageText: ex description; yourself)
 					] ].
 
+		resultsDict := Dictionary new.
+		resultCases := {}.
+		resultsDict 
+			at: #suiteName put: suite name;
+			at: #timeStamp put: DateAndTime now printString;
+			at: #properties put: (Dictionary new
+				at: #includeDeprecatedPackages put: includeDeprecatedPackages;
+				at: #deprecatedAction put: Deprecated deprecatedAction;
+				yourself);
+			at: #notes put: '';
+			at: #gsVersion put: (System gemVersionAt: #gsVersion);
+			at: #testCases put: resultCases;
+			at: #resultsSummary put: (Dictionary new
+				at: #summary put: res printString;
+				at: #failures put: res failureCount;
+				at: #errors put: res errorCount;
+				at: #passed put: res passedCount;
+				yourself)
+			yourself.
 		strm := WriteStream on: String new.
- 	 strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
+ 		strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
+		res passed do: [:each |
+			resultCases add: (Dictionary new
+					at: #className put: each class asString;
+					at: #selector put: each selector asString;
+					at: #status put: 'passed';
+					yourself) ].
+
 		strm nextPutAll: res printString; lf.
 		strm nextPutAll: '  errors'; lf.
-		(res errors collect: [:each | each printString ]) asArray sort do: [:each |
+		(res errors collect: [:each |  
+			resultCases add: (Dictionary new
+					at: #className put: each class asString;
+					at: #selector put: each selector asString;
+					at: #status put: 'errors';
+					yourself). 
+			each printString ]) asArray sort do: [:each |
 			strm tab; nextPutAll: each; lf].
-		res failures size = 0
-			ifTrue: [ ^ strm contents ].
-		strm nextPutAll: '  failures'; lf.
-			(res failures collect: [:each | each printString]) asArray sort do: [:each |
-			strm tab; nextPutAll: each; lf].
+		res failures size > 0
+			ifTrue: [
+				strm nextPutAll: '  failures'; lf.
+				(res failures collect: [:each | 
+					resultCases add: (Dictionary new
+							at: #className put: each class asString;
+							at: #selector put: each selector asString;
+							at: #status put: 'failures';
+							yourself). 
+					each printString]) asArray sort do: [:each |
+					strm tab; nextPutAll: each; lf ] ].
+
+		(FileSystem workingDirectory / 'testResults', 'json')
+			writeStreamDo: [:fileStream | STON put: resultsDict asJsonOnStreamPretty: fileStream ].
+
 		^ strm contents ] 
 			ensure: [ 
 				deprecationAction == #ignore

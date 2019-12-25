@@ -1095,6 +1095,12 @@ gs_options: aCollection
 	gs_options := aCollection
 %
 
+category: 'accessing'
+method: CypressClassDefinition
+gs_reservedOop
+	^ ''
+%
+
 category: 'visiting'
 method: CypressClassDefinition
 classDefinition: classBlock methodDefinition: methodBlock

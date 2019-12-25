@@ -58,6 +58,28 @@ RwPackageDefinition >> addClassNamed: className super: superclassName category: 
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName category: categryName comment: comment [
+
+	^ self addClassDefinition: (RwClassDefinition newForClassNamed: className super: superclassName  category: categryName comment: comment)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars category: category comment: comment [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: #()
+				classvars: #()
+				category: category
+				comment: comment
+				pools: #()
+				type: 'normal')
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
 
 	^ self addClassDefinition: 
@@ -96,6 +118,12 @@ RwPackageDefinition >> classDefinitions [
 RwPackageDefinition >> classDefinitions: classDefinitionDictionary [
 
 	classDefinitions := classDefinitionDictionary
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> classExtensionDefinitionNamed: className [
+
+	^ self classExtensionDefinitionNamed: className ifAbsent: [ self error: 'No class extension definition found with the name ', className printString ]
 ]
 
 { #category : 'accessing' }
@@ -171,8 +199,13 @@ RwPackageDefinition >> removeClassExtensionDefinitionNamed: className [
 
 { #category : 'accessing' }
 RwPackageDefinition >> removeClassNamed: className [
+	^ self removeKey: className from: classDefinitions
+]
 
-	self removeKey: className from: classDefinitions
+{ #category : 'accessing' }
+RwPackageDefinition >> removeClassNamed: className ifAbsent: absentBlock [
+
+	self removeKey: className from: classDefinitions ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }

@@ -1199,7 +1199,7 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	class := Rowan globalNamed: className.
-	self assert: class new mover = 1.
+	self assert: (class new perform: #mover) = 1.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class categoryOfSelector: #mover) asString = 'accessing'.
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName1.
@@ -1243,7 +1243,7 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class == oldClass.
-	self assert: class new mover = 1.
+	self assert: (class new perform: #mover) = 1.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class categoryOfSelector: #mover) asString =  ('*', packageName2 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -3402,9 +3402,9 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method2) rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method3) rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new method2 = 2.
-	self assert: class new method3 = 3.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #method2) = 2.
+	self assert: (class new perform: #method3) = 3.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
@@ -3436,10 +3436,10 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method3) rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method4) rowanPackageName = packageName2.
-	self assert: class new method1 = 1.
-	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: (x := class new method3) = 5.
-	self assert: class new method4 = 4.
+	self assert: (class new perform: #method1) = 1.
+	self should: [ (class new perform: #method2) = 2 ] raise: MessageNotUnderstood.
+	self assert: (x := class new perform: #method3) = 5.
+	self assert: (class new perform: #method4) = 4.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -3448,7 +3448,6 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 3.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -3517,9 +3516,9 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method2) rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method3) rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
-	self assert: class new method2 = 2.
-	self assert: class new method3 = 3.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #method2) = 2.
+	self assert: (class new perform: #method3) = 3.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
@@ -3551,10 +3550,10 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method3) rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method4) rowanPackageName = packageName2.
-	self assert: class new method1 = 1.
-	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: (x := class new method3) = 5.
-	self assert: class new method4 = 4.
+	self assert: (class new perform: #method1) = 1.
+	self should: [ (class new perform: #method2) = 2 ] raise: MessageNotUnderstood.
+	self assert: (x := class new perform: #method3) = 5.
+	self assert: (class new perform: #method4) = 4.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -3571,5 +3570,4 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 3.
-
 ]

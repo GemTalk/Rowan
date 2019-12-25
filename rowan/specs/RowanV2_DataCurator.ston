@@ -1,0 +1,21 @@
+RwComponentSpecification {
+	#specName : 'Rowan_DataCurator',
+	#version : '0.3.0',
+	#projectUrl : 'https://github.com/GemTalk/Rowan',
+	#configsPath : 'rowan/configs',
+	#specsPath : 'rowan/specs',
+	#repoPath : 'rowan/src',
+	#projectAlias : 'Rowan_DataCurator',
+	#projectName: 'Rowan',
+	#projectsPath : 'rowan/projects',
+	#repoSpec : RwGitRepositorySpecification {
+	},
+	#defaultComponentName : 'DataCurator_Tests',
+	#defaultConfigurationNames : [
+		'DataCurator_Tests'
+	],
+	#defaultGroupNames : [
+		'tests'
+	],
+	#comment : 'Used to load DataCurator tests in independent project'
+}

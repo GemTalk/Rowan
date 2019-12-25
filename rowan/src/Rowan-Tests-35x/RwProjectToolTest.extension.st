@@ -14,16 +14,14 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	('/tmp/rowanSimpleProject/' asFileReference)
+	((self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/' )asFileReference)
 		ensureCreateDirectory;
 		deleteAllChildren.
 
 	projectDefinition := RwComponentProjectDefinition
 		projectName: projectName 
-			projectHome: '/tmp/rowanSimpleProject/'
+			projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/'
 			useGit: true
 			comment: 'This is a simple project to demonstrate the smalltalk API used for a project lifecycle'.
 	 
@@ -86,8 +84,6 @@ RwProjectToolTest >> testProjectClassExtensions [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -95,13 +91,13 @@ RwProjectToolTest >> testProjectClassExtensions [
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleExtensionProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleExtensionProject/';
 		configsPath: 'configs';
 		packagesPath: 'src';
 		specsPath: 'specs';
 		yourself.
 
-	'/tmp/rowanSimpleExtensionProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'rowanSimpleExtensionProject') ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -134,7 +130,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testInstance := testClass new.
-	self assert: testInstance foo.
+	self assert: (testInstance perform: #foo).
 
 	classExtensionDefinition := RwClassExtensionDefinition
 		newForClassNamed: className.
@@ -165,9 +161,9 @@ RwProjectToolTest >> testProjectClassExtensions [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 == 1.
+	self assert: (testClass perform: #civar1) == 1.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 
 	projectDefinition 
@@ -210,8 +206,6 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -220,13 +214,13 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanClassExtensionsProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanClassExtensionsProject/';
 		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
 		setSymbolDictName: self _symbolDictionaryName1
 			forPackageNamed: 'Simple-Extensions1';
 		yourself.
 
-	'/tmp/rowanClassExtensionsProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'rowanClassExtensionsProject') ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -258,7 +252,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	testClass2 := Rowan globalNamed: className2.
 	self assert: testClass2 isNil.
 	testInstance1 := testClass1 new.
-	self should: [ testInstance1 ivar1 ] raise: MessageNotUnderstood.
+	self should: [ testInstance1 perform: #ivar1 ] raise: MessageNotUnderstood.
 
 	dictionariesAndSymbols := Rowan image symbolList
 		dictionariesAndSymbolsOf: testClass1.
@@ -323,7 +317,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
-	self assert: testClass1 civar1 = 1.
+	self assert: (testClass1 perform: #civar1) = 1.
 
 	projectDefinition
 		export;
@@ -362,8 +356,6 @@ RwProjectToolTest >> testSimpleProject1 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -372,10 +364,10 @@ RwProjectToolTest >> testSimpleProject1 [
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/';
 		yourself.
 
-	'/tmp/rowanSimpleProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/') asFileReference ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -434,8 +426,6 @@ RwProjectToolTest >> testSimpleProject2 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -444,13 +434,13 @@ RwProjectToolTest >> testSimpleProject2 [
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject2/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject2/';
 		configsPath: 'configs';
 		packagesPath: 'src';
 		specsPath: 'specs';
 		yourself.
 
-	'/tmp/rowanSimpleProject2/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject2/' ) asFileReference ensureDeleteAll.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: 'Simple2'
@@ -490,21 +480,19 @@ RwProjectToolTest >> testSimpleProject3 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition newForGitBasedProjectNamed: projectName)
 		comment: 'This is a simple project created in memory first, then written to disk.';
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject3/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject3/';
 		configsPath: 'configs';
 		packagesPath: 'src'; 
 		specsPath: 'specs';
  		yourself.
 
-	'/tmp/rowanSimpleProject3/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject3/' )asFileReference ensureDeleteAll.
 
 	className := 'Simple3'.
 	classDefinition := RwClassDefinition
@@ -545,9 +533,9 @@ RwProjectToolTest >> testSimpleProject3 [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 == 1.
+	self assert: (testClass perform: #civar1) == 1.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].

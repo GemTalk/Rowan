@@ -183,6 +183,11 @@ CypressClassStructure >> gs_options: anOptionsArray [
 
 ]
 
+{ #category : 'accessing' }
+CypressClassStructure >> gs_reservedOop [
+	^ ''
+]
+
 { #category : 'querying' }
 CypressClassStructure >> instanceMethodNamed: methodName [
 

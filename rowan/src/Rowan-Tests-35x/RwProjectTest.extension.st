@@ -47,7 +47,7 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 		newForGitBasedProjectNamed: projectName)
 		addPackagesNamed: packageNames;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/';
 		yourself.
 
 	self

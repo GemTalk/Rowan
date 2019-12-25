@@ -128,6 +128,14 @@ Path class >> from: aString delimiter: aDelimiterCharacter [
 	^ pathClass withAll: splitPathElements
 ]
 
+{ #category : 'ston' }
+Path class >> fromSton: stonReader [
+	| elements |
+	elements := Array streamContents: [ :out |
+		stonReader parseListDo: [ :each | out nextPut: each ] ].
+	^ self withAll: elements
+]
+
 { #category : 'private' }
 Path class >> isAbsolutePath: aString delimiter: aCharacter [
 	"Answer a boolean indicating whether the supplied path is considered absolute"
@@ -623,6 +631,14 @@ Path >> segments [
 	].
 	
 	^ segments asArray 
+]
+
+{ #category : 'ston' }
+Path >> stonOn: stonWriter [
+	stonWriter 
+		writeObject: self 
+		streamShortList: [ :listWriter | 
+			self do: [ :each | listWriter add: each ] ]
 ]
 
 { #category : 'navigating' }

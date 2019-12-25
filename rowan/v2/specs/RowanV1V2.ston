@@ -1,0 +1,28 @@
+RwLoadSpecificationV2 {
+	#specName : 'RowanV1V2',
+	#projectName : 'Rowan',
+	#gitUrl : 'https://github.com/GemTalk/Rowan',
+	#revision : 'master',
+	#projectSpecFile : 'rowan/v2/project.ston',
+	#componentNames : [
+		'RowanV1',
+		'RowanV2'
+	],
+	#groupNames : [
+		'core',
+		'tests'
+	],
+	#platformProperties : {
+		'gemstone' : {
+		'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals',
+				#defaultUseSessionMethodsForExtensions : false
+			},
+			'SystemUser' : {
+				#defaultSymbolDictName : 'RowanKernel',
+				#defaultUseSessionMethodsForExtensions : false
+			}
+		}
+	},
+	#comment : 'Combined load of RowanV1 and RowanV2'
+}

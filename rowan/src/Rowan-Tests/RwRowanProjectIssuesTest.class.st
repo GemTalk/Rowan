@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanProjectIssuesTest class >> _symbolDictionaryNames [
+
+	^ 	super _symbolDictionaryNames, 
+			#( #'RowanSample4SymbolDict' #'SampleSymbolDict')
+]
+
+{ #category : 'private' }
 RwRowanProjectIssuesTest >> _addClassNamed: className superclassName: superclassName classVars: classVars toPackageNamed: packageName inProjectNamed: projectName validate: validate [
 
 	"validate the dirty state of project before and after class is added"
@@ -132,26 +139,6 @@ RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projec
 
 	validate ifTrue: [ self assert: project isDirty ].
 
-]
-
-{ #category : 'private-issue 150' }
-RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString [
-
-	| rowanProject projectTools gitRootPath |
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/issues/'.
-
-	(gitRootPath / projectName) ensureDeleteAll.
-
-	projectTools clone
-		cloneSpecUrl: projectUrlString
-		gitRootPath: rowanProject repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
 ]
 
 { #category : 'private-issue 24' }
@@ -345,7 +332,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -378,8 +365,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1
 			do: [:ex | ex resume: true ].
 
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass2 new ivar1 isNil.
-
+	self assert: (theClass2 new perform: #ivar1) isNil.
 ]
 
 { #category : 'tests-issue 114' }
@@ -395,7 +381,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_2
 	packageName2 := 'Issue114-Core2'.
 	comment := 'a class comment'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -426,7 +412,6 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_2
 
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass2 comment = comment.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -441,7 +426,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_3
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -463,8 +448,8 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_3
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
@@ -480,10 +465,9 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_3
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
-	self assert: theClass2 new ivar1 isNil.
-
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 ]
 
 { #category : 'tests-issue 114' }
@@ -498,7 +482,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_4
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -520,8 +504,8 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_4
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
@@ -543,10 +527,9 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_4
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
-
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 ]
 
 { #category : 'tests-issue 114' }
@@ -561,7 +544,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_5
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -584,8 +567,8 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_5
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 	theClass2 comment: 'a comment'.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
@@ -608,10 +591,9 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_5
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
-
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 ]
 
 { #category : 'tests-issue 114' }
@@ -626,7 +608,7 @@ RwRowanProjectIssuesTest >> testIssue114_classComment [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -661,7 +643,6 @@ RwRowanProjectIssuesTest >> testIssue114_classComment [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'theClass1 comment'.
 	self assert: theClass2 comment = 'theClass2 comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -677,7 +658,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_1 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -714,7 +695,6 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_1 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'a new comment'.
 	self assert: theClass2 comment = 'theClass2 comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -730,7 +710,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_2 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -767,7 +747,6 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_2 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'theClass1 comment'.
 	self assert: theClass2 comment = 'a new comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -783,7 +762,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_3 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -821,7 +800,6 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_3 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'a new comment'.
 	self assert: theClass2 comment = 'a new comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -837,7 +815,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_0 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -860,8 +838,8 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_0 [
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 comment = 'a comment'.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -883,10 +861,9 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_0 [
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
-
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 ]
 
 { #category : 'tests-issue 114' }
@@ -902,7 +879,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_1 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -925,8 +902,8 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_1 [
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 comment = 'a comment'.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -949,11 +926,10 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_1 [
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 	self assert: theClass2 comment = 'a new comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -969,7 +945,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_2 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -992,8 +968,8 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_2 [
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 comment = 'a comment'.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -1021,11 +997,10 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_2 [
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 2.
-	self assert: theClass2 new foo = 2.
-	self assert: theClass2 new ivar1 isNil.
+	self assert: (theClass1 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #foo) = 2.
+	self assert: (theClass2 new perform: #ivar1) isNil.
 	self assert: theClass2 comment = 'a new comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -1040,7 +1015,7 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1062,8 +1037,8 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
@@ -1088,10 +1063,9 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 
 	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
-	self assert: theClass1 new foo = 2.
-	self assert: theClass1 new ivar1 isNil.
-	self assert: theClass2 new foo = 2.
-
+	self assert: (theClass1 new perform: #foo) = 2.
+	self assert: (theClass1 new perform: #ivar1) isNil.
+	self assert: (theClass2 new perform: #foo) = 2.
 ]
 
 { #category : 'tests-issue 123' }
@@ -1167,12 +1141,12 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 	self assert: (audit := project audit) isEmpty.
 	theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName1.
 	self assert: theClass1 rowanPackageName = packageName1.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'accessing'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 
@@ -1201,13 +1175,13 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 	theClass2 := Rowan globalNamed: className2.
 	self assert: oldClass1 ~~ theClass1.
 	self assert: oldClass2 ~~ theClass2.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName2.
 	self assert: theClass1 rowanPackageName = packageName2.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'accessing'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 ]
@@ -1229,7 +1203,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1253,12 +1227,12 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName1.
 	self assert: theClass1 rowanPackageName = packageName1.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 
@@ -1271,18 +1245,17 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 		category: packageName2
 		options: #().
 
-	self assert: theClass1 new foo = 1.
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName2.
 	self assert: theClass1 rowanPackageName = packageName2.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
 	self assert: (Rowan globalNamed: className2) ~~ theClass2.
 	theClass2 := Rowan globalNamed: className2.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1303,7 +1276,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1319,7 +1292,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo)= 1.
 	self assert: theClass category = packageName1.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
@@ -1336,10 +1309,9 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1362,7 +1334,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1378,7 +1350,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName1.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
@@ -1393,12 +1365,11 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 		category: packageName2
 		options: #().
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1418,7 +1389,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1442,12 +1413,12 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName1.
 	self assert: theClass1 rowanPackageName = packageName1.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName1.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 
@@ -1462,18 +1433,17 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 		options: #().
 
 	self assert: oldClass ~~ theClass1.
-	self assert: theClass1 new foo = 1.
-	self assert: theClass1 new foo = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
+	self assert: (theClass1 new perform: #foo) = 1.
 	self assert: theClass1 category = packageName2.
 	self assert: theClass1 rowanPackageName = packageName2.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
 	self assert: (x := Rowan globalNamed: className2) ~~ theClass2.
 	theClass2 := Rowan globalNamed: className2.
-	self assert: theClass2 new foo = 1.
+	self assert: (theClass2 new perform: #foo) = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1492,7 +1462,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1508,7 +1478,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName1 inProjectNamed: projectName validate: false.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName1.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
@@ -1523,12 +1493,11 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 		category: packageName2
 		options: #().
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1547,7 +1516,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1563,7 +1532,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName1 inProjectNamed: projectName validate: false.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName1.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
@@ -1580,13 +1549,12 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 		options: #().
 
 	self assert: oldClass ~= theClass.
-	self assert: theClass new foo = 1.
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 125' }
@@ -1606,7 +1574,7 @@ RwRowanProjectIssuesTest >> testIssue125_1 [
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1621,14 +1589,13 @@ RwRowanProjectIssuesTest >> testIssue125_1 [
 		options: #().
 	theClass rwCompileMethod: 'foo ^1' category: 'accessing'.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'accessing'.
 
 	theClass rwCompileMethod: 'foo ^1' category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase)
-
 ]
 
 { #category : 'tests-issue 125' }
@@ -1648,7 +1615,7 @@ RwRowanProjectIssuesTest >> testIssue125_2 [
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1663,14 +1630,13 @@ RwRowanProjectIssuesTest >> testIssue125_2 [
 		options: #().
 	theClass rwCompileMethod: 'foo ^1' category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 
 	theClass rwCompileMethod: 'foo ^1' category: 'accessing'.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (x := (theClass categoryOfSelector: #foo) asString) = 'accessing'
-
 ]
 
 { #category : 'tests-issue 125' }
@@ -1691,7 +1657,7 @@ RwRowanProjectIssuesTest >> testIssue125_3 [
 	packageName3 := 'Issue125-Extensions2'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1707,14 +1673,13 @@ RwRowanProjectIssuesTest >> testIssue125_3 [
 		options: #().
 	theClass rwCompileMethod: 'foo ^1' category: '*' , packageName2 asLowercase.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 
 	theClass rwCompileMethod: 'foo ^1' category:'*' , packageName3 asLowercase.
 
-	self assert: theClass new foo = 1.
+	self assert: (theClass new perform: #foo) = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName3 asLowercase).
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -1929,8 +1894,8 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
-	self assert: class new method1 = 1.
-	self assert: class new method2 = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #method2) = 2.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
@@ -1969,10 +1934,10 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
-	self assert: class new method1 = 1.
-	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: (x := class new method3) = 5.
-	self assert: class new method4 = 4.
+	self assert: (class new perform: #method1) = 1.
+	self should: [ (class new perform: #method2) = 2 ] raise: MessageNotUnderstood.
+	self assert: (x := class new perform: #method3) = 5.
+	self assert: (class new perform: #method4) = 4.
 
 	self assert: class == oldClass.
 ]
@@ -2060,7 +2025,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 
-	self assert: (x := class new method3) = 5.
+	self assert: (x := class new perform: #method3) = 5.
 ]
 
 { #category : 'tests-issue 185' }
@@ -2492,8 +2457,8 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
-	self assert: class new method1 = 1.
-	self assert: class new method2 = 2.
+	self assert: (class new perform: #method1) = 1.
+	self assert: (class new perform: #method2) = 2.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
@@ -2532,10 +2497,10 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
-	self assert: class new method1 = 1.
-	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: (x := class new method3) = 5.
-	self assert: class new method4 = 4.
+	self assert: (class new perform: #method1) = 1.
+	self should: [ (class new perform: #method2) = 2 ] raise: MessageNotUnderstood.
+	self assert: (x := class new perform: #method3) = 5.
+	self assert: (class new perform: #method4) = 4.
 
 	self assert: class == oldClass.
 ]
@@ -2622,7 +2587,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 
-	self assert: (x := class new method3) = 5.
+	self assert: (x := class new perform: #method3) = 5.
 ]
 
 { #category : 'tests-issue 198' }
@@ -2761,9 +2726,8 @@ RwRowanProjectIssuesTest >> testIssue198B [
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
-	self assert: (Rowan globalNamed: className3) new boom == (Rowan globalNamed: className2).
+	self assert: ((Rowan globalNamed: className3) new perform: #boom) == (Rowan globalNamed: className2).
 	self assert: theSubclass rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 198' }
@@ -2951,7 +2915,7 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 	"validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class new mover = 2.
+	self assert: (class new perform: #mover) = 2.
 
 	"move the method to new package"
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
@@ -2977,7 +2941,7 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	"validate"
-	self assert: class new mover = 2. "method not installed when class extension does not have a proper class name"
+	self assert: (class new perform: #mover) = 2. "method not installed when class extension does not have a proper class name"
 ]
 
 { #category : 'tests-issue 208' }
@@ -3041,7 +3005,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
-	self assert: class new method1 = 1.
+	self assert: (class new perform: #method1) = 1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
@@ -3082,7 +3046,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	self assert: oldClass == class.
 	self assert: class rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName3.
-	self assert: class new method1 = 1.
+	self assert: (class new perform: #method1) = 1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
@@ -3102,122 +3066,6 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
-]
-
-{ #category : 'tests-issue 215' }
-RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_symbol_dict [
-
-	"https://github.com/dalehenrich/Rowan/issues/215"
-
-	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
-		classDefinition packageDefinition className1 className2 projectSetDefinition class
-		classExtensionDefinition oldClass project audit |
-	projectName := 'Issue215'.
-	packageName1 := 'Issue215-Core1'.
-	packageName2 := 'Issue215-Tools'.
-	packageName3 := 'Issue215-Tools-Extensions'.
-	className1 := 'Issue215Class1'.
-	className2 := 'Issue215Class2'.
-
-	{projectName}
-		do: [ :pn | 
-			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
-
-	projectDefinition1 := (RwProjectDefinition
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName2;
-		yourself.
-
-	packageDefinition := projectDefinition1 packageNamed: packageName1.
-	classDefinition := RwClassDefinition
-		newForClassNamed: className1
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	packageDefinition addClassDefinition: classDefinition.
-
-	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	classDefinition := RwClassDefinition
-		newForClassNamed: className2
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName2
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	packageDefinition addClassDefinition: classDefinition.
-
-	"create extension method in different package"
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-				newForSelector: #'mover'
-				protocol: '*', packageName2 asLowercase
-				source: 'mover ^2').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-	"load"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition1.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-	"validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	class := Rowan globalNamed: className1.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
-	self assert: class new mover = 2.
-
-	"move the class to different symbol dictionary and move extension methods to new package"
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	projectDefinition2
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName2
-			forPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName3.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName2.
-	(packageDefinition classExtensions at: className1) removeInstanceMethod: #mover.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-				newForSelector: #'mover'
-				protocol: '*', packageName3 asLowercase
-				source: 'mover ^2').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-	
-	"load"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition2.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-	"validate"
-	self assert: (audit := project audit) isEmpty.
-	oldClass := class.
-	class := Rowan globalNamed: className1.
-	self assert: class == oldClass.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
-	self assert: class new mover = 2.
 ]
 
 { #category : 'tests-issue 217' }
@@ -3242,10 +3090,9 @@ RwRowanProjectIssuesTest >> testIssue24_addProject [
 	| projectName |
 	projectName := 'Issue24_addProject'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -3255,7 +3102,7 @@ RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
 	projectName := 'Issue24_addRemovePackage'.
 	packageName := 'Issue24-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -3266,7 +3113,6 @@ RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
 	self _removePackageNamed: packageName from: projectName.
 
 	self _writeProjectNamed: projectName.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -3277,7 +3123,7 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -3296,7 +3142,6 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 	self _removeClassNamed: className fromProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -3307,7 +3152,7 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveMethods [
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -3342,7 +3187,6 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveMethods [
 	self _removeSelector: #foo fromBehavior: theClass class inProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -3353,7 +3197,7 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: '/tmp/rowanIssuesProject/'  validate: false.
+	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'  validate: false.
 	theClass := self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName  validate: false.
@@ -3371,7 +3215,7 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 	self _addOrUpdateMethod:  'foo ^''bar''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName validate: false.
 
 	self assert: project isDirty.
-	self assert: theClass new foo = 'bar'.
+	self assert: (theClass new perform: #foo) = 'bar'.
 
 	Rowan projectTools load loadProjectNamed: projectName.
 
@@ -3393,8 +3237,7 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 
 	theClass := Rowan image objectNamed: className.
 	self assert: theClass notNil.
-	self assert: theClass new foo = 'foo'.
-
+	self assert: (theClass new perform: #foo) = 'foo'.
 ]
 
 { #category : 'tests-issue 24' }
@@ -3408,7 +3251,7 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenPackages [
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -3428,7 +3271,6 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenPackages [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass rowanPackageName = packageName2
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -3441,8 +3283,8 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenProjects [
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
+	self _createLoadedProjectNamed: projectName1 root: self _testRowanProjectsSandbox pathString,'/rowanIssuesProject1/'.
+	self _createLoadedProjectNamed: projectName2 root: self _testRowanProjectsSandbox pathString,'/rowanIssuesProject2/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -3464,7 +3306,6 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenProjects [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass rowanPackageName = packageName2
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -3479,7 +3320,7 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenPackages [
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -3495,7 +3336,6 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenPackages [
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName2 inProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -3510,8 +3350,8 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenProjects [
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
+	self _createLoadedProjectNamed: projectName1 root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject1/'.
+	self _createLoadedProjectNamed: projectName2 root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject2/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -3529,7 +3369,6 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenProjects [
 
 	self _writeProjectNamed: projectName1.
 	self _writeProjectNamed: projectName2.
-
 ]
 
 { #category : 'tests-issue 255' }
@@ -5205,8 +5044,8 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
-	self assert: class foo = 'foo'.
-	self assert: class new foo = 'foo'.
+	self assert: (class perform: #foo) = 'foo'.
+	self assert: (class new perform: #foo) = 'foo'.
 
 "remove package"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -5222,8 +5061,8 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class == oldClass.
-	self should: [ class foo = 'foo' ] raise: MessageNotUnderstood.
-	self should: [ class new foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (class perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (class new perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 ]
 
 { #category : 'tests-issue 310' }
@@ -7347,7 +7186,7 @@ RwRowanProjectIssuesTest >> testIssue40 [
 	projectName := 'Issue40_project'.
 	packageName := 'Issue40-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName toProjectNamed: projectName validate: false.
 
 	theClass1 := self 
@@ -7385,9 +7224,8 @@ RwRowanProjectIssuesTest >> testIssue40 [
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
 			do: [:ex | ex resume: true ].
 
-	self assert: theClass2 cvar1 = 1.
-	self assert: theClass2 cvar2 = 2.
-
+	self assert: (theClass2 perform: #cvar1) = 1.
+	self assert: (theClass2 perform: #cvar2) = 2.
 ]
 
 { #category : 'tests-issue 41' }
@@ -7403,7 +7241,7 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -7419,8 +7257,8 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 			ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) isNil.
 
 	initializeRun := false.
 	[ self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
@@ -7430,9 +7268,8 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 			ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
-
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 ]
 
 { #category : 'tests-issue 41' }
@@ -7448,7 +7285,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveAddUpdateInitializeExtensionM
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -7458,14 +7295,13 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveAddUpdateInitializeExtensionM
 	
 	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) isNil.
 
 	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
-
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 ]
 
 { #category : 'tests-issue 41' }
@@ -7482,7 +7318,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -7496,20 +7332,20 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	"create initialize package as an extension method"
 	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) isNil.
 
 	theClass 
-		cvar1: 3;
-		cvar2: 4.
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
+		perform: #cvar1: with: 3;
+		perform: #cvar2: with: 4.
+	self assert: (theClass perform: #cvar1) = 3.
+	self assert: (theClass perform: #cvar2) = 4.
 
 	"initialize method changed in same package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
@@ -7520,16 +7356,16 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	"initialize method not changed and moved to new package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName3.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
@@ -7540,40 +7376,39 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	self deny: ((loadedClassExtensions at: className) classMethodDefinitions includesKey: #initialize).
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	"initialize method not changed and left in same package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	"initialize method not changed and moved to new package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	theClass initialize.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	"initialize method changed and moved to new package"
 	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
-
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 ]
 
 { #category : 'tests-issue 41' }
@@ -7590,7 +7425,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -7609,14 +7444,14 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 			ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) isNil.
 
 	theClass 
-		cvar1: 3;
-		cvar2: 4.
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
+		perform: #cvar1: with: 3;
+		perform: #cvar2: with: 4.
+	self assert: (theClass perform: #cvar1) = 3.
+	self assert: (theClass perform: #cvar2) = 4.
 
 	initializeRun := false.
 	[	"initialize method changed in same package"
@@ -7627,14 +7462,14 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 				ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	initializeRun := false.
 	[	"initialize method changed and moved to new package"
@@ -7645,14 +7480,14 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 				ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+		perform: #cvar1: with: 5;
+		perform: #cvar2: with: 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	initializeRun := false.
 	[	"initialize method not changed and left in same package"
@@ -7663,14 +7498,13 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 				ex resume: true ].
 
 	self deny: initializeRun.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	self assert: (theClass perform: #cvar1) = 5.
+	self assert: (theClass perform: #cvar2) = 6.
 
 	theClass initialize.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
-
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 ]
 
 { #category : 'tests-issue 41' }
@@ -7687,7 +7521,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -7706,14 +7540,14 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 				ex resume: true ].
 
 	self assert: initializeRun.
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 
 	theClass 
-		cvar1: 3;
-		cvar2: 4.
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
+		perform: #cvar1: with: 3;
+		perform: #cvar2: with: 4.
+	self assert: (theClass perform: #cvar1) = 3.
+	self assert: (theClass perform: #cvar2) = 4.
 
 	initializeRun := false.
 	[	"initialize method not changed and moved to new package"
@@ -7724,14 +7558,13 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 				ex resume: true ].
 
 	self deny: initializeRun.
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
+	self assert: (theClass perform: #cvar1) = 3.
+	self assert: (theClass perform: #cvar2) = 4.
 
 	theClass initialize.
 
-	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 = 2.
-
+	self assert: (theClass perform: #cvar1) = 1.
+	self assert: (theClass perform: #cvar2) = 2.
 ]
 
 { #category : 'tests-issue 467' }
@@ -8749,122 +8582,6 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_6 [
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
-{ #category : 'tests-issue 215' }
-RwRowanProjectIssuesTest >> testIssue495_move_class_and_extension_method_to_new_symbol_dict [
-
-	"https://github.com/dalehenrich/Rowan/issues/495"
-
-	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
-		classDefinition packageDefinition className1 className2 projectSetDefinition class
-		classExtensionDefinition oldClass project audit |
-	projectName := 'Issue215'.
-	packageName1 := 'Issue215-Core1'.
-	packageName2 := 'Issue215-Tools'.
-	packageName3 := 'Issue215-Tools-Extensions'.
-	className1 := 'Issue215Class1'.
-	className2 := 'Issue215Class2'.
-
-	{projectName}
-		do: [ :pn | 
-			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
-
-	projectDefinition1 := (RwProjectDefinition
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName2;
-		yourself.
-
-	packageDefinition := projectDefinition1 packageNamed: packageName1.
-	classDefinition := RwClassDefinition
-		newForClassNamed: className1
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	packageDefinition addClassDefinition: classDefinition.
-
-	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	classDefinition := RwClassDefinition
-		newForClassNamed: className2
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName2
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	packageDefinition addClassDefinition: classDefinition.
-
-	"create extension method in different package"
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-				newForSelector: #'mover'
-				protocol: '*', packageName2 asLowercase
-			source: 'mover ^2').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-	"load"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition1.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-	"validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	class := Rowan globalNamed: className1.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
-	self assert: class new mover = 2.
-
-	"move the class to different symbol dictionary and move extension methods to new package"
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	projectDefinition2
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName2
-			forPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName1
-			forPackageNamed: packageName3.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName2.
-	(packageDefinition classExtensions at: className1) removeInstanceMethod: #mover.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-				newForSelector: #'mover'
-				protocol: 'accessing'
-			source: 'mover ^2').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-	
-	"load"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition2.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-	"validate"
-	self assert: (audit := project audit) isEmpty.
-	oldClass := class.
-	class := Rowan globalNamed: className1.
-	self assert: class == oldClass.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
-	self assert: class new mover = 2.
-]
-
 { #category : 'tests-issue 498' }
 RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_2 [
 
@@ -9217,10 +8934,10 @@ RwRowanProjectIssuesTest >> testIssue91 [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	testClass
 		rwCompileMethod: 'foo ^''foo'''
@@ -9240,17 +8957,16 @@ RwRowanProjectIssuesTest >> testIssue91 [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #ivar1) isNil.
+	self assert: (testInstance perform: #foo) = 'foo'.
 
 	fooMethod := testClass
 		rwCompileMethod: 'foo ^''bar'''
 		category: '*' , packageName2 asLowercase. "create extension method"
 
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 	self assert: fooMethod rowanPackageName = packageName2.
-
 ]

@@ -411,6 +411,7 @@ method4 ^4
 
 run
 Issue361Class1 initialize.
+true
 ', percent, '
 '
 ]
@@ -428,6 +429,7 @@ category: ''*issue361-extension1''
 method: Issue361Class1
 method1 ^1
 ', percent, '
+
 '
 ]
 
@@ -458,6 +460,7 @@ initialize "another noop"
 
 run
 Issue361Class2 initialize.
+true
 ', percent, '
 '
 ]
@@ -683,8 +686,8 @@ Issue361Class1_1 initialize.
 Issue361Class1_2 initialize.
 Issue361Class2_1 initialize.
 Issue361Class2_2 initialize.
+true
 ', percent, '
-
 '
 ]
 
@@ -861,8 +864,8 @@ method2 ^2
 run
 Issue361Class1_1 initialize.
 Issue361Class1_2 initialize.
+true
 ', percent, '
-
 '
 ]
 
@@ -938,8 +941,8 @@ initialize "another noop"
 run
 Issue361Class2_1 initialize.
 Issue361Class2_2 initialize.
+true
 ', percent, '
-
 '
 ]
 

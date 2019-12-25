@@ -669,14 +669,14 @@ RwComponentProjectDefinition >> key [
 RwComponentProjectDefinition >> load [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadComponentProjectDefinition: self
+	^ self _loadTool loadComponentProjectDefinition: self
 ]
 
 { #category : 'actions' }
-RwComponentProjectDefinition >> load: platformConfigurationAttributes [
+RwComponentProjectDefinition >> load: instanceMigrator [
 	"load the receiver into the image"
 
-	^ Rowan projectTools load loadComponentProjectDefinition: self platformConfigurationAttributes: platformConfigurationAttributes
+	^ self _loadTool loadComponentProjectDefinition: self instanceMigrator: instanceMigrator
 ]
 
 { #category : 'accessing' }
@@ -828,6 +828,12 @@ RwComponentProjectDefinition >> projectsPath: aString [
 RwComponentProjectDefinition >> projectsRoot [
 
 	^ self projectRef projectsRoot
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> projectUrl [
+
+	^ self projectRef projectUrl
 ]
 
 { #category : 'actions' }
@@ -982,19 +988,21 @@ RwComponentProjectDefinition >> updateLoadedCommitId [
 ]
 
 { #category : 'loading' }
-RwComponentProjectDefinition >> updateLoadedComponentInfoFor: aLoadedProject from: map [
+RwComponentProjectDefinition >> updateLoadedComponentInfoFor: aLoadedProject from: projectInfo [
 	"really need to update loaded components"
 
 	| theComponentNames |
-	aLoadedProject loadedGroupNames: (map at: 'loadedGroupNames').
+	aLoadedProject loadedGroupNames: (projectInfo at: 'loadedGroupNames').
 
-	theComponentNames := map at: 'loadedConfigurationNames'.
+	theComponentNames := projectInfo at: 'loadedConfigurationNames'.
 	aLoadedProject components keys do: [:aComponentName |
 		(theComponentNames includes: aComponentName)
 			ifFalse: [ aLoadedProject components removeKey: aComponentName ] ].
 
 	theComponentNames do: [:configName |
 		aLoadedProject components at: configName put: (self components at: configName) copy ].
+
+	self updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo
 ]
 
 { #category : 'properties' }

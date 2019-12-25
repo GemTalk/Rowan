@@ -31,12 +31,6 @@ RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 			userPlatformDict at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
 ]
 
-{ #category : 'cypress (old)' }
-RwGsImage class >> _projectRegistry [
-
-	^ self _projectRegistryForUserId: self currentUserId
-]
-
 { #category : 'querying' }
 RwGsImage class >> _removeLoadedProject: aRwLoadedProject [
 
@@ -522,6 +516,29 @@ RwGsImage class >> resolveName: aName [
  symbol list, returns nil. Uses the current session's transient copy of the symbol list."
 
 	^ GsCurrentSession currentSession resolveSymbol: aName asSymbol
+]
+
+{ #category : 'querying' }
+RwGsImage class >> symbolDictNamed: symbolDictName [
+	"Search symbol list for a symbol dictionary with the given name"
+
+	^ self
+		symbolDictNamed: symbolDictName
+		ifAbsent: [ 
+			self
+				error:
+					'No symbol dictionary with the name ' , symbolDictName printString , ' found.' ]
+]
+
+{ #category : 'querying' }
+RwGsImage class >> symbolDictNamed: symbolDictName ifAbsent: absentBlock [
+	"Search symbol list for a symbol dictionary with the given name"
+
+	| symbolDictNameSymbol |
+	symbolDictNameSymbol := symbolDictName asString.
+	^ self symbolList
+		detect: [ :each | (each at: symbolDictNameSymbol ifAbsent: [ nil ]) == each ]
+		ifNone: absentBlock
 ]
 
 { #category : 'querying' }

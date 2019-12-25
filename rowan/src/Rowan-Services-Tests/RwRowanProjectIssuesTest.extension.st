@@ -24,7 +24,7 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 		name: projectName;
 		yourself.
 
-	testBranch := 'issue_150'.
+	testBranch := 'issue_150_v2'.
 	service 
 		checkout: testBranch;
 		branch;
@@ -34,7 +34,11 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 		yourself.
 	Rowan projectTools load loadProjectNamed: projectName.
 	testClass := Rowan globalNamed: 'RowanSample3'.
-	testClass rwCompileMethod: 'foo "', DateAndTime now printString, '"^''foo''' category: 'accessing'.
+	testClass 
+		rwCompileMethod: 'foo
+ "', DateAndTime now printString, '"
+^1 '
+		category: 'accessing'.
 	service
 		commitWithMessage: 'a commit';
 		pushToGit;

@@ -106,6 +106,12 @@ RwGsImagePatchVisitor_254 >> addDeletedPackage: aPackageDefinition [
 ]
 
 { #category : 'private' }
+RwGsImagePatchVisitor_254 >> addDeletedProject: aProjecteDefinition [
+
+	self error: 'not yet implemented'
+]
+
+{ #category : 'private' }
 RwGsImagePatchVisitor_254 >> deleteClasses: classDefinitions [
 
 	classDefinitions

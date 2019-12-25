@@ -41,6 +41,18 @@ RwGsLoadedSymbolDictComponentProject >> components [
 	^ self projectRef components
 ]
 
+{ #category : 'properties' }
+RwGsLoadedSymbolDictComponentProject >> defaultSymbolDictName: symDictName [
+
+	self projectRef defaultSymbolDictName: symDictName
+]
+
+{ #category : 'properties' }
+RwGsLoadedSymbolDictComponentProject >> defaultUseSessionMethodsForExtensions: aBool [
+
+	self projectRef defaultUseSessionMethodsForExtensions: aBool
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictComponentProject >> initializeForLoadSpecification: aLoadSpecification [
 
@@ -67,7 +79,7 @@ RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 	"Create definitions from all of the components I define, and answer the collection of them"
 
 	| components |
-	components := self componenents copy.
+	components := self components copy.
 	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
 	^ components
 ]
@@ -112,6 +124,12 @@ RwGsLoadedSymbolDictComponentProject >> markPackageDirty [
 	self markDirty
 ]
 
+{ #category : 'properties' }
+RwGsLoadedSymbolDictComponentProject >> packageNameToPlatformPropertiesMap: aDictionary [
+
+	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> projectOwnerId [
 
@@ -145,6 +163,12 @@ RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 	props := super propertiesForDefinition.
 	props at: 'projectRef' put: handle copy.
 	^ props
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> remote [
+
+	^ self projectRef remote
 ]
 
 { #category : 'accessing' }

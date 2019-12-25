@@ -76,7 +76,7 @@ RwPlatform >> basePlatformAttribute [
 { #category : 'preferences' }
 RwPlatform >> clearAllPreferencesFor: preferenceSymbol [ 
 
-	self subclassResponisbility: #clearAllPreferencesFor:
+	self subclassResponsibility: #clearAllPreferencesFor:
 ]
 
 { #category : 'automatic class initialization' }
@@ -112,13 +112,13 @@ RwPlatform >> clearAutomaticClassInitializationBlackList_global [
 { #category : 'preferences' }
 RwPlatform >> clearDefaultPreferenceFor: preferenceSymbol [ 
 
-	self subclassResponisbility: #clearDefaultPreferenceFor:
+	self subclassResponsibility: #clearDefaultPreferenceFor:
 ]
 
 { #category : 'preferences' }
 RwPlatform >> clearPreferenceFor: preferenceSymbol [ 
 
-	self subclassResponisbility: #clearPreferenceFor:
+	self subclassResponsibility: #clearPreferenceFor:
 ]
 
 { #category : 'preferences' }
@@ -130,7 +130,7 @@ RwPlatform >> defaultPreferenceFor: preferenceSymbol [
 { #category : 'preferences' }
 RwPlatform >> defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
-	^ self subclassResponisbility: #defaultPreferenceFor:ifAbsent:
+	^ self subclassResponsibility: #defaultPreferenceFor:ifAbsent:
 ]
 
 { #category : 'queries' }
@@ -176,19 +176,19 @@ RwPlatform >> preferenceFor: preferenceSymbol [
 { #category : 'preferences' }
 RwPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
 
-	^ self subclassResponisbility: #preferenceFor:ifAbsent:
+	^ self subclassResponsibility: #preferenceFor:ifAbsent:
 ]
 
 { #category : 'preferences' }
 RwPlatform >> setDefaultPreferenceFor: preferenceSymbol to: anObject [
 
-	self subclassResponisbility: #setDefaultPreferenceFor:to:
+	self subclassResponsibility: #setDefaultPreferenceFor:to:
 ]
 
 { #category : 'preferences' }
 RwPlatform >> setPreferenceFor: preferenceSymbol to: anObject [
 
-	self subclassResponisbility: #setPreferenceFor:to:
+	self subclassResponsibility: #setPreferenceFor:to:
 ]
 
 { #category : 'queries' }

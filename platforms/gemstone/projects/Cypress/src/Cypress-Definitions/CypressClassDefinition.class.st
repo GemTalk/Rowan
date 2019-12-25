@@ -329,6 +329,11 @@ CypressClassDefinition >> gs_options: aCollection [
 
 ]
 
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_reservedOop [
+	^ ''
+]
+
 { #category : 'comparing' }
 CypressClassDefinition >> hash [
 

@@ -24,7 +24,7 @@ Dictionary >> _writeCypressJsonOn: aStream indent: startIndent [
 			[:key |
 			| value |
 			value := self at: key.
-			cnt := cnt + 1.
+			value ifNotNil: [ cnt := cnt + 1.
 			indent timesRepeat: [aStream tab].
 			key _writeCypressJsonOn: aStream indent: indent.
 			aStream nextPutAll: ' : '.
@@ -33,7 +33,7 @@ Dictionary >> _writeCypressJsonOn: aStream indent: startIndent [
 				ifTrue: 
 					[aStream
 						nextPutAll: ',';
-						lf]].
+						lf]]].
 	self size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
 	aStream nextPutAll: ' }'
 

@@ -99,18 +99,20 @@ RowanProjectService >> branch: anObject [
 { #category : 'client commands' }
 RowanProjectService >> changes [
 
-	| jadeServer |
+	| jadeServer projectNames |
 	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
-	(Rowan projectTools diff
-		patchesForProjectNamed: 'Rowan') do: [:assoc | 
-			"key is packageName, value is a CypressPatch"
-			| patch |
-			patch := assoc value.
-			changes add:(jadeServer new
-				_mcDescriptionOfPatch: patch
-				baseName: 'closest ancestor'
-				alternateName: nil) ].
+	projectNames := name ifNil: [ Rowan projectNames ] ifNotNil: [ { name } ].
+	projectNames do: [:aProjectName | 
+		(Rowan projectTools diff
+			patchesForProjectNamed: aProjectName) do: [:assoc | 
+				"key is packageName, value is a CypressPatch"
+				| patch |
+				patch := assoc value.
+				changes add:(jadeServer new
+					_mcDescriptionOfPatch: patch
+					baseName: 'closest ancestor'
+					alternateName: nil) ] ].
 	self refresh.
 	RowanCommandResult addResult: self.
 ]
@@ -247,7 +249,7 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 		cloneSpecUrl: url
 		gitRootPath: rootPath
 		useSsh: useSsh.
-	RowanBrowserService new updateProjects.
+	(RowanBrowserService new organizer: organizer) updateProjects.
 ]
 
 { #category : 'rowan' }
@@ -365,10 +367,16 @@ RowanProjectService >> refresh [
 
 { #category : 'client commands' }
 RowanProjectService >> reloadProject [
-
-	[Rowan projectTools load loadProjectNamed: name] 
-		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ]
+  [ Rowan projectTools load loadProjectNamed: name ]
+    on: Warning
+    do: [ :ex | 
+      Transcript
+        cr;
+        show: ex description.
+      ex resume ].
+  self update.
+  RowanCommandResult addResult: self.
+  RowanBrowserService new packagesWithTests
 ]
 
 { #category : 'rowan' }
@@ -431,8 +439,10 @@ RowanProjectService >> rowanSkew [
 
 { #category : 'perform' }
 RowanProjectService >> servicePerform: symbol withArguments: collection [
-	super servicePerform: symbol withArguments: collection.
-	self update.
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
 ]
 
 { #category : 'client commands' }
@@ -494,6 +504,11 @@ RowanProjectService >> updateInternalService: updatedService [
 		packageService = updatedService ifTrue:[
 			packages at: index put: updatedService
 		]].
+]
+
+{ #category : 'testing' }
+RowanProjectService >> wasDeleted [
+  ^ self projectIsLoaded not
 ]
 
 { #category : 'client commands' }

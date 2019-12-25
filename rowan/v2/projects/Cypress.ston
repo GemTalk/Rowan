@@ -1,0 +1,21 @@
+RwEmbeddedLoadSpecificationV2 {
+	#specName : 'Cypress',
+	#projectName : 'Cypress',
+	#gitUrl : 'https://github.com/GemTalk/Rowan',
+	#revision : 'master',
+	#projectSpecFile : 'platforms/gemstone/projects/Cypress/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#groupNames : [
+		'core'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : 'Cypress --- package loader used with V1 ... deprecated in V2'
+}

@@ -90,21 +90,20 @@ RwHybridBrowserToolTest >> testHybridClassCopy [
 		category: 'accessing'.
 	normalClass rwComment: comment.
 
-	self assert: normalClass new foo isNil.
-	self assert: normalClass bar isNil.
-	self assert: normalClass baz isNil.
+	self assert: (normalClass new perform: #foo) isNil.
+	self assert: (normalClass  perform: #bar) isNil.
+	self assert: (normalClass  perform: #baz) isNil.
 	self assert: normalClass comment = comment.
 
 	newClassName := 'SimpleHybridNormal1Copy'.
 	newClass := Rowan projectTools browser copyClassNamed: className to: newClassName.
 
-	self assert: newClass new foo isNil.
-	self assert: newClass bar isNil.
-	self assert: newClass baz isNil.
+	self assert: (newClass new  perform: #foo) isNil.
+	self assert: (newClass  perform: #bar) isNil.
+	self assert: (newClass  perform: #baz) isNil.
 	self assert: newClass comment = comment.
 
 	self assert: (Rowan globalNamed: className) == normalClass
-
 ]
 
 { #category : 'tests' }
@@ -237,7 +236,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateB [
 	template := browserTool
 		classCreationTemplateForSubclassOf: 'Object'
 		className: 'SimpleHybridByte1'
-		type: 'bytes'
+		type: 'byteSubclass'
 		category: packageName1
 		packageName: nil.
 	byteClass := template evaluate.
@@ -294,21 +293,20 @@ RwHybridBrowserToolTest >> testHybridClassRename [
 		category: 'accessing'.
 	normalClass rwComment: comment.
 
-	self assert: normalClass new foo isNil.
-	self assert: normalClass bar isNil.
-	self assert: normalClass baz isNil.
+	self assert: (normalClass new perform: #foo) isNil.
+	self assert: (normalClass perform: #bar) isNil.
+	self assert: (normalClass perform: #baz) isNil.
 	self assert: normalClass comment = comment.
 
 	newClassName := 'SimpleHybridNormal1Copy'.
 	newClass := Rowan projectTools browser renameClassNamed: className to: newClassName.
 
-	self assert: newClass new foo isNil.
-	self assert: newClass bar isNil.
-	self assert: newClass baz isNil.
+	self assert: (newClass new perform: #foo) isNil.
+	self assert: (newClass perform: #bar) isNil.
+	self assert: (newClass perform: #baz) isNil.
 	self assert: newClass comment = comment.
 
 	self assert: (Rowan globalNamed: className) isNil
-
 ]
 
 { #category : 'tests' }
@@ -343,9 +341,9 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 		category: 'accessing'
 		packageName: packageName2.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2
@@ -382,9 +380,9 @@ RwHybridBrowserToolTest >> testHybridCompileMethodMoveToProtocol [
 		rwCompileMethod: 'bar ^''bar'''
 		category: 'accessing'.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 	self
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = 'accessing'.
@@ -395,7 +393,7 @@ RwHybridBrowserToolTest >> testHybridCompileMethodMoveToProtocol [
 		rwCompileMethod: 'bar "" ^''bar'''
 		category: 'new category'.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	self
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = 'new category'.
@@ -431,9 +429,9 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove [
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -441,8 +439,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove [
 	normalClass rwRemoveSelector: #'foo'.
 	normalClass class rwRemoveSelector: #'bar'.
 
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance foo ] raise: MessageNotUnderstood.
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
+	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood.
 
 	fooMethod := normalClass
 		rwCompileMethod: 'foo ^''foo'''
@@ -454,14 +452,14 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove [
 	self assert: fooMethod rowanPackageName = packageName2.
 	self assert: barMethod rowanPackageName = packageName1.
 
-	self assert: normalClass bar = 'bar'.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	normalClass rwRemoveSelector: #'foo'.
 	normalClass class rwRemoveSelector: #'bar'.
 
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance foo ] raise: MessageNotUnderstood
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
+	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood
 ]
 
 { #category : 'tests' }
@@ -498,9 +496,9 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 		category: '*' , packageName2 asLowercase.
 
 "validate"
-	self assert: normalClass bar = 'bar'.
+	self assert: (normalClass perform: #bar) = 'bar'.
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
@@ -518,8 +516,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 	normalClass class rwRemoveSelector: #'bar'.
 
 "validate"
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance foo ] raise: MessageNotUnderstood.
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
+	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -541,8 +539,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 	self assert: fooMethod rowanPackageName = packageName2.
 	self assert: barMethod rowanPackageName = packageName1.
 
-	self assert: normalClass bar = 'bar'.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -557,8 +555,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 	normalClass class rwRemoveSelector: #'bar'.
 
 "validate"
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance foo ] raise: MessageNotUnderstood.
+	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
+	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -567,7 +565,6 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
@@ -630,14 +627,14 @@ RwHybridBrowserToolTest >> testHybridComplicatedClassCopy [
 	self assert: meth rowanPackageName = project2PackageName2. 
 
 	self assert: testClass notNil.
-	self assert: testClass cvar1 = 2.
-	self assert: testClass civar1 = 1.
-	self assert: testClass fooClass = 1.
-	self assert: testClass barClass = 1.
+	self assert: (testClass perform: #cvar1) = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #fooClass) = 1.
+	self assert: (testClass perform: #barClass) = 1.
 
-	self assert: testClass new ivar1 isNil.
-	self assert: testClass new foo = 1.
-	self assert: testClass new bar = 1.
+	self assert: (testClass new perform: #ivar1) isNil.
+	self assert: (testClass new perform: #foo) = 1.
+	self assert: (testClass new perform: #bar) = 1.
 
 	self assert: (testClass categoryOfSelector: #foo) = ( '*' , project1PackageName2 asLowercase) asSymbol.
 	self assert: (testClass class categoryOfSelector: #fooClass) = ( '*' , project1PackageName2 asLowercase) asSymbol.
@@ -650,306 +647,19 @@ RwHybridBrowserToolTest >> testHybridComplicatedClassCopy [
 	self assert: newClass == (Rowan globalNamed: newClassName).
 
 	self assert: newClass ~~ testClass.
-	self assert: newClass cvar1 = 2.
-	self assert: newClass civar1 = 1.
-	self assert: newClass fooClass = 1.
-	self assert: newClass barClass = 1.
+	self assert: (newClass perform: #cvar1) = 2.
+	self assert: (newClass perform: #civar1) = 1.
+	self assert: (newClass perform: #fooClass) = 1.
+	self assert: (newClass perform: #barClass) = 1.
 
-	self assert: newClass new ivar1 isNil.
-	self assert: newClass new foo = 1.
-	self assert: newClass new bar = 1.
+	self assert: (newClass new perform: #ivar1) isNil.
+	self assert: (newClass new perform: #foo) = 1.
+	self assert: (newClass new perform: #bar) = 1.
 
 	self assert: (newClass categoryOfSelector: #foo) = ( '*' , project1PackageName2 asLowercase) asSymbol.
 	self assert: (newClass class categoryOfSelector: #fooClass) = ( '*' , project1PackageName2 asLowercase) asSymbol.
 	self assert: (newClass categoryOfSelector: #bar) = ( '*' , project2PackageName2 asLowercase) asSymbol.
 	self assert: (newClass class categoryOfSelector: #barClass) = ( '*' , project2PackageName2 asLowercase) asSymbol.
-
-]
-
-{ #category : 'tests - packages' }
-RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
-
-	"Write project to disk, make a few modifications and then reload the project from disk"
-
-	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 
-		normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage 
-		theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 
-		projectDefinition useExport |
-
-	useExport := false.
-
-	projectName := 'HybridPatchProjectA'.
-	packageName1 := 'Hybrid-Patch-Core'.
-	packageName2 := 'Hybrid-Patch-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
-	projectDefinition := self
-		_loadDiskProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment: 'hybrid browser project package patch test'
-		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'.
-	className1 := 'SimpleHybridNormalReload1'.
-	className2 := 'SimpleHybridNormalReload2'.
-	classNames := {className1.
-	className2}.
-
-	normalClass1 := Object
-		rwSubclass: className1
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass1 rowanPackageName = packageName1.
-
-	normalClass1 
-		rwCompileMethod:  'foo ^''foo''' 
-		category: 'accessing'.
-	normalClass1 class
-		rwCompileMethod: 'bar ^''bar'''
-		category: '*' , packageName2 asLowercase.
-
-	self assert: normalClass1 bar = 'bar'.
-	normalInstance1 := normalClass1 new.
-	self assert: normalInstance1 foo = 'foo'.
-
-	normalClass2 := Object
-		rwSubclass: className2
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass2 rowanPackageName = packageName1.
-
-	normalInstance2 := normalClass2 new.
-	self should: [ normalInstance2 biz ] raise: MessageNotUnderstood.
-	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
-
-	projectTools := Rowan projectTools.
-	projectDefinition exportSpecification.	"when should the spec be exported? ... not on every write since we do expect the spec to manually modified over time"
-	useExport
-		ifTrue: [ projectDefinition export ]
-		ifFalse: [ projectTools write writeProjectNamed: projectName ].
-	projectTools commit
-		commitProjectNamed: projectName
-		message:
-			'Added SimpleHybridNormalReload1 and SimpleHybridNormalReload2 classes and extension methods'.
-
-	writtenStateValidationBlock := [ 
-	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded package structure and verify that it matches the original expected structure"
-
-	theLoadedProject
-		loadedPackagesDo: [ :loadedProject :loadedPackage | 
-			self assert: theLoadedProject == loadedProject.
-			theLoadedPackage := loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			self assert: (packageNames includes: loadedPackage name) ]
-		loadedClassedDo: [ :loadedProject :loadedPackage :loadedClass | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			theLoadedClassOrClassExtension := loadedClass.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					loadedClass name = className1
-						ifTrue: [ self assert: (loadedClass propertyAt: 'instvars') isEmpty ]
-						ifFalse: [ 
-							loadedClass name = className2
-								ifTrue: [ self assert: (loadedClass propertyAt: 'instvars') isEmpty ]
-								ifFalse: [ 
-									self
-										assert: false
-										description:
-											'Unexpected loaded class ' , loadedClass name printString , ' in '
-												, packageName2 ] ] ]
-				ifFalse: [ self assert: false description: 'No class expected in ' , packageName2 ] ]
-		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			theLoadedClassOrClassExtension := loadedClassExtension.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self
-						assert: false
-						description: 'no classes expected in ' , packageName1 printString ].
-			loadedPackage name = packageName2
-				ifTrue: [ self assert: (classNames includes: loadedClassExtension name) ] ]
-		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			self assert: theLoadedClassOrClassExtension == loadedClassOrClassExtension.
-
-			loadedPackage name = packageName1
-				ifTrue: [ self assert: (#(#'foo') includes: loadedMethod selector) ].
-			loadedPackage name = packageName2
-				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in '.
-					packageName2 ] ]
-		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self
-						assert: false
-						description: 'no instance methods expected in ' , packageName1 ].
-			loadedPackage name = packageName2
-				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ] ].
-
-	writtenStateValidationBlock value.
-
-	normalClass1 := Object
-		rwSubclass: className1
-		instVarNames: #('ivar1')
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().	"add new instance variable to class"
-
-	normalInstance1 := normalClass1 new.
-
-	normalClass1 rwCompileMethod: 'foo "comment" ^''foo''' category: 'accessing'.	"change method"
-	normalClass1 rwCompileMethod: 'ivar1 ^ivar1' category: 'accessing'.	"add new instance method"
-	normalClass1 class
-		rwCompileMethod: 'baz ^''baz'''
-		category: '*' , packageName2 asLowercase.	"add new class-side method"
-	normalClass1 class rwRemoveSelector: #'bar'.	"remove existing method"
-
-	self assert: normalInstance1 foo = 'foo'.
-	self assert: normalInstance1 ivar1 = nil.
-	self assert: normalClass1 baz = 'baz'.
-	self should: [ normalClass1 bar ] raise: MessageNotUnderstood.
-
-	normalClass2 rwCompileMethod: 'biz ^''biz''' category: 'accessing'.	"add new instance method"
-	normalClass2
-		rwCompileMethod: 'biff ^''biff'''
-		category: '*' , packageName2 asLowercase.	"add new class-side method"
-
-	normalInstance2 := normalClass2 new.
-	self assert: normalInstance2 biz = 'biz'.
-	self assert: normalInstance2 biff = 'biff'.
-
-	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded package structure and verify that it matches the expected structure"
-
-	theLoadedProject
-		loadedPackagesDo: [ :loadedProject :loadedPackage | 
-			self assert: theLoadedProject == loadedProject.
-			theLoadedPackage := loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			self assert: (packageNames includes: loadedPackage name) ]
-		loadedClassedDo: [ :loadedProject :loadedPackage :loadedClass | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			theLoadedClassOrClassExtension := loadedClass.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					loadedClass name = className1
-						ifTrue: [ self assert: (loadedClass propertyAt: 'instvars') = #('ivar1') ]
-						ifFalse: [ 
-							loadedClass name = className2
-								ifTrue: [ self assert: (loadedClass propertyAt: 'instvars') isEmpty ]
-								ifFalse: [ 
-									self
-										assert: false
-										description:
-											'Unexpected loaded class ' , loadedClass name printString , ' in '
-												, packageName2 ] ] ]
-				ifFalse: [ self assert: false description: 'No class expected in ' , packageName2 ] ]
-		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			theLoadedClassOrClassExtension := loadedClassExtension.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self
-						assert: false
-						description: 'no classes expected in ' , packageName1 printString ].
-			loadedPackage name = packageName2
-				ifTrue: [ self assert: (classNames includes: loadedClassExtension name) ] ]
-		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			self assert: theLoadedClassOrClassExtension == loadedClassOrClassExtension.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					loadedMethod loadedClass name = className1
-						ifTrue: [ self assert: (#(#'foo' #'ivar1') includes: loadedMethod selector) ]
-						ifFalse: [ 
-							loadedMethod loadedClass name = className2
-								ifTrue: [ self assert: (#(#'biz') includes: loadedMethod selector) ]
-								ifFalse: [ 
-									self
-										assert: false
-										description:
-											'Unexpected loaded method ' , loadedMethod selector printString , ' in '
-												, packageName1 ] ] ].
-			loadedPackage name = packageName2
-				ifTrue: [ 
-					loadedMethod loadedClass name = className2
-						ifTrue: [ self assert: (#(#'biff') includes: loadedMethod selector) ]
-						ifFalse: [ 
-							self
-								assert: false
-								description:
-									'Unexpected loaded method ' , loadedMethod selector printString , ' in '
-										, packageName2 ] ] ]
-		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self
-						assert: false
-						description: 'no instance methods expected in ' , packageName1 ].
-			loadedPackage name = packageName2
-				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ].
-
-	projectTools load loadProjectNamed: projectName.	"restore original state of project"
-
-	normalClass1 := Rowan globalNamed: className1.
-	normalInstance1 := normalClass1 new.
-
-	self assert: normalClass1 bar = 'bar'.
-	self assert: normalInstance1 foo = 'foo'.
-	self should: [ normalInstance1 ivar1 ] raise: MessageNotUnderstood.
-	self should: [ normalClass1 baz = 'baz' ] raise: MessageNotUnderstood.
-
-	oldNormalClass2 := normalClass2.
-	normalClass2 := Rowan globalNamed: className2.
-	self assert: oldNormalClass2 == normalClass2.
-	normalInstance2 := normalClass2 new.
-	self should: [ normalInstance2 biz ] raise: MessageNotUnderstood.
-	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
-
-	writtenStateValidationBlock value	"verify that original state is restored"
 ]
 
 { #category : 'tests' }
@@ -986,7 +696,7 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 	normalClass
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*' , packageName2 asLowercase.
-	self assert: normalClass new foo = 'foo'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
 
 	otherClass := Object
 		rwSubclass: className2
@@ -1001,13 +711,13 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 	otherClass
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*' , packageName1 asLowercase.
-	self assert: otherClass new foo = 'foo'.
+	self assert: (otherClass new perform: #foo) = 'foo'.
 
 	Rowan projectTools browser removePackageNamed: packageName1.
 
 	self assert: (Rowan globalNamed: className1) isNil.
 	self assert: (Rowan globalNamed: className2) == otherClass.
-	self should: [ otherClass new foo ] raise: MessageNotUnderstood.
+	self should: [ otherClass new perform: #foo ] raise: MessageNotUnderstood.
 
 	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded thing structure and verify that it matches the expected structure"
 
@@ -1087,13 +797,13 @@ RwHybridBrowserToolTest >> testHybridModifyExtensionCompileMethod [
 	self assert: barMethod rowanPackageName = packageName2.
 
 	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
+	self assert: (normalInstance perform: #foo) = 'foo'.
 	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
 	self assert: fooMethod rowanPackageName = packageName2.
 
 	fooMethod := normalClass rwCompileMethod: 'foo ^''bar''' category: protocol.
 
-	self assert: (x := normalInstance foo) = 'bar'.
+	self assert: (x := normalInstance perform: #foo) = 'bar'.
 	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
 	self assert: fooMethod rowanPackageName = packageName2.
 
@@ -1101,7 +811,7 @@ RwHybridBrowserToolTest >> testHybridModifyExtensionCompileMethod [
 		rwCompileMethod: 'bar ^''foo'''
 		category: protocol.
 
-	self assert: (x := normalClass bar) = 'foo'.
+	self assert: (x := normalClass perform: #bar) = 'foo'.
 	self
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = protocol.
@@ -1545,10 +1255,10 @@ RwHybridBrowserToolTest >> testHybridMoveClassWithMethodsAndExtensionMethodsToEx
 		rwCompileMethod: 'ext2 ^''ext2'''
 		category: '*', packageName3 asLowercase.
 
-	self assert: normalClass new foo = 'foo'.
-	self assert: normalClass new ext1 = 'ext1'.
-	self assert: normalClass bar = 'bar'.
-	self assert: normalClass ext2 = 'ext2'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
+	self assert: (normalClass new perform: #ext1) = 'ext1'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalClass perform: #ext2) = 'ext2'.
 
 	self assert: normalClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
@@ -1565,10 +1275,10 @@ RwHybridBrowserToolTest >> testHybridMoveClassWithMethodsAndExtensionMethodsToEx
 		category: packageName3
 		options: #().
 
-	self assert: normalClass new foo = 'foo'.
-	self assert: normalClass new ext1 = 'ext1'.
-	self assert: normalClass bar = 'bar'.
-	self assert: normalClass ext2 = 'ext2'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
+	self assert: (normalClass new perform: #ext1) = 'ext1'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalClass perform: #ext2) = 'ext2'.
 
 	fooMethod := movedNormalClass compiledMethodAt: #foo.
 	barMethod := movedNormalClass class compiledMethodAt: #bar.
@@ -1581,7 +1291,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassWithMethodsAndExtensionMethodsToEx
 	self assert: barMethod rowanPackageName = packageName3.
 	self assert: ext1Method rowanPackageName = packageName3.
 	self assert: ext2Method rowanPackageName = packageName3.
-
 ]
 
 { #category : 'tests' }
@@ -1621,10 +1330,10 @@ RwHybridBrowserToolTest >> testHybridMoveClassWithMethodsAndExtensionMethodsToPa
 		rwCompileMethod: 'ext2 ^''ext2'''
 		category: '*', packageName3 asLowercase.
 
-	self assert: normalClass new foo = 'foo'.
-	self assert: normalClass new ext1 = 'ext1'.
-	self assert: normalClass bar = 'bar'.
-	self assert: normalClass ext2 = 'ext2'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
+	self assert: (normalClass new perform: #ext1) = 'ext1'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalClass perform: #ext2) = 'ext2'.
 
 	self assert: normalClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
@@ -1641,10 +1350,10 @@ RwHybridBrowserToolTest >> testHybridMoveClassWithMethodsAndExtensionMethodsToPa
 		category: packageName2
 		options: #().
 
-	self assert: normalClass new foo = 'foo'.
-	self assert: normalClass new ext1 = 'ext1'.
-	self assert: normalClass bar = 'bar'.
-	self assert: normalClass ext2 = 'ext2'.
+	self assert: (normalClass new perform: #foo) = 'foo'.
+	self assert: (normalClass new perform: #ext1) = 'ext1'.
+	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (normalClass perform: #ext2) = 'ext2'.
 
 	fooMethod := movedNormalClass compiledMethodAt: #foo.
 	barMethod := movedNormalClass class compiledMethodAt: #bar.
@@ -1657,7 +1366,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassWithMethodsAndExtensionMethodsToPa
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: ext1Method rowanPackageName = packageName3.
 	self assert: ext2Method rowanPackageName = packageName3.
-
 ]
 
 { #category : 'tests' }
@@ -2214,10 +1922,10 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsA [
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
-	self assert: newSubclassVersion foo = 'foo'.
-	self assert: newSubclassVersion foo1 = 'foo'.
-	self assert: newSubclassVersion new foo = 'foo'.
-	self assert: newSubclassVersion new foo1 = 'foo'
+	self assert: (newSubclassVersion perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion perform: #foo1) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo1) = 'foo'
 ]
 
 { #category : 'tests' }
@@ -2269,10 +1977,10 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
-	self assert: newSubclassVersion foo = 'foo'.
-	self assert: newSubclassVersion foo1 = 'foo'.
-	self assert: newSubclassVersion new foo = 'foo'.
-	self assert: newSubclassVersion new foo1 = 'foo'
+	self assert: (newSubclassVersion perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion perform: #foo1) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo1) = 'foo'
 ]
 
 { #category : 'tests' }
@@ -2328,10 +2036,10 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
-	self assert: newSubclassVersion foo = 'foo'.
-	self assert: newSubclassVersion foo1 = 'foo'.
-	self assert: newSubclassVersion new foo = 'foo'.
-	self assert: newSubclassVersion new foo1 = 'foo'
+	self assert: (newSubclassVersion perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion perform: #foo1) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo) = 'foo'.
+	self assert: (newSubclassVersion new perform: #foo1) = 'foo'
 ]
 
 { #category : 'tests' }
@@ -2420,222 +2128,6 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesB [
 	newSubclassVersion4 := Rowan globalNamed: subclass4 name.
 	self assert: newSubclassVersion4 ~~ subclass4.
 	self assert: newSubclassVersion4 superClass == newSubclassVersion3
-]
-
-{ #category : 'tests - packages' }
-RwHybridBrowserToolTest >> testHybridProjectLoad [
-
-	"Write project to disk, make a few modifications and then reload the project from disk"
-
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod 
-		barMethod normalInstance projectTools bazMethod ivar1Method className 
-		theLoadedProject theLoadedPackage theLoadedClassOrClassExtension 
-		writtenStateValidationBlock project |
-	projectName := 'HybridPatchProjectA'.
-	packageName1 := 'Hybrid-Patch-Core'.
-	packageName2 := 'Hybrid-Patch-Extensions'.
-	packageNames := { packageName1 . packageName2 }.
-
-	projectTools := Rowan projectTools.
-
-	self
-		_loadDiskProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment: 'hybrid browser project package patch test'
-		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'.
-	className := 'SimpleHybridNormalReload'.
-
-	normalClass := Object
-		rwSubclass: className
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass rowanPackageName = packageName1.
-
-	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
-	barMethod := normalClass class
-		rwCompileMethod: 'bar ^''bar'''
-		category: '*' , packageName2 asLowercase.
-
-	self assert: normalClass bar = 'bar'.
-	normalInstance := normalClass new.
-	self assert: normalInstance foo = 'foo'.
-
-	project := RwProject newNamed: projectName.
-	project exportSpecification.
-	projectTools write writeProjectNamed: projectName.
-	projectTools commit
-		commitProjectNamed: projectName
-		message: 'Added Simple class and extension methods'.
-
-	writtenStateValidationBlock := [ 
-	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded package structure and verify that it matches the original expected structure"
-
-	theLoadedProject
-		loadedPackagesDo: [ :loadedProject :loadedPackage | 
-			self assert: theLoadedProject == loadedProject.
-			theLoadedPackage := loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			self assert: (packageNames includes: loadedPackage name) ]
-		loadedClassedDo: [ :loadedProject :loadedPackage :loadedClass | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			theLoadedClassOrClassExtension := loadedClass.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self assert: loadedClass name = className.
-					self assert: (loadedClass propertyAt: 'instvars') isEmpty ]
-				ifFalse: [ self assert: false description: 'No class expected in ' , packageName2 ] ]
-		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			theLoadedClassOrClassExtension := loadedClassExtension.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self
-						assert: false
-						description: 'no classes expected in ' , packageName1 printString ].
-			loadedPackage name = packageName2
-				ifTrue: [ self assert: loadedClassExtension name = className ] ]
-		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			self assert: theLoadedClassOrClassExtension == loadedClassOrClassExtension.
-
-			loadedPackage name = packageName1
-				ifTrue: [ self assert: (#(#'foo') includes: loadedMethod selector) ].
-			loadedPackage name = packageName2
-				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in '.
-					packageName2 ] ]
-		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self
-						assert: false
-						description: 'no instance methods expected in ' , packageName1 ].
-			loadedPackage name = packageName2
-				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ] ].
-
-	writtenStateValidationBlock value.
-
-	normalClass := Object
-		rwSubclass: className
-		instVarNames: #('ivar1')
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().	"add new instance variable to class"
-
-	normalInstance := normalClass new.
-
-	fooMethod := normalClass
-		rwCompileMethod: 'foo "comment" ^''foo'''
-		category: 'accessing'.	"change method"
-	ivar1Method := normalClass
-		rwCompileMethod: 'ivar1 ^ivar1'
-		category: 'accessing'.	"add new instance method"
-	bazMethod := normalClass class
-		rwCompileMethod: 'baz ^''baz'''
-		category: '*' , packageName2 asLowercase.	"add new class-side method"
-	normalClass class rwRemoveSelector: #'bar'.	"remove existing method"
-
-	self assert: normalInstance foo = 'foo'.
-	self assert: normalInstance ivar1 = nil.
-	self assert: normalClass baz = 'baz'.
-	self should: [ normalClass bar ] raise: MessageNotUnderstood.
-
-	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded package structure and verify that it matches the expected structure"
-
-	theLoadedProject
-		loadedPackagesDo: [ :loadedProject :loadedPackage | 
-			self assert: theLoadedProject == loadedProject.
-			theLoadedPackage := loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			self assert: (packageNames includes: loadedPackage name) ]
-		loadedClassedDo: [ :loadedProject :loadedPackage :loadedClass | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			theLoadedClassOrClassExtension := loadedClass.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self assert: loadedClass name = className.
-					self assert: (loadedClass propertyAt: 'instvars') = #('ivar1') ]
-				ifFalse: [ self assert: false description: 'No class expected in ' , packageName2 ] ]
-		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			theLoadedClassOrClassExtension := loadedClassExtension.
-
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self
-						assert: false
-						description: 'no classes expected in ' , packageName1 printString ].
-			loadedPackage name = packageName2
-				ifTrue: [ self assert: loadedClassExtension name = className ] ]
-		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
-			self assert: theLoadedProject == loadedProject.
-			self assert: theLoadedPackage == loadedPackage.
-			self
-				assert:
-					(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
-			self assert: theLoadedClassOrClassExtension == loadedClassOrClassExtension.
-
-			loadedPackage name = packageName1
-				ifTrue: [ self assert: (#(#'foo' #'ivar1') includes: loadedMethod selector) ].
-			loadedPackage name = packageName2
-				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in '.
-					packageName2 ] ]
-		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
-			loadedPackage name = packageName1
-				ifTrue: [ 
-					self
-						assert: false
-						description: 'no instance methods expected in ' , packageName1 ].
-			loadedPackage name = packageName2
-				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ].
-
-	projectTools load loadProjectNamed: projectName.	"restore original state of project"
-
-	normalClass := Rowan globalNamed: className.
-	normalInstance := normalClass new.
-
-	self assert: normalClass bar = 'bar'.
-	self assert: normalInstance foo = 'foo'.
-	self should: [ normalInstance ivar1 ] raise: MessageNotUnderstood.
-	self should: [ normalClass baz = 'baz' ] raise: MessageNotUnderstood.
-
-	writtenStateValidationBlock value	"verify that original state is restored"
 ]
 
 { #category : 'tests' }

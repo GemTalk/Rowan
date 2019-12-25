@@ -1,6 +1,11 @@
 Extension { #name : 'RwGsPlatform' }
 
 { #category : '*rowan-services-extensions' }
+RwGsPlatform >> answeringServiceClass [
+  ^ RowanAnsweringService
+]
+
+{ #category : '*rowan-services-extensions' }
 RwGsPlatform >> browserServiceClass [
 
 	^ RowanBrowserService
@@ -24,6 +29,7 @@ RwGsPlatform >> jadeServerClassNamed: className [
 	| jadeClasses |
 	jadeClasses := Array with: (UserGlobals at: #JadeServer). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
+	jadeClasses add: (UserGlobals at: #JadeServer64bit35). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
 ]
 
@@ -70,9 +76,11 @@ RwGsPlatform >> serviceClasses [
 	| array |
 	array := Array with: RowanService. 
 	array add: RowanAnsweringService; 
+		add: RowanAutoCommitService; 
 		add: RowanBrowserService;
 		add: RowanClassService; 
 		add: RowanDebuggerService; 
+		add: RowanDictionaryService; 
 		add: RowanFrameService;
 		add: RowanLoggingService;
 		add: RowanMethodService;

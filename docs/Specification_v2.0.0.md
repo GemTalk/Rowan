@@ -4,14 +4,24 @@
 ## Rowan Specification
 ### Defining an image
 The numbered items marked with `--` are obsolete and subject to a planned change.
-1. A Smalltalk image is composed of a collection of configurations.
-2. A configuration is a named collection of configurations and packages.
+1. A Smalltalk image is composed of a collection of loaded projects.
+1. A loaded project is a collection of loaded components defined by a load specification.
+1. A load specification is a named collection of project properties:
+  1. defining the structure of the project on disk:
+    1. `specs` directory where load specifications are stored.
+    2. `components` directory where component definitions are stored.
+    3. `projects` directory where required project specifications are stored.
+    4. `packages` directory where packages are stored.
+  2. the list of componentNames and groups to be loaded when the specification is resolved.
+  3. the url and type of the repository technology to be used for storing the project artifacts on disk.
+2. A component is a named collection of components and packages.
 3. A package is a named collection of class definitions, class extensions and method definitions.
-4. A package may only be present in one loaded configuration.
+4. A package may only be present in one loaded component.
 4. A class definition defines the attributes of a class. The class so defined is considered to be defined in the package. A class definition includes a list of class and instance methods for the class, that are also considered to be defined in the package.
 4. A class extension defines a list of class and instance side methods for a class that is not defined in the package.
 5. A method definition defines the source code and protocol of a method.
-3. A configuration is loaded from a project.
+
+3. A component is loaded from a project.
 4. --A project is a named collection of paths to directory structure that may be physical disk, within a git commit or in a memory filesystem, etc.
 5. --There are three separate root directories in a project: specs, configurations, and src. The specs directory contains a collection of load specifications stored as STON files (.ston extension). The configurations directory contains a collection of top-level and nested configurations stored as STON files. The src directory contains a collection of packages stored using Filetree or Tonel disk package formats.
 6. All packages referenced in a configuration will be found in the src directory of the project associated with the configuration.

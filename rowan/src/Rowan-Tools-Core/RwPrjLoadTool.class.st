@@ -64,7 +64,7 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 							"set gs_symbolDictionary for the first time, or (potentially) override if project freshly read 
 								from disk (loadedProjectInfo available)"
 							packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
-	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectDefinitionSet.
+	diff := projectSetDefinitionToLoad compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
@@ -84,36 +84,20 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition [
-
-	^ self loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
-]
-
-{ #category : 'load project definitions' }
-RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes [
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
-
-	| projectSetDefinition |
-	projectSetDefinition := projectDefinition repositoryRoot exists
-		ifTrue: [ 
-			Rowan projectTools read
-				readProjectSetForComponentProjectDefinition: projectDefinition
-				withConfigurations: projectDefinition loadedConfigurationNames
-				groupNames: projectDefinition loadedGroupNames 
-				platformConfigurationAttributes: platformConfigurationAttributes ]
-		ifFalse: [ 
-			RwProjectSetDefinition new
-				addProject: projectDefinition;
-				yourself ].
-	^ self loadProjectSetDefinition: projectSetDefinition
-]
-
-{ #category : 'load project definitions' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
+	^ self
+		loadProjectDefinition: projectDefinition
+		instanceMigrator: Rowan platform instanceMigrator
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadTool >> loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
-	^ self loadProjectSetDefinition: projectSetDefinition
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'load project by name' }

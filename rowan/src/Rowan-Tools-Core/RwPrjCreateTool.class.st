@@ -11,14 +11,7 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPathIn useGit: useGit 
 	gitTool := Rowan gitTools.
 	repoPath := repoPathIn asFileReference.
 	repoPath exists
-		ifTrue: [ 
-			(self
-				confirm:
-					'There is already a directory named ' , repoPath pathString printString
-						, '. The contents of the directory will be deleted if you continue.')
-				== true
-				ifFalse: [ ^ abortBlock value ].
-			repoPath ensureDeleteAllChildren ]
+		ifTrue: [^ abortBlock value  ]
 		ifFalse: [ repoPath ensureCreateDirectory ].
 	useGit
 		ifTrue: [ 
@@ -28,26 +21,10 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPathIn useGit: useGit 
 					gitTool gitinitIn: repoPath pathString with: '' ] ]
 ]
 
-{ #category : 'component project defintion creation' }
-RwPrjCreateTool >> createComponentProject: componentProjectDefinition [
-
-	"Create create new repository on `disk`, based on the given repository definition."
-
-	self createProjectRepository: componentProjectDefinition projectRef.
-
-	componentProjectDefinition exportProjects.
-	componentProjectDefinition exportComponents.
-	componentProjectDefinition exportPackages.
-
-	componentProjectDefinition register.
-
-	^ componentProjectDefinition
-]
-
 { #category : 'project repository creation' }
 RwPrjCreateTool >> createProjectRepository: projectReferenceDefinition [
 
-	"Create create new repository on `disk`, based on the given repository definition."
+	"Create create new repository on `disk`, based on the given repository definition, if it does not already exist."
 
 	| repositoryDefinition |
 	repositoryDefinition := projectReferenceDefinition repositoryDefinition.
@@ -55,8 +32,7 @@ RwPrjCreateTool >> createProjectRepository: projectReferenceDefinition [
 		repositoryDefinition repositoryRoot 
 		useGit: projectReferenceDefinition useGit 
 		abort: [
-			"abort occurs because directory exists and user has not confirmed that the directory should be deleted"
-			"cofirm that the repository appears to be complete relative to this project ... we will likely be writing new information to the repo"
+			"repository already exists on disk, confirm that the repository matches the disk information and continue"
 			projectReferenceDefinition validateRepository.
 			^ projectReferenceDefinition ].
 

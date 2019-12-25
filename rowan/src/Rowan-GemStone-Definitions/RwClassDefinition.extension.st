@@ -101,10 +101,8 @@ RwClassDefinition >> gs_reservedOop [
 
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_reservedOop: aString [
-
-	self properties
-		at: 'gs_reservedoop'
-		put: aString
+	aString isEmpty not
+		ifTrue: [ self properties at: 'gs_reservedoop' put: aString ]
 ]
 
 { #category : '*rowan-gemstone-definitions' }

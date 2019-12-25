@@ -18,7 +18,6 @@ RwGitTool >> gitbranchIn: gitRepoPath with: args [
 
 { #category : 'smalltalk api' }
 RwGitTool >> gitBranchNameIn: gitRepoPath [
-
 	"return current branch for git repository located at gitPath"
 
 	| command result |
@@ -28,9 +27,8 @@ RwGitTool >> gitBranchNameIn: gitRepoPath [
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitcheckoutIn: gitRepoPath with: args [
-
-	^ self performGitCommand: 'checkout' in: gitRepoPath pathString with: args
+RwGitTool >> gitcheckoutIn: gitRootReference with: args [
+	^ self performGitCommand: 'checkout' in: gitRootReference pathString with: args
 ]
 
 { #category : 'smalltalk api' }
@@ -64,6 +62,11 @@ RwGitTool >> gitcommitShaIn: gitRepoPath [
 	(result beginsWith: 'fatal:')
 		ifTrue: [ ^ nil ].
 	^ result trimWhiteSpace
+]
+
+{ #category : 'smalltalk api' }
+RwGitTool >> gitfetchIn: gitRootReference with: args [
+	^ self performGitCommand: 'fetch' in: gitRootReference pathString with: args
 ]
 
 { #category : 'smalltalk api' }

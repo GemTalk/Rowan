@@ -36,6 +36,10 @@ set -e
 # 1.2.4 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.4 v1.2.4 Oscar-3.0.50
 # 1.2.5 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.5 v1.2.5 Oscar-3.0.50
 # 1.2.6 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.6 v1.2.6 Oscar-3.0.65
+# 1.2.7 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.7 v1.2.7 Oscar-3.0.85
+# 1.2.8 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.8 v1.2.8 Oscar-3.0.87
+# 1.2.9 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.9 v1.2.9 Oscar-3.0.89
+# 1.2.10 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.10 v1.2.10 Oscar-3.0.91
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -118,7 +122,7 @@ clone_entire_git_repo() {
 
 cd $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/packing
 
-rm -rf Rowan MANIFEST.TXT Jadeite_runtime_* *.zip *.sha256
+rm -rf Rowan MANIFEST.TXT Jadeite_runtime_* *.zip *.sha256 *.pdf
 
 # Clone Rowan include all branches (complete copy of github repo)
 clone_entire_git_repo git@github.com:dalehenrich/Rowan.git Rowan $rowanDeploymentBranch
@@ -135,6 +139,9 @@ jadeite_runtime_dirName="Jadeite_runtime_${jadeite_tag}"
 wget https://github.com/GemTalk/Jadeite/releases/download/"$jadeite_tag"/runtime.zip
 unzip runtime.zip
 mv runtime "$jadeite_runtime_dirName"
+
+# copy documentation 
+cp /export/techpubs/JadeiteCurrent/*.pdf .
 
 echo "" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT

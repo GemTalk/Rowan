@@ -31,6 +31,37 @@ RwComponentProjectDefinition >> defaultUseSessionMethodsForExtensions: aBool [
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> exportTopazFormatTo: filePath [
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference basename;
+		yourself.
+	visitor visit: projectSetModification
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference basename;
+		topazFilenamePackageNamesMap: packageNamesMap;
+		yourself.
+	visitor visit: projectSetModification
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> methodEnvForPackageNamed: packageName [
 
 	^self projectRef methodEnvForPackageNamed: packageName
@@ -67,9 +98,31 @@ RwComponentProjectDefinition >> setSymbolDictName: symbolDictName forPackageName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+
+	self projectRef
+		setUseSessionMethodsForExtensions: aBool
+		forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	^self projectRef symbolDictNameForPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo [
+
+	|  thePackageMapSpecs |
+	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+		ifNotNil: [:name | aLoadedProject defaultSymbolDictName: name ].
+	(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+		ifNotNil: [:boolean | 
+			aLoadedProject defaultUseSessionMethodsForExtensions: boolean  ].
+	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+		ifNotNil: [:map | aLoadedProject packageNameToPlatformPropertiesMap: map]
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

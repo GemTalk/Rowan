@@ -219,7 +219,7 @@ RwGsLoadedSymbolDictClass >> updateClassNameFromClass [
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 

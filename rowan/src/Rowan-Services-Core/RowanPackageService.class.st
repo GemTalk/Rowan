@@ -38,8 +38,7 @@ RowanPackageService >> = packageService [
 
 { #category : 'testing' }
 RowanPackageService >> arePackageAndProjectClean [
-
-	^self rowanDirty not and:[self projectIsDirty not]
+  ^ self rowanDirty not and: [ self projectIsDirty not ]
 ]
 
 { #category : 'rowan' }
@@ -65,28 +64,10 @@ RowanPackageService >> classHierarchy [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'private' }
+{ #category : 'commands support' }
 RowanPackageService >> classHierarchy: theClasses [
-	| superclassChains levels services hierarchies toExpand |
-	superclassChains := self superclassChainsFor: theClasses. 
-	hierarchies := self extendHierarchies: superclassChains. 
-	levels := self hierarchiesByLevel: hierarchies.
-	services := Dictionary new. 
-	toExpand := Set new. 
-	self services: services from: levels expand: toExpand.
-	hierarchyServices := services reject:[:array | array isEmpty].
-	hierarchyServices copy keysAndValuesDo:[:key :value | 
-		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	^hierarchyServices
-]
-
-{ #category : 'client commands' }
-RowanPackageService >> compileClass: definitionString [
-
-	|  anonymousMethod |
-	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: Rowan image symbolList.
-	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
+  hierarchyServices := super classHierarchy: theClasses.
+  ^ hierarchyServices
 ]
 
 { #category : 'rowan' }
@@ -129,26 +110,6 @@ RowanPackageService >> deletePackage [
 
 ]
 
-{ #category : 'commands support' }
-RowanPackageService >> extendHierarchies: hierarchies [
-	
-	"extend the hierarchies by one level
-	of subclasses"
-
-	| extendedHierarchies |
-	extendedHierarchies := Array new. 
-	hierarchies do:[:hierarchy |
-		| theClass subclasses |
-		theClass := hierarchy last. 
-		(subclasses := organizer subclassesOf: theClass) isEmpty 
-			ifTrue:[extendedHierarchies add: hierarchy]
-			ifFalse:[
-				subclasses do:[:sub |
-					extendedHierarchies add: (hierarchy copy add: sub; yourself)
-				]]].
-	^extendedHierarchies
-]
-
 { #category : 'rowan' }
 RowanPackageService >> genericClassCreationTemplate [
 
@@ -159,34 +120,6 @@ RowanPackageService >> genericClassCreationTemplate [
 { #category : 'comparing' }
 RowanPackageService >> hash [
 	^self name hash
-]
-
-{ #category : 'commands support' }
-RowanPackageService >> hierarchiesByLevel: hierarchies [
-
-	"Return dictionary of classes by level. 
-	Example: 
-		hierarchies - #(#(Object Collection Array) #(Object AbstractException Exception))
-	Return: 
-		#(#nil->#(Object) Object->#(Collection AbstractException) Collection->#(Array) AbstractException->#(Exception)
-	"
-	| levels |
-	levels := hierarchies inject: Dictionary new into:[:dict :chain | 
-		1 to: chain size do: [:index | 
-			| cls theSuper classSet |
-			cls := chain at: index.
-			classSet := dict at: cls ifAbsentPut: [Array new].
-			index = 1 
-		ifTrue:[
-			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
-			((dict at: #'nil') includes: cls) ifFalse:[(dict at: #'nil') add: cls].
-		]
-		ifFalse:[
-				theSuper := chain at: index - 1.
-				((dict at: theSuper) includes: cls) ifFalse:[(dict at: theSuper) add: cls]
-				]].
-			dict].
-	^levels
 ]
 
 { #category : 'Accessing' }
@@ -308,36 +241,16 @@ RowanPackageService >> projectName: newValue [
 ]
 
 { #category : 'client commands' }
-RowanPackageService >> recompileMethodsAfterClassCompilation [
-
-	"compileClass: must be run first"
-	| theClass classService packageService |
-
-	theClass := [(UserGlobals at: #jadeiteCompileClassMethod) _executeInContext: nil] 
-		ensure: [UserGlobals at: #jadeiteCompileClassMethod put: nil].
-	classService := RowanClassService new name: theClass name. 
-	classService update. 
-	classService isNewClass: true.
-	classService packageName = name 
-		ifTrue:[
-			self selectedClass: classService
-		]
-		ifFalse:[
-			packageService := RowanPackageService forPackageNamed: classService packageName. 
-			packageService update. 
-			packageService selectedClass: classService].
-	RowanCommandResult addResult: classService.
-]
-
-{ #category : 'client commands' }
 RowanPackageService >> removeClass: classService [
-	self removeClassNamed: classService name. 
-	self setDefaultTemplate.
-	classService updateType: #removedClass:.
-	RowanCommandResult addResult: classService
+  self removeClassNamed: classService name.
+  self setDefaultTemplate.
+  classService updateType: #'removedClass:'.
+  classService wasRemoved: true.
+  RowanCommandResult addResult: classService.
+  RowanBrowserService new packagesWithTests	"sunit browser might need updated"
 ]
 
-{ #category : 'client commands' }
+{ #category : 'commands support' }
 RowanPackageService >> removeClassNamed: className [
 
 	self browserTool removeClassNamed: className.
@@ -371,30 +284,23 @@ RowanPackageService >> selectedClass: classService [
 
 { #category : 'perform' }
 RowanPackageService >> servicePerform: symbol withArguments: collection [
-	| wasClean |
-	wasClean := self arePackageAndProjectClean.
-	super servicePerform: symbol withArguments: collection.
-	self update. 
-	wasClean ifTrue:[
-		self updateProject]
+  | wasClean |
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  wasClean := self arePackageAndProjectClean.
+  super servicePerform: symbol withArguments: collection.
+  self update.
+  wasClean
+    ifTrue: [ self updateProject ]
 ]
 
 { #category : 'commands support' }
 RowanPackageService >> services: services from: levels expand: toExpand [
-
-	(classes collect:[:svc | svc theClass]) do:[:aClass |
-		toExpand addAll: (organizer allSuperclassesOf: aClass)].
-	levels keysAndValuesDo: [:key :value |
-		| newKey service  | 
-		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService new classServiceFromOop: key asOop).
-			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-			service].
-		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService new classServiceFromOop: cls asOop).
-				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
-				service
-				])]
+  ^ self
+    services: services
+    from: levels
+    expand: toExpand
+    classes: (classes collect: [ :classService | classService theClass ])
 ]
 
 { #category : 'client commands' }
@@ -403,35 +309,35 @@ RowanPackageService >> setDefaultTemplate [
 	defaultTemplate := self genericClassCreationTemplate.
 ]
 
-{ #category : 'commands support' }
-RowanPackageService >> superclassChainsFor: behaviors [
-	organizer := ClassOrganizer new. 
-	^behaviors collect:[:behavior | | supers |
-			supers := organizer allSuperclassesOf: behavior. 
-			supers add: behavior. 
-			supers].
-
-]
-
 { #category : 'client commands' }
 RowanPackageService >> testClasses [
-
-	testClasses := Set new. 
-	TestCase allSubclasses do:[:testSubclass |
-		testSubclass isAbstract ifFalse:[
-			testSubclass suite tests do:[:testClassInstance |
-				| implementingClass |
-				implementingClass := testClassInstance class whichClassIncludesSelector: testClassInstance selector. 
-				(implementingClass compiledMethodAt: testClassInstance selector) rowanPackageName = name ifTrue:[
-					| classService |
-					classService := RowanClassService basicForClassNamed: testSubclass name.
-					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
-					(self loadedClassExtensions keys asArray includes: classService name) ifFalse:[
-							"don't include extension classes"
-							testClasses add: classService]]]]]]. 
-	updateType := #testClasses:. 
-	testClasses := testClasses asArray. 
-	RowanCommandResult addResult: self.
+  organizer := ClassOrganizer new.
+  testClasses := Set new.
+  self loadedClasses
+    valuesDo: [ :loadedClass | 
+      | cls |
+      cls := loadedClass handle.
+      (cls inheritsFrom: TestCase)
+        ifTrue: [ 
+          cls isAbstract
+            ifFalse: [ 
+              | classService |
+              classService := RowanClassService basicForClassNamed: cls name.
+              testClasses add: classService ] ] ].
+  self loadedClassExtensions
+    valuesDo: [ :loadedClass | 
+      | cls |
+      cls := loadedClass handle.
+      (cls inheritsFrom: TestCase)
+        ifTrue: [ 
+          cls isAbstract
+            ifFalse: [ 
+              | classService |
+              classService := RowanClassService basicForClassNamed: cls name.
+              testClasses add: classService ] ] ].
+  updateType := #'testClasses:'.
+  testClasses := testClasses asArray.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'updates' }

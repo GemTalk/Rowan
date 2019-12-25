@@ -27,28 +27,12 @@ RwRowanSample4Test >> _cloneProjectFromSpecUrl_300: specUrlString projectsHome: 
 ]
 
 { #category : '*rowan-tests-32x' }
-RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
-
-	self _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: true
-]
-
-{ #category : '*rowan-tests-32x' }
-RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool [
-
-	Rowan projectTools clone
-		cloneSpecification: specUrlString asRwUrl asSpecification
-		gitRootPath: projectsHome
-		useSsh: true
-		registerProject: aBool.
-]
-
-{ #category : '*rowan-tests-32x' }
 RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName [
 
 	| gitRootPath spec rowanProject|
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -150,7 +134,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -248,7 +232,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221A_v12 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 

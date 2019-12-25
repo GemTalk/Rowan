@@ -301,6 +301,12 @@ gs_options: anOptionsArray
 	^self properties at: 'gs_options' put: anOptionsArray
 %
 
+category: 'accessing'
+method: CypressClassStructure
+gs_reservedOop
+	^ ''
+%
+
 category: 'converting'
 method: CypressClassStructure
 classInstanceVariablesString

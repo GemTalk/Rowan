@@ -277,9 +277,21 @@ RwAbstractClassDefinition >> removeInstanceMethod: selector [
 ]
 
 { #category : 'accessing' }
+RwAbstractClassDefinition >> updateClassMethod: methodSource protocol: protocol [
+
+	^self updateClassMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
+]
+
+{ #category : 'accessing' }
 RwAbstractClassDefinition >> updateClassMethodDefinition: aMethodDefinition [
 
 	self updateDefinition: aMethodDefinition in: classMethodDefinitions
+]
+
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> updateInstanceMethod: methodSource protocol: protocol [
+
+	^self updateInstanceMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
 ]
 
 { #category : 'accessing' }

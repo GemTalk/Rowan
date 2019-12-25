@@ -597,7 +597,7 @@ RwAdoptToolApiTest >> testAdoptClass [
 		defaultSymbolDictName: symDictName
 		comment: 'project for testing package adopt api'.
 
-	symDict := Rowan globalNamed: symDictName.
+	symDict := Rowan image symbolDictNamed: symDictName.
 
 	"Use non-Rowan api to create class and methods"
 	theClass := Object subclass: className
@@ -630,7 +630,6 @@ RwAdoptToolApiTest >> testAdoptClass [
 	self assert: theClass rowanProjectName = projectName.
 	self assert: instanceMethod rowanProjectName = projectName.
 	self assert: classMethod rowanProjectName = projectName.
-
 ]
 
 { #category : 'tests' }

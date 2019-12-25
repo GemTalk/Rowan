@@ -11,9 +11,24 @@ RwProject >> _loadedProject [
 ]
 
 { #category : 'private' }
+RwProject >> _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock [
+
+	^ Rowan image
+		loadedProjectNamed: self name
+		ifPresent: presentBlock
+		ifAbsent: absentBlock
+]
+
+{ #category : 'private' }
 RwProject >> _specification [
 
 	^ self _loadedProject specification
+]
+
+{ #category : 'actions' }
+RwProject >> asDefinition [
+
+	^ self _loadedProject asDefinition
 ]
 
 { #category : 'actions' }
@@ -50,7 +65,7 @@ RwProject >> currentBranchName [
 { #category : 'accessing' }
 RwProject >> definedClasses [
 
-	^ self _projectTools query classForProjectNamed: self name
+	^ self _projectTools query classesForProjectNamed: self name
 ]
 
 { #category : 'testing' }
@@ -89,6 +104,13 @@ RwProject >> load [
 	"load the receiver into the image"
 
 	^ self _loadedProject load
+]
+
+{ #category : 'actions' }
+RwProject >> load: instanceMigrator [
+	"load the receiver into the image"
+
+	^ self _loadedProject load: instanceMigrator
 ]
 
 { #category : 'properties' }
@@ -148,7 +170,7 @@ RwProject >> register [
 { #category : 'properties' }
 RwProject >> remote [
 
-	^ self _specification remote
+	^ self _loadedProject remote
 ]
 
 { #category : 'accessing' }
@@ -172,10 +194,17 @@ RwProject >> repositoryRootPath [
 ]
 
 { #category : 'actions' }
-RwProject >> unload [
-	"unload the receiver into the image"
+RwProject >> testSuite [
+	^ Rowan projectTools test testSuiteForProjectNamed: self name
+]
 
-	^ self _loadedProject unload
+{ #category : 'actions' }
+RwProject >> unload [
+	"unload the loaded project (if present) from the image"
+
+	^ self
+		_loadedProjectIfPresent: [ :loadedProject | loadedProject unload ]
+		ifAbsent: [  ]
 ]
 
 { #category : 'testing' }

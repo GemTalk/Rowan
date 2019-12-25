@@ -27,7 +27,14 @@ RwAbstractReaderWriterVisitor class >> _repositoryPropertyDictFor: packagesRoot 
 	| propertiesFile |
 	propertiesFile := packagesRoot / 'properties', 'st'.
 	propertiesFile exists
-		ifFalse: [ ^ Dictionary new ].
+		ifFalse: [
+			| propertiesDict |
+			propertiesFile := packagesRoot / '.filetree'.
+			propertiesFile exists
+					ifFalse: [^ Dictionary new ].
+			propertiesDict := self _readObjectFrom: propertiesFile.
+			propertiesDict at: #format put: 'filetree'.
+			^ propertiesDict ].
 	^ self _readObjectFrom: propertiesFile
 ]
 
@@ -121,6 +128,12 @@ RwAbstractReaderWriterVisitor >> _validateRowanMonticelloClassCategoryConvention
 
 	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
 	RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageName: packageName packageConvention: 'Monticello'
+]
+
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName [
+
+	self error: 'not yet implemented'
 ]
 
 { #category : 'validation' }

@@ -5,7 +5,8 @@ Class {
 		'name',
 		'classes',
 		'hierarchyServices',
-		'globals'
+		'globals',
+		'defaultTemplate'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -20,6 +21,23 @@ RowanDictionaryService >> classHierarchy [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'Updating' }
+RowanDictionaryService >> defaultTemplate: newValue [
+	defaultTemplate := newValue
+]
+
+{ #category : 'command support' }
+RowanDictionaryService >> genericClassCreationTemplate [
+
+	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: nil packageName: nil
+]
+
+{ #category : 'initialization' }
+RowanDictionaryService >> initialize [
+
+	self setDefaultTemplate
+]
+
 { #category : 'client commands' }
 RowanDictionaryService >> insertAt: index [
 
@@ -28,7 +46,11 @@ RowanDictionaryService >> insertAt: index [
 	theDictionary at: name asSymbol put: theDictionary. 
 	System myUserProfile insertDictionary: theDictionary at: index. 
 	RowanBrowserService new updateDictionaries.
-	System commitTransaction.
+]
+
+{ #category : 'testing' }
+RowanDictionaryService >> isDictionaryService [
+  ^ true
 ]
 
 { #category : 'accessing' }
@@ -42,6 +64,21 @@ RowanDictionaryService >> name: object [
 ]
 
 { #category : 'client commands' }
+RowanDictionaryService >> removeClass: classService [
+	self removeClassNamed: classService name. 
+	self setDefaultTemplate.
+	classService updateType: #removedClass:.
+	RowanCommandResult addResult: classService
+]
+
+{ #category : 'client commands' }
+RowanDictionaryService >> removeClassNamed: className [
+
+	self browserTool removeClassNamed: className.
+
+]
+
+{ #category : 'client commands' }
 RowanDictionaryService >> removeGlobalNamed: symbol [
 	| dictionary |
 	dictionary := (System myUserProfile resolveSymbol: name asSymbol) value.
@@ -51,35 +88,58 @@ RowanDictionaryService >> removeGlobalNamed: symbol [
 ]
 
 { #category : 'perform' }
-RowanDictionaryService >> servicePerform: symbol withArguments: collection [	
+RowanDictionaryService >> servicePerform: symbol withArguments: collection [
+  self isUpdatingButFoundToBeDeleted
+    ifTrue: [ ^ self handleDeletedService ].
+  super servicePerform: symbol withArguments: collection.
+  self update
+]
 
-	super servicePerform: symbol withArguments: collection.
-	self update.
+{ #category : 'client commands' }
+RowanDictionaryService >> setDefaultTemplate [
+
+	defaultTemplate := self genericClassCreationTemplate.
 ]
 
 { #category : 'updates' }
-RowanDictionaryService >> update [ 
-	| dictionary sorted | 
-	classes := Array new. 
-	sorted := SortedCollection sortBlock: [:x :y | x first < y first].  
-	dictionary := Rowan image symbolList objectNamed: name. 
-	dictionary ifNil:[^self].
-	dictionary keysAndValuesDo:[:key :value |
-		value isClass ifTrue:[
-			| classService | 
-			classService :=  RowanClassService new name: key asString. 
-			classService versions: value classHistory size.
-			classService version: (value classHistory indexOf: value).
-			classes add: classService. 
-		]
-		ifFalse:[
-			sorted add: (Array 	with: (name, '.', key)
-										with: value class name
-										with: value asOop
-										with: value printString
-										)
-		]
-	].
-	globals := sorted asArray. 
-	RowanCommandResult addResult: self
+RowanDictionaryService >> update [
+  | dictionary sorted |
+  classes := Array new.
+  sorted := SortedCollection sortBlock: [ :x :y | x first < y first ].
+  dictionary := Rowan image symbolList objectNamed: name.
+  dictionary ifNil: [ ^ self ].
+  dictionary
+    keysAndValuesDo: [ :key :value | 
+      value isClass
+        ifTrue: [ 
+          | classService |
+          classService := RowanClassService new name: key asString.
+          classService versions: value classHistory size.
+          classService version: (value classHistory indexOf: value).
+          classes add: classService ]
+        ifFalse: [ 
+          | printString theKey |
+          printString := [ 
+          value printString charSize > 1
+            ifTrue: [ '<<unprintable string. charSize > 1>>' ]
+            ifFalse: [ value printString ] ]
+            on: Error
+            do: [ :ex | 'unprintable string. Error - <' , ex printString , '>' ].
+          key charSize = 1
+            ifTrue: [ theKey := key ]
+            ifFalse: [ theKey := '<<unprintable string. charSize > 1>>' ].
+          sorted
+            add:
+              (Array
+                with: name , '.' , theKey
+                with: value class name
+                with: value asOop
+                with: printString) ] ].
+  globals := sorted asArray.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'testing' }
+RowanDictionaryService >> wasDeleted [
+  ^ (Rowan globalNamed: name) isNil
 ]

@@ -15,8 +15,23 @@ RowanAnsweringServiceTest >> setUp [
 ]
 
 { #category : 'tests' }
-RowanAnsweringServiceTest >> test_execCompileError [
+RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  service setBreakPointsAreEnabled: true.
+  self assert: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: true.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled').
+  service setBreakPointsAreEnabled: false.
+  self deny: service breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: false.
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+]
 
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_execCompileError [
+ 
 	self deny: (service exec: '1 +' context: nil asOop) key.
 ]
 
@@ -50,6 +65,28 @@ RowanAnsweringServiceTest >> test_initializeAutoCommit [
 	self deny: (SessionTemps current at: #'Jadeite_AutoCommit')] ensure: [
 		RowanService setAutoCommit: autoCommit.
 		self assert: RowanService autoCommit equals: autoCommit.]
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_initializeBreakPointsAreDisabled [
+  | breakPointsAreEnabled |
+  self
+    jadeiteIssueTested: #'issue515'
+    withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  breakPointsAreEnabled := RowanService breakPointsAreEnabled.
+  self assert: RowanService breakPointsAreEnabled equals: breakPointsAreEnabled.
+  self
+    assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+    equals: breakPointsAreEnabled.
+  [ 
+  service initializeBreakPointsAreEnabled.
+  self assert:  RowanService breakPointsAreEnabled.
+  self assert: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
+    ensure: [ 
+      RowanService setBreakPointsAreEnabled: breakPointsAreEnabled.
+      self
+        assert: RowanService breakPointsAreEnabled
+        equals: breakPointsAreEnabled ]
 ]
 
 { #category : 'tests' }
@@ -99,6 +136,14 @@ RowanAnsweringServiceTest >> test_maxPrint [
 	self assert: (service printStringOf: 'ab
 cd' asOop toMaxSize: 25) equals: '''ab
 cd'''.  "includes lf (10) - no ? substitution"
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_play [
+
+	"method to safely play with commits" 
+
+	self deny: false
 ]
 
 { #category : 'tests' }

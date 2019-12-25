@@ -369,7 +369,7 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self assert: testClass == class.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
@@ -385,7 +385,7 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self
 		assert:
 			(testClass categoryOfSelector: methodSelector) = methodProtocol asSymbol.
@@ -404,7 +404,6 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
-
 ]
 
 { #category : 'tests' }
@@ -429,7 +428,7 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance  perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	compiledMethod := self
 		_compileMethodIn: class
@@ -442,13 +441,13 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 		protocol: 'accessing'
 		toPackageNamed: packageName.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 
 	dict rowanSymbolDictionaryRegistry
 		deleteCompiledMethod: compiledMethod
 		from: class.
 
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance  perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	expectedPackageSet := self
 		packageSetDefinition: packageName
@@ -459,7 +458,6 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
-
 ]
 
 { #category : 'tests' }
@@ -493,7 +491,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self assert: testClass == class.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	expectedPackage1 := self
 		packageDefinition: packageName1
@@ -514,7 +512,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 		protocol: methodProtocol
 		toPackageNamed: packageName2.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self
 		assert:
 			(testClass categoryOfSelector: methodSelector) = methodProtocol asSymbol.
@@ -539,7 +537,6 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 			packageName2}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
-
 ]
 
 { #category : 'tests' }
@@ -572,7 +569,7 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
@@ -588,7 +585,7 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
@@ -597,7 +594,7 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 		moveCompiledMethod: compiledMethod
 		toProtocol: methodProtocol.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self assert: (testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
 	expectedPackageSet := self
@@ -614,7 +611,6 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
-
 ]
 
 { #category : 'tests' }
@@ -639,7 +635,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ (testInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
@@ -655,7 +651,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 
-	self assert: testInstance foo = 'foo'.
+	self assert: (testInstance perform: #foo) = 'foo'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
@@ -667,7 +663,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 
 	dict rowanSymbolDictionaryRegistry addRecompiledMethod: newCompiledMethod.
 
-	self assert: testInstance foo = 'bar'.
+	self assert: (testInstance perform: #foo) = 'bar'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
@@ -684,7 +680,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 		protocol: methodProtocol
 		toPackageNamed: packageName.	"account for using wrong method to update a method --- perhaps the selector is incorrect?"
 
-	self assert: testInstance foo = 'who'.
+	self assert: (testInstance perform: #foo) = 'who'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
@@ -702,5 +698,4 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
-
 ]

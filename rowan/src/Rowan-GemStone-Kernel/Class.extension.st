@@ -105,7 +105,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
-		type: 'bytes'
+		type: 'byteSubclass'
 		superclass: self name asString
 		instVarNames: #()
 		classVars: anArrayOfClassVars
@@ -121,7 +121,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
-		type: 'bytes'
+		type: 'byteSubclass'
 		superclass: self name asString
 		instVarNames: #()
 		classVars: anArrayOfClassVars
@@ -131,7 +131,6 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		packageName: aPackageName
 		constraints: #()
 		options: optionsArray
-
 ]
 
 { #category : '*rowan-gemstone-kernel' }

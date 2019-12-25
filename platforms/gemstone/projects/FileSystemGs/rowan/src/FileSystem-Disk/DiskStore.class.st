@@ -361,8 +361,8 @@ DiskStore >> openFileStream: path writable: writable [
 	fullPath := self stringFromPath: path.
 	"redirect over the default implementation"
 	^ writable 
-		ifFalse: [ FileStream readOnlyFileNamed: fullPath ]
-		ifTrue: [ FileStream fileNamed: fullPath ]
+		ifFalse: [ FileStreamPortable readOnlyFileNamed: fullPath ]
+		ifTrue: [ FileStreamPortable fileNamed: fullPath ]
 ]
 
 { #category : 'public' }

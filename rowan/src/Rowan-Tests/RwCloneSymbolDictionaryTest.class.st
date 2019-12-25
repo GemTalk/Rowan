@@ -25,7 +25,7 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -45,10 +45,10 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 
 	validationBlock := [:aClass :expectedValue |
 		| x |
-		self assert: (x := aClass cv1) = expectedValue.
+		self assert: (x := aClass perform: #cv1) = expectedValue.
 	].
 
-	theOriginalClass cv1: #one.
+	theOriginalClass perform: #cv1: with: #one.
 
 	validationBlock value: theOriginalClass value: #one.
 
@@ -65,11 +65,10 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 	validationBlock value: clonedClass value: #one.
 	validationBlock value: theOriginalClass value: #one.
 
-	clonedClass cv1: #ONE.
+	clonedClass perform: #cv1: with: #ONE.
 
 	validationBlock value: clonedClass value: #ONE.
 	validationBlock value: theOriginalClass value: #one.
-
 ]
 
 { #category : 'tests' }
@@ -88,7 +87,7 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -157,19 +156,19 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 	theOriginalClass3 class rwCompileMethod: 'civ3 ^civ3' category: 'accessing'.
 	theOriginalClass3 class rwCompileMethod: 'civ3: x civ3 := x' category: 'accessing'.
 
-	theOriginalClass1 cv1: #one; civ1: #one.
-	theOriginalClass2 cv2: #two; civ2: #two.
-	theOriginalClass3 cv3: #three; civ3: #three.
+	theOriginalClass1 perform: #cv1: with: #one; perform: #civ1: with: #one.
+	theOriginalClass2 perform: #cv2: with: #two; perform: #civ2: with: #two.
+	theOriginalClass3 perform: #cv3: with: #three; perform: #civ3: with: #three.
 
 	validationBlock := [:aClass :cv1 :cv2 :cv3|
 		| x |
-		aClass new iv1; iv2.	"no MNU is sufficient"
-		self assert: (x := aClass new civ1) = cv1.
-		self assert: (x := aClass new civ2) = cv2.
-		self assert: (x := aClass new civ3) = cv3.
-		self assert: (x := aClass new cv1) = cv1.
-		self assert: (x := aClass new cv2) = cv2.
-		self assert: (x := aClass new cv3) = cv3.
+		aClass new perform: #iv1; perform: #iv2.	"no MNU is sufficient"
+		self assert: (x := aClass new perform: #civ1) = cv1.
+		self assert: (x := aClass new perform: #civ2) = cv2.
+		self assert: (x := aClass new perform: #civ3) = cv3.
+		self assert: (x := aClass new perform: #cv1) = cv1.
+		self assert: (x := aClass new perform: #cv2) = cv2.
+		self assert: (x := aClass new perform: #cv3) = cv3.
 	].
 
 	validationBlock value: theOriginalClass1 value: #one value: #two value: #three.
@@ -197,9 +196,9 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 	validationBlock value: clonedClass2 value: #one value: #two value: #three.
 	validationBlock value: clonedClass3 value: #one value: #two value: #three.
 
-	clonedClass1 cv1: #ONE; civ1: #ONE.
-	clonedClass2 cv2: #TWO; civ2: #TWO.
-	clonedClass3 cv3: #THREE; civ3: #THREE.
+	clonedClass1 perform: #cv1: with: #ONE; perform: #civ1: with: #ONE.
+	clonedClass2 perform: #cv2: with: #TWO; perform: #civ2: with: #TWO.
+	clonedClass3 perform: #cv3: with: #THREE; perform: #civ3: with: #THREE.
 
 	validationBlock value: theOriginalClass1 value: #one value: #two value: #three.
 	validationBlock value: theOriginalClass2 value: #one value: #two value: #three.
@@ -208,7 +207,6 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 	validationBlock value: clonedClass1 value: #ONE value: #TWO value: #THREE.
 	validationBlock value: clonedClass2 value: #ONE value: #TWO value: #THREE.
 	validationBlock value: clonedClass3 value: #ONE value: #TWO value: #THREE.
-
 ]
 
 { #category : 'tests' }
@@ -237,7 +235,7 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -263,11 +261,11 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 
 	theOriginalClass initialize.
 	validationBlock := [:aClass |
-		self assert: aClass cv1 = 2.
-		self assert: aClass civ1 = 1.
-		self assert: aClass bar = 'bar'.
-		self assert: aClass new iv1 = 3.
-		self assert: aClass new foo = 'foo'.
+		self assert: (aClass perform: #cv1) = 2.
+		self assert: (aClass perform: #civ1) = 1.
+		self assert: (aClass perform: #bar) = 'bar'.
+		self assert: (aClass new perform: #iv1) = 3.
+		self assert: (aClass new perform: #foo) = 'foo'.
 	].
 
 	validationBlock value: theOriginalClass.
@@ -282,7 +280,6 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 	self assert: clonedClass classHistory ~~ theOriginalClass classHistory.
 
 	validationBlock value: clonedClass.
-
 ]
 
 { #category : 'tests' }
@@ -300,7 +297,7 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -339,5 +336,4 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 	self assert: clonedClass2 classHistory ~~ theOriginalSubclass classHistory.
 
 	self assert: (x := clonedClass2 superclass) == clonedClass1
-
 ]

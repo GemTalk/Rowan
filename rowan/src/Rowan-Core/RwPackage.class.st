@@ -19,13 +19,17 @@ RwPackage >> _loadedProject [
 { #category : 'accessing' }
 RwPackage >> definedClasses [
 
-	^ self _packageTools query classesForPackageNamed: self name
+"	^ self _packageTools query classesForPackageNamed: self name"
+
+	^ self error: 'not yet implemented'
 ]
 
 { #category : 'accessing' }
 RwPackage >> extendedClasses [
 
-	^ self _packageTools query classExtensionsForPackageNamed: self name
+"	^ self _packageTools query classExtensionsForPackageNamed: self name"
+
+	^ self error: 'not yet implemented'
 ]
 
 { #category : 'testing' }

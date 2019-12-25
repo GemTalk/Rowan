@@ -7,14 +7,13 @@ RwGsImage class >> _cloneRowanLoaderSymbolDictionary [
 		in a separate symbol dictionary and then use the isolated copy to execute the update."
 
 	| rowanLoaderSymbolDict clonedSymDictName clonedSymDict |
-	rowanLoaderSymbolDict := Rowan globalNamed: 'RowanLoader'.
+	rowanLoaderSymbolDict := Rowan image symbolDictNamed: 'RowanLoader'.
 	clonedSymDictName := #'RowanLoader_cloned'.
 	clonedSymDict := rowanLoaderSymbolDict 
 		_rowanCloneSymbolDictionaryNamed: clonedSymDictName 
 		symbolList: GsCurrentSession currentSession symbolList.
 	Transcript cr; show: 'RowanLoader symbol dictionary cloned'.
 	^ clonedSymDict
-
 ]
 
 { #category : '*rowan-gemstone-loader-extensions' }

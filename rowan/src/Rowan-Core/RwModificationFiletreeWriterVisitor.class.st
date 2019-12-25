@@ -229,6 +229,14 @@ RwModificationFiletreeWriterVisitor >> _methodInstanceExtensionDir [
 	^ self _classExtensionSourceDir / 'instance'
 ]
 
+{ #category : 'private' }
+RwModificationFiletreeWriterVisitor >> _toJSON: anObject [
+	| str |
+	str := WriteStreamPortable on: String new.
+	anObject _writeCypressJsonOn: str.
+	^ str contents
+]
+
 { #category : 'class writing' }
 RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition [
 	"order is alphabetical"
@@ -239,11 +247,9 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 	definition 		
 		at: #category put: aClassDefinition category.
 
-	(aClassDefinition classInstVarNames)
-		ifNotEmpty: [ :vars | definition at: #classinstvars put: vars asArray ].
+	definition at: #classinstvars put: (aClassDefinition classInstVarNames) asArray.
 
-	(aClassDefinition classVarNames)
-		ifNotEmpty: [ :vars | definition at: #classvars put: vars asArray ].
+	definition at: #classvars put: (aClassDefinition classVarNames) asArray.
 
 	(aClassDefinition gs_constraints)
 		ifNotEmpty: [:gs_constraints | definition at: #'gs_constraints' put: gs_constraints asArray ].
@@ -251,16 +257,16 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
 
-	(aClassDefinition instVarNames)
-		ifNotEmpty: [ :vars | definition at: #instvars put: vars asArray ].
+	definition at: #commentStamp put: ''.
+
+	definition at: #instvars put: (aClassDefinition instVarNames) asArray.
 
 	(aClassDefinition gs_reservedOop)
 		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
 
 	definition at: #name put: aClassDefinition name.
 
-	((aClassDefinition poolDictionaryNames) collect: [:each | each asString])
-		ifNotEmpty: [ :vars | definition at: #pools put: vars asArray ].
+	definition at: #pools put: ((aClassDefinition poolDictionaryNames) collect: [:each | each asString]) asArray.
 
 	definition at: #super put: aClassDefinition superclassName.
 
@@ -376,6 +382,12 @@ RwModificationFiletreeWriterVisitor >> changedMethod: aMethodModification [
 			<< (methodDefinition source withLineEndings: self _newLine) ]
 ]
 
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> changedMethodExtension: aMethodExtensionModification [
+
+	self error: 'not yet implemented'
+]
+
 { #category : 'accessing' }
 RwModificationFiletreeWriterVisitor >> defaultPackageFormat [
 
@@ -444,7 +456,7 @@ RwModificationFiletreeWriterVisitor >> deletedMethodExtension: aMethodExtensionM
 RwModificationFiletreeWriterVisitor >> monticelloMetadata [
 	"monticello metadata  --- for writing metadataless is the only supported format"
 
-	^ monticelloMetadata ifNil: [ monticelloMetadata := false ]
+	^ monticelloMetadata ifNil: [ monticelloMetadata := 'false' ]
 ]
 
 { #category : 'package writing' }
@@ -531,7 +543,7 @@ RwModificationFiletreeWriterVisitor >> processProject: aProjectModification [
 		ifTrue: [
 			"properties file includes leading $., so strip it"
 			packageExtension := packageExtension copyFrom: 2 to: packageExtension size ].
-	(projectProperties at: 'Metadata' ifAbsent: [ true ])
+	(projectProperties at: 'Metadata' ifAbsent: [ 'true' ])  = 'true'
 		ifTrue: [
 			"Rowan can read filetree repositories with Monticello metadata, but cannot write Monticello metadata"
 			self error: 'Monticello metadata not supported.' ].

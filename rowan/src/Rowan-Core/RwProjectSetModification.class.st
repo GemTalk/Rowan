@@ -255,6 +255,11 @@ RwProjectSetModification >> initialize [
 
 ]
 
+{ #category : 'testing' }
+RwProjectSetModification >> isEmpty [
+	^ super isEmpty and: [ movedClasses isEmpty and: [ movedMethods isEmpty ] ]
+]
+
 { #category : 'private - moves' }
 RwProjectSetModification >> updateForClassMoveFrom: removal to: addition [
 	"Transform the given removal and addition to a move."

@@ -34,6 +34,12 @@ RowanService class >> autoCommit [
 ]
 
 { #category : 'autocommit' }
+RowanService class >> breakPointsAreEnabled [
+
+	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
+]
+
+{ #category : 'autocommit' }
 RowanService class >> flipAutoCommit [
 	| newValue |
 	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
@@ -67,6 +73,19 @@ RowanService class >> setAutoCommit: object [
 	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
 ]
 
+{ #category : 'autocommit' }
+RowanService class >> setBreakPointsAreEnabled: boolean [
+  ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
+]
+
+{ #category : 'accessing' }
+RowanService class >> version [
+  "change this method carefully and only at Jadeite release boundaries.
+	Failure to do so will prevent logins"
+
+  ^ 3091
+]
+
 { #category : 'other' }
 RowanService >> answer: anObject [
 
@@ -81,6 +100,29 @@ RowanService >> browserTool [
 
 	^self projectTools browser
 
+]
+
+{ #category : 'commands support' }
+RowanService >> classHierarchy: theClasses [
+  | superclassChains levels services hierarchies toExpand hierarchyServices |
+  superclassChains := self superclassChainsFor: theClasses.
+  hierarchies := self extendHierarchies: superclassChains.
+  levels := self hierarchiesByLevel: hierarchies.
+  services := Dictionary new.
+  toExpand := Set new.
+  self
+    services: services
+    from: levels
+    expand: toExpand
+    classes: theClasses.
+  hierarchyServices := services reject: [ :array | array isEmpty ].
+  hierarchyServices copy
+    keysAndValuesDo: [ :key :value | 
+      hierarchyServices
+        at: key
+        put:
+          (value asSet asSortedCollection: [ :x :y | x name < y name ]) asArray ].
+  ^ hierarchyServices
 ]
 
 { #category : 'accessing' }
@@ -173,12 +215,72 @@ RowanService >> excludedInstVars [
 
 ]
 
+{ #category : 'commands support' }
+RowanService >> extendHierarchies: hierarchies [
+	
+	"extend the hierarchies by one level
+	of subclasses"
+
+	| extendedHierarchies |
+	extendedHierarchies := Array new. 
+	hierarchies do:[:hierarchy |
+		| theClass subclasses |
+		theClass := hierarchy last. 
+		(subclasses := organizer subclassesOf: theClass) isEmpty 
+			ifTrue:[extendedHierarchies add: hierarchy]
+			ifFalse:[
+				subclasses do:[:sub |
+					extendedHierarchies add: (hierarchy copy add: sub; yourself)
+				]]].
+	^extendedHierarchies
+]
+
+{ #category : 'perform' }
+RowanService >> handleDeletedService [
+  self updateType: #'removed:'.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'commands support' }
+RowanService >> hierarchiesByLevel: hierarchies [
+
+	"Return dictionary of classes by level. 
+	Example: 
+		hierarchies - #(#(Object Collection Array) #(Object AbstractException Exception))
+	Return: 
+		#(#nil->#(Object) Object->#(Collection AbstractException) Collection->#(Array) AbstractException->#(Exception)
+	"
+	| levels |
+	levels := hierarchies inject: Dictionary new into:[:dict :chain | 
+		1 to: chain size do: [:index | 
+			| cls theSuper classSet |
+			cls := chain at: index.
+			classSet := dict at: cls ifAbsentPut: [Array new].
+			index = 1 
+		ifTrue:[
+			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
+			((dict at: #'nil') includes: cls) ifFalse:[(dict at: #'nil') add: cls].
+		]
+		ifFalse:[
+				theSuper := chain at: index - 1.
+				((dict at: theSuper) includes: cls) ifFalse:[(dict at: theSuper) add: cls]
+				]].
+			dict].
+	^levels
+]
+
 { #category : 'initialization' }
 RowanService >> initialize [
 ]
 
 { #category : 'testing' }
 RowanService >> isClassService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isDictionaryService [
 
 	^false
 ]
@@ -199,6 +301,17 @@ RowanService >> isPackageService [
 RowanService >> isProjectService [
 
 	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isUpdating [
+
+	^command == #update
+]
+
+{ #category : 'perform' }
+RowanService >> isUpdatingButFoundToBeDeleted [
+  ^ self command == #'update' and: [ self wasDeleted ]
 ]
 
 { #category : 'accessing' }
@@ -281,10 +394,55 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
-	"each service updates itself after performing a command.
+  "each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
-	symbol == #update ifTrue:[^self].
-	^super perform: symbol withArguments: collection.
+
+  SessionTemps current
+    at: #'versionsVerified'
+    ifAbsent: [ 
+      SessionTemps current at: #'versionsVerified' put: false.
+      self
+        inform:
+          'Version mismatch failure. Client version is older than server version.' ].
+  symbol == #'update'
+    ifTrue: [ ^ self ].
+  ^ super perform: symbol withArguments: collection
+]
+
+{ #category : 'commands support' }
+RowanService >> services: services from: levels expand: toExpand classes: theClasses [
+  "In order to avoid the expense of creating duplicate services, we cache
+them in the newServices temporary for look up"
+
+  | newServices |
+  newServices := Array new.
+  theClasses
+    do: [ :aClass | toExpand addAll: (organizer allSuperclassesOf: aClass) ].
+  levels
+    keysAndValuesDo: [ :key :value | 
+      | newKey service |
+      newKey := key = #'nil'
+        ifTrue: [ #'nil' ]
+        ifFalse: [ 
+          service := newServices
+            detect: [ :classService | classService name = key name ]
+            ifNone: [ RowanClassService new classServiceFromOop: key asOop ].
+          (toExpand includes: service theClass)
+            ifTrue: [ service expand: true ]
+            ifFalse: [ service expand: false ].
+          service ].
+      services
+        at: newKey
+        put:
+          (value
+            collect: [ :cls | 
+              service := newServices
+                detect: [ :classService | classService name = cls name ]
+                ifNone: [ RowanClassService new classServiceFromOop: cls asOop ].
+              (toExpand includes: service theClass)
+                ifTrue: [ service expand: true ]
+                ifFalse: [ service expand: false ].
+              service ]) ]
 ]
 
 { #category : 'replication' }
@@ -308,6 +466,16 @@ RowanService >> stonStringFor: anObject [
 	suitable for replicating on the client."
 
 	^STON toString: anObject
+
+]
+
+{ #category : 'commands support' }
+RowanService >> superclassChainsFor: behaviors [
+	organizer := ClassOrganizer new. 
+	^behaviors collect:[:behavior | | supers |
+			supers := organizer allSuperclassesOf: behavior. 
+			supers add: behavior. 
+			supers].
 
 ]
 
@@ -335,10 +503,24 @@ RowanService >> updateInternalService: updatedService [
 	"no internally held services to update"
 ]
 
+{ #category : 'update' }
+RowanService >> updateLatest [
+  "subclasses may want to special behavior to update themselves
+	to their loaded version"
+
+  self update
+]
+
 { #category : 'accessing' }
 RowanService >> updateType: aSymbol [
 
 	updateType := aSymbol
+]
+
+{ #category : 'testing' }
+RowanService >> wasDeleted [
+
+	^false
 ]
 
 { #category : 'fileout' }

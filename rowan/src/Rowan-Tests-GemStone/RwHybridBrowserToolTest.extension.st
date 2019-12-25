@@ -62,7 +62,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplate_292 
 '.
 	self assert: template = expectedTemplate.
 
-"1 create class - bytes"
+"1 create class - byteSubclass"
 	class := Object
 		rwByteSubclass: 'TestByteClass'
 		classVars: #()
@@ -83,7 +83,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplate_292 
 '.
 	self assert: template = expectedTemplate.
 
-"2 create subclass - bytes"
+"2 create subclass - byteSubclass"
 	oldClass := class.
 	class := oldClass
 		rwSubclass: 'TestByteSubclass'
@@ -152,5 +152,4 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplate_292 
 	options: #()
 '.
 	self assert: template = expectedTemplate.
-
 ]

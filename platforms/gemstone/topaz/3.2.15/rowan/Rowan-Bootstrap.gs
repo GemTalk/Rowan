@@ -623,7 +623,8 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
-    value: #('Rowan-Definitions' 'Rowan-Configurations' 'Rowan-Specifications'
+    value: #('Rowan-Definitions' 'Rowan-DefinitionsV1' 'Rowan-Configurations-Common' 'Rowan-Configurations' 
+			'Rowan-Specifications'
 	).	"Rowan Definitions, Configurations and Specifications"
 %
   commit
@@ -632,7 +633,7 @@ commit
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
     value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
-      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
+      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 
       'Rowan-Services-Core' 'Rowan-Url-Extensions'
       'Rowan-Services-Extensions' 'AST-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core'
 	).	"Populate with Rowan implementation classes"
@@ -642,9 +643,11 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
-    value: #('Rowan-Tools-Core' 'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
-							'Rowan-GemStone-Specifications' 'Rowan-Components' 'Rowan-Tools-GemStone' 
-							'Rowan-Definitions-Deprecated' 'Rowan-Tools-Deprecated'
+    value: #('Rowan-DefinitionsV2' 'Rowan-Tools-Core' 'Rowan-Tools-CoreV2' 'Rowan-Cypress-Definitions'
+							'Rowan-GemStone-Definitions' 'Rowan-GemStone-DefinitionsV1' 'Rowan-GemStone-DefinitionsV2'
+							'Rowan-GemStone-Specifications' 'Rowan-Components' 'Rowan-ComponentsV2'
+							'Rowan-Tools-GemStone' 'Rowan-Definitions-Deprecated' 'Rowan-Tools-Deprecated'
+							'Rowan-Core-Definitions-Extensions' 'Rowan-Core-DefinitionsV1' 'Rowan-Core-DefinitionsV2'
 	).	"Rowan Tools"
 %
   commit
@@ -659,9 +662,11 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('Rowan-Tools-Extensions' 'Rowan-Tests' 'Rowan-Tests-32x' 
+    value: #('Rowan-GemStone-CoreV2' 'Rowan-Tools-Extensions-Components' 'Rowan-Tests' 
+			'Rowan-TestsV2' 'Rowan-Tests-32x' 'Rowan-Tests-Components'
 			'Rowan-Services-Tests' 'Rowan-GemStone-Components'
 			'Rowan-Tests-GemStone' 'Rowan-Tools-Extensions-GemStone'
+			'Rowan-DataCurator-Tests' 'Rowan-Tests-Deprecated'
 	).	"Tool extension methods for RowanKernel classes "
 %
   commit
@@ -669,7 +674,7 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanLoader'
-    value: #('Rowan-GemStone-Loader' 'Rowan-GemStone-Loader32x' 'Rowan-GemStone-Loader-Deprecated'
+    value: #('Rowan-GemStone-Loader' 'Rowan-GemStone-Loader-Deprecated'
 	).		"GemStone Rowan loader classes"
 %
   commit
@@ -696,7 +701,7 @@ commit
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
     value: #( 
-			'Rowan-GemStone-Components-Extensions'
+			'Rowan-GemStone-Components-Extensions' 'Rowan-GemStone-Definitions-ExtensionsV2'
 	).	"Rowan Tools"
 %
   commit
