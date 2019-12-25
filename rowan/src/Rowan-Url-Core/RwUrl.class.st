@@ -75,8 +75,6 @@ RwUrl class >> fromString: aString [
       fragment := remainder copyFrom: index + 1 to: remainder size.
       remainder := remainder copyFrom: 1 to: index - 1 ].
   scheme := self schemeNameForString: remainder.
-  (scheme = 'http' or: [ scheme = 'https' ])
-    ifTrue: [ ^ self httpFromString: aString ].
   newUrl := (self urlClassForScheme: scheme) new
     privateInitializeFromText: remainder.
   newUrl privateFragment: fragment.
@@ -111,13 +109,21 @@ RwUrl class >> schemeNameForString: aString [
 
 { #category : 'parsing' }
 RwUrl class >> urlClassForScheme: scheme [
-
 	"explicitly list the classes to be matched: https://github.com/dalehenrich/Rowan/issues/211"
 
-	^ {RwFileUrl. RwCypressUrl. RwTonelUrl. RwFiletreeUrl. RwGithubUrl. RwGenericUrl. RwHierarchicalUrl. RwSmalltalkRepositoryUrl. RwGitFileTreeUrl}
-				detect: [ :urlClass | urlClass schemeName = scheme ]
-				ifNone: [ RwGenericUrl ].
-
+	^ {RwFileUrl.
+	RwCypressUrl.
+	RwTonelUrl.
+	RwFiletreeUrl.
+	RwGithubUrl.
+	RwGenericUrl.
+	RwHierarchicalUrl.
+	RwSmalltalkRepositoryUrl.
+	RwGitFileTreeUrl.
+	RwHttpUrl.
+	RwHttpsUrl}
+		detect: [ :urlClass | urlClass schemeName = scheme ]
+		ifNone: [ RwGenericUrl ]
 ]
 
 { #category : 'converting' }

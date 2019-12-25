@@ -6707,6 +6707,38 @@ true.
 
 doit
 (RwHierarchicalUrl
+	subclass: 'RwHttpUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Url-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwHttpUrl
+	subclass: 'RwHttpsUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Url-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwHierarchicalUrl
 	subclass: 'RwSmalltalkRepositoryUrl'
 	instVarNames: #( project committish dir )
 	classVars: #(  )
@@ -65690,8 +65722,6 @@ fromString: aString
       fragment := remainder copyFrom: index + 1 to: remainder size.
       remainder := remainder copyFrom: 1 to: index - 1 ].
   scheme := self schemeNameForString: remainder.
-  (scheme = 'http' or: [ scheme = 'https' ])
-    ifTrue: [ ^ self httpFromString: aString ].
   newUrl := (self urlClassForScheme: scheme) new
     privateInitializeFromText: remainder.
   newUrl privateFragment: fragment.
@@ -65728,12 +65758,21 @@ schemeNameForString: aString
 category: 'parsing'
 classmethod: RwUrl
 urlClassForScheme: scheme
-
 	"explicitly list the classes to be matched: https://github.com/dalehenrich/Rowan/issues/211"
 
-	^ {RwFileUrl. RwCypressUrl. RwTonelUrl. RwFiletreeUrl. RwGithubUrl. RwGenericUrl. RwHierarchicalUrl. RwSmalltalkRepositoryUrl. RwGitFileTreeUrl}
-				detect: [ :urlClass | urlClass schemeName = scheme ]
-				ifNone: [ RwGenericUrl ].
+	^ {RwFileUrl.
+	RwCypressUrl.
+	RwTonelUrl.
+	RwFiletreeUrl.
+	RwGithubUrl.
+	RwGenericUrl.
+	RwHierarchicalUrl.
+	RwSmalltalkRepositoryUrl.
+	RwGitFileTreeUrl.
+	RwHttpUrl.
+	RwHttpsUrl}
+		detect: [ :urlClass | urlClass schemeName = scheme ]
+		ifNone: [ RwGenericUrl ]
 %
 
 !		Instance methods for 'RwUrl'
@@ -66536,13 +66575,17 @@ privateInitializeFromText: aString
 			| lastColonIndex portString |
 			lastColonIndex := authority findLast: [ :c | c = $: ].
 			portString := authority copyFrom: lastColonIndex + 1 to: authority size.
-			(portString allSatisfy: [ :each | each isDigit ])
-				ifTrue: [ 
-					port := Integer fromString: portString.
-					port > 65535
-						ifTrue: [ self error: 'Invalid port number' ].
-					authority := authority copyFrom: 1 to: lastColonIndex - 1 ]
-				ifFalse: [ self error: 'Invalid port number' ] ].	"get the path"
+			(portString size > 0) 
+				ifTrue: [
+					(portString allSatisfy: [ :each | each isDigit ])
+						ifTrue: [ 
+							port := Integer fromString: portString.
+							port > 65535
+								ifTrue: [ self error: 'Invalid port number' ] ]
+						ifFalse: [ self error: 'Invalid port number' ] ].
+			authority := authority copyFrom: 1 to: lastColonIndex - 1 ].	
+
+	"get the path"
 	path := self privateParsePath: remainder relativeTo: #()
 %
 
@@ -66598,9 +66641,36 @@ schemeName: schemeName0  authority: authority0  path: path0  query: query0
 
 category: 'access'
 method: RwHierarchicalUrl
+segments
+
+	^ path
+%
+
+category: 'access'
+method: RwHierarchicalUrl
 username
 	"http://user:pword@foo.com' asUrl username"
 	^username
+%
+
+! Class implementation for 'RwHttpUrl'
+
+!		Class methods for 'RwHttpUrl'
+
+category: 'constants'
+classmethod: RwHttpUrl
+schemeName
+	^'http'
+%
+
+! Class implementation for 'RwHttpsUrl'
+
+!		Class methods for 'RwHttpsUrl'
+
+category: 'constants'
+classmethod: RwHttpsUrl
+schemeName
+	^'https'
 %
 
 ! Class implementation for 'RwSmalltalkRepositoryUrl'
@@ -73800,14 +73870,6 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 %
 
 ! Class extensions for 'RwUrl'
-
-!		Class methods for 'RwUrl'
-
-category: '*rowan-url-3215'
-classmethod: RwUrl
-httpFromString: aString
-  ^CypressUrl absoluteFromText: aString
-%
 
 !		Instance methods for 'RwUrl'
 

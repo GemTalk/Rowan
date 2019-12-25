@@ -37,13 +37,16 @@ ar := {
 	RwLoadSpecificationV2Test buildSuite.
 	RwProjectLoadComponentV2Test buildSuite.
 	RwProjectSpecificationV2Test buildSuite.
-} collect: [:each | each run ].
+} collect: [:each | {each name . each run} ].
 dict := Dictionary new.
 strm := WriteStream on: String new.
 strm lf.
 clean := true.
-ar do: [:res |
-	strm nextPutAll: res printString; lf.
+ar do: [:ar |
+	| suiteName res |
+	suiteName := ar at: 1.
+	res := ar at: 2.
+	strm nextPutAll: suiteName, ' test suite : ', res printString; lf.
 	res errors  size > 0
 		ifTrue: [ 
 		clean := false.
