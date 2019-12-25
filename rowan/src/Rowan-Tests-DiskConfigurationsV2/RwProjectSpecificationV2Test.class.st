@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwProjectSpecificationV2Test',
-	#superclass : 'RwAbstractV2Test',
-	#category : 'Rowan-TestsV2'
+	#superclass : 'TestCase',
+	#category : 'Rowan-Tests-DiskConfigurationsV2'
 }
 
 { #category : 'tests' }

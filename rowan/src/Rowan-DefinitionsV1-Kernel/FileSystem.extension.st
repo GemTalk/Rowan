@@ -1,6 +1,6 @@
 Extension { #name : 'FileSystem' }
 
-{ #category : '*rowan-components-kernel' }
+{ #category : '*rowan-definitionsv1-kernel' }
 FileSystem >> rowanRepositoryDefinitionClass [
 
 	^ store rowanRepositoryDefinitionClass

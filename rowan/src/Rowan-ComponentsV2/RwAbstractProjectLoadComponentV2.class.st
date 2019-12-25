@@ -56,6 +56,12 @@ RwAbstractProjectLoadComponentV2 class >> newNamed: aName for: projectName [
 
 ]
 
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 class >> orderedDictionaryClass [
+
+	self subclassResponsibility: #orderedDictionaryClass
+]
+
 { #category : 'exporting' }
 RwAbstractProjectLoadComponentV2 >> _exportToUrl: fileUrl [
 	self subclassResponsibility: #'_exportToUrl:'
@@ -380,12 +386,12 @@ RwAbstractProjectLoadComponentV2 >> initializeForExport [
 	self conditionalPackages
 		ifNotNil: [ :cp | 
 			| orderedConditionalPackages |
-			orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
+			orderedConditionalPackages := self class orderedDictionaryClass new.
 			(cp keys asSortedCollection: [ :a :b | (a at: 1) <= (b at: 1) ])
 				do: [ :ar | 
 					| dict orderedPackageNames |
 					dict := cp at: ar.
-					orderedPackageNames := Rowan platform orderedDictionaryClass new.
+					orderedPackageNames := self class orderedDictionaryClass new.
 					dict keys asArray sort
 						do: [ :group | orderedPackageNames at: group put: (dict at: group) ].
 					orderedConditionalPackages at: ar put: orderedPackageNames ].
@@ -393,18 +399,18 @@ RwAbstractProjectLoadComponentV2 >> initializeForExport [
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
 			| orderedConditionalPackageMapSpecs |
-			orderedConditionalPackageMapSpecs := Rowan platform orderedDictionaryClass
+			orderedConditionalPackageMapSpecs := self class orderedDictionaryClass
 				new.
 			(conditionalPackageMapSpecs keys asSortedCollection: [ :a :b | a <= b ])
 				do: [ :platformName | 
 					| orderedUserMap userMap |
-					orderedUserMap := Rowan platform orderedDictionaryClass new.
+					orderedUserMap := self class orderedDictionaryClass new.
 					userMap := conditionalPackageMapSpecs at: platformName.
 					(userMap keys asSortedCollection: [ :a :b | a <= b ])
 						do: [ :userName | 
 							| attributeMap orderedAttributeMap |
 							attributeMap := userMap at: userName.
-							orderedAttributeMap := Rowan platform orderedDictionaryClass new.
+							orderedAttributeMap := self class orderedDictionaryClass new.
 							(attributeMap keys asSortedCollection: [ :a :b | a <= b ])
 								do: [ :attributeName | orderedAttributeMap at: attributeName put: (attributeMap at: attributeName) ].
 							orderedUserMap at: userName put: orderedAttributeMap ].

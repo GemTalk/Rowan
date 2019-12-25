@@ -31,6 +31,38 @@
 
 	input ./rowan_gs/DiskConfigurationsV2.gs
 
+	run
+| ar strm dict clean |
+ar := { 
+	RwLoadSpecificationV2Test buildSuite.
+	RwProjectLoadComponentV2Test buildSuite.
+	RwProjectSpecificationV2Test buildSuite.
+} collect: [:each | {each name . each run} ].
+dict := Dictionary new.
+strm := WriteStream on: String new.
+strm lf.
+clean := true.
+ar do: [:ar |
+	| suiteName res |
+	suiteName := ar at: 1.
+	res := ar at: 2.
+	strm nextPutAll: suiteName, ' test suite : ', res printString; lf.
+	res errors  size > 0
+		ifTrue: [ 
+		clean := false.
+		strm nextPutAll: '  errors'; lf.
+		(res errors collect: [:each |  each printString ]) asArray sort do: [:each |
+			strm tab; nextPutAll: each; lf] ].
+	res failures size > 0
+		ifTrue: [
+			clean := false.
+			strm nextPutAll: '  failures'; lf.
+			(res failures collect: [:each | each printString]) asArray sort do: [:each |
+				strm tab; nextPutAll: each; lf ] ] ].
+	GsFile stdout nextPutAll: strm contents.
+	clean ifFalse: [ self error: 'TEST FAILURES' ]
+%
+
 	commit
 
 	logout

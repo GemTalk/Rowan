@@ -75,8 +75,6 @@ RwUrl class >> fromString: aString [
       fragment := remainder copyFrom: index + 1 to: remainder size.
       remainder := remainder copyFrom: 1 to: index - 1 ].
   scheme := self schemeNameForString: remainder.
-  (scheme = 'http' or: [ scheme = 'https' ])
-    ifTrue: [ ^ self httpFromString: aString ].
   newUrl := (self urlClassForScheme: scheme) new
     privateInitializeFromText: remainder.
   newUrl privateFragment: fragment.
@@ -111,13 +109,21 @@ RwUrl class >> schemeNameForString: aString [
 
 { #category : 'parsing' }
 RwUrl class >> urlClassForScheme: scheme [
-
 	"explicitly list the classes to be matched: https://github.com/dalehenrich/Rowan/issues/211"
 
-	^ {RwFileUrl. RwCypressUrl. RwTonelUrl. RwFiletreeUrl. RwGithubUrl. RwGenericUrl. RwHierarchicalUrl. RwSmalltalkRepositoryUrl. RwGitFileTreeUrl}
-				detect: [ :urlClass | urlClass schemeName = scheme ]
-				ifNone: [ RwGenericUrl ].
-
+	^ {RwFileUrl.
+	RwCypressUrl.
+	RwTonelUrl.
+	RwFiletreeUrl.
+	RwGithubUrl.
+	RwGenericUrl.
+	RwHierarchicalUrl.
+	RwSmalltalkRepositoryUrl.
+	RwGitFileTreeUrl.
+	RwHttpUrl.
+	RwHttpsUrl}
+		detect: [ :urlClass | urlClass schemeName = scheme ]
+		ifNone: [ RwGenericUrl ]
 ]
 
 { #category : 'converting' }
@@ -149,57 +155,6 @@ RwUrl >> asUrl [
 RwUrl >> authority [
 	^''
 
-]
-
-{ #category : 'rowan support' }
-RwUrl >> createRwRepositoryForFormat: repositoryFormat forPath: repositoryDirectoryPath [
-  repositoryFormat = 'tonel'
-    ifTrue: [ ^ self createRwTonelRepositoryForPath: repositoryDirectoryPath ].
-  repositoryFormat = 'filetree'
-    ifTrue: [ ^ self createRwFiletreeRepositoryForPath: repositoryDirectoryPath ].
-  repositoryFormat = 'cypress'
-    ifTrue: [ ^ self createRwCypressRepositoryForPath: repositoryDirectoryPath ]
-]
-
-{ #category : 'rowan support' }
-RwUrl >> createRwRepositoryForPath: repositoryDirectoryPath [
-  | hasCypress hasFiletree hasTonel repositoryFormat |
-  hasTonel := hasCypress := hasFiletree := false.
-  (self fileUtils directoryEntriesFrom: repositoryDirectoryPath)
-    do: [ :entry | 
-      | filename |
-      filename := self fileUtils localNameFrom: entry.
-      filename = 'properties.st'
-        ifTrue: [ hasTonel := true ].
-      filename = '.cypress'
-        ifTrue: [ hasCypress := true ].
-      filename = '.filetree'
-        ifTrue: [ hasFiletree := true ] ].
-  hasCypress | hasTonel
-    ifTrue: [
-      | theFilename |
-      theFilename := hasTonel
-        ifTrue: [ 'properties.st' ]
-        ifFalse: [ '.cypress' ].
-      self fileUtils
-        readStreamFor: theFilename
-        in: repositoryDirectoryPath
-        do: [ :fileStream | 
-          repositoryFormat := (STON fromStream: fileStream)
-            at: #'format'
-            ifAbsent: [ 'filetree' ] ].
-      ^ self
-        createRwRepositoryForFormat: repositoryFormat
-        forPath: repositoryDirectoryPath ].
-  hasFiletree
-    ifTrue: [ ^ self createRwRepositoryForFormat: 'filetree' forPath: repositoryDirectoryPath ].
-  ^ self createRwRepositoryForFormat: 'cypress' forPath: repositoryDirectoryPath
-
-]
-
-{ #category : 'rowan support' }
-RwUrl >> fileUtils [
-  ^ Rowan fileUtilities
 ]
 
 { #category : 'fragment' }

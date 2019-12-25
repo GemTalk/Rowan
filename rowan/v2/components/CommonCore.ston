@@ -12,15 +12,12 @@ RwNestedProjectLoadComponentV2 {
 				#packageNames : [
 					'Rowan-Cypress-Core',
 					'Rowan-Kernel',
-					'Rowan-Url-Core',
 					'Rowan-Url-Extensions',
 					'Rowan-Definitions',
 					'Rowan-Core-Definitions-Extensions',
-					'Rowan-Configurations-Common',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
-					'Rowan-Tools-Kernel',
-					'Rowan-Components-Kernel'
+					'Rowan-Tools-Kernel'
 				]
 			},
 			'tests' : {
@@ -94,15 +91,12 @@ RwNestedProjectLoadComponentV2 {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
 					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
-					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-Configurations-Common' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-GemStone' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel-32x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel-36x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
@@ -110,6 +104,7 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-32x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-35x' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
