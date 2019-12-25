@@ -1,6 +1,6 @@
 Extension { #name : 'DiskStore' }
 
-{ #category : '*rowan-components-kernel' }
+{ #category : '*rowan-definitionsv1-kernel' }
 DiskStore >> rowanRepositoryDefinitionClass [
 
 	^ RwDiskRepositoryDefinition

@@ -17,8 +17,7 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-Core-Definitions-Extensions',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
-					'Rowan-Tools-Kernel',
-					'Rowan-Components-Kernel'
+					'Rowan-Tools-Kernel'
 				]
 			},
 			'tests' : {
@@ -92,7 +91,6 @@ RwNestedProjectLoadComponentV2 {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
 					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
-					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },

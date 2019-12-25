@@ -6,6 +6,7 @@
     	'core': {
 				#packageNames : [
 					'Rowan-Tools-Kernel',
+					'Rowan-DefinitionsV1-Kernel',
 					'Rowan-Components-Kernel'
 					]
 				}
@@ -62,6 +63,7 @@
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
 					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
+					'Rowan-DefinitionsV1-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Url' : { 'symbolDictName' : 'Globals' },

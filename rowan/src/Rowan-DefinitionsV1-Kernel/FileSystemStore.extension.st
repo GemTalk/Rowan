@@ -1,6 +1,6 @@
 Extension { #name : 'FileSystemStore' }
 
-{ #category : '*rowan-components-kernel' }
+{ #category : '*rowan-definitionsv1-kernel' }
 FileSystemStore >> rowanRepositoryDefinitionClass [
 
 	self subclassResponsibility: #rowanRepositoryDefinitionClass

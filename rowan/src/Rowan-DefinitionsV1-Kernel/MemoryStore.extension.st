@@ -1,6 +1,6 @@
 Extension { #name : 'MemoryStore' }
 
-{ #category : '*rowan-components-kernel' }
+{ #category : '*rowan-definitionsv1-kernel' }
 MemoryStore >> rowanRepositoryDefinitionClass [
 
 	^ RwMemoryRepositoryDefinition

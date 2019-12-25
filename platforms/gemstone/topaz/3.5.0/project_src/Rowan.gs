@@ -6964,6 +6964,54 @@ true.
 %
 
 doit
+(TestCase
+	subclass: 'RwLoadSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwProjectLoadComponentV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwProjectSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (TonelParser
 	subclass: 'NewTonelParser'
 	instVarNames: #( methodParser currentMethodNode methodBodyStart )
@@ -65723,59 +65771,6 @@ authority
 	^''
 %
 
-category: 'rowan support'
-method: RwUrl
-createRwRepositoryForFormat: repositoryFormat forPath: repositoryDirectoryPath
-  repositoryFormat = 'tonel'
-    ifTrue: [ ^ self createRwTonelRepositoryForPath: repositoryDirectoryPath ].
-  repositoryFormat = 'filetree'
-    ifTrue: [ ^ self createRwFiletreeRepositoryForPath: repositoryDirectoryPath ].
-  repositoryFormat = 'cypress'
-    ifTrue: [ ^ self createRwCypressRepositoryForPath: repositoryDirectoryPath ]
-%
-
-category: 'rowan support'
-method: RwUrl
-createRwRepositoryForPath: repositoryDirectoryPath
-  | hasCypress hasFiletree hasTonel repositoryFormat |
-  hasTonel := hasCypress := hasFiletree := false.
-  (self fileUtils directoryEntriesFrom: repositoryDirectoryPath)
-    do: [ :entry | 
-      | filename |
-      filename := self fileUtils localNameFrom: entry.
-      filename = 'properties.st'
-        ifTrue: [ hasTonel := true ].
-      filename = '.cypress'
-        ifTrue: [ hasCypress := true ].
-      filename = '.filetree'
-        ifTrue: [ hasFiletree := true ] ].
-  hasCypress | hasTonel
-    ifTrue: [
-      | theFilename |
-      theFilename := hasTonel
-        ifTrue: [ 'properties.st' ]
-        ifFalse: [ '.cypress' ].
-      self fileUtils
-        readStreamFor: theFilename
-        in: repositoryDirectoryPath
-        do: [ :fileStream | 
-          repositoryFormat := (STON fromStream: fileStream)
-            at: #'format'
-            ifAbsent: [ 'filetree' ] ].
-      ^ self
-        createRwRepositoryForFormat: repositoryFormat
-        forPath: repositoryDirectoryPath ].
-  hasFiletree
-    ifTrue: [ ^ self createRwRepositoryForFormat: 'filetree' forPath: repositoryDirectoryPath ].
-  ^ self createRwRepositoryForFormat: 'cypress' forPath: repositoryDirectoryPath
-%
-
-category: 'rowan support'
-method: RwUrl
-fileUtils
-  ^ Rowan fileUtilities
-%
-
 category: 'fragment'
 method: RwUrl
 fragment
@@ -65988,7 +65983,7 @@ pathForDirectory
 	they are absolute. Filename is left out."
 
 	| delimiter |
-	delimiter :=  CypressFileUtilities current pathNameDelimiter.
+	delimiter :=  '/'.
 	^String streamContents: [ :s |
 		(self isAbsolute and: [self firstPartIsDriveLetter not])
 			ifTrue: [ s nextPutAll: delimiter ].
@@ -68253,6 +68248,909 @@ testCreateProjects
 				description: 'The project ' , projectName printString , ' should not exist' ]
 %
 
+! Class implementation for 'RwLoadSpecificationV2Test'
+
+!		Instance methods for 'RwLoadSpecificationV2Test'
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_1
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_2
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		revision: 'master';
+		gitUrl: 'file://x/y/z';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_3
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testComparison_1
+	| projectName loadSpecification specName projectSpecCopy stonString stonStringCopy x |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	self
+		assert:
+			(x := RwLoadSpecificationV2 allInstVarNames)
+				=
+					#(#'specName' #'projectName' #'projectAlias' #'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #'revision' #'projectSpecFile' #'componentNames' #'groupNames' #'platformProperties' #'comment' #'projectsHome' #'repositoryResolutionPolicy').	"If inst vars don't match, copy and hash methods have to change"
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+	self assert: projectSpecCopy hash = loadSpecification hash
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testComparison_2
+	"compare equal even if lazy initialization has taken place"
+
+	| projectName loadSpecification specName projectSpecCopy stonString stonStringCopy stonStringLazy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	projectSpecCopy platformProperties.	"trigger the selectors that cause lazy initialization"
+
+	stonStringLazy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+	self assert: projectSpecCopy hash = loadSpecification hash.
+	self deny: stonStringLazy = stonStringCopy
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidPropertyValue
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 'boom';
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidPropertyValueForUser
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 'boom';
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidRevision
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		revision: 'boom';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Invalid revision ''boom''. Should be nil for disk-based repository'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_1
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"original has no predefined platformSpec dictionary"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString stonStringCopy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {
+	(STON toStringPretty: loadSpecification).
+	(STON toStringPretty: projectSpecCopy)}	"useful in case of test failure"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_2
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"predefine platformSpec dictionary in original"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultSymbolDictNameForUser: 'Bozo'
+			to: self _sampleSymbolDictionaryName2;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}.
+	self assert: stonString = (stonStrings at: 1).	"duh"
+	self assert: stonString = (stonStrings at: 2).	"point of test"
+	self deny: stonString = (stonStrings at: 3)	"duh"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_3
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"componentNames and groupNames need to be isolated"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		revision: 'master';
+		gitUrl: 'file://x/y/z';
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy componentNames add: 'Boom'.
+	projectSpecCopy groupNames add: 'boom'.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}.
+	self assert: stonString = (stonStrings at: 1).	"duh"
+	self assert: stonString = (stonStrings at: 2).	"point of test"
+	self deny: stonString = (stonStrings at: 3)	"duh"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testMissingRevision
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: The instance variable ''revision'' must be set for the''gitUrl'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testNilInstanceVariable
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectSpecFile: nil;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''projectSpecFile'' cannot be nil'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testOnlyOneRepositoryUrl
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		diskUrl: 'ftp://$ROWAN_PROJECTS_HOME/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testRevisionMustBeSet
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''revision'' must be set for the''gitUrl'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testUknownPlatform
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+
+	hitError := false.
+	loadSpecification platformProperties at: 'boom' put: Dictionary new.
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown platform name ''boom'' in platform properties'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testUnknownPropertyKey
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+	(loadSpecification platformProperties at: 'gemstone')
+		at: 'BOOM'
+		put:
+			(Dictionary new
+				at: #'boom' put: nil;
+				yourself).
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description) = 'Error: Unknown platform property key #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'private'
+method: RwLoadSpecificationV2Test
+_sampleSymbolDictionaryName1
+
+	^ #'RowanSample9_1'
+%
+
+category: 'private'
+method: RwLoadSpecificationV2Test
+_sampleSymbolDictionaryName2
+
+	^ #'RowanSample9_2'
+%
+
+! Class implementation for 'RwProjectLoadComponentV2Test'
+
+!		Instance methods for 'RwProjectLoadComponentV2Test'
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testBasic
+	"excercise basic functionality"
+
+	| componentName projectName component packageName stonString |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self assert: component validate
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testInvalidConditionalGroupName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString conditionalPackages hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	conditionalPackages := component conditionalPackages.
+	(conditionalPackages at: #('common')) at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Conditional packages includes group name ''boom'' that is not a defined group'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testInvalidGroupName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component defineGroupNamed: 'core' toIncludeGroups: #('boom').
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The group ''boom'' is not a defined group'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUknownPlatform
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	component conditionalPackageMapSpecs at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Unknown platform name ''boom'' in conditional package map specs'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUknownPlatformPropertiesKey
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'boom'
+		put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown platformPropertiesMap key #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUndefinedPackageName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	(((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'packageNameToPlatformPropertiesMap') at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Undefined package name ''boom'' used in plaform properties map'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUnknownPackagePropertName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	(((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'packageNameToPlatformPropertiesMap')
+		at: packageName
+		put:
+			(Dictionary new
+				at: #'boom' put: 'boom';
+				yourself).
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown package property name #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+! Class implementation for 'RwProjectSpecificationV2Test'
+
+!		Instance methods for 'RwProjectSpecificationV2Test'
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testBasic
+	"excercise basic functionality"
+
+	| projectName projectSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
+	self assert: projectSpecification  _validate
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testComparison_1
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy x |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+
+	self
+		assert:
+			(x := RwProjectSpecificationV2 allInstVarNames)
+				=
+					#(#'specName' #'projectName' #'projectSpecPath' #'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'comment' #'repoType' #'loadedCommitId').	"If inst vars don't match, copy and hash methods have to change"
+
+	stonString := STON toStringPretty: projectSpecification.
+
+	projectSpecCopy := projectSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = projectSpecification.
+	self assert: projectSpecCopy hash = projectSpecification hash
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testComparison_2
+	"compare equal even if lazy initialization has taken place"
+
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy stonStringLazy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: projectSpecification.
+
+	projectSpecCopy := projectSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	projectSpecCopy repoType.	"trigger the selectors that cause lazy initialization"
+
+	stonStringLazy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = projectSpecification.
+	self assert: projectSpecCopy hash = projectSpecification hash.
+	self deny: stonStringLazy = stonStringCopy
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testNilInstanceVariable
+	"error coverage for invalid load specs"
+
+	| projectName projectSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		projectsPath: nil;
+		yourself.
+
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
+	hitError := false.
+	[ projectSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''projectsPath'' cannot be nil'.
+			hitError := true ].
+	self assert: hitError
+%
+
 ! Class implementation for 'NewTonelParser'
 
 !		Instance methods for 'NewTonelParser'
@@ -68822,7 +69720,7 @@ asRwSemanticVersionNumber
 	^ RwSemanticVersionNumber fromString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-url'
 method: CharacterCollection
 asRwUrl
 
@@ -68831,7 +69729,7 @@ asRwUrl
 	^ RwUrl fromString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-url'
 method: CharacterCollection
 indexOfAnyOf: specialChars startingAt: oldPos
 
@@ -68909,7 +69807,7 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 	^ aRwSemanticVersonComponent rwSemanticStringLessThanSelf: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-url'
 method: CharacterCollection
 unescapePercents
 
@@ -69748,7 +70646,7 @@ packageNames
 
 !		Instance methods for 'DiskStore'
 
-category: '*rowan-components-kernel'
+category: '*rowan-definitionsv1-kernel'
 method: DiskStore
 rowanRepositoryDefinitionClass
 
@@ -69856,7 +70754,7 @@ rowanProjectsHome
 
 !		Instance methods for 'FileSystem'
 
-category: '*rowan-components-kernel'
+category: '*rowan-definitionsv1-kernel'
 method: FileSystem
 rowanRepositoryDefinitionClass
 
@@ -69867,7 +70765,7 @@ rowanRepositoryDefinitionClass
 
 !		Instance methods for 'FileSystemStore'
 
-category: '*rowan-components-kernel'
+category: '*rowan-definitionsv1-kernel'
 method: FileSystemStore
 rowanRepositoryDefinitionClass
 
@@ -70051,7 +70949,7 @@ stonOn: stonWriter
 
 !		Instance methods for 'MemoryStore'
 
-category: '*rowan-components-kernel'
+category: '*rowan-definitionsv1-kernel'
 method: MemoryStore
 rowanRepositoryDefinitionClass
 
@@ -71334,7 +72232,7 @@ registry_ImplementationClass
 
 !		Class methods for 'RwLoadSpecificationV2'
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 classmethod: RwLoadSpecificationV2
 _gemstoneAllUsersName
 	^ 'allusers'
@@ -71342,7 +72240,7 @@ _gemstoneAllUsersName
 
 !		Instance methods for 'RwLoadSpecificationV2'
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneDefaultMethodEnvForUser: userId
 	| gemstoneProperties userProperties |
@@ -71360,7 +72258,7 @@ gemstoneDefaultMethodEnvForUser: userId
 		ifAbsent: [ self _gemstoneDefaultMethodEnv ]
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneDefaultSymbolDictNameForUser: userId
 	| gemstoneProperties userProperties |
@@ -71378,7 +72276,7 @@ gemstoneDefaultSymbolDictNameForUser: userId
 		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
 	| gemstoneProperties userProperties |
@@ -71396,7 +72294,7 @@ gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
 		ifAbsent: [ self _gemstoneDefaultUseSessionMethodsForExtensions ]
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultMethodEnvForUser: userId to: env
 
@@ -71405,13 +72303,13 @@ gemstoneSetDefaultMethodEnvForUser: userId to: env
 			at: #defaultMethodEnv put: env
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultMethodEnvTo: env
 	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: env
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 
@@ -71420,13 +72318,13 @@ gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 			at: #defaultSymbolDictName put: symbolDictName
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self gemstoneSetDefaultSymbolDictNameForUser: self _gemstoneAllUsersName to: symbolDictName
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
 
@@ -71435,7 +72333,7 @@ gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
 			at: #defaultUseSessionMethodsForExtensions put: aBool
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
@@ -71452,27 +72350,27 @@ resolve
 	^ RwResolvedProjectV2 loadSpecification: self
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 _gemstoneAllUsersName
 
 	^ self class _gemstoneAllUsersName
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 _gemstoneDefaultMethodEnv
 	^ 0
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 _gemstoneDefaultSymbolDictName
 
 	^ 'UserGlobals'
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-gemstone-specificationsv2'
 method: RwLoadSpecificationV2
 _gemstoneDefaultUseSessionMethodsForExtensions
 
@@ -72941,6 +73839,53 @@ createRwFiletreeRepositoryForPath: repositoryDirectoryPath
 		yourself
 %
 
+category: '*rowan-url-corev1'
+method: RwUrl
+createRwRepositoryForFormat: repositoryFormat forPath: repositoryDirectoryPath
+  repositoryFormat = 'tonel'
+    ifTrue: [ ^ self createRwTonelRepositoryForPath: repositoryDirectoryPath ].
+  repositoryFormat = 'filetree'
+    ifTrue: [ ^ self createRwFiletreeRepositoryForPath: repositoryDirectoryPath ].
+  repositoryFormat = 'cypress'
+    ifTrue: [ ^ self createRwCypressRepositoryForPath: repositoryDirectoryPath ]
+%
+
+category: '*rowan-url-corev1'
+method: RwUrl
+createRwRepositoryForPath: repositoryDirectoryPath
+  | hasCypress hasFiletree hasTonel repositoryFormat |
+  hasTonel := hasCypress := hasFiletree := false.
+  (self fileUtils directoryEntriesFrom: repositoryDirectoryPath)
+    do: [ :entry | 
+      | filename |
+      filename := self fileUtils localNameFrom: entry.
+      filename = 'properties.st'
+        ifTrue: [ hasTonel := true ].
+      filename = '.cypress'
+        ifTrue: [ hasCypress := true ].
+      filename = '.filetree'
+        ifTrue: [ hasFiletree := true ] ].
+  hasCypress | hasTonel
+    ifTrue: [
+      | theFilename |
+      theFilename := hasTonel
+        ifTrue: [ 'properties.st' ]
+        ifFalse: [ '.cypress' ].
+      self fileUtils
+        readStreamFor: theFilename
+        in: repositoryDirectoryPath
+        do: [ :fileStream | 
+          repositoryFormat := (STON fromStream: fileStream)
+            at: #'format'
+            ifAbsent: [ 'filetree' ] ].
+      ^ self
+        createRwRepositoryForFormat: repositoryFormat
+        forPath: repositoryDirectoryPath ].
+  hasFiletree
+    ifTrue: [ ^ self createRwRepositoryForFormat: 'filetree' forPath: repositoryDirectoryPath ].
+  ^ self createRwRepositoryForFormat: 'cypress' forPath: repositoryDirectoryPath
+%
+
 category: '*rowan-url-cypress'
 method: RwUrl
 createRwTonelRepositoryForPath: repositoryDirectoryPath
@@ -72952,6 +73897,12 @@ createRwTonelRepositoryForPath: repositoryDirectoryPath
     initializeReaderAndWriterClasses;
     url: self printString;
     yourself
+%
+
+category: '*rowan-url-corev1'
+method: RwUrl
+fileUtils
+  ^ Rowan fileUtilities
 %
 
 ! Class extensions for 'SequenceableCollection'

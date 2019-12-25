@@ -11,7 +11,8 @@ RwNestedProjectLoadComponentV2 {
 				#packageNames : [
 					'Rowan-Url-Core',
 					'Rowan-Configurations-Common',
-					'Rowan-Specifications'
+					'Rowan-Specifications',
+					'Rowan-Components-Kernel'
 				]
 			},
 			'tests' : {
@@ -35,6 +36,7 @@ RwNestedProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Configurations-Common' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Url' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' }
