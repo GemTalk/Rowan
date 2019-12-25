@@ -1448,18 +1448,21 @@ methodDef
 category: 'parsing'
 method: TonelParser
 methodDef: aBlock
-	| ar def |
-	ar := { 
-		self separator.
-		self try: [ self metadata ]. 
-		self separator. 
-		self method. 
-		self methodBody 
-	}.
-	def := self newMethodDefinitionFrom: ar.
-	aBlock 
-		value: ar fourth first second notNil 
-		value: def
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStream wrappedStream wrappedStream name .
+
+  aBlock
+    value: ar fourth first second notNil
+    value: def
 %
 
 category: 'parsing'
@@ -1480,14 +1483,14 @@ methodDefList
 					"skip possible spaces at the end"
 					self separator ]
 			] 
-  ] on: TonelParseError do:[:ex | 
-		lastSelectorParsed ifNotNil:[ | str |
+  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
       str := ex details ifNil:[ '' ].
-      ex details: str, ', after tonel method selector: ', lastSelectorParsed printString 
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
     ].
-		ex pass 
+    ex pass 
   ].
-	^ result
+  ^ result
 %
 
 category: 'private factory'
@@ -4463,8 +4466,6 @@ putOn: aStream
 
 !		Instance methods for 'PositionableStreamPortable'
 
-!  match: comes from base image
-
 category: '*tonel-gemstonecommon-core'
 method: PositionableStreamPortable
 originalContents
@@ -4623,7 +4624,12 @@ method: Stream
 
 category: '*tonel-gemstone-kernel'
 method: Symbol
-keywords
+_keywords
+  "Disabled for now by rename to _keywords ; see if 3.6 base image is ok.
+   NOTE, you also need to override in DoubleByteSymbol and QuadByteSymbol
+   if a reimplementation is needed for Rowan .
+   To override in one place for all Symbol classes, 
+    reimplement Symbol class >> _keywords:    instead ."
 
 	"Answer an array of the keywords that compose the receiver."
 

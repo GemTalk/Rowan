@@ -4667,7 +4667,8 @@ category: 'primitives-path'
 classmethod: File
 lookupDirectory: fullPath filename: fileName
 
-	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
+	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and 
+   return entry array or nil "
 
 	^ self lookupPath: fullPath, '/', fileName
 %
@@ -7759,7 +7760,8 @@ classmethod: DiskStore
 activeClass
 	self allSubclasses do: [:ea | 
 		ea isActiveClass ifTrue: [^ ea]].
-	^ self
+  "Various methods go into infinite recursion if we return self."
+	Error signal:'Cannot find an active subclass of DiskStore' .
 %
 
 category: 'current'
@@ -7860,14 +7862,22 @@ category: 'private'
 method: DiskStore
 basicEntry: ignored path: aPath nodesDo: aBlock
 	| pathString intOrArray |
-		
 	pathString := self stringFromPath: aPath.
 	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
 	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
 	intOrArray
 		do: [:entryPathString |
 			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (File lookupPath: entryPathString) ] ]
+				ifFalse: [ | aFile |
+          aFile := File lookupPath: entryPathString .
+          "For now, ignore symLinks which reference a non-existant file."
+          aFile ifNil:[ 
+             (GsFile isSymbolicLink: entryPathString onClient: false) ifFalse:[
+                self signalFileDoesNotExist: entryPathString 
+             ]
+          ] ifNotNil:[
+            aBlock value: aFile 
+          ]]]
 %
 
 category: 'public'
@@ -8166,7 +8176,9 @@ delimiter
 category: 'current'
 classmethod: UnixStore
 isActiveClass
-	^ ((System gemVersionAt: 'osName') = 'Linux') and: [ super isActiveClass ]
+  | osNam |
+  osNam := System gemVersionAt: 'osName'.
+  ^ (#( 'Linux' 'Darwin' 'SunOS' 'AIX') includes: osNam) and:[ super isActiveClass ]
 %
 
 category: 'public'
@@ -8213,7 +8225,7 @@ checkName: aFileName fixErrors: fixing
 category: 'current'
 classmethod: MacStore
 isActiveClass
-	^ ((System gemVersionAt: 'osName') = 'OSX') and: [ super isActiveClass ]
+	^ ((System gemVersionAt: 'osName') = 'Darwin') and: [ super isActiveClass ]
 %
 
 category: 'public'
@@ -9463,11 +9475,13 @@ from: aString delimiter: aDelimiterCharacter
 
 	aString first = $$
 		ifTrue: [
-			| pathElements envVarString envVarElement |
+			| pathElements envVarString envVarElement eVar |
 			"GemStone paths are allowed to start with an environment variable"
 			pathElements := aDelimiterCharacter split: aString.
 			envVarElement := (pathElements at: 1) .
-			envVarString := (System gemEnvironmentVariable: (envVarElement copyFrom: 2 to: envVarElement size)) decodeFromUTF8 asString.
+			envVarString := System gemEnvironmentVariable: (eVar := envVarElement copyFrom: 2 to: envVarElement size). 
+      envVarString ifNil:[ Error signal:'environment variable ' , eVar ,' not defined']. 
+      envVarString := envVarString decodeFromUTF8 asString .
 			pathClass :=  ((self isAbsolutePath: envVarString delimiter: aDelimiterCharacter) or: 
 									[self isAbsoluteWindowsPath: envVarString]) 
 				ifTrue: [ AbsolutePath ]
@@ -19079,10 +19093,16 @@ isEmptyOrNil
 category: '*filesystem-gemstone-kernel'
 method: Utf8
 asByteArray
-
 	^ ByteArray streamContents: [ :stream |
 		self do: [ :each |
 			stream nextPut: each ] ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Utf8
+asString
+  "override the *filesystem  ByteArray >> asString"
+  ^ self decodeToString   "or maybe  decodeToUnicode ??"
 %
 
 ! Class Initialization
