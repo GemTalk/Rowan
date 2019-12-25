@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwNestedProjectLoadComponentV2',
-	#superclass : 'RwAbstractProjectLoadComponentV2',
+	#superclass : 'RwCommonProjectLoadComponentV2',
 	#category : 'Rowan-ComponentsV2'
 }
 

@@ -1,4 +1,4 @@
-RwProjectLoadComponentV2 {
+RwNestedProjectLoadComponentV2 {
 	#name : 'CommonComponent',
 	#comment : 'V2 prototype. Common code shared by ComponentV1 and ComponentV2',
 	#componentNames : [

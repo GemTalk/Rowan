@@ -1,0 +1,56 @@
+RwProjectLoadComponentV2 {
+	#name : 'DiskConfigurationsV2',
+	#comment : 'V2 classes that are exported to disk for specifiying configurations. These class definitions should be shared by all platforms that support the Rowan disk spec.',
+	#componentNames : [
+			'DiskConfigurationsCommon'
+		],
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Rowan-SpecificationsV2',
+					'Rowan-ComponentsV2'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests-DiskConfigurationsV2'
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-SpecificationsV2'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-SpecificationsV2' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-SpecificationsV2' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-ComponentsV2' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	},
+	#projectNames : [
+		'FileSystemGs',
+		'STON'
+	]
+}

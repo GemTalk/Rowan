@@ -1,0 +1,53 @@
+RwNestedProjectLoadComponentV2 {
+	#name : 'DiskConfigurationsCommon',
+	#comment : 'V2 classes that are exported to disk for specifiying configurations. These class definitions should be shared by all platforms that support the Rowan disk spec.',
+	#componentNames : [
+		],
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Rowan-Url-Core',
+					'Rowan-Configurations-Common',
+					'Rowan-Specifications',
+					'Rowan-Components-Kernel'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Url'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Configurations-Common' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Url' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+}

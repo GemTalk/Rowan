@@ -179,13 +179,17 @@ RwHierarchicalUrl >> privateInitializeFromText: aString [
 			| lastColonIndex portString |
 			lastColonIndex := authority findLast: [ :c | c = $: ].
 			portString := authority copyFrom: lastColonIndex + 1 to: authority size.
-			(portString allSatisfy: [ :each | each isDigit ])
-				ifTrue: [ 
-					port := Integer fromString: portString.
-					port > 65535
-						ifTrue: [ self error: 'Invalid port number' ].
-					authority := authority copyFrom: 1 to: lastColonIndex - 1 ]
-				ifFalse: [ self error: 'Invalid port number' ] ].	"get the path"
+			(portString size > 0) 
+				ifTrue: [
+					(portString allSatisfy: [ :each | each isDigit ])
+						ifTrue: [ 
+							port := Integer fromString: portString.
+							port > 65535
+								ifTrue: [ self error: 'Invalid port number' ] ]
+						ifFalse: [ self error: 'Invalid port number' ] ].
+			authority := authority copyFrom: 1 to: lastColonIndex - 1 ].	
+
+	"get the path"
 	path := self privateParsePath: remainder relativeTo: #()
 ]
 
@@ -237,6 +241,12 @@ RwHierarchicalUrl >> schemeName: schemeName0  authority: authority0  path: path0
 	path := path0.
 	query := query0.
 
+]
+
+{ #category : 'access' }
+RwHierarchicalUrl >> segments [
+
+	^ path
 ]
 
 { #category : 'access' }
