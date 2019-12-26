@@ -1,6 +1,6 @@
 Class {
-	#name : 'RwProjectLoadComponentVisitorV2',
-	#superclass : 'RwProjectLoadConfigurationVisitorV2',
+	#name : 'RwResolvedProjectComponentVisitorV2',
+	#superclass : 'RwAbstractProjectComponentVisitorV2',
 	#instVars : [
 		'projectNames',
 		'projectsRoot',
@@ -14,13 +14,13 @@ Class {
 }
 
 { #category : 'private' }
-RwProjectLoadComponentVisitorV2 >> _addPackageNames: somePackageNames for: aComponent [
+RwResolvedProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: aComponent [
 
 	self projectDefinition addPackages: somePackageNames forComponent: aComponent
 ]
 
 { #category : 'private' }
-RwProjectLoadComponentVisitorV2 >> _projects: projectDirPath forProject: ignored [
+RwResolvedProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ignored [
 
 	| urlBase |
 	self projectNames isEmpty ifTrue: [ ^ #() ].
@@ -33,14 +33,14 @@ RwProjectLoadComponentVisitorV2 >> _projects: projectDirPath forProject: ignored
 ]
 
 { #category : 'private' }
-RwProjectLoadComponentVisitorV2 >> _visited: aComponent [
+RwResolvedProjectComponentVisitorV2 >> _visited: aComponent [
 
 	super _visited: aComponent.
 	visitedComponents at: aComponent name put: aComponent.
 ]
 
 { #category : 'initialization' }
-RwProjectLoadComponentVisitorV2 >> initialize [
+RwResolvedProjectComponentVisitorV2 >> initialize [
 
 	super initialize.
 	projectNames := Set new.
@@ -49,44 +49,44 @@ RwProjectLoadComponentVisitorV2 >> initialize [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectDefinition [
+RwResolvedProjectComponentVisitorV2 >> projectDefinition [
 	^ self resolvedProject _projectDefinition
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectLoadSpecs [
+RwResolvedProjectComponentVisitorV2 >> projectLoadSpecs [
 
 	^ projectLoadSpecs
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectNames [
+RwResolvedProjectComponentVisitorV2 >> projectNames [
 
 	^ projectNames
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectsRoot [
+RwResolvedProjectComponentVisitorV2 >> projectsRoot [
 	^ projectsRoot
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> projectsRoot: aString [
+RwResolvedProjectComponentVisitorV2 >> projectsRoot: aString [
 	projectsRoot := aString asFileReference
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> resolvedProject [
+RwResolvedProjectComponentVisitorV2 >> resolvedProject [
 	^ resolvedProject
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> resolvedProject: aResolvedProject [
+RwResolvedProjectComponentVisitorV2 >> resolvedProject: aResolvedProject [
 	resolvedProject := aResolvedProject
 ]
 
 { #category : 'visiting' }
-RwProjectLoadComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLoadConfiguration [
+RwResolvedProjectComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLoadConfiguration [
 	(visitedComponentNames includes: aComponentLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
@@ -111,19 +111,19 @@ RwProjectLoadComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLo
 ]
 
 { #category : 'accessing' }
-RwProjectLoadComponentVisitorV2 >> visitedComponents [
+RwResolvedProjectComponentVisitorV2 >> visitedComponents [
 
 	^ visitedComponents
 ]
 
 { #category : 'visiting' }
-RwProjectLoadComponentVisitorV2 >> visitLoadSpecification: aLoadSpecification [
+RwResolvedProjectComponentVisitorV2 >> visitLoadSpecification: aLoadSpecification [
 
 	self projectLoadSpecs add: aLoadSpecification
 ]
 
 { #category : 'visiting' }
-RwProjectLoadComponentVisitorV2 >> visitNestedProjectLoadComponent: aNestedProjectLoadComponent [
+RwResolvedProjectComponentVisitorV2 >> visitNestedProjectLoadComponent: aNestedProjectLoadComponent [
 	(visitedComponentNames includes: aNestedProjectLoadComponent name)
 		ifTrue: [ ^ self ].
 

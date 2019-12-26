@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwProjectLoadConfigurationVisitorV2',
+	#name : 'RwAbstractProjectComponentVisitorV2',
 	#superclass : 'Object',
 	#instVars : [
 		'packageNames',
@@ -14,21 +14,21 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwProjectLoadConfigurationVisitorV2 class >> new [
+RwAbstractProjectComponentVisitorV2 class >> new [
 
 	^super new initialize
 
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _addPackageNames: somePackageNames for: aConfiguration [
+RwAbstractProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: aConfiguration [
 
 	self packageNames addAll: somePackageNames
 
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _components: componentDirPath forProject: aProjectName [
+RwAbstractProjectComponentVisitorV2 >> _components: componentDirPath forProject: aProjectName [
 
 	| urlBase |
 	self componentNames isEmpty ifTrue: [ ^ #() ].
@@ -43,7 +43,7 @@ RwProjectLoadConfigurationVisitorV2 >> _components: componentDirPath forProject:
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
+RwAbstractProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
 
 	self platformAttributes do: [:anObject |
 		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
@@ -52,7 +52,7 @@ RwProjectLoadConfigurationVisitorV2 >> _matchPlatformAttributes: platformPattern
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _platformAttributeMatchIn: platformMatchersList [
+RwAbstractProjectComponentVisitorV2 >> _platformAttributeMatchIn: platformMatchersList [
 
 	platformMatchersList do: [:platformPatternMatcher |
 		(self _matchPlatformAttributes: platformPatternMatcher) 
@@ -62,7 +62,7 @@ RwProjectLoadConfigurationVisitorV2 >> _platformAttributeMatchIn: platformMatche
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _processConditionalPackageNames: aProjectLoadConfiguration [
+RwAbstractProjectComponentVisitorV2 >> _processConditionalPackageNames: aProjectLoadConfiguration [
 
 	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
 		(self _platformAttributeMatchIn: platformMatchers)
@@ -76,7 +76,7 @@ RwProjectLoadConfigurationVisitorV2 >> _processConditionalPackageNames: aProject
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _processGroupNames [
+RwAbstractProjectComponentVisitorV2 >> _processGroupNames [
 
 	| seedGroupNames seeded |
 	seedGroupNames := groupNames asSet copy.
@@ -98,43 +98,43 @@ RwProjectLoadConfigurationVisitorV2 >> _processGroupNames [
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitorV2 >> _visited: aComponent [
+RwAbstractProjectComponentVisitorV2 >> _visited: aComponent [
 
 	visitedComponentNames add:  aComponent name.
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> componentNames [
+RwAbstractProjectComponentVisitorV2 >> componentNames [
 
 	^ componentNames
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> componentsRoot [
+RwAbstractProjectComponentVisitorV2 >> componentsRoot [
 	^ componentsRoot
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> componentsRoot: aStringOrFileReference [
+RwAbstractProjectComponentVisitorV2 >> componentsRoot: aStringOrFileReference [
 	componentsRoot := aStringOrFileReference asFileReference
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> groupNames [
+RwAbstractProjectComponentVisitorV2 >> groupNames [
 
 	^ groupNames
 
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> groupNames: aColl [
+RwAbstractProjectComponentVisitorV2 >> groupNames: aColl [
 
 	groupNames := aColl copy
 
 ]
 
 { #category : 'initialization' }
-RwProjectLoadConfigurationVisitorV2 >> initialize [
+RwAbstractProjectComponentVisitorV2 >> initialize [
 	packageNames := Set new.
 	visitedComponentNames := Set new.
 	componentNames := Set new.
@@ -143,39 +143,39 @@ RwProjectLoadConfigurationVisitorV2 >> initialize [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> packageNames [
+RwAbstractProjectComponentVisitorV2 >> packageNames [
 
 	^ packageNames
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> platformAttributes [
+RwAbstractProjectComponentVisitorV2 >> platformAttributes [
 
 	^ platformAttributes
 
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfigurationVisitorV2 >> platformAttributes: aColl [
+RwAbstractProjectComponentVisitorV2 >> platformAttributes: aColl [
 
 	platformAttributes := aColl
 
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitorV2 >> visit: aProjectComponent [
+RwAbstractProjectComponentVisitorV2 >> visit: aProjectComponent [
 
 	^aProjectComponent acceptVisitor: self
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitorV2 >> visitNested: aProjectComponent [
+RwAbstractProjectComponentVisitorV2 >> visitNested: aProjectComponent [
 
 	^aProjectComponent acceptNestedVisitor: self
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitorV2 >> visitProjectLoadComponent: aProjectLoadComponent [
+RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadComponent [
 	(visitedComponentNames includes: aProjectLoadComponent name)
 		ifTrue: [ ^ self ].
 

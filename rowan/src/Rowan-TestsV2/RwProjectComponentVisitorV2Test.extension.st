@@ -1,7 +1,7 @@
-Extension { #name : 'RwProjectLoadComponentVisitorV2Test' }
+Extension { #name : 'RwProjectComponentVisitorV2Test' }
 
 { #category : '*rowan-testsV2' }
-RwProjectLoadComponentVisitorV2Test >> testBasicResolvedProjectVisit [
+RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
 
 	| platformAttributes groupNames componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
