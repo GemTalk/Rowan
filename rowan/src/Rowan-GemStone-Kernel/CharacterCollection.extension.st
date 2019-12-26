@@ -1,25 +1,11 @@
 Extension { #name : 'CharacterCollection' }
 
 { #category : '*rowan-gemstone-kernel' }
-CharacterCollection >> asRwGemStoneVersionNumber [
-
-	^ RwGemStoneVersionNumber fromString: self
-
-]
-
-{ #category : '*rowan-gemstone-kernel' }
 CharacterCollection >> asRwRepository [
 
 	"return a platform appropriate repository for the repository identified in the receiver"
 
 	^ self asRwUrl asRwRepository
-]
-
-{ #category : '*rowan-gemstone-kernel' }
-CharacterCollection >> asRwSemanticVersionNumber [
-
-	^ RwSemanticVersionNumber fromString: self
-
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -35,44 +21,6 @@ CharacterCollection >> indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlo
 	ans = 0
 		ifTrue: [ ^ aBlock value ]
 		ifFalse: [ ^ ans ]
-
-]
-
-{ #category : '*rowan-gemstone-kernel' }
-CharacterCollection >> rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher [
-
-	^ anRwGemStoneVersionConfigurationPlatformAttributeMatcher matchString: self
-
-]
-
-{ #category : '*rowan-gemstone-kernel' }
-CharacterCollection >> rwPlatformAttributeMatchForString: anRwStringConfigurationPlatformAttributeMatcher [
-
-	^ anRwStringConfigurationPlatformAttributeMatcher matchString: self
-
-]
-
-{ #category : '*rowan-gemstone-kernel' }
-CharacterCollection >> rwSemanticIntegerLessThanSelf: anInteger [
-
-	"integers have greater precedence than strings"
-	"anInteger < aString-> true"
-
-  ^ true
-
-]
-
-{ #category : '*rowan-gemstone-kernel' }
-CharacterCollection >> rwSemanticStringLessThanSelf: aString [
-
-	^ aString < self
-
-]
-
-{ #category : '*rowan-gemstone-kernel' }
-CharacterCollection >> rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent [
-
-	^ aRwSemanticVersonComponent rwSemanticStringLessThanSelf: self
 
 ]
 

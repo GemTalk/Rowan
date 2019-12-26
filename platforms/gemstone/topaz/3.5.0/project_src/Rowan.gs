@@ -6997,6 +6997,22 @@ true.
 
 doit
 (TestCase
+	subclass: 'RwGemStoneVersionNumberTestCase'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
 	subclass: 'RwLoadSpecificationV2Test'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -7029,7 +7045,55 @@ true.
 
 doit
 (TestCase
+	subclass: 'RwProjectLoadComponentVisitorV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
 	subclass: 'RwProjectSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwSemanticVersionNumber200TestCase'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: 'The tests in this class were extracted from the examples in Semantic Version Specification ...';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwSemanticVersionNumberTestCase'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -39014,7 +39078,7 @@ readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClass
         offset := methodStream position .
 				methodSource := methodStream upToEnd.
 				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
-        methodDef offset: offset inFile: file name .
+        methodDef offset: offset inFile: file pathString .
 				self 
 					validateMethodDefinitionProtocol: methodDef 
 						className: classDefinition name
@@ -57891,7 +57955,7 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior _rwMoveMethod: selector toCategory: protocolSymbol environmentId: 0 .
+	behavior moveMethod: selector toCategory: protocolSymbol.
 
 	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
@@ -58044,7 +58108,7 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior _rwMoveMethod: selector toCategory: protocolSymbol environmentId: 0 .
+	behavior moveMethod: selector toCategory: protocolSymbol.
 
 	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
@@ -58446,7 +58510,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior _rwMoveMethod: selector toCategory: newProtocol environmentId: 0.
+	behavior moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := registryInstance methodRegistry
 		at: compiledMethod
@@ -68542,6 +68606,261 @@ testCreateProjects
 				description: 'The project ' , projectName printString , ' should not exist' ]
 %
 
+! Class implementation for 'RwGemStoneVersionNumberTestCase'
+
+!		Class methods for 'RwGemStoneVersionNumberTestCase'
+
+category: 'Tests'
+classmethod: RwGemStoneVersionNumberTestCase
+shouldInheritSelectors
+
+	^true
+%
+
+!		Instance methods for 'RwGemStoneVersionNumberTestCase'
+
+category: 'test alpha/numeric version numbers'
+method: RwGemStoneVersionNumberTestCase
+testAlphaNumericVersion1
+
+	"Use numeric comparison for pure numbers. If you non-numeric version separate with '-'"
+	
+	| x y |
+	self assert: ((x := self versionClass fromString: '2.9.0') < (y := self versionClass fromString: '2.10.0')).
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion01
+
+	self assert: '1.1.1' asRwGemStoneVersionNumber ~> '1.1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion02
+
+	self deny: '1.1' asRwGemStoneVersionNumber ~> '1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion03
+
+	self assert: '1.1' asRwGemStoneVersionNumber ~> '1.1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion04
+
+	self assert: '3.2.0' asRwGemStoneVersionNumber approximateBase asString = '4'.
+	self assert: '3.2' asRwGemStoneVersionNumber approximateBase asString = '4'.
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion05
+
+	self assert: '3.2.16' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.2.14' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.3' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+
+	self assert: '3.2.15.5' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.2.15.0' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.2.16' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.3' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+
+	self assert: '3.3' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.3.0' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.3.1' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.4' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+
+	self assert: '3.3.1' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+	self assert: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+	self assert: '3.3' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testCollapseZeros
+
+	self assert: (RwGemStoneVersionNumber fromString: '1.0') collapseZeros printString = '1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0') collapseZeros printString = '1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0') collapseZeros printString = '1'.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion01
+
+	self assert: ((self versionClass fromString: '1.1.1') versionString = '1.1.1')
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion02
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.1.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 = v1).	
+	self assert: (v2 = v2).
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion03
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion04
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion05
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion06
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3.'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion07
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3.0.0'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion09
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0'.
+	v2 := self versionClass fromString: '0.7'.
+	self assert: (v1 >= v2).
+	self assert: (v2 <= v1)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion10
+
+	| x y |
+	self assert: ((x := (({
+		self versionClass fromString: '1.0'.
+		self versionClass fromString: '0.7'.
+		self versionClass fromString: '0.8'.
+		self versionClass fromString: '0.9'.
+		self versionClass fromString: '1.0.1'
+	} sort: [:a :b | a <= b ]) collect: [:each | each versionString ]) asArray) = (y := #( '0.7' '0.8' '0.9' '1.0' '1.0.1')))
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion11
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1b'.
+	v2 := self versionClass fromString: '1.0.1a'.
+	self assert: (v1 >= v2).
+	self assert: (v2 <= v1)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion12
+
+	self deny: ((self versionClass fromString: '1.0') <= (self versionClass fromString: '0.7'))
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion13
+
+	self deny: ((self versionClass fromString: '0.8') <= (self versionClass fromString: '0.7')).
+	self deny: ((self versionClass fromString: '0.8.1.8') <= (self versionClass fromString: '0.7.0.5')).
+	
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion17
+
+	self assert: ((self versionClass fromString: '1.0') = (self versionClass fromString: '1.0.0')).
+	self assert: ((self versionClass fromString: '1') = (self versionClass fromString: '1.0')).
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion18
+
+	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1')).
+	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1-0')).
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion20
+
+	self assert: (RwGemStoneVersionNumber fromString: '') printString = ''.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion21
+
+	self deny: (RwGemStoneVersionNumber fromString: '') > (RwGemStoneVersionNumber fromString: '0').
+	self assert: (RwGemStoneVersionNumber fromString: '') < (RwGemStoneVersionNumber fromString: '0').
+	self assert: (RwGemStoneVersionNumber fromString: '') = (RwGemStoneVersionNumber fromString: '').
+
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion24
+
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0.1.0.0') = (RwGemStoneVersionNumber fromString: '1.0.0.1').
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0.1') ~= (RwGemStoneVersionNumber fromString: '1..1').
+%
+
+category: 'private'
+method: RwGemStoneVersionNumberTestCase
+versionClass
+
+	^RwGemStoneVersionNumber
+%
+
 ! Class implementation for 'RwLoadSpecificationV2Test'
 
 !		Instance methods for 'RwLoadSpecificationV2Test'
@@ -69340,6 +69659,42 @@ testUnknownPackagePropertName
 	self assert: hitError
 %
 
+! Class implementation for 'RwProjectLoadComponentVisitorV2Test'
+
+!		Instance methods for 'RwProjectLoadComponentVisitorV2Test'
+
+category: 'tests'
+method: RwProjectLoadComponentVisitorV2Test
+testBasic
+	| platformAttributes groupNames componentDirectory projectsDirectory resolvedProject visitor componentNamesToLoad projectName |
+	platformAttributes := {'common'.
+	'gemstone'.
+	('3.5.0' asRwGemStoneVersionNumber)}.
+
+	visitor := self _visitorClass new
+		platformAttributes: platformAttributes;
+		groupNames: groupNames;
+		componentsRoot: componentDirectory;
+		projectsRoot: projectsDirectory;
+		resolvedProject: resolvedProject;
+		yourself.
+	projectName := resolvedProject projectAlias.
+	componentNamesToLoad
+		do: [ :componentName | 
+			| component url |
+			url := 'file:' , (componentDirectory / componentName , 'ston') pathString.
+			component := RwAbstractProjectConfiguration fromUrl: url.
+			component projectName: projectName.
+
+			visitor visit: component ]
+%
+
+category: 'private'
+method: RwProjectLoadComponentVisitorV2Test
+_visitorClass
+	^ RwProjectLoadComponentVisitorV2
+%
+
 ! Class implementation for 'RwProjectSpecificationV2Test'
 
 !		Instance methods for 'RwProjectSpecificationV2Test'
@@ -69443,6 +69798,560 @@ testNilInstanceVariable
 						= 'Error: The instance variable ''projectsPath'' cannot be nil'.
 			hitError := true ].
 	self assert: hitError
+%
+
+! Class implementation for 'RwSemanticVersionNumber200TestCase'
+
+!		Instance methods for 'RwSemanticVersionNumber200TestCase'
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testGitDescribe
+
+	"https://github.com/GemTalk/Rowan/issues/381#issuecomment-450502212"
+
+	"
+`git describe --match v0.0.1` can produce a version number that looks like the following v0.0.1-1-g832d2b5 ... ensure that we can use this result to compare version numbers ... the leading `-` needs to be transformed to `+`, but other than that I think that the following comparisons are correct for what we are trying to do o
+	"
+	| s1 s2 s3 s4 v1 v2 v3 v4 |
+	s1 := '0.0.1'.
+	s2 := '0.0.1+1-g832d2b5'. "git describe output .. compares equal to 0.0.1, which is acceptable - I think"
+	s3 := '0.0.1+2-g59a4bdf'.	"git describe output .. compares equal to 0.0.1, which is acceptable - I think"
+	s4 := '0.0.2'.
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 = v2.	"acceptable, I think"
+
+	self assert: v1 = v3.	"acceptable, I think"
+	self assert: v2 = v3.	"acceptable, I think"
+
+	self assert: v1 < v4.
+	self assert: v2 < v4.
+	self assert: v3 < v4.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_02
+
+	"
+A normal version number MUST take the form X.Y.Z where X, Y, and Z are
+non-negative integers, and MUST NOT contain leading zeroes. X is the
+major version, Y is the minor version, and Z is the patch version.
+Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.
+	"
+	| s1 s2 s3 v1 v2 v3 |
+	s1 := '1.9.0' .
+	s2 := '1.10.0' .
+	s3 := '1.11.0' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+
+	self assert: v1 < v2.
+	self assert: v2 < v3.
+	self assert: v1 < v3.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_09
+
+	"
+A pre-release version MAY be denoted by appending a hyphen and a
+series of dot separated identifiers immediately following the patch
+version. Identifiers MUST comprise only ASCII alphanumerics and hyphen
+[0-9A-Za-z-]. Identifiers MUST NOT be empty. Numeric identifiers MUST
+NOT include leading zeroes. Pre-release versions have a lower
+precedence than the associated normal version. A pre-release version
+indicates that the version is unstable and might not satisfy the
+intended compatibility requirements as denoted by its associated
+normal version. Examples: 1.0.0-alpha, 1.0.0-alpha.1, 1.0.0-0.3.7,
+1.0.0-x.7.z.92.
+	"
+	| s1 s2 s3 s4 s5 v1 v2 v3 v4 v5 |
+	s1 := '1.0.0-alpha' .
+	s2 := '1.0.0-alpha.1' .
+	s3 := '1.0.0-0.3.7' .
+	s4 := '1.0.0-x.7.z.92' .
+
+	s5 := '1.0.0' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+	v5 := s5 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 < v5.
+	self assert: v2 < v5.
+	self assert: v3 < v5.
+	self assert: v4 < v5.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+	self assert: v5 = v5.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_10
+
+	"
+Build metadata MAY be denoted by appending a plus sign and a series of dot
+separated identifiers immediately following the patch or pre-release version.
+Identifiers MUST comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-].
+Identifiers MUST NOT be empty. Build metadata MUST be ignored when determining
+version precedence. Thus two versions that differ only in the build metadata,
+have the same precedence. Examples: 1.0.0-alpha+001, 1.0.0+20130313144700,
+1.0.0-beta+exp.sha.5114f85.
+	"
+
+	| s1 s2 s3 s4 v1 v2 v3 v4 |
+	s1 := '1.0.0-alpha+001' .
+	s2 := '1.0.0-beta+exp.sha.5114f85' .
+	s3 := '1.0.0+20130313144700' .
+	s4 := '1.0.0+99999999999999' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 < v2.
+	self assert: v2 < v3.
+	self assert: v1 < v3.
+	self assert: v1 < v4.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+	self assert: v4 = v3.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_11
+
+	"
+Precedence refers to how versions are compared to each other when ordered.
+Precedence MUST be calculated by separating the version into major, minor, patch
+and pre-release identifiers in that order (Build metadata does not figure
+into precedence). Precedence is determined by the first difference when
+comparing each of these identifiers from left to right as follows: Major, minor,
+and patch versions are always compared numerically. Example: 1.0.0 < 2.0.0 <
+2.1.0 < 2.1.1. When major, minor, and patch are equal, a pre-release version has
+lower precedence than a normal version. Example: 1.0.0-alpha < 1.0.0. Precedence
+for two pre-release versions with the same major, minor, and patch version MUST
+be determined by comparing each dot separated identifier from left to right
+until a difference is found as follows: identifiers consisting of only digits
+are compared numerically and identifiers with letters or hyphens are compared
+lexically in ASCII sort order. Numeric identifiers always have lower precedence
+than non-numeric identifiers. A larger set of pre-release fields has a higher
+precedence than a smaller set, if all of the preceding identifiers are equal.
+Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta <
+1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
+	"
+
+	| vrsns vrsna vrsnb |
+	vrsns := #( '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-alpha.beta' '1.0.0-beta' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0').
+	vrsns
+		do: [:str |
+			vrsnb := str asRwSemanticVersionNumber.
+			self assert: vrsnb printString = str.
+			self assert: vrsnb = vrsnb.
+			vrsna ifNotNil: [ self assert: vrsna < vrsnb ].
+			vrsna := vrsnb ].
+	vrsna := nil.
+	vrsns reverse
+		do: [:str |
+			vrsnb := str asRwSemanticVersionNumber.
+			self assert: vrsnb printString = str.
+			self assert: vrsnb = vrsnb.
+			vrsna ifNotNil: [ self assert: vrsna > vrsnb ].
+			vrsna := vrsnb ].
+
+	self deny: '1.0.0-alpha.beta' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber
+%
+
+! Class implementation for 'RwSemanticVersionNumberTestCase'
+
+!		Class methods for 'RwSemanticVersionNumberTestCase'
+
+category: 'Tests'
+classmethod: RwSemanticVersionNumberTestCase
+shouldInheritSelectors
+
+	^true
+%
+
+!		Instance methods for 'RwSemanticVersionNumberTestCase'
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+sampleVersionStrings
+    ^ #('1.0.0+-' '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-0.3.7' '1.0.0-x.7.z.92')
+        , #('1.0.0+build.1' '1.3.7+build.11.e0f985a')
+        ,
+            #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0-rc.1+build.1' '1.0.0' '1.0.0+0.3.7' '1.3.7+build' '1.3.7+build.2.b8f12d7' '1.3.7+build.11.e0f985a')
+        , #('1.0.0-alp-h-a' '1.0.0-r-c.1' '1.0.0+alp-h-a' '1.0.0+r-c.1')
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion1
+
+	"Use numeric comparison for pure numbers. If you non-numeric version separate with '-'"
+	
+	| x y |
+	self assert: ((x := self versionClass fromString: '2.9.0') < (y := self versionClass fromString: '2.10.0')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion2
+
+	self assert: ((self versionClass fromString: '2.9.0-alpha.2') < (self versionClass fromString: '2.9.0-alpha.3')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion3
+
+	self assert: ((self versionClass fromString: '2.9.9-alpha.2') < (self versionClass fromString: '2.9.10')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion4
+
+	self assert: ((self versionClass fromString: '2.9.9-alpha.2') < (self versionClass fromString: '2.9.9')).
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testEqualityComparison
+    self deny: '1.0.0+-' asRwSemanticVersionNumber = '1.0.0--' asRwSemanticVersionNumber.
+	self assert: '1.0.0+-' asRwSemanticVersionNumber = '1.0.0+a' asRwSemanticVersionNumber.
+	self sampleVersionStrings
+        do: [ :versionString | self assert: versionString asRwSemanticVersionNumber = versionString asRwSemanticVersionNumber ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testLessThanComparison
+    self assert: '1.0.0-rc.1+build.1' asRwSemanticVersionNumber < '1.0.0' asRwSemanticVersionNumber.
+    self
+        assert: '1.0.0-rc.1+build.1' asRwSemanticVersionNumber < '1.0.0+build.0' asRwSemanticVersionNumber.
+    self assert:  '1.0.0-0.3.7' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber.
+    self assert: '1.0.0-alpha' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber.
+    self assert: '1.0.0-0.3.7' asRwSemanticVersionNumber < '1.0.0-x.7.z.92' asRwSemanticVersionNumber
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testOfficialInvalidSemanticVersions
+	"https://github.com/semver/semver/issues/232#issuecomment-430813095"
+
+	"https://github.com/GemTalk/Rowan/issues/381"
+
+    | vrsn |
+    {
+		'1'.
+		'1.2'.
+		'1.2.3-0123'.
+		'1.2.3-0123.0123'.
+		'1.1.2+.123'.
+		'+invalid'.
+		'-invalid'.
+		'-invalid+invalid'.
+		'-invalid.01'.
+		'alpha'.
+		'alpha.beta'.
+		'alpha.beta.1'.
+		'alpha.1'.
+		'alpha+beta'.
+		'alpha_beta'.
+		'alpha.'.
+		'alpha..'.
+		'beta'.
+		'1.0.0-alpha_beta'.
+		'-alpha.'.
+		'1.0.0-alpha..'.
+		'1.0.0-alpha..1'.
+		'1.0.0-alpha...1'.
+		'1.0.0-alpha....1'.
+		'1.0.0-alpha.....1'.
+		'1.0.0-alpha......1'.
+		'1.0.0-alpha.......1'.
+		'01.1.1'.
+		'1.01.1'.
+		'1.1.01'.
+		'1.2'.
+		'1.2.3.DEV'.
+		'1.2-SNAPSHOT'.
+		'1.2.31.2.3----RC-SNAPSHOT.12.09.1--..12+788'.
+		'1.2-RC-SNAPSHOT'.
+		'-1.0.3-gamma+b7718'.
+		'+justmeta'.
+		'9.8.7+meta+meta'.
+		'9.8.7-whatever+meta+meta'.
+		'99999999999999999999999.999999999999999999.99999999999999999----RC-SNAPSHOT.12.09.1--------------------------------..12'.
+	}
+	do: [ :versionString |
+		self should: [ vrsn := versionString asRwSemanticVersionNumber ] raise: Error ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testOfficialValidSemanticVersions
+	"https://github.com/semver/semver/issues/232#issuecomment-430813095"
+
+	"https://github.com/GemTalk/Rowan/issues/381"
+
+	| x vrsn |
+    {
+		'0.0.0'.
+		'0.0.1'.
+		'0.0.4'.
+		'1.2.3'.
+		'10.20.30'.
+		'1.1.2-prerelease+meta'.
+		'1.1.2+meta'.
+		'1.1.2+meta-valid'.
+		'1.0.0-alpha'.
+		'1.0.0-beta'.
+		'1.0.0-alpha.beta'.
+		'1.0.0-alpha.beta.1'.
+		'1.0.0-alpha.1'.
+		'1.0.0-alpha0.valid'.
+		'1.0.0-alpha.0valid'.
+		'1.0.0-alpha-a.b-c-somethinglong+build.1-aef.1-its-okay'.
+		'1.0.0-rc.1+build.1'.
+		'2.0.0-rc.1+build.123'.
+		'1.2.3-beta'.
+		'10.2.3-DEV-SNAPSHOT'.
+		'1.2.3-SNAPSHOT-123'.
+		'1.0.0'.
+		'2.0.0'.
+		'1.1.7'.
+		'2.0.0+build.1848'.
+		'2.0.1-alpha.1227'.
+		'1.0.0-alpha+beta'.
+		'1.2.3----RC-SNAPSHOT.12.9.1--.12+788'.
+		'1.2.3----R-S.12.9.1--.12+meta'.
+		'1.2.3----RC-SNAPSHOT.12.9.1--.12'.
+		'1.0.0+0.build.1-rc.10000aaa-kk-0.1'.
+		'99999999999999999999999.999999999999999999.99999999999999999'.
+		'1.0.0-0A.is.legal'.
+		}
+	do: [ :versionString | self assert: versionString = (x := (vrsn := versionString asRwSemanticVersionNumber) printString) ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testPrinting
+    | x vrsn |
+    self sampleVersionStrings
+        do: [ :versionString | self assert: versionString = (x := (vrsn := versionString asRwSemanticVersionNumber) printString) ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioning
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.1.0' '1.0.0-rc.2').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0').
+    self validateSemanticVersionStrings: #('1.0.0-1' '1.0.0-alpha').
+    self validateSemanticVersionStrings: #('1.0.0-alpha' '1.0.0+1').
+    self validateSemanticVersionStrings: #('1.0.0' '1.0.1').
+    self validateSemanticVersionStrings: #('1.0.0--' '1.0.0-a').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0' '1.0.1').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.2' '1.0.0-rc.3').
+    self validateSemanticVersionStrings: #('1.0.0-10000' '1.0.0-a')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioningSpecItem10
+    "[Semantic Versioning 2.0.0-rc.1](http://semver.org/)"
+
+    self validateSemanticVersionStrings: #( '1.0.0-0.3.7' '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-x.7.z.92')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioningSubsetCompliance
+    "subset of sample versions that are compatible with MetacellVersionNumber syntax"
+
+    self
+        validateSemanticVersionStrings:
+            #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion01
+
+	self assert: ((self versionClass fromString: '1.1.1') versionString = '1.1.1')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion02
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.1.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 = v1).	
+	self assert: (v2 = v2).
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion04
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion05
+    | v1 v2 |
+    v1 := self versionClass fromString: '3.0.0'.
+    v2 := self versionClass fromString: '2.0.0'.
+    self assert: v1 > v2
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion09
+    | v1 v2 |
+    v1 := self versionClass fromString: '1.0.0'.
+    v2 := self versionClass fromString: '0.7.0'.
+    self assert: v1 >= v2.
+    self assert: v2 <= v1
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion10
+    | x y |
+    self
+        assert:
+            (x := (({(self versionClass fromString: '1.0.0').
+            (self versionClass fromString: '0.7.0').
+            (self versionClass fromString: '0.8.0').
+            (self versionClass fromString: '0.9.0').
+            (self versionClass fromString: '1.0.1')} sort: [ :a :b | a <= b ]) collect: [ :each | each versionString ])
+                asArray) = (y := #('0.7.0' '0.8.0' '0.9.0' '1.0.0' '1.0.1'))
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion12
+    self deny: (self versionClass fromString: '1.0.0') <= (self versionClass fromString: '0.7.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion14
+
+	self assert: ((self versionClass fromString: '2.9.0-alpha02') < (self versionClass fromString: '2.9.0-alpha03')).
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion15
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0-beta.1')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion16
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion17
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-0').
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-beta.0').
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-beta')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion18
+    | x y |
+    self deny: (x := self versionClass fromString: '1.0.0') < (y := self versionClass fromString: '1.0.0-0').
+    self assert: (x := self versionClass fromString: '1.0.0') > (y := self versionClass fromString: '1.0.0-0').
+    self assert: (x := self versionClass fromString: '1.0.0') = (y := self versionClass fromString: '1.0.0+0').
+ 
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion19
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+validateSemanticVersionStrings: versionStrings
+    | versions version |
+    versions := versionStrings collect: [ :each | each asRwSemanticVersionNumber ].
+    version := versions at: 1.
+    2 to: versions size do: [ :index | 
+        | nextVersion |
+        nextVersion := versions at: index.
+        self assert: version < nextVersion.
+        version := nextVersion ]
+%
+
+category: 'private'
+method: RwSemanticVersionNumberTestCase
+versionClass
+    ^ RwSemanticVersionNumber
 %
 
 ! Class implementation for 'NewTonelParser'
@@ -70004,7 +70913,7 @@ byteArrayMap
 
 !		Instance methods for 'CharacterCollection'
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 asRwGemStoneVersionNumber
 
@@ -70020,7 +70929,7 @@ asRwRepository
 	^ self asRwUrl asRwRepository
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 asRwSemanticVersionNumber
 
@@ -70076,21 +70985,21 @@ rbStoreOn: aStream
   aStream nextPut: $'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher
 
 	^ anRwGemStoneVersionConfigurationPlatformAttributeMatcher matchString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwPlatformAttributeMatchForString: anRwStringConfigurationPlatformAttributeMatcher
 
 	^ anRwStringConfigurationPlatformAttributeMatcher matchString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticIntegerLessThanSelf: anInteger
 
@@ -70100,14 +71009,14 @@ rwSemanticIntegerLessThanSelf: anInteger
   ^ true
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticStringLessThanSelf: aString
 
 	^ aString < self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 
@@ -71207,14 +72116,14 @@ _rwFinishFromStream: aStream signFound: aSignFound factor: aFactor radix: radix
 
 !		Instance methods for 'Integer'
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticIntegerLessThanSelf: anInteger
 
 	^ anInteger < self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticStringLessThanSelf:  aString
   "integers have greater precedence than strings"
@@ -71223,7 +72132,7 @@ rwSemanticStringLessThanSelf:  aString
   ^ false
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 
@@ -71399,35 +72308,35 @@ isValue
 	^false
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher
   ^ self
     error: 'Expected a String or a RwGemStoneVersion'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwPlatformAttributeMatchForString: anRwStringConfigurationPlatformAttributeMatcher
   ^ self
     error: 'Expected a String or a RwGemStoneVersion'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticIntegerLessThanSelf: anInteger
   ^ self
     error: 'Invalid semantic verson component - should be an Integer.'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticStringLessThanSelf: aString
   ^ self
     error: 'Invalid semantic verson component - should be String.'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
   ^ self

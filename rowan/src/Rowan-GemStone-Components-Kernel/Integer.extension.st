@@ -1,13 +1,13 @@
 Extension { #name : 'Integer' }
 
-{ #category : '*rowan-gemstone-kernel' }
+{ #category : '*rowan-gemstone-components-kernel' }
 Integer >> rwSemanticIntegerLessThanSelf: anInteger [
 
 	^ anInteger < self
 
 ]
 
-{ #category : '*rowan-gemstone-kernel' }
+{ #category : '*rowan-gemstone-components-kernel' }
 Integer >> rwSemanticStringLessThanSelf:  aString [
   "integers have greater precedence than strings"
 	" aString < anInteger -> false"
@@ -16,7 +16,7 @@ Integer >> rwSemanticStringLessThanSelf:  aString [
 
 ]
 
-{ #category : '*rowan-gemstone-kernel' }
+{ #category : '*rowan-gemstone-components-kernel' }
 Integer >> rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent [
 
 	^ aRwSemanticVersonComponent rwSemanticIntegerLessThanSelf: self
