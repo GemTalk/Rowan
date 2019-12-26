@@ -7449,8 +7449,82 @@ _gitPullSessionCacheKey
 
 category: 'private'
 classmethod: RwRowanSample9Test
+_loadSpecNamed: specName
+	"
+		self _clearLoadSpecSessionCache
+	"
+
+	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
+		we'll use `fetch` and `pull` to update the repo and branches as needed"
+
+	"it is assumed that the load spec on the master branch and the load spec on the branch are the same"
+
+	| loadSpecification resolvedProject resolvedRepository dict theSpec branchDict |
+	loadSpecification := self _rowanSample9_0000_load_spec.
+	theSpec := (SessionTemps current
+		at: self _loadSpecSessionCacheKey
+		ifAbsent: [  ])
+		ifNotNil: [ :specsDict | specsDict at: specName ]
+		ifNil: [ 
+			"The first time we access the repository in this session, we'll refresh the 
+				master branch and cache the session specs"
+			loadSpecification revision: 'master'.
+			resolvedProject := loadSpecification resolveStrict.
+
+			resolvedRepository := resolvedProject repository.
+			resolvedRepository
+				fetch;
+				pull: resolvedRepository remote branch: 'master';
+				yourself.
+
+			dict := SessionTemps current
+				at: self _loadSpecSessionCacheKey
+				ifAbsentPut: [ Dictionary new ].
+			(resolvedProject repositoryRoot / 'specs') files
+				do: [ :file | 
+					file
+						readStreamDo: [ :fileStream | 
+							| stream spec |
+							stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+							spec := STON fromStream: stream.
+							dict at: spec specName put: spec ] ].
+			dict at: specName ].
+	theSpec := theSpec copy.
+	theSpec
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+	resolvedProject := theSpec resolveStrict.	"When we reference a spec, we'll checkout the branch"
+	branchDict := SessionTemps current
+		at: self _gitPullSessionCacheKey
+		ifAbsentPut: [ Dictionary new ].
+	(branchDict at: theSpec revision ifAbsent: [  ])
+		ifNil: [ 
+			"Once per session fetch and pull the latest commits for the branch"
+			resolvedRepository := resolvedProject repository.
+			resolvedRepository
+				fetch;
+				pull: resolvedRepository remote branch: theSpec revision;
+				yourself.
+			branchDict at: theSpec revision put: theSpec ].
+	^ theSpec copy
+%
+
+category: 'private'
+classmethod: RwRowanSample9Test
 _loadSpecSessionCacheKey
 	^ #'RowanSample9LoadSpecsDict'
+%
+
+category: 'private'
+classmethod: RwRowanSample9Test
+_rowanSample9_0000_load_spec
+	| rowanProject fileUrl |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	^ (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself
 %
 
 !		Instance methods for 'RwRowanSample9Test'
@@ -8580,63 +8654,7 @@ _issue_527_resolve_load_validate: projectSpec className: className expectedSymDi
 category: 'private'
 method: RwRowanSample9Test
 _loadSpecNamed: specName
-	"
-		self _clearLoadSpecSessionCache
-	"
-
-	"The RowanSample9 repository is expected to be 'permanently' located on disk ... 
-		we'll use `fetch` and `pull` to update the repo and branches as needed"
-
-	"it is assumed that the load spec on the master branch and the load spec on the branch are the same"
-
-	| loadSpecification resolvedProject resolvedRepository dict theSpec branchDict |
-	loadSpecification := self _rowanSample9_0000_load_spec.
-	theSpec := (SessionTemps current
-		at: self _loadSpecSessionCacheKey
-		ifAbsent: [  ])
-		ifNotNil: [ :specsDict | specsDict at: specName ]
-		ifNil: [ 
-			"The first time we access the repository in this session, we'll refresh the 
-				master branch and cache the session specs"
-			loadSpecification revision: 'master'.
-			resolvedProject := loadSpecification resolveStrict.
-
-			resolvedRepository := resolvedProject repository.
-			resolvedRepository
-				fetch;
-				pull: resolvedRepository remote branch: 'master';
-				yourself.
-
-			dict := SessionTemps current
-				at: self _loadSpecSessionCacheKey
-				ifAbsentPut: [ Dictionary new ].
-			(resolvedProject repositoryRoot / 'specs') files
-				do: [ :file | 
-					file
-						readStreamDo: [ :fileStream | 
-							| stream spec |
-							stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-							spec := STON fromStream: stream.
-							dict at: spec specName put: spec ] ].
-			dict at: specName ].
-	theSpec := theSpec copy.
-	theSpec
-		projectsHome: self _testRowanProjectsSandbox;
-		yourself.
-	resolvedProject := theSpec resolveStrict.	"When we reference a spec, we'll checkout the branch"
-	branchDict := SessionTemps current
-		at: self _gitPullSessionCacheKey
-		ifAbsentPut: [ Dictionary new ].
-	(branchDict at: theSpec revision ifAbsent: [  ])
-		ifNil: [ 
-			"Once per session fetch and pull the latest commits for the branch"
-			resolvedRepository := resolvedProject repository.
-			resolvedRepository
-				fetch;
-				pull: resolvedRepository remote branch: theSpec revision;
-				yourself.
-			branchDict at: theSpec revision put: theSpec ].
-	^ theSpec copy
+	^ self class _loadSpecNamed: specName
 %
 
 category: 'private'
@@ -8648,14 +8666,7 @@ _loadSpecSessionCacheKey
 category: 'private'
 method: RwRowanSample9Test
 _rowanSample9_0000_load_spec
-
-	| rowanProject fileUrl |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	fileUrl := 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample9_0000.ston'.
-	^(RwSpecification fromUrl: fileUrl)
-		projectsHome: self _testRowanProjectsSandbox;
-		yourself.
+	^ self class _rowanSample9_0000_load_spec
 %
 
 category: 'private'
@@ -47786,6 +47797,73 @@ testHybridProjectLoad
 	self should: [ normalClass perform: #baz = 'baz' ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
+%
+
+! Class extensions for 'RwProjectComponentVisitorV2Test'
+
+!		Instance methods for 'RwProjectComponentVisitorV2Test'
+
+category: '*rowan-testsV2'
+method: RwProjectComponentVisitorV2Test
+testBasicVisit_withResolvedProject
+	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
+
+	| platformAttributes groupNames componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
+	platformAttributes := {'common'.
+	'gemstone'.
+	('3.5.0' asRwGemStoneVersionNumber)}.
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_DiskConfig_Test'.
+	componentNamesToLoad := #('Core').
+
+	projectsHome := RwRowanSample9Test _testRowanProjectsSandbox asFileReference.
+	projectPath := projectsHome / projectAlias.
+	projectPath exists
+		ifTrue: [ projectPath deleteAll ].
+
+	loadSpec := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		specName: projectName;
+		projectsHome: projectsHome;
+		componentNames: componentNamesToLoad;
+		groupNames: #('core');
+		projectSpecFile: 'rowan/project.ston';
+		gitUrl: 'https://github.com/dalehenrich/RowanSample9';
+		revision: 'spec_0008';
+		yourself.
+	basicProject := RwResolvedProjectV2 basicLoadSpecification: loadSpec.
+	basicProject _projectRepository resolve.	"create clone"
+	groupNames := loadSpec groupNames.
+	componentsRoot := basicProject componentsRoot.
+
+	self assert: basicProject packageNames isEmpty.
+
+	visitor := self _visitorClass new
+		platformAttributes: platformAttributes;
+		groupNames: groupNames;
+		componentsRoot: componentsRoot;
+		projectsRoot: basicProject projectsRoot;
+		resolvedProject: basicProject;
+		yourself.
+	projectName := basicProject projectAlias.
+
+	self assert: basicProject packageNames isEmpty.
+
+	componentNamesToLoad
+		do: [ :componentName | 
+			| component url |
+			url := 'file:' , (componentsRoot / componentName , 'ston') pathString.
+			component := RwAbstractProjectConfiguration fromUrl: url.
+			component projectName: projectName.
+
+			visitor visit: component ].
+	self
+		assert:
+			basicProject packageNames sort
+				=
+					#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
+	self assert: visitor projectLoadSpecs isEmpty
 %
 
 ! Class extensions for 'RwProjectConfigurationsTest'

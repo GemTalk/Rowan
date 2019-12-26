@@ -2,11 +2,6 @@ Class {
 	#name : 'RwResolvedProjectComponentVisitorV2',
 	#superclass : 'RwAbstractProjectComponentVisitorV2',
 	#instVars : [
-		'projectNames',
-		'projectsRoot',
-		'repositoryRoot',
-		'projectLoadSpecs',
-		'visitedComponents',
 		'projectDefinition',
 		'resolvedProject'
 	],
@@ -39,15 +34,6 @@ RwResolvedProjectComponentVisitorV2 >> _visited: aComponent [
 	visitedComponents at: aComponent name put: aComponent.
 ]
 
-{ #category : 'initialization' }
-RwResolvedProjectComponentVisitorV2 >> initialize [
-
-	super initialize.
-	projectNames := Set new.
-	projectLoadSpecs := Set new.
-	visitedComponents := Dictionary new
-]
-
 { #category : 'accessing' }
 RwResolvedProjectComponentVisitorV2 >> projectDefinition [
 	^ self resolvedProject _projectDefinition
@@ -57,22 +43,6 @@ RwResolvedProjectComponentVisitorV2 >> projectDefinition [
 RwResolvedProjectComponentVisitorV2 >> projectLoadSpecs [
 
 	^ projectLoadSpecs
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectNames [
-
-	^ projectNames
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectsRoot [
-	^ projectsRoot
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectsRoot: aString [
-	projectsRoot := aString asFileReference
 ]
 
 { #category : 'accessing' }

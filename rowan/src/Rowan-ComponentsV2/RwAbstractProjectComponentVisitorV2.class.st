@@ -2,12 +2,15 @@ Class {
 	#name : 'RwAbstractProjectComponentVisitorV2',
 	#superclass : 'Object',
 	#instVars : [
-		'packageNames',
+		'projectLoadSpecs',
+		'visitedComponents',
 		'visitedComponentNames',
 		'platformAttributes',
 		'definedGroupNames',
+		'projectNames',
 		'groupNames',
 		'componentNames',
+		'projectsRoot',
 		'componentsRoot'
 	],
 	#category : 'Rowan-ComponentsV2'
@@ -21,9 +24,9 @@ RwAbstractProjectComponentVisitorV2 class >> new [
 ]
 
 { #category : 'private' }
-RwAbstractProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: aConfiguration [
+RwAbstractProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: aComponent [
 
-	self packageNames addAll: somePackageNames
+	self subclassResponsibility: #_addPackageNames:for:
 
 ]
 
@@ -135,17 +138,13 @@ RwAbstractProjectComponentVisitorV2 >> groupNames: aColl [
 
 { #category : 'initialization' }
 RwAbstractProjectComponentVisitorV2 >> initialize [
-	packageNames := Set new.
 	visitedComponentNames := Set new.
+	projectNames := Set new.
 	componentNames := Set new.
 	platformAttributes := #().
-	groupNames := Set new
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> packageNames [
-
-	^ packageNames
+	groupNames := Set new.
+	projectLoadSpecs := Set new.
+	visitedComponents := Dictionary new
 ]
 
 { #category : 'accessing' }
@@ -160,6 +159,28 @@ RwAbstractProjectComponentVisitorV2 >> platformAttributes: aColl [
 
 	platformAttributes := aColl
 
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> projectLoadSpecs [
+
+	^ projectLoadSpecs
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> projectNames [
+
+	^ projectNames
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> projectsRoot [
+	^ projectsRoot
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> projectsRoot: aString [
+	projectsRoot := aString asFileReference
 ]
 
 { #category : 'visiting' }
