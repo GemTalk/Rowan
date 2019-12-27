@@ -37,7 +37,7 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_independent [
 			| component url |
 			url := 'file:' , projectPath , '/' , projectSpec componentsPath , '/'
 				, componentName , '.ston'.
-			component := RwAbstractProjectConfiguration fromUrl: url.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
 			component projectName: projectAlias.
 
 			visitor visit: component ].

@@ -75,7 +75,7 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 		do: [ :componentName | 
 			| component url |
 			url := 'file:' , (componentsRoot / componentName , 'ston') pathString.
-			component := RwAbstractProjectConfiguration fromUrl: url.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
 			component projectName: projectName.
 
 			visitor visit: component ].

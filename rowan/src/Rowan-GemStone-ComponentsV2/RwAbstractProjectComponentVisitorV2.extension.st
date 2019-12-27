@@ -10,7 +10,7 @@ RwAbstractProjectComponentVisitorV2 >> _components: componentDirPath forProject:
 		collect: [ :componentName | 
 			| url |
 			url := urlBase , componentName , '.ston'.
-			(RwCommonProjectLoadComponentV2 fromUrl: url)
+			(RwAbstractProjectLoadComponentV2 fromUrl: url)
 				projectName: aProjectName;
 				yourself ]
 ]

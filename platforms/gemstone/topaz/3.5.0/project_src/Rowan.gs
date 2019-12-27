@@ -3009,22 +3009,6 @@ true.
 
 doit
 (RwAbstractProjectLoadComponentV2
-	subclass: 'RwCommonProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwCommonProjectLoadComponentV2
 	subclass: 'RwNestedProjectLoadComponentV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -3040,7 +3024,7 @@ true.
 %
 
 doit
-(RwCommonProjectLoadComponentV2
+(RwAbstractProjectLoadComponentV2
 	subclass: 'RwProjectLoadComponentV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -33977,32 +33961,6 @@ visitNested: aProjectLoadComponent
 
 category: 'visiting'
 method: RwAbstractProjectComponentVisitorV2
-visitNestedProjectLoadComponent: aNestedProjectLoadComponent
-	(visitedComponentNames includes: aNestedProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aNestedProjectLoadComponent.
-
-	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aNestedProjectLoadComponent.
-
-	self componentNames addAll: aNestedProjectLoadComponent componentNames.
-	(self
-		_components: self componentsPath
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aNestedProjectLoadComponent projectNames.
-	(self
-		_projects: self projectsPath
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-%
-
-category: 'visiting'
-method: RwAbstractProjectComponentVisitorV2
 visitProjectLoadComponent: aProjectLoadComponent
 
 	(visitedComponentNames includes: aProjectLoadComponent name)
@@ -34974,14 +34932,6 @@ _configurations
 
 category: 'instance creation'
 classmethod: RwAbstractProjectLoadComponentV2
-fromUrl: specNameOrUrl
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
-
-	self subclassResponsibility: #'fromUrl:'
-%
-
-category: 'instance creation'
-classmethod: RwAbstractProjectLoadComponentV2
 new
 
 	^self basicNew initialize
@@ -34995,13 +34945,6 @@ newNamed: aName for: projectName
 		name: aName;
 		projectName: projectName;
 		yourself
-%
-
-category: 'accessing'
-classmethod: RwAbstractProjectLoadComponentV2
-orderedDictionaryClass
-
-	self subclassResponsibility: #orderedDictionaryClass
 %
 
 category: 'private'
@@ -35440,12 +35383,6 @@ validate
 	^ true
 %
 
-category: 'exporting'
-method: RwAbstractProjectLoadComponentV2
-_exportToUrl: fileUrl
-	self subclassResponsibility: #'_exportToUrl:'
-%
-
 category: 'private'
 method: RwAbstractProjectLoadComponentV2
 _platformPatternMatcherFor: pattern
@@ -35571,7 +35508,7 @@ category: 'visiting'
 method: RwNestedProjectLoadComponentV2
 acceptNestedVisitor: aVisitor
 
-	^aVisitor visitNestedProjectLoadComponent: self
+	^aVisitor visitProjectLoadComponent: self
 %
 
 category: 'visiting'
@@ -45148,7 +45085,7 @@ _visitComponents: visitorClass forResolvedProject: resolvedProject withComponent
 		do: [ :componentName | 
 			| component url |
 			url := 'file:' , (componentDirectory / componentName , 'ston') pathString.
-			component := RwAbstractProjectConfiguration fromUrl: url.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
 			component projectName: projectName.
 			forLoad
 				ifTrue: [ 
@@ -69425,10 +69362,7 @@ _sampleSymbolDictionaryName2
 category: 'tests'
 method: RwProjectComponentVisitorV2Test
 testBasicVisit_independent
-	"test of RwProjectLoadComponentVisitorV2 as it would be used without an RwResolvedProject."
-
-	"for the purposes of this test, a RwResolveProject is used to clone the RowanSample9 project
-		into the test sandbox directory"
+	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
 
 	| platformAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
 	platformAttributes := {'common'.
@@ -69454,7 +69388,7 @@ testBasicVisit_independent
 			| component url |
 			url := 'file:' , projectPath , '/' , projectSpec componentsPath , '/'
 				, componentName , '.ston'.
-			component := RwAbstractProjectConfiguration fromUrl: url.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
 			component projectName: projectAlias.
 
 			visitor visit: component ].
@@ -72513,7 +72447,7 @@ _components: componentDirPath forProject: aProjectName
 		collect: [ :componentName | 
 			| url |
 			url := urlBase , componentName , '.ston'.
-			(RwCommonProjectLoadComponentV2 fromUrl: url)
+			(RwAbstractProjectLoadComponentV2 fromUrl: url)
 				projectName: aProjectName;
 				yourself ]
 %
@@ -72588,6 +72522,78 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 		"projectOwnerId entries are considered equal for comparison purpposes"
 		^ true ].
 	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+%
+
+! Class extensions for 'RwAbstractProjectLoadComponentV2'
+
+!		Class methods for 'RwAbstractProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwAbstractProjectLoadComponentV2
+fromUrl: specNameOrUrl
+
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme isNil
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
+	url scheme = 'file'
+		ifTrue: [ 
+			CypressFileUtilities current
+				readStreamFor: url fileName
+				in: url pathForDirectory
+				do: [ :stream | ^ self _readStonFrom: stream ] ].
+	url scheme asString = 'https'
+		ifTrue: [ 
+self error: 'not yet supported'.
+"
+			| client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := (Rowan globalNamed: 'ZnClient') new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
+	self error: 'Unknown scheme: ' , url scheme printString
+%
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwAbstractProjectLoadComponentV2
+orderedDictionaryClass
+
+	^ Rowan platform orderedDictionaryClass
+%
+
+!		Instance methods for 'RwAbstractProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+method: RwAbstractProjectLoadComponentV2
+_exportToUrl: fileUrl
+
+	| url |
+	url := fileUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			Rowan fileUtilities
+				writeStreamFor: self name , '.ston'
+				in: url pathForDirectory
+				do: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+  url schemeName = 'memory'
+    ifTrue: [ 
+		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
+			writeStreamDo: [ :stream | 
+			  | string |
+			  string := STON toStringPretty: self.
+			  stream nextPutAll: string.
+			  ^ self ] ].
+	^ nil	"otherwise a noop"
 %
 
 ! Class extensions for 'RwAbstractResolvedObjectV2'
@@ -72925,78 +72931,6 @@ method: RwClassMove
 addMovedClassToPatchSet: aPatchSet
 
 	aPatchSet addClassMove: self
-%
-
-! Class extensions for 'RwCommonProjectLoadComponentV2'
-
-!		Class methods for 'RwCommonProjectLoadComponentV2'
-
-category: '*rowan-gemstone-componentsv2'
-classmethod: RwCommonProjectLoadComponentV2
-fromUrl: specNameOrUrl
-
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
-
-	| url |
-	url := specNameOrUrl asRwUrl.
-	url scheme isNil
-		ifTrue: [ self error: 'scheme must be file: or https:' ].
-	url scheme = 'file'
-		ifTrue: [ 
-			CypressFileUtilities current
-				readStreamFor: url fileName
-				in: url pathForDirectory
-				do: [ :stream | ^ self _readStonFrom: stream ] ].
-	url scheme asString = 'https'
-		ifTrue: [ 
-self error: 'not yet supported'.
-"
-			| client response |
-			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (Rowan globalNamed: 'ZnClient') new.
-			response := client
-				beOneShot;
-				enforceHttpSuccess: true;
-				get: url.
-			^ self _readStonFrom: response decodeFromUTF8
-" ].
-	self error: 'Unknown scheme: ' , url scheme printString
-%
-
-category: '*rowan-gemstone-componentsv2'
-classmethod: RwCommonProjectLoadComponentV2
-orderedDictionaryClass
-
-	^ Rowan platform orderedDictionaryClass
-%
-
-!		Instance methods for 'RwCommonProjectLoadComponentV2'
-
-category: '*rowan-gemstone-componentsv2'
-method: RwCommonProjectLoadComponentV2
-_exportToUrl: fileUrl
-
-	| url |
-	url := fileUrl asRwUrl.
-	url schemeName = 'file'
-		ifTrue: [ 
-			Rowan fileUtilities
-				writeStreamFor: self name , '.ston'
-				in: url pathForDirectory
-				do: [ :stream | 
-					| string |
-					string := STON toStringPretty: self.
-					stream nextPutAll: string.
-					^ self ] ].
-  url schemeName = 'memory'
-    ifTrue: [ 
-		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
-			writeStreamDo: [ :stream | 
-			  | string |
-			  string := STON toStringPretty: self.
-			  stream nextPutAll: string.
-			  ^ self ] ].
-	^ nil	"otherwise a noop"
 %
 
 ! Class extensions for 'RwComponentProjectDefinition'
