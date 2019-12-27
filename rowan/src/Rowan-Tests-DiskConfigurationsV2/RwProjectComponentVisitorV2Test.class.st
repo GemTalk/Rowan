@@ -11,10 +11,7 @@ RwProjectComponentVisitorV2Test >> _visitorClass [
 
 { #category : 'tests' }
 RwProjectComponentVisitorV2Test >> testBasicVisit_independent [
-	"test of RwProjectLoadComponentVisitorV2 as it would be used without an RwResolvedProject."
-
-	"for the purposes of this test, a RwResolveProject is used to clone the RowanSample9 project
-		into the test sandbox directory"
+	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
 
 	| platformAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
 	platformAttributes := {'common'.

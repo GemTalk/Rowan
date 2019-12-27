@@ -188,31 +188,6 @@ RwAbstractProjectComponentVisitorV2 >> visitNested: aProjectLoadComponent [
 ]
 
 { #category : 'visiting' }
-RwAbstractProjectComponentVisitorV2 >> visitNestedProjectLoadComponent: aNestedProjectLoadComponent [
-	(visitedComponentNames includes: aNestedProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aNestedProjectLoadComponent.
-
-	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aNestedProjectLoadComponent.
-
-	self componentNames addAll: aNestedProjectLoadComponent componentNames.
-	(self
-		_components: self componentsPath
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aNestedProjectLoadComponent projectNames.
-	(self
-		_projects: self projectsPath
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-]
-
-{ #category : 'visiting' }
 RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadComponent [
 
 	(visitedComponentNames includes: aProjectLoadComponent name)
