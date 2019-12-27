@@ -197,31 +197,6 @@ RwAbstractProjectComponentVisitorV2 >> visit: aProjectLoadComponent [
 	^aProjectLoadComponent acceptVisitor: self
 ]
 
-{ #category : 'visiting' }
-RwAbstractProjectComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLoadConfiguration [
-	(visitedComponentNames includes: aComponentLoadConfiguration name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aComponentLoadConfiguration.
-
-	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aComponentLoadConfiguration.
-
-	self componentNames addAll: aComponentLoadConfiguration componentNames.
-	(self
-		_components: self componentsRoot
-		forProject: aComponentLoadConfiguration projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aComponentLoadConfiguration projectNames.
-	(self
-		_projects: self projectsRoot
-		forProject: aComponentLoadConfiguration projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-]
-
 { #category : 'accessing' }
 RwAbstractProjectComponentVisitorV2 >> visitedComponents [
 
@@ -267,6 +242,7 @@ RwAbstractProjectComponentVisitorV2 >> visitNestedProjectLoadComponent: aNestedP
 
 { #category : 'visiting' }
 RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadComponent [
+
 	(visitedComponentNames includes: aProjectLoadComponent name)
 		ifTrue: [ ^ self ].
 
@@ -279,7 +255,13 @@ RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadCo
 
 	self componentNames addAll: aProjectLoadComponent componentNames.
 	(self
-		_components: self componentsRoor
+		_components: self componentsRoot
 		forProject: aProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ]
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	self projectNames addAll: aProjectLoadComponent projectNames.
+	(self
+		_projects: self projectsRoot
+		forProject: aProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]

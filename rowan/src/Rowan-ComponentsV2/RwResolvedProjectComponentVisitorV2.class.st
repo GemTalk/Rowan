@@ -2,7 +2,6 @@ Class {
 	#name : 'RwResolvedProjectComponentVisitorV2',
 	#superclass : 'RwAbstractProjectComponentVisitorV2',
 	#instVars : [
-		'projectDefinition',
 		'resolvedProject'
 	],
 	#category : 'Rowan-ComponentsV2'

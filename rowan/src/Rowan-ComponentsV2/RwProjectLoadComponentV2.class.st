@@ -7,5 +7,5 @@ Class {
 { #category : 'visiting' }
 RwProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 
-	^aVisitor visitComponentLoadConfiguration: self
+	^aVisitor visitProjectLoadComponent: self
 ]
