@@ -85,3 +85,35 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 			#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
 	self assert: visitor projectLoadSpecs isEmpty
 ]
+
+{ #category : '*rowan-testsV2' }
+RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
+	"Read project definition from a tonel repository written by VAST .. includes additional package/class/method properties not used by GemStone or Pharo"
+
+	"https://github.com/GemTalk/Rowan/issues/555"
+
+	| platformAttributes resolvedProject projectName loadSpec projectAlias projectsHome projectPath |
+	platformAttributes := {'common'.
+	'vast'}.
+	projectName := 'tonel-demo'.
+	projectAlias := projectName , '_DiskConfig_Test'.
+
+	projectsHome := RwRowanSample9Test _testRowanProjectsSandbox asFileReference.
+	projectPath := projectsHome / projectAlias.
+	projectPath exists
+		ifTrue: [ projectPath deleteAll ].
+
+	loadSpec := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		specName: projectName;
+		projectsHome: projectsHome;
+		componentNames: #('Core');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/project.ston';
+		gitUrl: 'https://github.com/dalehenrich/tonel-demos';
+		revision: 'rowan_553';
+		yourself.
+
+	resolvedProject := loadSpec resolve: platformAttributes
+]

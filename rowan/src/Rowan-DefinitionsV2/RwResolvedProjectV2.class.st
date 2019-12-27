@@ -39,6 +39,17 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 		resolve
 ]
 
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platformAttributes: platformAttributes [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolve: platformAttributes
+]
+
 { #category : 'private' }
 RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 	"answer true if the basic project directory structure is present"
@@ -421,6 +432,20 @@ RwResolvedProjectV2 >> resolve [
 				ifTrue: [ 
 					"update project definition from disk"
 					self read ] ]
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> resolve: platformConfigurationAttributes [
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self read: platformConfigurationAttributes ] ]
 ]
 
 { #category : 'load specification' }

@@ -6,7 +6,7 @@ Class {
 
 { #category : 'accessing' }
 RwSpecification class >> _supportedPlatformNames [
-	^ #('gemstone')
+	^ #('gemstone' 'vast' 'pharo')
 ]
 
 { #category : 'instance creation' }
