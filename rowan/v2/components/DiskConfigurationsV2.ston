@@ -23,7 +23,6 @@ RwProjectLoadComponentV2 {
 		[ 'gemstone' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-GemStone-SpecificationsV2'
 				]
 			},
 			'tests' : {
@@ -36,7 +35,6 @@ RwProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'Rowan-GemStone-SpecificationsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-SpecificationsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-ComponentsV2' : { 'symbolDictName' : 'RowanTools' }
 				}
