@@ -9,9 +9,7 @@ Class {
 		'definedGroupNames',
 		'projectNames',
 		'groupNames',
-		'componentNames',
-		'projectsRoot',
-		'componentsRoot'
+		'componentNames'
 	],
 	#category : 'Rowan-ComponentsV2'
 }
@@ -101,9 +99,23 @@ RwAbstractProjectComponentVisitorV2 >> _processGroupNames [
 ]
 
 { #category : 'private' }
+RwAbstractProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ignored [
+
+	| urlBase |
+	self projectNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
+	^ self projectNames
+		collect: [ :prjName | 
+			| url |
+			url := urlBase , prjName , '.ston'.
+			RwSpecification fromUrl: url ]
+]
+
+{ #category : 'private' }
 RwAbstractProjectComponentVisitorV2 >> _visited: aComponent [
 
 	visitedComponentNames add:  aComponent name.
+	visitedComponents at: aComponent name put: aComponent.
 ]
 
 { #category : 'accessing' }
@@ -114,12 +126,7 @@ RwAbstractProjectComponentVisitorV2 >> componentNames [
 
 { #category : 'accessing' }
 RwAbstractProjectComponentVisitorV2 >> componentsRoot [
-	^ componentsRoot
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> componentsRoot: aStringOrFileReference [
-	componentsRoot := aStringOrFileReference asFileReference
+	^ self subclassResponsibility: #'componentsRoot'
 ]
 
 { #category : 'accessing' }
@@ -148,6 +155,12 @@ RwAbstractProjectComponentVisitorV2 >> initialize [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectComponentVisitorV2 >> packageNames [
+
+	self subclassResponsibility: #packageNames
+]
+
+{ #category : 'accessing' }
 RwAbstractProjectComponentVisitorV2 >> platformAttributes [
 
 	^ platformAttributes
@@ -162,37 +175,94 @@ RwAbstractProjectComponentVisitorV2 >> platformAttributes: aColl [
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectLoadSpecs [
+RwAbstractProjectComponentVisitorV2 >> projectLoadSpecs [
 
 	^ projectLoadSpecs
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectNames [
+RwAbstractProjectComponentVisitorV2 >> projectNames [
 
 	^ projectNames
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectsRoot [
-	^ projectsRoot
+RwAbstractProjectComponentVisitorV2 >> projectsRoot [
+	^ self subclassResponsibility: #'projectsRoot'
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectComponentVisitorV2 >> visit: aProjectLoadComponent [
+
+	^aProjectLoadComponent acceptVisitor: self
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectComponentVisitorV2 >> visitComponentLoadConfiguration: aComponentLoadConfiguration [
+	(visitedComponentNames includes: aComponentLoadConfiguration name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aComponentLoadConfiguration.
+
+	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
+	self _processGroupNames.
+
+	self _processConditionalPackageNames: aComponentLoadConfiguration.
+
+	self componentNames addAll: aComponentLoadConfiguration componentNames.
+	(self
+		_components: self componentsRoot
+		forProject: aComponentLoadConfiguration projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	self projectNames addAll: aComponentLoadConfiguration projectNames.
+	(self
+		_projects: self projectsRoot
+		forProject: aComponentLoadConfiguration projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectsRoot: aString [
-	projectsRoot := aString asFileReference
+RwAbstractProjectComponentVisitorV2 >> visitedComponents [
+
+	^ visitedComponents
 ]
 
 { #category : 'visiting' }
-RwAbstractProjectComponentVisitorV2 >> visit: aProjectComponent [
+RwAbstractProjectComponentVisitorV2 >> visitLoadSpecification: aLoadSpecification [
 
-	^aProjectComponent acceptVisitor: self
+	self projectLoadSpecs add: aLoadSpecification
 ]
 
 { #category : 'visiting' }
-RwAbstractProjectComponentVisitorV2 >> visitNested: aProjectComponent [
+RwAbstractProjectComponentVisitorV2 >> visitNested: aProjectLoadComponent [
 
-	^aProjectComponent acceptNestedVisitor: self
+	^aProjectLoadComponent acceptNestedVisitor: self
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectComponentVisitorV2 >> visitNestedProjectLoadComponent: aNestedProjectLoadComponent [
+	(visitedComponentNames includes: aNestedProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aNestedProjectLoadComponent.
+
+	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
+	self _processGroupNames.
+
+	self _processConditionalPackageNames: aNestedProjectLoadComponent.
+
+	self componentNames addAll: aNestedProjectLoadComponent componentNames.
+	(self
+		_components: self componentsRoot
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	self projectNames addAll: aNestedProjectLoadComponent projectNames.
+	(self
+		_projects: self projectsRoot
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]
 
 { #category : 'visiting' }

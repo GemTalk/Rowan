@@ -37,14 +37,12 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 
 	visitor := self _visitorClass new
 		platformAttributes: platformAttributes;
-		groupNames: groupNames;
-		componentsRoot: componentsRoot;
-		projectsRoot: basicProject projectsRoot;
 		resolvedProject: basicProject;
+		groupNames: groupNames;
 		yourself.
 	projectName := basicProject projectAlias.
 
-	self assert: basicProject packageNames isEmpty.
+	self assert: visitor packageNames isEmpty.
 
 	componentNamesToLoad
 		do: [ :componentName | 
@@ -55,9 +53,8 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 
 			visitor visit: component ].
 	self
-		assert:
-			basicProject packageNames sort
-				=
-					#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
+		assert: visitor packageNames sort
+		equals:
+			#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
 	self assert: visitor projectLoadSpecs isEmpty
 ]

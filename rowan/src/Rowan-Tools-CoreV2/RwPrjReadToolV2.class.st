@@ -25,8 +25,6 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedPr
 	visitor := visitorClass new
 		platformAttributes: platformConfigurationAttributes;
 		groupNames: groupNames;
-		componentsRoot: componentDirectory;
-		projectsRoot: projectsDirectory;
 		resolvedProject: resolvedProject;
 		yourself.
 	componentNames
