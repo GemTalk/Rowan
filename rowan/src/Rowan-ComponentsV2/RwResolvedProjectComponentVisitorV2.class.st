@@ -8,6 +8,15 @@ Class {
 	#category : 'Rowan-ComponentsV2'
 }
 
+{ #category : 'instance creation' }
+RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject platformAttributes: platformConfigurationAttributes groupNames: groupNames [
+	^ self new
+		platformAttributes: platformConfigurationAttributes;
+		groupNames: groupNames;
+		resolvedProject: resolvedProject;
+		yourself
+]
+
 { #category : 'private' }
 RwResolvedProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: aComponent [
 

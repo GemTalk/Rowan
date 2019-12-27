@@ -22,11 +22,10 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedPr
 				error:
 					'No projects directory (' , projectsDirectory pathString printString
 						, ') found for project ' , projectName printString ].
-	visitor := visitorClass new
-		platformAttributes: platformConfigurationAttributes;
-		groupNames: groupNames;
-		resolvedProject: resolvedProject;
-		yourself.
+	visitor := visitorClass
+		resolvedProject: resolvedProject
+		platformAttributes: platformConfigurationAttributes
+		groupNames: groupNames.
 	componentNames
 		do: [ :componentName | 
 			| component url |

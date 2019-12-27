@@ -35,11 +35,10 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 
 	self assert: basicProject packageNames isEmpty.
 
-	visitor := self _visitorClass new
-		platformAttributes: platformAttributes;
-		resolvedProject: basicProject;
-		groupNames: groupNames;
-		yourself.
+	visitor := self _visitorClass
+		resolvedProject: basicProject
+		platformAttributes: platformAttributes
+		groupNames: groupNames.
 	projectName := basicProject projectAlias.
 
 	self assert: visitor packageNames isEmpty.
