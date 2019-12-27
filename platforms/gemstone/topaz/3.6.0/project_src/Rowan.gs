@@ -35290,11 +35290,14 @@ readClassesFor: packageName packageRoot: packageRoot
 category: 'package reading'
 method: RwRepositoryComponentProjectReaderVisitor
 readPackages: packagesRoot
-	packagesRoot directories do: [:packageDir |
-		| packageName |
-		packageName := self _packageNameFromPackageDir: packageDir.
-		(packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
-			ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
+	packagesRoot directories do: [:packageDir | | dir |
+    dir := packageDir path basename .
+    dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
+		  | packageName |
+		  packageName := self _packageNameFromPackageDir: packageDir.
+		  (packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
+			  ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
+    ].
 %
 
 category: 'public'
@@ -35474,11 +35477,13 @@ readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClass
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream methodDef |
+				| protocol methodSource methodStream methodDef offset |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
+        offset := methodStream position .
 				methodSource := methodStream upToEnd.
 				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+        methodDef offset: offset inFile: file name .
 				self 
 					validateMethodDefinitionProtocol: methodDef 
 						className: classDefinition name
@@ -35499,6 +35504,35 @@ _filetreeRepositoryPropertyDictFor: packagesRoot
 ! Class implementation for 'RwRepositoryComponentProjectTonelReaderVisitor'
 
 !		Class methods for 'RwRepositoryComponentProjectTonelReaderVisitor'
+
+category: 'class file reading'
+classmethod: RwRepositoryComponentProjectTonelReaderVisitor
+lineNumberStringForMethod: anRwMethodDefinition
+  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
+		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
+			 ^ self lineNumberStringForOffset: offset fileName: fName
+			] 
+	].
+  ^ '  (Unable to determine line )' .
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryComponentProjectTonelReaderVisitor
+lineNumberStringForOffset: offset fileName: fName
+  | res |
+  res :='  (Unable to determine line number)' .
+  [ | fRef |
+    fRef := fName asFileReference .
+    fRef readStreamDo:[ :fStream |  | buf lf lNum |
+      buf := fStream contents .
+      buf size > offset ifTrue:[ buf size: offset ].
+      lNum := 1 + (buf occurrencesOf: (lf := Character lf)) .
+      res := '', lf , ' near line ' , lNum asString , lf , ' in file ', fName .
+    ]
+  ] on: Error do:[:ex | "ignore" ].
+  ^ res
+%
 
 category: 'class file reading'
 classmethod: RwRepositoryComponentProjectTonelReaderVisitor
@@ -35548,6 +35582,47 @@ readClassFiles: fileArray projectName: projectName packageName: packageName
 
 category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
+checkMethodDefinitions: aClassDef
+  | cls clsName methBlk fakeMethDict pkgName |
+
+  self compileWhileReading ifFalse:[ ^ self "do nothing"  ].
+
+  clsName := aClassDef  name asSymbol .
+  (pkgName := currentPackageDefinition name) = 'Filein1C' ifTrue:[ 
+     "lookup in GemStone_Legacy_Streams first"
+     cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
+  ].
+  cls ifNil:[   
+    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+       "creating the class not implemented yet"
+       Warning signal:'class ' , clsName , ' not found by name lookup'.
+       ^ self "can't check syntax on the methods until class is defined"
+    ].
+  ].
+  cls := cls"anAssociation" value.
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: fakeMethDict
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  0
+    ] on: ( CompileError , CompileWarning ) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+  ].
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef classMethodDefinitions do: methBlk .
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
 classExtensionFileExtensions
 
 	^ #( 'extension' 'st' )
@@ -35558,6 +35633,18 @@ method: RwRepositoryComponentProjectTonelReaderVisitor
 classFileExtensions
 
 	^ #( 'class' 'st' )
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
+compileWhileReading
+  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
+compileWhileReading: aBoolean
+  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 %
 
 category: 'tonel parser'
@@ -35634,35 +35721,54 @@ readClassExtensionFile: file inPackage: packageName
 
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		| definitions stream |
-		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		definitions := (TonelParser on: stream forReader: self) start.
-		((definitions at: 2) at: 1) do: [:mDef |
-			currentClassExtension addClassMethodDefinition: mDef ].
-		((definitions at: 2) at: 2) do: [:mDef |
-			currentClassExtension addInstanceMethodDefinition: mDef ] ].
+	fileReference readStreamDo: [:fileStream | | stream |
+		[ | definitions |
+		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  currentClassExtension addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  currentClassExtension addInstanceMethodDefinition: mDef ] .
+      self checkMethodDefinitions: currentClassExtension .
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
 %
 
 category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
 readClassFile: file inPackage: packageName
-
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		| definitions stream |
-		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		definitions := (TonelParser on: stream forReader: self) start.
-		self validateClassCategory: currentClassDefinition forPackageNamed: packageName.
-		((definitions at: 2) at: 1) do: [:mDef |
-			currentClassDefinition addClassMethodDefinition: mDef ].
-		((definitions at: 2) at: 2) do: [:mDef |
-			currentClassDefinition addInstanceMethodDefinition: mDef ].
-		(currentProjectDefinition packageNamed: packageName)
-			addClassDefinition: currentClassDefinition ].
+	fileReference readStreamDo: [:fileStream | | stream |
+    [
+		  | definitions clsDef projectDef |
+      "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream := ZnBufferedReadStream on: fileStream. 
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+      clsDef := currentClassDefinition ifNotNil:[:def |
+                  currentClassExtension ifNotNil:[ 
+                    Error signal:'both a class definition and extension in file ', file name ].
+                  def
+                ] ifNil:[ currentClassExtension ].
+		  self validateClassCategory: clsDef forPackageNamed: packageName.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  clsDef addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  clsDef addInstanceMethodDefinition: mDef ].
+      self checkMethodDefinitions: clsDef .
+		  projectDef := currentProjectDefinition packageNamed: packageName .
+      currentClassDefinition ifNotNil:[ projectDef addClassDefinition: clsDef ] .
+                             "ifNil:[ projectDef addClassExtensionDefinition: clsDef]."
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
 %
 
 category: 'package reading'
@@ -41053,6 +41159,21 @@ updatePropertiesFromClass: aClass
 
 category: 'utility'
 method: RwClassDefinition
+_removeSubclassesDisallowed
+  "Only for use in building definitions for bootstap of the base image.
+   image bootstrap code responsible for setting subclassesDisallowed on
+   appropriate classes after they are all defined."
+  | propertyName oldValue newValue |
+  propertyName := 'gs_options'.
+  oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
+  oldValue isEmpty ifFalse:[
+     newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
+     self propertyAt: propertyName put: newValue
+  ]
+%
+
+category: 'utility'
+method: RwClassDefinition
 _updateCategoryFromClass: aClass
 
 	| propertyName newValue |
@@ -42047,6 +42168,15 @@ key
 
 category: 'accessing'
 method: RwMethodDefinition
+offset: anInteger inFile: aFileName
+  "these properties are used when handling a CompileError or
+   a tonel parse error."
+  properties at:'_gsFileOffset' put: anInteger .
+  properties at:'_gsFileName' put: aFileName .
+%
+
+category: 'accessing'
+method: RwMethodDefinition
 protocol
 
 	^properties at: 'protocol'
@@ -42862,6 +42992,61 @@ projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: u
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
+topazReadTonelFile: fileName
+    "Read a single file and compile the methods within that file.
+     Definition/redefinition of the class not implemented yet "
+  | projectDef package clsName clsDef cls methBlk envId |
+  projectDef := RwRepositoryComponentProjectTonelReaderVisitor
+     readClassFile: fileName
+     projectName: 'TopazLoad'   "synthetic projed and package names"
+     packageName: 'TopazPackage' .
+  package := projectDef packageNamed: 'TopazPackage_1' .
+  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
+  package classDefinitions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class definition in file ' , fileName
+    ].
+    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
+  ].
+  package classExtensions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class extension in file ' , fileName
+    ].
+    sz > 0 ifTrue:[
+      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
+      clsDef :=  defs values at: 1.
+    ].
+  ].   
+  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
+  clsName := clsDef name .
+  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
+    "creating the class not implemented yet"
+    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
+  ].
+  cls := cls"anAssociation" value.
+
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: nil "install into the class's dictionaries"
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  envId
+    ] on: (CompileError, CompileWarning) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+   ].
+  clsDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  clsDef classMethodDefinitions do: methBlk .
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
 withProperties: properties packageDefinitions: packageDefinitions
 
 	^ self basicNew
@@ -43204,6 +43389,20 @@ commit: message
 	^ self projectRef doCommit: message
 %
 
+category: 'properties'
+method: RwComponentProjectDefinition
+compileWhileReading
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  ^ properties at: 'CompileWhileReading' otherwise: false
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+compileWhileReading: aBoolean
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  properties at: 'CompileWhileReading' put: aBoolean
+%
+
 category: 'accessing'
 method: RwComponentProjectDefinition
 componentNamed: aComponentName
@@ -43340,9 +43539,8 @@ method: RwComponentProjectDefinition
 exportPackages
 	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
 	| projectSetDefinition |
-	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
-		on: Error
-		do: [:ignored | RwProjectSetDefinition new ].
+	projectSetDefinition := (self class newForProjectReference: self projectRef) readProjectSet .
+
 	self exportPackages: projectSetDefinition.
 %
 
@@ -43641,7 +43839,7 @@ readPackageNames: packageNames
 
 	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
-	| format visitorClass |
+	| format aVisitor |
 	packages := Dictionary new. 
 	format := self 
 		packageFormatIfAbsent: [  
@@ -43650,10 +43848,15 @@ readPackageNames: packageNames
 				at: #format ifAbsent: [ 'tonel' ].
 			self packageFormat: formatFromDisk.
 			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
+	format = 'tonel' ifTrue: [ 
+     aVisitor := RwRepositoryComponentProjectTonelReaderVisitor new .
+     self compileWhileReading ifTrue:[
+       aVisitor compileWhileReading: true .
+     ]
+  ] ifFalse: [ 
+     aVisitor := RwRepositoryComponentProjectFiletreeReaderVisitor new .
+  ].
+	^ aVisitor
 		packageNames: packageNames;
 		visit: self.
 %
@@ -48176,22 +48379,27 @@ category: 'compiling'
 method: RwGsMethodPatch
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		intoCategories: nil
-		intoPragmas: nil
-		environmentId: self methodEnvironmentId
+  [
+	  | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
+		  intoCategories: nil
+		  intoPragmas: nil
+		  environmentId: self methodEnvironmentId
+  ] on: (CompileError, CompileWarning) do:[:ex |
+    ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methodDefinition).
+    ex pass 
+  ]
 %
 
 category: 'initializers'
@@ -48684,25 +48892,29 @@ category: 'compiling'
 method: RwGsMethodExtensionSessionMethodSymbolDictPatch
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+  [ | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
 
-	methDict := GsMethodDictionary new.
-	catDict := GsMethodDictionary new.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: methDict
-		intoCategories: catDict
-		intoPragmas: pArray
-		environmentId: self methodEnvironmentId
+	  methDict := GsMethodDictionary new.
+	  catDict := GsMethodDictionary new.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: methDict
+		  intoCategories: catDict
+		  intoPragmas: pArray
+		  environmentId: self methodEnvironmentId
+   ] on: (CompileError, CompileWarning) do:[:ex |
+     ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methodDefinition).
+     ex pass
+   ]
 %
 
 category: 'installing'
@@ -51156,7 +51368,7 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _rwMoveMethod: selector toCategory: protocolSymbol environmentId: 0 .
 
 	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
@@ -51301,7 +51513,7 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _rwMoveMethod: selector toCategory: protocolSymbol environmentId: 0 .
 
 	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
@@ -51703,7 +51915,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+	behavior _rwMoveMethod: selector toCategory: newProtocol environmentId: 0.
 
 	loadedMethod := registryInstance methodRegistry
 		at: compiledMethod
@@ -55829,7 +56041,8 @@ method: RwGsPlatform
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.
-	 Returns the compiled method or signals a CompileError."
+	 Returns the compiled method or signals a CompileError.
+   Only used to parse a method to determine the selector.  "
 
 	| undefinedSymbolList undefinedSymbols |
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
@@ -60331,43 +60544,6 @@ newMethodDefinitionFrom: anArray
 
 !		Instance methods for 'Behavior'
 
-category: '*rowan-gemstone-3215'
-method: Behavior
-moveMethod: aSelector toCategory: categoryName environmentId: envId
-
-	"Moves the method aSelector (a String) from its current category to the
- specified category (also a String).  If either aSelector or categoryName is
- not in the receiver's method dictionary, or if aSelector is already in
- categoryName, generates an error..
- This method does not account for selectors inherited from superclasses."
-
-	| selSym catSym oldCat |
-	self _validatePrivilege
-		ifFalse: [ ^ nil ].
-	(self includesCategory: categoryName environmentId: envId)
-		ifFalse: [ ^ self _categoryNotFound: categoryName ].
-	oldCat := self categoryOfSelector: aSelector environmentId: envId.
-
-"Backport of a change in behavior that was made in 3.4 and is needed for Rowan" 
-"
-	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
-"
-
-	catSym := categoryName asSymbol.
-	selSym := aSelector asSymbol.
-
-	(envId ~~ 0
-		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
-		ifTrue: [ 
-			| catDict |
-			catDict := self _baseCategorysForStore: envId.
-			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
-			(catDict at: catSym) add: selSym ]
-		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
-	self _needsAnnouncement
-		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
-%
-
 category: '*ast-kernel-core'
 method: Behavior
 parseTreeFor: aSymbol	
@@ -60689,6 +60865,45 @@ ifTrue: [
 mySubclasses := self subclasses .
 self _rwNewConstraint: aClass atOffset: offset .
 mySubclasses do:[:x| x _rwNewInheritedConstraint: aClass atOffset: offset ] .
+%
+
+category: '*rowan-gemstone-3215'
+method: Behavior
+_rwMoveMethod: aSelector toCategory: categoryName environmentId: envId
+
+	"Moves the method aSelector (a String) from its current category to the
+ specified category (also a String).  If either aSelector or categoryName is
+ not in the receiver's method dictionary, or if aSelector is already in
+ categoryName, generates an error..
+ This method does not account for selectors inherited from superclasses."
+
+	| selSym catSym oldCat |
+
+  self deprecated:'_rwMoveMethod should use base image if possible'.
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+	(self includesCategory: categoryName environmentId: envId)
+		ifFalse: [ ^ self _categoryNotFound: categoryName ].
+	oldCat := self categoryOfSelector: aSelector environmentId: envId.
+
+"Backport of a change in behavior that was made in 3.4 and is needed for Rowan" 
+"
+	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
+"
+
+	catSym := categoryName asSymbol.
+	selSym := aSelector asSymbol.
+
+	(envId ~~ 0
+		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
+		ifTrue: [ 
+			| catDict |
+			catDict := self _baseCategorysForStore: envId.
+			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
+			(catDict at: catSym) add: selSym ]
+		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
+	self _needsAnnouncement
+		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
 %
 
 category: '*rowan-gemstone-kernel'
@@ -61463,9 +61678,10 @@ _rwOptionsForDefinition
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwReservedOop
- "returns nil or the SmallInteger specifying a reserved oopNumber"
-  | oop|
-  ^ (oop := self asOopNumber) <= System _lastReservedOopNumber ifTrue:[ oop ] ifFalse:[ nil ].
+ "returns nil or the SmallInteger specifying a reserved oop"
+  ^ self asOopNumber <= System _lastReservedOopNumber 
+    ifTrue:[ self asOop ] 
+    ifFalse:[ nil ].
 %
 
 category: '*rowan-gemstone-kernel'

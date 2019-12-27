@@ -25,7 +25,8 @@
       'core': {
 				#packageNames : [
 					'GemStone-Interactions-Kernel',
-					'Rowan-GemStone-3215'
+					'Rowan-GemStone-3215',
+					'Rowan-GemStone-Components-Kernel'
 					]
 				}
 			},
@@ -69,6 +70,7 @@
 					'Rowan-GemStone-Url' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel-32x' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel-36x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
 					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },

@@ -15,6 +15,7 @@ RwProjectLoadConfiguration {
 		}
 	},
 	#definedGroupNames : {
-		'core' : [ ]
+		'core' : [ ] ,
+		'tests' : [ 'core' ]
 	}
 }

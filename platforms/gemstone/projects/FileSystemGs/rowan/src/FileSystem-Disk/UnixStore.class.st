@@ -14,7 +14,9 @@ UnixStore class >> delimiter [
 
 { #category : 'current' }
 UnixStore class >> isActiveClass [
-	^ ((System gemVersionAt: 'osName') = 'Linux') and: [ super isActiveClass ]
+  | osNam |
+  osNam := System gemVersionAt: 'osName'.
+  ^ (#( 'Linux' 'Darwin' 'SunOS' 'AIX') includes: osNam) and:[ super isActiveClass ]
 ]
 
 { #category : 'public' }

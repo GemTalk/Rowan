@@ -22,18 +22,15 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedPr
 				error:
 					'No projects directory (' , projectsDirectory pathString printString
 						, ') found for project ' , projectName printString ].
-	visitor := visitorClass new
-		platformAttributes: platformConfigurationAttributes;
-		groupNames: groupNames;
-		componentsRoot: componentDirectory;
-		projectsRoot: projectsDirectory;
-		resolvedProject: resolvedProject;
-		yourself.
+	visitor := visitorClass
+		resolvedProject: resolvedProject
+		platformAttributes: platformConfigurationAttributes
+		groupNames: groupNames.
 	componentNames
 		do: [ :componentName | 
 			| component url |
 			url := 'file:' , (componentDirectory / componentName , 'ston') pathString.
-			component := RwAbstractProjectConfiguration fromUrl: url.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
 			component projectName: projectName.
 			forLoad
 				ifTrue: [ 
@@ -67,7 +64,7 @@ RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withCompone
 		ifTrue: [ resolvedProject groupNames ]
 		ifFalse: [ groupNames ].
 	^ self
-		_visitComponents: RwProjectLoadComponentVisitorV2
+		_visitComponents: RwResolvedProjectComponentVisitorV2
 		forResolvedProject: resolvedProject
 		withComponentNames: theComponentNames
 		groupNames: theGroupNames

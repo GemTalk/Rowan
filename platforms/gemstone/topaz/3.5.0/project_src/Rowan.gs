@@ -2849,6 +2849,54 @@ true.
 
 doit
 (Object
+	subclass: 'RwAbstractProjectComponentVisitorV2'
+	instVarNames: #( projectLoadSpecs visitedComponents visitedComponentNames platformAttributes definedGroupNames projectNames groupNames componentNames )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractProjectComponentVisitorV2
+	subclass: 'RwIndependentComponentVisitorV2'
+	instVarNames: #( packageNames componentsPath projectsPath )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractProjectComponentVisitorV2
+	subclass: 'RwResolvedProjectComponentVisitorV2'
+	instVarNames: #( resolvedProject )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'RwAbstractProjectConfiguration'
 	instVarNames: #( name comment projectName version configurationNames )
 	classVars: #(  )
@@ -2961,22 +3009,6 @@ true.
 
 doit
 (RwAbstractProjectLoadComponentV2
-	subclass: 'RwCommonProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwCommonProjectLoadComponentV2
 	subclass: 'RwNestedProjectLoadComponentV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -2992,7 +3024,7 @@ true.
 %
 
 doit
-(RwCommonProjectLoadComponentV2
+(RwAbstractProjectLoadComponentV2
 	subclass: 'RwProjectLoadComponentV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -6070,38 +6102,6 @@ true.
 
 doit
 (Object
-	subclass: 'RwProjectLoadConfigurationVisitorV2'
-	instVarNames: #( packageNames visitedComponentNames platformAttributes definedGroupNames groupNames componentNames componentsRoot )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwProjectLoadConfigurationVisitorV2
-	subclass: 'RwProjectLoadComponentVisitorV2'
-	instVarNames: #( projectNames projectsRoot repositoryRoot projectLoadSpecs visitedComponents projectDefinition resolvedProject )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(Object
 	subclass: 'RwPropertyModification'
 	instVarNames: #( key oldValue newValue )
 	classVars: #(  )
@@ -6997,7 +6997,39 @@ true.
 
 doit
 (TestCase
+	subclass: 'RwGemStoneVersionNumberTestCase'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
 	subclass: 'RwLoadSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwProjectComponentVisitorV2Test'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -7030,6 +7062,38 @@ true.
 doit
 (TestCase
 	subclass: 'RwProjectSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwSemanticVersionNumber200TestCase'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: 'The tests in this class were extracted from the examples in Semantic Version Specification ...';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwSemanticVersionNumberTestCase'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -33774,6 +33838,335 @@ matchVersion: aGemStoneVersion
 	^ false
 %
 
+! Class implementation for 'RwAbstractProjectComponentVisitorV2'
+
+!		Class methods for 'RwAbstractProjectComponentVisitorV2'
+
+category: 'instance creation'
+classmethod: RwAbstractProjectComponentVisitorV2
+new
+
+	^super new initialize
+%
+
+!		Instance methods for 'RwAbstractProjectComponentVisitorV2'
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+componentNames
+
+	^ componentNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+componentsPath
+	^ self subclassResponsibility: #'componentsPath'
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+groupNames
+
+	^ groupNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+groupNames: aColl
+
+	groupNames := aColl copy
+%
+
+category: 'initialization'
+method: RwAbstractProjectComponentVisitorV2
+initialize
+	visitedComponentNames := Set new.
+	projectNames := Set new.
+	componentNames := Set new.
+	platformAttributes := #().
+	groupNames := Set new.
+	projectLoadSpecs := Set new.
+	visitedComponents := Dictionary new
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+packageNames
+
+	self subclassResponsibility: #packageNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+platformAttributes
+
+	^ platformAttributes
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+platformAttributes: aColl
+
+	platformAttributes := aColl
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+projectLoadSpecs
+
+	^ projectLoadSpecs
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+projectNames
+
+	^ projectNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+projectsPath
+	^ self subclassResponsibility: #'projectsPath'
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visit: aProjectLoadComponent
+
+	^aProjectLoadComponent acceptVisitor: self
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+visitedComponents
+
+	^ visitedComponents
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitLoadSpecification: aLoadSpecification
+
+	self projectLoadSpecs add: aLoadSpecification
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitNested: aProjectLoadComponent
+
+	^aProjectLoadComponent acceptNestedVisitor: self
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitProjectLoadComponent: aProjectLoadComponent
+
+	(visitedComponentNames includes: aProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aProjectLoadComponent.
+
+	definedGroupNames := aProjectLoadComponent definedGroupNames.
+	self _processGroupNames.
+
+	self _processConditionalPackageNames: aProjectLoadComponent.
+
+	self componentNames addAll: aProjectLoadComponent componentNames.
+	(self
+		_components: self componentsPath
+		forProject: aProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	self projectNames addAll: aProjectLoadComponent projectNames.
+	(self
+		_projects: self projectsPath
+		forProject: aProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_addPackageNames: somePackageNames for: aComponent
+
+	self subclassResponsibility: #_addPackageNames:for:
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_matchPlatformAttributes: platformPatternMatcher
+
+	self platformAttributes do: [:anObject |
+		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
+	^false
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_platformAttributeMatchIn: platformMatchersList
+
+	platformMatchersList do: [:platformPatternMatcher |
+		(self _matchPlatformAttributes: platformPatternMatcher) 
+			ifTrue: [ ^true ] ].
+	^false
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_processConditionalPackageNames: aProjectLoadConfiguration
+
+	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
+			ifTrue: [
+				groupMap keysAndValuesDo: [:group :map |
+					(self groupNames includes: group)
+						ifTrue: [ 
+							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
+							self componentNames addAll: (map at: #componentNames ifAbsent: [ #()] ) ] ] ] ].
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_processGroupNames
+
+	| seedGroupNames seeded |
+	seedGroupNames := groupNames asSet copy.
+	seeded := Set new.
+	[seedGroupNames isEmpty ]
+		whileFalse: [ 
+			seedGroupNames copy do: [:groupName |
+				| referencedGroupNames |
+				"make sure that required groups are included in group names, recursively"
+				seedGroupNames remove: groupName.
+				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
+				groupNames addAll: referencedGroupNames.
+				referencedGroupNames do: [:refGroupName |
+					(seeded includes: refGroupName)
+						ifFalse: [
+						"ensure that we seed each group only once"
+						seeded add: refGroupName.
+						seedGroupNames add: refGroupName ] ] ] ].
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_visited: aComponent
+
+	visitedComponentNames add:  aComponent name.
+	visitedComponents at: aComponent name put: aComponent.
+%
+
+! Class implementation for 'RwIndependentComponentVisitorV2'
+
+!		Instance methods for 'RwIndependentComponentVisitorV2'
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+componentsPath
+	^ componentsPath
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+componentsPath: aString
+	componentsPath := aString
+%
+
+category: 'initialization'
+method: RwIndependentComponentVisitorV2
+initialize
+	super initialize.
+	packageNames := Set new.
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+packageNames
+
+	^ packageNames
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+projectsPath
+	^ projectsPath
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+projectsPath: aString
+	projectsPath := aString
+%
+
+category: 'private'
+method: RwIndependentComponentVisitorV2
+_addPackageNames: somePackageNames for: aComponent
+
+	self packageNames addAll: somePackageNames
+%
+
+! Class implementation for 'RwResolvedProjectComponentVisitorV2'
+
+!		Class methods for 'RwResolvedProjectComponentVisitorV2'
+
+category: 'instance creation'
+classmethod: RwResolvedProjectComponentVisitorV2
+resolvedProject: resolvedProject platformAttributes: platformConfigurationAttributes groupNames: groupNames
+	^ self new
+		platformAttributes: platformConfigurationAttributes;
+		groupNames: groupNames;
+		resolvedProject: resolvedProject;
+		yourself
+%
+
+!		Instance methods for 'RwResolvedProjectComponentVisitorV2'
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+componentsPath
+
+	^ self resolvedProject componentsRoot
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+packageNames
+	^ self resolvedProject packageNames
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+projectDefinition
+	^ self resolvedProject _projectDefinition
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+projectsPath
+
+	^ self resolvedProject projectsRoot
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+resolvedProject
+	^ resolvedProject
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+resolvedProject: aResolvedProject
+	resolvedProject := aResolvedProject
+%
+
+category: 'private'
+method: RwResolvedProjectComponentVisitorV2
+_addPackageNames: somePackageNames for: aComponent
+
+	self projectDefinition addPackages: somePackageNames forComponent: aComponent
+%
+
 ! Class implementation for 'RwAbstractProjectConfiguration'
 
 !		Class methods for 'RwAbstractProjectConfiguration'
@@ -34539,14 +34932,6 @@ _configurations
 
 category: 'instance creation'
 classmethod: RwAbstractProjectLoadComponentV2
-fromUrl: specNameOrUrl
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
-
-	self subclassResponsibility: #'fromUrl:'
-%
-
-category: 'instance creation'
-classmethod: RwAbstractProjectLoadComponentV2
 new
 
 	^self basicNew initialize
@@ -34560,13 +34945,6 @@ newNamed: aName for: projectName
 		name: aName;
 		projectName: projectName;
 		yourself
-%
-
-category: 'accessing'
-classmethod: RwAbstractProjectLoadComponentV2
-orderedDictionaryClass
-
-	self subclassResponsibility: #orderedDictionaryClass
 %
 
 category: 'private'
@@ -35005,12 +35383,6 @@ validate
 	^ true
 %
 
-category: 'exporting'
-method: RwAbstractProjectLoadComponentV2
-_exportToUrl: fileUrl
-	self subclassResponsibility: #'_exportToUrl:'
-%
-
 category: 'private'
 method: RwAbstractProjectLoadComponentV2
 _platformPatternMatcherFor: pattern
@@ -35136,7 +35508,7 @@ category: 'visiting'
 method: RwNestedProjectLoadComponentV2
 acceptNestedVisitor: aVisitor
 
-	^aVisitor visitNestedProjectLoadComponent: self
+	^aVisitor visitProjectLoadComponent: self
 %
 
 category: 'visiting'
@@ -35162,7 +35534,7 @@ category: 'visiting'
 method: RwProjectLoadComponentV2
 acceptVisitor: aVisitor
 
-	^aVisitor visitComponentLoadConfiguration: self
+	^aVisitor visitProjectLoadComponent: self
 %
 
 ! Class implementation for 'RwAbstractProjectSetModificationVisitor'
@@ -38809,14 +39181,17 @@ readClassesFor: packageName packageRoot: packageRoot
 	^ self subclassResponsibility: #readClassesFor:packageRoot:
 %
 
-category: 'other'
+category: 'package reading'
 method: RwRepositoryComponentProjectReaderVisitor
-readPackages: aPackagesRoot
-	aPackagesRoot directories do: [:packageDir |
-		| packageName |
-		packageName := self _packageNameFromPackageDir: packageDir.
-		(packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
-			ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
+readPackages: packagesRoot
+	packagesRoot directories do: [:packageDir | | dir |
+    dir := packageDir path basename .
+    dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
+		  | packageName |
+		  packageName := self _packageNameFromPackageDir: packageDir.
+		  (packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
+			  ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
+    ].
 %
 
 category: 'public'
@@ -39005,11 +39380,13 @@ readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClass
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream methodDef |
+				| protocol methodSource methodStream methodDef offset |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
+        offset := methodStream position .
 				methodSource := methodStream upToEnd.
 				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+        methodDef offset: offset inFile: file pathString .
 				self 
 					validateMethodDefinitionProtocol: methodDef 
 						className: classDefinition name
@@ -39030,6 +39407,35 @@ _filetreeRepositoryPropertyDictFor: aPackagesRoot
 ! Class implementation for 'RwRepositoryComponentProjectTonelReaderVisitor'
 
 !		Class methods for 'RwRepositoryComponentProjectTonelReaderVisitor'
+
+category: 'class file reading'
+classmethod: RwRepositoryComponentProjectTonelReaderVisitor
+lineNumberStringForMethod: anRwMethodDefinition
+  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
+		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
+			 ^ self lineNumberStringForOffset: offset fileName: fName
+			] 
+	].
+  ^ '  (Unable to determine line )' .
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryComponentProjectTonelReaderVisitor
+lineNumberStringForOffset: offset fileName: fName
+  | res |
+  res :='  (Unable to determine line number)' .
+  [ | fRef |
+    fRef := fName asFileReference .
+    fRef readStreamDo:[ :fStream |  | buf lf lNum |
+      buf := fStream contents .
+      buf size > offset ifTrue:[ buf size: offset ].
+      lNum := 1 + (buf occurrencesOf: (lf := Character lf)) .
+      res := '', lf , ' near line ' , lNum asString , lf , ' in file ', fName .
+    ]
+  ] on: Error do:[:ex | "ignore" ].
+  ^ res
+%
 
 category: 'class file reading'
 classmethod: RwRepositoryComponentProjectTonelReaderVisitor
@@ -39079,6 +39485,47 @@ readClassFiles: fileArray projectName: projectName packageName: packageName
 
 category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
+checkMethodDefinitions: aClassDef
+  | cls clsName methBlk fakeMethDict pkgName |
+
+  self compileWhileReading ifFalse:[ ^ self "do nothing"  ].
+
+  clsName := aClassDef  name asSymbol .
+  (pkgName := currentPackageDefinition name) = 'Filein1C' ifTrue:[ 
+     "lookup in GemStone_Legacy_Streams first"
+     cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
+  ].
+  cls ifNil:[   
+    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+       "creating the class not implemented yet"
+       Warning signal:'class ' , clsName , ' not found by name lookup'.
+       ^ self "can't check syntax on the methods until class is defined"
+    ].
+  ].
+  cls := cls"anAssociation" value.
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: fakeMethDict
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  0
+    ] on: ( CompileError , CompileWarning ) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+  ].
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef classMethodDefinitions do: methBlk .
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
 classExtensionFileExtensions
 
 	^ #( 'extension' 'st' )
@@ -39089,6 +39536,18 @@ method: RwRepositoryComponentProjectTonelReaderVisitor
 classFileExtensions
 
 	^ #( 'class' 'st' )
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
+compileWhileReading
+  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
+compileWhileReading: aBoolean
+  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 %
 
 category: 'tonel parser'
@@ -39165,35 +39624,54 @@ readClassExtensionFile: file inPackage: packageName
 
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		| definitions stream |
-		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		definitions := (TonelParser on: stream forReader: self) start.
-		((definitions at: 2) at: 1) do: [:mDef |
-			currentClassExtension addClassMethodDefinition: mDef ].
-		((definitions at: 2) at: 2) do: [:mDef |
-			currentClassExtension addInstanceMethodDefinition: mDef ] ].
+	fileReference readStreamDo: [:fileStream | | stream |
+		[ | definitions |
+		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  currentClassExtension addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  currentClassExtension addInstanceMethodDefinition: mDef ] .
+      self checkMethodDefinitions: currentClassExtension .
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
 %
 
 category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
 readClassFile: file inPackage: packageName
-
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		| definitions stream |
-		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		definitions := (TonelParser on: stream forReader: self) start.
-		self validateClassCategory: currentClassDefinition forPackageNamed: packageName.
-		((definitions at: 2) at: 1) do: [:mDef |
-			currentClassDefinition addClassMethodDefinition: mDef ].
-		((definitions at: 2) at: 2) do: [:mDef |
-			currentClassDefinition addInstanceMethodDefinition: mDef ].
-		(currentProjectDefinition packageNamed: packageName)
-			addClassDefinition: currentClassDefinition ].
+	fileReference readStreamDo: [:fileStream | | stream |
+    [
+		  | definitions clsDef projectDef |
+      "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream := ZnBufferedReadStream on: fileStream. 
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+      clsDef := currentClassDefinition ifNotNil:[:def |
+                  currentClassExtension ifNotNil:[ 
+                    Error signal:'both a class definition and extension in file ', file name ].
+                  def
+                ] ifNil:[ currentClassExtension ].
+		  self validateClassCategory: clsDef forPackageNamed: packageName.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  clsDef addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  clsDef addInstanceMethodDefinition: mDef ].
+      self checkMethodDefinitions: clsDef .
+		  projectDef := currentProjectDefinition packageNamed: packageName .
+      currentClassDefinition ifNotNil:[ projectDef addClassDefinition: clsDef ] .
+                             "ifNil:[ projectDef addClassExtensionDefinition: clsDef]."
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
 %
 
 category: 'package reading'
@@ -44509,7 +44987,7 @@ readComponentsForResolvedProject: resolvedProject withComponentNames: componentN
 		ifTrue: [ resolvedProject groupNames ]
 		ifFalse: [ groupNames ].
 	^ self
-		_visitComponents: RwProjectLoadComponentVisitorV2
+		_visitComponents: RwResolvedProjectComponentVisitorV2
 		forResolvedProject: resolvedProject
 		withComponentNames: theComponentNames
 		groupNames: theGroupNames
@@ -44599,18 +45077,15 @@ _visitComponents: visitorClass forResolvedProject: resolvedProject withComponent
 				error:
 					'No projects directory (' , projectsDirectory pathString printString
 						, ') found for project ' , projectName printString ].
-	visitor := visitorClass new
-		platformAttributes: platformConfigurationAttributes;
-		groupNames: groupNames;
-		componentsRoot: componentDirectory;
-		projectsRoot: projectsDirectory;
-		resolvedProject: resolvedProject;
-		yourself.
+	visitor := visitorClass
+		resolvedProject: resolvedProject
+		platformAttributes: platformConfigurationAttributes
+		groupNames: groupNames.
 	componentNames
 		do: [ :componentName | 
 			| component url |
 			url := 'file:' , (componentDirectory / componentName , 'ston') pathString.
-			component := RwAbstractProjectConfiguration fromUrl: url.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
 			component projectName: projectName.
 			forLoad
 				ifTrue: [ 
@@ -45794,6 +46269,21 @@ updatePropertiesFromClass: aClass
 		_updateConstraintsFromClass: aClass;
 		_updateCommentFromClass: aClass;
 		_updateCategoryFromClass: aClass
+%
+
+category: 'utility'
+method: RwClassDefinition
+_removeSubclassesDisallowed
+  "Only for use in building definitions for bootstap of the base image.
+   image bootstrap code responsible for setting subclassesDisallowed on
+   appropriate classes after they are all defined."
+  | propertyName oldValue newValue |
+  propertyName := 'gs_options'.
+  oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
+  oldValue isEmpty ifFalse:[
+     newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
+     self propertyAt: propertyName put: newValue
+  ]
 %
 
 category: 'utility'
@@ -47906,6 +48396,15 @@ key
 
 category: 'accessing'
 method: RwMethodDefinition
+offset: anInteger inFile: aFileName
+  "these properties are used when handling a CompileError or
+   a tonel parse error."
+  properties at:'_gsFileOffset' put: anInteger .
+  properties at:'_gsFileName' put: aFileName .
+%
+
+category: 'accessing'
+method: RwMethodDefinition
 protocol
 
 	^properties at: 'protocol'
@@ -47937,6 +48436,17 @@ method: RwMethodDefinition
 source: sourceString
 
 	source := sourceString
+%
+
+category: 'private'
+method: RwMethodDefinition
+_compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+
+	({'_gsFileOffset'. '_gsFileName' } includes: propertyKey)
+		ifTrue: [ 
+		"_gsFileOffset' '_gsFileName' are informational properties so any differences can be ignored "
+		^ true ].
+	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 %
 
 ! Class implementation for 'RwPackageDefinition'
@@ -48786,6 +49296,61 @@ projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: u
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
+topazReadTonelFile: fileName
+    "Read a single file and compile the methods within that file.
+     Definition/redefinition of the class not implemented yet "
+  | projectDef package clsName clsDef cls methBlk envId |
+  projectDef := RwRepositoryComponentProjectTonelReaderVisitor
+     readClassFile: fileName
+     projectName: 'TopazLoad'   "synthetic projed and package names"
+     packageName: 'TopazPackage' .
+  package := projectDef packageNamed: 'TopazPackage_1' .
+  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
+  package classDefinitions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class definition in file ' , fileName
+    ].
+    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
+  ].
+  package classExtensions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class extension in file ' , fileName
+    ].
+    sz > 0 ifTrue:[
+      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
+      clsDef :=  defs values at: 1.
+    ].
+  ].   
+  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
+  clsName := clsDef name .
+  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
+    "creating the class not implemented yet"
+    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
+  ].
+  cls := cls"anAssociation" value.
+
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: nil "install into the class's dictionaries"
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  envId
+    ] on: (CompileError, CompileWarning) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+   ].
+  clsDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  clsDef classMethodDefinitions do: methBlk .
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
 withProperties: properties packageDefinitions: packageDefinitions
 
 	^ self basicNew
@@ -49128,6 +49693,20 @@ commit: message
 	^ self projectRef doCommit: message
 %
 
+category: 'properties'
+method: RwComponentProjectDefinition
+compileWhileReading
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  ^ properties at: 'CompileWhileReading' otherwise: false
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+compileWhileReading: aBoolean
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  properties at: 'CompileWhileReading' put: aBoolean
+%
+
 category: 'accessing'
 method: RwComponentProjectDefinition
 componentNamed: aComponentName
@@ -49264,9 +49843,8 @@ method: RwComponentProjectDefinition
 exportPackages
 	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
 	| projectSetDefinition |
-	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
-		on: Error
-		do: [:ignored | RwProjectSetDefinition new ].
+	projectSetDefinition := (self class newForProjectReference: self projectRef) readProjectSet .
+
 	self exportPackages: projectSetDefinition.
 %
 
@@ -49565,7 +50143,7 @@ readPackageNames: packageNames
 
 	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
-	| format visitorClass |
+	| format aVisitor |
 	packages := Dictionary new. 
 	format := self 
 		packageFormatIfAbsent: [  
@@ -49574,10 +50152,15 @@ readPackageNames: packageNames
 				at: #format ifAbsent: [ 'tonel' ].
 			self packageFormat: formatFromDisk.
 			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
+	format = 'tonel' ifTrue: [ 
+     aVisitor := RwRepositoryComponentProjectTonelReaderVisitor new .
+     self compileWhileReading ifTrue:[
+       aVisitor compileWhileReading: true .
+     ]
+  ] ifFalse: [ 
+     aVisitor := RwRepositoryComponentProjectFiletreeReaderVisitor new .
+  ].
+	^ aVisitor
 		packageNames: packageNames;
 		visit: self.
 %
@@ -54688,22 +55271,27 @@ category: 'compiling'
 method: RwGsMethodPatch
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		intoCategories: nil
-		intoPragmas: nil
-		environmentId: self methodEnvironmentId
+  [
+	  | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
+		  intoCategories: nil
+		  intoPragmas: nil
+		  environmentId: self methodEnvironmentId
+  ] on: (CompileError, CompileWarning) do:[:ex |
+    ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methodDefinition).
+    ex pass 
+  ]
 %
 
 category: 'initializers'
@@ -55195,25 +55783,29 @@ category: 'compiling'
 method: RwGsMethodExtensionSessionMethodSymbolDictPatch
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+  [ | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
 
-	methDict := GsMethodDictionary new.
-	catDict := GsMethodDictionary new.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: methDict
-		intoCategories: catDict
-		intoPragmas: pArray
-		environmentId: self methodEnvironmentId
+	  methDict := GsMethodDictionary new.
+	  catDict := GsMethodDictionary new.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: methDict
+		  intoCategories: catDict
+		  intoPragmas: pArray
+		  environmentId: self methodEnvironmentId
+   ] on: (CompileError, CompileWarning) do:[:ex |
+     ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methodDefinition).
+     ex pass
+   ]
 %
 
 category: 'installing'
@@ -58223,7 +58815,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+	behavior moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := registryInstance methodRegistry
 		at: compiledMethod
@@ -62733,7 +63325,8 @@ method: RwGsPlatform
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.
-	 Returns the compiled method or signals a CompileError."
+	 Returns the compiled method or signals a CompileError.
+   Only used to parse a method to determine the selector.  "
 
 	| undefinedSymbolList undefinedSymbols |
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
@@ -63234,356 +63827,6 @@ _visited: aConfiguration
 
 	super _visited: aConfiguration.
 	visitedConfigurationMap at:  aConfiguration name put: aConfiguration.
-%
-
-! Class implementation for 'RwProjectLoadConfigurationVisitorV2'
-
-!		Class methods for 'RwProjectLoadConfigurationVisitorV2'
-
-category: 'instance creation'
-classmethod: RwProjectLoadConfigurationVisitorV2
-new
-
-	^super new initialize
-%
-
-!		Instance methods for 'RwProjectLoadConfigurationVisitorV2'
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-componentNames
-
-	^ componentNames
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-componentsRoot
-	^ componentsRoot
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-componentsRoot: aStringOrFileReference
-	componentsRoot := aStringOrFileReference asFileReference
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-groupNames
-
-	^ groupNames
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-groupNames: aColl
-
-	groupNames := aColl copy
-%
-
-category: 'initialization'
-method: RwProjectLoadConfigurationVisitorV2
-initialize
-	packageNames := Set new.
-	visitedComponentNames := Set new.
-	componentNames := Set new.
-	platformAttributes := #().
-	groupNames := Set new
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-packageNames
-
-	^ packageNames
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-platformAttributes
-
-	^ platformAttributes
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-platformAttributes: aColl
-
-	platformAttributes := aColl
-%
-
-category: 'visiting'
-method: RwProjectLoadConfigurationVisitorV2
-visit: aProjectComponent
-
-	^aProjectComponent acceptVisitor: self
-%
-
-category: 'visiting'
-method: RwProjectLoadConfigurationVisitorV2
-visitNested: aProjectComponent
-
-	^aProjectComponent acceptNestedVisitor: self
-%
-
-category: 'visiting'
-method: RwProjectLoadConfigurationVisitorV2
-visitProjectLoadComponent: aProjectLoadComponent
-	(visitedComponentNames includes: aProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aProjectLoadComponent.
-
-	definedGroupNames := aProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aProjectLoadComponent.
-
-	self componentNames addAll: aProjectLoadComponent componentNames.
-	(self
-		_components: self componentsRoor
-		forProject: aProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ]
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_addPackageNames: somePackageNames for: aConfiguration
-
-	self packageNames addAll: somePackageNames
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_components: componentDirPath forProject: aProjectName
-
-	| urlBase |
-	self componentNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
-	^ self componentNames
-		collect: [ :componentName | 
-			| url |
-			url := urlBase , componentName , '.ston'.
-			(RwCommonProjectLoadComponentV2 fromUrl: url)
-				projectName: aProjectName;
-				yourself ]
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_matchPlatformAttributes: platformPatternMatcher
-
-	self platformAttributes do: [:anObject |
-		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
-	^false
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_platformAttributeMatchIn: platformMatchersList
-
-	platformMatchersList do: [:platformPatternMatcher |
-		(self _matchPlatformAttributes: platformPatternMatcher) 
-			ifTrue: [ ^true ] ].
-	^false
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_processConditionalPackageNames: aProjectLoadConfiguration
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #componentNames ifAbsent: [ #()] ) ] ] ] ].
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_processGroupNames
-
-	| seedGroupNames seeded |
-	seedGroupNames := groupNames asSet copy.
-	seeded := Set new.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				referencedGroupNames do: [:refGroupName |
-					(seeded includes: refGroupName)
-						ifFalse: [
-						"ensure that we seed each group only once"
-						seeded add: refGroupName.
-						seedGroupNames add: refGroupName ] ] ] ].
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_visited: aComponent
-
-	visitedComponentNames add:  aComponent name.
-%
-
-! Class implementation for 'RwProjectLoadComponentVisitorV2'
-
-!		Instance methods for 'RwProjectLoadComponentVisitorV2'
-
-category: 'initialization'
-method: RwProjectLoadComponentVisitorV2
-initialize
-
-	super initialize.
-	projectNames := Set new.
-	projectLoadSpecs := Set new.
-	visitedComponents := Dictionary new
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectDefinition
-	^ self resolvedProject _projectDefinition
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectLoadSpecs
-
-	^ projectLoadSpecs
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectNames
-
-	^ projectNames
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectsRoot
-	^ projectsRoot
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectsRoot: aString
-	projectsRoot := aString asFileReference
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-resolvedProject
-	^ resolvedProject
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-resolvedProject: aResolvedProject
-	resolvedProject := aResolvedProject
-%
-
-category: 'visiting'
-method: RwProjectLoadComponentVisitorV2
-visitComponentLoadConfiguration: aComponentLoadConfiguration
-	(visitedComponentNames includes: aComponentLoadConfiguration name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aComponentLoadConfiguration.
-
-	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aComponentLoadConfiguration.
-
-	self componentNames addAll: aComponentLoadConfiguration componentNames.
-	(self
-		_components: self componentsRoot
-		forProject: aComponentLoadConfiguration projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aComponentLoadConfiguration projectNames.
-	(self
-		_projects: self projectsRoot
-		forProject: aComponentLoadConfiguration projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-visitedComponents
-
-	^ visitedComponents
-%
-
-category: 'visiting'
-method: RwProjectLoadComponentVisitorV2
-visitLoadSpecification: aLoadSpecification
-
-	self projectLoadSpecs add: aLoadSpecification
-%
-
-category: 'visiting'
-method: RwProjectLoadComponentVisitorV2
-visitNestedProjectLoadComponent: aNestedProjectLoadComponent
-	(visitedComponentNames includes: aNestedProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aNestedProjectLoadComponent.
-
-	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aNestedProjectLoadComponent.
-
-	self componentNames addAll: aNestedProjectLoadComponent componentNames.
-	(self
-		_components: self componentsRoot
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aNestedProjectLoadComponent projectNames.
-	(self
-		_projects: self projectsRoot
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-%
-
-category: 'private'
-method: RwProjectLoadComponentVisitorV2
-_addPackageNames: somePackageNames for: aComponent
-
-	self projectDefinition addPackages: somePackageNames forComponent: aComponent
-%
-
-category: 'private'
-method: RwProjectLoadComponentVisitorV2
-_projects: projectDirPath forProject: ignored
-
-	| urlBase |
-	self projectNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
-	^ self projectNames
-		collect: [ :prjName | 
-			| url |
-			url := urlBase , prjName , '.ston'.
-			RwSpecification fromUrl: url ]
-%
-
-category: 'private'
-method: RwProjectLoadComponentVisitorV2
-_visited: aComponent
-
-	super _visited: aComponent.
-	visitedComponents at: aComponent name put: aComponent.
 %
 
 ! Class implementation for 'RwPropertyModification'
@@ -68318,6 +68561,261 @@ testCreateProjects
 				description: 'The project ' , projectName printString , ' should not exist' ]
 %
 
+! Class implementation for 'RwGemStoneVersionNumberTestCase'
+
+!		Class methods for 'RwGemStoneVersionNumberTestCase'
+
+category: 'Tests'
+classmethod: RwGemStoneVersionNumberTestCase
+shouldInheritSelectors
+
+	^true
+%
+
+!		Instance methods for 'RwGemStoneVersionNumberTestCase'
+
+category: 'test alpha/numeric version numbers'
+method: RwGemStoneVersionNumberTestCase
+testAlphaNumericVersion1
+
+	"Use numeric comparison for pure numbers. If you non-numeric version separate with '-'"
+	
+	| x y |
+	self assert: ((x := self versionClass fromString: '2.9.0') < (y := self versionClass fromString: '2.10.0')).
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion01
+
+	self assert: '1.1.1' asRwGemStoneVersionNumber ~> '1.1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion02
+
+	self deny: '1.1' asRwGemStoneVersionNumber ~> '1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion03
+
+	self assert: '1.1' asRwGemStoneVersionNumber ~> '1.1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion04
+
+	self assert: '3.2.0' asRwGemStoneVersionNumber approximateBase asString = '4'.
+	self assert: '3.2' asRwGemStoneVersionNumber approximateBase asString = '4'.
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion05
+
+	self assert: '3.2.16' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.2.14' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.3' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+
+	self assert: '3.2.15.5' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.2.15.0' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.2.16' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.3' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+
+	self assert: '3.3' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.3.0' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.3.1' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.4' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+
+	self assert: '3.3.1' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+	self assert: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+	self assert: '3.3' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testCollapseZeros
+
+	self assert: (RwGemStoneVersionNumber fromString: '1.0') collapseZeros printString = '1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0') collapseZeros printString = '1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0') collapseZeros printString = '1'.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion01
+
+	self assert: ((self versionClass fromString: '1.1.1') versionString = '1.1.1')
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion02
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.1.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 = v1).	
+	self assert: (v2 = v2).
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion03
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion04
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion05
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion06
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3.'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion07
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3.0.0'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion09
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0'.
+	v2 := self versionClass fromString: '0.7'.
+	self assert: (v1 >= v2).
+	self assert: (v2 <= v1)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion10
+
+	| x y |
+	self assert: ((x := (({
+		self versionClass fromString: '1.0'.
+		self versionClass fromString: '0.7'.
+		self versionClass fromString: '0.8'.
+		self versionClass fromString: '0.9'.
+		self versionClass fromString: '1.0.1'
+	} sort: [:a :b | a <= b ]) collect: [:each | each versionString ]) asArray) = (y := #( '0.7' '0.8' '0.9' '1.0' '1.0.1')))
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion11
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1b'.
+	v2 := self versionClass fromString: '1.0.1a'.
+	self assert: (v1 >= v2).
+	self assert: (v2 <= v1)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion12
+
+	self deny: ((self versionClass fromString: '1.0') <= (self versionClass fromString: '0.7'))
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion13
+
+	self deny: ((self versionClass fromString: '0.8') <= (self versionClass fromString: '0.7')).
+	self deny: ((self versionClass fromString: '0.8.1.8') <= (self versionClass fromString: '0.7.0.5')).
+	
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion17
+
+	self assert: ((self versionClass fromString: '1.0') = (self versionClass fromString: '1.0.0')).
+	self assert: ((self versionClass fromString: '1') = (self versionClass fromString: '1.0')).
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion18
+
+	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1')).
+	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1-0')).
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion20
+
+	self assert: (RwGemStoneVersionNumber fromString: '') printString = ''.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion21
+
+	self deny: (RwGemStoneVersionNumber fromString: '') > (RwGemStoneVersionNumber fromString: '0').
+	self assert: (RwGemStoneVersionNumber fromString: '') < (RwGemStoneVersionNumber fromString: '0').
+	self assert: (RwGemStoneVersionNumber fromString: '') = (RwGemStoneVersionNumber fromString: '').
+
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion24
+
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0.1.0.0') = (RwGemStoneVersionNumber fromString: '1.0.0.1').
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0.1') ~= (RwGemStoneVersionNumber fromString: '1..1').
+%
+
+category: 'private'
+method: RwGemStoneVersionNumberTestCase
+versionClass
+
+	^RwGemStoneVersionNumber
+%
+
 ! Class implementation for 'RwLoadSpecificationV2Test'
 
 !		Instance methods for 'RwLoadSpecificationV2Test'
@@ -68857,6 +69355,56 @@ _sampleSymbolDictionaryName2
 	^ #'RowanSample9_2'
 %
 
+! Class implementation for 'RwProjectComponentVisitorV2Test'
+
+!		Instance methods for 'RwProjectComponentVisitorV2Test'
+
+category: 'tests'
+method: RwProjectComponentVisitorV2Test
+testBasicVisit_independent
+	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
+
+	| platformAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
+	platformAttributes := {'common'.
+	'gemstone'.
+	('3.5.0' asRwGemStoneVersionNumber)}.
+	projectAlias := 'RowanSample9_DiskConfig_Test'.
+	componentNamesToLoad := #('Core').
+	groupNames := #('core').
+
+	projectPath := self _cloneRowanSample9: projectAlias.	"clone https://github.com/dalehenrich/RowanSample9"
+
+	visitor := RwIndependentComponentVisitorV2 new
+		platformAttributes: platformAttributes;
+		groupNames: groupNames;
+		yourself.
+
+	self assert: visitor packageNames isEmpty.
+	projectSpecUrl := 'file:' , projectPath , '/rowan/project.ston'.
+	projectSpec := RwSpecification fromUrl: projectSpecUrl.
+
+	componentNamesToLoad
+		do: [ :componentName | 
+			| component url |
+			url := 'file:' , projectPath , '/' , projectSpec componentsPath , '/'
+				, componentName , '.ston'.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
+			component projectName: projectAlias.
+
+			visitor visit: component ].
+	self
+		assert: visitor packageNames sort
+		equals:
+			#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
+	self assert: visitor projectLoadSpecs isEmpty
+%
+
+category: 'private'
+method: RwProjectComponentVisitorV2Test
+_visitorClass
+	^ RwResolvedProjectComponentVisitorV2
+%
+
 ! Class implementation for 'RwProjectLoadComponentV2Test'
 
 !		Instance methods for 'RwProjectLoadComponentV2Test'
@@ -69221,6 +69769,560 @@ testNilInstanceVariable
 	self assert: hitError
 %
 
+! Class implementation for 'RwSemanticVersionNumber200TestCase'
+
+!		Instance methods for 'RwSemanticVersionNumber200TestCase'
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testGitDescribe
+
+	"https://github.com/GemTalk/Rowan/issues/381#issuecomment-450502212"
+
+	"
+`git describe --match v0.0.1` can produce a version number that looks like the following v0.0.1-1-g832d2b5 ... ensure that we can use this result to compare version numbers ... the leading `-` needs to be transformed to `+`, but other than that I think that the following comparisons are correct for what we are trying to do o
+	"
+	| s1 s2 s3 s4 v1 v2 v3 v4 |
+	s1 := '0.0.1'.
+	s2 := '0.0.1+1-g832d2b5'. "git describe output .. compares equal to 0.0.1, which is acceptable - I think"
+	s3 := '0.0.1+2-g59a4bdf'.	"git describe output .. compares equal to 0.0.1, which is acceptable - I think"
+	s4 := '0.0.2'.
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 = v2.	"acceptable, I think"
+
+	self assert: v1 = v3.	"acceptable, I think"
+	self assert: v2 = v3.	"acceptable, I think"
+
+	self assert: v1 < v4.
+	self assert: v2 < v4.
+	self assert: v3 < v4.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_02
+
+	"
+A normal version number MUST take the form X.Y.Z where X, Y, and Z are
+non-negative integers, and MUST NOT contain leading zeroes. X is the
+major version, Y is the minor version, and Z is the patch version.
+Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.
+	"
+	| s1 s2 s3 v1 v2 v3 |
+	s1 := '1.9.0' .
+	s2 := '1.10.0' .
+	s3 := '1.11.0' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+
+	self assert: v1 < v2.
+	self assert: v2 < v3.
+	self assert: v1 < v3.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_09
+
+	"
+A pre-release version MAY be denoted by appending a hyphen and a
+series of dot separated identifiers immediately following the patch
+version. Identifiers MUST comprise only ASCII alphanumerics and hyphen
+[0-9A-Za-z-]. Identifiers MUST NOT be empty. Numeric identifiers MUST
+NOT include leading zeroes. Pre-release versions have a lower
+precedence than the associated normal version. A pre-release version
+indicates that the version is unstable and might not satisfy the
+intended compatibility requirements as denoted by its associated
+normal version. Examples: 1.0.0-alpha, 1.0.0-alpha.1, 1.0.0-0.3.7,
+1.0.0-x.7.z.92.
+	"
+	| s1 s2 s3 s4 s5 v1 v2 v3 v4 v5 |
+	s1 := '1.0.0-alpha' .
+	s2 := '1.0.0-alpha.1' .
+	s3 := '1.0.0-0.3.7' .
+	s4 := '1.0.0-x.7.z.92' .
+
+	s5 := '1.0.0' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+	v5 := s5 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 < v5.
+	self assert: v2 < v5.
+	self assert: v3 < v5.
+	self assert: v4 < v5.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+	self assert: v5 = v5.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_10
+
+	"
+Build metadata MAY be denoted by appending a plus sign and a series of dot
+separated identifiers immediately following the patch or pre-release version.
+Identifiers MUST comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-].
+Identifiers MUST NOT be empty. Build metadata MUST be ignored when determining
+version precedence. Thus two versions that differ only in the build metadata,
+have the same precedence. Examples: 1.0.0-alpha+001, 1.0.0+20130313144700,
+1.0.0-beta+exp.sha.5114f85.
+	"
+
+	| s1 s2 s3 s4 v1 v2 v3 v4 |
+	s1 := '1.0.0-alpha+001' .
+	s2 := '1.0.0-beta+exp.sha.5114f85' .
+	s3 := '1.0.0+20130313144700' .
+	s4 := '1.0.0+99999999999999' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 < v2.
+	self assert: v2 < v3.
+	self assert: v1 < v3.
+	self assert: v1 < v4.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+	self assert: v4 = v3.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_11
+
+	"
+Precedence refers to how versions are compared to each other when ordered.
+Precedence MUST be calculated by separating the version into major, minor, patch
+and pre-release identifiers in that order (Build metadata does not figure
+into precedence). Precedence is determined by the first difference when
+comparing each of these identifiers from left to right as follows: Major, minor,
+and patch versions are always compared numerically. Example: 1.0.0 < 2.0.0 <
+2.1.0 < 2.1.1. When major, minor, and patch are equal, a pre-release version has
+lower precedence than a normal version. Example: 1.0.0-alpha < 1.0.0. Precedence
+for two pre-release versions with the same major, minor, and patch version MUST
+be determined by comparing each dot separated identifier from left to right
+until a difference is found as follows: identifiers consisting of only digits
+are compared numerically and identifiers with letters or hyphens are compared
+lexically in ASCII sort order. Numeric identifiers always have lower precedence
+than non-numeric identifiers. A larger set of pre-release fields has a higher
+precedence than a smaller set, if all of the preceding identifiers are equal.
+Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta <
+1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
+	"
+
+	| vrsns vrsna vrsnb |
+	vrsns := #( '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-alpha.beta' '1.0.0-beta' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0').
+	vrsns
+		do: [:str |
+			vrsnb := str asRwSemanticVersionNumber.
+			self assert: vrsnb printString = str.
+			self assert: vrsnb = vrsnb.
+			vrsna ifNotNil: [ self assert: vrsna < vrsnb ].
+			vrsna := vrsnb ].
+	vrsna := nil.
+	vrsns reverse
+		do: [:str |
+			vrsnb := str asRwSemanticVersionNumber.
+			self assert: vrsnb printString = str.
+			self assert: vrsnb = vrsnb.
+			vrsna ifNotNil: [ self assert: vrsna > vrsnb ].
+			vrsna := vrsnb ].
+
+	self deny: '1.0.0-alpha.beta' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber
+%
+
+! Class implementation for 'RwSemanticVersionNumberTestCase'
+
+!		Class methods for 'RwSemanticVersionNumberTestCase'
+
+category: 'Tests'
+classmethod: RwSemanticVersionNumberTestCase
+shouldInheritSelectors
+
+	^true
+%
+
+!		Instance methods for 'RwSemanticVersionNumberTestCase'
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+sampleVersionStrings
+    ^ #('1.0.0+-' '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-0.3.7' '1.0.0-x.7.z.92')
+        , #('1.0.0+build.1' '1.3.7+build.11.e0f985a')
+        ,
+            #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0-rc.1+build.1' '1.0.0' '1.0.0+0.3.7' '1.3.7+build' '1.3.7+build.2.b8f12d7' '1.3.7+build.11.e0f985a')
+        , #('1.0.0-alp-h-a' '1.0.0-r-c.1' '1.0.0+alp-h-a' '1.0.0+r-c.1')
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion1
+
+	"Use numeric comparison for pure numbers. If you non-numeric version separate with '-'"
+	
+	| x y |
+	self assert: ((x := self versionClass fromString: '2.9.0') < (y := self versionClass fromString: '2.10.0')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion2
+
+	self assert: ((self versionClass fromString: '2.9.0-alpha.2') < (self versionClass fromString: '2.9.0-alpha.3')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion3
+
+	self assert: ((self versionClass fromString: '2.9.9-alpha.2') < (self versionClass fromString: '2.9.10')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion4
+
+	self assert: ((self versionClass fromString: '2.9.9-alpha.2') < (self versionClass fromString: '2.9.9')).
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testEqualityComparison
+    self deny: '1.0.0+-' asRwSemanticVersionNumber = '1.0.0--' asRwSemanticVersionNumber.
+	self assert: '1.0.0+-' asRwSemanticVersionNumber = '1.0.0+a' asRwSemanticVersionNumber.
+	self sampleVersionStrings
+        do: [ :versionString | self assert: versionString asRwSemanticVersionNumber = versionString asRwSemanticVersionNumber ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testLessThanComparison
+    self assert: '1.0.0-rc.1+build.1' asRwSemanticVersionNumber < '1.0.0' asRwSemanticVersionNumber.
+    self
+        assert: '1.0.0-rc.1+build.1' asRwSemanticVersionNumber < '1.0.0+build.0' asRwSemanticVersionNumber.
+    self assert:  '1.0.0-0.3.7' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber.
+    self assert: '1.0.0-alpha' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber.
+    self assert: '1.0.0-0.3.7' asRwSemanticVersionNumber < '1.0.0-x.7.z.92' asRwSemanticVersionNumber
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testOfficialInvalidSemanticVersions
+	"https://github.com/semver/semver/issues/232#issuecomment-430813095"
+
+	"https://github.com/GemTalk/Rowan/issues/381"
+
+    | vrsn |
+    {
+		'1'.
+		'1.2'.
+		'1.2.3-0123'.
+		'1.2.3-0123.0123'.
+		'1.1.2+.123'.
+		'+invalid'.
+		'-invalid'.
+		'-invalid+invalid'.
+		'-invalid.01'.
+		'alpha'.
+		'alpha.beta'.
+		'alpha.beta.1'.
+		'alpha.1'.
+		'alpha+beta'.
+		'alpha_beta'.
+		'alpha.'.
+		'alpha..'.
+		'beta'.
+		'1.0.0-alpha_beta'.
+		'-alpha.'.
+		'1.0.0-alpha..'.
+		'1.0.0-alpha..1'.
+		'1.0.0-alpha...1'.
+		'1.0.0-alpha....1'.
+		'1.0.0-alpha.....1'.
+		'1.0.0-alpha......1'.
+		'1.0.0-alpha.......1'.
+		'01.1.1'.
+		'1.01.1'.
+		'1.1.01'.
+		'1.2'.
+		'1.2.3.DEV'.
+		'1.2-SNAPSHOT'.
+		'1.2.31.2.3----RC-SNAPSHOT.12.09.1--..12+788'.
+		'1.2-RC-SNAPSHOT'.
+		'-1.0.3-gamma+b7718'.
+		'+justmeta'.
+		'9.8.7+meta+meta'.
+		'9.8.7-whatever+meta+meta'.
+		'99999999999999999999999.999999999999999999.99999999999999999----RC-SNAPSHOT.12.09.1--------------------------------..12'.
+	}
+	do: [ :versionString |
+		self should: [ vrsn := versionString asRwSemanticVersionNumber ] raise: Error ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testOfficialValidSemanticVersions
+	"https://github.com/semver/semver/issues/232#issuecomment-430813095"
+
+	"https://github.com/GemTalk/Rowan/issues/381"
+
+	| x vrsn |
+    {
+		'0.0.0'.
+		'0.0.1'.
+		'0.0.4'.
+		'1.2.3'.
+		'10.20.30'.
+		'1.1.2-prerelease+meta'.
+		'1.1.2+meta'.
+		'1.1.2+meta-valid'.
+		'1.0.0-alpha'.
+		'1.0.0-beta'.
+		'1.0.0-alpha.beta'.
+		'1.0.0-alpha.beta.1'.
+		'1.0.0-alpha.1'.
+		'1.0.0-alpha0.valid'.
+		'1.0.0-alpha.0valid'.
+		'1.0.0-alpha-a.b-c-somethinglong+build.1-aef.1-its-okay'.
+		'1.0.0-rc.1+build.1'.
+		'2.0.0-rc.1+build.123'.
+		'1.2.3-beta'.
+		'10.2.3-DEV-SNAPSHOT'.
+		'1.2.3-SNAPSHOT-123'.
+		'1.0.0'.
+		'2.0.0'.
+		'1.1.7'.
+		'2.0.0+build.1848'.
+		'2.0.1-alpha.1227'.
+		'1.0.0-alpha+beta'.
+		'1.2.3----RC-SNAPSHOT.12.9.1--.12+788'.
+		'1.2.3----R-S.12.9.1--.12+meta'.
+		'1.2.3----RC-SNAPSHOT.12.9.1--.12'.
+		'1.0.0+0.build.1-rc.10000aaa-kk-0.1'.
+		'99999999999999999999999.999999999999999999.99999999999999999'.
+		'1.0.0-0A.is.legal'.
+		}
+	do: [ :versionString | self assert: versionString = (x := (vrsn := versionString asRwSemanticVersionNumber) printString) ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testPrinting
+    | x vrsn |
+    self sampleVersionStrings
+        do: [ :versionString | self assert: versionString = (x := (vrsn := versionString asRwSemanticVersionNumber) printString) ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioning
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.1.0' '1.0.0-rc.2').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0').
+    self validateSemanticVersionStrings: #('1.0.0-1' '1.0.0-alpha').
+    self validateSemanticVersionStrings: #('1.0.0-alpha' '1.0.0+1').
+    self validateSemanticVersionStrings: #('1.0.0' '1.0.1').
+    self validateSemanticVersionStrings: #('1.0.0--' '1.0.0-a').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0' '1.0.1').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.2' '1.0.0-rc.3').
+    self validateSemanticVersionStrings: #('1.0.0-10000' '1.0.0-a')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioningSpecItem10
+    "[Semantic Versioning 2.0.0-rc.1](http://semver.org/)"
+
+    self validateSemanticVersionStrings: #( '1.0.0-0.3.7' '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-x.7.z.92')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioningSubsetCompliance
+    "subset of sample versions that are compatible with MetacellVersionNumber syntax"
+
+    self
+        validateSemanticVersionStrings:
+            #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion01
+
+	self assert: ((self versionClass fromString: '1.1.1') versionString = '1.1.1')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion02
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.1.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 = v1).	
+	self assert: (v2 = v2).
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion04
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion05
+    | v1 v2 |
+    v1 := self versionClass fromString: '3.0.0'.
+    v2 := self versionClass fromString: '2.0.0'.
+    self assert: v1 > v2
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion09
+    | v1 v2 |
+    v1 := self versionClass fromString: '1.0.0'.
+    v2 := self versionClass fromString: '0.7.0'.
+    self assert: v1 >= v2.
+    self assert: v2 <= v1
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion10
+    | x y |
+    self
+        assert:
+            (x := (({(self versionClass fromString: '1.0.0').
+            (self versionClass fromString: '0.7.0').
+            (self versionClass fromString: '0.8.0').
+            (self versionClass fromString: '0.9.0').
+            (self versionClass fromString: '1.0.1')} sort: [ :a :b | a <= b ]) collect: [ :each | each versionString ])
+                asArray) = (y := #('0.7.0' '0.8.0' '0.9.0' '1.0.0' '1.0.1'))
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion12
+    self deny: (self versionClass fromString: '1.0.0') <= (self versionClass fromString: '0.7.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion14
+
+	self assert: ((self versionClass fromString: '2.9.0-alpha02') < (self versionClass fromString: '2.9.0-alpha03')).
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion15
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0-beta.1')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion16
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion17
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-0').
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-beta.0').
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-beta')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion18
+    | x y |
+    self deny: (x := self versionClass fromString: '1.0.0') < (y := self versionClass fromString: '1.0.0-0').
+    self assert: (x := self versionClass fromString: '1.0.0') > (y := self versionClass fromString: '1.0.0-0').
+    self assert: (x := self versionClass fromString: '1.0.0') = (y := self versionClass fromString: '1.0.0+0').
+ 
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion19
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+validateSemanticVersionStrings: versionStrings
+    | versions version |
+    versions := versionStrings collect: [ :each | each asRwSemanticVersionNumber ].
+    version := versions at: 1.
+    2 to: versions size do: [ :index | 
+        | nextVersion |
+        nextVersion := versions at: index.
+        self assert: version < nextVersion.
+        version := nextVersion ]
+%
+
+category: 'private'
+method: RwSemanticVersionNumberTestCase
+versionClass
+    ^ RwSemanticVersionNumber
+%
+
 ! Class implementation for 'NewTonelParser'
 
 !		Instance methods for 'NewTonelParser'
@@ -69303,46 +70405,20 @@ newMethodDefinitionFrom: anArray
 		source: source
 %
 
+! Class extensions for 'AbstractException'
+
+!		Instance methods for 'AbstractException'
+
+category: '*rowan-gemstone-kernel-32x'
+method: AbstractException
+addText: aString
+  messageText ifNil:[ self asString "build the default messageText" ].
+  messageText := (messageText ifNil:[ String new ]), ', ', aString .
+%
+
 ! Class extensions for 'Behavior'
 
 !		Instance methods for 'Behavior'
-
-category: '*rowan-gemstone-3215'
-method: Behavior
-moveMethod: aSelector toCategory: categoryName environmentId: envId
-
-	"Moves the method aSelector (a String) from its current category to the
- specified category (also a String).  If either aSelector or categoryName is
- not in the receiver's method dictionary, or if aSelector is already in
- categoryName, generates an error..
- This method does not account for selectors inherited from superclasses."
-
-	| selSym catSym oldCat |
-	self _validatePrivilege
-		ifFalse: [ ^ nil ].
-	(self includesCategory: categoryName environmentId: envId)
-		ifFalse: [ ^ self _categoryNotFound: categoryName ].
-	oldCat := self categoryOfSelector: aSelector environmentId: envId.
-
-"Backport of a change in behavior that was made in 3.4 and is needed for Rowan" 
-"
-	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
-"
-
-	catSym := categoryName asSymbol.
-	selSym := aSelector asSymbol.
-
-	(envId ~~ 0
-		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
-		ifTrue: [ 
-			| catDict |
-			catDict := self _baseCategorysForStore: envId.
-			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
-			(catDict at: catSym) add: selSym ]
-		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
-	self _needsAnnouncement
-		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
-%
 
 category: '*ast-kernel-core'
 method: Behavior
@@ -69667,6 +70743,45 @@ self _rwNewConstraint: aClass atOffset: offset .
 mySubclasses do:[:x| x _rwNewInheritedConstraint: aClass atOffset: offset ] .
 %
 
+category: '*rowan-gemstone-3215'
+method: Behavior
+_rwMoveMethod: aSelector toCategory: categoryName environmentId: envId
+
+	"Moves the method aSelector (a String) from its current category to the
+ specified category (also a String).  If either aSelector or categoryName is
+ not in the receiver's method dictionary, or if aSelector is already in
+ categoryName, generates an error..
+ This method does not account for selectors inherited from superclasses."
+
+	| selSym catSym oldCat |
+
+  self deprecated:'_rwMoveMethod should use base image if possible'.
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+	(self includesCategory: categoryName environmentId: envId)
+		ifFalse: [ ^ self _categoryNotFound: categoryName ].
+	oldCat := self categoryOfSelector: aSelector environmentId: envId.
+
+"Backport of a change in behavior that was made in 3.4 and is needed for Rowan" 
+"
+	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
+"
+
+	catSym := categoryName asSymbol.
+	selSym := aSelector asSymbol.
+
+	(envId ~~ 0
+		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
+		ifTrue: [ 
+			| catDict |
+			catDict := self _baseCategorysForStore: envId.
+			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
+			(catDict at: catSym) add: selSym ]
+		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
+	self _needsAnnouncement
+		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
+%
+
 category: '*rowan-gemstone-kernel'
 method: Behavior
 _rwNewConstraint: aClass atOffset: offset
@@ -69767,7 +70882,7 @@ byteArrayMap
 
 !		Instance methods for 'CharacterCollection'
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 asRwGemStoneVersionNumber
 
@@ -69783,7 +70898,7 @@ asRwRepository
 	^ self asRwUrl asRwRepository
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 asRwSemanticVersionNumber
 
@@ -69839,21 +70954,21 @@ rbStoreOn: aStream
   aStream nextPut: $'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher
 
 	^ anRwGemStoneVersionConfigurationPlatformAttributeMatcher matchString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwPlatformAttributeMatchForString: anRwStringConfigurationPlatformAttributeMatcher
 
 	^ anRwStringConfigurationPlatformAttributeMatcher matchString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticIntegerLessThanSelf: anInteger
 
@@ -69863,14 +70978,14 @@ rwSemanticIntegerLessThanSelf: anInteger
   ^ true
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticStringLessThanSelf: aString
 
 	^ aString < self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 
@@ -70455,9 +71570,10 @@ _rwOptionsForDefinition
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwReservedOop
- "returns nil or the SmallInteger specifying a reserved oopNumber"
-  | oop|
-  ^ (oop := self asOopNumber) <= System _lastReservedOopNumber ifTrue:[ oop ] ifFalse:[ nil ].
+ "returns nil or the SmallInteger specifying a reserved oop"
+  ^ self asOopNumber <= System _lastReservedOopNumber 
+    ifTrue:[ self asOop ] 
+    ifFalse:[ nil ].
 %
 
 category: '*rowan-gemstone-kernel'
@@ -70629,6 +71745,12 @@ category: '*rowan-cypress-kernel'
 method: CypressMethodDefinition
 accept: aVisitor
 	^ aVisitor visitMethodDefinition: self
+%
+
+category: '*rowan-cypress-kernel'
+method: CypressMethodDefinition
+offset: anInteger inFile: aFileName
+	"noop"
 %
 
 category: '*rowan-tools-kernel'
@@ -70963,14 +72085,14 @@ _rwFinishFromStream: aStream signFound: aSignFound factor: aFactor radix: radix
 
 !		Instance methods for 'Integer'
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticIntegerLessThanSelf: anInteger
 
 	^ anInteger < self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticStringLessThanSelf:  aString
   "integers have greater precedence than strings"
@@ -70979,7 +72101,7 @@ rwSemanticStringLessThanSelf:  aString
   ^ false
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 
@@ -71155,35 +72277,35 @@ isValue
 	^false
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher
   ^ self
     error: 'Expected a String or a RwGemStoneVersion'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwPlatformAttributeMatchForString: anRwStringConfigurationPlatformAttributeMatcher
   ^ self
     error: 'Expected a String or a RwGemStoneVersion'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticIntegerLessThanSelf: anInteger
   ^ self
     error: 'Invalid semantic verson component - should be an Integer.'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticStringLessThanSelf: aString
   ^ self
     error: 'Invalid semantic verson component - should be String.'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
   ^ self
@@ -71310,6 +72432,40 @@ name
   ^ self key
 %
 
+! Class extensions for 'RwAbstractProjectComponentVisitorV2'
+
+!		Instance methods for 'RwAbstractProjectComponentVisitorV2'
+
+category: '*rowan-gemstone-componentsv2'
+method: RwAbstractProjectComponentVisitorV2
+_components: componentDirPath forProject: aProjectName
+
+	| urlBase |
+	self componentNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
+	^ self componentNames
+		collect: [ :componentName | 
+			| url |
+			url := urlBase , componentName , '.ston'.
+			(RwAbstractProjectLoadComponentV2 fromUrl: url)
+				projectName: aProjectName;
+				yourself ]
+%
+
+category: '*rowan-gemstone-componentsv2'
+method: RwAbstractProjectComponentVisitorV2
+_projects: projectDirPath forProject: ignored
+
+	| urlBase |
+	self projectNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
+	^ self projectNames
+		collect: [ :prjName | 
+			| url |
+			url := urlBase , prjName , '.ston'.
+			RwSpecification fromUrl: url ]
+%
+
 ! Class extensions for 'RwAbstractProjectDefinitionV2'
 
 !		Instance methods for 'RwAbstractProjectDefinitionV2'
@@ -71366,6 +72522,78 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 		"projectOwnerId entries are considered equal for comparison purpposes"
 		^ true ].
 	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+%
+
+! Class extensions for 'RwAbstractProjectLoadComponentV2'
+
+!		Class methods for 'RwAbstractProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwAbstractProjectLoadComponentV2
+fromUrl: specNameOrUrl
+
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme isNil
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
+	url scheme = 'file'
+		ifTrue: [ 
+			CypressFileUtilities current
+				readStreamFor: url fileName
+				in: url pathForDirectory
+				do: [ :stream | ^ self _readStonFrom: stream ] ].
+	url scheme asString = 'https'
+		ifTrue: [ 
+self error: 'not yet supported'.
+"
+			| client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := (Rowan globalNamed: 'ZnClient') new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
+	self error: 'Unknown scheme: ' , url scheme printString
+%
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwAbstractProjectLoadComponentV2
+orderedDictionaryClass
+
+	^ Rowan platform orderedDictionaryClass
+%
+
+!		Instance methods for 'RwAbstractProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+method: RwAbstractProjectLoadComponentV2
+_exportToUrl: fileUrl
+
+	| url |
+	url := fileUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			Rowan fileUtilities
+				writeStreamFor: self name , '.ston'
+				in: url pathForDirectory
+				do: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+  url schemeName = 'memory'
+    ifTrue: [ 
+		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
+			writeStreamDo: [ :stream | 
+			  | string |
+			  string := STON toStringPretty: self.
+			  stream nextPutAll: string.
+			  ^ self ] ].
+	^ nil	"otherwise a noop"
 %
 
 ! Class extensions for 'RwAbstractResolvedObjectV2'
@@ -71703,78 +72931,6 @@ method: RwClassMove
 addMovedClassToPatchSet: aPatchSet
 
 	aPatchSet addClassMove: self
-%
-
-! Class extensions for 'RwCommonProjectLoadComponentV2'
-
-!		Class methods for 'RwCommonProjectLoadComponentV2'
-
-category: '*rowan-gemstone-componentsv2'
-classmethod: RwCommonProjectLoadComponentV2
-fromUrl: specNameOrUrl
-
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
-
-	| url |
-	url := specNameOrUrl asRwUrl.
-	url scheme isNil
-		ifTrue: [ self error: 'scheme must be file: or https:' ].
-	url scheme = 'file'
-		ifTrue: [ 
-			CypressFileUtilities current
-				readStreamFor: url fileName
-				in: url pathForDirectory
-				do: [ :stream | ^ self _readStonFrom: stream ] ].
-	url scheme asString = 'https'
-		ifTrue: [ 
-self error: 'not yet supported'.
-"
-			| client response |
-			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (Rowan globalNamed: 'ZnClient') new.
-			response := client
-				beOneShot;
-				enforceHttpSuccess: true;
-				get: url.
-			^ self _readStonFrom: response decodeFromUTF8
-" ].
-	self error: 'Unknown scheme: ' , url scheme printString
-%
-
-category: '*rowan-gemstone-componentsv2'
-classmethod: RwCommonProjectLoadComponentV2
-orderedDictionaryClass
-
-	^ Rowan platform orderedDictionaryClass
-%
-
-!		Instance methods for 'RwCommonProjectLoadComponentV2'
-
-category: '*rowan-gemstone-componentsv2'
-method: RwCommonProjectLoadComponentV2
-_exportToUrl: fileUrl
-
-	| url |
-	url := fileUrl asRwUrl.
-	url schemeName = 'file'
-		ifTrue: [ 
-			Rowan fileUtilities
-				writeStreamFor: self name , '.ston'
-				in: url pathForDirectory
-				do: [ :stream | 
-					| string |
-					string := STON toStringPretty: self.
-					stream nextPutAll: string.
-					^ self ] ].
-  url schemeName = 'memory'
-    ifTrue: [ 
-		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
-			writeStreamDo: [ :stream | 
-			  | string |
-			  string := STON toStringPretty: self.
-			  stream nextPutAll: string.
-			  ^ self ] ].
-	^ nil	"otherwise a noop"
 %
 
 ! Class extensions for 'RwComponentProjectDefinition'

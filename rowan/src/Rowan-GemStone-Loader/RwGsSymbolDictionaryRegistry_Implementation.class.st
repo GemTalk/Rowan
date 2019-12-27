@@ -887,7 +887,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+	behavior moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := registryInstance methodRegistry
 		at: compiledMethod

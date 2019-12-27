@@ -1448,18 +1448,21 @@ methodDef
 category: 'parsing'
 method: TonelParser
 methodDef: aBlock
-	| ar def |
-	ar := { 
-		self separator.
-		self try: [ self metadata ]. 
-		self separator. 
-		self method. 
-		self methodBody 
-	}.
-	def := self newMethodDefinitionFrom: ar.
-	aBlock 
-		value: ar fourth first second notNil 
-		value: def
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStreamName .
+
+  aBlock
+    value: ar fourth first second notNil
+    value: def
 %
 
 category: 'parsing'
@@ -1480,14 +1483,14 @@ methodDefList
 					"skip possible spaces at the end"
 					self separator ]
 			] 
-  ] on: TonelParseError do:[:ex | 
-		lastSelectorParsed ifNotNil:[ | str |
+  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
       str := ex details ifNil:[ '' ].
-      ex details: str, ', after tonel method selector: ', lastSelectorParsed printString 
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
     ].
-		ex pass 
+    ex pass 
   ].
-	^ result
+  ^ result
 %
 
 category: 'private factory'
@@ -4465,31 +4468,6 @@ putOn: aStream
 
 category: '*tonel-gemstonecommon-core'
 method: PositionableStreamPortable
-match: subCollection
-  "Set the access position of the receiver to be past the next occurrence of the subCollection. Answer whether subCollection is found.  No wildcards, and case does matter."
-
-  | pattern startMatch |
-  pattern := ReadStreamPortable on: subCollection.
-  startMatch := nil.
-  [ pattern atEnd ]
-    whileFalse: [ 
-      self atEnd
-        ifTrue: [ ^ false ].
-      self next = pattern next
-        ifTrue: [ 
-          pattern position = 1
-            ifTrue: [ startMatch := self position ] ]
-        ifFalse: [ 
-          pattern position: 0.
-          startMatch
-            ifNotNil: [ 
-              self position: startMatch.
-              startMatch := nil ] ] ].
-  ^ true
-%
-
-category: '*tonel-gemstonecommon-core'
-method: PositionableStreamPortable
 originalContents
 	"Answer the receiver's actual contents collection, NOT a copy.  1/29/96 sw"
 
@@ -4646,7 +4624,12 @@ method: Stream
 
 category: '*tonel-gemstone-kernel'
 method: Symbol
-keywords
+_keywords
+  "Disabled for now by rename to _keywords ; see if 3.6 base image is ok.
+   NOTE, you also need to override in DoubleByteSymbol and QuadByteSymbol
+   if a reimplementation is needed for Rowan .
+   To override in one place for all Symbol classes, 
+    reimplement Symbol class >> _keywords:    instead ."
 
 	"Answer an array of the keywords that compose the receiver."
 

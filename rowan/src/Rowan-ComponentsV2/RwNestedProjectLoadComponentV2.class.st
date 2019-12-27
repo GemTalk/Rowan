@@ -1,13 +1,13 @@
 Class {
 	#name : 'RwNestedProjectLoadComponentV2',
-	#superclass : 'RwCommonProjectLoadComponentV2',
+	#superclass : 'RwAbstractProjectLoadComponentV2',
 	#category : 'Rowan-ComponentsV2'
 }
 
 { #category : 'visiting' }
 RwNestedProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 
-	^aVisitor visitNestedProjectLoadComponent: self
+	^aVisitor visitProjectLoadComponent: self
 ]
 
 { #category : 'visiting' }

@@ -18,49 +18,7 @@ RwRowanSample9Test class >> _gitPullSessionCacheKey [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test class >> _loadSpecSessionCacheKey [
-	^ #'RowanSample9LoadSpecsDict'
-]
-
-{ #category : 'private' }
-RwRowanSample9Test >> _deleteProjectRepositoryDir [
-	^ false
-]
-
-{ #category : 'private' }
-RwRowanSample9Test >> _gitPullSessionCacheKey [
-	^ self class _gitPullSessionCacheKey
-]
-
-{ #category : 'private' }
-RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: className expectedSymDictName: expectedSymDictName [
-	| resolvedProject loadedProjects symDictName symDict |
-	resolvedProject := projectSpec resolve.
-	loadedProjects := resolvedProject load.
-	self assert: loadedProjects size = 1.
-	loadedProjects do: [ :project | self assert: project audit isEmpty ].
-
-	symDictName := projectSpec
-		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId.
-
-	self assert: symDictName = expectedSymDictName.
-
-	(symDict := Rowan globalNamed: symDictName)
-		ifNil: [ 
-			self
-				assert: false
-				description:
-					'Expected symbol dictionary ' , symDictName printString , ' not present' ].
-
-	self assert: (symDict at: className asSymbol ifAbsent: [  ]) notNil.
-
-	(loadedProjects at: 1) unload.
-
-	self deny: (symDict at: className asSymbol ifAbsent: [  ]) notNil
-]
-
-{ #category : 'private' }
-RwRowanSample9Test >> _loadSpecNamed: specName [
+RwRowanSample9Test class >> _loadSpecNamed: specName [
 	"
 		self _clearLoadSpecSessionCache
 	"
@@ -121,20 +79,71 @@ RwRowanSample9Test >> _loadSpecNamed: specName [
 ]
 
 { #category : 'private' }
+RwRowanSample9Test class >> _loadSpecSessionCacheKey [
+	^ #'RowanSample9LoadSpecsDict'
+]
+
+{ #category : 'private' }
+RwRowanSample9Test class >> _rowanSample9_0000_load_spec [
+	| rowanProject fileUrl |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	fileUrl := 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample9_0000.ston'.
+	^ (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _deleteProjectRepositoryDir [
+	^ false
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _gitPullSessionCacheKey [
+	^ self class _gitPullSessionCacheKey
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: className expectedSymDictName: expectedSymDictName [
+	| resolvedProject loadedProjects symDictName symDict |
+	resolvedProject := projectSpec resolve.
+	loadedProjects := resolvedProject load.
+	self assert: loadedProjects size = 1.
+	loadedProjects do: [ :project | self assert: project audit isEmpty ].
+
+	symDictName := projectSpec
+		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId.
+
+	self assert: symDictName = expectedSymDictName.
+
+	(symDict := Rowan globalNamed: symDictName)
+		ifNil: [ 
+			self
+				assert: false
+				description:
+					'Expected symbol dictionary ' , symDictName printString , ' not present' ].
+
+	self assert: (symDict at: className asSymbol ifAbsent: [  ]) notNil.
+
+	(loadedProjects at: 1) unload.
+
+	self deny: (symDict at: className asSymbol ifAbsent: [  ]) notNil
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _loadSpecNamed: specName [
+	^ self class _loadSpecNamed: specName
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _loadSpecSessionCacheKey [
 	^ self class _loadSpecSessionCacheKey
 ]
 
 { #category : 'private' }
 RwRowanSample9Test >> _rowanSample9_0000_load_spec [
-
-	| rowanProject fileUrl |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	fileUrl := 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample9_0000.ston'.
-	^(RwSpecification fromUrl: fileUrl)
-		projectsHome: self _testRowanProjectsSandbox;
-		yourself.
+	^ self class _rowanSample9_0000_load_spec
 ]
 
 { #category : 'private' }

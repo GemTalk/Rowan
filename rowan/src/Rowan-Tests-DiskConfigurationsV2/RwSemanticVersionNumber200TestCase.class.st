@@ -4,7 +4,7 @@ The tests in this class were extracted from the examples in Semantic Version Spe
 Class {
 	#name : 'RwSemanticVersionNumber200TestCase',
 	#superclass : 'TestCase',
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Tests-DiskConfigurationsV2'
 }
 
 { #category : 'tests' }

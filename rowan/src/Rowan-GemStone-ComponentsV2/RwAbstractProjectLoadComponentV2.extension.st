@@ -1,7 +1,7 @@
-Extension { #name : 'RwCommonProjectLoadComponentV2' }
+Extension { #name : 'RwAbstractProjectLoadComponentV2' }
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwCommonProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
+RwAbstractProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
 
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
 
@@ -32,13 +32,13 @@ self error: 'not yet supported'.
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwCommonProjectLoadComponentV2 class >> orderedDictionaryClass [
+RwAbstractProjectLoadComponentV2 class >> orderedDictionaryClass [
 
 	^ Rowan platform orderedDictionaryClass
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwCommonProjectLoadComponentV2 >> _exportToUrl: fileUrl [
+RwAbstractProjectLoadComponentV2 >> _exportToUrl: fileUrl [
 
 	| url |
 	url := fileUrl asRwUrl.

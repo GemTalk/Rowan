@@ -7,7 +7,7 @@ RwProjectLoadConfiguration {
 		[
 			'gemstone'
 		] : {
-			'core' : {
+			'tests' : {
 				#packageNames : [
 					'STON-Tests',
 					'STON-GemStone-Tests'

@@ -13,25 +13,29 @@ Class {
 { #category : 'compiling' }
 RwGsMethodExtensionSessionMethodSymbolDictPatch >> compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols [
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+  [ | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
 
-	methDict := GsMethodDictionary new.
-	catDict := GsMethodDictionary new.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: methDict
-		intoCategories: catDict
-		intoPragmas: pArray
-		environmentId: self methodEnvironmentId
+	  methDict := GsMethodDictionary new.
+	  catDict := GsMethodDictionary new.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: methDict
+		  intoCategories: catDict
+		  intoPragmas: pArray
+		  environmentId: self methodEnvironmentId
+   ] on: (CompileError, CompileWarning) do:[:ex |
+     ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methodDefinition).
+     ex pass
+   ]
 ]
 
 { #category : 'installing' }

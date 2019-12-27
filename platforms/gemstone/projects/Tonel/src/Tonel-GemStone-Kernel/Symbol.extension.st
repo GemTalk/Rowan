@@ -1,7 +1,12 @@
 Extension { #name : 'Symbol' }
 
 { #category : '*tonel-gemstone-kernel' }
-Symbol >> keywords [
+Symbol >> _keywords [
+  "Disabled for now by rename to _keywords ; see if 3.6 base image is ok.
+   NOTE, you also need to override in DoubleByteSymbol and QuadByteSymbol
+   if a reimplementation is needed for Rowan .
+   To override in one place for all Symbol classes, 
+    reimplement Symbol class >> _keywords:    instead ."
 
 	"Answer an array of the keywords that compose the receiver."
 
@@ -28,5 +33,4 @@ Symbol >> keywords [
 				to: keywords size
 				with: {(':' , keywords last)} ].
 	^ keywords
-
 ]

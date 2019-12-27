@@ -116,7 +116,7 @@ RowanMethodServiceTest >> test_isTestMethod [
 
 { #category : 'tests' }
 RowanMethodServiceTest >> test_reformatSource [
-	| classService methodService source |
+	| classService methodService source strm indentString |
 		classService := RowanClassService forClassNamed: self servicesDefaultClassName.
 	source := 'abc | abc | abc := 1. abc := abc + abc. ^abc'.
 	classService saveMethodSource: source category: 'other'.
@@ -124,11 +124,17 @@ RowanMethodServiceTest >> test_reformatSource [
 	methodService := (classService methodsNamed: #abc) first.
 	self assert: methodService source equals: source.
 	methodService reformatSource.
-	self assert: methodService reformatSource source equals: 'abc
-  | abc |
-  abc := 1.
-  abc := abc + abc.
-  ^ abc'
+	indentString := RBConfigurableFormatter indentString.
+	strm := WriteStream on: String new.
+	strm 
+		nextPutAll: 'abc'; lf;
+		nextPutAll:  indentString, '| abc |'; lf;
+		nextPutAll:  indentString, 'abc := 1.'; lf;
+		nextPutAll:  indentString, 'abc := abc + abc.'; lf;
+		nextPutAll:  indentString, '^ abc';
+		yourself.
+	self assert: methodService reformatSource source equals: strm contents
+
 ]
 
 { #category : 'tests' }

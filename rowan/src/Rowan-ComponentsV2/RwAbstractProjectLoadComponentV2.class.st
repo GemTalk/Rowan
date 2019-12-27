@@ -33,13 +33,6 @@ RwAbstractProjectLoadComponentV2 class >> _readStonFrom: stream [
 ]
 
 { #category : 'instance creation' }
-RwAbstractProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
-
-	self subclassResponsibility: #'fromUrl:'
-]
-
-{ #category : 'instance creation' }
 RwAbstractProjectLoadComponentV2 class >> new [
 
 	^self basicNew initialize
@@ -54,17 +47,6 @@ RwAbstractProjectLoadComponentV2 class >> newNamed: aName for: projectName [
 		projectName: projectName;
 		yourself
 
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 class >> orderedDictionaryClass [
-
-	self subclassResponsibility: #orderedDictionaryClass
-]
-
-{ #category : 'exporting' }
-RwAbstractProjectLoadComponentV2 >> _exportToUrl: fileUrl [
-	self subclassResponsibility: #'_exportToUrl:'
 ]
 
 { #category : 'private' }

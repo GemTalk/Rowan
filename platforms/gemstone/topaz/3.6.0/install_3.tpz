@@ -181,17 +181,6 @@ GsFile gciLogServer: 'FAILED AUDIT: ', projectName.
   commit
 
   logout
-  set u DataCurator p swordfish
-  login
-
-# set rowanCompile to true 
-#
-run
-UserGlobals at: #rowanCompile put: true.
-%
-  commit
-
-	logout
 
 	errorCount
 

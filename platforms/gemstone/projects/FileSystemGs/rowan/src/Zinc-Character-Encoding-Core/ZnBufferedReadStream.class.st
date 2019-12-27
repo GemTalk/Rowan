@@ -445,3 +445,8 @@ ZnBufferedReadStream >> upToEnd [
 ZnBufferedReadStream >> wrappedStream [
 	^ stream
 ]
+
+{ #category : 'accessing' }
+ZnBufferedReadStream >> wrappedStreamName [
+	^ stream wrappedStreamName
+]
