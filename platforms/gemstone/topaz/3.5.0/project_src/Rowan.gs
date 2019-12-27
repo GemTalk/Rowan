@@ -2850,7 +2850,7 @@ true.
 doit
 (Object
 	subclass: 'RwAbstractProjectComponentVisitorV2'
-	instVarNames: #( projectLoadSpecs visitedComponents visitedComponentNames platformAttributes definedGroupNames projectNames groupNames componentNames projectsRoot componentsRoot )
+	instVarNames: #( projectLoadSpecs visitedComponents visitedComponentNames platformAttributes definedGroupNames projectNames groupNames componentNames )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -2866,7 +2866,7 @@ true.
 doit
 (RwAbstractProjectComponentVisitorV2
 	subclass: 'RwIndependentComponentVisitorV2'
-	instVarNames: #( packageNames )
+	instVarNames: #( packageNames componentsPath projectsPath )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -2882,7 +2882,7 @@ true.
 doit
 (RwAbstractProjectComponentVisitorV2
 	subclass: 'RwResolvedProjectComponentVisitorV2'
-	instVarNames: #( projectDefinition resolvedProject )
+	instVarNames: #( resolvedProject )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -33876,14 +33876,8 @@ componentNames
 
 category: 'accessing'
 method: RwAbstractProjectComponentVisitorV2
-componentsRoot
-	^ componentsRoot
-%
-
-category: 'accessing'
-method: RwAbstractProjectComponentVisitorV2
-componentsRoot: aStringOrFileReference
-	componentsRoot := aStringOrFileReference asFileReference
+componentsPath
+	^ self subclassResponsibility: #'componentsPath'
 %
 
 category: 'accessing'
@@ -33910,6 +33904,13 @@ initialize
 	groupNames := Set new.
 	projectLoadSpecs := Set new.
 	visitedComponents := Dictionary new
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+packageNames
+
+	self subclassResponsibility: #packageNames
 %
 
 category: 'accessing'
@@ -33942,33 +33943,68 @@ projectNames
 
 category: 'accessing'
 method: RwAbstractProjectComponentVisitorV2
-projectsRoot
-	^ projectsRoot
+projectsPath
+	^ self subclassResponsibility: #'projectsPath'
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visit: aProjectLoadComponent
+
+	^aProjectLoadComponent acceptVisitor: self
 %
 
 category: 'accessing'
 method: RwAbstractProjectComponentVisitorV2
-projectsRoot: aString
-	projectsRoot := aString asFileReference
+visitedComponents
+
+	^ visitedComponents
 %
 
 category: 'visiting'
 method: RwAbstractProjectComponentVisitorV2
-visit: aProjectComponent
+visitLoadSpecification: aLoadSpecification
 
-	^aProjectComponent acceptVisitor: self
+	self projectLoadSpecs add: aLoadSpecification
 %
 
 category: 'visiting'
 method: RwAbstractProjectComponentVisitorV2
-visitNested: aProjectComponent
+visitNested: aProjectLoadComponent
 
-	^aProjectComponent acceptNestedVisitor: self
+	^aProjectLoadComponent acceptNestedVisitor: self
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitNestedProjectLoadComponent: aNestedProjectLoadComponent
+	(visitedComponentNames includes: aNestedProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aNestedProjectLoadComponent.
+
+	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
+	self _processGroupNames.
+
+	self _processConditionalPackageNames: aNestedProjectLoadComponent.
+
+	self componentNames addAll: aNestedProjectLoadComponent componentNames.
+	(self
+		_components: self componentsPath
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	self projectNames addAll: aNestedProjectLoadComponent projectNames.
+	(self
+		_projects: self projectsPath
+		forProject: aNestedProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 %
 
 category: 'visiting'
 method: RwAbstractProjectComponentVisitorV2
 visitProjectLoadComponent: aProjectLoadComponent
+
 	(visitedComponentNames includes: aProjectLoadComponent name)
 		ifTrue: [ ^ self ].
 
@@ -33981,9 +34017,15 @@ visitProjectLoadComponent: aProjectLoadComponent
 
 	self componentNames addAll: aProjectLoadComponent componentNames.
 	(self
-		_components: self componentsRoor
+		_components: self componentsPath
 		forProject: aProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ]
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	self projectNames addAll: aProjectLoadComponent projectNames.
+	(self
+		_projects: self projectsPath
+		forProject: aProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 %
 
 category: 'private'
@@ -33991,22 +34033,6 @@ method: RwAbstractProjectComponentVisitorV2
 _addPackageNames: somePackageNames for: aComponent
 
 	self subclassResponsibility: #_addPackageNames:for:
-%
-
-category: 'private'
-method: RwAbstractProjectComponentVisitorV2
-_components: componentDirPath forProject: aProjectName
-
-	| urlBase |
-	self componentNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
-	^ self componentNames
-		collect: [ :componentName | 
-			| url |
-			url := urlBase , componentName , '.ston'.
-			(RwCommonProjectLoadComponentV2 fromUrl: url)
-				projectName: aProjectName;
-				yourself ]
 %
 
 category: 'private'
@@ -34070,11 +34096,24 @@ method: RwAbstractProjectComponentVisitorV2
 _visited: aComponent
 
 	visitedComponentNames add:  aComponent name.
+	visitedComponents at: aComponent name put: aComponent.
 %
 
 ! Class implementation for 'RwIndependentComponentVisitorV2'
 
 !		Instance methods for 'RwIndependentComponentVisitorV2'
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+componentsPath
+	^ componentsPath
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+componentsPath: aString
+	componentsPath := aString
+%
 
 category: 'initialization'
 method: RwIndependentComponentVisitorV2
@@ -34090,6 +34129,18 @@ packageNames
 	^ packageNames
 %
 
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+projectsPath
+	^ projectsPath
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+projectsPath: aString
+	projectsPath := aString
+%
+
 category: 'private'
 method: RwIndependentComponentVisitorV2
 _addPackageNames: somePackageNames for: aComponent
@@ -34099,7 +34150,32 @@ _addPackageNames: somePackageNames for: aComponent
 
 ! Class implementation for 'RwResolvedProjectComponentVisitorV2'
 
+!		Class methods for 'RwResolvedProjectComponentVisitorV2'
+
+category: 'instance creation'
+classmethod: RwResolvedProjectComponentVisitorV2
+resolvedProject: resolvedProject platformAttributes: platformConfigurationAttributes groupNames: groupNames
+	^ self new
+		platformAttributes: platformConfigurationAttributes;
+		groupNames: groupNames;
+		resolvedProject: resolvedProject;
+		yourself
+%
+
 !		Instance methods for 'RwResolvedProjectComponentVisitorV2'
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+componentsPath
+
+	^ self resolvedProject componentsRoot
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+packageNames
+	^ self resolvedProject packageNames
+%
 
 category: 'accessing'
 method: RwResolvedProjectComponentVisitorV2
@@ -34109,9 +34185,9 @@ projectDefinition
 
 category: 'accessing'
 method: RwResolvedProjectComponentVisitorV2
-projectLoadSpecs
+projectsPath
 
-	^ projectLoadSpecs
+	^ self resolvedProject projectsRoot
 %
 
 category: 'accessing'
@@ -34126,99 +34202,11 @@ resolvedProject: aResolvedProject
 	resolvedProject := aResolvedProject
 %
 
-category: 'visiting'
-method: RwResolvedProjectComponentVisitorV2
-visitComponentLoadConfiguration: aComponentLoadConfiguration
-	(visitedComponentNames includes: aComponentLoadConfiguration name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aComponentLoadConfiguration.
-
-	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aComponentLoadConfiguration.
-
-	self componentNames addAll: aComponentLoadConfiguration componentNames.
-	(self
-		_components: self componentsRoot
-		forProject: aComponentLoadConfiguration projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aComponentLoadConfiguration projectNames.
-	(self
-		_projects: self projectsRoot
-		forProject: aComponentLoadConfiguration projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-%
-
-category: 'accessing'
-method: RwResolvedProjectComponentVisitorV2
-visitedComponents
-
-	^ visitedComponents
-%
-
-category: 'visiting'
-method: RwResolvedProjectComponentVisitorV2
-visitLoadSpecification: aLoadSpecification
-
-	self projectLoadSpecs add: aLoadSpecification
-%
-
-category: 'visiting'
-method: RwResolvedProjectComponentVisitorV2
-visitNestedProjectLoadComponent: aNestedProjectLoadComponent
-	(visitedComponentNames includes: aNestedProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aNestedProjectLoadComponent.
-
-	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aNestedProjectLoadComponent.
-
-	self componentNames addAll: aNestedProjectLoadComponent componentNames.
-	(self
-		_components: self componentsRoot
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aNestedProjectLoadComponent projectNames.
-	(self
-		_projects: self projectsRoot
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-%
-
 category: 'private'
 method: RwResolvedProjectComponentVisitorV2
 _addPackageNames: somePackageNames for: aComponent
 
 	self projectDefinition addPackages: somePackageNames forComponent: aComponent
-%
-
-category: 'private'
-method: RwResolvedProjectComponentVisitorV2
-_projects: projectDirPath forProject: ignored
-
-	| urlBase |
-	self projectNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
-	^ self projectNames
-		collect: [ :prjName | 
-			| url |
-			url := urlBase , prjName , '.ston'.
-			RwSpecification fromUrl: url ]
-%
-
-category: 'private'
-method: RwResolvedProjectComponentVisitorV2
-_visited: aComponent
-
-	super _visited: aComponent.
-	visitedComponents at: aComponent name put: aComponent.
 %
 
 ! Class implementation for 'RwAbstractProjectConfiguration'
@@ -35609,7 +35597,7 @@ category: 'visiting'
 method: RwProjectLoadComponentV2
 acceptVisitor: aVisitor
 
-	^aVisitor visitComponentLoadConfiguration: self
+	^aVisitor visitProjectLoadComponent: self
 %
 
 ! Class implementation for 'RwAbstractProjectSetModificationVisitor'
@@ -45152,13 +45140,10 @@ _visitComponents: visitorClass forResolvedProject: resolvedProject withComponent
 				error:
 					'No projects directory (' , projectsDirectory pathString printString
 						, ') found for project ' , projectName printString ].
-	visitor := visitorClass new
-		platformAttributes: platformConfigurationAttributes;
-		groupNames: groupNames;
-		componentsRoot: componentDirectory;
-		projectsRoot: projectsDirectory;
-		resolvedProject: resolvedProject;
-		yourself.
+	visitor := visitorClass
+		resolvedProject: resolvedProject
+		platformAttributes: platformConfigurationAttributes
+		groupNames: groupNames.
 	componentNames
 		do: [ :componentName | 
 			| component url |
@@ -69437,6 +69422,49 @@ _sampleSymbolDictionaryName2
 
 !		Instance methods for 'RwProjectComponentVisitorV2Test'
 
+category: 'tests'
+method: RwProjectComponentVisitorV2Test
+testBasicVisit_independent
+	"test of RwProjectLoadComponentVisitorV2 as it would be used without an RwResolvedProject."
+
+	"for the purposes of this test, a RwResolveProject is used to clone the RowanSample9 project
+		into the test sandbox directory"
+
+	| platformAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
+	platformAttributes := {'common'.
+	'gemstone'.
+	('3.5.0' asRwGemStoneVersionNumber)}.
+	projectAlias := 'RowanSample9_DiskConfig_Test'.
+	componentNamesToLoad := #('Core').
+	groupNames := #('core').
+
+	projectPath := self _cloneRowanSample9: projectAlias.	"clone https://github.com/dalehenrich/RowanSample9"
+
+	visitor := RwIndependentComponentVisitorV2 new
+		platformAttributes: platformAttributes;
+		groupNames: groupNames;
+		yourself.
+
+	self assert: visitor packageNames isEmpty.
+	projectSpecUrl := 'file:' , projectPath , '/rowan/project.ston'.
+	projectSpec := RwSpecification fromUrl: projectSpecUrl.
+
+	componentNamesToLoad
+		do: [ :componentName | 
+			| component url |
+			url := 'file:' , projectPath , '/' , projectSpec componentsPath , '/'
+				, componentName , '.ston'.
+			component := RwAbstractProjectConfiguration fromUrl: url.
+			component projectName: projectAlias.
+
+			visitor visit: component ].
+	self
+		assert: visitor packageNames sort
+		equals:
+			#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
+	self assert: visitor projectLoadSpecs isEmpty
+%
+
 category: 'private'
 method: RwProjectComponentVisitorV2Test
 _visitorClass
@@ -72468,6 +72496,40 @@ category: '*rowan-cypress-definitions'
 method: RwAbstractClassDefinition
 name
   ^ self key
+%
+
+! Class extensions for 'RwAbstractProjectComponentVisitorV2'
+
+!		Instance methods for 'RwAbstractProjectComponentVisitorV2'
+
+category: '*rowan-gemstone-componentsv2'
+method: RwAbstractProjectComponentVisitorV2
+_components: componentDirPath forProject: aProjectName
+
+	| urlBase |
+	self componentNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
+	^ self componentNames
+		collect: [ :componentName | 
+			| url |
+			url := urlBase , componentName , '.ston'.
+			(RwCommonProjectLoadComponentV2 fromUrl: url)
+				projectName: aProjectName;
+				yourself ]
+%
+
+category: '*rowan-gemstone-componentsv2'
+method: RwAbstractProjectComponentVisitorV2
+_projects: projectDirPath forProject: ignored
+
+	| urlBase |
+	self projectNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
+	^ self projectNames
+		collect: [ :prjName | 
+			| url |
+			url := urlBase , prjName , '.ston'.
+			RwSpecification fromUrl: url ]
 %
 
 ! Class extensions for 'RwAbstractProjectDefinitionV2'

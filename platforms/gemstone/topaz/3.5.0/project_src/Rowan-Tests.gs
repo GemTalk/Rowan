@@ -47839,16 +47839,13 @@ testBasicVisit_withResolvedProject
 
 	self assert: basicProject packageNames isEmpty.
 
-	visitor := self _visitorClass new
-		platformAttributes: platformAttributes;
-		groupNames: groupNames;
-		componentsRoot: componentsRoot;
-		projectsRoot: basicProject projectsRoot;
-		resolvedProject: basicProject;
-		yourself.
+	visitor := RwResolvedProjectComponentVisitorV2
+		resolvedProject: basicProject
+		platformAttributes: platformAttributes
+		groupNames: groupNames.
 	projectName := basicProject projectAlias.
 
-	self assert: basicProject packageNames isEmpty.
+	self assert: visitor packageNames isEmpty.
 
 	componentNamesToLoad
 		do: [ :componentName | 
@@ -47859,11 +47856,39 @@ testBasicVisit_withResolvedProject
 
 			visitor visit: component ].
 	self
-		assert:
-			basicProject packageNames sort
-				=
-					#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
+		assert: visitor packageNames sort
+		equals:
+			#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
 	self assert: visitor projectLoadSpecs isEmpty
+%
+
+category: '*rowan-testsV2'
+method: RwProjectComponentVisitorV2Test
+_cloneRowanSample9: projectAlias
+	"clone https://github.com/dalehenrich/RowanSample9 and return full path to the clone"
+
+	| basicProject loadSpec projectPath projectsHome |
+	projectsHome := RwRowanSample9Test _testRowanProjectsSandbox asFileReference.
+	projectPath := projectsHome / projectAlias.
+	projectPath exists
+		ifTrue: [ projectPath deleteAll ].
+
+	loadSpec := RwLoadSpecificationV2 new
+		projectAlias: projectAlias;
+		specName: projectAlias;
+		projectsHome: projectsHome;
+		componentNames: #('Core');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/project.ston';
+		gitUrl: 'https://github.com/dalehenrich/RowanSample9';
+		revision: 'spec_0008';
+		yourself.
+	loadSpec _validate.
+
+	basicProject := RwResolvedProjectV2 basicLoadSpecification: loadSpec.
+	basicProject _projectRepository resolve.	"create clone"
+
+	^ projectPath pathString
 %
 
 ! Class extensions for 'RwProjectConfigurationsTest'

@@ -23,7 +23,8 @@ RwResolvedProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: a
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> componentsRoot [
+RwResolvedProjectComponentVisitorV2 >> componentsPath [
+
 	^ self resolvedProject componentsRoot
 ]
 
@@ -38,7 +39,8 @@ RwResolvedProjectComponentVisitorV2 >> projectDefinition [
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectsRoot [
+RwResolvedProjectComponentVisitorV2 >> projectsPath [
+
 	^ self resolvedProject projectsRoot
 ]
 

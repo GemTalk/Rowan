@@ -1,6 +1,34 @@
 Extension { #name : 'RwProjectComponentVisitorV2Test' }
 
 { #category : '*rowan-testsV2' }
+RwProjectComponentVisitorV2Test >> _cloneRowanSample9: projectAlias [
+	"clone https://github.com/dalehenrich/RowanSample9 and return full path to the clone"
+
+	| basicProject loadSpec projectPath projectsHome |
+	projectsHome := RwRowanSample9Test _testRowanProjectsSandbox asFileReference.
+	projectPath := projectsHome / projectAlias.
+	projectPath exists
+		ifTrue: [ projectPath deleteAll ].
+
+	loadSpec := RwLoadSpecificationV2 new
+		projectAlias: projectAlias;
+		specName: projectAlias;
+		projectsHome: projectsHome;
+		componentNames: #('Core');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/project.ston';
+		gitUrl: 'https://github.com/dalehenrich/RowanSample9';
+		revision: 'spec_0008';
+		yourself.
+	loadSpec _validate.
+
+	basicProject := RwResolvedProjectV2 basicLoadSpecification: loadSpec.
+	basicProject _projectRepository resolve.	"create clone"
+
+	^ projectPath pathString
+]
+
+{ #category : '*rowan-testsV2' }
 RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
 

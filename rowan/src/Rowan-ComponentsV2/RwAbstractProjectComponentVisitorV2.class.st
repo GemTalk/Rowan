@@ -29,21 +29,6 @@ RwAbstractProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: a
 ]
 
 { #category : 'private' }
-RwAbstractProjectComponentVisitorV2 >> _components: componentDirPath forProject: aProjectName [
-
-	| urlBase |
-	self componentNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
-	^ self componentNames
-		collect: [ :componentName | 
-			| url |
-			url := urlBase , componentName , '.ston'.
-			(RwCommonProjectLoadComponentV2 fromUrl: url)
-				projectName: aProjectName;
-				yourself ]
-]
-
-{ #category : 'private' }
 RwAbstractProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
 
 	self platformAttributes do: [:anObject |
@@ -99,19 +84,6 @@ RwAbstractProjectComponentVisitorV2 >> _processGroupNames [
 ]
 
 { #category : 'private' }
-RwAbstractProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ignored [
-
-	| urlBase |
-	self projectNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
-	^ self projectNames
-		collect: [ :prjName | 
-			| url |
-			url := urlBase , prjName , '.ston'.
-			RwSpecification fromUrl: url ]
-]
-
-{ #category : 'private' }
 RwAbstractProjectComponentVisitorV2 >> _visited: aComponent [
 
 	visitedComponentNames add:  aComponent name.
@@ -125,8 +97,8 @@ RwAbstractProjectComponentVisitorV2 >> componentNames [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> componentsRoot [
-	^ self subclassResponsibility: #'componentsRoot'
+RwAbstractProjectComponentVisitorV2 >> componentsPath [
+	^ self subclassResponsibility: #'componentsPath'
 ]
 
 { #category : 'accessing' }
@@ -187,8 +159,8 @@ RwAbstractProjectComponentVisitorV2 >> projectNames [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> projectsRoot [
-	^ self subclassResponsibility: #'projectsRoot'
+RwAbstractProjectComponentVisitorV2 >> projectsPath [
+	^ self subclassResponsibility: #'projectsPath'
 ]
 
 { #category : 'visiting' }
@@ -229,13 +201,13 @@ RwAbstractProjectComponentVisitorV2 >> visitNestedProjectLoadComponent: aNestedP
 
 	self componentNames addAll: aNestedProjectLoadComponent componentNames.
 	(self
-		_components: self componentsRoot
+		_components: self componentsPath
 		forProject: aNestedProjectLoadComponent projectName)
 		do: [ :component | component acceptNestedVisitor: self ].
 
 	self projectNames addAll: aNestedProjectLoadComponent projectNames.
 	(self
-		_projects: self projectsRoot
+		_projects: self projectsPath
 		forProject: aNestedProjectLoadComponent projectName)
 		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]
@@ -255,13 +227,13 @@ RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadCo
 
 	self componentNames addAll: aProjectLoadComponent componentNames.
 	(self
-		_components: self componentsRoot
+		_components: self componentsPath
 		forProject: aProjectLoadComponent projectName)
 		do: [ :component | component acceptNestedVisitor: self ].
 
 	self projectNames addAll: aProjectLoadComponent projectNames.
 	(self
-		_projects: self projectsRoot
+		_projects: self projectsPath
 		forProject: aProjectLoadComponent projectName)
 		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]

@@ -3,8 +3,8 @@ Class {
 	#superclass : 'RwAbstractProjectComponentVisitorV2',
 	#instVars : [
 		'packageNames',
-		'componentsRoot',
-		'projectsRoot'
+		'componentsPath',
+		'projectsPath'
 	],
 	#category : 'Rowan-ComponentsV2'
 }
@@ -17,13 +17,13 @@ RwIndependentComponentVisitorV2 >> _addPackageNames: somePackageNames for: aComp
 ]
 
 { #category : 'accessing' }
-RwIndependentComponentVisitorV2 >> componentsRoot [
-	^ componentsRoot
+RwIndependentComponentVisitorV2 >> componentsPath [
+	^ componentsPath
 ]
 
 { #category : 'accessing' }
-RwIndependentComponentVisitorV2 >> componentsRoot: aStringOrFileReference [
-	componentsRoot := aStringOrFileReference asFileReference
+RwIndependentComponentVisitorV2 >> componentsPath: aString [
+	componentsPath := aString
 ]
 
 { #category : 'initialization' }
@@ -39,11 +39,11 @@ RwIndependentComponentVisitorV2 >> packageNames [
 ]
 
 { #category : 'accessing' }
-RwIndependentComponentVisitorV2 >> projectsRoot [
-	^ projectsRoot
+RwIndependentComponentVisitorV2 >> projectsPath [
+	^ projectsPath
 ]
 
 { #category : 'accessing' }
-RwIndependentComponentVisitorV2 >> projectsRoot: aString [
-	projectsRoot := aString asFileReference
+RwIndependentComponentVisitorV2 >> projectsPath: aString [
+	projectsPath := aString
 ]
