@@ -29,6 +29,38 @@ RwProjectComponentVisitorV2Test >> _cloneRowanSample9: projectAlias [
 ]
 
 { #category : '*rowan-testsV2' }
+RwProjectComponentVisitorV2Test >> _readReadVastTonelDemo_555: platformAttributes deleteClone: deleteClone [
+	"Read project definition from a tonel repository written by VAST .. includes additional package/class/method properties not used by GemStone or Pharo"
+
+	"https://github.com/GemTalk/Rowan/issues/555"
+
+	| projectName loadSpec projectAlias projectsHome projectPath |
+	projectName := 'tonel-demo'.
+	projectAlias := projectName , '_DiskConfig_Test'.
+
+	projectsHome := RwRowanSample9Test _testRowanProjectsSandbox asFileReference.
+	deleteClone
+		ifTrue: [ 
+			projectPath := projectsHome / projectAlias.
+			projectPath exists
+				ifTrue: [ projectPath deleteAll ] ].
+
+	loadSpec := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		specName: projectName;
+		projectsHome: projectsHome;
+		componentNames: #('Core');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/project.ston';
+		gitUrl: 'https://github.com/dalehenrich/tonel-demos';
+		revision: 'rowan_553';
+		yourself.
+
+	^ loadSpec resolve: platformAttributes
+]
+
+{ #category : '*rowan-testsV2' }
 RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
 
@@ -92,28 +124,34 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 
 	"https://github.com/GemTalk/Rowan/issues/555"
 
-	| platformAttributes resolvedProject projectName loadSpec projectAlias projectsHome projectPath |
-	platformAttributes := {'common'.
-	'vast'}.
-	projectName := 'tonel-demo'.
-	projectAlias := projectName , '_DiskConfig_Test'.
+	| resolvedProject |
+"vast"
+	resolvedProject := self
+		_readReadVastTonelDemo_555:
+			{'common'.
+			'vast'}
+		deleteClone: true.
+	self
+		assert: resolvedProject packageNames sort
+		equals:
+			#('TonelExampleAnotherSubSubApp' 'TonelAnotherShadowSubSubApp' 'TonelExampleApp' 'TonelExampleShadowSubSubApp' 'TonelExampleSubApp' 'TonelExampleShadowSubSubSubApp' 'TonelExampleSubSubApp')
+				sort.
 
-	projectsHome := RwRowanSample9Test _testRowanProjectsSandbox asFileReference.
-	projectPath := projectsHome / projectAlias.
-	projectPath exists
-		ifTrue: [ projectPath deleteAll ].
+"pharo"
+	resolvedProject := self
+		_readReadVastTonelDemo_555:
+			{'common'.
+			'pharo'}
+		deleteClone: false.
+	self
+		assert: resolvedProject packageNames sort
+		equals: #('TonelExampleApp' 'TonelExampleForPharoApp') sort.
 
-	loadSpec := RwLoadSpecificationV2 new
-		projectName: projectName;
-		projectAlias: projectAlias;
-		specName: projectName;
-		projectsHome: projectsHome;
-		componentNames: #('Core');
-		groupNames: #('core');
-		projectSpecFile: 'rowan/project.ston';
-		gitUrl: 'https://github.com/dalehenrich/tonel-demos';
-		revision: 'rowan_553';
-		yourself.
-
-	resolvedProject := loadSpec resolve: platformAttributes
+"gemstone"
+	resolvedProject := self
+		_readReadVastTonelDemo_555:
+			{'common'.
+			'gemstone'}
+		deleteClone: false.
+	self assert: resolvedProject packageNames sort equals: #() sort
 ]
