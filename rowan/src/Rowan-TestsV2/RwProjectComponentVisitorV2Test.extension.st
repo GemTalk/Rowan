@@ -29,7 +29,40 @@ RwProjectComponentVisitorV2Test >> _cloneRowanSample9: projectAlias [
 ]
 
 { #category : '*rowan-testsV2' }
-RwProjectComponentVisitorV2Test >> _readReadVastTonelDemo_555: platformAttributes deleteClone: deleteClone [
+RwProjectComponentVisitorV2Test >> _cloneVastTonelDemo_555: projectAlias deleteClone: deleteClone [
+	"Read project definition from a tonel repository written by VAST .. includes additional package/class/method properties not used by GemStone or Pharo"
+
+	"https://github.com/GemTalk/Rowan/issues/555"
+
+	| loadSpec projectsHome projectPath basicProject |
+	projectsHome := RwRowanSample9Test _testRowanProjectsSandbox asFileReference.
+	deleteClone
+		ifTrue: [ 
+			projectPath := projectsHome / projectAlias.
+			projectPath exists
+				ifTrue: [ projectPath deleteAll ] ].
+
+	loadSpec := RwLoadSpecificationV2 new
+		projectAlias: projectAlias;
+		specName: projectAlias;
+		projectsHome: projectsHome;
+		componentNames: #('Core');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/project.ston';
+		gitUrl: 'https://github.com/dalehenrich/tonel-demos';
+		revision: 'rowan_553';
+		yourself.
+
+	loadSpec _validate.
+
+	basicProject := RwResolvedProjectV2 basicLoadSpecification: loadSpec.
+	basicProject _projectRepository resolve.	"create clone"
+
+	^ projectPath pathString
+]
+
+{ #category : '*rowan-testsV2' }
+RwProjectComponentVisitorV2Test >> _readVastTonelDemo_555: platformAttributes deleteClone: deleteClone [
 	"Read project definition from a tonel repository written by VAST .. includes additional package/class/method properties not used by GemStone or Pharo"
 
 	"https://github.com/GemTalk/Rowan/issues/555"
@@ -127,7 +160,7 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 	| resolvedProject |
 "vast"
 	resolvedProject := self
-		_readReadVastTonelDemo_555:
+		_readVastTonelDemo_555:
 			{'common'.
 			'vast'}
 		deleteClone: true.
@@ -139,7 +172,7 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 
 "pharo"
 	resolvedProject := self
-		_readReadVastTonelDemo_555:
+		_readVastTonelDemo_555:
 			{'common'.
 			'pharo'}
 		deleteClone: false.
@@ -149,9 +182,9 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 
 "gemstone"
 	resolvedProject := self
-		_readReadVastTonelDemo_555:
+		_readVastTonelDemo_555:
 			{'common'.
 			'gemstone'}
 		deleteClone: false.
-	self assert: resolvedProject packageNames sort equals: #('TonelExampleApp') sort
+	self assert: resolvedProject packageNames sort equals: #('TonelExampleApp' 'TonelExampleForGemStoneApp') sort
 ]
