@@ -37,8 +37,7 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-GemStone-Definitions',
 					'Rowan-Tools-GemStone',
 					'Rowan-Tools-Extensions-GemStone',
-					'Rowan-GemStone-Kernel',
-					'Rowan-GemStone-Specifications'
+					'Rowan-GemStone-Kernel'
 				]
 			},
 			'tests' : {
@@ -104,8 +103,7 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-32x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-35x' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' }
+					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' }
 				}
 			}
 		}

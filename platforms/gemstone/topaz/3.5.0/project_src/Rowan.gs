@@ -34932,6 +34932,34 @@ _configurations
 
 category: 'instance creation'
 classmethod: RwAbstractProjectLoadComponentV2
+fromUrl: specNameOrUrl
+
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme isNil
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
+	url scheme = 'file'
+		ifTrue: [ ^ self fromFile: url pathForFile ].
+	url scheme asString = 'https'
+		ifTrue: [ 
+self error: 'not yet supported'.
+"
+			| client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := (Rowan globalNamed: 'ZnClient') new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
+	self error: 'Unknown scheme: ' , url scheme printString
+%
+
+category: 'instance creation'
+classmethod: RwAbstractProjectLoadComponentV2
 new
 
 	^self basicNew initialize
@@ -35830,17 +35858,19 @@ _readObjectFrom: aFileReference
 category: 'private'
 classmethod: RwAbstractReaderWriterVisitor
 _repositoryPropertyDictFor: packagesRoot
-
 	| propertiesFile |
-	propertiesFile := packagesRoot / 'properties', 'st'.
+	propertiesFile := packagesRoot / 'properties' , 'st'.
 	propertiesFile exists
-		ifFalse: [
+		ifFalse: [ 
 			| propertiesDict |
 			propertiesFile := packagesRoot / '.filetree'.
 			propertiesFile exists
-					ifFalse: [^ Dictionary new ].
+				ifFalse: [ 
+					propertiesFile := packagesRoot / '.properties'.
+					propertiesFile exists
+						ifFalse: [ ^ Dictionary new ] ].
 			propertiesDict := self _readObjectFrom: propertiesFile.
-			propertiesDict at: #format put: 'filetree'.
+			propertiesDict at: #'format' put: 'filetree'.
 			^ propertiesDict ].
 	^ self _readObjectFrom: propertiesFile
 %
@@ -40072,6 +40102,18 @@ loadSpecification: anRwLoadSpecificationV2
 		resolve
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProjectV2
+loadSpecification: anRwLoadSpecificationV2 platformAttributes: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolve: platformAttributes
+%
+
 !		Instance methods for 'RwResolvedProjectV2'
 
 category: 'visiting'
@@ -40491,6 +40533,21 @@ resolve
 				ifTrue: [ 
 					"update project definition from disk"
 					self read ] ]
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+resolve: platformConfigurationAttributes
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self read: platformConfigurationAttributes ] ]
 %
 
 category: 'load specification'
@@ -63906,18 +63963,6 @@ isEmpty
 
 category: 'instance creation'
 classmethod: RwSpecification
-fromFile: filePath
-	filePath asFileReference
-		readStreamDo: [ :fileStream | 
-			| stream |
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			^ (STON fromStream: stream)
-				initializeForImport;
-				yourself ]
-%
-
-category: 'instance creation'
-classmethod: RwSpecification
 fromUrl: specNameOrUrl
 
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
@@ -63953,7 +63998,7 @@ new
 category: 'accessing'
 classmethod: RwSpecification
 _supportedPlatformNames
-	^ #('gemstone')
+	^ #('gemstone' 'vast' 'pharo')
 %
 
 !		Instance methods for 'RwSpecification'
@@ -64086,6 +64131,14 @@ repositoryUrl: anObject
 
 ! Class implementation for 'RwLoadSpecificationV2'
 
+!		Class methods for 'RwLoadSpecificationV2'
+
+category: 'gemstone-support'
+classmethod: RwLoadSpecificationV2
+_gemstoneAllUsersName
+	^ 'allusers'
+%
+
 !		Instance methods for 'RwLoadSpecificationV2'
 
 category: 'comparing'
@@ -64181,6 +64234,105 @@ fromSton: stonReader
 	^ (super fromSton: stonReader)
 		_validate;
 		yourself
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneDefaultMethodEnvForUser: userId
+	| gemstoneProperties userProperties |
+	gemstoneProperties := self platformProperties
+		at: 'gemstone'
+		ifAbsent: [ ^ self _gemstoneDefaultMethodEnv ].
+	userProperties := gemstoneProperties
+		at: userId
+		ifAbsent: [ 
+			gemstoneProperties
+				at: self _gemstoneAllUsersName
+				ifAbsent: [ ^ self _gemstoneDefaultMethodEnv ] ].
+	^ userProperties
+		at: #'defaultMethodEnv'
+		ifAbsent: [ self _gemstoneDefaultMethodEnv ]
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneDefaultSymbolDictNameForUser: userId
+	| gemstoneProperties userProperties |
+	gemstoneProperties := self platformProperties
+		at: 'gemstone'
+		ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ].
+	userProperties := gemstoneProperties
+		at: userId
+		ifAbsent: [ 
+			gemstoneProperties
+				at: self _gemstoneAllUsersName
+				ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ] ].
+	^ userProperties
+		at: #'defaultSymbolDictName'
+		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
+	| gemstoneProperties userProperties |
+	gemstoneProperties := self platformProperties
+		at: 'gemstone'
+		ifAbsent: [ ^ self _gemstoneDefaultUseSessionMethodsForExtensions ].
+	userProperties := gemstoneProperties
+		at: userId
+		ifAbsent: [ 
+			gemstoneProperties
+				at: self _gemstoneAllUsersName
+				ifAbsent: [ ^ self _gemstoneDefaultUseSessionMethodsForExtensions ] ].
+	^ userProperties
+		at: #'defaultUseSessionMethodsForExtensions'
+		ifAbsent: [ self _gemstoneDefaultUseSessionMethodsForExtensions ]
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultMethodEnvForUser: userId to: env
+
+	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
+		at: userId ifAbsentPut: [ Dictionary new ])
+			at: #defaultMethodEnv put: env
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultMethodEnvTo: env
+	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: env
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+
+	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
+		at: userId ifAbsentPut: [ Dictionary new ])
+			at: #defaultSymbolDictName put: symbolDictName
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+	self gemstoneSetDefaultSymbolDictNameForUser: self _gemstoneAllUsersName to: symbolDictName
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
+
+	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
+		at: userId ifAbsentPut: [ Dictionary new ])
+			at: #defaultUseSessionMethodsForExtensions put: aBool
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
 %
 
 category: 'accessing'
@@ -64457,6 +64609,33 @@ category: 'accessing'
 method: RwLoadSpecificationV2
 svnUrlUrl: anUrlString
 	svnUrl := anUrlString
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+_gemstoneAllUsersName
+
+	^ self class _gemstoneAllUsersName
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+_gemstoneDefaultMethodEnv
+	^ 0
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+_gemstoneDefaultSymbolDictName
+
+	^ 'UserGlobals'
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+_gemstoneDefaultUseSessionMethodsForExtensions
+
+	^ false
 %
 
 category: 'accessing'
@@ -69399,10 +69578,81 @@ testBasicVisit_independent
 	self assert: visitor projectLoadSpecs isEmpty
 %
 
+category: 'tests'
+method: RwProjectComponentVisitorV2Test
+testVisitVastTonelDemo_555_independent
+	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
+
+	"https://github.com/GemTalk/Rowan/issues/555"
+
+	| visitor projectAlias projectPath componentNamesToLoad groupNames |
+
+	projectAlias := 'tonel-demo_DiskConfig_Test'.
+	componentNamesToLoad := #('Core').
+	groupNames := #('core').
+
+	projectPath := self _cloneVastTonelDemo_555: projectAlias deleteClone: true.
+
+"vast"
+	visitor := self
+		_visitVastTonelDemo_555:
+			{'common'.
+			'vast'}
+		projectAlias: projectAlias
+		projectPath: projectPath.
+	self
+		assert: visitor packageNames sort
+		equals:
+			#('TonelExampleAnotherSubSubApp' 'TonelAnotherShadowSubSubApp' 'TonelExampleApp' 'TonelExampleShadowSubSubApp' 'TonelExampleSubApp' 'TonelExampleShadowSubSubSubApp' 'TonelExampleSubSubApp' 'TonelExampleForVastPharoApp')
+				sort.
+
+"pharo"
+	visitor := self
+		_visitVastTonelDemo_555:
+			{'common'.
+			'pharo'}
+		projectAlias: projectAlias
+		projectPath: projectPath.
+	self
+		assert: visitor packageNames sort
+		equals: #('TonelExampleApp' 'TonelExampleForPharoApp' 'TonelExampleForVastPharoApp') sort.
+
+"gemstone"
+	visitor := self
+		_visitVastTonelDemo_555:
+			{'common'.
+			'gemstone'}
+		projectAlias: projectAlias
+		projectPath: projectPath.
+	self assert: visitor packageNames sort equals: #('TonelExampleApp' 'TonelExampleForGemStoneApp') sort
+%
+
 category: 'private'
 method: RwProjectComponentVisitorV2Test
-_visitorClass
-	^ RwResolvedProjectComponentVisitorV2
+_visitVastTonelDemo_555: platformAttributes projectAlias: projectAlias projectPath: projectPath
+	| groupNames visitor componentNamesToLoad projectSpecUrl projectSpec |
+	componentNamesToLoad := #('Core').
+	groupNames := #('core').
+
+	visitor := RwIndependentComponentVisitorV2 new
+		platformAttributes: platformAttributes;
+		groupNames: groupNames;
+		yourself.
+
+	self assert: visitor packageNames isEmpty.
+	projectSpecUrl := 'file:' , projectPath , '/rowan/project.ston'.
+	projectSpec := RwSpecification fromUrl: projectSpecUrl.
+
+	componentNamesToLoad
+		do: [ :componentName | 
+			| component url |
+			url := 'file:' , projectPath , '/' , projectSpec componentsPath , '/'
+				, componentName , '.ston'.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
+			component projectName: projectAlias.
+
+			visitor visit: component ].
+	^ visitor
 %
 
 ! Class implementation for 'RwProjectLoadComponentV2Test'
@@ -70992,6 +71242,33 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 	^ aRwSemanticVersonComponent rwSemanticStringLessThanSelf: self
 %
 
+category: '*rowan-gemstone-components-kernel'
+method: CharacterCollection
+substrings: separators 
+	"Answer an array containing the substrings in the receiver separated 
+	by the elements of separators."
+	| result sourceStream subStringStream |
+	
+	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
+		ifFalse: [ ^ self error: 'separators must be Characters.' ].
+	sourceStream := self readStream.
+	result := OrderedCollection new.
+	subStringStream := String new writeStreamPortable.
+	[ sourceStream atEnd ] whileFalse: [
+		| char |
+		char := sourceStream next.
+		(separators includes: char)
+			ifTrue: [
+				subStringStream isEmpty ifFalse: [
+					result add: subStringStream contents.
+					subStringStream := String new writeStreamPortable ] ]
+			ifFalse: [
+				subStringStream nextPut: char ] ].
+	subStringStream isEmpty ifFalse: [
+		result add: subStringStream contents ].
+	^ result asArray
+%
+
 category: '*rowan-gemstone-url'
 method: CharacterCollection
 unescapePercents
@@ -72530,34 +72807,12 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 
 category: '*rowan-gemstone-componentsv2'
 classmethod: RwAbstractProjectLoadComponentV2
-fromUrl: specNameOrUrl
-
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
-
-	| url |
-	url := specNameOrUrl asRwUrl.
-	url scheme isNil
-		ifTrue: [ self error: 'scheme must be file: or https:' ].
-	url scheme = 'file'
-		ifTrue: [ 
-			CypressFileUtilities current
-				readStreamFor: url fileName
-				in: url pathForDirectory
-				do: [ :stream | ^ self _readStonFrom: stream ] ].
-	url scheme asString = 'https'
-		ifTrue: [ 
-self error: 'not yet supported'.
-"
-			| client response |
-			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (Rowan globalNamed: 'ZnClient') new.
-			response := client
-				beOneShot;
-				enforceHttpSuccess: true;
-				get: url.
-			^ self _readStonFrom: response decodeFromUTF8
-" ].
-	self error: 'Unknown scheme: ' , url scheme printString
+fromFile: filePath
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ self _readStonFrom: stream ]
 %
 
 category: '*rowan-gemstone-componentsv2'
@@ -73456,114 +73711,7 @@ registry_ImplementationClass
 
 ! Class extensions for 'RwLoadSpecificationV2'
 
-!		Class methods for 'RwLoadSpecificationV2'
-
-category: '*rowan-gemstone-specificationsv2'
-classmethod: RwLoadSpecificationV2
-_gemstoneAllUsersName
-	^ 'allusers'
-%
-
 !		Instance methods for 'RwLoadSpecificationV2'
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneDefaultMethodEnvForUser: userId
-	| gemstoneProperties userProperties |
-	gemstoneProperties := self platformProperties
-		at: 'gemstone'
-		ifAbsent: [ ^ self _gemstoneDefaultMethodEnv ].
-	userProperties := gemstoneProperties
-		at: userId
-		ifAbsent: [ 
-			gemstoneProperties
-				at: self _gemstoneAllUsersName
-				ifAbsent: [ ^ self _gemstoneDefaultMethodEnv ] ].
-	^ userProperties
-		at: #'defaultMethodEnv'
-		ifAbsent: [ self _gemstoneDefaultMethodEnv ]
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneDefaultSymbolDictNameForUser: userId
-	| gemstoneProperties userProperties |
-	gemstoneProperties := self platformProperties
-		at: 'gemstone'
-		ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ].
-	userProperties := gemstoneProperties
-		at: userId
-		ifAbsent: [ 
-			gemstoneProperties
-				at: self _gemstoneAllUsersName
-				ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ] ].
-	^ userProperties
-		at: #'defaultSymbolDictName'
-		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
-	| gemstoneProperties userProperties |
-	gemstoneProperties := self platformProperties
-		at: 'gemstone'
-		ifAbsent: [ ^ self _gemstoneDefaultUseSessionMethodsForExtensions ].
-	userProperties := gemstoneProperties
-		at: userId
-		ifAbsent: [ 
-			gemstoneProperties
-				at: self _gemstoneAllUsersName
-				ifAbsent: [ ^ self _gemstoneDefaultUseSessionMethodsForExtensions ] ].
-	^ userProperties
-		at: #'defaultUseSessionMethodsForExtensions'
-		ifAbsent: [ self _gemstoneDefaultUseSessionMethodsForExtensions ]
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultMethodEnvForUser: userId to: env
-
-	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
-		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultMethodEnv put: env
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultMethodEnvTo: env
-	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: env
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-
-	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
-		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultSymbolDictName put: symbolDictName
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-	self gemstoneSetDefaultSymbolDictNameForUser: self _gemstoneAllUsersName to: symbolDictName
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
-
-	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
-		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultUseSessionMethodsForExtensions put: aBool
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
-	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
-%
 
 category: '*rowan-definitionsv2'
 method: RwLoadSpecificationV2
@@ -73576,31 +73724,15 @@ resolve
 	^ RwResolvedProjectV2 loadSpecification: self
 %
 
-category: '*rowan-gemstone-specificationsv2'
+category: '*rowan-definitionsv2'
 method: RwLoadSpecificationV2
-_gemstoneAllUsersName
+resolve: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
 
-	^ self class _gemstoneAllUsersName
-%
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-_gemstoneDefaultMethodEnv
-	^ 0
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-_gemstoneDefaultSymbolDictName
-
-	^ 'UserGlobals'
-%
-
-category: '*rowan-gemstone-specificationsv2'
-method: RwLoadSpecificationV2
-_gemstoneDefaultUseSessionMethodsForExtensions
-
-	^ false
+	^ RwResolvedProjectV2 loadSpecification: self platformAttributes: platformAttributes
 %
 
 ! Class extensions for 'RwMethodDefinition'
@@ -74972,6 +75104,20 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 ! Class extensions for 'RwSpecification'
 
+!		Class methods for 'RwSpecification'
+
+category: '*rowan-gemstone-specifications'
+classmethod: RwSpecification
+fromFile: filePath
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ (STON fromStream: stream)
+				initializeForImport;
+				yourself ]
+%
+
 !		Instance methods for 'RwSpecification'
 
 category: '*rowan-gemstone-specificationsv1'
@@ -75186,6 +75332,13 @@ rbStoreOn: aStream
   (self rbStoreElementsFrom: 1 to: self size on: aStream)
     ifFalse: [ aStream nextPutAll: '; yourself' ].
   aStream nextPut: $)
+%
+
+category: '*rowan-gemstone-components-kernel'
+method: SequenceableCollection
+writeStreamPortable
+
+	^ WriteStreamPortable on: self
 %
 
 ! Class extensions for 'String'

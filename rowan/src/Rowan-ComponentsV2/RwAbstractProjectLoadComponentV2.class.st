@@ -33,6 +33,33 @@ RwAbstractProjectLoadComponentV2 class >> _readStonFrom: stream [
 ]
 
 { #category : 'instance creation' }
+RwAbstractProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
+
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme isNil
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
+	url scheme = 'file'
+		ifTrue: [ ^ self fromFile: url pathForFile ].
+	url scheme asString = 'https'
+		ifTrue: [ 
+self error: 'not yet supported'.
+"
+			| client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := (Rowan globalNamed: 'ZnClient') new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
+	self error: 'Unknown scheme: ' , url scheme printString
+]
+
+{ #category : 'instance creation' }
 RwAbstractProjectLoadComponentV2 class >> new [
 
 	^self basicNew initialize

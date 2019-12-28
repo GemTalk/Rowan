@@ -10,17 +10,6 @@ RwSpecification class >> _supportedPlatformNames [
 ]
 
 { #category : 'instance creation' }
-RwSpecification class >> fromFile: filePath [
-	filePath asFileReference
-		readStreamDo: [ :fileStream | 
-			| stream |
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			^ (STON fromStream: stream)
-				initializeForImport;
-				yourself ]
-]
-
-{ #category : 'instance creation' }
 RwSpecification class >> fromUrl: specNameOrUrl [
 
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"

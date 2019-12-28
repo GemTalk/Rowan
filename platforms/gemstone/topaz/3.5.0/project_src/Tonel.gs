@@ -3998,33 +3998,6 @@ putOn: aStream
 
 category: '*tonel-gemstone-kernel'
 method: CharacterCollection
-substrings: separators 
-	"Answer an array containing the substrings in the receiver separated 
-	by the elements of separators."
-	| result sourceStream subStringStream |
-	
-	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
-		ifFalse: [ ^ self error: 'separators must be Characters.' ].
-	sourceStream := self readStream.
-	result := OrderedCollection new.
-	subStringStream := String new writeStreamPortable.
-	[ sourceStream atEnd ] whileFalse: [
-		| char |
-		char := sourceStream next.
-		(separators includes: char)
-			ifTrue: [
-				subStringStream isEmpty ifFalse: [
-					result add: subStringStream contents.
-					subStringStream := String new writeStreamPortable ] ]
-			ifFalse: [
-				subStringStream nextPut: char ] ].
-	subStringStream isEmpty ifFalse: [
-		result add: subStringStream contents ].
-	^ result asArray
-%
-
-category: '*tonel-gemstone-kernel'
-method: CharacterCollection
 trimBoth
 
 	"Trim separators from both sides of the receiving string."
@@ -4598,13 +4571,6 @@ withIndexDo: elementAndIndexBlock
 	"Just like with:do: except that the iteration index supplies the second argument to the block."
 
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
-%
-
-category: '*tonel-gemstone-kernel'
-method: SequenceableCollection
-writeStreamPortable
-
-	^ WriteStreamPortable on: self
 %
 
 ! Class extensions for 'Stream'

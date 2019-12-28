@@ -24,7 +24,8 @@ RwNestedProjectLoadComponentV2 {
 				#packageNames : [
 					'Rowan-GemStone-Components-Kernel',
 					'Rowan-GemStone-Url',
-					'Rowan-Components-Kernel'
+					'Rowan-Components-Kernel',
+					'Rowan-GemStone-Specifications'
 				]
 			},
 			'tests' : {
@@ -41,7 +42,8 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-Configurations-Common' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Url' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Components-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' }
+					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
 		}
