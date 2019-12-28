@@ -134,7 +134,7 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 	self
 		assert: resolvedProject packageNames sort
 		equals:
-			#('TonelExampleAnotherSubSubApp' 'TonelAnotherShadowSubSubApp' 'TonelExampleApp' 'TonelExampleShadowSubSubApp' 'TonelExampleSubApp' 'TonelExampleShadowSubSubSubApp' 'TonelExampleSubSubApp')
+			#('TonelExampleAnotherSubSubApp' 'TonelAnotherShadowSubSubApp' 'TonelExampleApp' 'TonelExampleShadowSubSubApp' 'TonelExampleSubApp' 'TonelExampleShadowSubSubSubApp' 'TonelExampleSubSubApp' 'TonelExampleForVastPharoApp')
 				sort.
 
 "pharo"
@@ -145,7 +145,7 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 		deleteClone: false.
 	self
 		assert: resolvedProject packageNames sort
-		equals: #('TonelExampleApp' 'TonelExampleForPharoApp') sort.
+		equals: #('TonelExampleApp' 'TonelExampleForPharoApp' 'TonelExampleForVastPharoApp') sort.
 
 "gemstone"
 	resolvedProject := self
@@ -153,5 +153,5 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 			{'common'.
 			'gemstone'}
 		deleteClone: false.
-	self assert: resolvedProject packageNames sort equals: #() sort
+	self assert: resolvedProject packageNames sort equals: #('TonelExampleApp') sort
 ]
