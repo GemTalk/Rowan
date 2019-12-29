@@ -1,6 +1,8 @@
 RwNestedProjectLoadComponentV2 {
 	#name : 'DiskConfigurationsCommon',
-	#comment : 'V2 classes that are exported to disk for specifiying configurations. These class definitions should be shared by all platforms that support the Rowan disk spec.',
+	#comment : 'V2 classes that are exported to disk for specifiying configurations.
+	These class definitions should be shared by all platforms that support the Rowan
+	disk spec.',
 	#componentNames : [
 		],
 	#conditionalPackages : {
@@ -19,7 +21,10 @@ RwNestedProjectLoadComponentV2 {
 				]
 			}
 		},
-		[ 'gemstone' ] : {
+		[ 
+			'gemstone', 
+			'gemstoneBase'
+		 ] : {
       'core': {
 				#packageNames : [
 					'Rowan-GemStone-Components-Kernel',

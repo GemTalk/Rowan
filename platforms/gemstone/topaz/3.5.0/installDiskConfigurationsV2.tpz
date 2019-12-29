@@ -31,16 +31,6 @@
 
 	input ./rowan_gs/DiskConfigurationsV2.gs
 
-method: RwProjectComponentVisitorV2Test
-_cloneVastTonelDemo_555: projectAlias deleteClone: deleteClone
-^'$GS_HOME/shared/repos/tonel-demos'
-%
-
-method: RwProjectComponentVisitorV2Test
-_cloneRowanSample9: projectAlias
-^'$GS_HOME/shared/repos/RowanSample9'
-%
-
 	run
 | ar strm dict clean |
 ar := { 

@@ -3,7 +3,7 @@ RwProjectLoadComponentV2 {
 	#comment : 'FileSystemGs component. For now all packages are expected to be loaded into Globals by SystemUser',
 	#conditionalPackages : {
 		[
-			'gemstone'
+			'gemstone-kernel'
 		] : {
 			'core' : {
 				#packageNames : [

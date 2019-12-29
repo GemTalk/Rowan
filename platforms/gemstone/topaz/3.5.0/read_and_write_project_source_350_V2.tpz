@@ -28,14 +28,14 @@
   login
 
 run
-	| platformConfigurationAttributes projectSetModification visitor
+	| platformConfigurationAttributes projectSetModification visitor 
 		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool 
 		auditFailures gsFileName |
 
 	platformConfigurationAttributes := {
 		'common'.
 		'gemstone'.
-		'gemstone-kernel'.
+		'gemstone-kernel',
 		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
 	}.
 	repositoryRoot := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/rowan_exp_350/rowan_gs' asFileReference.
@@ -44,32 +44,37 @@ run
 	{
 		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/DiskConfigurationsV2.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'$ROWAN_PROJECTS_HOME'.
+			platformConfigurationAttributes
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'$ROWAN_PROJECTS_HOME'.
+			platformConfigurationAttributes
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'$ROWAN_PROJECTS_HOME'.
+			platformConfigurationAttributes
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV2.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'$ROWAN_PROJECTS_HOME'.
+			platformConfigurationAttributes
 		}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk."
-		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome |
+		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome conditionalAttributes |
 		loadSpecUrl := ar at: 1.
 		projectsHome := ar at: 2.
+		conditionalAttributes := ar at: 3.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
 		gsFileName := loadSpec specName.
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		theProjectSetDefinition :=  resolvedProject read: platformConfigurationAttributes.
+		theProjectSetDefinition :=  resolvedProject read: conditionalAttributes.
 		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
 		theProjectSetDefinition
 			do: [:projectDefinition |	

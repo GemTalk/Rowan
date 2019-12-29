@@ -3,7 +3,7 @@ RwProjectLoadComponentV2 {
 	#comment : 'Single component for STON project',
 	#conditionalPackages : {
 		[
-			'gemstone'
+			'gemstone-kernel'
 		] : {
 			'core' : {
 				#packageNames : [

@@ -3,7 +3,7 @@ RwProjectLoadComponentV2 {
 	#comment : 'Single component for Cypress project',
 	#conditionalPackages : {
 		[
-			'common'
+			'gemstone-kernel'
 		] : {
 			'core' : {
 				#packageNames : [

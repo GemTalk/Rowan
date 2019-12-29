@@ -4,7 +4,7 @@ RwProjectLoadConfiguration {
 	#version : '0.1.0',
 	#conditionalPackages : {
 		[
-			'gemstone'
+			'gemstone-kernel'
 		] : {
 			'core' : {
 				#packageNames : [
