@@ -2,10 +2,27 @@ Extension { #name : 'RwAbstractProjectComponentVisitorV2' }
 
 { #category : '*rowan-gsbase-componentsv2' }
 RwAbstractProjectComponentVisitorV2 >> _components: componentDirPath forProject: aProjectName [
-	self error: 'Not yet implemented'
+	| urlBase |
+	self componentNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
+	^ self componentNames
+		collect: [ :componentName | 
+			| url |
+			url := urlBase , componentName , '.ston'.
+			(RwAbstractProjectLoadComponentV2 fromUrl: url)
+				projectName: aProjectName;
+				yourself ]
 ]
 
 { #category : '*rowan-gsbase-componentsv2' }
 RwAbstractProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ignored [
-	self error: 'Not yet implemented'
+
+	| urlBase |
+	self projectNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
+	^ self projectNames
+		collect: [ :prjName | 
+			| url |
+			url := urlBase , prjName , '.ston'.
+			RwSpecification fromUrl: url ]
 ]

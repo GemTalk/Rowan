@@ -71891,6 +71891,20 @@ _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat const
   ^ self _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
 %
 
+! Class extensions for 'Collection'
+
+!		Instance methods for 'Collection'
+
+category: '*rowan-gemstone-components-kernel'
+method: Collection
+sort: aSortBlock
+
+	"Sort this array using aSortBlock. The block should take two arguments
+	and return true if the first element should preceed the second one."
+
+	^ self sortWithBlock: aSortBlock
+%
+
 ! Class extensions for 'CypressAddition'
 
 !		Instance methods for 'CypressAddition'

@@ -2,7 +2,11 @@ Extension { #name : 'RwAbstractProjectLoadComponentV2' }
 
 { #category : '*rowan-gsbase-componentsv2' }
 RwAbstractProjectLoadComponentV2 class >> fromFile: filePath [
-	self error: 'Not yet implemented'
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ self _readStonFrom: stream ]
 ]
 
 { #category : '*rowan-gsbase-componentsv2' }
