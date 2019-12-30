@@ -795,7 +795,6 @@ RwRowanSample9Test >> testIssue_557 [
 
 	| loadSpec projectName resolvedProject loadedProjects |
 
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0016'.
 
 	projectName := loadSpec projectAlias.
@@ -819,7 +818,6 @@ UserGlobals at: #ConditionalHalt put: false.
 "adjust project definition to force the class method #bar into extendedMethods"
 
 "load modified project spec_0017"
-UserGlobals at: #ConditionalHalt put: true.
 	loadedProjects := resolvedProject load.
 
 "validate"
