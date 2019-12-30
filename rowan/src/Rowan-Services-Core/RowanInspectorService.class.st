@@ -89,7 +89,10 @@ RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
     ifTrue: [ 
       | aBag |
       aBag := anObject _asIdentityBag.
-      indexStart to: indexStop do: [ :i | indexedVars add: i printString -> (Reflection oopOf: (aBag _at: i)) ] ]
+      indexStart to: indexStop do: [ :i | 
+        indexedVars
+          add:
+            (self stripOutUnicode: i printString) -> (Reflection oopOf: (aBag _at: i)) ] ]
     ifFalse: [ 
       indexStart to: indexStop do: [ :i | 
         indexedVars
@@ -244,7 +247,7 @@ RowanInspectorService >> setIndexedSize: anObject [
     ifFalse: [ 0 ]
     ifTrue: [ 
       instVarsAreRemovable := true.
-      (self isRcBag: anObject)
+      (self shouldReferenceBySize: anObject)
         ifTrue: [ anObject size ]
         ifFalse: [ anObject _primitiveSize - anObject class allInstVarNames size ] ]
 ]
@@ -254,4 +257,12 @@ RowanInspectorService >> setOopFrom: oopOrObject [
   oop := isOop
     ifTrue: [ oopOrObject ]
     ifFalse: [ Reflection oopOf: oopOrObject ]
+]
+
+{ #category : 'testing' }
+RowanInspectorService >> shouldReferenceBySize: anObject [
+
+	(self isRcBag: anObject) ifTrue:[^true].
+	(anObject isKindOf: MultiByteString) ifTrue:[^true]. 
+	^false
 ]
