@@ -24,6 +24,8 @@ RwTestProjectLibraryGenerator new
 	genSpec_0013: comment;
 	genSpec_0014: comment;
 	genSpec_0015: comment;
+	genSpec_0016: comment;
+	genSpec_0017: comment;
 	yourself
 "
 Class {
@@ -711,6 +713,57 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0015: resolvedProject [
 	resolvedProject
 		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName2 
 			forPackageNamed: packageName2;
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0016: resolvedProject [
+	"Starting with spec_0016, move an extension method from one package to another with
+		no modifications"
+
+	"Move extension method from  RowanSample9-Extensions1 to RowanSample9-Extensions."
+
+	"https://github.com/GemTalk/Rowan/issues/557"
+
+	| className1 packageName1 packageName2 methodDefinition |
+	className1 := 'RowanSample9Class1'.
+	packageName1 := projectName , '-' , 'Extensions1'.
+	packageName2 := projectName , '-' , 'Extensions'.
+
+	methodDefinition := ((resolvedProject packageNamed: packageName1)
+		classExtensionDefinitionNamed: className1)
+		removeClassMethod: #'bar'.
+
+	methodDefinition protocol: '*', packageName2 asLowercase.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName1 
+		forPackageNamed: packageName2;
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		addClassExtensionNamed: className1)
+		addClassMethodDefinition: methodDefinition;
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0017: resolvedProject [
+	"Starting with spec_0015, change symbol dictionary of RowanSample9-Extensions to match symbol
+		dictionary of RowanSample9-Extensions1"
+
+	"https://github.com/GemTalk/Rowan/issues/557"
+
+	| packageName1 |
+	packageName1 := projectName , '-' , 'Extensions'.
+
+	resolvedProject
+		gemstoneSetSymbolDictName:  RwRowanSample9Test _sampleSymbolDictionaryName1 
+		forPackageNamed: packageName1;
 		yourself.
 
 	^ resolvedProject
@@ -1699,6 +1752,100 @@ RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0015: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0016: commitMessage [
+	"Starting with spec_0015, move an extension method from one package to another with
+		no modifications"
+
+	"https://github.com/GemTalk/Rowan/issues/557"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0016'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0015'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0015, move an extension method from one package to another with no modifications'
+		index: 16
+		derivedFrom: derivedFrom
+		comment: 'Move extension method from  RowanSample9-Extensions1 to RowanSample9-Extensions.')
+		rowanIssues: #( 557);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0016: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0017: commitMessage [
+	"Starting with spec_0015, change symbol dictionary of RowanSample9-Extensions to match symbol
+		dictionary of RowanSample9-Extensions1"
+
+	"https://github.com/GemTalk/Rowan/issues/557"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0017'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0015'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Starting with spec_0015, change symbol dictionary of RowanSample9-Extensions to match symbol dictionary of RowanSample9-Extensions'
+		index: 17
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #( 557);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0017: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
