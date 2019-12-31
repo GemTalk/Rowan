@@ -5,7 +5,7 @@ Class {
 		'projectLoadSpecs',
 		'visitedComponents',
 		'visitedComponentNames',
-		'platformAttributes',
+		'platformConditionalAttributes',
 		'definedGroupNames',
 		'projectNames',
 		'groupNames',
@@ -31,10 +31,9 @@ RwAbstractProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: a
 { #category : 'private' }
 RwAbstractProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
 
-	self platformAttributes do: [:anObject |
+	self platformConditionalAttributes do: [:anObject |
 		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
 	^false
-
 ]
 
 { #category : 'private' }
@@ -124,7 +123,7 @@ RwAbstractProjectComponentVisitorV2 >> initialize [
 	visitedComponentNames := Set new.
 	projectNames := Set new.
 	componentNames := Set new.
-	platformAttributes := #().
+	platformConditionalAttributes := #().
 	groupNames := Set new.
 	projectLoadSpecs := Set new.
 	visitedComponents := Dictionary new
@@ -137,17 +136,15 @@ RwAbstractProjectComponentVisitorV2 >> packageNames [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> platformAttributes [
+RwAbstractProjectComponentVisitorV2 >> platformConditionalAttributes [
 
-	^ platformAttributes
-
+	^ platformConditionalAttributes
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> platformAttributes: aColl [
+RwAbstractProjectComponentVisitorV2 >> platformConditionalAttributes: aColl [
 
-	platformAttributes := aColl
-
+	platformConditionalAttributes := aColl
 ]
 
 { #category : 'accessing' }

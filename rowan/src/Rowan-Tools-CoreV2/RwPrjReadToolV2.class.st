@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'private' }
-RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
+RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad [
 	| projectName componentDirectory projectsDirectory visitor |
 	projectName := resolvedProject projectAlias.
 	componentDirectory := resolvedProject componentsRoot.
@@ -24,7 +24,7 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedPr
 						, ') found for project ' , projectName printString ].
 	visitor := visitorClass
 		resolvedProject: resolvedProject
-		platformAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		groupNames: groupNames.
 	componentNames
 		do: [ :componentName | 
@@ -43,17 +43,17 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedPr
 ]
 
 { #category : 'read resolved projects' }
-RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
+RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
 	^ self
 		readComponentsForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		forLoad: true
 ]
 
 { #category : 'read resolved projects' }
-RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
+RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad [
 	| theComponentNames theGroupNames |
 	resolvedProject _projectDefinition components: Dictionary new.	"build new list of components based on (potentially) new list of configNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
@@ -68,7 +68,7 @@ RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withCompone
 		forResolvedProject: resolvedProject
 		withComponentNames: theComponentNames
 		groupNames: theGroupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		forLoad: forLoad
 ]
 
@@ -81,11 +81,11 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		platformConditionalAttributes: Rowan platformConditionalAttributes
 ]
 
 { #category : 'read resolved projects' }
-RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
+RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -103,7 +103,7 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 				readComponentsForResolvedProject: rp
 				withComponentNames: cn
 				groupNames: gn
-				platformConfigurationAttributes: platformConfigurationAttributes.
+				platformConditionalAttributes: platformConditionalAttributes.
 			rp
 				projectDefinitionSourceProperty:
 					RwLoadedProject _projectDiskDefinitionSourceValue.

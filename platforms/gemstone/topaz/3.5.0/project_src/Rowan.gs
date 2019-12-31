@@ -2850,7 +2850,7 @@ true.
 doit
 (Object
 	subclass: 'RwAbstractProjectComponentVisitorV2'
-	instVarNames: #( projectLoadSpecs visitedComponents visitedComponentNames platformAttributes definedGroupNames projectNames groupNames componentNames )
+	instVarNames: #( projectLoadSpecs visitedComponents visitedComponentNames platformConditionalAttributes definedGroupNames projectNames groupNames componentNames )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -6193,7 +6193,7 @@ true.
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl svnUrl revision projectSpecFile componentNames groupNames platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -33884,7 +33884,7 @@ initialize
 	visitedComponentNames := Set new.
 	projectNames := Set new.
 	componentNames := Set new.
-	platformAttributes := #().
+	platformConditionalAttributes := #().
 	groupNames := Set new.
 	projectLoadSpecs := Set new.
 	visitedComponents := Dictionary new
@@ -33899,16 +33899,16 @@ packageNames
 
 category: 'accessing'
 method: RwAbstractProjectComponentVisitorV2
-platformAttributes
+platformConditionalAttributes
 
-	^ platformAttributes
+	^ platformConditionalAttributes
 %
 
 category: 'accessing'
 method: RwAbstractProjectComponentVisitorV2
-platformAttributes: aColl
+platformConditionalAttributes: aColl
 
-	platformAttributes := aColl
+	platformConditionalAttributes := aColl
 %
 
 category: 'accessing'
@@ -33997,7 +33997,7 @@ category: 'private'
 method: RwAbstractProjectComponentVisitorV2
 _matchPlatformAttributes: platformPatternMatcher
 
-	self platformAttributes do: [:anObject |
+	self platformConditionalAttributes do: [:anObject |
 		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
 	^false
 %
@@ -34117,9 +34117,9 @@ _addPackageNames: somePackageNames for: aComponent
 
 category: 'instance creation'
 classmethod: RwResolvedProjectComponentVisitorV2
-resolvedProject: resolvedProject platformAttributes: platformConfigurationAttributes groupNames: groupNames
+resolvedProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes groupNames: groupNames
 	^ self new
-		platformAttributes: platformConfigurationAttributes;
+		platformConditionalAttributes: platformConditionalAttributes;
 		groupNames: groupNames;
 		resolvedProject: resolvedProject;
 		yourself
@@ -40565,7 +40565,7 @@ read
 
 category: 'actions'
 method: RwResolvedProjectV2
-read: platformConfigurationAttributes
+read: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
@@ -40573,7 +40573,7 @@ read: platformConfigurationAttributes
 	^ self
 		readComponentNames: self componentNames
 		groupNames: self groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'actions'
@@ -40586,12 +40586,12 @@ readComponentNames: componentNames groupNames: groupNames
 	^ self
 		readComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		platformConditionalAttributes: Rowan platformConditionalAttributes
 %
 
 category: 'actions'
 method: RwResolvedProjectV2
-readComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
@@ -40600,7 +40600,7 @@ readComponentNames: componentNames groupNames: groupNames platformConfigurationA
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'project definition'
@@ -45139,18 +45139,18 @@ _visitConfigurations: visitorClass forProjectDefinition: projectDefinition withC
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
 	^ self
 		readComponentsForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		forLoad: true
 %
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
+readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad
 	| theComponentNames theGroupNames |
 	resolvedProject _projectDefinition components: Dictionary new.	"build new list of components based on (potentially) new list of configNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
@@ -45165,7 +45165,7 @@ readComponentsForResolvedProject: resolvedProject withComponentNames: componentN
 		forResolvedProject: resolvedProject
 		withComponentNames: theComponentNames
 		groupNames: theGroupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		forLoad: forLoad
 %
 
@@ -45179,12 +45179,12 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		platformConditionalAttributes: Rowan platformConditionalAttributes
 %
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -45202,7 +45202,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 				readComponentsForResolvedProject: rp
 				withComponentNames: cn
 				groupNames: gn
-				platformConfigurationAttributes: platformConfigurationAttributes.
+				platformConditionalAttributes: platformConditionalAttributes.
 			rp
 				projectDefinitionSourceProperty:
 					RwLoadedProject _projectDiskDefinitionSourceValue.
@@ -45234,7 +45234,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 
 category: 'private'
 method: RwPrjReadToolV2
-_visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
+_visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad
 	| projectName componentDirectory projectsDirectory visitor |
 	projectName := resolvedProject projectAlias.
 	componentDirectory := resolvedProject componentsRoot.
@@ -45253,7 +45253,7 @@ _visitComponents: visitorClass forResolvedProject: resolvedProject withComponent
 						, ') found for project ' , projectName printString ].
 	visitor := visitorClass
 		resolvedProject: resolvedProject
-		platformAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		groupNames: groupNames.
 	componentNames
 		do: [ :componentName | 
@@ -64365,6 +64365,20 @@ componentNames: anArray
 
 category: 'accessing'
 method: RwLoadSpecificationV2
+customConditionalAttributes
+
+	^ customConditionalAttributes ifNil: [ #() ]
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+customConditionalAttributes: anArray
+
+	customConditionalAttributes := anArray
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
 diskUrl
 	^ diskUrl
 %
@@ -69242,7 +69256,7 @@ testComparison_1
 		assert:
 			(x := RwLoadSpecificationV2 allInstVarNames)
 				=
-					#(#'specName' #'projectName' #'projectAlias' #'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #'revision' #'projectSpecFile' #'componentNames' #'groupNames' #'platformProperties' #'comment' #'projectsHome' #'repositoryResolutionPolicy').	"If inst vars don't match, copy and hash methods have to change"
+					#(#'specName' #'projectName' #'projectAlias' #'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #'revision' #'projectSpecFile' #'componentNames' #'groupNames' #'customConditionalAttributes' #'platformProperties' #'comment' #'projectsHome' #'repositoryResolutionPolicy').	"If inst vars don't match, copy and hash methods have to change"
 
 	loadSpecification := RwLoadSpecificationV2 new
 		projectName: projectName;
@@ -69705,8 +69719,8 @@ method: RwProjectComponentVisitorV2Test
 testBasicVisit_independent
 	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
 
-	| platformAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
-	platformAttributes := {'common'.
+	| platformConditionalAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
+	platformConditionalAttributes := {'common'.
 	'gemstone'.
 	('3.5.0' asRwGemStoneVersionNumber)}.
 	projectAlias := 'RowanSample9_DiskConfig_Test'.
@@ -69716,7 +69730,7 @@ testBasicVisit_independent
 	projectPath := self _cloneRowanSample9: projectAlias.	"clone https://github.com/dalehenrich/RowanSample9"
 
 	visitor := RwIndependentComponentVisitorV2 new
-		platformAttributes: platformAttributes;
+		platformConditionalAttributes: platformConditionalAttributes;
 		groupNames: groupNames;
 		yourself.
 
@@ -69791,13 +69805,13 @@ testVisitVastTonelDemo_555_independent
 
 category: 'private'
 method: RwProjectComponentVisitorV2Test
-_visitVastTonelDemo_555: platformAttributes projectAlias: projectAlias projectPath: projectPath
+_visitVastTonelDemo_555: platformConditionalAttributes projectAlias: projectAlias projectPath: projectPath
 	| groupNames visitor componentNamesToLoad projectSpecUrl projectSpec |
 	componentNamesToLoad := #('Core').
 	groupNames := #('core').
 
 	visitor := RwIndependentComponentVisitorV2 new
-		platformAttributes: platformAttributes;
+		platformConditionalAttributes: platformConditionalAttributes;
 		groupNames: groupNames;
 		yourself.
 

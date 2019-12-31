@@ -353,7 +353,7 @@ RwResolvedProjectV2 >> read [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> read: platformConfigurationAttributes [
+RwResolvedProjectV2 >> read: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
@@ -361,7 +361,7 @@ RwResolvedProjectV2 >> read: platformConfigurationAttributes [
 	^ self
 		readComponentNames: self componentNames
 		groupNames: self groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'actions' }
@@ -373,11 +373,11 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 	^ self
 		readComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		platformConditionalAttributes: Rowan platformConditionalAttributes
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
+RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
@@ -386,7 +386,7 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'project definition' }

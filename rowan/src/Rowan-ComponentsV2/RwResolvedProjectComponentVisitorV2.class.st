@@ -8,9 +8,9 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject platformAttributes: platformConfigurationAttributes groupNames: groupNames [
+RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes groupNames: groupNames [
 	^ self new
-		platformAttributes: platformConfigurationAttributes;
+		platformConditionalAttributes: platformConditionalAttributes;
 		groupNames: groupNames;
 		resolvedProject: resolvedProject;
 		yourself

@@ -48339,8 +48339,8 @@ method: RwProjectComponentVisitorV2Test
 testBasicVisit_withResolvedProject
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
 
-	| platformAttributes groupNames componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
-	platformAttributes := {'common'.
+	| platformConditionalAttributes groupNames componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
+	platformConditionalAttributes := {'common'.
 	'gemstone'.
 	('3.5.0' asRwGemStoneVersionNumber)}.
 	projectName := 'RowanSample9'.
@@ -48372,7 +48372,7 @@ testBasicVisit_withResolvedProject
 
 	visitor := RwResolvedProjectComponentVisitorV2
 		resolvedProject: basicProject
-		platformAttributes: platformAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		groupNames: groupNames.
 	projectName := basicProject projectAlias.
 
