@@ -247,7 +247,7 @@ RwResolvedProjectV2 >> key [
 RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
 
-	self _validate: Rowan platformConfigurationAttributes.
+	self _validate: Rowan platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 
@@ -373,7 +373,7 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 	^ self
 		readComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 ]
 
 { #category : 'actions' }

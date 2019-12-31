@@ -129,10 +129,10 @@ RwAbstractResolvedObjectV2 >> _projectStructure: object [
 { #category : 'private' }
 RwAbstractResolvedObjectV2 >> _validate [
 	"ensure that the receiver's specifications contain valid information ... 
-		the specs must be able to stand on their, when they are written to disk, so there is a 
+		the specs must be able to stand on their own, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	^ self _validate: Rowan platformConfigurationAttributes
+	^ self _validate: Rowan platformConditionalAttributes
 ]
 
 { #category : 'private' }

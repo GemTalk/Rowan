@@ -59,7 +59,7 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
 			withConfigurations: configNames 
 			groupNames: groupNames 
-			platformConfigurationAttributes: Rowan platformConfigurationAttributes
+			platformConfigurationAttributes: Rowan platformConditionalAttributes
 ]
 
 { #category : '*rowan-tools-extensions-components' }

@@ -2994,7 +2994,7 @@ true.
 doit
 (Object
 	subclass: 'RwAbstractProjectLoadComponentV2'
-	instVarNames: #( name comment projectName projectNames componentNames definedGroupNames conditionalPackages conditionalPackageMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers )
+	instVarNames: #( name comment projectName projectNames componentNames definedGroupNames conditionalProperties conditionalPackages conditionalPropertyMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -26694,11 +26694,11 @@ platform
 
 category: 'public'
 classmethod: Rowan
-platformConfigurationAttributes
+platformConditionalAttributes
 
-	"Return list of platform-specific configuration attributes"
+	"Return list of platform-specific conditional attributes for use by components"
 
-	^ self platform platformConfigurationAttributes
+	^ self platform platformConditionalAttributes
 %
 
 category: 'public'
@@ -34015,15 +34015,20 @@ _platformAttributeMatchIn: platformMatchersList
 category: 'private'
 method: RwAbstractProjectComponentVisitorV2
 _processConditionalPackageNames: aProjectLoadConfiguration
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #componentNames ifAbsent: [ #()] ) ] ] ] ].
+	aProjectLoadConfiguration conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :groupMap | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					groupMap
+						keysAndValuesDo: [ :group :map | 
+							(self groupNames includes: group)
+								ifTrue: [ 
+									self
+										_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
+										for: aProjectLoadConfiguration.
+									self componentNames
+										addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
+									self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ] ]
 %
 
 category: 'private'
@@ -34826,21 +34831,6 @@ projectNames: anArray
 	projectNames := anArray
 %
 
-category: 'private'
-method: RwComponentLoadConfiguration
-_processConditionalPackageNames: aProjectLoadConfiguration
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #() ] ).
-							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
-%
-
 ! Class implementation for 'RwProjectCompoundConfiguration'
 
 !		Instance methods for 'RwProjectCompoundConfiguration'
@@ -35035,6 +35025,15 @@ componentNames: anArray
 	componentNames := anArray
 %
 
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalComponentsAtConditions: conditions andGroup: groupName
+	^ self
+		_conditionalPropertiesAt: #'componentNames'
+		conditions: conditions
+		andGroup: groupName
+%
+
 category: 'private'
 method: RwAbstractProjectLoadComponentV2
 conditionalPackageMapSpecMatchers
@@ -35089,46 +35088,78 @@ conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName s
 		ifNotNil: [ dict at: 'symbolDictName' put: symbolDictName asString ]
 %
 
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackageMatchers
-
-	conditionalPackageMatchers ifNotNil: [:val | ^ val ]. 
-	conditionalPackageMatchers := Dictionary new.
-	self conditionalPackages keysAndValuesDo: [:platformPatterns :groupMap |
-		conditionalPackageMatchers
-			at: (platformPatterns collect: [:pattern | self _platformPatternMatcherFor: pattern ])
-			put: groupMap ].
-	^ conditionalPackageMatchers
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackages
-
-	^ conditionalPackages ifNil: [ conditionalPackages := Dictionary new ]
-%
-
 category: 'accessing'
 method: RwAbstractProjectLoadComponentV2
 conditionalPackagesAtConditions: conditions andGroup: groupName
-
-	| thePackageNameMap |
-	thePackageNameMap := (self conditionalPackages at: conditions asArray sort ifAbsent: [ ^ Set new])
-		at: groupName ifAbsent: [ ^ Set new ].
-	^ (thePackageNameMap at: #packageNames ifAbsent: [ Set new ]) asSet
+	^ self
+		_conditionalPropertiesAt: #'packageNames'
+		conditions: conditions
+		andGroup: groupName
 %
 
 category: 'accessing'
 method: RwAbstractProjectLoadComponentV2
-conditionalPackagesAtConditions: conditions andGroup: groupName addPackageNames: packageNames
+conditionalProjectsAtConditions: conditions andGroup: groupName
+	^ self
+		_conditionalPropertiesAt: #'projectNames'
+		conditions: conditions
+		andGroup: groupName
+%
 
-	| thePackageNames thePackageNameMap |
-	thePackageNameMap := (self conditionalPackages at: conditions asArray sort ifAbsentPut: [ Dictionary new])
-		at: groupName ifAbsentPut: [ Dictionary new ].
-	thePackageNames := (thePackageNameMap at: #packageNames ifAbsentPut: [ Set new ]) asSet.
-	thePackageNames addAll: packageNames.
-	thePackageNameMap at: #packageNames put: thePackageNames asArray sort
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalProperties
+	^ conditionalProperties
+		ifNil: [ 
+			conditionalPackages
+				ifNotNil: [ 
+					conditionalProperties := conditionalPackages.
+					conditionalPackages := nil.
+					conditionalProperties ]
+				ifNil: [ conditionalProperties := Dictionary new ] ]
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName addComponentNames: names
+	^ self
+		_conditionalPropertiesAt: #'componentNames'
+		conditions: conditions
+		andGroup: groupName
+		addNames: names
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName addPackageNames: names
+	^ self
+		_conditionalPropertiesAt: #'packageNames'
+		conditions: conditions
+		andGroup: groupName
+		addNames: names
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName addProjectNames: names
+	^ self
+		_conditionalPropertiesAt: #'projectNames'
+		conditions: conditions
+		andGroup: groupName
+		addNames: names
+%
+
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertyMatchers
+
+	conditionalPropertyMatchers ifNotNil: [:val | ^ val ]. 
+	conditionalPropertyMatchers := Dictionary new.
+	self conditionalProperties keysAndValuesDo: [:platformPatterns :groupMap |
+		conditionalPropertyMatchers
+			at: (platformPatterns collect: [:pattern | self _platformPatternMatcherFor: pattern ])
+			put: groupMap ].
+	^ conditionalPropertyMatchers
 %
 
 category: 'accessing'
@@ -35167,7 +35198,7 @@ defineGroupNamed: groupName toIncludeGroups: includedGroups
 category: 'ston'
 method: RwAbstractProjectLoadComponentV2
 excludedInstVars
-	^ #(#'conditionalPackageMatchers' #'conditionalPackageMapSpecMatchers')
+	^ #(#'conditionalPropertyMatchers' #'conditionalPackageMapSpecMatchers')
 %
 
 category: 'exporting'
@@ -35207,20 +35238,21 @@ initializeForExport
 	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
 
 	projectName := nil.
-	conditionalPackageMatchers := conditionalPackageMapSpecMatchers := nil.
-	self conditionalPackages
+	conditionalPropertyMatchers := conditionalPackageMapSpecMatchers := nil.
+	self conditionalProperties
 		ifNotNil: [ :cp | 
-			| orderedConditionalPackages |
-			orderedConditionalPackages := self class orderedDictionaryClass new.
+			| orderedConditionalProperties |
+			orderedConditionalProperties := self class orderedDictionaryClass new.
 			(cp keys asSortedCollection: [ :a :b | (a at: 1) <= (b at: 1) ])
 				do: [ :ar | 
-					| dict orderedPackageNames |
+					| dict orderedPropertyNames |
 					dict := cp at: ar.
-					orderedPackageNames := self class orderedDictionaryClass new.
+					orderedPropertyNames := self class orderedDictionaryClass new.
 					dict keys asArray sort
-						do: [ :group | orderedPackageNames at: group put: (dict at: group) ].
-					orderedConditionalPackages at: ar put: orderedPackageNames ].
-			conditionalPackages := orderedConditionalPackages ].
+						do: [ :group | orderedPropertyNames at: group put: (dict at: group) ].
+					orderedConditionalProperties at: ar put: orderedPropertyNames ].
+			conditionalProperties := orderedConditionalProperties.
+			conditionalPackages := nil ].
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
 			| orderedConditionalPackageMapSpecs |
@@ -35274,10 +35306,10 @@ packageNames
 
 	| allDefinedPackageNames |
 	allDefinedPackageNames := Set new.
-	self conditionalPackages
+	self conditionalProperties
 		keysAndValuesDo: [ :conditions :groupMap | 
 			groupMap
-				keysAndValuesDo: [ :groupName :packageMap | allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
+				keysAndValuesDo: [ :groupName :propertiesMap | allDefinedPackageNames addAll: (propertiesMap at: #'packageNames') ] ].
 	^ allDefinedPackageNames
 %
 
@@ -35288,8 +35320,8 @@ packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes 
 
 	| allDefinedPackageNames matchers |
 	allDefinedPackageNames := Set new.
-	matchers := self conditionalPackageMatchers.
-	self conditionalPackages
+	matchers := self conditionalPropertyMatchers.
+	self conditionalProperties
 		keysAndValuesDo: [ :conditions :ignored | 
 			platformConfigurationAttributes
 				do: [ :anObject | 
@@ -35339,10 +35371,10 @@ method: RwAbstractProjectLoadComponentV2
 removePackageNamed: aPackageName
 	"this can create empty packageName lists or empty packageMapSpecMaps ... the export logic _should_ cleanup empty list, which is sufficient"
 
-	self conditionalPackages
+	self conditionalProperties
 		keysAndValuesDo: [ :conditionsArray :conditionMap | 
 			conditionMap
-				keysAndValuesDo: [ :groupName :groupMap | (groupMap at: #'packageNames') remove: aPackageName ifAbsent: [  ] ] ].
+				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'packageNames') remove: aPackageName ifAbsent: [  ] ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
 			packageMapSpecsMap
@@ -35387,17 +35419,17 @@ validate
 							Error
 								signal:
 									'The group ' , dependentGroupName printString , ' is not a defined group' ] ] ].
-	self conditionalPackages
+	self conditionalProperties
 		keysAndValuesDo: [ :conditions :groupMap | 
 			groupMap
-				keysAndValuesDo: [ :groupName :packageMap | 
+				keysAndValuesDo: [ :groupName :propertiesMap | 
 					(self definedGroupNames keys includes: groupName)
 						ifFalse: [ 
 							Error
 								signal:
 									'Conditional packages includes group name ' , groupName printString
 										, ' that is not a defined group' ].
-					allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
+					allDefinedPackageNames addAll: (propertiesMap at: #'packageNames') ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformName :userIdMap | 
 			(RwSpecification _supportedPlatformNames includes: platformName)
@@ -35409,6 +35441,32 @@ validate
 			platformName = 'gemstone'
 				ifTrue: [ self _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap ] ].
 	^ true
+%
+
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+_conditionalPropertiesAt: key conditions: conditions andGroup: groupName
+
+	| thePropertiesMap |
+	thePropertiesMap := (self conditionalProperties at: conditions asArray sort ifAbsent: [ ^ Set new])
+		at: groupName ifAbsent: [ ^ Set new ].
+	^ (thePropertiesMap at: key asSymbol ifAbsent: [ Set new ]) asSet
+%
+
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+_conditionalPropertiesAt: key conditions: conditions andGroup: groupName addNames: names
+	| theNames theConditionalPropertiesMap |
+	theConditionalPropertiesMap := (self conditionalProperties
+		at: conditions asArray sort
+		ifAbsentPut: [ Dictionary new ]) at: groupName ifAbsentPut: [ Dictionary new ].
+	theNames := (theConditionalPropertiesMap
+		at: key asSymbol
+		ifAbsentPut: [ Set new ]) asSet.
+	theNames addAll: names.
+	theNames := theNames asArray sort.
+	theConditionalPropertiesMap at: key asSymbol put: theNames.
+	^ theNames
 %
 
 category: 'private'
@@ -35483,21 +35541,6 @@ _platformPatternMatcherFor: pattern
 			pattern2: gsVersion2;
 			patternMatchBlock: [:a :b :c | (a <= b) & (b < c ) ];
 			yourself
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-_processConditionalPackageNames: aProjectLoadConfiguration
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #componentNames ifAbsent: [ #() ] ).
-							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
 %
 
 category: 'validation'
@@ -38788,17 +38831,22 @@ addedClassExtension: aClassExtensionModification
 category: 'actions'
 method: RwModificationTonelWriterVisitorV2
 addedPackage: aPackageModification
-
+	| packageProperties exportedPackageProperties |
 	currentPackageDefinition := aPackageModification after.
 
-	"create package directory and package.st file"
+	packageProperties := currentPackageDefinition properties.
+	exportedPackageProperties := self class orderedDictionaryClass new.
+	exportedPackageProperties at: #'name' put: (packageProperties at: 'name').
+	(packageProperties at: 'comment' ifAbsent: [  ])
+		ifNotNil: [ :comment | exportedPackageProperties at: #'comment' put: comment ].
+	(packageProperties keys reject: [ :key | key = 'name' ]) asArray sort
+		do: [ :key | exportedPackageProperties at: key asSymbol put: (packageProperties at: key) ].
+
 	self _packageSourceDir ensureCreateDirectory.
-	(self _packageSourceDir /  'package.st')
-		writeStreamDo: [:aStream |
-		aStream 
-			<< 'Package ' 
-			<< (self _toSTON: { #name ->  currentPackageDefinition name } asDictionary) 
-			<< self  _newLine ].
+	self _packageSourceDir / 'package.st'
+		writeStreamDo: [ :aStream | 
+			aStream << 'Package ' << (self _toSTON: exportedPackageProperties)
+				<< self _newLine ].
 
 	self processPackage: aPackageModification
 %
@@ -38953,9 +39001,16 @@ _hasShebangOf: aClassDefinition
 category: 'class writing'
 method: RwModificationTonelWriterVisitorV2
 _methodDefinitionOf: aMethodDefinition
-	^ self _toSTON: (self class orderedDictionaryClass new 
-		at: #category put: aMethodDefinition protocol; 
-		yourself)
+	| excludedMethodProperties methodProperties exportedProperties |
+	excludedMethodProperties := #('_gsFileOffset' '_gsFileName' 'category' 'protocol' 'selector').
+	exportedProperties := self class orderedDictionaryClass new
+		at: #'category' put: aMethodDefinition protocol;
+		yourself.
+	methodProperties := aMethodDefinition properties.
+	(methodProperties keys
+		reject: [ :each | excludedMethodProperties includes: each ]) asArray sort
+		do: [ :key | exportedProperties at: key asSymbol put: (methodProperties at: key) ].
+	^ self _toSTON: exportedProperties
 %
 
 category: 'class writing'
@@ -40042,10 +40097,10 @@ category: 'private'
 method: RwAbstractResolvedObjectV2
 _validate
 	"ensure that the receiver's specifications contain valid information ... 
-		the specs must be able to stand on their, when they are written to disk, so there is a 
+		the specs must be able to stand on their own, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	^ self _validate: Rowan platformConfigurationAttributes
+	^ self _validate: Rowan platformConditionalAttributes
 %
 
 category: 'private'
@@ -40059,6 +40114,68 @@ _validate: platformConfigurationAttributes
 	self _projectSpecification _validate.
 	self _loadSpecification _validate.
 	^ true
+%
+
+! Class implementation for 'RwResolvedLoadSpecificationV2'
+
+!		Instance methods for 'RwResolvedLoadSpecificationV2'
+
+category: 'accessing'
+method: RwResolvedLoadSpecificationV2
+groupNames
+	"list of groups to be loaded. 
+		Default is {'core' 'tests'}"
+
+	^ self _loadSpecification groupNames
+%
+
+category: 'accessing'
+method: RwResolvedLoadSpecificationV2
+groupNames: anArray
+	"list of groups to be loaded. 
+		Default is {'core' 'tests'}"
+
+	self _loadSpecification groupNames: anArray
+%
+
+! Class implementation for 'RwResolvedProjectSpecificationV2'
+
+!		Instance methods for 'RwResolvedProjectSpecificationV2'
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+packageConvention
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	^ self _projectSpecification packageConvention
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+packageConvention: aString
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	self _projectSpecification packageConvention: aString
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+packagesPath
+	^self _projectSpecification packagesPath
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+packagesPath: aString
+	self _projectSpecification packagesPath: aString
 %
 
 ! Class implementation for 'RwResolvedProjectV2'
@@ -40323,7 +40440,7 @@ method: RwResolvedProjectV2
 load
 	"load the receiver into the image"
 
-	self _validate: Rowan platformConfigurationAttributes.
+	self _validate: Rowan platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 %
 
@@ -40469,7 +40586,7 @@ readComponentNames: componentNames groupNames: groupNames
 	^ self
 		readComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 %
 
 category: 'actions'
@@ -44449,7 +44566,7 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 %
 
@@ -44458,7 +44575,7 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 %
 
@@ -44800,7 +44917,7 @@ readConfigurationsForProjectDefinition: projectDefinition withConfigurations: co
 		forProjectDefinition: projectDefinition 
 		withConfigurations: theConfigNames 
 		groupNames: theGroupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		forLoad: forLoad
 %
 
@@ -45062,7 +45179,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 %
 
 category: 'read resolved projects'
@@ -45196,10 +45313,10 @@ reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet defa
 		{ defaultGroupName . globalsGroupName }
 			do: [:groupName | config addDefinedGroupName: groupName ].
 		config 
-			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+			conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 				andGroup: defaultGroupName 
 				addPackageNames: originalPackageNames;
-			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+			conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 				andGroup: globalsGroupName 
 				addPackageNames: globalPackageNames.
 		globalPackageNames do: [:packageName |
@@ -45881,7 +45998,7 @@ category: 'accessing'
 method: RwAbstractClassDefinition
 addClassMethodDefinition: aMethodDefinition
 
-	self addDefinition: aMethodDefinition to: classMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: classMethodDefinitions
 %
 
 category: 'accessing'
@@ -45895,7 +46012,7 @@ category: 'accessing'
 method: RwAbstractClassDefinition
 addInstanceMethodDefinition: aMethodDefinition
 
-	self addDefinition: aMethodDefinition to: instanceMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: instanceMethodDefinitions
 %
 
 category: 'private'
@@ -46870,7 +46987,7 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 		at: componentName
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
 	component
-		conditionalPackagesAtConditions: conditionArray
+		conditionalPropertiesAtConditions: conditionArray
 		andGroup: groupName
 		addPackageNames: {packageName}.
 	^ package
@@ -46892,7 +47009,7 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
 			andPackageName: packageName
 			setSymbolDictNameTo: aSymbolDictAssoc value;
-		conditionalPackagesAtConditions: conditionArray
+		conditionalPropertiesAtConditions: conditionArray
 			andGroup: groupName
 			addPackageNames: {packageName}.
 	^ package
@@ -48587,19 +48704,52 @@ addClassNamed: className super: superclassName instvars: instvars category: cate
 
 category: 'accessing'
 method: RwPackageDefinition
-addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type
+addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: #()
+				type: 'normal')
+%
 
-	^ self addClassDefinition: 
-		(RwClassDefinition 
-			newForClassNamed: className 
-				super: superclassName 
-				instvars: instvars 
-				classinstvars: 
-				classinstvars 
-				classvars: classvars 
-				category: category 
-				comment: comment 
-				pools: pools 
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
+				type: 'normal')
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
 				type: type)
 %
 
@@ -48888,7 +49038,7 @@ configurationTemplate
 	groupNames
 		do: [:groupName | config addDefinedGroupName: groupName ].
 	config 
-		conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+		conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 		andGroup: (groupNames at: 1) 
 		addPackageNames: self packageNames.
 	^ config
@@ -62862,13 +63012,13 @@ automaticClassInitializationBlackList_global
 
 category: 'queries'
 method: RwPlatform
-basePlatformAttribute
-	"Answer the generic configuration attribute for the platform"
+basePlatformConditionalAttribute
+	"Answer the generic conditional attribute for the platform"
 
-	"Examples include: 'gemstone', 'pharo', 'squeak'"
+	"Examples include: 'gemstone', 'pharo', 'squeak', 'vast' 
+		(see RwSpecification class >> _supportedPlatformNames)"
 
-
-	self subclassResponsibility: #basePlatformAttribute
+	self subclassResponsibility: #'basePlatformConditionalAttribute'
 %
 
 category: 'preferences'
@@ -62966,8 +63116,8 @@ loadedPackageClass
 
 category: 'queries'
 method: RwPlatform
-platformConfigurationAttributes
-	"Answer the configuration attributes. Currently 'common' is the only shared attribute."
+platformConditionalAttributes
+	"Answer the platform conditional attributes. Currently 'common' is the only shared attribute."
 
 	"subclasses need to override and provide additional platform-specific attributes"
 
@@ -63057,9 +63207,11 @@ automaticClassInitializationBlackList_user
 
 category: 'queries'
 method: RwGsPlatform
-basePlatformAttribute
-	"Answer the generic configuration attribute for the platform"
+basePlatformConditionalAttribute
+	"Answer the generic conditional attribute for the platform"
 
+	"Examples include: 'gemstone', 'pharo', 'squeak', 'vast' 
+		(see RwSpecification class >> _supportedPlatformNames)"
 
 	^ 'gemstone'
 %
@@ -63263,10 +63415,14 @@ parseSelectorFrom: methodString
 
 category: 'queries'
 method: RwGsPlatform
-platformConfigurationAttributes
-	"Answer the configuration attributes for the current platform."
+platformConditionalAttributes
+	"Answer the conditional attributes for the current platform."
 
-	^ super platformConfigurationAttributes, {self basePlatformAttribute. 'gemstone-kernel'. (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
+	^ super platformConditionalAttributes
+		,
+			{(self basePlatformConditionalAttribute).
+			'gemstone-kernel'.
+			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}
 %
 
 category: 'preferences'
@@ -63998,7 +64154,7 @@ new
 category: 'accessing'
 classmethod: RwSpecification
 _supportedPlatformNames
-	^ #('gemstone' 'vast' 'pharo')
+	^ #('gemstone' 'pharo' 'squeak' 'vast')
 %
 
 !		Instance methods for 'RwSpecification'
@@ -65599,6 +65755,12 @@ packageConvention
 category: 'accessing'
 method: RwProjectSpecificationV2
 packageConvention: aString
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
 	packageConvention := aString
 %
 
@@ -69675,7 +69837,7 @@ testBasic
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -69702,13 +69864,13 @@ testInvalidConditionalGroupName
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
 			andPackageName: packageName
 			setSymbolDictNameTo: 'UserGlobals'.
-	conditionalPackages := component conditionalPackages.
+	conditionalPackages := component conditionalProperties.
 	(conditionalPackages at: #('common')) at: 'boom' put: Dictionary new.
 
 	stonString := STON toStringPretty: component.	"useful in case of error"
@@ -69770,7 +69932,7 @@ testUknownPlatform
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -69808,7 +69970,7 @@ testUknownPlatformPropertiesKey
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -69847,7 +70009,7 @@ testUndefinedPackageName
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -69886,7 +70048,7 @@ testUnknownPackagePropertName
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -74068,7 +74230,7 @@ method: RwPrjLoadTool
 loadComponentProjectDefinition: projectDefinition
 	^ self
 		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 %
 
@@ -74077,7 +74239,7 @@ method: RwPrjLoadTool
 loadComponentProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
 	^ self
 		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 %
 
@@ -74200,7 +74362,7 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
 			withConfigurations: configNames 
 			groupNames: groupNames 
-			platformConfigurationAttributes: Rowan platformConfigurationAttributes
+			platformConfigurationAttributes: Rowan platformConditionalAttributes
 %
 
 category: '*rowan-tools-extensions-components'
