@@ -247,7 +247,7 @@ RwResolvedProjectV2 >> key [
 RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
 
-	self _validate: Rowan platformConditionalAttributes.
+	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 
@@ -302,6 +302,12 @@ RwResolvedProjectV2 >> packages [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packages: aPackageDictionary [
 	^ self _projectDefinition packages: aPackageDictionary
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> platformConditionalAttributes [
+
+	^ self _loadSpecification customConditionalAttributes,  Rowan platformConditionalAttributes
 ]
 
 { #category : 'accessing' }
@@ -373,7 +379,7 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 	^ self
 		readComponentNames: componentNames
 		groupNames: groupNames
-		platformConditionalAttributes: Rowan platformConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
 { #category : 'actions' }

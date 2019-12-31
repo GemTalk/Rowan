@@ -94,7 +94,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
@@ -102,7 +102,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 ]
 

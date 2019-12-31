@@ -81,7 +81,7 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConditionalAttributes: Rowan platformConditionalAttributes
+		platformConditionalAttributes: resolvedProject platformConditionalAttributes
 ]
 
 { #category : 'read resolved projects' }

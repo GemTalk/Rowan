@@ -132,7 +132,7 @@ RwAbstractResolvedObjectV2 >> _validate [
 		the specs must be able to stand on their own, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	^ self _validate: Rowan platformConditionalAttributes
+	^ self _validate: self platformConditionalAttributes
 ]
 
 { #category : 'private' }
