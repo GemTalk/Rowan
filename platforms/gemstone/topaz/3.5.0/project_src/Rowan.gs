@@ -40100,7 +40100,7 @@ _validate
 		the specs must be able to stand on their own, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	^ self _validate: Rowan platformConditionalAttributes
+	^ self _validate: self platformConditionalAttributes
 %
 
 category: 'private'
@@ -40440,7 +40440,7 @@ method: RwResolvedProjectV2
 load
 	"load the receiver into the image"
 
-	self _validate: Rowan platformConditionalAttributes.
+	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 %
 
@@ -40505,6 +40505,13 @@ category: 'project definition'
 method: RwResolvedProjectV2
 packages: aPackageDictionary
 	^ self _projectDefinition packages: aPackageDictionary
+%
+
+category: 'accessing'
+method: RwResolvedProjectV2
+platformConditionalAttributes
+
+	^ self _projectLoadSpecification customConfigurationAttributes,  Rowan platformConditionalAttributes
 %
 
 category: 'accessing'
@@ -40586,7 +40593,7 @@ readComponentNames: componentNames groupNames: groupNames
 	^ self
 		readComponentNames: componentNames
 		groupNames: groupNames
-		platformConditionalAttributes: Rowan platformConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
 %
 
 category: 'actions'
@@ -44566,7 +44573,7 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 %
 
@@ -44575,7 +44582,7 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 %
 
@@ -45179,7 +45186,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConditionalAttributes: Rowan platformConditionalAttributes
+		platformConditionalAttributes: resolvedProject platformConditionalAttributes
 %
 
 category: 'read resolved projects'
