@@ -377,6 +377,15 @@ answeringService answer. "
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> removeMethodHistoryFor: methodService [
+  | rowanMethodHistory |
+  rowanMethodHistory := UserGlobals
+    at: #'RowanMethodHistory'
+    ifAbsentPut: [ Dictionary new ].
+  rowanMethodHistory removeKey: methodService ifAbsent: [  ]
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> runMethodTests: methodServices [
 
 	| behavior |
