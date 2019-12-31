@@ -26,6 +26,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0015: comment;
 	genSpec_0016: comment;
 	genSpec_0017: comment;
+	genSpec_0018: comment
 	yourself
 "
 Class {
@@ -770,6 +771,170 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0017: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
+	"Build a sample vast/gemstone project based on information in https://github.com/dalehenrich/tonel-demos/tree/rowan_553"
+
+	"https://github.com/GemTalk/Rowan/issues/553"
+
+	| componentName groupName packageName1 packageName2 extensionClassName1 className1 className2 |
+	componentName := 'Core'.
+	groupName := 'core'.
+	packageName1 := projectName , '-Vast-Application'.
+	packageName2 := projectName , '-Common-Core'.
+	extensionClassName1 := 'TestCase'.
+	className1 := 'TonelExampleTest'.
+	className2 := 'TonelExampleApp'.
+
+	resolvedProject projectSpecification
+		packagesPath: 'source';
+		packageConvention: 'Rowan';
+		yourself.
+
+	resolvedProject loadSpecification
+		groupNames: {groupName};
+		yourself.
+
+	resolvedProject
+		comment:
+				'sample vast/gemstone project, based on project structure in https://github.com/dalehenrich/tonel-demos/tree/rowan_553';
+		addComponentNamed: componentName
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						yourself)
+			comment: 'Primary component used for loading the core classes.';
+		addPackageNamed: packageName1
+			toComponentNamed: componentName
+			withConditions: {'vast'}
+			andGroupName: groupName;
+		addPackageNamed: packageName2
+			toComponentNamed: componentName
+			withConditions: {'common'}
+			andGroupName: groupName;
+		yourself.
+
+	(resolvedProject packageNamed: packageName1)
+		propertyAt: 'comment'
+			put:
+				'This is a vast only package, so the vast package properties are required?';
+		propertyAt: 'vaPrerequisites' put: #('SUnit' 'TonelWriterModel');
+		propertyAt: 'vaSubApplications'
+			put:
+				(Dictionary new
+						add: #'condition' -> true;
+						add: #'#subapps' -> #('TonelExampleSubApp');
+						yourself);
+		yourself.
+
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className2
+		super: 'Application'
+		category: 'TonelExampleApp'
+		comment:
+			'This is a VAST application class that is paired with the test class '
+				, className1 printString , '.')
+		addClassMethod:
+				'_PRAGMA_TonelExampleConstants
+"%%PRAGMA DECLARE
+	(name: TonelExampleConstants isPool: true)
+	(pool: TonelExampleConstants declarations: (
+		(name: Constant1 isConstant: true valueExpression: ''1'')
+		(name: Constant2 isConstant: true valueExpression: ''2'')
+	
+	))
+	"'
+			protocol: 'Not categorized';
+		addClassMethod:
+				'writeAppToTonel
+
+	| writer fileSystem |
+
+	fileSystem := (Smalltalk at: #TonelCommonFileSystem) new.
+	writer := (Smalltalk at: #TonelWriter) on: fileSystem.
+	writer writeInWorkingDirectoryProjectIncluding: (Array with: TonelExampleApp)'
+			protocol: 'Not categorized';
+		addClassMethod:
+				'writeAppToTonelToGit
+
+	| writer fileSystem |
+
+	fileSystem := (Smalltalk at: #TonelCommonFileSystem) new.
+	writer := (Smalltalk at: #TonelWriter) on: fileSystem.
+	writer
+		writeApplication: TonelExampleApp
+		into: (CfsPath named: ''c:\Users\mpeck\Documents\Instantiations\git\tonel-demos\source\'')'
+			protocol: 'Not categorized';
+		yourself.
+
+	(resolvedProject packageNamed: packageName2)
+		propertyAt: 'comment'
+		put:
+			'This package contains the code that is common between gemstone and vast, so not appropriate to add vast package properties.'.
+
+	((resolvedProject packageNamed: packageName2)
+		addClassExtensionNamed: extensionClassName1)
+		addInstanceMethod:
+				'tonelExampleExtendedMethodFromRootApp
+	"common extension method"
+	^ ''tonelExampleExtendedMethodFromRootApp'''
+			protocol: 'tonel example';
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: className1
+		super: extensionClassName1
+		instvars: #('instVar1' 'instVar2' 'instVar3')
+		classinstvars: #('classInstVar1' 'classInstVar2' 'classInstVar3')
+		classvars: #('ClassVar1' 'ClassVar2' 'ClassVar3')
+		category: 'TonelExampleApp'
+		comment:
+			'TonelExampleTest is an application used to verify that the tonel writer and reader for VA does work')
+		addClassMethod:
+				'classInstVar1 ^ classInstVar1 ifNil: [ classInstVar1 := ''classInstVar1'' ]'
+			protocol: 'Accessing';
+		addClassMethod: 'classVar1 ^ ClassVar1 ifNil: [ ClassVar1 := ''ClassVar1'' ]'
+			protocol: 'Accessing';
+		addInstanceMethod: 'setUp instVar1 := ''instVar1''' protocol: 'Running';
+		addInstanceMethod:
+				'testClassInstVarAccess self assert: self class classInstVar1 equals: ''classInstVar1'''
+			protocol: 'Testing';
+		addInstanceMethod:
+				'testClassVarAccess self assert: self class classVar1 equals: ''ClassVar1'''
+			protocol: 'Testing';
+		addInstanceMethod:
+				'testExtendedMethodFromRootApp self assert: self tonelExampleExtendedMethodFromRootApp equals: ''tonelExampleExtendedMethodFromRootApp'''
+			protocol: 'Testing';
+		addInstanceMethod:
+				'testExtendedMethodFromSubApp self assert: self tonelExampleExtendedMethodFromSubApp equals: ''tonelExampleExtendedMethodFromSubApp'''
+			protocol: 'Testing';
+		addInstanceMethod:
+				'testExtendedMethodFromSubSubApp self assert: self tonelExampleExtendedMethodFromSubSubApp equals: ''tonelExampleExtendedMethodFromSubSubApp'''
+			protocol: 'Testing';
+		addInstanceMethod:
+				'testInstVarAccess self assert: instVar1 equals: ''instVar1'''
+			protocol: 'Testing';
+		addInstanceMethod:
+				'testPrivateMethod self assert: self privateMethod equals: ''privateMethod'''
+			protocol: 'Testing';
+		addInstanceMethod:
+				'testClassDefinedInSubApp self assert: TonelExampleSubAppClass notCategorizedMethod equals: ''notCategorizedMethod'''
+			protocol: 'Testing';
+		addInstanceMethod:
+				'testClassDefinedInSubSubApp self assert: TonelExampleSubSubAppClass notCategorizedMethod2 equals: ''notCategorizedMethod2'''
+			protocol: 'Testing';
+		yourself.
+
+	(((resolvedProject packageNamed: packageName2) classDefinitionNamed: className1)
+		addInstanceMethod:
+			'privateMethod
+	"this method has a VAST-specific property, but the source is shared"
+	^''privateMethod'''
+		protocol: 'Accessing') propertyAt: 'vaVisibility' put: 'private'.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDefinition [
 	| className packageName |
 	packageName := projectName , '-Core1'.
@@ -826,9 +991,14 @@ RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage resolvedReposit
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom  resolvedRepository: resolvedRepository commitMessage: commitMessage [
+RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom resolvedRepository: resolvedRepository commitMessage: commitMessage [
 	| derivedIndexCardFile |
 	derivedFrom
+		ifNil: [ 
+			(resolvedRepository repositoryRoot / 'indexCards') exists
+				ifTrue: [ (resolvedRepository repositoryRoot / 'indexCards') ensureDeleteAll ].
+			(resolvedRepository repositoryRoot / 'specs') exists
+				ifTrue: [ (resolvedRepository repositoryRoot / 'specs') ensureDeleteAll ] ]
 		ifNotNil: [ 
 			derivedIndexCardFile := resolvedRepository repositoryRoot / derivedFrom , 'ston'.
 			derivedIndexCardFile exists
@@ -846,7 +1016,8 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: index
 	(resolvedRepository repositoryRoot / 'indexCards') ensureCreateDirectory.
 	indexCard exportTo: resolvedRepository repositoryRoot / 'indexCards'.
 	(resolvedRepository repositoryRoot / 'specs') ensureCreateDirectory.
-	resolvedRepository _loadSpecification exportTo: resolvedRepository repositoryRoot / 'specs'.
+	resolvedRepository _loadSpecification
+		exportTo: resolvedRepository repositoryRoot / 'specs'.
 
 	self
 		_doCommitAndPush: commitMessage
@@ -1851,6 +2022,55 @@ RwTestProjectLibraryGenerator >> genSpec_0017: commitMessage [
 		_finishCommitAndPush: specName
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
+	"Build a sample vast/gemstone project based on information in https://github.com/dalehenrich/tonel-demos/tree/rowan_553"
+
+	"https://github.com/GemTalk/Rowan/issues/553"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0018'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Build a sample vast/gemstone project based on information in https://github.com/dalehenrich/tonel-demos/tree/rowan_553'
+		index: 18
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(553 555);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0018: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
 ]
