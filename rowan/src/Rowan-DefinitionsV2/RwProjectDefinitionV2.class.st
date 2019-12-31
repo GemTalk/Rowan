@@ -160,7 +160,7 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 		at: componentName
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
 	component
-		conditionalPackagesAtConditions: conditionArray
+		conditionalPropertiesAtConditions: conditionArray
 		andGroup: groupName
 		addPackageNames: {packageName}.
 	^ package
@@ -181,7 +181,7 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
 			andPackageName: packageName
 			setSymbolDictNameTo: aSymbolDictAssoc value;
-		conditionalPackagesAtConditions: conditionArray
+		conditionalPropertiesAtConditions: conditionArray
 			andGroup: groupName
 			addPackageNames: {packageName}.
 	^ package

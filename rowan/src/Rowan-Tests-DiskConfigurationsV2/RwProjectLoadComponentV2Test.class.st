@@ -19,7 +19,7 @@ RwProjectLoadComponentV2Test >> testBasic [
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -45,13 +45,13 @@ RwProjectLoadComponentV2Test >> testInvalidConditionalGroupName [
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
 			andPackageName: packageName
 			setSymbolDictNameTo: 'UserGlobals'.
-	conditionalPackages := component conditionalPackages.
+	conditionalPackages := component conditionalProperties.
 	(conditionalPackages at: #('common')) at: 'boom' put: Dictionary new.
 
 	stonString := STON toStringPretty: component.	"useful in case of error"
@@ -111,7 +111,7 @@ RwProjectLoadComponentV2Test >> testUknownPlatform [
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -148,7 +148,7 @@ RwProjectLoadComponentV2Test >> testUknownPlatformPropertiesKey [
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -186,7 +186,7 @@ RwProjectLoadComponentV2Test >> testUndefinedPackageName [
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
@@ -224,7 +224,7 @@ RwProjectLoadComponentV2Test >> testUnknownPackagePropertName [
 	packageName := projectName , '-Core'.
 	component
 		defineGroupNamed: 'core';
-		conditionalPackagesAtConditions: {'common'}
+		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
