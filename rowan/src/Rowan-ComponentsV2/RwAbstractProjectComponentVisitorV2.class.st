@@ -47,7 +47,7 @@ RwAbstractProjectComponentVisitorV2 >> _platformAttributeMatchIn: platformMatche
 ]
 
 { #category : 'private' }
-RwAbstractProjectComponentVisitorV2 >> _processConditionalPackageNames: aProjectLoadConfiguration [
+RwAbstractProjectComponentVisitorV2 >> _processConditionalProperties: aProjectLoadConfiguration [
 	aProjectLoadConfiguration conditionalPropertyMatchers
 		keysAndValuesDo: [ :platformMatchers :groupMap | 
 			(self _platformAttributeMatchIn: platformMatchers)
@@ -199,7 +199,7 @@ RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadCo
 	definedGroupNames := aProjectLoadComponent definedGroupNames.
 	self _processGroupNames.
 
-	self _processConditionalPackageNames: aProjectLoadComponent.
+	self _processConditionalProperties: aProjectLoadComponent.
 
 	(self
 		_components: self componentsPath

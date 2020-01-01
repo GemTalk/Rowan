@@ -7,7 +7,6 @@ Class {
 		'projectName',
 		'definedGroupNames',
 		'conditionalProperties',
-		'conditionalPackages',
 		'conditionalPropertyMatchers',
 		'conditionalPackageMapSpecs',
 		'conditionalPackageMapSpecMatchers'
@@ -297,14 +296,7 @@ RwAbstractProjectLoadComponentV2 >> conditionalProjectsAtConditions: conditions 
 
 { #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> conditionalProperties [
-	^ conditionalProperties
-		ifNil: [ 
-			conditionalPackages
-				ifNotNil: [ 
-					conditionalProperties := conditionalPackages.
-					conditionalPackages := nil.
-					conditionalProperties ]
-				ifNil: [ conditionalProperties := Dictionary new ] ]
+	^ conditionalProperties ifNil: [ conditionalProperties := Dictionary new ]
 ]
 
 { #category : 'accessing' }
@@ -414,24 +406,35 @@ RwAbstractProjectLoadComponentV2 >> exportToUrl: fileUrl [
 RwAbstractProjectLoadComponentV2 >> fromSton: stonReader [
 	"componentNames and projectNames no longer supported ... componentNames and projectnames should be inserted into conditionalProperties under 'common'"
 
-	| instanceVariableNames |
+	| instanceVariableNames componentNames projectNames |
 	instanceVariableNames := self class allInstVarNames.
 	stonReader
 		parseMapDo: [ :instVarName :value | 
 			instVarName = #'componentNames'
 				ifTrue: [ 
-					self
-						conditionalPropertiesAtConditions: {'common'}
-						andGroup: 'core'
-						addComponentNames: value ]
+					componentNames ifNil: [ componentNames := Set new ].
+					componentNames addAll: value ]
 				ifFalse: [ 
 					instVarName = #'projectNames'
 						ifTrue: [ 
-							self
-								conditionalPropertiesAtConditions: {'common'}
-								andGroup: 'core'
-								addProjectNames: value ]
-						ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ]
+							projectNames ifNil: [ projectNames := Set new ].
+							projectNames addAll: value ]
+						ifFalse: [ 
+							instVarName = #'conditionalPackages'
+								ifTrue: [ conditionalProperties := value ]
+								ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ] ].
+	componentNames
+		ifNotNil: [ 
+			self
+				conditionalPropertiesAtConditions: {'common'}
+				andGroup: 'core'
+				addComponentNames: componentNames ].
+	projectNames
+		ifNotNil: [ 
+			self
+				conditionalPropertiesAtConditions: {'common'}
+				andGroup: 'core'
+				addProjectNames: projectNames ]
 ]
 
 { #category : 'initialization' }
@@ -460,8 +463,7 @@ RwAbstractProjectLoadComponentV2 >> initializeForExport [
 					dict keys asArray sort
 						do: [ :group | orderedPropertyNames at: group put: (dict at: group) ].
 					orderedConditionalProperties at: ar put: orderedPropertyNames ].
-			conditionalProperties := orderedConditionalProperties.
-			conditionalPackages := nil ].
+			conditionalProperties := orderedConditionalProperties ].
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
 			| orderedConditionalPackageMapSpecs |
