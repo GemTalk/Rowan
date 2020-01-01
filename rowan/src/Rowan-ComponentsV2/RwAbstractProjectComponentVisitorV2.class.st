@@ -201,13 +201,11 @@ RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadCo
 
 	self _processConditionalPackageNames: aProjectLoadComponent.
 
-	self componentNames addAll: aProjectLoadComponent componentNames.
 	(self
 		_components: self componentsPath
 		forProject: aProjectLoadComponent projectName)
 		do: [ :component | component acceptNestedVisitor: self ].
 
-	self projectNames addAll: aProjectLoadComponent projectNames.
 	(self
 		_projects: self projectsPath
 		forProject: aProjectLoadComponent projectName)

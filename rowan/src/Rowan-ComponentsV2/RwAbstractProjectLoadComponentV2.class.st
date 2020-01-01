@@ -5,8 +5,6 @@ Class {
 		'name',
 		'comment',
 		'projectName',
-		'projectNames',
-		'componentNames',
 		'definedGroupNames',
 		'conditionalProperties',
 		'conditionalPackages',
@@ -75,15 +73,6 @@ RwAbstractProjectLoadComponentV2 class >> newNamed: aName for: projectName [
 		projectName: projectName;
 		yourself
 
-]
-
-{ #category : 'private' }
-RwAbstractProjectLoadComponentV2 >> _conditionalPropertiesAt: key conditions: conditions andGroup: groupName [
-
-	| thePropertiesMap |
-	thePropertiesMap := (self conditionalProperties at: conditions asArray sort ifAbsent: [ ^ Set new])
-		at: groupName ifAbsent: [ ^ Set new ].
-	^ (thePropertiesMap at: key asSymbol ifAbsent: [ Set new ]) asSet
 ]
 
 { #category : 'private' }
@@ -230,19 +219,9 @@ RwAbstractProjectLoadComponentV2 >> comment: anObject [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> componentNames [
-	^ componentNames ifNil: [ componentNames := Array new ]
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> componentNames: anArray [
-	componentNames := anArray
-]
-
-{ #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> conditionalComponentsAtConditions: conditions andGroup: groupName [
 	^ self
-		_conditionalPropertiesAt: #'componentNames'
+		conditionalPropertiesAt: #'componentNames'
 		conditions: conditions
 		andGroup: groupName
 ]
@@ -303,7 +282,7 @@ RwAbstractProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: 
 { #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> conditionalPackagesAtConditions: conditions andGroup: groupName [
 	^ self
-		_conditionalPropertiesAt: #'packageNames'
+		conditionalPropertiesAt: #'packageNames'
 		conditions: conditions
 		andGroup: groupName
 ]
@@ -311,7 +290,7 @@ RwAbstractProjectLoadComponentV2 >> conditionalPackagesAtConditions: conditions 
 { #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> conditionalProjectsAtConditions: conditions andGroup: groupName [
 	^ self
-		_conditionalPropertiesAt: #'projectNames'
+		conditionalPropertiesAt: #'projectNames'
 		conditions: conditions
 		andGroup: groupName
 ]
@@ -326,6 +305,15 @@ RwAbstractProjectLoadComponentV2 >> conditionalProperties [
 					conditionalPackages := nil.
 					conditionalProperties ]
 				ifNil: [ conditionalProperties := Dictionary new ] ]
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> conditionalPropertiesAt: key conditions: conditions andGroup: groupName [
+
+	| thePropertiesMap |
+	thePropertiesMap := (self conditionalProperties at: conditions asArray sort ifAbsent: [ ^ Set new])
+		at: groupName ifAbsent: [ ^ Set new ].
+	^ (thePropertiesMap at: key asSymbol ifAbsent: [ Set new ]) asSet
 ]
 
 { #category : 'accessing' }
@@ -420,6 +408,30 @@ RwAbstractProjectLoadComponentV2 >> exportToUrl: fileUrl [
 	^ self copy
 		initializeForExport
 		_exportToUrl: fileUrl
+]
+
+{ #category : 'ston' }
+RwAbstractProjectLoadComponentV2 >> fromSton: stonReader [
+	"componentNames and projectNames no longer supported ... componentNames and projectnames should be inserted into conditionalProperties under 'common'"
+
+	| instanceVariableNames |
+	instanceVariableNames := self class allInstVarNames.
+	stonReader
+		parseMapDo: [ :instVarName :value | 
+			instVarName = #'componentNames'
+				ifTrue: [ 
+					self
+						conditionalPropertiesAtConditions: {'common'}
+						andGroup: 'core'
+						addComponentNames: value ]
+				ifFalse: [ 
+					instVarName = #'projectNames'
+						ifTrue: [ 
+							self
+								conditionalPropertiesAtConditions: {'common'}
+								andGroup: 'core'
+								addProjectNames: value ]
+						ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ]
 ]
 
 { #category : 'initialization' }
@@ -548,26 +560,13 @@ RwAbstractProjectLoadComponentV2 >> projectName: anObject [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> projectNames [
-
-	^ projectNames ifNil: [ projectNames := Array new ]
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> projectNames: anArray [
-
-	projectNames := anArray
-]
-
-{ #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> removeComponentNamed: aComponentName [
 	"this can create empty componentName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
 
 	self conditionalProperties
 		keysAndValuesDo: [ :conditionsArray :conditionMap | 
 			conditionMap
-				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'componentNames' ifAbsent: [#()]) remove: aComponentName ifAbsent: [  ] ] ].
-	self componentNames remove: aComponentName ifAbsent: [  ]
+				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'componentNames' ifAbsent: [#()]) remove: aComponentName ifAbsent: [  ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -595,7 +594,6 @@ RwAbstractProjectLoadComponentV2 >> removeProjectNamed: aProjectName [
 		keysAndValuesDo: [ :conditionsArray :conditionMap | 
 			conditionMap
 				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'projectNames' ifAbsent: [#()]) remove: aProjectName ifAbsent: [  ] ] ].
-	self projectNames remove: aProjectName ifAbsent: [  ]
 ]
 
 { #category : 'ston' }

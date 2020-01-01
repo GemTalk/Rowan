@@ -336,7 +336,9 @@ RwRowanSample9Test >> testIssue_446 [
 				add: 'tests' -> {'core'};
 				yourself)
 		comment: 'contains ' , projectName , '-Core1 package and Core2 component')
-		componentNames: #('Core2');
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: #('Core2');
 		yourself.
 	resolvedProject
 		addComponentNamed: 'Core2'
@@ -349,11 +351,11 @@ RwRowanSample9Test >> testIssue_446 [
 
 	resolvedProject
 		componentNames: #('Core1');
-		yourself.	"????"
+		yourself.
 
 	project2 := RwResolvedProjectV2 new
-		componentNames:  #('Core2');
-		yourself.	"????"
+		componentNames: #('Core2');
+		yourself.
 
 	stonString := STON toStringPretty: resolvedProject.
 	false

@@ -8,56 +8,148 @@ Class {
 RwProjectLoadComponentV2Test >> testBasic [
 	"excercise basic functionality"
 
-	| componentName projectName component packageName stonString projectRef componentRef |
+	| componentName projectName component packageName1 packageName2 stonString projectRef componentRef projectRef1 componentRef1 conditionalProperties x |
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
 	projectRef := 'Project'.
 	componentRef := 'Nested'.
+	projectRef1 := 'Project1'.
+	componentRef1 := 'Nested1'.
 
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
 
 	self assert: component validate.
 
-	packageName := projectName , '-Core'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Extension'.
 	component
 		defineGroupNamed: 'core';
 		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
-			addPackageNames: {packageName};
+			addPackageNames: {packageName1};
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: {componentRef};
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addProjectNames: {projectRef};
 		conditionalPropertiesAtConditions: {'gemstone'}
 			andGroup: 'core'
 			addComponentNames: {componentRef};
 		conditionalPropertiesAtConditions: {'gemstone'}
 			andGroup: 'core'
-			addPackageNames: {packageName};
+			addPackageNames: {packageName2};
 		conditionalPropertiesAtConditions: {'vast'}
 			andGroup: 'core'
-			addProjectNames: {projectRef};
+			addProjectNames: {projectRef1};
 		conditionalPropertiesAtConditions: {'vast'}
 			andGroup: 'core'
-			addPackageNames: {projectName , '-Extension'};
+			addPackageNames: {packageName2};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
-			andPackageName: packageName
+			andPackageName: packageName1
 			setSymbolDictNameTo: 'UserGlobals'.
 
-	component projectNames add: 'Project1'.
-	component componentNames add: 'Nested1'.
 
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	self assert: component validate.
-	self assert: component projectNames = #('Project1').
-	self assert: component componentNames = #('Nested1').
+	self assert: component definedGroupNames keys asArray sort = {'core'}.
+	conditionalProperties := component copy initializeForExport
+		conditionalProperties.	"sorted in canonical key order"
+	self
+		assert:
+			conditionalProperties keys
+				=
+					{{'common'}.
+					{'gemstone'}.
+					{'vast'}}.
+
+	self
+		assert:
+			(x := component conditionalComponentsAtConditions: {'common'} andGroup: 'core')
+				asArray = {componentRef}.
+	self
+		assert:
+			(x := component conditionalPackagesAtConditions: {'common'} andGroup: 'core')
+				asArray = {packageName1}.
+	self
+		assert:
+			(x := component conditionalProjectsAtConditions: {'common'} andGroup: 'core')
+				asArray = {projectRef}.
+
+	self
+		assert:
+			(x := component conditionalComponentsAtConditions: {'gemstone'} andGroup: 'core')
+				asArray = {componentRef}.
+	self
+		assert:
+			(x := component conditionalPackagesAtConditions: {'gemstone'} andGroup: 'core')
+				asArray = {packageName2}.
+	self
+		assert:
+			(x := component conditionalProjectsAtConditions: {'gemstone'} andGroup: 'core')
+				asArray = {}.
+
+	self
+		assert:
+			(x := component conditionalComponentsAtConditions: {'vast'} andGroup: 'core')
+				asArray = {}.
+	self
+		assert:
+			(x := component conditionalPackagesAtConditions: {'vast'} andGroup: 'core')
+				asArray = {packageName2}.
+	self
+		assert:
+			(x := component conditionalProjectsAtConditions: {'vast'} andGroup: 'core')
+				asArray = {projectRef1}.
 
 	component
-		removePackageNamed: packageName;
-		removeProjectNamed: 'Project1';
+		removePackageNamed: packageName1;
+		removeProjectNamed: projectRef1;
 		removeComponentNamed: componentRef;
 		yourself.
 
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	self assert: component validate.
-	self assert: component projectNames = #().
-	self assert: component componentNames = #('Nested1').
+
+
+	self
+		assert:
+			(x := component conditionalComponentsAtConditions: {'common'} andGroup: 'core')
+				asArray = {}.
+	self
+		assert:
+			(x := component conditionalPackagesAtConditions: {'common'} andGroup: 'core')
+				asArray = {}.
+	self
+		assert:
+			(x := component conditionalProjectsAtConditions: {'common'} andGroup: 'core')
+				asArray = {projectRef}.
+
+	self
+		assert:
+			(x := component conditionalComponentsAtConditions: {'gemstone'} andGroup: 'core')
+				asArray = {}.
+	self
+		assert:
+			(x := component conditionalPackagesAtConditions: {'gemstone'} andGroup: 'core')
+				asArray = {packageName2}.
+	self
+		assert:
+			(x := component conditionalProjectsAtConditions: {'gemstone'} andGroup: 'core')
+				asArray = {}.
+
+	self
+		assert:
+			(x := component conditionalComponentsAtConditions: {'vast'} andGroup: 'core')
+				asArray = {}.
+	self
+		assert:
+			(x := component conditionalPackagesAtConditions: {'vast'} andGroup: 'core')
+				asArray = {packageName2}.
+	self
+		assert:
+			(x := component conditionalProjectsAtConditions: {'vast'} andGroup: 'core')
+				asArray = {}.
 ]
 
 { #category : 'tests' }
