@@ -13,7 +13,8 @@ Class {
 		'compileErrorArray',
 		'isOop',
 		'instVarNames',
-		'instVarsAreRemovable'
+		'instVarsAreRemovable',
+		'isDictionary'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -118,8 +119,10 @@ RowanInspectorService >> inspect: oopOrObject [
     ifTrue: [ ^ self inspectClientForwarder: anObject ].
   className := anObject class name.
   myself := 'self' -> (self selfPrintString: anObject).
-  (anObject isKindOf: Dictionary superclass )
-    ifTrue: [ ^ self inspectDictionary: anObject ].
+  (anObject isKindOf: Dictionary superclass)
+    ifTrue: [ 
+      objects := self inspectDictionary: anObject from: 1 to: maxIndexedVars.
+      ^ self ].
   self addInstVars: anObject.
   self addDynamicInstVars: anObject.
   self addFirstIndexedVars: anObject.
@@ -147,7 +150,7 @@ RowanInspectorService >> inspect: oopOrObject inWindow: handle [
   className := anObject class name.
   myself := 'self' -> (self selfPrintString: anObject).
   (anObject isKindOf: Dictionary superclass)
-    ifTrue: [ ^ self inspectDictionary: anObject ].
+    ifTrue: [ ^ self inspectDictionary: anObject from: 1 to: maxIndexedVars ].
   self addInstVars: anObject.
   self addDynamicInstVars: anObject.
   self addFirstIndexedVars: anObject.
@@ -163,20 +166,26 @@ RowanInspectorService >> inspectClientForwarder: anObject [
 ]
 
 { #category : 'command support' }
-RowanInspectorService >> inspectDictionary: aDictionary [
+RowanInspectorService >> inspectDictionary: aDictionary from: start to: stop [
+  | sortedKeys |
+  isDictionary := true.
   instVarsAreRemovable := true.
-  aDictionary
-    keysDo: [ :key | 
-      objects
+  sortedKeys := aDictionary keys asSortedCollection
+    sortBlock: [ :x :y | x printString < y printString ].
+  visibleIndices := sortedKeys size min: stop.
+  nextIndices := OrderedCollection new.
+  (sortedKeys copyFrom: start to: visibleIndices)
+    do: [ :key | 
+      nextIndices
         add:
           (self stripOutUnicode: key printString)
             ->
               (Array
                 with: (Reflection oopOf: key)
                 with: (Reflection oopOf: (aDictionary at: key))) ].
-  objects := (objects asSortedCollection sortBlock: [ :x :y | x key < y key ])
-    asOrderedCollection.
-  RowanCommandResult addResult: self
+  indexedSize := aDictionary size.
+  RowanCommandResult addResult: self.
+  ^ nextIndices
 ]
 
 { #category : 'testing' }
@@ -192,7 +201,10 @@ RowanInspectorService >> isRcBag: anObject [
 
 { #category : 'client commands' }
 RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
-  | stop |
+  | stop anObject |
+  anObject := Object _objectForOop: oop.
+  (anObject isKindOf: Dictionary superclass)
+    ifTrue: [ ^ self inspectDictionary: anObject from: indexStart to: indexStop ].
   stop := indexStop min: indexedSize.
   nextIndices := self indexedVarsFrom: indexStart to: stop.
   visibleIndices := stop.
