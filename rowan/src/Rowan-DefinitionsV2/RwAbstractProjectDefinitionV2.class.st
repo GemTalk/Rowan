@@ -123,6 +123,13 @@ RwAbstractProjectDefinitionV2 >> postCopy [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> removeComponentNamed: aComponentName [
+	self components
+		do: [ :component | component removeComponentNamed: aComponentName ].
+	^ self components removeKey: aComponentName ifAbsent: [  ].
+]
+
+{ #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removePackage: aPackageDefinition [
 
 	| key |
@@ -134,9 +141,12 @@ RwAbstractProjectDefinitionV2 >> removePackage: aPackageDefinition [
 
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removePackageNamed: packageName [
+	^ self removePackage: (self packageNamed: packageName)
+]
 
-	^self removePackage: (self packageNamed: packageName)
-
+{ #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> removeProjectNamed: aProjectName [
+	self components do: [ :component | component removeProjectNamed: aProjectName ]
 ]
 
 { #category : 'properties' }

@@ -231,7 +231,7 @@ RwAbstractProjectLoadComponentV2 >> comment: anObject [
 
 { #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> componentNames [
-	^ componentNames ifNil: [ Array new ]
+	^ componentNames ifNil: [ componentNames := Array new ]
 ]
 
 { #category : 'accessing' }
@@ -550,7 +550,7 @@ RwAbstractProjectLoadComponentV2 >> projectName: anObject [
 { #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> projectNames [
 
-	^ projectNames ifNil: [ #() ]
+	^ projectNames ifNil: [ projectNames := Array new ]
 ]
 
 { #category : 'accessing' }
@@ -560,13 +560,24 @@ RwAbstractProjectLoadComponentV2 >> projectNames: anArray [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> removeComponentNamed: aComponentName [
+	"this can create empty componentName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
+
+	self conditionalProperties
+		keysAndValuesDo: [ :conditionsArray :conditionMap | 
+			conditionMap
+				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'componentNames' ifAbsent: [#()]) remove: aComponentName ifAbsent: [  ] ] ].
+	self componentNames remove: aComponentName ifAbsent: [  ]
+]
+
+{ #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> removePackageNamed: aPackageName [
 	"this can create empty packageName lists or empty packageMapSpecMaps ... the export logic _should_ cleanup empty list, which is sufficient"
 
 	self conditionalProperties
 		keysAndValuesDo: [ :conditionsArray :conditionMap | 
 			conditionMap
-				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'packageNames') remove: aPackageName ifAbsent: [  ] ] ].
+				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'packageNames' ifAbsent: [#()]) remove: aPackageName ifAbsent: [  ] ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
 			packageMapSpecsMap
@@ -574,6 +585,17 @@ RwAbstractProjectLoadComponentV2 >> removePackageNamed: aPackageName [
 					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
 						removeKey: aPackageName
 						ifAbsent: [  ] ] ]
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> removeProjectNamed: aProjectName [
+	"this can create empty projectName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
+
+	self conditionalProperties
+		keysAndValuesDo: [ :conditionsArray :conditionMap | 
+			conditionMap
+				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'projectNames' ifAbsent: [#()]) remove: aProjectName ifAbsent: [  ] ] ].
+	self projectNames remove: aProjectName ifAbsent: [  ]
 ]
 
 { #category : 'ston' }
@@ -619,7 +641,8 @@ RwAbstractProjectLoadComponentV2 >> validate [
 								signal:
 									'Conditional packages includes group name ' , groupName printString
 										, ' that is not a defined group' ].
-					allDefinedPackageNames addAll: (propertiesMap at: #'packageNames') ] ].
+					allDefinedPackageNames
+						addAll: (propertiesMap at: #'packageNames' ifAbsent: [ #() ]) ] ].
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformName :userIdMap | 
 			(RwSpecification _supportedPlatformNames includes: platformName)

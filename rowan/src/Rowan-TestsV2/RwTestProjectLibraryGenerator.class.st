@@ -26,7 +26,8 @@ RwTestProjectLibraryGenerator new
 	genSpec_0015: comment;
 	genSpec_0016: comment;
 	genSpec_0017: comment;
-	genSpec_0018: comment
+	genSpec_0018: comment;
+	genSpec_0019: comment;
 	yourself
 "
 Class {
@@ -930,6 +931,32 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 	"this method has a VAST-specific property, but the source is shared"
 	^''privateMethod'''
 		protocol: 'Accessing') propertyAt: 'vaVisibility' put: 'private'.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
+	"Conditional components test case"
+
+	"https://github.com/GemTalk/Rowan/issues/554"
+
+	| packageName1 packageName2 package1 package2 componentName conditionArray groupName |
+	packageName1 := projectName , '-' , 'Extensions1'.
+	packageName2 := projectName , '-' , 'Extensions'.
+
+	package1 := resolvedProject removePackageNamed: packageName2.
+	package2 := resolvedProject removePackageNamed: packageName1.	"addPackage needs thought ... have to update component structures while we're at it"
+	resolvedProject
+		addPackage: package1
+			toComponentNamed: componentName
+			withConditions: conditionArray
+			andGroupName: groupName;
+		addPackage: package2
+			toComponentNamed: componentName
+			withConditions: conditionArray
+			andGroupName: groupName;
+		yourself.
 
 	^ resolvedProject
 ]
@@ -2071,6 +2098,56 @@ RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		indexCard: indexCard
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
+	"Conditional components test case"
+
+	"https://github.com/GemTalk/Rowan/issues/554"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0019'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0017'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Conditional components test case'
+		index: 19
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(554);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0019: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
 ]

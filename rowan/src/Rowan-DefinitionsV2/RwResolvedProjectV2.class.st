@@ -417,8 +417,18 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
+	^ self _projectDefinition removeComponentNamed: aComponentName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
 	^ self _projectDefinition removePackageNamed: packageName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removeProjectNamed: aProjectName [
+	^ self _projectDefinition removeProjectNamed: aProjectName
 ]
 
 { #category : 'project specification' }

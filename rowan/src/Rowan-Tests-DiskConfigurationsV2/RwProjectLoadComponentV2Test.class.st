@@ -8,9 +8,11 @@ Class {
 RwProjectLoadComponentV2Test >> testBasic [
 	"excercise basic functionality"
 
-	| componentName projectName component packageName stonString |
+	| componentName projectName component packageName stonString projectRef componentRef |
 	projectName := 'RowanSample9'.
 	componentName := 'Core'.
+	projectRef := 'Project'.
+	componentRef := 'Nested'.
 
 	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
 
@@ -22,12 +24,40 @@ RwProjectLoadComponentV2Test >> testBasic [
 		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addPackageNames: {packageName};
+		conditionalPropertiesAtConditions: {'gemstone'}
+			andGroup: 'core'
+			addComponentNames: {componentRef};
+		conditionalPropertiesAtConditions: {'gemstone'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPropertiesAtConditions: {'vast'}
+			andGroup: 'core'
+			addProjectNames: {projectRef};
+		conditionalPropertiesAtConditions: {'vast'}
+			andGroup: 'core'
+			addPackageNames: {projectName , '-Extension'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
 			andPackageName: packageName
 			setSymbolDictNameTo: 'UserGlobals'.
 
+	component projectNames add: 'Project1'.
+	component componentNames add: 'Nested1'.
+
 	stonString := STON toStringPretty: component.	"useful in case of error"
-	self assert: component validate
+	self assert: component validate.
+	self assert: component projectNames = #('Project1').
+	self assert: component componentNames = #('Nested1').
+
+	component
+		removePackageNamed: packageName;
+		removeProjectNamed: 'Project1';
+		removeComponentNamed: componentRef;
+		yourself.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self assert: component validate.
+	self assert: component projectNames = #().
+	self assert: component componentNames = #('Nested1').
 ]
 
 { #category : 'tests' }
