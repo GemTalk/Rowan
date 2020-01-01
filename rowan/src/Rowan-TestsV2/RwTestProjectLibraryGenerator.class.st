@@ -189,7 +189,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004_b: resolvedProject [
 				add: 'tests' -> {'core'};
 				yourself)
 		comment: 'contains ' , projectName , '-Core1 package')
-		componentNames: #('Core1');
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: #('Core1');
 		yourself.
 	resolvedProject
 		addPackageNamed: projectName , '-Core1'
@@ -212,7 +214,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: resolvedProject [
 				add: 'tests' -> {'core'};
 				yourself)
 		comment: 'contains ' , projectName , '-Core1 package')
-		componentNames: #('Core2');
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: #('Core2');
 		yourself.
 	(resolvedProject
 		addComponentNamed: 'Core2'
@@ -222,7 +226,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: resolvedProject [
 				add: 'tests' -> {'core'};
 				yourself)
 		comment: 'contains ' , projectName , '-Core2 package')
-		componentNames: #('Core1');
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: #('Core1');
 		yourself.
 	resolvedProject
 		addPackageNamed: projectName , '-Core1'
@@ -939,21 +945,47 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 	"Conditional components test case"
 
+	"two new conditional/nested components with a package per
+		add an extension method for packageName2"
+
 	"https://github.com/GemTalk/Rowan/issues/554"
 
-	| packageName1 packageName2 package1 package2 componentName conditionArray groupName |
+	| packageName1 packageName2 componentName componentName1 componentName2 conditionArray groupName |
 	packageName1 := projectName , '-' , 'Extensions1'.
 	packageName2 := projectName , '-' , 'Extensions'.
+	componentName := 'Core'.
+	componentName1 := 'Core1'.
+	componentName2 := 'Core2'.
 
-	package1 := resolvedProject removePackageNamed: packageName2.
-	package2 := resolvedProject removePackageNamed: packageName1.	"addPackage needs thought ... have to update component structures while we're at it"
 	resolvedProject
-		addPackage: package1
-			toComponentNamed: componentName
+		addNestedComponentNamed: componentName1
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
+			comment: '';
+		addNestedComponentNamed: componentName2
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
+			comment: '';
+		removePackageNamed: packageName1
+			fromComponentNamed: componentName
 			withConditions: conditionArray
 			andGroupName: groupName;
-		addPackage: package2
-			toComponentNamed: componentName
+		removePackageNamed: packageName2
+			fromComponentNamed: componentName
+			withConditions: conditionArray
+			andGroupName: groupName;
+		addPackageNamed: packageName1
+			toComponentNamed: componentName1
+			withConditions: conditionArray
+			andGroupName: groupName;
+		addPackagePackageNamed: packageName2
+			toComponentNamed: componentName2
 			withConditions: conditionArray
 			andGroupName: groupName;
 		yourself.
