@@ -960,6 +960,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 	componentName := 'Core'.
 	componentName1 := 'subs/Core1'.
 	componentName2 := 'subs/Core2'.
+	conditionArray := {'common'}.
+	groupName := 'core'.
 
 	resolvedProject
 		addNestedComponentNamed: componentName1
@@ -976,6 +978,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 						add: 'tests' -> {'core'};
 						yourself)
 			comment: '';
+		gemstoneSetSymbolDictName: nil forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: nil forPackageNamed: packageName2;
 		removePackageNamed: packageName1
 			fromComponentNamed: componentName
 			withConditions: conditionArray
@@ -988,10 +992,29 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 			toComponentNamed: componentName1
 			withConditions: conditionArray
 			andGroupName: groupName;
-		addPackagePackageNamed: packageName2
+		addPackageNamed: packageName2
 			toComponentNamed: componentName2
 			withConditions: conditionArray
 			andGroupName: groupName;
+		addComponentNamed: componentName1
+			toComponentNamed: componentName
+			withConditions: conditionArray
+			andGroupName: groupName;
+		addComponentNamed: componentName2
+			toComponentNamed: componentName
+			withConditions: conditionArray
+			andGroupName: groupName;
+		yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		addClassExtensionNamed: projectName , 'Class1')
+		addInstanceMethod: 'baz ^''baz''' protocol: '*' , packageName2 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: projectName , '-Tests')
+		classDefinitionNamed: projectName , 'TestCase')
+		addInstanceMethod:
+				'test3 self assert: ' , projectName , 'Class1 new baz = ''baz'''
+			protocol: 'tests';
 		yourself.
 
 	^ resolvedProject
@@ -2173,6 +2196,7 @@ RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
 		groupNames:
 				{'core'.
 					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 
 	resolvedRepository := self

@@ -143,6 +143,21 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: gr
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	|  component |
+	self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	component := self components
+		at: toComponentName
+		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		addComponentNames: {componentName}.
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName comment: commentString [
 
 	| component |

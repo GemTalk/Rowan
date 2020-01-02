@@ -509,8 +509,7 @@ RwAbstractProjectLoadComponentV2 >> initializeForExport [
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
 			| orderedConditionalPackageMapSpecs |
-			orderedConditionalPackageMapSpecs := self class orderedDictionaryClass
-				new.
+			orderedConditionalPackageMapSpecs := self class orderedDictionaryClass new.
 			(conditionalPackageMapSpecs keys asSortedCollection: [ :a :b | a <= b ])
 				do: [ :platformName | 
 					| orderedUserMap userMap |
@@ -522,9 +521,20 @@ RwAbstractProjectLoadComponentV2 >> initializeForExport [
 							attributeMap := userMap at: userName.
 							orderedAttributeMap := self class orderedDictionaryClass new.
 							(attributeMap keys asSortedCollection: [ :a :b | a <= b ])
-								do: [ :attributeName | orderedAttributeMap at: attributeName put: (attributeMap at: attributeName) ].
-							orderedUserMap at: userName put: orderedAttributeMap ].
-					orderedConditionalPackageMapSpecs at: platformName put: orderedUserMap ].
+								do: [ :attributeName | 
+									| packageMap orderedPackageMap |
+									packageMap := attributeMap at: attributeName.
+									orderedPackageMap := self class orderedDictionaryClass new.
+									(packageMap keys asSortedCollection: [ :a :b | a <= b ])
+										do: [ :packageName | 
+											(packageMap at: packageName) isEmpty
+												ifFalse: [ orderedPackageMap at: packageName put: (packageMap at: packageName) ] ].
+									orderedPackageMap isEmpty
+										ifFalse: [ orderedAttributeMap at: attributeName put: orderedPackageMap ] ].
+							orderedAttributeMap isEmpty
+								ifFalse: [ orderedUserMap at: userName put: orderedAttributeMap ] ].
+					orderedUserMap isEmpty
+						ifFalse: [ orderedConditionalPackageMapSpecs at: platformName put: orderedUserMap ] ].
 			conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
 ]
 

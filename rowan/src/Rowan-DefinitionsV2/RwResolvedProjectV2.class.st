@@ -81,6 +81,15 @@ RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: grou
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	^ self _projectDefinition
 		addNestedComponentNamed: aComponentName
