@@ -42,7 +42,7 @@ RwAbstractV2Test class >> _symbolDictionaryNames [
 RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject [
 	| projectName packageName className |
 	projectName := resolvedProject projectName.
-	resolvedProject
+	(resolvedProject
 		comment: 'Project created using the V2 project creation api ';
 		addComponentNamed: 'Core'
 			definedGroupNames:
@@ -50,7 +50,22 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 						add: 'core' -> {};
 						add: 'tests' -> {'core'};
 						yourself)
-			comment: 'Primary component used for loading the system.';
+			comment: 'Primary component used for loading the system.')
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: {'subs/Nested'};
+		yourself.
+
+	resolvedProject
+		addNestedComponentNamed: 'subs/Nested'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'Nested component defines a shared subsystem of the primary project.'.
+
+	resolvedProject
 		addPackagesNamed: {(projectName , '-Core')}
 			toComponentNamed: 'Core'
 			withConditions: {'common'}
@@ -68,6 +83,10 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 			toComponentNamed: 'Core'
 			withConditions: {'gemstone'}
 			andGroupName: 'tests';
+		addPackagesNamed: {(projectName , '-Shared')}
+			toComponentNamed: 'subs/Nested'
+			withConditions: {'common'}
+			andGroupName: 'core';
 		yourself.
 	packageName := projectName , '-Core'.
 	className := projectName , 'Class1'.
@@ -85,7 +104,9 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 		super: 'TestCase'
 		category: packageName
 		comment: 'I test the example class')
-		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+		addInstanceMethod: 'test  self assert: ' , projectName , 'Shared new shared = ''shared'''
+			protocol: 'tests';
+		addInstanceMethod: 'testShared  self assert: ' , className , ' new foo = 1'
 			protocol: 'tests';
 		yourself.
 	packageName := projectName , '-GemStone-Extensions'.
@@ -105,6 +126,15 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 		comment: 'I test the example GemStone class')
 		addInstanceMethod: 'test  self assert: ' , className , ' foo = 1'
 			protocol: 'tests';
+		yourself.
+	packageName := projectName , '-Shared'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: projectName , 'Shared'
+		super: 'Object'
+		category: packageName
+		comment: 'I am a shared class in a shared component')
+		addInstanceMethod: 'shared ^''shared'''
+			protocol: 'accessing';
 		yourself.
 	resolvedProject components do: [ :component | self assert: component validate ].
 	self assert: resolvedProject _validate.
@@ -171,6 +201,7 @@ RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
 	(repositoryRoot / resolvedProject projectSpecFile).
 	(resolvedProject componentsRoot).
 	(resolvedProject componentsRoot / 'Core.ston').
+	(resolvedProject componentsRoot / 'subs' / 'Nested.ston').
 	(resolvedProject packagesRoot).
 	(resolvedProject packagesRoot / (projectName , '-Core')).
 	(resolvedProject packagesRoot / (projectName , '-Core')
@@ -184,6 +215,9 @@ RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
 	(resolvedProject packagesRoot / (projectName , '-Tests')).
 	(resolvedProject packagesRoot / (projectName , '-Tests')
 		/ (projectName , 'TestCase.class.st')).
+	(resolvedProject packagesRoot / (projectName , '-Shared')).
+	(resolvedProject packagesRoot / (projectName , '-Shared')
+		/ (projectName , 'Shared.class.st')).
 	(resolvedProject specsRoot).
 	(resolvedProject specsRoot / resolvedProject projectAlias , 'ston').
 	(resolvedProject projectsRoot)} do: [ :fileRef | self assert: fileRef exists ]

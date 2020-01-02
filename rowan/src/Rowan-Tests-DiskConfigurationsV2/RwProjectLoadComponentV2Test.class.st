@@ -4,19 +4,12 @@ Class {
 	#category : 'Rowan-Tests-DiskConfigurationsV2'
 }
 
-{ #category : 'tests' }
-RwProjectLoadComponentV2Test >> testBasic [
+{ #category : 'private' }
+RwProjectLoadComponentV2Test >> _testComponentClass: componentClass projectName: projectName componentName: componentName projectRef: projectRef componentRef: componentRef projectRef: projectRef1 [
 	"excercise basic functionality"
 
-	| componentName projectName component packageName1 packageName2 stonString projectRef componentRef projectRef1 componentRef1 conditionalProperties x |
-	projectName := 'RowanSample9'.
-	componentName := 'Core'.
-	projectRef := 'Project'.
-	componentRef := 'Nested'.
-	projectRef1 := 'Project1'.
-	componentRef1 := 'Nested1'.
-
-	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+	| component packageName1 packageName2 stonString conditionalProperties |
+	component := componentClass newNamed: componentName for: projectName.
 
 	self assert: component validate.
 
@@ -64,43 +57,25 @@ RwProjectLoadComponentV2Test >> testBasic [
 					{'vast'}}.
 
 	self
-		assert:
-			(x := component conditionalComponentsAtConditions: {'common'} andGroup: 'core')
-				asArray = {componentRef}.
-	self
-		assert:
-			(x := component conditionalPackagesAtConditions: {'common'} andGroup: 'core')
-				asArray = {packageName1}.
-	self
-		assert:
-			(x := component conditionalProjectsAtConditions: {'common'} andGroup: 'core')
-				asArray = {projectRef}.
-
-	self
-		assert:
-			(x := component conditionalComponentsAtConditions: {'gemstone'} andGroup: 'core')
-				asArray = {componentRef}.
-	self
-		assert:
-			(x := component conditionalPackagesAtConditions: {'gemstone'} andGroup: 'core')
-				asArray = {packageName2}.
-	self
-		assert:
-			(x := component conditionalProjectsAtConditions: {'gemstone'} andGroup: 'core')
-				asArray = {}.
-
-	self
-		assert:
-			(x := component conditionalComponentsAtConditions: {'vast'} andGroup: 'core')
-				asArray = {}.
-	self
-		assert:
-			(x := component conditionalPackagesAtConditions: {'vast'} andGroup: 'core')
-				asArray = {packageName2}.
-	self
-		assert:
-			(x := component conditionalProjectsAtConditions: {'vast'} andGroup: 'core')
-				asArray = {projectRef1}.
+		_validateComponent: component
+			condition: {'common'}
+			group: 'core'
+			componentNames: {componentRef}
+			packageNames: {packageName1}
+			projectNames: {projectRef};
+		_validateComponent: component
+			condition: {'gemstone'}
+			group: 'core'
+			componentNames: {componentRef}
+			packageNames: {packageName2}
+			projectNames: {};
+		_validateComponent: component
+			condition: {'vast'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {packageName2}
+			projectNames: {projectRef1};
+		yourself.
 
 	component
 		removePackageNamed: packageName1;
@@ -111,45 +86,72 @@ RwProjectLoadComponentV2Test >> testBasic [
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	self assert: component validate.
 
+	self
+		_validateComponent: component
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {}
+			projectNames: {projectRef};
+		_validateComponent: component
+			condition: {'gemstone'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {packageName2}
+			projectNames: {};
+		_validateComponent: component
+			condition: {'vast'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {packageName2}
+			projectNames: {};
+		yourself
+]
+
+{ #category : 'private' }
+RwProjectLoadComponentV2Test >> _validateComponent: component condition: conditionArray group: groupName componentNames: componentNames packageNames: packageNames projectNames: projectNames [
+	| x |
+	self
+		assert:
+			(x := component
+				conditionalComponentsAtConditions: conditionArray
+				andGroup: groupName) asArray = componentNames.
+	self
+		assert:
+			(x := component
+				conditionalPackagesAtConditions: conditionArray
+				andGroup: groupName) asArray = packageNames.
+	self
+		assert:
+			(x := component
+				conditionalProjectsAtConditions: conditionArray
+				andGroup: groupName) asArray = projectNames
+]
+
+{ #category : 'tests' }
+RwProjectLoadComponentV2Test >> testBasic [
+	"excercise basic functionality for RwProjectLoadComponentV2"
 
 	self
-		assert:
-			(x := component conditionalComponentsAtConditions: {'common'} andGroup: 'core')
-				asArray = {}.
-	self
-		assert:
-			(x := component conditionalPackagesAtConditions: {'common'} andGroup: 'core')
-				asArray = {}.
-	self
-		assert:
-			(x := component conditionalProjectsAtConditions: {'common'} andGroup: 'core')
-				asArray = {projectRef}.
+		_testComponentClass: RwProjectLoadComponentV2
+		projectName: 'RowanSample9'
+		componentName: 'Core'
+		projectRef: 'Project'
+		componentRef: 'Nested'
+		projectRef: 'Project1'
+]
+
+{ #category : 'tests' }
+RwProjectLoadComponentV2Test >> testBasic_nested [
+	"excercise basic functionality for RwNestedProjectLoadComponentV2"
 
 	self
-		assert:
-			(x := component conditionalComponentsAtConditions: {'gemstone'} andGroup: 'core')
-				asArray = {}.
-	self
-		assert:
-			(x := component conditionalPackagesAtConditions: {'gemstone'} andGroup: 'core')
-				asArray = {packageName2}.
-	self
-		assert:
-			(x := component conditionalProjectsAtConditions: {'gemstone'} andGroup: 'core')
-				asArray = {}.
-
-	self
-		assert:
-			(x := component conditionalComponentsAtConditions: {'vast'} andGroup: 'core')
-				asArray = {}.
-	self
-		assert:
-			(x := component conditionalPackagesAtConditions: {'vast'} andGroup: 'core')
-				asArray = {packageName2}.
-	self
-		assert:
-			(x := component conditionalProjectsAtConditions: {'vast'} andGroup: 'core')
-				asArray = {}.
+		_testComponentClass: RwNestedProjectLoadComponentV2
+		projectName: 'RowanSample9'
+		componentName: 'Core'
+		projectRef: 'Project'
+		componentRef: 'Nested'
+		projectRef: 'Project1'
 ]
 
 { #category : 'tests' }

@@ -395,11 +395,11 @@ RwAbstractProjectLoadComponentV2 >> export [
 ]
 
 { #category : 'exporting' }
-RwAbstractProjectLoadComponentV2 >> exportToUrl: fileUrl [
+RwAbstractProjectLoadComponentV2 >> exportToUrl: directoryUrl [
 
 	^ self copy
 		initializeForExport
-		_exportToUrl: fileUrl
+		_exportToUrl: directoryUrl
 ]
 
 { #category : 'ston' }

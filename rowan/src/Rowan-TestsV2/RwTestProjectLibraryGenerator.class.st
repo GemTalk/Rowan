@@ -188,7 +188,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004_b: resolvedProject [
 				add: 'core' -> {};
 				add: 'tests' -> {'core'};
 				yourself)
-		comment: 'contains ' , projectName , '-Core1 package')
+		comment:
+			'contains ' , projectName
+				,
+					'-Core1 package, which is a duplicate reference, since the Core1 component also references the '
+				, projectName , '-Core1 package')
 		conditionalPropertiesAtConditions: {'common'}
 			andGroup: 'core'
 			addComponentNames: #('Core1');
@@ -954,8 +958,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 	packageName1 := projectName , '-' , 'Extensions1'.
 	packageName2 := projectName , '-' , 'Extensions'.
 	componentName := 'Core'.
-	componentName1 := 'Core1'.
-	componentName2 := 'Core2'.
+	componentName1 := 'subs/Core1'.
+	componentName2 := 'subs/Core2'.
 
 	resolvedProject
 		addNestedComponentNamed: componentName1

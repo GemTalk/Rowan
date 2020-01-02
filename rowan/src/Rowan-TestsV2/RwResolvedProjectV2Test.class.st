@@ -8,7 +8,7 @@ Class {
 RwResolvedProjectV2Test >> testBasic [
 	"Create project ... without errors"
 
-	| projectName projectAlias project stonString  |
+	| projectName projectAlias project stonString |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	project := RwResolvedProjectV2 new
@@ -22,7 +22,7 @@ RwResolvedProjectV2Test >> testBasic [
 
 	project resolve.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: project.
-	stonString := STON toStringPretty: project	"useful to view full structure"
+	stonString := STON toStringPretty: project.	"useful to view full structure"
 ]
 
 { #category : 'tests' }

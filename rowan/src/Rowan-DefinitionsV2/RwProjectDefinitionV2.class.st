@@ -143,6 +143,31 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: gr
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName comment: commentString [
+
+	| component |
+	component := self 
+		components at: aComponentName 
+		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
+	^ component 
+		addDefinedGroupName: self defaultGroupName includeGroups: #();
+		comment: commentString;
+		yourself
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
+	| component |
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
+	groupNameDict
+		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
+	component comment: commentString.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName [
 
 	self shouldNotImplement
