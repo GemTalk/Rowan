@@ -90,6 +90,21 @@ RwAbstractProjectLoadComponentV2 >> _conditionalPropertiesAt: key conditions: co
 ]
 
 { #category : 'private' }
+RwAbstractProjectLoadComponentV2 >> _conditionalPropertiesAt: key conditions: conditions andGroup: groupName removeNames: names [
+	| theNames theConditionalPropertiesMap |
+	theConditionalPropertiesMap := (self conditionalProperties
+		at: conditions asArray sort
+		ifAbsentPut: [ Dictionary new ]) at: groupName ifAbsentPut: [ Dictionary new ].
+	theNames := (theConditionalPropertiesMap
+		at: key asSymbol
+		ifAbsentPut: [ Set new ]) asSet.
+	theNames removeAll: names.
+	theNames := theNames asArray sort.
+	theConditionalPropertiesMap at: key asSymbol put: theNames.
+	^ theNames
+]
+
+{ #category : 'private' }
 RwAbstractProjectLoadComponentV2 >> _platformPatternMatcherFor: pattern [
 
 	" Returns an instance of RwAbstractConfigurationPlatformAttributeMatcher:
@@ -333,6 +348,33 @@ RwAbstractProjectLoadComponentV2 >> conditionalPropertiesAtConditions: condition
 		conditions: conditions
 		andGroup: groupName
 		addNames: names
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> conditionalPropertiesAtConditions: conditions andGroup: groupName removeComponentNames: names [
+	^ self
+		_conditionalPropertiesAt: #'componentNames'
+		conditions: conditions
+		andGroup: groupName
+		removeNames: names
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> conditionalPropertiesAtConditions: conditions andGroup: groupName removePackageNames: names [
+	^ self
+		_conditionalPropertiesAt: #'packageNames'
+		conditions: conditions
+		andGroup: groupName
+		removeNames: names
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadComponentV2 >> conditionalPropertiesAtConditions: conditions andGroup: groupName removeProjectNames: names [
+	^ self
+		_conditionalPropertiesAt: #'projectNames'
+		conditions: conditions
+		andGroup: groupName
+		removeNames: names
 ]
 
 { #category : 'private' }

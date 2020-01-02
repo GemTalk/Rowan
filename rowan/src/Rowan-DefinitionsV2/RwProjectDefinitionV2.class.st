@@ -180,7 +180,11 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	package := RwPackageDefinition newNamed: packageName.
-	self _addPackage: package.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
 	component := self components
 		at: componentName
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
@@ -198,7 +202,11 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	package := RwPackageDefinition newNamed: packageName.
-	self _addPackage: package.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
 	component := self components
 		at: componentName
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
@@ -457,6 +465,20 @@ RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
 	self components
 		do: [ :component | component removePackageNamed: aPackageDefinition name ].
 	super removePackage: aPackageDefinition
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	"do not remove package from defintion, remove it from the named component only. 
+		Use removePackage:, if you want the package completely removed from definition"
+
+	| component |
+	component := self componentNamed: componentName.
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		removePackageNames: {packageName}.
+	^ component
 ]
 
 { #category : 'temporary compat' }

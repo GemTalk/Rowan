@@ -130,6 +130,11 @@ RwResolvedProjectV2 >> comment: aString [
 	self _projectDefinition comment: aString
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> componentNamed: aComponentName [
+	^ self _projectDefinition componentNamed: aComponentName
+]
+
 { #category : 'project specification' }
 RwResolvedProjectV2 >> componentNames [
 	^ self _loadSpecification componentNames
@@ -432,6 +437,15 @@ RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
 	^ self _projectDefinition removePackageNamed: packageName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		removePackageNamed: packageName
+		fromComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
 ]
 
 { #category : 'project definition' }

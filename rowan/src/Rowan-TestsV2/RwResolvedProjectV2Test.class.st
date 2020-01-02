@@ -166,6 +166,97 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject [
 ]
 
 { #category : 'tests' }
+RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
+	"move packages from one component to another, using removePackageNamed:... 
+		and addPackageNamed:... methods for RwResolvedProject. "
+
+	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject packageName componentName1 componentName2 conditionArray groupName component |
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	projectsHome := self _testRowanProjectsSandbox.
+	projectRoot := projectsHome / projectAlias.
+
+	projectSpecification := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		diskUrl: 'file://' , projectRoot pathString;
+		yourself.
+
+	self deny: projectRoot exists.
+
+	resolvedProject := projectSpecification resolve.
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+
+	resolvedProject
+		export;
+		exportLoadSpecification.
+
+	informed := false.
+	self
+		handleInformDuring: [ resolvedProject commit: 'first commit' ]
+		interactionBlock: [ :inform | informed := true ].
+	self assert: informed description: 'expected an inform'.
+
+	self _validateCanonicalRowanSample9ProjectFor: resolvedProject.
+
+	packageName := projectName , '-GemStone-Tests'.
+	componentName1 := 'Core'.
+	componentName2 := 'subs/Nested'.
+	conditionArray := {'gemstone'}.
+	groupName := 'tests'.
+	resolvedProject
+		removePackageNamed: packageName
+		fromComponentNamed: componentName1
+		withConditions: conditionArray
+		andGroupName: groupName.
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+	resolvedProject
+		addPackageNamed: packageName
+			toComponentNamed: componentName2
+			withConditions: conditionArray
+			andGroupName: groupName;
+		yourself.
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+
+	self
+		deny:
+			(((resolvedProject componentNamed: componentName1)
+				conditionalPackagesAtConditions: conditionArray
+				andGroup: groupName) includes: packageName).
+	self
+		assert:
+			(((resolvedProject componentNamed: componentName2)
+				conditionalPackagesAtConditions: conditionArray
+				andGroup: groupName) includes: packageName).	"validate move in image"
+
+	resolvedProject exportComponents.
+
+	component := RwAbstractProjectLoadComponentV2
+		fromFile:
+			resolvedProject componentsRoot
+				/ (resolvedProject componentNamed: componentName1) name , 'ston'.
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self
+		deny:
+			((component conditionalPackagesAtConditions: conditionArray andGroup: groupName)
+				includes: packageName).	"validate move on disk"
+
+
+	component := RwAbstractProjectLoadComponentV2
+		fromFile:
+			resolvedProject componentsRoot
+				/ (resolvedProject componentNamed: componentName2) name , 'ston'.
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self
+		assert:
+			((component conditionalPackagesAtConditions: conditionArray andGroup: groupName)
+				includes: packageName)	"validate move on disk"
+]
+
+{ #category : 'tests' }
 RwResolvedProjectV2Test >> testCreateNewGitProject [
 	| projectName projectAlias projectSpecification stonString resolvedProject projectsHome projectRoot resolvedRepository resolvedRepositoryCopy x |
 	projectName := 'RowanSample9'.

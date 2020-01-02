@@ -9,16 +9,23 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 RwAbstractProjectDefinitionV2 >> _addPackage: aPackageDefinition [
+	^ self
+		_addPackage: aPackageDefinition
+		ifPresent: [ self error: 'Duplicate package' ]
+]
 
+{ #category : 'private' }
+RwAbstractProjectDefinitionV2 >> _addPackage: aPackageDefinition ifPresent: presentBlock [
 	| key |
 	key := aPackageDefinition key.
-	(packages includesKey: key) ifTrue: [self error: 'Duplicate package'].
+	(packages includesKey: key)
+		ifTrue: [ ^ presentBlock value ].
 	^ packages at: key put: aPackageDefinition
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 RwAbstractProjectDefinitionV2 >> _projectDefinition [
 	^ self
 ]
