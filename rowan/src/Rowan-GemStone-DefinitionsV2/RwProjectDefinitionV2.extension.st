@@ -45,16 +45,18 @@ RwProjectDefinitionV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 	"answer true if the package was found in one of the receivers components"
 
+	| foundOne |
+	foundOne := false.
 	self components
 		keysAndValuesDo: [ :componentName :component | 
 			(component packageNames includes: packageName)
 				ifTrue: [ 
+					foundOne := true.
 					component
 						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
 						andPackageName: packageName
-						setSymbolDictNameTo: symbolDictName.
-					^ self ] ].
-	self error: 'No package named ', packageName printString, ' found.'.
+						setSymbolDictNameTo: symbolDictName ] ].
+	foundOne ifFalse: [ self error: 'No package named ' , packageName printString , ' found.']
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }

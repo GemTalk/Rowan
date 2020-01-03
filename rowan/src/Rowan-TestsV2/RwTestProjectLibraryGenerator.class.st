@@ -28,6 +28,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0017: comment;
 	genSpec_0018: comment;
 	genSpec_0019: comment;
+	genSpec_0020: comment;
 	yourself
 "
 Class {
@@ -996,6 +997,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 			toComponentNamed: componentName2
 			withConditions: conditionArray
 			andGroupName: groupName;
+
 		addComponentNamed: componentName1
 			toComponentNamed: componentName
 			withConditions: conditionArray
@@ -1004,6 +1006,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 			toComponentNamed: componentName
 			withConditions: conditionArray
 			andGroupName: groupName;
+
 		yourself.
 
 	((resolvedProject packageNamed: packageName2)
@@ -1016,6 +1019,42 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 				'test3 self assert: ' , projectName , 'Class1 new baz = ''baz'''
 			protocol: 'tests';
 		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0020: resolvedProject [
+	"Start with spec_0019, and undo work done to recreate spec_0017 structure -- find and fix holes in api"
+
+	"https://github.com/GemTalk/Rowan/issues/554"
+
+	| packageName1 packageName2 componentName componentName1 componentName2 conditionArray groupName |
+	packageName1 := projectName , '-' , 'Extensions1'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	componentName := 'Core'.
+	componentName1 := 'subs/Core1'.
+	componentName2 := 'subs/Core2'.
+	conditionArray := {'common'}.
+	groupName := 'core'.
+
+	resolvedProject
+		removeComponentNamed: componentName1;
+		removeComponentNamed: componentName2;
+		addPackageNamed: packageName1
+			toComponentNamed: componentName
+			withConditions: conditionArray
+			andGroupName: groupName;
+		addPackageNamed: packageName2
+			toComponentNamed: componentName
+			withConditions: conditionArray
+			andGroupName: groupName;
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName1
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName1
+			forPackageNamed: packageName2;
+		yourself.
+
 
 	^ resolvedProject
 ]
@@ -2203,6 +2242,57 @@ RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0019: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0020: commitMessage [
+	"Start with spec_0019, and undo work done to recreate spec_0017 structure -- find and fix holes in api"
+
+	"https://github.com/GemTalk/Rowan/issues/554"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0020'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0019'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Conditional components test case'
+		index: 20
+		derivedFrom: derivedFrom
+		comment: 'Start with spec_0019, and undo work done to recreate spec_0017 structure -- find and fix holes in api')
+		rowanIssues: #(554);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0020: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

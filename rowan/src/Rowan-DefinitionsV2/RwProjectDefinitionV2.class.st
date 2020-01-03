@@ -476,6 +476,17 @@ RwProjectDefinitionV2 >> readProjectSetReadTool: readTool withConfigurations: th
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName [
+	| component |
+	component := self componentNamed: fromComponentName.
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		removeComponentNames: {componentName}.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
 	self components
 		do: [ :component | component removePackageNamed: aPackageDefinition name ].

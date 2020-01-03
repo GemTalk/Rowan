@@ -444,6 +444,15 @@ RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		removeComponentNamed: componentName
+		fromComponentNamed: fromComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
 	^ self _projectDefinition removePackageNamed: packageName
 ]
