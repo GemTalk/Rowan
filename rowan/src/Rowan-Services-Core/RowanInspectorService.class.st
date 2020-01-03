@@ -112,21 +112,7 @@ RowanInspectorService >> initialize [
 
 { #category : 'client commands' }
 RowanInspectorService >> inspect: oopOrObject [
-  | anObject |
-  self setOopFrom: oopOrObject.
-  anObject := Object _objectForOop: oop.
-  (self isClientForwarder: anObject)
-    ifTrue: [ ^ self inspectClientForwarder: anObject ].
-  className := anObject class name.
-  myself := 'self' -> (self selfPrintString: anObject).
-  (anObject isKindOf: Dictionary superclass)
-    ifTrue: [ 
-      objects := self inspectDictionary: anObject from: 1 to: maxIndexedVars.
-      ^ self ].
-  self addInstVars: anObject.
-  self addDynamicInstVars: anObject.
-  self addFirstIndexedVars: anObject.
-  RowanCommandResult addResult: self
+  ^ self inspect: oopOrObject inWindow: nil
 ]
 
 { #category : 'client commands' }
@@ -143,14 +129,15 @@ RowanInspectorService >> inspect: anOop from: indexStart to: indexStop [
 RowanInspectorService >> inspect: oopOrObject inWindow: handle [
   | anObject |
   self setOopFrom: oopOrObject.
-  RowanBrowserService new saveRootObject: oop windowHandle: handle.
+  handle
+    ifNotNil: [ RowanBrowserService new saveRootObject: oop windowHandle: handle ].
   anObject := Object _objectForOop: oop.
   (self isClientForwarder: anObject)
     ifTrue: [ ^ self inspectClientForwarder: anObject ].
   className := anObject class name.
   myself := 'self' -> (self selfPrintString: anObject).
   (anObject isKindOf: Dictionary superclass)
-    ifTrue: [ ^ self inspectDictionary: anObject from: 1 to: maxIndexedVars ].
+    ifTrue: [ ^ objects addAll: (self inspectDictionary: anObject from: 1 to: maxIndexedVars) ].
   self addInstVars: anObject.
   self addDynamicInstVars: anObject.
   self addFirstIndexedVars: anObject.
@@ -170,6 +157,8 @@ RowanInspectorService >> inspectDictionary: aDictionary from: start to: stop [
   | sortedKeys |
   isDictionary := true.
   instVarsAreRemovable := true.
+  self addInstVars: aDictionary.
+  self addDynamicInstVars: aDictionary.
   sortedKeys := aDictionary keys asSortedCollection
     sortBlock: [ :x :y | x printString < y printString ].
   visibleIndices := sortedKeys size min: stop.
@@ -204,7 +193,10 @@ RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
   | stop anObject |
   anObject := Object _objectForOop: oop.
   (anObject isKindOf: Dictionary superclass)
-    ifTrue: [ ^ self inspectDictionary: anObject from: indexStart to: indexStop ].
+    ifTrue: [ 
+      ^ objects
+        addAll:
+          (self inspectDictionary: anObject from: indexStart to: indexStop) ].
   stop := indexStop min: indexedSize.
   nextIndices := self indexedVarsFrom: indexStart to: stop.
   visibleIndices := stop.
