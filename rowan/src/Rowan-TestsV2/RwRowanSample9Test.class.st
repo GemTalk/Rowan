@@ -183,6 +183,27 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _validateSpec_0017_componentStructure: resolvedProject [
+	self
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames:
+				{'RowanSample9-Core'.
+				'RowanSample9-Extensions'.
+				'RowanSample9-Extensions1'}
+			projectNames: {};
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {'RowanSample9-Tests'}
+			projectNames: {};
+		yourself
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 	| exceptions |
 	exceptions := {}.
@@ -1413,23 +1434,7 @@ RwRowanSample9Test >> testSpec_0017 [
 	resolvedProject := loadSpec resolve.	"load project"
 	loadedProjects := resolvedProject load.	"validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-	self
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'core'
-			componentNames: {}
-			packageNames:
-				{'RowanSample9-Core'.
-				'RowanSample9-Extensions'.
-				'RowanSample9-Extensions1'}
-			projectNames: {};
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'tests'
-			componentNames: {}
-			packageNames: {'RowanSample9-Tests'}
-			projectNames: {};
-		yourself
+	self _validateSpec_0017_componentStructure: resolvedProject
 ]
 
 { #category : 'issue_554' }
@@ -1466,7 +1471,7 @@ RwRowanSample9Test >> testSpec_0019 [
 		yourself
 ]
 
-{ #category : 'issue 557' }
+{ #category : 'issue_554' }
 RwRowanSample9Test >> testSpec_0020 [
 	"spec_0020 should load cleanly and match spec_0017"
 
@@ -1482,21 +1487,5 @@ RwRowanSample9Test >> testSpec_0020 [
 	resolvedProject := loadSpec resolve.	"load project"
 	loadedProjects := resolvedProject load.	"validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-	self
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'core'
-			componentNames: {}
-			packageNames:
-				{'RowanSample9-Core'.
-				'RowanSample9-Extensions'.
-				'RowanSample9-Extensions1'}
-			projectNames: {};
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'tests'
-			componentNames: {}
-			packageNames: {'RowanSample9-Tests'}
-			projectNames: {};
-		yourself
+	self _validateSpec_0017_componentStructure: resolvedProject
 ]
