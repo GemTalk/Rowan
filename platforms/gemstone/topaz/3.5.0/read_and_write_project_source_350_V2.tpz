@@ -49,6 +49,7 @@ run
 	repositoryRoot deleteAllChildren.
 	{
 		{
+"
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/DiskConfigurationsV2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributesDiskConfigs
@@ -57,9 +58,11 @@ run
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes
 		}.		{
+"
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes
+"
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1.ston'.
 			'$ROWAN_PROJECTS_HOME'.
@@ -68,6 +71,7 @@ run
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes
+"
 		}.
 	} 
 	do: [:ar |
