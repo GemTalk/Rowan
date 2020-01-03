@@ -99,7 +99,7 @@ RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
         indexedVars
           add:
             (self stripOutUnicode: i printString)
-              -> (Reflection oopOf: (anObject at: i + namedSize)) ] ].
+              -> (Reflection oopOf: (anObject at: i)) ] ].
   ^ indexedVars
 ]
 
