@@ -5,7 +5,7 @@ Class {
 		'projectLoadSpecs',
 		'visitedComponents',
 		'visitedComponentNames',
-		'platformAttributes',
+		'platformConditionalAttributes',
 		'definedGroupNames',
 		'projectNames',
 		'groupNames',
@@ -31,10 +31,9 @@ RwAbstractProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: a
 { #category : 'private' }
 RwAbstractProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
 
-	self platformAttributes do: [:anObject |
+	self platformConditionalAttributes do: [:anObject |
 		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
 	^false
-
 ]
 
 { #category : 'private' }
@@ -48,17 +47,21 @@ RwAbstractProjectComponentVisitorV2 >> _platformAttributeMatchIn: platformMatche
 ]
 
 { #category : 'private' }
-RwAbstractProjectComponentVisitorV2 >> _processConditionalPackageNames: aProjectLoadConfiguration [
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #componentNames ifAbsent: [ #()] ) ] ] ] ].
-
+RwAbstractProjectComponentVisitorV2 >> _processConditionalProperties: aProjectLoadConfiguration [
+	aProjectLoadConfiguration conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :groupMap | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					groupMap
+						keysAndValuesDo: [ :group :map | 
+							(self groupNames includes: group)
+								ifTrue: [ 
+									self
+										_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
+										for: aProjectLoadConfiguration.
+									self componentNames
+										addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
+									self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ] ]
 ]
 
 { #category : 'private' }
@@ -120,7 +123,7 @@ RwAbstractProjectComponentVisitorV2 >> initialize [
 	visitedComponentNames := Set new.
 	projectNames := Set new.
 	componentNames := Set new.
-	platformAttributes := #().
+	platformConditionalAttributes := #().
 	groupNames := Set new.
 	projectLoadSpecs := Set new.
 	visitedComponents := Dictionary new
@@ -133,17 +136,15 @@ RwAbstractProjectComponentVisitorV2 >> packageNames [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> platformAttributes [
+RwAbstractProjectComponentVisitorV2 >> platformConditionalAttributes [
 
-	^ platformAttributes
-
+	^ platformConditionalAttributes
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> platformAttributes: aColl [
+RwAbstractProjectComponentVisitorV2 >> platformConditionalAttributes: aColl [
 
-	platformAttributes := aColl
-
+	platformConditionalAttributes := aColl
 ]
 
 { #category : 'accessing' }
@@ -198,15 +199,13 @@ RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadCo
 	definedGroupNames := aProjectLoadComponent definedGroupNames.
 	self _processGroupNames.
 
-	self _processConditionalPackageNames: aProjectLoadComponent.
+	self _processConditionalProperties: aProjectLoadComponent.
 
-	self componentNames addAll: aProjectLoadComponent componentNames.
 	(self
 		_components: self componentsPath
 		forProject: aProjectLoadComponent projectName)
 		do: [ :component | component acceptNestedVisitor: self ].
 
-	self projectNames addAll: aProjectLoadComponent projectNames.
 	(self
 		_projects: self projectsPath
 		forProject: aProjectLoadComponent projectName)

@@ -97,8 +97,8 @@ RwProjectComponentVisitorV2Test >> _readVastTonelDemo_555: platformAttributes de
 RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
 
-	| platformAttributes groupNames componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
-	platformAttributes := {'common'.
+	| platformConditionalAttributes groupNames componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
+	platformConditionalAttributes := {'common'.
 	'gemstone'.
 	('3.5.0' asRwGemStoneVersionNumber)}.
 	projectName := 'RowanSample9'.
@@ -130,7 +130,7 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 
 	visitor := RwResolvedProjectComponentVisitorV2
 		resolvedProject: basicProject
-		platformAttributes: platformAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		groupNames: groupNames.
 	projectName := basicProject projectAlias.
 

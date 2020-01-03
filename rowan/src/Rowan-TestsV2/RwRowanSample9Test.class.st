@@ -183,6 +183,27 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _validateSpec_0017_componentStructure: resolvedProject [
+	self
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames:
+				{'RowanSample9-Core'.
+				'RowanSample9-Extensions'.
+				'RowanSample9-Extensions1'}
+			projectNames: {};
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {'RowanSample9-Tests'}
+			projectNames: {};
+		yourself
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 	| exceptions |
 	exceptions := {}.
@@ -336,7 +357,9 @@ RwRowanSample9Test >> testIssue_446 [
 				add: 'tests' -> {'core'};
 				yourself)
 		comment: 'contains ' , projectName , '-Core1 package and Core2 component')
-		componentNames: #('Core2');
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: #('Core2');
 		yourself.
 	resolvedProject
 		addComponentNamed: 'Core2'
@@ -349,11 +372,11 @@ RwRowanSample9Test >> testIssue_446 [
 
 	resolvedProject
 		componentNames: #('Core1');
-		yourself.	"????"
+		yourself.
 
 	project2 := RwResolvedProjectV2 new
-		componentNames:  #('Core2');
-		yourself.	"????"
+		componentNames: #('Core2');
+		yourself.
 
 	stonString := STON toStringPretty: resolvedProject.
 	false
@@ -415,7 +438,7 @@ RwRowanSample9Test >> testIssue_495_1 [
 "resolve project"
 	resolvedProject := loadSpec resolveStrict.
 
-"load project soec_0011"
+"load project spec_0011"
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -425,7 +448,7 @@ RwRowanSample9Test >> testIssue_495_1 [
 	loadSpec := self _loadSpecNamed: 'spec_0012'.
 	resolvedProject := loadSpec resolveStrict.
 
-"load project soec_0012"
+"load project spec_0012"
 	errorHit := false.
 
 	[ loadedProjects := resolvedProject load ]
@@ -457,7 +480,7 @@ RwRowanSample9Test >> testIssue_495_2 [
 "resolve project"
 	resolvedProject := loadSpec resolveStrict.
 
-"load project soec_0011"
+"load project spec_0011"
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -467,7 +490,7 @@ RwRowanSample9Test >> testIssue_495_2 [
 	loadSpec := self _loadSpecNamed: 'spec_0013'.
 	resolvedProject := loadSpec resolveStrict.
 
-"load project soec_0013"
+"load project spec_0013"
 	errorHit := false.
 	[ loadedProjects := resolvedProject load ]
 		on: Error
@@ -789,6 +812,41 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 	self assert: errorHit
 ]
 
+{ #category : 'issue 557' }
+RwRowanSample9Test >> testIssue_557 [
+	"https://github.com/dalehenrich/Rowan/issues/557"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0016'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project spec_0016"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0017"
+	loadSpec := self _loadSpecNamed: 'spec_0017'.
+	resolvedProject := loadSpec resolveStrict.
+
+"adjust project definition to force the class method #bar into extendedMethods"
+
+"load modified project spec_0017"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
 { #category : 'issue 495' }
 RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
@@ -811,7 +869,7 @@ RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol
 "resolve project"
 	resolvedProject := loadSpec resolveStrict.
 
-"load project soec_0011"
+"load project spec_0011"
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -821,7 +879,7 @@ RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol
 	loadSpec := self _loadSpecNamed: 'spec_0014'.
 	resolvedProject := loadSpec resolveStrict.
 
-"load project soec_0014"
+"load project spec_0014"
 	loadedProjects := resolvedProject load .
 
 "validate"
@@ -847,7 +905,7 @@ RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol
 "resolve project"
 	resolvedProject := loadSpec resolveStrict.
 
-"load project soec_0011"
+"load project spec_0011"
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -857,7 +915,7 @@ RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol
 	loadSpec := self _loadSpecNamed: 'spec_0015'.
 	resolvedProject := loadSpec resolveStrict.
 
-"load project soec_0014"
+"load project spec_0014"
 	loadedProjects := resolvedProject load .
 
 "validate"
@@ -1141,7 +1199,7 @@ RwRowanSample9Test >> testSpec_0010 [
 ]
 
 { #category : 'issue 495' }
-RwRowanSample9Test >> testSpec_011 [
+RwRowanSample9Test >> testSpec_0011 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
 	| loadSpec projectName resolvedProject loadedProjects |
@@ -1163,8 +1221,8 @@ RwRowanSample9Test >> testSpec_011 [
 ]
 
 { #category : 'issue 495' }
-RwRowanSample9Test >> testSpec_012 [
-	"spec_012 should result in an error when loaded"
+RwRowanSample9Test >> testSpec_0012 [
+	"spec_0012 should result in an error when loaded"
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
@@ -1191,8 +1249,8 @@ RwRowanSample9Test >> testSpec_012 [
 ]
 
 { #category : 'issue 495' }
-RwRowanSample9Test >> testSpec_013 [
-	"spec_013 should result in an error when loaded"
+RwRowanSample9Test >> testSpec_0013 [
+	"spec_0013 should result in an error when loaded"
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
@@ -1219,8 +1277,8 @@ RwRowanSample9Test >> testSpec_013 [
 ]
 
 { #category : 'issue 495' }
-RwRowanSample9Test >> testSpec_014 [
-	"spec_014 should load cleanly"
+RwRowanSample9Test >> testSpec_0014 [
+	"spec_0014 should load cleanly"
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
@@ -1243,8 +1301,8 @@ RwRowanSample9Test >> testSpec_014 [
 ]
 
 { #category : 'issue 495' }
-RwRowanSample9Test >> testSpec_015 [
-	"spec_015 should load cleanly"
+RwRowanSample9Test >> testSpec_0015 [
+	"spec_0015 should load cleanly"
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
@@ -1264,4 +1322,170 @@ RwRowanSample9Test >> testSpec_015 [
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'issue 557' }
+RwRowanSample9Test >> testSpec_0015_to_0016 [
+	"https://github.com/dalehenrich/Rowan/issues/557"
+
+	"passing test case ... symbol dictionary of packages involved don't match"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0015'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project spec_0015"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0016"
+	loadSpec := self _loadSpecNamed: 'spec_0016'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project spec_0016"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
+{ #category : 'issue 557' }
+RwRowanSample9Test >> testSpec_0016 [
+	"spec_0016 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/557"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0016'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'issue 557' }
+RwRowanSample9Test >> testSpec_0016_to_0017 [
+	"https://github.com/dalehenrich/Rowan/issues/557"
+
+	"passing test case ... symbol dictionaries match, but no methods put into extendedMethods -- put into movedMethods instead"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0016'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project spec_0016"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+"spec_0017"
+	loadSpec := self _loadSpecNamed: 'spec_0017'.
+	resolvedProject := loadSpec resolveStrict.
+
+"load project spec_0017"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
+{ #category : 'issue 557' }
+RwRowanSample9Test >> testSpec_0017 [
+	"spec_0017 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/557"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0017'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
+	resolvedProject := loadSpec resolve.	"load project"
+	loadedProjects := resolvedProject load.	"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self _validateSpec_0017_componentStructure: resolvedProject
+]
+
+{ #category : 'issue_554' }
+RwRowanSample9Test >> testSpec_0019 [
+	"spec_0019 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/554"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0019'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
+	resolvedProject := loadSpec resolve.	"load project"
+	loadedProjects := resolvedProject load.	"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'core'
+			componentNames:
+				{'subs/Core1'.
+				'subs/Core2'}
+			packageNames: {'RowanSample9-Core'}
+			projectNames: {};
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {'RowanSample9-Tests'}
+			projectNames: {};
+		yourself
+]
+
+{ #category : 'issue_554' }
+RwRowanSample9Test >> testSpec_0020 [
+	"spec_0020 should load cleanly and match spec_0017"
+
+	"https://github.com/dalehenrich/Rowan/issues/554"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0020'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
+	resolvedProject := loadSpec resolve.	"load project"
+	loadedProjects := resolvedProject load.	"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self _validateSpec_0017_componentStructure: resolvedProject
 ]

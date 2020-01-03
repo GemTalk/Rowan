@@ -81,6 +81,23 @@ RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: grou
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
+	^ self _projectDefinition
+		addNestedComponentNamed: aComponentName
+		definedGroupNames: groupNameDict
+		comment: commentString
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 	^ self _projectDefinition
 		addPackageNamed: packageName
@@ -120,6 +137,11 @@ RwResolvedProjectV2 >> comment [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment: aString [
 	self _projectDefinition comment: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> componentNamed: aComponentName [
+	^ self _projectDefinition componentNamed: aComponentName
 ]
 
 { #category : 'project specification' }
@@ -247,7 +269,7 @@ RwResolvedProjectV2 >> key [
 RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
 
-	self _validate: Rowan platformConfigurationAttributes.
+	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 
@@ -305,6 +327,12 @@ RwResolvedProjectV2 >> packages: aPackageDictionary [
 ]
 
 { #category : 'accessing' }
+RwResolvedProjectV2 >> platformConditionalAttributes [
+
+	^ self _loadSpecification customConditionalAttributes,  Rowan platformConditionalAttributes
+]
+
+{ #category : 'accessing' }
 RwResolvedProjectV2 >> projectAlias: aString [
 	self _loadSpecification projectAlias: aString
 ]
@@ -353,7 +381,7 @@ RwResolvedProjectV2 >> read [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> read: platformConfigurationAttributes [
+RwResolvedProjectV2 >> read: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
@@ -361,7 +389,7 @@ RwResolvedProjectV2 >> read: platformConfigurationAttributes [
 	^ self
 		readComponentNames: self componentNames
 		groupNames: self groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'actions' }
@@ -373,11 +401,11 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 	^ self
 		readComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
+RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
@@ -386,7 +414,7 @@ RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'project definition' }
@@ -411,8 +439,36 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
+	^ self _projectDefinition removeComponentNamed: aComponentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		removeComponentNamed: componentName
+		fromComponentNamed: fromComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
 	^ self _projectDefinition removePackageNamed: packageName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		removePackageNamed: packageName
+		fromComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removeProjectNamed: aProjectName [
+	^ self _projectDefinition removeProjectNamed: aProjectName
 ]
 
 { #category : 'project specification' }

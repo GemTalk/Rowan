@@ -102,10 +102,10 @@ RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: pro
 		{ defaultGroupName . globalsGroupName }
 			do: [:groupName | config addDefinedGroupName: groupName ].
 		config 
-			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+			conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 				andGroup: defaultGroupName 
 				addPackageNames: originalPackageNames;
-			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+			conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 				andGroup: globalsGroupName 
 				addPackageNames: globalPackageNames.
 		globalPackageNames do: [:packageName |
@@ -115,7 +115,6 @@ RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: pro
 				setSymbolDictNameTo: 'Globals' ].
 		configExportMap at: config put: projectDef configurationExportUrl ].
 	^ configExportMap
-
 ]
 
 { #category : 'smalltalk api' }

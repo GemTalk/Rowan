@@ -201,7 +201,6 @@ RwProjectConfigurationsTest >> testProjectCompoundConfigurationApi [
 
 	map := config conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' andPackageName: (packageNames at: 2).
 	self assert: (map at: 'symbolDictName') = 'SymDict2'.
-
 ]
 
 { #category : 'tests' }

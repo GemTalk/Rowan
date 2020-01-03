@@ -143,6 +143,46 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: gr
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	|  component |
+	self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	component := self components
+		at: toComponentName
+		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		addComponentNames: {componentName}.
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName comment: commentString [
+
+	| component |
+	component := self 
+		components at: aComponentName 
+		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
+	^ component 
+		addDefinedGroupName: self defaultGroupName includeGroups: #();
+		comment: commentString;
+		yourself
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
+	| component |
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
+	groupNameDict
+		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
+	component comment: commentString.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName [
 
 	self shouldNotImplement
@@ -155,12 +195,16 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	package := RwPackageDefinition newNamed: packageName.
-	self _addPackage: package.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
 	component := self components
 		at: componentName
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
 	component
-		conditionalPackagesAtConditions: conditionArray
+		conditionalPropertiesAtConditions: conditionArray
 		andGroup: groupName
 		addPackageNames: {packageName}.
 	^ package
@@ -173,7 +217,11 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	package := RwPackageDefinition newNamed: packageName.
-	self _addPackage: package.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
 	component := self components
 		at: componentName
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
@@ -181,7 +229,7 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
 			andPackageName: packageName
 			setSymbolDictNameTo: aSymbolDictAssoc value;
-		conditionalPackagesAtConditions: conditionArray
+		conditionalPropertiesAtConditions: conditionArray
 			andGroup: groupName
 			addPackageNames: {packageName}.
 	^ package
@@ -428,10 +476,35 @@ RwProjectDefinitionV2 >> readProjectSetReadTool: readTool withConfigurations: th
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName [
+	| component |
+	component := self componentNamed: fromComponentName.
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		removeComponentNames: {componentName}.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
 	self components
 		do: [ :component | component removePackageNamed: aPackageDefinition name ].
 	super removePackage: aPackageDefinition
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	"do not remove package from defintion, remove it from the named component only. 
+		Use removePackage:, if you want the package completely removed from definition"
+
+	| component |
+	component := self componentNamed: componentName.
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		removePackageNames: {packageName}.
+	^ component
 ]
 
 { #category : 'temporary compat' }

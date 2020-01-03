@@ -58,9 +58,16 @@ RwModificationTonelWriterVisitorV2 >> _hasShebangOf: aClassDefinition [
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _methodDefinitionOf: aMethodDefinition [
-	^ self _toSTON: (self class orderedDictionaryClass new 
-		at: #category put: aMethodDefinition protocol; 
-		yourself)
+	| excludedMethodProperties methodProperties exportedProperties |
+	excludedMethodProperties := #('_gsFileOffset' '_gsFileName' 'category' 'protocol' 'selector').
+	exportedProperties := self class orderedDictionaryClass new
+		at: #'category' put: aMethodDefinition protocol;
+		yourself.
+	methodProperties := aMethodDefinition properties.
+	(methodProperties keys
+		reject: [ :each | excludedMethodProperties includes: each ]) asArray sort
+		do: [ :key | exportedProperties at: key asSymbol put: (methodProperties at: key) ].
+	^ self _toSTON: exportedProperties
 ]
 
 { #category : 'class writing' }
@@ -221,17 +228,22 @@ RwModificationTonelWriterVisitorV2 >> addedClassExtension: aClassExtensionModifi
 
 { #category : 'actions' }
 RwModificationTonelWriterVisitorV2 >> addedPackage: aPackageModification [
-
+	| packageProperties exportedPackageProperties |
 	currentPackageDefinition := aPackageModification after.
 
-	"create package directory and package.st file"
+	packageProperties := currentPackageDefinition properties.
+	exportedPackageProperties := self class orderedDictionaryClass new.
+	exportedPackageProperties at: #'name' put: (packageProperties at: 'name').
+	(packageProperties at: 'comment' ifAbsent: [  ])
+		ifNotNil: [ :comment | exportedPackageProperties at: #'comment' put: comment ].
+	(packageProperties keys reject: [ :key | key = 'name' ]) asArray sort
+		do: [ :key | exportedPackageProperties at: key asSymbol put: (packageProperties at: key) ].
+
 	self _packageSourceDir ensureCreateDirectory.
-	(self _packageSourceDir /  'package.st')
-		writeStreamDo: [:aStream |
-		aStream 
-			<< 'Package ' 
-			<< (self _toSTON: { #name ->  currentPackageDefinition name } asDictionary) 
-			<< self  _newLine ].
+	self _packageSourceDir / 'package.st'
+		writeStreamDo: [ :aStream | 
+			aStream << 'Package ' << (self _toSTON: exportedPackageProperties)
+				<< self _newLine ].
 
 	self processPackage: aPackageModification
 ]

@@ -13,6 +13,7 @@ Class {
 		'projectSpecFile',
 		'componentNames',
 		'groupNames',
+		'customConditionalAttributes',
 		'platformProperties',
 		'comment',
 		'projectsHome',
@@ -191,6 +192,18 @@ RwLoadSpecificationV2 >> componentNames [
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> componentNames: anArray [
 	componentNames := anArray asArray
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> customConditionalAttributes [
+
+	^ customConditionalAttributes ifNil: [ #() ]
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> customConditionalAttributes: anArray [
+
+	customConditionalAttributes := anArray
 ]
 
 { #category : 'accessing' }

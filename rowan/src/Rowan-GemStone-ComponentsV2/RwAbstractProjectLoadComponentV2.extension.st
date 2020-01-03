@@ -16,27 +16,28 @@ RwAbstractProjectLoadComponentV2 class >> orderedDictionaryClass [
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwAbstractProjectLoadComponentV2 >> _exportToUrl: fileUrl [
-
+RwAbstractProjectLoadComponentV2 >> _exportToUrl: directoryUrl [
 	| url |
-	url := fileUrl asRwUrl.
+	url := directoryUrl asRwUrl.
 	url schemeName = 'file'
 		ifTrue: [ 
-			Rowan fileUtilities
-				writeStreamFor: self name , '.ston'
-				in: url pathForDirectory
-				do: [ :stream | 
+			| fileRef |
+			fileRef := url pathForDirectory asFileReference / self name , 'ston'.
+			fileRef parent ensureCreateDirectory.
+			fileRef
+				writeStreamDo: [ :stream | 
 					| string |
 					string := STON toStringPretty: self.
 					stream nextPutAll: string.
 					^ self ] ].
-  url schemeName = 'memory'
-    ifTrue: [ 
-		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
-			writeStreamDo: [ :stream | 
-			  | string |
-			  string := STON toStringPretty: self.
-			  stream nextPutAll: string.
-			  ^ self ] ].
+	url schemeName = 'memory'
+		ifTrue: [ 
+			FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory
+				/ self name , 'ston'
+				writeStreamDo: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
 	^ nil	"otherwise a noop"
 ]

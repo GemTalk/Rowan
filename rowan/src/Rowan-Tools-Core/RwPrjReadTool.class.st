@@ -123,7 +123,7 @@ RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withC
 		forProjectDefinition: projectDefinition 
 		withConfigurations: theConfigNames 
 		groupNames: theGroupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		forLoad: forLoad
 ]
 

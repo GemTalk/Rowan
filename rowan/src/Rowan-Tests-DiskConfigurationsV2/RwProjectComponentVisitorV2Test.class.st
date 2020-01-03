@@ -5,13 +5,13 @@ Class {
 }
 
 { #category : 'private' }
-RwProjectComponentVisitorV2Test >> _visitVastTonelDemo_555: platformAttributes projectAlias: projectAlias projectPath: projectPath [
+RwProjectComponentVisitorV2Test >> _visitVastTonelDemo_555: platformConditionalAttributes projectAlias: projectAlias projectPath: projectPath [
 	| groupNames visitor componentNamesToLoad projectSpecUrl projectSpec |
 	componentNamesToLoad := #('Core').
 	groupNames := #('core').
 
 	visitor := RwIndependentComponentVisitorV2 new
-		platformAttributes: platformAttributes;
+		platformConditionalAttributes: platformConditionalAttributes;
 		groupNames: groupNames;
 		yourself.
 
@@ -35,8 +35,8 @@ RwProjectComponentVisitorV2Test >> _visitVastTonelDemo_555: platformAttributes p
 RwProjectComponentVisitorV2Test >> testBasicVisit_independent [
 	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
 
-	| platformAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
-	platformAttributes := {'common'.
+	| platformConditionalAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
+	platformConditionalAttributes := {'common'.
 	'gemstone'.
 	('3.5.0' asRwGemStoneVersionNumber)}.
 	projectAlias := 'RowanSample9_DiskConfig_Test'.
@@ -46,7 +46,7 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_independent [
 	projectPath := self _cloneRowanSample9: projectAlias.	"clone https://github.com/dalehenrich/RowanSample9"
 
 	visitor := RwIndependentComponentVisitorV2 new
-		platformAttributes: platformAttributes;
+		platformConditionalAttributes: platformConditionalAttributes;
 		groupNames: groupNames;
 		yourself.
 

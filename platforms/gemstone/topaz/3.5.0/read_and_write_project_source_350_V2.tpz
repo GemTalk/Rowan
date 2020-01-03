@@ -28,14 +28,20 @@
   login
 
 run
-	| platformConfigurationAttributes projectSetModification visitor 
+	| platformConditionalAttributes platformConditionalAttributesDiskConfigs projectSetModification visitor 
 		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool 
 		auditFailures gsFileName |
 
-	platformConfigurationAttributes := {
+	platformConditionalAttributes := {
 		'common'.
 		'gemstone'.
 		'gemstone-kernel',
+		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
+	}.
+	platformConditionalAttributesDiskConfigs := {
+		'common'.
+		'gemstoneBase'.	"custom attribute - for packages that should ONLY be loaded standalone"
+		'gemstone-kernel'.
 		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
 	}.
 	repositoryRoot := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/rowan_exp_350/rowan_gs' asFileReference.
@@ -45,22 +51,22 @@ run
 		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/DiskConfigurationsV2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
-			platformConfigurationAttributes
+			platformConditionalAttributesDiskConfigs
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
-			platformConfigurationAttributes
+			platformConditionalAttributes
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
-			platformConfigurationAttributes
+			platformConditionalAttributes
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1.ston'.
 			'$ROWAN_PROJECTS_HOME'
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
-			platformConfigurationAttributes
+			platformConditionalAttributes
 		}.
 	} 
 	do: [:ar |
