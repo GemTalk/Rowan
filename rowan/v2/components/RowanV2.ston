@@ -1,16 +1,16 @@
 RwProjectLoadComponentV2 {
 	#name : 'RowanV2',
 	#comment : 'RowanV2 support',
-	#componentNames : [
-			'CommonCore',
-			'Services',
-			'DiskConfigurationsV2'
-		],
 	#conditionalPackages : {
 		[
 			'common'
 		] : {
 			'core' : {
+				#componentNames : [
+					'CommonCore',
+					'Services',
+					'DiskConfigurationsV2'
+				],
 				#packageNames : [
 					'Rowan-DefinitionsV2',
 					'Rowan-Core-DefinitionsV2',

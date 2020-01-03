@@ -1,18 +1,22 @@
 RwNestedProjectLoadComponentV2 {
 	#name : 'CommonComponent',
 	#comment : 'V2 prototype. Common code shared by ComponentV1 and ComponentV2',
-	#componentNames : [
-			'CommonCore',
-			'Services'
-		],
 	#conditionalPackages : {
 		[
 			'common'
 		] : {
 			'core' : {
+				#componentNames : [
+					'CommonCore',
+					'Services'
+				],
 				#packageNames : [
 					'Rowan-Tools-Extensions-Components',
 					'Rowan-Components'
+				],
+				#projectNames : [
+					'Cypress',
+					'Tonel'
 				]
 			},
 			'tests' : {
@@ -46,9 +50,5 @@ RwNestedProjectLoadComponentV2 {
 			'core'
 		],
 		'core' : [ ]
-	},
-	#projectNames : [
-		'Cypress',
-		'Tonel'
-	]
+	}
 }

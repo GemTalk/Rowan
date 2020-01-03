@@ -35,7 +35,7 @@ run
 	platformConditionalAttributes := {
 		'common'.
 		'gemstone'.
-		'gemstone-kernel',
+		'gemstone-kernel'.
 		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
 	}.
 	platformConditionalAttributesDiskConfigs := {
@@ -44,7 +44,7 @@ run
 		'gemstone-kernel'.
 		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
 	}.
-	repositoryRoot := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/rowan_exp_350/rowan_gs' asFileReference.
+	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2' asFileReference.
 	repositoryRoot ensureCreateDirectory.
 	repositoryRoot deleteAllChildren.
 	{
@@ -62,7 +62,8 @@ run
 			platformConditionalAttributes
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV2.ston'.
 			'$ROWAN_PROJECTS_HOME'.

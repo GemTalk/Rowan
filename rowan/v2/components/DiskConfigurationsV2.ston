@@ -8,17 +8,21 @@ RwProjectLoadComponentV2 {
 		implementations for the same methods. so only one of these two packages may be 
 		loaded at any time. Rowan-GsBase-ComponentsV2 is meant to be used in a GemStone 
 		environment where Rowan and FileSystem have not been installed',
-	#componentNames : [
-			'DiskConfigurationsCommon'
-		],
 	#conditionalPackages : {
 		[
 			'common'
 		] : {
 			'core' : {
+				#componentNames : [
+					'DiskConfigurationsCommon'
+				],
 				#packageNames : [
 					'Rowan-SpecificationsV2',
 					'Rowan-ComponentsV2'
+				],
+				#projectNames : [
+					'FileSystemGs',
+					'STON'
 				]
 			},
 			'tests' : {
@@ -65,9 +69,5 @@ RwProjectLoadComponentV2 {
 			'core'
 		],
 		'core' : [ ]
-	},
-	#projectNames : [
-		'FileSystemGs',
-		'STON'
-	]
+	}
 }

@@ -1,14 +1,14 @@
 RwNestedProjectLoadComponentV2 {
 	#name : 'CommonCore',
 	#comment : 'Common code shared by RowanV1, RowanV2, ComponentV1 and ComponentV2',
-	#componentNames : [
-		'DiskConfigurationsCommon'
-	],
 	#conditionalPackages : {
 		[
 			'common'
 		] : {
 			'core' : {
+				#componentNames : [
+					'DiskConfigurationsCommon'
+				],
 				#packageNames : [
 					'Rowan-Cypress-Core',
 					'Rowan-Kernel',
@@ -18,6 +18,10 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-Core',
 					'Rowan-Tools-Core',
 					'Rowan-Tools-Kernel'
+				],
+				#projectNames : [
+					'FileSystemGs',
+					'STON'
 				]
 			},
 			'tests' : {
@@ -56,6 +60,13 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-Url-3215',
 					'GemStone-Interactions-Kernel',
 					'Rowan-GemStone-3215'
+				]
+			}
+		},
+		[ 'gs3.[2-4]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-32x'
 				]
 			}
 		},
@@ -108,8 +119,11 @@ RwNestedProjectLoadComponentV2 {
 			}
 		}
 	},
-	#projectNames : [
-		'FileSystemGs',
-		'STON'
-	]
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+
 }

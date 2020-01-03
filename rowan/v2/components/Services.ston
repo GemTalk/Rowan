@@ -33,5 +33,11 @@ RwNestedProjectLoadComponentV2 {
 				}
 			}
 		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
 	}
 }

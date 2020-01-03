@@ -29,6 +29,24 @@ RwProjectLoadComponentV2 {
 					'FileSystem-Tests-GemStone'
 				]
 			}
+		},
+		[
+			'gs3.2.x'
+		] : {
+			'core' : {
+				#packageNames : [
+					'FileSystem-Core-32x'
+				]
+			}
+		},
+		[
+			'gs3.[5-]'
+		] : {
+			'core' : {
+				#packageNames : [
+					'FileSystem-GemStone-Kernel-35x'
+				]
+			}
 		}
 	},
 	#definedGroupNames : {

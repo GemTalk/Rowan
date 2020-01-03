@@ -1,16 +1,15 @@
 RwProjectLoadComponentV2 {
 	#name : 'RowanV1',
 	#comment : 'RowanV1 support',
-	#componentNames : [
-			'CommonCore',
-			'Services'
-		],
-
 	#conditionalPackages : {
 		[
 			'common'
 		] : {
 			'core' : {
+				#componentNames : [
+					'CommonCore',
+					'Services'
+				],
 				#packageNames : [
 					'Rowan-DefinitionsV1-Kernel',
 					'Rowan-DefinitionsV1',
@@ -23,6 +22,10 @@ RwProjectLoadComponentV2 {
 					'Rowan-Definitions-Deprecated',
 					'Rowan-Deprecated',
 					'Rowan-Cypress-Kernel'
+				],
+				#projectNames : [
+					'Cypress',
+					'Tonel'
 				]
 			},
 			'tests' : {
@@ -73,9 +76,5 @@ RwProjectLoadComponentV2 {
 			'core'
 		],
 		'core' : [ ]
-	},
-	#projectNames : [
-		'Cypress',
-		'Tonel'
-	]
+	}
 }
