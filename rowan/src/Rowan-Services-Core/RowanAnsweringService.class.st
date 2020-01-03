@@ -295,6 +295,14 @@ RowanAnsweringService >> isTranscriptInstalled [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> isVariable: oop [
+	| anObject |
+	anObject := Object _objectForOop: oop. 
+	answer := anObject class isVariable.
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> loadedPackageExists: packageName [
 	
 	| actualName |

@@ -14,7 +14,8 @@ Class {
 		'isOop',
 		'instVarNames',
 		'instVarsAreRemovable',
-		'isDictionary'
+		'isDictionary',
+		'isVariable'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -51,6 +52,20 @@ RowanInspectorService >> addInstVars: anObject [
       add:
         ('-' , (self stripOutUnicode: (instVarNames at: i) asString))
           -> (Reflection oopOf: (anObject instVarAt: i)) ]
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> addObject: string after: index [
+  | newObject theObject |
+  theObject := Object _objectForOop: oop.
+  newObject := string evaluate.
+  theObject class isIndexable
+    ifTrue: [ theObject insertAll: (Array with: newObject) at: index ]
+    ifFalse: [ theObject add: newObject ].
+  objects := OrderedCollection new.
+  isOop := true.
+  self inspect: oop.
+  self inspect: oop from: visibleIndices to: visibleIndices + 1
 ]
 
 { #category : 'client commands' }
@@ -107,7 +122,7 @@ RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
 RowanInspectorService >> initialize [
   super initialize.
   objects := OrderedCollection new.
-  instVarsAreRemovable := false
+  instVarsAreRemovable := false.
 ]
 
 { #category : 'client commands' }
@@ -132,6 +147,7 @@ RowanInspectorService >> inspect: oopOrObject inWindow: handle [
   handle
     ifNotNil: [ RowanBrowserService new saveRootObject: oop windowHandle: handle ].
   anObject := Object _objectForOop: oop.
+  isVariable := anObject class isVariable.
   (self isClientForwarder: anObject)
     ifTrue: [ ^ self inspectClientForwarder: anObject ].
   className := anObject class name.
@@ -247,7 +263,7 @@ RowanInspectorService >> selfPrintString: anObject [
 
 { #category : 'private' }
 RowanInspectorService >> setIndexedSize: anObject [
-  indexedSize := (anObject class isNsc or: [ anObject class isIndexable ])
+  indexedSize := anObject class isVariable
     ifFalse: [ 0 ]
     ifTrue: [ 
       instVarsAreRemovable := true.
