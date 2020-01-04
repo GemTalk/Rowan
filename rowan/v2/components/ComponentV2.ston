@@ -16,7 +16,6 @@ RwProjectLoadComponentV2 {
 			},
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests-35x'
 				]
 			}
 		},
@@ -27,10 +26,25 @@ RwProjectLoadComponentV2 {
 			},
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests-GemStone-35x'
 				]
 			}
-		}
+		},
+		[ 'gs3.[2-4]' ] : {
+      'tests': {
+				#packageNames : [
+					'Rowan-Tests-32x'
+					]
+				}
+			},
+		[ 'gs3.[5-]' ] : {
+      'tests': {
+				#packageNames : [
+					'Rowan-Tests-35x',
+					'Rowan-Tests-GemStone-35x'
+					]
+				}
+			}
+
 	},
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
