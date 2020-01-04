@@ -82,7 +82,7 @@ run
 		conditionalAttributes := ar at: 3.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
 
-loadSpec groupNames: #('core' 'tests' 'deprecated' 'jadeServer' 'deprecated tests').
+" loadSpec groupNames: #('core' 'tests' 'deprecated' 'jadeServer' 'deprecated tests')."
 
 		gsFileName := loadSpec specName.
 		resolvedProject := loadSpec

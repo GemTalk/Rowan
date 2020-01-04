@@ -4,7 +4,7 @@ run
 	includeDeprecatedPackages := (System stoneVersionReport at: 'gsVersion') = '3.2.15' 
 		ifTrue: [
 			"3.2.15 needs deprecated packages loaded to function"
-			true ]
+			false ]
 		ifFalse: [
 			"3.5.0 can run with or without deprecated packges"
 			false ].

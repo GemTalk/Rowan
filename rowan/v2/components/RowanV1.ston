@@ -16,11 +16,6 @@ RwProjectLoadComponentV2 {
 					'Rowan-SpecificationsV1',
 					'Rowan-Core-DefinitionsV1',
 					'Rowan-Url-CoreV1',
-					'Rowan-Tools-Deprecated',
-					'Rowan-GemStone-Loader-Deprecated',
-					'Rowan-GemStone-Loader-Extensions-Deprecated',
-					'Rowan-Definitions-Deprecated',
-					'Rowan-Deprecated',
 					'Rowan-Cypress-Kernel'
 				],
 				#projectNames : [
@@ -28,9 +23,17 @@ RwProjectLoadComponentV2 {
 					'Tonel'
 				]
 			},
+			'deprecated' : {
+				#packageNames : [
+					'Rowan-GemStone-Loader-Deprecated',
+					'Rowan-GemStone-Loader-Extensions-Deprecated',
+					'Rowan-Definitions-Deprecated',
+					'Rowan-Tools-Deprecated',
+					'Rowan-Deprecated'
+				]
+			},
 			'tests' : {
 				#packageNames : [
-					
 				]
 			}
 		},
@@ -45,6 +48,10 @@ RwProjectLoadComponentV2 {
 				]
 			},
 			'tests' : {
+				#packageNames : [
+				]
+			},
+			'deprecated tests' : {
 				#packageNames : [
 					'Rowan-Tests-Deprecated'
 				]
@@ -72,7 +79,17 @@ RwProjectLoadComponentV2 {
 		}
 	},
 	#definedGroupNames : {
+		'deprecated tests' : [
+			'tests',
+			'deprecated'
+		],
 		'tests' : [
+			'core'
+		],
+		'deprecated' : [
+			'core'
+		],
+		'jadeServer' : [
 			'core'
 		],
 		'core' : [ ]
