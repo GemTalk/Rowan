@@ -29,14 +29,7 @@
 					]
 				}
 			},
-		[ 'gs3.[2-4]' ] : {
-      'tests': {
-				#packageNames : [
-					'Rowan-Tests-32x'
-					]
-				}
-			},
-		[ 'gs3.[5-]' ] : {
+		[ 'gs3.[2-]' ] : {
       'tests': {
 				#packageNames : [
 					'Rowan-Tests-35x',
