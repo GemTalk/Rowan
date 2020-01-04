@@ -149,7 +149,7 @@ TonelWriter >> skipSeparators: aStream [
 TonelWriter >> splitMethodSource: aMethodDefinition into: aBlock [
 	| keywords source declaration |
 	
-	keywords := aMethodDefinition selector asSymbol keywords.
+	keywords := aMethodDefinition selector asSymbol _keywords.
 	source := aMethodDefinition source readStream.
 	"Skip spaces"
 	(source peek isSeparator) ifTrue: [ self skipSeparators: source ].
@@ -169,7 +169,6 @@ TonelWriter >> splitMethodSource: aMethodDefinition into: aBlock [
 	aBlock 
 		value: (declaration contents trimLeft withLineEndings: self newLine)
 		value: (source upToEnd withLineEndings: self newLine)
-
 ]
 
 { #category : 'private' }
