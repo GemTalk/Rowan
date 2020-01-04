@@ -70,7 +70,7 @@
 		theProjectSetDefinition := readTool 
 			readProjectSetForComponentProjectDefinition: projectDefinition 
 				withConfigurations: projectDefinition defaultConfigurationNames 
-				groupNames: {'core'. 'tests' . 'jadeServer' }.
+				groupNames: {'core' . 'tests' . 'deprecated' . 'jadeServer'.  'deprecated tests' }.
 
 		loadedProjectInfo 
 			at: projectDefinition name 
