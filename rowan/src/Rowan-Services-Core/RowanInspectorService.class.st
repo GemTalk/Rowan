@@ -15,7 +15,8 @@ Class {
 		'instVarNames',
 		'instVarsAreRemovable',
 		'isDictionary',
-		'isVariable'
+		'isVariable',
+		'selectionOop'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -62,10 +63,12 @@ RowanInspectorService >> addObject: string after: index [
   theObject class isIndexable
     ifTrue: [ theObject insertAll: (Array with: newObject) at: index ]
     ifFalse: [ theObject add: newObject ].
+  selectionOop := newObject asOop.
   objects := OrderedCollection new.
   isOop := true.
   self inspect: oop.
-  self inspect: oop from: visibleIndices to: visibleIndices + 1
+  theObject class isIndexable
+    ifTrue: [ self inspect: oop from: visibleIndices to: visibleIndices + 1 ]
 ]
 
 { #category : 'client commands' }
