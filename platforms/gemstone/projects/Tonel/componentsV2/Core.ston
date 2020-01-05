@@ -22,6 +22,15 @@ RwProjectLoadComponentV2 {
 					'Tonel-Tests'
 				]
 			}
+		},
+		[
+			'gs3.2.x'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Tonel-GemStone-32x-Kernel'
+				]
+			}
 		}
 	},
 	#definedGroupNames : {
