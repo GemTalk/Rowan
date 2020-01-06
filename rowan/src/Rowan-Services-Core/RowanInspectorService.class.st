@@ -60,7 +60,12 @@ RowanInspectorService >> addObject: string after: index [
   theObject := Object _objectForOop: oop.
   newObject := string evaluate.
   theObject class isIndexable
-    ifTrue: [ theObject insertAll: (Array with: newObject) at: index ]
+    ifTrue: [ 
+      | insertionCollection |
+      insertionCollection := (theObject isKindOf: CharacterCollection)
+        ifTrue: [ newObject ]
+        ifFalse: [ Array with: newObject ].
+      theObject insertAll: insertionCollection at: index + 1 ]
     ifFalse: [ theObject add: newObject ].
   selectionOop := newObject asOop.
   objects := OrderedCollection new.
