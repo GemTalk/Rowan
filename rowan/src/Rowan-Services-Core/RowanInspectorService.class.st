@@ -44,10 +44,9 @@ RowanInspectorService >> addFirstIndexedVars: anObject [
 
 { #category : 'command support' }
 RowanInspectorService >> addInstVars: anObject [
-  | namedSize isRcBag |
+  | namedSize |
   instVarNames := anObject class allInstVarNames.
   namedSize := instVarNames size.
-  isRcBag := self isRcBag: anObject.
   1 to: namedSize do: [ :i | 
     objects
       add:
@@ -99,25 +98,26 @@ RowanInspectorService >> executeThenInspect: string inFrame: level process: proc
 
 { #category : 'command support' }
 RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
-  | namedSize isRcBag anObject indexedVars |
+  | namedSize isUnordered anObject indexedVars |
   indexedVars := OrderedCollection new.
   anObject := Object _objectForOop: oop.
   namedSize := anObject class allInstVarNames size.
-  isRcBag := self isRcBag: anObject.
-  isRcBag
+  isUnordered := anObject isKindOf: UnorderedCollection.
+  isUnordered
     ifTrue: [ 
-      | aBag |
-      aBag := anObject _asIdentityBag.
+      | sorted |
+      sorted := anObject
+        asSortedCollection: [ :x :y | x printString < y printString ].
       indexStart to: indexStop do: [ :i | 
         indexedVars
           add:
-            (self stripOutUnicode: i printString) -> (Reflection oopOf: (aBag _at: i)) ] ]
+            (self stripOutUnicode: (sorted at: i) printString)
+              -> (Reflection oopOf: (sorted at: i)) ] ]
     ifFalse: [ 
       indexStart to: indexStop do: [ :i | 
         indexedVars
           add:
-            (self stripOutUnicode: i printString)
-              -> (Reflection oopOf: (anObject at: i)) ] ].
+            (self stripOutUnicode: i printString) -> (Reflection oopOf: (anObject at: i)) ] ].
   ^ indexedVars
 ]
 
@@ -202,11 +202,6 @@ RowanInspectorService >> isClientForwarder: anObject [
 	^(Reflection classOf: anObject) name == #'ClientForwarder'
 ]
 
-{ #category : 'testing' }
-RowanInspectorService >> isRcBag: anObject [
-  ^ anObject class name == #'RcIdentityBag'
-]
-
 { #category : 'client commands' }
 RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
   | stop anObject |
@@ -285,7 +280,7 @@ RowanInspectorService >> setOopFrom: oopOrObject [
 { #category : 'testing' }
 RowanInspectorService >> shouldReferenceBySize: anObject [
 
-	(self isRcBag: anObject) ifTrue:[^true].
+	(anObject isKindOf: UnorderedCollection) ifTrue:[^true].
 	(anObject isKindOf: MultiByteString) ifTrue:[^true]. 
 	^false
 ]
