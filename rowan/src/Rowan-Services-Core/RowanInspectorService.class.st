@@ -16,7 +16,8 @@ Class {
 		'instVarsAreRemovable',
 		'isDictionary',
 		'isVariable',
-		'selectionOop'
+		'selectionOop',
+		'isUnordered'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -101,9 +102,9 @@ RowanInspectorService >> executeThenInspect: string inFrame: level process: proc
       RowanCommandResult addResult: self ]
 ]
 
-{ #category : 'command support' }
+{ #category : 'other' }
 RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
-  | namedSize isUnordered anObject indexedVars |
+  | namedSize  anObject indexedVars |
   indexedVars := OrderedCollection new.
   anObject := Object _objectForOop: oop.
   namedSize := anObject class allInstVarNames size.
@@ -131,6 +132,7 @@ RowanInspectorService >> initialize [
   super initialize.
   objects := OrderedCollection new.
   instVarsAreRemovable := false.
+  isUnordered := false
 ]
 
 { #category : 'client commands' }
@@ -252,6 +254,20 @@ RowanInspectorService >> removeKey: keyOop [
   isOop := false.
   self inspect: theObject.	"reinspect"
   "self inspect: oop from: visibleIndices to: formerlyVisible"	"pick up any additional indexed keys the user may have asked for"
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> removeOop: elementOop [
+  | theObject formerlyVisible removal |
+  theObject := Object _objectForOop: oop.
+  removal := Object _objectForOop: elementOop.
+  theObject remove: removal.
+  formerlyVisible := visibleIndices.
+  objects := OrderedCollection new.
+  isOop := false.
+  self inspect: theObject.
+  visibleIndices > 0
+    ifTrue: [ self inspect: oop from: visibleIndices to: formerlyVisible ]
 ]
 
 { #category : 'printing' }
