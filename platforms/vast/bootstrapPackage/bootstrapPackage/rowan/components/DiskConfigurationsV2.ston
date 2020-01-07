@@ -1,0 +1,18 @@
+RwProjectLoadComponentV2 {
+	#name : 'DiskConfigurationsV2',
+	#comment : 'Project used for bootstrapping the DiskConfigurationsV2 definitions into VAST',
+	#definedGroupNames : {
+		'core' : [ ]
+	},
+	#conditionalProperties : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'DiskConfigurationsV2-VAST-Bootstrap'
+				]
+			}
+		}
+	}
+}
