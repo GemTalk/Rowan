@@ -1054,7 +1054,7 @@ RwRowanSample4Test >> testIssue284 [
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	loadedCommitId := project loadedCommitId.
-	self assert: loadedCommitId = '8a4a450'
+	self assert: loadedCommitId = '322983e'
 ]
 
 { #category : 'tests' }
@@ -1479,10 +1479,9 @@ RwRowanSample4Test >> testIssue460_2 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := self _testRowanProjectsSandbox pathString.
+	gitRootPath := self _testRowanProjectsSandbox.
 
-	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
-		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
 
