@@ -30,7 +30,7 @@ RowanInspectorService >> addDynamicInstVars: anObject [
   1 to: dynamicSize do: [ :i | 
     objects
       add:
-        (self stripOutUnicode: (dynamic at: i))
+        ('--' , (self stripOutUnicode: (dynamic at: i)))
           -> (Reflection oopOf: (anObject dynamicInstVarAt: (dynamic at: i))) ]
 ]
 
