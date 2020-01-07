@@ -56,6 +56,18 @@ RowanInspectorService >> addInstVars: anObject [
 ]
 
 { #category : 'client commands' }
+RowanInspectorService >> addKey: keyString [
+  | newObject theObject |
+  theObject := Object _objectForOop: oop.
+  newObject := keyString evaluate.
+  theObject at: newObject ifAbsentPut: nil.
+  selectionOop := newObject asOop.
+  objects := OrderedCollection new.
+  isOop := true.
+  self inspect: oop
+]
+
+{ #category : 'client commands' }
 RowanInspectorService >> addObject: string after: index [
   | newObject theObject |
   theObject := Object _objectForOop: oop.
@@ -185,19 +197,19 @@ RowanInspectorService >> inspectDictionary: aDictionary from: start to: stop [
   instVarsAreRemovable := true.
   self addInstVars: aDictionary.
   self addDynamicInstVars: aDictionary.
-  sortedKeys := aDictionary keys asSortedCollection
-    sortBlock: [ :x :y | x printString < y printString ].
+  sortedKeys := (aDictionary keys collect: [ :key | key printString -> key ])
+    asSortedCollection.
   visibleIndices := sortedKeys size min: stop.
   nextIndices := OrderedCollection new.
   (sortedKeys copyFrom: start to: visibleIndices)
-    do: [ :key | 
+    do: [ :assoc | 
       nextIndices
         add:
-          (self stripOutUnicode: key printString)
+          (self stripOutUnicode: assoc key)
             ->
               (Array
-                with: (Reflection oopOf: key)
-                with: (Reflection oopOf: (aDictionary at: key))) ].
+                with: (Reflection oopOf: assoc value)
+                with: (Reflection oopOf: (aDictionary at: assoc value))) ].
   indexedSize := aDictionary size.
   RowanCommandResult addResult: self.
   ^ nextIndices
