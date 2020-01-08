@@ -24,6 +24,7 @@
 					'Rowan-Configurations-Common',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
+					'Rowan-Tools-CoreV1',
 					'Rowan-Tools-CoreV2',
 					'Rowan-Tools-Extensions-Components'
 					]
@@ -42,6 +43,7 @@
 				#packageNames : [
 					'AST-Core',
 					'Rowan-Cypress-Core',
+					'Rowan-Cypress-Components',
 					'Rowan-Cypress-Definitions',
 					'Rowan-Url-Cypress',
 					'Rowan-Services-Extensions',
@@ -113,8 +115,10 @@
 					'Rowan-GemStone-DefinitionsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-SpecificationsV1' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Definitions-Deprecated' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Cypress-Components' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Cypress-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-CoreV1' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-CoreV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Extensions-Components' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Deprecated' : { 'symbolDictName' : 'RowanTools' },

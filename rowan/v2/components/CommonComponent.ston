@@ -12,6 +12,7 @@ RwNestedProjectLoadComponentV2 {
 				],
 				#packageNames : [
 					'Rowan-Tools-Extensions-Components',
+					'Rowan-Cypress-Components',
 					'Rowan-Components'
 				],
 				#projectNames : [
@@ -40,6 +41,7 @@ RwNestedProjectLoadComponentV2 {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-Tools-Extensions-Components' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Components' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Cypress-Components' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Components-Extensions' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
