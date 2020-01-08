@@ -284,6 +284,25 @@ RowanInspectorService >> removeOop: elementOop [
 ]
 
 { #category : 'client commands' }
+RowanInspectorService >> replaceElement: oldOop with: string [
+  | theObject newObject formerlyVisible oldObject |
+  theObject := Object _objectForOop: oop.
+  newObject := string
+    evaluateInContext: theObject
+    symbolList: Rowan image symbolList.
+  oldObject := Object _objectForOop: oldOop.
+  theObject remove: oldObject.
+  theObject add: newObject.
+  selectionOop := newObject asOop.
+  formerlyVisible := visibleIndices.
+  objects := OrderedCollection new.
+  isOop := false.
+  self inspect: theObject.
+  visibleIndices > 0
+    ifTrue: [ self inspect: oop from: visibleIndices to: formerlyVisible ]
+]
+
+{ #category : 'client commands' }
 RowanInspectorService >> save: string indexedVarAt: index [
   | theObject newObject formerlyVisible |
   theObject := Object _objectForOop: oop.
@@ -297,6 +316,18 @@ RowanInspectorService >> save: string indexedVarAt: index [
   self inspect: theObject.
   visibleIndices > 0
     ifTrue: [ self inspect: oop from: visibleIndices to: formerlyVisible ]
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> save: string namedInstVar: instVarName [
+  | theObject newObject instVarIndex |
+  theObject := Object _objectForOop: oop.
+  newObject := string
+    evaluateInContext: theObject
+    symbolList: Rowan image symbolList.
+  instVarIndex := theObject class allInstVarNames indexOf: instVarName.
+  theObject instVarAt: instVarIndex put: newObject.
+  self reinspect: theObject
 ]
 
 { #category : 'printing' }
