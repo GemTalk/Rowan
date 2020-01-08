@@ -146,7 +146,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 	"issue_185_1 --> issue_185_3	:: move NewRowanSample4 class to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar audit |
 
 	projectName := 'RowanSample4'.
 	Rowan
@@ -176,6 +176,8 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -193,6 +195,8 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -209,6 +213,8 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
@@ -228,7 +234,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 	"issue_185_1 --> issue_185_7	:: move NewRowanSample4 class with new class var to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	Rowan
@@ -258,6 +264,8 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	project := RwProject newNamed: projectName.
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
@@ -276,6 +284,8 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -292,6 +302,8 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
@@ -313,7 +325,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 	"issue_185_1 --> issue_185_5	:: move new version NewRowanSample4 class to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -339,6 +351,8 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -356,6 +370,8 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -372,6 +388,8 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
@@ -394,7 +412,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 													move NewRowanSample4 to RowanSample4SymbolDict"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar  audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -420,6 +438,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -436,6 +456,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self
 		assert:
@@ -454,6 +476,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
@@ -474,7 +498,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 													move NewRowanSample4 with new class variable to RowanSample4SymbolDict"
 
 	| specUrlString projectTools gitTool rowanProject gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -500,6 +524,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -516,6 +542,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self
 		assert:
@@ -534,6 +562,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
@@ -554,7 +584,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 													move new version of NewRowanSample4 to RowanSample4SymbolDict"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -580,6 +610,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -597,6 +629,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -613,6 +647,8 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
@@ -634,7 +670,7 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	"issue_185_1 --> issue_185_4	:: Simply rename RowanSample4-NewPackage to RowanSample4-RenamedPackage (no symbol dictionary move)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -660,6 +696,8 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -676,6 +714,8 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self
 		assert:
@@ -695,6 +735,8 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
