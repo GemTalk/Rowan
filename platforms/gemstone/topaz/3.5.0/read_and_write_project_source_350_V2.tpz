@@ -54,11 +54,11 @@ run
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributesDiskConfigs
 		}.		{
+"
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes
 		}.		{
-"
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes
