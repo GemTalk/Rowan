@@ -251,7 +251,7 @@ RowanInspectorService >> reinspect: theObject [
   objects := OrderedCollection new.
   isOop := false.
   self inspect: theObject.
-  visibleIndices > 0
+  (visibleIndices > 0 and: [ visibleIndices < formerlyVisible ])
     ifTrue: [ self inspect: oop from: visibleIndices to: formerlyVisible ]
 ]
 
@@ -270,6 +270,7 @@ RowanInspectorService >> removeKey: keyOop [
   theObject := Object _objectForOop: oop.
   removalKey := Object _objectForOop: keyOop.
   theObject removeKey: removalKey.
+  visibleIndices := visibleIndices - 1 max: 0.
   self reinspect: theObject
 ]
 
