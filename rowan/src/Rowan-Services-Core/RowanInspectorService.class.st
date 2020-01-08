@@ -71,7 +71,9 @@ RowanInspectorService >> addKey: keyString [
 RowanInspectorService >> addObject: string after: index [
   | newObject theObject |
   theObject := Object _objectForOop: oop.
-  newObject := string evaluate.
+  newObject := string
+    evaluateInContext: theObject
+    symbolList: Rowan image symbolList.
   theObject class isIndexable
     ifTrue: [ 
       | insertionCollection |
@@ -242,38 +244,52 @@ RowanInspectorService >> oop: anInteger [
 	oop := anInteger
 ]
 
-{ #category : 'client commands' }
-RowanInspectorService >> removeIndexedInstVarAt: index [
-  | theObject removalObject formerlyVisible |
-  theObject := Object _objectForOop: oop.
-  removalObject := theObject at: index.
-  theObject remove: removalObject.
+{ #category : 'private' }
+RowanInspectorService >> reinspect: theObject [
+  | formerlyVisible |
   formerlyVisible := visibleIndices.
   objects := OrderedCollection new.
   isOop := false.
-  self inspect: theObject.	"reinspect"
-  self inspect: oop from: visibleIndices to: formerlyVisible	"pick up any additional indexed inst vars the user may have asked for"
+  self inspect: theObject.
+  visibleIndices > 0
+    ifTrue: [ self inspect: oop from: visibleIndices to: formerlyVisible ]
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> removeIndexedInstVarAt: index [
+  | theObject removalObject |
+  theObject := Object _objectForOop: oop.
+  removalObject := theObject at: index.
+  theObject remove: removalObject.
+  self reinspect: theObject
 ]
 
 { #category : 'client commands' }
 RowanInspectorService >> removeKey: keyOop [
-  | theObject formerlyVisible removalKey |
+  | theObject removalKey |
   theObject := Object _objectForOop: oop.
   removalKey := Object _objectForOop: keyOop.
   theObject removeKey: removalKey.
-  formerlyVisible := visibleIndices.
-  objects := OrderedCollection new.
-  isOop := false.
-  self inspect: theObject.	"reinspect"
-  "self inspect: oop from: visibleIndices to: formerlyVisible"	"pick up any additional indexed keys the user may have asked for"
+  self reinspect: theObject
 ]
 
 { #category : 'client commands' }
 RowanInspectorService >> removeOop: elementOop [
-  | theObject formerlyVisible removal |
+  | theObject removal |
   theObject := Object _objectForOop: oop.
   removal := Object _objectForOop: elementOop.
   theObject remove: removal.
+  self reinspect: theObject
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> save: string indexedVarAt: index [
+  | theObject newObject formerlyVisible |
+  theObject := Object _objectForOop: oop.
+  newObject := string
+    evaluateInContext: theObject
+    symbolList: Rowan image symbolList.
+  theObject at: index put: newObject.
   formerlyVisible := visibleIndices.
   objects := OrderedCollection new.
   isOop := false.
