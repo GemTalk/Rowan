@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'packageExtension'
 	],
-	#category : 'Rowan-DefinitionsV2'
+	#category : 'Rowan-Components'
 }
 
 { #category : 'class directory reading' }

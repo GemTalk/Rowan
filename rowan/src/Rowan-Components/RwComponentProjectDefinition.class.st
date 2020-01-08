@@ -116,15 +116,6 @@ RwComponentProjectDefinition class >> projectName: projectName projectHome: proj
 ]
 
 { #category : 'instance creation' }
-RwComponentProjectDefinition class >> withProperties: properties packageDefinitions: packageDefinitions [
-
-	^ self basicNew
-		properties: properties;
-		packages: packageDefinitions;
-		yourself
-]
-
-{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> topazReadTonelFile: fileName [
     "Read a single file and compile the methods within that file.
      Definition/redefinition of the class not implemented yet "
@@ -176,6 +167,15 @@ RwComponentProjectDefinition class >> topazReadTonelFile: fileName [
   clsDef instanceMethodDefinitions do: methBlk .
   cls := cls class .
   clsDef classMethodDefinitions do: methBlk .
+]
+
+{ #category : 'instance creation' }
+RwComponentProjectDefinition class >> withProperties: properties packageDefinitions: packageDefinitions [
+
+	^ self basicNew
+		properties: properties;
+		packages: packageDefinitions;
+		yourself
 ]
 
 { #category : 'visiting' }
@@ -481,6 +481,18 @@ RwComponentProjectDefinition >> commit: message [
 			self inform: msg.
 			^ msg ].
 	^ self projectRef doCommit: message
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> compileWhileReading [
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  ^ properties at: 'CompileWhileReading' otherwise: false
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> compileWhileReading: aBoolean [
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  properties at: 'CompileWhileReading' put: aBoolean
 ]
 
 { #category : 'accessing' }
@@ -894,28 +906,6 @@ RwComponentProjectDefinition >> readProjectSet [
 	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
 ]
 
-{ #category : 'actions' }
-RwComponentProjectDefinition >> readProjectSetForPackageNames: packageNames [
-
-	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
-
-	| format visitorClass |
-	packages := Dictionary new. 
-	format := self 
-		packageFormatIfAbsent: [  
-			| formatFromDisk |
-			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
-				at: #format ifAbsent: [ 'tonel' ].
-			self packageFormat: formatFromDisk.
-			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
-		packageNames: packageNames;
-		visit: self.
-]
-
 { #category : 'reading' }
 RwComponentProjectDefinition >> readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames [
 
@@ -937,17 +927,6 @@ RwComponentProjectDefinition >> repositoryRoot: aFileReferenceOrPath [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot: aFileReferenceOrPath
-]
-
-{ #category : 'properties' }
-RwComponentProjectDefinition >> compileWhileReading: aBoolean [
-  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
-  properties at: 'CompileWhileReading' put: aBoolean
-]
-{ #category : 'properties' }
-RwComponentProjectDefinition >> compileWhileReading [
-  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
-  ^ properties at: 'CompileWhileReading' otherwise: false
 ]
 
 { #category : 'temporary compat' }

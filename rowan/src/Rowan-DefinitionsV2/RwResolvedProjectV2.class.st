@@ -130,6 +130,12 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addRawPackageNamed: packageName [
+
+	^ self _projectDefinition addRawPackageNamed: packageName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> comment [
 	^ self _projectDefinition comment
 ]
@@ -309,6 +315,12 @@ RwResolvedProjectV2 >> packageFormatIfAbsent: absentBlock [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packageNamed: aString [
 	^ self _projectDefinition packageNamed: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> packageNamed: aString ifAbsent: absentBlock [
+
+	^ self _projectDefinition packageNamed: aString ifAbsent: absentBlock
 ]
 
 { #category : 'project definition' }

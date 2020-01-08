@@ -1,8 +1,35 @@
 Class {
 	#name : 'RwRepositoryComponentProjectTonelReaderVisitor',
 	#superclass : 'RwRepositoryComponentProjectReaderVisitor',
-	#category : 'Rowan-DefinitionsV2'
+	#category : 'Rowan-Components'
 }
+
+{ #category : 'class file reading' }
+RwRepositoryComponentProjectTonelReaderVisitor class >> lineNumberStringForMethod: anRwMethodDefinition [
+  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
+		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
+			 ^ self lineNumberStringForOffset: offset fileName: fName
+			] 
+	].
+  ^ '  (Unable to determine line )' .
+]
+
+{ #category : 'class file reading' }
+RwRepositoryComponentProjectTonelReaderVisitor class >> lineNumberStringForOffset: offset fileName: fName [
+  | res |
+  res :='  (Unable to determine line number)' .
+  [ | fRef |
+    fRef := fName asFileReference .
+    fRef readStreamDo:[ :fStream |  | buf lf lNum |
+      buf := fStream contents .
+      buf size > offset ifTrue:[ buf size: offset ].
+      lNum := 1 + (buf occurrencesOf: (lf := Character lf)) .
+      res := '', lf , ' near line ' , lNum asString , lf , ' in file ', fName .
+    ]
+  ] on: Error do:[:ex | "ignore" ].
+  ^ res
+]
 
 { #category : 'class file reading' }
 RwRepositoryComponentProjectTonelReaderVisitor class >> readClassFile: file [
@@ -44,39 +71,52 @@ RwRepositoryComponentProjectTonelReaderVisitor class >> readClassFiles: fileArra
 	^ projectDefinition
 ]
 
-{ #category : 'class file reading' }
-RwRepositoryComponentProjectTonelReaderVisitor class >> lineNumberStringForMethod: anRwMethodDefinition [
-  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
-	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
-		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
-			 ^ self lineNumberStringForOffset: offset fileName: fName
-			] 
-	].
-  ^ '  (Unable to determine line )' .
-]
-
-{ #category : 'class file reading' }
-RwRepositoryComponentProjectTonelReaderVisitor class >> lineNumberStringForOffset: offset fileName: fName [
-  | res |
-  res :='  (Unable to determine line number)' .
-  [ | fRef |
-    fRef := fName asFileReference .
-    fRef readStreamDo:[ :fStream |  | buf lf lNum |
-      buf := fStream contents .
-      buf size > offset ifTrue:[ buf size: offset ].
-      lNum := 1 + (buf occurrencesOf: (lf := Character lf)) .
-      res := '', lf , ' near line ' , lNum asString , lf , ' in file ', fName .
-    ]
-  ] on: Error do:[:ex | "ignore" ].
-  ^ res
-]
-
 { #category : 'package reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> _packageNameFromPackageDir: packageDir [
 
 	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
 
 	^ (self _readObjectFrom: (packageDir / 'package', 'st')) at: #name
+]
+
+{ #category : 'class reading' }
+RwRepositoryComponentProjectTonelReaderVisitor >> checkMethodDefinitions: aClassDef [
+  | cls clsName methBlk fakeMethDict pkgName |
+
+  self compileWhileReading ifFalse:[ ^ self "do nothing"  ].
+
+  clsName := aClassDef  name asSymbol .
+  (pkgName := currentPackageDefinition name) = 'Filein1C' ifTrue:[ 
+     "lookup in GemStone_Legacy_Streams first"
+     cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
+  ].
+  cls ifNil:[   
+    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+       "creating the class not implemented yet"
+       Warning signal:'class ' , clsName , ' not found by name lookup'.
+       ^ self "can't check syntax on the methods until class is defined"
+    ].
+  ].
+  cls := cls"anAssociation" value.
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: fakeMethDict
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  0
+    ] on: ( CompileError , CompileWarning ) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+  ].
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef classMethodDefinitions do: methBlk .
 ]
 
 { #category : 'class reading' }
@@ -89,6 +129,16 @@ RwRepositoryComponentProjectTonelReaderVisitor >> classExtensionFileExtensions [
 RwRepositoryComponentProjectTonelReaderVisitor >> classFileExtensions [
 
 	^ #( 'class' 'st' )
+]
+
+{ #category : 'class reading' }
+RwRepositoryComponentProjectTonelReaderVisitor >> compileWhileReading [
+  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
+]
+
+{ #category : 'class reading' }
+RwRepositoryComponentProjectTonelReaderVisitor >> compileWhileReading: aBoolean [
+  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 ]
 
 { #category : 'tonel parser' }
@@ -207,54 +257,3 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassFile: file inPackage:
     ].
   ].
 ]
-
-{ #category : 'class reading' }
-RwRepositoryComponentProjectTonelReaderVisitor >> checkMethodDefinitions: aClassDef [
-  | cls clsName methBlk fakeMethDict pkgName |
-
-  self compileWhileReading ifFalse:[ ^ self "do nothing"  ].
-
-  clsName := aClassDef  name asSymbol .
-  (pkgName := currentPackageDefinition name) = 'Filein1C' ifTrue:[ 
-     "lookup in GemStone_Legacy_Streams first"
-     cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
-  ].
-  cls ifNil:[   
-    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
-       "creating the class not implemented yet"
-       Warning signal:'class ' , clsName , ' not found by name lookup'.
-       ^ self "can't check syntax on the methods until class is defined"
-    ].
-  ].
-  cls := cls"anAssociation" value.
-  methBlk := [ :methDef "a RwMethodDefinition" |
-    [
-      cls compileMethod: methDef source
-      dictionaries: System myUserProfile symbolList
-      category: methDef protocol asSymbol
-      intoMethodDict: fakeMethDict
-      intoCategories: nil
-      intoPragmas: nil
-      environmentId:  0
-    ] on: ( CompileError , CompileWarning ) do:[:ex | 
-      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
-      ex pass
-    ]
-  ].
-  fakeMethDict := GsMethodDictionary new .
-  aClassDef instanceMethodDefinitions do: methBlk .
-  cls := cls class .
-  fakeMethDict := GsMethodDictionary new .
-  aClassDef classMethodDefinitions do: methBlk .
-]
-
-{ #category : 'class reading' }
-RwRepositoryComponentProjectTonelReaderVisitor >> compileWhileReading: aBoolean [
-  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
-]
-
-{ #category : 'class reading' }
-RwRepositoryComponentProjectTonelReaderVisitor >> compileWhileReading [
-  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
-]
-
