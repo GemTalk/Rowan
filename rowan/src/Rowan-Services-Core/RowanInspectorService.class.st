@@ -303,6 +303,17 @@ RowanInspectorService >> replaceElement: oldOop with: string [
 ]
 
 { #category : 'client commands' }
+RowanInspectorService >> save: string dynamicInstVar: instVarName [
+  | theObject newObject |
+  theObject := Object _objectForOop: oop.
+  newObject := string
+    evaluateInContext: theObject
+    symbolList: Rowan image symbolList.
+  theObject dynamicInstVarAt: instVarName put: newObject.
+  self reinspect: theObject
+]
+
+{ #category : 'client commands' }
 RowanInspectorService >> save: string indexedVarAt: index [
   | theObject newObject formerlyVisible |
   theObject := Object _objectForOop: oop.
@@ -327,6 +338,18 @@ RowanInspectorService >> save: string namedInstVar: instVarName [
     symbolList: Rowan image symbolList.
   instVarIndex := theObject class allInstVarNames indexOf: instVarName.
   theObject instVarAt: instVarIndex put: newObject.
+  self reinspect: theObject
+]
+
+{ #category : 'client commands' }
+RowanInspectorService >> saveKey: keyOop value: string [
+  | theObject newObject key |
+  theObject := Object _objectForOop: oop.
+  newObject := string
+    evaluateInContext: theObject
+    symbolList: Rowan image symbolList.
+  key := Object _objectForOop: keyOop.
+  theObject at: key put: newObject.
   self reinspect: theObject
 ]
 
