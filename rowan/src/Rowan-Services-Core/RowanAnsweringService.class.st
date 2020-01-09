@@ -99,6 +99,17 @@ RowanAnsweringService >> basicExec: aString context: oop [
 	^answer
 ]
 
+{ #category : 'client command support' }
+RowanAnsweringService >> basicPrintStringOf: oop toMaxSize: integer [
+  | object printString  |
+  object := Object _objectForOop: oop.
+  printString := self stripOutUnicode: object printString.
+  printString := printString size > integer
+    ifTrue: [ (printString copyFrom: 1 to: integer) , '...' ]
+    ifFalse: [ printString ].
+  ^ printString
+]
+
 { #category : 'client commands' }
 RowanAnsweringService >> breakPointsAreEnabled [
   answer := RowanService breakPointsAreEnabled.
@@ -353,12 +364,16 @@ RowanAnsweringService >> newPackageNamed: packageName [
 
 { #category : 'client commands' }
 RowanAnsweringService >> printStringOf: oop toMaxSize: integer [
-  | object |
-  object := Object _objectForOop: oop.
-  answer := self stripOutUnicode: object printString.
-  answer := answer size > integer
-    ifTrue: [ (answer copyFrom: 1 to: integer) , '...' ]
-    ifFalse: [ answer ].
+  answer := self basicPrintStringOf: oop toMaxSize: integer.
+  RowanCommandResult addResult: self.
+  ^ answer
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> printStringOfOops: oops toMaxSize: integer [
+  answer := Array new.
+  oops
+    do: [ :oop | answer add: (self basicPrintStringOf: oop toMaxSize: integer) ].
   RowanCommandResult addResult: self.
   ^ answer
 ]
