@@ -21,7 +21,7 @@
 
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_2_V2.tpz
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3_V2.tpz
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3_RowanV1V2.tpz
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_4_V2.tpz
 
 	errorCount

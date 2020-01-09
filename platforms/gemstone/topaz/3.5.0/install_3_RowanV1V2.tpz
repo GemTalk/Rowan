@@ -1,0 +1,151 @@
+#!/usr/local/bin/smalltalk/gemstone/topaz
+#
+# If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
+#	script can be directly executed:
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3.tpz <gsdevkit-stone-name> -lq
+#
+# If you are not using GsDevKit_home, you can directly run this script as long as
+# 	1. $GEMSTONE is defined
+# 	2. $GEMSTONE/bin is you path
+#	then execute using the following invocation
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz -lq
+#
+#	[1] https://github.com/GsDevKit/GsDevKit_home
+# [2] https://github.com/dalehenrich/stash
+#
+
+	omit pushonly
+  iferr 1 stk
+  iferr 2 stack
+#  iferr 3 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+# Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
+#  methods into the correct package structure
+  run
+	"install_3.tpz"
+ 	| platformConditionalAttributes projectSetDefinition reAudit auditFailures |
+  SessionTemps current at: #ROWAN_TRACE put: #gciLogServer . "log to topaz output file"
+	platformConditionalAttributes := {
+		'common'.
+		'gemstone'.
+		'gemstone-kernel'.
+		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
+	}.
+	{
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes
+		}.
+	} 
+	do: [:ar |
+		"Read project and packages from disk. Dependent projects will be included in the projectSetDefinition"
+		| configNames groupNames resolvedProject loadSpecUrl loadSpec projectsHome conditionalAttributes gsFileName |
+		loadSpecUrl := ar at: 1.
+		projectsHome := ar at: 2.
+		conditionalAttributes := ar at: 3.
+		loadSpec := RwSpecification fromUrl: loadSpecUrl.
+		gsFileName := loadSpec specName.
+		resolvedProject := loadSpec
+			projectsHome: projectsHome;
+			resolve.
+		projectSetDefinition :=  resolvedProject read: conditionalAttributes ].
+
+	projectSetDefinition projects
+		do: [:resolvedProject |
+			| resolvedProjectCopy projectDefinitionEmptyCopy |
+			"Create loaded project (if needed), traverse the package definitions and 
+				create loaded packages for each"
+			GsFile gciLogServer: resolvedProject projectName.
+			resolvedProject _validate.
+			resolvedProjectCopy := resolvedProject copy.
+			projectDefinitionEmptyCopy := RwProjectDefinitionV2 basicNew
+				properties:
+					(Dictionary new
+						add: 'name' -> resolvedProjectCopy projectAlias;
+						yourself);
+				packages: Dictionary new;
+				projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
+				yourself.
+			resolvedProjectCopy _projectDefinition: projectDefinitionEmptyCopy.
+			resolvedProject packageNames do: [:packageName |
+				GsFile gciLogServer: '	', packageName.
+				resolvedProjectCopy addRawPackageNamed: packageName ].
+			projectDefinitionEmptyCopy components: resolvedProject _projectDefinition components.	"not completely safe"
+
+			resolvedProjectCopy load ].
+
+	"Adopt the project set definition ... 
+		Log and ignore any missing method or missing classes encountered as they may not be
+		present in the .gs bootstrap file for the project ... The will be created when we
+		reload the project a little bit later on."
+	[ Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition ]
+		on: RwAdoptMissingMethodErrorNotification, RwAdoptMissingClassErrorNotification
+		do: [:ex |
+			ex
+				methodErrorDo: [ GsFile gciLogServer: 'Missing loaded method ', ex methodPrintString, ' encountered during adopt ... IGNORED' ]
+				classErrorDo: [  GsFile gciLogServer: 'Missing loaded class ', ex className, ' encountered during adopt ... IGNORED' ].
+			ex resume: nil ].
+
+	projectSetDefinition projects 
+		do: [:projectDefinition |
+			"make sure that the loaded SHA is set for each project"
+			projectDefinition updateLoadedCommitId ].
+
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		"mark projects and packages not dirty"
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+
+	reAudit := true.	"kick off the first audit"
+	[ reAudit ] whileTrue: [
+		auditFailures := {}.
+		reAudit := false.
+		projectSetDefinition projects
+			do: [:projectDefinition |
+				| audit projectName |
+				projectName := projectDefinition name.
+				[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+					on: RwAuditMethodErrorNotification
+					do: [:ex |
+						| beh |
+						GsFile gciLogServer: 'extra unpackaged method ', ex methodPrintString, ' encountered during audit ... REMOVED (audit will be rerun)'.
+						"method is not present in the current package structure, so it should be removed"
+						beh := Rowan globalNamed: ex className.
+						ex isMetaclass ifTrue: [ beh := beh class ].
+						beh removeSelector: ex selector.
+						"don't record as an audit error, but make sure that we rerun the audit"
+						reAudit := true.
+						ex resume: false ].
+				GsFile gciLogServer: '	-- audit finished '. 
+				audit isEmpty 
+					ifFalse: [
+						reAudit := false. "we must have had an audit failure that was not handled" 
+GsFile gciLogServer: 'FAILED AUDIT: ', projectName.
+						auditFailures add: projectName ] ].
+		reAudit ifTrue: [ GsFile gciLogServer: 'RERUN AUDIT' ] ].
+	auditFailures isEmpty 
+		ifFalse: [ 
+			self error: 'Post load Rowan audit failed for projects ', auditFailures printString ] .
+  true	
+%
+  commit
+
+# Install Rowan class in Published symbol dict, so it is availailable to all users
+# 
+   run
+  | rowanAssoc |
+  rowanAssoc := RowanKernel associationAt: #Rowan.
+  Published add: rowanAssoc. true
+%
+  commit
+
+  logout
+
+	errorCount
+
