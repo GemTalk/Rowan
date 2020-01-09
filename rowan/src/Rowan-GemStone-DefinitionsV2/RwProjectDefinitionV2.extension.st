@@ -79,7 +79,7 @@ RwProjectDefinitionV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forU
 						at: packageName
 						ifAbsent: absentBlock.
 					^ packagePropertiesMap at: 'symbolDictName' ifAbsent: absentBlock ] ].
-	self error: 'No package ' , packageName , ' found in the current project.'
+	^ absentBlock value
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }

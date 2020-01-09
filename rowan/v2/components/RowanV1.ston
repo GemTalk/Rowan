@@ -45,8 +45,7 @@ RwProjectLoadComponentV2 {
 					'Rowan-Cypress-Definitions',
 					'Rowan-Url-Cypress',
 					'Rowan-GemStone-DefinitionsV1',
-					'Rowan-GemStone-SpecificationsV1',
-					'Rowan-GemStone-SpecificationsV2'
+					'Rowan-GemStone-SpecificationsV1'
 				]
 			},
 			'tests' : {
@@ -76,7 +75,6 @@ RwProjectLoadComponentV2 {
 					'Rowan-Tools-CoreV1' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-SpecificationsV1' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-GemStone-SpecificationsV2' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' }
 				}
 			}
