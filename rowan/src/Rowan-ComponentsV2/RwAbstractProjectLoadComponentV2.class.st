@@ -65,13 +65,20 @@ RwAbstractProjectLoadComponentV2 class >> new [
 ]
 
 { #category : 'instance creation' }
-RwAbstractProjectLoadComponentV2 class >> newNamed: aName for: projectName [
+RwAbstractProjectLoadComponentV2 class >> newNamed: aName [
 
 	^ self new
 		name: aName;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwAbstractProjectLoadComponentV2 class >> newNamed: aName for: projectName [
+	"this method should not exist"
+
+	^ (self newNamed: aName)
 		projectName: projectName;
 		yourself
-
 ]
 
 { #category : 'private' }
