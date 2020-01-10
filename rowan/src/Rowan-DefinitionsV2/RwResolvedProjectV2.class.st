@@ -130,6 +130,15 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		addProjectNamed:projectName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addRawPackageNamed: packageName [
 
 	^ self _projectDefinition addRawPackageNamed: packageName
@@ -194,8 +203,6 @@ RwResolvedProjectV2 >> export [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportComponents [
-	self components isEmpty
-		ifTrue: [ self addComponentNamed: self defaultComponentName comment: '' ].
 	self components values
 		do: [ :component | component exportToUrl: 'file:' , self componentsRoot pathString , '/' ].
 	self components isEmpty

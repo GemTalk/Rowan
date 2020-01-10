@@ -15,6 +15,11 @@ RwResolvedLoadComponentsV2 class >> new [
 ]
 
 { #category : 'private' }
+RwResolvedLoadComponentsV2 >> _gemstoneAllUsersName [
+	^ RwLoadSpecificationV2 _gemstoneAllUsersName
+]
+
+{ #category : 'private' }
 RwResolvedLoadComponentsV2 >> _validate [
 	"ensure that each of the components is valid and return a list of the package names managed by all components"
 
@@ -46,20 +51,13 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes groupNa
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName comment: commentString [
-	| component |
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName ].
-	^ component
-		addDefinedGroupName: self defaultGroupName includeGroups: #();
-		comment: commentString;
-		yourself
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
 	component := self components
 		at: aComponentName
 		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName ].
@@ -72,12 +70,9 @@ RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName definedGroupName
 { #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
 	| component |
-	self
+	component :=  self
 		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	component := self components
-		at: toComponentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName ].
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
 	component
 		conditionalPropertiesAtConditions: conditionArray
 		andGroup: groupName
@@ -85,20 +80,13 @@ RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed:
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addNestedComponentNamed: aComponentName comment: commentString [
-	| component |
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName ].
-	^ component
-		addDefinedGroupName: self defaultGroupName includeGroups: #();
-		comment: commentString;
-		yourself
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
 	component := self components
 		at: aComponentName
 		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName ].
@@ -149,6 +137,18 @@ RwResolvedLoadComponentsV2 >> addPackagesNamed: packageNames toComponentNamed: c
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		addProjectNames: {projectName}
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> componentNamed: aComponentName [
 	^ self
 		componentNamed: aComponentName
@@ -176,8 +176,6 @@ RwResolvedLoadComponentsV2 >> components: object [
 { #category : 'exporting' }
 RwResolvedLoadComponentsV2 >> export: componentsRoot [
 
-	self components isEmpty ifTrue: [
-		self addComponentNamed: self defaultComponentName comment: '' ].
 	self components values do: [:component|
 		component exportToUrl: 'file:',  componentsRoot pathString, '/' ].
 	self components isEmpty

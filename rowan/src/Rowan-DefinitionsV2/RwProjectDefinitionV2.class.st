@@ -118,19 +118,6 @@ RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addComponentNamed: aComponentName comment: commentString [
-
-	| component |
-	component := self 
-		components at: aComponentName 
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
-	^ component 
-		addDefinedGroupName: self defaultGroupName includeGroups: #();
-		comment: commentString;
-		yourself
-]
-
-{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	| component |
 	component := self components
@@ -155,19 +142,6 @@ RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toCo
 		conditionalPropertiesAtConditions: conditionArray
 		andGroup: groupName
 		addComponentNames: {componentName}.
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName comment: commentString [
-
-	| component |
-	component := self 
-		components at: aComponentName 
-		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
-	^ component 
-		addDefinedGroupName: self defaultGroupName includeGroups: #();
-		comment: commentString;
-		yourself
 ]
 
 { #category : 'accessing' }
@@ -273,6 +247,21 @@ RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: compon
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	| component |
+	self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component := self components
+		at: toComponentName
+		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: toComponentName for: self name ].
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		addProjectNames: {projectName}
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
@@ -306,8 +295,6 @@ RwProjectDefinitionV2 >> export [
 { #category : 'exporting' }
 RwProjectDefinitionV2 >> exportComponents [
 
-	self components isEmpty ifTrue: [
-		self addComponentNamed: self defaultComponentName comment: '' ].
 	self components values do: [:component|
 		component exportToUrl: 'file:',  self componentsRoot pathString, '/' ].
 	self components isEmpty
