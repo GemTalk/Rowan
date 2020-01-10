@@ -14,6 +14,18 @@ RwResolvedLoadComponentsV2 class >> new [
 
 ]
 
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> _addComponent: aComponent [
+	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
+
+	"see similar comment in addRawPackageNamed: and addPackages:forComponent: "
+
+	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
+		component --- presumably freshly read from disk --- wins"
+
+	^ self components at: aComponent name put: aComponent
+]
+
 { #category : 'private' }
 RwResolvedLoadComponentsV2 >> _gemstoneAllUsersName [
 	^ RwLoadSpecificationV2 _gemstoneAllUsersName
@@ -173,6 +185,14 @@ RwResolvedLoadComponentsV2 >> components: object [
 	components := object
 ]
 
+{ #category : 'enumerating' }
+RwResolvedLoadComponentsV2 >> do: aBlock [
+	"For each component in the receiver, evaluates the one-argument block
+ aBlock with the value as the argument.  Returns the receiver."
+
+	self components do: aBlock
+]
+
 { #category : 'exporting' }
 RwResolvedLoadComponentsV2 >> export: componentsRoot [
 
@@ -228,6 +248,11 @@ RwResolvedLoadComponentsV2 >> gemstoneSymbolDictNameForPackageNamed: packageName
 { #category : 'initialization' }
 RwResolvedLoadComponentsV2 >> initialize [
 	components := Dictionary new
+]
+
+{ #category : 'testing' }
+RwResolvedLoadComponentsV2 >> isEmpty [
+	^ self components isEmpty
 ]
 
 { #category : 'copying' }

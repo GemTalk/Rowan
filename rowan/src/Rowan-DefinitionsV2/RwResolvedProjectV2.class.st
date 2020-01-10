@@ -19,7 +19,7 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 						add: 'name' -> loadSpecification projectAlias;
 						yourself);
 		packages: Dictionary new;
-		components: Dictionary new;
+		components: RwResolvedLoadComponentsV2 new;
 		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
 		yourself.
 	^ self basicNew
@@ -140,6 +140,9 @@ RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentNa
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addRawPackageNamed: packageName [
+	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
+
+	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _projectDefinition addRawPackageNamed: packageName
 ]
@@ -203,7 +206,7 @@ RwResolvedProjectV2 >> export [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportComponents [
-	self components values
+	self components
 		do: [ :component | component exportToUrl: 'file:' , self componentsRoot pathString , '/' ].
 	self components isEmpty
 		ifTrue: [ 

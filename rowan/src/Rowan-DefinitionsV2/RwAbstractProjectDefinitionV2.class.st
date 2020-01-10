@@ -58,10 +58,7 @@ RwAbstractProjectDefinitionV2 >> componentNamed: aComponentName [
 
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
-
-	^ self components 
-		at: aComponentName 
-		ifAbsent: absentBlock
+	^ self components componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
@@ -78,7 +75,7 @@ RwAbstractProjectDefinitionV2 >> components: aComponentDefinitionDictionary [
 RwAbstractProjectDefinitionV2 >> initialize [
 	super initialize.
 	packages := Dictionary new.
-	components := Dictionary new
+	components := RwResolvedLoadComponentsV2 new
 ]
 
 { #category : 'testing' }
@@ -131,9 +128,7 @@ RwAbstractProjectDefinitionV2 >> postCopy [
 
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removeComponentNamed: aComponentName [
-	self components
-		do: [ :component | component removeComponentNamed: aComponentName ].
-	^ self components removeKey: aComponentName ifAbsent: [  ].
+	^ self components removeComponentNamed: aComponentName
 ]
 
 { #category : 'accessing' }
@@ -153,7 +148,7 @@ RwAbstractProjectDefinitionV2 >> removePackageNamed: packageName [
 
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removeProjectNamed: aProjectName [
-	self components do: [ :component | component removeProjectNamed: aProjectName ]
+	^ self components removeProjectNamed: aProjectName
 ]
 
 { #category : 'properties' }

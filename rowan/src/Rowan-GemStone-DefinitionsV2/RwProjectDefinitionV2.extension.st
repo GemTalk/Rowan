@@ -45,41 +45,17 @@ RwProjectDefinitionV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 	"answer true if the package was found in one of the receivers components"
 
-	| foundOne |
-	foundOne := false.
 	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					foundOne := true.
-					component
-						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
-						andPackageName: packageName
-						setSymbolDictNameTo: symbolDictName ] ].
-	foundOne ifFalse: [ self error: 'No package named ' , packageName printString , ' found.']
+		gemstoneSetSymbolDictName: symbolDictName
+		forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwProjectDefinitionV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock [
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					| userIdPropertiesMap packagePropertiesMap |
-					userIdPropertiesMap := (component
-						conditionalPackageMapSpecsAtGemStoneUserId: userId)
-						at: #'packageNameToPlatformPropertiesMap'
-						ifAbsent: [ 
-							"no entries for the specific userId, check if there's an entry for allusers"
-							(component
-								conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
-								at: #'packageNameToPlatformPropertiesMap'
-								ifAbsent: absentBlock ].
-					packagePropertiesMap := userIdPropertiesMap
-						at: packageName
-						ifAbsent: absentBlock.
-					^ packagePropertiesMap at: 'symbolDictName' ifAbsent: absentBlock ] ].
-	^ absentBlock value
+	^ self components
+		gemstoneSymbolDictNameForPackageNamed: packageName
+		forUser: userId
+		ifAbsent: absentBlock
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }

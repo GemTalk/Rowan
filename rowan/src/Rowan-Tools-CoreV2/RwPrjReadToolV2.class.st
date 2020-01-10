@@ -55,7 +55,7 @@ RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withCompone
 { #category : 'read resolved projects' }
 RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad [
 	| theComponentNames theGroupNames |
-	resolvedProject _projectDefinition components: Dictionary new.	"build new list of components based on (potentially) new list of configNames"
+	resolvedProject _projectDefinition components: RwResolvedLoadComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theComponentNames := componentNames isEmpty
 		ifTrue: [ resolvedProject componentNames ]
@@ -108,7 +108,7 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 				projectDefinitionSourceProperty:
 					RwLoadedProject _projectDiskDefinitionSourceValue.
 			visitor visitedComponents
-				keysAndValuesDo: [ :cName :cmp | rp components at: cName put: cmp ].
+				keysAndValuesDo: [ :cName :cmp | rp components _addComponent: cmp ].
 			projectVisitedQueue
 				addLast:
 					{visitor.
