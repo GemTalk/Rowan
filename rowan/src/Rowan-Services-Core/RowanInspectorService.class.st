@@ -256,11 +256,11 @@ RowanInspectorService >> reinspect: theObject [
 ]
 
 { #category : 'client commands' }
-RowanInspectorService >> removeIndexedInstVarAt: index [
-  | theObject removalObject |
+RowanInspectorService >> removeIndexedInstVarsAt: indices [
+  | theObject removalObjects |
   theObject := Object _objectForOop: oop.
-  removalObject := theObject at: index.
-  theObject remove: removalObject.
+  removalObjects := indices collect: [ :index | theObject at: index ].
+  removalObjects do: [ :removalObject | theObject remove: removalObject ].
   self reinspect: theObject
 ]
 
