@@ -28,9 +28,9 @@
   login
 
 run
-	| platformConditionalAttributes platformConditionalAttributesDiskConfigs projectSetModification visitor 
-		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool 
-		auditFailures gsFileName |
+	"install_4_V2.tpz"
+	| platformConditionalAttributes ar resolvedProject loadSpecUrl loadSpec projectsHome conditionalAttributes 
+			loadedProjects warnings |
 
 	platformConditionalAttributes := {
 		'common'.
@@ -38,31 +38,45 @@ run
 		'gemstone-kernel'.
 		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
 	}.
-	platformConditionalAttributesDiskConfigs := {
-		'common'.
-		'gemstoneBase'.	"custom attribute - for packages that should ONLY be loaded standalone"
-		'gemstone-kernel'.
-		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
-	}.
-	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2' asFileReference.
-	repositoryRoot ensureCreateDirectory.
-	repositoryRoot deleteAllChildren.
-	{
+	ar := {
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes
-	} 
-	do: [:ar |
-		"Read project and packages from disk."
-		| resolvedProject loadSpecUrl loadSpec projectsHome conditionalAttributes projectSetDefinition |
-		loadSpecUrl := ar at: 1.
-		projectsHome := ar at: 2.
-		conditionalAttributes := ar at: 3.
-		loadSpec := RwSpecification fromUrl: loadSpecUrl.
-		gsFileName := loadSpec specName.
-		resolvedProject := loadSpec
-			projectsHome: projectsHome;
-			resolve.
-		projectSetDefinition :=  resolvedProject read: conditionalAttributes.
- ].
+		}.
+	"Load project and packages from disk."
+	loadSpecUrl := ar at: 1.
+	projectsHome := ar at: 2.
+	conditionalAttributes := ar at: 3.
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	resolvedProject := loadSpec
+		projectsHome: projectsHome;
+		resolve.
+	warnings := {}.
+	[ loadedProjects := resolvedProject load: conditionalAttributes ]
+			on: CompileWarning do: [:ex |
+				(ex description includesString: 'not optimized')
+					ifFalse: [ warnings add: ex asString printString ].
+				ex resume ].
+
+	System commit.
+
+ 	warnings isEmpty ifFalse: [
+		GsFile gciLogServer: 'COMPILE WARNINGS: '.
+		warnings do: [:warning | GsFile gciLogServer: '	', warning ]. 
+		self error: 'Warnings during project reload' ]. 
+
+	"audit after load"
+	loadedProjects do: [:loadedProject |
+		| audit |
+		audit := loadedProject audit.
+		audit isEmpty 
+			ifFalse: [ self error: 'Post load Rowan audit failed for project ',loadedProject name printString ] ].
+	true
 %
+
+	commit
+
+	logout
+
+	errorCount
+

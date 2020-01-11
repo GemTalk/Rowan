@@ -289,6 +289,16 @@ RwResolvedProjectV2 >> load [
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> load: platformConfigurationAttributes [
+	"load the receiver into the image"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectDefinition: self projectDefinition
+		platformConfigurationAttributes: platformConfigurationAttributes
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> loadedCommitId [
 	^ self _projectSpecification loadedCommitId
