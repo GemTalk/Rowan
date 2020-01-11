@@ -263,13 +263,27 @@ RowanAnsweringService >> expressionSelector: string [
   messageNode := [ RBParser parseExpression: string ]
     on: Error
     do: [ :ex | nil ].
+  messageNode
+    ifNil: [ 
+      messageNode := [ RBParser parseExpression: string , ' #foo' ]
+        on: Error
+        do: [ :ex | nil ] ].
+  messageNode
+    ifNil: [ 
+      messageNode := [ RBParser parseExpression: '#foo ' , string ]
+        on: Error
+        do: [ :ex | nil ] ].
   answer := messageNode
     ifNil: [ string ]
     ifNotNil: [ 
       messageNode isMessage
         ifTrue: [ messageNode buildSelector ]
-        ifFalse: [ string ] ].
-  RowanCommandResult addResult: self
+        ifFalse: [ 
+          messageNode isCascade
+            ifTrue: [ messageNode messages first buildSelector]
+            ifFalse: [ string ] ] ].
+  RowanCommandResult addResult: self.
+  ^ answer	"return answer for testing"
 ]
 
 { #category : 'client commands' }

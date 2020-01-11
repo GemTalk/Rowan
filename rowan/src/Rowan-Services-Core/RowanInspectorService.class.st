@@ -256,6 +256,15 @@ RowanInspectorService >> reinspect: theObject [
 ]
 
 { #category : 'client commands' }
+RowanInspectorService >> removeDynamicInstVars: dynamicInstVarNames [
+  | theObject |
+  theObject := Object _objectForOop: oop.
+  dynamicInstVarNames
+    do: [ :dynamicInstVar | theObject removeDynamicInstVar: dynamicInstVar ].
+  self reinspect: theObject
+]
+
+{ #category : 'client commands' }
 RowanInspectorService >> removeIndexedInstVarsAt: indices [
   | theObject removalObjects |
   theObject := Object _objectForOop: oop.
@@ -265,12 +274,14 @@ RowanInspectorService >> removeIndexedInstVarsAt: indices [
 ]
 
 { #category : 'client commands' }
-RowanInspectorService >> removeKey: keyOop [
+RowanInspectorService >> removeKeys: keyOops [
   | theObject removalKey |
   theObject := Object _objectForOop: oop.
-  removalKey := Object _objectForOop: keyOop.
-  theObject removeKey: removalKey.
-  visibleIndices := visibleIndices - 1 max: 0.
+  keyOops
+    do: [ :keyOop | 
+      removalKey := Object _objectForOop: keyOop.
+      theObject removeKey: removalKey.
+      visibleIndices := visibleIndices - 1 max: 0 ].
   self reinspect: theObject
 ]
 
