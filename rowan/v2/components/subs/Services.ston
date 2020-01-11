@@ -1,5 +1,5 @@
 RwNestedProjectLoadComponentV2 {
-	#name : 'Services',
+	#name : 'subs/Services',
 	#comment : 'Jadeite Services implementation',
 	#conditionalPackages : {
 		[

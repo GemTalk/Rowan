@@ -1,5 +1,5 @@
 RwNestedProjectLoadComponentV2 {
-	#name : 'CommonComponent',
+	#name : 'subs/CommonComponent',
 	#comment : 'V2 prototype. Common code shared by ComponentV1 and ComponentV2',
 	#conditionalPackages : {
 		[
@@ -7,8 +7,8 @@ RwNestedProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#componentNames : [
-					'CommonCore',
-					'Services'
+					'subs/CommonCore',
+					'subs/Services'
 				],
 				#packageNames : [
 					'Rowan-Tools-Extensions-Components',

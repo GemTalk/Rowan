@@ -14,7 +14,7 @@ RwProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#componentNames : [
-					'DiskConfigurationsCommon'
+					'subs/DiskConfigurationsCommon'
 				],
 				#packageNames : [
 					'Rowan-SpecificationsV2',

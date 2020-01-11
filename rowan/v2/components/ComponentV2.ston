@@ -7,7 +7,7 @@ RwProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#componentNames : [
-					'CommonComponentV2',
+					'subs/CommonComponentV2',
 					'RowanV2',
 					'RowanV1'
 				],

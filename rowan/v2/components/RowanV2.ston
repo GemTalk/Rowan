@@ -7,8 +7,8 @@ RwProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#componentNames : [
-					'CommonCore',
-					'Services',
+					'subs/CommonCore',
+					'subs/Services',
 					'DiskConfigurationsV2'
 				],
 				#packageNames : [

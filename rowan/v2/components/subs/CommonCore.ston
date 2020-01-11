@@ -1,5 +1,5 @@
 RwNestedProjectLoadComponentV2 {
-	#name : 'CommonCore',
+	#name : 'subs/CommonCore',
 	#comment : 'Common code shared by RowanV1, RowanV2, ComponentV1 and ComponentV2',
 	#conditionalPackages : {
 		[
@@ -7,7 +7,7 @@ RwNestedProjectLoadComponentV2 {
 		] : {
 			'core' : {
 				#componentNames : [
-					'DiskConfigurationsCommon'
+					'subs/DiskConfigurationsCommon'
 				],
 				#packageNames : [
 					'Rowan-Cypress-Core',
