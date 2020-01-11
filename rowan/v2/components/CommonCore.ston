@@ -57,7 +57,6 @@ RwNestedProjectLoadComponentV2 {
       'core': {
 				#packageNames : [
           'GemStone-Interactions-Core',
-					'Rowan-Url-3215',
 					'GemStone-Interactions-Kernel',
 					'Rowan-GemStone-3215'
 				]
