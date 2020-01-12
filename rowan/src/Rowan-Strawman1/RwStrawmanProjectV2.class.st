@@ -30,9 +30,11 @@ RwStrawmanProjectV2 >> addPackagesNamed: packageNames toComponentNamed: aCompone
 ]
 
 { #category : 'accessing' }
-RwStrawmanProjectV2 >> addSimpleComponentNamed: aComponentName comment: commentString [
+RwStrawmanProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
 	^ self _loadComponents
 		addSimpleComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
 		comment: commentString
 ]
 

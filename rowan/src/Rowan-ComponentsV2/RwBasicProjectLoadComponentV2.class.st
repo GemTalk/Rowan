@@ -123,10 +123,20 @@ RwBasicProjectLoadComponentV2 >> _validatedPackageNames [
 ]
 
 { #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> addComponentNamed: aComponentName [
+	self subclassResponsibility: #'addComponentNamed:'
+]
+
+{ #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> addPackageNames: aPackageNames [
 	"add packages to default conditional/group if applicable"
 
 	self subclassResponsibility: #'addPackageNames:'
+]
+
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> addProjectNamed: aProjectName [
+	self subclassResponsibility: #'addProjectNamed:'
 ]
 
 { #category : 'accessing' }
@@ -195,6 +205,11 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packag
 	propertiesDict at: 'vaPrerequisites' put: prereqs asSet asArray
 ]
 
+{ #category : 'ston' }
+RwBasicProjectLoadComponentV2 >> excludedInstVars [
+	^ #()
+]
+
 { #category : 'initialization' }
 RwBasicProjectLoadComponentV2 >> initialize [
 	comment := ''
@@ -227,6 +242,12 @@ RwBasicProjectLoadComponentV2 >> initializeForExport [
 			conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
 ]
 
+{ #category : 'ston' }
+RwBasicProjectLoadComponentV2 >> instVarNamesInOrderForSton [
+
+	^ self class allInstVarNames
+]
+
 { #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> name [
 
@@ -239,6 +260,24 @@ RwBasicProjectLoadComponentV2 >> name: anObject [
 
    name := anObject
 
+]
+
+{ #category : 'ston' }
+RwBasicProjectLoadComponentV2 >> stonOn: stonWriter [
+	| instanceVariableNames allInstanceVariableNames |
+	instanceVariableNames := self instVarNamesInOrderForSton
+		reject: [ :iv | self excludedInstVars includes: iv ].
+	allInstanceVariableNames := self class allInstVarNames.
+	stonWriter
+		writeObject: self
+		streamMap: [ :dictionary | 
+			instanceVariableNames
+				do: [ :each | 
+					(self instVarAt: (allInstanceVariableNames indexOf: each asSymbol))
+						ifNotNil: [ :value | dictionary at: each asSymbol put: value ]
+						ifNil: [ 
+							self stonShouldWriteNilInstVars
+								ifTrue: [ dictionary at: each asSymbol put: nil ] ] ] ]
 ]
 
 { #category : 'validation' }

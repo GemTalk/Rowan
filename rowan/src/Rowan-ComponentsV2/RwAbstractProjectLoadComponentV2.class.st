@@ -334,7 +334,8 @@ RwAbstractProjectLoadComponentV2 >> defineGroupNamed: groupName toIncludeGroups:
 
 { #category : 'ston' }
 RwAbstractProjectLoadComponentV2 >> excludedInstVars [
-	^ #(#'conditionalPropertyMatchers' #'conditionalPackageMapSpecMatchers')
+	^ super excludedInstVars
+		, #(#'conditionalPropertyMatchers' #'conditionalPackageMapSpecMatchers')
 ]
 
 { #category : 'exporting' }
@@ -512,18 +513,4 @@ RwAbstractProjectLoadComponentV2 >> removeProjectNamed: aProjectName [
 		keysAndValuesDo: [ :conditionsArray :conditionMap | 
 			conditionMap
 				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'projectNames' ifAbsent: [#()]) remove: aProjectName ifAbsent: [  ] ] ].
-]
-
-{ #category : 'ston' }
-RwAbstractProjectLoadComponentV2 >> stonOn: stonWriter [   
-	| instanceVariableNames |
-	instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
-	stonWriter writeObject: self
-		streamMap: 
-			[:dictionary |
-			instanceVariableNames do: 
-					[:each |
-					(self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
-						ifNotNil: [:value | dictionary at: each asSymbol put: value]
-						ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
 ]

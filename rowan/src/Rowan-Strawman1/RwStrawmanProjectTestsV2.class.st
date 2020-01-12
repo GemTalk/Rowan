@@ -29,9 +29,12 @@ RwStrawmanProjectTestsV2 >> testBasic [
 
 	project
 		addSimpleComponentNamed: 'Core'
+			condition: 'vast'
+			groupName: 'core'
 			comment: 'Primary component used for loading the system.';
-		addPackagesNamed: {(projectName , '-Core')} toComponentNamed: 'Core';
-		addPackagesNamed: {(projectName , '-Vast-Application')}
+		addPackagesNamed:
+				{(projectName , '-Core').
+					(projectName , '-Vast-Application')}
 			toComponentNamed: 'Core';
 		vastSetVaPrequisitesTo: #('SUnit' 'TonelWriterModel')
 			forPackageNamed: projectName , '-Core';
@@ -42,7 +45,8 @@ RwStrawmanProjectTestsV2 >> testBasic [
 	stonString := STON toStringPretty: project.	"useful to view full structure"
 	self assert: project _validate.
 
-true ifTrue: [ ^self ]. "skip rest of test until the rest of the test regressions are addressed"
+	true
+		ifTrue: [ ^ self ].	"skip rest of test until the rest of the test regressions are addressed"
 	project resolve.
 	stonString := STON toStringPretty: project.	"useful to view full structure"
 

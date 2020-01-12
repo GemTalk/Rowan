@@ -80,6 +80,15 @@ RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName definedGroupName
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component addComponentNamed: componentName
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
 	| component |
 	component :=  self
@@ -166,6 +175,15 @@ RwResolvedLoadComponentsV2 >> addPackagesNamed: packageNames toComponentNamed: c
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toComponentName [
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component addProjectNamed: projectName
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
 	| component |
 	component := self
@@ -178,7 +196,7 @@ RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toC
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName comment: commentString [
+RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
 	| component |
 	self components
 		at: aComponentName
@@ -188,7 +206,11 @@ RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName comment: c
 	component := self components
 		at: aComponentName
 		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
-	component comment: commentString.
+	component
+		condition: condition;
+		groupName: groupName;
+		comment: commentString;
+		yourself.
 	^ component
 ]
 
