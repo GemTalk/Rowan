@@ -109,6 +109,17 @@ RwResolvedLoadComponentsV2 >> addNestedComponentNamed: aComponentName definedGro
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: componentName [ 
+	| component |
+	component := self
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	component
+		addPackageNames: {packageName}.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 	| component |
 	component := self
@@ -138,6 +149,12 @@ RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: com
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addPackagesNamed: packageNames toComponentNamed: aComponentName [
+	packageNames
+		do: [ :packageName | self addPackageNamed: packageName toComponentNamed: aComponentName ]
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 	^ packageNames
 		collect: [ :packageName | 
@@ -158,6 +175,21 @@ RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toC
 		conditionalPropertiesAtConditions: conditionArray
 		andGroup: groupName
 		addProjectNames: {projectName}
+]
+
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName comment: commentString [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
+	component comment: commentString.
+	^ component
 ]
 
 { #category : 'accessing' }
@@ -277,4 +309,34 @@ RwResolvedLoadComponentsV2 >> removePackageNamed: aPackageName [
 { #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> removeProjectNamed: aProjectName [
 	self components do: [ :component | component removeProjectNamed: aProjectName ]
+]
+
+{ #category : 'vast support' }
+RwResolvedLoadComponentsV2 >> vastSetVaPrequisitesTo: prereqArray forPackageNamed: packageName [
+	| foundOne |
+	foundOne := false.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					foundOne := true.
+					component
+						conditionalPackageMapSpecsAtPackageName: packageName
+						setVaPrequisitesTo: prereqArray ] ].
+	foundOne
+		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
+]
+
+{ #category : 'vast support' }
+RwResolvedLoadComponentsV2 >> vastVaPrequisitesForPackageNamed: packageName ifAbsent: absentBlock [
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					| packagePropertiesMap |
+					packagePropertiesMap := component
+						conditionalPackageMapSpecsAt: 'vast'
+						ifAbsent: [  ].
+					^ packagePropertiesMap at: 'vaPrequisites' ifAbsent: absentBlock ] ].
+	^ absentBlock value
 ]

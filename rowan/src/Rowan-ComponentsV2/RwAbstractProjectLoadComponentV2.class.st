@@ -1,85 +1,14 @@
 Class {
 	#name : 'RwAbstractProjectLoadComponentV2',
-	#superclass : 'Object',
+	#superclass : 'RwBasicProjectLoadComponentV2',
 	#instVars : [
-		'name',
-		'comment',
-		'projectName',
 		'definedGroupNames',
 		'conditionalProperties',
 		'conditionalPropertyMatchers',
-		'conditionalPackageMapSpecs',
 		'conditionalPackageMapSpecMatchers'
 	],
 	#category : 'Rowan-ComponentsV2'
 }
-
-{ #category : 'private' }
-RwAbstractProjectLoadComponentV2 class >> _gemstoneSupportedPackagePropertyNames [
-	^ #('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
-]
-
-{ #category : 'private' }
-RwAbstractProjectLoadComponentV2 class >> _readStonFrom: stream [
-	| reader component |
-	(reader := STONReader on: stream) allowComplexMapKeys: true.
-	component := reader next
-		initializeForImport;
-		yourself.
-	component validate.	"validate when reading from disk, since hand editting could create inconsistencies"
-	^ component
-]
-
-{ #category : 'instance creation' }
-RwAbstractProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
-
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
-
-	| url |
-	url := specNameOrUrl asRwUrl.
-	url scheme isNil
-		ifTrue: [ self error: 'scheme must be file: or https:' ].
-	url scheme = 'file'
-		ifTrue: [ ^ self fromFile: url pathForFile ].
-	url scheme asString = 'https'
-		ifTrue: [ 
-self error: 'not yet supported'.
-"
-			| client response |
-			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (Rowan globalNamed: 'ZnClient') new.
-			response := client
-				beOneShot;
-				enforceHttpSuccess: true;
-				get: url.
-			^ self _readStonFrom: response decodeFromUTF8
-" ].
-	self error: 'Unknown scheme: ' , url scheme printString
-]
-
-{ #category : 'instance creation' }
-RwAbstractProjectLoadComponentV2 class >> new [
-
-	^self basicNew initialize
-
-]
-
-{ #category : 'instance creation' }
-RwAbstractProjectLoadComponentV2 class >> newNamed: aName [
-
-	^ self new
-		name: aName;
-		yourself
-]
-
-{ #category : 'instance creation' }
-RwAbstractProjectLoadComponentV2 class >> newNamed: aName for: projectName [
-	"this method should not exist"
-
-	^ (self newNamed: aName)
-		projectName: projectName;
-		yourself
-]
 
 { #category : 'private' }
 RwAbstractProjectLoadComponentV2 >> _conditionalPropertiesAt: key conditions: conditions andGroup: groupName addNames: names [
@@ -186,6 +115,37 @@ RwAbstractProjectLoadComponentV2 >> _platformPatternMatcherFor: pattern [
 ]
 
 { #category : 'validation' }
+RwAbstractProjectLoadComponentV2 >> _validatedPackageNames [
+	"answer the validated set of package names"
+
+	| allDefinedPackageNames knownGroupNames |
+	allDefinedPackageNames := Set new.
+	knownGroupNames := self definedGroupNames keys.
+	self definedGroupNames
+		keysAndValuesDo: [ :groupName :dependentGroups | 
+			dependentGroups
+				do: [ :dependentGroupName | 
+					(knownGroupNames includes: dependentGroupName)
+						ifFalse: [ 
+							Error
+								signal:
+									'The group ' , dependentGroupName printString , ' is not a defined group' ] ] ].
+	self conditionalProperties
+		keysAndValuesDo: [ :conditions :groupMap | 
+			groupMap
+				keysAndValuesDo: [ :groupName :propertiesMap | 
+					(self definedGroupNames keys includes: groupName)
+						ifFalse: [ 
+							Error
+								signal:
+									'Conditional packages includes group name ' , groupName printString
+										, ' that is not a defined group' ].
+					allDefinedPackageNames
+						addAll: (propertiesMap at: #'packageNames' ifAbsent: [ #() ]) ] ].
+	^ allDefinedPackageNames
+]
+
+{ #category : 'validation' }
 RwAbstractProjectLoadComponentV2 >> _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap [
 	"ensure that the data structures within the receiver contain valid information:
 		1. only packages defined in the receiver may be referenced in the reciever
@@ -226,20 +186,6 @@ RwAbstractProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> comment [
-
-   ^comment
-
-]
-
-{ #category : 'initialization' }
-RwAbstractProjectLoadComponentV2 >> comment: anObject [
-
-   comment := anObject
-
-]
-
-{ #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> conditionalComponentsAtConditions: conditions andGroup: groupName [
 	^ self
 		conditionalPropertiesAt: #'componentNames'
@@ -258,46 +204,6 @@ RwAbstractProjectLoadComponentV2 >> conditionalPackageMapSpecMatchers [
 			put: packageMapSpecsMap ].
 	^ conditionalPackageMapSpecMatchers
 
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> conditionalPackageMapSpecs [
-
-	^ conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
-
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId [ 
-
-	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsent: [ ^ Dictionary new ])
-
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName [
-
-	^ (((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsentPut: [ ^ Dictionary new ])
-			at: #packageNameToPlatformPropertiesMap ifAbsent: [ ^ Dictionary new ])
-				at: packageName ifAbsent: [ ^ Dictionary new ]
-
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setSymbolDictNameTo: symbolDictName [
-	| dict |
-	dict := (((self conditionalPackageMapSpecs
-		at: 'gemstone'
-		ifAbsentPut: [ Dictionary new ]) at: userId ifAbsentPut: [ Dictionary new ])
-		at: #'packageNameToPlatformPropertiesMap'
-		ifAbsentPut: [ Dictionary new ])
-		at: packageName
-		ifAbsentPut: [ Dictionary new ].
-	symbolDictName
-		ifNil: [ dict removeKey: 'symbolDictName' ifAbsent: [  ] ]
-		ifNotNil: [ dict at: 'symbolDictName' put: symbolDictName asString ]
 ]
 
 { #category : 'accessing' }
@@ -487,18 +393,13 @@ RwAbstractProjectLoadComponentV2 >> fromSton: stonReader [
 ]
 
 { #category : 'initialization' }
-RwAbstractProjectLoadComponentV2 >> initialize [
-	comment := ''
-]
-
-{ #category : 'initialization' }
 RwAbstractProjectLoadComponentV2 >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
 	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
 
-	projectName := nil.
+	super initializeForExport.
 	conditionalPropertyMatchers := conditionalPackageMapSpecMatchers := nil.
 	self conditionalProperties
 		ifNotNil: [ :cp | 
@@ -512,37 +413,7 @@ RwAbstractProjectLoadComponentV2 >> initializeForExport [
 					dict keys asArray sort
 						do: [ :group | orderedPropertyNames at: group put: (dict at: group) ].
 					orderedConditionalProperties at: ar put: orderedPropertyNames ].
-			conditionalProperties := orderedConditionalProperties ].
-	conditionalPackageMapSpecs
-		ifNotNil: [ 
-			| orderedConditionalPackageMapSpecs |
-			orderedConditionalPackageMapSpecs := self class orderedDictionaryClass new.
-			(conditionalPackageMapSpecs keys asSortedCollection: [ :a :b | a <= b ])
-				do: [ :platformName | 
-					| orderedUserMap userMap |
-					orderedUserMap := self class orderedDictionaryClass new.
-					userMap := conditionalPackageMapSpecs at: platformName.
-					(userMap keys asSortedCollection: [ :a :b | a <= b ])
-						do: [ :userName | 
-							| attributeMap orderedAttributeMap |
-							attributeMap := userMap at: userName.
-							orderedAttributeMap := self class orderedDictionaryClass new.
-							(attributeMap keys asSortedCollection: [ :a :b | a <= b ])
-								do: [ :attributeName | 
-									| packageMap orderedPackageMap |
-									packageMap := attributeMap at: attributeName.
-									orderedPackageMap := self class orderedDictionaryClass new.
-									(packageMap keys asSortedCollection: [ :a :b | a <= b ])
-										do: [ :packageName | 
-											(packageMap at: packageName) isEmpty
-												ifFalse: [ orderedPackageMap at: packageName put: (packageMap at: packageName) ] ].
-									orderedPackageMap isEmpty
-										ifFalse: [ orderedAttributeMap at: attributeName put: orderedPackageMap ] ].
-							orderedAttributeMap isEmpty
-								ifFalse: [ orderedUserMap at: userName put: orderedAttributeMap ] ].
-					orderedUserMap isEmpty
-						ifFalse: [ orderedConditionalPackageMapSpecs at: platformName put: orderedUserMap ] ].
-			conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
+			conditionalProperties := orderedConditionalProperties ]
 ]
 
 { #category : 'initialization' }
@@ -552,20 +423,6 @@ RwAbstractProjectLoadComponentV2 >> initializeForImport [
 	not be shared"
 
 	projectName := nil
-
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> name [
-
-   ^name
-
-]
-
-{ #category : 'initialization' }
-RwAbstractProjectLoadComponentV2 >> name: anObject [
-
-   name := anObject
 
 ]
 
@@ -669,48 +526,4 @@ RwAbstractProjectLoadComponentV2 >> stonOn: stonWriter [
 					(self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
 						ifNotNil: [:value | dictionary at: each asSymbol put: value]
 						ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
-]
-
-{ #category : 'validation' }
-RwAbstractProjectLoadComponentV2 >> validate [
-	"ensure that the data structures within the receiver contain valid information:
-		1. only packages defined in the receiver may be referenced in the reciever
-		2. platform implementation is responsible for validating platform structures"
-
-	| allDefinedPackageNames knownGroupNames |
-	self name ifNil: [ self error: 'name is nil' ].
-	allDefinedPackageNames := Set new.
-	knownGroupNames := self definedGroupNames keys.
-	self definedGroupNames
-		keysAndValuesDo: [ :groupName :dependentGroups | 
-			dependentGroups
-				do: [ :dependentGroupName | 
-					(knownGroupNames includes: dependentGroupName)
-						ifFalse: [ 
-							Error
-								signal:
-									'The group ' , dependentGroupName printString , ' is not a defined group' ] ] ].
-	self conditionalProperties
-		keysAndValuesDo: [ :conditions :groupMap | 
-			groupMap
-				keysAndValuesDo: [ :groupName :propertiesMap | 
-					(self definedGroupNames keys includes: groupName)
-						ifFalse: [ 
-							Error
-								signal:
-									'Conditional packages includes group name ' , groupName printString
-										, ' that is not a defined group' ].
-					allDefinedPackageNames
-						addAll: (propertiesMap at: #'packageNames' ifAbsent: [ #() ]) ] ].
-	self conditionalPackageMapSpecs
-		keysAndValuesDo: [ :platformName :userIdMap | 
-			(RwSpecification _supportedPlatformNames includes: platformName)
-				ifFalse: [ 
-					Error
-						signal:
-							'Unknown platform name ' , platformName printString
-								, ' in conditional package map specs' ].
-			platformName = 'gemstone'
-				ifTrue: [ self _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap ] ].
-	^ true
 ]

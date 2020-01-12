@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwResolvedProjectV2',
-	#superclass : 'RwAbstractResolvedObjectV2',
+	#superclass : 'RwAbstractResolvedProjectV2',
 	#category : 'Rowan-DefinitionsV2'
 }
 
@@ -266,8 +266,6 @@ RwResolvedProjectV2 >> initialize [
 	"repository must be explicitly created"
 
 	super initialize.
-	projectSpecification := RwProjectSpecificationV2 new.
-	loadSpecification := RwLoadSpecificationV2 new.
 	projectDefinition := RwProjectDefinitionV2 new
 ]
 
@@ -358,17 +356,6 @@ RwResolvedProjectV2 >> packages: aPackageDictionary [
 	^ self _projectDefinition packages: aPackageDictionary
 ]
 
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> platformConditionalAttributes [
-
-	^ self _loadSpecification customConditionalAttributes,  Rowan platformConditionalAttributes
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> projectAlias: aString [
-	self _loadSpecification projectAlias: aString
-]
-
 { #category : 'project definition' }
 RwResolvedProjectV2 >> projectDefinitionSourceProperty [
 	^ self _projectDefinition projectDefinitionSourceProperty
@@ -381,8 +368,7 @@ RwResolvedProjectV2 >> projectDefinitionSourceProperty: sourceKeyOrNil [
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectName: aString [
-	self _loadSpecification projectName: aString.
-	self _projectSpecification projectName: aString.
+	super projectName: aString.
 	self _projectDefinition projectName: aString
 ]
 
@@ -391,11 +377,6 @@ RwResolvedProjectV2 >> projectNames [
 	"not yet implemented"
 
 	^ #()
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> projectsHome: aProjectHomeReferenceOrString [
-	self _loadSpecification projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : 'project definition' }
