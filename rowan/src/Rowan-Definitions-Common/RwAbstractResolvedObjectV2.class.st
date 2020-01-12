@@ -36,36 +36,7 @@ RwAbstractResolvedObjectV2 >> _loadSpecification: object [
 
 { #category : 'private' }
 RwAbstractResolvedObjectV2 >> _projectRepository [
-	^ projectRepository
-		ifNil: [ 
-			projectRepository := self gitUrl
-				ifNotNil: [ :urlString | 
-					RwGitRepositoryDefinitionV2
-						newNamed: self projectAlias
-						projectsHome: self projectsHome
-						repositoryUrl: urlString
-						revision: self _loadSpecification revision ]
-				ifNil: [ 
-					self _loadSpecification svnUrl
-						ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
-						ifNil: [ 
-							self _loadSpecification mercurialUrl
-								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
-								ifNil: [ 
-									self _projectSpecification repoType == #'git'
-										ifTrue: [ 
-											RwGitRepositoryDefinitionV2
-												newNamed: self projectAlias
-												projectsHome: self projectsHome
-												repositoryUrl: ''
-												revision: self _loadSpecification revision ]
-										ifFalse: [ 
-											RwDiskRepositoryDefinitionV2
-												newNamed: self projectAlias
-												projectsHome: self projectsHome
-												repositoryUrl: self diskUrl ] ] ] ].
-
-			projectRepository ]
+	self subclassResponsibility: #'_projectRepository'
 ]
 
 { #category : 'private' }

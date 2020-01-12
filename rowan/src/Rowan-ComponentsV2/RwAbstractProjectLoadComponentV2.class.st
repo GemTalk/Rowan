@@ -350,14 +350,6 @@ RwAbstractProjectLoadComponentV2 >> export [
 	^ self exportToUrl: exportUrl
 ]
 
-{ #category : 'exporting' }
-RwAbstractProjectLoadComponentV2 >> exportToUrl: directoryUrl [
-
-	^ self copy
-		initializeForExport
-		_exportToUrl: directoryUrl
-]
-
 { #category : 'ston' }
 RwAbstractProjectLoadComponentV2 >> fromSton: stonReader [
 	"componentNames and projectNames no longer supported ... componentNames and projectnames should be inserted into conditionalProperties under 'common'"

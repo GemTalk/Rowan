@@ -15,7 +15,8 @@ RwStrawmanProjectTestsV2 >> _testRowanProjectsSandbox [
 { #category : 'tests' }
 RwStrawmanProjectTestsV2 >> testBasic [
 	"Create project ... without errors  the project structure should parallel
-		https://github.com/dalehenrich/tonel-demos"
+		https://github.com/dalehenrich/tonel-demos ...
+		reading and writing packages is beyond the scope of this strawman"
 
 	| projectName projectAlias project stonString |
 	projectName := 'Tonel-Demos'.
@@ -26,6 +27,8 @@ RwStrawmanProjectTestsV2 >> testBasic [
 		projectsHome: self _testRowanProjectsSandbox;
 		comment: 'Project created using the Strawman1 V2 project creation api ';
 		yourself.
+
+	project repositoryRoot  ensureDeleteAll.
 
 	project
 		addSimpleComponentNamed: 'Core'
@@ -45,10 +48,10 @@ RwStrawmanProjectTestsV2 >> testBasic [
 	stonString := STON toStringPretty: project.	"useful to view full structure"
 	self assert: project _validate.
 
-	true
-		ifTrue: [ ^ self ].	"skip rest of test until the rest of the test regressions are addressed"
 	project resolve.
+
 	stonString := STON toStringPretty: project.	"useful to view full structure"
+	project export.
 
 	project yourself
 ]

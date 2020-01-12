@@ -108,9 +108,8 @@ RwBasicProjectLoadComponentV2 >> _canonicalizeVastPackageMapSpecs: propertiesMap
 	orderedPropertyMap := self class orderedDictionaryClass new.
 	(propertiesMap keys asSortedCollection: [ :a :b | a <= b ])
 		do: [ :vaPropertyName | 
-			| properties |
-			properties at: vaPropertyName.
-			properties isEmpty
+			propertiesMap at: vaPropertyName.
+			propertiesMap isEmpty
 				ifFalse: [ orderedPropertyMap at: vaPropertyName put: (propertiesMap at: vaPropertyName) ] ].
 	^ orderedPropertyMap
 ]
@@ -208,6 +207,14 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packag
 { #category : 'ston' }
 RwBasicProjectLoadComponentV2 >> excludedInstVars [
 	^ #()
+]
+
+{ #category : 'exporting' }
+RwBasicProjectLoadComponentV2 >> exportToUrl: directoryUrl [
+
+	^ self copy
+		initializeForExport
+		_exportToUrl: directoryUrl
 ]
 
 { #category : 'initialization' }

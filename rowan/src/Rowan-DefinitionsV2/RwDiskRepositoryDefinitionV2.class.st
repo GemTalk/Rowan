@@ -1,11 +1,6 @@
 Class {
 	#name : 'RwDiskRepositoryDefinitionV2',
-	#superclass : 'RwDefinition',
-	#instVars : [
-		'projectsHome',
-		'repositoryRoot',
-		'repositoryUrl'
-	],
+	#superclass : 'RwAbstractRepositoryDefinitionV2',
 	#category : 'Rowan-DefinitionsV2'
 }
 
@@ -21,14 +16,6 @@ RwDiskRepositoryDefinitionV2 class >> newNamed: repositoryName projectsHome: aFi
 { #category : 'private' }
 RwDiskRepositoryDefinitionV2 >> _fileSystem [
 	^ FileSystem disk
-]
-
-{ #category : 'comparing' }
-RwDiskRepositoryDefinitionV2 >> = anObject [
-	^ self projectsHome = anObject projectsHome
-		and: [ 
-			self repositoryRoot = anObject repositoryRoot
-				and: [ self repositoryUrl = anObject repositoryUrl ] ]
 ]
 
 { #category : 'testing' }
@@ -75,43 +62,6 @@ RwDiskRepositoryDefinitionV2 >> doCommit: message [
 	"noop by default"
 ]
 
-{ #category : 'comparing' }
-RwDiskRepositoryDefinitionV2 >> hash [
-	| hashValue |
-	hashValue := self projectsHome hash.
-	hashValue := hashValue bitXor: self repositoryRoot hash.
-	hashValue := hashValue bitXor: self repositoryUrl hash.
-	^ hashValue
-]
-
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> key [
-
-	^properties at: 'name' ifAbsent: [nil]
-]
-
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> name [
-
-	^ self key
-]
-
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> name: aString [ 
-
-	properties at: 'name' put: aString
-]
-
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> projectsHome [
-	^ projectsHome
-]
-
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> projectsHome: aFileReference [
-	projectsHome := aFileReference
-]
-
 { #category : 'testing' }
 RwDiskRepositoryDefinitionV2 >> repositoryExists [
 
@@ -138,16 +88,6 @@ RwDiskRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
 	repositoryRoot := pathStringOrReference asFileReference
 ]
 
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> repositoryUrl [
-	^ repositoryUrl
-]
-
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> repositoryUrl: anUrlString [
-	repositoryUrl := anUrlString
-]
-
 { #category : 'actions' }
 RwDiskRepositoryDefinitionV2 >> resolve [
 	"attach to existing repository structure or create"
@@ -159,10 +99,4 @@ RwDiskRepositoryDefinitionV2 >> resolve [
 		ifFalse: [ 
 			self repositoryRoot ensureCreateDirectory.
 			false ]
-]
-
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> revision [
-
-	^ ''
 ]
