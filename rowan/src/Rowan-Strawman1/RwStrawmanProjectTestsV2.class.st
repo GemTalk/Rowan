@@ -18,7 +18,7 @@ RwStrawmanProjectTestsV2 >> testBasic [
 		https://github.com/dalehenrich/tonel-demos ...
 		reading and writing packages is beyond the scope of this strawman"
 
-	| projectName projectAlias project stonString |
+	| projectName projectAlias project stonString loadSpec resolvedProject |
 	projectName := 'Tonel-Demos'.
 	projectAlias := projectName , '_Test'.
 	project := RwStrawmanProjectV2 new
@@ -30,6 +30,7 @@ RwStrawmanProjectTestsV2 >> testBasic [
 
 	project repositoryRoot ensureDeleteAll.
 
+"create project from scratch"
 	project
 		addSimpleComponentNamed: 'Core'
 			condition: 'vast'
@@ -50,10 +51,31 @@ RwStrawmanProjectTestsV2 >> testBasic [
 
 	project resolve.
 
+"export project arififacts to disk"
 	stonString := STON toStringPretty: project.	"useful to view full structure"
 	project
 		export;
 		exportLoadSpecification.
 
-	project yourself
+"read load spec from disk"
+	loadSpec := (RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(project repositoryRoot / 'rowan' / 'specs' / projectAlias , 'ston') pathString)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+
+"read project from disk"
+	resolvedProject := loadSpec resolveStrawman.
+
+	stonString := STON
+		toStringPretty:
+			{resolvedProject.
+			project}.	"useful to view full structure"
+
+"repository and components should match"
+	self assert: resolvedProject _projectRepository = project _projectRepository.
+	self assert: resolvedProject _loadComponents = project _loadComponents.
+	project halt
 ]

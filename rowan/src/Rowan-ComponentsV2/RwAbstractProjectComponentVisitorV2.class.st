@@ -211,3 +211,29 @@ RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadCo
 		forProject: aProjectLoadComponent projectName)
 		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]
+
+{ #category : 'visiting' }
+RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent [
+	(visitedComponentNames includes: aSimpleProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aSimpleProjectLoadComponent.
+
+	(self groupNames includes: aSimpleProjectLoadComponent groupName)
+		ifTrue: [ 
+			self
+				_addPackageNames: aSimpleProjectLoadComponent packageNames
+				for: aSimpleProjectLoadComponent.
+			self componentNames addAll: aSimpleProjectLoadComponent componentNames.
+			self projectNames addAll: aSimpleProjectLoadComponent projectNames ].
+
+	(self
+		_components: self componentsPath
+		forProject: aSimpleProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	(self
+		_projects: self projectsPath
+		forProject: aSimpleProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
+]

@@ -409,16 +409,6 @@ RwAbstractProjectLoadComponentV2 >> initializeForExport [
 			conditionalProperties := orderedConditionalProperties ]
 ]
 
-{ #category : 'initialization' }
-RwAbstractProjectLoadComponentV2 >> initializeForImport [
-
-	"if spec has been imported, clear out any of the fields that represent state that should 
-	not be shared"
-
-	projectName := nil
-
-]
-
 { #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> packageNames [
 	"Answer the collection of package names defined in the receiver."
@@ -454,20 +444,6 @@ RwAbstractProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttribut
 													(groupNames includes: groupName)
 														ifTrue: [ allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ] ] ] ] ] ].
 	^ allDefinedPackageNames
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> projectName [
-
-   ^projectName
-
-]
-
-{ #category : 'initialization' }
-RwAbstractProjectLoadComponentV2 >> projectName: anObject [
-
-   projectName := anObject
-
 ]
 
 { #category : 'accessing' }

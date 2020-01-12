@@ -162,16 +162,6 @@ RwResolvedProjectV2 >> componentNamed: aComponentName [
 	^ self _projectDefinition componentNamed: aComponentName
 ]
 
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> componentNames [
-	^ self _loadSpecification componentNames
-]
-
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> componentNames: anArray [
-	self _loadSpecification componentNames: anArray
-]
-
 { #category : 'project definition' }
 RwResolvedProjectV2 >> components [
 	^ self _projectDefinition components
@@ -249,16 +239,6 @@ RwResolvedProjectV2 >> gitUrl [
 { #category : 'load specification' }
 RwResolvedProjectV2 >> gitUrl: anUrlString [
 	self _loadSpecification gitUrl: anUrlString
-]
-
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> groupNames [
-	^ self _loadSpecification groupNames
-]
-
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> groupNames: anArray [
-	self _loadSpecification groupNames: anArray
 ]
 
 { #category : 'initialization' }

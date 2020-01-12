@@ -3,10 +3,54 @@ Class {
 	#superclass : 'RwAbstractResolvedObjectV2',
 	#instVars : [
 		'loadComponents',
-		'comment'
+		'comment',
+		'packages'
 	],
 	#category : 'Rowan-Strawman1'
 }
+
+{ #category : 'instance creation' }
+RwStrawmanProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	| loadSpecification |
+	loadSpecification := anRwLoadSpecificationV2 copy.
+	^ self new
+		_loadSpecification: loadSpecification;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwStrawmanProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ self
+		loadSpecification: anRwLoadSpecificationV2
+		platformAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'instance creation' }
+RwStrawmanProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platformAttributes: platformAttributes [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolve: platformAttributes
+]
+
+{ #category : 'accessing' }
+RwStrawmanProjectV2 class >> platformConditionalAttributes [
+
+	^ {'common'}
+]
 
 { #category : 'private' }
 RwStrawmanProjectV2 >> _checkProjectDirectoryStructure [
@@ -52,6 +96,7 @@ RwStrawmanProjectV2 >> addPackagesNamed: packageNames toComponentNamed: aCompone
 
 { #category : 'accessing' }
 RwStrawmanProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	self _loadSpecification componentNames add: aComponentName.
 	^ self _loadComponents
 		addSimpleComponentNamed: aComponentName
 		condition: condition
@@ -113,7 +158,74 @@ RwStrawmanProjectV2 >> exportProjectSpecification [
 { #category : 'initiailization' }
 RwStrawmanProjectV2 >> initialize [
 	super initialize.
-	loadComponents := RwResolvedLoadComponentsV2 new
+	loadComponents := RwResolvedLoadComponentsV2 new.
+	packages := Dictionary new
+]
+
+{ #category : 'accessing' }
+RwStrawmanProjectV2 >> packages [
+	^ packages
+]
+
+{ #category : 'accessing' }
+RwStrawmanProjectV2 >> platformConditionalAttributes [
+
+	^ self class platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwStrawmanProjectV2 >> read [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self readComponentNames: self componentNames groupNames: self groupNames
+]
+
+{ #category : 'actions' }
+RwStrawmanProjectV2 >> read: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readComponentNames: self componentNames
+		groupNames: self groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'private' }
+RwStrawmanProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	| visitor |
+	visitor := RwIndependentComponentVisitorV2 new
+		platformConditionalAttributes: platformConditionalAttributes;
+		groupNames: groupNames;
+		yourself.
+
+	componentNames
+		do: [ :componentName | 
+			| component url |
+			url := 'file:' , (self componentsRoot / componentName , 'ston') pathString.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
+			component projectName: self projectAlias.
+
+			visitor visit: component ].
+
+	visitor packageNames
+		do: [ :packageName | 
+			| packageDict |
+			packageDict := packages
+				at: packageName
+				put:
+					(Dictionary new
+						at: #'name' put: packageName;
+						at: #'propertiess' put: Dictionary new yourself).
+			(self vastVaPrequisitesForPackageNamed: packageName)
+				ifNotNil: [ :prereqs | packageDict at: 'vaPrerequisites' put: prereqs ] ]
 ]
 
 { #category : 'actions' }
@@ -153,5 +265,5 @@ RwStrawmanProjectV2 >> vastSetVaPrequisitesTo: prereqArray forPackageNamed: pack
 
 { #category : 'package properties' }
 RwStrawmanProjectV2 >> vastVaPrequisitesForPackageNamed: packageName [
-	^ self _loadComponents vastVaPrequisitesForPackageNamed: packageName
+	^ self _loadComponents vastVaPrequisitesForPackageNamed: packageName ifAbsent: []
 ]

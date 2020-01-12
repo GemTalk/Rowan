@@ -249,6 +249,16 @@ RwBasicProjectLoadComponentV2 >> initializeForExport [
 			conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
 ]
 
+{ #category : 'initialization' }
+RwBasicProjectLoadComponentV2 >> initializeForImport [
+
+	"if spec has been imported, clear out any of the fields that represent state that should 
+	not be shared"
+
+	projectName := nil
+
+]
+
 { #category : 'ston' }
 RwBasicProjectLoadComponentV2 >> instVarNamesInOrderForSton [
 
@@ -266,6 +276,20 @@ RwBasicProjectLoadComponentV2 >> name [
 RwBasicProjectLoadComponentV2 >> name: anObject [
 
    name := anObject
+
+]
+
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> projectName [
+
+   ^projectName
+
+]
+
+{ #category : 'initialization' }
+RwBasicProjectLoadComponentV2 >> projectName: anObject [
+
+   projectName := anObject
 
 ]
 
