@@ -42,7 +42,7 @@ RwAbstractResolvedProjectV2 >> _validate: platformConfigurationAttributes [
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	super _validate: platformConfigurationAttributes
+	super _validate: platformConfigurationAttributes.
 	self _projectDefinition _validate: platformConfigurationAttributes groupNames: self groupNames.
 	^ true
 ]
