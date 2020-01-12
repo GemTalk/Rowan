@@ -376,7 +376,9 @@ RwLoadSpecificationV2 >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	repositoryResolutionPolicy := projectsHome :=  nil
+	platformProperties isEmpty
+		ifTrue: [ platformProperties := nil ].
+	repositoryResolutionPolicy := projectsHome := nil
 ]
 
 { #category : 'testing' }

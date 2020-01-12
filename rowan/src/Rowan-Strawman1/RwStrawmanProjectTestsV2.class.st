@@ -28,7 +28,7 @@ RwStrawmanProjectTestsV2 >> testBasic [
 		comment: 'Project created using the Strawman1 V2 project creation api ';
 		yourself.
 
-	project repositoryRoot  ensureDeleteAll.
+	project repositoryRoot ensureDeleteAll.
 
 	project
 		addSimpleComponentNamed: 'Core'
@@ -51,7 +51,9 @@ RwStrawmanProjectTestsV2 >> testBasic [
 	project resolve.
 
 	stonString := STON toStringPretty: project.	"useful to view full structure"
-	project export.
+	project
+		export;
+		exportLoadSpecification.
 
 	project yourself
 ]
