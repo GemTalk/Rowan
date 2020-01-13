@@ -245,8 +245,8 @@ RowanAnsweringService >> exec: aString inFrame: level ofProcess: processOop cont
               put: (symbolDictionary at: (argsAndTemps at: index)).
             variableService := RowanVariableService
               oop: (symbolDictionary at: (argsAndTemps at: index)) asOop
-              key: (argsAndTemps at: index)
-              value: (symbolDictionary at: (argsAndTemps at: index))
+              key: (argsAndTemps at: index) printString
+              value: (symbolDictionary at: (argsAndTemps at: index)) printString
               className: (frameContents at: 8) class name asString.
             RowanCommandResult addResult: variableService ] ].
       symbolList remove: symbolDictionary ].	"return answer for testing"
