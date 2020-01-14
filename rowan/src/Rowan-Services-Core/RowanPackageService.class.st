@@ -141,6 +141,12 @@ RowanPackageService >> isDirty: boolean [
 	isDirty := boolean
 ]
 
+{ #category : 'testing' }
+RowanPackageService >> isPackageService [
+
+	^true
+]
+
 { #category : 'Accessing' }
 RowanPackageService >> jadeite_testClasses [
 

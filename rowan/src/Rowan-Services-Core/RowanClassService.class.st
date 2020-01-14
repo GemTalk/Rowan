@@ -552,6 +552,17 @@ RowanClassService >> isNewClass: boolean [
 	isNewClass := boolean
 ]
 
+{ #category : 'testing' }
+RowanClassService >> isPackageClean [
+
+	^self packageIsDirty not
+]
+
+{ #category : 'testing' }
+RowanClassService >> isProjectClean [
+  ^ self projectIsDirty not
+]
+
 { #category : 'Updating' }
 RowanClassService >> isTestCase [
 
@@ -1015,10 +1026,10 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
   | wasClean |
   self isUpdatingButFoundToBeDeleted
     ifTrue: [ ^ self handleDeletedService ].
-  wasClean := self arePackageAndProjectClean.
+  wasClean := self isPackageClean.
   super servicePerform: symbol withArguments: collection.
   updateAfterCommand == false
-    ifFalse: [ self update ].
+    ifFalse: [ self update ]. 
   wasClean
     ifTrue: [ self updatePackageProject ]
 ]
