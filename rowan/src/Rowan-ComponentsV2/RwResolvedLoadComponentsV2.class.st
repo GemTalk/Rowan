@@ -350,6 +350,22 @@ RwResolvedLoadComponentsV2 >> vastSetVaPrequisitesTo: prereqArray forPackageName
 ]
 
 { #category : 'vast support' }
+RwResolvedLoadComponentsV2 >> vastSetVaSubApplicationsTo: subApplicationsArray forPackageNamed: packageName [
+	| foundOne |
+	foundOne := false.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					foundOne := true.
+					component
+						conditionalPackageMapSpecsAtPackageName: packageName
+						setVaSubApplicationsTo: subApplicationsArray ] ].
+	foundOne
+		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
+]
+
+{ #category : 'vast support' }
 RwResolvedLoadComponentsV2 >> vastVaPrequisitesForPackageNamed: packageName ifAbsent: absentBlock [
 	self components
 		keysAndValuesDo: [ :componentName :component | 
@@ -359,6 +375,20 @@ RwResolvedLoadComponentsV2 >> vastVaPrequisitesForPackageNamed: packageName ifAb
 					packagePropertiesMap := component
 						conditionalPackageMapSpecsAt: 'vast'
 						ifAbsent: [  ].
-					^ packagePropertiesMap at: 'vaPrequisites' ifAbsent: absentBlock ] ].
+					^ packagePropertiesMap at: 'vaPrerequisites' ifAbsent: absentBlock ] ].
+	^ absentBlock value
+]
+
+{ #category : 'vast support' }
+RwResolvedLoadComponentsV2 >> vastVaSubApplicationsForPackageNamed: packageName ifAbsent: absentBlock [
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					| packagePropertiesMap |
+					packagePropertiesMap := component
+						conditionalPackageMapSpecsAt: 'vast'
+						ifAbsent: [  ].
+					^ packagePropertiesMap at: 'vaSubApplications' ifAbsent: absentBlock ] ].
 	^ absentBlock value
 ]

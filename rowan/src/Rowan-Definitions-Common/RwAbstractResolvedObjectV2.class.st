@@ -278,6 +278,16 @@ RwAbstractResolvedObjectV2 >> vastSetVaPrequisitesTo: prereqArray forPackageName
 ]
 
 { #category : 'package properties' }
+RwAbstractResolvedObjectV2 >> vastSetVaSubApplicationsTo: subApplicationsDictionary forPackageNamed: packageName [
+	self subclassResponsibility: #'vastSetVaSubApplicationsTo:forPackageNamed:'
+]
+
+{ #category : 'package properties' }
 RwAbstractResolvedObjectV2 >> vastVaPrequisitesForPackageNamed: packageName [
 	self subclassResponsibility: #'vastVaPrequisitesForPackageNamed:'
+]
+
+{ #category : 'package properties' }
+RwAbstractResolvedObjectV2 >> vastVaSubApplicationsForPackageNamed: packageName [
+	self subclassResponsibility: #'vastVaSubApplicationsForPackageNamed:'
 ]

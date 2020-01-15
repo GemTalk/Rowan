@@ -200,7 +200,7 @@ RwStrawmanProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	| visitor |
+	| visitor packageDict |
 	visitor := RwIndependentComponentVisitorV2 new
 		platformConditionalAttributes: platformConditionalAttributes;
 		groupNames: groupNames;
@@ -215,17 +215,22 @@ RwStrawmanProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 
 			visitor visit: component ].
 
+	self _loadComponents components: visitor visitedComponents.
+
 	visitor packageNames
 		do: [ :packageName | 
-			| packageDict |
 			packageDict := packages
 				at: packageName
 				put:
 					(Dictionary new
 						at: #'name' put: packageName;
-						at: #'propertiess' put: Dictionary new yourself).
+						at: #'properties' put: Dictionary new;
+						at: #'definitions' put: Dictionary new;
+						yourself).	"to be populated by VAST tonel reader"
 			(self vastVaPrequisitesForPackageNamed: packageName)
-				ifNotNil: [ :prereqs | packageDict at: 'vaPrerequisites' put: prereqs ] ]
+				ifNotNil: [ :prereqs | (packageDict at: #'properties') at: 'vaPrerequisites' put: prereqs ].
+			(self vastVaSubApplicationsForPackageNamed: packageName)
+				ifNotNil: [ :subApplications | (packageDict at: #'properties') at: 'vaSubApplications' put: subApplications ] ]
 ]
 
 { #category : 'actions' }
@@ -264,6 +269,18 @@ RwStrawmanProjectV2 >> vastSetVaPrequisitesTo: prereqArray forPackageNamed: pack
 ]
 
 { #category : 'package properties' }
+RwStrawmanProjectV2 >> vastSetVaSubApplicationsTo: subApplicationsArray forPackageNamed: packageName [
+	self _loadComponents
+		vastSetVaSubApplicationsTo: subApplicationsArray
+		forPackageNamed: packageName
+]
+
+{ #category : 'package properties' }
 RwStrawmanProjectV2 >> vastVaPrequisitesForPackageNamed: packageName [
 	^ self _loadComponents vastVaPrequisitesForPackageNamed: packageName ifAbsent: []
+]
+
+{ #category : 'package properties' }
+RwStrawmanProjectV2 >> vastVaSubApplicationsForPackageNamed: packageName [
+	^ self _loadComponents vastVaSubApplicationsForPackageNamed: packageName ifAbsent: []
 ]

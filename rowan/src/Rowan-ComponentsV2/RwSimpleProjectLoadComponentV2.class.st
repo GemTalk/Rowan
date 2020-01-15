@@ -18,6 +18,22 @@ RwSimpleProjectLoadComponentV2 >> _validatedPackageNames [
 	^ self packageNames asSet
 ]
 
+{ #category : 'comparing' }
+RwSimpleProjectLoadComponentV2 >> = aRwSimpleProjectLoadComponentV2 [
+	(aRwSimpleProjectLoadComponentV2 isKindOf: self class)
+		ifFalse: [ ^ false ].
+	^ ((((((self name = aRwSimpleProjectLoadComponentV2 name
+		and: [ self comment = aRwSimpleProjectLoadComponentV2 comment ])
+		and: [ 
+			self conditionalPackageMapSpecs
+				= aRwSimpleProjectLoadComponentV2 conditionalPackageMapSpecs ])
+		and: [ self condition = aRwSimpleProjectLoadComponentV2 condition ])
+		and: [ self groupName = aRwSimpleProjectLoadComponentV2 groupName ])
+		and: [ self packageNames = aRwSimpleProjectLoadComponentV2 packageNames ])
+		and: [ self componentNames = aRwSimpleProjectLoadComponentV2 componentNames ])
+		and: [ self projectNames = aRwSimpleProjectLoadComponentV2 projectNames ]
+]
+
 { #category : 'visiting' }
 RwSimpleProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitSimpleProjectLoadComponent: self
@@ -67,6 +83,19 @@ RwSimpleProjectLoadComponentV2 >> groupName [
 { #category : 'accessing' }
 RwSimpleProjectLoadComponentV2 >> groupName: object [
 	groupName := object
+]
+
+{ #category : 'comparing' }
+RwSimpleProjectLoadComponentV2 >> hash [
+	| hashValue |
+	hashValue := self name hash.
+	hashValue := hashValue bitXor: self comment.
+	hashValue := hashValue bitXor: self conditionalPackageMapSpecs.
+	hashValue := hashValue bitXor: self groupName.
+	hashValue := hashValue bitXor: self packageNames.
+	hashValue := hashValue bitXor: self componentNames.
+	hashValue := hashValue bitXor: self projectNames.
+	^ hashValue
 ]
 
 { #category : 'initialization' }

@@ -5,6 +5,29 @@ Class {
 }
 
 { #category : 'private' }
+RwStrawmanProjectTestsV2 >> _expectedPackageDefinitions [
+	^ Dictionary new
+		at: 'TonelExampleApp'
+			put:
+				(Dictionary new
+						at: #'name' put: 'TonelExampleApp';
+						at: #'properties'
+							put:
+								(Dictionary new
+										at: 'vaPrerequisites' put: #('SUnit' 'TonelWriterModel');
+										at: 'vaSubApplications'
+											put:
+												{(Dictionary new
+														at: #'condition' put: true;
+														at: #'subapps' put: {'TonelExampleSubApp'};
+														yourself)};
+										yourself);
+						at: #'definitions' put: Dictionary new;
+						yourself);
+		yourself
+]
+
+{ #category : 'private' }
 RwStrawmanProjectTestsV2 >> _testRowanProjectsSandbox [
 	"working repository for use as ROWAN_PROJECTS_HOME for tests"
 
@@ -18,7 +41,7 @@ RwStrawmanProjectTestsV2 >> testBasic [
 		https://github.com/dalehenrich/tonel-demos ...
 		reading and writing packages is beyond the scope of this strawman"
 
-	| projectName projectAlias project stonString loadSpec resolvedProject |
+	| projectName projectAlias project stonString loadSpec resolvedProject x y |
 	projectName := 'Tonel-Demos'.
 	projectAlias := projectName , '_Test'.
 	project := RwStrawmanProjectV2 new
@@ -37,13 +60,15 @@ RwStrawmanProjectTestsV2 >> testBasic [
 			groupName: 'core'
 			comment: 'Primary component used for loading the system.';
 		addPackagesNamed:
-				{(projectName , '-Core').
-					(projectName , '-Vast-Application')}
+				{'TonelExampleApp'}
 			toComponentNamed: 'Core';
 		vastSetVaPrequisitesTo: #('SUnit' 'TonelWriterModel')
-			forPackageNamed: projectName , '-Core';
-		vastSetVaPrequisitesTo: #('SUnit' 'TonelWriterModel')
-			forPackageNamed: projectName , '-Vast-Application';
+			forPackageNamed: 'TonelExampleApp';
+		vastSetVaSubApplicationsTo: {(Dictionary new
+				at: #'condition' put: true;
+				at: #'subapps' put: {'TonelExampleSubApp'};
+				yourself)}
+			forPackageNamed: 'TonelExampleApp';
 		yourself.
 
 	stonString := STON toStringPretty: project.	"useful to view full structure"
@@ -76,6 +101,8 @@ RwStrawmanProjectTestsV2 >> testBasic [
 
 "repository and components should match"
 	self assert: resolvedProject _projectRepository = project _projectRepository.
-	self assert: resolvedProject _loadComponents = project _loadComponents.
-	project halt
+
+	self assert: (x := resolvedProject _loadComponents components) = (y := project _loadComponents components).
+
+	self assert: (x := resolvedProject packages) = (y := self _expectedPackageDefinitions).
 ]

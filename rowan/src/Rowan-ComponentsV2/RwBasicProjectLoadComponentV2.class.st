@@ -160,6 +160,13 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs [
 ]
 
 { #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAt: key ifAbsent: absentBlock [
+	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
+
+	^ conditionalPackageMapSpecs at: key ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId [ 
 
 	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
@@ -202,6 +209,16 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packag
 	prereqs addAll: prereqsArray.
 
 	propertiesDict at: 'vaPrerequisites' put: prereqs asSet asArray
+]
+
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packageName setVaSubApplicationsTo: subApplicationsArray [
+	| propertiesDict subApplications |
+	propertiesDict := self conditionalPackageMapSpecs
+		at: 'vast'
+		ifAbsentPut: [ Dictionary new ].
+	subApplications := propertiesDict at: 'vaSubApplications' ifAbsentPut: [ {} ].
+	subApplicationsArray do: [ :value | subApplications add: value ]
 ]
 
 { #category : 'ston' }
