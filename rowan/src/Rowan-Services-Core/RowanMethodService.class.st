@@ -32,7 +32,8 @@ Class {
 		'firstReference',
 		'renamedName',
 		'isMethodForBlock',
-		'homeMethodOop'
+		'homeMethodOop',
+		'hasMethodHistory'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -406,6 +407,7 @@ RowanMethodService >> initialize [
 	isTestMethod := false.
 	failedCompile := false.
 	isMethodForBlock := false.
+	hasMethodHistory := true.
 ]
 
 { #category : 'initialization' }
@@ -430,7 +432,8 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
-	self initializeTestMethodsFor: inClass thisClass
+	self initializeTestMethodsFor: inClass thisClass.
+	self setHasMethodHistory
 ]
 
 { #category : 'initialization' }
@@ -630,6 +633,14 @@ RowanMethodService >> setBreakAt: stepPoint [
     ifFalse: [ GsNMethod _disableAllBreaks ].
   self update.
   RowanCommandResult addResult: self
+]
+
+{ #category : 'method history' }
+RowanMethodService >> setHasMethodHistory [
+  | answeringService |
+  answeringService := RowanAnsweringService new.
+  hasMethodHistory := (answeringService basicMethodHistoryFor: self) answer size
+    > 1.
 ]
 
 { #category : 'initialization' }

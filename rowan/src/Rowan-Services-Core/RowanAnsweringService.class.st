@@ -100,6 +100,18 @@ RowanAnsweringService >> basicExec: aString context: oop [
 ]
 
 { #category : 'client command support' }
+RowanAnsweringService >> basicMethodHistoryFor: methodService [
+  | rowanMethodHistory |
+  rowanMethodHistory := UserGlobals
+    at: #'RowanMethodHistory'
+    ifAbsentPut: [ Dictionary new ].
+  answer := (rowanMethodHistory at: methodService ifAbsentPut: [ Array new ])
+    asOrderedCollection.
+  answer
+    addFirst: (rowanMethodHistory keys detect: [ :svc | svc = methodService ])
+]
+
+{ #category : 'client command support' }
 RowanAnsweringService >> basicPrintStringOf: oop toMaxSize: integer [
   | object printString  |
   object := Object _objectForOop: oop.
@@ -340,13 +352,7 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 
 { #category : 'client commands' }
 RowanAnsweringService >> methodHistoryFor: methodService [
-  | rowanMethodHistory |
-  rowanMethodHistory := UserGlobals
-    at: #'RowanMethodHistory'
-    ifAbsentPut: [ Dictionary new ].
-  answer := (rowanMethodHistory at: methodService ifAbsentPut: [ Array new ]) asOrderedCollection.
-  answer
-    addFirst: (rowanMethodHistory keys detect: [ :svc | svc = methodService ]).
+  self basicMethodHistoryFor: methodService.
   RowanCommandResult addResult: self.
   ^ answer	"for testing"
 ]
