@@ -9,6 +9,7 @@ RwProjectLoadComponentV2 {
 				#componentNames : [
 					'subs/CommonCore',
 					'subs/Services',
+					'StrawMan_1',
 					'DiskConfigurationsV2'
 				],
 				#packageNames : [
