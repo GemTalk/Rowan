@@ -371,11 +371,12 @@ RwResolvedLoadComponentsV2 >> vastVaPrequisitesForPackageNamed: packageName ifAb
 		keysAndValuesDo: [ :componentName :component | 
 			(component packageNames includes: packageName)
 				ifTrue: [ 
-					| packagePropertiesMap |
-					packagePropertiesMap := component
+					| packageMap propertiesMap |
+					packageMap := component
 						conditionalPackageMapSpecsAt: 'vast'
-						ifAbsent: [  ].
-					^ packagePropertiesMap at: 'vaPrerequisites' ifAbsent: absentBlock ] ].
+						ifAbsent: absentBlock.
+					propertiesMap := packageMap at: packageName ifAbsent: absentBlock.
+					^ propertiesMap at: 'vaPrerequisites' ifAbsent: absentBlock ] ].
 	^ absentBlock value
 ]
 
@@ -385,10 +386,11 @@ RwResolvedLoadComponentsV2 >> vastVaSubApplicationsForPackageNamed: packageName 
 		keysAndValuesDo: [ :componentName :component | 
 			(component packageNames includes: packageName)
 				ifTrue: [ 
-					| packagePropertiesMap |
-					packagePropertiesMap := component
+					| packageMap propertiesMap |
+					packageMap := component
 						conditionalPackageMapSpecsAt: 'vast'
-						ifAbsent: [  ].
-					^ packagePropertiesMap at: 'vaSubApplications' ifAbsent: absentBlock ] ].
+						ifAbsent: absentBlock.
+					propertiesMap := packageMap at: packageName ifAbsent: absentBlock.
+					^ propertiesMap at: 'vaSubApplications' ifAbsent: absentBlock ] ].
 	^ absentBlock value
 ]

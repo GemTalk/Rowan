@@ -41,12 +41,10 @@ RwStrawmanProjectTestsV2 >> testBasic [
 		https://github.com/dalehenrich/tonel-demos ...
 		reading and writing packages is beyond the scope of this strawman"
 
-	| projectName projectAlias project stonString loadSpec resolvedProject x y |
-	projectName := 'Tonel-Demos'.
-	projectAlias := projectName , '_Test'.
+	| projectName project stonString loadSpec resolvedProject x y |
+	projectName := 'tonel-demos'.
 	project := RwStrawmanProjectV2 new
 		projectName: projectName;
-		projectAlias: projectAlias;
 		projectsHome: self _testRowanProjectsSandbox;
 		comment: 'Project created using the Strawman1 V2 project creation api ';
 		yourself.
@@ -87,7 +85,7 @@ RwStrawmanProjectTestsV2 >> testBasic [
 		fromUrl:
 			'file:'
 				,
-					(project repositoryRoot / 'rowan' / 'specs' / projectAlias , 'ston') pathString)
+					(project repositoryRoot / 'rowan' / 'specs' / projectName , 'ston') pathString)
 		projectsHome: self _testRowanProjectsSandbox;
 		yourself.
 

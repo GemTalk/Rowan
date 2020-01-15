@@ -201,10 +201,13 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: use
 
 { #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packageName setVaPrequisitesTo: prereqsArray [
-	| propertiesDict prereqs |
-	propertiesDict := self conditionalPackageMapSpecs
+	| packageDict propertiesDict prereqs |
+	packageDict := self conditionalPackageMapSpecs
 		at: 'vast'
 		ifAbsentPut: [ Dictionary new ].
+
+	propertiesDict := packageDict at: packageName ifAbsentPut: [ Dictionary new ].
+
 	prereqs := propertiesDict at: 'vaPrerequisites' ifAbsent: [ {} ].
 	prereqs addAll: prereqsArray.
 
@@ -213,10 +216,13 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packag
 
 { #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packageName setVaSubApplicationsTo: subApplicationsArray [
-	| propertiesDict subApplications |
-	propertiesDict := self conditionalPackageMapSpecs
+	| packageDict propertiesDict subApplications |
+	packageDict := self conditionalPackageMapSpecs
 		at: 'vast'
 		ifAbsentPut: [ Dictionary new ].
+
+	propertiesDict := packageDict at: packageName ifAbsentPut: [ Dictionary new ].
+
 	subApplications := propertiesDict at: 'vaSubApplications' ifAbsentPut: [ {} ].
 	subApplicationsArray do: [ :value | subApplications add: value ]
 ]
