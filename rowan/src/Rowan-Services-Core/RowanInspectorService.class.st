@@ -59,7 +59,9 @@ RowanInspectorService >> addInstVars: anObject [
 RowanInspectorService >> addKey: keyString [
   | newObject theObject |
   theObject := Object _objectForOop: oop.
-  newObject := keyString evaluate.
+  newObject := keyString
+    evaluateInContext: theObject
+    symbolList: Rowan image symbolList.
   theObject at: newObject ifAbsentPut: nil.
   selectionOop := newObject asOop.
   objects := OrderedCollection new.
@@ -206,6 +208,17 @@ RowanInspectorService >> maxPrintStringSize [
   "currently matches Jadeite client"
 
   ^ 100000
+]
+
+{ #category : 'constants' }
+RowanInspectorService >> maxVariables [
+	"See Jadeite issue #668. Currently, 
+	Dolphin doesn't seem to be able to 
+	handle more than about 65k elements
+	in a list
+	https://github.com/GemTalk/Jadeite/issues/668#issuecomment-566795924" 
+	
+	^65000
 ]
 
 { #category : 'client commands' }
