@@ -113,8 +113,16 @@ RowanAnsweringService >> basicMethodHistoryFor: methodService [
 
 { #category : 'client command support' }
 RowanAnsweringService >> basicPrintStringOf: oop toMaxSize: integer [
-  | object printString  |
+  | object |
   object := Object _objectForOop: oop.
+  ^ self basicPrintStringOfObject: object toMaxSize: integer
+]
+
+{ #category : 'client command support' }
+RowanAnsweringService >> basicPrintStringOfObject: object toMaxSize: integer [
+  "avoid the oop conversion when we already have the object"
+
+  | printString |
   printString := self stripOutUnicode: object printString.
   printString := printString size > integer
     ifTrue: [ (printString copyFrom: 1 to: integer) , '...' ]

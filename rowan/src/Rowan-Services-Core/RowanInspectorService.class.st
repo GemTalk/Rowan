@@ -39,7 +39,7 @@ RowanInspectorService >> addFirstIndexedVars: anObject [
   | max |
   self setIndexedSize: anObject.
   max := indexedSize min: maxIndexedVars.
-  objects addAll: (self indexedVarsFrom: 1 to: max).
+  objects addAll: (self safeVariablesFrom: 1 to: max).
   visibleIndices := max
 ]
 
@@ -116,31 +116,6 @@ RowanInspectorService >> executeThenInspect: string inFrame: level process: proc
       RowanCommandResult addResult: self ]
 ]
 
-{ #category : 'other' }
-RowanInspectorService >> indexedVarsFrom: indexStart to: indexStop [
-  | namedSize  anObject indexedVars |
-  indexedVars := OrderedCollection new.
-  anObject := Object _objectForOop: oop.
-  namedSize := anObject class allInstVarNames size.
-  isUnordered := anObject isKindOf: UnorderedCollection.
-  isUnordered
-    ifTrue: [ 
-      | sorted |
-      sorted := anObject
-        asSortedCollection: [ :x :y | x printString < y printString ].
-      indexStart to: indexStop do: [ :i | 
-        indexedVars
-          add:
-            (self stripOutUnicode: (sorted at: i) printString)
-              -> (Reflection oopOf: (sorted at: i)) ] ]
-    ifFalse: [ 
-      indexStart to: indexStop do: [ :i | 
-        indexedVars
-          add:
-            (self stripOutUnicode: i printString) -> (Reflection oopOf: (anObject at: i)) ] ].
-  ^ indexedVars
-]
-
 { #category : 'initialization' }
 RowanInspectorService >> initialize [
   super initialize.
@@ -159,7 +134,7 @@ RowanInspectorService >> inspect: anOop from: indexStart to: indexStop [
   | anObject stop |
   anObject := Object _objectForOop: anOop.
   stop := indexStop min: indexedSize.
-  nextIndices := self indexedVarsFrom: indexStart to: stop.
+  nextIndices := self safeVariablesFrom: indexStart to: stop.
   visibleIndices := stop.
   RowanCommandResult addResult: self
 ]
@@ -194,20 +169,23 @@ RowanInspectorService >> inspectClientForwarder: anObject [
 
 { #category : 'command support' }
 RowanInspectorService >> inspectDictionary: aDictionary from: start to: stop [
-  | sortedKeys |
+  | sortedKeys service |
   isDictionary := true.
   instVarsAreRemovable := true.
   self addInstVars: aDictionary.
   self addDynamicInstVars: aDictionary.
-  sortedKeys := (aDictionary keys collect: [ :key | key printString -> key ])
-    asSortedCollection.
+  service := RowanAnsweringService new.
+  sortedKeys := (aDictionary keys
+    collect: [ :key | 
+      (service basicPrintStringOfObject: key toMaxSize: self maxPrintStringSize)
+        -> key ]) asSortedCollection.
   visibleIndices := sortedKeys size min: stop.
   nextIndices := OrderedCollection new.
   (sortedKeys copyFrom: start to: visibleIndices)
     do: [ :assoc | 
       nextIndices
         add:
-          (self stripOutUnicode: assoc key)
+          assoc key
             ->
               (Array
                 with: (Reflection oopOf: assoc value)
@@ -223,6 +201,13 @@ RowanInspectorService >> isClientForwarder: anObject [
 	^(Reflection classOf: anObject) name == #'ClientForwarder'
 ]
 
+{ #category : 'constants' }
+RowanInspectorService >> maxPrintStringSize [
+  "currently matches Jadeite client"
+
+  ^ 100000
+]
+
 { #category : 'client commands' }
 RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
   | stop anObject |
@@ -233,7 +218,7 @@ RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
         addAll:
           (self inspectDictionary: anObject from: indexStart to: indexStop) ].
   stop := indexStop min: indexedSize.
-  nextIndices := self indexedVarsFrom: indexStart to: stop.
+  nextIndices := self safeVariablesFrom: indexStart to: stop.
   visibleIndices := stop.
   RowanCommandResult addResult: self
 ]
@@ -311,6 +296,22 @@ RowanInspectorService >> replaceElement: oldOop with: string [
   self inspect: theObject.
   visibleIndices > 0
     ifTrue: [ self inspect: oop from: visibleIndices to: formerlyVisible ]
+]
+
+{ #category : 'command support' }
+RowanInspectorService >> safeVariablesFrom: indexStart to: indexStop [
+  [ ^ self variablesFrom: indexStart to: indexStop ]
+    on: Error
+    do: [ :ex | 
+      indexedSize := 0.
+      instVarsAreRemovable := false.
+      visibleIndices := 0 to: 0.
+      nextIndices := 0 to: 0.
+      nil
+        inform:
+          'Unable to inspect variables of this object. Perhaps it is malformed? Error: '
+            , ex description.
+      ^ OrderedCollection new ]
 ]
 
 { #category : 'client commands' }
@@ -398,4 +399,23 @@ RowanInspectorService >> shouldReferenceBySize: anObject [
 	(anObject isKindOf: UnorderedCollection) ifTrue:[^true].
 	(anObject isKindOf: MultiByteString) ifTrue:[^true]. 
 	^false
+]
+
+{ #category : 'command support' }
+RowanInspectorService >> variablesFrom: indexStart to: indexStop [
+  | namedSize anObject indexedVars |
+  indexedVars := OrderedCollection new.
+  anObject := Object _objectForOop: oop.
+  namedSize := anObject class allInstVarNames size.
+  isUnordered := anObject isKindOf: UnorderedCollection.
+  isUnordered
+    ifTrue: [ 
+      | sorted service |
+      service := RowanAnsweringService new.
+      sorted := (anObject
+        collect: [ :var | service basicPrintStringOfObject: var toMaxSize: self maxPrintStringSize ])
+        asSortedCollection.
+      indexStart to: indexStop do: [ :i | indexedVars add: (sorted at: i) -> (Reflection oopOf: (sorted at: i)) ] ]
+    ifFalse: [ indexStart to: indexStop do: [ :i | indexedVars add: i printString -> (Reflection oopOf: (anObject at: i)) ] ].
+  ^ indexedVars
 ]
