@@ -274,6 +274,17 @@ RwAbstractResolvedObjectV2 >> repositoryRoot [
 ]
 
 { #category : 'accessing' }
+RwAbstractResolvedObjectV2 >> requiredProjectRoots [
+"This method can be deleted, once the doitsRoot directory has propogated out to RowanSample9 project"
+
+	^ {(self componentsRoot).
+"	(self doitsRoot)."
+	(self packagesRoot).
+	(self specsRoot).
+	(self projectsRoot)}
+]
+
+{ #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> specsRoot [
 	^ self repositoryRoot / self _projectSpecification specsPath
 ]

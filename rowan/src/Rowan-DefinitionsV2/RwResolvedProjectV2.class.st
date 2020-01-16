@@ -54,7 +54,7 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platform
 RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 	"answer true if the basic project directory structure is present"
 
-	self projectRoots
+	self requiredProjectRoots
 		do: [ :fileRef | 
 			fileRef exists
 				ifFalse: [ ^ false ] ].
