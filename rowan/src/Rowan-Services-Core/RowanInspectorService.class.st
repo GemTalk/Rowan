@@ -307,6 +307,7 @@ RowanInspectorService >> safeVariablesFrom: indexStart to: indexStop [
       instVarsAreRemovable := false.
       visibleIndices := 0 to: 0.
       nextIndices := 0 to: 0.
+      isVariable := false.
       nil
         inform:
           'Unable to inspect variables of this object. Perhaps it is malformed? Error: '
