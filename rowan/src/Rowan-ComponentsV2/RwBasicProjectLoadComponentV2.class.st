@@ -5,7 +5,9 @@ Class {
 		'name',
 		'comment',
 		'projectName',
-		'conditionalPackageMapSpecs'
+		'conditionalPackageMapSpecs',
+		'preloadDoitName',
+		'postloadDoitName'
 	],
 	#category : 'Rowan-ComponentsV2'
 }

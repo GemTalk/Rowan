@@ -35,7 +35,7 @@ RwProjectSpecificationV2Test >> testComparison_1 [
 		assert:
 			(x := RwProjectSpecificationV2 allInstVarNames)
 				=
-					#(#'specName' #'projectName' #'projectSpecPath' #'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'comment' #'repoType' #'loadedCommitId').	"If inst vars don't match, copy and hash methods have to change"
+					#(#'specName' #'projectName' #'projectSpecPath' #'componentsPath' #'doitsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'comment' #'repoType' #'loadedCommitId').	"If inst vars don't match, copy and hash methods have to change"
 
 	stonString := STON toStringPretty: projectSpecification.
 

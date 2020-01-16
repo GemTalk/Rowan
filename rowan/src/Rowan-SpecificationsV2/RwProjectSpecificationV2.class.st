@@ -6,6 +6,7 @@ Class {
 		'projectName',
 		'projectSpecPath',
 		'componentsPath',
+		'doitsPath',
 		'packagesPath',
 		'projectsPath',
 		'specsPath',
@@ -60,22 +61,24 @@ RwProjectSpecificationV2 >> = anObject [
 				and: [ 
 					self componentsPath = anObject componentsPath
 						and: [ 
-							self packageFormat = anObject packageFormat
+							self doitsPath = anObject doitsPath
 								and: [ 
-									self packageConvention = anObject packageConvention
+									self packageFormat = anObject packageFormat
 										and: [ 
-											self packagesPath = anObject packagesPath
+											self packageConvention = anObject packageConvention
 												and: [ 
-													self projectsPath = anObject projectsPath
+													self packagesPath = anObject packagesPath
 														and: [ 
-															self specsPath = anObject specsPath
+															self projectsPath = anObject projectsPath
 																and: [ 
-																	lazyEqual := self _repoType = anObject _repoType
-																		or: [ self repoType = anObject repoType ].
-																	lazyEqual
+																	self specsPath = anObject specsPath
 																		and: [ 
-																			self comment = anObject comment
-																				and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ]
+																			lazyEqual := self _repoType = anObject _repoType
+																				or: [ self repoType = anObject repoType ].
+																			lazyEqual
+																				and: [ 
+																					self comment = anObject comment
+																						and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -100,8 +103,13 @@ RwProjectSpecificationV2 >> componentsPath: aString [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecificationV2 >> componentsRoot [
-	^ self repositoryRoot / self componentsPath
+RwProjectSpecificationV2 >> doitsPath [
+	^doitsPath
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> doitsPath: object [
+	doitsPath := object
 ]
 
 { #category : 'exporting' }
@@ -117,6 +125,7 @@ RwProjectSpecificationV2 >> hash [
 	hashValue := self specName hash.
 	hashValue := hashValue bitXor: self projectName hash.
 	hashValue := hashValue bitXor: self componentsPath hash.
+	hashValue := hashValue bitXor: self doitsPath hash.
 	hashValue := hashValue bitXor: self packagesPath hash.
 	hashValue := hashValue bitXor: self projectsPath hash.
 	hashValue := hashValue bitXor: self specsPath hash.
@@ -132,6 +141,7 @@ RwProjectSpecificationV2 >> hash [
 RwProjectSpecificationV2 >> initialize [
 	super initialize.
 	componentsPath := 'rowan/components'.
+	doitsPath := 'rowan/doits'.
 	packagesPath := 'rowan/src'.
 	projectsPath := 'rowan/projects'.
 	specsPath := 'rowan/specs'.
@@ -207,11 +217,6 @@ RwProjectSpecificationV2 >> packagesPath: aString [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecificationV2 >> packagesRoot [
-	^ self repositoryRoot / self packagesPath
-]
-
-{ #category : 'accessing' }
 RwProjectSpecificationV2 >> projectName [
 
 	^ projectName
@@ -220,14 +225,6 @@ RwProjectSpecificationV2 >> projectName [
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> projectName: aString [
 	projectName := aString
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> projectRoots [
-	^ {(self componentsRoot).
-	(self packagesRoot).
-	(self specsRoot).
-	(self projectsRoot)}
 ]
 
 { #category : 'accessing' }
@@ -250,11 +247,6 @@ RwProjectSpecificationV2 >> projectSpecPath [
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> projectSpecPath: aString [
 	projectSpecPath := aString
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> projectsRoot [
-	^ self repositoryRoot / self projectsPath
 ]
 
 { #category : 'accessing' }
@@ -289,9 +281,4 @@ RwProjectSpecificationV2 >> specsPath [
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> specsPath: aString [
 	specsPath := aString
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> specsRoot [
-	^ self repositoryRoot / self specsPath
 ]

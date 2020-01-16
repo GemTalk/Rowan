@@ -17,6 +17,7 @@ RwPrjCreateToolV2 >> createProjectRepository: projectDefinition [
 				ifFalse: [ self error: 'internal error - expected the repository root to be created' ] ].
 	{(projectDefinition componentsRoot).
 	(projectDefinition packagesRoot).
+	(projectDefinition doitsRoot).
 	(projectDefinition specsRoot).
 	(projectDefinition projectsRoot)} do: [ :path | path ensureCreateDirectory ]
 ]
