@@ -234,12 +234,27 @@ RwBasicProjectLoadComponentV2 >> excludedInstVars [
 	^ #()
 ]
 
+{ #category : 'doits' }
+RwBasicProjectLoadComponentV2 >> executePostloadDoit [
+	self halt: 'not yet implemented'
+]
+
+{ #category : 'doits' }
+RwBasicProjectLoadComponentV2 >> executePreloadDoit [
+	self halt: 'not yet implemented'
+]
+
 { #category : 'exporting' }
 RwBasicProjectLoadComponentV2 >> exportToUrl: directoryUrl [
 
 	^ self copy
 		initializeForExport
 		_exportToUrl: directoryUrl
+]
+
+{ #category : 'testing' }
+RwBasicProjectLoadComponentV2 >> hasDoits [
+	^ preloadDoitName notNil and: [ postloadDoitName notNil ]
 ]
 
 { #category : 'initialization' }

@@ -167,6 +167,11 @@ RwResolvedProjectV2 >> components [
 	^ self _projectDefinition components
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> componentsWithDoits [
+	^ self _projectDefinition components componentsWithDoits
+]
+
 { #category : 'copying' }
 RwResolvedProjectV2 >> copyForLoadedProject [
 	"project definition is not part of the copy for loaded projects"

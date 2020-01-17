@@ -72,7 +72,12 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
-		ifFalse: [ Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
+		ifFalse: [ 
+			| componentsWithDoits |
+			componentsWithDoits := diff componentsWithDoits.
+			componentsWithDoits do: [ :component | component executePreloadDoit ].
+			Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
+			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
 	loadedProjects := Array new.
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 

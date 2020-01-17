@@ -16,6 +16,7 @@ RwNestedProjectLoadComponentV2 {
 					'Rowan-Definitions',
 					'Rowan-Core-Definitions-Extensions',
 					'Rowan-Core',
+					'Rowan-CoreV2',
 					'Rowan-Tools-Core',
 					'Rowan-Tools-Kernel'
 				],

@@ -239,6 +239,11 @@ RwResolvedLoadComponentsV2 >> components: object [
 	components := object
 ]
 
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> componentsWithDoits [
+	^ self components select: [ :each | each hasDoits ]
+]
+
 { #category : 'enumerating' }
 RwResolvedLoadComponentsV2 >> do: aBlock [
 	"For each component in the receiver, evaluates the one-argument block
