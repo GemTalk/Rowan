@@ -427,9 +427,10 @@ RowanInspectorService >> variablesFrom: indexStart to: indexStop [
       | sorted service |
       service := RowanAnsweringService new.
       sorted := (anObject
-        collect: [ :var | service basicPrintStringOfObject: var toMaxSize: self maxPrintStringSize ])
-        asSortedCollection.
-      indexStart to: indexStop do: [ :i | indexedVars add: (sorted at: i) -> (Reflection oopOf: (sorted at: i)) ] ]
+        collect: [ :var | 
+          (service basicPrintStringOfObject: var toMaxSize: self maxPrintStringSize)
+            -> (Reflection oopOf: var) ]) asSortedCollection: [:x :y | x key < y key]. 
+      indexStart to: indexStop do: [ :i | indexedVars add: (sorted at: i) ] ]
     ifFalse: [ indexStart to: indexStop do: [ :i | indexedVars add: i printString -> (Reflection oopOf: (anObject at: i)) ] ].
   ^ indexedVars
 ]
