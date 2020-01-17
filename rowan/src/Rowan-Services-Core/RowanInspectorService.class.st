@@ -17,7 +17,8 @@ Class {
 		'isDictionary',
 		'isVariable',
 		'selectionOop',
-		'isUnordered'
+		'isUnordered',
+		'statusText'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -321,10 +322,7 @@ RowanInspectorService >> safeVariablesFrom: indexStart to: indexStop [
       visibleIndices := 0 to: 0.
       nextIndices := 0 to: 0.
       isVariable := false.
-      nil
-        inform:
-          'Unable to inspect variables of this object. Perhaps it is malformed? Error: '
-            , ex description.
+      statusText := 'Error getting object contents: ' , ex description.
       ^ OrderedCollection new ]
 ]
 
