@@ -135,7 +135,7 @@ RowanInspectorService >> inspect: oopOrObject [
 RowanInspectorService >> inspect: anOop from: indexStart to: indexStop [
   | anObject stop |
   anObject := Object _objectForOop: anOop.
-  stop := indexStop min: indexedSize.
+  stop := (indexStop min: indexedSize) min: self maxVariables.
   nextIndices := self safeVariablesFrom: indexStart to: stop.
   visibleIndices := stop.
   RowanCommandResult addResult: self
@@ -181,7 +181,7 @@ RowanInspectorService >> inspectDictionary: aDictionary from: start to: stop [
     collect: [ :key | 
       (service basicPrintStringOfObject: key toMaxSize: self maxPrintStringSize)
         -> key ]) asSortedCollection.
-  visibleIndices := sortedKeys size min: stop.
+  visibleIndices := (sortedKeys size min: stop) min: self maxVariables.
   nextIndices := OrderedCollection new.
   (sortedKeys copyFrom: start to: visibleIndices)
     do: [ :assoc | 
@@ -230,7 +230,7 @@ RowanInspectorService >> nextIndexedVarsFrom: indexStart to: indexStop [
       ^ objects
         addAll:
           (self inspectDictionary: anObject from: indexStart to: indexStop) ].
-  stop := indexStop min: indexedSize.
+  stop := (indexStop min: indexedSize) min: self maxVariables.
   nextIndices := self safeVariablesFrom: indexStart to: stop.
   visibleIndices := stop.
   RowanCommandResult addResult: self

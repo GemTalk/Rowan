@@ -89,7 +89,7 @@ RowanAnsweringService >> autocompleteSymbols [
   RowanCommandResult addResult: self
 ]
 
-{ #category : 'private' }
+{ #category : 'client command support' }
 RowanAnsweringService >> basicExec: aString context: oop [
 	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: Rowan image symbolList) asOop] 
 		on: CompileError do: [:ex | 
@@ -217,6 +217,13 @@ RowanAnsweringService >> exec: aString context: oop [
 
 	"return answer for testing" 
 	^answer
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> exec: aString context: oop inWindow: handle [
+  answer := self exec: aString context: oop.
+  RowanBrowserService new saveRootObject: answer value windowHandle: handle.	"return answer for testing"
+  ^ answer
 ]
 
 { #category : 'client commands' }
