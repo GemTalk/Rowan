@@ -218,8 +218,13 @@ RwLoadSpecificationV2 >> diskUrl: anUrlString [
 
 { #category : 'exporting' }
 RwLoadSpecificationV2 >> exportTo: directoryReference [
-	(directoryReference / self specName, 'ston')
-		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
+	directoryReference / self specName , 'ston'
+		writeStreamDo: [ :fileStream | self exportToStream: fileStream ]
+]
+
+{ #category : 'exporting' }
+RwLoadSpecificationV2 >> exportToStream: fileStream [
+	STON put: self copy initializeForExport onStreamPretty: fileStream
 ]
 
 { #category : 'ston' }
@@ -376,8 +381,10 @@ RwLoadSpecificationV2 >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	platformProperties isEmpty
-		ifTrue: [ platformProperties := nil ].
+	platformProperties
+		ifNotNil: [ 
+			platformProperties isEmpty
+				ifTrue: [ platformProperties := nil ] ].
 	repositoryResolutionPolicy := projectsHome := nil
 ]
 
