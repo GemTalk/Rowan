@@ -29,6 +29,8 @@ RwTestProjectLibraryGenerator new
 	genSpec_0018: commitComment;
 	genSpec_0019: commitComment;
 	genSpec_0020: commitComment;
+	genSpec_0021: commitComment;
+	genSpec_0022: commitComment;
 	yourself
 "
 Class {
@@ -1060,6 +1062,62 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0020: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0021: resolvedProject [
+	"Start with spec_0011, add pre and post load doits plus tests to validate that post load doits had been executed (part 1). Preload doit validation will be in part 2."
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	| packageName1 packageName2 packageName3 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		classVarNames: #('PostLoadDoit' 'PretLoadDoit');
+		addClassMethod: 'postLoadDoit ^PostLoadDoit' protocol: 'accessing';
+		addClassMethod: 'preLoadDoit ^PreLoadDoit' protocol: 'accessing';
+		addClassMethod: 'postLoadDoit: value PostLoadDoit := value'
+			protocol: 'accessing';
+		addClassMethod: 'pretLoadDoit: value PretLoadDoit := value'
+			protocol: 'accessing';
+		yourself.
+
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod:
+				'testPostLoadDoits
+	self assert: ' , className1
+						,
+							' preLoadDoit = nil.
+	self assert: ' , className1
+						,
+							' postLoadDoit = ''done''.
+'
+			protocol: 'tests';
+		yourself.
+
+	resolvedProject
+		addPreloadDoitName: 'preloadDoit.st'
+			withSource: className1 , ' preLoadDit: ''done'''
+			toComponentNamed: 'Core';
+		addPostloadDoitName: 'subs/postloadDoit.st'
+			withSource: className1 , ' postLoadDit: ''done'''
+			toComponentNamed: 'Core';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0022: resolvedProject [
+	"Start with spec_0021, add pre and post load doits adjust tests to validate that pre load doits had been executed (part 2)"
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDefinition [
 	| className packageName |
 	packageName := projectName , '-Core1'.
@@ -1243,13 +1301,13 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 			"create the branch"
 			resolvedRepository createBranch: specName ].
 
-	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	addDefinitionsBlock value: resolvedProject.
-
 	resolvedProject projectRoots
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
+
+	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	addDefinitionsBlock value: resolvedProject.
 
 	resolvedProject 
 		export;	"write the rowan directory structure"
@@ -2393,6 +2451,110 @@ RwTestProjectLibraryGenerator >> genSpec_0020: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0020: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0021: commitMessage [
+	"Start with spec_0011, add pre and post load doits plus tests to validate that post load doits had been executed (part 1). Preload doit validation will be in part 2."
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0021'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Start with spec_0011, add pre and post load doits plus tests to validate that post load doits had been executed (part 1). Preload doit validation will be in part 2.'
+		index: 21
+		derivedFrom: derivedFrom
+		comment:
+			'')
+		rowanIssues: #(568);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0021: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0022: commitMessage [
+	"Start with spec_0021, add pre and post load doits adjust tests to validate that pre load doits had been executed (part 2)"
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0022'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0021'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Start with spec_0021, add pre and post load doits adjust tests to validate that pre load doits had been executed (part 2)'
+		index: 22
+		derivedFrom: derivedFrom
+		comment:
+			'')
+		rowanIssues: #(568);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0022: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

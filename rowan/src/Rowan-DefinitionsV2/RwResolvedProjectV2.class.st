@@ -129,6 +129,28 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 		andGroupName: groupName
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
+	self doitsRoot exists
+		ifFalse: [ self doitsRoot ensureCreateDirectory ].
+	(self doitsRoot / doitName) exists
+		ifFalse: [ (self doitsRoot / doitName) ensureCreateFile ].
+	self doitsRoot / doitName
+		writeStreamDo: [ :fileStream | fileStream nextPutAll: doitSource ].
+	(self componentNamed: aComponentName) postloadDoitName: doitName
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
+	self doitsRoot exists
+		ifFalse: [ self doitsRoot ensureCreateDirectory ].
+	(self doitsRoot / doitName) exists
+		ifFalse: [ (self doitsRoot / doitName) ensureCreateFile ].
+	self doitsRoot / doitName
+		writeStreamDo: [ :fileStream | fileStream nextPutAll: doitSource ].
+	(self componentNamed: aComponentName) preloadDoitName: doitName
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 	^ self _projectDefinition

@@ -320,6 +320,26 @@ RwBasicProjectLoadComponentV2 >> name: anObject [
 ]
 
 { #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> postloadDoitName [
+	^postloadDoitName
+]
+
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> postloadDoitName: object [
+	postloadDoitName := object
+]
+
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> preloadDoitName [
+	^preloadDoitName
+]
+
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> preloadDoitName: object [
+	preloadDoitName := object
+]
+
+{ #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> projectName [
 
    ^projectName
