@@ -304,6 +304,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 				loadedClassNamed: className 
 				ifAbsent: [
 				| theBehavior |
+					| theBehavior |
 					theBehavior := Rowan image objectNamed: className.
 					isMeta ifTrue:  [ theBehavior := theBehavior class ].
 					RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString, '. The modification will not be tracked by Rowan'.
