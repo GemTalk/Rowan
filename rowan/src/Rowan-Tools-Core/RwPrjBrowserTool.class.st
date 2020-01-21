@@ -303,7 +303,6 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 			loadedClass := Rowan image 
 				loadedClassNamed: className 
 				ifAbsent: [
-				| theBehavior |
 					| theBehavior |
 					theBehavior := Rowan image objectNamed: className.
 					isMeta ifTrue:  [ theBehavior := theBehavior class ].
