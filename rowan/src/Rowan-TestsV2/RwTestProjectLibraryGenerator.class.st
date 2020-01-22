@@ -1075,12 +1075,12 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0021: resolvedProject [
 	className2 := projectName , 'TestCase'.
 
 	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
-		classVarNames: #('PostLoadDoit' 'PretLoadDoit');
+		classVarNames: #('PostLoadDoit' 'PreLoadDoit');
 		addClassMethod: 'postLoadDoit ^PostLoadDoit' protocol: 'accessing';
 		addClassMethod: 'preLoadDoit ^PreLoadDoit' protocol: 'accessing';
 		addClassMethod: 'postLoadDoit: value PostLoadDoit := value'
 			protocol: 'accessing';
-		addClassMethod: 'pretLoadDoit: value PretLoadDoit := value'
+		addClassMethod: 'preLoadDoit: value PreLoadDoit := value'
 			protocol: 'accessing';
 		yourself.
 
@@ -1099,10 +1099,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0021: resolvedProject [
 
 	resolvedProject
 		addPreloadDoitName: 'preloadDoit.st'
-			withSource: className1 , ' preLoadDit: ''done'''
+			withSource: '(Rowan globalNamed: ', className1 printString, ') ifNotNil: [:class | class perform: #preLoadDoit: with: ''done'' ]'
 			toComponentNamed: 'Core';
 		addPostloadDoitName: 'subs/postloadDoit.st'
-			withSource: className1 , ' postLoadDit: ''done'''
+			withSource: className1 , ' postLoadDoit: ''done'''
 			toComponentNamed: 'Core';
 		yourself.
 	^ resolvedProject

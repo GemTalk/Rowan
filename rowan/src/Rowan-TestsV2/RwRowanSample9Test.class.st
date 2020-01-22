@@ -204,6 +204,26 @@ RwRowanSample9Test >> _validateSpec_0017_componentStructure: resolvedProject [
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _validateSpec_0021_componentStructure: resolvedProject [
+	self
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames:
+				{'RowanSample9-Core'.
+				'RowanSample9-Extensions'}
+			projectNames: {};
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {'RowanSample9-Tests'}
+			projectNames: {};
+		yourself
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 	| exceptions |
 	exceptions := {}.
@@ -1514,5 +1534,5 @@ RwRowanSample9Test >> testSpec_0021 [
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-	self _validateSpec_0017_componentStructure: resolvedProject
+	self _validateSpec_0021_componentStructure: resolvedProject
 ]

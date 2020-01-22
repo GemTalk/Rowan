@@ -131,13 +131,10 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
-	self doitsRoot exists
-		ifFalse: [ self doitsRoot ensureCreateDirectory ].
-	(self doitsRoot / doitName) exists
-		ifFalse: [ (self doitsRoot / doitName) ensureCreateFile ].
-	self doitsRoot / doitName
-		writeStreamDo: [ :fileStream | fileStream nextPutAll: doitSource ].
-	(self componentNamed: aComponentName) postloadDoitName: doitName
+	| component |
+	component := self componentNamed: aComponentName.
+	component postloadDoitName: doitName.
+	component doitDict at: doitName put: doitSource
 ]
 
 { #category : 'accessing' }
@@ -191,7 +188,7 @@ RwResolvedProjectV2 >> components [
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> componentsWithDoits [
-	^ self _projectDefinition components componentsWithDoits
+	^ self _projectDefinition components componentsWithDoits: self doitsRoot
 ]
 
 { #category : 'copying' }
@@ -224,7 +221,11 @@ RwResolvedProjectV2 >> export [
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportComponents [
 	self components
-		do: [ :component | component exportToUrl: 'file:' , self componentsRoot pathString , '/' ].
+		do: [ :component | 
+			component
+				exportToUrl: 'file:' , self componentsRoot pathString , '/';
+				exportDoitsToUrl: 'file:' , self doitsRoot pathString , '/';
+				yourself ].
 	self components isEmpty
 		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"

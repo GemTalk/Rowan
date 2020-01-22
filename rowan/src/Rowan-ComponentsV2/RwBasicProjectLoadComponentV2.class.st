@@ -7,7 +7,8 @@ Class {
 		'projectName',
 		'conditionalPackageMapSpecs',
 		'preloadDoitName',
-		'postloadDoitName'
+		'postloadDoitName',
+		'doitDict'
 	],
 	#category : 'Rowan-ComponentsV2'
 }
@@ -229,6 +230,16 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packag
 	subApplicationsArray do: [ :value | subApplications add: value ]
 ]
 
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> doitDict [
+	^doitDict
+]
+
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> doitDict: object [
+	doitDict := object
+]
+
 { #category : 'ston' }
 RwBasicProjectLoadComponentV2 >> excludedInstVars [
 	^ #()
@@ -236,12 +247,35 @@ RwBasicProjectLoadComponentV2 >> excludedInstVars [
 
 { #category : 'doits' }
 RwBasicProjectLoadComponentV2 >> executePostloadDoit [
-	self halt: 'not yet implemented'
+	(self doitDict at: self postloadDoitName) evaluate
 ]
 
 { #category : 'doits' }
 RwBasicProjectLoadComponentV2 >> executePreloadDoit [
-	self halt: 'not yet implemented'
+	(self doitDict at: self preloadDoitName) evaluate
+]
+
+{ #category : 'exporting' }
+RwBasicProjectLoadComponentV2 >> exportDoitsToUrl: directoryUrl [
+	| doitsRoot url |
+	url := directoryUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			doitsRoot := url pathForDirectory asFileReference.
+			doitsRoot exists
+				ifFalse: [ doitsRoot ensureCreateDirectory ].
+			{(self preloadDoitName).
+			(self postloadDoitName)}
+				do: [ :doitName | 
+					doitName
+						ifNotNil: [ 
+							(self doitDict at: doitName ifAbsent: [  ])
+								ifNotNil: [ :doitString | 
+									(doitsRoot / doitName) exists
+										ifFalse: [ (doitsRoot / doitName) ensureCreateFile ].
+									doitsRoot / doitName
+										writeStreamDo: [ :fileStream | fileStream nextPutAll: doitString ] ] ] ] ]
+		ifFalse: [ self error: 'unsupported url scheme ' , url schemeName printString ]
 ]
 
 { #category : 'exporting' }
@@ -259,7 +293,8 @@ RwBasicProjectLoadComponentV2 >> hasDoits [
 
 { #category : 'initialization' }
 RwBasicProjectLoadComponentV2 >> initialize [
-	comment := ''
+	comment := ''.
+	doitDict := Dictionary new
 ]
 
 { #category : 'initialization' }
@@ -269,7 +304,7 @@ RwBasicProjectLoadComponentV2 >> initializeForExport [
 
 	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
 
-	projectName := nil.
+	doitDict := projectName := nil.
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
 			| orderedConditionalPackageMapSpecs |
@@ -351,6 +386,30 @@ RwBasicProjectLoadComponentV2 >> projectName: anObject [
 
    projectName := anObject
 
+]
+
+{ #category : 'doits' }
+RwBasicProjectLoadComponentV2 >> resolveDoits: doitsRoot [
+	preloadDoitName
+		ifNotNil: [ 
+			(doitsRoot / preloadDoitName) exists
+				ifTrue: [ 
+					doitsRoot / preloadDoitName
+						readStreamDo: [ :fileStream | self doitDict at: preloadDoitName put: fileStream contents ] ]
+				ifFalse: [ 
+					self doitDict
+						at: preloadDoitName
+						put: '"no doit file ' , preloadDoitName printString , ' found"' ] ].
+	postloadDoitName
+		ifNotNil: [ 
+			(doitsRoot / postloadDoitName) exists
+				ifTrue: [ 
+					doitsRoot / postloadDoitName
+						readStreamDo: [ :fileStream | self doitDict at: postloadDoitName put: fileStream contents ] ]
+				ifFalse: [ 
+					self doitDict
+						at: postloadDoitName
+						put: '"no doit file ' , postloadDoitName printString , ' found"' ] ]
 ]
 
 { #category : 'ston' }
