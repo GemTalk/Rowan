@@ -124,11 +124,6 @@ RwAbstractResolvedObjectV2 >> componentsRoot [
 	^ self repositoryRoot / self _projectSpecification componentsPath
 ]
 
-{ #category : 'accessing' }
-RwAbstractResolvedObjectV2 >> doitsRoot [
-	^ self repositoryRoot / self _projectSpecification doitsPath
-]
-
 { #category : 'package properties' }
 RwAbstractResolvedObjectV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 	self subclassResponsibility: #'gemstoneSetSymbolDictName:forPackageNamed:'
@@ -197,7 +192,6 @@ RwAbstractResolvedObjectV2 >> projectName: aString [
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectRoots [
 	^ {(self componentsRoot).
-	(self doitsRoot).
 	(self packagesRoot).
 	(self specsRoot).
 	(self projectsRoot)}

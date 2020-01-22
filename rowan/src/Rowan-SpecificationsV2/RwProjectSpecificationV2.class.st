@@ -6,7 +6,6 @@ Class {
 		'projectName',
 		'projectSpecPath',
 		'componentsPath',
-		'doitsPath',
 		'packagesPath',
 		'projectsPath',
 		'specsPath',
@@ -61,24 +60,22 @@ RwProjectSpecificationV2 >> = anObject [
 				and: [ 
 					self componentsPath = anObject componentsPath
 						and: [ 
-							self doitsPath = anObject doitsPath
+							self packageFormat = anObject packageFormat
 								and: [ 
-									self packageFormat = anObject packageFormat
+									self packageConvention = anObject packageConvention
 										and: [ 
-											self packageConvention = anObject packageConvention
+											self packagesPath = anObject packagesPath
 												and: [ 
-													self packagesPath = anObject packagesPath
+													self projectsPath = anObject projectsPath
 														and: [ 
-															self projectsPath = anObject projectsPath
+															self specsPath = anObject specsPath
 																and: [ 
-																	self specsPath = anObject specsPath
+																	lazyEqual := self _repoType = anObject _repoType
+																		or: [ self repoType = anObject repoType ].
+																	lazyEqual
 																		and: [ 
-																			lazyEqual := self _repoType = anObject _repoType
-																				or: [ self repoType = anObject repoType ].
-																			lazyEqual
-																				and: [ 
-																					self comment = anObject comment
-																						and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ] ]
+																			self comment = anObject comment
+																				and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -102,21 +99,24 @@ RwProjectSpecificationV2 >> componentsPath: aString [
 	componentsPath := aString
 ]
 
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> doitsPath [
-	^doitsPath
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> doitsPath: object [
-	doitsPath := object
-]
-
 { #category : 'exporting' }
 RwProjectSpecificationV2 >> exportTo: directoryReference [
 
 	(directoryReference / self projectSpecPath / self specName, 'ston')
 		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
+]
+
+{ #category : 'other' }
+RwProjectSpecificationV2 >> fromSton: stonReader [
+  "short term mod needed for rewriting RowanSample9 projects once https://github.com/GemTalk/Rowan/issues/568 work is completed"
+
+  self class isVariable
+    ifTrue: [ self subclassResponsibility ]
+    ifFalse: [ | instanceVariableNames |
+      instanceVariableNames := self class allInstVarNames.
+      stonReader
+        parseMapDo: [ :instVarName :value |
+			instVarName == #doitsPath ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ]
 ]
 
 { #category : 'comparing' }
@@ -125,7 +125,6 @@ RwProjectSpecificationV2 >> hash [
 	hashValue := self specName hash.
 	hashValue := hashValue bitXor: self projectName hash.
 	hashValue := hashValue bitXor: self componentsPath hash.
-	hashValue := hashValue bitXor: self doitsPath hash.
 	hashValue := hashValue bitXor: self packagesPath hash.
 	hashValue := hashValue bitXor: self projectsPath hash.
 	hashValue := hashValue bitXor: self specsPath hash.
@@ -141,7 +140,6 @@ RwProjectSpecificationV2 >> hash [
 RwProjectSpecificationV2 >> initialize [
 	super initialize.
 	componentsPath := 'rowan/components'.
-	doitsPath := 'rowan/doits'.
 	packagesPath := 'rowan/src'.
 	projectsPath := 'rowan/projects'.
 	specsPath := 'rowan/specs'.

@@ -202,7 +202,6 @@ RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
 	(resolvedProject componentsRoot).
 	(resolvedProject componentsRoot / 'Core.ston').
 	(resolvedProject componentsRoot / 'subs' / 'Nested.ston').
-	(resolvedProject doitsRoot).
 	(resolvedProject packagesRoot).
 	(resolvedProject packagesRoot / (projectName , '-Core')).
 	(resolvedProject packagesRoot / (projectName , '-Core')

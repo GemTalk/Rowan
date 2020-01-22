@@ -28,10 +28,10 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedPr
 		groupNames: groupNames.
 	componentNames
 		do: [ :componentName | 
-			| component url |
-			url := 'file:' , (componentDirectory / componentName , 'ston') pathString.
-			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
-			component resolveDoits: resolvedProject doitsRoot.
+			| component |
+			component := RwBasicProjectLoadComponentV2
+				fromComponentsDirectory: componentDirectory
+				named: componentName.
 			component projectName: projectName.
 			forLoad
 				ifTrue: [ 

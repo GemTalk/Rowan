@@ -139,13 +139,10 @@ RwResolvedProjectV2 >> addPostloadDoitName: doitName withSource: doitSource toCo
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
-	self doitsRoot exists
-		ifFalse: [ self doitsRoot ensureCreateDirectory ].
-	(self doitsRoot / doitName) exists
-		ifFalse: [ (self doitsRoot / doitName) ensureCreateFile ].
-	self doitsRoot / doitName
-		writeStreamDo: [ :fileStream | fileStream nextPutAll: doitSource ].
-	(self componentNamed: aComponentName) preloadDoitName: doitName
+	| component |
+	component := self componentNamed: aComponentName.
+	component preloadDoitName: doitName.
+	component doitDict at: doitName put: doitSource
 ]
 
 { #category : 'project definition' }

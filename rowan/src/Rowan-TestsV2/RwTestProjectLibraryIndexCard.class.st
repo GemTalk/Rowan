@@ -9,7 +9,8 @@ Class {
 		'derivedFrom',
 		'comment',
 		'rowanIssues',
-		'gemstoneIssues'
+		'gemstoneIssues',
+		'rowanSHA'
 	],
 	#category : 'Rowan-TestsV2'
 }
@@ -83,6 +84,18 @@ RwTestProjectLibraryIndexCard >> rowanIssues [
 { #category : 'accessing' }
 RwTestProjectLibraryIndexCard >> rowanIssues: object [
 	rowanIssues := object
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryIndexCard >> rowanSHA [
+	"The SHA of the Rowan commit used to create this index card"
+
+	^rowanSHA
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryIndexCard >> rowanSHA: object [
+	rowanSHA := object
 ]
 
 { #category : 'accessing' }

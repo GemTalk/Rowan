@@ -30,6 +30,15 @@ RwBasicProjectLoadComponentV2 class >> _readStonFrom: stream [
 ]
 
 { #category : 'instance creation' }
+RwBasicProjectLoadComponentV2 class >> fromComponentsDirectory: componentsDirectory named: componentName [
+	| component url |
+	url := 'file:' , (componentsDirectory / componentName , 'ston') pathString.
+	component := self fromUrl: url.
+	component _readDoitsFrom: componentsDirectory.
+	^ component
+]
+
+{ #category : 'instance creation' }
 RwBasicProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
 
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
@@ -117,8 +126,31 @@ RwBasicProjectLoadComponentV2 >> _canonicalizeVastPackageMapSpecs: propertiesMap
 	^ orderedPropertyMap
 ]
 
+{ #category : 'doits' }
+RwBasicProjectLoadComponentV2 >> _readDoitsFrom: componentsRoot [
+	| fileRef |
+	preloadDoitName
+		ifNotNil: [ 
+			fileRef := componentsRoot / preloadDoitName , 'st'.
+			fileRef exists
+				ifTrue: [ 
+					fileRef
+						readStreamDo: [ :fileStream | self doitDict at: preloadDoitName put: fileStream contents ] ]
+				ifFalse: [ self error: '"no doit file ' , preloadDoitName printString , ' found"' ] ].
+	postloadDoitName
+		ifNotNil: [ 
+			fileRef := componentsRoot / postloadDoitName , 'st'.
+
+			fileRef exists
+				ifTrue: [ 
+					fileRef
+						readStreamDo: [ :fileStream | self doitDict at: postloadDoitName put: fileStream contents ] ]
+				ifFalse: [ self error: '"no doit file ' , postloadDoitName printString , ' found"' ] ]
+]
+
 { #category : 'validation' }
 RwBasicProjectLoadComponentV2 >> _validateDoits [
+true ifTrue: [ "short term hack" ^self].
 	self preloadDoitName
 		ifNotNil: [ 
 			((self doitDict
@@ -293,8 +325,6 @@ RwBasicProjectLoadComponentV2 >> exportDoitsToUrl: directoryUrl [
 	url schemeName = 'file'
 		ifTrue: [ 
 			doitsRoot := url pathForDirectory asFileReference.
-			doitsRoot exists
-				ifFalse: [ doitsRoot ensureCreateDirectory ].
 			{(self preloadDoitName).
 			(self postloadDoitName)}
 				do: [ :doitName | 
@@ -302,19 +332,21 @@ RwBasicProjectLoadComponentV2 >> exportDoitsToUrl: directoryUrl [
 						ifNotNil: [ 
 							(self doitDict at: doitName ifAbsent: [  ])
 								ifNotNil: [ :doitString | 
-									(doitsRoot / doitName) exists
-										ifFalse: [ (doitsRoot / doitName) ensureCreateFile ].
-									doitsRoot / doitName
+									| fileRef |
+									fileRef := doitsRoot / doitName , 'st'.
+									fileRef exists
+										ifFalse: [ fileRef ensureCreateFile ].
+									fileRef
 										writeStreamDo: [ :fileStream | fileStream nextPutAll: doitString ] ] ] ] ]
 		ifFalse: [ self error: 'unsupported url scheme ' , url schemeName printString ]
 ]
 
 { #category : 'exporting' }
 RwBasicProjectLoadComponentV2 >> exportToUrl: directoryUrl [
-
-	^ self copy
-		initializeForExport
-		_exportToUrl: directoryUrl
+	self exportDoitsToUrl: directoryUrl.
+	^ self copy initializeForExport
+		_exportToUrl: directoryUrl;
+		yourself
 ]
 
 { #category : 'testing' }
@@ -417,30 +449,6 @@ RwBasicProjectLoadComponentV2 >> projectName: anObject [
 
    projectName := anObject
 
-]
-
-{ #category : 'doits' }
-RwBasicProjectLoadComponentV2 >> resolveDoits: doitsRoot [
-	preloadDoitName
-		ifNotNil: [ 
-			(doitsRoot / preloadDoitName) exists
-				ifTrue: [ 
-					doitsRoot / preloadDoitName
-						readStreamDo: [ :fileStream | self doitDict at: preloadDoitName put: fileStream contents ] ]
-				ifFalse: [ 
-					self doitDict
-						at: preloadDoitName
-						put: '"no doit file ' , preloadDoitName printString , ' found"' ] ].
-	postloadDoitName
-		ifNotNil: [ 
-			(doitsRoot / postloadDoitName) exists
-				ifTrue: [ 
-					doitsRoot / postloadDoitName
-						readStreamDo: [ :fileStream | self doitDict at: postloadDoitName put: fileStream contents ] ]
-				ifFalse: [ 
-					self doitDict
-						at: postloadDoitName
-						put: '"no doit file ' , postloadDoitName printString , ' found"' ] ]
 ]
 
 { #category : 'ston' }

@@ -1099,10 +1099,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0021: resolvedProject [
 		yourself.
 
 	resolvedProject
-		addPreloadDoitName: 'preloadDoit.st'
+		addPreloadDoitName: 'preloadDoit'
 			withSource: '(Rowan globalNamed: ', className1 printString, ') ifNotNil: [:class | class perform: #preLoadDoit: with: ''done'' ]'
 			toComponentNamed: 'Core';
-		addPostloadDoitName: 'subs/postloadDoit.st'
+		addPostloadDoitName: 'subs/postloadDoit'
 			withSource: className1 , ' postLoadDoit: ''done'''
 			toComponentNamed: 'Core';
 		yourself.
@@ -1164,6 +1164,7 @@ RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: 
 		comment: comment;
 		rowanIssues: {};
 		gemstoneIssues: {};
+		rowanSHA: (RwProject newNamed: 'Rowan') repositoryCommitId;
 		yourself
 ]
 
@@ -1321,17 +1322,19 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 			"create the branch"
 			resolvedRepository createBranch: specName ].
 
+	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	addDefinitionsBlock value: resolvedProject.
+
 	resolvedProject projectRoots
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
 
-	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	addDefinitionsBlock value: resolvedProject.
+	(resolvedProject repositoryRoot / 'rowan/doits') ensureDeleteAll.
 
-	resolvedProject 
-		export;	"write the rowan directory structure"
-		exportLoadSpecification.
+	resolvedProject
+		export;
+		exportLoadSpecification.	"write the rowan directory structure"
 
 	^ resolvedRepository
 ]
