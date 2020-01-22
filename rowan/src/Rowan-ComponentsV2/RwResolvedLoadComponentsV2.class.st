@@ -39,7 +39,9 @@ RwResolvedLoadComponentsV2 >> _validate [
 	componentPackageNames := Set new.
 	self components
 		keysAndValuesDo: [ :componentName :component | 
-			component validate.
+			component
+				validate;
+				_validateDoits.
 			componentPackageNames addAll: component packageNames ].
 	^ componentPackageNames
 ]
@@ -52,7 +54,9 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes groupNa
 	componentPackageNames := Set new.
 	self components
 		keysAndValuesDo: [ :componentName :component | 
-			component validate.
+			component
+				validate;
+				_validateDoits.
 			componentPackageNames
 				addAll:
 					(component
@@ -242,17 +246,6 @@ RwResolvedLoadComponentsV2 >> components: object [
 { #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> componentsWithDoits [
 	^ self components select: [ :each | each hasDoits ]
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> componentsWithDoits: doitsRoot [
-	^ self components
-		select: [ :each | 
-			each hasDoits
-				ifTrue: [ 
-					each resolveDoits: doitsRoot.
-					true ]
-				ifFalse: [ false ] ]
 ]
 
 { #category : 'enumerating' }

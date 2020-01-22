@@ -118,6 +118,37 @@ RwBasicProjectLoadComponentV2 >> _canonicalizeVastPackageMapSpecs: propertiesMap
 ]
 
 { #category : 'validation' }
+RwBasicProjectLoadComponentV2 >> _validateDoits [
+	self preloadDoitName
+		ifNotNil: [ 
+			((self doitDict
+				at: self preloadDoitName
+				ifAbsent: [ 
+					self
+						error:
+							'Expected doit for ' , self preloadDoitName printString , ' to exist.' ])
+				isKindOf: CharacterCollection)
+				ifFalse: [ 
+					self
+						error:
+							'Doit for ' , self preloadDoitName printString , ' is not a CharacterCollection' ] ].
+	self postloadDoitName
+		ifNotNil: [ 
+			((self doitDict
+				at: self postloadDoitName
+				ifAbsent: [ 
+					self
+						error:
+							'Expected doit for ' , self postloadDoitName printString , ' to exist.' ])
+				isKindOf: CharacterCollection)
+				ifFalse: [ 
+					self
+						error:
+							'Doit for ' , self postloadDoitName printString
+								, ' is not a CharacterCollection' ] ]
+]
+
+{ #category : 'validation' }
 RwBasicProjectLoadComponentV2 >> _validatedPackageNames [
 	"answer the validated set of package names"
 
@@ -438,6 +469,7 @@ RwBasicProjectLoadComponentV2 >> validate [
 
 	| allDefinedPackageNames |
 	self name ifNil: [ self error: 'name is nil' ].
+	self _validateDoits.
 	allDefinedPackageNames := self _validatedPackageNames.
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformName :platformPropertiesMap | 

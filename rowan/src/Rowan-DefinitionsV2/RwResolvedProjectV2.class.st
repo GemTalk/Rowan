@@ -188,7 +188,7 @@ RwResolvedProjectV2 >> components [
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> componentsWithDoits [
-	^ self _projectDefinition components componentsWithDoits: self doitsRoot
+	^ self _projectDefinition components componentsWithDoits
 ]
 
 { #category : 'copying' }
@@ -224,7 +224,6 @@ RwResolvedProjectV2 >> exportComponents [
 		do: [ :component | 
 			component
 				exportToUrl: 'file:' , self componentsRoot pathString , '/';
-				exportDoitsToUrl: 'file:' , self doitsRoot pathString , '/';
 				yourself ].
 	self components isEmpty
 		ifTrue: [ 

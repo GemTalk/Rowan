@@ -31,6 +31,7 @@ RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedPr
 			| component url |
 			url := 'file:' , (componentDirectory / componentName , 'ston') pathString.
 			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
+			component resolveDoits: resolvedProject doitsRoot.
 			component projectName: projectName.
 			forLoad
 				ifTrue: [ 

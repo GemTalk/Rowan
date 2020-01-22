@@ -1087,6 +1087,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0021: resolvedProject [
 	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
 		addInstanceMethod:
 				'testPostLoadDoits
+	"part 1"
 	self assert: ' , className1
 						,
 							' preLoadDoit = nil.
@@ -1113,6 +1114,25 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0022: resolvedProject [
 	"Start with spec_0021, add pre and post load doits adjust tests to validate that pre load doits had been executed (part 2)"
 
 	"https://github.com/GemTalk/Rowan/issues/568"
+
+	| packageName3 className1 className2 |
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		updateInstanceMethod:
+				'testPostLoadDoits
+	"part 2"
+	self assert: ' , className1
+						,
+							' preLoadDoit = ''done''.
+	self assert: ' , className1
+						,
+							' postLoadDoit = ''done''.
+'
+			protocol: 'tests';
+		yourself.
 
 	^ resolvedProject
 ]
