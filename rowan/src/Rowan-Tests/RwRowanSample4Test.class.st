@@ -1698,7 +1698,7 @@ RwRowanSample4Test >> testIssue284 [
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
-	self assert: loadedCommitId = '8a4a450'
+	self assert: loadedCommitId = '322983e'
 ]
 
 { #category : 'tests' }
