@@ -1573,3 +1573,27 @@ RwRowanSample9Test >> testSpec_0021 [
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 	self _validateSpec_0021_componentStructure: resolvedProject
 ]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0023 [
+	"spec_0023 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/568"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0023'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]

@@ -1138,6 +1138,98 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0022: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
+	"Start with spec_0011, add a sequence of packages each subclassing off of the the other to be loaded in order."
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	| packageName1 packageName2 packageName3 packageName4 testPackageName className1 className2 className3 className4 testClassName1 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Core2'.
+	packageName3 := projectName , '-' , 'Core3'.
+	packageName4 := projectName , '-' , 'Core4'.
+	testPackageName := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	className4 := projectName , 'Class4'.
+	testClassName1 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		classInstVarNames: #('postLoadDoit' 'preLoadDoit');
+		addClassMethod: 'postLoadDoit ^postLoadDoit' protocol: 'accessing';
+		addClassMethod: 'preLoadDoit ^preLoadDoit' protocol: 'accessing';
+		addClassMethod: 'postLoadDoit: value postLoadDoit := value'
+			protocol: 'accessing';
+		addClassMethod: 'preLoadDoit: value preLoadDoit := value'
+			protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: testPackageName)
+		classDefinitionNamed: testClassName1)
+		addInstanceMethod:
+				'testPostLoadDoits
+	self assert: ' , className1
+						,
+							' preLoadDoit = nil.
+	self assert: ' , className1
+						,
+							' postLoadDoit = 1.
+'
+			protocol: 'tests';
+		yourself.
+
+	{packageName2.
+	packageName3.
+	packageName4}
+		do: [ :packageName | resolvedProject addRawPackageNamed: packageName ].
+
+	resolvedProject removeComponentNamed: 'Core'.
+	resolvedProject components
+		addSequencedComponentNamed: 'Core'
+		condition: 'common'
+		groupName: 'core'
+		comment:
+			'master component, that will load 4 simple components in order with each component doing a complete, independent load'.
+
+	resolvedProject components
+		addSimpleComponentNamed: 'Core1'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'First component for loading first package';
+		addPackageNamed: packageName1 toComponentNamed: 'Core1';
+		addSimpleComponentNamed: 'Core2'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'Second component for loading second package';
+		addPackageNamed: packageName2 toComponentNamed: 'Core2';
+		addSimpleComponentNamed: 'Core3'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'Third component for loading third package';
+		addPackageNamed: packageName3 toComponentNamed: 'Core3';
+		addSimpleComponentNamed: 'Core4'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'Fourth component for loading fourth package';
+		addPackageNamed: packageName4 toComponentNamed: 'Core4';
+		yourself.
+
+	(resolvedProject componentNamed: 'Core')
+		addComponentNamed: 'Core1';
+		addComponentNamed: 'Core2';
+		addComponentNamed: 'Core3';
+		addComponentNamed: 'Core4';
+		yourself.
+
+	resolvedProject
+		addPostloadDoitName: 'doits/postloadDoit_Core1'
+			withSource: className1 , ' postLoadDoit: 1'
+			toComponentNamed: 'Core1';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDefinition [
 	| className packageName |
 	packageName := projectName , '-Core1'.
@@ -2578,6 +2670,58 @@ RwTestProjectLibraryGenerator >> genSpec_0022: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0022: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
+	"Start with  spec_0011, add a sequence of packages each subclassing off of the the other to be loaded in order."
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0023'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Start with spec_0011, add a sequence of packages each subclassing off of the the other to be loaded in order.'
+		index: 23
+		derivedFrom: derivedFrom
+		comment:
+			'')
+		rowanIssues: #(568);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0023: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
