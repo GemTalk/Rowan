@@ -106,19 +106,6 @@ RwProjectSpecificationV2 >> exportTo: directoryReference [
 		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
 ]
 
-{ #category : 'other' }
-RwProjectSpecificationV2 >> fromSton: stonReader [
-  "short term mod needed for rewriting RowanSample9 projects once https://github.com/GemTalk/Rowan/issues/568 work is completed"
-
-  self class isVariable
-    ifTrue: [ self subclassResponsibility ]
-    ifFalse: [ | instanceVariableNames |
-      instanceVariableNames := self class allInstVarNames.
-      stonReader
-        parseMapDo: [ :instVarName :value |
-			instVarName == #doitsPath ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ]
-]
-
 { #category : 'comparing' }
 RwProjectSpecificationV2 >> hash [
 	| hashValue |

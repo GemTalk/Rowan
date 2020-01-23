@@ -208,9 +208,10 @@ RwStrawmanProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 
 	componentNames
 		do: [ :componentName | 
-			| component url |
-			url := 'file:' , (self componentsRoot / componentName , 'ston') pathString.
-			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
+			| component |
+			component := RwBasicProjectLoadComponentV2
+				fromComponentsDirectory: self componentsRoot
+				named: componentName.
 			component projectName: self projectAlias.
 
 			visitor visit: component ].

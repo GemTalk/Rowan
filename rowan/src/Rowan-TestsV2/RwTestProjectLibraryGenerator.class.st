@@ -1099,10 +1099,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0021: resolvedProject [
 		yourself.
 
 	resolvedProject
-		addPreloadDoitName: 'preloadDoit'
+		addPreloadDoitName: 'doits/preloadDoit'
 			withSource: '(Rowan globalNamed: ', className1 printString, ') ifNotNil: [:class | class perform: #preLoadDoit: with: ''done'' ]'
 			toComponentNamed: 'Core';
-		addPostloadDoitName: 'subs/postloadDoit'
+		addPostloadDoitName: 'doits/postloadDoit'
 			withSource: className1 , ' postLoadDoit: ''done'''
 			toComponentNamed: 'Core';
 		yourself.

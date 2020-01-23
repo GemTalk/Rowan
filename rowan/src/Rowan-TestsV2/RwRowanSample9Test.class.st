@@ -867,6 +867,43 @@ RwRowanSample9Test >> testIssue_557 [
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue_568 [
+	"load spec_0021, then spec_0022 to validate that pre load doit was run"
+
+	"https://github.com/dalehenrich/Rowan/issues/568"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0021'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self _validateSpec_0021_componentStructure: resolvedProject.
+
+"load spec_0022"
+	loadSpec := self _loadSpecNamed: 'spec_0022'.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project should trigger preload doit"
+	loadedProjects := resolvedProject load.
+
+"validate test will validate that preload doit executed"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
 { #category : 'issue 495' }
 RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
