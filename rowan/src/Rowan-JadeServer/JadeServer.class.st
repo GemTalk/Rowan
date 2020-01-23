@@ -1779,7 +1779,7 @@ JadeServer >> inspect: anObject [
 	(anObject isKindOf: Dictionary superclass) ifTrue: [^self inspectDictionary: anObject on: stream].
 	self inspectNamedInstanceVariablesOf: anObject on: stream.
 	anObject class format > 0 ifTrue: [
-		1 to: (anObject _basicSize min: 200) do: [:i | 
+		1 to: (anObject _basicSize) do: [:i | 
 			i printOn: stream.
 			stream tab.
 			self print: (self oopOf: (anObject _at: i)) on: stream.

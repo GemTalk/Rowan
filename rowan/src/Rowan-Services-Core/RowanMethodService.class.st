@@ -32,7 +32,8 @@ Class {
 		'firstReference',
 		'renamedName',
 		'isMethodForBlock',
-		'homeMethodOop'
+		'homeMethodOop',
+		'hasMethodHistory'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -139,6 +140,16 @@ RowanMethodService >> addOrUpdateMethod [
                    forClassNamed: self classService name
                    isMeta: meta
                    inPackageNamed: self classService packageName
+]
+
+{ #category : 'method history' }
+RowanMethodService >> addToMethodHistory [
+  | rowanMethodHistory methodHistory |
+  rowanMethodHistory := (System myUserProfile objectNamed: #UserGlobals)
+    at: #'RowanMethodHistory'
+    ifAbsentPut: [ Dictionary new ].
+  methodHistory := rowanMethodHistory at: self ifAbsentPut: [ Array new ].
+  methodHistory add: self
 ]
 
 { #category : 'client commands' }
@@ -396,6 +407,7 @@ RowanMethodService >> initialize [
 	isTestMethod := false.
 	failedCompile := false.
 	isMethodForBlock := false.
+	hasMethodHistory := true.
 ]
 
 { #category : 'initialization' }
@@ -420,7 +432,8 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
-	self initializeTestMethodsFor: inClass thisClass
+	self initializeTestMethodsFor: inClass thisClass.
+	self setHasMethodHistory
 ]
 
 { #category : 'initialization' }
@@ -620,6 +633,14 @@ RowanMethodService >> setBreakAt: stepPoint [
     ifFalse: [ GsNMethod _disableAllBreaks ].
   self update.
   RowanCommandResult addResult: self
+]
+
+{ #category : 'method history' }
+RowanMethodService >> setHasMethodHistory [
+  | answeringService |
+  answeringService := RowanAnsweringService new.
+  hasMethodHistory := (answeringService basicMethodHistoryFor: self) answer size
+    > 1.
 ]
 
 { #category : 'initialization' }
