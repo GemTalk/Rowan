@@ -1143,12 +1143,15 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/568"
 
-	| packageName1 packageName2 packageName3 packageName4 testPackageName className1 className2 className3 className4 testClassName1 |
+	| packageName1 packageName2 packageName3 packageName4 testPackageName testPackageName2 testPackageName3 testPackageName4 className1 className2 className3 className4 testClassName1 |
 	packageName1 := projectName , '-' , 'Core'.
 	packageName2 := projectName , '-' , 'Core2'.
 	packageName3 := projectName , '-' , 'Core3'.
 	packageName4 := projectName , '-' , 'Core4'.
 	testPackageName := projectName , '-' , 'Tests'.
+	testPackageName2 := projectName , '-' , 'Tests2'.
+	testPackageName3 := projectName , '-' , 'Tests3'.
+	testPackageName4 := projectName , '-' , 'Tests4'.
 	className1 := projectName , 'Class1'.
 	className2 := projectName , 'Class2'.
 	className3 := projectName , 'Class3'.
@@ -1170,9 +1173,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 				'testPostLoadDoits
 	self assert: ' , className1
 						,
-							' preLoadDoit = nil.
-	self assert: ' , className1
-						,
 							' postLoadDoit = 1.
 '
 			protocol: 'tests';
@@ -1180,8 +1180,107 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 
 	{packageName2.
 	packageName3.
-	packageName4}
+	packageName4.
+	testPackageName2.
+	testPackageName3.
+	testPackageName4}
 		do: [ :packageName | resolvedProject addRawPackageNamed: packageName ].
+
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: className2
+		super: className1
+		instvars: #()
+		category: packageName2
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^2' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: testPackageName2)
+		addClassExtensionNamed: testClassName1)
+		addInstanceMethod:
+				'testPostLoadDoits2
+	self assert: ' , className1
+						,
+							' preLoadDoit = 2.
+	self assert: ' , className1
+						,
+							' postLoadDoit = 1.
+	self assert: ' , className2
+						,
+							' postLoadDoit = 2.
+'
+			protocol: '*' , testPackageName2 asLowercase;
+		yourself.
+
+	((resolvedProject packageNamed: packageName3)
+		addClassNamed: className3
+		super: className2
+		instvars: #()
+		category: packageName3
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^3' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: testPackageName3)
+		addClassExtensionNamed: testClassName1)
+		addInstanceMethod:
+				'testPostLoadDoits3
+	self assert: ' , className1
+						,
+							' preLoadDoit = 2.
+	self assert: ' , className1
+						,
+							' postLoadDoit = 1.
+	self assert: ' , className2
+						,
+							' preLoadDoit = 3.
+	self assert: ' , className2
+						,
+							' postLoadDoit = 2.
+	self assert: ' , className3
+						,
+							' postLoadDoit = 3.
+'
+			protocol: '*' , testPackageName3 asLowercase;
+		yourself.
+
+	((resolvedProject packageNamed: packageName4)
+		addClassNamed: className4
+		super: className3
+		instvars: #()
+		category: packageName4
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^4' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: testPackageName4)
+		addClassExtensionNamed: testClassName1)
+		addInstanceMethod:
+				'testPostLoadDoits4
+	self assert: ' , className1
+						,
+							' preLoadDoit = 2.
+	self assert: ' , className1
+						,
+							' postLoadDoit = 1.
+	self assert: ' , className2
+						,
+							' preLoadDoit = 3.
+	self assert: ' , className2
+						,
+							' postLoadDoit = 2.
+	self assert: ' , className3
+						,
+							' preLoadDoit = 4.
+	self assert: ' , className3
+						,
+							' postLoadDoit = 3.
+	self assert: ' , className4
+						,
+							' preLoadDoit = nil.
+	self assert: ' , className4
+						,
+							' postLoadDoit = 4.
+'
+			protocol: '*' , testPackageName4 asLowercase;
+		yourself.
 
 	resolvedProject removeComponentNamed: 'Core'.
 	resolvedProject components
@@ -1225,6 +1324,24 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 		addPostloadDoitName: 'doits/postloadDoit_Core1'
 			withSource: className1 , ' postLoadDoit: 1'
 			toComponentNamed: 'Core1';
+		addPreloadDoitName: 'doits/preloadDoit_Core2'
+			withSource: className1 , ' preLoadDoit: 2'
+			toComponentNamed: 'Core2';
+		addPostloadDoitName: 'doits/postloadDoit_Core2'
+			withSource: className2 , ' postLoadDoit: 2'
+			toComponentNamed: 'Core2';
+		addPreloadDoitName: 'doits/preloadDoit_Core3'
+			withSource: className2 , ' preLoadDoit: 3'
+			toComponentNamed: 'Core3';
+		addPostloadDoitName: 'doits/postloadDoit_Core3'
+			withSource: className3 , ' postLoadDoit: 3'
+			toComponentNamed: 'Core3';
+		addPreloadDoitName: 'doits/preloadDoit_Core4'
+			withSource: className3 , ' preLoadDoit: 4'
+			toComponentNamed: 'Core4';
+		addPostloadDoitName: 'doits/postloadDoit_Core4'
+			withSource: className4 , ' postLoadDoit: 4'
+			toComponentNamed: 'Core4';
 		yourself.
 	^ resolvedProject
 ]
@@ -1288,7 +1405,7 @@ RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage resolvedReposit
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom resolvedRepository: resolvedRepository commitMessage: commitMessage [
-	| derivedIndexCardFile |
+	| derivedIndexCardFile indexCardDict card |
 	derivedFrom
 		ifNil: [ 
 			(resolvedRepository repositoryRoot / 'indexCards') exists
@@ -1315,6 +1432,11 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: index
 	resolvedRepository _loadSpecification
 		exportTo: resolvedRepository repositoryRoot / 'specs'.
 
+	indexCardDict := Dictionary new.
+	(resolvedRepository repositoryRoot / 'indexCards') allFiles
+		do: [ :indexFile | 
+			card := RwTestProjectLibraryIndexCard fromFile: indexFile.
+			indexCardDict at: card specName put: card ].
 	resolvedRepository repositoryRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
 			fileStream
@@ -1337,6 +1459,12 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: index
 						lf;
 						yourself.
 					loadSpec exportToStream: fileStream.
+					(indexCardDict at: loadSpec specName ifAbsent: [  ])
+						ifNotNil: [ :iCard | 
+							fileStream
+								lf;
+								lf.
+							iCard exportToStream: fileStream ].
 					fileStream
 						lf;
 						nextPutAll: '```';
@@ -2696,7 +2824,7 @@ RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Start with spec_0011, add a sequence of packages each subclassing off of the the other to be loaded in order.'
+		title: 'Start with spec_0011, add a sequence of packages each subclassing off of the the other to be loaded in order. The Core component is a sequenced component.'
 		index: 23
 		derivedFrom: derivedFrom
 		comment:

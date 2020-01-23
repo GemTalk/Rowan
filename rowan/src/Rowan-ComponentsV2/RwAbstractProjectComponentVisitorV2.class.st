@@ -213,6 +213,28 @@ RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadCo
 ]
 
 { #category : 'visiting' }
+RwAbstractProjectComponentVisitorV2 >> visitSequencedProjectLoadComponent: aSequencedProjectLoadComponent [
+	| urlBase |
+	(visitedComponentNames includes: aSequencedProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aSequencedProjectLoadComponent.
+
+	urlBase := 'file:' , self componentsPath asFileReference pathString , '/'.
+	aSequencedProjectLoadComponent componentNames
+		do: [ :componentName | 
+			| url component |
+			url := urlBase , componentName , '.ston'.
+			component := (RwAbstractProjectLoadComponentV2 fromUrl: url)
+				projectName: aSequencedProjectLoadComponent projectName;
+				yourself.
+
+			component acceptNestedVisitor: self.
+
+			self error: 'not yet implmented' ]
+]
+
+{ #category : 'visiting' }
 RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent [
 	(visitedComponentNames includes: aSimpleProjectLoadComponent name)
 		ifTrue: [ ^ self ].

@@ -23,6 +23,12 @@ RwSimpleProjectLoadComponentV2 >> = aRwSimpleProjectLoadComponentV2 [
 ]
 
 { #category : 'visiting' }
+RwSimpleProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
+
+	^ self acceptVisitor: aVisitor
+]
+
+{ #category : 'visiting' }
 RwSimpleProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitSimpleProjectLoadComponent: self
 ]
@@ -32,13 +38,13 @@ RwSimpleProjectLoadComponentV2 >> addPackageNames: aPackageNames [
 	"add packages to default conditional/group if applicable"
 
 	self packageNames addAll: aPackageNames.
-	packageNames := packageNames asSet asArray
+	packageNames := packageNames asSet asArray sort
 ]
 
 { #category : 'accessing' }
 RwSimpleProjectLoadComponentV2 >> addProjectNamed: aProjectName [
 	self projectNames add: aProjectName.
-	projectNames := projectNames asSet asArray
+	projectNames := projectNames asSet asArray sort
 ]
 
 { #category : 'comparing' }

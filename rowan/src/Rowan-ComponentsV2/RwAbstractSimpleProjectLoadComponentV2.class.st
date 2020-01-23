@@ -25,8 +25,9 @@ RwAbstractSimpleProjectLoadComponentV2 >> = aRwAbstractSimpleProjectLoadComponen
 
 { #category : 'accessing' }
 RwAbstractSimpleProjectLoadComponentV2 >> addComponentNamed: aComponentName [ 
+	"avoid duplicates and keep the list sorted"
 	self componentNames add: aComponentName.
-	componentNames := componentNames asSet asArray
+	componentNames := componentNames asSet asArray sort
 ]
 
 { #category : 'accessing' }
