@@ -222,7 +222,8 @@ RowanAnsweringService >> exec: aString context: oop [
 { #category : 'client commands' }
 RowanAnsweringService >> exec: aString context: oop inWindow: handle [
   answer := self exec: aString context: oop.
-  RowanBrowserService new saveRootObject: answer value windowHandle: handle.	"return answer for testing"
+  answer key
+    ifTrue: [ RowanBrowserService new saveRootObject: answer value windowHandle: handle ].	"return answer for testing"
   ^ answer
 ]
 
