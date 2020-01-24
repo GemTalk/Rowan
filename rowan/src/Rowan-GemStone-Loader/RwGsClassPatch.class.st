@@ -25,7 +25,7 @@ RwGsClassPatch class >> for: aClassDefinition inPackage: aPackageDefinition [
 
 { #category : 'private' }
 RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
-	"Legal types are normal, variable, and bytes."
+	"Legal types are normal, variable, and byteSubclass."
 
 	"These values need to be moved into Class"
 	^classType = 'normal'
@@ -34,7 +34,7 @@ RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
 			[ classType = 'variable'
 				ifTrue: [ fmt bitOr: 16r4.	"add indexable bit" ]
 				ifFalse: 
-					[ classType = 'bytes'
+					[ classType = 'byteSubclass'
 						ifTrue: [ (fmt bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4 ]
 						ifFalse: [self error: 'Unknown class type']]]
 ]
@@ -176,6 +176,13 @@ RwGsClassPatch >> oldClassVersion [
 	"The old version is what is currently bound to the class definition's name."
 
 	^ (self resolveName: classDefinition key) value
+]
+
+{ #category : 'Formatting' }
+RwGsClassPatch >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream nextPutAll: '(', classDefinition name, ')'
 ]
 
 { #category : 'private' }

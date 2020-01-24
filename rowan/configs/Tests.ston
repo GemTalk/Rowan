@@ -6,7 +6,9 @@
 		[ 'common' ] : {
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests'
+					'Rowan-Tests',
+					'Rowan-TestsV2',
+					'Rowan-Tests-Components'
 					]
 				}
 			},

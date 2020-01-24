@@ -1,5 +1,6 @@
 RwProjectLoadConfiguration {
 	#name : 'Common',
+	#comment : 'Common set of packages ',
 	#version : '0.1.0',
 	#conditionalPackages : {
 		[
@@ -14,5 +15,6 @@ RwProjectLoadConfiguration {
 			}
 		}
 	},
-	#comment : 'Common set of packages '
+	#conditionalPackageMapSpecs : { },
+	#definedGroupNames : { }
 }

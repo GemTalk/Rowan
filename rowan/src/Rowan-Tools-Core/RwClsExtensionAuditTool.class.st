@@ -33,6 +33,17 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 		ifNil: [(RwAuditDetail for: aLoadedClassExtension message: ' Class does not exists for loaded class extension')] 
 		ifNotNil: [:aBehavior ||categories | 
 					
+				aBehavior == aLoadedClassExtension handle
+					ifFalse: [ 
+						self
+							errorLog: res
+							add:
+								(aLoadedClassExtension name , ' #' , extensionCategoryName)
+									->
+										(' loaded extension class (' , aLoadedClassExtension handle asOop printString
+										, ') not latest version of class ('
+										, aBehavior asOop printString , ') ') ].
+
 			categories := (aBehavior _baseCategorys: 0)
 				ifNil: [ #() ]
 				ifNotNil: [:catDict | catDict keys ].
@@ -41,7 +52,6 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 					ifNotNil: [:aCategory | res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
 					ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
 						res add: (RwAuditDetail for: aLoadedClassExtension message: 'Missing instance method extension category named ', extensionCategoryName) ] ].
-
 			categories := (aBehavior class _baseCategorys: 0)
 				ifNil: [ #() ]
 				ifNotNil: [:catDict | catDict keys ].

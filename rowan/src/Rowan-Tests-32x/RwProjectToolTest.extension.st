@@ -21,7 +21,7 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 				createDiskBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/'].
+				root: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/'].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -81,6 +81,8 @@ RwProjectToolTest >> testProjectClassExtensions [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleExtensionProject/') asFileReference ensureDeleteAll.
 
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -158,7 +160,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleExtensionProject/'
+				root: self _testRowanProjectsSandbox pathString, '/rowanSimpleExtensionProject/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].
@@ -293,7 +295,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanClassExtensionsProject/'
+				root: self _testRowanProjectsSandbox pathString, '/rowanClassExtensionsProject/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].
@@ -319,13 +321,15 @@ RwProjectToolTest >> testSimpleProject1 [
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/') asFileReference ensureDeleteAll.
+
 	self
 		handleConfirmationDuring: [ 
 			projectDefinition := projectTools create
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/' ].
+				root: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/' ].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -386,6 +390,8 @@ RwProjectToolTest >> testSimpleProject2 [
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject2/') asFileReference ensureDeleteAll.
+
 	projectDefinition := RwProjectDefinition
 		newForGitBasedProjectNamed: projectName.
 	projectDefinition
@@ -418,7 +424,7 @@ RwProjectToolTest >> testSimpleProject2 [
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject2/'
+				root: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject2/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].
@@ -442,6 +448,8 @@ RwProjectToolTest >> testSimpleProject3 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject3/') asFileReference ensureDeleteAll.
 
 	projectDefinition := RwProjectDefinition
 		newForGitBasedProjectNamed: projectName.
@@ -502,7 +510,7 @@ RwProjectToolTest >> testSimpleProject3 [
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject3/'
+				root: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject3/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].

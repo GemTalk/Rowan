@@ -5,6 +5,17 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwSpecification class >> fromFile: filePath [
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ (STON fromStream: stream)
+				initializeForImport;
+				yourself ]
+]
+
+{ #category : 'instance creation' }
 RwSpecification class >> fromUrl: specNameOrUrl [
 
 	"self fromUrl: 'file:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston'"

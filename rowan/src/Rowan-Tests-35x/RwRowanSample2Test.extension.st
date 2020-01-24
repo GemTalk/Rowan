@@ -76,13 +76,13 @@ RwRowanSample2Test >> testIssue493 [
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -129,13 +129,13 @@ RwRowanSample2Test >> testIssue515 [
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectDef := self 
 		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		projectsHome: self _testRowanProjectsSandbox
 		registerProject: false.
 
 	projectDef defaultSymbolDictName: self _symbolDictionaryName.
@@ -172,7 +172,7 @@ RwRowanSample2Test >> testIssue515 [
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 

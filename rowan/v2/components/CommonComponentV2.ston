@@ -1,0 +1,36 @@
+RwNestedProjectLoadComponentV2 {
+	#name : 'CommonComponentV2',
+	#comment : 'V2 prototype. Common code shared ComponentCore and RowanV2. Equivalent to old Structure loaded in 3.5.0.',
+	#componentNames : [
+			'CommonComponent'
+		],
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Rowan-Configurations',
+					'Rowan-ComponentsV2'
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-ComponentsV2' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	}
+}

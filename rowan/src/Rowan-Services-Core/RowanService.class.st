@@ -83,7 +83,7 @@ RowanService class >> version [
   "change this method carefully and only at Jadeite release boundaries.
 	Failure to do so will prevent logins"
 
-  ^ 3085
+  ^ 3092
 ]
 
 { #category : 'other' }
@@ -237,7 +237,7 @@ RowanService >> extendHierarchies: hierarchies [
 
 { #category : 'perform' }
 RowanService >> handleDeletedService [
-  updateType := #'removed:'.
+  self updateType: #'removed:'.
   RowanCommandResult addResult: self
 ]
 
@@ -275,6 +275,12 @@ RowanService >> initialize [
 
 { #category : 'testing' }
 RowanService >> isClassService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isDictionaryService [
 
 	^false
 ]
@@ -463,6 +469,18 @@ RowanService >> stonStringFor: anObject [
 
 ]
 
+{ #category : 'private' }
+RowanService >> stripOutUnicode: string [
+  | asciiString |
+  asciiString := string
+    collect: [ :char | 
+      (char ~= Character lf
+        and: [ char asciiValue < 32 or: [ char asciiValue > 255 ] ])
+        ifTrue: [ $? ]
+        ifFalse: [ char ] ].
+  ^ asciiString
+]
+
 { #category : 'commands support' }
 RowanService >> superclassChainsFor: behaviors [
 	organizer := ClassOrganizer new. 
@@ -495,6 +513,14 @@ RowanService >> update [
 RowanService >> updateInternalService: updatedService [
 
 	"no internally held services to update"
+]
+
+{ #category : 'update' }
+RowanService >> updateLatest [
+  "subclasses may want to special behavior to update themselves
+	to their loaded version"
+
+  self update
 ]
 
 { #category : 'accessing' }

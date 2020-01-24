@@ -1,0 +1,29 @@
+RwProjectLoadComponentV2 {
+	#name : 'Core',
+	#comment : 'Single component for STON project',
+	#conditionalPackages : {
+		[
+			'gemstone'
+		] : {
+			'core' : {
+				#packageNames : [
+					'STON-Core',
+					'STON-GemStoneBase',
+					'STON-GemStoneCommon'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'STON-Tests',
+					'STON-GemStone-Tests'
+				]
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+}

@@ -57,7 +57,7 @@ RwRowanSample1Test >> testIssue345 [
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -122,7 +122,7 @@ RwRowanSample1Test >> testIssue514 [
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 

@@ -27,6 +27,21 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName cat
 ]
 
 { #category : 'instance creation' }
+RwClassDefinition class >> newForClassNamed: className super: superClassName category: category comment: comment [
+
+	^ self 
+		newForClassNamed: className 
+		super: superClassName 
+		instvars: #() 
+		classinstvars: #() 
+		classvars: #() 
+		category: category 
+		comment: comment 
+		pools: #() 
+		type: 'normal'
+]
+
+{ #category : 'instance creation' }
 RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
 
 	| propertiesDictionary |
@@ -208,7 +223,7 @@ RwClassDefinition >> _updateSymbolDictionaryFromClass: aClass [
 
 { #category : 'accessing' }
 RwClassDefinition >> classType [
-	"Legal types are normal, variable, and bytes."
+	"Legal types are normal, variable, and byteSubclass."
 
 	^self propertyAt: 'type' ifAbsent: ['normal']
 ]

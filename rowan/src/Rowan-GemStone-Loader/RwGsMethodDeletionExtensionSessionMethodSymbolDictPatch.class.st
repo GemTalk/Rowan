@@ -72,9 +72,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMovedMethodNewC
 
 { #category : 'deleting' }
 RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
-
 	"noop for class extension methods"
-
 ]
 
 { #category : 'accessing' }

@@ -35,6 +35,13 @@ RwLoadedProject class >> _projectLoadedDefinitionSourceValue [
 ]
 
 { #category : 'accessing' }
+RwLoadedProject class >> _projectSourceValueNewProject [
+	"This value of the property key indicates that the source of the project definition is a newly created project, so we explicitly don't want to read project from disk on load."
+
+	^ 'new project'
+]
+
+{ #category : 'accessing' }
 RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
 	"This value of the property key indicates that the source of the project definition is unknown."
 
@@ -135,7 +142,7 @@ RwLoadedProject >> load [
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
 			self halt: 'expected to update the projectDefinition in-place' ].
-	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
 ]
 
 { #category : 'actions' }
@@ -150,7 +157,7 @@ RwLoadedProject >> load: instanceMigrator [
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
 			self halt: 'expected to update the projectDefinition in-place' ].
-	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
+	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
 ]
 
 { #category : 'accessing' }
@@ -288,7 +295,7 @@ RwLoadedProject >> unload [
 
 	| projectDefinition |
 	projectDefinition := self asDefinition.
-	^ Rowan projectTools delete deleteProjectDefinition: projectDefinition
+	^ projectDefinition _deleteTool deleteProjectDefinition: projectDefinition
 ]
 
 { #category : 'testing' }

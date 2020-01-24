@@ -1779,7 +1779,7 @@ JadeServer >> inspect: anObject [
 	(anObject isKindOf: Dictionary superclass) ifTrue: [^self inspectDictionary: anObject on: stream].
 	self inspectNamedInstanceVariablesOf: anObject on: stream.
 	anObject class format > 0 ifTrue: [
-		1 to: (anObject _basicSize min: 200) do: [:i | 
+		1 to: (anObject _basicSize) do: [:i | 
 			i printOn: stream.
 			stream tab.
 			self print: (self oopOf: (anObject _at: i)) on: stream.
@@ -1815,9 +1815,13 @@ JadeServer >> inspectDictionary: aDictionary on: aStream [
 		| index keyString key value valueString |
 		index := each findLast: [:char | char = $~].
 		keyString := each copyFrom: 1 to: index - 1.
+		keyString charSize = 1 ifFalse:[
+			keyString := '<<unprintable key. charSize > 1>>']. 
 		key := keyDict at: each.
 		value := aDictionary at: key. 
 		valueString := (self printStringOf: value to: 10).
+		valueString charSize = 1 ifFalse:[
+			valueString := '<<unprintable value. charSize > 1>>']. 
 		aStream nextPutAll: keyString , '->' , valueString; tab.
 		self print: (self oopOf: value) on: aStream.
 		aStream lf.
@@ -1825,8 +1829,6 @@ JadeServer >> inspectDictionary: aDictionary on: aStream [
 	^aStream 
 		lf; 
 		contents.
-
-
 ]
 
 { #category : 'category' }

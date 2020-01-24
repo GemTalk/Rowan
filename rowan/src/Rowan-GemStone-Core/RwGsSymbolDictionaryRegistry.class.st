@@ -243,8 +243,7 @@ RwGsSymbolDictionaryRegistry >> addNewClassVersionToAssociation: newClass [
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
-	^ self class registry_ImplementationClass addNewClassVersionToAssociation: newClass instance: self
-
+	self class registry_ImplementationClass addNewClassVersionToAssociation: newClass instance: self
 ]
 
 { #category : 'private' }
@@ -254,8 +253,7 @@ RwGsSymbolDictionaryRegistry >> addNewClassVersionToAssociation: newClass implem
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
-	^ implementationClass addNewClassVersionToAssociation: newClass instance: self
-
+	implementationClass addNewClassVersionToAssociation: newClass instance: self
 ]
 
 { #category : 'private' }
@@ -527,13 +525,6 @@ RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forLoadedPackage: l
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPackageNamed: packageName [
-
-	^ self class registry_ImplementationClass ensureExtensionClassNamed: className existsForPackageNamed: packageName instance: self
-
-]
-
-{ #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPackageNamed: packageName implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
@@ -660,10 +651,12 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> movePackage: packageName to: symbolDictionaryName [
-
-	^  self class registry_ImplementationClass movePackage: packageName  to: symbolDictionaryName instance: self
-
+RwGsSymbolDictionaryRegistry >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions [
+	^ self class registry_ImplementationClass
+		movePackage: packageName
+		to: symbolDictionaryName
+		classesWithNewVersions: classesWithNewVersions
+		instance: self
 ]
 
 { #category : 'package - creation api' }

@@ -28,31 +28,6 @@ RwRowanSample4Test >> setUp [
 ]
 
 { #category : 'tests' }
-RwRowanSample4Test >> test_projectUrl_issue_463 [
-	| specUrlString rowanProject testProjectHome projectName project projectDef |
-	projectName := 'RowanSample4'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	testProjectHome := (rowanProject repositoryRootPath
-		, '/test/testRepositories/repos/') asFileReference.
-	(testProjectHome / projectName) exists
-		ifTrue: [ (testProjectHome / projectName) deleteAll ].
-	projectDef := (RwComponentProjectDefinition newForUrl: specUrlString)
-		projectHome: testProjectHome;
-		yourself.
-	self
-		handleInformDuring: [ projectDef clone ]
-		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
-	self
-		assert: projectDef projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
-	projectDef load.
-	project := RwProject newNamed: projectName.
-	self assert: project projectUrl = projectDef projectUrl
-]
-
-{ #category : 'tests' }
 RwRowanSample4Test >> testCreateProjectDefinition [
 
 	| specUrlString projectTools rowanProject gitRootPath projectName projectDefinition x |
@@ -68,7 +43,7 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -128,7 +103,7 @@ RwRowanSample4Test >> testIssue14 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -185,7 +160,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -267,7 +242,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -348,7 +323,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -429,7 +404,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -509,7 +484,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -589,7 +564,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -669,7 +644,7 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -731,70 +706,6 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	self assert: (x := newClass rowanPackageName) = 'RowanSample4-RenamedPackage'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4SymbolDict') includesKey: #'NewRowanSample4')
-]
-
-{ #category : 'tests' }
-RwRowanSample4Test >> testIssue200 [
-
-	"https://github.com/dalehenrich/Rowan/issues/200"
-
-	"load RowanSampl4 project which depends upon RowanSample3"
-
-	| specUrlString projectTools rowanProject gitRootPath project repoRootPath x
-		projectName3 projectName4 |
-
-	projectName3 := 'RowanSample3'.
-	projectName4 := 'RowanSample4'.
-	{ projectName3 . projectName4 } do: [:projectName |
-		(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
-
-	(gitRootPath / projectName3) ensureDeleteAll.
-	(gitRootPath / projectName4) ensureDeleteAll.
-
-	self deny: (gitRootPath / projectName3) exists.
-	self deny: (gitRootPath / projectName4) exists.
-
-	specUrlString := self _rowanSample4_200_LoadSpecificationUrl.
-
-	(RwComponentProjectDefinition newForUrl: specUrlString)
-		projectHome: gitRootPath;
-		clone;
-		register.
-
-	project := Rowan projectNamed: projectName4.
-
-	repoRootPath := project repositoryRootPath asFileReference.
-
-	self assert: project currentBranchName = 'issue_200_0'.
-	self deny: (Rowan globalNamed: 'RowanSample5') notNil.
-	self deny: (Rowan globalNamed: 'RowanSample3') notNil.
-	self deny: (Rowan globalNamed: 'RowanSample4') notNil.
-
-"load"
-	self
-		handleInformDuring: [ project load ]
-		interactionBlock: [ :inform | self assert: false description: 'unexpected inform' ].
-
-"validate"
-	self assert: (Rowan globalNamed: 'RowanSample5') notNil.
-	self assert: (Rowan globalNamed: 'RowanSample3') notNil.
-	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
-
-	project := Rowan projectNamed: projectName4.
-	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
-
-	project := Rowan projectNamed: projectName3.
-	self assert: (x := project loadedConfigurationNames) asArray = #('Default').
-
-	self assert: (gitRootPath / projectName4) exists.
-	self assert: (gitRootPath / projectName3) exists.
 ]
 
 { #category : 'tests' }
@@ -883,7 +794,7 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 	"load the RowanSample4 project from disk - overly the correct project structure over the primer project classes"
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
@@ -986,7 +897,7 @@ RwRowanSample4Test >> testIssue210 [
 	"now load the RowanSample4 project from disk"
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
@@ -1086,7 +997,7 @@ RwRowanSample4Test >> testIssue230 [
 	"now load the RowanSample4 project from disk"
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
@@ -1117,7 +1028,7 @@ RwRowanSample4Test >> testIssue284 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1173,7 +1084,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1240,111 +1151,6 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 ]
 
 { #category : 'tests' }
-RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProject_3 [
-
-	"version of testIssue295_rename_package_move_newClassVersion_newProject_2 that should pass using RwProjectDefinition or RwProjectComponentDefinition"
-
-	"attempting to reproduce the actual issue (_1 doesn't reproduce problem, but should remain static to ensure behavior does not change detrimentally"
-
-	"https://github.com/dalehenrich/Rowan/issues/295"
-
-	"Error creating a new class version while moving to a new package in a new project and a new symbol dictionary"
-
-	"issue_295_1 --> issue_295_3	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
-													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
-
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass projectDefinition projectSetDefinition oldProjectDefinition |
-	projectName := 'RowanSample4'.
-	{ projectName . projectName, '_295'} do: [:pn |
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
-
-	(gitRootPath / projectName) ensureDeleteAll.
-
-	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
-
-	project := Rowan projectNamed: projectName.
-	repoRootPath := project repositoryRootPath asFileReference.
-
-	gitTool := projectTools git.
-	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_0'.				"starting point of test"
-
-	projectTools load
-		loadProjectNamed: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
-											'RowanSample4-GemStone-Tests').
-	self
-		assert:
-			(x := project packageNames asArray sort) =  baselinePackageNames sort.
-
-	self assert: (x := project loadedGroupNames) asArray = #('tests').
-	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
-
-	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_1'.				"New package added to the project"
-
-	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
-
-	projectTools load
-		loadProjectNamed: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-	self
-		assert:
-			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
-
-	newClass := Rowan globalNamed: 'NewRowanSample4'.
-
-	self assert: (newClass new perform: #foo) = 'foo'.
-
-	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
-
-	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_3'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
-																								move new version of NewRowanSample4 to RowanSample4SymbolDict"
-"trigger the bug on this load"
-	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
-
-"need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
-	projectSetDefinition := self _projectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
-	projectDefinition := projectSetDefinition projectNamed: projectName, '_295'.
-
-	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
-
-	oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
-	projectSetDefinition addProject: oldProjectDefinition.
-
-	oldProjectDefinition packages values do: [:pkgDefinition |
-	    pkgDefinition classDefinitions values do: [:classDefinition |
-	        pkgDefinition removeClassDefinition: classDefinition ].
-	    pkgDefinition classExtensions values do: [:classExtension |
-        	pkgDefinition removeClassExtensionDefinition: classExtension ]].
-
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
-
-
-	oldClass := newClass.
-	newClass := Rowan globalNamed: 'NewRowanSample4'.
-
-	self assert: oldClass ~~ newClass.
-	self assert: (newClass new perform: #foo) = 'foo'.
-
-	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
-
-	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
-]
-
-{ #category : 'tests' }
 RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subclass_newProject [
 
 	"attempting to reproduce the actual issue (_1 doesn't reproduce problem, but should remain static to ensure behavior does not change detrimentally"
@@ -1368,7 +1174,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1466,7 +1272,7 @@ RwRowanSample4Test >> testIssue304 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1523,7 +1329,7 @@ RwRowanSample4Test >> testIssue305 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1569,7 +1375,7 @@ RwRowanSample4Test >> testIssue460_1 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1652,10 +1458,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 { #category : 'tests' }
 RwRowanSample4Test >> testIssue460_2 [
 
-	"This test is also important for validating the fix to Issue #504:
-		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
-		At least confirm that it is NOT a good candidate, since this test is now failing
-		with the new error introduced in the partial for for Issue #504"
+	"As of today the test is passing, so it's not a candidate for Issue #504"
 
 	"https://github.com/dalehenrich/Rowan/issues/260"
 
@@ -1676,7 +1479,7 @@ RwRowanSample4Test >> testIssue460_2 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox pathString.
 
 	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
 		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
@@ -1772,7 +1575,7 @@ RwRowanSample4Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	{ projectName . projectName, '_295'} do: [:pn |
@@ -1783,7 +1586,7 @@ RwRowanSample4Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1835,6 +1638,9 @@ RwRowanSample4Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 		_loadProjectFromSpecUrl: specUrlString
 		repoRootPath: repoRootPath.
 
+"expose bug"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self assert: (((Rowan image loadedProjectNamed: projectName)
 	loadedPackages at: 'RowanSample4-Extensions')
 		loadedClassExtensions isEmpty).
@@ -1864,7 +1670,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1899,7 +1705,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1911,7 +1717,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 		_loadProjectFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: projectRootPath)
 		repoRootPath: projectRootPath.
 
-	self assert: (x := (Rowan projectNamed: projectName) loadedCommitId) = 'ea371eb'.
+	self assert: (x := (Rowan projectNamed: projectName) loadedCommitId) = 'fb3fdc5'.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
@@ -1934,7 +1740,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_1 [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -1968,8 +1774,8 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath_symLink  := '/tmp/rowan_issue_300/'.
-	gitRootPath :=  rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/issue_300_dir/'.
+	gitRootPath_symLink  := self _testRowanProjectsSandbox pathString, '/rowan_issue_300/'.
+	gitRootPath :=  self _testRowanProjectsSandbox / 'issue_300_dir/'.
 
 	commandLine := 'set -e;  rm -rf ', gitRootPath pathString.
 	Rowan gitTools performOnServer: commandLine logging: true.
@@ -2018,7 +1824,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_issue180 [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 		(gitRootPath / projectName) ensureDeleteAll.
 
@@ -2053,7 +1859,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221B [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -2096,7 +1902,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221C [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -2139,7 +1945,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221D [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath  / projectName) ensureDeleteAll.
 
@@ -2181,7 +1987,7 @@ RwRowanSample4Test >> testLoadProjectNamed_493 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -2224,7 +2030,7 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -2267,7 +2073,7 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -2292,6 +2098,6 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
-	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := rowanSampleSpec loadedGroupNames) asArray = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) asArray = #('Load').
 ]

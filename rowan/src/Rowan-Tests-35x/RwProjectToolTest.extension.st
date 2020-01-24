@@ -15,13 +15,13 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
 
-	('/tmp/rowanSimpleProject/' asFileReference)
+	((self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/' )asFileReference)
 		ensureCreateDirectory;
 		deleteAllChildren.
 
 	projectDefinition := RwComponentProjectDefinition
 		projectName: projectName 
-			projectHome: '/tmp/rowanSimpleProject/'
+			projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/'
 			useGit: true
 			comment: 'This is a simple project to demonstrate the smalltalk API used for a project lifecycle'.
 	 
@@ -91,13 +91,13 @@ RwProjectToolTest >> testProjectClassExtensions [
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleExtensionProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleExtensionProject/';
 		configsPath: 'configs';
 		packagesPath: 'src';
 		specsPath: 'specs';
 		yourself.
 
-	'/tmp/rowanSimpleExtensionProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'rowanSimpleExtensionProject') ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -214,13 +214,13 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanClassExtensionsProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanClassExtensionsProject/';
 		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
 		setSymbolDictName: self _symbolDictionaryName1
 			forPackageNamed: 'Simple-Extensions1';
 		yourself.
 
-	'/tmp/rowanClassExtensionsProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'rowanClassExtensionsProject') ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -364,10 +364,10 @@ RwProjectToolTest >> testSimpleProject1 [
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/';
 		yourself.
 
-	'/tmp/rowanSimpleProject/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/') asFileReference ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
@@ -434,13 +434,13 @@ RwProjectToolTest >> testSimpleProject2 [
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject2/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject2/';
 		configsPath: 'configs';
 		packagesPath: 'src';
 		specsPath: 'specs';
 		yourself.
 
-	'/tmp/rowanSimpleProject2/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject2/' ) asFileReference ensureDeleteAll.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: 'Simple2'
@@ -486,13 +486,13 @@ RwProjectToolTest >> testSimpleProject3 [
 		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		packageFormat: 'tonel';
-		projectHome: '/tmp/rowanSimpleProject3/';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject3/';
 		configsPath: 'configs';
 		packagesPath: 'src'; 
 		specsPath: 'specs';
  		yourself.
 
-	'/tmp/rowanSimpleProject3/' asFileReference ensureDeleteAll.
+	(self _testRowanProjectsSandbox pathString, '/rowanSimpleProject3/' )asFileReference ensureDeleteAll.
 
 	className := 'Simple3'.
 	classDefinition := RwClassDefinition

@@ -21,29 +21,6 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPathIn useGit: useGit 
 					gitTool gitinitIn: repoPath pathString with: '' ] ]
 ]
 
-{ #category : 'component project defintion creation' }
-RwPrjCreateTool >> createComponentProject: componentProjectDefinition [
-
-	"Create create new repository on `disk`, based on the given repository definition."
-
-	self createProjectRepository: componentProjectDefinition projectRef.
-
-	componentProjectDefinition exportProjects.
-	componentProjectDefinition exportComponents.
-	componentProjectDefinition exportPackages.
-
-	componentProjectDefinition register.
-
-	^ componentProjectDefinition
-]
-
-{ #category : 'component project defintion creation' }
-RwPrjCreateTool >> createComponentProjectNamed: projectName [
-	"Create a new component project with all of the default attributes"
-
-	^ RwComponentProjectDefinition projectName: projectName
-]
-
 { #category : 'project repository creation' }
 RwPrjCreateTool >> createProjectRepository: projectReferenceDefinition [
 

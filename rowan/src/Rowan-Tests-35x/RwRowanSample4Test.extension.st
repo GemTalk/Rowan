@@ -23,7 +23,7 @@ RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString project
 
 	| rowanProject projectHome projectDefinition loadSpecUrl |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	projectHome := self _testRowanProjectsSandbox.
 
 	(projectHome / projectName) ensureDeleteAll.
 
@@ -123,7 +123,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -180,13 +180,12 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 { #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> testLoadComponentProjectFromUrl [
 
-	| specUrlString projectTools rowanProject projectName x project masterBranchSHA |
+	| specUrlString projectTools projectName x project masterBranchSHA |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -218,7 +217,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 

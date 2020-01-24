@@ -303,9 +303,12 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 			loadedClass := Rowan image 
 				loadedClassNamed: className 
 				ifAbsent: [
+					| theBehavior |
+					theBehavior := Rowan image objectNamed: className.
+					isMeta ifTrue:  [ theBehavior := theBehavior class ].
 					RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString, '. The modification will not be tracked by Rowan'.
 					"Notification resumed, so continue with add/modify"
-					^ (Rowan image objectNamed: className)
+					^ theBehavior
 						compileMethod: methodSource
 						dictionaries: Rowan image symbolList
 						category: hybridPackageName
@@ -610,6 +613,19 @@ RwPrjBrowserTool >> addRowanSymbolDictionariesToPersistentSymbolListFor: userPro
 
 ]
 
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> addRowanSymbolDictionariesToTransientSymbolList [
+  | systemUser |
+  systemUser := AllUsers userWithId: 'SystemUser'.
+  self _rowanSymbolDictionaryNames
+    do: [ :symDictName | 
+      | aSymbolDictionary anIndex transient |
+      transient := GsSession currentSession symbolList.
+      aSymbolDictionary := systemUser objectNamed: symDictName.
+      anIndex := transient size + 1.
+      transient insertObject: aSymbolDictionary at: anIndex ]
+]
+
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForClass: aClass [
 
@@ -765,7 +781,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className: className type: classType category: category packageName: packageNameOrNil [
 
-	"classType may be 'normal', 'bytes', or 'variable'"
+	"classType may be 'normal', 'byteSubclass', or 'variable'"
 
 	| result lfsp superClass |
 	result := String new.
@@ -776,10 +792,10 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 		ifTrue: [ result addAll: ' rwSubclass: ' ].
 	classType = 'variable'
 		ifTrue: [ result addAll: ' rwIndexableSubclass: ' ].
-	classType = 'bytes'
+	classType = 'byteSubclass'
 		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
 	result addAll: className printString.
-	classType ~= 'bytes'
+	classType ~= 'byteSubclass'
 		ifTrue: [ 
 			result
 				addAll: lfsp;
@@ -806,14 +822,13 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 		add: 'options: #()';
 		add: Character lf.
 	^ result
-
 ]
 
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className: className type: classType instanceVariablesString: instanceVariablesString classVariablesString: classVariablesString classInstanceVariablesString: classInstanceVariablesString poolDictionariesString: poolDictionariesString 
 comment: comment category: category [
 
-	"classType may be 'normal', 'bytes', or 'variable'"
+	"classType may be 'normal', 'byteSubclass', or 'variable'"
 
 	| result lfsp |
 	result := String new.
@@ -829,10 +844,10 @@ comment: comment category: category [
 		ifTrue: [ result addAll: ' rwSubclass: ' ].
 	classType = 'variable'
 		ifTrue: [ result addAll: ' rwIndexableSubclass: ' ].
-	classType = 'bytes'
+	classType = 'byteSubclass'
 		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
 	result addAll: className.
-	classType ~= 'bytes'
+	classType ~= 'byteSubclass'
 		ifTrue: [ 
 			result
 				addAll: lfsp;
@@ -1210,9 +1225,12 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		inClassNamed: className
 		isMeta: isMeta
 		ifAbsent: [
+			| theBehavior |
+			theBehavior := Rowan globalNamed: className.
+			isMeta ifTrue: [ theBehavior := theBehavior class ].
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged method from the class ', className printString, '. The removal will not be tracked by Rowan'.
 			"Notification resumed, so continue with removal"
-			^ (Rowan globalNamed: className) removeSelector: methodSelector ].
+			^ theBehavior removeSelector: methodSelector ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
 	loadedClassOrExtension := loadedPackage
 		classOrExtensionForClassNamed: className

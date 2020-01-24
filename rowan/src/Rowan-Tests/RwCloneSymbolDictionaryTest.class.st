@@ -25,7 +25,7 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -87,7 +87,7 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -235,7 +235,7 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -297,7 +297,7 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -336,5 +336,4 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 	self assert: clonedClass2 classHistory ~~ theOriginalSubclass classHistory.
 
 	self assert: (x := clonedClass2 superclass) == clonedClass1
-
 ]

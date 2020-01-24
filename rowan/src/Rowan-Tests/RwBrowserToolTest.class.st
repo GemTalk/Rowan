@@ -239,37 +239,6 @@ RwBrowserToolTest >> _issue481_projectDefinition: projectName  packageName1: pac
 ]
 
 { #category : 'private' }
-RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath [
-
-	| projectDefinition projectTools |
-	projectTools := Rowan projectTools.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
-
-	projectDefinition := (RwComponentProjectDefinition 
-		projectName: projectName 
-			projectHome: rootPath "?" 
-			useGit: true 
-			comment: comment)
-		defaultSymbolDictName: defaultSymbolDictName;
-		configsPath: 'configs';
-		packagesPath: 'src';
-		projectsPath: 'projects';
-		specsPath: 'specs';
-		packageNames: packageNames;
-		yourself.
-
-	(rootPath asFileReference / projectName) ensureDeleteAll.
-
-	self
-		handleConfirmationDuring: [ projectDefinition create ].
-
-	projectTools load loadProjectDefinition: projectDefinition.
-	^ projectDefinition
-]
-
-{ #category : 'private' }
 RwBrowserToolTest >> _loadExtendedProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName1 extensionPackageNames: extensionPackageNames [
 
 	| projectDefinition classDefinition classExtensionDefinition projectTools |
@@ -381,11 +350,11 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 				(self
 					_basicClassDefinition: 'SimpleCustomByteArray1'
 					superclass: 'Object'
-					type: 'bytes').
+					type: 'byteSubclass').
 				(self
 					_basicClassDefinition: 'SimpleByteArray1'
 					superclass: 'ByteArray'
-					type: 'bytes').
+					type: 'byteSubclass').
 				(self _basicClassDefinition: 'SimpleProto1' superclass: 'nil' type: 'normal')}
 					do: [ :cd | 
 						cd category: (classPackageNames at: index).
@@ -397,7 +366,6 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 	[ projectTools load loadProjectSetDefinition: projectSetDefinition  ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }

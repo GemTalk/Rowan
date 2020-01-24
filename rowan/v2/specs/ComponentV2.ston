@@ -1,0 +1,27 @@
+RwLoadSpecificationV2 {
+	#specName : 'ComponentV2',
+	#projectName : 'Rowan',
+	#gitUrl : 'https://github.com/GemTalk/Rowan',
+	#revision : 'master',
+	#projectSpecFile : 'rowan/v2/project.ston',
+	#componentNames : [
+		'ComponentV2'
+	],
+	#groupNames : [
+		'core',
+		'tests'
+	],
+	#platformProperties : {
+		'gemstone' : {
+		'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals',
+				#defaultUseSessionMethodsForExtensions : false
+			},
+			'SystemUser' : {
+				#defaultSymbolDictName : 'RowanKernel',
+				#defaultUseSessionMethodsForExtensions : false
+			}
+		}
+	},
+	#comment : 'V2 prototype. Equivalent to candidateV2.0 loaded in 3.5.0. Scheduled to be deprecated, once the tests are converted to straight V2 tests using V2 api'
+}
