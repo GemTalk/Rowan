@@ -83,7 +83,7 @@ RowanService class >> version [
   "change this method carefully and only at Jadeite release boundaries.
 	Failure to do so will prevent logins"
 
-  ^ 3091
+  ^ 3092
 ]
 
 { #category : 'other' }
@@ -467,6 +467,18 @@ RowanService >> stonStringFor: anObject [
 
 	^STON toString: anObject
 
+]
+
+{ #category : 'private' }
+RowanService >> stripOutUnicode: string [
+  | asciiString |
+  asciiString := string
+    collect: [ :char | 
+      (char ~= Character lf
+        and: [ char asciiValue < 32 or: [ char asciiValue > 255 ] ])
+        ifTrue: [ $? ]
+        ifFalse: [ char ] ].
+  ^ asciiString
 ]
 
 { #category : 'commands support' }
