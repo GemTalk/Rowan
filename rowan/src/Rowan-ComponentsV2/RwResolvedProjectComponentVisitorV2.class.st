@@ -53,3 +53,9 @@ RwResolvedProjectComponentVisitorV2 >> resolvedProject [
 RwResolvedProjectComponentVisitorV2 >> resolvedProject: aResolvedProject [
 	resolvedProject := aResolvedProject
 ]
+
+{ #category : 'visiting' }
+RwResolvedProjectComponentVisitorV2 >> visit: aProjectLoadComponent [
+
+	^aProjectLoadComponent acceptVisitor: self
+]

@@ -231,7 +231,7 @@ RwAbstractProjectComponentVisitorV2 >> visitSequencedProjectLoadComponent: aSequ
 
 			component acceptNestedVisitor: self.
 
-			self error: 'not yet implmented' ]
+			self error: 'need to perform load operation at this point' ]
 ]
 
 { #category : 'visiting' }

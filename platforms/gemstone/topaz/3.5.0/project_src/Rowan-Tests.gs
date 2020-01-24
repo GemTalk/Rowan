@@ -12,36 +12,38 @@ doit
 	options: #()
 )
 		category: 'Rowan-TestsV2';
-		comment: '| comment |
+		comment: '| commitComment |
 RwRowanSample9Test _clearLoadSpecSessionCache.
 (RwAbstractV2Test _testRowanProjectsSandbox / ''RowanSample9'') ensureDeleteAll.
 
-comment := ''''.
+commitComment := ''''.
 RwTestProjectLibraryGenerator new
 	projectName: ''RowanSample9'';
 	projectUrl: ''https://github.com/dalehenrich/RowanSample9'';
 	preserveChangesOnGithub: true;
-	genSpec_0000: comment;
-	genSpec_0001: comment;
-	genSpec_0002: comment;
-	genSpec_0003: comment;
-	genSpec_0004: comment;
-	genSpec_0005: comment;
-	genSpec_0006: comment;
-	genSpec_0007: comment;
-	genSpec_0008: comment;
-	genSpec_0009: comment;
-	genSpec_0010: comment;
-	genSpec_0011: comment;
-	genSpec_0012: comment;
-	genSpec_0013: comment;
-	genSpec_0014: comment;
-	genSpec_0015: comment;
-	genSpec_0016: comment;
-	genSpec_0017: comment;
-	genSpec_0018: comment;
-	genSpec_0019: comment;
-	genSpec_0020: comment;
+	genSpec_0000: commitComment;
+	genSpec_0001: commitComment;
+	genSpec_0002: commitComment;
+	genSpec_0003: commitComment;
+	genSpec_0004: commitComment;
+	genSpec_0005: commitComment;
+	genSpec_0006: commitComment;
+	genSpec_0007: commitComment;
+	genSpec_0008: commitComment;
+	genSpec_0009: commitComment;
+	genSpec_0010: commitComment;
+	genSpec_0011: commitComment;
+	genSpec_0012: commitComment;
+	genSpec_0013: commitComment;
+	genSpec_0014: commitComment;
+	genSpec_0015: commitComment;
+	genSpec_0016: commitComment;
+	genSpec_0017: commitComment;
+	genSpec_0018: commitComment;
+	genSpec_0019: commitComment;
+	genSpec_0020: commitComment;
+	genSpec_0021: commitComment;
+	genSpec_0022: commitComment;
 	yourself';
 		immediateInvariant.
 true.
@@ -50,7 +52,7 @@ true.
 doit
 (Object
 	subclass: 'RwTestProjectLibraryIndexCard'
-	instVarNames: #( name title specName index derivedFrom comment rowanIssues gemstoneIssues )
+	instVarNames: #( name title specName index derivedFrom comment rowanIssues gemstoneIssues rowanSHA )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1057,15 +1059,16 @@ genSpec_0000: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0000'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
+	title := 'Empty project with no packages'.
 
 	indexCard := self
 		_createCard: postfix
 		specName: specName
-		title: 'Empty project with no packages'
+		title: title
 		index: 0
 		derivedFrom: derivedFrom
 		comment: ''.
@@ -1074,6 +1077,7 @@ genSpec_0000: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1097,25 +1101,28 @@ genSpec_0001: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0001'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
+	title := 'Bare bones package structure -Core and -Tests'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Bare bones package structure -Core and -Tests'
+		title: title
 		index: 1
 		derivedFrom: derivedFrom
-		comment: 'One class per package: RowanSample9-Core and RowanSample9-Tests packages')
-		rowanIssues: #( 527);
+		comment:
+			'One class per package: RowanSample9-Core and RowanSample9-Tests packages')
+		rowanIssues: #(527);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1139,19 +1146,20 @@ genSpec_0002: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0002'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
+	title := 'RowanSample4 basic project definition'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'RowanSample4 basic project definition'
+		title: title
 		index: 2
 		derivedFrom: derivedFrom
 		comment: 'RowanSampe9Class1 has extension methods')
-		rowanIssues: #( 254 504);
+		rowanIssues: #(254 504);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1161,6 +1169,7 @@ genSpec_0002: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1184,15 +1193,16 @@ genSpec_0003: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0003'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0002'.
+	title := 'RowanSample4 primer project definition'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'RowanSample4 primer project definition'
+		title: title
 		index: 3
 		derivedFrom: derivedFrom
 		comment: 'RowanSample9Class1 has instancesInvariant option set')
@@ -1206,6 +1216,7 @@ genSpec_0003: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1252,15 +1263,16 @@ genSpec_0004: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0004'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
+	title := 'Reconcile inconsistencies for storage of package-specific properties'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Reconcile inconsistencies for storage of package-specific properties'
+		title: title
 		index: 4
 		derivedFrom: derivedFrom
 		comment: '')
@@ -1274,6 +1286,7 @@ genSpec_0004: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1298,17 +1311,17 @@ genSpec_0004_b: commitMessage
 	"The method is NOT idempotent with respect to the branches involved. It must be run whenever genSpec_0004 is run.
 		Right now it is called from genSpec_0004_b, so explicit top-level call is not necessary."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom branchName |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom branchName title |
 	postfix := '0004_b'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
 	branchName := 'spec_0004'.
+	title := 'Create inconsistency in component definitions ... duplicate package error expected on load'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title:
-			'Create inconsistency in component definitions ... duplicate package error expected on load'
+		title: title
 		index: 4
 		derivedFrom: derivedFrom
 		comment: '')
@@ -1322,6 +1335,7 @@ genSpec_0004_b: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1347,19 +1361,26 @@ genSpec_0005: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0005'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
+	title := 'Two classes, two  packages, plus tests. Primer for Issue 230'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Two classes, two  packages, plus tests. Primer for Issue 230'
+		title: title
 		index: 5
 		derivedFrom: derivedFrom
-		comment: 'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString, ' and classes in Core2 are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName3 printString, ' and classes in Tests are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
-		rowanIssues: #( 504);
+		comment:
+			'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in '
+				, RwRowanSample9Test _sampleSymbolDictionaryName2 printString
+				, ' and classes in Core2 are in symbol dictionary '
+				, RwRowanSample9Test _sampleSymbolDictionaryName3 printString
+				, ' and classes in Tests are in symbol dictionary '
+				, RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
+		rowanIssues: #(504);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1369,6 +1390,7 @@ genSpec_0005: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1394,15 +1416,16 @@ genSpec_0006: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0006'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0002'.
+	title := 'spec_0002 with different symbol dict mappings'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'spec_0002 with different symbol dict mappings'
+		title: title
 		index: 6
 		derivedFrom: derivedFrom
 		comment:
@@ -1417,6 +1440,7 @@ genSpec_0006: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1442,19 +1466,26 @@ genSpec_0007: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0007'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0005'.
+	title := 'Two classes, two  packages, plus tests. Primer for Issue 230, using ivs instead of instancesInvariant'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Two classes, two  packages, plus tests. Primer for Issue 230, using ivs instead of instancesInvariant'
+		title: title
 		index: 7
 		derivedFrom: derivedFrom
-		comment: 'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString, ' and classes in Core2 are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName3 printString, ' and classes in Tests are in symbol dictionary ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
-		rowanIssues: #( 504);
+		comment:
+			'One class per package: RowanSample9-Core1, RowanSample9-Core2 and RowanSample9-Tests packages. Tests ensure that classes in Core1 are in '
+				, RwRowanSample9Test _sampleSymbolDictionaryName2 printString
+				, ' and classes in Core2 are in symbol dictionary '
+				, RwRowanSample9Test _sampleSymbolDictionaryName3 printString
+				, ' and classes in Tests are in symbol dictionary '
+				, RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
+		rowanIssues: #(504);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1464,6 +1495,7 @@ genSpec_0007: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1489,19 +1521,24 @@ genSpec_0008: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0008'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0006'.
+	title := 'two symbol dicts ... gemstone in one, the rest in another'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'two symbol dicts ... gemstone in one, the rest in another'
+		title: title
 		index: 8
 		derivedFrom: derivedFrom
-		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName1 printString, '. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
-		rowanIssues: #( 493);
+		comment:
+			'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in '
+				, RwRowanSample9Test _sampleSymbolDictionaryName1 printString
+				, '. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in '
+				, RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
+		rowanIssues: #(493);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1511,6 +1548,7 @@ genSpec_0008: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1536,19 +1574,22 @@ genSpec_0009: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0009'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0008'.
+	title := 'one symbol dict specified for gemstone, the rest in default (unspecified)'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'one symbol dict specified for gemstone, the rest in default (unspecified)'
+		title: title
 		index: 9
 		derivedFrom: derivedFrom
-		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
-		rowanIssues: #( 493);
+		comment:
+			'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in '
+				, RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
+		rowanIssues: #(493);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1558,6 +1599,7 @@ genSpec_0009: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1583,19 +1625,22 @@ genSpec_0010: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0010'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0009'.
+	title := 'one symbol dict specified for gemstone, the rest in default --- default sym dict changed from 0009'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'one symbol dict specified for gemstone, the rest in default --- default sym dict changed from 0009'
+		title: title
 		index: 10
 		derivedFrom: derivedFrom
-		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in ', RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
-		rowanIssues: #( 493);
+		comment:
+			'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default. RowanSample9-GemStone and RowanSample9-GemStone-Tests packages in '
+				, RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
+		rowanIssues: #(493);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1605,6 +1650,7 @@ genSpec_0010: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1630,19 +1676,21 @@ genSpec_0011: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0011'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
+	title := 'A single class with an extension method in a separate package. All packages loaded into a single symbol dict. Test methods validate classes and symbol dictionary mapping.'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'A single class with an extension method in a separate package. All packages loaded into a single symbol dict. Test methods validate classes and symbol dictionary mapping.'
+		title: title
 		index: 11
 		derivedFrom: derivedFrom
-		comment: 'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default symbol dictionary.')
-		rowanIssues: #( 495);
+		comment:
+			'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default symbol dictionary.')
+		rowanIssues: #(495);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1652,6 +1700,7 @@ genSpec_0011: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1679,22 +1728,24 @@ genSpec_0012: commitMessage
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
 	postfix := '0012'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0011'.
+	title := 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
+		(extension method and class in different symbol dictionaries) and does cause an error.'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
-		different symbol dict; move new extension package to a third symbol dictionary. This is an illegal combination
-		(extension method and class in different symbol dictionaries) and does cause an error.'
+		title: title
 		index: 12
 		derivedFrom: derivedFrom
-		comment: 'RowanSample9-Core in one symbol dict, RowanSample9-Extensions1 in another symbol dict, and 
+		comment:
+			'RowanSample9-Core in one symbol dict, RowanSample9-Extensions1 in another symbol dict, and 
 		RowanSample9-Tests packages in default symbol dictionary.')
-		rowanIssues: #( 495);
+		rowanIssues: #(495);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1704,6 +1755,7 @@ genSpec_0012: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -1739,14 +1791,16 @@ genSpec_0013: commitMessage
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Starting with spec_0011, move extension method to a new extension package; move class package to a 
+		title:
+			'Starting with spec_0011, move extension method to a new extension package; move class package to a 
 		different symbol dict; move new extension package to the first symbol dictionary. This is an illegal combination
 		(extension method and class in different symbol dictionaries) and does cause an error.'
 		index: 13
 		derivedFrom: derivedFrom
-		comment: 'Swap symbol dicts for RowanSample9-Core and RowanSample9-Extensions1. RowanSample9-Tests
+		comment:
+			'Swap symbol dicts for RowanSample9-Core and RowanSample9-Extensions1. RowanSample9-Tests
 		packages in default symbol dictionary.')
-		rowanIssues: #( 495);
+		rowanIssues: #(495);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1756,6 +1810,7 @@ genSpec_0013: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -1792,15 +1847,17 @@ genSpec_0014: commitMessage
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Starting with spec_0011, move extension method to a new extension package; move new extension package 
+		title:
+			'Starting with spec_0011, move extension method to a new extension package; move new extension package 
 		to the classes symbol dictionary. This is a legal combination (extension method and class in same symbol
 		dictionary) the V2 classes are handling the symbol dictionary lookup properly, so this combo validates that
 		the bug (#493) is fixed.'
 		index: 14
 		derivedFrom: derivedFrom
-		comment: 'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
+		comment:
+			'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
 		to new package. RowanSample9-Tests package in default symbol dictionary.')
-		rowanIssues: #( 493);
+		rowanIssues: #(493);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1810,6 +1867,7 @@ genSpec_0014: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -1850,7 +1908,8 @@ genSpec_0015: commitMessage
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
+		title:
+			'Starting with spec_0014, remove the old (now empty) package from the project as triggering a package move
 	as opposed to a class move seems to trigger the bug, which implies that move package is not quite right. 
 
 	It seems that assigning a new symbol dictionary to the OLD package ... the package that the class is moved FROM
@@ -1860,10 +1919,11 @@ genSpec_0015: commitMessage
 	showed that #493 wasn''t fixed by the V2 implementation.'
 		index: 15
 		derivedFrom: derivedFrom
-		comment: 'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
+		comment:
+			'RowanSample9-Core and RowanSample9-Extensions1 in same symbol dictionary, but extension method moves
 		to RowanSample9-Extensions1. RowanSample9-Tests package in default symbol dictionary. Move the old (empty) package
 		to a different symbol dictionary.')
-		rowanIssues: #( 495);
+		rowanIssues: #(495);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1873,6 +1933,7 @@ genSpec_0015: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -1907,11 +1968,13 @@ genSpec_0016: commitMessage
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Starting with spec_0015, move an extension method from one package to another with no modifications'
+		title:
+			'Starting with spec_0015, move an extension method from one package to another with no modifications'
 		index: 16
 		derivedFrom: derivedFrom
-		comment: 'Move extension method from  RowanSample9-Extensions1 to RowanSample9-Extensions.')
-		rowanIssues: #( 557);
+		comment:
+			'Move extension method from  RowanSample9-Extensions1 to RowanSample9-Extensions.')
+		rowanIssues: #(557);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1921,6 +1984,7 @@ genSpec_0016: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -1955,11 +2019,12 @@ genSpec_0017: commitMessage
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title: 'Starting with spec_0015, change symbol dictionary of RowanSample9-Extensions to match symbol dictionary of RowanSample9-Extensions'
+		title:
+			'Starting with spec_0015, change symbol dictionary of RowanSample9-Extensions to match symbol dictionary of RowanSample9-Extensions'
 		index: 17
 		derivedFrom: derivedFrom
 		comment: '')
-		rowanIssues: #( 557);
+		rowanIssues: #(557);
 		yourself.
 	loadSpecification := (self _createLoadSpecification: self projectName)
 		specName: specName;
@@ -1969,6 +2034,7 @@ genSpec_0017: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -2020,6 +2086,7 @@ genSpec_0018: commitMessage
 		groupNames:
 				{'core'.
 					'tests'};
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -2052,8 +2119,7 @@ genSpec_0019: commitMessage
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title:
-			'Conditional components test case'
+		title: 'Conditional components test case'
 		index: 19
 		derivedFrom: derivedFrom
 		comment: '')
@@ -2071,6 +2137,7 @@ genSpec_0019: commitMessage
 				{'core'.
 					'tests'};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -2104,11 +2171,11 @@ genSpec_0020: commitMessage
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
-		title:
-			'Conditional components test case'
+		title: 'Conditional components test case'
 		index: 20
 		derivedFrom: derivedFrom
-		comment: 'Start with spec_0019, and undo work done to recreate spec_0017 structure -- find and fix holes in api')
+		comment:
+			'Start with spec_0019, and undo work done to recreate spec_0017 structure -- find and fix holes in api')
 		rowanIssues: #(554);
 		yourself.
 
@@ -2123,12 +2190,172 @@ genSpec_0020: commitMessage
 				{'core'.
 					'tests'};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0020: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0021: commitMessage
+	"Start with spec_0011, add pre and post load doits plus tests to validate that post load doits had been executed (part 1). Preload doit validation will be in part 2."
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0021'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Start with spec_0011, add pre and post load doits plus tests to validate that post load doits had been executed (part 1). Preload doit validation will be in part 2.'
+		index: 21
+		derivedFrom: derivedFrom
+		comment:
+			'')
+		rowanIssues: #(568);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0021: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0022: commitMessage
+	"Start with spec_0021, add pre and post load doits adjust tests to validate that pre load doits had been executed (part 2)"
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0022'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0021'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Start with spec_0021, add pre and post load doits adjust tests to validate that pre load doits had been executed (part 2)'
+		index: 22
+		derivedFrom: derivedFrom
+		comment:
+			'')
+		rowanIssues: #(568);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0022: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0023: commitMessage
+	"Start with  spec_0011, add a sequence of packages each subclassing off of the the other to be loaded in order."
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0023'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: 'Start with spec_0011, add a sequence of packages each subclassing off of the the other to be loaded in order. The Core component is a sequenced component.'
+		index: 23
+		derivedFrom: derivedFrom
+		comment:
+			'')
+		rowanIssues: #(568);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0023: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
@@ -3230,6 +3457,294 @@ _addDefinitionsFor_0020: resolvedProject
 
 category: 'private'
 method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0021: resolvedProject
+	"Start with spec_0011, add pre and post load doits plus tests to validate that post load doits had been executed (part 1). Preload doit validation will be in part 2."
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	| packageName1 packageName2 packageName3 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		classVarNames: #('PostLoadDoit' 'PreLoadDoit');
+		addClassMethod: 'postLoadDoit ^PostLoadDoit' protocol: 'accessing';
+		addClassMethod: 'preLoadDoit ^PreLoadDoit' protocol: 'accessing';
+		addClassMethod: 'postLoadDoit: value PostLoadDoit := value'
+			protocol: 'accessing';
+		addClassMethod: 'preLoadDoit: value PreLoadDoit := value'
+			protocol: 'accessing';
+		yourself.
+
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod:
+				'testPostLoadDoits
+	"part 1"
+	self assert: ' , className1
+						,
+							' preLoadDoit = nil.
+	self assert: ' , className1
+						,
+							' postLoadDoit = ''done''.
+'
+			protocol: 'tests';
+		yourself.
+
+	resolvedProject
+		addPreloadDoitName: 'doits/preloadDoit'
+			withSource: '(Rowan globalNamed: ', className1 printString, ') ifNotNil: [:class | class perform: #preLoadDoit: with: ''done'' ]'
+			toComponentNamed: 'Core';
+		addPostloadDoitName: 'doits/postloadDoit'
+			withSource: className1 , ' postLoadDoit: ''done'''
+			toComponentNamed: 'Core';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0022: resolvedProject
+	"Start with spec_0021, add pre and post load doits adjust tests to validate that pre load doits had been executed (part 2)"
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	| packageName3 className1 className2 |
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		updateInstanceMethod:
+				'testPostLoadDoits
+	"part 2"
+	self assert: ' , className1
+						,
+							' preLoadDoit = ''done''.
+	self assert: ' , className1
+						,
+							' postLoadDoit = ''done''.
+'
+			protocol: 'tests';
+		yourself.
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0023: resolvedProject
+	"Start with spec_0011, add a sequence of packages each subclassing off of the the other to be loaded in order."
+
+	"https://github.com/GemTalk/Rowan/issues/568"
+
+	| packageName1 packageName2 packageName3 packageName4 testPackageName testPackageName2 testPackageName3 testPackageName4 className1 className2 className3 className4 testClassName1 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Core2'.
+	packageName3 := projectName , '-' , 'Core3'.
+	packageName4 := projectName , '-' , 'Core4'.
+	testPackageName := projectName , '-' , 'Tests'.
+	testPackageName2 := projectName , '-' , 'Tests2'.
+	testPackageName3 := projectName , '-' , 'Tests3'.
+	testPackageName4 := projectName , '-' , 'Tests4'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	className4 := projectName , 'Class4'.
+	testClassName1 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		classInstVarNames: #('postLoadDoit' 'preLoadDoit');
+		addClassMethod: 'postLoadDoit ^postLoadDoit' protocol: 'accessing';
+		addClassMethod: 'preLoadDoit ^preLoadDoit' protocol: 'accessing';
+		addClassMethod: 'postLoadDoit: value postLoadDoit := value'
+			protocol: 'accessing';
+		addClassMethod: 'preLoadDoit: value preLoadDoit := value'
+			protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: testPackageName)
+		classDefinitionNamed: testClassName1)
+		addInstanceMethod:
+				'testPostLoadDoits
+	self assert: ' , className1
+						,
+							' postLoadDoit = 1.
+'
+			protocol: 'tests';
+		yourself.
+
+	{packageName2.
+	packageName3.
+	packageName4.
+	testPackageName2.
+	testPackageName3.
+	testPackageName4}
+		do: [ :packageName | resolvedProject addRawPackageNamed: packageName ].
+
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: className2
+		super: className1
+		instvars: #()
+		category: packageName2
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^2' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: testPackageName2)
+		addClassExtensionNamed: testClassName1)
+		addInstanceMethod:
+				'testPostLoadDoits2
+	self assert: ' , className1
+						,
+							' preLoadDoit = 2.
+	self assert: ' , className1
+						,
+							' postLoadDoit = 1.
+	self assert: ' , className2
+						,
+							' postLoadDoit = 2.
+'
+			protocol: '*' , testPackageName2 asLowercase;
+		yourself.
+
+	((resolvedProject packageNamed: packageName3)
+		addClassNamed: className3
+		super: className2
+		instvars: #()
+		category: packageName3
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^3' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: testPackageName3)
+		addClassExtensionNamed: testClassName1)
+		addInstanceMethod:
+				'testPostLoadDoits3
+	self assert: ' , className1
+						,
+							' preLoadDoit = 2.
+	self assert: ' , className1
+						,
+							' postLoadDoit = 1.
+	self assert: ' , className2
+						,
+							' preLoadDoit = 3.
+	self assert: ' , className2
+						,
+							' postLoadDoit = 2.
+	self assert: ' , className3
+						,
+							' postLoadDoit = 3.
+'
+			protocol: '*' , testPackageName3 asLowercase;
+		yourself.
+
+	((resolvedProject packageNamed: packageName4)
+		addClassNamed: className4
+		super: className3
+		instvars: #()
+		category: packageName4
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^4' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: testPackageName4)
+		addClassExtensionNamed: testClassName1)
+		addInstanceMethod:
+				'testPostLoadDoits4
+	self assert: ' , className1
+						,
+							' preLoadDoit = 2.
+	self assert: ' , className1
+						,
+							' postLoadDoit = 1.
+	self assert: ' , className2
+						,
+							' preLoadDoit = 3.
+	self assert: ' , className2
+						,
+							' postLoadDoit = 2.
+	self assert: ' , className3
+						,
+							' preLoadDoit = 4.
+	self assert: ' , className3
+						,
+							' postLoadDoit = 3.
+	self assert: ' , className4
+						,
+							' preLoadDoit = nil.
+	self assert: ' , className4
+						,
+							' postLoadDoit = 4.
+'
+			protocol: '*' , testPackageName4 asLowercase;
+		yourself.
+
+	resolvedProject removeComponentNamed: 'Core'.
+	resolvedProject components
+		addSequencedComponentNamed: 'Core'
+		condition: 'common'
+		groupName: 'core'
+		comment:
+			'master component, that will load 4 simple components in order with each component doing a complete, independent load'.
+
+	resolvedProject components
+		addSimpleComponentNamed: 'Core1'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'First component for loading first package';
+		addPackageNamed: packageName1 toComponentNamed: 'Core1';
+		addSimpleComponentNamed: 'Core2'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'Second component for loading second package';
+		addPackageNamed: packageName2 toComponentNamed: 'Core2';
+		addSimpleComponentNamed: 'Core3'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'Third component for loading third package';
+		addPackageNamed: packageName3 toComponentNamed: 'Core3';
+		addSimpleComponentNamed: 'Core4'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'Fourth component for loading fourth package';
+		addPackageNamed: packageName4 toComponentNamed: 'Core4';
+		yourself.
+
+	(resolvedProject componentNamed: 'Core')
+		addComponentNamed: 'Core1';
+		addComponentNamed: 'Core2';
+		addComponentNamed: 'Core3';
+		addComponentNamed: 'Core4';
+		yourself.
+
+	resolvedProject
+		addPostloadDoitName: 'doits/postloadDoit_Core1'
+			withSource: className1 , ' postLoadDoit: 1'
+			toComponentNamed: 'Core1';
+		addPreloadDoitName: 'doits/preloadDoit_Core2'
+			withSource: className1 , ' preLoadDoit: 2'
+			toComponentNamed: 'Core2';
+		addPostloadDoitName: 'doits/postloadDoit_Core2'
+			withSource: className2 , ' postLoadDoit: 2'
+			toComponentNamed: 'Core2';
+		addPreloadDoitName: 'doits/preloadDoit_Core3'
+			withSource: className2 , ' preLoadDoit: 3'
+			toComponentNamed: 'Core3';
+		addPostloadDoitName: 'doits/postloadDoit_Core3'
+			withSource: className3 , ' postLoadDoit: 3'
+			toComponentNamed: 'Core3';
+		addPreloadDoitName: 'doits/preloadDoit_Core4'
+			withSource: className3 , ' preLoadDoit: 4'
+			toComponentNamed: 'Core4';
+		addPostloadDoitName: 'doits/postloadDoit_Core4'
+			withSource: className4 , ' postLoadDoit: 4'
+			toComponentNamed: 'Core4';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
 _addPackageCore1DefinitionsFor_0004: projectDefinition
 	| className packageName |
 	packageName := projectName , '-Core1'.
@@ -3257,6 +3772,7 @@ _createCard: postfix specName: specName title: title index: index derivedFrom: p
 		comment: comment;
 		rowanIssues: {};
 		gemstoneIssues: {};
+		rowanSHA: (RwProject newNamed: 'Rowan') repositoryCommitId;
 		yourself
 %
 
@@ -3291,7 +3807,7 @@ _doCommitAndPush: commitMessage resolvedRepository: resolvedRepository branchNam
 category: 'private'
 method: RwTestProjectLibraryGenerator
 _finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom resolvedRepository: resolvedRepository commitMessage: commitMessage
-	| derivedIndexCardFile |
+	| derivedIndexCardFile indexCardDict card |
 	derivedFrom
 		ifNil: [ 
 			(resolvedRepository repositoryRoot / 'indexCards') exists
@@ -3317,6 +3833,51 @@ _finishCommitAndPush: specName indexCard: indexCard derivedFrom: derivedFrom res
 	(resolvedRepository repositoryRoot / 'specs') ensureCreateDirectory.
 	resolvedRepository _loadSpecification
 		exportTo: resolvedRepository repositoryRoot / 'specs'.
+
+	indexCardDict := Dictionary new.
+	(resolvedRepository repositoryRoot / 'indexCards') allFiles
+		do: [ :indexFile | 
+			card := RwTestProjectLibraryIndexCard fromFile: indexFile.
+			indexCardDict at: card specName put: card ].
+	resolvedRepository repositoryRoot / 'README.md'
+		writeStreamDo: [ :fileStream | 
+			fileStream
+				nextPutAll: '# RowanSample9';
+				lf;
+				nextPutAll:
+						'Sample project that is being used to develop the **final** version of the V2.0 project handling API.';
+				lf;
+				nextPutAll: '## Summary of Load Specs';
+				lf;
+				yourself.
+			(((resolvedRepository repositoryRoot / 'specs') allFiles
+				collect: [ :specFile | RwSpecification fromFile: specFile ]) asArray
+				sort: [ :a :b | a specName <= b specName ])
+				do: [ :loadSpec | 
+					fileStream
+						nextPutAll: '### ' , loadSpec specName;
+						lf;
+						nextPutAll: '```';
+						lf;
+						yourself.
+					loadSpec exportToStream: fileStream.
+					(indexCardDict at: loadSpec specName ifAbsent: [  ])
+						ifNotNil: [ :iCard | 
+							fileStream
+								lf;
+								lf.
+							iCard exportToStream: fileStream ].
+					fileStream
+						lf;
+						nextPutAll: '```';
+						lf;
+						yourself ].
+			fileStream
+				lf;
+				nextPutAll:
+						'*This README file is autogenerated, so any direct edits may be lost.*';
+				lf;
+				yourself ].
 
 	self
 		_doCommitAndPush: commitMessage
@@ -3368,9 +3929,11 @@ _genSpecFor: specName loadSpecification: loadSpecification addDefinitions: addDe
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
 
-	resolvedProject 
-		export;	"write the rowan directory structure"
-		exportLoadSpecification.
+	(resolvedProject repositoryRoot / 'rowan/doits') ensureDeleteAll.
+
+	resolvedProject
+		export;
+		exportLoadSpecification.	"write the rowan directory structure"
 
 	^ resolvedRepository
 %
@@ -3415,6 +3978,18 @@ _testRowanProjectsSandbox
 
 ! Class implementation for 'RwTestProjectLibraryIndexCard'
 
+!		Class methods for 'RwTestProjectLibraryIndexCard'
+
+category: 'instance creation'
+classmethod: RwTestProjectLibraryIndexCard
+fromFile: filePath
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ STON fromStream: stream ]
+%
+
 !		Instance methods for 'RwTestProjectLibraryIndexCard'
 
 category: 'accessing'
@@ -3451,7 +4026,13 @@ category: 'export'
 method: RwTestProjectLibraryIndexCard
 exportTo: directoryReference as: fileName
 	directoryReference / fileName
-		writeStreamDo: [ :fileStream | STON put: self onStreamPretty: fileStream ]
+		writeStreamDo: [ :fileStream | self exportToStream: fileStream ]
+%
+
+category: 'export'
+method: RwTestProjectLibraryIndexCard
+exportToStream: fileStream
+	STON put: self onStreamPretty: fileStream
 %
 
 category: 'accessing'
@@ -3500,6 +4081,20 @@ category: 'accessing'
 method: RwTestProjectLibraryIndexCard
 rowanIssues: object
 	rowanIssues := object
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+rowanSHA
+	"The SHA of the Rowan commit used to create this index card"
+
+	^rowanSHA
+%
+
+category: 'accessing'
+method: RwTestProjectLibraryIndexCard
+rowanSHA: object
+	rowanSHA := object
 %
 
 category: 'accessing'
@@ -8984,6 +9579,44 @@ testIssue_557
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects
 %
 
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_568
+	"load spec_0021, then spec_0022 to validate that pre load doit was run"
+
+	"https://github.com/dalehenrich/Rowan/issues/568"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0021'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self _validateSpec_0021_componentStructure: resolvedProject.
+
+"load spec_0022"
+	loadSpec := self _loadSpecNamed: 'spec_0022'.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project should trigger preload doit"
+	loadedProjects := resolvedProject load.
+
+"validate test will validate that preload doit executed"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
 category: 'issue 493'
 method: RwRowanSample9Test
 testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493
@@ -9206,6 +9839,7 @@ testSpec_0008
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
 	| loadSpec projectName resolvedProject loadedProjects |
+UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
 	projectName := loadSpec projectAlias.
@@ -9217,6 +9851,7 @@ testSpec_0008
 	resolvedProject := loadSpec resolve.
 
 "load project"
+UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -9572,6 +10207,57 @@ testSpec_0020
 	self _validateSpec_0017_componentStructure: resolvedProject
 %
 
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0021
+	"spec_0021 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/568"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0021'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self _validateSpec_0021_componentStructure: resolvedProject
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0023
+	"spec_0023 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/568"
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0023'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+%
+
 category: 'private'
 method: RwRowanSample9Test
 _deleteProjectRepositoryDir
@@ -9680,6 +10366,27 @@ _validateSpec_0017_componentStructure: resolvedProject
 				{'RowanSample9-Core'.
 				'RowanSample9-Extensions'.
 				'RowanSample9-Extensions1'}
+			projectNames: {};
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {'RowanSample9-Tests'}
+			projectNames: {};
+		yourself
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_validateSpec_0021_componentStructure: resolvedProject
+	self
+		_validateComponent: (resolvedProject componentNamed: 'Core')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames:
+				{'RowanSample9-Core'.
+				'RowanSample9-Extensions'}
 			projectNames: {};
 		_validateComponent: (resolvedProject componentNamed: 'Core')
 			condition: {'common'}
@@ -44506,7 +45213,7 @@ testIssue185_move_class_to_symbolDict
 	"issue_185_1 --> issue_185_3	:: move NewRowanSample4 class to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar audit |
 
 	projectName := 'RowanSample4'.
 	Rowan
@@ -44536,6 +45243,8 @@ testIssue185_move_class_to_symbolDict
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -44553,6 +45262,8 @@ testIssue185_move_class_to_symbolDict
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -44569,6 +45280,8 @@ testIssue185_move_class_to_symbolDict
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
@@ -44589,7 +45302,7 @@ testIssue185_move_newClassVariable_to_symbolDict
 	"issue_185_1 --> issue_185_7	:: move NewRowanSample4 class with new class var to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	Rowan
@@ -44619,6 +45332,8 @@ testIssue185_move_newClassVariable_to_symbolDict
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	project := RwProject newNamed: projectName.
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
@@ -44637,6 +45352,8 @@ testIssue185_move_newClassVariable_to_symbolDict
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -44653,6 +45370,8 @@ testIssue185_move_newClassVariable_to_symbolDict
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
@@ -44675,7 +45394,7 @@ testIssue185_move_newClassVersion_to_symbolDict
 	"issue_185_1 --> issue_185_5	:: move new version NewRowanSample4 class to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -44701,6 +45420,8 @@ testIssue185_move_newClassVersion_to_symbolDict
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -44718,6 +45439,8 @@ testIssue185_move_newClassVersion_to_symbolDict
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -44734,6 +45457,8 @@ testIssue185_move_newClassVersion_to_symbolDict
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
@@ -44757,7 +45482,7 @@ testIssue185_rename_package_move_class
 													move NewRowanSample4 to RowanSample4SymbolDict"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar  audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -44783,6 +45508,8 @@ testIssue185_rename_package_move_class
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -44799,6 +45526,8 @@ testIssue185_rename_package_move_class
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self
 		assert:
@@ -44817,6 +45546,8 @@ testIssue185_rename_package_move_class
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
@@ -44838,7 +45569,7 @@ testIssue185_rename_package_move_classVariable
 													move NewRowanSample4 with new class variable to RowanSample4SymbolDict"
 
 	| specUrlString projectTools gitTool rowanProject gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -44864,6 +45595,8 @@ testIssue185_rename_package_move_classVariable
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -44880,6 +45613,8 @@ testIssue185_rename_package_move_classVariable
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self
 		assert:
@@ -44898,6 +45633,8 @@ testIssue185_rename_package_move_classVariable
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
@@ -44919,7 +45656,7 @@ testIssue185_rename_package_move_newClassVersion
 													move new version of NewRowanSample4 to RowanSample4SymbolDict"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -44945,6 +45682,8 @@ testIssue185_rename_package_move_newClassVersion
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -44962,6 +45701,8 @@ testIssue185_rename_package_move_newClassVersion
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -44978,6 +45719,8 @@ testIssue185_rename_package_move_newClassVersion
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
@@ -45000,7 +45743,7 @@ testIssue185_simple_package_rename
 	"issue_185_1 --> issue_185_4	:: Simply rename RowanSample4-NewPackage to RowanSample4-RenamedPackage (no symbol dictionary move)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar audit |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -45026,6 +45769,8 @@ testIssue185_simple_package_rename
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -45042,6 +45787,8 @@ testIssue185_simple_package_rename
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self
 		assert:
@@ -45061,6 +45808,8 @@ testIssue185_simple_package_rename
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
@@ -45424,7 +46173,7 @@ testIssue284
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	loadedCommitId := project loadedCommitId.
-	self assert: loadedCommitId = '8a4a450'
+	self assert: loadedCommitId = '322983e'
 %
 
 category: 'tests'
@@ -45855,10 +46604,9 @@ testIssue460_2
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := self _testRowanProjectsSandbox pathString.
+	gitRootPath := self _testRowanProjectsSandbox.
 
-	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
-		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
 
@@ -51529,7 +52277,7 @@ testIssue185_move_class_to_symbolDict_A_v20
 	"issue_185_1 --> issue_185_3	:: move NewRowanSample4 class to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar audit |
 
 	projectName := 'RowanSample4'.
 	Rowan
@@ -51557,6 +52305,8 @@ testIssue185_move_class_to_symbolDict_A_v20
 
 	project load.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -51572,6 +52322,8 @@ testIssue185_move_class_to_symbolDict_A_v20
 
 	project load.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -51586,6 +52338,8 @@ testIssue185_move_class_to_symbolDict_A_v20
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_3'.				"Move NewRowanSample4 class to RowanSample4SymbolDict"
 
 	project load.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 
