@@ -423,7 +423,7 @@ RowanClassServiceTest >> test_methodHistoryAdd [
     yourself.
   self
     assert:
-      ((UserGlobals at: #'RowanMethodHistory') at: methodService ifAbsent: [  ])
+      ((self userGlobals at: #'RowanMethodHistory') at: methodService ifAbsent: [  ])
     equals: nil.
   classService := RowanClassService forClassNamed: self servicesDefaultClassName.
   source := 'test_methodHistoryAdd | abc | abc := 1. abc := abc + abc. ^abc'.
@@ -463,7 +463,7 @@ RowanClassServiceTest >> test_methodHistoryInitialize [
     yourself.
   self
     assert:
-      ((UserGlobals at: #'RowanMethodHistory') at: methodService ifAbsent: [  ])
+      ((self userGlobals at: #'RowanMethodHistory') at: methodService ifAbsent: [  ])
     equals: nil.
   classService := RowanClassService forClassNamed: self servicesDefaultClassName.
   source := 'test_methodHistoryInitialize | abc | abc := 1. abc := abc + abc. ^abc'.
