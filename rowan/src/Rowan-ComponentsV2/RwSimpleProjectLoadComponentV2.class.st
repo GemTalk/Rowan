@@ -51,8 +51,8 @@ RwSimpleProjectLoadComponentV2 >> addProjectNamed: aProjectName [
 RwSimpleProjectLoadComponentV2 >> hash [
 	| hashValue |
 	hashValue := super hash.
-	hashValue := hashValue bitXor: self packageNames.
-	hashValue := hashValue bitXor: self projectNames.
+	hashValue := hashValue bitXor: self packageNames hash.
+	hashValue := hashValue bitXor: self projectNames hash.
 	^ hashValue
 ]
 

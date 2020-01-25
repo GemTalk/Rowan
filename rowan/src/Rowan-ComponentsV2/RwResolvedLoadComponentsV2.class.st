@@ -200,25 +200,6 @@ RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toC
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addSequencedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwSequencedProjectLoadComponentV2 newNamed: aComponentName ].
-	component
-		condition: condition;
-		groupName: groupName;
-		comment: commentString;
-		yourself.
-	^ component
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
 	| component |
 	self components

@@ -2,15 +2,15 @@ Extension { #name : 'RwAbstractProjectComponentVisitorV2' }
 
 { #category : '*rowan-gemstone-componentsv2' }
 RwAbstractProjectComponentVisitorV2 >> _components: componentDirPath forProject: aProjectName [
-
-	| urlBase |
-	self componentNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
+	| componentDirectory |
+	self componentNames isEmpty
+		ifTrue: [ ^ #() ].
+	componentDirectory := componentDirPath asFileReference.
 	^ self componentNames
 		collect: [ :componentName | 
-			| url |
-			url := urlBase , componentName , '.ston'.
-			(RwAbstractProjectLoadComponentV2 fromUrl: url)
+			(RwBasicProjectLoadComponentV2
+				fromComponentsDirectory: componentDirectory
+				named: componentName)
 				projectName: aProjectName;
 				yourself ]
 ]

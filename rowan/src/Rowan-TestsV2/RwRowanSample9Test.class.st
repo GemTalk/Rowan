@@ -1575,8 +1575,11 @@ RwRowanSample9Test >> testSpec_0021 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testSpec_0023 [
-	"spec_0023 should load cleanly"
+RwRowanSample9Test >> testSpec_0023_1 [
+	"spec_0023 should fail with undefined symbol error while executing a preload doit, 
+		since at the time that preloadDoits are executed, not all of the classes are defined.
+
+		When RwAtomicProjectLoadComponentV2 is implemented and used, this test should pass. "
 
 	"https://github.com/dalehenrich/Rowan/issues/568"
 
@@ -1596,4 +1599,36 @@ RwRowanSample9Test >> testSpec_0023 [
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0023_2 [
+	"spec_0023 should load cleanly since the components will be loaded in order and preload doits should succeed ... 
+		tests for pre and post load doits run as part of #_standard_validate:loadedProjects:"
+
+	"https://github.com/dalehenrich/Rowan/issues/568"
+
+	| loadSpec projectName resolvedProject loadedProjects componentNames |
+	loadSpec := self _loadSpecNamed: 'spec_0023'.
+
+	projectName := loadSpec projectAlias.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	componentNames := {}.
+	loadSpec groupNames: {'core'}.
+	{'Core1' . 'Core2' . 'Core3' . 'Core4' }
+		do: [:componentName |
+"load all of the components in proper sequence"
+		componentNames add: componentName.
+"resolve project"
+		loadSpec componentNames: componentNames.
+		resolvedProject := loadSpec resolve.
+
+"load project"
+		loadedProjects := resolvedProject load.
+
+"validate"
+		self _standard_validate: resolvedProject loadedProjects: loadedProjects ].
 ]

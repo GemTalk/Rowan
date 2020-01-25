@@ -1143,12 +1143,12 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/568"
 
-	| packageName1 packageName2 packageName3 packageName4 testPackageName testPackageName2 testPackageName3 testPackageName4 className1 className2 className3 className4 testClassName1 |
+	| packageName1 packageName2 packageName3 packageName4 testPackageName1 testPackageName2 testPackageName3 testPackageName4 className1 className2 className3 className4 testClassName1 |
 	packageName1 := projectName , '-' , 'Core'.
 	packageName2 := projectName , '-' , 'Core2'.
 	packageName3 := projectName , '-' , 'Core3'.
 	packageName4 := projectName , '-' , 'Core4'.
-	testPackageName := projectName , '-' , 'Tests'.
+	testPackageName1 := projectName , '-' , 'Tests'.
 	testPackageName2 := projectName , '-' , 'Tests2'.
 	testPackageName3 := projectName , '-' , 'Tests3'.
 	testPackageName4 := projectName , '-' , 'Tests4'.
@@ -1167,8 +1167,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 		addClassMethod: 'preLoadDoit: value preLoadDoit := value'
 			protocol: 'accessing';
 		yourself.
-	((resolvedProject packageNamed: testPackageName)
+	((resolvedProject packageNamed: testPackageName1)
 		classDefinitionNamed: testClassName1)
+		removeInstanceMethod: #'test2';
 		addInstanceMethod:
 				'testPostLoadDoits
 	self assert: ' , className1
@@ -1284,7 +1285,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 
 	resolvedProject removeComponentNamed: 'Core'.
 	resolvedProject components
-		addSequencedComponentNamed: 'Core'
+		addSimpleComponentNamed: 'Core'
 		condition: 'common'
 		groupName: 'core'
 		comment:
@@ -1295,22 +1296,34 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 			condition: 'common'
 			groupName: 'core'
 			comment: 'First component for loading first package';
-		addPackageNamed: packageName1 toComponentNamed: 'Core1';
+		addPackagesNamed:
+				{packageName1.
+					testPackageName1}
+			toComponentNamed: 'Core1';
 		addSimpleComponentNamed: 'Core2'
 			condition: 'common'
 			groupName: 'core'
 			comment: 'Second component for loading second package';
-		addPackageNamed: packageName2 toComponentNamed: 'Core2';
+		addPackagesNamed:
+				{packageName2.
+					testPackageName2}
+			toComponentNamed: 'Core2';
 		addSimpleComponentNamed: 'Core3'
 			condition: 'common'
 			groupName: 'core'
 			comment: 'Third component for loading third package';
-		addPackageNamed: packageName3 toComponentNamed: 'Core3';
+		addPackagesNamed:
+				{packageName3.
+					testPackageName3}
+			toComponentNamed: 'Core3';
 		addSimpleComponentNamed: 'Core4'
 			condition: 'common'
 			groupName: 'core'
 			comment: 'Fourth component for loading fourth package';
-		addPackageNamed: packageName4 toComponentNamed: 'Core4';
+		addPackagesNamed:
+				{packageName4.
+					testPackageName4}
+			toComponentNamed: 'Core4';
 		yourself.
 
 	(resolvedProject componentNamed: 'Core')
