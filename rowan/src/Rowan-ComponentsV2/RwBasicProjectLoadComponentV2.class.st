@@ -187,6 +187,13 @@ RwBasicProjectLoadComponentV2 >> _validatedPackageNames [
 	self subclassResponsibility: #'_validatedPackageNames'
 ]
 
+{ #category : 'visiting' }
+RwBasicProjectLoadComponentV2 >> acceptTopLevelVisitor: aVisitor [
+	"the receiver is being visited from an RwSequencedProjectLoadComponent"
+
+	^ self acceptVisitor: aVisitor
+]
+
 { #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> addComponentNamed: aComponentName [
 	self subclassResponsibility: #'addComponentNamed:'

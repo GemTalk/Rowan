@@ -4,75 +4,6 @@ Class {
 	#category : 'Rowan-Tools-CoreV2'
 }
 
-{ #category : 'private' }
-RwPrjReadToolV2 >> _visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad [
-	| projectName componentDirectory projectsDirectory visitor |
-	projectName := resolvedProject projectAlias.
-	componentDirectory := resolvedProject componentsRoot.
-	componentDirectory exists
-		ifFalse: [ 
-			^ self
-				error:
-					'No component directory (' , componentDirectory pathString printString
-						, ') found for project ' , projectName printString ].
-	projectsDirectory := resolvedProject projectsRoot.
-	projectsDirectory exists
-		ifFalse: [ 
-			^ self
-				error:
-					'No projects directory (' , projectsDirectory pathString printString
-						, ') found for project ' , projectName printString ].
-	visitor := visitorClass
-		resolvedProject: resolvedProject
-		platformConditionalAttributes: platformConditionalAttributes
-		groupNames: groupNames.
-	componentNames
-		do: [ :componentName | 
-			| component |
-			component := RwBasicProjectLoadComponentV2
-				fromComponentsDirectory: componentDirectory
-				named: componentName.
-			component projectName: projectName.
-			forLoad
-				ifTrue: [ 
-					"expect all component names to represent loadable components - throw error if a nested component is encountered"
-					visitor visit: component ]
-				ifFalse: [ 
-					"resolve component names without respect to whether or not the component is loadable"
-					visitor visitNested: component ] ].
-	^ visitor
-]
-
-{ #category : 'read resolved projects' }
-RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
-	^ self
-		readComponentsForResolvedProject: resolvedProject
-		withComponentNames: componentNames
-		groupNames: groupNames
-		platformConditionalAttributes: platformConditionalAttributes
-		forLoad: true
-]
-
-{ #category : 'read resolved projects' }
-RwPrjReadToolV2 >> readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad [
-	| theComponentNames theGroupNames |
-	resolvedProject _projectDefinition components: RwResolvedLoadComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
-	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
-	theComponentNames := componentNames isEmpty
-		ifTrue: [ resolvedProject componentNames ]
-		ifFalse: [ componentNames ].
-	theGroupNames := groupNames isEmpty
-		ifTrue: [ resolvedProject groupNames ]
-		ifFalse: [ groupNames ].
-	^ self
-		_visitComponents: RwResolvedProjectComponentVisitorV2
-		forResolvedProject: resolvedProject
-		withComponentNames: theComponentNames
-		groupNames: theGroupNames
-		platformConditionalAttributes: platformConditionalAttributes
-		forLoad: forLoad
-]
-
 { #category : 'read resolved projects' }
 RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames [
 	"read packages and project metadata into projectDefinition ... return a project definition
@@ -87,49 +18,9 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 
 { #category : 'read resolved projects' }
 RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
-	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {{resolvedProject.
-	componentNames.
-	groupNames}}.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| nextDefArray rp cn gn |
-			nextDefArray := projectVisitorQueue removeFirst.
-			rp := nextDefArray at: 1.
-			cn := nextDefArray at: 2.
-			gn := nextDefArray at: 3.
-			visitor := self
-				readComponentsForResolvedProject: rp
-				withComponentNames: cn
-				groupNames: gn
-				platformConditionalAttributes: platformConditionalAttributes.
-			rp
-				projectDefinitionSourceProperty:
-					RwLoadedProject _projectDiskDefinitionSourceValue.
-			visitor visitedComponents
-				keysAndValuesDo: [ :cName :cmp | rp components _addComponent: cmp ].
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					nextDefArray}.
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theResolvedProject |
-					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give enbedded projects a chance"
-					projectVisitorQueue
-						addLast:
-							{theResolvedProject.
-							(loadSpec componentNames).
-							(loadSpec groupNames)} ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| ndf theVisitor theResolvedProject |
-			theVisitor := visitedArray at: 1.
-			ndf := visitedArray at: 2.
-			theResolvedProject := ndf at: 1.
-			theResolvedProject readPackageNames: theResolvedProject packageNames.
-			projectSetDefinition addProject: theResolvedProject ].
-	^ projectSetDefinition
+	^ RwResolvedProjectComponentVisitorV2
+		readProjectSetForResolvedProject: resolvedProject
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes
 ]

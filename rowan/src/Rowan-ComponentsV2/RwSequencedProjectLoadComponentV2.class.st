@@ -21,6 +21,18 @@ RwSequencedProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 ]
 
 { #category : 'visiting' }
+RwSequencedProjectLoadComponentV2 >> acceptTopLevelVisitor: aVisitor [
+	"the receiver is being visited from an RwSequencedProjectLoadComponent.
+		RwSequencedProjectLoadComponents may not be nested. "
+
+	^ self
+		error:
+			'The sequenced project load component ' , self name printString
+				,
+					' can only be loaded as a component directly referenced from a load spec."'
+]
+
+{ #category : 'visiting' }
 RwSequencedProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitSequencedProjectLoadComponent: self
 ]

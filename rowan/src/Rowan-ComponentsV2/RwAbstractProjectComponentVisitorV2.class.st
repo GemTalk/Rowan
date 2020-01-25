@@ -229,7 +229,7 @@ RwAbstractProjectComponentVisitorV2 >> visitSequencedProjectLoadComponent: aSequ
 				projectName: aSequencedProjectLoadComponent projectName;
 				yourself.
 
-			component acceptNestedVisitor: self.
+			component acceptTopLevelVisitor: self.
 
 			self error: 'need to perform load operation at this point' ]
 ]
