@@ -1146,6 +1146,44 @@ values
 	^ values copyFrom: 1 to: size
 %
 
+category: 'filetree'
+method: GsTonelOrderedDictionary
+_writeCypressJsonOn: fileStream
+	"Private method which may be removed in a future GemStone version."
+
+	self _writeCypressJsonOn: fileStream indent: 0
+%
+
+category: 'filetree'
+method: GsTonelOrderedDictionary
+_writeCypressJsonOn: aStream indent: startIndent
+	"Private method which may be removed in a future GemStone version."
+
+	| indent cnt |
+	indent := startIndent.
+	aStream
+		nextPutAll: '{';
+		lf.
+	cnt := 0.
+	indent := indent + 1.
+	self keys do: 
+			[:key |
+			| value |
+			value := self at: key.
+			cnt := cnt + 1.
+			indent timesRepeat: [aStream tab].
+			key _writeCypressJsonOn: aStream indent: indent.
+			aStream nextPutAll: ' : '.
+			value _writeCypressJsonOn: aStream indent: indent.
+			cnt < size
+				ifTrue: 
+					[aStream
+						nextPutAll: ',';
+						lf]].
+	size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
+	aStream nextPutAll: ' }'
+%
+
 ! Class implementation for 'TonelParser'
 
 !		Class methods for 'TonelParser'
@@ -1420,7 +1458,7 @@ methodDef: aBlock
   }.
   (def := self newMethodDefinitionFrom: ar )
     offset: offset
-    inFile: stream wrappedStream wrappedStream wrappedStream name .
+    inFile: stream wrappedStreamName .
 
   aBlock
     value: ar fourth first second notNil
@@ -3960,33 +3998,6 @@ putOn: aStream
 
 category: '*tonel-gemstone-kernel'
 method: CharacterCollection
-substrings: separators 
-	"Answer an array containing the substrings in the receiver separated 
-	by the elements of separators."
-	| result sourceStream subStringStream |
-	
-	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
-		ifFalse: [ ^ self error: 'separators must be Characters.' ].
-	sourceStream := self readStream.
-	result := OrderedCollection new.
-	subStringStream := String new writeStreamPortable.
-	[ sourceStream atEnd ] whileFalse: [
-		| char |
-		char := sourceStream next.
-		(separators includes: char)
-			ifTrue: [
-				subStringStream isEmpty ifFalse: [
-					result add: subStringStream contents.
-					subStringStream := String new writeStreamPortable ] ]
-			ifFalse: [
-				subStringStream nextPut: char ] ].
-	subStringStream isEmpty ifFalse: [
-		result add: subStringStream contents ].
-	^ result asArray
-%
-
-category: '*tonel-gemstone-kernel'
-method: CharacterCollection
 trimBoth
 
 	"Trim separators from both sides of the receiving string."
@@ -4140,16 +4151,6 @@ select: selectBlock thenDo: doBlock
   "Utility method to improve readability."
 
   ^ (self select: selectBlock) do: doBlock
-%
-
-category: '*tonel-gemstone-kernel'
-method: Collection
-sort: aSortBlock
-
-	"Sort this array using aSortBlock. The block should take two arguments
-	and return true if the first element should preceed the second one."
-
-	^ self sortWithBlock: aSortBlock
 %
 
 ! Class extensions for 'CypressClassDefinition'
@@ -4562,13 +4563,6 @@ withIndexDo: elementAndIndexBlock
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
 %
 
-category: '*tonel-gemstone-kernel'
-method: SequenceableCollection
-writeStreamPortable
-
-	^ WriteStreamPortable on: self
-%
-
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -4578,46 +4572,6 @@ method: Stream
 << items
 
 	items putOn: self
-%
-
-! Class extensions for 'Symbol'
-
-!		Instance methods for 'Symbol'
-
-category: '*tonel-gemstone-kernel'
-method: Symbol
-_keywords
-  "Disabled for now by rename to _keywords ; see if 3.6 base image is ok.
-   NOTE, you also need to override in DoubleByteSymbol and QuadByteSymbol
-   if a reimplementation is needed for Rowan .
-   To override in one place for all Symbol classes, 
-    reimplement Symbol class >> _keywords:    instead ."
-
-	"Answer an array of the keywords that compose the receiver."
-
-	| kwd char keywords |
-	keywords := Array new.
-			kwd := WriteStreamPortable on: String new.
-			1 to: self size do: [ :i | 
-				kwd nextPut: (char := self at: i).
-				char = $:
-					ifTrue: [ 
-						keywords add: kwd contents.
-						kwd reset ] ].
-			kwd position = 0
-				ifFalse: [ keywords add: kwd contents ].
-	(keywords size >= 1 and: [ (keywords at: 1) = ':' ])
-		ifTrue: [ 
-			"Has an initial keyword, as in #:if:then:else:"
-			keywords := keywords allButFirst ].
-	(keywords size >= 2 and: [ (keywords at: keywords size - 1) = ':' ])
-		ifTrue: [ 
-			"Has a final keyword, as in #nextPut::andCR"
-			keywords := keywords
-				copyReplaceFrom: keywords size - 1
-				to: keywords size
-				with: {(':' , keywords last)} ].
-	^ keywords
 %
 
 ! Class extensions for 'TonelAbstractWriterTest'

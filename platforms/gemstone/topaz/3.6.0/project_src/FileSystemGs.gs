@@ -2032,7 +2032,7 @@ true.
 %
 
 doit
-(WriteStream
+(WriteStreamPortable
 	subclass: 'MemoryWriteStream'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -8143,8 +8143,8 @@ openFileStream: path writable: writable
 	fullPath := self stringFromPath: path.
 	"redirect over the default implementation"
 	^ writable 
-		ifFalse: [ FileStream readOnlyFileNamed: fullPath ]
-		ifTrue: [ FileStream fileNamed: fullPath ]
+		ifFalse: [ FileStreamPortable readOnlyFileNamed: fullPath ]
+		ifTrue: [ FileStreamPortable fileNamed: fullPath ]
 %
 
 category: 'public'
@@ -9497,6 +9497,15 @@ from: aString delimiter: aDelimiterCharacter
 	^ pathClass withAll: splitPathElements
 %
 
+category: 'ston'
+classmethod: Path
+fromSton: stonReader
+	| elements |
+	elements := Array streamContents: [ :out |
+		stonReader parseListDo: [ :each | out nextPut: each ] ].
+	^ self withAll: elements
+%
+
 category: 'private'
 classmethod: Path
 isAbsolutePath: aString delimiter: aCharacter
@@ -10054,6 +10063,15 @@ segments
 	^ segments asArray 
 %
 
+category: 'ston'
+method: Path
+stonOn: stonWriter
+	stonWriter 
+		writeObject: self 
+		streamShortList: [ :listWriter | 
+			self do: [ :each | listWriter add: each ] ]
+%
+
 category: 'navigating'
 method: Path
 withExtension: extension 
@@ -10437,6 +10455,29 @@ nextInto: collection
 		into: collection
 %
 
+category: 'accessing'
+method: ZnBufferedReadStream
+nextLine
+"Answer next line (may be empty) without line end delimiters, or nil if at end.
+Leave the stream positioned after the line delimiter(s).
+Handle a zoo of line delimiters CR, LF, or CR-LF pair"
+
+| cr lf chrcls result ch |
+self atEnd ifTrue: [^nil].
+cr := (chrcls:= Character) cr.
+lf := chrcls  lf.
+result := self collectionSpecies new.
+[ ch := self next .
+  (ch == cr or:[ ch == lf ]) ifTrue:[ 
+    ch == cr ifTrue:[ self peekFor: lf ].
+    ^ result 
+  ].
+  result add: ch .
+  self atEnd 
+] whileFalse .
+^ result
+%
+
 category: 'accessing-bytes'
 method: ZnBufferedReadStream
 nextLittleEndianNumber: numberOfBytes
@@ -10671,6 +10712,12 @@ category: 'accessing'
 method: ZnBufferedReadStream
 wrappedStream
 	^ stream
+%
+
+category: 'accessing'
+method: ZnBufferedReadStream
+wrappedStreamName
+	^ stream wrappedStreamName
 %
 
 ! Class implementation for 'ZnBufferedReadWriteStream'
@@ -10913,6 +10960,13 @@ method: ZnBufferedReadWriteStream
 wrappedStream
 
 	^ readStream wrappedStream
+%
+
+category: 'accessing'
+method: ZnBufferedReadWriteStream
+wrappedStreamName
+
+	^ readStream wrappedStreamName
 %
 
 category: 'accessing'
@@ -11851,6 +11905,12 @@ wrappedStream
 	^ stream
 %
 
+category: 'accessing'
+method: ZnEncodedStream
+wrappedStreamName
+	^ stream wrappedStreamName
+%
+
 ! Class implementation for 'ZnEncodedReadStream'
 
 !		Instance methods for 'ZnEncodedReadStream'
@@ -12547,6 +12607,13 @@ upToEnd
 		| next |
 		[ (next := self next) isNil ] whileFalse: [
 			newStream nextPut: next ] ]
+%
+
+category: 'accessing'
+method: AbstractBinaryFileStream
+wrappedStreamName
+
+	^self name
 %
 
 ! Class implementation for 'BinaryFileStream'
@@ -18519,12 +18586,12 @@ testGsDeleteDirectoryOnError
 	self should: [ filesystem delete: path parent ] raise: Error.
 %
 
-! Class extensions for 'FileStream'
+! Class extensions for 'FileStreamPortable'
 
-!		Class methods for 'FileStream'
+!		Class methods for 'FileStreamPortable'
 
 category: '*FileSystem-Core'
-classmethod: FileStream
+classmethod: FileStreamPortable
 onHandle: aFileSystemHandle
 	^ self concreteStream new
 		open: aFileSystemHandle fullName
@@ -18979,6 +19046,13 @@ category: '*filesystem-gemstone-kernel'
 method: Stream
 isBinary
 	^false
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Stream
+wrappedStreamName
+
+	^''
 %
 
 ! Class extensions for 'TestAsserter'

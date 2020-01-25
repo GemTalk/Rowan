@@ -5907,6 +5907,12 @@ gs_options: aCollection
 	gs_options := aCollection
 %
 
+category: 'accessing'
+method: CypressClassDefinition
+gs_reservedOop
+	^ ''
+%
+
 category: 'comparing'
 method: CypressClassDefinition
 hash
@@ -8368,6 +8374,12 @@ method: CypressClassStructure
 gs_options: anOptionsArray
 
 	^self properties at: 'gs_options' put: anOptionsArray
+%
+
+category: 'accessing'
+method: CypressClassStructure
+gs_reservedOop
+	^ ''
 %
 
 category: 'querying'
@@ -12235,6 +12247,23 @@ characters
 	^self on: String new
 %
 
+category: 'Documentation'
+classmethod: CypressMessageDigestStream
+comment
+"WriteStreamLegacy has a wired in comment method (in 2.3.15), so we
+	need this method to answer correctly provide the comment for this 
+	class"
+" As of GS/64 3.1, comments are now recorded in the class extraDict
+  dictionary under the key #comment.  Comment information formerly
+  recorded as a GsClassDocumentation under the key #description are
+  converted to a string and placed under #comment during DB 
+  conversion/upgrade. "
+
+  | cmt |
+  cmt := self _extraDictAt: #comment.
+  ^ cmt isNil ifTrue: [ '' ] ifFalse: [ cmt ]
+%
+
 !		Instance methods for 'CypressMessageDigestStream'
 
 category: 'digests'
@@ -12920,7 +12949,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 			[:key |
 			| value |
 			value := self at: key.
-			cnt := cnt + 1.
+			value ifNotNil: [ cnt := cnt + 1.
 			indent timesRepeat: [aStream tab].
 			key _writeCypressJsonOn: aStream indent: indent.
 			aStream nextPutAll: ' : '.
@@ -12929,7 +12958,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 				ifTrue: 
 					[aStream
 						nextPutAll: ',';
-						lf]].
+						lf]]].
 	self size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
 	aStream nextPutAll: ' }'
 %
