@@ -145,7 +145,7 @@ RowanMethodService >> addOrUpdateMethod [
 { #category : 'method history' }
 RowanMethodService >> addToMethodHistory [
   | rowanMethodHistory methodHistory |
-  rowanMethodHistory := (System myUserProfile objectNamed: #UserGlobals)
+  rowanMethodHistory := self userGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
   methodHistory := rowanMethodHistory at: self ifAbsentPut: [ Array new ].

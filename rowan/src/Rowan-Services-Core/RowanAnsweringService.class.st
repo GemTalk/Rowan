@@ -102,7 +102,7 @@ RowanAnsweringService >> basicExec: aString context: oop [
 { #category : 'client command support' }
 RowanAnsweringService >> basicMethodHistoryFor: methodService [
   | rowanMethodHistory |
-  rowanMethodHistory := UserGlobals
+  rowanMethodHistory := self userGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
   answer := (rowanMethodHistory at: methodService ifAbsentPut: [ Array new ])
@@ -222,7 +222,8 @@ RowanAnsweringService >> exec: aString context: oop [
 { #category : 'client commands' }
 RowanAnsweringService >> exec: aString context: oop inWindow: handle [
   answer := self exec: aString context: oop.
-  RowanBrowserService new saveRootObject: answer value windowHandle: handle.	"return answer for testing"
+  answer key
+    ifTrue: [ RowanBrowserService new saveRootObject: answer value windowHandle: handle ].	"return answer for testing"
   ^ answer
 ]
 
@@ -437,7 +438,7 @@ answeringService answer. "
 { #category : 'client commands' }
 RowanAnsweringService >> removeMethodHistoryFor: methodService [
   | rowanMethodHistory |
-  rowanMethodHistory := UserGlobals
+  rowanMethodHistory := self userGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
   rowanMethodHistory removeKey: methodService ifAbsent: [  ]

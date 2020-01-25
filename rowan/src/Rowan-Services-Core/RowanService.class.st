@@ -529,6 +529,11 @@ RowanService >> updateType: aSymbol [
 	updateType := aSymbol
 ]
 
+{ #category : 'accessing' }
+RowanService >> userGlobals [
+  ^ Rowan image symbolList objectNamed: #'UserGlobals'
+]
+
 { #category : 'testing' }
 RowanService >> wasDeleted [
 

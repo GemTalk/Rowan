@@ -82,12 +82,14 @@ RwGsPlatform >> serviceClasses [
 		add: RowanDebuggerService; 
 		add: RowanDictionaryService; 
 		add: RowanFrameService;
+		add: RowanInspectorService;
 		add: RowanLoggingService;
 		add: RowanMethodService;
 		add: RowanPackageService; 
 		add: RowanProcessService;
 		add: RowanProjectService;
 		add: RowanQueryService;
+		add: RowanTestService;
 		add: RowanVariableService.
 	^array
 ]
