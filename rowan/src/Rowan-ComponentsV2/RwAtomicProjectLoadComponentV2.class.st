@@ -1,5 +1,5 @@
 Class {
 	#name : 'RwAtomicProjectLoadComponentV2',
-	#superclass : 'RwAbstractSimpleProjectLoadComponentV2',
+	#superclass : 'RwAbstractRowanProjectLoadComponentV2',
 	#category : 'Rowan-ComponentsV2'
 }

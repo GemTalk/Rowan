@@ -1,8 +1,7 @@
 Class {
 	#name : 'RwSimpleProjectLoadComponentV2',
-	#superclass : 'RwAbstractSimpleProjectLoadComponentV2',
+	#superclass : 'RwAbstractRowanProjectLoadComponentV2',
 	#instVars : [
-		'packageNames',
 		'projectNames'
 	],
 	#category : 'Rowan-ComponentsV2'
@@ -17,8 +16,7 @@ RwSimpleProjectLoadComponentV2 >> _validatedPackageNames [
 
 { #category : 'comparing' }
 RwSimpleProjectLoadComponentV2 >> = aRwSimpleProjectLoadComponentV2 [
-	^ (super = aRwSimpleProjectLoadComponentV2
-		and: [ self packageNames = aRwSimpleProjectLoadComponentV2 packageNames ])
+	^ super = aRwSimpleProjectLoadComponentV2
 		and: [ self projectNames = aRwSimpleProjectLoadComponentV2 projectNames ]
 ]
 
@@ -34,14 +32,6 @@ RwSimpleProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwSimpleProjectLoadComponentV2 >> addPackageNames: aPackageNames [
-	"add packages to default conditional/group if applicable"
-
-	self packageNames addAll: aPackageNames.
-	packageNames := packageNames asSet asArray sort
-]
-
-{ #category : 'accessing' }
 RwSimpleProjectLoadComponentV2 >> addProjectNamed: aProjectName [
 	self projectNames add: aProjectName.
 	projectNames := projectNames asSet asArray sort
@@ -49,29 +39,18 @@ RwSimpleProjectLoadComponentV2 >> addProjectNamed: aProjectName [
 
 { #category : 'comparing' }
 RwSimpleProjectLoadComponentV2 >> hash [
-	| hashValue |
-	hashValue := super hash.
-	hashValue := hashValue bitXor: self packageNames hash.
-	hashValue := hashValue bitXor: self projectNames hash.
-	^ hashValue
+	^ super hash bitXor: self projectNames hash
 ]
 
 { #category : 'initialization' }
 RwSimpleProjectLoadComponentV2 >> initialize [
 	super initialize.
-	packageNames := {}.
 	projectNames := {}
 ]
 
 { #category : 'ston' }
 RwSimpleProjectLoadComponentV2 >> instVarNamesInOrderForSton [
 	^ #(#'name' #'projectName' #'comment' #'condition' #'groupName' #'preloadDoitName' #'postloadDoitName' #'packageNames' #'componentNames' #'projectNames' #'conditionalPackageMapSpecs')
-]
-
-{ #category : 'accessing' }
-RwSimpleProjectLoadComponentV2 >> packageNames [
-
-	^ packageNames
 ]
 
 { #category : 'accessing' }

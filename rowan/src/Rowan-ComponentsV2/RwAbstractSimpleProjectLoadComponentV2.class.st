@@ -2,9 +2,8 @@ Class {
 	#name : 'RwAbstractSimpleProjectLoadComponentV2',
 	#superclass : 'RwBasicProjectLoadComponentV2',
 	#instVars : [
-		'condition',
-		'groupName',
-		'componentNames'
+		'packageNames',
+		'condition'
 	],
 	#category : 'Rowan-ComponentsV2'
 }
@@ -19,21 +18,16 @@ RwAbstractSimpleProjectLoadComponentV2 >> = aRwAbstractSimpleProjectLoadComponen
 			self conditionalPackageMapSpecs
 				= aRwAbstractSimpleProjectLoadComponentV2 conditionalPackageMapSpecs ])
 		and: [ self condition = aRwAbstractSimpleProjectLoadComponentV2 condition ])
-		and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ])
-		and: [ self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames ]
+		and: [ self packageNames = aRwAbstractSimpleProjectLoadComponentV2 packageNames ])
+		and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ]
 ]
 
 { #category : 'accessing' }
-RwAbstractSimpleProjectLoadComponentV2 >> addComponentNamed: aComponentName [ 
-	"avoid duplicates and keep the list sorted"
-	self componentNames add: aComponentName.
-	componentNames := componentNames asSet asArray sort
-]
+RwAbstractSimpleProjectLoadComponentV2 >> addPackageNames: aPackageNames [
+	"add packages to default conditional/group if applicable"
 
-{ #category : 'accessing' }
-RwAbstractSimpleProjectLoadComponentV2 >> componentNames [
-
-	^ componentNames
+	self packageNames addAll: aPackageNames.
+	packageNames := packageNames asSet asArray sort
 ]
 
 { #category : 'accessing' }
@@ -46,33 +40,13 @@ RwAbstractSimpleProjectLoadComponentV2 >> condition: object [
 	condition := object
 ]
 
-{ #category : 'private' }
-RwAbstractSimpleProjectLoadComponentV2 >> conditionalPropertyMatchers [
-	| conditionalPropertyMatchers |
-	conditionalPropertyMatchers := Dictionary new
-		at: {(self _platformPatternMatcherFor: self condition)} put: {groupName};
-		yourself.
-	^ conditionalPropertyMatchers
-]
-
-{ #category : 'accessing' }
-RwAbstractSimpleProjectLoadComponentV2 >> groupName [
-	^groupName
-]
-
-{ #category : 'accessing' }
-RwAbstractSimpleProjectLoadComponentV2 >> groupName: object [
-	groupName := object
-]
-
 { #category : 'comparing' }
 RwAbstractSimpleProjectLoadComponentV2 >> hash [
 	| hashValue |
 	hashValue := self name hash.
 	hashValue := hashValue bitXor: self comment hash.
 	hashValue := hashValue bitXor: self conditionalPackageMapSpecs hash.
-	hashValue := hashValue bitXor: self groupName hash.
-	hashValue := hashValue bitXor: self componentNames hash.
+	hashValue := hashValue bitXor: self packageNames hash.
 	^ hashValue
 ]
 
@@ -80,26 +54,11 @@ RwAbstractSimpleProjectLoadComponentV2 >> hash [
 RwAbstractSimpleProjectLoadComponentV2 >> initialize [
 	super initialize.
 	condition := 'common'.
-	groupName := 'core'.
-	componentNames := {}.
+	packageNames := {}
 ]
 
 { #category : 'accessing' }
-RwAbstractSimpleProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames [
-	"Answer the collection of package names defined in the receiver."
+RwAbstractSimpleProjectLoadComponentV2 >> packageNames [
 
-	| allDefinedPackageNames matchers |
-	allDefinedPackageNames := Set new.
-	matchers := self conditionalPropertyMatchers.
-	platformConfigurationAttributes
-		do: [ :anObject | 
-			matchers
-				keysAndValuesDo: [ :ar :theGroupNames | 
-					ar
-						do: [ :matcher | 
-							(matcher match: anObject)
-								ifTrue: [ 
-									(theGroupNames includes: groupName)
-										ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ] ].
-	^ allDefinedPackageNames
+	^ packageNames
 ]
