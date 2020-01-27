@@ -247,6 +247,25 @@ RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition:
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwSimpleNestedProjectLoadComponentV2 newNamed: aComponentName ].
+	component
+		condition: condition;
+		groupName: groupName;
+		comment: commentString;
+		yourself.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
 	| component |
 	self components

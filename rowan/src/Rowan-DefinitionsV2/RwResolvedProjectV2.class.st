@@ -106,6 +106,13 @@ RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: grou
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	^ self _projectDefinition
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
 	^ self _projectDefinition
 		addComponentNamed: componentName
@@ -206,6 +213,15 @@ RwResolvedProjectV2 >> addRawPackageNamed: packageName [
 RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
 	^ self _projectDefinition
 		addSimpleComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self _projectDefinition
+		addSimpleNestedComponentNamed: aComponentName
 		condition: condition
 		groupName: groupName
 		comment: commentString

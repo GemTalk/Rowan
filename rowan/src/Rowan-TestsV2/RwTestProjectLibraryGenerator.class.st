@@ -31,6 +31,8 @@ RwTestProjectLibraryGenerator new
 	genSpec_0020: commitComment;
 	genSpec_0021: commitComment;
 	genSpec_0022: commitComment;
+	genSpec_0023: commitComment;
+	genSpec_0024: commitComment;
 	yourself
 "
 Class {
@@ -1291,7 +1293,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 		comment:
 			'master component, that will load 4 simple components in order with each component doing a complete, independent load'.
 
-	resolvedProject components
+	resolvedProject
 		addSimpleComponentNamed: 'Core1'
 			condition: 'common'
 			groupName: 'core'
@@ -1356,6 +1358,141 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 			withSource: className4 , ' postLoadDoit: 4'
 			toComponentNamed: 'Core4';
 		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
+	"Start with  spec_0011, add pharo, gemstone, and vast conditional packages using
+		RwSimpleProjectLoadComponentV2, intended to form the basis for working out the
+		details necessary to enable pharo, gemstone and vast to share common code."
+
+	"https://github.com/GemTalk/Rowan/issues/553"
+
+	| packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+
+	packageName4 := projectName , '-' , 'Export-GemStone'.
+	packageName5 := projectName , '-' , 'Export-Pharo'.
+	packageName6 := projectName , '-' , 'Export-VAST'.
+
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	{packageName4.
+	packageName5.
+	packageName6}
+		do: [ :packageName | resolvedProject addRawPackageNamed: packageName ].
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		addInstanceMethod: 'ivar1 ^ ivar1' protocol: 'accessing';
+		addInstanceMethod: 'ivar1: anObject  ivar1 := anObject' protocol: 'accessing';
+		yourself.
+
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod:
+				'testExport
+	"exexute without error"
+	| filePath object |
+	filePath := ''/tmp/' , projectName
+						,
+							'_export.ston''.
+	object := ' , className1
+						,
+							' new ivar1: filePath.
+	object exportTo: filePath'
+			protocol: 'tests';
+		yourself.
+
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className1)
+		addInstanceMethod:
+				'exportTo: pathString
+	| stream |
+	stream := GsFile openWriteOnServer: pathString.
+	[STON put: self onStreamPretty: stream]
+		ensure: [ stream close ].'
+			protocol: '*' , packageName4 asLowercase;
+		yourself.
+
+	((resolvedProject packageNamed: packageName5)
+		addClassExtensionNamed: className1)
+		addInstanceMethod:
+				'exportTo: pathString
+	pathString asFileReference writeStreamDo: [:stream |
+		STON put: self onStreamPretty: stream].'
+			protocol: '*' , packageName5 asLowercase;
+		yourself.
+
+	((resolvedProject packageNamed: packageName6)
+		addClassExtensionNamed: className1)
+		addInstanceMethod:
+				'exportTo: pathString
+	| outStream |
+	outStream := CfsWriteFileStream openEmpty: pathString.
+	[STON put: self onStreamPretty: stream]
+		ensure: [ stream close ].'
+			protocol: 'accessing';
+		yourself.
+
+	resolvedProject
+		removeComponentNamed: 'Core';
+		addSimpleComponentNamed: 'Core'
+			condition: 'common'
+			groupName: 'core'
+			comment: 'Top-level component for loading the application';
+		addSimpleComponentNamed: 'Tests'
+			condition: 'common'
+			groupName: 'tests'
+			comment: 'Top-level component for the application tests';
+		addSimpleNestedComponentNamed: 'platform/Extensions-GemStone'
+			condition: 'gemstone'
+			groupName: 'core'
+			comment: 'Component for loading gemstone-specific packages';
+		addSimpleNestedComponentNamed: 'platform/Extensions-Pharo'
+			condition: 'pharo'
+			groupName: 'core'
+			comment: 'Component for loading pharo-specific packages';
+		addSimpleNestedComponentNamed: 'platform/Extensions-VAST'
+			condition: 'vast'
+			groupName: 'core'
+			comment: 'Component for loading vast-specific packages';
+		yourself.
+
+	resolvedProject
+		addComponentNamed: 'Tests' toComponentNamed: 'Core';
+		addComponentNamed: 'Core' toComponentNamed: 'Tests';
+		addComponentNamed: 'platform/Extensions-GemStone' toComponentNamed: 'Core';
+		addComponentNamed: 'platform/Extensions-Pharo' toComponentNamed: 'Core';
+		addComponentNamed: 'platform/Extensions-VAST' toComponentNamed: 'Core';
+		yourself.
+
+	resolvedProject
+		addPackagesNamed:
+				{packageName1.
+					packageName2}
+			toComponentNamed: 'Core';
+		addPackageNamed: packageName3 toComponentNamed: 'Tests';
+		addPackageNamed: packageName4 toComponentNamed: 'platform/Extensions-GemStone';
+		addPackageNamed: packageName5 toComponentNamed: 'platform/Extensions-Pharo';
+		addPackageNamed: packageName6 toComponentNamed: 'platform/Extensions-VAST';
+		yourself.
+
+	resolvedProject
+		_validate:
+				{'common'.
+					'gemstone'};
+		_validate:
+				{'common'.
+					'pharo'};
+		_validate:
+				{'common'.
+					'vast'};
+		yourself.
+
+
 	^ resolvedProject
 ]
 
@@ -2925,6 +3062,63 @@ RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0023: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
+	"Start with  spec_0011, add pharo, gemstone, and vast conditional packages using
+		RwSimpleProjectLoadComponentV2, intended to form the basis for working out the
+		details necessary to enable pharo, gemstone and vast to share common code."
+
+	"https://github.com/GemTalk/Rowan/issues/553"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0024'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0011, add pharo, gemstone, and vast conditional packages using
+		RwSimpleProjectLoadComponentV2, intended to form the basis for working out the
+		details necessary to enable pharo, gemstone and vast to share common code.'
+		index: 24
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(553);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0024: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

@@ -133,6 +133,13 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: gr
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	^ self components
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
 	^ self components
 		addComponentNamed: componentName
@@ -269,6 +276,15 @@ RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
 	^ self components
 		addSimpleComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
 		condition: condition
 		groupName: groupName
 		comment: commentString
