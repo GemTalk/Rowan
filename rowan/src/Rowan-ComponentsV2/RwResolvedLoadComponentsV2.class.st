@@ -67,6 +67,34 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes groupNa
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwEnvyApplicationProjectLoadComponentV2 newNamed: aComponentName ].
+	component
+		condition: condition;
+		groupName: groupName;
+		comment: commentString;
+		yourself.
+	^ component
+]
+
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addApplicationNamed: componentName toComponentNamed: toComponentName [
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component addApplicationNamed: componentName
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	| component |
 	self components
@@ -216,6 +244,34 @@ RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition:
 		comment: commentString;
 		yourself.
 	^ component
+]
+
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwEnvySubApplicationProjectLoadComponentV2 newNamed: aComponentName ].
+	component
+		condition: condition;
+		groupName: groupName;
+		comment: commentString;
+		yourself.
+	^ component
+]
+
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addSubApplicationNamed: componentName toComponentNamed: toComponentName [
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component addSubApplicationNamed: componentName
 ]
 
 { #category : 'accessing' }

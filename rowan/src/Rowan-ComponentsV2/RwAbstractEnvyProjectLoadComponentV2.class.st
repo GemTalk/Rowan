@@ -23,6 +23,13 @@ RwAbstractEnvyProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
+RwAbstractEnvyProjectLoadComponentV2 >> addApplicationNamed: aComponentName [
+	"avoid duplicates and keep the list sorted"
+
+	self error: 'application components may not be added to subapplication components'
+]
+
+{ #category : 'accessing' }
 RwAbstractEnvyProjectLoadComponentV2 >> addSubApplicationNamed: aComponentName [
 	"avoid duplicates and keep the list sorted"
 
@@ -37,6 +44,12 @@ RwAbstractEnvyProjectLoadComponentV2 >> conditionalPropertyMatchers [
 		at: {(self _platformPatternMatcherFor: self condition)} put: {};
 		yourself.
 	^ conditionalPropertyMatchers
+]
+
+{ #category : 'accessing' }
+RwAbstractEnvyProjectLoadComponentV2 >> groupName: aGroupName [
+
+"not implemented ... yet ... keep it simple at first"
 ]
 
 { #category : 'comparing' }

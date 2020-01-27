@@ -109,6 +109,22 @@ RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self components
+		addApplicationNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addApplicationNamed: componentName toComponentNamed: toComponentName [
+	^ self components
+		addApplicationNamed: componentName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	^ self components
 		addComponentNamed: aComponentName
@@ -137,6 +153,22 @@ RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName definedGroupNam
 RwProjectDefinitionV2 >> addPackageNamed: packageName [
 
 	self shouldNotImplement
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName [
+	| package |
+	self components
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	package := RwPackageDefinition newNamed: packageName.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
+	self components addPackageNamed: packageName toComponentNamed: componentName.
+	^ package
 ]
 
 { #category : 'accessing' }
@@ -195,6 +227,12 @@ RwProjectDefinitionV2 >> addPackages: somePackageNames forComponent: aComponent 
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: componentName [
+	^ packageNames
+		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 
 
@@ -225,6 +263,31 @@ RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self components
+		addSubApplicationNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSubApplicationNamed: componentName toComponentNamed: toComponentName [
+	^ self components
+		addSubApplicationNamed: componentName
+		toComponentNamed: toComponentName
 ]
 
 { #category : 'actions' }

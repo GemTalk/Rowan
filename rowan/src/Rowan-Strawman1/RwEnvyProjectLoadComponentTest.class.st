@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwEnvyProjectLoadComponentTest',
 	#superclass : 'RwAbstractV2Test',
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-Strawman1'
 }
 
 { #category : 'tests' }
@@ -46,32 +46,32 @@ RwEnvyProjectLoadComponentTest >> testBasic [
 	'GemStone application';
 
 		addApplicationNamed: 'VASTApplication'
-			toApplicationNamed: 'CommonApplication';
+			toComponentNamed: 'CommonApplication';
 		addSubApplicationNamed: 'subs/SubApplicationCommon'
-			toApplicationNamed: 'CommonApplication';
+			toComponentNamed: 'CommonApplication';
 
 "SUnit is intended to be resolved within the VAST image itself"
 		addApplicationNamed: 'SUnit'
-			toApplicationNamed: 'VASTApplication';
+			toComponentNamed: 'VASTApplication';
 
 		addSubApplicationNamed: 'subs/SubApplicationGemStone'
-			toSubApplicationNamed: 'subs/SubApplicationCommon';
+			toComponentNamed: 'subs/SubApplicationCommon';
 		addSubApplicationNamed: 'subs/SubApplicationVast'
-			toSubApplicationNamed: 'subs/SubApplicationCommon';
+			toComponentNamed: 'subs/SubApplicationCommon';
 			
 "now we create the packages and distribute them amongst the applications"
 
 		addPackagesNamed:
-				{'TonelExampleApp'}
-			toComponentNamed: 'Core';
-		vastSetVaPrequisitesTo: #('SUnit' 'TonelWriterModel')
-			forPackageNamed: 'TonelExampleApp';
-		vastSetVaSubApplicationsTo: {(Dictionary new
-				at: #'condition' put: true;
-				at: #'subapps' put: {'TonelExampleSubApp'};
-				yourself)}
-			forPackageNamed: 'TonelExampleApp';
+				{'TonelExampleApp' . 'TonelExampleSubApp'}
+			toComponentNamed: 'subs/SubApplicationCommon';
+		addPackagesNamed:
+				{'TonelExampleForGemStoneApp'}
+			toComponentNamed: 'subs/SubApplicationGemStone';
+		addPackagesNamed:
+				{'TonelExampleAnotherSubSubApp'}
+			toComponentNamed: 'subs/SubApplicationVast';
 		yourself.
+
 
 	stonString := STON toStringPretty: project.	"useful to view full structure"
 	self assert: project _validate.

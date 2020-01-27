@@ -31,14 +31,6 @@ RwEnvyApplicationProjectLoadComponentV2 >> addApplicationNamed: aComponentName [
 ]
 
 { #category : 'accessing' }
-RwEnvyApplicationProjectLoadComponentV2 >> addSubApplicationNamed: aComponentName [
-	"avoid duplicates and keep the list sorted"
-
-	self subApplicationNames add: aComponentName.
-	subApplicationNames := subApplicationNames asSet asArray sort
-]
-
-{ #category : 'accessing' }
 RwEnvyApplicationProjectLoadComponentV2 >> applicationNames [
 	^ applicationNames
 ]

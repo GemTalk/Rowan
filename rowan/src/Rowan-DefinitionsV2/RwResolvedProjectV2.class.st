@@ -73,6 +73,31 @@ RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addApplicationNamed: aComponentName condition: condition comment: commentString [
+	^ self
+		addApplicationNamed: aComponentName
+		condition: condition
+		groupName: 'core'
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self _projectDefinition
+		addApplicationNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addApplicationNamed: componentName toComponentNamed: toComponentName [ 
+	^ self _projectDefinition
+		addApplicationNamed: componentName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	^ self _projectDefinition
 		addComponentNamed: aComponentName
@@ -98,6 +123,13 @@ RwResolvedProjectV2 >> addNestedComponentNamed: aComponentName definedGroupNames
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName [
+	^ self _projectDefinition
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 	^ self _projectDefinition
 		addPackageNamed: packageName
@@ -116,6 +148,13 @@ RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentN
 		withConditions: conditionArray
 		andGroupName: groupName
 		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componentName [ 
+	^ self _projectDefinition
+		addPackagesNamed: packageNames
+		toComponentNamed: componentName
 ]
 
 { #category : 'project definition' }
@@ -161,6 +200,40 @@ RwResolvedProjectV2 >> addRawPackageNamed: packageName [
 	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _projectDefinition addRawPackageNamed: packageName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self _projectDefinition
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSubApplicationNamed: aComponentName condition: condition comment: commentString [
+	^ self _projectDefinition
+		addSubApplicationNamed: aComponentName
+		condition: condition
+		groupName: 'core'
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self _projectDefinition
+		addSubApplicationNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSubApplicationNamed: componentName toComponentNamed: toComponentName [
+	^ self _projectDefinition
+		addSubApplicationNamed: componentName
+		toComponentNamed: toComponentName
 ]
 
 { #category : 'project definition' }
