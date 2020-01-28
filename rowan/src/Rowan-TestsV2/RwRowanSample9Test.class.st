@@ -1654,5 +1654,5 @@ RwRowanSample9Test >> testSpec_0024 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
 ]

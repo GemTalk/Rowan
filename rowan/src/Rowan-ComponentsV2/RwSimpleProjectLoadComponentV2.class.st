@@ -37,6 +37,15 @@ RwSimpleProjectLoadComponentV2 >> addProjectNamed: aProjectName [
 	projectNames := projectNames asSet asArray sort
 ]
 
+{ #category : 'accessing' }
+RwSimpleProjectLoadComponentV2 >> conditionalPropertyMatchers [
+	| conditionalPropertyMatchers |
+	conditionalPropertyMatchers := Dictionary new
+		at: {(self _platformPatternMatcherFor: self condition)} put: {};
+		yourself.
+	^ conditionalPropertyMatchers
+]
+
 { #category : 'comparing' }
 RwSimpleProjectLoadComponentV2 >> hash [
 	^ super hash bitXor: self projectNames hash

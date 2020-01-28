@@ -221,11 +221,15 @@ RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleP
 
 	(self groupNames includes: aSimpleProjectLoadComponent groupName)
 		ifTrue: [ 
-			self
-				_addPackageNames: aSimpleProjectLoadComponent packageNames
-				for: aSimpleProjectLoadComponent.
-			self componentNames addAll: aSimpleProjectLoadComponent componentNames.
-			self projectNames addAll: aSimpleProjectLoadComponent projectNames ].
+			aSimpleProjectLoadComponent conditionalPropertyMatchers
+				keysAndValuesDo: [ :platformMatchers :ignored | 
+					(self _platformAttributeMatchIn: platformMatchers)
+						ifTrue: [ 
+							self
+								_addPackageNames: aSimpleProjectLoadComponent packageNames
+								for: aSimpleProjectLoadComponent.
+							self componentNames addAll: aSimpleProjectLoadComponent componentNames.
+							self projectNames addAll: aSimpleProjectLoadComponent projectNames ] ] ].
 
 	(self
 		_components: self componentsPath
