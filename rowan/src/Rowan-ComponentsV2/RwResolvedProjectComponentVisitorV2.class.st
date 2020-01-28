@@ -7,13 +7,53 @@ Class {
 	#category : 'Rowan-ComponentsV2'
 }
 
-{ #category : 'instance creation' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
-	^ self new
-		readProjectSetForResolvedProject: resolvedProject
-		withComponentNames: componentNames
-		groupNames: groupNames
-		platformConditionalAttributes: platformConditionalAttributes
+{ #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {{resolvedProject.
+	componentNamesToRead.
+	groupNames}}.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| nextDefArray rp cn gn |
+			nextDefArray := projectVisitorQueue removeFirst.
+			rp := nextDefArray at: 1.
+			cn := nextDefArray at: 2.
+			gn := nextDefArray at: 3.
+			visitor := self new
+				_readComponentsForResolvedProject: rp
+				withComponentNames: cn
+				groupNames: gn
+				platformConditionalAttributes: platformConditionalAttributes.
+			rp
+				projectDefinitionSourceProperty:
+					RwLoadedProject _projectDiskDefinitionSourceValue.
+			visitor visitedComponents
+				keysAndValuesDo: [ :cName :cmp | rp components _addComponent: cmp ].
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					nextDefArray}.
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theResolvedProject |
+					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give enbedded projects a chance"
+					projectVisitorQueue
+						addLast:
+							{theResolvedProject.
+							(loadSpec componentNames).
+							(loadSpec groupNames)} ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| ndf theVisitor theResolvedProject |
+			theVisitor := visitedArray at: 1.
+			ndf := visitedArray at: 2.
+			theResolvedProject := ndf at: 1.
+			theResolvedProject readPackageNames: theResolvedProject packageNames.
+			projectSetDefinition addProject: theResolvedProject ].
+	^ projectSetDefinition
 ]
 
 { #category : 'instance creation' }
@@ -99,55 +139,6 @@ RwResolvedProjectComponentVisitorV2 >> projectDefinition [
 RwResolvedProjectComponentVisitorV2 >> projectsPath [
 
 	^ self resolvedProject projectsRoot
-]
-
-{ #category : 'reading' }
-RwResolvedProjectComponentVisitorV2 >> readProjectSetForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead groupNames: theGroupNames platformConditionalAttributes: thePlatformConditionalAttributes [
-	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {{aResolvedProject.
-	componentNamesToRead.
-	theGroupNames}}.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| nextDefArray rp cn gn |
-			nextDefArray := projectVisitorQueue removeFirst.
-			rp := nextDefArray at: 1.
-			cn := nextDefArray at: 2.
-			gn := nextDefArray at: 3.
-			visitor := self
-				_readComponentsForResolvedProject: rp
-				withComponentNames: cn
-				groupNames: gn
-				platformConditionalAttributes: thePlatformConditionalAttributes.
-			rp
-				projectDefinitionSourceProperty:
-					RwLoadedProject _projectDiskDefinitionSourceValue.
-			visitor visitedComponents
-				keysAndValuesDo: [ :cName :cmp | rp components _addComponent: cmp ].
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					nextDefArray}.
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theResolvedProject |
-					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give enbedded projects a chance"
-					projectVisitorQueue
-						addLast:
-							{theResolvedProject.
-							(loadSpec componentNames).
-							(loadSpec groupNames)} ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| ndf theVisitor theResolvedProject |
-			theVisitor := visitedArray at: 1.
-			ndf := visitedArray at: 2.
-			theResolvedProject := ndf at: 1.
-			theResolvedProject readPackageNames: theResolvedProject packageNames.
-			projectSetDefinition addProject: theResolvedProject ].
-	^ projectSetDefinition
 ]
 
 { #category : 'accessing' }
