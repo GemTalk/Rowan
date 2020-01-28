@@ -48,6 +48,98 @@ Class {
 }
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addApplication_SubApplicationComponentsFor_0023: resolvedProject [
+	"Start with  spec_0011, add pharo, gemstone, and vast conditional packages using
+		RwSimpleProjectLoadComponentV2, intended to form the basis for working out the
+		details necessary to enable pharo, gemstone and vast to share common code."
+
+	"https://github.com/GemTalk/Rowan/issues/553"
+
+	| packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+
+	packageName4 := projectName , '-' , 'Export-GemStone'.
+	packageName5 := projectName , '-' , 'Export-Pharo'.
+	packageName6 := projectName , '-' , 'Export-VAST'.
+	packageName7 := projectName , '-' , 'VAST-Application'.
+	packageName8 := projectName , '-' , 'VAST-Test-Application'.
+
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	resolvedProject
+		addApplicationNamed: 'envy/Core'
+			condition: 'common'
+			comment:
+				'Top-level application for loading the application core. NOTE: boty envy/Core and envy/Tests are recursive';
+		addApplicationNamed: 'envy/Tests'
+			condition: 'common'
+			comment: 'Top-level application for the application tests';
+		addSubApplicationNamed: 'envy/platform/Extensions-GemStone'
+			condition: 'gemstone'
+			comment: 'Subapplication for loading gemstone-specific packages';
+		addSubApplicationNamed: 'envy/platform/Extensions-Pharo'
+			condition: 'pharo'
+			comment: 'Subapplication for loading pharo-specific packages';
+		addApplicationNamed: 'envy/Extensions-VAST'
+			condition: 'vast'
+			comment:
+				'Subapplication for loading vast-specific test packages and components. 
+		The component named STON is a pseudo-component that refers to 
+		applications expected to reside in the VAST image.
+
+		NOTE: I want this application to be be a subapplication --- it is not a COMPLETE application.
+		It MUST be created in order to reference the VAST specific STON application.';
+		addApplicationNamed: 'envy/Tests-VAST'
+			condition: 'vast'
+			comment:
+				'Subapplication for loading vast-specific test packages and components. 
+		The component named SUnit is a pseudo-component that refers to 
+		applications expected to reside in the VAST image.
+
+		NOTE: I want this application to be be a subapplication --- it is not a COMPLETE application.
+		It MUST be created in order to reference the VAST specific STON application.';
+		yourself.
+
+	resolvedProject
+		addApplicationNamed: 'envy/Tests' toComponentNamed: 'envy/Core';
+		addApplicationNamed: 'envy/Core' toComponentNamed: 'envy/Tests';
+		addApplicationNamed: 'envy/Tests-VAST' toComponentNamed: 'envy/Tests';
+		addApplicationNamed: 'envy/platform/Extensions-GemStone'
+			toComponentNamed: 'envy/Core';
+		addApplicationNamed: 'envy/platform/Extensions-Pharo'
+			toComponentNamed: 'envy/Core';
+		addApplicationNamed: 'envy/Extensions-VAST' toComponentNamed: 'envy/Core';
+		yourself.
+
+	resolvedProject
+		addPackagesNamed:
+				{packageName1.
+					packageName2}
+			toComponentNamed: 'envy/Core';
+		addPackageNamed: packageName3 toComponentNamed: 'envy/Tests';
+		addPackageNamed: packageName4
+			toComponentNamed: 'envy/platform/Extensions-GemStone';
+		addPackageNamed: packageName5
+			toComponentNamed: 'envy/platform/Extensions-Pharo';
+		addPackagesNamed:
+				{packageName6.
+					packageName7}
+			toComponentNamed: 'envy/Extensions-VAST';
+		addPackageNamed: packageName8 toComponentNamed: 'envy/Tests-VAST';
+		yourself.
+
+	resolvedProject
+		addApplicationNamed: 'STON' toComponentNamed: 'envy/Extensions-VAST';
+		addApplicationNamed: 'Sunit' toComponentNamed: 'envy/Tests-VAST';
+		yourself.	"add the VAST image application dependencies"
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
 	resolvedProject
 		comment: 'spec_0000 definitions';
@@ -1369,7 +1461,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/553"
 
-	| packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 className1 className2 |
+	| packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 className1 className2 className3 className4 |
 	packageName1 := projectName , '-' , 'Core'.
 	packageName2 := projectName , '-' , 'Extensions'.
 	packageName3 := projectName , '-' , 'Tests'.
@@ -1377,13 +1469,19 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 	packageName4 := projectName , '-' , 'Export-GemStone'.
 	packageName5 := projectName , '-' , 'Export-Pharo'.
 	packageName6 := projectName , '-' , 'Export-VAST'.
+	packageName7 := projectName , '-' , 'VAST-Application'.
+	packageName8 := projectName , '-' , 'VAST-Test-Application'.
 
 	className1 := projectName , 'Class1'.
 	className2 := projectName , 'TestCase'.
+	className3 := projectName , 'ApplicationClass1'.
+	className4 := projectName , 'TestApplication1'.
 
 	{packageName4.
 	packageName5.
-	packageName6}
+	packageName6.
+	packageName7.
+	packageName8}
 		do: [ :packageName | resolvedProject addRawPackageNamed: packageName ].
 
 	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
@@ -1437,6 +1535,38 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 			protocol: 'accessing';
 		yourself.
 
+	((resolvedProject packageNamed: packageName7)
+		addClassNamed: className3
+		super: 'Application'
+		instvars: #()
+		category: packageName7
+		comment: 'I am a VAST appliation class')
+		addClassMethod:
+				'writeAppToTonel
+	| writer fileSystem |
+	fileSystem := TonelCommonFileSystem new.
+	writer := TonelWriter on: fileSystem.
+	writer writeInWorkingDirectoryProjectIncluding: (Array with: ' , className3
+						, ')'
+			protocol: 'accessing';
+		yourself.
+
+	((resolvedProject packageNamed: packageName8)
+		addClassNamed: className4
+		super: 'Application'
+		instvars: #()
+		category: packageName8
+		comment: 'I am a VAST test ppliation class')
+		addClassMethod:
+				'writeAppToTonel
+	| writer fileSystem |
+	fileSystem := TonelCommonFileSystem new.
+	writer := TonelWriter on: fileSystem.
+	writer writeInWorkingDirectoryProjectIncluding: (Array with: ' , className4
+						, ')'
+			protocol: 'accessing';
+		yourself.
+
 	resolvedProject
 		removeComponentNamed: 'Core';
 		addSimpleComponentNamed: 'Core'
@@ -1458,12 +1588,26 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 		addSimpleNestedComponentNamed: 'platform/Extensions-VAST'
 			condition: 'vast'
 			groupName: 'core'
-			comment: 'Component for loading vast-specific packages';
+			comment:
+				'Component for loading vast-specific test packages and components. 
+		The component named VAST_IMAGE/STON is a pseudo-component that refers to 
+		applications expected to reside in the VAST image.
+
+		The package named RowanSample9-VAST-Application, which contains the Envy 
+		Application class is also included in this component.';
+		addSimpleNestedComponentNamed: 'platform/Tests-VAST'
+			condition: 'vast'
+			groupName: 'tests'
+			comment:
+				'Component for loading vast-specific test packages and components. 
+		The component named VAST_IMAGE/SUnit is a pseudo-component that refers to 
+		applications expected to reside in the VAST image';
 		yourself.
 
 	resolvedProject
 		addComponentNamed: 'Tests' toComponentNamed: 'Core';
 		addComponentNamed: 'Core' toComponentNamed: 'Tests';
+		addComponentNamed: 'platform/Tests-VAST' toComponentNamed: 'Tests';
 		addComponentNamed: 'platform/Extensions-GemStone' toComponentNamed: 'Core';
 		addComponentNamed: 'platform/Extensions-Pharo' toComponentNamed: 'Core';
 		addComponentNamed: 'platform/Extensions-VAST' toComponentNamed: 'Core';
@@ -1475,10 +1619,21 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 					packageName2}
 			toComponentNamed: 'Core';
 		addPackageNamed: packageName3 toComponentNamed: 'Tests';
-		addPackageNamed: packageName4 toComponentNamed: 'platform/Extensions-GemStone';
+		addPackageNamed: packageName4
+			toComponentNamed: 'platform/Extensions-GemStone';
 		addPackageNamed: packageName5 toComponentNamed: 'platform/Extensions-Pharo';
-		addPackageNamed: packageName6 toComponentNamed: 'platform/Extensions-VAST';
+		addPackagesNamed:
+				{packageName6.
+					packageName7}
+			toComponentNamed: 'platform/Extensions-VAST';
+		addPackageNamed: packageName8 toComponentNamed: 'platform/Tests-VAST';
 		yourself.
+
+	resolvedProject
+		addComponentNamed: 'VAST_IMAGE/STON'
+			toComponentNamed: 'platform/Extensions-VAST';
+		addComponentNamed: 'VAST_IMAGE/Sunit' toComponentNamed: 'platform/Tests-VAST';
+		yourself.	"add the VAST_IMAGE application dependencies"
 
 	resolvedProject
 		_validate:
@@ -1492,6 +1647,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 					'vast'};
 		yourself.
 
+	self _addApplication_SubApplicationComponentsFor_0023: resolvedProject.
 
 	^ resolvedProject
 ]
