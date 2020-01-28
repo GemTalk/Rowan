@@ -1494,7 +1494,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 				'testExport
 	"exexute without error"
 	| filePath object |
-	filePath := FileReference newTempFilePrefix: ', projectName printString, '_export suffix: ''ston''
+	filePath := (FileReference newTempFilePrefix: ''', projectName , '_export'' suffix: ''ston'') pathString.
 	object := ' , className1
 						,
 							' new ivar1: filePath.
