@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'pattern2'
 	],
-	#category : 'Rowan-Configurations-Common'
+	#category : 'Rowan-Core-Conditional-Support'
 }
 
 { #category : 'matching' }

@@ -350,7 +350,7 @@ Class {
 		'preReleaseVersion',
 		'buildVersion'
 	],
-	#category : 'Rowan-Configurations-Common'
+	#category : 'Rowan-Core-Conditional-Support'
 }
 
 { #category : 'private' }

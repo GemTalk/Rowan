@@ -4,17 +4,18 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#groupName : 'core',
 	#projectNames : [ ],
 	#componentNames : [
-		'platform/gemstone/Core'
+		'platform/gemstone/Core',
+		'shared/org/tests/Core'
 	],
 	#packageNames : [
-		'Rowan-Configurations-Common',
+		'Rowan-Core-Conditional-Support',
 		'Rowan-Url-Core'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'Rowan-Configurations-Common' : {
+					'Rowan-Core-Conditional-Support' : {
 						'symbolDictName' : 'RowanTools'
 					},
 					'Rowan-Specifications' : {

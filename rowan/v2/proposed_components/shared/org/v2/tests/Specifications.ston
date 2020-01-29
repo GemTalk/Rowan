@@ -1,0 +1,11 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'shared/org/v2/tests/Specifications',
+	#condition : 'v2',
+	#groupName : 'tests',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Tests-SpecificationsV2'
+	],
+	#comment : 'Organize all specification tests under one component'
+}

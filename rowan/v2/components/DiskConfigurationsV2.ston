@@ -27,7 +27,9 @@ RwProjectLoadComponentV2 {
 			},
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests-DiskConfigurationsV2'
+					'Rowan-Tests-ComponentsV2',
+					'Rowan-Tests-Core',
+					'Rowan-Tests-SpecificationsV2'
 				]
 			}
 		},

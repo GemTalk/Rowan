@@ -115,7 +115,7 @@ RwSimpleComponentRowanExperiment >> _createSharedComponents: resolvedProject [
 		addSimpleNestedComponentNamed: 'shared/org/Components'
 			condition: 'common'
 			groupName: 'core'
-			comment: 'Organize all definition classes under one component';
+			comment: 'Organize all component classes under one component';
 		addComponentNamed: 'shared/org/Components' toComponentNamed: 'shared/Shared';
 		addSimpleNestedComponentNamed: 'shared/org/Tools'
 			condition: 'common'
@@ -127,6 +127,29 @@ RwSimpleComponentRowanExperiment >> _createSharedComponents: resolvedProject [
 			groupName: 'core'
 			comment: 'Organize all core classes under one component';
 		addComponentNamed: 'shared/org/Core' toComponentNamed: 'shared/Shared';
+		yourself
+]
+
+{ #category : 'private' }
+RwSimpleComponentRowanExperiment >> _createSharedTestComponents: resolvedProject [
+	resolvedProject
+		addSimpleNestedComponentNamed: 'shared/org/tests/Core'
+			condition: 'common'
+			groupName: 'tests'
+			comment: 'Organize all core tests under one component';
+		addComponentNamed: 'shared/org/tests/Core' toComponentNamed: 'shared/org/Core';
+		addSimpleNestedComponentNamed: 'shared/org/v2/tests/Specifications'
+			condition: 'v2'
+			groupName: 'tests'
+			comment: 'Organize all specification tests under one component';
+		addComponentNamed: 'shared/org/v2/tests/Specifications'
+			toComponentNamed: 'shared/org/Specifications';
+		addSimpleNestedComponentNamed: 'shared/org/v2/tests/Components'
+			condition: 'v2'
+			groupName: 'tests'
+			comment: 'Organize all component tests under one component';
+		addComponentNamed: 'shared/org/v2/tests/Components'
+			toComponentNamed: 'shared/org/Components';
 		yourself
 ]
 
@@ -167,14 +190,15 @@ RwSimpleComponentRowanExperiment >> _createV2Components: resolvedProject [
 RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedProject [
 	"
 		subs/DiskConfigurationsCommon common/core
+		subs/DiskConfigurationsCommonV2 common/tests
 	"
 
 	(resolvedProject componentNamed: 'shared/org/Core')
 		addPackageNames:
 				{'Rowan-Url-Core'.
-					'Rowan-Configurations-Common'};
+					'Rowan-Core-Conditional-Support'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
-			andPackageName: 'Rowan-Configurations-Common'
+			andPackageName: 'Rowan-Core-Conditional-Support'
 			setSymbolDictNameTo: 'RowanTools';
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Specifications'
@@ -193,7 +217,11 @@ RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedPr
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Specifications'
 			setSymbolDictNameTo: 'RowanTools';
-		yourself
+		yourself.
+
+	(resolvedProject componentNamed: 'shared/org/tests/Core')
+		addPackageNames: {'Rowan-Tests-Core'};
+		yourself.
 ]
 
 { #category : 'private' }
@@ -201,7 +229,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 	"
 		subs/DiskConfigurationsCommon gemstone/core
 		subs/Services gemstone/core
-		subs/DiskConfigurationsCommonV2 common/core
+		subs/DiskConfigurationsCommonV2 gemstone/core
 	"
 
 	(resolvedProject componentNamed: 'shared/platform/gemstone/Core')
@@ -275,6 +303,13 @@ RwSimpleComponentRowanExperiment >> _populateV2ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-SpecificationsV2'
 			setSymbolDictNameTo: 'RowanTools';
+		yourself.
+
+	(resolvedProject componentNamed: 'shared/org/v2/tests/Components')
+		addPackageNames: {'Rowan-Tests-ComponentsV2'};
+		yourself.
+	(resolvedProject componentNamed: 'shared/org/v2/tests/Specifications')
+		addPackageNames: {'Rowan-Tests-SpecificationsV2'};
 		yourself
 ]
 
@@ -322,6 +357,7 @@ RwSimpleComponentRowanExperiment >> testBuildExperimentalRowanComponentStructure
 	self
 		_createTopLevelComponents: resolvedProject;
 		_createSharedComponents: resolvedProject;
+		_createSharedTestComponents: resolvedProject;
 		_createRowanComponents: resolvedProject;
 		_createGemStoneComponents: resolvedProject;
 		_createV2Components: resolvedProject;

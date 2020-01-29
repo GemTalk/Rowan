@@ -1,0 +1,11 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'shared/org/tests/Core',
+	#condition : 'common',
+	#groupName : 'tests',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Tests-Core'
+	],
+	#comment : 'Organize all core tests under one component'
+}

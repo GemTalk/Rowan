@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGemStoneVersionNumberTestCase',
 	#superclass : 'TestCase',
-	#category : 'Rowan-Tests-DiskConfigurationsV2'
+	#category : 'Rowan-Tests-Core'
 }
 
 { #category : 'Tests' }

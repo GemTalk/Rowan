@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwLoadSpecificationV2Test',
 	#superclass : 'TestCase',
-	#category : 'Rowan-Tests-DiskConfigurationsV2'
+	#category : 'Rowan-Tests-SpecificationsV2'
 }
 
 { #category : 'private' }
