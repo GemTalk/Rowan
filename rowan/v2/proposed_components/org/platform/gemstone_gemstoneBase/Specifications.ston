@@ -1,5 +1,5 @@
 RwPlatformNestedProjectLoadComponentV2 {
-	#name : 'org/platform/gemstone/Specifications',
+	#name : 'org/platform/gemstone_gemstoneBase/Specifications',
 	#condition : [
 		'gemstone',
 		'gemstoneBase'
@@ -18,5 +18,5 @@ RwPlatformNestedProjectLoadComponentV2 {
 			}
 		}
 	},
-	#comment : 'Specifications gemstone packages'
+	#comment : 'Specifications gemstone or gemstoneBase packages'
 }

@@ -2,9 +2,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'org/Tools',
 	#condition : 'common',
 	#projectNames : [ ],
-	#componentNames : [
-		'org/platform/Tools'
-	],
+	#componentNames : [ ],
 	#packageNames : [ ],
 	#comment : 'Organize all tool classes under one component. Shared between Rowan and RowanDiskAPI.'
 }

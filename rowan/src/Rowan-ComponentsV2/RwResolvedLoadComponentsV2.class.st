@@ -287,7 +287,7 @@ RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName cond
 	| component |
 	self components
 		at: aComponentName
-		ifPresent: [ 
+		ifPresent: [:ignored |
 			self
 				error: 'The component ' , aComponentName printString , ' is already present' ].
 	component := self components

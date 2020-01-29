@@ -3,6 +3,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'gemstone',
 	#projectNames : [ ],
 	#componentNames : [ ],
-	#packageNames : [ ],
+	#packageNames : [
+		'Rowan-Services-Tests'
+	],
 	#comment : 'Services gemstone test packages'
 }

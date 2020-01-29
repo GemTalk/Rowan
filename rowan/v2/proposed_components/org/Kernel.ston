@@ -2,9 +2,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'org/Kernel',
 	#condition : 'common',
 	#projectNames : [ ],
-	#componentNames : [
-		'org/platform/Kernel'
-	],
+	#componentNames : [ ],
 	#packageNames : [ ],
 	#comment : 'Organize all kernel classes under one component. Kernel classes are those core \n\tclasses that are not present as part of the RowanDiskAPI, most notably, the class Rowan.'
 }

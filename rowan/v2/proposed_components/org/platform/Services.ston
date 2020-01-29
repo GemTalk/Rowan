@@ -2,7 +2,9 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'org/platform/Services',
 	#condition : 'common',
 	#projectNames : [ ],
-	#componentNames : [ ],
+	#componentNames : [
+		'org/platform/gemstone/Services'
+	],
 	#packageNames : [ ],
 	#comment : 'Services platform packages'
 }

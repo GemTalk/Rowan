@@ -2,9 +2,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'org/Definitions',
 	#condition : 'common',
 	#projectNames : [ ],
-	#componentNames : [
-		'org/platform/Definitions'
-	],
+	#componentNames : [ ],
 	#packageNames : [
 		'Rowan-Definitions-Common'
 	],

@@ -1,5 +1,5 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'org/tests/v2/Components',
+	#name : 'org/v2/tests/Components',
 	#condition : 'v2',
 	#projectNames : [ ],
 	#componentNames : [ ],

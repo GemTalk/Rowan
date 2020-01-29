@@ -3,7 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'tests',
 	#projectNames : [ ],
 	#componentNames : [
-		'org/tests/v2/Specifications'
+		'org/v2/tests/Specifications'
 	],
 	#packageNames : [ ],
 	#comment : 'Organize all specification tests under one component'

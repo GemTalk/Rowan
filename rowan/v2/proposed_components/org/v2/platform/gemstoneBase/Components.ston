@@ -1,21 +1,21 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'org/platform/gemstone/v2/Components',
-	#condition : 'gemstone',
+	#name : 'org/v2/platform/gemstoneBase/Components',
+	#condition : 'gemstoneBase',
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [
-		'Rowan-GemStone-ComponentsV2'
+		'Rowan-GsBase-ComponentsV2'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'Rowan-GemStone-ComponentsV2' : {
+					'Rowan-GsBase-ComponentsV2' : {
 						'symbolDictName' : 'RowanTools'
 					}
 				}
 			}
 		}
 	},
-	#comment : 'Components gemstone packages'
+	#comment : 'Components gemstoneBase packages'
 }

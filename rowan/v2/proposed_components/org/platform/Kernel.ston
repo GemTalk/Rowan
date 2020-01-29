@@ -1,8 +1,0 @@
-RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'org/platform/Kernel',
-	#condition : 'common',
-	#projectNames : [ ],
-	#componentNames : [ ],
-	#packageNames : [ ],
-	#comment : 'Kernel platform packages'
-}

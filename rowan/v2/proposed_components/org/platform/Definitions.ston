@@ -1,8 +1,0 @@
-RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'org/platform/Definitions',
-	#condition : 'common',
-	#projectNames : [ ],
-	#componentNames : [ ],
-	#packageNames : [ ],
-	#comment : 'Definitions platform packages'
-}
