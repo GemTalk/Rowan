@@ -1,14 +1,19 @@
 RwSimpleProjectLoadComponentV2 {
 	#name : 'Rowan',
 	#condition : 'common',
-	#groupName : 'core',
-	#projectNames : [ ],
+	#projectNames : [
+		'FileSystemGs',
+		'STON'
+	],
 	#componentNames : [
+		'org/Components',
+		'org/Core',
 		'org/Definitions',
 		'org/Kernel',
 		'org/Loader',
 		'org/Services',
-		'shared/Shared'
+		'org/Specifications',
+		'org/Tools'
 	],
 	#packageNames : [ ],
 	#comment : 'top-level component for loading entire Rowan project.'

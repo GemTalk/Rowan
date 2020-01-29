@@ -210,11 +210,27 @@ RwResolvedProjectV2 >> addRawPackageNamed: packageName [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
+	^ self _projectDefinition
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		comment: commentString
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
 	^ self _projectDefinition
 		addSimpleComponentNamed: aComponentName
 		condition: condition
 		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition  comment: commentString [
+	^ self _projectDefinition
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
 		comment: commentString
 ]
 

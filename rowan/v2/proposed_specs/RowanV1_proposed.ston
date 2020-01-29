@@ -7,10 +7,8 @@ RwLoadSpecificationV2 {
 	#componentNames : [
 		'Rowan'
 	],
-	#groupNames : [
-		'core'
-	],
 	#customConditionalAttributes : [
+		'tests',
 		'v1'
 	],
 	#platformProperties : {

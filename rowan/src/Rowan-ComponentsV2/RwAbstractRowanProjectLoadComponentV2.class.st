@@ -56,8 +56,7 @@ RwAbstractRowanProjectLoadComponentV2 >> hash [
 { #category : 'initialization' }
 RwAbstractRowanProjectLoadComponentV2 >> initialize [
 	super initialize.
-	componentNames := {}.
-	groupName := 'core'.
+	componentNames := {}
 ]
 
 { #category : 'accessing' }

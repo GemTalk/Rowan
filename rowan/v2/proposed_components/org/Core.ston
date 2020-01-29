@@ -1,11 +1,10 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'shared/org/Core',
+	#name : 'org/Core',
 	#condition : 'common',
-	#groupName : 'core',
 	#projectNames : [ ],
 	#componentNames : [
-		'platform/gemstone/Core',
-		'shared/org/tests/Core'
+		'org/tests/Core',
+		'platform/gemstone/Core'
 	],
 	#packageNames : [
 		'Rowan-Core-Conditional-Support',
@@ -25,5 +24,5 @@ RwSimpleNestedProjectLoadComponentV2 {
 			}
 		}
 	},
-	#comment : 'Organize all core classes under one component'
+	#comment : 'Organize all core classes under one component. Shared between Rowan and RowanDiskAPI.'
 }

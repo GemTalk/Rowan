@@ -1,7 +1,6 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'shared/org/tests/Core',
+	#name : 'org/tests/Core',
 	#condition : 'common',
-	#groupName : 'tests',
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [

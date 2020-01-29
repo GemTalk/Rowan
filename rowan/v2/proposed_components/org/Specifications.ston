@@ -1,12 +1,11 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'shared/org/Specifications',
+	#name : 'org/Specifications',
 	#condition : 'common',
-	#groupName : 'core',
 	#projectNames : [ ],
 	#componentNames : [
-		'shared/org/v2/Specifications',
-		'shared/org/v2/tests/Specifications',
-		'shared/platform/gemstone/Specifications'
+		'org/platform/gemstone/Specifications',
+		'org/tests/v2/Specifications',
+		'org/v2/Specifications'
 	],
 	#packageNames : [
 		'Rowan-Specifications'
@@ -22,5 +21,5 @@ RwSimpleNestedProjectLoadComponentV2 {
 			}
 		}
 	},
-	#comment : 'Organize all specification classes under one component'
+	#comment : 'Organize all specification classes under one component. Shared between Rowan and RowanDiskAPI.'
 }

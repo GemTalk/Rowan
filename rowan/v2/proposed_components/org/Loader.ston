@@ -1,7 +1,6 @@
 RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'org/Loader',
 	#condition : 'common',
-	#groupName : 'core',
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [ ],

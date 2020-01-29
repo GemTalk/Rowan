@@ -1,10 +1,9 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'shared/platform/gemstone/Components',
+	#name : 'org/platform/gemstone/Components',
 	#condition : [
 		'gemstone',
 		'gemstoneBase'
 	],
-	#groupName : 'core',
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [

@@ -273,11 +273,27 @@ RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		comment: commentString
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
 	^ self components
 		addSimpleComponentNamed: aComponentName
 		condition: condition
 		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
 		comment: commentString
 ]
 

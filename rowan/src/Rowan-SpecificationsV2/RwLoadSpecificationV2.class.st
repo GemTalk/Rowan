@@ -343,7 +343,9 @@ RwLoadSpecificationV2 >> groupNames [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> groupNames: anArray [
-	groupNames := anArray asArray
+	anArray
+		ifNil: [ groupNames := anArray ]
+		ifNotNil: [ groupNames := anArray asArray ]
 ]
 
 { #category : 'comparing' }

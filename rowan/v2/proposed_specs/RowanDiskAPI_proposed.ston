@@ -7,10 +7,8 @@ RwLoadSpecificationV2 {
 	#componentNames : [
 		'RowanDiskAPI'
 	],
-	#groupNames : [
-		'core'
-	],
 	#customConditionalAttributes : [
+		'tests',
 		'v2'
 	],
 	#platformProperties : {
