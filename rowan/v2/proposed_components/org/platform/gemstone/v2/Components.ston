@@ -1,8 +1,6 @@
 RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'org/platform/gemstone/v2/Components',
-	#condition : [
-		'gemstone'
-	],
+	#condition : 'gemstone',
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [

@@ -3,8 +3,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
-		'org/tests/Core',
-		'platform/gemstone/Core'
+		'org/platform/Core',
+		'org/tests/Core'
 	],
 	#packageNames : [
 		'Rowan-Core-Conditional-Support',

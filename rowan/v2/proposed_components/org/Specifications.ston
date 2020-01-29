@@ -4,7 +4,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#projectNames : [ ],
 	#componentNames : [
 		'org/platform/gemstone/Specifications',
-		'org/tests/v2/Specifications',
+		'org/platform/Specifications',
+		'org/tests/Specifications',
 		'org/v2/Specifications'
 	],
 	#packageNames : [

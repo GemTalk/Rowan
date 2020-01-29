@@ -36,8 +36,12 @@ RwAbstractSimpleProjectLoadComponentV2 >> condition [
 ]
 
 { #category : 'accessing' }
-RwAbstractSimpleProjectLoadComponentV2 >> condition: object [
-	condition := object
+RwAbstractSimpleProjectLoadComponentV2 >> condition: aString [
+	false
+		ifTrue: [ 
+			aString isString
+				ifFalse: [ self error: 'The condition is constrained to be a string' ] ].
+	condition := aString
 ]
 
 { #category : 'comparing' }

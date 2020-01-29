@@ -207,6 +207,24 @@ RwResolvedLoadComponentsV2 >> addPackagesNamed: packageNames toComponentNamed: c
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwPlatformNestedProjectLoadComponentV2 newNamed: aComponentName ].
+	component
+		condition: conditionArray;
+		comment: commentString;
+		yourself.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toComponentName [
 	| component |
 	component := self

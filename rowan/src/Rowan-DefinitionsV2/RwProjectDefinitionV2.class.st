@@ -255,6 +255,14 @@ RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: compon
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
+	^ self components
+		addPlatformNestedComponentNamed: aComponentName
+		condition: conditionArray
+		comment: commentString
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
 	^ self components
 		addProjectNamed: projectName

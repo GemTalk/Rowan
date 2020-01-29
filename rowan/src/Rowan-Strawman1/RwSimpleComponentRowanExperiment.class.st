@@ -10,32 +10,8 @@ Class {
 { #category : 'private' }
 RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 	resolvedProject
-		addSimpleNestedComponentNamed: 'org/platform/gemstone/Core'
-			condition:
-				{'gemstone'.
-				'gemstoneBase'}
-			comment: 'Core gemstone packages';
-		addComponentNamed: 'platform/gemstone/Core'
-			toComponentNamed: 'org/Core';
-		addSimpleNestedComponentNamed: 'org/platform/gemstone/Components'
-			condition:
-				{'gemstone'.
-				'gemstoneBase'}
-			comment: 'Components gemstone packages';
-		addComponentNamed: 'platform/gemstone/Components'
-			toComponentNamed: 'org/Components';
-		addSimpleNestedComponentNamed: 'org/platform/gemstone/Specifications'
-			condition:
-				{'gemstone'.
-				'gemstoneBase'}
-			comment: 'Specifications gemstone packages';
-		addComponentNamed: 'org/platform/gemstone/Specifications'
-			toComponentNamed: 'org/Specifications';
-		yourself.
-
-	resolvedProject
 		addSimpleNestedComponentNamed: 'org/platform/gemstone/Services'
-			condition: {'gemstone'}
+			condition: 'gemstone'
 			comment: 'Services gemstone packages';
 		addComponentNamed: 'org/platform/gemstone/Services'
 			toComponentNamed: 'org/Services';
@@ -43,15 +19,99 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 
 	resolvedProject
 		addSimpleNestedComponentNamed: 'org/platform/gemstoneBase/v2/Components'
-			condition: {'gemstoneBase'}
+			condition: 'gemstoneBase'
 			comment: 'Components gemstoneBase packages';
 		addComponentNamed: 'org/platform/gemstoneBase/v2/Components'
 			toComponentNamed: 'org/Components';
 		addSimpleNestedComponentNamed: 'org/platform/gemstone/v2/Components'
-			condition: {'gemstone'}
+			condition: 'gemstone'
 			comment: 'Components gemstone packages';
 		addComponentNamed: 'org/platform/gemstone/v2/Components'
 			toComponentNamed: 'org/Components';
+		yourself
+]
+
+{ #category : 'private' }
+RwSimpleComponentRowanExperiment >> _createGemStoneTestComponents: resolvedProject [
+	resolvedProject
+		addSimpleNestedComponentNamed: 'org/tests/platform/gemstone/Services'
+			condition: 'gemstone'
+			comment: 'Services gemstone test packages';
+		addComponentNamed: 'org/tests/platform/gemstone/Services'
+			toComponentNamed: 'org/tests/Services';
+		yourself
+]
+
+{ #category : 'private' }
+RwSimpleComponentRowanExperiment >> _createGemStoneTroubleComponents: resolvedProject [
+	resolvedProject
+		addPlatformNestedComponentNamed: 'org/platform/gemstone/Core'
+			condition:
+				{'gemstone'.
+					'gemstoneBase'}
+			comment: 'Core gemstone packages';
+		addComponentNamed: 'platform/gemstone/Core' toComponentNamed: 'org/platform/Core';
+		yourself.
+
+
+
+	resolvedProject
+		addPlatformNestedComponentNamed: 'org/platform/gemstone/Components'
+			condition:
+				{'gemstone'.
+					'gemstoneBase'}
+			comment: 'Components gemstone packages';
+		addComponentNamed: 'platform/gemstone/Components'
+			toComponentNamed: 'org/Components';
+		addPlatformNestedComponentNamed: 'org/platform/gemstone/Specifications'
+			condition:
+				{'gemstone'.
+					'gemstoneBase'}
+			comment: 'Specifications gemstone packages';
+		addComponentNamed: 'org/platform/gemstone/Specifications'
+			toComponentNamed: 'org/Specifications';
+		yourself
+]
+
+{ #category : 'private' }
+RwSimpleComponentRowanExperiment >> _createPlatformComponents: resolvedProject [
+	resolvedProject
+		addSimpleNestedComponentNamed: 'org/platform/Components'
+			condition: 'common'
+			comment: 'Components platform packages';
+		addComponentNamed: 'org/platform/Components'
+			toComponentNamed: 'org/Components';
+		addSimpleNestedComponentNamed: 'org/platform/Core'
+			condition: 'common'
+			comment: 'Core platform packages';
+		addComponentNamed: 'org/platform/Core' toComponentNamed: 'org/Core';
+		addSimpleNestedComponentNamed: 'org/platform/Definitions'
+			condition: 'common'
+			comment: 'Definitions platform packages';
+		addComponentNamed: 'org/platform/Definitions'
+			toComponentNamed: 'org/Definitions';
+		addSimpleNestedComponentNamed: 'org/platform/Kernel'
+			condition: 'common'
+			comment: 'Kernel platform packages';
+		addComponentNamed: 'org/platform/Kernel' toComponentNamed: 'org/Kernel';
+		addSimpleNestedComponentNamed: 'org/platform/Loader'
+			condition: 'common'
+			comment: 'Loader platform packages';
+		addComponentNamed: 'org/platform/Loader' toComponentNamed: 'org/Loader';
+		addSimpleNestedComponentNamed: 'org/platform/Services'
+			condition: 'common'
+			comment: 'Services platform packages';
+		addComponentNamed: 'org/platform/Services' toComponentNamed: 'org/Services';
+		addSimpleNestedComponentNamed: 'org/platform/Specifications'
+			condition: 'common'
+			comment: 'Specifications platform packages';
+		addComponentNamed: 'org/platform/Specifications'
+			toComponentNamed: 'org/Specifications';
+		addComponentNamed: 'org/platform/Services' toComponentNamed: 'org/Services';
+		addSimpleNestedComponentNamed: 'org/platform/Tools'
+			condition: 'common'
+			comment: 'Tools platform packages';
+		addComponentNamed: 'org/platform/Tools' toComponentNamed: 'org/Tools';
 		yourself
 ]
 
@@ -110,19 +170,35 @@ RwSimpleComponentRowanExperiment >> _createRowanComponents: resolvedProject [
 RwSimpleComponentRowanExperiment >> _createRowanTestComponents: resolvedProject [
 	resolvedProject
 		addSimpleNestedComponentNamed: 'org/tests/Core'
-			condition: 'common'
+			condition: 'tests'
 			comment: 'Organize all core tests under one component';
 		addComponentNamed: 'org/tests/Core' toComponentNamed: 'org/Core';
+		addSimpleNestedComponentNamed: 'org/tests/Specifications'
+			condition: 'tests'
+			comment: 'Organize all specification tests under one component';
+		addComponentNamed: 'org/tests/Specifications'
+			toComponentNamed: 'org/Specifications';
+		addSimpleNestedComponentNamed: 'org/tests/Components'
+			condition: 'tests'
+			comment: 'Organize all component tests under one component';
+		addComponentNamed: 'org/tests/Components' toComponentNamed: 'org/Components';
+		addSimpleNestedComponentNamed: 'org/tests/Services'
+			condition: 'tests'
+			comment: 'Organize all service tests under one component';
+		addComponentNamed: 'org/tests/Services' toComponentNamed: 'org/Services';
+		yourself.
+
+	resolvedProject
 		addSimpleNestedComponentNamed: 'org/tests/v2/Specifications'
 			condition: 'v2'
 			comment: 'Organize all specification tests under one component';
 		addComponentNamed: 'org/tests/v2/Specifications'
-			toComponentNamed: 'org/Specifications';
+			toComponentNamed: 'org/tests/Specifications';
 		addSimpleNestedComponentNamed: 'org/tests/v2/Components'
 			condition: 'v2'
 			comment: 'Organize all component tests under one component';
 		addComponentNamed: 'org/tests/v2/Components'
-			toComponentNamed: 'org/Components';
+			toComponentNamed: 'org/tests/Components';
 		yourself
 ]
 
@@ -316,7 +392,7 @@ RwSimpleComponentRowanExperiment >> testBuildExperimentalRowanComponentStructure
 	"
 
 	| specArray resolvedProject loadSpec |
-	true
+	false
 		ifTrue: [ ^ self ].	"remove this statement if you want to generate the structures"
 	specArray := {'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
 	'$ROWAN_PROJECTS_HOME'.
@@ -338,7 +414,10 @@ RwSimpleComponentRowanExperiment >> testBuildExperimentalRowanComponentStructure
 		_createRowanComponents: resolvedProject;
 		_createRowanTestComponents: resolvedProject;
 		_createV2Components: resolvedProject;
+		_createPlatformComponents: resolvedProject;
+		_createGemStoneTroubleComponents: resolvedProject;
 		_createGemStoneComponents: resolvedProject;
+		_createGemStoneTestComponents: resolvedProject;
 		_populateCommonComponentPackages: resolvedProject;
 		_populateGemStoneComponentPackages: resolvedProject;
 		_populateV2ComponentPackages: resolvedProject;

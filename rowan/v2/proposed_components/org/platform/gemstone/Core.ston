@@ -1,11 +1,9 @@
-RwSimpleNestedProjectLoadComponentV2 {
+RwPlatformNestedProjectLoadComponentV2 {
 	#name : 'org/platform/gemstone/Core',
 	#condition : [
 		'gemstone',
 		'gemstoneBase'
 	],
-	#projectNames : [ ],
-	#componentNames : [ ],
 	#packageNames : [
 		'Rowan-GemStone-Url'
 	],

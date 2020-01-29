@@ -1,0 +1,8 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'org/platform/Services',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [ ],
+	#comment : 'Services platform packages'
+}

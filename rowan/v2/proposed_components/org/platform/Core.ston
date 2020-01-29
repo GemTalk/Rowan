@@ -1,10 +1,10 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'org/Loader',
+	#name : 'org/platform/Core',
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
-		'org/platform/Loader'
+		'platform/gemstone/Core'
 	],
 	#packageNames : [ ],
-	#comment : 'Organize all loader classes under one component'
+	#comment : 'Core platform packages'
 }

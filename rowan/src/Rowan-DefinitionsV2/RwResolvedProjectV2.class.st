@@ -175,6 +175,14 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 		andGroupName: groupName
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
+	^ self _projectDefinition
+		addPlatformNestedComponentNamed: aComponentName
+		condition: conditionArray
+		comment: commentString
+]
+
 { #category : 'accessing' }
 RwResolvedProjectV2 >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
 	| component |

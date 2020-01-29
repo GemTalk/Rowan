@@ -1,0 +1,8 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'org/tests/platform/gemstone/Services',
+	#condition : 'gemstone',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [ ],
+	#comment : 'Services gemstone test packages'
+}
