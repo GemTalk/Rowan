@@ -1,0 +1,28 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'shared/org/Core',
+	#condition : 'common',
+	#groupName : 'core',
+	#projectNames : [ ],
+	#componentNames : [
+		'platform/gemstone/Core'
+	],
+	#packageNames : [
+		'Rowan-Configurations-Common',
+		'Rowan-Url-Core'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Configurations-Common' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Specifications' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all core classes under one component'
+}

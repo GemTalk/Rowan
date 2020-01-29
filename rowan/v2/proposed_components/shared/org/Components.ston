@@ -1,0 +1,14 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'shared/org/Components',
+	#condition : 'common',
+	#groupName : 'core',
+	#projectNames : [ ],
+	#componentNames : [
+		'shared/org/v2/Components',
+		'shared/platform/gemstone/Components',
+		'shared/platform/gemstone/v2/Components',
+		'shared/platform/gemstoneBase/v2/Components'
+	],
+	#packageNames : [ ],
+	#comment : 'Organize all definition classes under one component'
+}

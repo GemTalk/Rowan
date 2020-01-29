@@ -1,0 +1,11 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'org/Services',
+	#condition : 'common',
+	#groupName : 'core',
+	#projectNames : [ ],
+	#componentNames : [
+		'platform/gemstone/Services'
+	],
+	#packageNames : [ ],
+	#comment : 'Organize all services classes under one component'
+}

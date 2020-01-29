@@ -1,0 +1,9 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'shared/org/Tools',
+	#condition : 'common',
+	#groupName : 'core',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [ ],
+	#comment : 'Organize all tool classes under one component'
+}

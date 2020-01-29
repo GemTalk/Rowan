@@ -1,0 +1,15 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Rowan',
+	#condition : 'common',
+	#groupName : 'core',
+	#projectNames : [ ],
+	#componentNames : [
+		'org/Definitions',
+		'org/Kernel',
+		'org/Loader',
+		'org/Services',
+		'shared/Shared'
+	],
+	#packageNames : [ ],
+	#comment : 'top-level component for loading entire Rowan project.'
+}

@@ -1,0 +1,25 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'shared/org/Specifications',
+	#condition : 'common',
+	#groupName : 'core',
+	#projectNames : [ ],
+	#componentNames : [
+		'shared/org/v2/Specifications',
+		'shared/platform/gemstone/Specifications'
+	],
+	#packageNames : [
+		'Rowan-Specifications'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Specifications' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all specification classes under one component'
+}

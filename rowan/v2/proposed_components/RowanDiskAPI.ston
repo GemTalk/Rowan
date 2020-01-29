@@ -1,0 +1,11 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'RowanDiskAPI',
+	#condition : 'common',
+	#groupName : 'core',
+	#projectNames : [ ],
+	#componentNames : [
+		'shared/Shared'
+	],
+	#packageNames : [ ],
+	#comment : 'top-level component for loading Rowan API for reading writing Rowan disk structure.'
+}
