@@ -3,6 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'tests',
 	#projectNames : [ ],
 	#componentNames : [
+		'common/tests/componentsV2/Components',
 		'common/tests/v2/Components'
 	],
 	#packageNames : [ ],
