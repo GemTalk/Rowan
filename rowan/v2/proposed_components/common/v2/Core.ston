@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v2/Core',
+	#condition : 'v2',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-CoreV2'
+	],
+	#comment : 'Organize all v2 core classes under one component'
+}

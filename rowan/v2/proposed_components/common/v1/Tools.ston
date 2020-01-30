@@ -1,0 +1,11 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v1/Tools',
+	#condition : 'v1',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Cypress-Core',
+		'Rowan-Tools-Kernel'
+	],
+	#comment : 'Organize all v1 tools classes under one component'
+}

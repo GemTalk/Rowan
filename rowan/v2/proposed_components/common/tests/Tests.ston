@@ -1,10 +1,10 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'common/Tests',
+	#name : 'common/tests/Tests',
 	#condition : 'tests',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/tests/Tests'
+		'common/tests/platform/Tests'
 	],
 	#packageNames : [ ],
-	#comment : 'Rowan System test component. Shared between Rowan and RowanDiskAPI.'
+	#comment : 'Organize all system tests under one component'
 }

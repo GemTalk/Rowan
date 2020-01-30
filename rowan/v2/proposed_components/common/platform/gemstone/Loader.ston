@@ -1,0 +1,22 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/platform/gemstone/Loader',
+	#condition : 'gemstone',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-GemStone-Loader',
+		'Rowan-GemStone-Loader-Extensions'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Loader' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Loader gemstone  packages '
+}

@@ -1,0 +1,13 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v1/Specifications',
+	#condition : 'v1',
+	#projectNames : [
+		'Cypress',
+		'Tonel'
+	],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Url-Extensions'
+	],
+	#comment : 'Organize all v1 Specifications classes under one component'
+}
