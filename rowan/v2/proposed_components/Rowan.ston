@@ -6,14 +6,15 @@ RwSimpleProjectLoadComponentV2 {
 		'STON'
 	],
 	#componentNames : [
-		'org/Components',
-		'org/Core',
-		'org/Definitions',
-		'org/Kernel',
-		'org/Loader',
-		'org/Services',
-		'org/Specifications',
-		'org/Tools'
+		'common/Components',
+		'common/Core',
+		'common/Definitions',
+		'common/Kernel',
+		'common/Loader',
+		'common/Services',
+		'common/Specifications',
+		'common/Tests',
+		'common/Tools'
 	],
 	#packageNames : [ ],
 	#comment : 'top-level component for loading entire Rowan project.'

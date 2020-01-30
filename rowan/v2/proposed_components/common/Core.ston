@@ -1,0 +1,28 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Core',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/platform/Core',
+		'common/tests/Core'
+	],
+	#packageNames : [
+		'Rowan-Core-Conditional-Support',
+		'Rowan-Url-Core'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Core-Conditional-Support' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Specifications' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all core classes under one component. Shared between Rowan and RowanDiskAPI.'
+}

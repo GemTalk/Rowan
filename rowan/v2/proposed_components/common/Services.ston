@@ -1,0 +1,11 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Services',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/platform/Services',
+		'common/tests/Services'
+	],
+	#packageNames : [ ],
+	#comment : 'Organize all services classes under one component'
+}

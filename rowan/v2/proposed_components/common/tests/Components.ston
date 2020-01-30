@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/Components',
+	#condition : 'tests',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/tests/v2/Components'
+	],
+	#packageNames : [ ],
+	#comment : 'Organize all component tests under one component'
+}

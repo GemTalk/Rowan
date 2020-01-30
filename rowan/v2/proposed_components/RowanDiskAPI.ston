@@ -6,10 +6,11 @@ RwSimpleProjectLoadComponentV2 {
 		'STON'
 	],
 	#componentNames : [
-		'org/Components',
-		'org/Core',
-		'org/Specifications',
-		'org/Tools'
+		'common/Components',
+		'common/Core',
+		'common/Specifications',
+		'common/Tests',
+		'common/Tools'
 	],
 	#packageNames : [ ],
 	#comment : 'top-level component for loading Rowan API for reading writing Rowan disk structure.'

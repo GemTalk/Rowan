@@ -1,0 +1,13 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Components',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/platform/Components',
+		'common/tests/Components',
+		'common/v2/Components',
+		'common/v2/platform/Components'
+	],
+	#packageNames : [ ],
+	#comment : 'Organize all component classes under one component. Shared between Rowan and RowanDiskAPI.'
+}
