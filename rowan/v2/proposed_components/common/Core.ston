@@ -3,14 +3,14 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/platform/Core',
 		'common/platform/gemstone/Core',
 		'common/platform/gemstone32-5/Core',
 		'common/platform/gemstone32x/Core',
 		'common/platform/gemstone35-/Core',
 		'common/platform/gemstone36-/Core',
 		'common/tests/Core',
-		'common/v2/Core'
+		'common/v2/Core',
+		'platform/gemstone_gemstoneBase/Core'
 	],
 	#packageNames : [
 		'Rowan-Core',

@@ -9,5 +9,5 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'Rowan-DataCurator-Tests',
 		'Rowan-Tests-GemStone'
 	],
-	#comment : 'SystemTests gemstone test packages'
+	#comment : 'Tests gemstone test packages'
 }

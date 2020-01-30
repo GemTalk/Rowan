@@ -3,7 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'tests',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/tests/platform/Tests'
+		'common/tests/platform/gemstone/Tests'
 	],
 	#packageNames : [ ],
 	#comment : 'Organize all system tests under one component'
