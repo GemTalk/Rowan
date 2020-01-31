@@ -9,6 +9,8 @@ RwEnvyProjectLoadComponentTest >> testBasic [
 	"Create project using envy application and subapplication components. 
 		Based on project created in RwStrawmanProjectTestsV2>>testBasic"
 
+	"Abandoned/deferred work on RwEnvyApplicationProjectLoadComponentV2 (https://github.com/GemTalk/Rowan/issues/553#issuecomment-579028291), because envy application/subaapplications not quite suitable for mainstream Rowan use ... leaving (failing) test in case we need application/subapplication for VAST support. If not will repurpose using simple components."
+
 	| projectName project stonString loadSpec resolvedProject x y |
 	projectName := 'EnvyApplication'.
 	project := RwResolvedProjectV2 new
