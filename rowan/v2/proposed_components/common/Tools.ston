@@ -4,7 +4,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#projectNames : [ ],
 	#componentNames : [
 		'common/platform/gemstone/Tools',
-		'common/v1/Tools'
+		'common/v1/Tools',
+		'common/v2/Tools'
 	],
 	#packageNames : [
 		'Rowan-Tools-Core'

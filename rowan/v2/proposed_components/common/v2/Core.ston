@@ -2,7 +2,9 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'common/v2/Core',
 	#condition : 'v2',
 	#projectNames : [ ],
-	#componentNames : [ ],
+	#componentNames : [
+		'common/v2/platform/gemstone/Core'
+	],
 	#packageNames : [
 		'Rowan-CoreV2'
 	],
