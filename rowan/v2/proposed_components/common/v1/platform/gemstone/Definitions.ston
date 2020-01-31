@@ -1,0 +1,25 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v1/platform/gemstone/Definitions',
+	#condition : 'gemstone',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Cypress-Definitions',
+		'Rowan-GemStone-DefinitionsV1'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Cypress-Definitions' : {
+						'symbolDictName' : 'RowanLoader'
+					},
+					'Rowan-GemStone-DefinitionsV1' : {
+						'symbolDictName' : 'RowanLoader'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Definitions gemstone packages'
+}

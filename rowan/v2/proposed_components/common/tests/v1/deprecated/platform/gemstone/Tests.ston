@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/v1/deprecated/platform/gemstone/Tests',
+	#condition : 'tests',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Tests-Deprecated'
+	],
+	#comment : 'Organize all test v1 deprecated gemstone classes under one component'
+}

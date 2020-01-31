@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/v1/Tests',
+	#condition : 'tests',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/tests/v1/deprecated/Tests'
+	],
+	#packageNames : [ ],
+	#comment : 'Organize all test v1 classes under one component'
+}

@@ -3,7 +3,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/platform/gemstone/Definitions'
+		'common/platform/gemstone/Definitions',
+		'common/v1/Definitions'
 	],
 	#packageNames : [
 		'Rowan-Definitions',

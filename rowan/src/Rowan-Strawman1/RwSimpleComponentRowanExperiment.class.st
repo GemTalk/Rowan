@@ -35,11 +35,42 @@ RwSimpleComponentRowanExperiment >> _createComponentsV2Components: resolvedProje
 { #category : 'private' }
 RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 	resolvedProject
+		addSimpleNestedComponentNamed: 'common/tests/v1/deprecated/platform/gemstone/Tests'
+			condition: 'gemstone'
+			comment: 'Organize all test v1 deprecated gemstone classes under one component';
+		addComponentNamed: 'common/tests/v1/deprecated/platform/gemstone/Tests'
+			toComponentNamed: 'common/tests/v1/deprecated/Tests';
+		yourself.
+
+	resolvedProject
+		addSimpleNestedComponentNamed: 'common/v1/platform/gemstone/Core'
+			condition: 'gemstone'
+			comment: 'Core gemstone packages';
+		addComponentNamed: 'common/v1/platform/gemstone/Core'
+			toComponentNamed: 'common/v1/Core';
+		addSimpleNestedComponentNamed: 'common/v1/platform/gemstone/Specifications'
+			condition: 'gemstone'
+			comment: 'Specifications gemstone packages';
+		addComponentNamed: 'common/v1/platform/gemstone/Specifications'
+			toComponentNamed: 'common/v1/Specifications';
+		addSimpleNestedComponentNamed: 'common/v1/platform/gemstone/Definitions'
+			condition: 'gemstone'
+			comment: 'Definitions gemstone packages';
+		addComponentNamed: 'common/v1/platform/gemstone/Definitions'
+			toComponentNamed: 'common/v1/Definitions';
+		addSimpleNestedComponentNamed: 'common/v1/deprecated/platform/gemstone/Loader'
+			condition: 'gemstone'
+			comment: 'Services gemstone packages';
+		addComponentNamed: 'common/v1/deprecated/platform/gemstone/Loader'
+			toComponentNamed: 'common/v1/deprecated/Loader';
+		yourself.
+
+	resolvedProject
 		addSimpleNestedComponentNamed: 'common/platform/gemstone/Services'
 			condition: 'gemstone'
 			comment: 'Services gemstone packages';
 		addComponentNamed: 'common/platform/gemstone/Services'
-			toComponentNamed: 'common/platform/Services';
+			toComponentNamed: 'common/Services';
 		yourself.
 
 	resolvedProject
@@ -47,12 +78,12 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 			condition: 'gemstoneBase'
 			comment: 'Components gemstoneBase packages';
 		addComponentNamed: 'common/v2/platform/gemstoneBase/Components'
-			toComponentNamed: 'common/v2/platform/Components';
+			toComponentNamed: 'common/v2/Components';
 		addSimpleNestedComponentNamed: 'common/v2/platform/gemstone/Components'
 			condition: 'gemstone'
 			comment: 'Components gemstone packages';
 		addComponentNamed: 'common/v2/platform/gemstone/Components'
-			toComponentNamed: 'common/v2/platform/Components';
+			toComponentNamed: 'common/v2/Components';
 		yourself.
 
 	resolvedProject
@@ -62,7 +93,7 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 					'gemstoneBase'}
 			comment: 'Core gemstone or gemstoneBase packages';
 		addComponentNamed: 'platform/gemstone_gemstoneBase/Core'
-			toComponentNamed: 'common/platform/Core';
+			toComponentNamed: 'common/Core';
 		yourself.
 
 	resolvedProject
@@ -73,7 +104,7 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 					'gemstoneBase'}
 			comment: 'Components gemstone or gemstoneBase packages';
 		addComponentNamed: 'platform/gemstone_gemstoneBase/Components'
-			toComponentNamed: 'common/platform/Components';
+			toComponentNamed: 'common/Components';
 		addPlatformNestedComponentNamed:
 				'common/platform/gemstone_gemstoneBase/Specifications'
 			condition:
@@ -81,7 +112,7 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 					'gemstoneBase'}
 			comment: 'Specifications gemstone or gemstoneBase packages';
 		addComponentNamed: 'common/platform/gemstone_gemstoneBase/Specifications'
-			toComponentNamed: 'common/platform/Specifications';
+			toComponentNamed: 'common/Specifications';
 		yourself.
 
 	resolvedProject
@@ -163,7 +194,7 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 			comment: 'Core gs3.[6-]  packages ';
 		addComponentNamed: 'common/platform/gemstone36-/Core'
 			toComponentNamed: 'common/Core';
-		yourself.
+		yourself
 ]
 
 { #category : 'private' }
@@ -176,41 +207,18 @@ RwSimpleComponentRowanExperiment >> _createGemStoneTestComponents: resolvedProje
 			toComponentNamed: 'common/tests/Services';
 		addSimpleNestedComponentNamed: 'common/tests/platform/gemstone/Tests'
 			condition: 'gemstone'
-			comment: 'SystemTests gemstone test packages';
+			comment: 'Tests gemstone test packages';
 		addComponentNamed: 'common/tests/platform/gemstone/Tests'
-			toComponentNamed: 'common/tests/platform/Tests';
-		yourself
-]
-
-{ #category : 'private' }
-RwSimpleComponentRowanExperiment >> _createPlatformComponents: resolvedProject [
-	resolvedProject
-		addSimpleNestedComponentNamed: 'common/platform/Services'
-			condition: 'common'
-			comment: 'Services platform packages';
-		addComponentNamed: 'common/platform/Services' toComponentNamed: 'common/Services';
-		addSimpleNestedComponentNamed: 'common/platform/Core'
-			condition: 'common'
-			comment: 'Core platform packages';
-		addComponentNamed: 'common/platform/Core' toComponentNamed: 'common/Core';
-		addSimpleNestedComponentNamed: 'common/platform/Components'
-			condition: 'common'
-			comment: 'Components platform packages';
-		addComponentNamed: 'common/platform/Components'
-			toComponentNamed: 'common/Components';
-		addSimpleNestedComponentNamed: 'common/platform/Specifications'
-			condition: 'common'
-			comment: 'Specifications platform packages';
-		addComponentNamed: 'common/platform/Specifications'
-			toComponentNamed: 'common/Specifications';
+			toComponentNamed: 'common/tests/Tests';
 		yourself.
 
 	resolvedProject
-		addSimpleNestedComponentNamed: 'common/v2/platform/Components'
-			condition: 'v2'
-			comment: 'Components v2/platform packages';
-		addComponentNamed: 'common/v2/platform/Components'
-			toComponentNamed: 'common/Components';
+		addSimpleNestedComponentNamed:
+				'common/tests/componentsV2/platform/gemstone32-/Components'
+			condition: 'gs3.[2-]'
+			comment: 'Components gs3.[2-]  packages ';
+		addComponentNamed: 'common/tests/componentsV2/platform/gemstone32-/Components'
+			toComponentNamed: 'common/tests/componentsV2/Components';
 		yourself
 ]
 
@@ -270,9 +278,6 @@ RwSimpleComponentRowanExperiment >> _createRowanComponents: resolvedProject [
 			condition: 'common'
 			comment: 'Organize all services classes under one component';
 		addComponentNamed: 'common/Services' toComponentNamed: 'Rowan';
-		addSimpleNestedComponentNamed: 'common/SystemTests'
-			condition: 'tests'
-			comment: 'Organize all system test classes under one component';
 		addComponentNamed: 'common/Services' toComponentNamed: 'Rowan';
 		addSimpleNestedComponentNamed: 'common/Loader'
 			condition: 'common'
@@ -310,11 +315,6 @@ RwSimpleComponentRowanExperiment >> _createRowanTestComponents: resolvedProject 
 			condition: 'tests'
 			comment: 'Organize all system tests under one component';
 		addComponentNamed: 'common/tests/Tests' toComponentNamed: 'common/Tests';
-		addSimpleNestedComponentNamed: 'common/tests/platform/Tests'
-			condition: 'tests'
-			comment: 'Organize all platform sytems tests under one component';
-		addComponentNamed: 'common/tests/platform/Tests'
-			toComponentNamed: 'common/tests/Tests';
 		yourself.
 
 	resolvedProject
@@ -357,21 +357,78 @@ RwSimpleComponentRowanExperiment >> _createTopLevelComponents: resolvedProject [
 { #category : 'private' }
 RwSimpleComponentRowanExperiment >> _createV1Components: resolvedProject [
 	resolvedProject
+		addSimpleNestedComponentNamed: 'common/tests/v1/Tests'
+			condition: 'tests'
+			comment: 'Organize all test v1 classes under one component';
+		addComponentNamed: 'common/tests/v1/Tests'
+			toComponentNamed: 'common/tests/Tests';
+		yourself.
+
+	resolvedProject
+		addSimpleNestedComponentNamed: 'common/v1/Core'
+			condition: 'v1'
+			comment: 'Organize all v1 core classes under one component';
+		addComponentNamed: 'common/v1/Core' toComponentNamed: 'common/Core';
 		addSimpleNestedComponentNamed: 'common/v1/Tools'
 			condition: 'v1'
 			comment: 'Organize all v1 tools classes under one component';
-		addComponentNamed: 'common/v1/Tools'
-			toComponentNamed: 'common/Tools';
+		addComponentNamed: 'common/v1/Tools' toComponentNamed: 'common/Tools';
 		addSimpleNestedComponentNamed: 'common/v1/Specifications'
 			condition: 'v1'
 			comment: 'Organize all v1 Specifications classes under one component';
 		addComponentNamed: 'common/v1/Specifications'
 			toComponentNamed: 'common/Specifications';
+		addSimpleNestedComponentNamed: 'common/v1/Loader'
+			condition: 'v1'
+			comment: 'Organize all v1 loader classes under one component';
+		addComponentNamed: 'common/v1/Loader' toComponentNamed: 'common/Loader';
+		yourself.
+
+	resolvedProject
+		addSimpleNestedComponentNamed: 'common/v1/Components'
+			condition: 'v1'
+			comment: 'Organize all v1 components classes under one component';
+		addComponentNamed: 'common/v1/Components'
+			toComponentNamed: 'common/Components';
+		addSimpleNestedComponentNamed: 'common/v1/Definitions'
+			condition: 'v1'
+			comment: 'Organize all v1 Definitions classes under one component';
+		addComponentNamed: 'common/v1/Definitions'
+			toComponentNamed: 'common/Definitions';
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/Specifications')
 		addProjectNamed: 'Cypress';
 		addProjectNamed: 'Tonel';
+		yourself
+]
+
+{ #category : 'private' }
+RwSimpleComponentRowanExperiment >> _createV1DeprecatedComponents: resolvedProject [
+	resolvedProject
+		addSimpleNestedComponentNamed: 'common/tests/v1/deprecated/Tests'
+			condition: 'deprecated'
+			comment: 'Organize all test v1 deprecated classes under one component';
+		addComponentNamed: 'common/tests/v1/deprecated/Tests'
+			toComponentNamed: 'common/tests/v1/Tests';
+		yourself.
+
+	resolvedProject
+		addSimpleNestedComponentNamed: 'common/v1/deprecated/Loader'
+			condition: 'deprecated'
+			comment: 'Organize all deprecated loader classes under one component';
+		addComponentNamed: 'common/v1/deprecated/Loader'
+			toComponentNamed: 'common/v1/Loader';
+		addSimpleNestedComponentNamed: 'common/v1/deprecated/Definitions'
+			condition: 'deprecated'
+			comment: 'Organize all deprecated definitions classes under one component';
+		addComponentNamed: 'common/v1/deprecated/Definitions'
+			toComponentNamed: 'common/v1/Definitions';
+		addSimpleNestedComponentNamed: 'common/v1/deprecated/Tools'
+			condition: 'deprecated'
+			comment: 'Organize all deprecated tools classes under one component';
+		addComponentNamed: 'common/v1/deprecated/Tools'
+			toComponentNamed: 'common/v1/Tools';
 		yourself
 ]
 
@@ -451,7 +508,7 @@ RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedPr
 		addPackageNames: {'Rowan-Tests-Core'};
 		yourself.
 
-	(resolvedProject componentNamed: 'common/SystemTests')
+	(resolvedProject componentNamed: 'common/Tests')
 		addPackageNames: {'Rowan-Tests'};
 		yourself
 ]
@@ -492,7 +549,49 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		subs/DiskConfigurationsCommonV2 gemstone/core
 		subs/CommonComponent	gemstone/core
 		subs/CommonComponentV2	gemstone/core
+
+		componentsV2 gemstone/tests
+
+		RowanV1 tests/deprecated/gemstone/
 	"
+
+	(resolvedProject
+		componentNamed: 'common/tests/v1/deprecated/platform/gemstone/Tests')
+		addPackageNames: {'Rowan-Tests-Deprecated'};
+		yourself.
+
+	(resolvedProject componentNamed: 'common/v1/platform/gemstone/Specifications')
+		addPackageNames: {'Rowan-GemStone-SpecificationsV1'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-GemStone-SpecificationsV1'
+			setSymbolDictNameTo: 'RowanTools';
+		yourself.
+
+	(resolvedProject componentNamed: 'common/v1/platform/gemstone/Core')
+		addPackageNames: {'Rowan-Url-Cypress'};
+		yourself.
+
+	(resolvedProject componentNamed: 'common/v1/platform/gemstone/Definitions')
+		addPackageNames:
+				{'Rowan-Cypress-Definitions'.
+					'Rowan-GemStone-DefinitionsV1'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Cypress-Definitions'
+			setSymbolDictNameTo: 'RowanLoader';
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-GemStone-DefinitionsV1'
+			setSymbolDictNameTo: 'RowanLoader';
+		yourself.
+
+	(resolvedProject
+		componentNamed: 'common/v1/deprecated/platform/gemstone/Loader')
+		addPackageNames:
+				{'Rowan-GemStone-Loader-Deprecated'.
+					'Rowan-GemStone-Loader-Extensions-Deprecated'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-GemStone-Loader-Deprecated'
+			setSymbolDictNameTo: 'RowanLoader';
+		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone_gemstoneBase/Core')
 		addPackageNames: {'Rowan-GemStone-Url'};
@@ -628,27 +727,31 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone32-5/Core')
-		addPackageNames:
-				{'Rowan-GemStone-Kernel-32x'};
+		addPackageNames: {'Rowan-GemStone-Kernel-32x'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Kernel-32x'
 			setSymbolDictNameTo: 'Globals';
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone35-/Core')
-		addPackageNames:
-				{'Rowan-GemStone-35x'};
+		addPackageNames: {'Rowan-GemStone-35x'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-35x'
 			setSymbolDictNameTo: 'Globals';
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone36-/Core')
-		addPackageNames:
-				{'Rowan-GemStone-36x'};
+		addPackageNames: {'Rowan-GemStone-36x'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-36x'
 			setSymbolDictNameTo: 'Globals';
+		yourself.
+
+	(resolvedProject
+		componentNamed: 'common/tests/componentsV2/platform/gemstone32-/Components')
+		addPackageNames:
+				{'Rowan-Tests-35x'.
+					'Rowan-Tests-GemStone-35x'};
 		yourself
 ]
 
@@ -658,12 +761,64 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		subs/CommonCore common/core
 	"
 
-	(resolvedProject componentNamed: 'common/v1/Tools')
-		addPackageNames: {'Rowan-Cypress-Core'};
-		addPackageNames: {'Rowan-Tools-Kernel'};
+	(resolvedProject componentNamed: 'common/v1/deprecated/Tools')
+		addPackageNames: {'Rowan-Tools-Deprecated'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Tools-Deprecated'
+			setSymbolDictNameTo: 'RowanTools';
 		yourself.
+
+	(resolvedProject componentNamed: 'common/v1/deprecated/Definitions')
+		addPackageNames: {'Rowan-Definitions-Deprecated'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Definitions-Deprecated'
+			setSymbolDictNameTo: 'RowanTools';
+		yourself.
+
+	(resolvedProject componentNamed: 'common/v1/Tools')
+		addPackageNames:
+				{'Rowan-Cypress-Core'.
+					'Rowan-Tools-Kernel'.
+					'Rowan-Tools-CoreV1'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Tools-CoreV1'
+			setSymbolDictNameTo: 'RowanTools';
+		yourself.
+
 	(resolvedProject componentNamed: 'common/v1/Specifications')
-		addPackageNames: {'Rowan-Url-Extensions'};
+		addPackageNames:
+				{'Rowan-Url-Extensions'.
+					'Rowan-SpecificationsV1'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-SpecificationsV1'
+			setSymbolDictNameTo: 'RowanTools';
+		yourself.
+
+	(resolvedProject componentNamed: 'common/v1/Components')
+		addPackageNames: {'Rowan-Configurations'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Configurations'
+			setSymbolDictNameTo: 'RowanTools';
+		yourself.
+	(resolvedProject componentNamed: 'common/v1/Definitions')
+		addPackageNames:
+				{'Rowan-DefinitionsV1-Kernel'.
+					'Rowan-DefinitionsV1'.
+					'Rowan-Core-DefinitionsV1'.
+					'Rowan-Url-CoreV1'.
+					'Rowan-Cypress-Kernel'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-DefinitionsV1'
+			setSymbolDictNameTo: 'RowanTools';
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-DefinitionsV1-Kernel'
+			setSymbolDictNameTo: 'Globals';
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Core-DefinitionsV1'
+			setSymbolDictNameTo: 'RowanTools';
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Cypress-Kernel'
+			setSymbolDictNameTo: 'Globals';
 		yourself
 ]
 
@@ -746,8 +901,8 @@ RwSimpleComponentRowanExperiment >> testBuildExperimentalRowanComponentStructure
 		_createRowanTestComponents: resolvedProject;
 		_createV2Components: resolvedProject;
 		_createV1Components: resolvedProject;
+		_createV1DeprecatedComponents: resolvedProject;
 		_createComponentsV2Components: resolvedProject;
-		_createPlatformComponents: resolvedProject;
 		_createGemStoneComponents: resolvedProject;
 		_createGemStoneTestComponents: resolvedProject;
 		_populateCommonComponentPackages: resolvedProject;
@@ -793,7 +948,8 @@ RwSimpleComponentRowanExperiment >> testBuildExperimentalRowanComponentStructure
 		comment: 'Load spec for loading Rowan v1';
 		customConditionalAttributes:
 				{'tests'.
-					'v1'};
+					'v1'.
+					'deprecated'};
 		exportTo: resolvedProject specsRoot;
 		yourself.
 

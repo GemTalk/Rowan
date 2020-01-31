@@ -9,7 +9,8 @@ RwLoadSpecificationV2 {
 	],
 	#customConditionalAttributes : [
 		'tests',
-		'v1'
+		'v1',
+		'deprecated'
 	],
 	#platformProperties : {
 		'gemstone' : {
