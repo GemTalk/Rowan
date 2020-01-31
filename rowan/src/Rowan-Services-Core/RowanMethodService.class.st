@@ -33,7 +33,8 @@ Class {
 		'renamedName',
 		'isMethodForBlock',
 		'homeMethodOop',
-		'hasMethodHistory'
+		'hasMethodHistory',
+		'searchString'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -510,6 +511,16 @@ RowanMethodService >> name [
 	^selector
 ]
 
+{ #category : 'accessing' }
+RowanMethodService >> oop [
+	^oop
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> oop: object [
+	oop := object
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> packageName [
 	^packageName
@@ -581,6 +592,16 @@ RowanMethodService >> runTest: testSelector inClassName: theClassName [
 	sunitTestResult passedCount > 0 ifTrue:[testResult := 'passed']. 
 	testRunClassName := theClassName. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> searchString [
+	^searchString
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> searchString: object [
+	searchString := object
 ]
 
 { #category : 'Accessing' }
