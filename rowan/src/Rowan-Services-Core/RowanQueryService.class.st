@@ -7,23 +7,6 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
-{ #category : 'query support' }
-RowanQueryService >> assignFirstReferences: methods string: string [
-  queryResults
-    do: [ :methodService | 
-      | theMethod |
-      theMethod := methods first
-        detect: [ :method | method asOop = methodService oop ]
-        ifNone: [  ].
-      theMethod
-        ifNotNil: [ 
-          | index |
-          index := methods first indexOf: theMethod.
-          methodService
-            firstReference: (methods last at: index);
-            searchString: string ] ]
-]
-
 { #category : 'private' }
 RowanQueryService >> basicBreakpointMethods [
   | bpMethods bpArray |
@@ -152,12 +135,23 @@ RowanQueryService >> literalReferences: string [
 RowanQueryService >> methodsContaining: string [
   | methods |
   methods := organizer substringSearch: string.
-  queryResults := self methodServicesFrom: methods first.
-  self assignFirstReferences: methods string: string.
+  queryResults := Array new.
+  1 to: methods first size do: [ :index | 
+    | methodService |
+    methodService := self methodServiceFrom: (methods first at: index).
+    methodService
+      firstReference: (methods last at: index);
+      searchString: string.
+    queryResults add: methodService ].
   self returnQueryToClient
 ]
 
-{ #category : 'queries' }
+{ #category : 'query support' }
+RowanQueryService >> methodServiceFrom: method [
+  ^ (self methodServicesFrom: (Array with: method)) first
+]
+
+{ #category : 'query support' }
 RowanQueryService >> methodServicesFrom: methods [
 
 	| sorted | 
