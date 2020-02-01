@@ -372,10 +372,6 @@ RwSimpleComponentRowanExperiment >> _createTopLevelComponents: resolvedProject [
 { #category : 'private' }
 RwSimpleComponentRowanExperiment >> _createV1Components: resolvedProject [
 	resolvedProject
-		addSimpleNestedComponentNamed: 'common/v2/StrawMan_1'
-			condition: 'v2'
-			comment: 'Organize all strawman v1 classes under one component';
-		addComponentNamed: 'common/v2/StrawMan_1' toComponentNamed: 'Rowan';
 		addSimpleNestedComponentNamed: 'common/tests/v1/Tests'
 			condition: 'tests'
 			comment: 'Organize all test v1 classes under one component';
@@ -454,6 +450,10 @@ RwSimpleComponentRowanExperiment >> _createV1DeprecatedComponents: resolvedProje
 { #category : 'private' }
 RwSimpleComponentRowanExperiment >> _createV2Components: resolvedProject [
 	resolvedProject
+		addSimpleNestedComponentNamed: 'common/v2/StrawMan_1'
+			condition: 'v2'
+			comment: 'Organize all strawman v2 classes under one component';
+		addComponentNamed: 'common/v2/StrawMan_1' toComponentNamed: 'Rowan';
 		addSimpleNestedComponentNamed: 'common/tests/v2/Tests'
 			condition: 'v2'
 			comment: 'Organize all v2 tests classes under one component';
@@ -641,12 +641,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/platform/gemstone/Definitions')
-		addPackageNames:
-				{'Rowan-Cypress-Definitions'.
-					'Rowan-GemStone-DefinitionsV1'};
-		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
-			andPackageName: 'Rowan-Cypress-Definitions'
-			setSymbolDictNameTo: 'RowanLoader';
+		addPackageNames: {'Rowan-GemStone-DefinitionsV1'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-DefinitionsV1'
 			setSymbolDictNameTo: 'RowanLoader';
@@ -764,12 +759,17 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 					'Rowan-GemStone-Loader-Extensions'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Loader'
-			setSymbolDictNameTo: 'Globals';
+			setSymbolDictNameTo: 'RowanLoader';
 		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone/Definitions')
-		addPackageNames: {'Rowan-GemStone-Definitions'};
+		addPackageNames:
+				{'Rowan-Cypress-Definitions'.
+					'Rowan-GemStone-Definitions'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Cypress-Definitions'
+			setSymbolDictNameTo: 'RowanLoader';
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Definitions'
 			setSymbolDictNameTo: 'RowanTools';
@@ -800,9 +800,6 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 				{'GemStone-Interactions-Core'.
 					'GemStone-Interactions-Kernel'.
 					'Rowan-GemStone-3215'};
-		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
-			andPackageName: 'GemStone-Interactions-Core'
-			setSymbolDictNameTo: 'Globals';
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'GemStone-Interactions-Kernel'
 			setSymbolDictNameTo: 'Globals';
@@ -1132,10 +1129,12 @@ RwSimpleComponentRowanExperiment >> testWriteTopzForExperimentalRowanComponentSt
 		projectsHome: projectsHome;
 		resolve.
 
+	conditionalAttributes addAll: loadSpec customConditionalAttributes.
 	theProjectSetDefinition := resolvedProject read: conditionalAttributes.
 
 	topazFileNameMap := Dictionary new.
-	gsfileName := 'ComponentV2' topazFileNameMap at: gsfileName put: {}.
+	gsfileName := 'ComponentV2'.
+	topazFileNameMap at: gsfileName put: {}.
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2'
 		asFileReference.
 

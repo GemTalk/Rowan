@@ -12,9 +12,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'GemStone-Interactions-Core' : {
-						'symbolDictName' : 'Globals'
-					},
 					'GemStone-Interactions-Kernel' : {
 						'symbolDictName' : 'Globals'
 					},

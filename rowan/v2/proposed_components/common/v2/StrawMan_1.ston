@@ -17,5 +17,5 @@ RwSimpleNestedProjectLoadComponentV2 {
 			}
 		}
 	},
-	#comment : 'Organize all strawman v1 classes under one component'
+	#comment : 'Organize all strawman v2 classes under one component'
 }
