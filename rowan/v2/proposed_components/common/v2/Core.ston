@@ -8,6 +8,5 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#packageNames : [
 		'Rowan-CoreV2'
 	],
-	#conditionalPackageMapSpecs : { },
 	#comment : 'Organize all v2 core classes under one component'
 }

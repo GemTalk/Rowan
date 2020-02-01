@@ -7,6 +7,5 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'Rowan-Tests-35x',
 		'Rowan-Tests-GemStone-35x'
 	],
-	#conditionalPackageMapSpecs : { },
 	#comment : 'Components gs3.[2-]  packages '
 }

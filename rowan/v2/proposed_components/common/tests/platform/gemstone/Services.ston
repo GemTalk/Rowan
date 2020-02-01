@@ -6,6 +6,5 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#packageNames : [
 		'Rowan-Services-Tests'
 	],
-	#conditionalPackageMapSpecs : { },
 	#comment : 'Services gemstone test packages'
 }

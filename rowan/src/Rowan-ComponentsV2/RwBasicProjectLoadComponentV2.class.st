@@ -473,21 +473,26 @@ RwBasicProjectLoadComponentV2 >> initializeForExport [
 	doitDict := projectName := nil.
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
-			| orderedConditionalPackageMapSpecs |
-			orderedConditionalPackageMapSpecs := self class orderedDictionaryClass new.
-			(conditionalPackageMapSpecs keys asSortedCollection: [ :a :b | a <= b ])
-				do: [ :platformName | 
-					| orderedPlatformMap platformMap |
-					platformMap := conditionalPackageMapSpecs at: platformName.
-					orderedPlatformMap := platformName = 'gemstone'
-						ifTrue: [ self _canonicalizeGemStonePackageMapSpecs: platformMap ]
-						ifFalse: [ 
-							platformName = 'vast'
-								ifTrue: [ self _canonicalizeVastPackageMapSpecs: platformMap ]
-								ifFalse: [ self error: 'Unknown platform name ' , platformName printString ] ].
-					orderedPlatformMap isEmpty
-						ifFalse: [ orderedConditionalPackageMapSpecs at: platformName put: orderedPlatformMap ] ].
-			conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
+			conditionalPackageMapSpecs isEmpty
+				ifTrue: [ 
+					"don't export this field if it is empty ..."
+					conditionalPackageMapSpecs := nil ]
+				ifFalse: [ 
+					| orderedConditionalPackageMapSpecs |
+					orderedConditionalPackageMapSpecs := self class orderedDictionaryClass new.
+					(conditionalPackageMapSpecs keys asSortedCollection: [ :a :b | a <= b ])
+						do: [ :platformName | 
+							| orderedPlatformMap platformMap |
+							platformMap := conditionalPackageMapSpecs at: platformName.
+							orderedPlatformMap := platformName = 'gemstone'
+								ifTrue: [ self _canonicalizeGemStonePackageMapSpecs: platformMap ]
+								ifFalse: [ 
+									platformName = 'vast'
+										ifTrue: [ self _canonicalizeVastPackageMapSpecs: platformMap ]
+										ifFalse: [ self error: 'Unknown platform name ' , platformName printString ] ].
+							orderedPlatformMap isEmpty
+								ifFalse: [ orderedConditionalPackageMapSpecs at: platformName put: orderedPlatformMap ] ].
+					conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ] ]
 ]
 
 { #category : 'initialization' }
