@@ -992,6 +992,36 @@ RwSimpleComponentRowanExperiment >> _readRowanFromDisk: specArray [
 		resolve
 ]
 
+{ #category : 'private' }
+RwSimpleComponentRowanExperiment >> _writeTopzFilesUsing: loadSpecUrl conditionalAttributes: conditionalAttributes gsFileName: gsFileName repositoryRoot: repositoryRoot projectsHome: projectsHome [
+	| loadSpec resolvedProject theProjectSetDefinition topazFileNameMap |
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+
+	resolvedProject := loadSpec
+		projectsHome: projectsHome;
+		resolve.
+
+	conditionalAttributes addAll: loadSpec customConditionalAttributes.
+	theProjectSetDefinition := resolvedProject read: conditionalAttributes.
+
+	topazFileNameMap := Dictionary new.
+	topazFileNameMap at: gsFileName put: {}.
+
+	theProjectSetDefinition keys
+		do: [ :projectName | 
+			| projectDefinition projectSetModification visitor |
+			projectDefinition := theProjectSetDefinition projectNamed: projectName.
+			projectSetModification := theProjectSetDefinition
+				compareAgainstBase: RwProjectSetDefinition new.
+			projectDefinition packageNames
+				do: [ :packageName | (topazFileNameMap at: gsFileName) add: packageName ].
+			visitor := RwGsModificationTopazWriterVisitor new
+				repositoryRootPath: repositoryRoot;
+				topazFilenamePackageNamesMap: topazFileNameMap;
+				yourself.
+			visitor visit: projectSetModification	"write topaz files" ]
+]
+
 { #category : 'tests' }
 RwSimpleComponentRowanExperiment >> testReadExperimentalRowanComponentStructure [
 	"Read project and packages from disk."
@@ -1012,6 +1042,44 @@ RwSimpleComponentRowanExperiment >> testReadExperimentalRowanComponentStructure 
 
 	self deny: resolvedProject packageNames isEmpty.
 
+	loadSpecUrl := 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/RowanV1V2_proposed.ston'.
+	projectsHome := '$ROWAN_PROJECTS_HOME'.
+	conditionalAttributes := {'common'.
+	'gemstone'.
+	'gemstone-kernel'.
+	('3.5.0' asRwGemStoneVersionNumber)	"want to read 3.5.0 packages"}.
+
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+
+	resolvedProject := loadSpec
+		projectsHome: projectsHome;
+		resolve.
+
+	self deny: resolvedProject packageNames isEmpty.
+]
+
+{ #category : 'tests' }
+RwSimpleComponentRowanExperiment >> testWriteComponentV2TopazForExperimentalRowanComponentStructure [
+	"Read project and packages from disk."
+
+	| loadSpecUrl projectsHome conditionalAttributes repositoryRoot |
+	true
+		ifTrue: [ ^ self ].	"remove this statement if you want to generate the topaz fille"
+	loadSpecUrl := 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
+	projectsHome := '$ROWAN_PROJECTS_HOME'.
+	conditionalAttributes := {'common'.
+	'gemstone'.
+	'gemstone-kernel'.
+	('3.5.0' asRwGemStoneVersionNumber)	"want to read 3.5.0 packages"}.
+	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2'
+		asFileReference.
+
+	self
+		_writeTopzFilesUsing: loadSpecUrl
+		conditionalAttributes: conditionalAttributes
+		gsFileName: 'ComponentV2'
+		repositoryRoot: repositoryRoot
+		projectsHome: projectsHome
 ]
 
 { #category : 'tests' }
@@ -1096,6 +1164,18 @@ RwSimpleComponentRowanExperiment >> testWriteExperimentalRowanComponentStructure
 
 	loadSpec := loadSpec copy.
 	loadSpec
+		specName: 'RowanV1V2_proposed';
+		componentNames: {'Rowan'};
+		comment: 'Load spec for loading Rowan v1 and v2';
+		customConditionalAttributes:
+				{'tests'.
+					'v1'.
+					'v2'};
+		exportTo: resolvedProject specsRoot;
+		yourself.
+
+	loadSpec := loadSpec copy.
+	loadSpec
 		specName: 'ComponentV2_proposed';
 		componentNames: {'Rowan'};
 		comment:
@@ -1110,45 +1190,25 @@ RwSimpleComponentRowanExperiment >> testWriteExperimentalRowanComponentStructure
 ]
 
 { #category : 'tests' }
-RwSimpleComponentRowanExperiment >> testWriteTopzForExperimentalRowanComponentStructure [
+RwSimpleComponentRowanExperiment >> testWriteRowanV1V2TopazForExperimentalRowanComponentStructure [
 	"Read project and packages from disk."
 
-	| resolvedProject loadSpec loadSpecUrl projectsHome conditionalAttributes theProjectSetDefinition topazFileNameMap repositoryRoot gsfileName |
+	| loadSpecUrl projectsHome conditionalAttributes repositoryRoot |
 	true
 		ifTrue: [ ^ self ].	"remove this statement if you want to generate the topaz fille"
-	loadSpecUrl := 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
+	loadSpecUrl := 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/RowanV1V2_proposed.ston'.
 	projectsHome := '$ROWAN_PROJECTS_HOME'.
 	conditionalAttributes := {'common'.
 	'gemstone'.
 	'gemstone-kernel'.
 	('3.5.0' asRwGemStoneVersionNumber)	"want to read 3.5.0 packages"}.
-
-	loadSpec := RwSpecification fromUrl: loadSpecUrl.
-
-	resolvedProject := loadSpec
-		projectsHome: projectsHome;
-		resolve.
-
-	conditionalAttributes addAll: loadSpec customConditionalAttributes.
-	theProjectSetDefinition := resolvedProject read: conditionalAttributes.
-
-	topazFileNameMap := Dictionary new.
-	gsfileName := 'ComponentV2'.
-	topazFileNameMap at: gsfileName put: {}.
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2'
 		asFileReference.
 
-	theProjectSetDefinition keys
-		do: [ :projectName | 
-			| projectDefinition projectSetModification visitor |
-			projectDefinition := theProjectSetDefinition projectNamed: projectName.
-			projectSetModification := theProjectSetDefinition
-				compareAgainstBase: RwProjectSetDefinition new.
-			projectDefinition packageNames
-				do: [ :packageName | (topazFileNameMap at: gsfileName) add: packageName ].
-			visitor := RwGsModificationTopazWriterVisitor new
-				repositoryRootPath: repositoryRoot;
-				topazFilenamePackageNamesMap: topazFileNameMap;
-				yourself.
-			visitor visit: projectSetModification	"write topaz files" ]
+	self
+		_writeTopzFilesUsing: loadSpecUrl
+		conditionalAttributes: conditionalAttributes
+		gsFileName: 'RowanV1V2'
+		repositoryRoot: repositoryRoot
+		projectsHome: projectsHome
 ]
