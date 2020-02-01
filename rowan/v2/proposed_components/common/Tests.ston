@@ -8,5 +8,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#packageNames : [
 		'Rowan-Tests'
 	],
+	#conditionalPackageMapSpecs : { },
 	#comment : 'Rowan System test component. Shared between Rowan and RowanDiskAPI.'
 }

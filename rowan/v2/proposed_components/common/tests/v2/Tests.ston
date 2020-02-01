@@ -6,5 +6,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#packageNames : [
 		'Rowan-TestsV2'
 	],
+	#conditionalPackageMapSpecs : { },
 	#comment : 'Organize all v2 tests classes under one component'
 }

@@ -219,7 +219,7 @@ RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleP
 
 	self _visited: aSimpleProjectLoadComponent.
 
-	(self groupNames includes: aSimpleProjectLoadComponent groupName)
+	(self groupNames isEmpty or: [ self groupNames includes: aSimpleProjectLoadComponent groupName])
 		ifTrue: [ 
 			aSimpleProjectLoadComponent conditionalPropertyMatchers
 				keysAndValuesDo: [ :platformMatchers :ignored | 

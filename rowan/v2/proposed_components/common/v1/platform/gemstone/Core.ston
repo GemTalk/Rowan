@@ -6,5 +6,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#packageNames : [
 		'Rowan-Url-Cypress'
 	],
+	#conditionalPackageMapSpecs : { },
 	#comment : 'Core gemstone packages'
 }

@@ -107,7 +107,7 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 				{'gemstone'.
 					'gemstoneBase'}
 			comment: 'Core gemstone or gemstoneBase packages';
-		addComponentNamed: 'platform/gemstone_gemstoneBase/Core'
+		addComponentNamed: 'common/platform/gemstone_gemstoneBase/Core'
 			toComponentNamed: 'common/Core';
 		yourself.
 
@@ -118,7 +118,7 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 				{'gemstone'.
 					'gemstoneBase'}
 			comment: 'Components gemstone or gemstoneBase packages';
-		addComponentNamed: 'platform/gemstone_gemstoneBase/Components'
+		addComponentNamed: 'common/platform/gemstone_gemstoneBase/Components'
 			toComponentNamed: 'common/Components';
 		addPlatformNestedComponentNamed:
 				'common/platform/gemstone_gemstoneBase/Specifications'
@@ -183,7 +183,7 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 		addSimpleNestedComponentNamed: 'common/platform/gemstone32-/Core'
 			condition: 'gs3.[2-]'
 			comment: 'Core gs3.[2-]  packages ';
-		addComponentNamed: 'common/platform/gemstone32x/Core'
+		addComponentNamed: 'common/platform/gemstone32-/Core'
 			toComponentNamed: 'common/Core';
 		yourself.
 
@@ -457,7 +457,7 @@ RwSimpleComponentRowanExperiment >> _createV2Components: resolvedProject [
 		addSimpleNestedComponentNamed: 'common/tests/v2/Tests'
 			condition: 'v2'
 			comment: 'Organize all v2 tests classes under one component';
-		addComponentNamed: 'common/v2/Tests' toComponentNamed: 'common/tests/Tests';
+		addComponentNamed: 'common/tests/v2/Tests' toComponentNamed: 'common/tests/Tests';
 		addSimpleNestedComponentNamed: 'common/v2/Tools'
 			condition: 'v2'
 			comment: 'Organize all v2 tools classes under one component';
@@ -499,6 +499,7 @@ RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedPr
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Strawman1'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/Core')
@@ -512,11 +513,9 @@ RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedPr
 			andPackageName: 'Rowan-Core-Conditional-Support'
 			setSymbolDictNameTo: 'RowanTools';
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
-			andPackageName: 'Rowan-Specifications'
-			setSymbolDictNameTo: 'RowanTools';
-		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Core-Definitions-Extensions'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/Definitions')
@@ -529,6 +528,7 @@ RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedPr
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Definitions-Common'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/Specifications')
@@ -536,6 +536,7 @@ RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedPr
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Specifications'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/Tools')
@@ -543,14 +544,17 @@ RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedPr
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Tools-Core'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/tests/Core')
 		addPackageNames: {'Rowan-Tests-Core'};
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/Tests')
 		addPackageNames: {'Rowan-Tests'};
+		validate;
 		yourself
 ]
 
@@ -574,11 +578,13 @@ RwSimpleComponentRowanExperiment >> _populateComponentsV2ComponentPackages: reso
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Components'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/tests/componentsV2/Components')
 		addPackageNames: {'Rowan-Tests-Components'};
-		yourself.
+		validate;
+		yourself
 ]
 
 { #category : 'private' }
@@ -599,6 +605,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 
 	(resolvedProject componentNamed: 'common/v2/platform/gemstone/Core')
 		addPackageNames: {'Rowan-GemStone-CoreV2'};
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v2/platform/gemstone/Definitions')
@@ -611,11 +618,13 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Definitions-ExtensionsV2'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject
 		componentNamed: 'common/tests/v1/deprecated/platform/gemstone/Tests')
 		addPackageNames: {'Rowan-Tests-Deprecated'};
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/platform/gemstone/Specifications')
@@ -623,10 +632,12 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-SpecificationsV1'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/platform/gemstone/Core')
 		addPackageNames: {'Rowan-Url-Cypress'};
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/platform/gemstone/Definitions')
@@ -639,6 +650,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-DefinitionsV1'
 			setSymbolDictNameTo: 'RowanLoader';
+		validate;
 		yourself.
 
 	(resolvedProject
@@ -649,6 +661,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Loader-Deprecated'
 			setSymbolDictNameTo: 'RowanLoader';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone_gemstoneBase/Core')
@@ -656,6 +669,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Url'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself.
 
 	(resolvedProject
@@ -669,6 +683,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Components-Kernel'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself.
 
 	(resolvedProject
@@ -677,6 +692,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Specifications'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone/Services')
@@ -687,6 +703,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-JadeServer'
 			setSymbolDictNameTo: 'UserGlobals';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v2/platform/gemstoneBase/Components')
@@ -694,6 +711,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GsBase-ComponentsV2'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v2/platform/gemstone/Components')
@@ -701,10 +719,12 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-ComponentsV2'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/tests/platform/gemstone/Services')
 		addPackageNames: {'Rowan-Services-Tests'};
+		validate;
 		yourself.
 
 	(resolvedProject
@@ -715,6 +735,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Components-Extensions'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone/AST')
@@ -724,6 +745,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'AST-Kernel-Core'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone/Core')
@@ -733,6 +755,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Kernel'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone/Loader')
@@ -742,6 +765,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Loader'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone/Definitions')
@@ -749,6 +773,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Definitions'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone/Tools')
@@ -758,6 +783,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Tools-GemStone'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/tests/platform/gemstone/Tests')
@@ -766,6 +792,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 					'AST-Kernel-Tests-Core'.
 					'Rowan-Tests-GemStone'.
 					'Rowan-DataCurator-Tests'};
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone32-/Core')
@@ -782,6 +809,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-3215'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone32-5/Core')
@@ -789,6 +817,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Kernel-32x'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone35-/Core')
@@ -796,6 +825,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-35x'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/platform/gemstone36-/Core')
@@ -803,6 +833,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-36x'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself.
 
 	(resolvedProject
@@ -810,6 +841,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		addPackageNames:
 				{'Rowan-Tests-35x'.
 					'Rowan-Tests-GemStone-35x'};
+		validate;
 		yourself
 ]
 
@@ -824,6 +856,7 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Tools-Deprecated'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/deprecated/Definitions')
@@ -831,6 +864,7 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Definitions-Deprecated'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/Tools')
@@ -841,6 +875,7 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Tools-CoreV1'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/Specifications')
@@ -850,6 +885,7 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-SpecificationsV1'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/Components')
@@ -857,7 +893,9 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Configurations'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
+
 	(resolvedProject componentNamed: 'common/v1/Definitions')
 		addPackageNames:
 				{'Rowan-DefinitionsV1-Kernel'.
@@ -877,6 +915,7 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Cypress-Kernel'
 			setSymbolDictNameTo: 'Globals';
+		validate;
 		yourself
 ]
 
@@ -889,6 +928,7 @@ RwSimpleComponentRowanExperiment >> _populateV2ComponentPackages: resolvedProjec
 
 	(resolvedProject componentNamed: 'common/tests/v2/Tests')
 		addPackageNames: {'Rowan-TestsV2'};
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v2/Tools')
@@ -896,6 +936,7 @@ RwSimpleComponentRowanExperiment >> _populateV2ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Tools-CoreV2'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v2/Definitions')
@@ -908,10 +949,12 @@ RwSimpleComponentRowanExperiment >> _populateV2ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Core-DefinitionsV2'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v2/Core')
 		addPackageNames: {'Rowan-CoreV2'};
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v2/Components')
@@ -919,6 +962,7 @@ RwSimpleComponentRowanExperiment >> _populateV2ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-ComponentsV2'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v2/Specifications')
@@ -926,13 +970,16 @@ RwSimpleComponentRowanExperiment >> _populateV2ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-SpecificationsV2'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
 		yourself.
 
 	(resolvedProject componentNamed: 'common/tests/v2/Components')
 		addPackageNames: {'Rowan-Tests-ComponentsV2'};
+		validate;
 		yourself.
 	(resolvedProject componentNamed: 'common/tests/v2/Specifications')
 		addPackageNames: {'Rowan-Tests-SpecificationsV2'};
+		validate;
 		yourself
 ]
 
@@ -951,13 +998,6 @@ RwSimpleComponentRowanExperiment >> _readRowanFromDisk: specArray [
 { #category : 'tests' }
 RwSimpleComponentRowanExperiment >> testBuildExperimentalRowanComponentStructure [
 	"Read project and packages from disk."
-
-	"
-		subs/DiskConfigurationsCommon common/core
-		subs/DiskConfigurationsCommon gemstone/core
-
-		subs/Services gemstone/core
-	"
 
 	| specArray resolvedProject loadSpec |
 	true
@@ -1004,7 +1044,7 @@ RwSimpleComponentRowanExperiment >> testBuildExperimentalRowanComponentStructure
 		projectSpecFile: 'rowan/v2/proposed_project.ston';
 		revision: 'candidateV2.0';
 		componentNames: {'Rowan'};
-		groupNames: nil;
+		groupNames: #();
 		comment: 'Load spec for loading Rowan v2';
 		customConditionalAttributes:
 				{'tests'.
@@ -1048,4 +1088,26 @@ RwSimpleComponentRowanExperiment >> testBuildExperimentalRowanComponentStructure
 					'componentsV2'};
 		exportTo: resolvedProject specsRoot;
 		yourself
+]
+
+{ #category : 'tests' }
+RwSimpleComponentRowanExperiment >> testReadExperimentalRowanComponentStructure [
+	"Read project and packages from disk."
+
+	| resolvedProject loadSpec loadSpecUrl projectsHome conditionalAttributes |
+	loadSpecUrl := 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
+	projectsHome := '$ROWAN_PROJECTS_HOME'.
+	conditionalAttributes := {'common'.
+	'gemstone'.
+	'gemstone-kernel'.
+	('3.5.0' asRwGemStoneVersionNumber)	"want to read 3.5.0 packages"}.
+
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+
+	resolvedProject := loadSpec
+		projectsHome: projectsHome;
+		resolve.
+
+	self deny: resolvedProject packageNames isEmpty.
+
 ]

@@ -71,33 +71,6 @@ RwAbstractProjectLoadComponentV2 >> _validatedPackageNames [
 	^ allDefinedPackageNames
 ]
 
-{ #category : 'validation' }
-RwAbstractProjectLoadComponentV2 >> _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap [
-	"ensure that the data structures within the receiver contain valid information:
-		1. only packages defined in the receiver may be referenced in the reciever
-		2. platform implementation is responsible for validating platform structures"
-
-	userIdMap
-		keysAndValuesDo: [ :userId :platformPropertiesMap | 
-			platformPropertiesMap
-				keysAndValuesDo: [ :key :packagePropertiesMap | 
-					key == #'packageNameToPlatformPropertiesMap'
-						ifFalse: [ Error signal: 'Unknown platformPropertiesMap key ' , key printString ].
-					packagePropertiesMap
-						keysAndValuesDo: [ :packageName :packageProperties | 
-							(allDefinedPackageNames includes: packageName)
-								ifFalse: [ 
-									Error
-										signal:
-											'Undefined package name ' , packageName printString
-												, ' used in plaform properties map' ].
-							packageProperties
-								keysDo: [ :packagePropertyName | 
-									(self class _gemstoneSupportedPackagePropertyNames
-										includes: packagePropertyName)
-										ifFalse: [ Error signal: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
-]
-
 { #category : 'visiting' }
 RwAbstractProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 

@@ -6,5 +6,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#packageNames : [
 		'Rowan-GemStone-CoreV2'
 	],
+	#conditionalPackageMapSpecs : { },
 	#comment : 'Core vw gemstone packages'
 }
