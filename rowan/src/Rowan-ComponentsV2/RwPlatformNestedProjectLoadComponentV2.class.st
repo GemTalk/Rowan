@@ -34,6 +34,18 @@ RwPlatformNestedProjectLoadComponentV2 >> condition: anArray [
 	condition := anArray
 ]
 
+{ #category : 'accessing' }
+RwPlatformNestedProjectLoadComponentV2 >> conditionalPropertyMatchers [
+	| conditionalPropertyMatchers |
+	conditionalPropertyMatchers := Dictionary new
+		at:
+				(self condition
+						collect: [ :aCondition | self _platformPatternMatcherFor: aCondition ])
+			put: {};
+		yourself.
+	^ conditionalPropertyMatchers
+]
+
 { #category : 'initialization' }
 RwPlatformNestedProjectLoadComponentV2 >> initialize [
 	super initialize.
