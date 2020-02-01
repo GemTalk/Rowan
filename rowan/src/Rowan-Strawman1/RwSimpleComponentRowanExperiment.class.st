@@ -1059,7 +1059,31 @@ RwSimpleComponentRowanExperiment >> testReadExperimentalRowanComponentStructure 
 ]
 
 { #category : 'tests' }
-RwSimpleComponentRowanExperiment >> testWriteComponentV2TopazForExperimentalRowanComponentStructure [
+RwSimpleComponentRowanExperiment >> testWriteComponentV2_3215_TopazForExperimentalRowanComponentStructure [
+	"Read project and packages from disk."
+
+	| loadSpecUrl projectsHome conditionalAttributes repositoryRoot |
+	true
+		ifTrue: [ ^ self ].	"remove this statement if you want to generate the topaz fille"
+	loadSpecUrl := 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
+	projectsHome := '$ROWAN_PROJECTS_HOME'.
+	conditionalAttributes := {'common'.
+	'gemstone'.
+	'gemstone-kernel'.
+	('3.2.15' asRwGemStoneVersionNumber)	"want to read 3.2.15 packages"}.
+	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/project_src_v2'
+		asFileReference.
+
+	self
+		_writeTopzFilesUsing: loadSpecUrl
+		conditionalAttributes: conditionalAttributes
+		gsFileName: 'ComponentV2'
+		repositoryRoot: repositoryRoot
+		projectsHome: projectsHome
+]
+
+{ #category : 'tests' }
+RwSimpleComponentRowanExperiment >> testWriteComponentV2_350_TopazForExperimentalRowanComponentStructure [
 	"Read project and packages from disk."
 
 	| loadSpecUrl projectsHome conditionalAttributes repositoryRoot |
