@@ -5,6 +5,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#componentNames : [
 		'common/platform/gemstone/Core',
 		'common/platform/gemstone32-/Core',
+		'common/platform/gemstone32-4/Core',
 		'common/platform/gemstone32-5/Core',
 		'common/platform/gemstone35-/Core',
 		'common/platform/gemstone36-/Core',

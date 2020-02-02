@@ -188,6 +188,14 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 		yourself.
 
 	resolvedProject
+		addSimpleNestedComponentNamed: 'common/platform/gemstone32-4/Core'
+			condition: 'gs3.[2-4]'
+			comment: 'Core gs3.[2-4]  packages ';
+		addComponentNamed: 'common/platform/gemstone32-4/Core'
+			toComponentNamed: 'common/Core';
+		yourself.
+
+	resolvedProject
 		addSimpleNestedComponentNamed: 'common/platform/gemstone32-5/Core'
 			condition: 'gs3.[2-5]'
 			comment: 'Core gs3.[2-5]  packages ';
@@ -805,6 +813,14 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 			setSymbolDictNameTo: 'Globals';
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-3215'
+			setSymbolDictNameTo: 'Globals';
+		validate;
+		yourself.
+
+	(resolvedProject componentNamed: 'common/platform/gemstone32-4/Core')
+		addPackageNames: {'Rowan-GemStone-32x'};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-GemStone-32x'
 			setSymbolDictNameTo: 'Globals';
 		validate;
 		yourself.
