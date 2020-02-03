@@ -259,6 +259,23 @@ true.
 
 doit
 (Error
+	subclass: 'TonelParseError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-GemStone-Core';
+		comment: 'I''m a parsing error. 
+I happen whenever the parsing of a tonel file is broken in someway.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Error
 	subclass: 'ZnCharacterEncodingError'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -1883,6 +1900,22 @@ doit
 )
 		category: 'GemStone-Interactions-Core';
 		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'GsTonelOrderedDictionary'
+	instVarNames: #( size keys values )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-GemStone-Core';
+		comment: 'I am an implementation of a dictionary. Compared to other dictionaries I am very efficient for small sizes, speed- and space-wise. I also mantain the order in which elements are added when iterating. My implementation features some ideas from the RefactoringBrowser.';
 		immediateInvariant.
 true.
 %
@@ -3515,6 +3548,22 @@ doit
 )
 		category: 'Rowan-Services-Core';
 		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RowanGsGeneralDependencySorter'
+	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-GemStone-Core';
+		comment: 'Copied from CypressGsGeneralDependencySorter';
 		immediateInvariant.
 true.
 %
@@ -7798,6 +7847,100 @@ true.
 %
 
 doit
+(STONWriter
+	subclass: 'TonelSTONWriter'
+	instVarNames: #( aliases )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-GemStone-Core';
+		comment: 'I''m a modified STON writer to make tonel metadata look as we want.
+
+- it accept aliasses for classes, so I can say OrderedDictionary -> nil (then I do not have an extra information I do not want). Btw, tonel needs to use ordered dictionaries instead plain dictionaries because output needs to be deterministic, and we want to control the order of attributes we publish.
+- if dictionary has just one element, it prints it in just one line, to have a more compact view.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'TonelParser'
+	instVarNames: #( packageReader stream lastSelectorParsed )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: 'I''m a parser for tonel files. 
+I parse a class with the following format: 
+
+Tonel spec
+====
+
+    [comment]
+    type { typeDefinition }
+    (
+        [{ methodMetadata }]
+        method [
+            methodBody ] 
+    )*
+
+
+comment
+---
+"
+comment string
+"
+is optional (but it should be there, in good design ;)
+
+type
+---
+Class|Trait|Extension
+
+typeDefinition
+---
+a STON file with class/trait/extension metadata
+
+methodMetadata
+---
+a STON file with method metadata
+is optional (but also, recommended)
+
+method
+---
+method declaration as this: 
+
+Class[ class] >> selector
+
+methodBody 
+---
+the method body (we do not parse contents, that''s class builder task)';
+		immediateInvariant.
+true.
+%
+
+doit
+(TonelParser
+	subclass: 'NewTonelParser'
+	instVarNames: #( methodParser currentMethodNode methodBodyStart )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'ZnBufferedReadStream'
 	instVarNames: #( stream buffer position limit )
@@ -8051,22 +8194,6 @@ doit
 I wrap another binary WriteStream and use a ZnCharacerEncoder to allow Characters to be written.
 
 Part of Zinc HTTP Components.';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwProjectDefinition
-	subclass: 'RwUnmanagedProjectDefinition'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Definitions';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -10021,22 +10148,6 @@ DiskFileAttributesTestsResources is currently used by FileReferenceAttributeTest
 
 
     Implementation Points';
-		immediateInvariant.
-true.
-%
-
-doit
-(TonelParser
-	subclass: 'NewTonelParser'
-	instVarNames: #( methodParser currentMethodNode methodBodyStart )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -19308,6 +19419,332 @@ textBlock: anObject
 
    "Modify the value of the instance variable 'textBlock'."
    textBlock := anObject
+%
+
+! Class implementation for 'GsTonelOrderedDictionary'
+
+!		Class methods for 'GsTonelOrderedDictionary'
+
+category: 'instance creation'
+classmethod: GsTonelOrderedDictionary
+new
+	^ self new: 3
+%
+
+category: 'instance creation'
+classmethod: GsTonelOrderedDictionary
+new: anInteger
+	^ self basicNew initialize: anInteger; yourself
+%
+
+category: 'instance creation'
+classmethod: GsTonelOrderedDictionary
+withAll: aDictionary
+	^ (self new: aDictionary size)
+		addAll: aDictionary;
+		yourself
+%
+
+!		Instance methods for 'GsTonelOrderedDictionary'
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+add: anAssociation
+	self at: anAssociation key put: anAssociation value.
+	^ anAssociation
+%
+
+category: 'adding'
+method: GsTonelOrderedDictionary
+addAll: aDictionary
+	aDictionary keysAndValuesDo: [ :key :value | self at: key put: value ].
+	^ aDictionary
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+associations
+	"Answer a Collection containing the receiver's associations."
+
+	| result |
+	result := WriteStream on: (Array new: self size).
+	self associationsDo: [ :assoc | result nextPut: assoc ].
+	^ result contents
+%
+
+category: 'enumerating'
+method: GsTonelOrderedDictionary
+associationsDo: aBlock
+	self keysAndValuesDo: [ :key :value | aBlock value: key -> value ]
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+at: aKey
+	"Answer the value associated with aKey. Raise an exception, if no such key is defined."
+
+	^ self at: aKey ifAbsent: [ self errorKeyNotFound ]
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+at: aKey ifAbsent: aBlock
+	"Answer the value associated with aKey. Evaluate aBlock, if no such key is defined."
+
+	| index |
+	index := self findIndexFor: aKey.
+	^ index = 0
+		ifFalse: [ values at: index ]
+		ifTrue: [ aBlock value ]
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+at: aKey ifAbsentPut: aBlock
+	"Answer the value associated with aKey. Evaluate aBlock, if no such key is defined and store the return value."
+
+	| index |
+	index := self findIndexFor: aKey.
+	^ index = 0
+		ifFalse: [ values at: index ]
+		ifTrue: [ self privateAt: aKey put: aBlock value ]
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+at: aKey ifPresent: aBlock
+	"Lookup aKey in the receiver. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
+
+	| index |
+	index := self findIndexFor: aKey.
+	^ index = 0 ifFalse: [ aBlock value: (values at: index) ]
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+at: aKey put: aValue
+	"Set the value of aKey to be aValue."
+
+	| index |
+	index := self findIndexFor: aKey.
+	^ index = 0
+		ifFalse: [ values at: index put: aValue ]
+		ifTrue: [ self privateAt: aKey put: aValue ]
+%
+
+category: 'enumerating'
+method: GsTonelOrderedDictionary
+do: aBlock
+	1 to: size do: [ :index | aBlock value: (values at: index) ]
+%
+
+category: 'private'
+method: GsTonelOrderedDictionary
+errorKeyNotFound
+	self error: 'Key not found'
+%
+
+category: 'private'
+method: GsTonelOrderedDictionary
+findIndexFor: aKey
+	1 to: size do: [ :index |
+		(keys at: index) = aKey
+			ifTrue: [ ^ index ] ].
+	^ 0
+%
+
+category: 'private'
+method: GsTonelOrderedDictionary
+grow
+	| newKeys newValues |
+	newKeys := Array new: 2 * size.
+	newValues := Array new: 2 * size.
+	1 to: size do: [ :index |
+		newKeys at: index put: (keys at: index).
+		newValues at: index put: (values at: index) ].
+	keys := newKeys.
+	values := newValues
+%
+
+category: 'testing'
+method: GsTonelOrderedDictionary
+includesKey: aKey
+	"Answer whether the receiver has a key equal to aKey."
+
+	^ (self findIndexFor: aKey) ~= 0
+%
+
+category: 'initialization'
+method: GsTonelOrderedDictionary
+initialize: anInteger
+  size := 0.
+  keys := Array new: anInteger.
+  values := Array new: anInteger
+%
+
+category: 'testing'
+method: GsTonelOrderedDictionary
+isCollection
+	^ true
+%
+
+category: 'testing'
+method: GsTonelOrderedDictionary
+isEmpty
+	^ size = 0
+%
+
+category: 'enumerating'
+method: GsTonelOrderedDictionary
+keys
+	^ keys copyFrom: 1 to: size
+%
+
+category: 'enumerating'
+method: GsTonelOrderedDictionary
+keysAndValuesDo: aBlock
+	1 to: size do: [ :index | aBlock value: (keys at: index) value: (values at: index) ]
+%
+
+category: 'enumerating'
+method: GsTonelOrderedDictionary
+keysDo: aBlock
+	1 to: size do: [ :each | aBlock value: (keys at: each) ]
+%
+
+category: 'copying'
+method: GsTonelOrderedDictionary
+postCopy
+	super postCopy.
+	keys := keys copy.
+	values := values copy
+%
+
+category: 'printing'
+method: GsTonelOrderedDictionary
+printOn: aStream
+	super printOn: aStream.
+	
+	aStream nextPut: $(.
+	self size <= 100
+		ifTrue: [
+			| first |
+			first := true.
+			self keysAndValuesDo: [ :key :value |
+				"keysAndValuesDo:separatedBy: would be nice"
+				first
+					ifTrue: [ first := false ]
+					ifFalse: [ aStream space ].
+				aStream
+					print: key;
+					nextPutAll: '->';				
+					print: value ] ]
+		ifFalse: [
+			aStream
+				nextPutAll: 'size ';
+				print: self size ].
+	aStream nextPut: $)	
+%
+
+category: 'private'
+method: GsTonelOrderedDictionary
+privateAt: aKey put: aValue
+	size = keys size ifTrue: [ self grow ].
+	keys at: (size := size + 1) put: aKey.
+	^ values at: size put: aValue
+%
+
+category: 'private'
+method: GsTonelOrderedDictionary
+removeIndex: index
+	| value |
+	value := values at: index.
+	index to: size - 1 do:
+			[ :i | 
+			keys at: i put: (keys at: i + 1).
+			values at: i put: (values at: i + 1) ].
+	keys at: size put: nil.
+	values at: size put: nil.
+	size := size - 1.
+	^ value
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+removeKey: aKey
+	"Remove aKey from the receiver, raise an exception if the element is missing."
+
+	^ self removeKey: aKey ifAbsent: [ self errorKeyNotFound ]
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+removeKey: aKey ifAbsent: aBlock
+	"Remove aKey from the receiver, evaluate aBlock if the element is missing."
+
+	| index |
+	index := self findIndexFor: aKey.
+	index = 0 ifTrue: [ ^ aBlock value ].
+	^ self removeIndex: index
+%
+
+category: 'accessing'
+method: GsTonelOrderedDictionary
+size
+	^ size
+%
+
+category: 'ston'
+method: GsTonelOrderedDictionary
+stonOn: stonWriter
+	"Instances of STON mapClass will be encoded directly, without a class tag.
+	Other (sub)classes will be encoded with a class tag and will use a map representation. "
+	
+    stonWriter encodeMap: self
+%
+
+category: 'enumerating'
+method: GsTonelOrderedDictionary
+values
+	^ values copyFrom: 1 to: size
+%
+
+category: 'filetree'
+method: GsTonelOrderedDictionary
+_writeCypressJsonOn: fileStream
+	"Private method which may be removed in a future GemStone version."
+
+	self _writeCypressJsonOn: fileStream indent: 0
+%
+
+category: 'filetree'
+method: GsTonelOrderedDictionary
+_writeCypressJsonOn: aStream indent: startIndent
+	"Private method which may be removed in a future GemStone version."
+
+	| indent cnt |
+	indent := startIndent.
+	aStream
+		nextPutAll: '{';
+		lf.
+	cnt := 0.
+	indent := indent + 1.
+	self keys do: 
+			[:key |
+			| value |
+			value := self at: key.
+			cnt := cnt + 1.
+			indent timesRepeat: [aStream tab].
+			key _writeCypressJsonOn: aStream indent: indent.
+			aStream nextPutAll: ' : '.
+			value _writeCypressJsonOn: aStream indent: indent.
+			cnt < size
+				ifTrue: 
+					[aStream
+						nextPutAll: ',';
+						lf]].
+	size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
+	aStream nextPutAll: ' }'
 %
 
 ! Class implementation for 'JadeServer'
@@ -39124,6 +39561,86 @@ selection
 	^selection
 %
 
+! Class implementation for 'RowanGsGeneralDependencySorter'
+
+!		Class methods for 'RowanGsGeneralDependencySorter'
+
+category: 'instance creation'
+classmethod: RowanGsGeneralDependencySorter
+on: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
+	"Create an instance of the receiver capable for sorting the dependencies of someCandidates.
+	 aOneArgBlock is used to evaluate the key of the object depended on for a candidate.
+	 anotherOneArgBlock is used to evaluate the key of the candidate itself."
+
+	^self new
+		initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock;
+		yourself.
+%
+
+!		Instance methods for 'RowanGsGeneralDependencySorter'
+
+category: 'sorting - private'
+method: RowanGsGeneralDependencySorter
+determineGraphRoots
+  ^ dependencyGraphs
+    selectAssociations: [ :each | (candidateAliasMap includesKey: each key) not ]
+%
+
+category: 'initializing - private'
+method: RowanGsGeneralDependencySorter
+initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
+
+	candidates := someCandidates.
+	dependsOnConverter := aOneArgBlock.
+	dependentConverter := anotherOneArgBlock.
+	individualDependencyMap := Dictionary new.
+	dependencyGraphs := Dictionary new.
+	candidateAliasMap := Dictionary new
+%
+
+category: 'sorting'
+method: RowanGsGeneralDependencySorter
+inOrder
+  | sorted sortedRoots |
+  sorted := OrderedCollection new.
+  self mapCandidatesIntoGraphs.
+  sortedRoots := SortedCollection sortBlock: [ :a :b | a key <= b key ].
+  self determineGraphRoots associationsDo: [ :assoc | sortedRoots add: assoc ].
+  sortedRoots do: [ :assoc | self transcribeGraph: assoc value into: sorted ].
+  ^ sorted
+%
+
+category: 'sorting - private'
+method: RowanGsGeneralDependencySorter
+mapCandidatesIntoGraphs
+
+	| dependsOnKey dependentKey |
+	candidates do: 
+			[:each |
+			| individualDependency |
+			dependsOnKey := dependsOnConverter value: each.
+			dependentKey := dependentConverter value: each.
+			candidateAliasMap at: dependentKey put: each.
+			individualDependencyMap at: dependsOnKey ifAbsentPut: [Dictionary new].
+			individualDependencyMap at: dependentKey ifAbsentPut: [Dictionary new].
+			individualDependency := individualDependencyMap
+						associationAt: dependsOnKey.
+			(dependencyGraphs includesKey: dependsOnKey)
+				ifFalse: [dependencyGraphs add: individualDependency].
+			individualDependency value
+				add: (individualDependencyMap associationAt: dependentKey)]
+%
+
+category: 'sorting - private'
+method: RowanGsGeneralDependencySorter
+transcribeGraph: subtree into: sorted
+  (subtree keys asSortedCollection: [ :a :b | a <= b ])
+    do: [ :name | | subsubtree |
+      subsubtree := subtree at: name.
+      sorted add: (candidateAliasMap at: name).
+      self transcribeGraph: subsubtree into: sorted ]
+%
+
 ! Class implementation for 'RowanInterface'
 
 !		Class methods for 'RowanInterface'
@@ -44695,22 +45212,6 @@ updateInternalService: updatedService
 		]].
 %
 
-! Class implementation for 'RowanTestService'
-
-!		Instance methods for 'RowanTestService'
-
-category: 'command'
-method: RowanTestService
-createNewTestProjectNamed: projectName
-
-	| proj |
-	proj := RwProjectDefinition newForGitBasedProjectNamed: projectName.
-	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/', projectName.
-	Rowan projectTools create createProjectFor: proj.
-	Rowan projectTools load loadProjectDefinition: proj.
-	^proj
-%
-
 ! Class implementation for 'RowanVariableService'
 
 !		Class methods for 'RowanVariableService'
@@ -45617,6 +46118,18 @@ visitProjectModification: aProjectModification
 
 !		Class methods for 'RwAbstractReaderWriterVisitor'
 
+category: 'accessing'
+classmethod: RwAbstractReaderWriterVisitor
+tonelClassLabel
+	^ 'Class'
+%
+
+category: 'accessing'
+classmethod: RwAbstractReaderWriterVisitor
+tonelExtensionLabel
+	^ 'Extension'
+%
+
 category: 'private'
 classmethod: RwAbstractReaderWriterVisitor
 _readObjectFrom: aFileReference
@@ -46301,7 +46814,7 @@ export
 			(packageNames includes: packageName)
 				ifTrue: [ classDefinitionsList add: (self classDefinitions at: className) ] ].
 
-		classDefinitionsInOrder := (CypressGsGeneralDependencySorter
+		classDefinitionsInOrder := (RowanGsGeneralDependencySorter
 			on: classDefinitionsList
 			dependsOn: [:candidate | candidate superclassName]
 			dependent: [:candidate | candidate name]) inOrder.
@@ -48836,7 +49349,7 @@ _typeClassDefinitionOf: aClassDefinition
 category: 'class writing'
 method: RwModificationTonelWriterVisitorV2
 _typeOfClass: aClassDefinition
-	^ self class classLabel
+	^ self class tonelClassLabel
 %
 
 category: 'class writing'
@@ -49389,9 +49902,9 @@ compileWhileReading: aBoolean
 category: 'tonel parser'
 method: RwRepositoryResolvedProjectTonelReaderVisitorV2
 definitionForType: aString
-  aString = TonelWriter classLabel
+  aString = self class tonelClassLabel
     ifTrue: [ ^ #class ].
-  aString = TonelWriter extensionLabel
+  aString = self class tonelExtensionLabel
     ifTrue: [ ^ #classExtension ].
   TonelParseError signal: 'Unknown type declaration.'
 %
@@ -62183,8 +62696,10 @@ packageName
 category: 'accessing'
 method: RwGsPatch
 projectDefinition
-
-	^ projectDefinition ifNil: [ RwUnmanagedProjectDefinition new ]
+	^ projectDefinition
+		ifNil: [ 
+			"RwUnmanagedProjectDefinition may not be applicable in V2 system"
+			(Rowan globalNamed: 'RwUnmanagedProjectDefinition') new ]
 %
 
 category: 'accessing'
@@ -65638,12 +66153,13 @@ _createMovedClasses
 category: 'private - applying'
 method: RwGsPatchSet_254
 _currentProjectDefinition
-
 	^ currentProjectDefinition
 		ifNil: [ 
 			currentProjectDefinition := Rowan image
 				loadedProjectNamed: Rowan unpackagedName
-				ifAbsent: [ RwUnmanagedProjectDefinition new ] ]
+				ifAbsent: [ 
+					"RwUnmanagedProjectDefinition may not be applicable in V2 system"
+					(Rowan globalNamed: 'RwUnmanagedProjectDefinition') new ] ]
 %
 
 category: 'private - patch class accessors'
@@ -79054,6 +79570,701 @@ writeSymbol: symbol
 					writeStream nextPutAll: symbol ]
 				ifFalse: [
 					self encodeString: symbol ] ]
+%
+
+! Class implementation for 'TonelSTONWriter'
+
+!		Instance methods for 'TonelSTONWriter'
+
+category: 'accessing'
+method: TonelSTONWriter
+aliases
+	^ aliases
+%
+
+category: 'accessing'
+method: TonelSTONWriter
+aliases: aDictionary
+	aliases := aDictionary
+%
+
+category: 'private'
+method: TonelSTONWriter
+encodeKey: key value: value
+
+	super encodeKey: key asSymbol
+		value: (value isSymbol ifTrue: [value asString] ifFalse: [value])
+%
+
+category: 'writing'
+method: TonelSTONWriter
+encodeMap: pairs
+	| first |
+	first := true.
+	writeStream nextPut: ${.
+	pairs isEmpty
+		ifTrue: [
+			self prettyPrintSpace ]
+		ifFalse: [
+			self indentedDo: [
+				pairs size = 1 
+					ifTrue: [ self prettyPrintSpace ]
+					ifFalse: [ self newlineIndent ].
+				pairs keysAndValuesDo: [ :key :value |
+					first 
+						ifTrue: [ first := false ] 
+						ifFalse: [ self mapElementSeparator ].
+					self encodeKey: key value: value ] ].
+				pairs size = 1 
+					ifTrue: [ self prettyPrintSpace ]
+					ifFalse: [ self newlineIndent ] ].
+	writeStream nextPut: $}
+%
+
+category: 'initialization'
+method: TonelSTONWriter
+initialize
+	super initialize.
+	self prettyPrint: true.
+	aliases := { Rowan platform orderedDictionaryClass -> nil } asDictionary
+%
+
+category: 'accessing'
+method: TonelSTONWriter
+stonNameFor: aClass
+	^ self aliases 
+		at: aClass 
+		ifAbsent: [ aClass stonName ]
+%
+
+category: 'writing'
+method: TonelSTONWriter
+writeObject: anObject do: block
+	(jsonMode and: [ anObject class ~= STON listClass and: [ anObject class ~= STON mapClass ] ])
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self with: anObject do: [
+		(self stonNameFor: anObject class) ifNotNil: [ :stonName | 
+			writeStream nextPutAll: stonName.
+			self prettyPrintSpace ].
+		block value ]
+%
+
+! Class implementation for 'TonelParser'
+
+!		Class methods for 'TonelParser'
+
+category: 'instance creation'
+classmethod: TonelParser
+on: aStream forReader: aTonelReader
+	^ self new 
+		stream: aStream;
+		packageReader: aTonelReader;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: TonelParser
+onString: aString forReader: aTonelReader
+  ^ self on: (self readStreamClass on: aString) forReader: aTonelReader
+%
+
+category: 'parsing'
+classmethod: TonelParser
+parseStream: aStream forReader: aTonelReader
+	^ (self on: aStream forReader: aTonelReader)
+		 start
+%
+
+category: 'parsing'
+classmethod: TonelParser
+parseString: aString forReader: aTonelReader
+	^ self parseStream: (self readStreamClass on: aString) forReader: aTonelReader
+%
+
+category: 'accessing'
+classmethod: TonelParser
+readStreamClass
+
+	^ ReadStreamPortable
+%
+
+category: 'accessing'
+classmethod: TonelParser
+writeStreamClass
+
+	^ WriteStreamPortable
+%
+
+category: 'Topaz support'
+classmethod: TonelParser
+_compileForTopaz: aString envId: envId
+  "aString is the topaz text object for topaz TMETHOD command"
+| strm parser catDict category methInfo methSrc symList clsName cls
+  warnStr  |
+strm :=  ReadStreamPortable on: aString  .
+(parser := self new) stream: strm .
+
+parser separator ifNotNil:[ Error signal:'expected parser separator to be nil'].
+
+catDict :=  (parser try: [ parser metadata ]).
+catDict ifNil:[ Error signal:'Category dictionary not found'. ].
+category := catDict at: #category .
+
+parser separator ifNotNil:[ Error signal:'expected second parser separator to be nil'].
+
+methInfo :=  parser method.
+clsName := Symbol _existingWithAll: ((methInfo at: 1) at: 1) .
+
+methSrc :=  (methInfo at: 2)"keywords+args" ,  parser methodBody .
+symList := System myUserProfile symbolList .
+cls := (symList resolveSymbol: clsName) value .
+((methInfo at: 1) at: 2) ifNotNil:[:classWord |
+  classWord = 'class' ifTrue:[ cls := cls class ]
+      ifFalse:[ Error signal:'unrecognized ' , classWord asString, ' after >>'].
+].
+[ cls compileMethod: methSrc dictionaries: symList 
+               category: category  
+               environmentId: envId .
+] on: CompileWarning do:[:ex | 
+   warnStr := ex warningString .
+   ex resume 
+].
+^ warnStr "nil if no warnings"
+%
+
+!		Instance methods for 'TonelParser'
+
+category: 'private'
+method: TonelParser
+cleanSelector: aString
+	"BEWARE: I'm doing some heave assumptions here: I'm removing just ONE space (in case there 
+	 is one) because I expect this to be a file generated by tonel, and tonel adds one space 
+	 before start with the method body to make the format more readable. 
+	 But of course this is not very good :("
+	^ (aString last = Character space
+		ifTrue: [ aString allButLast ]
+		ifFalse: [ aString ]) 
+		trimLeft
+%
+
+category: 'parsing'
+method: TonelParser
+comment
+	| result ch eatNext |
+	
+	result := String new writeStreamPortable.
+
+	eatNext := false.
+	stream next = $" ifFalse: [ TonelParseError signal: 'Can''t parse comment' ].	
+	[ stream atEnd not 
+		and: [ 
+				(ch := stream next) ~= $" 
+				or: [ eatNext := (stream peek = $") ] ] ]
+	whileTrue: [ 
+		result nextPut: ch.
+		eatNext ifTrue: [ 
+			stream skip: 1.
+			eatNext := false ] ].
+	
+	^ self 
+		removeFrom: '"',result contents,'"' 
+		enclosingStart: $" 
+		end: $"
+%
+
+category: 'private factory'
+method: TonelParser
+definitionForType: aString
+  ^ self packageReader definitionForType: aString
+%
+
+category: 'parsing'
+method: TonelParser
+document
+	^ { 
+	self typeDef.
+	self methodDefList.
+	 } 
+	select: [:each | each notNil ]
+%
+
+category: 'private'
+method: TonelParser
+extractSelector: aString
+	| separators selectorStream keywords |
+	
+	separators := { 
+		Character space. 
+		Character tab. 
+		Character lf. 
+		Character newPage. 
+		Character cr. 
+		$:}.
+
+	keywords := Array new writeStreamPortable.
+	selectorStream := aString readStream.
+	[ selectorStream atEnd ]
+	whileFalse: [ | word ch |
+		word := String new writeStreamPortable.
+		[ selectorStream atEnd not and: [ (separators includes: (ch := selectorStream next)) not ] ]
+		whileTrue: [ word nextPut: ch ].
+		ch = $: ifTrue: [ word nextPut: ch ]. 
+		word contents trimBoth ifNotEmpty: [ :v | keywords nextPut: v ] ].
+	keywords := keywords contents.
+
+	^ (keywords size <= 2 
+		ifTrue: [ keywords first]
+		ifFalse: [ ('' join: (keywords pairsCollect: [ :keyword :argument | keyword ])) ])
+		asSymbol
+%
+
+category: 'testing'
+method: TonelParser
+isEnter: aCharacter
+	^ #(13 10) includes: aCharacter asciiValue
+%
+
+category: 'testing'
+method: TonelParser
+isSeparator: aCharacter 
+	^ aCharacter isSeparator
+%
+
+category: 'parsing'
+method: TonelParser
+metadata
+	| result ch count |
+	
+	result := String new writeStreamPortable.
+
+	count := 0.
+	stream peek = ${ ifFalse: [ TonelParseError signal: 'Can''t parse metadata' ].	
+	[ stream atEnd not ]
+	whileTrue: [ 
+		ch := stream next.
+		result nextPut: ch.
+		ch = ${ ifTrue: [ count := count +1 ].
+		ch = $} ifTrue: [ count := count -1 ].
+		count = 0 ifTrue: [ ^ STON fromString: result contents ]].
+
+	TonelParseError signal: 'Can''t parse metadata'
+%
+
+category: 'parsing'
+method: TonelParser
+method
+	| type selector |
+	
+	type := self untilIncluding: '>>'.
+	selector := self cleanSelector: (self untilExcluding: '[').
+	type := type trimBoth substrings: ' '.
+	type size = 1 ifTrue: [ type := type copyWith: nil ].
+  lastSelectorParsed := selector .
+	^ { 
+		type.
+		selector.
+	}
+%
+
+category: 'parsing'
+method: TonelParser
+methodBody
+	"I read a methodbody (what is inside [ ... ])
+	 Since a method body can contain enclosing brackets we need to be sure we will skip them and
+	 correctly read the method. For that, I have to take into account: 
+		- I can mention [] in comments
+		- I can mention [] in strings
+		- I can use $[, $] 
+		- I can have inner blocks
+		- I can mention a comment of the form ""$"" or a comment of the form '$'
+	 all that needs to be skipped "
+	| result char prevChar comment string count startPos |
+	
+	result := self class writeStreamClass on: String new.
+
+	comment := false.
+	string := false.
+	prevChar := nil.
+	count := 0.
+        startPos := stream position .
+        "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
+	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
+	[ stream atEnd not ]
+	whileTrue: [ 
+		char := stream next.
+		result nextPut: char.
+		(char = $" and: [ string not and: [ prevChar ~= $$ or: [ comment ] ] ]) 
+			ifTrue: [ comment := comment not ]. 
+		(char = $' and: [ comment not and: [ prevChar ~= $$ or: [ string ] ] ]) 
+			ifTrue: [ string := string not ]. 
+		(comment or: [ string ]) ifFalse: [ 
+			(char = $[ and: [  prevChar ~= $$ ]) ifTrue: [ count := count +1 ].
+			(char = $] and: [ prevChar ~= $$ ]) ifTrue: [ count := count -1 ] ].
+		count = 0 ifTrue: [ 
+			^ self 
+				removeFrom: result contents 
+				enclosingStart: $[ 
+				end: $]
+				clean: #right ].
+		prevChar := char ].
+
+	TonelParseError signal: 'Can''t parse method body'
+%
+
+category: 'parsing'
+method: TonelParser
+methodDef
+	"kept around for tests"
+
+	| methodDef |
+	self methodDef: [:isMeta :mDef |
+		methodDef :=  mDef.
+		"skip possible spaces at the end"
+		self separator ].
+	^methodDef
+%
+
+category: 'parsing'
+method: TonelParser
+methodDef: aBlock
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStreamName .
+
+  aBlock
+    value: ar fourth first second notNil
+    value: def
+%
+
+category: 'parsing'
+method: TonelParser
+methodDefList
+	| result classStream instanceStream |
+	self separator. "to arrive to the end of the file in case there are no methods"
+	result := { {}. {} }.
+	classStream := (result at: 1) writeStreamPortable.
+	instanceStream := (result at: 2) writeStreamPortable.
+	[
+		[ stream atEnd ]
+			whileFalse: [ 
+				self methodDef: [:isMeta :mDef |
+					isMeta
+						ifTrue: [ classStream nextPut: mDef ]
+						ifFalse: [ instanceStream nextPut: mDef ].
+					"skip possible spaces at the end"
+					self separator ]
+			] 
+  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
+      str := ex details ifNil:[ '' ].
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
+    ].
+    ex pass 
+  ].
+  ^ result
+%
+
+category: 'private factory'
+method: TonelParser
+newMethodDefinitionFrom: anArray
+	| metadata className meta selector source  |
+	
+	metadata := anArray second ifNil: [ Dictionary new ].
+	className := anArray fourth first first.
+	meta := anArray fourth first second notNil.
+	selector := self extractSelector: anArray fourth second trimBoth.
+	source := String streamContents: [ :s | 
+		s << anArray fourth second.
+		anArray fifth ifNotEmpty: [ :src | s << src ] ].
+
+	^ self packageReader newMethodDefinitionForClassNamed: className
+		classIsMeta: meta
+		selector: selector
+		category: (metadata at: #category ifAbsent: [ '' ]) 
+		source: source
+%
+
+category: 'private factory'
+method: TonelParser
+newTypeDefinitionFrom: anArray
+	^ self packageReader newTypeDefinitionFrom: anArray
+%
+
+category: 'accessing'
+method: TonelParser
+packageReader
+	^ packageReader
+%
+
+category: 'accessing'
+method: TonelParser
+packageReader: aPackageReader 
+	packageReader := aPackageReader
+%
+
+category: 'private'
+method: TonelParser
+removeFrom: aString enclosingStart: startChar end: endChar
+	^ self 
+		removeFrom: aString 
+		enclosingStart: startChar 
+		end: endChar
+		clean: #both
+%
+
+category: 'private'
+method: TonelParser
+removeFrom: aString enclosingStart: startChar end: endChar clean: cleanSymbol
+  "cleanSymbol can be #left, #rigth and #both"
+
+  | result stop ch start end |
+  result := self class readStreamClass on: aString trimBoth.
+  result peek = startChar
+    ifFalse: [ TonelParseError signal: 'I cannot remove enclosing start' ].
+  result skip: 1.
+  (#(#'both' #'left') includes: cleanSymbol)
+    ifTrue: [ 
+      stop := TonelWriter lineEnding size.
+      [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
+        whileTrue: [ 
+          (self isEnter: ch)
+            ifTrue: [ stop := stop - 1 ].
+          result skip: 1 ] ].
+  start := result position.
+  result setToEnd.
+  result skip: -1.
+  result peek = endChar
+    ifFalse: [ TonelParseError signal: 'I cannot remove enclosing end' ].
+  result skip: -1.
+  (#(#'both' #'right') includes: cleanSymbol)
+    ifTrue: [ 
+      stop := TonelWriter lineEnding size.
+      [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
+        whileTrue: [ 
+          (self isEnter: ch)
+            ifTrue: [ stop := stop - 1 ].
+          result skip: -1 ] ].
+  end := result position.
+  ^ result originalContents copyFrom: start + 1 to: end + 1
+%
+
+category: 'parsing'
+method: TonelParser
+separator
+	[ stream atEnd not and: [ self isSeparator: stream peek ] ]
+	whileTrue: [ stream next ].
+	^ nil
+%
+
+category: 'parsing'
+method: TonelParser
+shebang
+	"look for a '#!' in first two character position and skip to next line if present"
+
+	(stream peekFor: $#) ifFalse: [ ^ nil ].	
+	(stream peekFor: $!) ifFalse: [ ^ nil ].
+	^ stream  upTo: Character lf.
+%
+
+category: 'accessing'
+method: TonelParser
+start
+	^ self document
+%
+
+category: 'accessing'
+method: TonelParser
+stream: aStream 
+	stream := aStream
+%
+
+category: 'private parsing'
+method: TonelParser
+try: aBlock
+	^ self 
+		try: aBlock 
+		onSuccess: [ :parsedValue | parsedValue ] 
+		onFailure: [ nil ]
+%
+
+category: 'private parsing'
+method: TonelParser
+try: aBlock onFailure: failureBlock
+	^ self 
+		try: aBlock 
+		onSuccess: [ :parsedValue |  parsedValue ] 
+		onFailure: failureBlock
+%
+
+category: 'private parsing'
+method: TonelParser
+try: aBlock onSuccess: successBlock
+	^ self 
+		try: aBlock 
+		onSuccess: successBlock 
+		onFailure: [ nil ]
+%
+
+category: 'private parsing'
+method: TonelParser
+try: aBlock onSuccess: successBlock onFailure: failureBlock
+	| pos |
+	
+	pos := stream position.
+	[ ^ successBlock value: aBlock value ]
+	on: TonelParseError 
+	do: [ :e | 
+		stream position: pos.
+		^ failureBlock value ]. 
+	
+%
+
+category: 'parsing'
+method: TonelParser
+type
+	self try: [ self word: 'Class' ] onSuccess: [ :word | ^ word  ].
+	self try: [ self word: 'Trait' ] onSuccess: [ :word | ^ word  ].
+	self try: [ self word: 'Extension' ] onSuccess: [ :word | ^ word  ].
+	
+	"at end"
+	TonelParseError signal: 'Can''t parse type.'	
+%
+
+category: 'parsing'
+method: TonelParser
+typeDef
+	| shebang |
+	shebang := self shebang. "ignore shebang on first line of file if present"
+	^ self newTypeDefinitionFrom: { 
+		self separator.
+		self try: [ self comment ]. 
+		self separator. 
+		self type. 
+		self separator. 
+		self try: [ 
+			| typeMetadata normalizedMetadata |
+			typeMetadata := self metadata.
+			normalizedMetadata := Dictionary new.
+			typeMetadata keysAndValuesDo: [:key :value |
+				normalizedMetadata at: key asLowercase asSymbol put: value ].
+			normalizedMetadata at: #shebang put: shebang.
+			normalizedMetadata ] 
+	}
+%
+
+category: 'private parsing'
+method: TonelParser
+untilExcluding: aCollection
+	| result |
+	result := stream upToAll: aCollection.
+	stream position: stream position - aCollection size.
+	^ result
+%
+
+category: 'private parsing'
+method: TonelParser
+untilIncluding: aCollection
+	^ stream upToAll: aCollection
+%
+
+category: 'private parsing'
+method: TonelParser
+word: aString
+	| result |
+	result := stream next: aString size.
+	result = aString
+		ifFalse: [ TonelParseError signal: 'Can''t parse ', aString ].
+	^ result
+%
+
+! Class implementation for 'NewTonelParser'
+
+!		Instance methods for 'NewTonelParser'
+
+category: 'parsing'
+method: NewTonelParser
+method
+
+	| type start end currentPosition selector count |
+	
+	type := self untilIncluding: '>>'.
+	start := stream position.
+	self methodParser
+		scanner: (methodParser scannerClass on: stream
+				errorBlock: [:errorMessage :errorPosition |self halt]).
+	currentMethodNode := methodParser parseTonelMessagePattern.
+	end := methodParser scanner previousStepPosition.
+	currentPosition := methodParser scanner stream position.
+
+	methodParser scanner stream position: start.
+	count := end - start.
+	selector := String new: count.
+	methodParser scanner stream readInto: selector startingAt: 1 count: count.
+	methodParser scanner stream position: currentPosition.
+	selector := selector trimBoth.
+	type := type trimBoth substrings: ' '.
+	type size = 1 ifTrue: [ type := type copyWith: nil ].
+	methodBodyStart := stream position.
+	methodParser tonelStep.	"eat the $["
+	^ { 
+		type.
+		selector.
+	}
+%
+
+category: 'parsing'
+method: NewTonelParser
+methodBody
+	| source end count currentPosition |
+	self methodParser tonelMethodBodyTerminationToken
+		ifFalse: [
+			methodParser parseTonelPragmas.
+			currentMethodNode body: (methodParser parseTonelStatements: true) ].
+	end := methodParser currentToken start - 1.
+	count :=  end - methodBodyStart.
+	source := String new: count - 2.
+	currentPosition := methodParser scanner stream position.
+	methodParser scanner stream position: methodBodyStart + 1.
+	methodParser scanner stream readInto: source startingAt: 1 count: count - 2.
+	methodParser scanner stream position: currentPosition.
+	^ source
+%
+
+category: 'accessing'
+method: NewTonelParser
+methodParser
+
+	^ methodParser ifNil: [ methodParser := RBTonelParser new ]
+%
+
+category: 'private factory'
+method: NewTonelParser
+newMethodDefinitionFrom: anArray
+	| metadata className meta selector source  |
+	
+	metadata := anArray second ifNil: [ Dictionary new ].
+	className := anArray fourth first first.
+	meta := anArray fourth first second notNil.
+	selector :=  anArray fourth second trimBoth.
+	source := String streamContents: [ :s | 
+		s << selector.
+		anArray fifth ifNotEmpty: [ :src | 
+			s lf.
+			s << src ] ].
+
+	^ self packageReader newMethodDefinitionForClassNamed: className
+		classIsMeta: meta
+		selector: (self extractSelector: selector)
+		category: (metadata at: #category ifAbsent: [ '' ]) 
+		source: source
 %
 
 ! Class implementation for 'ZnBufferedReadStream'
@@ -136613,88 +137824,6 @@ method: DiskFileAttributesTestsResources
 tearDown
 
 	file delete.
-%
-
-! Class implementation for 'NewTonelParser'
-
-!		Instance methods for 'NewTonelParser'
-
-category: 'parsing'
-method: NewTonelParser
-method
-
-	| type start end currentPosition selector count |
-	
-	type := self untilIncluding: '>>'.
-	start := stream position.
-	self methodParser
-		scanner: (methodParser scannerClass on: stream
-				errorBlock: [:errorMessage :errorPosition |self halt]).
-	currentMethodNode := methodParser parseTonelMessagePattern.
-	end := methodParser scanner previousStepPosition.
-	currentPosition := methodParser scanner stream position.
-
-	methodParser scanner stream position: start.
-	count := end - start.
-	selector := String new: count.
-	methodParser scanner stream readInto: selector startingAt: 1 count: count.
-	methodParser scanner stream position: currentPosition.
-	selector := selector trimBoth.
-	type := type trimBoth substrings: ' '.
-	type size = 1 ifTrue: [ type := type copyWith: nil ].
-	methodBodyStart := stream position.
-	methodParser tonelStep.	"eat the $["
-	^ { 
-		type.
-		selector.
-	}
-%
-
-category: 'parsing'
-method: NewTonelParser
-methodBody
-	| source end count currentPosition |
-	self methodParser tonelMethodBodyTerminationToken
-		ifFalse: [
-			methodParser parseTonelPragmas.
-			currentMethodNode body: (methodParser parseTonelStatements: true) ].
-	end := methodParser currentToken start - 1.
-	count :=  end - methodBodyStart.
-	source := String new: count - 2.
-	currentPosition := methodParser scanner stream position.
-	methodParser scanner stream position: methodBodyStart + 1.
-	methodParser scanner stream readInto: source startingAt: 1 count: count - 2.
-	methodParser scanner stream position: currentPosition.
-	^ source
-%
-
-category: 'accessing'
-method: NewTonelParser
-methodParser
-
-	^ methodParser ifNil: [ methodParser := RBTonelParser new ]
-%
-
-category: 'private factory'
-method: NewTonelParser
-newMethodDefinitionFrom: anArray
-	| metadata className meta selector source  |
-	
-	metadata := anArray second ifNil: [ Dictionary new ].
-	className := anArray fourth first first.
-	meta := anArray fourth first second notNil.
-	selector :=  anArray fourth second trimBoth.
-	source := String streamContents: [ :s | 
-		s << selector.
-		anArray fifth ifNotEmpty: [ :src | 
-			s lf.
-			s << src ] ].
-
-	^ self packageReader newMethodDefinitionForClassNamed: className
-		classIsMeta: meta
-		selector: (self extractSelector: selector)
-		category: (metadata at: #category ifAbsent: [ '' ]) 
-		source: source
 %
 
 ! Class implementation for 'MemoryWriteStream'

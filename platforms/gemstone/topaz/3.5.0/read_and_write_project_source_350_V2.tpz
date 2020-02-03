@@ -46,10 +46,14 @@ run
 	}.
 	repositoryRoot3215 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/project_src_v2' asFileReference.
 	repositoryRoot3215 ensureCreateDirectory.
+false ifTrue: [ 
 	repositoryRoot3215 deleteAllChildren.
+ ].
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2' asFileReference.
 	repositoryRoot ensureCreateDirectory.
+false ifTrue: [ 
 	repositoryRoot deleteAllChildren.
+].
 	{
 		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed.ston'.
@@ -108,7 +112,7 @@ run
 			do: [:projectDefinition |	
 				GsFile gciLogServer: '	Project: ', projectDefinition name.
 				projectDefinition packageNames do: [:pkgName | GsFile gciLogServer: '		', pkgName ] ].
-		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
+		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName, ' (', (conditionalAttributes at: 4) printString, ')'.
 
 		topazFileNameMap := Dictionary new.
 		topazFileNameMap at: gsFileName put: {}.

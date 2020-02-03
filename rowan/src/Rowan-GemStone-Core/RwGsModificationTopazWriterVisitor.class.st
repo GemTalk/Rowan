@@ -298,7 +298,7 @@ RwGsModificationTopazWriterVisitor >> export [
 			(packageNames includes: packageName)
 				ifTrue: [ classDefinitionsList add: (self classDefinitions at: className) ] ].
 
-		classDefinitionsInOrder := (CypressGsGeneralDependencySorter
+		classDefinitionsInOrder := (RowanGsGeneralDependencySorter
 			on: classDefinitionsList
 			dependsOn: [:candidate | candidate superclassName]
 			dependent: [:candidate | candidate name]) inOrder.

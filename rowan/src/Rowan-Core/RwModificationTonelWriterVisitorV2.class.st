@@ -158,7 +158,7 @@ RwModificationTonelWriterVisitorV2 >> _typeClassDefinitionOf: aClassDefinition [
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _typeOfClass: aClassDefinition [
-	^ self class classLabel
+	^ self class tonelClassLabel
 ]
 
 { #category : 'class writing' }

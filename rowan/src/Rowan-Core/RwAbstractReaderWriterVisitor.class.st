@@ -40,6 +40,16 @@ RwAbstractReaderWriterVisitor class >> _repositoryPropertyDictFor: packagesRoot 
 	^ self _readObjectFrom: propertiesFile
 ]
 
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor class >> tonelClassLabel [
+	^ 'Class'
+]
+
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor class >> tonelExtensionLabel [
+	^ 'Extension'
+]
+
 { #category : 'private' }
 RwAbstractReaderWriterVisitor >> _packageConvention: aString [
 

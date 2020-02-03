@@ -153,9 +153,9 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> compileWhileReading: aBoolean
 
 { #category : 'tonel parser' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> definitionForType: aString [
-  aString = TonelWriter classLabel
+  aString = self class tonelClassLabel
     ifTrue: [ ^ #class ].
-  aString = TonelWriter extensionLabel
+  aString = self class tonelExtensionLabel
     ifTrue: [ ^ #classExtension ].
   TonelParseError signal: 'Unknown type declaration.'
 ]
