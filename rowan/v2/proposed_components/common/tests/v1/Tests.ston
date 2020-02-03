@@ -5,6 +5,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#componentNames : [
 		'common/tests/v1/deprecated/Tests'
 	],
-	#packageNames : [ ],
+	#packageNames : [
+		'Rowan-TestsV1'
+	],
 	#comment : 'Organize all test v1 classes under one component'
 }

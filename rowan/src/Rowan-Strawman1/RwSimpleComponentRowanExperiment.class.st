@@ -866,6 +866,10 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		subs/CommonCore common/core
 	"
 
+	(resolvedProject componentNamed: 'common/tests/v1/Tests')
+		addPackageNames: {'Rowan-TestsV1'};
+		yourself.
+
 	(resolvedProject componentNamed: 'common/v1/deprecated/Tools')
 		addPackageNames: {'Rowan-Tools-Deprecated'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'

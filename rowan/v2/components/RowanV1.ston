@@ -36,6 +36,7 @@ RwProjectLoadComponentV2 {
 			},
 			'tests' : {
 				#packageNames : [
+					'Rowan-TestsV1'
 				]
 			}
 		},
