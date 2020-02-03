@@ -139,6 +139,17 @@ RowanAnsweringService >> breakPointsAreEnabled [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> canAccessServiceClasses [
+  "Being able to see RowanLoggingService is a good
+	indication that all of the service classes are visible"
+
+  answer := [ '[RowanLoggingService] value. true.' evaluate ]
+    on: Error
+    do: [ :ex | false ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> clearAllBreaks [
   | methodServices |
   methodServices := RowanQueryService new
