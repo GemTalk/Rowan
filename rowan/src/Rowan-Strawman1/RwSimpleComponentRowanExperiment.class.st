@@ -367,6 +367,7 @@ RwSimpleComponentRowanExperiment >> _createTopLevelComponents: resolvedProject [
 		yourself.
 
 	(resolvedProject componentNamed: 'Rowan')
+		addProjectNamed: 'Cypress';
 		addProjectNamed: 'FileSystemGs';
 		addProjectNamed: 'STON';
 		yourself.
@@ -421,7 +422,6 @@ RwSimpleComponentRowanExperiment >> _createV1Components: resolvedProject [
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/Specifications')
-		addProjectNamed: 'Cypress';
 		addProjectNamed: 'Tonel';
 		yourself
 ]
@@ -548,7 +548,9 @@ RwSimpleComponentRowanExperiment >> _populateCommonComponentPackages: resolvedPr
 		yourself.
 
 	(resolvedProject componentNamed: 'common/Tools')
-		addPackageNames: {'Rowan-Tools-Core'};
+		addPackageNames:
+				{'Rowan-Cypress-Core'.
+					'Rowan-Tools-Core'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Tools-Core'
 			setSymbolDictNameTo: 'RowanTools';
@@ -882,8 +884,7 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 
 	(resolvedProject componentNamed: 'common/v1/Tools')
 		addPackageNames:
-				{'Rowan-Cypress-Core'.
-					'Rowan-Tools-Kernel'.
+				{'Rowan-Tools-Kernel'.
 					'Rowan-Tools-CoreV1'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Tools-CoreV1'

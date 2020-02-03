@@ -2,7 +2,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'common/v1/Specifications',
 	#condition : 'v1',
 	#projectNames : [
-		'Cypress',
 		'Tonel'
 	],
 	#componentNames : [

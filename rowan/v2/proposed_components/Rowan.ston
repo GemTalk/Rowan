@@ -2,6 +2,7 @@ RwSimpleProjectLoadComponentV2 {
 	#name : 'Rowan',
 	#condition : 'common',
 	#projectNames : [
+		'Cypress',
 		'FileSystemGs',
 		'STON'
 	],

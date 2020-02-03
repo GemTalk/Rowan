@@ -8,6 +8,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/v2/Tools'
 	],
 	#packageNames : [
+		'Rowan-Cypress-Core',
 		'Rowan-Tools-Core'
 	],
 	#conditionalPackageMapSpecs : {

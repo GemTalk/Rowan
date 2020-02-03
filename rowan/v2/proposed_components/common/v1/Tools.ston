@@ -6,7 +6,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/v1/deprecated/Tools'
 	],
 	#packageNames : [
-		'Rowan-Cypress-Core',
 		'Rowan-Tools-CoreV1',
 		'Rowan-Tools-Kernel'
 	],

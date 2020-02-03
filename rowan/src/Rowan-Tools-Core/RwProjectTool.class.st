@@ -42,11 +42,6 @@ RwProjectTool class >> commit [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> create [
-  ^ RwPrjCreateTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> delete [
 
 	^ RwPrjDeleteTool new
@@ -70,12 +65,6 @@ RwProjectTool class >> disown [
 RwProjectTool class >> edit [
 
 	^ RwPrjEditTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> load [
-
-	^RwPrjLoadTool new
 ]
 
 { #category : 'commands' }
@@ -103,11 +92,6 @@ RwProjectTool class >> query [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> read [
-  ^ RwPrjReadTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> reconcile [
 
 	^ RwPrjReconcileTool new
@@ -124,12 +108,6 @@ RwProjectTool class >> revert [
 RwProjectTool class >> test [
 
 	^RwPrjTestTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> write [
-
-	^RwPrjWriteTool new
 ]
 
 { #category : 'smalltalk api' }
