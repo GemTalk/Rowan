@@ -3,7 +3,7 @@
 # If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
 #	script can be directly executed:
 #
-#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/installRowan.tpz <gsdevkit-stone-name> -l
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_2.tpz <gsdevkit-stone-name> -lq
 #
 # If you are not using GsDevKit_home, you can directly run this script as long as
 # 	1. $GEMSTONE is defined
@@ -17,12 +17,18 @@
 #
 
 	omit pushonly
-#	display oops
+  iferr 1 stk
+  iferr 2 stack
+#  iferr 3 exit 1
 
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_2_RowanV2.tpz
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3_RowanV2.tpz
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_4_RowanV2.tpz
+  set u SystemUser p swordfish
+  login
 
-	errorCount
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2/RowanV2.gs
+  commit
 
+	logout
+
+  errorCount
+
+	
