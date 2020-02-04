@@ -228,6 +228,11 @@ RwSimpleComponentRowanExperiment >> _createGemStoneTestComponents: resolvedProje
 			comment: 'Services gemstone test packages';
 		addComponentNamed: 'common/tests/platform/gemstone/Services'
 			toComponentNamed: 'common/tests/Services';
+		addSimpleNestedComponentNamed: 'common/tests/v1/platform/gemstone/Services'
+			condition: 'gemstone'
+			comment: 'Services v1 gemstone test packages';
+		addComponentNamed: 'common/tests/v1/platform/gemstone/Services'
+			toComponentNamed: 'common/tests/v1/Services';
 		addSimpleNestedComponentNamed: 'common/tests/platform/gemstone/Tests'
 			condition: 'gemstone'
 			comment: 'Tests gemstone test packages';
@@ -301,7 +306,6 @@ RwSimpleComponentRowanExperiment >> _createRowanComponents: resolvedProject [
 			condition: 'common'
 			comment: 'Organize all services classes under one component';
 		addComponentNamed: 'common/Services' toComponentNamed: 'Rowan';
-		addComponentNamed: 'common/Services' toComponentNamed: 'Rowan';
 		addSimpleNestedComponentNamed: 'common/Loader'
 			condition: 'common'
 			comment: 'Organize all loader classes under one component';
@@ -338,6 +342,14 @@ RwSimpleComponentRowanExperiment >> _createRowanTestComponents: resolvedProject 
 			condition: 'tests'
 			comment: 'Organize all system tests under one component';
 		addComponentNamed: 'common/tests/Tests' toComponentNamed: 'common/Tests';
+		yourself.
+
+	resolvedProject
+		addSimpleNestedComponentNamed: 'common/tests/v1/Services'
+			condition: 'v1'
+			comment: 'Organize all services v1 tests under one component';
+		addComponentNamed: 'common/tests/v1/Services'
+			toComponentNamed: 'common/tests/Services';
 		yourself.
 
 	resolvedProject
@@ -382,7 +394,7 @@ RwSimpleComponentRowanExperiment >> _createTopLevelComponents: resolvedProject [
 RwSimpleComponentRowanExperiment >> _createV1Components: resolvedProject [
 	resolvedProject
 		addSimpleNestedComponentNamed: 'common/tests/v1/Tests'
-			condition: 'tests'
+			condition: 'v1'
 			comment: 'Organize all test v1 classes under one component';
 		addComponentNamed: 'common/tests/v1/Tests'
 			toComponentNamed: 'common/tests/Tests';
@@ -732,6 +744,11 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		validate;
 		yourself.
 
+	(resolvedProject componentNamed: 'common/tests/v1/platform/gemstone/Services')
+		addPackageNames: {'Rowan-Services-TestsV1'};
+		validate;
+		yourself.
+
 	(resolvedProject
 		componentNamed: 'common/componentsV2/platform/gemstone/Components')
 		addPackageNames:
@@ -911,6 +928,11 @@ RwSimpleComponentRowanExperiment >> _populateV1ComponentPackages: resolvedProjec
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Configurations'
 			setSymbolDictNameTo: 'RowanTools';
+		validate;
+		yourself.
+
+	(resolvedProject componentNamed: 'common/v1/Core')
+		addPackageNames: {'Rowan-CoreV1'};
 		validate;
 		yourself.
 

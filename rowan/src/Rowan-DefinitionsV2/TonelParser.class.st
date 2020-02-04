@@ -92,6 +92,13 @@ cls := (symList resolveSymbol: clsName) value .
 
 ]
 
+{ #category : 'accessing' }
+TonelParser class >> lineEnding [
+  "Answer the os-specific line endings"
+
+  ^ String with: Character lf
+]
+
 { #category : 'instance creation' }
 TonelParser class >> on: aStream forReader: aTonelReader [
 	^ self new 
@@ -429,7 +436,7 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
   result skip: 1.
   (#(#'both' #'left') includes: cleanSymbol)
     ifTrue: [ 
-      stop := TonelWriter lineEnding size.
+      stop := self class lineEnding size.
       [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
         whileTrue: [ 
           (self isEnter: ch)
@@ -443,7 +450,7 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
   result skip: -1.
   (#(#'both' #'right') includes: cleanSymbol)
     ifTrue: [ 
-      stop := TonelWriter lineEnding size.
+      stop := self class lineEnding size.
       [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
         whileTrue: [ 
           (self isEnter: ch)
@@ -451,7 +458,6 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
           result skip: -1 ] ].
   end := result position.
   ^ result originalContents copyFrom: start + 1 to: end + 1
-
 ]
 
 { #category : 'parsing' }

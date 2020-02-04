@@ -92,13 +92,6 @@ RwProjectTool class >> query [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> reconcile [
-
-	^ RwPrjReconcileTool new
-
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> revert [
 
 	^RwPrjRevertTool new

@@ -25,6 +25,7 @@
 					'Rowan-Configurations',
 					'Rowan-Core-Conditional-Support',
 					'Rowan-Core',
+					'Rowan-CoreV1',
 					'Rowan-CoreV2',
 					'Rowan-Tools-Core',
 					'Rowan-Tools-CoreV1',

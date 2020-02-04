@@ -17,6 +17,13 @@ RwProjectTool class >> read [
 ]
 
 { #category : '*rowan-tools-corev1' }
+RwProjectTool class >> reconcile [
+
+	^ RwPrjReconcileTool new
+
+]
+
+{ #category : '*rowan-tools-corev1' }
 RwProjectTool class >> write [
 
 	^RwPrjWriteTool new

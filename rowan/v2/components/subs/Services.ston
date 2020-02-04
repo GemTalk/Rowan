@@ -20,7 +20,8 @@ RwNestedProjectLoadComponentV2 {
 			},
 			'tests' : {
 				#packageNames : [
-					'Rowan-Services-Tests'
+					'Rowan-Services-Tests',
+					'Rowan-Services-TestsV1'
 				]
 			}
 		}

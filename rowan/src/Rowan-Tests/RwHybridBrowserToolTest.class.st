@@ -4,23 +4,6 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
-{ #category : 'private' }
-RwHybridBrowserToolTest >> _standardProjectDefinition: projectName packageNameMap: packageNameMap defaultSymbolDictName: defaultSymbolDictName [
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	packageNameMap keysAndValuesDo: [:packageName :symDictName |
-		projectDefinition
-			addPackageNamed: packageName;
-			setSymbolDictName: symDictName forPackageNamed: packageName
-			yourself ].
-	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
-
-	^ projectDefinition
-
-]
-
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridClassComment [
 

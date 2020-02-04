@@ -5,6 +5,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#componentNames : [
 		'common/v1/platform/gemstone/Core'
 	],
-	#packageNames : [ ],
+	#packageNames : [
+		'Rowan-CoreV1'
+	],
 	#comment : 'Organize all v1 core classes under one component'
 }
