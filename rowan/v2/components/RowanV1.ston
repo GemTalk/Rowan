@@ -51,6 +51,7 @@ RwProjectLoadComponentV2 {
 			},
 			'tests' : {
 				#packageNames : [
+					'Rowan-Tests-GemStoneV1'
 				]
 			},
 			'deprecated tests' : {

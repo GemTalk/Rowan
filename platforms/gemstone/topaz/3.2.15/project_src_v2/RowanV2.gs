@@ -1141,6 +1141,25 @@ true.
 %
 
 doit
+(Notification
+	subclass: 'TonelShouldIgnore'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Core';
+		comment: 'I''m a notification to say tonel writer that he should ignore a section. 
+This tipically happens on a MCClassTraitDefinition, because it will be managed on MCTraitDefinition.
+
+(see TonelWriter>>typeOf:)';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'AbstractFileReference'
 	instVarNames: #(  )
@@ -1436,6 +1455,38 @@ true.
 %
 
 doit
+(CypressAbstractPackageWriter
+	subclass: 'TonelCypressWriter'
+	instVarNames: #( snapshot sourceDir packageDir writer )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'CypressTonel-Core';
+		comment: 'I''m a writer for tonel format';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractPackageFiler
+	subclass: 'TonelCypressReader'
+	instVarNames: #( packageName definitions directoryPath )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'CypressTonel-Core';
+		comment: 'I''m a reader for tonel format.';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'CypressAbstractRepository'
 	instVarNames: #( url properties readerClass writerClass )
@@ -1551,6 +1602,27 @@ doit
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressFileSystemRepository
+	subclass: 'CypressTonelRepository'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'CypressTonel-Core';
+		comment: 'No class-specific documentation for CypressTonelRepository, hierarchy is: 
+Object
+  CypressAbstractRepository( url properties readerClass writerClass)
+    CypressFileSystemRepository( directoryPath)
+      CypressTonelRepository
+';
 		immediateInvariant.
 true.
 %
@@ -2483,6 +2555,22 @@ doit
 	options: #()
 )
 		category: 'Cypress-PackageManagement';
+		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressTonelFileUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'CypressTonel-Core';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
 true.
@@ -9401,10 +9489,10 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanTools
+	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Tonel-Core';
 		comment: 'I''m a parser for tonel files. 
 I parse a class with the following format: 
 
@@ -9460,10 +9548,26 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanTools
+	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Tonel-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'TonelWriter'
+	instVarNames: #( packageWriter )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Core';
 		comment: '';
 		immediateInvariant.
 true.
@@ -10324,6 +10428,22 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'NewTonelParserTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
 true.
@@ -11356,6 +11476,150 @@ doit
 )
 		category: 'STON-Tests';
 		comment: 'STONWriterTests test serialization.';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'TonelAbstractTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TonelAbstractTest
+	subclass: 'TonelAbstractWriterTest'
+	instVarNames: #( directory )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TonelAbstractWriterTest
+	subclass: 'TonelCypressWriterTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'CypressTonel-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TonelAbstractTest
+	subclass: 'TonelReaderTest'
+	instVarNames: #( directory )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TonelReaderTest
+	subclass: 'TonelCypressReaderTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'CypressTonel-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'TonelParserTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TonelParserTest
+	subclass: 'TonelParserForCypressTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Cypress-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'TonelWriterTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TonelWriterTest
+	subclass: 'TonelWriterForCypressTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Tonel-Cypress-Tests';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -17174,6 +17438,385 @@ writePropertiesFile
 	 for preserving the FileTree details. Strictly read-only."
 %
 
+! Class implementation for 'TonelCypressWriter'
+
+!		Class methods for 'TonelCypressWriter'
+
+category: 'instance creation'
+classmethod: TonelCypressWriter
+on: sourceDir
+	^ self new
+		sourceDir: sourceDir;
+		yourself
+%
+
+!		Instance methods for 'TonelCypressWriter'
+
+category: 'accessing'
+method: TonelCypressWriter
+definitions
+
+	^ snapshot definitions
+%
+
+category: 'initializing - private'
+method: TonelCypressWriter
+initializeForRepository: aCypressFileSystemRepository
+  repository := aCypressFileSystemRepository.
+  self sourceDir: repository directoryPath
+%
+
+category: 'private testing'
+method: TonelCypressWriter
+isClass: aClassDefinition
+	^ aClassDefinition class = CypressClassDefinition
+%
+
+category: 'private testing'
+method: TonelCypressWriter
+isTrait: aClassDefinition
+	^ false
+%
+
+category: 'accessing'
+method: TonelCypressWriter
+packageDir
+	^ packageDir 
+		ifNotNil: [ self fileUtils directoryFromPath: packageDir relativeTo: self sourceDir ]
+		ifNil: [ self sourceDir  ]
+%
+
+category: 'accessing'
+method: TonelCypressWriter
+sourceDir
+	^ sourceDir
+%
+
+category: 'accessing'
+method: TonelCypressWriter
+sourceDir: aFileReference
+	sourceDir := aFileReference
+%
+
+category: 'private writing'
+method: TonelCypressWriter
+writeMethodExtensions
+	| classesAndMethods |
+	classesAndMethods := Dictionary new.
+	snapshot definitions 
+		select: [ :each | each isMethodDefinition and: [ each isExtensionMethod ] ]
+		thenDo: [ :each | 
+			(classesAndMethods 
+				at: each className
+				ifAbsentPut: [ Set new ])
+				add: each ].
+	classesAndMethods keysAndValuesDo: [ :className :methods | 
+		self writer
+			writeExtensionMethods: methods 
+			className: className ]
+		
+	
+%
+
+category: 'private writing'
+method: TonelCypressWriter
+writePackage: aPackageName
+	"I'm assuming first category is actually the package"
+	packageDir := aPackageName.
+	(self fileUtils directoryExists: self packageDir) ifTrue: [ 
+		self fileUtils deleteAll: self packageDir ].  
+	self fileUtils ensureDirectoryExists: self packageDir.
+	self writer writePackage: packageDir
+%
+
+category: 'private writing'
+method: TonelCypressWriter
+writePackageFileNamed: packageFileName do: writerBlock
+
+	self fileUtils 
+		writeStreamFor: packageFileName
+		in: self packageDir 
+		do: [ :aStream | writerBlock value: aStream ]
+%
+
+category: 'accessing'
+method: TonelCypressWriter
+writer
+  ^ writer
+    ifNil: [ 
+      writer := TonelWriter new
+        packageWriter: self;
+        yourself ]
+%
+
+category: 'accessing'
+method: TonelCypressWriter
+writer: aTonelWriter
+	writer := aTonelWriter
+%
+
+category: 'writing'
+method: TonelCypressWriter
+writeSnapshot: aSnapshot
+  self
+    writeSnapshot: aSnapshot
+    inPackageNamed: (aSnapshot dynamicInstVarAt: #'packageName')
+%
+
+category: 'writing'
+method: TonelCypressWriter
+writeSnapshot: aSnapshot inPackageNamed: packageName
+  snapshot := aSnapshot.	"ensure package dirs exists. 
+	 It has to be just one but well..."
+  self writePackage: packageName.	"now export classes"
+  (self definitions select: [ :each | each isClassDefinition ])
+    do: [ :each | self writer writeClass: each ].	"... and method extensions"
+  self writeMethodExtensions
+%
+
+category: 'writing'
+method: TonelCypressWriter
+writeVersion: aVersion
+	self writeSnapshot: aVersion snapshot
+%
+
+! Class implementation for 'TonelCypressReader'
+
+!		Class methods for 'TonelCypressReader'
+
+category: 'definition creation'
+classmethod: TonelCypressReader
+definitionForType: aString
+  aString = TonelWriter classLabel
+    ifTrue: [ ^ CypressClassDefinition ].
+  aString = TonelWriter extensionLabel
+    ifTrue: [ ^ nil ].
+  TonelParseError signal: 'Unknown type declaration.'
+%
+
+category: 'accessing'
+classmethod: TonelCypressReader
+definitionOrders
+	"Used to sort definitions inside a snapshot"
+	^ Dictionary new
+		at: CypressMethodDefinition put: 1;
+		at: CypressClassDefinition put: 2;
+		yourself
+%
+
+category: 'definition creation'
+classmethod: TonelCypressReader
+newClassDefinitionForClassNamed: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
+  ^ CypressClassDefinition
+    name: nameString
+    superclassName: superclassString
+    category: categoryString
+    instVarNames: ivarArray
+    classInstVarNames: civarArray
+    classVarNames: cvarArray
+    poolDictionaryNames: poolArray
+    comment: commentString
+    type: typeSymbol
+%
+
+category: 'definition creation'
+classmethod: TonelCypressReader
+newClassDefinitionFrom: anArray
+  | metadata |
+  metadata := anArray sixth.
+  ^ CypressClassDefinition
+    name: (metadata at: #'name')
+    superclassName: (metadata at: #'superclass')
+    category: (metadata at: #'category')
+    instVarNames: (metadata at: #'instvars' ifAbsent: [ #() ])
+    classInstVarNames: (metadata at: #'classinstvars' ifAbsent: [ #() ])
+    classVarNames: (metadata at: #'classvars' ifAbsent: [ #() ])
+    poolDictionaryNames: (metadata at: #'pools' ifAbsent: [ #() ])
+    gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ])
+    gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ])
+    comment: (anArray second ifNil: [ '' ])
+    type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol
+%
+
+category: 'definition creation'
+classmethod: TonelCypressReader
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+  ^ CypressMethodDefinition
+    className: className
+    classIsMeta: meta
+    selector: selector
+    category: category
+    source: source
+%
+
+category: 'definition creation'
+classmethod: TonelCypressReader
+newTypeDefinitionFrom: anArray
+  | typeClass |
+  typeClass := self definitionForType: anArray fourth.
+  typeClass = CypressClassDefinition
+    ifTrue: [ ^ self newClassDefinitionFrom: anArray ].
+  "is extension, no type"
+  ^ nil
+%
+
+category: 'reading'
+classmethod: TonelCypressReader
+on: rootDirectoryPath fileName: packageName
+  | reader |
+  reader := self new.
+  ^ reader
+    packageDirectory:
+        rootDirectoryPath , reader fileUtils pathNameDelimiter , packageName;
+    packageName: packageName;
+    yourself
+%
+
+!		Instance methods for 'TonelCypressReader'
+
+category: 'private'
+method: TonelCypressReader
+canBeLoaded: aFileReference
+  | fileName |
+  fileName := self fileUtils localNameFrom: aFileReference.
+  ^ fileName ~= 'package.st' and: [ fileName endsWith: '.st' ]
+%
+
+category: 'private'
+method: TonelCypressReader
+categoriesFrom: aCollection
+  ^ ((aCollection select: [ :each | each isClassDefinition ])
+    collect: [ :each | each category asSymbol ]) asSet sortWithBlock: [ :a :b | a < b ]
+%
+
+category: 'parser support'
+method: TonelCypressReader
+definitionForType: aString
+  ^ self class definitionForType: aString
+%
+
+category: 'accessing'
+method: TonelCypressReader
+definitions
+  ^ definitions
+%
+
+category: 'accessing'
+method: TonelCypressReader
+directoryPath
+  ^ directoryPath
+%
+
+category: 'accessing'
+method: TonelCypressReader
+directoryPath: aString
+  directoryPath := aString
+%
+
+category: 'initializing - private'
+method: TonelCypressReader
+initializeForRepository: aCypressFileSystemRepository
+  repository := aCypressFileSystemRepository.
+  self directoryPath: repository directoryPath
+%
+
+category: 'loading'
+method: TonelCypressReader
+loadDefinitions
+  "load all definitions in the known directories and files."
+  | definitionOrders newDefinitions loadable dir |
+  definitionOrders := self class definitionOrders.
+  loadable := (self fileUtils directoryEntriesFrom: (dir := self packageDirectory))
+               select: [ :each | self canBeLoaded: each ].
+  loadable isEmpty ifTrue:[ GsFile gciLogServer:'No loadable files found in ' , dir asString ].
+  newDefinitions := ( 
+    loadable collect: [ :each | 
+    GsFile gciLogServer:'Reading ' , each asString .
+      self fileUtils
+        readStreamFor: each
+        do: [ :s | TonelParser parseStream: s forReader: self ] ])
+    flattened
+    sort: [ :a :b | (definitionOrders at: a class) < (definitionOrders at: b class) ].
+  definitions := newDefinitions sort
+%
+
+category: 'loading'
+method: TonelCypressReader
+loadDefinitionsFromFiles: fileNames
+  "From the known directories and files, load only those files
+   whose file names end with one of the Strings in the Array  fileNames ."
+  | definitionOrders newDefinitions loadable dir |
+  definitionOrders := self class definitionOrders.
+  loadable := (self fileUtils directoryEntriesFrom: (dir := self packageDirectory))
+        select: [ :each | (self canBeLoaded: each) and:[ 
+                  (fileNames detect:[:n | each endsWith: n] ifNone:[nil]) ~~ nil] ].
+  loadable isEmpty ifTrue:[ 
+      GsFile gciLogServer: 'None of specified  files found in ' , dir asString ].
+  newDefinitions := ( 
+    loadable collect: [ :each | 
+    GsFile gciLogServer:'Reading ' , each asString .
+      self fileUtils
+        readStreamFor: each
+        do: [ :s | TonelParser parseStream: s forReader: self ] ])
+    flattened
+    sort: [ :a :b | (definitionOrders at: a class) < (definitionOrders at: b class) ].
+  definitions := newDefinitions sort
+%
+
+category: 'parser support'
+method: TonelCypressReader
+newClassDefinitionFrom: anArray
+	^self class newClassDefinitionFrom: anArray
+%
+
+category: 'parser support'
+method: TonelCypressReader
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+  ^ self class
+    newMethodDefinitionForClassNamed: className
+    classIsMeta: meta
+    selector: selector
+    category: category
+    source: source
+%
+
+category: 'parser support'
+method: TonelCypressReader
+newTraitDefinitionFrom: anArray
+	^ self class newTraitDefinitionFrom: anArray
+%
+
+category: 'parser support'
+method: TonelCypressReader
+newTypeDefinitionFrom: anArray
+	^ self class newTypeDefinitionFrom: anArray
+%
+
+category: 'accessing'
+method: TonelCypressReader
+packageName
+
+   ^packageName
+%
+
+category: 'accessing'
+method: TonelCypressReader
+packageName: aString
+  packageName := aString.
+  self
+    packageDirectory:
+      (self fileUtils directoryFromPath: packageName relativeTo: self directoryPath)
+%
+
+category: 'reading'
+method: TonelCypressReader
+readPackageStructure
+  self loadDefinitions.
+  ^ packageStructure
+    fromSnapshot: definitions;
+    yourself
+%
+
 ! Class implementation for 'CypressAbstractRepository'
 
 !		Class methods for 'CypressAbstractRepository'
@@ -18129,6 +18772,94 @@ validateUrl
 
   (self url projectPath isEmpty or: [ self url projectBranchOrTag isEmpty ])
     ifTrue: [ self error: self printString , ' should not be used with non-git URLs.' ]
+%
+
+! Class implementation for 'CypressTonelRepository'
+
+!		Instance methods for 'CypressTonelRepository'
+
+category: 'updating properties'
+method: CypressTonelRepository
+codeFormatProperty: aString
+  (aString equalsNoCase: 'Tonel')
+    ifFalse: [ ^ super codeFormatProperty: aString ].
+  properties at: '_gs_format' put: aString
+%
+
+category: 'initializing - private'
+method: CypressTonelRepository
+initializeReaderAndWriterClasses
+  self isCodeFormatTonel
+    ifTrue: [ 
+      readerClass := TonelCypressReader.
+      writerClass := TonelCypressWriter ]
+    ifFalse: [ super initializeReaderAndWriterClasses ]
+%
+
+category: 'testing properties'
+method: CypressTonelRepository
+isCodeFormatTonel
+
+	^self isCodeFormatProperty: 'Tonel'
+%
+
+category: 'accessing properties'
+method: CypressTonelRepository
+packageExtension
+  ^ properties at: 'packageExtension' ifAbsent: [ '' ]
+%
+
+category: 'reading'
+method: CypressTonelRepository
+readPackageStructureForPackageNamed: packageName 
+  | reader |
+  reader := self reader
+    packageName: packageName;
+    loadDefinitions;
+    yourself.
+  ^ CypressSnapshot definitions: reader definitions
+%
+
+category: 'reading'
+method: CypressTonelRepository
+readPackageStructureForPackageNamed: packageName  files: fileNames
+  "Load only those files whose file names end with one of the Strings
+   in the Array fileNames."
+  | reader |
+  reader := self reader
+    packageName: packageName;
+    loadDefinitionsFromFiles: fileNames  ;
+    yourself.
+  ^ CypressSnapshot definitions: reader definitions
+%
+
+category: 'reading'
+method: CypressTonelRepository
+readPropertiesFile
+  "noop"
+
+%
+
+category: 'reading'
+method: CypressTonelRepository
+readPropertiesFile: fileName
+  "noop"
+
+%
+
+category: 'writing'
+method: CypressTonelRepository
+writePackageStructure: aPackageStructure
+  ^ self writer
+    writeSnapshot: aPackageStructure snapshot
+    inPackageNamed: aPackageStructure packageName
+%
+
+category: 'writing'
+method: CypressTonelRepository
+writePropertiesFile: fileName
+  "noop"
+
 %
 
 ! Class implementation for 'CypressFileUtilities'
@@ -25781,6 +26512,37 @@ method: CypressSmalltalkUrl
 repositoryClass
 
 	^CypressSmalltalkRepository
+%
+
+! Class implementation for 'CypressTonelFileUrl'
+
+!		Class methods for 'CypressTonelFileUrl'
+
+category: 'constants'
+classmethod: CypressTonelFileUrl
+schemeName
+  ^ 'tonel'
+%
+
+!		Instance methods for 'CypressTonelFileUrl'
+
+category: 'accessing'
+method: CypressTonelFileUrl
+codeFormat
+  ^ 'Tonel'
+%
+
+category: 'testing'
+method: CypressTonelFileUrl
+isStrict
+  ^ true
+%
+
+category: 'accessing'
+method: CypressTonelFileUrl
+repositoryClass
+
+	^CypressTonelRepository
 %
 
 ! Class implementation for 'CypressTopazUrl'
@@ -92518,6 +93280,371 @@ newMethodDefinitionFrom: anArray
 		source: source
 %
 
+! Class implementation for 'TonelWriter'
+
+!		Class methods for 'TonelWriter'
+
+category: 'accessing'
+classmethod: TonelWriter
+classLabel
+	^ 'Class'
+%
+
+category: 'accessing'
+classmethod: TonelWriter
+extensionLabel
+	^ 'Extension'
+%
+
+category: 'instance creation'
+classmethod: TonelWriter
+on: aPackageWriter
+
+	^ self new
+		packageWriter: aPackageWriter;
+		yourself
+%
+
+category: 'accessing'
+classmethod: TonelWriter
+traitLabel
+	^ 'Trait'
+%
+
+!		Instance methods for 'TonelWriter'
+
+category: 'private'
+method: TonelWriter
+classNameFor: aMethodDefinition parent: aClassDefinition
+	aClassDefinition ifNil: [ ^ aMethodDefinition fullClassName ].
+	^ aMethodDefinition classIsMeta
+		ifFalse: [ aMethodDefinition className ]
+		ifTrue: [ 
+			aClassDefinition isTraitDefinition
+				ifFalse: [aMethodDefinition className, ' class']
+				ifTrue: [aMethodDefinition className, ' classSide'] ]
+%
+
+category: 'private definitions'
+method: TonelWriter
+commentOf: aClassDefinition
+	^ (aClassDefinition comment 
+		copyReplaceAll: '"' 
+		with: '""')
+		withLineEndings: self newLine
+%
+
+category: 'accessing'
+method: TonelWriter
+definitions
+
+   ^self packageWriter definitions
+%
+
+category: 'private'
+method: TonelWriter
+fileNameFor: aClassDefinition
+	^ String streamContents: [ :stream | 
+		stream 
+			<< aClassDefinition className
+			<< '.' << (self typeOf: aClassDefinition) asLowercase
+			<< '.st'  ]
+%
+
+category: 'private testing'
+method: TonelWriter
+isClass: aClassDefinition
+	^ self packageWriter isClass: aClassDefinition
+%
+
+category: 'private testing'
+method: TonelWriter
+isTrait: aClassDefinition
+	^ self packageWriter isTrait: aClassDefinition
+%
+
+category: 'private definitions'
+method: TonelWriter
+methodDefinitionOf: aMethodDefinition
+	^ self toSTON: (self class orderedDictionaryClass new 
+		at: #category put: aMethodDefinition category asSymbol; 
+		yourself)	
+	
+%
+
+category: 'private'
+method: TonelWriter
+newLine
+	 ^ self class lineEnding
+%
+
+category: 'accessing'
+method: TonelWriter
+packageWriter
+  ^ packageWriter
+%
+
+category: 'accessing'
+method: TonelWriter
+packageWriter: anObject
+
+   packageWriter := anObject
+%
+
+category: 'private'
+method: TonelWriter
+selectorIsComplete: keywords in: aString
+	| start |
+	
+	start := 1.
+	keywords do: [ :each | | index | 
+		index := aString 
+			findString: each 
+			startingAt: start 
+			caseSensitive: true.
+		index = 0 ifTrue: [ ^ false ].
+		start := index + each size ].
+	^ true
+%
+
+category: 'private'
+method: TonelWriter
+skipComment: aStream
+	"I assume I'm on top of the begining of a comment"
+	aStream skip: 1.
+	[ aStream atEnd not 
+		and: [ aStream next ~= $" or: [ aStream peek = $" ] ] ]
+	whileTrue.	
+%
+
+category: 'private'
+method: TonelWriter
+skipSeparators: aStream
+	[ aStream peek isSeparator ]
+	whileTrue: [ aStream skip: 1 ]. 
+%
+
+category: 'private'
+method: TonelWriter
+splitMethodSource: aMethodDefinition into: aBlock
+	| keywords source declaration |
+	
+	keywords := aMethodDefinition selector asSymbol keywords.
+	source := aMethodDefinition source readStream.
+	"Skip spaces"
+	(source peek isSeparator) ifTrue: [ self skipSeparators: source ].
+	"Skip comments"
+	(source peek = $") ifTrue: [ self skipComment: source ]. 
+	"Parse declaration"
+	declaration := String new writeStreamPortable.
+	[ (self selectorIsComplete: keywords in: declaration originalContents) not 
+		or: [ ':+-/\*~<>=@,%|&?!' includes: declaration contents trimRight last ] ]
+	whileTrue: [ 
+		"get separators"
+		[ source atEnd not and: [ source peek isSeparator ] ]
+			whileTrue: [ declaration nextPut: source next ].
+		"take next word"
+		[ source atEnd not and: [ source peek isSeparator not ] ]
+			whileTrue: [ declaration nextPut: source next ] ].
+	aBlock 
+		value: (declaration contents trimLeft withLineEndings: self newLine)
+		value: (source upToEnd withLineEndings: self newLine)
+%
+
+category: 'private'
+method: TonelWriter
+toSTON: anObject
+	^ (String streamContents: [ :stream | 
+		(TonelSTONWriter on: stream) nextPut: anObject ])
+		withLineEndings: self newLine
+%
+
+category: 'private definitions'
+method: TonelWriter
+typeClassDefinitionOf: aClassDefinition
+	| definition |
+	
+	definition := self class orderedDictionaryClass new 
+		at: #name put: aClassDefinition className asSymbol; 
+		at: #superclass put: aClassDefinition superclassName asSymbol;
+		yourself.
+
+	aClassDefinition type = #normal ifFalse: [ 
+		definition at: #type put: aClassDefinition type ].
+	
+	aClassDefinition hasTraitComposition ifTrue: [ 
+		definition at: #traits put: aClassDefinition traitCompositionString ].
+	
+	aClassDefinition hasClassTraitComposition ifTrue: [ 
+		definition at: #classTraits put: aClassDefinition classTraitCompositionString ].
+	
+	(aClassDefinition instVarNames)
+		ifNotEmpty: [ :vars | definition at: #instVars put: vars asArray ].
+
+	(aClassDefinition classVarNames)
+		ifNotEmpty: [ :vars | definition at: #classVars put: vars asArray ].
+		
+	((aClassDefinition poolDictionaries) collect: [:each | each asString])
+		ifNotEmpty: [ :vars | definition at: #pools put: vars asArray ].
+		
+	(aClassDefinition classInstVarNames)
+		ifNotEmpty: [ :vars | definition at: #classInstVars put: vars asArray ].
+
+	(aClassDefinition gs_constraints)
+		ifNotEmpty: [:gs_constraints | definition at: #'gs_constraints' put: gs_constraints asArray ].
+
+	(aClassDefinition gs_options)
+		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
+
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedOop' put: gs_reservedOop asString ].
+
+	definition 		
+		at: #category put: aClassDefinition category asSymbol.
+	
+	^ self toSTON: definition
+%
+
+category: 'private definitions'
+method: TonelWriter
+typeDefinitionOf: aClassDefinition
+	(self isTrait: aClassDefinition) 
+		ifTrue: [ ^ self typeTraitDefinitionOf: aClassDefinition ].
+	^ self typeClassDefinitionOf: aClassDefinition
+%
+
+category: 'private'
+method: TonelWriter
+typeOf: aClassDefinition
+	(self isClass: aClassDefinition) ifTrue: [ ^ self class classLabel ].
+	(self isTrait: aClassDefinition) ifTrue: [ ^ self class traitLabel ].
+
+	TonelShouldIgnore signal
+%
+
+category: 'writing'
+method: TonelWriter
+writeClass: aClassDefinition
+	[ 
+		self packageWriter 
+			writePackageFileNamed: (self fileNameFor: aClassDefinition) 
+			do:  [ :aStream | 
+				self writeClassDefinition: aClassDefinition on: aStream.
+				self writeClassSideMethodDefinitions: aClassDefinition on: aStream.
+				self writeInstanceSideMethodDefinitions: aClassDefinition on: aStream ] ]
+	on: TonelShouldIgnore
+	do: [ :e | self logCr: 'ignoring: ', aClassDefinition asString ]
+%
+
+category: 'private writing'
+method: TonelWriter
+writeClassDefinition: aClassDefinition on: aStream
+	| nl |
+	nl := self newLine.
+	
+	aClassDefinition hasComment 
+		ifTrue: [ 
+			aStream 
+				<< '"' << nl
+				<< (self commentOf: aClassDefinition) << nl
+				<< '"' << nl ].
+	aStream
+		<< (self typeOf: aClassDefinition) 
+		<< ' ' << (self typeDefinitionOf: aClassDefinition ) << nl
+%
+
+category: 'private writing'
+method: TonelWriter
+writeClassSideMethodDefinitions: aClassDefinition on: aStream
+	((self definitions 
+		select: [ :each | 
+			each isMethodDefinition 
+			and: [ each className = aClassDefinition className
+			and: [ each classIsMeta ] ] ])
+		sortWithBlock: [ :a :b | a selector _unicodeLessThan: b selector ])
+		do: [ :each | 
+			self writeMethodDefinition: each parent: aClassDefinition on: aStream ]
+%
+
+category: 'writing'
+method: TonelWriter
+writeExtensionMethods: methods className: className
+
+	| nl |
+	nl := self newLine.
+	self packageWriter
+		writePackageFileNamed: className , '.extension.st'
+		do: [ :s | 
+			s << 'Extension '
+				<< (self toSTON: {(#'name' -> className asSymbol)} asDictionary) << nl.
+			((methods select: [ :m | m classIsMeta not ])
+				sortWithBlock: [ :a :b | a selector  _unicodeLessThan: b selector ])
+				do: [ :each | self writeMethodDefinition: each on: s ].
+			((methods select: [ :m | m classIsMeta ])
+				sortWithBlock: [ :a :b | a selector  _unicodeLessThan: b selector ])
+				do: [ :each | self writeMethodDefinition: each on: s ] ]
+%
+
+category: 'private writing'
+method: TonelWriter
+writeInstanceSideMethodDefinitions: aClassDefinition on: aStream
+	((self definitions 
+		select: [ :each | 
+			each isMethodDefinition 
+			and: [ each className = aClassDefinition className
+			and: [ each classIsMeta not ] ] ])
+		sortWithBlock: [ :a :b | a selector _unicodeLessThan: b selector ])
+		do: [ :each | 
+			self writeMethodDefinition: each parent: aClassDefinition on: aStream ]
+
+	
+	
+%
+
+category: 'private writing'
+method: TonelWriter
+writeMethodDefinition: aMethodDefinition on: aStream
+	^ self 
+		writeMethodDefinition: aMethodDefinition 
+		parent: nil 
+		on: aStream
+%
+
+category: 'private writing'
+method: TonelWriter
+writeMethodDefinition: aMethodDefinition parent: aClassDefinition on: aStream
+	| nl |
+	
+	nl := self newLine.
+	self 
+		splitMethodSource: aMethodDefinition 
+		into: [ :methodDeclaration :methodBody | | fullClassName |
+			fullClassName := self classNameFor: aMethodDefinition parent: aClassDefinition.
+			aStream 
+				<< nl 
+				<< (self methodDefinitionOf: aMethodDefinition) << nl 
+				<< fullClassName << ' >> ' << methodDeclaration 
+				<< ' [' << methodBody << nl << ']' << nl ]
+%
+
+category: 'writing'
+method: TonelWriter
+writePackage: packageName
+	self packageWriter 
+		writePackageFileNamed: 'package.st'
+		do:  [ :aStream | self writePackage: packageName on: aStream ]
+%
+
+category: 'writing'
+method: TonelWriter
+writePackage: packageName on: aStream
+
+	aStream 
+		<< 'Package ' 
+		<< (self toSTON: { #name ->  packageName asSymbol } asDictionary) 
+		<< self  newLine
+%
+
 ! Class implementation for 'ZnBufferedReadStream'
 
 !		Class methods for 'ZnBufferedReadStream'
@@ -98904,6 +100031,769 @@ test_updateFromSton
 	self assert: (services at: 2) queryResults first selector == #test_updateFromSton.
 	self assert: (services last isKindOf: RowanLoggingService)]
 		ensure: [RowanCommandResult initializeResults.]
+%
+
+! Class implementation for 'NewTonelParserTest'
+
+!		Instance methods for 'NewTonelParserTest'
+
+category: 'asserting'
+method: NewTonelParserTest
+assertParse: aString rule: rule equals: result 
+	self 
+		assert: (self parse: aString rule: rule)
+		equals: result
+%
+
+category: 'private'
+method: NewTonelParserTest
+newClassDefinitionForClassNamed: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
+  ^ TonelCypressReader
+    newClassDefinitionForClassNamed: nameString
+    superclassName: superclassString
+    category: categoryString
+    instVarNames: ivarArray
+    classVarNames: cvarArray
+    poolDictionaryNames: poolArray
+    classInstVarNames: civarArray
+    type: typeSymbol
+    comment: commentString
+%
+
+category: 'private'
+method: NewTonelParserTest
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+  ^ TonelCypressReader
+    newMethodDefinitionForClassNamed: className
+    classIsMeta: meta
+    selector: selector
+    category: category
+    source: source
+%
+
+category: 'private'
+method: NewTonelParserTest
+newTypeDefinitionFrom: anArray
+  ^ TonelCypressReader newTypeDefinitionFrom: anArray
+%
+
+category: 'private'
+method: NewTonelParserTest
+parse: aString rule: rule
+  | parser |
+  parser := self tonelParserClass onString: aString forReader: self.
+  ^ parser perform: rule
+%
+
+category: 'asserting'
+method: NewTonelParserTest
+shouldParse: aString rule: rule raise: error
+  | parser |
+  parser := self tonelParserClass onString: aString  forReader: self.
+  self should: [ parser perform: rule ] raise: error
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testComment
+	self 
+		shouldParse: 'this "should" be an error'
+		rule: #comment
+		raise: TonelParseError.
+	
+	self  
+		assertParse: '"this is a comment"'
+		rule: #comment
+		equals: 'this is a comment'.
+	
+	self  
+		assertParse: '"""this"" is a comment with ""nested"" colons ""also at the end"""'
+		rule: #comment
+		equals: '"this" is a comment with "nested" colons "also at the end"'
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testCPreprocessor_initializePaths
+	self 
+		assertParse: '
+{ #category: ''Private'' }
+CPreprocessor>>_initializePaths [
+', self _CPreprocessor_initializePaths_method_source, '
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #CPreprocessor
+			classIsMeta: false
+			selector: #_initializePaths
+			category: 'Private'
+			source: '_initializePaths
+', self _CPreprocessor_initializePaths_method_source).
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testExtractSelector
+	| parser |
+	
+	parser := self tonelParserClass new.
+	
+	self assert: (parser extractSelector: 'unary') equals: #unary.
+	self assert: (parser extractSelector: '+ something') equals: #+.
+	self assert: (parser extractSelector: '==> other') equals: #==>.
+	self 
+		assert: (parser extractSelector: 'some: arg1 keyword: arg2 selector: arg3') 
+		equals: #some:keyword:selector:.
+	self 
+		assert: (parser extractSelector: 'some: 	arg1 keyword:arg2 selector: arg3') 
+		equals: #some:keyword:selector:.
+	self 
+		assert: (parser extractSelector: 'some: arg1 
+keyword: arg2 
+selector: arg3') 
+		equals: #some:keyword:selector:.
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testIssue465
+	self 
+		assertParse: '
+{ #category: ''documentation'' }
+Object>>anReOverviewComment [
+', self _issue_45_method_source, '
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #Object
+			classIsMeta: false
+			selector: #anReOverviewComment
+			category: 'documentation'
+			source: 'anReOverviewComment
+', self _issue_45_method_source).
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testMetadata
+	self 
+		assertParse: '{ #vars: [ #a, #b ] }' 
+		rule: #metadata 
+		equals: { #vars -> #(a b) } asDictionary.
+	
+	self 
+		assertParse: '{ 
+	#vars: [ #a, #b ],
+	#uses: { #someNested: 42 } 
+	}' 
+		rule: #metadata 
+		equals: { 
+			#vars -> #(a b). 
+			#uses -> { #someNested -> 42 } asDictionary
+		} asDictionary
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testMethod
+
+	self 
+		assertParse: 'Object>>name' 
+		rule: #method
+		equals: #(('Object' nil) 'name').
+		
+	self 
+		assertParse: 'Object >> name: aString' 
+		rule: #method
+		equals: #(('Object' nil) 'name: aString').
+
+false ifTrue: [	"I'm not sure that this pattern will show up in the wild ...so it can fail"
+	self 
+		assertParse: 'Object >> name: aString [ I do not care ]' 
+		rule: #method
+		equals: #(('Object' nil) 'name: aString').
+].
+	self 
+		assertParse: 'Object class >> name: aString' 
+		rule: #method
+		equals: #(('Object' 'class') 'name: aString').
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testMethodBody
+
+true ifTrue: [ "skip this test for now" ^ self ].
+	self 
+		assertParse: '[ method body... I will ignore what is inside ]'
+		rule: #methodBody
+		equals: ' method body... I will ignore what is inside'.
+
+	self 
+		assertParse: '[
+method 
+	[body... [I 
+		will ignore] 
+what] is inside
+]'
+		rule: #methodBody
+		equals: '
+method 
+	[body... [I 
+		will ignore] 
+what] is inside'.
+		
+	self 
+		assertParse: '[ method body with "''", ''"'', "[", '']'' ]'
+		rule: #methodBody
+		equals: ' method body with "''", ''"'', "[", '']'''.
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testMethodDef
+	self 
+		assertParse: '
+{ #category: ''accessing'' }
+Object>>name [
+	^ self printString
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #Object
+			classIsMeta: false
+			selector: #name
+			category: 'accessing' 
+			source: 'name
+	^ self printString').
+			
+	self 
+		assertParse: '
+Object class>>name [
+	^ self printString
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #Object
+			classIsMeta: true
+			selector: #name
+			category: ''
+			source: 'name
+	^ self printString').
+
+	self 
+		assertParse: '
+TClass classSide >> template: aSystemCategoryName [
+	"I really do not care"
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #TClass
+			classIsMeta: true
+			selector: #template:
+			category: ''
+			source: 'template: aSystemCategoryName
+	"I really do not care"').
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testMethodDefList
+	| parsed |
+	
+	parsed := self 
+		parse: '
+Object class>>new [
+	^ self basicNew initialize
+]
+
+{ #category: ''accessing'' }
+Object>>name [
+	^ self printString
+]
+
+{ #category: ''printing'' }
+Object>>printOn: aStream [
+	"Append to the argument, aStream, a sequence of characters that  
+	identifies the receiver."
+
+	| title |
+	title := self class name.
+	aStream
+		nextPutAll: (title first isVowel ifTrue: [''an ''] ifFalse: [''a '']);
+		nextPutAll: title
+
+]'
+		rule: #methodDefList.
+		
+	self assert: parsed flattened size equals: 3
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testRemoveFromEnclosingStartEnd
+  | parser nl |
+  nl := TonelParser lineEnding.
+  parser := self tonelParserClass new.
+  self
+    assert: (parser removeFrom: '[ ^ self ]' enclosingStart: $[ end: $])
+    equals: '^ self'.
+  self
+    assert:
+      (parser
+        removeFrom:
+          ('[ 
+	^ self ]' withLineEndings: nl)
+        enclosingStart: $[
+        end: $])
+    equals: Character tab asString , '^ self'.
+  self
+    assert:
+      (parser
+        removeFrom:
+          ('[ 
+	^ self
+	]' withLineEndings: nl)
+        enclosingStart: $[
+        end: $])
+    equals: Character tab asString , '^ self'.
+  self
+    assert:
+      (parser
+        removeFrom:
+          ('[ 
+
+	^ self
+
+]' withLineEndings: nl)
+        enclosingStart: $[
+        end: $])
+    equals:
+      ('
+	^ self
+' withLineEndings: nl)
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testType
+	self assertParse: 'Class' rule: #type equals: 'Class'.
+	self assertParse: 'Trait' rule: #type equals: 'Trait'.
+	self assertParse: 'Extension' rule: #type equals: 'Extension'
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testTypeDef
+  self
+    assertParse:
+      '
+"
+this is a test
+"
+Class { 
+	#name: ''X'',
+	#superclass: ''Y'',
+	#category: ''Z'' 
+}'
+    rule: #'typeDef'
+    equals:
+      (self
+        newClassDefinitionForClassNamed: 'X'
+        superclassName: 'Y'
+        category: 'Z'
+        instVarNames: #()
+        classVarNames: #()
+        poolDictionaryNames: #()
+        classInstVarNames: #()
+        type: #'normal'
+        comment: 'this is a test')
+%
+
+category: 'tests'
+method: NewTonelParserTest
+testTypeDefWithClassVars
+  self
+    assertParse:
+      '
+"
+this is a test
+"
+Class {
+	#name : #MCMockASubclass,
+	#superclass : #MCMockClassA,
+	#instVars : [
+		''x''
+	],
+	#classVars : [
+		''Y''
+	],
+	#category : #MonticelloMocks
+}
+'
+    rule: #'typeDef'
+    equals:
+      (self
+        newClassDefinitionForClassNamed: 'MCMockASubclass'
+        superclassName: 'MCMockClassA'
+        category: 'MonticelloMocks'
+        instVarNames: #(#'x')
+        classVarNames: #(#'Y')
+        poolDictionaryNames: #()
+        classInstVarNames: #()
+        type: #'normal'
+        comment: 'this is a test')
+%
+
+category: 'private'
+method: NewTonelParserTest
+tonelParserClass
+
+	^true
+		ifTrue: [ NewTonelParser ]
+		ifFalse: [ TonelParser ]
+%
+
+category: 'private'
+method: NewTonelParserTest
+_CPreprocessor_initializePaths_method_source
+
+	^ '| list |
+  self nativeCppCmd .
+	list := { '''' }.
+	(path ~~ nil and: [path first == $$]) ifTrue: [list add: self directory].
+  cppArchMType ifNil:[  "not using native cpp"
+	  list add: ''/usr/include/''; add: ''/usr/local/include/'' .
+    systemSearchPaths := { } .
+  ] ifNotNil:[
+    systemSearchPaths := { ''/usr/include/'' . ''/usr/local/include/'' }.
+    cppArchMType == 50 ifTrue:[ systemSearchPaths add: ''/usr/include/linux'' ].
+  ].
+  searchPaths := list .
+'
+%
+
+category: 'private'
+method: NewTonelParserTest
+_issue_45_method_source
+^'"
+
+RePlugin -- A Regular Expressions Plugin for Squeak
+
+Introduction
+
+RePlugin is a Squeak Plugin providing modern regular expression matching operations similar to those found in Perl. It was written by Andrew C. Greenberg (werdna@gate.net), with contributions by Markus Kohler, Stephen Pair and others. RePlugin 3.2 (and ''the Gory Details'' portion of this document) is directly taken from Version 2.04 of the excellent PCRE library by Philip Hazel with only minor modifications.
+
+RePlugin, an Overview
+
+While the primary functionality (and documentation) for RePlugin is found in new classes RePattern and ReMatch and the operations set forth therein, a comprehensive set of convenience functions are provided in the String class for ease of use. 
+
+A Simple Example to Get You Started
+
+After installing RePlugin, you can execute the following in a workspace: 
+
+	''Candy is dandy, but liquor is quicker.''  reMatch: ''a.*y''
+
+This reMatch: message directs RePlugin to search the longer string for the leftmost occurrence of the letter ''a'', followed by the longest string that can be collected thereafter comprising any characters, but ending in a ''y.'' The message answers: 
+
+	 a ReMatch(''andy is dandy'')
+
+(*blush*) which is an object of type ReMatch. As you shall see later, ReMatch objects can be saved to obtain a wide range of information about the match result. When printed, as here, it conveniently identifies the substring that was actually matched, which can also be obtained from the ReMatch instance by sending it the message match. (Note that the longer string ''andy is dandy'' was matched, and not the shorter ''andy''.) If there was no match of the string, for example if the subject string were 
+
+	''You got ''y'', but only after the ''a''''
+
+then the message would answer nil.  A common use of regular expression matching is simply to determine as a boolean result whether the pattern has been matched (similar to the #match method).  Accordingly, a convenience function is provided:
+
+	(''Candy is dandy, but liquor is quicker.'' matchRe: ''a.*y'') ifTrue: [''matched''] ifFalse: [''not matched'']
+
+Global Searching and Replacing
+
+It is sometimes convenient to ask ReMatch to repeatedly search for non-overlapping matches of a regular expression, and to report a collection of information with respect to each of the matches found. For example, the message: 
+
+	''Stupid is as stupid does.'' reMatch: ''stupid'' andCollect: [:m | m match ].
+
+This message looks for occurrences of the regular expression ''stupid'' in the subject string. Each time a match is found, the corresponding match object is passed to the block associated with the collect: keyword, and the results of those computations are returned in an OrderedCollection. Since the first occurrence begins with a capital, only one match is found. (You could collect all occurrences either by using a character class or the i modifier, for example, using the reMatch:opt:collect: message.) In this case, however, the answer will be: 
+
+	OrderedCollection (''stupid'' )
+
+As a somewhat more useful example, 
+
+	''Stupid is as stupid does.'' reMatch: ''\w+'' andCollect: [:m | m match ].
+
+can be used to collect an ordered collection of all non-whitespace phrases in the string, in this case: 
+
+ 	OrderedCollection (''Stupid'' ''is'' ''as'' ''stupid'' ''does'' )
+
+This particular form (collecting matches) is used with such frequency that a convenience function is provided:
+
+	''Stupid is as stupid does.'' collectRe: ''\w+''
+ 
+Sometimes you will want to substitute text for the matched text, which you can accomplish with the reMatch:collect: message and some fancy footwork, or which you can do quite easily, for example, as follows: 
+
+	''Stupid is as stupid does.'' reMatch: ''stupid'' opt: ''i'' sub: [:m | ''Andy'' ].
+
+which answers a string replacing all occurrences of stupid (because of the opt: ''i'', the search is done without regard to case) with ''Andy'', yielding: 
+
+	''Andy is as Andy does.''
+
+You can also ''capture'' text by surrounding regular expression subexpressions with parentheses. For example, consider the following expression: 
+
+	''    line has leading spaces'' reMatch: ''^\W+(.*)''
+
+which answers 
+
+	a ReMatch(''     line has leading spaces'')
+
+This would have little utility, since it merely copies the line of text entirely. But since RePlugin keeps track of which text is ''captured'' by which parenthetical group, which is numbered in the order the left parenthesis appears in the string. These group matches can be seperately obtained by sending the resulting match object the message ''matchAt:,'' for example: 
+
+	(''    line has leading spaces'' reMatch: ''^\W+(.*)'') matchAt: 1
+
+which answers 
+
+	''line has leading spaces''
+
+That is, the line without the leading white space. Indeed, RePlugin remembers these parenthetical captures during the match, so that you can check for double words as follows: 
+
+	''this line has has a double word'' reMatch: ''(\w+)\W+\1''
+
+which matches 
+
+	a ReMatch(''has has'')
+
+These and other regular expression operations are discussed in substantially greater detail below. 
+
+
+Matching With RePlugin
+
+The Principal Messages
+
+You may call RePlugin in any of the following ways: 
+
+	subjectString reMatch: pattern [from: from] [to: to] [opt: optionString]
+	subjectString reMatch: [opt: optionString] sub: aBlock [num: maxMatches]
+	subjectString reMatch: [opt: optionString] collect: aBlock [num: maxMatches]
+
+The keywords in square brackets are optional, in the sense that messages are available with every combination of keywords shown, with and without the optional keywords. 
+
+The first message performs a single search on the substring of subjectString from from to to, using the modifiers set forth in optionString. If from: is not specified, then 1 is used, if to: is not specified, then subjectString size is used, and if opt: is not specified, then the empty string is used. 
+It should be noted that everywhere a pattern is permitted in these operations, either a string or compiled pattern object (an Re) may be used. If a string is used, then RePlugin will first search to see if the object was recently compiled, and if so, use that object, or if not, compiles the expression and remembers it for later reuse. If a compiled pattern object (an Re) is used, then that compiled object will be used, thereby avoiding recompilations and table lookups. 
+
+The second message performs repeated searches of subjectString for nonoverlapping matches of pattern, using compile and matching options optionString until no more matches are present or maxMatches have been found. (If maxMatches is less than zero, the number of matches will be limited only by the number of matches in the string.) Then, for each match found, replace the matched substring with the result of applying the corresponding match object to aBlock. If opt: is not specified, then the empty string is used, and if num: is not specified, then the equivalent of -1 is used. 
+
+There is a special case in the instance where the empty string is matched, because the ''next'' match would begin in the same place, thereby creating an infinite loop. This case is handled as in Perl 5.004, where an empty string is replaced with the result of calling the block, and the next search begins after ''bumping'' the string to the next character. Accordingly, 
+
+	''Thanks Markus and Steve for all your help'' reMatch: ''x*'' sub: [:m | ''!!'' ].  
+
+will answer: 
+
+	''!!T!!h!!a!!n!!k!!s!! !!M!!a!!r!!k!!u!!s!! !!a!!n!!d!! !!S!!t!!e!!v!!e!! !!f!!o!!r!! !!a!!l!!l!! !!y!!o!!u!!r!! !!h!!e!!l!!p!!''
+
+Finally, the third message performs repeated searches of subjectString for nonoverlapping matches of pattern, using compile and matching options optionString until no more matches are present or maxMatches have been found. (If maxMatches is less than zero, the number of matches will be limited only by the number of matches in the string.) Then, for each match found, evalute aBlock with the corresponding matchObject, and maintain and then answer an ordered collection of the results in the order they were computed. If opt: is not specified, then the empty string is used, and if num: is not specified, then the equivalent of -1 is used. 
+
+reMatch:collect: handles empty string in the same manner as reMatch:sub:, with the added proviso that an empty match will not be counted if it immediately follows a non-empty match. Accordingly 
+
+	''123'' reMatch: ''\d*'' collect: [:m | m match]
+
+answers 
+
+	OrderedCollection (''123'' )
+
+and not ''OrderedCollection (''123'' ''''),'' although 
+
+	''123'' reMatch: ''\d*'' sub: [:m | ''<'', m match, ''>'']
+
+will answer 
+
+	 ''<123><>''
+
+These null match rules mirror the semantics of Perl 5''s m/.../g and s/.../g operators. 
+
+Using ReMatch to Obtain Principal Match Information
+
+The substring of the substring matched by re is given by: 
+
+	m match
+
+The beginning and end of the substring in searchString is given by the messages from and to, respectively, so that the substring matched (the result of m match could be obtained with: 
+
+ 	m searchString
+		copyFrom: (m from)
+		to: (m to)
+
+
+Using ReMatch to Obtain Captured Groups (and Collections of Captured Groups)
+
+The number of substrings capturable by a parenthetical grouping in an re (regardless of the number actually matched to create m) is given by: 
+
+	m numGroups
+	
+The string captured by parenthetical grouping i, where 1<=i<=(m numGroups) is given by 
+
+	m matchAt: i
+
+and this can be generated as follows: 
+
+	m searchString
+		copyFrom: (m fromAt: i)
+		to: (m toAt: i)
+
+And an array of size (m numGroups) can be generated from strings and indices accordingly: 
+
+	m matches
+	m froms
+	m tos
+
+
+Efficient Regular Expression Matching
+
+RePattern tests for regular expression matching in three stages: 
+
+1. Compiles the regular expression into a convenient internal form. 
+2. Searches an object string or substring for matches. 
+3. Produces results of queries on a match object. 
+
+If you intend to repeatedly matching a single regular expression against many different strings, for example each line of a file or element of a collection, then repeating Step 1, the compilation, would be wasteful and inefficient. RePattern avoids recompilation by keeping track of the last dozen or so compiled regular expressions, avoiding the costly process of recompilation. Unfortunately, this adds the (less inefficient) cost of a table lookup with each regular expression match. 
+
+Accordingly, RePattern permits you to generate and keep ''compiled pattern objects,'' for repeated matching against subsequent strings without recompiling or searching the compilation cache. You can create an compiled pattern object with the asRePattern message: 
+
+	''\w+'' asRePattern
+
+which answers 
+
+	an Re(''\w+\00'')
+
+and the resulting pattern can be used wherever a pattern string can be used, except that no recompilation or table lookup occurs. The following: 
+
+	re := ''\w+'' asRePattern
+	myCollection do: [:i|
+		Transcript show: ((i reMatch: re) match); cr]
+
+will be substantially faster than 
+
+	myCollection do: [:i|
+		Transcript show: ((i reMatch: ''\w+'') match); cr]
+
+Regular Expression Syntax Summary
+
+A regular expression (or regexp) specifies a set of strings that matches it. Regular expressions can be concatenated to form new regular expressions; if A and B are both regular expressions, then AB is also an regular expression. If a string p matches A and another string q matches B, the string pq will match AB. Thus, complex expressions are easily constructed from simpler primitive expressions. 
+
+Regular expressions can contain both special and ordinary characters. Most ordinary characters, like ''A'', ''a'', or ''0'', are the simplest regular expressions; they simply match themselves. You can concatenate ordinary characters, so last matches the string ''last''. 
+
+Some characters, like ''|'' or ''('', are special. Special characters either stand for classes of ordinary characters, or affect how the regular expressions around them are interpreted. 
+
+The special characters are: 
+
+''.'' 
+(Dot.) In the default mode, this matches any character except a newline. If the ''s'' option has been specified, dot matches any character at all, including a newline. 
+
+''^'' 
+(Caret.) Matches the start of the string, and if the ''m'' option has been specified, then this also matches immediately after each newline. 
+
+''$'' 
+Matches the end of the string, and if the ''m'' option has been specified, then this also matches before a newline. foo matches both ''foo'' and ''foobar'', while the regular expression foo$ matches only ''foo''. 
+
+''*'' 
+Causes the resulting regexp to match 0 or more repetitions of the preceding regexp, as many repetitions as are possible. ab* will match ''a'', ''ab'', or ''a'' followed by any number of ''b''s. 
+
+''+'' 
+Causes the resulting regexp to match 1 or more repetitions of the preceding regexp. ab+ will match ''a'' followed by any non-zero number of ''b''s; it will not match just ''a''. 
+
+''?'' 
+Causes the resulting regexp to match 0 or 1 repetitions of the preceding regexp. ab? will match either ''a'' or ''ab''. 
+
+*?, +?, ?? 
+The ''*'', ''+'', and ''?'' qualifiers are all greedy; they match as much text as possible. Sometimes this behaviour isn''t desired; if the regexp <.*> is matched against ''<H1>title</H1>'', it will match the entire string, and not just ''<H1>''. Adding ''?'' after the qualifier makes it perform the match in non-greedy or minimal fashion; as few characters as possible will be matched. Using .*? in the previous expression will match only ''<H1>''. 
+
+{m,n} 
+Causes the resulting regexp to match from m to n repetitions of the preceding regexp, attempting to match as many repetitions as possible. For example, a{3,5} will match from 3 to 5 ''a'' characters. Omitting n specifies an infinite upper bound; you can''t omit m. 
+
+{m,n}? 
+Causes the resulting regexp to match from m to n repetitions of the preceding regexp, attempting to match as few repetitions as possible. This is the non-greedy version of the previous qualifier. For example, on the 6-character string ''aaaaaa'', a{3,5} will match 5 ''a'' characters, while a{3,5}? will only match 3 characters. 
+
+''\'' 
+Either escapes special characters (permitting you to match characters like ''*'', ''?'', and so forth), or signals a special sequence; special sequences are discussed below. 
+
+[] 
+Used to indicate a set of characters. Characters can be listed individually, or a range of characters can be indicated by giving two characters and separating them by a ''-''. Special characters are not active inside sets. For example, [akm$] will match any of the characters ''a'', ''k'', ''m'', or ''$''; [a-z] will match any lowercase letter, and [a-zA-Z0-9] matches any letter or digit. Character classes such as \w or \S(defined below) are also acceptable inside a range. If you want to include a '']'' or a ''-'' inside a set, precede it with a backslash, or place it as the first character. The pattern []] will match '']'', for example. 
+
+You can match the characters not within a range by complementing the set. This is indicated by including a ''^'' as the first character of the set; ''^'' elsewhere will simply match the ''^'' character. For example, [^5] will match any character except ''5''. 
+
+''|'' 
+A|B, where A and B can be arbitrary regexps, creates a regular expression that will match either A or B. This can be used inside groups (see below) as well. To match a literal ''|'', use \|, or enclose it inside a character class, as in [|]. 
+
+(...) 
+Matches whatever regular expression is inside the parentheses, and indicates the start and end of a group; the contents of a group can be retrieved after a match has been performed, and can be matched later in the string with the \number special sequence, described below. To match the literals ''('' or '''')'', use \( or \), or enclose them inside a character class: [(] [)]. 
+
+(?...) 
+This is an extension notation (a ''?'' following a ''('' is not meaningful otherwise). The first character after the ''?'' determines what the meaning and further syntax of the construct is. Following are the currently supported extensions: 
+
+(?imsx[-imsx]) 
+(One or more letters from the set ''i'', ''m'', ''s'', ''x''.) The group matches the empty string and set (or unset if the letters follow a ''-'') corresponding options for the regular expression or subexpression in which it is contained. 
+
+(?:...) 
+A non-grouping version of regular parentheses. Matches whatever regular expression is inside the parentheses, but the substring matched by the group cannot be retrieved after performing a match or referenced later in the pattern. 
+
+(?#...) 
+A comment; the contents of the parentheses are simply ignored. 
+
+(?=...) 
+Matches if ... matches next, but doesn''t consume any of the string. This is called a lookahead assertion. For example, Isaac (?=Asimov) will match ''Isaac'' only if it''s followed by ''Asimov''. 
+
+(?!!...) 
+Matches if ... doesn''t match next. This is a negative lookahead assertion. For example, Isaac (?!!Asimov) will match ''Isaac'' only if it''s not followed by ''Asimov''. 
+
+(?<=...) 
+Matches if ... matches, but doesn''t consume any of the string. This is called a lookbehind assertion. For example, (?<=foo|fooey)bar will match ''bar'' only if it''s preceded by ''foo'' or ''fooey''. All lookbehinds must have some fixed length, although alternatives need not be of the same length, as in the example. 
+
+(?<!!...) 
+Matches if ... doesn''t match, and doesn''t consume any of the string. This is called a negative lookbehind assertion. For example, (?<=foo|fooey)bar will match ''bar'' only if it''s not preceded by ''foo'' or ''fooey''. 
+
+(?(condition)yes-pattern) 
+Matches if condition is false or if condition is true and yes-pattern matches. 
+
+(?(condition)yes-pattern|no-pattern) 
+Matches if condition is true and yes-pattern matches, or if condition is false and no-pattern matches. 
+
+The special sequences consist of ''\'' and a character from the list below. If the ordinary character is not on the list, then the resulting regexp will match the second character. For example, \$ matches the character ''$''. 
+
+\number 
+Matches the contents of the group of the same number. Groups are numbered starting from 1. For example, (.+) \1 matches ''the the'' or ''55 55'', but not ''the end'' (note the space after the group). This special sequence can only be used to match one of the first 99 groups. If the first digit of number is 0, or number is 3 octal digits long, it will not be interpreted as a group match, but as the character with octal value number. Inside the ''['' and '']'' of a character class, all numeric escapes are treated as characters. 
+\A 
+Matches only at the start of the string. 
+\b 
+Matches the empty string, but only at the beginning or end of a word. A word is defined as a sequence of alphanumeric characters, so the end of a word is indicated by whitespace or a non-alphanumeric character. 
+\B 
+Matches the empty string, but only when it is not at the beginning or end of a word. 
+\d 
+Matches any decimal digit; this is equivalent to the set [0-9]. 
+\D 
+Matches any non-digit character; this is equivalent to the set [^0-9]. 
+\s 
+Matches any whitespace character; this is equivalent to the set [ \t\n\r\f\v]. 
+\S 
+Matches any non-whitespace character; this is equivalent to the set [^ \t\n\r\f\v]. 
+\w 
+Matches any alphanumeric character; this is equivalent to the set [a-zA-Z0-9_]. 
+\W 
+Matches any non-alphanumeric character; this is equivalent to the set [^a-zA-Z0-9_]. 
+
+\Z 
+Matches only at the end of the string. 
+
+\\ 
+Matches a literal backslash. 
+
+
+Compiler and Matching Option Modes Summary
+
+  i  for Caseless Matching Mode
+  m  for Multiline Mode
+  s  for Dotall Mode (Dot matches newlines)
+  x  for Extended Mode (whitespace not meaningful, comments permitted)
+  A  for Anchored mode
+  B  for NOTBOL mode (see below)
+  E  for ''Dollar end only'' mode (see below)
+  U  for Ungreedy mode -- greediness of operators is reversed
+  X  for PCRE ''Extra'' mode (see below)
+  Z  for NOTEOL mode (see below)
+
+Options B and Z are available only when matching. Option A is available for both matching and compiling. The remaining options are available only for compiling patterns. "
+	^ self'
 %
 
 ! Class implementation for 'PathTest'
@@ -107070,11 +108960,6 @@ _createComponentsV2Components: resolvedProject
 		addComponentNamed: 'common/tests/componentsV2/Components'
 			toComponentNamed: 'common/tests/Components';
 		yourself.
-
-	(resolvedProject componentNamed: 'common/componentsV2/Components')
-		addProjectNamed: 'Cypress';
-		addProjectNamed: 'Tonel';
-		yourself
 %
 
 category: 'private'
@@ -107270,6 +109155,11 @@ category: 'private'
 method: RwSimpleComponentRowanExperiment
 _createGemStoneTestComponents: resolvedProject
 	resolvedProject
+		addSimpleNestedComponentNamed: 'common/tests/v1/platform/gemstone/Components'
+			condition: 'gemstone'
+			comment: 'Components gemstone test packages';
+		addComponentNamed: 'common/tests/v1/platform/gemstone/Components'
+			toComponentNamed: 'common/tests/v1/Components';
 		addSimpleNestedComponentNamed: 'common/tests/platform/gemstone/Services'
 			condition: 'gemstone'
 			comment: 'Services gemstone test packages';
@@ -107384,6 +109274,11 @@ _createRowanTestComponents: resolvedProject
 			comment: 'Organize all service tests under one component';
 		addComponentNamed: 'common/tests/Services'
 			toComponentNamed: 'common/Services';
+		addSimpleNestedComponentNamed: 'common/tests/v1/Components'
+			condition: 'v1'
+			comment: 'Components test v1 packages';
+		addComponentNamed: 'common/tests/v1/Components'
+			toComponentNamed: 'common/tests/Components';
 		yourself.
 
 	resolvedProject
@@ -107431,6 +109326,7 @@ _createTopLevelComponents: resolvedProject
 	(resolvedProject componentNamed: 'Rowan')
 		addProjectNamed: 'Cypress';
 		addProjectNamed: 'FileSystemGs';
+		addProjectNamed: 'Tonel';
 		addProjectNamed: 'STON';
 		yourself.
 
@@ -107483,10 +109379,6 @@ _createV1Components: resolvedProject
 		addComponentNamed: 'common/v1/Definitions'
 			toComponentNamed: 'common/Definitions';
 		yourself.
-
-	(resolvedProject componentNamed: 'common/v1/Specifications')
-		addProjectNamed: 'Tonel';
-		yourself
 %
 
 category: 'private'
@@ -127951,6 +129843,1770 @@ writer
   ^ STONWriter new
 %
 
+! Class implementation for 'TonelAbstractTest'
+
+!		Class methods for 'TonelAbstractTest'
+
+category: 'Testing'
+classmethod: TonelAbstractTest
+isAbstract
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #TonelAbstractTest
+%
+
+category: 'private'
+classmethod: TonelAbstractTest
+mockCypressSnapshotSTON
+  ^ 'CypressSnapshot {
+	#definitions : [
+		CypressClassDefinition {
+			#name : ''MCMockASubclass'',
+			#superclassName : ''MCMockClassA'',
+			#category : ''MonticelloMocks'',
+			#comment : '''',
+			#instVarNames : [
+				''x''
+			],
+			#classInstVarNames : [ ],
+			#classVarNames : [
+				''Y''
+			],
+			#poolDictionaryNames : [ ],
+			#subclassType : #normal
+		},
+		CypressMethodDefinition {
+			#classIsMeta : true,
+			#source : ''initialize\n\n\tInitializationOrder := InitializationOrder\n\t\tifNil: [ -100 ] \"let the test fail\"\n\t\tifNotNil: [ InitializationOrder + 1.]'',
+			#category : ''as yet unclassified'',
+			#selector : ''initialize'',
+			#className : ''MCMockASubclass''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''variables\n\t^ x + Y + MCMockClassA'',
+			#category : ''as yet unclassified'',
+			#selector : ''variables'',
+			#className : ''MCMockASubclass''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''variables2\n\t^ ivar + CVar'',
+			#category : ''as yet unclassified'',
+			#selector : ''variables2'',
+			#className : ''MCMockASubclass''
+		},
+		CypressClassDefinition {
+			#name : ''MCMockClassA'',
+			#superclassName : ''MCMock'',
+			#category : ''MonticelloMocks'',
+			#comment : ''This is a mock class. The Monticello tests manipulated it to simulate a developer modifying code in the image.'',
+			#instVarNames : [
+				''ivar''
+			],
+			#classInstVarNames : [ ],
+			#classVarNames : [
+				''CVar'',
+				''InitializationOrder''
+			],
+			#poolDictionaryNames : [ ],
+			#subclassType : #normal
+		},
+		CypressMethodDefinition {
+			#classIsMeta : true,
+			#source : ''cVar\n\t^ CVar'',
+			#category : ''as yet unclassified'',
+			#selector : ''cVar'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : true,
+			#source : ''initializationOrder\n\n\t^ InitializationOrder'',
+			#category : ''as yet unclassified'',
+			#selector : ''initializationOrder'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : true,
+			#source : ''initialize\n\tCVar := #initialized.\n\tInitializationOrder := 1.\n'',
+			#category : ''as yet unclassified'',
+			#selector : ''initialize'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : true,
+			#source : ''one\n\n\t^ 1'',
+			#category : ''as yet unclassified'',
+			#selector : ''one'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : true,
+			#source : ''touchCVar\n\tCVar := #touched'',
+			#category : ''as yet unclassified'',
+			#selector : ''touchCVar'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''a\n\t^ \''a2\'''',
+			#category : ''numeric'',
+			#selector : ''a'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''b\n\t^ \''b1\'''',
+			#category : ''numeric'',
+			#selector : ''b'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''c\n\t^ \''c1\'''',
+			#category : ''numeric'',
+			#selector : ''c'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''d\n\t^ \''d\'''',
+			#category : ''numeric'',
+			#selector : ''d'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''falsehood\n\t^ false'',
+			#category : ''boolean'',
+			#selector : ''falsehood'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''moreTruth\n\n\t^ true'',
+			#category : ''boolean'',
+			#selector : ''moreTruth'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''one\n\t^ 1'',
+			#category : ''numeric'',
+			#selector : ''one'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''q'',
+			#category : ''drag\''n\''drop'',
+			#selector : ''q'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''truth\n\t^ true'',
+			#category : ''boolean'',
+			#selector : ''truth'',
+			#className : ''MCMockClassA''
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''two\n\t^ 2'',
+			#category : ''numeric'',
+			#selector : ''two'',
+			#className : ''MCMockClassA''
+		},
+		CypressClassDefinition {
+			#name : ''MCMockClassB'',
+			#superclassName : ''MCMock'',
+			#category : ''MonticelloMocks'',
+			#comment : ''This comment has a bang! Bang! Bang!'',
+			#instVarNames : [
+				''ivarb''
+			],
+			#classInstVarNames : [
+				''ciVar''
+			],
+			#classVarNames : [
+				''CVar''
+			],
+			#poolDictionaryNames : [
+				''MCMockAPoolDictionary''
+			],
+			#subclassType : #normal
+		},
+		CypressClassDefinition {
+			#name : ''MCMockClassD'',
+			#superclassName : ''Object'',
+			#category : ''MonticelloMocks'',
+			#comment : '''',
+			#instVarNames : [ ],
+			#classInstVarNames : [ ],
+			#classVarNames : [ ],
+			#poolDictionaryNames : [ ],
+			#subclassType : #normal
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''one\n\t^ 1'',
+			#category : ''as yet unclassified'',
+			#selector : ''one'',
+			#className : ''MCMockClassD''
+		},
+		CypressClassDefinition {
+			#name : ''MCMockClassE'',
+			#superclassName : ''Object'',
+			#category : ''MonticelloMocks'',
+			#comment : '''',
+			#instVarNames : [ ],
+			#classInstVarNames : [ ],
+			#classVarNames : [ ],
+			#poolDictionaryNames : [ ],
+			#subclassType : #variable
+		},
+		CypressMethodDefinition {
+			#classIsMeta : true,
+			#source : ''two\n\t^ 2'',
+			#category : ''as yet unclassified'',
+			#selector : ''two'',
+			#className : ''MCMockClassE''
+		},
+		CypressClassDefinition {
+			#name : ''MCMockClassF'',
+			#superclassName : ''Object'',
+			#category : ''MonticelloMocks'',
+			#comment : '''',
+			#instVarNames : [ ],
+			#classInstVarNames : [ ],
+			#classVarNames : [
+				''Foo''
+			],
+			#poolDictionaryNames : [ ],
+			#subclassType : #normal
+		},
+		CypressClassDefinition {
+			#name : ''MCMockClassG'',
+			#superclassName : ''Object'',
+			#category : ''MonticelloMocks'',
+			#comment : '''',
+			#instVarNames : [ ],
+			#classInstVarNames : [ ],
+			#classVarNames : [ ],
+			#poolDictionaryNames : [ ],
+			#subclassType : #words
+		},
+		CypressClassDefinition {
+			#name : ''MCMockClassH'',
+			#superclassName : ''Object'',
+			#category : ''MonticelloMocks'',
+			#comment : '''',
+			#instVarNames : [ ],
+			#classInstVarNames : [ ],
+			#classVarNames : [ ],
+			#poolDictionaryNames : [ ],
+			#subclassType : #bytes
+		},
+		CypressClassDefinition {
+			#name : ''MCMockClassI'',
+			#superclassName : ''Object'',
+			#category : ''MonticelloMocks'',
+			#comment : '''',
+			#instVarNames : [ ],
+			#classInstVarNames : [ ],
+			#classVarNames : [ ],
+			#poolDictionaryNames : [ ],
+			#subclassType : #weak
+		},
+		CypressMethodDefinition {
+			#classIsMeta : false,
+			#source : ''mockClassExtension\n\n\t\"I change the protocol of this method to resolve the failing test: MCChangeNotificationTest >> testExtMethodModified. This test basically test that when we modified an extension method, the extended package is marked as \''modified\''. The problem is that Monticello treat differently a classic method from an extension method, and this only by checking if the protocol name start with a star. Therefore, if the protocol does not match the extending package name, the extending package name will never be notified, and the test will fail. \"'',
+			#category : ''*MonticelloMocks'',
+			#selector : ''mockClassExtension'',
+			#className : ''MCSnapshotTest''
+		}
+	]
+}'
+%
+
+category: 'private'
+classmethod: TonelAbstractTest
+mockMCSnapshotSTON
+	^ 'MCSnapshot {
+	#definitions : [
+		MCOrganizationDefinition {
+			#categories : [
+				#MonticelloMocks
+			]
+		},
+		MCClassDefinition {
+			#name : #MCMockASubclass,
+			#superclassName : #MCMockClassA,
+			#variables : OrderedCollection [
+				MCInstanceVariableDefinition {
+					#name : ''x''
+				},
+				MCClassVariableDefinition {
+					#name : ''Y''
+				}
+			],
+			#category : #MonticelloMocks,
+			#type : #normal,
+			#comment : '''',
+			#commentStamp : '''',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCMethodDefinition {
+			#classIsMeta : true,
+			#source : ''initialize\r\r\tInitializationOrder := InitializationOrder\r\t\tifNil: [ -100 ] "let the test fail"\r\t\tifNotNil: [ InitializationOrder + 1.]'',
+			#category : #''as yet unclassified'',
+			#selector : #initialize,
+			#className : #MCMockASubclass
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''variables\r\t^ x + Y + MCMockClassA'',
+			#category : #''as yet unclassified'',
+			#selector : #variables,
+			#className : #MCMockASubclass
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''variables2\r\t^ ivar + CVar'',
+			#category : #''as yet unclassified'',
+			#selector : #variables2,
+			#className : #MCMockASubclass
+		},
+		MCClassDefinition {
+			#name : #MCMockClassA,
+			#superclassName : #MCMock,
+			#variables : OrderedCollection [
+				MCInstanceVariableDefinition {
+					#name : ''ivar''
+				},
+				MCClassVariableDefinition {
+					#name : ''CVar''
+				},
+				MCClassVariableDefinition {
+					#name : ''InitializationOrder''
+				}
+			],
+			#category : #MonticelloMocks,
+			#type : #normal,
+			#comment : ''This is a mock class. The Monticello tests manipulated it to simulate a developer modifying code in the image.'',
+			#commentStamp : ''cwp 8/10/2003 16:43'',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCMethodDefinition {
+			#classIsMeta : true,
+			#source : ''cVar\r\t^ CVar'',
+			#category : #''as yet unclassified'',
+			#selector : #cVar,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : true,
+			#source : ''initializationOrder\r\r\t^ InitializationOrder'',
+			#category : #''as yet unclassified'',
+			#selector : #initializationOrder,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : true,
+			#source : ''initialize\r\tCVar := #initialized.\r\tInitializationOrder := 1.\r'',
+			#category : #''as yet unclassified'',
+			#selector : #initialize,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : true,
+			#source : ''one\r\r\t^ 1'',
+			#category : #''as yet unclassified'',
+			#selector : #one,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : true,
+			#source : ''touchCVar\r\tCVar := #touched'',
+			#category : #''as yet unclassified'',
+			#selector : #touchCVar,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''a\r\t^ \''a2\'''',
+			#category : #numeric,
+			#selector : #a,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''b\r\t^ \''b1\'''',
+			#category : #numeric,
+			#selector : #b,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''c\r\t^ \''c1\'''',
+			#category : #numeric,
+			#selector : #c,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''d\r\t^ \''d\'''',
+			#category : #numeric,
+			#selector : #d,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''falsehood\r\t^ false'',
+			#category : #boolean,
+			#selector : #falsehood,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''moreTruth\r\r\t^ true'',
+			#category : #boolean,
+			#selector : #moreTruth,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''one\r\t^ 1'',
+			#category : #numeric,
+			#selector : #one,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''q'',
+			#category : #''drag\''n\''drop'',
+			#selector : #q,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''truth\r\t^ true'',
+			#category : #boolean,
+			#selector : #truth,
+			#className : #MCMockClassA
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''two\r\t^ 2'',
+			#category : #numeric,
+			#selector : #two,
+			#className : #MCMockClassA
+		},
+		MCClassDefinition {
+			#name : #MCMockClassB,
+			#superclassName : #MCMock,
+			#variables : OrderedCollection [
+				MCInstanceVariableDefinition {
+					#name : ''ivarb''
+				},
+				MCClassVariableDefinition {
+					#name : ''CVar''
+				},
+				MCPoolImportDefinition {
+					#name : ''MCMockAPoolDictionary''
+				},
+				MCClassInstanceVariableDefinition {
+					#name : ''ciVar''
+				}
+			],
+			#category : #MonticelloMocks,
+			#type : #normal,
+			#comment : ''This comment has a bang! Bang! Bang!'',
+			#commentStamp : '''',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCClassDefinition {
+			#name : #MCMockClassD,
+			#superclassName : #Object,
+			#variables : OrderedCollection [ ],
+			#category : #MonticelloMocks,
+			#type : #normal,
+			#comment : '''',
+			#commentStamp : '''',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''one\r\t^ 1'',
+			#category : #''as yet unclassified'',
+			#selector : #one,
+			#className : #MCMockClassD
+		},
+		MCClassDefinition {
+			#name : #MCMockClassE,
+			#superclassName : #Object,
+			#variables : OrderedCollection [ ],
+			#category : #MonticelloMocks,
+			#type : #variable,
+			#comment : '''',
+			#commentStamp : '''',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCMethodDefinition {
+			#classIsMeta : true,
+			#source : ''two\r\t^ 2'',
+			#category : #''as yet unclassified'',
+			#selector : #two,
+			#className : #MCMockClassE
+		},
+		MCClassDefinition {
+			#name : #MCMockClassF,
+			#superclassName : #Object,
+			#variables : OrderedCollection [
+				MCClassVariableDefinition {
+					#name : ''Foo''
+				}
+			],
+			#category : #MonticelloMocks,
+			#type : #normal,
+			#comment : '''',
+			#commentStamp : '''',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCClassDefinition {
+			#name : #MCMockClassG,
+			#superclassName : #Object,
+			#variables : OrderedCollection [ ],
+			#category : #MonticelloMocks,
+			#type : #words,
+			#comment : '''',
+			#commentStamp : '''',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCClassDefinition {
+			#name : #MCMockClassH,
+			#superclassName : #Object,
+			#variables : OrderedCollection [ ],
+			#category : #MonticelloMocks,
+			#type : #bytes,
+			#comment : '''',
+			#commentStamp : '''',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCClassDefinition {
+			#name : #MCMockClassI,
+			#superclassName : #Object,
+			#variables : OrderedCollection [ ],
+			#category : #MonticelloMocks,
+			#type : #weak,
+			#comment : '''',
+			#commentStamp : '''',
+			#traitComposition : ''{}'',
+			#classTraitComposition : ''{}''
+		},
+		MCMethodDefinition {
+			#classIsMeta : false,
+			#source : ''mockClassExtension\r\r\t"I change the protocol of this method to resolve the failing test: MCChangeNotificationTest >> testExtMethodModified. This test basically test that when we modified an extension method, the extended package is marked as \''modified\''. The problem is that Monticello treat differently a classic method from an extension method, and this only by checking if the protocol name start with a star. Therefore, if the protocol does not match the extending package name, the extending package name will never be notified, and the test will fail. " '',
+			#category : #''*MonticelloMocks'',
+			#selector : #mockClassExtension,
+			#className : #MCSnapshotTest
+		}
+	]
+}'
+%
+
+!		Instance methods for 'TonelAbstractTest'
+
+category: 'private'
+method: TonelAbstractTest
+fileUtils
+  self subclassResponsibility
+%
+
+category: 'mocks'
+method: TonelAbstractTest
+mockCypressSnapshot
+  ^ STON fromString: self class mockCypressSnapshotSTON
+%
+
+category: 'mocks'
+method: TonelAbstractTest
+mockMCSnapshot
+	^ STON fromString: self class mockMCSnapshotSTON
+%
+
+! Class implementation for 'TonelAbstractWriterTest'
+
+!		Class methods for 'TonelAbstractWriterTest'
+
+category: 'Testing'
+classmethod: TonelAbstractWriterTest
+isAbstract
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #TonelAbstractWriterTest
+%
+
+!		Instance methods for 'TonelAbstractWriterTest'
+
+category: 'tests'
+method: TonelAbstractWriterTest
+expectedMCMockASubclassClassSt
+	^ 'Class {
+	#name : ''MCMockASubclass'',
+	#superclass : ''MCMockClassA'',
+	#instVars : [
+		''x''
+	],
+	#classVars : [
+		''Y''
+	],
+	#category : ''MonticelloMocks''
+}
+
+{ #category : ''as yet unclassified'' }
+MCMockASubclass class >> initialize [
+
+	InitializationOrder := InitializationOrder
+		ifNil: [ -100 ] "let the test fail"
+		ifNotNil: [ InitializationOrder + 1.]
+]
+
+{ #category : ''as yet unclassified'' }
+MCMockASubclass >> variables [
+	^ x + Y + MCMockClassA
+]
+
+{ #category : ''as yet unclassified'' }
+MCMockASubclass >> variables2 [
+	^ ivar + CVar
+]
+'
+%
+
+category: 'tests'
+method: TonelAbstractWriterTest
+expectedMCMockClassAClassSt
+	^ '"
+This is a mock class. The Monticello tests manipulated it to simulate a developer modifying code in the image.
+"
+Class {
+	#name : ''MCMockClassA'',
+	#superclass : ''MCMock'',
+	#instVars : [
+		''ivar''
+	],
+	#classVars : [
+		''CVar'',
+		''InitializationOrder''
+	],
+	#category : ''MonticelloMocks''
+}
+
+{ #category : ''as yet unclassified'' }
+MCMockClassA class >> cVar [
+	^ CVar
+]
+
+{ #category : ''as yet unclassified'' }
+MCMockClassA class >> initializationOrder [
+
+	^ InitializationOrder
+]
+
+{ #category : ''as yet unclassified'' }
+MCMockClassA class >> initialize [
+	CVar := #initialized.
+	InitializationOrder := 1.
+
+]
+
+{ #category : ''as yet unclassified'' }
+MCMockClassA class >> one [
+
+	^ 1
+]
+
+{ #category : ''as yet unclassified'' }
+MCMockClassA class >> touchCVar [
+	CVar := #touched
+]
+
+{ #category : ''numeric'' }
+MCMockClassA >> a [
+	^ ''a2''
+]
+
+{ #category : ''numeric'' }
+MCMockClassA >> b [
+	^ ''b1''
+]
+
+{ #category : ''numeric'' }
+MCMockClassA >> c [
+	^ ''c1''
+]
+
+{ #category : ''numeric'' }
+MCMockClassA >> d [
+	^ ''d''
+]
+
+{ #category : ''boolean'' }
+MCMockClassA >> falsehood [
+	^ false
+]
+
+{ #category : ''boolean'' }
+MCMockClassA >> moreTruth [
+
+	^ true
+]
+
+{ #category : ''numeric'' }
+MCMockClassA >> one [
+	^ 1
+]
+
+{ #category : ''drag\''n\''drop'' }
+MCMockClassA >> q [
+]
+
+{ #category : ''boolean'' }
+MCMockClassA >> truth [
+	^ true
+]
+
+{ #category : ''numeric'' }
+MCMockClassA >> two [
+	^ 2
+]
+'
+%
+
+category: 'tests'
+method: TonelAbstractWriterTest
+expectedMCSnapshotTestExtensionSt
+	^ 'Extension { #name : ''MCSnapshotTest'' }
+
+{ #category : ''*MonticelloMocks'' }
+MCSnapshotTest >> mockClassExtension [
+
+	"I change the protocol of this method to resolve the failing test: MCChangeNotificationTest >> testExtMethodModified. This test basically test that when we modified an extension method, the extended package is marked as ''modified''. The problem is that Monticello treat differently a classic method from an extension method, and this only by checking if the protocol name start with a star. Therefore, if the protocol does not match the extending package name, the extending package name will never be notified, and the test will fail. "
+]
+'
+%
+
+category: 'mocks'
+method: TonelAbstractWriterTest
+mockSnapshot
+
+	self subclassResponsibility
+%
+
+category: 'running'
+method: TonelAbstractWriterTest
+setUp
+  directory := nil.
+  super setUp
+%
+
+category: 'tests'
+method: TonelAbstractWriterTest
+testWriteSnapshot
+  | writer dir nl packageDir snapshot |
+  dir := self directory.
+  writer := self writerClass on: dir.
+  snapshot := self mockSnapshot.
+  snapshot dynamicInstVarAt: #'packageName' put: 'MonticelloMocks'.
+  writer writeSnapshot: snapshot.
+  self assert: (self directoryNamed: 'MonticelloMocks' existsIn: dir).
+  packageDir := self directoryNamed: 'MonticelloMocks' in: dir.
+  self
+    assert: (self fileNamesIn: packageDir)
+    equals:
+      #('MCMockASubclass.class.st' 'MCMockClassA.class.st' 'MCMockClassB.class.st' 'MCMockClassD.class.st' 'MCMockClassE.class.st' 'MCMockClassF.class.st' 'MCMockClassG.class.st' 'MCMockClassH.class.st' 'MCMockClassI.class.st' 'MCSnapshotTest.extension.st' 'package.st').
+  nl := TonelWriter lineEnding.
+  self
+    assert:
+      (self contentsOfFileNamed: 'MCMockClassA.class.st' inDirectory: packageDir)
+    equals: (self expectedMCMockClassAClassSt withLineEndings: nl).
+  self
+    assert:
+      (self contentsOfFileNamed: 'MCMockASubclass.class.st' inDirectory: packageDir)
+    equals: (self expectedMCMockASubclassClassSt withLineEndings: nl).
+  self
+    assert:
+      (self contentsOfFileNamed: 'MCSnapshotTest.extension.st' inDirectory: packageDir)
+    equals: (self expectedMCSnapshotTestExtensionSt withLineEndings: nl)
+%
+
+category: 'private'
+method: TonelAbstractWriterTest
+writerClass
+
+  self subclassResponsibility
+%
+
+! Class implementation for 'TonelCypressWriterTest'
+
+!		Instance methods for 'TonelCypressWriterTest'
+
+category: 'private'
+method: TonelCypressWriterTest
+fileUtils
+  ^ CypressFileUtilities current
+%
+
+category: 'mocks'
+method: TonelCypressWriterTest
+mockSnapshot
+
+	^ self mockCypressSnapshot
+%
+
+category: 'private'
+method: TonelCypressWriterTest
+writerClass
+
+  ^ TonelCypressWriter
+%
+
+! Class implementation for 'TonelReaderTest'
+
+!		Class methods for 'TonelReaderTest'
+
+category: 'Testing'
+classmethod: TonelReaderTest
+isAbstract
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #TonelReaderTest
+%
+
+!		Instance methods for 'TonelReaderTest'
+
+category: 'tests'
+method: TonelReaderTest
+assertClassDefinition: a and: b
+	self assert: a className equals: b className.
+	self assert: a superclassName equals: b superclassName.
+	self assert: a traitCompositionString equals: b traitCompositionString.
+	self assert: a classTraitCompositionString equals: b classTraitCompositionString.
+	self assert: a category equals: b category.	
+	self assert: a instVarNames equals: b instVarNames.
+	self assert: a classInstVarNames equals: b classInstVarNames.
+	self assert: a classVarNames equals: b classVarNames.
+	self assert: a poolDictionaries equals: b poolDictionaries.
+	self assert: a type equals: b type.
+	self assert: a comment equals: b comment.
+%
+
+category: 'tests'
+method: TonelReaderTest
+assertDefinition: a and: b
+	a isOrganizationDefinition ifTrue: [ ^ self assertOrganisationDefinition: a and: b ].
+	a isClassDefinition ifTrue: [ ^ self assertClassDefinition: a and: b ].
+	a isMethodDefinition ifTrue: [ ^ self assertMethodDefinition: a and: b ].
+%
+
+category: 'tests'
+method: TonelReaderTest
+assertMethodDefinition: a and: b
+	self assert: a className equals: b className.
+	self assert: a selector equals: b selector.
+	self assert: a protocol equals: b protocol.
+	self assert: a source asByteArray equals: b source asByteArray.
+	self assert: a classIsMeta equals: b classIsMeta
+%
+
+category: 'tests'
+method: TonelReaderTest
+assertOrganisationDefinition: a and: b
+	self assert: a categories equals: b categories
+%
+
+category: 'mocks'
+method: TonelReaderTest
+mockSnapshot
+
+	self subclassResponsibility
+%
+
+category: 'tests'
+method: TonelReaderTest
+testLoadDefinitions
+  | snapshot reader |
+true ifTrue: [ ^ self ]. "with https://github.com/GemTalk/Rowan/issues/361 the Tonel/Cypress implementation will be phased and to get this test to pass, we have to arrange for the directory to be correctly passed into the TonelCypressReader ..."
+  snapshot := self mockSnapshot.
+  reader := self createReaderFor: snapshot fileName: 'MonticelloMocks'.
+  reader loadDefinitions.
+  self assert: reader definitions size equals: snapshot definitions size.
+  reader definitions sorted
+    with: snapshot definitions sorted
+    do: [ :a :b | self assertDefinition: a and: b ]
+%
+
+! Class implementation for 'TonelCypressReaderTest'
+
+!		Instance methods for 'TonelCypressReaderTest'
+
+category: 'tests'
+method: TonelCypressReaderTest
+assertClassDefinition: a and: b
+	self assert: a className equals: b className.
+	self assert: a superclassName equals: b superclassName.
+	self assert: a category equals: b category.	
+	self assert: a instVarNames equals: b instVarNames.
+	self assert: a classInstVarNames equals: b classInstVarNames.
+	self assert: a classVarNames equals: b classVarNames.
+	self assert: a poolDictionaries equals: b poolDictionaries.
+	self assert: a type equals: b type.
+	self assert: a comment equals: b comment.
+%
+
+category: 'tests'
+method: TonelCypressReaderTest
+assertDefinition: a and: b
+	a isClassDefinition ifTrue: [ ^ self assertClassDefinition: a and: b ].
+	a isMethodDefinition ifTrue: [ ^ self assertMethodDefinition: a and: b ].
+%
+
+category: 'tests'
+method: TonelCypressReaderTest
+assertMethodDefinition: a and: b
+	self assert: a className equals: b className.
+	self assert: a selector equals: b selector.
+	self assert: a category equals: b category.
+	self assert: a source asByteArray equals: b source asByteArray.
+	self assert: a classIsMeta equals: b classIsMeta
+%
+
+category: 'private'
+method: TonelCypressReaderTest
+fileUtils
+  ^ CypressFileUtilities current
+%
+
+category: 'mocks'
+method: TonelCypressReaderTest
+mockSnapshot
+  ^ self mockCypressSnapshot
+%
+
+! Class implementation for 'TonelParserTest'
+
+!		Class methods for 'TonelParserTest'
+
+category: 'Testing'
+classmethod: TonelParserTest
+isAbstract
+  "Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+  ^ self sunitName = #'TonelParserTest'
+%
+
+!		Instance methods for 'TonelParserTest'
+
+category: 'asserting'
+method: TonelParserTest
+assertParse: aString rule: rule equals: result 
+	self 
+		assert: (self parse: aString rule: rule)
+		equals: result
+%
+
+category: 'private'
+method: TonelParserTest
+newClassDefinitionForClassNamed: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
+  self subclassResponsibility
+%
+
+category: 'private'
+method: TonelParserTest
+newClassDefinitionFrom: anArray
+  self subclassResponsibility
+%
+
+category: 'private'
+method: TonelParserTest
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+  self subclassResponsibility
+%
+
+category: 'private'
+method: TonelParserTest
+newTraitDefinitionFrom: anArray
+  self subclassResponsibility
+%
+
+category: 'private'
+method: TonelParserTest
+newTypeDefinitionFrom: anArray
+  self subclassResponsibility
+%
+
+category: 'private'
+method: TonelParserTest
+parse: aString rule: rule
+  | parser |
+  parser := TonelParser onString: aString forReader: self.
+  ^ parser perform: rule
+%
+
+category: 'asserting'
+method: TonelParserTest
+shouldParse: aString rule: rule raise: error
+  | parser |
+  parser := TonelParser onString: aString  forReader: self.
+  self should: [ parser perform: rule ] raise: error
+%
+
+category: 'tests'
+method: TonelParserTest
+testComment
+	self 
+		shouldParse: 'this "should" be an error'
+		rule: #comment
+		raise: TonelParseError.
+	
+	self  
+		assertParse: '"this is a comment"'
+		rule: #comment
+		equals: 'this is a comment'.
+	
+	self  
+		assertParse: '"""this"" is a comment with ""nested"" colons ""also at the end"""'
+		rule: #comment
+		equals: '"this" is a comment with "nested" colons "also at the end"'	
+		
+		
+%
+
+category: 'tests'
+method: TonelParserTest
+testExtractSelector
+	| parser |
+	
+	parser := TonelParser new.
+	
+	self assert: (parser extractSelector: 'unary') equals: #unary.
+	self assert: (parser extractSelector: '+ something') equals: #+.
+	self assert: (parser extractSelector: '==> other') equals: #==>.
+	self 
+		assert: (parser extractSelector: 'some: arg1 keyword: arg2 selector: arg3') 
+		equals: #some:keyword:selector:.
+	self 
+		assert: (parser extractSelector: 'some: 	arg1 keyword:arg2 selector: arg3') 
+		equals: #some:keyword:selector:.
+	self 
+		assert: (parser extractSelector: 'some: arg1 
+keyword: arg2 
+selector: arg3') 
+		equals: #some:keyword:selector:.
+%
+
+category: 'tests'
+method: TonelParserTest
+testMetadata
+	self 
+		assertParse: '{ #vars: [ #a, #b ] }' 
+		rule: #metadata 
+		equals: { #vars -> #(a b) } asDictionary.
+	
+	self 
+		assertParse: '{ 
+	#vars: [ #a, #b ],
+	#uses: { #someNested: 42 } 
+	}' 
+		rule: #metadata 
+		equals: { 
+			#vars -> #(a b). 
+			#uses -> { #someNested -> 42 } asDictionary
+		} asDictionary
+%
+
+category: 'tests'
+method: TonelParserTest
+testMethod
+	self 
+		assertParse: 'Object>>name' 
+		rule: #method
+		equals: #(('Object' nil) 'name').
+		
+	self 
+		assertParse: 'Object >> name: aString' 
+		rule: #method
+		equals: #(('Object' nil) 'name: aString').
+		
+	self 
+		assertParse: 'Object >> name: aString [ I do not care ]' 
+		rule: #method
+		equals: #(('Object' nil) 'name: aString').
+		
+	self 
+		assertParse: 'Object class >> name: aString' 
+		rule: #method
+		equals: #(('Object' 'class') 'name: aString').
+%
+
+category: 'tests'
+method: TonelParserTest
+testMethodBody
+	self 
+		assertParse: '[ method body... I will ignore what is inside ]'
+		rule: #methodBody
+		equals: ' method body... I will ignore what is inside'.
+
+	self 
+		assertParse: '[
+method 
+	[body... [I 
+		will ignore] 
+what] is inside
+]'
+		rule: #methodBody
+		equals: '
+method 
+	[body... [I 
+		will ignore] 
+what] is inside'.
+		
+	self 
+		assertParse: '[ method body with "''", ''"'', "[", '']'' ]'
+		rule: #methodBody
+		equals: ' method body with "''", ''"'', "[", '']'''.
+	
+%
+
+category: 'tests'
+method: TonelParserTest
+testMethodDef
+	self 
+		assertParse: '
+{ #category: ''accessing'' }
+Object>>name [
+	^ self printString
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #Object
+			classIsMeta: false
+			selector: #name
+			category: 'accessing' 
+			source: 'name
+	^ self printString').
+			
+	self 
+		assertParse: '
+Object class>>name [ 
+	^ self printString
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #Object
+			classIsMeta: true
+			selector: #name
+			category: ''
+			source: 'name 
+	^ self printString').
+
+	self 
+		assertParse: '
+TClass classSide >> template: aSystemCategoryName [ 
+	"I really do not care"
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #TClass
+			classIsMeta: true
+			selector: #template:
+			category: ''
+			source: 'template: aSystemCategoryName 
+	"I really do not care"').
+%
+
+category: 'tests'
+method: TonelParserTest
+testMethodDefList
+	| parsed |
+	
+	parsed := self 
+		parse: '
+Object class>>new [
+	^ self basicNew initialize
+]
+
+{ #category: ''accessing'' }
+Object>>name [
+	^ self printString
+]
+
+{ #category: ''printing'' }
+Object>>printOn: aStream [
+	"Append to the argument, aStream, a sequence of characters that  
+	identifies the receiver."
+
+	| title |
+	title := self class name.
+	aStream
+		nextPutAll: (title first isVowel ifTrue: [''an ''] ifFalse: [''a '']);
+		nextPutAll: title
+
+]'
+		rule: #methodDefList.
+		
+	self assert: parsed flattened size equals: 3
+%
+
+category: 'tests'
+method: TonelParserTest
+testRemoveFromEnclosingStartEnd
+  | parser nl |
+  nl := TonelWriter lineEnding.
+  parser := TonelParser new.
+  self
+    assert: (parser removeFrom: '[ ^ self ]' enclosingStart: $[ end: $])
+    equals: '^ self'.
+  self
+    assert:
+      (parser
+        removeFrom:
+          ('[ 
+	^ self ]' withLineEndings: nl)
+        enclosingStart: $[
+        end: $])
+    equals: Character tab asString , '^ self'.
+  self
+    assert:
+      (parser
+        removeFrom:
+          ('[ 
+	^ self
+	]' withLineEndings: nl)
+        enclosingStart: $[
+        end: $])
+    equals: Character tab asString , '^ self'.
+  self
+    assert:
+      (parser
+        removeFrom:
+          ('[ 
+
+	^ self
+
+]' withLineEndings: nl)
+        enclosingStart: $[
+        end: $])
+    equals:
+      ('
+	^ self
+' withLineEndings: nl)
+%
+
+category: 'tests'
+method: TonelParserTest
+testType
+	self assertParse: 'Class' rule: #type equals: 'Class'.
+	self assertParse: 'Trait' rule: #type equals: 'Trait'.
+	self assertParse: 'Extension' rule: #type equals: 'Extension'
+%
+
+category: 'tests'
+method: TonelParserTest
+testTypeDef
+  self
+    assertParse:
+      '
+"
+this is a test
+"
+Class { 
+	#name: ''X'',
+	#superclass: ''Y'',
+	#category: ''Z'' 
+}'
+    rule: #'typeDef'
+    equals:
+      (self
+        newClassDefinitionForClassNamed: 'X'
+        superclassName: 'Y'
+        category: 'Z'
+        instVarNames: #()
+        classVarNames: #()
+        poolDictionaryNames: #()
+        classInstVarNames: #()
+        type: #'normal'
+        comment: 'this is a test')
+%
+
+category: 'tests'
+method: TonelParserTest
+testTypeDefWithClassVars
+  self
+    assertParse:
+      '
+"
+this is a test
+"
+Class {
+	#name : #MCMockASubclass,
+	#superclass : #MCMockClassA,
+	#instVars : [
+		''x''
+	],
+	#classVars : [
+		''Y''
+	],
+	#category : #MonticelloMocks
+}
+'
+    rule: #'typeDef'
+    equals:
+      (self
+        newClassDefinitionForClassNamed: 'MCMockASubclass'
+        superclassName: 'MCMockClassA'
+        category: 'MonticelloMocks'
+        instVarNames: #(#'x')
+        classVarNames: #(#'Y')
+        poolDictionaryNames: #()
+        classInstVarNames: #()
+        type: #'normal'
+        comment: 'this is a test')
+%
+
+! Class implementation for 'TonelParserForCypressTest'
+
+!		Instance methods for 'TonelParserForCypressTest'
+
+category: 'private'
+method: TonelParserForCypressTest
+newClassDefinitionForClassNamed: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
+  ^ TonelCypressReader
+    newClassDefinitionForClassNamed: nameString
+    superclassName: superclassString
+    category: categoryString
+    instVarNames: ivarArray
+    classVarNames: cvarArray
+    poolDictionaryNames: poolArray
+    classInstVarNames: civarArray
+    type: typeSymbol
+    comment: commentString
+%
+
+category: 'private'
+method: TonelParserForCypressTest
+newClassDefinitionFrom: anArray
+  ^ TonelCypressReader newClassDefinitionFrom: anArray
+%
+
+category: 'private'
+method: TonelParserForCypressTest
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+  ^ TonelCypressReader
+    newMethodDefinitionForClassNamed: className
+    classIsMeta: meta
+    selector: selector
+    category: category
+    source: source
+%
+
+category: 'private'
+method: TonelParserForCypressTest
+newTraitDefinitionFrom: anArray
+  ^ TonelCypressReader newTraitDefinitionFrom: anArray
+%
+
+category: 'private'
+method: TonelParserForCypressTest
+newTypeDefinitionFrom: anArray
+  ^ TonelCypressReader newTypeDefinitionFrom: anArray
+%
+
+! Class implementation for 'TonelWriterTest'
+
+!		Class methods for 'TonelWriterTest'
+
+category: 'Testing'
+classmethod: TonelWriterTest
+isAbstract
+  "Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+  ^ self sunitName = #'TonelWriterTest'
+%
+
+!		Instance methods for 'TonelWriterTest'
+
+category: 'private'
+method: TonelWriterTest
+creatClassDefinition: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
+  self subclassResponsibility
+%
+
+category: 'private'
+method: TonelWriterTest
+creatClassDefinition: nameString superclassName: superclassString traitComposition: traitCompositionString classTraitComposition: classTraitCompositionString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
+  self subclassResponsibility
+%
+
+category: 'private'
+method: TonelWriterTest
+creatMethodDefinition: classString classIsMeta: metaBoolean selector: selectorString category: catString source: sourceString
+  self subclassResponsibility
+%
+
+category: 'private'
+method: TonelWriterTest
+creatMethodDefinition: classString selector: selectorString category: catString source: sourceString
+  ^ self
+    creatMethodDefinition: classString
+    classIsMeta: false
+    selector: selectorString
+    category: catString
+    source: sourceString
+%
+
+category: 'private'
+method: TonelWriterTest
+defaultPackageWriter
+  self subclassResponsibility
+%
+
+category: 'tests'
+method: TonelWriterTest
+testSplitMethodSourceInto
+  | writer declaration source definition newLine tab space |
+  newLine := TonelWriter lineEnding.
+  tab := Character tab asString.
+  space := Character space asString.
+  writer := TonelWriter new.	"simplest split"
+  definition := self creatMethodDefinition: #'SomeClass'
+    selector: #'name'
+    category: 'accessing'
+    source:
+      'name
+	^ self'.
+  writer
+    splitMethodSource: definition
+    into: [ :d :s | 
+      declaration := d.
+      source := s ].
+  self assert: declaration equals: 'name'.
+  self assert: source equals: newLine , tab , '^ self'.	"test space at the end of method declaration (it needs to be kept)"
+  definition := self creatMethodDefinition: #'SomeClass'
+    selector: #'name:'
+    category: 'accessing'
+    source:
+      'name: aString 
+	name := aString'.
+  writer
+    splitMethodSource: definition
+    into: [ :d :s | 
+      declaration := d.
+      source := s ].
+  self assert: declaration equals: 'name: aString'.
+  self assert: source equals: space , newLine , tab , 'name := aString'.	"test multiline declaration"
+  definition := self creatMethodDefinition: #'SomeClass'
+    selector: #'method:with:several:lines:'
+    category: 'accessing'
+    source:
+      'method: var1
+	with: var2
+	several: var3
+	lines: var4
+	
+	^ var1 + var2 + var3 + var4'.
+  writer
+    splitMethodSource: definition
+    into: [ :d :s | 
+      declaration := d.
+      source := s ].
+  self
+    assert: declaration
+    equals:
+      ('method: var1
+	with: var2
+	several: var3
+	lines: var4'
+        withLineEndings: TonelWriter lineEnding).
+  self
+    assert: source
+    equals:
+      (newLine , tab , newLine , tab , '^ var1 + var2 + var3 + var4'
+        withLineEndings: newLine).	"test comment before declaration (it may happen, if someone copied from diffmorph)"
+  definition := self creatMethodDefinition: #'SomeClass'
+    selector: #'name:'
+    category: 'accessing'
+    source:
+      '
+"protocol: accessing"
+name: aString 
+	name := aString'.
+  writer
+    splitMethodSource: definition
+    into: [ :d :s | 
+      declaration := d.
+      source := s ].
+  self assert: declaration equals: 'name: aString'.
+  self assert: source equals: space , newLine , tab , 'name := aString'.	"test source right after declaration (no enter between selector and source)"
+  definition := self creatMethodDefinition: #'SomeClass'
+    selector: #'name:'
+    category: 'accessing'
+    source: 'name: aString name := aString'.
+  writer
+    splitMethodSource: definition
+    into: [ :d :s | 
+      declaration := d.
+      source := s ].
+  self assert: declaration equals: 'name: aString'.
+  self assert: source equals: ' name := aString'.	"test method name containin name of keywords in variables"
+  definition := self creatMethodDefinition: #'SomeClass'
+    selector: #'a:b:c:'
+    category: 'accessing'
+    source: 'a: b b: c c: d ^ 42'.
+  writer
+    splitMethodSource: definition
+    into: [ :d :s | 
+      declaration := d.
+      source := s ].
+  self assert: declaration equals: 'a: b b: c c: d'.
+  self assert: source equals: ' ^ 42'
+%
+
+category: 'tests'
+method: TonelWriterTest
+testWriteClassDefinitionOn
+  | writer def stream |
+  writer := TonelWriter new
+    packageWriter: self defaultPackageWriter;
+    yourself.
+  stream := TonelParser writeStreamClass on: String new.
+  def := self
+    creatClassDefinition: #'SomeObject'
+    superclassName: #'Object'
+    category: #'Kernel'
+    instVarNames: #()
+    classVarNames: #()
+    poolDictionaryNames: #()
+    classInstVarNames: #()
+    type: #'normal'
+    comment: 'comment test'.
+  writer writeClassDefinition: def on: stream.
+  self
+    assert: stream contents
+    equals:
+      ('"
+comment test
+"
+Class {
+	#name : ''SomeObject'',
+	#superclass : ''Object'',
+	#category : ''Kernel''
+}
+'
+        withLineEndings: TonelWriter lineEnding).
+  stream := String new writeStreamPortable.
+  def := self
+    creatClassDefinition: #'SomeObject'
+    superclassName: #'Object'
+    category: #'Kernel'
+    instVarNames: #(#'a' #'b' #'c')
+    classVarNames: #(#'D' #'E')
+    poolDictionaryNames: #(#'POOL')
+    classInstVarNames: #(#'instVarA')
+    type: #'normal'
+    comment: 'comment test'.
+  writer writeClassDefinition: def on: stream.
+  self
+    assert: stream contents
+    equals:
+      ('"
+comment test
+"
+Class {
+	#name : ''SomeObject'',
+	#superclass : ''Object'',
+	#instVars : [
+		''a'',
+		''b'',
+		''c''
+	],
+	#classVars : [
+		''D'',
+		''E''
+	],
+	#pools : [
+		''POOL''
+	],
+	#classInstVars : [
+		''instVarA''
+	],
+	#category : ''Kernel''
+}
+'
+        withLineEndings: TonelWriter lineEnding)
+%
+
+category: 'tests'
+method: TonelWriterTest
+testWriteMethodDefinitionOn
+  | writer def stream |
+  writer := TonelWriter new.
+  stream := String new writeStreamPortable.
+  def := self creatMethodDefinition: #'Object'
+    classIsMeta: false
+    selector: #'selector'
+    category: 'accessing'
+    source:
+      'selector
+	^ 42'.
+  writer writeMethodDefinition: def on: stream.
+  self
+    assert: stream contents
+    equals:
+      ('
+{ #category : ''accessing'' }
+Object >> selector [
+	^ 42
+]
+'
+        withLineEndings: TonelWriter lineEnding).
+  stream := String new writeStreamPortable.
+  def := self creatMethodDefinition: #'Object'
+    classIsMeta: true
+    selector: #'selector'
+    category: 'accessing'
+    source:
+      'selector
+	^ 42'.
+  writer writeMethodDefinition: def on: stream.
+  self
+    assert: stream contents
+    equals:
+      ('
+{ #category : ''accessing'' }
+Object class >> selector [
+	^ 42
+]
+'
+        withLineEndings: TonelWriter lineEnding).
+  stream := String new writeStreamPortable.
+  def := self creatMethodDefinition: #'Object'
+    classIsMeta: false
+    selector: #'='
+    category: 'comparing'
+    source:
+      '= anObject
+	^ self == anObject'.
+  writer writeMethodDefinition: def on: stream.
+  self
+    assert: stream contents
+    equals:
+      ('
+{ #category : ''comparing'' }
+Object >> = anObject [
+	^ self == anObject
+]
+'
+        withLineEndings: TonelWriter lineEnding)
+%
+
+category: 'tests'
+method: TonelWriterTest
+testWritePackageOn
+  | writer stream |
+  writer := TonelWriter new.
+  stream := TonelParser writeStreamClass on: String new.
+  writer writePackage: 'ThePackage' on: stream.
+  self
+    assert: stream contents
+    equals:
+      ('Package { #name : ''ThePackage'' }
+'
+).
+
+  stream := TonelParser writeStreamClass on: String new.
+  writer writePackage: 'The-Package' on: stream.
+  self
+    assert: stream contents
+    equals:
+      ('Package { #name : ''The-Package'' }
+'
+).
+
+  stream := TonelParser writeStreamClass on: String new.
+  writer writePackage: 'The Package' on: stream.
+  self
+    assert: stream contents
+    equals:
+      ('Package { #name : ''The Package'' }
+'
+).
+%
+
+! Class implementation for 'TonelWriterForCypressTest'
+
+!		Instance methods for 'TonelWriterForCypressTest'
+
+category: 'private'
+method: TonelWriterForCypressTest
+creatClassDefinition: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
+  ^ CypressClassDefinition
+    name: nameString
+    superclassName: superclassString
+    category: categoryString
+    instVarNames: ivarArray
+    classInstVarNames: civarArray
+    classVarNames: cvarArray
+    poolDictionaryNames: poolArray
+    comment: commentString
+    type: typeSymbol
+%
+
+category: 'private'
+method: TonelWriterForCypressTest
+creatClassDefinition: nameString superclassName: superclassString traitComposition: traitCompositionString classTraitComposition: classTraitCompositionString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
+  ^ CypressClassDefinition
+    name: nameString
+    superclassName: superclassString
+    category: categoryString
+    instVarNames: ivarArray
+    classInstVarNames: civarArray
+    classVarNames: cvarArray
+    poolDictionaryNames: poolArray
+    comment: commentString
+    type: typeSymbol
+%
+
+category: 'private'
+method: TonelWriterForCypressTest
+creatMethodDefinition: classString classIsMeta: metaBoolean selector: selectorString category: catString source: sourceString
+  ^ CypressMethodDefinition
+    className: classString
+    classIsMeta: metaBoolean
+    selector: selectorString
+    category: catString
+    source: sourceString
+
+
+%
+
+category: 'private'
+method: TonelWriterForCypressTest
+defaultPackageWriter
+  ^ TonelCypressWriter new
+%
+
 ! Class implementation for 'WindowsStoreTest'
 
 !		Instance methods for 'WindowsStoreTest'
@@ -129920,6 +133576,31 @@ encodeWith: encoding
 	^ encoding asZnCharacterEncoder encodeString: self
 %
 
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+endsWith: suffix
+
+	"Answer whether the tail end of the receiver is the same as suffix.
+	 The comparison is case-sensitive."
+
+	| ofs |
+	suffix size == 0
+		ifTrue: [ ^ false ].
+	(ofs := self size - suffix size) < 0
+		ifTrue: [ ^ false ].
+	^ self at: ofs + 1 equals: suffix	"
+  'Elvis' endsWith: 'vis'
+  'Elvis' endsWith: ''
+"
+%
+
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+findString: subString startingAt: startIndex caseSensitive: aBoolean
+
+	^ self _findString: subString startingAt: startIndex ignoreCase: aBoolean not
+%
+
 category: '*rowan-gemstone-url'
 method: CharacterCollection
 indexOfAnyOf: specialChars startingAt: oldPos
@@ -129950,6 +133631,61 @@ category: '*ston-gemstonebase'
 method: CharacterCollection
 isString
   ^ true
+%
+
+category: '*tonel-gemstonecommon-core'
+method: CharacterCollection
+join: aCollection 
+	"'*' join: #('WWWWW' 'W  EW' 'zzzz')
+		->  'WWWWW*W  EW*zzzz' "
+	^ self class new: (aCollection size * self size) streamContents: [:stream | 
+			aCollection
+				do: [:each | stream nextPutAll: each asString] 
+				separatedBy: [stream nextPutAll: self]]
+%
+
+category: '*tonel-gemstonecommon-core'
+method: CharacterCollection
+lineIndicesDo: aBlock
+	"execute aBlock with 3 arguments for each line:
+	- start index of line
+	- end index of line without line delimiter
+	- end index of line including line delimiter(s) CR, LF or CRLF"
+	
+	| cr lf start sz nextLF nextCR |
+	start := 1.
+	sz := self size.
+	cr := Character cr.
+	nextCR := self indexOf: cr startingAt: 1.
+	lf := Character lf.
+	nextLF := self indexOf: lf startingAt: 1.
+	[ start <= sz ] whileTrue: [
+		(nextLF = 0 and: [ nextCR = 0 ])
+			ifTrue: [ "No more CR, nor LF, the string is over"
+					aBlock value: start value: sz value: sz.
+					^self ].
+		(nextCR = 0 or: [ 0 < nextLF and: [ nextLF < nextCR ] ])
+			ifTrue: [ "Found a LF"
+					aBlock value: start value: nextLF - 1 value: nextLF.
+					start := 1 + nextLF.
+					nextLF := self indexOf: lf startingAt: start ]
+			ifFalse: [ 1 + nextCR = nextLF
+				ifTrue: [ "Found a CR-LF pair"
+					aBlock value: start value: nextCR - 1 value: nextLF.
+					start := 1 + nextLF.
+					nextCR := self indexOf: cr startingAt: start.
+					nextLF := self indexOf: lf startingAt: start ]
+				ifFalse: [ "Found a CR"
+					aBlock value: start value: nextCR - 1 value: nextCR.
+					start := 1 + nextCR.
+					nextCR := self indexOf: cr startingAt: start ]]]
+%
+
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+putOn: aStream
+
+	^ aStream nextPutAll: self
 %
 
 category: '*ast-kernel-core'
@@ -130046,6 +133782,76 @@ substrings: separators
 	^ result asArray
 %
 
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+trimBoth
+
+	"Trim separators from both sides of the receiving string."
+
+	^ self trimBoth: [ :char | char isSeparator ]
+%
+
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+trimBoth: aBlock
+
+	"Trim characters satisfying the condition given in aBlock from both sides of the receiving string."
+
+	^ self trimLeft: aBlock right: aBlock
+%
+
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+trimLeft
+
+	"Trim separators from the left side of the receiving string."
+
+	^ self trimLeft: [ :char | char isSeparator ]
+%
+
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+trimLeft: aBlock
+
+	"Trim characters satisfying the condition given in aBlock from the left side of the receiving string."
+
+	^ self trimLeft: aBlock right: [ :char | false ]
+%
+
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+trimLeft: aLeftBlock right: aRightBlock
+
+	"Trim characters satisfying the condition given in aLeftBlock from the left side and aRightBlock from the right sides of the receiving string."
+
+	| left right |
+	left := 1.
+	right := self size.
+	[ left <= right and: [ aLeftBlock value: (self at: left) ] ]
+		whileTrue: [ left := left + 1 ].
+	[ left <= right and: [ aRightBlock value: (self at: right) ] ]
+		whileTrue: [ right := right - 1 ].
+	^ self copyFrom: left to: right
+%
+
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+trimRight
+
+	"Trim separators from the right side of the receiving string."
+
+	^ self trimRight: [ :char | char isSeparator ]
+%
+
+category: '*tonel-gemstone-kernel'
+method: CharacterCollection
+trimRight: aBlock
+
+	"Trim characters satisfying the condition given in aBlock from the right side of the receiving string."
+
+	^ self trimLeft: [ :char | false ] right: aBlock
+%
+
 category: '*rowan-gemstone-url'
 method: CharacterCollection
 unescapePercents
@@ -130128,6 +133934,30 @@ withGemstoneLineEndings
 		startingAt: inPos.
 
 	^ outString copyFrom: 1 to: newOutPos - 1
+%
+
+category: '*tonel-gemstonecommon-core'
+method: CharacterCollection
+withLineEndings: lineEndingString
+
+	| stream |
+	
+	stream := nil.
+	self lineIndicesDo: [ :start :endWithoutDelimiters :end |
+		(stream isNil and: [ endWithoutDelimiters ~= end ]) ifTrue: [
+			(self copyFrom: endWithoutDelimiters + 1 to: end) = lineEndingString ifFalse: [
+				stream := WriteStreamPortable with: self copy.
+				stream position: start - 1 ]].
+		stream ifNotNil: [
+			stream next: endWithoutDelimiters - start + 1 putAll: self startingAt: start.
+			endWithoutDelimiters = end ifFalse: [
+				stream nextPutAll: lineEndingString ]]].
+	^stream
+		ifNil: [ self ]
+		ifNotNil: [ 
+			stream position = self size
+				ifTrue: [ stream originalContents ]
+				ifFalse: [ stream contents ]]
 %
 
 category: '*rowan-gemstone-kernel'
@@ -130946,12 +134776,46 @@ fromSton: stonReader
 
 !		Instance methods for 'Collection'
 
+category: '*tonel-gemstonecommon-core'
+method: Collection
+asDictionary
+
+  | dict |
+  dict := Dictionary new.
+  self do: [:assoc |
+    dict add: assoc].
+  ^ dict
+%
+
 category: '*filesystem-gemstone-kernel'
 method: Collection
 difference: aCollection
   "Answer the set theoretic difference of two collections."
 
   ^ self reject: [ :each | aCollection includes: each ]
+%
+
+category: '*tonel-gemstonecommon-core'
+method: Collection
+flattened
+	
+	"Flattens a collection of collections (no matter how many levels of collections exist).
+	Strings are considered atoms and, as such, won't be flattened
+	
+	Examples:
+	#(1 #(2 3) #(4 (#5))) flattened returns #(1 2 3 4 5) 
+	#('string1' #('string2' 'string3')) flattened returns #('string1' 'string2' 'string3')"
+	
+	^ Array streamContents: [ :stream | self flattenOn: stream].
+%
+
+category: '*tonel-gemstonecommon-core'
+method: Collection
+flattenOn: aStream
+
+	self do: [ :each | (each isCollection and: [each isString not]) 
+						ifTrue: [each flattenOn: aStream]
+						ifFalse: [aStream nextPut: each]].
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -130961,12 +134825,37 @@ ifEmpty: aBlock
     ifTrue: [ ^ aBlock value ]
 %
 
+category: '*tonel-gemstone-kernel'
+method: Collection
+ifNotEmpty: aBlock
+
+	^ self size == 0
+		ifFalse: [ aBlock cull: self ]
+%
+
+category: '*tonel-gemstone-kernel'
+method: Collection
+isCollection
+
+	"Return true if the receiver is some sort of Collection and responds to basic collection messages such as #size and #do:"
+
+	^ true
+%
+
 category: '*filesystem-gemstone-kernel'
 method: Collection
 isEmptyOrNil
   "Answer whether the receiver contains any elements, or is nil.  Useful in numerous situations where one wishes the same reaction to an empty collection or to nil"
 
   ^ self size == 0
+%
+
+category: '*tonel-gemstone-kernel'
+method: Collection
+select: selectBlock thenDo: doBlock
+  "Utility method to improve readability."
+
+  ^ (self select: selectBlock) do: doBlock
 %
 
 category: '*filesystem-gemstone-kernel'
@@ -131035,6 +134924,96 @@ postLoadDefinition: lookupSymbolList environmentId: environmentId
 %
 
 ! Class extensions for 'CypressClassDefinition'
+
+!		Class methods for 'CypressClassDefinition'
+
+category: '*cypresstonel-core'
+classmethod: CypressClassDefinition
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment subclassType: subclassType
+
+	^ self new
+		name: aClassName asString
+		superclassName: aSuperclassName asString
+		category: aCategory asString
+		instVarNames:
+			(someInstanceVariableNames asArray collect: [ :each | each asString ])
+		classInstVarNames:
+			(someClassInstanceVariableNames asArray collect: [ :each | each asString ])
+		classVarNames:
+			(someClassVariableNames asArray collect: [ :each | each asString ])
+		poolDictionaryNames:
+			(somePoolDictionaryNames asArray collect: [ :each | each asString ])
+		comment: (self normalizeLineEndingsOf: aComment)
+		subclassType: subclassType asString
+%
+
+category: '*cypresstonel-core'
+classmethod: CypressClassDefinition
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment type: type
+  | st |
+  st := type.
+  st == #'normal'
+    ifTrue: [ st := '' ].
+  ^ self
+    name: aClassName
+    superclassName: aSuperclassName
+    category: aCategory
+    instVarNames: someInstanceVariableNames
+    classInstVarNames: someClassInstanceVariableNames
+    classVarNames: someClassVariableNames
+    poolDictionaryNames: somePoolDictionaryNames
+    comment: aComment
+    subclassType: st
+%
+
+category: '*cypresstonel-core'
+classmethod: CypressClassDefinition
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
+	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
+	poolDictionaryNames: somePoolDictionaryNames gs_options: gs_options gs_constraints: gs_constraints comment: aComment 
+	subclassType: subclassType
+
+	^ self new
+		name: aClassName asString
+		superclassName: aSuperclassName asString
+		category: aCategory asString
+		instVarNames:
+			(someInstanceVariableNames asArray collect: [ :each | each asString ])
+		classInstVarNames:
+			(someClassInstanceVariableNames asArray collect: [ :each | each asString ])
+		classVarNames:
+			(someClassVariableNames asArray collect: [ :each | each asString ])
+		poolDictionaryNames:
+			(somePoolDictionaryNames asArray collect: [ :each | each asString ])
+		gs_options: gs_options 
+		gs_constraints: gs_constraints
+		comment: (self normalizeLineEndingsOf: aComment)
+		subclassType: subclassType asString
+%
+
+category: '*cypresstonel-core'
+classmethod: CypressClassDefinition
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
+	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
+	poolDictionaryNames: somePoolDictionaryNames  gs_options: someGs_options gs_constraints: someGs_constraints
+	comment: aComment type: type
+  | st |
+  st := type.
+  st == #'normal'
+    ifTrue: [ st := '' ].
+  ^ self
+    name: aClassName
+    superclassName: aSuperclassName
+    category: aCategory
+    instVarNames: someInstanceVariableNames
+    classInstVarNames: someClassInstanceVariableNames
+    classVarNames: someClassVariableNames
+    poolDictionaryNames: somePoolDictionaryNames
+    gs_options: someGs_options 
+    gs_constraints: someGs_constraints
+    comment: aComment
+    subclassType: st
+%
 
 !		Instance methods for 'CypressClassDefinition'
 
@@ -131153,6 +135132,32 @@ createOrReviseRegularClass: aSymbolDictionaryName environmentLoader: environment
     comment: self comment
 %
 
+category: '*cypresstonel-core'
+method: CypressClassDefinition
+hasClassTraitComposition
+
+	^false
+%
+
+category: '*cypresstonel-core'
+method: CypressClassDefinition
+hasComment
+  ^ comment notNil and: [ comment ~= '' ]
+%
+
+category: '*cypresstonel-core'
+method: CypressClassDefinition
+hasTraitComposition
+
+	^false
+%
+
+category: '*cypresstonel-core'
+method: CypressClassDefinition
+isClassDefinition
+  ^ true
+%
+
 category: '*cypress-environmental-tools'
 method: CypressClassDefinition
 loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader
@@ -131176,6 +135181,19 @@ loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader
     symbolList: lookupSymbolList 
 %
 
+category: '*cypresstonel-core'
+method: CypressClassDefinition
+poolDictionaries
+
+	^self poolDictionaryNames
+%
+
+category: '*cypresstonel-core'
+method: CypressClassDefinition
+sortKey
+	^ self className
+%
+
 category: '*cypress-environmental-tools'
 method: CypressClassDefinition
 symbolDictionaryForClassNamed: aString symbolList: aSymbolList
@@ -131187,6 +135205,16 @@ symbolDictionaryForClassNamed: aString symbolList: aSymbolList
   ^ aSymbolList asArray detect: [ :each | each
         anySatisfy: [ :every | every isBehavior and: [ every name asString = aString asString ] ] ]
   ifNone: [  ]
+%
+
+category: '*cypresstonel-core'
+method: CypressClassDefinition
+type
+  | st |
+  st := self subclassType.
+  st = ''
+    ifTrue: [ ^ #'normal' ].
+  ^ st
 %
 
 ! Class extensions for 'CypressClassStructure'
@@ -131263,6 +135291,30 @@ isSkeleton
 
 !		Instance methods for 'CypressDefinition'
 
+category: '*cypresstonel-core'
+method: CypressDefinition
+<= other
+	^ self sortKey <= other sortKey
+%
+
+category: '*cypresstonel-core'
+method: CypressDefinition
+isClassDefinition
+  ^ false
+%
+
+category: '*cypresstonel-core'
+method: CypressDefinition
+isMethodDefinition
+  ^ false
+%
+
+category: '*cypresstonel-core'
+method: CypressDefinition
+isTraitDefinition
+  ^ false
+%
+
 category: '*cypress-environmental-tools'
 method: CypressDefinition
 loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader
@@ -131290,6 +135342,33 @@ postLoadOver: aDefinition lookupSymbolList: lookupSymbolList environmentId: envi
   self postLoad: lookupSymbolList environmentId: environmentId
 %
 
+category: '*cypresstonel-core'
+method: CypressDefinition
+sortKey
+	self subclassResponsibility
+%
+
+! Class extensions for 'CypressGemStoneDirectoryUtilities'
+
+!		Class methods for 'CypressGemStoneDirectoryUtilities'
+
+category: '*cypresstonel-core'
+classmethod: CypressGemStoneDirectoryUtilities
+default
+  ^ self workingDirectory
+%
+
+category: '*cypresstonel-core'
+classmethod: CypressGemStoneDirectoryUtilities
+entryNamesFrom: aDirectory
+  "Answer just the name of the contents of aDirectory."
+
+  ^ (((self directoryEntriesFrom: aDirectory)
+    collect: [ :each | self localNameFrom: each ])
+    reject: [ :each | each = '.' or: [ each = '..' ] ])
+    sortWithBlock: [ :a :b | a <= b ]
+%
+
 ! Class extensions for 'CypressHierarchicalUrl'
 
 !		Instance methods for 'CypressHierarchicalUrl'
@@ -131303,6 +135382,27 @@ segments
 ! Class extensions for 'CypressMethodDefinition'
 
 !		Instance methods for 'CypressMethodDefinition'
+
+category: '*cypresstonel-core'
+method: CypressMethodDefinition
+fullClassName
+	
+	^ self classIsMeta
+		ifFalse: [self className]
+		ifTrue: [self className, ' class' ]
+%
+
+category: '*cypresstonel-core'
+method: CypressMethodDefinition
+isExtensionMethod
+	^ category beginsWith: '*'
+%
+
+category: '*cypresstonel-core'
+method: CypressMethodDefinition
+isMethodDefinition
+  ^ true
+%
 
 category: '*cypress-environmental-tools'
 method: CypressMethodDefinition
@@ -131332,6 +135432,12 @@ postLoadOver: aDefinition lookupSymbolList: lookupSymbolList environmentId: envi
       (self theNonMetaClass: lookupSymbolList)
         perform: #'initialize'
         env: environmentId ]
+%
+
+category: '*cypresstonel-core'
+method: CypressMethodDefinition
+sortKey
+	^ self className, '.', (self classIsMeta ifTrue: ['meta'] ifFalse: ['nonmeta']), '.', self selector
 %
 
 category: '*cypress-environmental-tools'
@@ -131527,6 +135633,16 @@ postLoadDefinition: lookupSymbolList environmentId: environmentId
   CypressError
     signal:
       'inappropriate to send #postLoadDefinition:environmentId: to a removal operation'
+%
+
+! Class extensions for 'CypressSnapshot'
+
+!		Instance methods for 'CypressSnapshot'
+
+category: '*cypresstonel-core'
+method: CypressSnapshot
+snapshot
+  ^ self
 %
 
 ! Class extensions for 'CypressStructure'
@@ -131884,6 +136000,17 @@ _stat: aName  isLstat: aBoolean
 aName _validateClass: String .
 aBoolean _validateClass: Boolean .
 self _primitiveFailed: #stat:isLstat: args: { aName . aBoolean }
+%
+
+!		Instance methods for 'GsFile'
+
+category: '*tonel-gemstonecommon-core'
+method: GsFile
+<< items
+
+ 	items putOn: self.
+	
+	^ self
 %
 
 ! Class extensions for 'GsNMethod'
@@ -132300,6 +136427,15 @@ isCharacter
 	^ false
 %
 
+category: '*tonel-gemstone-kernel'
+method: Object
+isCollection
+
+	"Return true if the receiver is some sort of Collection and responds to basic collection messages such as #size and #do:"
+
+	^ false
+%
+
 category: '*ston-gemstonebase'
 method: Object
 isNumber
@@ -132323,6 +136459,13 @@ method: Object
 isValue
 
 	^false
+%
+
+category: '*tonel-gemstone-kernel'
+method: Object
+putOn: aStream
+
+	^ aStream nextPut: self
 %
 
 category: '*rowan-gemstone-components-kernel'
@@ -132502,6 +136645,14 @@ nextInto: aCollection
 	Return aCollection or a partial copy if less than aCollection
 	size elements have been read."
 	^self next: aCollection size into: aCollection startingAt: 1.
+%
+
+category: '*tonel-gemstonecommon-core'
+method: PositionableStreamPortable
+originalContents
+	"Answer the receiver's actual contents collection, NOT a copy.  1/29/96 sw"
+
+	^ collection
 %
 
 ! Class extensions for 'QuadByteSymbol'
@@ -134191,27 +138342,9 @@ _readVastTonelDemo_555: platformAttributes deleteClone: deleteClone
 	^ loadSpec resolve: platformAttributes
 %
 
-! Class extensions for 'RwProjectConfigurationsTest'
-
-!		Instance methods for 'RwProjectConfigurationsTest'
-
-category: '*rowan-tests-gemstone'
-method: RwProjectConfigurationsTest
-_expectedLoadPackageNames_gemstone_tests
-
-	^ #('Rowan-Tests-GemStone') sort
-%
-
 ! Class extensions for 'RwProjectDefinition'
 
 !		Instance methods for 'RwProjectDefinition'
-
-category: '*rowan-core-definitionsv2'
-method: RwProjectDefinition
-componentsWithDoits
-	"v2 compat method"
-	^ #()
-%
 
 category: '*rowan-cypress-definitions'
 method: RwProjectDefinition
@@ -135592,6 +139725,40 @@ allButFirst: n
 	^ self copyFrom: n + 1 to: self size
 %
 
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+allButLast
+
+	"Answer a copy of the receiver containing all but the last
+	element. Raise an error if there are not enough elements."
+
+	^ self allButLast: 1
+%
+
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+allButLast: n
+
+	"Answer a copy of the receiver containing all but the last n
+	elements. Raise an error if there are not enough elements."
+
+	^ self copyFrom: 1 to: self size - n
+%
+
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+beginsWith: aSequenceableCollection
+
+	(aSequenceableCollection isEmpty
+		or: [ self size < aSequenceableCollection size ])
+		ifTrue: [ ^ false ].
+	aSequenceableCollection
+		withIndexDo: [ :each :index | 
+			(self at: index) ~= each
+				ifTrue: [ ^ false ] ].
+	^ true
+%
+
 category: '*filesystem-gemstone-kernel'
 method: SequenceableCollection
 copyAfterLast: anElement
@@ -135654,6 +139821,26 @@ copyWithFirst: newElement
 	^ newIC
 %
 
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+fifth
+
+	"Answer the fifth element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 5
+%
+
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+fourth
+
+	"Answer the fourth element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 4
+%
+
 category: '*filesystem-gemstone-kernel'
 method: SequenceableCollection
 grownBy: length
@@ -135689,6 +139876,26 @@ lastIndexOf: anElement startingAt: lastIndex ifAbsent: exceptionBlock
   ^ exceptionBlock ~~ nil
     ifTrue: [ exceptionBlock value ]
     ifFalse: [ 0 ]
+%
+
+category: '*tonel-gemstonecommon-core'
+method: SequenceableCollection
+pairsCollect: aBlock 
+	"Evaluate aBlock with my elements taken two at a time, and return an Array with the results"
+
+	^ (1 to: self size // 2) collect:
+		[:index | aBlock value: (self at: 2 * index - 1) value: (self at: 2 * index)]
+"
+#(1 'fred' 2 'charlie' 3 'elmer') pairsCollect:
+	[:a :b | b, ' is number ', a printString]
+"
+%
+
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+putOn: aStream
+
+	self do: [ :each | each putOn: aStream ]
 %
 
 category: '*ast-kernel-core'
@@ -135758,12 +139965,60 @@ reversed
 	^ result
 %
 
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+second
+
+	"Answer the second element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 2
+%
+
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+sixth
+
+	"Answer the sixth element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 6
+%
+
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+sort
+
+	"Sort this array into ascending order using the '<=' operator."
+
+	^ self sort: [ :a :b | a <= b ]
+%
+
 category: '*ston-core'
 method: SequenceableCollection
 stonOn: stonWriter
 	self class == STON listClass
 		ifTrue: [ stonWriter writeList: self ]
 		ifFalse: [ super stonOn: stonWriter ]
+%
+
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+third
+
+	"Answer the third element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 3
+%
+
+category: '*tonel-gemstone-kernel'
+method: SequenceableCollection
+withIndexDo: elementAndIndexBlock
+
+	"Just like with:do: except that the iteration index supplies the second argument to the block."
+
+	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
 %
 
 category: '*rowan-gemstone-components-kernel'
@@ -135963,6 +140218,13 @@ testGemStoneCollections
 
 !		Instance methods for 'Stream'
 
+category: '*tonel-gemstone-kernel'
+method: Stream
+<< items
+
+	items putOn: self
+%
+
 category: '*filesystem-gemstone-kernel'
 method: Stream
 isBinary
@@ -136023,6 +140285,14 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 !		Instance methods for 'Symbol'
 
+category: '*tonel-gemstone-32x-kernel'
+method: Symbol
+keywords
+	"override needed for 3.2.15"
+
+	^ self _keywords
+%
+
 category: '*ast-kernel-core'
 method: Symbol
 rbStoreOn: aStream
@@ -136034,6 +140304,42 @@ category: '*ston-core'
 method: Symbol
 stonOn: stonWriter
 	stonWriter writeSymbol: self
+%
+
+category: '*tonel-gemstone-32x-kernel'
+method: Symbol
+_keywords
+  "Disabled for now by rename to _keywords ; see if 3.6 base image is ok.
+   NOTE, you also need to override in DoubleByteSymbol and QuadByteSymbol
+   if a reimplementation is needed for Rowan .
+   To override in one place for all Symbol classes, 
+    reimplement Symbol class >> _keywords:    instead ."
+
+	"Answer an array of the keywords that compose the receiver."
+
+	| kwd char keywords |
+	keywords := Array new.
+			kwd := WriteStreamPortable on: String new.
+			1 to: self size do: [ :i | 
+				kwd nextPut: (char := self at: i).
+				char = $:
+					ifTrue: [ 
+						keywords add: kwd contents.
+						kwd reset ] ].
+			kwd position = 0
+				ifFalse: [ keywords add: kwd contents ].
+	(keywords size >= 1 and: [ (keywords at: 1) = ':' ])
+		ifTrue: [ 
+			"Has an initial keyword, as in #:if:then:else:"
+			keywords := keywords allButFirst ].
+	(keywords size >= 2 and: [ (keywords at: keywords size - 1) = ':' ])
+		ifTrue: [ 
+			"Has a final keyword, as in #nextPut::andCR"
+			keywords := keywords
+				copyReplaceFrom: keywords size - 1
+				to: keywords size
+				with: {(':' , keywords last)} ].
+	^ keywords
 %
 
 ! Class extensions for 'SymbolDictionary'
@@ -136189,6 +140495,167 @@ stonOn: stonWriter
   stonWriter
     writeObject: self
     listSingleton: (self asStringUsingFormat: #($: true false))
+%
+
+! Class extensions for 'TonelAbstractWriterTest'
+
+!		Instance methods for 'TonelAbstractWriterTest'
+
+category: '*tonel-gemstone-tests'
+method: TonelAbstractWriterTest
+contentsOfFileNamed: fileName inDirectory: dir
+  self fileUtils
+    readStreamFor: fileName
+    in: dir
+    do: [ :stream | ^ stream contents ]
+%
+
+category: '*tonel-gemstone-tests'
+method: TonelAbstractWriterTest
+directory
+  directory
+    ifNil: [ 
+      | fileUtils |
+      fileUtils := self fileUtils.
+      directory := fileUtils
+        directoryFromPath: 'mctest'
+        relativeTo: fileUtils default.
+      fileUtils ensureDirectoryExists: directory ].
+  ^ directory
+%
+
+category: '*tonel-gemstone-tests'
+method: TonelAbstractWriterTest
+directoryNamed: directoryName existsIn: dir
+  | fileUtils filePath |
+  fileUtils := self fileUtils.
+  filePath := fileUtils directoryFromPath: directoryName relativeTo: dir.
+  ^ fileUtils directoryExists: filePath
+%
+
+category: '*tonel-gemstone-tests'
+method: TonelAbstractWriterTest
+directoryNamed: directoryName in: dir
+  | fileUtils |
+  fileUtils := self fileUtils.
+  ^ fileUtils directoryFromPath: directoryName relativeTo: dir
+%
+
+category: '*tonel-gemstone-tests'
+method: TonelAbstractWriterTest
+fileNamesIn: dir
+  | fileUtils |
+  fileUtils := self fileUtils.
+  ^ fileUtils entryNamesFrom: dir
+%
+
+category: '*tonel-gemstone-tests'
+method: TonelAbstractWriterTest
+tearDown
+  directory
+    ifNotNil: [ :dir | 
+      | fileUtils |
+      fileUtils := self fileUtils.
+      (fileUtils directoryExists: dir)
+        ifTrue: [ fileUtils deleteAll: dir ] ].
+  super tearDown
+%
+
+! Class extensions for 'TonelCypressReaderTest'
+
+!		Instance methods for 'TonelCypressReaderTest'
+
+category: '*cypresstonel-gemstone-tests'
+method: TonelCypressReaderTest
+createReaderFor: snapshot fileName: packageName
+  | dir |
+  dir := self newFileDirectorySnapshot: snapshot fileName: packageName.
+  ^ TonelCypressReader on: dir fileName: packageName
+%
+
+category: '*cypresstonel-gemstone-tests'
+method: TonelCypressReaderTest
+directory
+	directory ifNil:
+		[ 
+		| fileUtils |
+		fileUtils := self fileUtils.
+		directory := fileUtils
+			directoryFromPath: 'mctest'
+			relativeTo: fileUtils default.
+		fileUtils ensureDirectoryExists: directory ].
+	^ directory
+%
+
+category: '*cypresstonel-gemstone-tests'
+method: TonelCypressReaderTest
+newFileDirectorySnapshot: aSnapshot fileName: packageName
+  "This method assumes writer works. If it is broken (the tests should show it), this tests 
+	 will break too."
+
+  | dir |
+  dir := self directory.
+  (TonelCypressWriter on: dir)
+    writeSnapshot: aSnapshot
+    inPackageNamed: packageName.
+  ^ dir
+%
+
+category: '*cypresstonel-gemstone-tests'
+method: TonelCypressReaderTest
+tearDown
+	self directory ifNotNil: [:dir | CypressFileUtilities current deleteAll: dir ].
+	super tearDown.
+%
+
+! Class extensions for 'TonelReaderTest'
+
+!		Instance methods for 'TonelReaderTest'
+
+category: '*tonel-gemstone-tests'
+method: TonelReaderTest
+directory
+  directory
+    ifNil: [ 
+      | fileUtils |
+      fileUtils := self fileUtils.
+      directory := fileUtils
+        directoryFromPath: 'mctest'
+        relativeTo: fileUtils default.
+      fileUtils ensureDirectoryExists: directory ].
+  ^ directory
+%
+
+category: '*tonel-gemstone-tests'
+method: TonelReaderTest
+tearDown
+  directory
+    ifNotNil: [ :dir | 
+      | fileUtils |
+      fileUtils := self fileUtils.
+      (fileUtils directoryExists: dir)
+        ifTrue: [ fileUtils deleteAll: dir ] ].
+  super tearDown
+%
+
+! Class extensions for 'TonelWriter'
+
+!		Class methods for 'TonelWriter'
+
+category: '*tonel-gemstonecommon-core'
+classmethod: TonelWriter
+lineEnding
+  "Answer the os-specific line endings"
+
+  ^ String with: Character lf
+%
+
+category: '*tonel-gemstonecommon-core'
+classmethod: TonelWriter
+orderedDictionaryClass
+  "Answer the platform-specific OrderedDictionary-compatible class"
+
+  ^ GsTonelOrderedDictionary
 %
 
 ! Class extensions for 'UndefinedObject'

@@ -1,9 +1,7 @@
 RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'common/v1/Specifications',
 	#condition : 'v1',
-	#projectNames : [
-		'Tonel'
-	],
+	#projectNames : [ ],
 	#componentNames : [
 		'common/v1/platform/gemstone/Specifications'
 	],

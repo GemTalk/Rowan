@@ -1,10 +1,7 @@
 RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'common/componentsV2/Components',
 	#condition : 'componentsV2',
-	#projectNames : [
-		'Cypress',
-		'Tonel'
-	],
+	#projectNames : [ ],
 	#componentNames : [
 		'common/componentsV2/platform/gemstone/Components'
 	],

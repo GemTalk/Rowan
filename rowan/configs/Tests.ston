@@ -24,6 +24,7 @@
 					'AST-Tests-Core',
 					'AST-Kernel-Tests-Core',
 					'Rowan-Tests-GemStone',
+					'Rowan-Tests-GemStoneV1',
 					'Rowan-DataCurator-Tests'
 					]
 				},

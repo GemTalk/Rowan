@@ -25,11 +25,6 @@ RwSimpleComponentRowanExperiment >> _createComponentsV2Components: resolvedProje
 		addComponentNamed: 'common/tests/componentsV2/Components'
 			toComponentNamed: 'common/tests/Components';
 		yourself.
-
-	(resolvedProject componentNamed: 'common/componentsV2/Components')
-		addProjectNamed: 'Cypress';
-		addProjectNamed: 'Tonel';
-		yourself
 ]
 
 { #category : 'private' }
@@ -223,6 +218,11 @@ RwSimpleComponentRowanExperiment >> _createGemStoneComponents: resolvedProject [
 { #category : 'private' }
 RwSimpleComponentRowanExperiment >> _createGemStoneTestComponents: resolvedProject [
 	resolvedProject
+		addSimpleNestedComponentNamed: 'common/tests/v1/platform/gemstone/Components'
+			condition: 'gemstone'
+			comment: 'Components gemstone test packages';
+		addComponentNamed: 'common/tests/v1/platform/gemstone/Components'
+			toComponentNamed: 'common/tests/v1/Components';
 		addSimpleNestedComponentNamed: 'common/tests/platform/gemstone/Services'
 			condition: 'gemstone'
 			comment: 'Services gemstone test packages';
@@ -335,6 +335,11 @@ RwSimpleComponentRowanExperiment >> _createRowanTestComponents: resolvedProject 
 			comment: 'Organize all service tests under one component';
 		addComponentNamed: 'common/tests/Services'
 			toComponentNamed: 'common/Services';
+		addSimpleNestedComponentNamed: 'common/tests/v1/Components'
+			condition: 'v1'
+			comment: 'Components test v1 packages';
+		addComponentNamed: 'common/tests/v1/Components'
+			toComponentNamed: 'common/tests/Components';
 		yourself.
 
 	resolvedProject
@@ -381,6 +386,7 @@ RwSimpleComponentRowanExperiment >> _createTopLevelComponents: resolvedProject [
 	(resolvedProject componentNamed: 'Rowan')
 		addProjectNamed: 'Cypress';
 		addProjectNamed: 'FileSystemGs';
+		addProjectNamed: 'Tonel';
 		addProjectNamed: 'STON';
 		yourself.
 
@@ -432,10 +438,6 @@ RwSimpleComponentRowanExperiment >> _createV1Components: resolvedProject [
 		addComponentNamed: 'common/v1/Definitions'
 			toComponentNamed: 'common/Definitions';
 		yourself.
-
-	(resolvedProject componentNamed: 'common/v1/Specifications')
-		addProjectNamed: 'Tonel';
-		yourself
 ]
 
 { #category : 'private' }
