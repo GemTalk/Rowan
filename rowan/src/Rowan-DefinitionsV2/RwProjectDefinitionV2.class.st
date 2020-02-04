@@ -436,7 +436,7 @@ RwProjectDefinitionV2 >> load: instanceMigrator [
 
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectName [
-	^ self propertyAt: 'name'
+	^ self propertyAt: 'name' ifAbsent: [ nil ]
 ]
 
 { #category : 'properties' }

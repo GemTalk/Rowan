@@ -665,10 +665,15 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 		yourself.
 
 	(resolvedProject componentNamed: 'common/v1/platform/gemstone/Definitions')
-		addPackageNames: {'Rowan-GemStone-DefinitionsV1'};
+		addPackageNames:
+				{'Rowan-GemStone-DefinitionsV1'.
+					'Rowan-Cypress-DefinitionsV1'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-DefinitionsV1'
 			setSymbolDictNameTo: 'RowanLoader';
+		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
+			andPackageName: 'Rowan-Cypress-DefinitionsV1'
+			setSymbolDictNameTo: 'RowanTools';
 		validate;
 		yourself.
 
