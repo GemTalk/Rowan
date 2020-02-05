@@ -12,7 +12,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-GemStone-Kernel' : {
-						'symbolDictName' : 'RowanTools'
+						'symbolDictName' : 'Globals'
 					}
 				}
 			}

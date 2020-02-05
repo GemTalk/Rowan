@@ -12,7 +12,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-Cypress-Definitions' : {
-						'symbolDictName' : 'RowanLoader'
+						'symbolDictName' : 'RowanTools'
 					},
 					'Rowan-GemStone-Definitions' : {
 						'symbolDictName' : 'RowanTools'

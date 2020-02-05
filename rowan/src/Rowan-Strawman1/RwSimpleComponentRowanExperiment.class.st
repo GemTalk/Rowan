@@ -783,7 +783,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 					'Rowan-GemStone-Kernel'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Kernel'
-			setSymbolDictNameTo: 'RowanTools';
+			setSymbolDictNameTo: 'Globals';
 		validate;
 		yourself.
 
@@ -803,7 +803,7 @@ RwSimpleComponentRowanExperiment >> _populateGemStoneComponentPackages: resolved
 					'Rowan-GemStone-Definitions'};
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-Cypress-Definitions'
-			setSymbolDictNameTo: 'RowanLoader';
+			setSymbolDictNameTo: 'RowanTools';
 		conditionalPackageMapSpecsAtGemStoneUserId: 'allusers'
 			andPackageName: 'Rowan-GemStone-Definitions'
 			setSymbolDictNameTo: 'RowanTools';
