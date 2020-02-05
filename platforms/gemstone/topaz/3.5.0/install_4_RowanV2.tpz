@@ -27,6 +27,8 @@
   set user SystemUser p swordfish
   login
 
+#	break RwPrjLoadToolV2 >> _loadProjectSetDefinition:instanceMigrator:
+
 run
 	"install_4_RowanV2.tpz"
 	| ar resolvedProject loadSpecUrl loadSpec projectsHome loadedProjects warnings |
