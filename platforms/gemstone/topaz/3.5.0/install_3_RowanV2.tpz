@@ -28,8 +28,8 @@
 #  methods into the correct package structure
   run
 	"install_3_RowanV2.tpz"
- 	| projectSetDefinition auditFailures reAudit theProjectSetDefinition |
-  SessionTemps current at: #ROWAN_TRACE put: #gciLogServer . "log to topaz output file"
+ 	| projectSetDefinition auditFailures reAudit theProjectSetDefinition doLog |
+doLog := false.
 	{
 		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed.ston'. 
@@ -47,8 +47,6 @@
 			resolve.
 		projectSetDefinition := resolvedProject read ].
 
-UserGlobals at: #The_PROJECT_SET_DEFINITION put: projectSetDefinition.
-
 	theProjectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition projects 
 		do: [:resolvedProject |
@@ -64,15 +62,22 @@ UserGlobals at: #The_PROJECT_SET_DEFINITION put: projectSetDefinition.
 				_projectStructure: nil;
 				yourself.
 			"wipe out package contents, so we can load *empty* project and packages, that will be adopted in next step"
+			GsFile stdout nextPutAll: 'Project: ', resolvedProject_copy name; lf.
 			resolvedProject_copy packageNames
 				do: [:packageName |
+					GsFile stdout nextPutAll: '	', packageName; lf.
 					(resolvedProject_copy packageNamed: packageName)
 						classDefinitions: Dictionary new;
 						classExtensions: Dictionary new;
 						yourself ].
 			theProjectSetDefinition addProject: resolvedProject_copy ].
 	"Load the project shell -- project and empty packages"
+doLog
+ifTrue: [ 
+	SessionTemps current at: #ROWAN_TRACE put: #gciLogServer . "log to topaz output file"
+].
 	Rowan projectTools loadV2 loadProjectSetDefinition: theProjectSetDefinition.
+  SessionTemps current removeKey: #ROWAN_TRACE ifAbsent: []. "end logging to topaz output file"
 
 	"Adopt the project set definition ... 
 		Log and ignore any missing method or missing classes encountered as they may not be

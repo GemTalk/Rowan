@@ -28,31 +28,22 @@
   login
 
 run
-	"install_4_V2.tpz"
-	| platformConditionalAttributes ar resolvedProject loadSpecUrl loadSpec projectsHome conditionalAttributes 
-			loadedProjects warnings |
+	"install_4_RowanV2.tpz"
+	| ar resolvedProject loadSpecUrl loadSpec projectsHome loadedProjects warnings |
 
-	platformConditionalAttributes := {
-		'common'.
-		'gemstone'.
-		'gemstone-kernel'.
-		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
-	}.
 	ar := {
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed.ston'.
 			'$ROWAN_PROJECTS_HOME'.
-			platformConditionalAttributes
 		}.
 	"Load project and packages from disk."
 	loadSpecUrl := ar at: 1.
 	projectsHome := ar at: 2.
-	conditionalAttributes := ar at: 3.
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec
 		projectsHome: projectsHome;
 		resolve.
 	warnings := {}.
-	[ loadedProjects := resolvedProject load: conditionalAttributes ]
+	[ loadedProjects := resolvedProject load ]
 			on: CompileWarning do: [:ex |
 				(ex description includesString: 'not optimized')
 					ifFalse: [ warnings add: ex asString printString ].
