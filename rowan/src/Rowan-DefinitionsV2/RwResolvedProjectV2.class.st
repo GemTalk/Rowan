@@ -601,6 +601,11 @@ RwResolvedProjectV2 >> removeProjectNamed: aProjectName [
 	^ self _projectDefinition removeProjectNamed: aProjectName
 ]
 
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> repositoryCommitId [
+	^ self loadedCommitId
+]
+
 { #category : 'project specification' }
 RwResolvedProjectV2 >> repoType: aSymbol [
 	self _projectSpecification repoType: aSymbol
