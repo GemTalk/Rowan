@@ -235,7 +235,9 @@ RwAbstractResolvedObjectV2 >> projectSpecPath: aString [
 	"full path to the project specification file - default rowan/project.ston"
 
 	self _projectSpecification projectSpecPath: aString.
-	self _loadSpecification projectSpecFile: (aString asFileReference / self projectSpecification projectName, 'ston') asPathString .
+	self _loadSpecification
+		projectSpecFile:
+			(Path * aString / self projectSpecification projectName , 'ston') pathString
 ]
 
 { #category : 'accessing' }

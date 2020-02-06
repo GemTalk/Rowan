@@ -200,6 +200,13 @@ RwResolvedProjectV2 >> addPreloadDoitName: doitName withSource: doitSource toCom
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName [ 
+	^ self _projectDefinition
+		addProjectNamed:projectName
+		toComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 	^ self _projectDefinition
 		addProjectNamed:projectName

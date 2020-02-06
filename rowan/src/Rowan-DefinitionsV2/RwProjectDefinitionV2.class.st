@@ -263,6 +263,13 @@ RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName conditi
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName [
+	^ self components
+		addProjectNamed: projectName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
 	^ self components
 		addProjectNamed: projectName

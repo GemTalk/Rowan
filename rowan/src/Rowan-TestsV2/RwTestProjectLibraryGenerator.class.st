@@ -33,6 +33,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0022: commitComment;
 	genSpec_0023: commitComment;
 	genSpec_0024: commitComment;
+	genSpec_0025: commitComment;
 	yourself
 "
 Class {
@@ -156,37 +157,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0001: resolvedProject [
-	| className packageName |
-	resolvedProject
-		addPackagesNamed: {(projectName , '-Core')}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		addPackageNamed: projectName , '-Tests'
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
-		yourself.
-	packageName := projectName , '-Core'.
-	className := projectName , 'Class1'.
-	((resolvedProject packageNamed: packageName)
-		addClassNamed: className
-		super: 'Object'
-		instvars: #('ivar1')
-		category: packageName
-		comment: 'I am an example class')
-		addInstanceMethod: 'foo ^1' protocol: 'accessing';
-		yourself.
-	packageName := projectName , '-Tests'.
-	((resolvedProject packageNamed: packageName)
-		addClassNamed: projectName , 'TestCase'
-		super: 'TestCase'
-		category: packageName
-		comment: 'I test the example class')
-		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
-			protocol: 'tests';
-		yourself.
-	^ resolvedProject
+	^ self _addDefinitionsFor: resolvedProject projectName: projectName
 ]
 
 { #category : 'private' }
@@ -1651,6 +1622,122 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
+	"Start with  spec_0001, add 3 embedded projects"
+
+	"https://github.com/GemTalk/Rowan/issues/571"
+
+	| loadSpecification_0025 packageNames |
+	loadSpecification_0025 := resolvedProject_0025 _loadSpecification.
+	packageNames := resolvedProject_0025 packageNames.
+
+	loadSpecification_0025 groupNames: {}.
+
+	resolvedProject_0025
+		removeComponentNamed: 'Core';
+		addSimpleComponentNamed: 'Core' condition: 'common' comment: 'the component';
+		yourself.
+	packageNames
+		do: [ :packageName | resolvedProject_0025 addPackageNamed: packageName toComponentNamed: 'Core' ].
+
+	1 to: 3 do: [ :index | 
+		| resolvedProjectName suffix loadSpecification specName resolvedProject baseName |
+		suffix := '_' , index asString.
+		specName := loadSpecification_0025 specName , suffix.
+		resolvedProjectName := resolvedProject_0025 projectName , suffix.
+
+		loadSpecification := RwEmbeddedLoadSpecificationV2 new
+			projectName: resolvedProjectName;
+			projectAlias: resolvedProject_0025 projectName;
+			projectsHome: self projectsHome;
+			gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+			groupNames: {};
+			yourself.
+
+		baseName := 'rowan' , suffix.
+		loadSpecification
+			specName: resolvedProjectName;
+			revision: loadSpecification_0025 revision;
+			gitUrl: self projectUrl;
+			componentNames: {'Core'};
+			comment: loadSpecification_0025 comment;
+			yourself.
+
+		resolvedProject := loadSpecification resolve.
+
+		resolvedProject
+			addSimpleComponentNamed: 'Core'
+			condition: 'common'
+			comment: 'the component'.
+
+		resolvedProject projectSpecification
+			componentsPath: baseName , '/components';
+			packagesPath: baseName , '/src';
+			projectsPath: baseName , '/projects';
+			specsPath: baseName , '/specs';
+			projectSpecPath: baseName;
+			yourself.
+
+		self
+			_addSimpleDefinitionsFor: resolvedProject
+			projectName: resolvedProject projectAlias , suffix.
+
+		resolvedProject projectRoots
+			do: [ :rootDir | 
+				"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
+				rootDir ensureDeleteAll ].
+
+		resolvedProject
+			export;
+			exportLoadSpecification.	"write the rowan directory structure"
+
+		resolvedProject_0025
+			addProjectNamed: resolvedProjectName
+			toComponentNamed: 'Core'.
+
+		resolvedProject_0025 projectsRoot ensureCreateDirectory.
+		resolvedProject specsRoot / resolvedProjectName , 'ston'
+			copyTo: resolvedProject_0025 projectsRoot / resolvedProjectName , 'ston' ].
+
+	^ resolvedProject_0025
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
+	| className packageName |
+	resolvedProject
+		addPackagesNamed: {(aProjectName , '-Core')}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addPackageNamed: aProjectName , '-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		yourself.
+	packageName := aProjectName , '-Core'.
+	className := aProjectName , 'Class1'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := aProjectName , '-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: aProjectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDefinition [
 	| className packageName |
 	packageName := projectName , '-Core1'.
@@ -1664,6 +1751,37 @@ RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDef
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
 	^ projectDefinition
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addSimpleDefinitionsFor: resolvedProject projectName: aProjectName [
+	| className packageName |
+	resolvedProject
+		addPackagesNamed: {(aProjectName , '-Core')}
+			toComponentNamed: 'Core';
+		addPackageNamed: aProjectName , '-Tests'
+			toComponentNamed: 'Core';
+		yourself.
+	packageName := aProjectName , '-Core'.
+	className := aProjectName , 'Class1'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := aProjectName , '-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: aProjectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
 ]
 
 { #category : 'private' }
@@ -1886,14 +2004,14 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 			resolvedRepository createBranch: specName ].
 
 	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	addDefinitionsBlock value: resolvedProject.
 
 	resolvedProject projectRoots
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
-
 	(resolvedProject repositoryRoot / 'rowan/doits') ensureDeleteAll.
+
+	addDefinitionsBlock value: resolvedProject.
 
 	resolvedProject
 		export;
@@ -3273,6 +3391,59 @@ RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0024: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
+	"Start with  spec_0001, add 3 embedded projects"
+
+	"https://github.com/GemTalk/Rowan/issues/571"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0025'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0001, add 3 embedded projects'
+		index: 25
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(571);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0025: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
