@@ -157,7 +157,7 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 
 	"https://github.com/GemTalk/Rowan/issues/555"
 
-	| resolvedProject |
+	| resolvedProject x |
 "vast"
 	resolvedProject := self
 		_readVastTonelDemo_555:
@@ -165,7 +165,7 @@ RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 			'vast'}
 		deleteClone: true.
 	self
-		assert: resolvedProject packageNames sort
+		assert: (x := resolvedProject packageNames sort)
 		equals:
 			#('TonelExampleAnotherSubSubApp' 'TonelAnotherShadowSubSubApp' 'TonelExampleApp' 'TonelExampleShadowSubSubApp' 'TonelExampleSubApp' 'TonelExampleShadowSubSubSubApp' 'TonelExampleSubSubApp' 'TonelExampleForVastPharoApp')
 				sort.

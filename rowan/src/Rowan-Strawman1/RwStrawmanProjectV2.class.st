@@ -82,7 +82,7 @@ RwStrawmanProjectV2 >> _projectRepository [
 	^ projectRepository
 		ifNil: [ 
 			projectRepository := RwStrawmanDiskRepositoryDefinition
-				newNamed: self projectAlias
+				newNamed: self projectName
 				projectsHome: self projectsHome
 				repositoryUrl: self diskUrl ]
 ]
@@ -180,6 +180,11 @@ RwStrawmanProjectV2 >> packages [
 RwStrawmanProjectV2 >> platformConditionalAttributes [
 
 	^ self class platformConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwStrawmanProjectV2 >> projectName [
+	^ self _loadSpecification projectName ifNil: [ super projectName ]
 ]
 
 { #category : 'actions' }

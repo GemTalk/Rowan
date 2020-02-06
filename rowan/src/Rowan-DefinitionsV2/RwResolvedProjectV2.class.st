@@ -480,6 +480,13 @@ RwResolvedProjectV2 >> packages: aPackageDictionary [
 	^ self _projectDefinition packages: aPackageDictionary
 ]
 
+{ #category : 'printing' }
+RwResolvedProjectV2 >> printOn: aStream [
+	self _projectDefinition ifNil: [ ^ super printOn: aStream ].
+
+	self _projectDefinition printOn: aStream
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> projectDefinitionSourceProperty [
 	^ self _projectDefinition projectDefinitionSourceProperty

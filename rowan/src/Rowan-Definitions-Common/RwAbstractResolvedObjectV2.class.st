@@ -185,6 +185,7 @@ RwAbstractResolvedObjectV2 >> projectAlias: aString [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectName [
+	projectSpecification ifNil: [ ^ self _projectDefinition projectName ].
 	^ self _projectSpecification projectName
 ]
 
@@ -237,7 +238,7 @@ RwAbstractResolvedObjectV2 >> projectSpecPath: aString [
 	self _projectSpecification projectSpecPath: aString.
 	self _loadSpecification
 		projectSpecFile:
-			(Path * aString / self projectSpecification projectName , 'ston') pathString
+			(Path * aString / self _projectSpecification specName , 'ston') pathString
 ]
 
 { #category : 'accessing' }

@@ -39,8 +39,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 	self deny: expectedRepositoryRoot exists.
 
 	project := RwResolvedProjectV2 new
-		projectName: projectName;
-		projectAlias: projectAlias;
+		projectName: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.

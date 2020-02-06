@@ -439,6 +439,15 @@ RwLoadSpecificationV2 >> postCopy [
 			platformProperties := platformPropertiesCopy ]
 ]
 
+{ #category : 'printing' }
+RwLoadSpecificationV2 >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream
+		nextPutAll: ' for ';
+		nextPutAll: (self specName ifNil: ['nil'])
+]
+
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> projectAlias [
 	"project alias is used as the name of the root directory for the project ... necessary if the project is 

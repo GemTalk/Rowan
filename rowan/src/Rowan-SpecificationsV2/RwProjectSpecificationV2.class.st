@@ -201,6 +201,15 @@ RwProjectSpecificationV2 >> packagesPath: aString [
 	packagesPath := aString
 ]
 
+{ #category : 'printing' }
+RwProjectSpecificationV2 >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream
+		nextPutAll: ' for ';
+		nextPutAll: (self specName ifNil: ['nil'])
+]
+
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> projectName [
 

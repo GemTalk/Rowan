@@ -46,6 +46,13 @@ RwResolvedProjectSpecificationV2 >> packagesPath: aString [
 	self _projectSpecification packagesPath: aString
 ]
 
+{ #category : 'printing' }
+RwResolvedProjectSpecificationV2 >> printOn: aStream [
+	self _projectSpecification ifNil: [ ^ super printOn: aStream ].
+
+	self _projectSpecification printOn: aStream
+]
+
 { #category : 'accessubg' }
 RwResolvedProjectSpecificationV2 >> projectsPath [
 	^self _projectSpecification projectsPath

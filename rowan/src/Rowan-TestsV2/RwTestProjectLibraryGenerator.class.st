@@ -1648,7 +1648,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 
 		loadSpecification := RwEmbeddedLoadSpecificationV2 new
 			projectName: resolvedProjectName;
-			projectAlias: resolvedProject_0025 projectName;
+"			projectAlias: resolvedProject_0025 projectName;"
 			projectsHome: self projectsHome;
 			gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 			groupNames: {};

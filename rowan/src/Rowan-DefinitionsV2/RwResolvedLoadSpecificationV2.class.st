@@ -19,3 +19,10 @@ RwResolvedLoadSpecificationV2 >> groupNames: anArray [
 
 	self _loadSpecification groupNames: anArray
 ]
+
+{ #category : 'printing' }
+RwResolvedLoadSpecificationV2 >> printOn: aStream [
+	self _loadSpecification ifNil: [ ^ super printOn: aStream ].
+
+	self _loadSpecification printOn: aStream
+]
