@@ -166,20 +166,42 @@ RwRowanSample9Test >> _standard_resolve_load_validate: projectSpec [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects [
-	| project testResult loadedProjectDefinition x |
-
-"validate"
+RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects [ 
+	| testResult loadedProjectDefinition x |
+	"validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: (x := project audit) isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	loadedProjects
+		do: [ :project | 
+			self assert: (x := project audit) isEmpty.
+			testResult := project testSuite run.
+			self deny: testResult hasErrors.
+			self deny: testResult hasFailures.
 
-	loadedProjectDefinition := project asDefinition.
-	self assert: loadedProjectDefinition class = resolvedProject projectDefinition class.
+			loadedProjectDefinition := project asDefinition.
+			self
+				assert:
+					loadedProjectDefinition class = resolvedProject projectDefinition class ]
+]
 
+{ #category : 'private' }
+RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames [
+	| testResult loadedProjectDefinition x |
+	"validate"
+	self assert: loadedProjects size = expectedProjectNames size.
+	self
+		assert: (loadedProjects collect: [ :each | each name ]) sort
+		equals: expectedProjectNames sort.
+	loadedProjects
+		do: [ :project | 
+			self assert: (x := project audit) isEmpty.
+			testResult := project testSuite run.
+			self deny: testResult hasErrors.
+			self deny: testResult hasFailures.
+
+			loadedProjectDefinition := project asDefinition.
+			self
+				assert:
+					loadedProjectDefinition class = resolvedProject projectDefinition class ]
 ]
 
 { #category : 'private' }
@@ -1663,13 +1685,15 @@ RwRowanSample9Test >> testSpec_0025 [
 
 	"https://github.com/dalehenrich/Rowan/issues/571"
 
-	| loadSpec projectName resolvedProject loadedProjects |
+	| loadSpec projectName resolvedProject loadedProjects projectNames |
 	loadSpec := self _loadSpecNamed: 'spec_0025'.
 
 	projectName := loadSpec projectName.
+	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
 
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
 	resolvedProject := loadSpec resolve.
@@ -1678,6 +1702,8 @@ RwRowanSample9Test >> testSpec_0025 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-self error: 'Not done with development'.
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
 ]

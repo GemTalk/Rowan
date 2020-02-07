@@ -635,8 +635,15 @@ RwResolvedProjectV2 >> resolve [
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
+					| projectSetDefinitiion |
 					"update project definition from disk"
-					self read ] ]
+					projectSetDefinitiion := self read.
+					projectSetDefinitiion size > 1
+						ifTrue: [ 
+							"mark this project as needing to be reloaded from disk before being loaded"
+							self
+								projectDefinitionSourceProperty:
+									RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ] ]
 ]
 
 { #category : 'actions' }

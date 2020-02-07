@@ -135,11 +135,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 		ifTrue: [ 
 			"only read from disk if the repository exists and the project definition has not 
 				already been loaded from disk"
-			Rowan projectTools read
-				readProjectSetForComponentProjectDefinition: projectDefinition
-				withConfigurations: projectDefinition loadedConfigurationNames
-				groupNames: projectDefinition loadedGroupNames
-				platformConfigurationAttributes: platformConfigurationAttributes ]
+			projectDefinition read: platformConfigurationAttributes ]
 		ifFalse: [ 
 			"If this project definition _was_ read from disk, we cannot trust that it was 
 				not modified, so clear source property"

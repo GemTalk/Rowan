@@ -35,6 +35,14 @@ RwLoadedProject class >> _projectLoadedDefinitionSourceValue [
 ]
 
 { #category : 'accessing' }
+RwLoadedProject class >> _projectLoadedDefinitionSourceWithDependentProjectsValue [
+	"This value of the property key indicates that the source of the project definition was loaded from disk, 
+		however, the project has dependent projects that will need to be reread from disk on load."
+
+	^ 'loaded from disk with dependent projects'
+]
+
+{ #category : 'accessing' }
 RwLoadedProject class >> _projectSourceValueNewProject [
 	"This value of the property key indicates that the source of the project definition is a newly created project, so we explicitly don't want to read project from disk on load."
 
