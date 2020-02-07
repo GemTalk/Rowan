@@ -31,9 +31,12 @@ RwResolvedRepositoryV2 >> fetch [
 
 { #category : 'printing' }
 RwResolvedRepositoryV2 >> printOn: aStream [
-	self _projectRepository ifNil: [ ^ super printOn: aStream ].
-
-	self _projectRepository printOn: aStream
+	super printOn: aStream.
+	projectRepository
+		ifNotNil: [ 
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll: self _projectRepository name ]
 ]
 
 { #category : 'repository' }

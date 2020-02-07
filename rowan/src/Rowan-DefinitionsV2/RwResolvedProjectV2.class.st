@@ -482,9 +482,12 @@ RwResolvedProjectV2 >> packages: aPackageDictionary [
 
 { #category : 'printing' }
 RwResolvedProjectV2 >> printOn: aStream [
-	self _projectDefinition ifNil: [ ^ super printOn: aStream ].
-
-	self _projectDefinition printOn: aStream
+	super printOn: aStream.
+	projectDefinition
+		ifNotNil: [ 
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll: self _projectDefinition projectName ]
 ]
 
 { #category : 'project definition' }
