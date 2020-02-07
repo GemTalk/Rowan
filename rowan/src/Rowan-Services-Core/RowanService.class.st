@@ -474,7 +474,7 @@ RowanService >> stripOutUnicode: string [
   | asciiString |
   asciiString := string
     collect: [ :char | 
-      (char ~= Character lf
+      ((self validLowRangeCharacters includes: char) not
         and: [ char asciiValue < 32 or: [ char asciiValue > 255 ] ])
         ifTrue: [ $? ]
         ifFalse: [ char ] ].
@@ -532,6 +532,11 @@ RowanService >> updateType: aSymbol [
 { #category : 'accessing' }
 RowanService >> userGlobals [
   ^ Rowan image symbolList objectNamed: #'UserGlobals'
+]
+
+{ #category : 'private' }
+RowanService >> validLowRangeCharacters [
+  ^ Array with: Character lf with: Character tab
 ]
 
 { #category : 'testing' }
