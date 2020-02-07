@@ -93,7 +93,7 @@ RwResolvedProjectComponentVisitorV2 >> _visitComponents: componentNamesToRead gr
 	| projectName componentDirectory projectsDirectory |
 	groupNames := aGroupNames.
 
-	projectName := resolvedProject projectAlias.
+	projectName := resolvedProject projectName.
 	componentDirectory := resolvedProject componentsRoot.
 	componentDirectory exists
 		ifFalse: [ 

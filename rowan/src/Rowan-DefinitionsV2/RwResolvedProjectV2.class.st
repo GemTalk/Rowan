@@ -16,7 +16,7 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
-						add: 'name' -> loadSpecification projectAlias;
+						add: 'name' -> loadSpecification projectName;
 						yourself);
 		packages: Dictionary new;
 		components: RwResolvedLoadComponentsV2 new;
@@ -400,7 +400,7 @@ RwResolvedProjectV2 >> isEmpty [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> key [
-	^ self projectAlias
+	^ self projectName
 ]
 
 { #category : 'actions' }
@@ -431,7 +431,7 @@ RwResolvedProjectV2 >> name [
 	"sender in loader code that's shared between RwComponentProjectDefinition and RwResolvedProjectV2, 
 		should use projectAlias, but need to wait until we're no longer using RwComponentProjectDefinition"
 
-	^ self projectAlias
+	^ self projectName
 ]
 
 { #category : 'project definition' }

@@ -55,13 +55,14 @@ RwAbstractResolvedObjectV2 >> _projectSpecification [
 
 	^ projectSpecification
 		ifNil: [ 
-			| projectSpecFileRef |
+			| projectSpecFileRef pName |
 			projectSpecFileRef := self repositoryRoot / self projectSpecFile.
+			pName := self projectName.	"projectSpecification is involved in default logic for projectName"
 			projectSpecification := projectSpecFileRef exists
 				ifTrue: [ RwSpecification fromFile: projectSpecFileRef ]
 				ifFalse: [ RwProjectSpecificationV2 new ].
 			projectSpecification
-				projectName: self projectAlias;
+				projectName: pName;
 				yourself ]
 ]
 
@@ -185,7 +186,10 @@ RwAbstractResolvedObjectV2 >> projectAlias: aString [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectName [
-	projectSpecification ifNil: [ ^ self _projectDefinition projectName ].
+	projectSpecification
+		ifNil: [ 
+			loadSpecification ifNil: [ ^ self _projectDefinition projectName ].
+			^ self _loadSpecification projectName ].
 	^ self _projectSpecification projectName
 ]
 

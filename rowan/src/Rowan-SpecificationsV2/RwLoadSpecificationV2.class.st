@@ -524,7 +524,7 @@ RwLoadSpecificationV2 >> repositoryResolutionPolicy: aSymbolOrNil [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> repositoryRoot [
-	^ self projectsHome / self projectAlias
+	^ self projectsHome / self projectName
 ]
 
 { #category : 'actions' }
@@ -567,7 +567,7 @@ RwLoadSpecificationV2 >> revision: aRevisionString [
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> specName [
 
-	^ specName ifNil: [ self projectAlias ]
+	^ specName ifNil: [ self projectName ]
 ]
 
 { #category : 'accessing' }

@@ -1680,7 +1680,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 
 		self
 			_addSimpleDefinitionsFor: resolvedProject
-			projectName: resolvedProject projectAlias , suffix.
+			projectName: resolvedProject projectName , suffix.
 
 		resolvedProject projectRoots
 			do: [ :rootDir | 

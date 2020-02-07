@@ -297,7 +297,7 @@ RwRowanSample9Test >> testIssue_254 [
 		packageName1 packageName2 |
 
 	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -417,7 +417,7 @@ RwRowanSample9Test >> testIssue_493 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -450,7 +450,7 @@ RwRowanSample9Test >> testIssue_495_1 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -492,7 +492,7 @@ RwRowanSample9Test >> testIssue_495_2 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -535,7 +535,7 @@ RwRowanSample9Test >> testIssue_504_1 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -582,7 +582,7 @@ RwRowanSample9Test >> testIssue_504_2 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -620,7 +620,7 @@ RwRowanSample9Test >> testIssue_504_3 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -658,7 +658,7 @@ RwRowanSample9Test >> testIssue_504_4 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0006'.	
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -693,10 +693,10 @@ RwRowanSample9Test >> testIssue_527 [
 	| loadSpec symDictName className projectName |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
-	(Rowan image loadedProjectNamed: loadSpec projectAlias ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: loadSpec projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 	className := projectName , 'Class1'.
 
 	self
@@ -724,7 +724,7 @@ RwRowanSample9Test >> testIssue_531_baseline [
 	| loadSpec projectName classesToSymDictMap |
 	loadSpec := self _loadSpecNamed: 'spec_0004'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
@@ -776,7 +776,7 @@ RwRowanSample9Test >> testIssue_549 [
 	| loadSpec projectName  resolvedProject1 resolvedProject2 loadedProjects project |
 	loadSpec := self _loadSpecNamed: 'spec_0014'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -808,7 +808,7 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 	| loadSpec projectName  resolvedProject1 errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0015'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -840,7 +840,7 @@ RwRowanSample9Test >> testIssue_557 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0016'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -876,7 +876,7 @@ RwRowanSample9Test >> testIssue_568 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0021'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -918,7 +918,7 @@ RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -954,7 +954,7 @@ RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -992,7 +992,7 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1023,7 +1023,7 @@ RwRowanSample9Test >> testRowanSample4_basic_504 [
 	| loadSpec projectName resolvedProject  loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
@@ -1053,7 +1053,7 @@ RwRowanSample9Test >> testRowanSample4_primer_504 [
 	| loadSpec projectName resolvedProject packageName1 packageName2 loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0005'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
@@ -1142,7 +1142,7 @@ RwRowanSample9Test >> testSpec_0002_to_0003 [
 		packageName1 packageName2 x |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1197,7 +1197,7 @@ RwRowanSample9Test >> testSpec_0008 [
 UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1220,7 +1220,7 @@ RwRowanSample9Test >> testSpec_0009 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0009'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1242,7 +1242,7 @@ RwRowanSample9Test >> testSpec_0010 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0010'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1264,7 +1264,7 @@ RwRowanSample9Test >> testSpec_0011 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1288,7 +1288,7 @@ RwRowanSample9Test >> testSpec_0012 [
 	| loadSpec projectName resolvedProject loadedProjects errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0012'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1316,7 +1316,7 @@ RwRowanSample9Test >> testSpec_0013 [
 	| loadSpec projectName resolvedProject loadedProjects errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0013'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1344,7 +1344,7 @@ RwRowanSample9Test >> testSpec_0014 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0014'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1368,7 +1368,7 @@ RwRowanSample9Test >> testSpec_0015 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0015'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1393,7 +1393,7 @@ RwRowanSample9Test >> testSpec_0015_to_0016 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0015'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1427,7 +1427,7 @@ RwRowanSample9Test >> testSpec_0016 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0016'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1452,7 +1452,7 @@ RwRowanSample9Test >> testSpec_0016_to_0017 [
 
 	loadSpec := self _loadSpecNamed: 'spec_0016'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1486,7 +1486,7 @@ RwRowanSample9Test >> testSpec_0017 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0017'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
@@ -1505,7 +1505,7 @@ RwRowanSample9Test >> testSpec_0019 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0019'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
@@ -1539,7 +1539,7 @@ RwRowanSample9Test >> testSpec_0020 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0020'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
@@ -1558,7 +1558,7 @@ RwRowanSample9Test >> testSpec_0021 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0021'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1586,7 +1586,7 @@ RwRowanSample9Test >> testSpec_0023_1 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0023'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1611,7 +1611,7 @@ RwRowanSample9Test >> testSpec_0023_2 [
 	| loadSpec projectName resolvedProject loadedProjects componentNames |
 	loadSpec := self _loadSpecNamed: 'spec_0023'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1642,7 +1642,7 @@ RwRowanSample9Test >> testSpec_0024 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0024'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1666,7 +1666,7 @@ RwRowanSample9Test >> testSpec_0025 [
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0025'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -1679,5 +1679,5 @@ RwRowanSample9Test >> testSpec_0025 [
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-self halt.
+self error: 'Not done with development'.
 ]

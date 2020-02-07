@@ -226,7 +226,7 @@ RwStrawmanProjectV2 >> readComponentNames: componentNames groupNames: groupNames
 			component := RwBasicProjectLoadComponentV2
 				fromComponentsDirectory: self componentsRoot
 				named: componentName.
-			component projectName: self projectAlias.
+			component projectName: self projectName.
 
 			visitor visit: component ].
 

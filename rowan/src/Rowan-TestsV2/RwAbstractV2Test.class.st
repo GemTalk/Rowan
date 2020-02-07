@@ -219,7 +219,7 @@ RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
 	(resolvedProject packagesRoot / (projectName , '-Shared')
 		/ (projectName , 'Shared.class.st')).
 	(resolvedProject specsRoot).
-	(resolvedProject specsRoot / resolvedProject projectAlias , 'ston').
+	(resolvedProject specsRoot / resolvedProject projectName , 'ston').
 	(resolvedProject projectsRoot)} do: [ :fileRef | self assert: fileRef exists ]
 ]
 

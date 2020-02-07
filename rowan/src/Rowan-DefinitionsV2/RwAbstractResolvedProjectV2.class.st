@@ -29,7 +29,7 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 			projectRepository := self gitUrl
 				ifNotNil: [ :urlString | 
 					RwGitRepositoryDefinitionV2
-						newNamed: self projectName
+						newNamed: self projectAlias
 						projectsHome: self projectsHome
 						repositoryUrl: urlString
 						revision: self _loadSpecification revision ]
@@ -43,13 +43,13 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 									self _projectSpecification repoType == #'git'
 										ifTrue: [ 
 											RwGitRepositoryDefinitionV2
-												newNamed: self projectName
+												newNamed: self projectAlias
 												projectsHome: self projectsHome
 												repositoryUrl: ''
 												revision: self _loadSpecification revision ]
 										ifFalse: [ 
 											RwDiskRepositoryDefinitionV2
-												newNamed: self projectName
+												newNamed: self projectAlias
 												projectsHome: self projectsHome
 												repositoryUrl: self diskUrl ] ] ] ].
 
@@ -93,7 +93,7 @@ RwAbstractResolvedProjectV2 >> commit: message [
 	self _projectRepository canCommit
 		ifFalse: [ 
 			| msg |
-			msg := 'repository for project ' , self projectAlias printString
+			msg := 'repository for project ' , self projectName printString
 				, ' does not support commit operations.'.
 			self inform: msg.
 			^ msg ].

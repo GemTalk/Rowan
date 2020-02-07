@@ -57,7 +57,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> defaultUseSessionMethodsForExtensions: 
 
 { #category : 'initialization' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolvedProject [
-	self initializeForName: aResolvedProject projectAlias.
+	self initializeForName: aResolvedProject projectName.
 	handle := aResolvedProject copyForLoadedProject
 ]
 
