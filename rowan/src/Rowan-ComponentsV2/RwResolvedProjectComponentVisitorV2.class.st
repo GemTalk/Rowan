@@ -8,6 +8,22 @@ Class {
 }
 
 { #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+	| visitor |
+	visitor := self new
+		_readComponentsForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject
+		projectDefinitionSourceProperty:
+			RwLoadedProject _projectDiskDefinitionSourceValue.
+	visitor visitedComponents
+		keysAndValuesDo: [ :cName :cmp | resolvedProject components _addComponent: cmp ].
+	^ visitor
+]
+
+{ #category : 'reading' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -22,20 +38,19 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
 			gn := nextDefArray at: 3.
-			visitor := self new
-				_readComponentsForResolvedProject: rp
+			gn := nextDefArray at: 3.
+
+			visitor := self
+				readProjectForResolvedProject: rp
 				withComponentNames: cn
 				groupNames: gn
 				platformConditionalAttributes: platformConditionalAttributes.
-			rp
-				projectDefinitionSourceProperty:
-					RwLoadedProject _projectDiskDefinitionSourceValue.
-			visitor visitedComponents
-				keysAndValuesDo: [ :cName :cmp | rp components _addComponent: cmp ].
+
 			projectVisitedQueue
 				addLast:
 					{visitor.
 					nextDefArray}.
+
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
 					| theResolvedProject |
