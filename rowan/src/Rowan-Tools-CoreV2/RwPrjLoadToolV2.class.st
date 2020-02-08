@@ -135,7 +135,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 		ifTrue: [ 
 			"only read from disk if the repository exists and the project definition has not 
 				already been loaded from disk"
-			projectDefinition read: platformConfigurationAttributes ]
+			projectDefinition readProjectSet: platformConfigurationAttributes ]
 		ifFalse: [ 
 			"If this project definition _was_ read from disk, we cannot trust that it was 
 				not modified, so clear source property"

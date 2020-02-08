@@ -522,45 +522,20 @@ RwResolvedProjectV2 >> projectUrl [
 RwResolvedProjectV2 >> read [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
-	^ self readComponentNames: self componentNames groupNames: self groupNames
+	^ self readProjectComponentNames: self componentNames groupNames: self groupNames
 ]
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> read: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
 	^ self
-		readComponentNames: self componentNames
+		readProjectComponentNames: self componentNames
 		groupNames: self groupNames
-		platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ self
-		readComponentNames: componentNames
-		groupNames: groupNames
-		platformConditionalAttributes: self platformConditionalAttributes
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
-		withComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
@@ -583,6 +558,77 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 	^ visitorClass new
 		packageNames: packageNames;
 		visit: self
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames groupNames: groupNames [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	^ self
+		readProjectComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	^ Rowan projectTools readV2
+		readProjectForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSet [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self readProjectSetComponentNames: self componentNames groupNames: self groupNames
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSet: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readProjectSetComponentNames: self componentNames
+		groupNames: self groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames groupNames: groupNames [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readProjectSetComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readProjectSetForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'project definition' }
@@ -638,15 +684,11 @@ RwResolvedProjectV2 >> resolve [
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
-					| projectSetDefinitiion |
 					"update project definition from disk"
-					projectSetDefinitiion := self read.
-					projectSetDefinitiion size > 1
-						ifTrue: [ 
-							"mark this project as needing to be reloaded from disk before being loaded"
-							self
-								projectDefinitionSourceProperty:
-									RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ] ]
+					self read.
+					self
+						projectDefinitionSourceProperty:
+							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
 ]
 
 { #category : 'actions' }

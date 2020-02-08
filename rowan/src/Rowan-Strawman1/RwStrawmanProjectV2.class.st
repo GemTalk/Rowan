@@ -191,28 +191,28 @@ RwStrawmanProjectV2 >> projectName [
 RwStrawmanProjectV2 >> read [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
-	^ self readComponentNames: self componentNames groupNames: self groupNames
+	^ self readProjectComponentNames: self componentNames groupNames: self groupNames
 ]
 
 { #category : 'actions' }
 RwStrawmanProjectV2 >> read: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
 	^ self
-		readComponentNames: self componentNames
+		readProjectComponentNames: self componentNames
 		groupNames: self groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'private' }
-RwStrawmanProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+{ #category : 'actions' }
+RwStrawmanProjectV2 >> readProjectComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
 	| visitor packageDict |
 	visitor := RwIndependentComponentVisitorV2 new

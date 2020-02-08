@@ -1052,7 +1052,7 @@ RwSimpleComponentRowanExperiment >> _writeTopzFilesUsing: loadSpecUrl conditiona
 		resolve.
 
 	conditionalAttributes addAll: loadSpec customConditionalAttributes.
-	theProjectSetDefinition := resolvedProject read: conditionalAttributes.
+	theProjectSetDefinition := resolvedProject readProjectSet: conditionalAttributes.
 
 	topazFileNameMap := Dictionary new.
 	topazFileNameMap at: gsFileName put: {}.

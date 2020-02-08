@@ -250,29 +250,6 @@ RwAbstractResolvedObjectV2 >> projectsRoot [
 	^ self repositoryRoot / self _projectSpecification projectsPath
 ]
 
-{ #category : 'actions' }
-RwAbstractResolvedObjectV2 >> readComponentNames: componentNames groupNames: groupNames [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ self
-		readComponentNames: componentNames
-		groupNames: groupNames
-		platformConditionalAttributes: self platformConditionalAttributes
-]
-
-{ #category : 'actions' }
-RwAbstractResolvedObjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	self
-		subclassResonsibility:
-			#'readComponentNames:groupNames:platformConditionalAttributes:'
-]
-
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> repositoryRoot [
 	projectRepository ifNil: [ ^ self _loadSpecification repositoryRoot ].
