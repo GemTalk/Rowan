@@ -5462,7 +5462,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanProjectService'
-	instVarNames: #( name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome )
+	instVarNames: #( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -8751,6 +8751,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0022: commitComment;
 	genSpec_0023: commitComment;
 	genSpec_0024: commitComment;
+	genSpec_0025: commitComment;
 	yourself';
 		immediateInvariant.
 true.
@@ -57544,7 +57545,7 @@ method: RowanProjectService
 branch
 
 	name isNil ifTrue:[^String new].
-	^(RwProject newNamed: name) currentBranchName
+	^self rwProject currentBranchName
 %
 
 category: 'accessing'
@@ -57582,7 +57583,7 @@ checkout: branchName
 
 	| project branches |
 
-	project := (RwProject newNamed: name). 
+	project := self rwProject. 
 	branches := Rowan gitTools gitcheckoutIn: project repositoryRootPath asFileReference with: branchName.
 	^branches
 %
@@ -57628,6 +57629,13 @@ defaultProjectName: aString
 	self class defaultProjectName: aString
 %
 
+category: 'replication'
+method: RowanProjectService
+excludedInstVars
+
+	^ super excludedInstVars, #( #rwProject)
+%
+
 category: 'accessing'
 method: RowanProjectService
 existsOnDisk
@@ -57652,9 +57660,9 @@ initialize
 category: 'rowan'
 method: RowanProjectService
 isDirty
-
-	name isNil ifTrue:[^false].
-	^(RwProject newNamed: name) isDirty
+	name isNil
+		ifTrue: [ ^ false ].
+	^ self rwProject isDirty
 %
 
 category: 'accessing'
@@ -57811,7 +57819,7 @@ method: RowanProjectService
 pullFromGit
 
 	| project |
-	project := RwProject newNamed: name. 
+	project := self rwProject. 
 	Rowan gitTools
 		gitpullIn: project repositoryRootPath
 		remote: project remote
@@ -57823,7 +57831,7 @@ method: RowanProjectService
 pushToGit
 
 	| project |
-	project := RwProject newNamed: name. 
+	project := self rwProject. 
 	Rowan gitTools
 		gitpushIn: project repositoryRootPath
 		remote: project remote
@@ -57865,8 +57873,7 @@ removeProjectNamed: projectName
 category: 'rowan'
 method: RowanProjectService
 repositorySha
-
-	^(RwProject newNamed: name) repositoryCommitId
+	^ self rwProject repositoryCommitId
 %
 
 category: 'rowan'
@@ -57874,7 +57881,7 @@ method: RowanProjectService
 rowanBranch
 	
 	name isNil ifTrue:[^String new].
-	^ [ (RwProject newNamed: name) currentBranchName ] on: Error do: [:ex | ^'ERROR getting repository branch' ]
+	^ [  self rwProject currentBranchName ] on: Error do: [:ex | ^'ERROR getting repository branch' ]
 %
 
 category: 'rowan'
@@ -57913,6 +57920,12 @@ rowanSkew
 	^self sha ~= self repositorySha
 %
 
+category: 'accessing'
+method: RowanProjectService
+rwProject
+	^ rwProject ifNil: [ rwProject := RwProject newNamed: name ]
+%
+
 category: 'perform'
 method: RowanProjectService
 servicePerform: symbol withArguments: collection
@@ -57943,7 +57956,7 @@ method: RowanProjectService
 sha
 
 	name isNil ifTrue:[^0].
-	^(RwProject newNamed: name) loadedCommitId
+	^self rwProject loadedCommitId
 %
 
 category: 'accessing'
@@ -58731,6 +58744,23 @@ _addPackageNames: somePackageNames for: aComponent
 
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
+readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+	| visitor |
+	visitor := self new
+		_readComponentsForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject
+		projectDefinitionSourceProperty:
+			RwLoadedProject _projectDiskDefinitionSourceValue.
+	visitor visitedComponents
+		keysAndValuesDo: [ :cName :cmp | resolvedProject components _addComponent: cmp ].
+	^ visitor
+%
+
+category: 'reading'
+classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -58745,20 +58775,19 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
 			gn := nextDefArray at: 3.
-			visitor := self new
-				_readComponentsForResolvedProject: rp
+			gn := nextDefArray at: 3.
+
+			visitor := self
+				readProjectForResolvedProject: rp
 				withComponentNames: cn
 				groupNames: gn
 				platformConditionalAttributes: platformConditionalAttributes.
-			rp
-				projectDefinitionSourceProperty:
-					RwLoadedProject _projectDiskDefinitionSourceValue.
-			visitor visitedComponents
-				keysAndValuesDo: [ :cName :cmp | rp components _addComponent: cmp ].
+
 			projectVisitedQueue
 				addLast:
 					{visitor.
 					nextDefArray}.
+
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
 					| theResolvedProject |
@@ -58867,7 +58896,7 @@ _visitComponents: componentNamesToRead groupNames: aGroupNames
 	| projectName componentDirectory projectsDirectory |
 	groupNames := aGroupNames.
 
-	projectName := resolvedProject projectAlias.
+	projectName := resolvedProject projectName.
 	componentDirectory := resolvedProject componentsRoot.
 	componentDirectory exists
 		ifFalse: [ 
@@ -63210,6 +63239,10 @@ projectAlias: aString
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectName
+	projectSpecification
+		ifNil: [ 
+			loadSpecification ifNil: [ ^ self _projectDefinition projectName ].
+			^ self _loadSpecification projectName ].
 	^ self _projectSpecification projectName
 %
 
@@ -63267,38 +63300,15 @@ projectSpecPath: aString
 	"full path to the project specification file - default rowan/project.ston"
 
 	self _projectSpecification projectSpecPath: aString.
-	self _loadSpecification projectSpecFile: (aString asFileReference / self projectSpecification projectName, 'ston') asPathString .
+	self _loadSpecification
+		projectSpecFile:
+			(Path * aString / self _projectSpecification specName , 'ston') pathString
 %
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectsRoot
 	^ self repositoryRoot / self _projectSpecification projectsPath
-%
-
-category: 'actions'
-method: RwAbstractResolvedObjectV2
-readComponentNames: componentNames groupNames: groupNames
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ self
-		readComponentNames: componentNames
-		groupNames: groupNames
-		platformConditionalAttributes: self platformConditionalAttributes
-%
-
-category: 'actions'
-method: RwAbstractResolvedObjectV2
-readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	self
-		subclassResonsibility:
-			#'readComponentNames:groupNames:platformConditionalAttributes:'
 %
 
 category: 'accessing'
@@ -63394,13 +63404,14 @@ _projectSpecification
 
 	^ projectSpecification
 		ifNil: [ 
-			| projectSpecFileRef |
+			| projectSpecFileRef pName |
 			projectSpecFileRef := self repositoryRoot / self projectSpecFile.
+			pName := self projectName.	"projectSpecification is involved in default logic for projectName"
 			projectSpecification := projectSpecFileRef exists
 				ifTrue: [ RwSpecification fromFile: projectSpecFileRef ]
 				ifFalse: [ RwProjectSpecificationV2 new ].
 			projectSpecification
-				projectName: self projectAlias;
+				projectName: pName;
 				yourself ]
 %
 
@@ -63452,7 +63463,7 @@ commit: message
 	self _projectRepository canCommit
 		ifFalse: [ 
 			| msg |
-			msg := 'repository for project ' , self projectAlias printString
+			msg := 'repository for project ' , self projectName printString
 				, ' does not support commit operations.'.
 			self inform: msg.
 			^ msg ].
@@ -63615,9 +63626,32 @@ groupNames: anArray
 	self _loadSpecification groupNames: anArray
 %
 
+category: 'printing'
+method: RwResolvedLoadSpecificationV2
+printOn: aStream
+	super printOn: aStream.
+	loadSpecification
+		ifNotNil: [ 
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll: self _loadSpecification specName ]
+%
+
 ! Class implementation for 'RwResolvedProjectSpecificationV2'
 
 !		Instance methods for 'RwResolvedProjectSpecificationV2'
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+componentsPath
+	^self _projectSpecification componentsPath
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+componentsPath: aString
+	self _projectSpecification componentsPath: aString
+%
 
 category: 'accessubg'
 method: RwResolvedProjectSpecificationV2
@@ -63655,6 +63689,41 @@ packagesPath: aString
 	self _projectSpecification packagesPath: aString
 %
 
+category: 'printing'
+method: RwResolvedProjectSpecificationV2
+printOn: aStream
+	super printOn: aStream.
+	projectSpecification
+		ifNotNil: [ 
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll: self _projectSpecification specName ]
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+projectsPath
+	^self _projectSpecification projectsPath
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+projectsPath: aString
+	self _projectSpecification projectsPath: aString
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+specsPath
+	^self _projectSpecification specsPath
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+specsPath: aString
+	self _projectSpecification specsPath: aString
+%
+
 ! Class implementation for 'RwResolvedProjectV2'
 
 !		Class methods for 'RwResolvedProjectV2'
@@ -63672,7 +63741,7 @@ basicLoadSpecification: anRwLoadSpecificationV2
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
-						add: 'name' -> loadSpecification projectAlias;
+						add: 'name' -> loadSpecification projectName;
 						yourself);
 		packages: Dictionary new;
 		components: RwResolvedLoadComponentsV2 new;
@@ -63856,6 +63925,14 @@ addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponent
 	component := self componentNamed: aComponentName.
 	component preloadDoitName: doitName.
 	component doitDict at: doitName put: doitSource
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addProjectNamed:projectName toComponentNamed: componentName 
+	^ self _projectDefinition
+		addProjectNamed:projectName
+		toComponentNamed: componentName
 %
 
 category: 'project definition'
@@ -64080,7 +64157,7 @@ isEmpty
 category: 'project definition'
 method: RwResolvedProjectV2
 key
-	^ self projectAlias
+	^ self projectName
 %
 
 category: 'actions'
@@ -64115,7 +64192,7 @@ name
 	"sender in loader code that's shared between RwComponentProjectDefinition and RwResolvedProjectV2, 
 		should use projectAlias, but need to wait until we're no longer using RwComponentProjectDefinition"
 
-	^ self projectAlias
+	^ self projectName
 %
 
 category: 'project definition'
@@ -64173,6 +64250,17 @@ packages: aPackageDictionary
 	^ self _projectDefinition packages: aPackageDictionary
 %
 
+category: 'printing'
+method: RwResolvedProjectV2
+printOn: aStream
+	super printOn: aStream.
+	projectDefinition
+		ifNotNil: [ 
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll: self _projectDefinition projectName ]
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 projectDefinitionSourceProperty
@@ -64211,9 +64299,9 @@ method: RwResolvedProjectV2
 read
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
-	^ self readComponentNames: self componentNames groupNames: self groupNames
+	^ self readProjectComponentNames: self componentNames groupNames: self groupNames
 %
 
 category: 'actions'
@@ -64221,38 +64309,11 @@ method: RwResolvedProjectV2
 read: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
 	^ self
-		readComponentNames: self componentNames
+		readProjectComponentNames: self componentNames
 		groupNames: self groupNames
-		platformConditionalAttributes: platformConditionalAttributes
-%
-
-category: 'actions'
-method: RwResolvedProjectV2
-readComponentNames: componentNames groupNames: groupNames
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ self
-		readComponentNames: componentNames
-		groupNames: groupNames
-		platformConditionalAttributes: self platformConditionalAttributes
-%
-
-category: 'actions'
-method: RwResolvedProjectV2
-readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
-		withComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -64276,6 +64337,83 @@ readPackageNames: packageNames
 	^ visitorClass new
 		packageNames: packageNames;
 		visit: self
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readProjectComponentNames: componentNames groupNames: groupNames
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	^ self
+		readProjectComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: self platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readProjectComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	^ Rowan projectTools readV2
+		readProjectForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readProjectSet
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self readProjectSetComponentNames: self componentNames groupNames: self groupNames
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readProjectSet: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readProjectSetComponentNames: self componentNames
+		groupNames: self groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readProjectSetComponentNames: componentNames groupNames: groupNames
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readProjectSetComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: self platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readProjectSetComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readProjectSetForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'project definition'
@@ -64316,6 +64454,12 @@ removeProjectNamed: aProjectName
 	^ self _projectDefinition removeProjectNamed: aProjectName
 %
 
+category: '-- loader compat --'
+method: RwResolvedProjectV2
+repositoryCommitId
+	^ self loadedCommitId
+%
+
 category: 'project specification'
 method: RwResolvedProjectV2
 repoType: aSymbol
@@ -64334,7 +64478,10 @@ resolve
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
 					"update project definition from disk"
-					self read ] ]
+					self read.
+					self
+						projectDefinitionSourceProperty:
+							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
 %
 
 category: 'actions'
@@ -64431,6 +64578,17 @@ category: 'repository'
 method: RwResolvedRepositoryV2
 fetch
 	^ self _projectRepository fetch
+%
+
+category: 'printing'
+method: RwResolvedRepositoryV2
+printOn: aStream
+	super printOn: aStream.
+	projectRepository
+		ifNotNil: [ 
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll: self _projectRepository name ]
 %
 
 category: 'repository'
@@ -64613,14 +64771,20 @@ platformConditionalAttributes
 	^ self class platformConditionalAttributes
 %
 
+category: 'accessing'
+method: RwStrawmanProjectV2
+projectName
+	^ self _loadSpecification projectName ifNil: [ super projectName ]
+%
+
 category: 'actions'
 method: RwStrawmanProjectV2
 read
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
-	^ self readComponentNames: self componentNames groupNames: self groupNames
+	^ self readProjectComponentNames: self componentNames groupNames: self groupNames
 %
 
 category: 'actions'
@@ -64628,20 +64792,20 @@ method: RwStrawmanProjectV2
 read: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
 	^ self
-		readComponentNames: self componentNames
+		readProjectComponentNames: self componentNames
 		groupNames: self groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'private'
+category: 'actions'
 method: RwStrawmanProjectV2
-readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+readProjectComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
 	| visitor packageDict |
 	visitor := RwIndependentComponentVisitorV2 new
@@ -64655,7 +64819,7 @@ readComponentNames: componentNames groupNames: groupNames platformConditionalAtt
 			component := RwBasicProjectLoadComponentV2
 				fromComponentsDirectory: self componentsRoot
 				named: componentName.
-			component projectName: self projectAlias.
+			component projectName: self projectName.
 
 			visitor visit: component ].
 
@@ -64769,7 +64933,7 @@ _projectRepository
 	^ projectRepository
 		ifNil: [ 
 			projectRepository := RwStrawmanDiskRepositoryDefinition
-				newNamed: self projectAlias
+				newNamed: self projectName
 				projectsHome: self projectsHome
 				repositoryUrl: self diskUrl ]
 %
@@ -68270,11 +68434,7 @@ loadProjectDefinition: projectDefinition platformConfigurationAttributes: platfo
 		ifTrue: [ 
 			"only read from disk if the repository exists and the project definition has not 
 				already been loaded from disk"
-			Rowan projectTools read
-				readProjectSetForComponentProjectDefinition: projectDefinition
-				withConfigurations: projectDefinition loadedConfigurationNames
-				groupNames: projectDefinition loadedGroupNames
-				platformConfigurationAttributes: platformConfigurationAttributes ]
+			projectDefinition readProjectSet: platformConfigurationAttributes ]
 		ifFalse: [ 
 			"If this project definition _was_ read from disk, we cannot trust that it was 
 				not modified, so clear source property"
@@ -68563,6 +68723,29 @@ classExtensionsForProjectNamed: projectName
 ! Class implementation for 'RwPrjReadToolV2'
 
 !		Instance methods for 'RwPrjReadToolV2'
+
+category: 'read resolved projects'
+method: RwPrjReadToolV2
+readProjectForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames
+	"read packages and project metadata into projectDefinition ... return the resolvedProject"
+
+	^ self
+		readProjectForResolvedProject: resolvedProject
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: resolvedProject platformConditionalAttributes
+%
+
+category: 'read resolved projects'
+method: RwPrjReadToolV2
+readProjectForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+	RwResolvedProjectComponentVisitorV2
+		readProjectForResolvedProject: resolvedProject
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes.
+	^ resolvedProject
+%
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
@@ -71656,6 +71839,14 @@ addPlatformNestedComponentNamed: aComponentName condition: conditionArray commen
 		addPlatformNestedComponentNamed: aComponentName
 		condition: conditionArray
 		comment: commentString
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addProjectNamed: projectName toComponentNamed: toComponentName
+	^ self components
+		addProjectNamed: projectName
+		toComponentNamed: toComponentName
 %
 
 category: 'accessing'
@@ -82404,6 +82595,15 @@ _projectLoadedDefinitionSourceValue
 
 category: 'accessing'
 classmethod: RwLoadedProject
+_projectLoadedDefinitionSourceWithDependentProjectsValue
+	"This value of the property key indicates that the source of the project definition was loaded from disk, 
+		however, the project has dependent projects that will need to be reread from disk on load."
+
+	^ 'loaded from disk with dependent projects'
+%
+
+category: 'accessing'
+classmethod: RwLoadedProject
 _projectSourceValueNewProject
 	"This value of the property key indicates that the source of the project definition is a newly created project, so we explicitly don't want to read project from disk on load."
 
@@ -82902,7 +83102,7 @@ defaultUseSessionMethodsForExtensions: aBool
 category: 'initialization'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 initializeForResolvedProject: aResolvedProject
-	self initializeForName: aResolvedProject projectAlias.
+	self initializeForName: aResolvedProject projectName.
 	handle := aResolvedProject copyForLoadedProject
 %
 
@@ -85841,6 +86041,16 @@ postCopy
 			platformProperties := platformPropertiesCopy ]
 %
 
+category: 'printing'
+method: RwLoadSpecificationV2
+printOn: aStream
+
+	super printOn: aStream.
+	aStream
+		nextPutAll: ' for ';
+		nextPutAll: (self specName ifNil: ['nil'])
+%
+
 category: 'accessing'
 method: RwLoadSpecificationV2
 projectAlias
@@ -85929,7 +86139,7 @@ repositoryResolutionPolicy: aSymbolOrNil
 category: 'accessing'
 method: RwLoadSpecificationV2
 repositoryRoot
-	^ self projectsHome / self projectAlias
+	^ self projectsHome / self projectName
 %
 
 category: 'actions'
@@ -85977,7 +86187,7 @@ category: 'accessing'
 method: RwLoadSpecificationV2
 specName
 
-	^ specName ifNil: [ self projectAlias ]
+	^ specName ifNil: [ self projectName ]
 %
 
 category: 'accessing'
@@ -86282,6 +86492,16 @@ category: 'accessing'
 method: RwProjectSpecificationV2
 packagesPath: aString
 	packagesPath := aString
+%
+
+category: 'printing'
+method: RwProjectSpecificationV2
+printOn: aStream
+
+	super printOn: aStream.
+	aStream
+		nextPutAll: ' for ';
+		nextPutAll: (self specName ifNil: ['nil'])
 %
 
 category: 'accessing'
@@ -87800,6 +88020,60 @@ genSpec_0024: commitMessage
 		commitMessage: commitMessage
 %
 
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0025: commitMessage
+	"Start with  spec_0001, add 3 embedded projects"
+
+	"https://github.com/GemTalk/Rowan/issues/571"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0025'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0001, add 3 embedded projects'
+		index: 25
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(571);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0025: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
 category: 'accessing'
 method: RwTestProjectLibraryGenerator
 preserveChangesOnGithub
@@ -87947,6 +88221,42 @@ _addApplication_SubApplicationComponentsFor_0023: resolvedProject
 
 category: 'private'
 method: RwTestProjectLibraryGenerator
+_addDefinitionsFor: resolvedProject projectName: aProjectName
+	| className packageName |
+	resolvedProject
+		addPackagesNamed: {(aProjectName , '-Core')}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addPackageNamed: aProjectName , '-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		yourself.
+	packageName := aProjectName , '-Core'.
+	className := aProjectName , 'Class1'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := aProjectName , '-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: aProjectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
 _addDefinitionsFor_0000: resolvedProject
 	resolvedProject
 		comment: 'spec_0000 definitions';
@@ -87964,37 +88274,7 @@ _addDefinitionsFor_0000: resolvedProject
 category: 'private'
 method: RwTestProjectLibraryGenerator
 _addDefinitionsFor_0001: resolvedProject
-	| className packageName |
-	resolvedProject
-		addPackagesNamed: {(projectName , '-Core')}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		addPackageNamed: projectName , '-Tests'
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
-		yourself.
-	packageName := projectName , '-Core'.
-	className := projectName , 'Class1'.
-	((resolvedProject packageNamed: packageName)
-		addClassNamed: className
-		super: 'Object'
-		instvars: #('ivar1')
-		category: packageName
-		comment: 'I am an example class')
-		addInstanceMethod: 'foo ^1' protocol: 'accessing';
-		yourself.
-	packageName := projectName , '-Tests'.
-	((resolvedProject packageNamed: packageName)
-		addClassNamed: projectName , 'TestCase'
-		super: 'TestCase'
-		category: packageName
-		comment: 'I test the example class')
-		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
-			protocol: 'tests';
-		yourself.
-	^ resolvedProject
+	^ self _addDefinitionsFor: resolvedProject projectName: projectName
 %
 
 category: 'private'
@@ -89484,6 +89764,88 @@ _addDefinitionsFor_0024: resolvedProject
 
 category: 'private'
 method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0025: resolvedProject_0025
+	"Start with  spec_0001, add 3 embedded projects"
+
+	"https://github.com/GemTalk/Rowan/issues/571"
+
+	| loadSpecification_0025 packageNames |
+	loadSpecification_0025 := resolvedProject_0025 _loadSpecification.
+	packageNames := resolvedProject_0025 packageNames.
+
+	loadSpecification_0025 groupNames: {}.
+
+	resolvedProject_0025
+		removeComponentNamed: 'Core';
+		addSimpleComponentNamed: 'Core' condition: 'common' comment: 'the component';
+		yourself.
+	packageNames
+		do: [ :packageName | resolvedProject_0025 addPackageNamed: packageName toComponentNamed: 'Core' ].
+
+	1 to: 3 do: [ :index | 
+		| resolvedProjectName suffix loadSpecification specName resolvedProject baseName |
+		suffix := '_' , index asString.
+		specName := loadSpecification_0025 specName , suffix.
+		resolvedProjectName := resolvedProject_0025 projectName , suffix.
+
+		loadSpecification := RwEmbeddedLoadSpecificationV2 new
+			projectName: resolvedProjectName;
+			projectAlias: resolvedProject_0025 projectName;
+			projectsHome: self projectsHome;
+			gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+			groupNames: {};
+			yourself.
+
+		baseName := 'rowan' , suffix.
+		loadSpecification
+			specName: resolvedProjectName;
+			revision: loadSpecification_0025 revision;
+			gitUrl: self projectUrl;
+			componentNames: {'Core'};
+			comment: loadSpecification_0025 comment;
+			yourself.
+
+		resolvedProject := loadSpecification resolve.
+
+		resolvedProject
+			addSimpleComponentNamed: 'Core'
+			condition: 'common'
+			comment: 'the component'.
+
+		resolvedProject projectSpecification
+			componentsPath: baseName , '/components';
+			packagesPath: baseName , '/src';
+			projectsPath: baseName , '/projects';
+			specsPath: baseName , '/specs';
+			projectSpecPath: baseName;
+			yourself.
+
+		self
+			_addSimpleDefinitionsFor: resolvedProject
+			projectName: resolvedProject projectName.
+
+		resolvedProject projectRoots
+			do: [ :rootDir | 
+				"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
+				rootDir ensureDeleteAll ].
+
+		resolvedProject
+			export;
+			exportLoadSpecification.	"write the rowan directory structure"
+
+		resolvedProject_0025
+			addProjectNamed: resolvedProjectName
+			toComponentNamed: 'Core'.
+
+		resolvedProject_0025 projectsRoot ensureCreateDirectory.
+		resolvedProject specsRoot / resolvedProjectName , 'ston'
+			copyTo: resolvedProject_0025 projectsRoot / resolvedProjectName , 'ston' ].
+
+	^ resolvedProject_0025
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
 _addPackageCore1DefinitionsFor_0004: projectDefinition
 	| className packageName |
 	packageName := projectName , '-Core1'.
@@ -89497,6 +89859,38 @@ _addPackageCore1DefinitionsFor_0004: projectDefinition
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
 	^ projectDefinition
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addSimpleDefinitionsFor: resolvedProject projectName: aProjectName
+	| className packageName |
+	resolvedProject
+		addPackagesNamed: {(aProjectName , '-Core')}
+			toComponentNamed: 'Core';
+		addPackageNamed: aProjectName , '-Tests'
+			toComponentNamed: 'Core';
+		yourself.
+	packageName := aProjectName , '-Core'.
+	className := aProjectName , 'Class1'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := aProjectName , '-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: aProjectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
 %
 
 category: 'private'
@@ -89701,14 +90095,14 @@ _genSpecFor: specName loadSpecification: loadSpecification addDefinitions: addDe
 			resolvedRepository createBranch: specName ].
 
 	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	addDefinitionsBlock value: resolvedProject.
 
 	resolvedProject projectRoots
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
-
 	(resolvedProject repositoryRoot / 'rowan/doits') ensureDeleteAll.
+
+	addDefinitionsBlock value: resolvedProject.
 
 	resolvedProject
 		export;
@@ -106340,7 +106734,7 @@ _validateCanonicalRowanSample9ProjectFor: resolvedProject
 	(resolvedProject packagesRoot / (projectName , '-Shared')
 		/ (projectName , 'Shared.class.st')).
 	(resolvedProject specsRoot).
-	(resolvedProject specsRoot / resolvedProject projectAlias , 'ston').
+	(resolvedProject specsRoot / resolvedProject projectName , 'ston').
 	(resolvedProject projectsRoot)} do: [ :fileRef | self assert: fileRef exists ]
 %
 
@@ -106518,8 +106912,7 @@ testBasicResolve_1
 	self deny: expectedRepositoryRoot exists.
 
 	project := RwResolvedProjectV2 new
-		projectName: projectName;
-		projectAlias: projectAlias;
+		projectName: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
@@ -106935,7 +107328,7 @@ testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -106972,7 +107365,7 @@ testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_2
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107006,7 +107399,7 @@ testIssue_254
 		packageName1 packageName2 |
 
 	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107128,7 +107521,7 @@ testIssue_493
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107162,7 +107555,7 @@ testIssue_495_1
 
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107205,7 +107598,7 @@ testIssue_495_2
 
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107249,7 +107642,7 @@ testIssue_504_1
 
 	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107297,7 +107690,7 @@ testIssue_504_2
 
 	loadSpec := self _loadSpecNamed: 'spec_0005'.	"primer -- spec_0001 with instancesInvariant"
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107336,7 +107729,7 @@ testIssue_504_3
 
 	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107375,7 +107768,7 @@ testIssue_504_4
 
 	loadSpec := self _loadSpecNamed: 'spec_0006'.	
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107411,10 +107804,10 @@ testIssue_527
 	| loadSpec symDictName className projectName |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
-	(Rowan image loadedProjectNamed: loadSpec projectAlias ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: loadSpec projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 	className := projectName , 'Class1'.
 
 	self
@@ -107443,7 +107836,7 @@ testIssue_531_baseline
 	| loadSpec projectName classesToSymDictMap |
 	loadSpec := self _loadSpecNamed: 'spec_0004'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
@@ -107497,7 +107890,7 @@ testIssue_549
 	| loadSpec projectName  resolvedProject1 resolvedProject2 loadedProjects project |
 	loadSpec := self _loadSpecNamed: 'spec_0014'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107530,7 +107923,7 @@ testIssue_549_errorCondition
 	| loadSpec projectName  resolvedProject1 errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0015'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107563,7 +107956,7 @@ testIssue_557
 
 	loadSpec := self _loadSpecNamed: 'spec_0016'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107600,7 +107993,7 @@ testIssue_568
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0021'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107628,6 +108021,52 @@ testIssue_568
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 %
 
+category: 'tests'
+method: RwRowanSample9Test
+testIssue_571_1
+	"load project with a different projectName and projectAlias"
+
+	"https://github.com/dalehenrich/Rowan/issues/571"
+
+	| loadSpec projectName resolvedProject loadedProjects projectNames newProjectName projectAlias expectedProjectNames |
+	loadSpec := self _loadSpecNamed: 'spec_0025'.
+
+	projectName := loadSpec projectName.
+	projectAlias := projectName, '_alias'.
+	newProjectName := projectName, '_new'.
+	projectNames := {newProjectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+	expectedProjectNames := {newProjectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	projectName := newProjectName.
+
+	loadSpec
+		projectName: projectName;
+		projectAlias: projectAlias.
+
+	(self _testRowanProjectsSandbox / projectAlias) ensureDeleteAll.
+	self deny: (self _testRowanProjectsSandbox / projectAlias) exists.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"validate"
+	self assert: (self _testRowanProjectsSandbox / projectAlias) exists.
+	self assert: resolvedProject repositoryRoot basename = projectAlias.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: expectedProjectNames
+%
+
 category: 'issue 493'
 method: RwRowanSample9Test
 testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493
@@ -107642,7 +108081,7 @@ testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107674,7 +108113,7 @@ testRowanSample4_basic_504
 	| loadSpec projectName resolvedProject  loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
@@ -107705,7 +108144,7 @@ testRowanSample4_primer_504
 	| loadSpec projectName resolvedProject packageName1 packageName2 loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0005'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
@@ -107797,7 +108236,7 @@ testSpec_0002_to_0003
 		packageName1 packageName2 x |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107853,7 +108292,7 @@ testSpec_0008
 UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107877,7 +108316,7 @@ testSpec_0009
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0009'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107900,7 +108339,7 @@ testSpec_0010
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0010'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107923,7 +108362,7 @@ testSpec_0011
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0011'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107948,7 +108387,7 @@ testSpec_0012
 	| loadSpec projectName resolvedProject loadedProjects errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0012'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -107977,7 +108416,7 @@ testSpec_0013
 	| loadSpec projectName resolvedProject loadedProjects errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0013'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108006,7 +108445,7 @@ testSpec_0014
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0014'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108031,7 +108470,7 @@ testSpec_0015
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0015'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108057,7 +108496,7 @@ testSpec_0015_to_0016
 
 	loadSpec := self _loadSpecNamed: 'spec_0015'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108092,7 +108531,7 @@ testSpec_0016
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0016'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108118,7 +108557,7 @@ testSpec_0016_to_0017
 
 	loadSpec := self _loadSpecNamed: 'spec_0016'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108153,7 +108592,7 @@ testSpec_0017
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0017'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
@@ -108173,7 +108612,7 @@ testSpec_0019
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0019'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
@@ -108208,7 +108647,7 @@ testSpec_0020
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0020'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
@@ -108228,7 +108667,7 @@ testSpec_0021
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0021'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108257,7 +108696,7 @@ testSpec_0023_1
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0023'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108283,7 +108722,7 @@ testSpec_0023_2
 	| loadSpec projectName resolvedProject loadedProjects componentNames |
 	loadSpec := self _loadSpecNamed: 'spec_0023'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108315,7 +108754,7 @@ testSpec_0024
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0024'.
 
-	projectName := loadSpec projectAlias.
+	projectName := loadSpec projectName.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
@@ -108328,6 +108767,36 @@ testSpec_0024
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0025
+	"spec_0025 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/571"
+
+	| loadSpec projectName resolvedProject loadedProjects projectNames |
+	loadSpec := self _loadSpecNamed: 'spec_0025'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
 %
 
 category: 'private'
@@ -108411,19 +108880,43 @@ _standard_resolve_load_validate: projectSpec
 
 category: 'private'
 method: RwRowanSample9Test
-_standard_validate: resolvedProject loadedProjects: loadedProjects
-	| project testResult loadedProjectDefinition x |
-
-"validate"
+_standard_validate: resolvedProject loadedProjects: loadedProjects 
+	| testResult loadedProjectDefinition x |
+	"validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: (x := project audit) isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	loadedProjects
+		do: [ :project | 
+			self assert: (x := project audit) isEmpty.
+			testResult := project testSuite run.
+			self deny: testResult hasErrors.
+			self deny: testResult hasFailures.
 
-	loadedProjectDefinition := project asDefinition.
-	self assert: loadedProjectDefinition class = resolvedProject projectDefinition class.
+			loadedProjectDefinition := project asDefinition.
+			self
+				assert:
+					loadedProjectDefinition class = resolvedProject projectDefinition class ]
+%
+
+category: 'private'
+method: RwRowanSample9Test
+_standard_validate: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames
+	| testResult loadedProjectDefinition x |
+	"validate"
+	self assert: loadedProjects size = expectedProjectNames size.
+	self
+		assert: (loadedProjects collect: [ :each | each name ]) sort
+		equals: expectedProjectNames sort.
+	loadedProjects
+		do: [ :project | 
+			self assert: (x := project audit) isEmpty.
+			testResult := project testSuite run.
+			self deny: testResult hasErrors.
+			self deny: testResult hasFailures.
+
+			loadedProjectDefinition := project asDefinition.
+			self
+				assert:
+					loadedProjectDefinition class = resolvedProject projectDefinition class ]
 %
 
 category: 'private'
@@ -109813,7 +110306,7 @@ _writeTopzFilesUsing: loadSpecUrl conditionalAttributes: conditionalAttributes g
 		resolve.
 
 	conditionalAttributes addAll: loadSpec customConditionalAttributes.
-	theProjectSetDefinition := resolvedProject read: conditionalAttributes.
+	theProjectSetDefinition := resolvedProject readProjectSet: conditionalAttributes.
 
 	topazFileNameMap := Dictionary new.
 	topazFileNameMap at: gsFileName put: {}.
@@ -136534,6 +137027,35 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 %
 
+! Class extensions for 'RwAbstractResolvedObjectV2'
+
+!		Instance methods for 'RwAbstractResolvedObjectV2'
+
+category: '*rowan-strawman1'
+method: RwAbstractResolvedObjectV2
+readProjectComponentNames: componentNames groupNames: groupNames
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	^ self
+		readProjectComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: self platformConditionalAttributes
+%
+
+category: '*rowan-strawman1'
+method: RwAbstractResolvedObjectV2
+readProjectComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self
+		subclassResonsibility:
+			#'readProjectComponentNames:groupNames:platformConditionalAttributes:'
+%
+
 ! Class extensions for 'RwAbstractTool'
 
 !		Instance methods for 'RwAbstractTool'
@@ -137846,7 +138368,7 @@ testReadVastTonelDemo_555
 
 	"https://github.com/GemTalk/Rowan/issues/555"
 
-	| resolvedProject |
+	| resolvedProject x |
 "vast"
 	resolvedProject := self
 		_readVastTonelDemo_555:
@@ -137854,7 +138376,7 @@ testReadVastTonelDemo_555
 			'vast'}
 		deleteClone: true.
 	self
-		assert: resolvedProject packageNames sort
+		assert: (x := resolvedProject packageNames sort)
 		equals:
 			#('TonelExampleAnotherSubSubApp' 'TonelAnotherShadowSubSubApp' 'TonelExampleApp' 'TonelExampleShadowSubSubApp' 'TonelExampleSubApp' 'TonelExampleShadowSubSubSubApp' 'TonelExampleSubSubApp' 'TonelExampleForVastPharoApp')
 				sort.

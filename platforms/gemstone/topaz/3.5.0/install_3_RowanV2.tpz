@@ -45,7 +45,7 @@ doLog := false.
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		projectSetDefinition := resolvedProject read ].
+		projectSetDefinition := resolvedProject readProjectSet ].
 
 	theProjectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition projects 

@@ -54,7 +54,7 @@ run
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		theProjectSetDefinition :=  resolvedProject read: conditionalAttributes.
+		theProjectSetDefinition :=  resolvedProject readProjectSet: conditionalAttributes.
 		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
 
 		"Now copy all of the definitions from the Rowan packages into a single bootstrap package for VAST"

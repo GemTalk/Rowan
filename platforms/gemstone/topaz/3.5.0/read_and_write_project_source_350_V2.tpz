@@ -106,7 +106,7 @@ false ifTrue: [
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		theProjectSetDefinition :=  resolvedProject read: conditionalAttributes.
+		theProjectSetDefinition :=  resolvedProject readProjectSet: conditionalAttributes.
 		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
