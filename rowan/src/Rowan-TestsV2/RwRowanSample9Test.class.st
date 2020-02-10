@@ -926,6 +926,51 @@ RwRowanSample9Test >> testIssue_568 [
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue_571_1 [
+	"load project with a different projectName and projectAlias"
+
+	"https://github.com/dalehenrich/Rowan/issues/571"
+
+	| loadSpec projectName resolvedProject loadedProjects projectNames newProjectName projectAlias expectedProjectNames |
+	loadSpec := self _loadSpecNamed: 'spec_0025'.
+
+	projectName := loadSpec projectName.
+	projectAlias := projectName, '_alias'.
+	newProjectName := projectName, '_new'.
+	projectNames := {newProjectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+	expectedProjectNames := {newProjectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	projectName := newProjectName.
+
+	loadSpec
+		projectName: projectName;
+		projectAlias: projectAlias.
+
+	(self _testRowanProjectsSandbox / projectAlias) ensureDeleteAll.
+	self deny: (self _testRowanProjectsSandbox / projectAlias) exists.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"validate"
+	self assert: (self _testRowanProjectsSandbox / projectAlias) exists.
+	self assert: resolvedProject repositoryRoot basename = projectAlias.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: expectedProjectNames
+]
+
 { #category : 'issue 495' }
 RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
