@@ -98,7 +98,7 @@ false ifTrue: [
 		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome conditionalAttributes theRepositoryRoot |
 		loadSpecUrl := ar at: 1.
 		projectsHome := ar at: 2.
-		conditionalAttributes := ar at: 3.
+		conditionalAttributes := (ar at: 3) copy.
 		theRepositoryRoot := ar at: 4.
 		gsFileName := ar at: 5.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.

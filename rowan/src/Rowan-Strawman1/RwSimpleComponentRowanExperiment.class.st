@@ -1174,6 +1174,7 @@ RwSimpleComponentRowanExperiment >> testWriteExperimentalRowanComponentStructure
 	resolvedProject _projectSpecification
 		specName: 'proposed_project';
 		componentsPath: 'rowan/v2/proposed_components';
+		projectsPath: 'rowan/v2/proposed_projects';
 		specsPath: 'rowan/v2/proposed_specs'.	"write components in a new spot"
 	resolvedProject componentsRoot ensureDeleteAll.
 	originalComponents := resolvedProject _projectDefinition components.	"save for reference"

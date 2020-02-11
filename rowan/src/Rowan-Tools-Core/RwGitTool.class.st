@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
+{ #category : 'private' }
+RwGitTool >> _shouldLog [
+	^ Rowan projectTools trace isTracing
+]
+
 { #category : 'smalltalk api' }
 RwGitTool >> gitaddIn: gitRepoPath with: args [
 
@@ -22,7 +27,7 @@ RwGitTool >> gitBranchNameIn: gitRepoPath [
 
 	| command result |
 	command := 'set -e; cd ' , gitRepoPath , ';git branch | sed -n ''/\* /s///p'''.
-	result := self performOnServer: command logging: false.
+	result := self performOnServer: command logging: self _shouldLog.
 	^ result trimWhiteSpace
 ]
 
@@ -34,7 +39,7 @@ RwGitTool >> gitcheckoutIn: gitRootReference with: args [
 { #category : 'smalltalk api' }
 RwGitTool >> gitcloneIn: gitRootPath with: args [
 
-	^ self gitcloneIn: gitRootPath with: args logging: true
+	^ self gitcloneIn: gitRootPath with: args logging: self _shouldLog
 ]
 
 { #category : 'smalltalk api' }
@@ -74,7 +79,7 @@ RwGitTool >> gitinitIn: dirPath with: args [
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git init ' , args.
-	^ self performOnServer: command logging: true
+	^ self performOnServer: command logging: self _shouldLog
 ]
 
 { #category : 'smalltalk api' }
@@ -109,11 +114,10 @@ RwGitTool >> gitPresentIn: gitRepoPath [
 	[ 
 	gitHome := self gitrevparseShowTopLevelIn: gitRepoPath.
 	command := 'set -e; cd ' , gitRepoPath , '; pwd'.
-	cdResponse := self performOnServer: command logging: true ]
+	cdResponse := self performOnServer: command logging: self _shouldLog ]
 		on: Error
 		do: [ :ex | ^ false ].
 	^ (self readlink: gitHome) = (self readlink: cdResponse)
-
 ]
 
 { #category : 'smalltalk api' }
@@ -151,7 +155,7 @@ RwGitTool >> gitrevparseShowTopLevelIn: dirPath [
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git rev-parse --show-toplevel'.
-	^ self performOnServer: command logging: true
+	^ self performOnServer: command logging: self _shouldLog
 ]
 
 { #category : 'smalltalk api' }
@@ -168,7 +172,7 @@ RwGitTool >> performGitCommand: gitCommand in: gitRepoPath with: gitArgs [
 		in: gitRepoPath
 		worktree: gitRepoPath
 		with: gitArgs
-		logging: true
+		logging: self _shouldLog
 ]
 
 { #category : 'private' }

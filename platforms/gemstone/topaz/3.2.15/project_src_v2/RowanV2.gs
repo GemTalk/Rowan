@@ -6597,6 +6597,22 @@ true.
 
 doit
 (RwProjectTool
+	subclass: 'RwPrjTraceTool'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwProjectTool
 	subclass: 'RwPrjWriteToolV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -63242,23 +63258,23 @@ packageExtension
 category: 'class reading'
 method: RwRepositoryResolvedProjectTonelReaderVisitorV2
 readClassesFor: packageName packageRoot: packageRoot
-
 	| classFileExtensions classExtensionFileExtensions trace |
-  trace := SessionTemps current at: #ROWAN_TRACE otherwise: nil .
-	currentPackageDefinition := currentProjectDefinition 
-		packageNamed: packageName 
+	trace := Rowan projectTools trace.
+	currentPackageDefinition := currentProjectDefinition
+		packageNamed: packageName
 		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	classExtensionFileExtensions := self classExtensionFileExtensions.
 	classFileExtensions := self classFileExtensions.
-	packageRoot files do: [:file |
-		| fileExtensions |
-    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading class ', file asString ].
-		fileExtensions := file extensions asArray.
-		fileExtensions = classFileExtensions
-			ifTrue: [ self readClassFile: file inPackage: packageName ]
-			ifFalse: [
-				fileExtensions = classExtensionFileExtensions
-					ifTrue: [ self readClassExtensionFile: file  inPackage: packageName ] ] ]
+	packageRoot files
+		do: [ :file | 
+			| fileExtensions |
+			trace trace: '--- reading class ' , file asString.
+			fileExtensions := file extensions asArray.
+			fileExtensions = classFileExtensions
+				ifTrue: [ self readClassFile: file inPackage: packageName ]
+				ifFalse: [ 
+					fileExtensions = classExtensionFileExtensions
+						ifTrue: [ self readClassExtensionFile: file inPackage: packageName ] ] ]
 %
 
 category: 'class reading'
@@ -65661,7 +65677,7 @@ gitBranchNameIn: gitRepoPath
 
 	| command result |
 	command := 'set -e; cd ' , gitRepoPath , ';git branch | sed -n ''/\* /s///p'''.
-	result := self performOnServer: command logging: false.
+	result := self performOnServer: command logging: self _shouldLog.
 	^ result trimWhiteSpace
 %
 
@@ -65675,7 +65691,7 @@ category: 'smalltalk api'
 method: RwGitTool
 gitcloneIn: gitRootPath with: args
 
-	^ self gitcloneIn: gitRootPath with: args logging: true
+	^ self gitcloneIn: gitRootPath with: args logging: self _shouldLog
 %
 
 category: 'smalltalk api'
@@ -65720,7 +65736,7 @@ gitinitIn: dirPath with: args
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git init ' , args.
-	^ self performOnServer: command logging: true
+	^ self performOnServer: command logging: self _shouldLog
 %
 
 category: 'smalltalk api'
@@ -65759,7 +65775,7 @@ gitPresentIn: gitRepoPath
 	[ 
 	gitHome := self gitrevparseShowTopLevelIn: gitRepoPath.
 	command := 'set -e; cd ' , gitRepoPath , '; pwd'.
-	cdResponse := self performOnServer: command logging: true ]
+	cdResponse := self performOnServer: command logging: self _shouldLog ]
 		on: Error
 		do: [ :ex | ^ false ].
 	^ (self readlink: gitHome) = (self readlink: cdResponse)
@@ -65806,7 +65822,7 @@ gitrevparseShowTopLevelIn: dirPath
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git rev-parse --show-toplevel'.
-	^ self performOnServer: command logging: true
+	^ self performOnServer: command logging: self _shouldLog
 %
 
 category: 'smalltalk api'
@@ -65825,7 +65841,7 @@ performGitCommand: gitCommand in: gitRepoPath with: gitArgs
 		in: gitRepoPath
 		worktree: gitRepoPath
 		with: gitArgs
-		logging: true
+		logging: self _shouldLog
 %
 
 category: 'private'
@@ -65873,6 +65889,12 @@ performOnServer: commandLine logging: logging
         cr;
         show: result ].
   ^ result
+%
+
+category: 'private'
+method: RwGitTool
+_shouldLog
+	^ Rowan projectTools trace isTracing
 %
 
 ! Class implementation for 'RwPackageTool'
@@ -66532,6 +66554,13 @@ classmethod: RwProjectTool
 test
 
 	^RwPrjTestTool new
+%
+
+category: 'commands'
+classmethod: RwProjectTool
+trace
+
+	^RwPrjTraceTool new
 %
 
 !		Instance methods for 'RwProjectTool'
@@ -69025,6 +69054,35 @@ _addTestsForProjectNamed: projectName toTestSuite: suite
 							cl isAbstract
 								ifFalse: [ suite addTests: cl suite tests ] ] ] ].
 	^ suite
+%
+
+! Class implementation for 'RwPrjTraceTool'
+
+!		Instance methods for 'RwPrjTraceTool'
+
+category: 'testing'
+method: RwPrjTraceTool
+isTracing
+	^ (SessionTemps current at: #'ROWAN_TRACE' otherwise: nil) == #'gciLogServer'
+%
+
+category: 'tracing'
+method: RwPrjTraceTool
+startTracing
+	SessionTemps current at: #'ROWAN_TRACE' put: #'gciLogServer'
+%
+
+category: 'tracing'
+method: RwPrjTraceTool
+stopTracing
+	SessionTemps current removeKey: #'ROWAN_TRACE' ifAbsent: []
+%
+
+category: 'tracing'
+method: RwPrjTraceTool
+trace: message
+	self isTracing
+		ifTrue: [ GsFile gciLogServer: message ]
 %
 
 ! Class implementation for 'RwPrjWriteToolV2'
@@ -137525,8 +137583,7 @@ fromFile: filePath
 	filePath asFileReference
 		readStreamDo: [ :fileStream | 
 			| stream |
-			(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil) == #'gciLogServer'
-				ifTrue: [ GsFile gciLogServer: '--- reading component ' , filePath asString ].
+			Rowan projectTools trace trace: '--- reading component ' , filePath asString.
 			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 			^ self _readStonFrom: stream ]
 %
@@ -139259,8 +139316,8 @@ fromFile: filePath
 			spec := (STON fromStream: stream)
 				initializeForImport;
 				yourself.
-			(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil) == #'gciLogServer'
-				ifTrue: [ GsFile gciLogServer: '--- reading ' , spec class label , filePath asString ].
+			Rowan projectTools trace
+				trace: '--- reading ' , spec class label , filePath asString.
 			^ spec ]
 %
 

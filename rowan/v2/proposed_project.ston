@@ -3,7 +3,7 @@ RwProjectSpecificationV2 {
 	#projectSpecPath : 'rowan/v2',
 	#componentsPath : 'rowan/v2/proposed_components',
 	#packagesPath : 'rowan/src',
-	#projectsPath : 'rowan/v2/projects',
+	#projectsPath : 'rowan/v2/proposed_projects',
 	#specsPath : 'rowan/v2/proposed_specs',
 	#packageFormat : 'tonel',
 	#comment : 'V2 Rowan project specification'

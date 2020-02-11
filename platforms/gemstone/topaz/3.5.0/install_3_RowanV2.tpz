@@ -28,8 +28,8 @@
 #  methods into the correct package structure
   run
 	"install_3_RowanV2.tpz"
- 	| projectSetDefinition auditFailures reAudit theProjectSetDefinition doLog |
-doLog := false.
+ 	| projectSetDefinition auditFailures reAudit theProjectSetDefinition |
+	Rowan projectTools trace startTracing; trace: '--- installing install_3_RowanV2.tpz'.
 	{
 		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed.ston'. 
@@ -72,10 +72,6 @@ doLog := false.
 						yourself ].
 			theProjectSetDefinition addProject: resolvedProject_copy ].
 	"Load the project shell -- project and empty packages"
-doLog
-ifTrue: [ 
-	SessionTemps current at: #ROWAN_TRACE put: #gciLogServer . "log to topaz output file"
-].
 	Rowan projectTools loadV2 loadProjectSetDefinition: theProjectSetDefinition.
   SessionTemps current removeKey: #ROWAN_TRACE ifAbsent: []. "end logging to topaz output file"
 

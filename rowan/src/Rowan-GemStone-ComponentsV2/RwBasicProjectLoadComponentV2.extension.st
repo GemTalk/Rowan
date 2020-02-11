@@ -5,8 +5,7 @@ RwBasicProjectLoadComponentV2 class >> fromFile: filePath [
 	filePath asFileReference
 		readStreamDo: [ :fileStream | 
 			| stream |
-			(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil) == #'gciLogServer'
-				ifTrue: [ GsFile gciLogServer: '--- reading component ' , filePath asString ].
+			Rowan projectTools trace trace: '--- reading component ' , filePath asString.
 			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 			^ self _readStonFrom: stream ]
 ]

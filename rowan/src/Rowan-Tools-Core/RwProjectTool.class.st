@@ -103,6 +103,12 @@ RwProjectTool class >> test [
 	^RwPrjTestTool new
 ]
 
+{ #category : 'commands' }
+RwProjectTool class >> trace [
+
+	^RwPrjTraceTool new
+]
+
 { #category : 'smalltalk api' }
 RwProjectTool >> repositoryUrl [
   ^ self specification repositoryUrl

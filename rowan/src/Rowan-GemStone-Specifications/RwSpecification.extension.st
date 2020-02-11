@@ -9,7 +9,7 @@ RwSpecification class >> fromFile: filePath [
 			spec := (STON fromStream: stream)
 				initializeForImport;
 				yourself.
-			(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil) == #'gciLogServer'
-				ifTrue: [ GsFile gciLogServer: '--- reading ' , spec class label , filePath asString ].
+			Rowan projectTools trace
+				trace: '--- reading ' , spec class label , filePath asString.
 			^ spec ]
 ]
