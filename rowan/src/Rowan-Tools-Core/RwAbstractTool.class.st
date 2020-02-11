@@ -167,7 +167,7 @@ RwAbstractTool >> readlink: filepath [
 
 	| command |
 	command := self _sh_realpath_source, '; realpath ' , filepath.
-	^Rowan gitTools performOnServer: command logging: true
+	^Rowan gitTools performOnServer: command
 ]
 
 { #category : 'smalltalk api' }

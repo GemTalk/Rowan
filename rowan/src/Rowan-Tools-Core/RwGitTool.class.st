@@ -188,6 +188,11 @@ RwGitTool >> performGitCommand: gitCommand in: gitRepoPath worktree: workTreePat
 ]
 
 { #category : 'private' }
+RwGitTool >> performOnServer: commandLine [
+	^ self performOnServer: commandLine logging: self _shouldLog
+]
+
+{ #category : 'private' }
 RwGitTool >> performOnServer: commandLine logging: logging [
   | result |
   result := self

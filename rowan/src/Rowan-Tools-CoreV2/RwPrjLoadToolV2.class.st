@@ -151,7 +151,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 { #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName [
 	| projectSet |
-	projectSet := Rowan projectTools readToolV2
+	projectSet := Rowan projectTools readV2
 		readProjectSetForProjectNamed: projectName.
 	^ self loadProjectSetDefinition: projectSet
 ]
@@ -171,7 +171,7 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: cu
 { #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
 	| projectSet |
-	projectSet := Rowan projectTools readToolV2
+	projectSet := Rowan projectTools readV2
 		readProjectSetForProjectNamed: projectName
 		platformConditionalAttributes: platformConditionalAttributes.
 	^ self loadProjectSetDefinition: projectSet

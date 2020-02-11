@@ -1514,10 +1514,10 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	gitRootPath :=  self _testRowanProjectsSandbox / 'issue_300_dir/'.
 
 	commandLine := 'set -e;  rm -rf ', gitRootPath pathString.
-	Rowan gitTools performOnServer: commandLine logging: true.
+	Rowan gitTools performOnServer: commandLine.
 
 	commandLine := 'set -e;  rm -rf ', gitRootPath_symLink.
-	Rowan gitTools performOnServer: commandLine logging: true.
+	Rowan gitTools performOnServer: commandLine.
 
 "clone project to make sure that we have an existing git project"
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: false.
@@ -1527,7 +1527,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 "create symbolic link..."
 	symLinkName := 'issue_300_symLink'.
 	commandLine := 'set -e;  cd ' , gitRootPath pathString, '; mkdir ', gitRootPath_symLink, '; ln -s ', gitRootPath pathString , ' ', gitRootPath_symLink, '/', symLinkName.
-	Rowan gitTools performOnServer: commandLine logging: true.
+	Rowan gitTools performOnServer: commandLine.
 
 "...and now run clone again using symbolic link" 
 	self
