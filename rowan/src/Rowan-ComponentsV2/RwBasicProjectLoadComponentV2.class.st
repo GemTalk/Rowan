@@ -545,6 +545,15 @@ RwBasicProjectLoadComponentV2 >> preloadDoitName: object [
 	preloadDoitName := object
 ]
 
+{ #category : 'printing' }
+RwBasicProjectLoadComponentV2 >> printOn: aStream [
+	super printOn: aStream.
+	aStream
+		space;
+		nextPutAll: name.
+	projectName ifNotNil: [ aStream nextPutAll: ' for project ' , projectName ]
+]
+
 { #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> projectName [
 

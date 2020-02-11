@@ -27,6 +27,11 @@ RwLoadSpecificationV2 class >> _gemstoneAllUsersName [
 	^ 'allusers'
 ]
 
+{ #category : 'accessing' }
+RwLoadSpecificationV2 class >> label [
+	^ 'load specification '
+]
+
 { #category : 'gemstone-support' }
 RwLoadSpecificationV2 >> _gemstoneAllUsersName [
 

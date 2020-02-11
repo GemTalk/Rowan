@@ -195,7 +195,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName pa
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
 		| fileExtensions |
-    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading ', file asString ].
+    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading class ', file asString ].
 		fileExtensions := file extensions asArray.
 		fileExtensions = classFileExtensions
 			ifTrue: [ self readClassFile: file inPackage: packageName ]

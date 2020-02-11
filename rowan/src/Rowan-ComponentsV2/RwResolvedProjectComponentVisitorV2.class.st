@@ -126,9 +126,12 @@ RwResolvedProjectComponentVisitorV2 >> _visitComponents: componentNamesToRead gr
 	componentNamesToRead
 		do: [ :componentName | 
 			| component |
-			component := RwBasicProjectLoadComponentV2
-				fromComponentsDirectory: componentDirectory
-				named: componentName.
+			component := self readComponents
+				at: componentName
+				ifAbsentPut: [ 
+					RwBasicProjectLoadComponentV2
+						fromComponentsDirectory: componentDirectory
+						named: componentName ].
 			component projectName: projectName.
 
 			self visit: component	"expect all component names to represent loadable components - throw error if a nested component is encountered" ]

@@ -19,6 +19,11 @@ Class {
 }
 
 { #category : 'accessing' }
+RwProjectSpecificationV2 class >> label [
+	^ 'project specification '
+]
+
+{ #category : 'accessing' }
 RwProjectSpecificationV2 >> _repoType [
 	"direct access to IV ... used by ="
 

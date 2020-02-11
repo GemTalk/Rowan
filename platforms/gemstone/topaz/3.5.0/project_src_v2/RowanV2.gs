@@ -5606,7 +5606,7 @@ true.
 doit
 (Object
 	subclass: 'RwAbstractProjectComponentVisitorV2'
-	instVarNames: #( projectLoadSpecs visitedComponents visitedComponentNames platformConditionalAttributes definedGroupNames projectNames groupNames componentNames )
+	instVarNames: #( projectLoadSpecs readComponents readProjects visitedComponents visitedComponentNames platformConditionalAttributes definedGroupNames projectNames groupNames componentNames )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -58482,6 +58482,8 @@ initialize
 	visitedComponentNames := Set new.
 	projectNames := Set new.
 	componentNames := Set new.
+	readComponents := Dictionary new.
+	readProjects := Dictionary new.
 	platformConditionalAttributes := #().
 	groupNames := Set new.
 	projectLoadSpecs := Set new.
@@ -58527,6 +58529,20 @@ category: 'accessing'
 method: RwAbstractProjectComponentVisitorV2
 projectsPath
 	^ self subclassResponsibility: #'projectsPath'
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+readComponents
+
+	^ readComponents
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+readProjects
+
+	^ readProjects
 %
 
 category: 'visiting'
@@ -58590,7 +58606,8 @@ visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent
 
 	self _visited: aSimpleProjectLoadComponent.
 
-	(self groupNames isEmpty or: [ self groupNames includes: aSimpleProjectLoadComponent groupName])
+	(self groupNames isEmpty
+		or: [ self groupNames includes: aSimpleProjectLoadComponent groupName ])
 		ifTrue: [ 
 			aSimpleProjectLoadComponent conditionalPropertyMatchers
 				keysAndValuesDo: [ :platformMatchers :ignored | 
@@ -58605,7 +58622,9 @@ visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent
 	(self
 		_components: self componentsPath
 		forProject: aSimpleProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
+		do: [ :component | 
+			(visitedComponentNames includes:component name)
+				ifFalse: [ component acceptNestedVisitor: self ] ].
 
 	(self
 		_projects: self projectsPath
@@ -58914,9 +58933,12 @@ _visitComponents: componentNamesToRead groupNames: aGroupNames
 	componentNamesToRead
 		do: [ :componentName | 
 			| component |
-			component := RwBasicProjectLoadComponentV2
-				fromComponentsDirectory: componentDirectory
-				named: componentName.
+			component := self readComponents
+				at: componentName
+				ifAbsentPut: [ 
+					RwBasicProjectLoadComponentV2
+						fromComponentsDirectory: componentDirectory
+						named: componentName ].
 			component projectName: projectName.
 
 			self visit: component	"expect all component names to represent loadable components - throw error if a nested component is encountered" ]
@@ -63041,7 +63063,7 @@ readClassesFor: packageName packageRoot: packageRoot
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
 		| fileExtensions |
-    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading ', file asString ].
+    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading class ', file asString ].
 		fileExtensions := file extensions asArray.
 		fileExtensions = classFileExtensions
 			ifTrue: [ self readClassFile: file inPackage: packageName ]
@@ -69281,6 +69303,16 @@ category: 'accessing'
 method: RwBasicProjectLoadComponentV2
 preloadDoitName: object
 	preloadDoitName := object
+%
+
+category: 'printing'
+method: RwBasicProjectLoadComponentV2
+printOn: aStream
+	super printOn: aStream.
+	aStream
+		space;
+		nextPutAll: name.
+	projectName ifNotNil: [ aStream nextPutAll: ' for project ' , projectName ]
 %
 
 category: 'accessing'
@@ -85616,6 +85648,12 @@ fromUrl: specNameOrUrl
 	self error: 'Unknown scheme: ' , url scheme printString
 %
 
+category: 'accessing'
+classmethod: RwSpecification
+label
+	^ self class name asString , ' '
+%
+
 category: 'instance creation'
 classmethod: RwSpecification
 new
@@ -85693,6 +85731,12 @@ version
 ! Class implementation for 'RwLoadSpecificationV2'
 
 !		Class methods for 'RwLoadSpecificationV2'
+
+category: 'accessing'
+classmethod: RwLoadSpecificationV2
+label
+	^ 'load specification '
+%
 
 category: 'gemstone-support'
 classmethod: RwLoadSpecificationV2
@@ -86322,7 +86366,25 @@ _validateGemStonePlatformUserIdMap: userIdMap
 						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
 %
 
+! Class implementation for 'RwEmbeddedLoadSpecificationV2'
+
+!		Class methods for 'RwEmbeddedLoadSpecificationV2'
+
+category: 'accessing'
+classmethod: RwEmbeddedLoadSpecificationV2
+label
+	^ 'embedded load specification '
+%
+
 ! Class implementation for 'RwProjectSpecificationV2'
+
+!		Class methods for 'RwProjectSpecificationV2'
+
+category: 'accessing'
+classmethod: RwProjectSpecificationV2
+label
+	^ 'project specification '
+%
 
 !		Instance methods for 'RwProjectSpecificationV2'
 
@@ -136942,31 +137004,39 @@ name
 category: '*rowan-gemstone-componentsv2'
 method: RwAbstractProjectComponentVisitorV2
 _components: componentDirPath forProject: aProjectName
-	| componentDirectory |
+	| componentDirectory selected |
 	self componentNames isEmpty
 		ifTrue: [ ^ #() ].
 	componentDirectory := componentDirPath asFileReference.
-	^ self componentNames
+	selected := (self componentNames
+		select: [ :componentName | (visitedComponentNames includes: componentName) not ])
 		collect: [ :componentName | 
-			(RwBasicProjectLoadComponentV2
-				fromComponentsDirectory: componentDirectory
-				named: componentName)
-				projectName: aProjectName;
-				yourself ]
+			self readComponents
+				at: componentName
+				ifAbsentPut: [ 
+ 					(RwBasicProjectLoadComponentV2
+						fromComponentsDirectory: componentDirectory
+						named: componentName)
+						projectName: aProjectName;
+						yourself ] ].
+	^ selected
 %
 
 category: '*rowan-gemstone-componentsv2'
 method: RwAbstractProjectComponentVisitorV2
 _projects: projectDirPath forProject: ignored
-
 	| urlBase |
-	self projectNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
+	self projectNames isEmpty
+		ifTrue: [ ^ #() ].
+	urlBase := 'file:' , projectDirPath asFileReference pathString , '/'.
 	^ self projectNames
 		collect: [ :prjName | 
-			| url |
-			url := urlBase , prjName , '.ston'.
-			RwSpecification fromUrl: url ]
+			self readProjects
+				at: prjName
+				ifAbsentPut: [ 
+					| url |
+					url := urlBase , prjName , '.ston'.
+					RwSpecification fromUrl: url ] ]
 %
 
 ! Class extensions for 'RwAbstractProjectDefinitionV2'
@@ -137082,6 +137152,8 @@ fromFile: filePath
 	filePath asFileReference
 		readStreamDo: [ :fileStream | 
 			| stream |
+			(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil) == #'gciLogServer'
+				ifTrue: [ GsFile gciLogServer: '--- reading component ' , filePath asString ].
 			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 			^ self _readStonFrom: stream ]
 %
@@ -138809,11 +138881,14 @@ classmethod: RwSpecification
 fromFile: filePath
 	filePath asFileReference
 		readStreamDo: [ :fileStream | 
-			| stream |
+			| stream spec |
 			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			^ (STON fromStream: stream)
+			spec := (STON fromStream: stream)
 				initializeForImport;
-				yourself ]
+				yourself.
+			(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil) == #'gciLogServer'
+				ifTrue: [ GsFile gciLogServer: '--- reading ' , spec class label , filePath asString ].
+			^ spec ]
 %
 
 ! Class extensions for 'SequenceableCollection'

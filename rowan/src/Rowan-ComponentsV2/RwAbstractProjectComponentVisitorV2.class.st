@@ -3,6 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'projectLoadSpecs',
+		'readComponents',
+		'readProjects',
 		'visitedComponents',
 		'visitedComponentNames',
 		'platformConditionalAttributes',
@@ -123,6 +125,8 @@ RwAbstractProjectComponentVisitorV2 >> initialize [
 	visitedComponentNames := Set new.
 	projectNames := Set new.
 	componentNames := Set new.
+	readComponents := Dictionary new.
+	readProjects := Dictionary new.
 	platformConditionalAttributes := #().
 	groupNames := Set new.
 	projectLoadSpecs := Set new.
@@ -162,6 +166,18 @@ RwAbstractProjectComponentVisitorV2 >> projectNames [
 { #category : 'accessing' }
 RwAbstractProjectComponentVisitorV2 >> projectsPath [
 	^ self subclassResponsibility: #'projectsPath'
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectComponentVisitorV2 >> readComponents [
+
+	^ readComponents
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectComponentVisitorV2 >> readProjects [
+
+	^ readProjects
 ]
 
 { #category : 'visiting' }
@@ -219,7 +235,8 @@ RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleP
 
 	self _visited: aSimpleProjectLoadComponent.
 
-	(self groupNames isEmpty or: [ self groupNames includes: aSimpleProjectLoadComponent groupName])
+	(self groupNames isEmpty
+		or: [ self groupNames includes: aSimpleProjectLoadComponent groupName ])
 		ifTrue: [ 
 			aSimpleProjectLoadComponent conditionalPropertyMatchers
 				keysAndValuesDo: [ :platformMatchers :ignored | 
@@ -234,7 +251,9 @@ RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleP
 	(self
 		_components: self componentsPath
 		forProject: aSimpleProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
+		do: [ :component | 
+			(visitedComponentNames includes:component name)
+				ifFalse: [ component acceptNestedVisitor: self ] ].
 
 	(self
 		_projects: self projectsPath

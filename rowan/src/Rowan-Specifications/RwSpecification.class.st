@@ -35,6 +35,11 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 	self error: 'Unknown scheme: ' , url scheme printString
 ]
 
+{ #category : 'accessing' }
+RwSpecification class >> label [
+	^ self class name asString , ' '
+]
+
 { #category : 'instance creation' }
 RwSpecification class >> new [
 
