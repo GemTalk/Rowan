@@ -156,15 +156,6 @@ RowanServicesTest >> defaultSymbolDictionaryName [
 	^'ServicesTestDictionary'
 ]
 
-{ #category : 'unicode method' }
-RowanServicesTest >> iAmAUnicodeMethod [
-
-		| abc |
-		abc := 'Ϛ'.
-		self halt. 
-		^abc
-]
-
 { #category : 'support' }
 RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 	"send this to help identify which tests test which issues

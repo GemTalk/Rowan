@@ -487,7 +487,7 @@ RowanClassService >> initializeMethodHistoryFor: source [
     ifTrue: [ ^ self	"invalid source, continue and let save method fail" ]
     ifFalse: [ 
       | compiledMethod |
-      compiledMethod := self theClass
+      compiledMethod := (Object _objectForOop: oop)
         compiledMethodAt: selector
         environmentId: 0
         otherwise: nil.
@@ -956,12 +956,13 @@ RowanClassService >> saveMethodSource: source category: category [
   | behavior compilationResult gsNMethod updatedCategory methodService |
   meta
     ifNil: [ 
-      behavior := Object _objectForOop: oop.  
-      meta := behavior isMeta ] 
+      behavior := Object _objectForOop: oop.
+      meta := behavior isMeta ]
     ifNotNil: [ 
       behavior := meta
         ifTrue: [ self theClass class ]
         ifFalse: [ self theClass ] ].
+  oop := behavior asOop.
   self initializeMethodHistoryFor: source.
   updatedCategory := category ifNil: [ 'other' ].
   compilationResult := self
