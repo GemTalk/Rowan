@@ -25,12 +25,12 @@ run
 				"make sure test group is loaded ... include deprecated packages"
 				Rowan projectTools loadV2
 					loadProjectNamed: projectName
-					withGroupNames: #('core' 'tests' 'deprecated' 'jadeServer' 'deprecated tests') ]
+					customConditionalAttributes: #('tests' 'deprecated') ]
 			ifFalse: [
 				"make sure test group is loaded ... do NOT include deprecated packages"
 				Rowan projectTools loadV2
 					loadProjectNamed: projectName
-					withGroupNames: #('core' 'tests' 'jadeServer') ] ]
+					customConditionalAttributes: #('tests') ] ]
 					on: CompileWarning do: [:ex |
 						(ex description includesString: 'not optimized')
 							ifFalse: [ warnings add: ex asString printString ].

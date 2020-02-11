@@ -1,0 +1,9 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Tests',
+	#condition : 'tests',
+	#packageNames : [
+		'STON-Tests',
+		'STON-GemStone-Tests'
+	],
+	#comment : 'Single component for STON project'
+}

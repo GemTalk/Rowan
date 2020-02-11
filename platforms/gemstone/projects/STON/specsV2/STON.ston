@@ -1,16 +1,18 @@
 RwEmbeddedLoadSpecificationV2 {
 	#specName : 'STON',
 	#projectName : 'STON',
+	#projectAlias : 'Rowan',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
 	#revision : 'master',
 	#projectSpecFile : 'platforms/gemstone/projects/STON/project.ston',
 	#componentNames : [
-		'Core'
+		'Core',
+		'Tests'
 	],
-	#groupNames : [
-		'core',
+	#customConditionalAttributes : [
 		'tests'
 	],
+	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {
 			'SystemUser' : {

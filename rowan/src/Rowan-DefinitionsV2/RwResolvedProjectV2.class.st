@@ -631,6 +631,19 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames groupNames: 
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readProjectSetForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: #()
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 	^ self _projectDefinition removeComponentNamed: aComponentName

@@ -125,6 +125,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> packageNameToPlatformPropertiesMap: aDi
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> platformConditionalAttributes [
+	"Answer the platformConditionalAttributes used to load the project"
+
+	^ self resolvedProject platformConditionalAttributes
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> projectOwnerId [
 
 	^ self propertyAt: 'projectOwnerId'

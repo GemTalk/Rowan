@@ -64643,6 +64643,20 @@ readProjectSetComponentNames: componentNames groupNames: groupNames platformCond
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+readProjectSetComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readProjectSetForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: #()
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 removeComponentNamed: aComponentName
@@ -68687,6 +68701,38 @@ loadProjectDefinition: projectDefinition platformConfigurationAttributes: platfo
 		instanceMigrator: instanceMigrator
 %
 
+category: 'load project by name'
+method: RwPrjLoadToolV2
+loadProjectNamed: projectName
+	| projectSet |
+	projectSet := Rowan projectTools readToolV2
+		readProjectSetForProjectNamed: projectName.
+	^ self loadProjectSetDefinition: projectSet
+%
+
+category: 'load project by name'
+method: RwPrjLoadToolV2
+loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes
+	| platformConditionalAttributes project |
+	project := RwProject newNamed: projectName.
+	platformConditionalAttributes := project platformConditionalAttributes copy
+		asSet.
+	platformConditionalAttributes addAll: customConditionalAttributes.
+	^ self
+		loadProjectNamed: projectName
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'load project by name'
+method: RwPrjLoadToolV2
+loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes
+	| projectSet |
+	projectSet := Rowan projectTools readToolV2
+		readProjectSetForProjectNamed: projectName
+		platformConditionalAttributes: platformConditionalAttributes.
+	^ self loadProjectSetDefinition: projectSet
+%
+
 category: 'load project definitions'
 method: RwPrjLoadToolV2
 loadProjectSetDefinition: projectSetDefinitionToLoad
@@ -68985,6 +69031,19 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes.
 	^ resolvedProject
+%
+
+category: 'read loaded projects'
+method: RwPrjReadToolV2
+readProjectSetForProjectNamed: projectName
+	^ (Rowan image loadedProjectNamed: projectName) asDefinition readProjectSet
+%
+
+category: 'read loaded projects'
+method: RwPrjReadToolV2
+readProjectSetForProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes
+	^ (Rowan image loadedProjectNamed: projectName) asDefinition
+		readProjectSet: platformConditionalAttributes
 %
 
 category: 'read resolved projects'
@@ -83454,6 +83513,14 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 packageNameToPlatformPropertiesMap: aDictionary
 
 	^self resolvedProject packageNameToPlatformPropertiesMap: aDictionary
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+platformConditionalAttributes
+	"Answer the platformConditionalAttributes used to load the project"
+
+	^ self resolvedProject platformConditionalAttributes
 %
 
 category: 'accessing'
@@ -109415,6 +109482,7 @@ testWriteExperimentalRowanComponentStructure
 	resolvedProject _projectSpecification
 		specName: 'proposed_project';
 		componentsPath: 'rowan/v2/proposed_components';
+		projectsPath: 'rowan/v2/proposed_projects';
 		specsPath: 'rowan/v2/proposed_specs'.	"write components in a new spot"
 	resolvedProject componentsRoot ensureDeleteAll.
 	originalComponents := resolvedProject _projectDefinition components.	"save for reference"
@@ -138783,6 +138851,14 @@ method: RwProject
 methodEnvForPackageNamed: packageName
 
 	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName
+%
+
+category: '*rowan-corev2'
+method: RwProject
+platformConditionalAttributes
+	"Answer the platformConditionalAttributes used to load the project"
+
+	^ self _loadedProject platformConditionalAttributes
 %
 
 category: '*rowan-gemstone-core'

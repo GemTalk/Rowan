@@ -32,6 +32,7 @@ run
 		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool 
 	 auditFailures gsFileName repositoryRoot3215 |
 
+	Rowan projectTools trace startTracing; trace: '--- read and write project source RowanV2'.
 	platformConditionalAttributes := {
 		'common'.
 		'gemstone'.
@@ -119,13 +120,12 @@ false ifTrue: [
 		theProjectSetDefinition keys do: [:projectName |
 			| projectDefinition |
 			projectDefinition := theProjectSetDefinition projectNamed: projectName.
-			projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 			projectDefinition packageNames do: [:packageName |
-				(topazFileNameMap at: gsFileName) add: packageName ].
-			visitor := RwGsModificationTopazWriterVisitor new
-				repositoryRootPath: theRepositoryRoot;
-				topazFilenamePackageNamesMap: topazFileNameMap;
-				yourself.
-			visitor visit: projectSetModification ].
- ].
+				(topazFileNameMap at: gsFileName) add: packageName ] ].
+		projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+		visitor := RwGsModificationTopazWriterVisitor new
+			repositoryRootPath: theRepositoryRoot;
+			topazFilenamePackageNamesMap: topazFileNameMap;
+			yourself.
+		visitor visit: projectSetModification ].
 %

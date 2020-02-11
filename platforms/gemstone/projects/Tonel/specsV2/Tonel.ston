@@ -1,16 +1,19 @@
 RwEmbeddedLoadSpecificationV2 {
 	#specName : 'Tonel',
 	#projectName : 'Tonel',
+	#projectAlias : 'Rowan',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
 	#revision : 'master',
 	#projectSpecFile : 'platforms/gemstone/projects/Tonel/project.ston',
 	#componentNames : [
-		'Core'
+		'Core',
+		'Tests',
+		'Gemstone32x'
 	],
-	#groupNames : [
-		'core',
+	#customConditionalAttributes : [
 		'tests'
 	],
+	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {
 			'SystemUser' : {

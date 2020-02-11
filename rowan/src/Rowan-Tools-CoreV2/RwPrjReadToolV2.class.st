@@ -25,6 +25,17 @@ RwPrjReadToolV2 >> readProjectForResolvedProject: resolvedProject withComponentN
 	^ resolvedProject
 ]
 
+{ #category : 'read loaded projects' }
+RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName [
+	^ (Rowan image loadedProjectNamed: projectName) asDefinition readProjectSet
+]
+
+{ #category : 'read loaded projects' }
+RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
+	^ (Rowan image loadedProjectNamed: projectName) asDefinition
+		readProjectSet: platformConditionalAttributes
+]
+
 { #category : 'read resolved projects' }
 RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames [
 	"read packages and project metadata into projectDefinition ... return a project definition

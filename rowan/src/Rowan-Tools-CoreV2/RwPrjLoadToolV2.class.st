@@ -148,6 +148,35 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 		instanceMigrator: instanceMigrator
 ]
 
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName [
+	| projectSet |
+	projectSet := Rowan projectTools readToolV2
+		readProjectSetForProjectNamed: projectName.
+	^ self loadProjectSetDefinition: projectSet
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
+	| platformConditionalAttributes project |
+	project := RwProject newNamed: projectName.
+	platformConditionalAttributes := project platformConditionalAttributes copy
+		asSet.
+	platformConditionalAttributes addAll: customConditionalAttributes.
+	^ self
+		loadProjectNamed: projectName
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
+	| projectSet |
+	projectSet := Rowan projectTools readToolV2
+		readProjectSetForProjectNamed: projectName
+		platformConditionalAttributes: platformConditionalAttributes.
+	^ self loadProjectSetDefinition: projectSet
+]
+
 { #category : 'load project definitions' }
 RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 
