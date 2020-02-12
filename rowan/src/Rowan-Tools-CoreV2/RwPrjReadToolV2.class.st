@@ -22,6 +22,7 @@ RwPrjReadToolV2 >> readProjectForResolvedProject: resolvedProject withComponentN
 		withComponentNames: componentNames
 		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject readPackageNames: resolvedProject packageNames.
 	^ resolvedProject
 ]
 

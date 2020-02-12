@@ -197,6 +197,22 @@ RwPackageDefinition >> key [
 	^self propertyAt: 'name' ifAbsent: [nil]
 ]
 
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassNamed: className modifyClassDefinition: classDefinitionBlock toPackage: packageDefinition [
+	| classDefinition |
+	classDefinition := self removeKey: className from: classDefinitions.
+	classDefinitionBlock cull: classDefinition.
+	packageDefinition addClassDefinition: classDefinition
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassNamed: className toPackage: packageDefinition [
+	self
+		moveClassNamed: className
+		modifyClassDefinition: [  ]
+		toPackage: packageDefinition
+]
+
 { #category : 'copying' }
 RwPackageDefinition >> postCopy [
 

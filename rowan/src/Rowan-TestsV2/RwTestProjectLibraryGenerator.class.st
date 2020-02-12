@@ -34,6 +34,8 @@ RwTestProjectLibraryGenerator new
 	genSpec_0023: commitComment;
 	genSpec_0024: commitComment;
 	genSpec_0025: commitComment;
+	genSpec_0026: commitComment;
+	genSpec_0027: commitComment;
 	yourself
 "
 Class {
@@ -1700,6 +1702,80 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 			copyTo: resolvedProject_0025 projectsRoot / resolvedProjectName , 'ston' ].
 
 	^ resolvedProject_0025
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0026: resolvedProject [
+	"Start with  spec_0000, create a project using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"start with a single component, single package project."
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName1 packageName1 className1 testClassName1 |
+	resolvedProject removeComponentNamed: 'Core'.
+
+	componentName1 := projectName.
+	packageName1 := projectName , '-Core'.
+	className1 := projectName , 'Class1'.
+	testClassName1 := projectName , 'TestCase1'.
+
+	resolvedProject loadSpecification
+		componentNames: {componentName1};
+		groupNames: #();
+		yourself.
+
+	resolvedProject addNewComponentNamed: componentName1.
+
+	resolvedProject
+		addPackageNamed: packageName1 toComponentNamed: componentName1;
+		yourself.
+
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName1
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: testClassName1
+		super: 'TestCase'
+		category: packageName1
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className1 , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0027: resolvedProject [
+	"Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"split pacakges into core and tests and use move class api to move class definitions from package to package"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName1 packageName1 className1 testClassName1 packageName2 |
+	componentName1 := projectName.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	className1 := projectName , 'Class1'.
+	testClassName1 := projectName , 'TestCase1'.
+
+	resolvedProject
+		addPackageNamed: packageName2 toComponentNamed: componentName1;
+		yourself.
+
+	(resolvedProject packageNamed: packageName1)
+		moveClassNamed: testClassName1
+		modifyClassDefinition: [ :classDef | classDef category: packageName2 ]
+		toPackage: (resolvedProject packageNamed: packageName2) yourself.
+
+	^ resolvedProject
 ]
 
 { #category : 'private' }
@@ -3444,6 +3520,115 @@ RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0025: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0026: commitMessage [
+	"Start with  spec_0000, create a project using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"start with a single component, single package project."
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0026'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0000, create a project using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 26
+		derivedFrom: derivedFrom
+		comment: 'start with a single component, single package project.')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0026: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0027: commitMessage [
+	"Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"split pacakges into core and tests and use move class api to move class definitions from package to package"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0027'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0026'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 27
+		derivedFrom: derivedFrom
+		comment:
+			'split pacakges into core and tests and use move class api to move class definitions from package to package')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0027: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

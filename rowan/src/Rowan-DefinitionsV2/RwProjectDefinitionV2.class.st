@@ -157,6 +157,14 @@ RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName definedGroupNam
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: ''
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName [
 
 	self shouldNotImplement

@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : 'accessing' }
+RwResolvedLoadSpecificationV2 >> componentNames [
+	"list of components to be loaded"
+
+	^ self _loadSpecification componentNames
+]
+
+{ #category : 'accessing' }
+RwResolvedLoadSpecificationV2 >> componentNames: anArray [
+	"list of components to be loaded"
+
+	self _loadSpecification componentNames: anArray
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadSpecificationV2 >> groupNames [
 	"list of groups to be loaded. 
 		Default is {'core' 'tests'}"

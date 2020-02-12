@@ -130,6 +130,11 @@ RwResolvedProjectV2 >> addNestedComponentNamed: aComponentName definedGroupNames
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: componentName [
+	^ self _projectDefinition addNewComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName [
 	^ self _projectDefinition
 		addPackageNamed: packageName
