@@ -135,6 +135,14 @@ RwResolvedProjectV2 >> addNewComponentNamed: componentName [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: condition [
+	^ self _projectDefinition
+		addNewComponentNamed: componentName
+		toComponentNamed: toComponentName
+		condition: condition
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName [
 	^ self _projectDefinition
 		addPackageNamed: packageName
@@ -437,6 +445,13 @@ RwResolvedProjectV2 >> load: platformConfigurationAttributes [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> loadedCommitId [
 	^ self _projectSpecification loadedCommitId
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
+	^ self _projectDefinition
+		movePackageNamed: aPackageName
+		toComponentNamed: aComponentName
 ]
 
 { #category : '-- loader compat --' }

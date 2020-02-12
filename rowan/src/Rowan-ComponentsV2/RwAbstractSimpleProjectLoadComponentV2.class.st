@@ -68,6 +68,11 @@ RwAbstractSimpleProjectLoadComponentV2 >> packageNames [
 ]
 
 { #category : 'accessing' }
+RwAbstractSimpleProjectLoadComponentV2 >> referencePath [
+	^ Path from: self name
+]
+
+{ #category : 'accessing' }
 RwAbstractSimpleProjectLoadComponentV2 >> removeComponentNamed: aComponentName [
 	self subclassResponsibility: #'removeComponentNamed:'
 ]

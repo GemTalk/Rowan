@@ -19,6 +19,13 @@ RwResolvedLoadSpecificationV2 >> componentNames: anArray [
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadSpecificationV2 >> customConditionalAttributes: anArray [
+	"set the custom conditional attributes"
+
+	^ self _loadSpecification customConditionalAttributes: anArray
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadSpecificationV2 >> groupNames [
 	"list of groups to be loaded. 
 		Default is {'core' 'tests'}"

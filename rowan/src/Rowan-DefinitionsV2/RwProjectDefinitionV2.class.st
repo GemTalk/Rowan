@@ -165,6 +165,30 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: condition [
+	"return the path name of the new component"
+
+	| theComponentName parentComponent |
+	parentComponent := self componentNamed: toComponentName.
+	parentComponent referencePath parent segments size = 0
+		ifFalse: [ 
+			"this is the case when I need to start worrying about a condition path and whether or not intermediate components need to be created"
+			self halt: 'not yet implemented' ].
+	theComponentName := (Path from: aComponentName) parent segments size = 0
+		ifTrue: [ (Path * condition / aComponentName) pathString ]
+		ifFalse: [ 
+			"a full path has been specified, and we may need to be worried about whether or not intermedite components need to be createad"
+			self halt: 'not yet implemented'.
+			aComponentName ].
+	self components
+		addSimpleComponentNamed: theComponentName
+		condition: condition
+		comment: ''.
+	parentComponent addComponentNamed: theComponentName.
+	^ theComponentName
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName [
 
 	self shouldNotImplement
@@ -447,6 +471,14 @@ RwProjectDefinitionV2 >> load: instanceMigrator [
 	"load the receiver into the image"
 
 	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
+	self components removePackageNamed: aPackageName.
+	self components
+		addPackageNamed: aPackageName
+		toComponentNamed: aComponentName
 ]
 
 { #category : 'properties' }

@@ -229,7 +229,7 @@ RwAbstractResolvedObjectV2 >> projectSpecFile: relativePathString [
 	"relative path to the project specification file - default: rowan/project.ston"
 
 	| path |
-	path := Path * relativePathString .
+	path := Path from: relativePathString .
 	self _projectSpecification projectSpecPath: path parent pathString.
 	self _projectSpecification specName: path base.
 	self _loadSpecification projectSpecFile: relativePathString
@@ -242,7 +242,7 @@ RwAbstractResolvedObjectV2 >> projectSpecPath: aString [
 	self _projectSpecification projectSpecPath: aString.
 	self _loadSpecification
 		projectSpecFile:
-			(Path * aString / self _projectSpecification specName , 'ston') pathString
+			(Path from: aString / self _projectSpecification specName , 'ston') pathString
 ]
 
 { #category : 'accessing' }

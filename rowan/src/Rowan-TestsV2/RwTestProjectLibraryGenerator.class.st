@@ -36,6 +36,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0025: commitComment;
 	genSpec_0026: commitComment;
 	genSpec_0027: commitComment;
+	genSpec_0028: commitComment;
 	yourself
 "
 Class {
@@ -1774,6 +1775,37 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0027: resolvedProject [
 		moveClassNamed: testClassName1
 		modifyClassDefinition: [ :classDef | classDef category: packageName2 ]
 		toPackage: (resolvedProject packageNamed: packageName2) yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0028: resolvedProject [
+	"Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add conditional Tests component"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentPath1 componentName2 packageName1 className1 testClassName1 packageName2 componentPath2  |
+	componentPath1 := projectName.
+	componentName2 := 'Tests'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	className1 := projectName , 'Class1'.
+	testClassName1 := projectName , 'TestCase1'.
+
+	componentPath2 := resolvedProject
+		addNewComponentNamed: componentPath1
+			toComponentNamed: componentPath1
+			condition: 'tests'.
+
+	resolvedProject loadSpecification
+		customConditionalAttributes: #('tests').
+
+	resolvedProject 
+		movePackageNamed: packageName2 toComponentNamed: componentPath2;
+		yourself.
 
 	^ resolvedProject
 ]
@@ -3629,6 +3661,59 @@ RwTestProjectLibraryGenerator >> genSpec_0027: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0027: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
+	"Start with  spec_0027, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add conditional Tests component"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0028'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0027'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 28
+		derivedFrom: derivedFrom
+		comment: 'add conditional Tests component')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0028: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

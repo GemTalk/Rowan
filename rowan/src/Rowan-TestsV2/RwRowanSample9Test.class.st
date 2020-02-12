@@ -1814,3 +1814,49 @@ RwRowanSample9Test >> testSpec_0027 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames
 ]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0028 [
+	"spec_0028 should load cleanly"
+
+	"add conditional Tests component"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0028'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"remove tests from the conditional attributes and resolve -- RowanSample9TestCase1 should not be loaded"
+	loadSpec customConditionalAttributes: #().
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	self assert: (Rowan globalNamed: 'RowanSample9TestCase1') notNil.
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self assert: (Rowan globalNamed: 'RowanSample9TestCase1') isNil.
+]
