@@ -89,16 +89,6 @@ RowanServicesTest >> createServicesTestClass [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> createServicesTestPackage [
-  | projectDefinition |
-  defaultProjectDefinition
-    ifNotNil: [ :projectDef | ^ projectDef packageNamed: self servicesTestPackageName ].
-  projectDefinition := self defaultProjectDefinition.
-  projectDefinition addPackageNamed: self servicesTestPackageName.
-  ^ projectDefinition packageNamed: self servicesTestPackageName
-]
-
-{ #category : 'support' }
 RowanServicesTest >> createServicesTestTestClass [
   | packageDefinition classDefinition |
   packageDefinition := self defaultProjectDefinition

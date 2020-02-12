@@ -63995,6 +63995,15 @@ addRawPackageNamed: packageName
 
 category: 'project definition'
 method: RwResolvedProjectV2
+addSimpleComponentNamed: aComponentName comment: commentString
+	^ self _projectDefinition
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: commentString
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
 addSimpleComponentNamed: aComponentName condition: condition comment: commentString
 	^ self _projectDefinition
 		addSimpleComponentNamed: aComponentName
@@ -65129,7 +65138,7 @@ readlink: filepath
 
 	| command |
 	command := self _sh_realpath_source, '; realpath ' , filepath.
-	^Rowan gitTools performOnServer: command logging: true
+	^Rowan gitTools performOnServer: command
 %
 
 category: 'smalltalk api'
@@ -65680,6 +65689,12 @@ performGitCommand: gitCommand in: gitRepoPath worktree: workTreePath with: gitAr
 		, '/.git --work-tree ' , workTreePath , ' ' , gitCommand , ' '.
 	command := commandBase , gitArgs.
 	^ self performOnServer: command logging: logging
+%
+
+category: 'private'
+method: RwGitTool
+performOnServer: commandLine
+	^ self performOnServer: commandLine logging: self _shouldLog
 %
 
 category: 'private'
@@ -68030,7 +68045,7 @@ _validateForGitRepository: aRwGitRepositoryDefinition ifDone: doneBlock
 		project ... if not error out of here."
 			response := gitTool gitrevparseShowTopLevelIn: gitRepoPath pathString.
 			command := 'set -e; cd ' , gitRepoPath pathString , '; pwd'.
-			cdResponse := gitTool performOnServer: command logging: true.
+			cdResponse := gitTool performOnServer: command.
 			(self readlink: response) = (self readlink: cdResponse)
 				ifTrue: [ 
 					| msg |
@@ -68516,7 +68531,7 @@ category: 'load project by name'
 method: RwPrjLoadToolV2
 loadProjectNamed: projectName
 	| projectSet |
-	projectSet := Rowan projectTools readToolV2
+	projectSet := Rowan projectTools readV2
 		readProjectSetForProjectNamed: projectName.
 	^ self loadProjectSetDefinition: projectSet
 %
@@ -68538,7 +68553,7 @@ category: 'load project by name'
 method: RwPrjLoadToolV2
 loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes
 	| projectSet |
-	projectSet := Rowan projectTools readToolV2
+	projectSet := Rowan projectTools readV2
 		readProjectSetForProjectNamed: projectName
 		platformConditionalAttributes: platformConditionalAttributes.
 	^ self loadProjectSetDefinition: projectSet
@@ -70207,6 +70222,24 @@ packageNames
 	^ packageNames
 %
 
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+removeComponentNamed: aComponentName
+	self subclassResponsibility: #'removeComponentNamed:'
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+removePackageNamed: aPackageName
+	self packageNames remove: aPackageName ifAbsent: [  ]
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+removeProjectNamed: aProjectName
+	self subclassResponsibility: #'removeProjectNamed:'
+%
+
 ! Class implementation for 'RwAbstractEnvyProjectLoadComponentV2'
 
 !		Instance methods for 'RwAbstractEnvyProjectLoadComponentV2'
@@ -70445,6 +70478,12 @@ packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes 
 	^ allDefinedPackageNames
 %
 
+category: 'accessing'
+method: RwAbstractRowanProjectLoadComponentV2
+removeComponentNamed: aComponentName
+	self componentNames remove: aComponentName ifAbsent: [  ]
+%
+
 ! Class implementation for 'RwSimpleProjectLoadComponentV2'
 
 !		Instance methods for 'RwSimpleProjectLoadComponentV2'
@@ -70509,6 +70548,12 @@ category: 'accessing'
 method: RwSimpleProjectLoadComponentV2
 projectNames
 	^projectNames
+%
+
+category: 'accessing'
+method: RwSimpleProjectLoadComponentV2
+removeProjectNamed: aProjectName
+	self projectNames remove: aProjectName ifAbsent: [  ]
 %
 
 category: 'validation'
@@ -103568,17 +103613,6 @@ createServicesTestClass
 
 category: 'support'
 method: RowanServicesTest
-createServicesTestPackage
-  | projectDefinition |
-  defaultProjectDefinition
-    ifNotNil: [ :projectDef | ^ projectDef packageNamed: self servicesTestPackageName ].
-  projectDefinition := self defaultProjectDefinition.
-  projectDefinition addPackageNamed: self servicesTestPackageName.
-  ^ projectDefinition packageNamed: self servicesTestPackageName
-%
-
-category: 'support'
-method: RowanServicesTest
 createServicesTestTestClass
   | packageDefinition classDefinition |
   packageDefinition := self defaultProjectDefinition
@@ -109281,7 +109315,9 @@ testWriteExperimentalRowanComponentStructure
 
 	| specArray resolvedProject loadSpec |
 	true
-		ifTrue: [ ^ self ].	"remove this statement if you want to generate the structures"
+		ifTrue: [ 
+			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
+			^ self ].
 	specArray := {'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
 	'$ROWAN_PROJECTS_HOME'.
 	{'common'.
@@ -126741,10 +126777,10 @@ testLoadProjectFromUrl_300_2
 	gitRootPath :=  self _testRowanProjectsSandbox / 'issue_300_dir/'.
 
 	commandLine := 'set -e;  rm -rf ', gitRootPath pathString.
-	Rowan gitTools performOnServer: commandLine logging: true.
+	Rowan gitTools performOnServer: commandLine.
 
 	commandLine := 'set -e;  rm -rf ', gitRootPath_symLink.
-	Rowan gitTools performOnServer: commandLine logging: true.
+	Rowan gitTools performOnServer: commandLine.
 
 "clone project to make sure that we have an existing git project"
 	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: false.
@@ -126754,7 +126790,7 @@ testLoadProjectFromUrl_300_2
 "create symbolic link..."
 	symLinkName := 'issue_300_symLink'.
 	commandLine := 'set -e;  cd ' , gitRootPath pathString, '; mkdir ', gitRootPath_symLink, '; ln -s ', gitRootPath pathString , ' ', gitRootPath_symLink, '/', symLinkName.
-	Rowan gitTools performOnServer: commandLine logging: true.
+	Rowan gitTools performOnServer: commandLine.
 
 "...and now run clone again using symbolic link" 
 	self
@@ -137095,6 +137131,152 @@ userAutomaticClassInitializationBlackList
 	^ self platform automaticClassInitializationBlackList_user
 %
 
+! Class extensions for 'RowanClassServiceTest'
+
+!		Instance methods for 'RowanClassServiceTest'
+
+category: '*rowan-services-testsv2'
+method: RowanClassServiceTest
+createHierarchyWithNonResolvableClass
+
+	"do not delete - sent by Jadeite client test
+	RowanClassServiceTest new createHierarchyWithNonResolvableClass.
+	Code by dhenrich"
+
+  | projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+    className4 projectSetDefinition class1 class2 class3 class4 oldClass1 oldClass2 oldClass3  |
+
+  projectName := 'Issue470'.
+  packageName1 := 'Issue470-Core'.
+  packageName2 := 'Issue470-Extensions'.
+  className1 := 'Issue470Class1'.
+  className2 := 'Issue470Class2'.
+  className3 := 'Issue470Class3'.
+  className4 := 'Issue470Class4'.
+
+  {projectName}
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+ 	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictionaryName;
+		yourself.
+	projectDefinition resolve.
+
+	projectDefinition 
+		addSimpleComponentNamed: self servicesTestComponentName 
+			comment: 'a test component';
+		addPackagesNamed: {packageName1. packageName2} toComponentNamed: self servicesTestComponentName;
+		yourself.
+
+  packageDefinition := projectDefinition packageNamed: packageName1.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className1
+      super: 'Object'
+      instvars: #(ivar1)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className2
+      super: className1
+      instvars: #('ivar2')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className3
+      super: className2
+      instvars: #('ivar4' 'ivar3')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+   yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+"load"
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: projectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+  class1 := Rowan globalNamed: className1.
+  self assert: class1 instVarNames = #(ivar1).
+
+  class2 := Rowan globalNamed: className2.
+  self assert: class2 instVarNames = #(ivar2).
+  self assert: class2 superClass == class1.
+
+  class3 := Rowan globalNamed: className3.
+  self assert: class3 instVarNames = #(ivar4 ivar3).
+  self assert: class3 superClass == class2.
+
+"remove class2 and add class4 -- edit projectDefinition structure in place"
+  projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+  packageDefinition := projectDefinition packageNamed: packageName1.
+
+  packageDefinition removeClassNamed: className2.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className4
+      super: className1
+      instvars: #('ivar2')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+"load"
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: projectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+  oldClass1 := class1.
+  oldClass2 := class2.
+  oldClass3 := class3.
+ 
+  class1 := Rowan globalNamed: className1.
+  self assert: class1 instVarNames = #(ivar1).
+  self assert: oldClass1 == class1.
+
+  class4 := Rowan globalNamed: className4.
+  self assert: class4 instVarNames = #(ivar2).
+  self assert: class4 superClass == class1.
+
+  class3 := Rowan globalNamed: className3.
+  self assert: class3 instVarNames = #(ivar4 ivar3).
+  self assert: class3 superClass == oldClass2.
+  self assert: oldClass3 == class3.
+%
+
 ! Class extensions for 'RowanInterface'
 
 !		Instance methods for 'RowanInterface'
@@ -137104,6 +137286,63 @@ method: RowanInterface
 _gemstonePlatformSpec
 
 	^ self _specification platformSpec at: 'gemstone'
+%
+
+! Class extensions for 'RowanServicesTest'
+
+!		Instance methods for 'RowanServicesTest'
+
+category: '*rowan-services-testsv2'
+method: RowanServicesTest
+createNonDiskTestProjectNamed: projectName packageName: packageName
+	| project componentName |
+	componentName := self servicesTestComponentName.
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictionaryName;
+		yourself.
+	project resolve.
+
+	(project addSimpleComponentNamed: componentName comment: 'a test component')
+		addPackageNamed: packageName toComponentNamed: componentName;
+		yourself.
+
+	project load.
+	^ project
+%
+
+category: '*rowan-services-testsv2'
+method: RowanServicesTest
+createProjectDefinitionNamed: projectName
+	| project |
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictionaryName;
+		yourself.
+	project resolve.
+
+	project addSimpleComponentNamed: self servicesTestComponentName comment: 'a test component'.
+	^ project
+%
+
+category: '*rowan-services-testsv2'
+method: RowanServicesTest
+createServicesTestPackage
+  | projectDefinition |
+  defaultProjectDefinition
+    ifNotNil: [ :projectDef | ^ projectDef packageNamed: self servicesTestPackageName ].
+  projectDefinition := self defaultProjectDefinition.
+  projectDefinition addPackageNamed: self servicesTestPackageName toComponentNamed: self servicesTestComponentName.
+  ^ projectDefinition packageNamed: self servicesTestPackageName
+%
+
+category: '*rowan-services-testsv2'
+method: RowanServicesTest
+servicesTestComponentName
+
+	^'Core'
 %
 
 ! Class extensions for 'RwAbstractClassDefinition'
@@ -137683,7 +137922,7 @@ method: RwGitTool
 createTmpFileWith: fileContents
 
 	| file filename |
-	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
+	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX') trimRight.
 	[ 
 	| count |
 	file := GsFile openWriteOnServer: filename.

@@ -1162,7 +1162,9 @@ RwSimpleComponentRowanExperiment >> testWriteExperimentalRowanComponentStructure
 
 	| specArray resolvedProject loadSpec |
 	true
-		ifTrue: [ ^ self ].	"remove this statement if you want to generate the structures"
+		ifTrue: [ 
+			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
+			^ self ].
 	specArray := {'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
 	'$ROWAN_PROJECTS_HOME'.
 	{'common'.

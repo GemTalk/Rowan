@@ -14,6 +14,8 @@ RwNestedProjectLoadComponentV2 {
       'core': {
 				#packageNames : [
 					'Rowan-Services-Core',
+					'Rowan-Services-CoreV1',
+					'Rowan-Services-CoreV2',
 					'Rowan-Services-Extensions',
 					'Rowan-JadeServer'
 				]
@@ -21,7 +23,7 @@ RwNestedProjectLoadComponentV2 {
 			'tests' : {
 				#packageNames : [
 					'Rowan-Services-Tests',
-					'Rowan-Services-TestsV1'
+					'Rowan-Services-TestsV2'
 				]
 			}
 		}

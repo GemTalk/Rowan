@@ -53,6 +53,8 @@
 					'Rowan-Url-Cypress',
 					'Rowan-Services-Extensions',
 					'Rowan-Services-Core',
+					'Rowan-Services-CoreV1',
+					'Rowan-Services-CoreV2',
 					'Rowan-GemStone-Definitions-ExtensionsV2',
 					'Rowan-GemStone-Core',
 					'Rowan-GemStone-CoreV2',

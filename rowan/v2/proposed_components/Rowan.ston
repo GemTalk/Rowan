@@ -12,7 +12,6 @@ RwSimpleProjectLoadComponentV2 {
 		'common/Components',
 		'common/Core',
 		'common/Definitions',
-		'common/Kernel',
 		'common/Loader',
 		'common/Services',
 		'common/Specifications',

@@ -78,3 +78,8 @@ RwAbstractRowanProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAtt
 										ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ] ].
 	^ allDefinedPackageNames
 ]
+
+{ #category : 'accessing' }
+RwAbstractRowanProjectLoadComponentV2 >> removeComponentNamed: aComponentName [
+	self componentNames remove: aComponentName ifAbsent: [  ]
+]

@@ -225,6 +225,14 @@ RwResolvedProjectV2 >> addRawPackageNamed: packageName [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName comment: commentString [
+	^ self _projectDefinition
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: commentString
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
 	^ self _projectDefinition
 		addSimpleComponentNamed: aComponentName

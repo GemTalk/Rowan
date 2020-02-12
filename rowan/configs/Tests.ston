@@ -20,7 +20,7 @@
 			'tests' : {
 				#packageNames : [
 					'Rowan-Services-Tests',
-					'Rowan-Services-TestsV1',
+					'Rowan-Services-TestsV2',
 					'AST-Tests-Core',
 					'AST-Kernel-Tests-Core',
 					'Rowan-Tests-GemStone',

@@ -66,3 +66,18 @@ RwAbstractSimpleProjectLoadComponentV2 >> packageNames [
 
 	^ packageNames
 ]
+
+{ #category : 'accessing' }
+RwAbstractSimpleProjectLoadComponentV2 >> removeComponentNamed: aComponentName [
+	self subclassResponsibility: #'removeComponentNamed:'
+]
+
+{ #category : 'accessing' }
+RwAbstractSimpleProjectLoadComponentV2 >> removePackageNamed: aPackageName [
+	self packageNames remove: aPackageName ifAbsent: [  ]
+]
+
+{ #category : 'accessing' }
+RwAbstractSimpleProjectLoadComponentV2 >> removeProjectNamed: aProjectName [
+	self subclassResponsibility: #'removeProjectNamed:'
+]

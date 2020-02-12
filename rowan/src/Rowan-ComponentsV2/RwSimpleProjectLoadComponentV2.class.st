@@ -66,3 +66,8 @@ RwSimpleProjectLoadComponentV2 >> instVarNamesInOrderForSton [
 RwSimpleProjectLoadComponentV2 >> projectNames [
 	^projectNames
 ]
+
+{ #category : 'accessing' }
+RwSimpleProjectLoadComponentV2 >> removeProjectNamed: aProjectName [
+	self projectNames remove: aProjectName ifAbsent: [  ]
+]
