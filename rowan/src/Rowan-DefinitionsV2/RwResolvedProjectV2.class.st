@@ -135,11 +135,11 @@ RwResolvedProjectV2 >> addNewComponentNamed: componentName [
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: condition [
+RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray [
 	^ self _projectDefinition
 		addNewComponentNamed: componentName
 		toComponentNamed: toComponentName
-		condition: condition
+		condition: conditionPathArray
 ]
 
 { #category : 'project definition' }

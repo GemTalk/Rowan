@@ -1799,7 +1799,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0028: resolvedProject [
 	componentPath2 := resolvedProject
 		addNewComponentNamed: componentName2
 			toComponentNamed: componentPath1
-			condition: 'tests'.
+			condition: #('common' 'tests' ).
 
 	resolvedProject loadSpecification
 		customConditionalAttributes: #('tests').
@@ -1819,9 +1819,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/573"
 
-	| componentPath1 componentPath2 componentPath3 componentName3 componentName4 componentName5 componentName6 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 classCreationBlock componentName2 |
+	| componentPath1 componentPath2 componentPath3 componentName3 componentName4 componentName5 componentName6 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 classCreationBlock componentName2 deletedComponentName |
+	deletedComponentName := 'common/RowanSample9'.
 	componentPath1 := projectName.
-	componentPath2 := 'tests/' , projectName.
+	componentPath2 := 'common/tests/' , projectName.
 	componentName2 := 'Tests'.
 	componentName3 := 'Core'.
 	componentName4 := 'Definitions'.
@@ -1840,6 +1841,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 	testClassName2 := projectName , 'TestCase2'.
 	testClassName3 := projectName , 'TestCase3'.
 
+	resolvedProject removeComponentNamed: deletedComponentName.
+
 	componentPath2 := resolvedProject
 		renameComponentNamed: componentPath2
 		to: componentName2.
@@ -1847,7 +1850,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 	componentPath3 := resolvedProject
 		addNewComponentNamed: componentName3
 		toComponentNamed: componentPath1
-		condition: 'common'.
+		condition: #('common').
 	resolvedProject
 		movePackageNamed: packageName1 toComponentNamed: componentPath3;
 		yourself.
@@ -1855,7 +1858,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 	componentPath3 := resolvedProject
 		addNewComponentNamed: componentName4
 		toComponentNamed: componentPath1
-		condition: 'common'.
+		condition: #('common').
 	resolvedProject
 		addPackageNamed: packageName3 toComponentNamed: componentPath3;
 		yourself.
@@ -1866,7 +1869,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 	componentPath3 := resolvedProject
 		addNewComponentNamed: componentName5
 		toComponentNamed: componentPath1
-		condition: 'common'.
+		condition: #('common').
 	resolvedProject
 		addPackageNamed: packageName5 toComponentNamed: componentPath3;
 		yourself.
@@ -1877,14 +1880,12 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 	componentPath3 := resolvedProject
 		addNewComponentNamed: componentName6
 		toComponentNamed: componentPath1
-		condition: 'common'.
-	(resolvedProject
-		componentNamed: componentPath1)
+		condition: #('common').
+	(resolvedProject componentNamed: componentPath1)
 		removeComponentNamed: componentPath2;
 		addComponentNamed: componentPath3;
 		yourself.
-	(resolvedProject
-		componentNamed: componentPath3)
+	(resolvedProject componentNamed: componentPath3)
 		addComponentNamed: componentPath2;
 		yourself.
 

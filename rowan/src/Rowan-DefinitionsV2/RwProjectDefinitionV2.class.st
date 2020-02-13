@@ -165,26 +165,36 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: condition [
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
 	"return the path name of the new component"
 
-	| theComponentName parentComponent |
-	parentComponent := self componentNamed: toComponentName.
-	parentComponent referencePath parent segments size = 0
-		ifFalse: [ 
-			"this is the case when I need to start worrying about a condition path and whether or not intermediate components need to be created"
-			self halt: 'not yet implemented' ].
-	theComponentName := (Path from: aComponentName) parent segments size = 0
-		ifTrue: [ (Path * condition / aComponentName) pathString ]
-		ifFalse: [ 
-			"a full path has been specified, and we may need to be worried about whether or not intermedite components need to be createad"
-			self halt: 'not yet implemented'.
-			aComponentName ].
+	| theComponentName toComponent path compositePath |
+	toComponent := self componentNamed: toComponentName.
+	path := RelativePath withAll: conditionPathArray.
+	path parent
+		do: [ :segment | 
+			| intermediateComponentName |
+			"ensure that we have the appropriate intermediate component structure"
+			compositePath := compositePath
+				ifNil: [ Path * segment ]
+				ifNotNil: [ compositePath / segment ].
+			intermediateComponentName := (compositePath / aComponentName) pathString.
+			toComponent := self components
+				componentNamed: intermediateComponentName
+				ifAbsent: [ 
+					| newComponent |
+					newComponent := self components
+						addSimpleNestedComponentNamed: intermediateComponentName
+						condition: segment
+						comment: ''.
+					toComponent addComponentNamed: intermediateComponentName.
+					newComponent ] ].
+	theComponentName := (path / aComponentName) pathString.
 	self components
-		addSimpleComponentNamed: theComponentName
-		condition: condition
+		addSimpleNestedComponentNamed: theComponentName
+		condition: conditionPathArray last
 		comment: ''.
-	parentComponent addComponentNamed: theComponentName.
+	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
 ]
 
