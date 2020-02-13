@@ -1975,9 +1975,6 @@ RwRowanSample9Test >> testSpec_0030 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	#('RowanSample9GsClass4'  'RowanSample9GsTestCase4') do: [:className |
-		self assert: (Rowan globalNamed: className) notNil ].
-
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects

@@ -1916,7 +1916,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0030: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/573"
 
-	| componentName4 componentName5 componentName6 componentPath1 componentPath2 componentPath3 componentPath4 componentPath5 packageName1 className1 className2 className3 className4 className5 testClassName1 testClassName2 testClassName3 testClassName4 testClassName5 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 componentPath |
+	| componentName4 componentName5 componentName6 componentPath1 componentPath2 componentPath3 componentPath4 componentPath5 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 componentPath |
 	componentPath1 := projectName.
 	componentPath2 := 'common/tests/Tests'.
 	componentPath3 := 'common/Core'.
@@ -1933,18 +1933,35 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0030: resolvedProject [
 	packageName6 := projectName , '-' , componentName5 , '-Tests'.
 	packageName7 := projectName , '-' , componentName4 , '-GemStone'.
 	packageName8 := projectName , '-' , componentName4 , '-GemStone' , '-Tests'.
-	packageName9 := projectName , '-' , componentName5 , '-Pharo'.
-	packageName10 := projectName , '-' , componentName5 , '-Pharo' , '-Tests'.
+	packageName9 := projectName , '-' , componentName4 , '-Pharo'.
+	packageName10 := projectName , '-' , componentName4 , '-Pharo' , '-Tests'.
 	className1 := projectName , 'Class1'.
 	className2 := projectName , 'Class2'.
 	className3 := projectName , 'Class3'.
-	className4 := projectName , 'GsClass4'.
-	className5 := projectName , 'PharoClass5'.
 	testClassName1 := projectName , 'TestCase1'.
 	testClassName2 := projectName , 'TestCase2'.
 	testClassName3 := projectName , 'TestCase3'.
-	testClassName4 := projectName , 'GsTestCase4'.
-	testClassName5 := projectName , 'PharoTestCase5'.
+
+	{{packageName3.
+	className2.
+	packageName4.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) classDefinitionNamed: (ar at: 2))
+				addInstanceMethod:
+						'bar ^ (self class _dictionaryClass new) at: self foo put: 1; yourself'
+					protocol: 'accessing';
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3)) classDefinitionNamed: (ar at: 4))
+				addInstanceMethod:
+						'testBar | inst | inst := ' , (ar at: 2)
+								, ' new. self assert: (inst bar at: inst foo) = 1'
+					protocol: 'tests';
+				addInstanceMethod:
+						'testBarClass | inst | inst := ' , (ar at: 2)
+								, ' new. self assert: inst bar class == self _dictionaryClass'
+					protocol: 'tests';
+				yourself ].
 
 	componentPath := resolvedProject
 		addNewComponentNamed: componentName4
@@ -1962,35 +1979,51 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0030: resolvedProject [
 		addPackageNamed: packageName8 toComponentNamed: componentPath;
 		yourself.
 
-	self _spec_0030_gemstone_classCreationBlock
-		value: resolvedProject
-		value: className4
-		value: packageName7
-		value: testClassName4
-		value: packageName8.
+	{{packageName7.
+	className2.
+	packageName8.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) addClassExtensionNamed: (ar at: 2))
+				addClassMethod: '_dictionaryClass ^ RcKeyValueDictionary'
+					protocol: '*' , (ar at: 1) asLowercase;
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3))
+				addClassExtensionNamed: (ar at: 4))
+				addInstanceMethod: '_dictionaryClass ^ RcKeyValueDictionary'
+					protocol: '*' , (ar at: 3) asLowercase;
+				yourself ].
 
 	componentPath := resolvedProject
-		addNewComponentNamed: componentName5
-		toComponentNamed: componentPath5
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath4
 		condition: #('common' 'pharo').
 	resolvedProject
 		addPackageNamed: packageName9 toComponentNamed: componentPath;
 		yourself.
 
 	componentPath := resolvedProject
-		addNewComponentNamed: componentName5
-		toComponentNamed: componentPath5
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath4
 		condition: #('common' 'tests' 'pharo').
 	resolvedProject
 		addPackageNamed: packageName10 toComponentNamed: componentPath;
 		yourself.
 
-	self _spec_0030_pharo_classCreationBlock
-		value: resolvedProject
-		value: className5
-		value: packageName9
-		value: testClassName5
-		value: packageName10.
+	{{packageName9.
+	className2.
+	packageName10.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) addClassExtensionNamed: (ar at: 2))
+				addClassMethod: '_dictionaryClass ^ PluggableDictionary'
+					protocol: '*' , (ar at: 1) asLowercase;
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3))
+				addClassExtensionNamed: (ar at: 4))
+				addInstanceMethod: '_dictionaryClass ^ PluggableDictionary'
+					protocol: '*' , (ar at: 3) asLowercase;
+				yourself ].
 
 	^ resolvedProject
 ]
@@ -2335,48 +2368,6 @@ RwTestProjectLibraryGenerator >> _spec_0029_classCreationBlock [
 		category: theTestPackageName
 		comment: 'I test the example class')
 		addInstanceMethod: 'test  self assert: ' , theClassName , ' new foo = 1'
-			protocol: 'tests';
-		yourself ].
-]
-
-{ #category : 'private' }
-RwTestProjectLibraryGenerator >> _spec_0030_gemstone_classCreationBlock [ 
-^ [ :resolvedProject :theClassName :thePackageName :theTestClassName :theTestPackageName | 
-	((resolvedProject packageNamed: thePackageName)
-		addClassNamed: theClassName
-		super: 'Object'
-		instvars: #('ivar1')
-		category: thePackageName
-		comment: 'I am an example class')
-		addInstanceMethod: 'foo ^RcKeyValueDictionary new at: 1 put: ''foo''; yourself' protocol: 'accessing';
-		yourself.
-	((resolvedProject packageNamed: theTestPackageName)
-		addClassNamed: theTestClassName
-		super: 'TestCase'
-		category: theTestPackageName
-		comment: 'I test the example class')
-		addInstanceMethod: 'test  self assert: ((' , theClassName , ' new foo) at: 1) = ''foo'''
-			protocol: 'tests';
-		yourself ].
-]
-
-{ #category : 'private' }
-RwTestProjectLibraryGenerator >> _spec_0030_pharo_classCreationBlock [ 
-^ [ :resolvedProject :theClassName :thePackageName :theTestClassName :theTestPackageName | 
-	((resolvedProject packageNamed: thePackageName)
-		addClassNamed: theClassName
-		super: 'Object'
-		instvars: #('ivar1')
-		category: thePackageName
-		comment: 'I am an example class')
-		addInstanceMethod: 'foo ^PluggableDictionary new at: 1 put: ''foo''; yourself' protocol: 'accessing';
-		yourself.
-	((resolvedProject packageNamed: theTestPackageName)
-		addClassNamed: theTestClassName
-		super: 'TestCase'
-		category: theTestPackageName
-		comment: 'I test the example class')
-		addInstanceMethod: 'test  self assert: ((' , theClassName , ' new foo) at: 1) = ''foo'''
 			protocol: 'tests';
 		yourself ].
 ]
