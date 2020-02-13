@@ -1860,3 +1860,52 @@ RwRowanSample9Test >> testSpec_0028 [
 		expectedProjectNames: projectNames.
 	self assert: (Rowan globalNamed: 'RowanSample9TestCase1') isNil.
 ]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0029 [
+	"spec_0029 should load cleanly"
+
+	"add 2 more classes, tests and packages (one class/package) and create category components: Core, Definitions, Specs, Tests"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0029'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"remove tests from the conditional attributes and resolve -- RowanSample9TestCase1 should not be loaded"
+	loadSpec customConditionalAttributes: #().
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	#('RowanSample9TestCase1'  'RowanSample9TestCase2'  'RowanSample9TestCase3') do: [:className |
+		self assert: (Rowan globalNamed: className) notNil ].
+
+	loadedProjects := resolvedProject load.
+
+	#('RowanSample9TestCase1'  'RowanSample9TestCase2'  'RowanSample9TestCase3') do: [:className |
+		self assert: (Rowan globalNamed: className) isNil ].
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]

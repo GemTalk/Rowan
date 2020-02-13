@@ -471,6 +471,37 @@ RwResolvedLoadComponentsV2 >> removeProjectNamed: aProjectName [
 	self components do: [ :component | component removeProjectNamed: aProjectName ]
 ]
 
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> renameComponentNamed: aComponentPath to: aComponentName [
+	| component referencePath componentPath |
+	component := self components
+		removeKey: aComponentPath
+		ifAbsent: [ self error: 'No component named ' , aComponentPath printString , ' found' ].
+	referencePath := component referencePath.
+	componentPath := referencePath parent segments size = 0
+		ifTrue: [ 
+			"top-level component, simple rename is sufficient"
+			aComponentName ]
+		ifFalse: [ 
+			"need to preserve the path for the component"
+			(referencePath parent / aComponentName) pathString ].
+	(self components includesKey: componentPath)
+		ifTrue: [ 
+			self
+				error:
+					'A component with the name ' , componentPath printString , ' already exists' ].
+	component name: componentPath.
+	self components
+		do: [ :comp | 
+			(comp componentNames includes: aComponentPath)
+				ifTrue: [ 
+					comp
+						removeComponentNamed: aComponentPath;
+						addComponentNamed: componentPath ] ].
+	self components at: componentPath put: component.
+	^ componentPath
+]
+
 { #category : 'vast support' }
 RwResolvedLoadComponentsV2 >> vastSetVaPrequisitesTo: prereqArray forPackageNamed: packageName [
 	| foundOne |

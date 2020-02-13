@@ -550,6 +550,11 @@ RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: com
 	^ component
 ]
 
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> renameComponentNamed: aComponentPath to: aComponentName [
+	^ self components renameComponentNamed: aComponentPath to: aComponentName
+]
+
 { #category : 'temporary compat' }
 RwProjectDefinitionV2 >> repositoryRootPath [
 

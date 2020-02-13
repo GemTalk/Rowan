@@ -37,6 +37,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0026: commitComment;
 	genSpec_0027: commitComment;
 	genSpec_0028: commitComment;
+	genSpec_0029: commitComment;
 	yourself
 "
 Class {
@@ -1789,14 +1790,14 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0028: resolvedProject [
 
 	| componentPath1 componentName2 packageName1 className1 testClassName1 packageName2 componentPath2  |
 	componentPath1 := projectName.
-	componentName2 := 'Tests'.
+	componentName2 :=  projectName.
 	packageName1 := projectName , '-Core'.
 	packageName2 := projectName , '-Tests'.
 	className1 := projectName , 'Class1'.
 	testClassName1 := projectName , 'TestCase1'.
 
 	componentPath2 := resolvedProject
-		addNewComponentNamed: componentPath1
+		addNewComponentNamed: componentName2
 			toComponentNamed: componentPath1
 			condition: 'tests'.
 
@@ -1806,6 +1807,116 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0028: resolvedProject [
 	resolvedProject 
 		movePackageNamed: packageName2 toComponentNamed: componentPath2;
 		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
+	"Start with  spec_0028, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add 2 more classes, tests and packages (one class/package) and create category components: Core, Definitions, Specs, Tests"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentPath1 componentPath2 componentPath3 componentName3 componentName4 componentName5 componentName6 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 classCreationBlock componentName2 |
+	componentPath1 := projectName.
+	componentPath2 := 'tests/' , projectName.
+	componentName2 := 'Tests'.
+	componentName3 := 'Core'.
+	componentName4 := 'Definitions'.
+	componentName5 := 'Specs'.
+	componentName6 := 'Tests'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-' , componentName4.
+	packageName4 := projectName , '-' , componentName4 , '-Tests'.
+	packageName5 := projectName , '-' , componentName5.
+	packageName6 := projectName , '-' , componentName5 , '-Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	testClassName1 := projectName , 'TestCase1'.
+	testClassName2 := projectName , 'TestCase2'.
+	testClassName3 := projectName , 'TestCase3'.
+
+	componentPath2 := resolvedProject
+		renameComponentNamed: componentPath2
+		to: componentName2.
+
+	componentPath3 := resolvedProject
+		addNewComponentNamed: componentName3
+		toComponentNamed: componentPath1
+		condition: 'common'.
+	resolvedProject
+		movePackageNamed: packageName1 toComponentNamed: componentPath3;
+		yourself.
+
+	componentPath3 := resolvedProject
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath1
+		condition: 'common'.
+	resolvedProject
+		addPackageNamed: packageName3 toComponentNamed: componentPath3;
+		yourself.
+	resolvedProject
+		addPackageNamed: packageName4 toComponentNamed: componentPath2;
+		yourself.
+
+	componentPath3 := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath1
+		condition: 'common'.
+	resolvedProject
+		addPackageNamed: packageName5 toComponentNamed: componentPath3;
+		yourself.
+	resolvedProject
+		addPackageNamed: packageName6 toComponentNamed: componentPath2;
+		yourself.
+
+	componentPath3 := resolvedProject
+		addNewComponentNamed: componentName6
+		toComponentNamed: componentPath1
+		condition: 'common'.
+	(resolvedProject
+		componentNamed: componentPath1)
+		removeComponentNamed: componentPath2;
+		addComponentNamed: componentPath3;
+		yourself.
+	(resolvedProject
+		componentNamed: componentPath3)
+		addComponentNamed: componentPath2;
+		yourself.
+
+	classCreationBlock := [ :theClassName :thePackageName :theTestClassName :theTestPackageName | 
+	((resolvedProject packageNamed: thePackageName)
+		addClassNamed: theClassName
+		super: 'Object'
+		instvars: #('ivar1')
+		category: thePackageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: theTestPackageName)
+		addClassNamed: theTestClassName
+		super: 'TestCase'
+		category: theTestPackageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , theClassName , ' new foo = 1'
+			protocol: 'tests';
+		yourself ].
+
+	classCreationBlock
+		value: className2
+		value: packageName3
+		value: testClassName2
+		value: packageName4.
+
+	classCreationBlock
+		value: className3
+		value: packageName5
+		value: testClassName3
+		value: packageName6.
 
 	^ resolvedProject
 ]
@@ -3691,7 +3802,7 @@ RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
 		_createCard: postfix
 		specName: specName
 		title:
-			'Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+			'Start with  spec_0027, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
 		index: 28
 		derivedFrom: derivedFrom
 		comment: 'add conditional Tests component')
@@ -3714,6 +3825,60 @@ RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0028: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0029: commitMessage [
+	"Start with  spec_0028, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add 2 more classes, tests and packages (one class/package) and create category components: Core, Definitions, Specs, Tests"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0029'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0028'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0028, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 29
+		derivedFrom: derivedFrom
+		comment: 'add 2 more classes, tests and packages (one class/package) and create category components: Core, Definitions, Specs, Tests')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		customConditionalAttributes: #('tests');
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0029: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

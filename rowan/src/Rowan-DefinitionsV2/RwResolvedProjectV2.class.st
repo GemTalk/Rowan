@@ -705,6 +705,13 @@ RwResolvedProjectV2 >> removeProjectNamed: aProjectName [
 	^ self _projectDefinition removeProjectNamed: aProjectName
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> renameComponentNamed: aComponentPath to: aComponentName [
+	^ self _projectDefinition
+		renameComponentNamed: aComponentPath
+		to: aComponentName
+]
+
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> repositoryCommitId [
 	^ self loadedCommitId
