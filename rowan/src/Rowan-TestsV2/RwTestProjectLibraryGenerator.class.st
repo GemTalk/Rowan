@@ -38,6 +38,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0027: commitComment;
 	genSpec_0028: commitComment;
 	genSpec_0029: commitComment;
+	genSpec_0030: commitComment;
 	yourself
 "
 Class {
@@ -1819,7 +1820,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/573"
 
-	| componentPath1 componentPath2 componentPath3 componentName3 componentName4 componentName5 componentName6 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 classCreationBlock componentName2 deletedComponentName |
+	| componentPath1 componentPath2 componentPath3 componentName3 componentName4 componentName5 componentName6 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 componentName2 deletedComponentName |
 	deletedComponentName := 'common/RowanSample9'.
 	componentPath1 := projectName.
 	componentPath2 := 'common/tests/' , projectName.
@@ -1889,35 +1890,107 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 		addComponentNamed: componentPath2;
 		yourself.
 
-	classCreationBlock := [ :theClassName :thePackageName :theTestClassName :theTestPackageName | 
-	((resolvedProject packageNamed: thePackageName)
-		addClassNamed: theClassName
-		super: 'Object'
-		instvars: #('ivar1')
-		category: thePackageName
-		comment: 'I am an example class')
-		addInstanceMethod: 'foo ^1' protocol: 'accessing';
-		yourself.
-	((resolvedProject packageNamed: theTestPackageName)
-		addClassNamed: theTestClassName
-		super: 'TestCase'
-		category: theTestPackageName
-		comment: 'I test the example class')
-		addInstanceMethod: 'test  self assert: ' , theClassName , ' new foo = 1'
-			protocol: 'tests';
-		yourself ].
 
-	classCreationBlock
+	self _spec_0029_classCreationBlock
+		value: resolvedProject
 		value: className2
 		value: packageName3
 		value: testClassName2
 		value: packageName4.
 
-	classCreationBlock
+	self _spec_0029_classCreationBlock
+		value: resolvedProject
 		value: className3
 		value: packageName5
 		value: testClassName3
 		value: packageName6.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0030: resolvedProject [
+	"Start with  spec_0030, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName4 componentName5 componentName6 componentPath1 componentPath2 componentPath3 componentPath4 componentPath5 packageName1 className1 className2 className3 className4 className5 testClassName1 testClassName2 testClassName3 testClassName4 testClassName5 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 componentPath |
+	componentPath1 := projectName.
+	componentPath2 := 'common/tests/Tests'.
+	componentPath3 := 'common/Core'.
+	componentPath4 := 'common/Definitions'.
+	componentPath5 := 'common/Specs'.
+	componentName4 := 'Definitions'.
+	componentName5 := 'Specs'.
+	componentName6 := 'Tests'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-' , componentName4.
+	packageName4 := projectName , '-' , componentName4 , '-Tests'.
+	packageName5 := projectName , '-' , componentName5.
+	packageName6 := projectName , '-' , componentName5 , '-Tests'.
+	packageName7 := projectName , '-' , componentName4 , '-GemStone'.
+	packageName8 := projectName , '-' , componentName4 , '-GemStone' , '-Tests'.
+	packageName9 := projectName , '-' , componentName5 , '-Pharo'.
+	packageName10 := projectName , '-' , componentName5 , '-Pharo' , '-Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	className4 := projectName , 'GsClass4'.
+	className5 := projectName , 'PharoClass5'.
+	testClassName1 := projectName , 'TestCase1'.
+	testClassName2 := projectName , 'TestCase2'.
+	testClassName3 := projectName , 'TestCase3'.
+	testClassName4 := projectName , 'GsTestCase4'.
+	testClassName5 := projectName , 'PharoTestCase5'.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		condition: #('common' 'gemstone').
+	resolvedProject
+		addPackageNamed: packageName7 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		condition: #('common' 'tests' 'gemstone').
+	resolvedProject
+		addPackageNamed: packageName8 toComponentNamed: componentPath;
+		yourself.
+
+	self _spec_0030_gemstone_classCreationBlock
+		value: resolvedProject
+		value: className4
+		value: packageName7
+		value: testClassName4
+		value: packageName8.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath5
+		condition: #('common' 'pharo').
+	resolvedProject
+		addPackageNamed: packageName9 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath5
+		condition: #('common' 'tests' 'pharo').
+	resolvedProject
+		addPackageNamed: packageName10 toComponentNamed: componentPath;
+		yourself.
+
+	self _spec_0030_pharo_classCreationBlock
+		value: resolvedProject
+		value: className5
+		value: packageName9
+		value: testClassName5
+		value: packageName10.
 
 	^ resolvedProject
 ]
@@ -2243,6 +2316,69 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _sampleSymbolDictionaryName1 [
 	^ RwAbstractV2Test _sampleSymbolDictionaryName1
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _spec_0029_classCreationBlock [ 
+^ [ :resolvedProject :theClassName :thePackageName :theTestClassName :theTestPackageName | 
+	((resolvedProject packageNamed: thePackageName)
+		addClassNamed: theClassName
+		super: 'Object'
+		instvars: #('ivar1')
+		category: thePackageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: theTestPackageName)
+		addClassNamed: theTestClassName
+		super: 'TestCase'
+		category: theTestPackageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , theClassName , ' new foo = 1'
+			protocol: 'tests';
+		yourself ].
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _spec_0030_gemstone_classCreationBlock [ 
+^ [ :resolvedProject :theClassName :thePackageName :theTestClassName :theTestPackageName | 
+	((resolvedProject packageNamed: thePackageName)
+		addClassNamed: theClassName
+		super: 'Object'
+		instvars: #('ivar1')
+		category: thePackageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^RcKeyValueDictionary new at: 1 put: ''foo''; yourself' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: theTestPackageName)
+		addClassNamed: theTestClassName
+		super: 'TestCase'
+		category: theTestPackageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ((' , theClassName , ' new foo) at: 1) = ''foo'''
+			protocol: 'tests';
+		yourself ].
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _spec_0030_pharo_classCreationBlock [ 
+^ [ :resolvedProject :theClassName :thePackageName :theTestClassName :theTestPackageName | 
+	((resolvedProject packageNamed: thePackageName)
+		addClassNamed: theClassName
+		super: 'Object'
+		instvars: #('ivar1')
+		category: thePackageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^PluggableDictionary new at: 1 put: ''foo''; yourself' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: theTestPackageName)
+		addClassNamed: theTestClassName
+		super: 'TestCase'
+		category: theTestPackageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ((' , theClassName , ' new foo) at: 1) = ''foo'''
+			protocol: 'tests';
+		yourself ].
 ]
 
 { #category : 'private' }
@@ -3880,6 +4016,60 @@ RwTestProjectLibraryGenerator >> genSpec_0029: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0029: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0030: commitMessage [
+	"Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0030'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0029'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 30
+		derivedFrom: derivedFrom
+		comment: 'add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		customConditionalAttributes: #('tests');
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0030: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

@@ -1949,3 +1949,37 @@ RwRowanSample9Test >> testSpec_0029 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 ]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0030 [
+	"spec_0030 should load cleanly"
+
+	"add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0030'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	#('RowanSample9GsClass4'  'RowanSample9GsTestCase4') do: [:className |
+		self assert: (Rowan globalNamed: className) notNil ].
+
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
