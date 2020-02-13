@@ -69,13 +69,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedCommitId [
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadedComponentDefinitions [
-
-	"Create definitions from all of the components I define, and answer the collection of them"
-
-	| components |
-	components := self components copy.
-	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
-	^ components
+	^ self resolvedProject _projectStructure copy
 ]
 
 { #category : 'accessing' }

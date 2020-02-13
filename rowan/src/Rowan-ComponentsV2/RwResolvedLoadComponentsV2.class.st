@@ -348,6 +348,21 @@ RwResolvedLoadComponentsV2 >> addSubApplicationNamed: componentName toComponentN
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> categoryComponentsFor: componentNameList [
+	"category components are the components listed in the top-level loaded components"
+
+	| topLevel categoryComponents |
+	topLevel := componentNameList
+		collect: [ :componentName | self componentNamed: componentName ].
+	categoryComponents := Set new.
+	topLevel
+		do: [ :component | 
+			component componentNames
+				do: [ :componentName | categoryComponents add: (self componentNamed: componentName) ] ].
+	^ categoryComponents asArray
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> componentNamed: aComponentName [
 	^ self
 		componentNamed: aComponentName
