@@ -165,6 +165,14 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName comment: aString [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: aString
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
 	"return the path name of the new component"
 
@@ -196,6 +204,14 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: 
 		comment: ''.
 	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewNestedComponentNamed: aComponentName comment: aString [
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
+		condition: 'common'
+		comment: aString
 ]
 
 { #category : 'accessing' }

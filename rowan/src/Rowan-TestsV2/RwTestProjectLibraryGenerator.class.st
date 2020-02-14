@@ -40,6 +40,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0029: commitComment;
 	genSpec_0030: commitComment;
 	genSpec_0031: commitComment;
+	genSpec_0032: commitComment;
 	yourself
 "
 Class {
@@ -2166,6 +2167,96 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0032: resolvedProject [
+	"Start with  spec_0031, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"Explore the use of shared directory for sharing code between two conditions, like v1 and v2 ... first create v1 and v2 packages (that can be independently loaded in GemStone and use the class in shared component for code that is common to both -- not controlled by attributes"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName4 componentName5 componentName6 componentName7 componentPath1 componentPath2 componentPath3 componentPath4 componentPath5 packageName1 className1 className2 className3 className4 className5 className6 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 packageName11 packageName12 packageName13 componentPath |
+	componentPath1 := projectName.
+	componentPath2 := 'common/tests/Tests'.
+	componentPath3 := 'common/Core'.
+	componentPath4 := 'common/Definitions'.
+	componentPath5 := 'common/Specs'.
+	componentName4 := 'Definitions'.
+	componentName5 := 'Specs'.
+	componentName6 := 'Tests'.
+	componentName7 := 'shared/Specs'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-' , componentName4.
+	packageName4 := projectName , '-' , componentName4 , '-Tests'.
+	packageName5 := projectName , '-' , componentName5.
+	packageName6 := projectName , '-' , componentName5 , '-Tests'.
+	packageName7 := projectName , '-' , componentName4 , '-GemStone'.
+	packageName8 := projectName , '-' , componentName4 , '-GemStone' , '-Tests'.
+	packageName9 := projectName , '-' , componentName4 , '-Pharo'.
+	packageName10 := projectName , '-' , componentName4 , '-Pharo' , '-Tests'.
+	packageName11 := projectName , '-' , componentName5 , '-Shared'.
+	packageName12 := projectName , '-' , componentName5 , '-V1'.
+	packageName13 := projectName , '-' , componentName5 , '-V2'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	className4 := projectName , componentName5 , 'SharedClass4'.
+	className5 := projectName , componentName5 , 'v1Class5'.
+	className6 := projectName , componentName5 , 'v2Class5'.
+	testClassName1 := projectName , 'TestCase1'.
+	testClassName2 := projectName , 'TestCase2'.
+	testClassName3 := projectName , 'TestCase3'.
+
+	resolvedProject
+		addNewNestedComponentNamed: componentName7
+		comment:
+			'This component is intended for sharing common code and should not be loaded independently'.
+	resolvedProject
+		addPackageNamed: packageName11 toComponentNamed: componentName7;
+		yourself.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath5
+		condition: #('common' 'v1').
+	resolvedProject
+		addPackageNamed: packageName12 toComponentNamed: componentPath;
+		addComponentNamed: componentName7 toComponentNamed: componentPath;
+		yourself.
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath5
+		condition: #('common' 'v2').
+	resolvedProject
+		addPackageNamed: packageName13 toComponentNamed: componentPath;
+		addComponentNamed: componentName7 toComponentNamed: componentPath;
+		yourself.
+
+	(resolvedProject packageNamed: packageName11)
+		addClassNamed: className4
+		super: className3
+		instvars: #()
+		category: packageName11
+		comment: 'I am an example class' yourself.
+	(resolvedProject packageNamed: packageName12)
+		addClassNamed: className5
+		super: className4
+		instvars: #()
+		category: packageName12
+		comment: 'I am an example class' yourself.
+	(resolvedProject packageNamed: packageName13)
+		addClassNamed: className6
+		super: className4
+		instvars: #()
+		category: packageName13
+		comment: 'I am an example class' yourself.
+
+	"add tests for v1 and v2 that send shared (implemented in className4) to className5 and className6 ... could be one test method"
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -4252,6 +4343,60 @@ RwTestProjectLibraryGenerator >> genSpec_0031: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0031: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
+	"Start with  spec_0031, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"Explore the use of shared directory for sharing code between two conditions, like v1 and v2 ... first create v1 and v2 packages (that can be independently loaded in GemStone and use the class in shared component for code that is common to both -- not controlled by attributes"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0032'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0031'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0031, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 32
+		derivedFrom: derivedFrom
+		comment: 'Explore the use of shared directory for sharing code between two conditions, like v1 and v2 ... first create v1 and v2 packages (that can be independently loaded in GemStone and use the class in shared component for code that is common to both -- not controlled by attributes.')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		customConditionalAttributes: #('tests');
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0032: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

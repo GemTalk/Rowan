@@ -143,6 +143,13 @@ RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toC
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addNewNestedComponentNamed: aComponentName comment: aString [
+	^ self _projectDefinition
+		addNewNestedComponentNamed: aComponentName
+		comment: aString
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName [
 	^ self _projectDefinition
 		addPackageNamed: packageName
