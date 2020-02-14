@@ -8768,6 +8768,13 @@ RwTestProjectLibraryGenerator new
 	genSpec_0023: commitComment;
 	genSpec_0024: commitComment;
 	genSpec_0025: commitComment;
+	genSpec_0026: commitComment;
+	genSpec_0027: commitComment;
+	genSpec_0028: commitComment;
+	genSpec_0029: commitComment;
+	genSpec_0030: commitComment;
+	genSpec_0031: commitComment;
+	genSpec_0032: commitComment;
 	yourself';
 		immediateInvariant.
 true.
@@ -63326,7 +63333,7 @@ projectSpecFile: relativePathString
 	"relative path to the project specification file - default: rowan/project.ston"
 
 	| path |
-	path := Path * relativePathString .
+	path := Path from: relativePathString .
 	self _projectSpecification projectSpecPath: path parent pathString.
 	self _projectSpecification specName: path base.
 	self _loadSpecification projectSpecFile: relativePathString
@@ -63340,7 +63347,7 @@ projectSpecPath: aString
 	self _projectSpecification projectSpecPath: aString.
 	self _loadSpecification
 		projectSpecFile:
-			(Path * aString / self _projectSpecification specName , 'ston') pathString
+			(Path from: aString / self _projectSpecification specName , 'ston') pathString
 %
 
 category: 'accessing'
@@ -63648,6 +63655,30 @@ _validate: platformConfigurationAttributes
 
 category: 'accessing'
 method: RwResolvedLoadSpecificationV2
+componentNames
+	"list of components to be loaded"
+
+	^ self _loadSpecification componentNames
+%
+
+category: 'accessing'
+method: RwResolvedLoadSpecificationV2
+componentNames: anArray
+	"list of components to be loaded"
+
+	self _loadSpecification componentNames: anArray
+%
+
+category: 'accessing'
+method: RwResolvedLoadSpecificationV2
+customConditionalAttributes: anArray
+	"set the custom conditional attributes"
+
+	^ self _loadSpecification customConditionalAttributes: anArray
+%
+
+category: 'accessing'
+method: RwResolvedLoadSpecificationV2
 groupNames
 	"list of groups to be loaded. 
 		Default is {'core' 'tests'}"
@@ -63889,6 +63920,29 @@ addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment
 
 category: 'project definition'
 method: RwResolvedProjectV2
+addNewComponentNamed: componentName
+	^ self _projectDefinition addNewComponentNamed: componentName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray
+	^ self _projectDefinition
+		addNewComponentNamed: componentName
+		toComponentNamed: toComponentName
+		condition: conditionPathArray
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addNewNestedComponentNamed: aComponentName comment: aString
+	^ self _projectDefinition
+		addNewNestedComponentNamed: aComponentName
+		comment: aString
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
 addPackageNamed: packageName toComponentNamed: componentName
 	^ self _projectDefinition
 		addPackageNamed: packageName
@@ -63936,6 +63990,16 @@ addPackagesNamed: packageNames toComponentNamed: componentName withConditions: c
 		toComponentNamed: componentName
 		withConditions: conditionArray
 		andGroupName: groupName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addPlatformComponentNamed: componentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray
+	^ self _projectDefinition
+		addPlatformComponentNamed: componentName
+		toComponentNamed: toComponentName
+		alias: alias
+		condition: conditionPathArray
 %
 
 category: 'project definition'
@@ -64233,6 +64297,14 @@ loadedCommitId
 	^ self _projectSpecification loadedCommitId
 %
 
+category: 'project definition'
+method: RwResolvedProjectV2
+movePackageNamed: aPackageName toComponentNamed: aComponentName
+	^ self _projectDefinition
+		movePackageNamed: aPackageName
+		toComponentNamed: aComponentName
+%
+
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 name
@@ -64513,6 +64585,14 @@ category: 'project definition'
 method: RwResolvedProjectV2
 removeProjectNamed: aProjectName
 	^ self _projectDefinition removeProjectNamed: aProjectName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+renameComponentNamed: aComponentPath to: aComponentName
+	^ self _projectDefinition
+		renameComponentNamed: aComponentPath
+		to: aComponentName
 %
 
 category: '-- loader compat --'
@@ -68856,6 +68936,7 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 		withComponentNames: componentNames
 		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject readPackageNames: resolvedProject packageNames.
 	^ resolvedProject
 %
 
@@ -70220,6 +70301,12 @@ method: RwAbstractSimpleProjectLoadComponentV2
 packageNames
 
 	^ packageNames
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+referencePath
+	^ Path from: self name
 %
 
 category: 'accessing'
@@ -71922,6 +72009,68 @@ addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment
 
 category: 'accessing'
 method: RwProjectDefinitionV2
+addNewComponentNamed: aComponentName
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: ''
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addNewComponentNamed: aComponentName comment: aString
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: aString
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray
+	"return the path name of the new component"
+
+	| theComponentName toComponent path compositePath |
+	toComponent := self componentNamed: toComponentName.
+	path := RelativePath withAll: conditionPathArray.
+	path parent
+		do: [ :segment | 
+			| intermediateComponentName |
+			"ensure that we have the appropriate intermediate component structure"
+			compositePath := compositePath
+				ifNil: [ Path * segment ]
+				ifNotNil: [ compositePath / segment ].
+			intermediateComponentName := (compositePath / aComponentName) pathString.
+			toComponent := self components
+				componentNamed: intermediateComponentName
+				ifAbsent: [ 
+					| newComponent |
+					newComponent := self components
+						addSimpleNestedComponentNamed: intermediateComponentName
+						condition: segment
+						comment: ''.
+					toComponent addComponentNamed: intermediateComponentName.
+					newComponent ] ].
+	theComponentName := (path / aComponentName) pathString.
+	self components
+		addSimpleNestedComponentNamed: theComponentName
+		condition: conditionPathArray last
+		comment: ''.
+	toComponent addComponentNamed: theComponentName.
+	^ theComponentName
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addNewNestedComponentNamed: aComponentName comment: aString
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
+		condition: 'common'
+		comment: aString
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
 addPackageNamed: packageName
 
 	self shouldNotImplement
@@ -72024,6 +72173,44 @@ addPackagesNamed: packageNames toComponentNamed: componentName withConditions: c
 
 	^ packageNames collect: [:packageName | 
 		self addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName  gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray
+	"return the path name of the new component"
+
+	| theComponentName toComponent path compositePath condition pathArray |
+	toComponent := self componentNamed: toComponentName.
+	condition := conditionPathArray last.
+	pathArray := conditionPathArray copy.
+	pathArray at: pathArray size put: alias.
+	path := RelativePath withAll: pathArray.
+	path parent
+		do: [ :segment | 
+			| intermediateComponentName |
+			"ensure that we have the appropriate intermediate component structure"
+			compositePath := compositePath
+				ifNil: [ Path * segment ]
+				ifNotNil: [ compositePath / segment ].
+			intermediateComponentName := (compositePath / aComponentName) pathString.
+			toComponent := self components
+				componentNamed: intermediateComponentName
+				ifAbsent: [ 
+					| newComponent |
+					newComponent := self components
+						addSimpleNestedComponentNamed: intermediateComponentName
+						condition: segment
+						comment: ''.
+					toComponent addComponentNamed: intermediateComponentName.
+					newComponent ] ].
+	theComponentName := (path / aComponentName) pathString.
+	self components
+		addPlatformNestedComponentNamed: theComponentName
+		condition: condition
+		comment: ''.
+	toComponent addComponentNamed: theComponentName.
+	^ theComponentName
 %
 
 category: 'accessing'
@@ -72233,6 +72420,15 @@ load: instanceMigrator
 	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 %
 
+category: 'accessing'
+method: RwProjectDefinitionV2
+movePackageNamed: aPackageName toComponentNamed: aComponentName
+	self components removePackageNamed: aPackageName.
+	self components
+		addPackageNamed: aPackageName
+		toComponentNamed: aComponentName
+%
+
 category: 'properties'
 method: RwProjectDefinitionV2
 projectName
@@ -72308,6 +72504,12 @@ removePackageNamed: packageName fromComponentNamed: componentName withConditions
 		andGroup: groupName
 		removePackageNames: {packageName}.
 	^ component
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+renameComponentNamed: aComponentPath to: aComponentName
+	^ self components renameComponentNamed: aComponentPath to: aComponentName
 %
 
 category: 'temporary compat'
@@ -73488,6 +73690,24 @@ key
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
 	^self propertyAt: 'name' ifAbsent: [nil]
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+moveClassNamed: className modifyClassDefinition: classDefinitionBlock toPackage: packageDefinition
+	| classDefinition |
+	classDefinition := self removeKey: className from: classDefinitions.
+	classDefinitionBlock cull: classDefinition.
+	packageDefinition addClassDefinition: classDefinition
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+moveClassNamed: className toPackage: packageDefinition
+	self
+		moveClassNamed: className
+		modifyClassDefinition: [  ]
+		toPackage: packageDefinition
 %
 
 category: 'copying'
@@ -83310,13 +83530,7 @@ loadedCommitId
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 loadedComponentDefinitions
-
-	"Create definitions from all of the components I define, and answer the collection of them"
-
-	| components |
-	components := self components copy.
-	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
-	^ components
+	^ self resolvedProject _projectStructure copy
 %
 
 category: 'accessing'
@@ -85528,6 +85742,22 @@ addSubApplicationNamed: componentName toComponentNamed: toComponentName
 
 category: 'accessing'
 method: RwResolvedLoadComponentsV2
+categoryComponentsFor: componentNameList
+	"category components are the components listed in the top-level loaded components"
+
+	| topLevel categoryComponents |
+	topLevel := componentNameList
+		collect: [ :componentName | self componentNamed: componentName ].
+	categoryComponents := Set new.
+	topLevel
+		do: [ :component | 
+			component componentNames
+				do: [ :componentName | categoryComponents add: (self componentNamed: componentName) ] ].
+	^ categoryComponents asArray
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
 componentNamed: aComponentName
 	^ self
 		componentNamed: aComponentName
@@ -85663,6 +85893,38 @@ category: 'accessing'
 method: RwResolvedLoadComponentsV2
 removeProjectNamed: aProjectName
 	self components do: [ :component | component removeProjectNamed: aProjectName ]
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+renameComponentNamed: aComponentPath to: aComponentName
+	| component referencePath componentPath |
+	component := self components
+		removeKey: aComponentPath
+		ifAbsent: [ self error: 'No component named ' , aComponentPath printString , ' found' ].
+	referencePath := component referencePath.
+	componentPath := referencePath parent segments size = 0
+		ifTrue: [ 
+			"top-level component, simple rename is sufficient"
+			aComponentName ]
+		ifFalse: [ 
+			"need to preserve the path for the component"
+			(referencePath parent / aComponentName) pathString ].
+	(self components includesKey: componentPath)
+		ifTrue: [ 
+			self
+				error:
+					'A component with the name ' , componentPath printString , ' already exists' ].
+	component name: componentPath.
+	self components
+		do: [ :comp | 
+			(comp componentNames includes: aComponentPath)
+				ifTrue: [ 
+					comp
+						removeComponentNamed: aComponentPath;
+						addComponentNamed: componentPath ] ].
+	self components at: componentPath put: component.
+	^ componentPath
 %
 
 category: 'vast support'
@@ -85927,28 +86189,31 @@ method: RwLoadSpecificationV2
 						and: [ 
 							self projectsHome = anObject projectsHome
 								and: [ 
-									self componentNames asArray sort = anObject componentNames asArray sort
+									self customConditionalAttributes asArray sort
+										= anObject customConditionalAttributes asArray sort
 										and: [ 
-											self groupNames asArray sort = anObject groupNames asArray sort
+											self componentNames asArray sort = anObject componentNames asArray sort
 												and: [ 
-													self projectSpecFile = anObject projectSpecFile
+													self groupNames asArray sort = anObject groupNames asArray sort
 														and: [ 
-															self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
+															self projectSpecFile = anObject projectSpecFile
 																and: [ 
-																	self gitUrl = anObject gitUrl
+																	self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
 																		and: [ 
-																			self diskUrl = anObject diskUrl
+																			self gitUrl = anObject gitUrl
 																				and: [ 
-																					self mercurialUrl = anObject mercurialUrl
+																					self diskUrl = anObject diskUrl
 																						and: [ 
-																							self svnUrl = anObject svnUrl
+																							self mercurialUrl = anObject mercurialUrl
 																								and: [ 
-																									self revision = anObject revision
+																									self svnUrl = anObject svnUrl
 																										and: [ 
-																											self comment = anObject comment
+																											self revision = anObject revision
 																												and: [ 
-																													self _platformProperties = anObject _platformProperties
-																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																													self comment = anObject comment
+																														and: [ 
+																															self _platformProperties = anObject _platformProperties
+																																or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 %
 
 category: 'visiting'
@@ -86161,6 +86426,7 @@ method: RwLoadSpecificationV2
 hash
 	| hashValue |
 	hashValue := self specName hash.
+	hashValue := hashValue bitXor: self customConditionalAttributes hash.
 	hashValue := hashValue bitXor: self projectName hash.
 	hashValue := hashValue bitXor: self projectAlias hash.
 	hashValue := hashValue bitXor: self projectSpecFile hash.
@@ -86233,6 +86499,7 @@ postCopy
 	super postCopy.
 	componentNames := componentNames copy.
 	groupNames := groupNames copy.
+	customConditionalAttributes := customConditionalAttributes copy.
 	platformProperties
 		ifNotNil: [ 
 			| platformPropertiesCopy |
@@ -88306,6 +88573,391 @@ genSpec_0025: commitMessage
 		commitMessage: commitMessage
 %
 
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0026: commitMessage
+	"Start with  spec_0000, create a project using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"start with a single component, single package project."
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0026'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0000, create a project using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 26
+		derivedFrom: derivedFrom
+		comment: 'start with a single component, single package project.')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		groupNames:
+				{'core'.
+					'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0026: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0027: commitMessage
+	"Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"split pacakges into core and tests and use move class api to move class definitions from package to package"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0027'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0026'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 27
+		derivedFrom: derivedFrom
+		comment:
+			'split pacakges into core and tests and use move class api to move class definitions from package to package')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0027: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0028: commitMessage
+	"Start with  spec_0027, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add conditional Tests component"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0028'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0027'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0027, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 28
+		derivedFrom: derivedFrom
+		comment: 'add conditional Tests component')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0028: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0029: commitMessage
+	"Start with  spec_0028, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add 2 more classes, tests and packages (one class/package) and create category components: Core, Definitions, Specs, Tests"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0029'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0028'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0028, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 29
+		derivedFrom: derivedFrom
+		comment: 'add 2 more classes, tests and packages (one class/package) and create category components: Core, Definitions, Specs, Tests')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		customConditionalAttributes: #('tests');
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0029: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0030: commitMessage
+	"Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0030'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0029'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 30
+		derivedFrom: derivedFrom
+		comment: 'add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		customConditionalAttributes: #('tests');
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0030: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0031: commitMessage
+	"Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"Add platform conditional extension methods and classes plus tests - pharo, gemstone and gs3.[5-]. Use platform components with alias."
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0031'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0029'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 31
+		derivedFrom: derivedFrom
+		comment: 'Add platform conditional extension methods and classes plus tests - pharo, gemstone and gs3.[5-]. Use platform components with alias. Use leading _ character when using alias, to distiguish from attribute (and path) using the same name.')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		customConditionalAttributes: #('tests');
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0031: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
+category: 'generators'
+method: RwTestProjectLibraryGenerator
+genSpec_0032: commitMessage
+	"Start with  spec_0031, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"Explore the use of shared directory for sharing code between two conditions, like v1 and v2 ... first create v1 and v2 packages (that can be independently loaded or loaded together in GemStone and use the class in shared component for code that is common to both -- not controlled by attributes"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0032'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0031'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0031, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 32
+		derivedFrom: derivedFrom
+		comment: 'Explore the use of shared directory for sharing code between two conditions, like v1 and v2 ... first create v1 and v2 packages (that can be independently loaded or loaded together in GemStone and use the class in shared component for code that is common to both -- not controlled by attributes.')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		customConditionalAttributes: #('tests');
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0032: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+%
+
 category: 'accessing'
 method: RwTestProjectLibraryGenerator
 preserveChangesOnGithub
@@ -90078,6 +90730,593 @@ _addDefinitionsFor_0025: resolvedProject_0025
 
 category: 'private'
 method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0026: resolvedProject
+	"Start with  spec_0000, create a project using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"start with a single component, single package project."
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName1 packageName1 className1 testClassName1 |
+	resolvedProject removeComponentNamed: 'Core'.
+
+	componentName1 := projectName.
+	packageName1 := projectName , '-Core'.
+	className1 := projectName , 'Class1'.
+	testClassName1 := projectName , 'TestCase1'.
+
+	resolvedProject loadSpecification
+		componentNames: {componentName1};
+		groupNames: #();
+		yourself.
+
+	resolvedProject addNewComponentNamed: componentName1.
+
+	resolvedProject
+		addPackageNamed: packageName1 toComponentNamed: componentName1;
+		yourself.
+
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName1
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: testClassName1
+		super: 'TestCase'
+		category: packageName1
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className1 , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0027: resolvedProject
+	"Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"split pacakges into core and tests and use move class api to move class definitions from package to package"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName1 packageName1 className1 testClassName1 packageName2 |
+	componentName1 := projectName.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	className1 := projectName , 'Class1'.
+	testClassName1 := projectName , 'TestCase1'.
+
+	resolvedProject
+		addPackageNamed: packageName2 toComponentNamed: componentName1;
+		yourself.
+
+	(resolvedProject packageNamed: packageName1)
+		moveClassNamed: testClassName1
+		modifyClassDefinition: [ :classDef | classDef category: packageName2 ]
+		toPackage: (resolvedProject packageNamed: packageName2) yourself.
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0028: resolvedProject
+	"Start with  spec_0026, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add conditional Tests component"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentPath1 componentName2 packageName1 className1 testClassName1 packageName2 componentPath2  |
+	componentPath1 := projectName.
+	componentName2 :=  projectName.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	className1 := projectName , 'Class1'.
+	testClassName1 := projectName , 'TestCase1'.
+
+	componentPath2 := resolvedProject
+		addNewComponentNamed: componentName2
+			toComponentNamed: componentPath1
+			condition: #('common' 'tests' ).
+
+	resolvedProject loadSpecification
+		customConditionalAttributes: #('tests').
+
+	resolvedProject 
+		movePackageNamed: packageName2 toComponentNamed: componentPath2;
+		yourself.
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0029: resolvedProject
+	"Start with  spec_0028, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add 2 more classes, tests and packages (one class/package) and create category components: Core, Definitions, Specs, Tests"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentPath1 componentPath2 componentPath3 componentName3 componentName4 componentName5 componentName6 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 componentName2 deletedComponentName |
+	deletedComponentName := 'common/RowanSample9'.
+	componentPath1 := projectName.
+	componentPath2 := 'common/tests/' , projectName.
+	componentName2 := 'Tests'.
+	componentName3 := 'Core'.
+	componentName4 := 'Definitions'.
+	componentName5 := 'Specs'.
+	componentName6 := 'Tests'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-' , componentName4.
+	packageName4 := projectName , '-' , componentName4 , '-Tests'.
+	packageName5 := projectName , '-' , componentName5.
+	packageName6 := projectName , '-' , componentName5 , '-Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	testClassName1 := projectName , 'TestCase1'.
+	testClassName2 := projectName , 'TestCase2'.
+	testClassName3 := projectName , 'TestCase3'.
+
+	resolvedProject removeComponentNamed: deletedComponentName.
+
+	componentPath2 := resolvedProject
+		renameComponentNamed: componentPath2
+		to: componentName2.
+
+	componentPath3 := resolvedProject
+		addNewComponentNamed: componentName3
+		toComponentNamed: componentPath1
+		condition: #('common').
+	resolvedProject
+		movePackageNamed: packageName1 toComponentNamed: componentPath3;
+		yourself.
+
+	componentPath3 := resolvedProject
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath1
+		condition: #('common').
+	resolvedProject
+		addPackageNamed: packageName3 toComponentNamed: componentPath3;
+		yourself.
+	resolvedProject
+		addPackageNamed: packageName4 toComponentNamed: componentPath2;
+		yourself.
+
+	componentPath3 := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath1
+		condition: #('common').
+	resolvedProject
+		addPackageNamed: packageName5 toComponentNamed: componentPath3;
+		yourself.
+	resolvedProject
+		addPackageNamed: packageName6 toComponentNamed: componentPath2;
+		yourself.
+
+	componentPath3 := resolvedProject
+		addNewComponentNamed: componentName6
+		toComponentNamed: componentPath1
+		condition: #('common').
+	(resolvedProject componentNamed: componentPath1)
+		removeComponentNamed: componentPath2;
+		addComponentNamed: componentPath3;
+		yourself.
+	(resolvedProject componentNamed: componentPath3)
+		addComponentNamed: componentPath2;
+		yourself.
+
+
+	self _spec_0029_classCreationBlock
+		value: resolvedProject
+		value: className2
+		value: packageName3
+		value: testClassName2
+		value: packageName4.
+
+	self _spec_0029_classCreationBlock
+		value: resolvedProject
+		value: className3
+		value: packageName5
+		value: testClassName3
+		value: packageName6.
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0030: resolvedProject
+	"Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName4 componentName5 componentName6 componentPath1 componentPath2 componentPath3 componentPath4 componentPath5 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 componentPath |
+	componentPath1 := projectName.
+	componentPath2 := 'common/tests/Tests'.
+	componentPath3 := 'common/Core'.
+	componentPath4 := 'common/Definitions'.
+	componentPath5 := 'common/Specs'.
+	componentName4 := 'Definitions'.
+	componentName5 := 'Specs'.
+	componentName6 := 'Tests'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-' , componentName4.
+	packageName4 := projectName , '-' , componentName4 , '-Tests'.
+	packageName5 := projectName , '-' , componentName5.
+	packageName6 := projectName , '-' , componentName5 , '-Tests'.
+	packageName7 := projectName , '-' , componentName4 , '-GemStone'.
+	packageName8 := projectName , '-' , componentName4 , '-GemStone' , '-Tests'.
+	packageName9 := projectName , '-' , componentName4 , '-Pharo'.
+	packageName10 := projectName , '-' , componentName4 , '-Pharo' , '-Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	testClassName1 := projectName , 'TestCase1'.
+	testClassName2 := projectName , 'TestCase2'.
+	testClassName3 := projectName , 'TestCase3'.
+
+	{{packageName3.
+	className2.
+	packageName4.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) classDefinitionNamed: (ar at: 2))
+				addInstanceMethod:
+						'bar ^ (self class _dictionaryClass new) at: self foo put: 1; yourself'
+					protocol: 'accessing';
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3)) classDefinitionNamed: (ar at: 4))
+				addInstanceMethod:
+						'testBar | inst | inst := ' , (ar at: 2)
+								, ' new. self assert: (inst bar at: inst foo) = 1'
+					protocol: 'tests';
+				addInstanceMethod:
+						'testBarClass | inst | inst := ' , (ar at: 2)
+								, ' new. self assert: inst bar class == self _dictionaryClass'
+					protocol: 'tests';
+				yourself ].
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		condition: #('common' 'gemstone').
+	resolvedProject
+		addPackageNamed: packageName7 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		condition: #('common' 'tests' 'gemstone').
+	resolvedProject
+		addPackageNamed: packageName8 toComponentNamed: componentPath;
+		yourself.
+
+	{{packageName7.
+	className2.
+	packageName8.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) addClassExtensionNamed: (ar at: 2))
+				addClassMethod: '_dictionaryClass ^ RcKeyValueDictionary'
+					protocol: '*' , (ar at: 1) asLowercase;
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3))
+				addClassExtensionNamed: (ar at: 4))
+				addInstanceMethod: '_dictionaryClass ^ RcKeyValueDictionary'
+					protocol: '*' , (ar at: 3) asLowercase;
+				yourself ].
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		condition: #('common' 'pharo').
+	resolvedProject
+		addPackageNamed: packageName9 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		condition: #('common' 'tests' 'pharo').
+	resolvedProject
+		addPackageNamed: packageName10 toComponentNamed: componentPath;
+		yourself.
+
+	{{packageName9.
+	className2.
+	packageName10.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) addClassExtensionNamed: (ar at: 2))
+				addClassMethod: '_dictionaryClass ^ PluggableDictionary'
+					protocol: '*' , (ar at: 1) asLowercase;
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3))
+				addClassExtensionNamed: (ar at: 4))
+				addInstanceMethod: '_dictionaryClass ^ PluggableDictionary'
+					protocol: '*' , (ar at: 3) asLowercase;
+				yourself ].
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0031: resolvedProject
+	"Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"Add platform conditional extension methods and classes plus tests - pharo, gemstone and gs3.[5-]. Use platform components with alias."
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName4 componentName5 componentName6 componentPath1 componentPath2 componentPath3 componentPath4 componentPath5 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 componentPath |
+	componentPath1 := projectName.
+	componentPath2 := 'common/tests/Tests'.
+	componentPath3 := 'common/Core'.
+	componentPath4 := 'common/Definitions'.
+	componentPath5 := 'common/Specs'.
+	componentName4 := 'Definitions'.
+	componentName5 := 'Specs'.
+	componentName6 := 'Tests'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-' , componentName4.
+	packageName4 := projectName , '-' , componentName4 , '-Tests'.
+	packageName5 := projectName , '-' , componentName5.
+	packageName6 := projectName , '-' , componentName5 , '-Tests'.
+	packageName7 := projectName , '-' , componentName4 , '-GemStone'.
+	packageName8 := projectName , '-' , componentName4 , '-GemStone' , '-Tests'.
+	packageName9 := projectName , '-' , componentName4 , '-Pharo'.
+	packageName10 := projectName , '-' , componentName4 , '-Pharo' , '-Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	testClassName1 := projectName , 'TestCase1'.
+	testClassName2 := projectName , 'TestCase2'.
+	testClassName3 := projectName , 'TestCase3'.
+
+	{{packageName3.
+	className2.
+	packageName4.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) classDefinitionNamed: (ar at: 2))
+				addInstanceMethod:
+						'bar ^ (self class _dictionaryClass new) at: self foo put: 1; yourself'
+					protocol: 'accessing';
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3)) classDefinitionNamed: (ar at: 4))
+				addInstanceMethod:
+						'testBar | inst | inst := ' , (ar at: 2)
+								, ' new. self assert: (inst bar at: inst foo) = 1'
+					protocol: 'tests';
+				addInstanceMethod:
+						'testBarClass | inst | inst := ' , (ar at: 2)
+								, ' new. self assert: inst bar class == self _dictionaryClass'
+					protocol: 'tests';
+				yourself ].
+
+	componentPath := resolvedProject
+		addPlatformComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		alias: '_gemstone_glass'
+		condition:
+			{'common'.
+			{'gemstone'.
+			'glass'}}.
+	resolvedProject
+		addPackageNamed: packageName7 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addPlatformComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		alias: '_gemstone_glass'
+		condition:
+			{'common'.
+			'tests'.
+			{'gemstone'.
+			'glass'}}.
+	resolvedProject
+		addPackageNamed: packageName8 toComponentNamed: componentPath;
+		yourself.
+
+	{{packageName7.
+	className2.
+	packageName8.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) addClassExtensionNamed: (ar at: 2))
+				addClassMethod: '_dictionaryClass ^ RcKeyValueDictionary'
+					protocol: '*' , (ar at: 1) asLowercase;
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3))
+				addClassExtensionNamed: (ar at: 4))
+				addInstanceMethod: '_dictionaryClass ^ RcKeyValueDictionary'
+					protocol: '*' , (ar at: 3) asLowercase;
+				yourself ].
+
+	componentPath := resolvedProject
+		addPlatformComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		alias: '_pharo'
+		condition:
+			{'common'.
+			{'pharo'}}.
+	resolvedProject
+		addPackageNamed: packageName9 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addPlatformComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		alias: '_pharo'
+		condition:
+			{'common'.
+			'tests'.
+			{'pharo'}}.
+	resolvedProject
+		addPackageNamed: packageName10 toComponentNamed: componentPath;
+		yourself.
+
+	{{packageName9.
+	className2.
+	packageName10.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) addClassExtensionNamed: (ar at: 2))
+				addClassMethod: '_dictionaryClass ^ PluggableDictionary'
+					protocol: '*' , (ar at: 1) asLowercase;
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3))
+				addClassExtensionNamed: (ar at: 4))
+				addInstanceMethod: '_dictionaryClass ^ PluggableDictionary'
+					protocol: '*' , (ar at: 3) asLowercase;
+				yourself ].
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_addDefinitionsFor_0032: resolvedProject
+	"Start with  spec_0031, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"Explore the use of shared directory for sharing code between two conditions, like v1 and v2 ... first create v1 and v2 packages (that can be independently loaded or loaded together in GemStone and use the class in shared component for code that is common to both -- not controlled by attributes"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName4 componentName5 componentName6 componentName7 componentPath1 componentPath2 componentPath3 componentPath4 componentPath5 componentPath6 packageName1 className1 className2 className3 className4 className5 className6 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 packageName11 packageName12 packageName13 packageName14 packageName15 componentPath |
+	componentPath1 := projectName.
+	componentPath2 := 'common/tests/Tests'.
+	componentPath3 := 'common/Core'.
+	componentPath4 := 'common/Definitions'.
+	componentPath5 := 'common/Specs'.
+	componentPath6 := 'common/Tests'.
+	componentName4 := 'Definitions'.
+	componentName5 := 'Specs'.
+	componentName6 := 'Tests'.
+	componentName7 := 'shared/Specs'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-' , componentName4.
+	packageName4 := projectName , '-' , componentName4 , '-Tests'.
+	packageName5 := projectName , '-' , componentName5.
+	packageName6 := projectName , '-' , componentName5 , '-Tests'.
+	packageName7 := projectName , '-' , componentName4 , '-GemStone'.
+	packageName8 := projectName , '-' , componentName4 , '-GemStone' , '-Tests'.
+	packageName9 := projectName , '-' , componentName4 , '-Pharo'.
+	packageName10 := projectName , '-' , componentName4 , '-Pharo' , '-Tests'.
+	packageName11 := projectName , '-' , componentName5 , '-Shared'.
+	packageName12 := projectName , '-' , componentName5 , '-V1'.
+	packageName13 := projectName , '-' , componentName5 , '-V2'.
+	packageName14 := projectName , '-' , componentName5 , '-V1-Tests'.
+	packageName15 := projectName , '-' , componentName5 , '-V2-Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	className4 := projectName , componentName5 , 'SharedClass4'.
+	className5 := projectName , componentName5 , 'v1Class5'.
+	className6 := projectName , componentName5 , 'v2Class5'.
+	testClassName1 := projectName , 'TestCase1'.
+	testClassName2 := projectName , 'TestCase2'.
+	testClassName3 := projectName , 'TestCase3'.
+
+	resolvedProject loadSpecification
+		customConditionalAttributes: #('tests' 'v1' 'v2').
+
+	resolvedProject
+		addNewNestedComponentNamed: componentName7
+		comment:
+			'This component is intended for sharing common code and should not be loaded independently'.
+	resolvedProject
+		addPackageNamed: packageName11 toComponentNamed: componentName7;
+		yourself.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath5
+		condition: #('common' 'v1').
+	resolvedProject
+		addPackageNamed: packageName12 toComponentNamed: componentPath;
+		addComponentNamed: componentName7 toComponentNamed: componentPath;
+		yourself.
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath5
+		condition: #('common' 'v2').
+	resolvedProject
+		addPackageNamed: packageName13 toComponentNamed: componentPath;
+		addComponentNamed: componentName7 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath6
+		condition: #('common' 'tests' 'v1').
+	resolvedProject
+		addPackageNamed: packageName14 toComponentNamed: componentPath;
+		yourself.
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName5
+		toComponentNamed: componentPath6
+		condition: #('common' 'tests' 'v2').
+	resolvedProject
+		addPackageNamed: packageName15 toComponentNamed: componentPath;
+		yourself.
+
+	((resolvedProject packageNamed: packageName11)
+		addClassNamed: className4
+		super: className3
+		instvars: #()
+		category: packageName11
+		comment: 'I am an example class' yourself)
+		addInstanceMethod: 'shared ^ ''shared''' protocol: 'accessing';
+		yourself.
+	(resolvedProject packageNamed: packageName12)
+		addClassNamed: className5
+		super: className4
+		instvars: #()
+		category: packageName12
+		comment: 'I am an example class' yourself.
+	(resolvedProject packageNamed: packageName13)
+		addClassNamed: className6
+		super: className4
+		instvars: #()
+		category: packageName13
+		comment: 'I am an example class' yourself.
+
+	((resolvedProject packageNamed: packageName14)
+		addClassExtensionNamed: testClassName3)
+		addInstanceMethod:
+			'testV1 self assert: (' , className5 , ' new) shared = ''shared'''
+		protocol: '*' , packageName14 asLowercase.
+
+	((resolvedProject packageNamed: packageName15)
+		addClassExtensionNamed: testClassName3)
+		addInstanceMethod:
+			'testV2 self assert: (' , className6 , ' new) shared = ''shared'''
+		protocol: '*' , packageName15 asLowercase.
+
+	^ resolvedProject
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
 _addPackageCore1DefinitionsFor_0004: projectDefinition
 	| className packageName |
 	packageName := projectName , '-Core1'.
@@ -90373,6 +91612,28 @@ category: 'private'
 method: RwTestProjectLibraryGenerator
 _sampleSymbolDictionaryName1
 	^ RwAbstractV2Test _sampleSymbolDictionaryName1
+%
+
+category: 'private'
+method: RwTestProjectLibraryGenerator
+_spec_0029_classCreationBlock 
+^ [ :resolvedProject :theClassName :thePackageName :theTestClassName :theTestPackageName | 
+	((resolvedProject packageNamed: thePackageName)
+		addClassNamed: theClassName
+		super: 'Object'
+		instvars: #('ivar1')
+		category: thePackageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: theTestPackageName)
+		addClassNamed: theTestClassName
+		super: 'TestCase'
+		category: theTestPackageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , theClassName , ' new foo = 1'
+			protocol: 'tests';
+		yourself ].
 %
 
 category: 'private'
@@ -107502,6 +108763,47 @@ _rowanSample9_0000_load_spec
 
 category: 'tests'
 method: RwRowanSample9Test
+testCategoryComponents
+	"based on spec_0029"
+
+	"a category component should be able to answer the list of packages and classes loaded in image"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project components categoryComponents |
+	loadSpec := self _loadSpecNamed: 'spec_0029'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"validate that list of packages and classes from the category components is correct"
+	project := loadedProjects at: 1.
+
+"using the category components, calculate the list of package names and class names in each component"
+	components := project loadedComponents.
+	categoryComponents := components categoryComponentsFor: project topLevelComponentNames.
+"I think I want a component visitor to extract the list of packages from the loaded components"
+	false ifTrue: [ self halt]
+%
+
+category: 'tests'
+method: RwRowanSample9Test
 testIndexCards
 	| projectSpecification indexCards specsDir projectSpecs resolvedProjects |
 	projectSpecification := self _rowanSample9_0000_load_spec.
@@ -109018,6 +110320,297 @@ testSpec_0025
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0026
+	"spec_0026 should load cleanly"
+
+	"start with a single component, single package project."
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0026'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0027
+	"spec_0027 should load cleanly"
+
+	"split pacakges into core and tests and use move class api to move class definitions from package to package"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0027'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0028
+	"spec_0028 should load cleanly"
+
+	"add conditional Tests component"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0028'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"remove tests from the conditional attributes and resolve -- RowanSample9TestCase1 should not be loaded"
+	loadSpec customConditionalAttributes: #().
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	self assert: (Rowan globalNamed: 'RowanSample9TestCase1') notNil.
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self assert: (Rowan globalNamed: 'RowanSample9TestCase1') isNil.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0029
+	"spec_0029 should load cleanly"
+
+	"add 2 more classes, tests and packages (one class/package) and create category components: Core, Definitions, Specs, Tests"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0029'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"remove tests from the conditional attributes and resolve -- RowanSample9TestCase1 should not be loaded"
+	loadSpec customConditionalAttributes: #().
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	#('RowanSample9TestCase1'  'RowanSample9TestCase2'  'RowanSample9TestCase3') do: [:className |
+		self assert: (Rowan globalNamed: className) notNil ].
+
+	loadedProjects := resolvedProject load.
+
+	#('RowanSample9TestCase1'  'RowanSample9TestCase2'  'RowanSample9TestCase3') do: [:className |
+		self assert: (Rowan globalNamed: className) isNil ].
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0030
+	"spec_0030 should load cleanly"
+
+	"add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0030'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0031
+	"spec_0031 should load cleanly"
+
+	"Add platform conditional extension methods and classes plus tests - pharo, gemstone and gs3.[5-]. Use platform components with alias."
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0031'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+%
+
+category: 'tests'
+method: RwRowanSample9Test
+testSpec_0032
+	"spec_0032 should load cleanly"
+
+	"Explore the use of shared directory for sharing code between two conditions, like v1 and v2 ... first create v1 and v2 packages (that can be independently loaded or loaded together in GemStone and use the class in shared component for code that is common to both -- not controlled by attributes"
+
+	"https://github.com/dalehenrich/Rowan/issues/573"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0032'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	#('RowanSample9SpecsSharedClass4' 'RowanSample9Specsv1Class5' 'RowanSample9Specsv2Class5') do: [:className |
+		self assert: (Rowan globalNamed: className) notNil ].
+
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"remove v1 from the conditional attributes and resolve -- RowanSample9Specsv1Class5 should not be loaded"
+	loadSpec customConditionalAttributes remove: 'v1'.
+	resolvedProject := loadSpec resolve.
+"load project"
+	loadedProjects := resolvedProject load.
+"validate"
+	#('RowanSample9Specsv1Class5' ) do: [:className |
+		self assert: (Rowan globalNamed: className) isNil ].
+	#('RowanSample9SpecsSharedClass4' 'RowanSample9Specsv2Class5') do: [:className |
+		self assert: (Rowan globalNamed: className) notNil ].
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"remove v2 from the conditional attributes, add v1 back  and resolve -- RowanSample9Specsv1Class5 should not be loaded"
+	loadSpec customConditionalAttributes remove: 'v2'.
+	loadSpec customConditionalAttributes add: 'v1'.
+	resolvedProject := loadSpec resolve.
+"load project"
+	loadedProjects := resolvedProject load.
+"validate"
+	#('RowanSample9Specsv2Class5' ) do: [:className |
+		self assert: (Rowan globalNamed: className) isNil ].
+	#('RowanSample9SpecsSharedClass4' 'RowanSample9Specsv1Class5') do: [:className |
+		self assert: (Rowan globalNamed: className) notNil ].
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
 %
 
 category: 'private'
@@ -138712,6 +140305,12 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
 %
 
+category: '*rowan-corev2'
+method: RwProject
+loadedComponents
+	^ self _loadedProject loadedComponentDefinitions
+%
+
 category: '*rowan-gemstone-core'
 method: RwProject
 methodEnvForPackageNamed: packageName
@@ -138732,6 +140331,12 @@ method: RwProject
 symbolDictNameForPackageNamed: packageName
 
 	^ self _gemstonePlatformSpec symbolDictNameForPackageNamed: packageName
+%
+
+category: '*rowan-corev2'
+method: RwProject
+topLevelComponentNames
+	^ self _loadedProject resolvedProject _loadSpecification componentNames
 %
 
 category: '*rowan-gemstone-core'

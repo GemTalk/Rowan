@@ -62585,7 +62585,7 @@ projectSpecFile: relativePathString
 	"relative path to the project specification file - default: rowan/project.ston"
 
 	| path |
-	path := Path * relativePathString .
+	path := Path from: relativePathString .
 	self _projectSpecification projectSpecPath: path parent pathString.
 	self _projectSpecification specName: path base.
 	self _loadSpecification projectSpecFile: relativePathString
@@ -62599,7 +62599,7 @@ projectSpecPath: aString
 	self _projectSpecification projectSpecPath: aString.
 	self _loadSpecification
 		projectSpecFile:
-			(Path * aString / self _projectSpecification specName , 'ston') pathString
+			(Path from: aString / self _projectSpecification specName , 'ston') pathString
 %
 
 category: 'accessing'
@@ -69323,6 +69323,24 @@ key
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
 	^self propertyAt: 'name' ifAbsent: [nil]
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+moveClassNamed: className modifyClassDefinition: classDefinitionBlock toPackage: packageDefinition
+	| classDefinition |
+	classDefinition := self removeKey: className from: classDefinitions.
+	classDefinitionBlock cull: classDefinition.
+	packageDefinition addClassDefinition: classDefinition
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+moveClassNamed: className toPackage: packageDefinition
+	self
+		moveClassNamed: className
+		modifyClassDefinition: [  ]
+		toPackage: packageDefinition
 %
 
 category: 'copying'
