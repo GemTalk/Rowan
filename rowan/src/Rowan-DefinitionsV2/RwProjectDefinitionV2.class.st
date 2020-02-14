@@ -297,6 +297,43 @@ RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: compon
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray [
+	"return the path name of the new component"
+
+	| theComponentName toComponent path compositePath condition pathArray |
+	toComponent := self componentNamed: toComponentName.
+	condition := conditionPathArray last.
+	pathArray := conditionPathArray copy.
+	pathArray at: pathArray size put: alias.
+	path := RelativePath withAll: pathArray.
+	path parent
+		do: [ :segment | 
+			| intermediateComponentName |
+			"ensure that we have the appropriate intermediate component structure"
+			compositePath := compositePath
+				ifNil: [ Path * segment ]
+				ifNotNil: [ compositePath / segment ].
+			intermediateComponentName := (compositePath / aComponentName) pathString.
+			toComponent := self components
+				componentNamed: intermediateComponentName
+				ifAbsent: [ 
+					| newComponent |
+					newComponent := self components
+						addSimpleNestedComponentNamed: intermediateComponentName
+						condition: segment
+						comment: ''.
+					toComponent addComponentNamed: intermediateComponentName.
+					newComponent ] ].
+	theComponentName := (path / aComponentName) pathString.
+	self components
+		addPlatformNestedComponentNamed: theComponentName
+		condition: condition
+		comment: ''.
+	toComponent addComponentNamed: theComponentName.
+	^ theComponentName
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
 	^ self components
 		addPlatformNestedComponentNamed: aComponentName

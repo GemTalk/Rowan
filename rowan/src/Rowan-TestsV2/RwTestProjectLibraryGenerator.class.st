@@ -39,6 +39,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0028: commitComment;
 	genSpec_0029: commitComment;
 	genSpec_0030: commitComment;
+	genSpec_0031: commitComment;
 	yourself
 "
 Class {
@@ -1910,7 +1911,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0030: resolvedProject [
-	"Start with  spec_0030, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+	"Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
 
 	"add platform conditional extension methods and classes plus tests - gemstone pharo gs3.5-"
 
@@ -2006,6 +2007,142 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0030: resolvedProject [
 		addNewComponentNamed: componentName4
 		toComponentNamed: componentPath4
 		condition: #('common' 'tests' 'pharo').
+	resolvedProject
+		addPackageNamed: packageName10 toComponentNamed: componentPath;
+		yourself.
+
+	{{packageName9.
+	className2.
+	packageName10.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) addClassExtensionNamed: (ar at: 2))
+				addClassMethod: '_dictionaryClass ^ PluggableDictionary'
+					protocol: '*' , (ar at: 1) asLowercase;
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3))
+				addClassExtensionNamed: (ar at: 4))
+				addInstanceMethod: '_dictionaryClass ^ PluggableDictionary'
+					protocol: '*' , (ar at: 3) asLowercase;
+				yourself ].
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
+	"Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"Add platform conditional extension methods and classes plus tests - pharo, gemstone and gs3.[5-]. Use platform components with alias."
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| componentName4 componentName5 componentName6 componentPath1 componentPath2 componentPath3 componentPath4 componentPath5 packageName1 className1 className2 className3 testClassName1 testClassName2 testClassName3 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 componentPath |
+	componentPath1 := projectName.
+	componentPath2 := 'common/tests/Tests'.
+	componentPath3 := 'common/Core'.
+	componentPath4 := 'common/Definitions'.
+	componentPath5 := 'common/Specs'.
+	componentName4 := 'Definitions'.
+	componentName5 := 'Specs'.
+	componentName6 := 'Tests'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-' , componentName4.
+	packageName4 := projectName , '-' , componentName4 , '-Tests'.
+	packageName5 := projectName , '-' , componentName5.
+	packageName6 := projectName , '-' , componentName5 , '-Tests'.
+	packageName7 := projectName , '-' , componentName4 , '-GemStone'.
+	packageName8 := projectName , '-' , componentName4 , '-GemStone' , '-Tests'.
+	packageName9 := projectName , '-' , componentName4 , '-Pharo'.
+	packageName10 := projectName , '-' , componentName4 , '-Pharo' , '-Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'Class2'.
+	className3 := projectName , 'Class3'.
+	testClassName1 := projectName , 'TestCase1'.
+	testClassName2 := projectName , 'TestCase2'.
+	testClassName3 := projectName , 'TestCase3'.
+
+	{{packageName3.
+	className2.
+	packageName4.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) classDefinitionNamed: (ar at: 2))
+				addInstanceMethod:
+						'bar ^ (self class _dictionaryClass new) at: self foo put: 1; yourself'
+					protocol: 'accessing';
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3)) classDefinitionNamed: (ar at: 4))
+				addInstanceMethod:
+						'testBar | inst | inst := ' , (ar at: 2)
+								, ' new. self assert: (inst bar at: inst foo) = 1'
+					protocol: 'tests';
+				addInstanceMethod:
+						'testBarClass | inst | inst := ' , (ar at: 2)
+								, ' new. self assert: inst bar class == self _dictionaryClass'
+					protocol: 'tests';
+				yourself ].
+
+	componentPath := resolvedProject
+		addPlatformComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		alias: '_gemstone_glass'
+		condition:
+			{'common'.
+			{'gemstone'.
+			'glass'}}.
+	resolvedProject
+		addPackageNamed: packageName7 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addPlatformComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		alias: '_gemstone_glass'
+		condition:
+			{'common'.
+			'tests'.
+			{'gemstone'.
+			'glass'}}.
+	resolvedProject
+		addPackageNamed: packageName8 toComponentNamed: componentPath;
+		yourself.
+
+	{{packageName7.
+	className2.
+	packageName8.
+	testClassName2}}
+		do: [ :ar | 
+			((resolvedProject packageNamed: (ar at: 1)) addClassExtensionNamed: (ar at: 2))
+				addClassMethod: '_dictionaryClass ^ RcKeyValueDictionary'
+					protocol: '*' , (ar at: 1) asLowercase;
+				yourself.
+			((resolvedProject packageNamed: (ar at: 3))
+				addClassExtensionNamed: (ar at: 4))
+				addInstanceMethod: '_dictionaryClass ^ RcKeyValueDictionary'
+					protocol: '*' , (ar at: 3) asLowercase;
+				yourself ].
+
+	componentPath := resolvedProject
+		addPlatformComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		alias: '_pharo'
+		condition:
+			{'common'.
+			{'pharo'}}.
+	resolvedProject
+		addPackageNamed: packageName9 toComponentNamed: componentPath;
+		yourself.
+
+	componentPath := resolvedProject
+		addPlatformComponentNamed: componentName4
+		toComponentNamed: componentPath4
+		alias: '_pharo'
+		condition:
+			{'common'.
+			'tests'.
+			{'pharo'}}.
 	resolvedProject
 		addPackageNamed: packageName10 toComponentNamed: componentPath;
 		yourself.
@@ -4061,6 +4198,60 @@ RwTestProjectLibraryGenerator >> genSpec_0030: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0030: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0031: commitMessage [
+	"Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project."
+
+	"Add platform conditional extension methods and classes plus tests - pharo, gemstone and gs3.[5-]. Use platform components with alias."
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0031'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0029'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0029, update the project structure using the new component creation API --- spec_0026 thru ?? represents the evolution of a project.'
+		index: 31
+		derivedFrom: derivedFrom
+		comment: 'Add platform conditional extension methods and classes plus tests - pharo, gemstone and gs3.[5-]. Use platform components with alias. Use leading _ character when using alias, to distiguish from attribute (and path) using the same name.')
+		rowanIssues: #(573);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {projectName};
+		customConditionalAttributes: #('tests');
+		groupNames: {};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0031: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

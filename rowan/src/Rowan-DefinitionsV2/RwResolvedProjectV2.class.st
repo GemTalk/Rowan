@@ -189,6 +189,15 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addPlatformComponentNamed: componentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray [
+	^ self _projectDefinition
+		addPlatformComponentNamed: componentName
+		toComponentNamed: toComponentName
+		alias: alias
+		condition: conditionPathArray
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
 	^ self _projectDefinition
 		addPlatformNestedComponentNamed: aComponentName
