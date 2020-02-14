@@ -149,28 +149,31 @@ RwLoadSpecificationV2 >> = anObject [
 						and: [ 
 							self projectsHome = anObject projectsHome
 								and: [ 
-									self componentNames asArray sort = anObject componentNames asArray sort
+									self customConditionalAttributes asArray sort
+										= anObject customConditionalAttributes asArray sort
 										and: [ 
-											self groupNames asArray sort = anObject groupNames asArray sort
+											self componentNames asArray sort = anObject componentNames asArray sort
 												and: [ 
-													self projectSpecFile = anObject projectSpecFile
+													self groupNames asArray sort = anObject groupNames asArray sort
 														and: [ 
-															self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
+															self projectSpecFile = anObject projectSpecFile
 																and: [ 
-																	self gitUrl = anObject gitUrl
+																	self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
 																		and: [ 
-																			self diskUrl = anObject diskUrl
+																			self gitUrl = anObject gitUrl
 																				and: [ 
-																					self mercurialUrl = anObject mercurialUrl
+																					self diskUrl = anObject diskUrl
 																						and: [ 
-																							self svnUrl = anObject svnUrl
+																							self mercurialUrl = anObject mercurialUrl
 																								and: [ 
-																									self revision = anObject revision
+																									self svnUrl = anObject svnUrl
 																										and: [ 
-																											self comment = anObject comment
+																											self revision = anObject revision
 																												and: [ 
-																													self _platformProperties = anObject _platformProperties
-																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																													self comment = anObject comment
+																														and: [ 
+																															self _platformProperties = anObject _platformProperties
+																																or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'visiting' }
@@ -357,6 +360,7 @@ RwLoadSpecificationV2 >> groupNames: anArray [
 RwLoadSpecificationV2 >> hash [
 	| hashValue |
 	hashValue := self specName hash.
+	hashValue := hashValue bitXor: self customConditionalAttributes hash.
 	hashValue := hashValue bitXor: self projectName hash.
 	hashValue := hashValue bitXor: self projectAlias hash.
 	hashValue := hashValue bitXor: self projectSpecFile hash.
@@ -422,6 +426,7 @@ RwLoadSpecificationV2 >> postCopy [
 	super postCopy.
 	componentNames := componentNames copy.
 	groupNames := groupNames copy.
+	customConditionalAttributes := customConditionalAttributes copy.
 	platformProperties
 		ifNotNil: [ 
 			| platformPropertiesCopy |

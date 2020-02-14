@@ -2045,4 +2045,34 @@ RwRowanSample9Test >> testSpec_0032 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
+"remove v1 from the conditional attributes and resolve -- RowanSample9Specsv1Class5 should not be loaded"
+	loadSpec customConditionalAttributes remove: 'v1'.
+	resolvedProject := loadSpec resolve.
+"load project"
+	loadedProjects := resolvedProject load.
+"validate"
+	#('RowanSample9Specsv1Class5' ) do: [:className |
+		self assert: (Rowan globalNamed: className) isNil ].
+	#('RowanSample9SpecsSharedClass4' 'RowanSample9Specsv2Class5') do: [:className |
+		self assert: (Rowan globalNamed: className) notNil ].
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"remove v2 from the conditional attributes, add v1 back  and resolve -- RowanSample9Specsv1Class5 should not be loaded"
+	loadSpec customConditionalAttributes remove: 'v2'.
+	loadSpec customConditionalAttributes add: 'v1'.
+	resolvedProject := loadSpec resolve.
+"load project"
+	loadedProjects := resolvedProject load.
+"validate"
+	#('RowanSample9Specsv2Class5' ) do: [:className |
+		self assert: (Rowan globalNamed: className) isNil ].
+	#('RowanSample9SpecsSharedClass4' 'RowanSample9Specsv1Class5') do: [:className |
+		self assert: (Rowan globalNamed: className) notNil ].
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
 ]
