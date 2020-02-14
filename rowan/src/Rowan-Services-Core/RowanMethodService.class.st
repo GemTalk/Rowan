@@ -299,6 +299,25 @@ RowanMethodService >> debugTest: testSelector inClassName: theClassName [
   RowanCommandResult addResult: self
 ]
 
+{ #category : 'client commands' }
+RowanMethodService >> debugTestAsFailure: testSelector inClassName: theClassName [
+  testResult := 'passed'.
+  [ 
+  ((Rowan image objectNamed: theClassName) selector: testSelector asSymbol)
+    debugAsFailure ]
+    on: Exception
+    do: [ :ex | 
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
+      ex pass ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> definedPackage [
 
