@@ -11,7 +11,9 @@ Class {
 { #category : 'comparing' }
 RwAbstractRowanProjectLoadComponentV2 >> = aRwAbstractSimpleProjectLoadComponentV2 [
 	^ super = aRwAbstractSimpleProjectLoadComponentV2
-		and: [ self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames ]
+		and: [ 
+			self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames
+				and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ] ]
 ]
 
 { #category : 'accessing' }
