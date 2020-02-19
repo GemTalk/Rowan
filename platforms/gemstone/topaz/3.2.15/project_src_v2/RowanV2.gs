@@ -64115,6 +64115,12 @@ addNewComponentNamed: componentName
 
 category: 'project definition'
 method: RwResolvedProjectV2
+addNewComponentNamed: aComponentName comment: aString
+	^ self _projectDefinition addNewComponentNamed: aComponentName comment: aString
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
 addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray
 	^ self _projectDefinition
 		addNewComponentNamed: componentName
@@ -64337,6 +64343,12 @@ category: 'project definition'
 method: RwResolvedProjectV2
 componentNamed: aComponentName
 	^ self _projectDefinition componentNamed: aComponentName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+componentNamed: aComponentName ifAbsent: absentBlock
+	^ self _projectDefinition componentNamed: aComponentName ifAbsent: absentBlock
 %
 
 category: 'project definition'
@@ -69471,6 +69483,12 @@ conditionalPackageMapSpecs
 
 category: 'accessing'
 method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecs: aDictionary
+	conditionalPackageMapSpecs := aDictionary
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
 conditionalPackageMapSpecsAt: key ifAbsent: absentBlock
 	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
 
@@ -70678,7 +70696,9 @@ category: 'comparing'
 method: RwAbstractRowanProjectLoadComponentV2
 = aRwAbstractSimpleProjectLoadComponentV2
 	^ super = aRwAbstractSimpleProjectLoadComponentV2
-		and: [ self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames ]
+		and: [ 
+			self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames
+				and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ] ]
 %
 
 category: 'accessing'
@@ -111038,6 +111058,149 @@ testReadExperimentalRowanComponentStructure
 		resolve.
 
 	self deny: resolvedProject packageNames isEmpty.
+%
+
+category: 'tests'
+method: RwSimpleComponentRowanExperiment
+testReadWriteProposed_ComponentStructure
+	"harvest full list of packages and record the condition and path for each package, then reconstruct by creating the components that have packages and let the rest fill-in automatically ... may want to review the path that is calculated, since I want to get rid of platform layer and I want to use platform components for the leaves"
+
+	| resolvedProject loadSpec loadSpecUrl projectsHome conditionalAttributes newComponents oldComponents packageMap rowanComponent definedAttributes |
+	false
+		ifTrue: [ 
+			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
+			^ self ].
+	loadSpecUrl := 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
+	projectsHome := '$ROWAN_PROJECTS_HOME'.
+	definedAttributes := {'common'.
+	'deprecated'.
+	'v1'.
+	'v2'.
+	'tests'.
+	'componentsV2'}.
+	conditionalAttributes := {'common'.
+	('3.6.0' asRwGemStoneVersionNumber).
+	('3.5.0' asRwGemStoneVersionNumber).
+	('3.2.15' asRwGemStoneVersionNumber).
+	'gemstone'.
+	'gemstone-kernel'.
+	'deprecated'.
+	'v1'.
+	'v2'.
+	'tests'.
+	'componentsV2'}.
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	loadSpec componentNames add: 'RowanDiskAPI'.
+	resolvedProject := loadSpec
+		projectsHome: projectsHome;
+		resolve: conditionalAttributes.
+	newComponents := RwResolvedLoadComponentsV2 new.
+	oldComponents := resolvedProject components.
+	newComponents components
+		at: 'RowanDiskAPI'
+		put: (oldComponents components removeKey: 'RowanDiskAPI').
+	resolvedProject _projectDefinition components: newComponents.
+
+	rowanComponent := resolvedProject
+		addNewComponentNamed: 'Rowan'
+		comment: 'top-level component for loading entire Rowan project.'.
+	rowanComponent projectNames
+		addAll:
+			{'Cypress'.
+			'FileSystemGs'.
+			'STON'.
+			'Tonel'}.
+
+
+	packageMap := Dictionary new.
+	oldComponents components
+		keysAndValuesDo: [ :componentName :component | 
+			component packageNames isEmpty
+				ifFalse: [ 
+					packageMap at: component packageNames ifPresent: [ self halt ].
+					packageMap at: component packageNames put: component ] ].
+	packageMap
+		keysAndValuesDo: [ :packageNames :component | 
+			| referencePath segments commonComponentName category componentName newComponent |
+			referencePath := component referencePath.
+			category := referencePath basename.
+			segments := referencePath parent segments.
+
+			(segments includes: 'platform')
+				ifTrue: [ 
+					| newSegments |
+					"remove 'platform' from the path"
+					referencePath := Path * (segments at: 1).
+					newSegments := {(segments at: 1)}.
+					2 to: segments size do: [ :index | 
+						| pathElement |
+						pathElement := segments at: index.
+						pathElement ~= 'platform'
+							ifTrue: [ 
+								referencePath := referencePath / pathElement.
+								newSegments add: pathElement ] ].
+					segments := newSegments.
+					referencePath := referencePath / category ].
+
+			segments = #('common' 'v2' 'StrawMan_1')
+				ifTrue: [ 
+					"StrawMan_1 is added directory to rowan component"
+					resolvedProject
+						addNewComponentNamed: 'StrawMan_1'
+						toComponentNamed: 'Rowan'
+						condition: #('common' 'v2').
+					componentName := 'common/v2/StrawMan_1' ]
+				ifFalse: [ 
+					commonComponentName := (Path * 'common' / category) pathString.
+					resolvedProject
+						componentNamed: commonComponentName
+						ifAbsent: [ 
+							resolvedProject
+								addNewComponentNamed: category
+								toComponentNamed: 'Rowan'
+								condition: #('common') ].
+					componentName := referencePath pathString.
+					resolvedProject
+						componentNamed: componentName
+						ifAbsent: [ 
+							(definedAttributes includes: segments last)
+								ifTrue: [ 
+									resolvedProject
+										addNewComponentNamed: category
+										toComponentNamed: commonComponentName
+										condition: segments ]
+								ifFalse: [ 
+									| conditionPathArray alias condition |
+									"add a platform component"
+									condition := component condition.
+									conditionPathArray := segments copy.
+									condition _isArray
+										ifTrue: [ 
+											alias := ''.
+											condition do: [ :str | alias := alias , '_' , str ].
+											conditionPathArray at: conditionPathArray size put: condition ]
+										ifFalse: [ 
+											alias := (condition copyWithout: $[) copyWithout: $].
+											conditionPathArray at: conditionPathArray size put: {condition} ].
+									componentName := resolvedProject
+										addPlatformComponentNamed: category
+										toComponentNamed: commonComponentName
+										alias: alias
+										condition: conditionPathArray ] ] ].
+			(newComponent := resolvedProject componentNamed: componentName) packageNames
+				addAll: packageNames.
+			newComponent
+				conditionalPackageMapSpecs: component conditionalPackageMapSpecs;
+				comment: component comment;
+				yourself ].
+
+
+	resolvedProject projectSpecification
+		componentsPath: 'rowan/v2/proposed_components_2'.
+
+	resolvedProject componentsRoot ensureDeleteAll.
+
+	resolvedProject exportComponents
 %
 
 category: 'tests'
