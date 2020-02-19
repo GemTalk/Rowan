@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/v1/gemstone/Core',
+	#condition : [
+		'gemstone'
+	],
+	#packageNames : [
+		'Rowan-Url-Cypress'
+	],
+	#comment : 'Core gemstone packages'
+}

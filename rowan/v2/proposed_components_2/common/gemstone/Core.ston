@@ -1,0 +1,22 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/gemstone/Core',
+	#condition : [
+		'gemstone'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Core',
+		'Rowan-GemStone-Kernel'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Kernel' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Core gemstone  packages '
+}

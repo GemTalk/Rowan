@@ -1,0 +1,21 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/gs3.2-5/Core',
+	#condition : [
+		'gs3.[2-5]'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Kernel-32x'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Kernel-32x' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Core gs3.[2-5]  packages '
+}

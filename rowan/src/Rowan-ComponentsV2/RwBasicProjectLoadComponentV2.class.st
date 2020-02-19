@@ -327,6 +327,11 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs [
 ]
 
 { #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs: aDictionary [
+	conditionalPackageMapSpecs := aDictionary
+]
+
+{ #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAt: key ifAbsent: absentBlock [
 	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
 

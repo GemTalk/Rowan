@@ -1,0 +1,22 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/_gemstone_gemstoneBase/Specifications',
+	#condition : [
+		'gemstone',
+		'gemstoneBase'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Specifications'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Specifications' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Specifications gemstone or gemstoneBase packages'
+}

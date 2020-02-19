@@ -135,6 +135,11 @@ RwResolvedProjectV2 >> addNewComponentNamed: componentName [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: aComponentName comment: aString [
+	^ self _projectDefinition addNewComponentNamed: aComponentName comment: aString
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray [
 	^ self _projectDefinition
 		addNewComponentNamed: componentName
@@ -333,6 +338,11 @@ RwResolvedProjectV2 >> comment: aString [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> componentNamed: aComponentName [
 	^ self _projectDefinition componentNamed: aComponentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
+	^ self _projectDefinition componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
 { #category : 'project definition' }
