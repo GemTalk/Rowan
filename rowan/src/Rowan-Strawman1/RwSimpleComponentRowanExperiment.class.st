@@ -1113,7 +1113,7 @@ RwSimpleComponentRowanExperiment >> testReadWriteProposed_ComponentStructure [
 	"harvest full list of packages and record the condition and path for each package, then reconstruct by creating the components that have packages and let the rest fill-in automatically ... may want to review the path that is calculated, since I want to get rid of platform layer and I want to use platform components for the leaves"
 
 	| resolvedProject loadSpec loadSpecUrl projectsHome conditionalAttributes newComponents oldComponents packageMap rowanComponent definedAttributes |
-	false
+	true
 		ifTrue: [ 
 			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
 			^ self ].
