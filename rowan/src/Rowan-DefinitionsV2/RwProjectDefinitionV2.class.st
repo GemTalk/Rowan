@@ -176,27 +176,38 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName comment: aString [
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
 	"return the path name of the new component"
 
+	^ self
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	"return the path name of the new component"
+
 	| theComponentName toComponent path compositePath |
 	toComponent := self componentNamed: toComponentName.
-	path := RelativePath withAll: conditionPathArray.
-	path parent
-		do: [ :segment | 
-			| intermediateComponentName |
-			"ensure that we have the appropriate intermediate component structure"
-			compositePath := compositePath
-				ifNil: [ Path * segment ]
-				ifNotNil: [ compositePath / segment ].
-			intermediateComponentName := (compositePath / aComponentName) pathString.
-			toComponent := self components
-				componentNamed: intermediateComponentName
-				ifAbsent: [ 
-					| newComponent |
-					newComponent := self components
-						addSimpleNestedComponentNamed: intermediateComponentName
-						condition: segment
-						comment: ''.
-					toComponent addComponentNamed: intermediateComponentName.
-					newComponent ] ].
+	path := RelativePath withAll: pathNameArray.
+	1 to: pathNameArray size - 1 do: [ :pathIndex | 
+		| segmentName intermediateComponentName |
+		"ensure that we have the appropriate intermediate component structure"
+		segmentName := pathNameArray at: pathIndex.
+		compositePath := compositePath
+			ifNil: [ Path * segmentName ]
+			ifNotNil: [ compositePath / segmentName ].
+		intermediateComponentName := (compositePath / aComponentName) pathString.
+		toComponent := self components
+			componentNamed: intermediateComponentName
+			ifAbsent: [ 
+				| newComponent |
+				newComponent := self components
+					addSimpleNestedComponentNamed: intermediateComponentName
+					condition: (conditionPathArray at: pathIndex)
+					comment: ''.
+				toComponent addComponentNamed: intermediateComponentName.
+				newComponent ] ].
 	theComponentName := (path / aComponentName) pathString.
 	self components
 		addSimpleNestedComponentNamed: theComponentName
@@ -317,6 +328,9 @@ RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNa
 	"return the path name of the new component"
 
 	| theComponentName toComponent path compositePath condition pathArray |
+	self
+		deprecated:
+			'Should be using addPlatformComponentNamed:toComponentNamed:pathNameArray:conditionPathArray:'.
 	toComponent := self componentNamed: toComponentName.
 	condition := conditionPathArray last.
 	pathArray := conditionPathArray copy.
@@ -340,6 +354,41 @@ RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNa
 						comment: ''.
 					toComponent addComponentNamed: intermediateComponentName.
 					newComponent ] ].
+	theComponentName := (path / aComponentName) pathString.
+	self components
+		addPlatformNestedComponentNamed: theComponentName
+		condition: condition
+		comment: ''.
+	toComponent addComponentNamed: theComponentName.
+	^ theComponentName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	"return the path name of the new component"
+
+	| theComponentName toComponent path compositePath condition |
+	toComponent := self componentNamed: toComponentName.
+	condition := conditionPathArray last.
+	path := RelativePath withAll: pathNameArray.
+	1 to: pathNameArray size - 1 do: [ :pathIndex | 
+		| segmentName intermediateComponentName |
+		"ensure that we have the appropriate intermediate component structure"
+		segmentName := pathNameArray at: pathIndex.
+		compositePath := compositePath
+			ifNil: [ Path * segmentName ]
+			ifNotNil: [ compositePath / segmentName ].
+		intermediateComponentName := (compositePath / aComponentName) pathString.
+		toComponent := self components
+			componentNamed: intermediateComponentName
+			ifAbsent: [ 
+				| newComponent |
+				newComponent := self components
+					addSimpleNestedComponentNamed: intermediateComponentName
+					condition: (conditionPathArray at: pathIndex)
+					comment: ''.
+				toComponent addComponentNamed: intermediateComponentName.
+				newComponent ] ].
 	theComponentName := (path / aComponentName) pathString.
 	self components
 		addPlatformNestedComponentNamed: theComponentName

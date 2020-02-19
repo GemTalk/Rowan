@@ -3,7 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'componentsV2',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/tests/componentsV2/gs3.2-/Components'
+		'common/tests/componentsV2/platforms/Components'
 	],
 	#packageNames : [
 		'Rowan-Tests-Components'

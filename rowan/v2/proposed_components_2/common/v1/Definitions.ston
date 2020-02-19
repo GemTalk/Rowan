@@ -4,7 +4,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#projectNames : [ ],
 	#componentNames : [
 		'common/v1/deprecated/Definitions',
-		'common/v1/gemstone/Definitions'
+		'common/v1/platforms/Definitions'
 	],
 	#packageNames : [
 		'Rowan-Core-DefinitionsV1',

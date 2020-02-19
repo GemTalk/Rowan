@@ -3,7 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'v1',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/v1/gemstone/Services'
+		'common/v1/platforms/Services'
 	],
 	#packageNames : [ ],
 	#comment : ''

@@ -3,7 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'deprecated',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/tests/v1/deprecated/gemstone/Tests'
+		'common/tests/v1/deprecated/platforms/Tests'
 	],
 	#packageNames : [ ],
 	#comment : ''

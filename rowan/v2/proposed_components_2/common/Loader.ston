@@ -3,7 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/gemstone/Loader',
+		'common/platforms/Loader',
 		'common/v1/Loader'
 	],
 	#packageNames : [ ],

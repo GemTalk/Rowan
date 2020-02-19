@@ -1168,24 +1168,31 @@ RwSimpleComponentRowanExperiment >> testReadWriteProposed_ComponentStructure [
 					packageMap at: component packageNames put: component ] ].
 	packageMap
 		keysAndValuesDo: [ :packageNames :component | 
-			| referencePath segments commonComponentName category componentName newComponent |
+			| pathNameArray referencePath segments commonComponentName category componentName newComponent |
 			referencePath := component referencePath.
 			category := referencePath basename.
 			segments := referencePath parent segments.
 
+			pathNameArray := nil.
 			(segments includes: 'platform')
 				ifTrue: [ 
 					| newSegments |
 					"remove 'platform' from the path"
 					referencePath := Path * (segments at: 1).
 					newSegments := {(segments at: 1)}.
+					pathNameArray := newSegments copy.
 					2 to: segments size do: [ :index | 
 						| pathElement |
 						pathElement := segments at: index.
-						pathElement ~= 'platform'
+						pathElement = 'platform'
 							ifTrue: [ 
+								referencePath := referencePath / 'platforms'.
+								newSegments add: 'common'.
+								pathNameArray add: 'platforms' ]
+							ifFalse: [ 
 								referencePath := referencePath / pathElement.
-								newSegments add: pathElement ] ].
+								newSegments add: pathElement.
+								pathNameArray add: pathElement ] ].
 					segments := newSegments.
 					referencePath := referencePath / category ].
 
@@ -1232,8 +1239,8 @@ RwSimpleComponentRowanExperiment >> testReadWriteProposed_ComponentStructure [
 									componentName := resolvedProject
 										addPlatformComponentNamed: category
 										toComponentNamed: commonComponentName
-										alias: alias
-										condition: conditionPathArray ] ] ].
+										pathNameArray: pathNameArray
+										conditionPathArray: conditionPathArray ] ] ].
 			(newComponent := resolvedProject componentNamed: componentName) packageNames
 				addAll: packageNames.
 			newComponent

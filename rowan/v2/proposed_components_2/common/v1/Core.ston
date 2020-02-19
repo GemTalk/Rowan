@@ -3,7 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'v1',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/v1/gemstone/Core'
+		'common/v1/platforms/Core'
 	],
 	#packageNames : [
 		'Rowan-CoreV1'

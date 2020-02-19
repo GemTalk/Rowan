@@ -210,6 +210,15 @@ RwResolvedProjectV2 >> addPlatformComponentNamed: componentName toComponentNamed
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	^ self _projectDefinition
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
 	^ self _projectDefinition
 		addPlatformNestedComponentNamed: aComponentName

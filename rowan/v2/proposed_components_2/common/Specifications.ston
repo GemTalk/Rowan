@@ -3,10 +3,10 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
+		'common/platforms/Specifications',
 		'common/tests/Specifications',
 		'common/v1/Specifications',
-		'common/v2/Specifications',
-		'common/_gemstone_gemstoneBase/Specifications'
+		'common/v2/Specifications'
 	],
 	#packageNames : [
 		'Rowan-Specifications'
