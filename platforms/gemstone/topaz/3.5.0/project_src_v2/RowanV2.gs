@@ -110934,38 +110934,97 @@ testReadExperimentalRowanComponentStructure
 
 category: 'tests'
 method: RwSimpleComponentRowanExperiment
-testReadWriteProposed_ComponentStructure
-	"harvest full list of packages and record the condition and path for each package, then reconstruct by creating the components that have packages and let the rest fill-in automatically ... may want to review the path that is calculated, since I want to get rid of platform layer and I want to use platform components for the leaves"
+testReadUpdateProposed_2_ComponentStructure_001
+	"add attributes: testsV1 and testsV2 for managing the Rowan-Services-TestsV1 and Rowan-Services-TestsV2 packages, 
+		which include an identical set of extension methods for the same class, consequently only one of the two attributes 
+		should be loades at any one time, depending upon which api you want to to test (when both v1 and v2 code may
+		be loaded."
 
-	| resolvedProject loadSpec loadSpecUrl projectsHome conditionalAttributes newComponents oldComponents packageMap rowanComponent definedAttributes |
+	| resolvedProject definedAttributes category commonComponentName componentName newComponent condition pathNameArray conditionPathArray referencePath |
 	false
 		ifTrue: [ 
 			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
 			^ self ].
-	loadSpecUrl := 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
-	projectsHome := '$ROWAN_PROJECTS_HOME'.
+	definedAttributes := {'common'.
+	'deprecated'.
+	'v1'.
+	'v2'.
+	'testsV1'.
+	'testsV2'.
+	'tests'.
+	'componentsV2'}.
+
+	resolvedProject := self
+		_readProposed_2_ComponentStructure:
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
+
+	category := 'Services'.
+	{{'testsV1'.
+	{'Rowan-Services-TestsV1'}}.
+	{'testsV2'.
+	{'Rowan-Services-TestsV2'}}}
+		do: [ :ar | 
+			| packageNames attribute |
+			packageNames := ar at: 2.
+			attribute := ar at: 1.
+
+			referencePath := Path * 'common' / 'tests' / attribute / 'platforms'
+				/ 'gemstone' / category.
+			pathNameArray := referencePath parent segments.
+			condition := {'gemstone'}.	"Services are gemstone artifacts"
+			conditionPathArray := {'common'.
+			'tests'.
+			attribute.
+			'common'.
+			condition}.
+
+			commonComponentName := (Path * 'common' / category) pathString.
+			resolvedProject
+				componentNamed: commonComponentName
+				ifAbsent: [ 
+					resolvedProject
+						addNewComponentNamed: category
+						toComponentNamed: 'Rowan'
+						condition: #('common') ].
+			componentName := referencePath pathString.
+			resolvedProject
+				componentNamed: componentName
+				ifAbsent: [ 
+					"add a platforms component"
+					componentName := resolvedProject
+						addPlatformComponentNamed: category
+						toComponentNamed: commonComponentName
+						pathNameArray: pathNameArray
+						conditionPathArray: conditionPathArray ].
+
+			(newComponent := resolvedProject componentNamed: componentName) packageNames
+				addAll: packageNames ].
+
+	resolvedProject componentsRoot ensureDeleteAll.
+
+	resolvedProject exportComponents
+%
+
+category: 'tests'
+method: RwSimpleComponentRowanExperiment
+testReadWriteProposed_ComponentStructure
+	"harvest full list of packages and record the condition and path for each package, then reconstruct by creating the components that have packages and let the rest fill-in automatically ... may want to review the path that is calculated, since I want to get rid of platform layer and I want to use platform components for the leaves"
+
+	| resolvedProject newComponents oldComponents packageMap rowanComponent definedAttributes |
+	true
+		ifTrue: [ 
+			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
+			^ self ].
 	definedAttributes := {'common'.
 	'deprecated'.
 	'v1'.
 	'v2'.
 	'tests'.
 	'componentsV2'}.
-	conditionalAttributes := {'common'.
-	('3.6.0' asRwGemStoneVersionNumber).
-	('3.5.0' asRwGemStoneVersionNumber).
-	('3.2.15' asRwGemStoneVersionNumber).
-	'gemstone'.
-	'gemstone-kernel'.
-	'deprecated'.
-	'v1'.
-	'v2'.
-	'tests'.
-	'componentsV2'}.
-	loadSpec := RwSpecification fromUrl: loadSpecUrl.
-	loadSpec componentNames add: 'RowanDiskAPI'.
-	resolvedProject := loadSpec
-		projectsHome: projectsHome;
-		resolve: conditionalAttributes.
+
+	resolvedProject := self
+		_readProposed_2_ComponentStructure:
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
 	newComponents := RwResolvedLoadComponentsV2 new.
 	oldComponents := resolvedProject components.
 	newComponents components
@@ -112328,6 +112387,29 @@ _populateV2ComponentPackages: resolvedProject
 		addPackageNames: {'Rowan-Tests-SpecificationsV2'};
 		validate;
 		yourself
+%
+
+category: 'private'
+method: RwSimpleComponentRowanExperiment
+_readProposed_2_ComponentStructure: loadSpecUrl
+	|  projectsHome loadSpec conditionalAttributes |
+	projectsHome := '$ROWAN_PROJECTS_HOME'.
+	conditionalAttributes := {'common'.
+	('3.6.0' asRwGemStoneVersionNumber).
+	('3.5.0' asRwGemStoneVersionNumber).
+	('3.2.15' asRwGemStoneVersionNumber).
+	'gemstone'.
+	'gemstone-kernel'.
+	'deprecated'.
+	'v1'.
+	'v2'.
+	'tests'.
+	'componentsV2'}.
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	loadSpec componentNames add: 'RowanDiskAPI'.
+	^ loadSpec
+		projectsHome: projectsHome;
+		resolve: conditionalAttributes
 %
 
 category: 'private'

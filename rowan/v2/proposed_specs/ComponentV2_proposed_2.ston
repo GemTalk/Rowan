@@ -12,6 +12,7 @@ RwLoadSpecificationV2 {
 		'tests',
 		'v1',
 		'v2',
+		'testsV2',
 		'componentsV2'
 	],
 	#platformProperties : {

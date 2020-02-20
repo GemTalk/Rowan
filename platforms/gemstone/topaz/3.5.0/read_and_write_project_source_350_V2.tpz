@@ -57,37 +57,37 @@ false ifTrue: [
 ].
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes.
 			repositoryRoot.
 			'RowanV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes3215.
 			repositoryRoot3215.
 			'RowanV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes.
 			repositoryRoot.
 			'ComponentV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes3215.
 			repositoryRoot3215.
 			'ComponentV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/RowanV1_proposed.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/RowanV1_proposed_2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes.
 			repositoryRoot.
 			'RowanV1'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/RowanV1V2_proposed.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/RowanV1V2_proposed_2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes.
 			repositoryRoot.
