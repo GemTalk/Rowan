@@ -29,10 +29,16 @@
 
 run
 	| platformConditionalAttributes platformConditionalAttributes3215 projectSetModification visitor 
-		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool 
-	 auditFailures gsFileName repositoryRoot3215 |
+		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool platformConditionalAttributes360
+	 auditFailures gsFileName repositoryRoot3215 repositoryRoot360 |
 
 	Rowan projectTools trace startTracing; trace: '--- read and write project source RowanV2'.
+	platformConditionalAttributes360 := {
+		'common'.
+		'gemstone'.
+		'gemstone-kernel'.
+		'3.6.0' asRwGemStoneVersionNumber.	"want to read 3.6.0 packages"
+	}.
 	platformConditionalAttributes := {
 		'common'.
 		'gemstone'.
@@ -45,6 +51,11 @@ run
 		'gemstone-kernel'.
 		'3.2.15' asRwGemStoneVersionNumber.	"want to read 3.2.15 packages"
 	}.
+	repositoryRoot360 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src_v2' asFileReference.
+	repositoryRoot360 ensureCreateDirectory.
+false ifTrue: [ 
+	repositoryRoot360 deleteAllChildren.
+ ].
 	repositoryRoot3215 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/project_src_v2' asFileReference.
 	repositoryRoot3215 ensureCreateDirectory.
 false ifTrue: [ 
@@ -65,6 +76,12 @@ false ifTrue: [
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes360.
+			repositoryRoot360.
+			'RowanV2'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes3215.
 			repositoryRoot3215.
 			'RowanV2'
@@ -73,6 +90,12 @@ false ifTrue: [
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes.
 			repositoryRoot.
+			'ComponentV2'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes360.
+			repositoryRoot360.
 			'ComponentV2'
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
