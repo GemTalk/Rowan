@@ -150,6 +150,14 @@ RowanAnsweringService >> canAccessServiceClasses [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> classHasSubclasses: oop [
+  | behavior |
+  behavior := Object _objectForOop: oop.
+  answer := behavior subclasses notEmpty.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> clearAllBreaks [
   | methodServices |
   methodServices := RowanQueryService new
