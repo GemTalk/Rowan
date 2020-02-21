@@ -4,7 +4,8 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gs3.[6-]'
 	],
 	#packageNames : [
-		'Rowan-GemStone-36x'
+		'Rowan-GemStone-36x',
+		'Rowan-GemStone-Kernel-36x'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
@@ -12,7 +13,11 @@ RwPlatformNestedProjectLoadComponentV2 {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-GemStone-36x' : {
 						'symbolDictName' : 'Globals'
+					},
+					'Rowan-GemStone-Kernel-36x' : {
+						'symbolDictName' : 'Globals'
 					}
+
 				}
 			}
 		}
