@@ -34,7 +34,7 @@ run
 	| ar resolvedProject loadSpecUrl loadSpec projectsHome loadedProjects warnings |
 	Rowan projectTools trace startTracing; trace: '--- installing install_4_RowanV2.tpz'.
 	ar := {
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 		}.
 	"Load project and packages from disk."

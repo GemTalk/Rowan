@@ -8,17 +8,13 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/v2/Definitions'
 	],
 	#packageNames : [
-		'Rowan-Definitions',
-		'Rowan-Definitions-Common'
+		'Rowan-Definitions'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-Definitions' : {
-						'symbolDictName' : 'RowanTools'
-					},
-					'Rowan-Definitions-Common' : {
 						'symbolDictName' : 'RowanTools'
 					}
 				}

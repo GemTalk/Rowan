@@ -32,7 +32,7 @@
 	Rowan projectTools trace startTracing; trace: '--- installing install_3_RowanV2.tpz'.
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed.ston'. 
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'. 
 			'$ROWAN_PROJECTS_HOME'
 		}.
 	} 

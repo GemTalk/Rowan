@@ -26,3 +26,15 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 		yourself.
 	^projectDefinition
 ]
+
+{ #category : '*rowan-services-testsv1' }
+RowanServicesTest >> createServicesTestPackage [
+  | projectDefinition |
+self error: 'needs porting back to v1 api'.
+  defaultProjectDefinition
+    ifNotNil: [ :projectDef | ^ projectDef packageNamed: self servicesTestPackageName ].
+  projectDefinition := self defaultProjectDefinition.
+  projectDefinition addPackageNamed: self servicesTestPackageName toComponentNamed: self servicesTestComponentName.
+  ^ projectDefinition packageNamed: self servicesTestPackageName
+]
+

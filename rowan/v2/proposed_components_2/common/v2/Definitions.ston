@@ -7,6 +7,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	],
 	#packageNames : [
 		'Rowan-Core-DefinitionsV2',
+		'Rowan-Definitions-Common',
 		'Rowan-DefinitionsV2'
 	],
 	#conditionalPackageMapSpecs : {
@@ -14,6 +15,9 @@ RwSimpleNestedProjectLoadComponentV2 {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-Core-DefinitionsV2' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Definitions-Common' : {
 						'symbolDictName' : 'RowanTools'
 					},
 					'Rowan-DefinitionsV2' : {
