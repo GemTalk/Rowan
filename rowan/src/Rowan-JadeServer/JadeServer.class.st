@@ -4944,26 +4944,6 @@ JadeServer >> systemBrowserSTONA: aString [
 
 ]
 
-{ #category : 'jadeite' }
-JadeServer >> systemBrowserUpdate [
-
-	RowanCommandResult initializeResults. 
-	writeStream nextPutAll: 'update'; lf.
-	self 
-		sbUpdatePackagesOrDictionaries;
-		sbUpdateClassCategories;
-		sbUpdateClasses;
-		sbUpdateClassInfo; 
-		sbUpdateSuperclass. 
-		methodCommandResult := RowanMethodsUpdate new. 
-		self sbReadMethodFilter.
-		selectedClass isNil ifFalse:[
-			methodCommandResult selectedClass: selectedClass name.
-			self
-				sbUpdateMethodFilter;
-				sbUpdateMethods]
-]
-
 { #category : 'category' }
 JadeServer >> systemConfigAsDictionary [
 
