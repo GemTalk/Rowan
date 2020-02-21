@@ -110941,7 +110941,7 @@ testReadUpdateProposed_2_ComponentStructure_001
 		be loaded."
 
 	| resolvedProject definedAttributes category commonComponentName componentName newComponent condition pathNameArray conditionPathArray referencePath |
-	false
+	true
 		ifTrue: [ 
 			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
 			^ self ].

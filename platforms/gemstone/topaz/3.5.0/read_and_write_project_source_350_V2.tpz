@@ -32,7 +32,10 @@ run
 		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool platformConditionalAttributes360
 	 auditFailures gsFileName repositoryRoot3215 repositoryRoot360 |
 
-	Rowan projectTools trace startTracing; trace: '--- read and write project source RowanV2'.
+false ifTrue: [ 
+	Rowan projectTools trace startTracing 
+].
+  GsFile gciLogServer: '--- read and write project source RowanV2'.
 	platformConditionalAttributes360 := {
 		'common'.
 		'gemstone'.
@@ -131,12 +134,12 @@ false ifTrue: [
 			projectsHome: projectsHome;
 			resolve.
 		theProjectSetDefinition :=  resolvedProject readProjectSet: conditionalAttributes.
-		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
+		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs'.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
 				GsFile gciLogServer: '	Project: ', projectDefinition name.
 				projectDefinition packageNames do: [:pkgName | GsFile gciLogServer: '		', pkgName ] ].
-		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName, ' (', (conditionalAttributes at: 4) printString, ')'.
+		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs (', (conditionalAttributes at: 4) printString, ')'.
 
 		topazFileNameMap := Dictionary new.
 		topazFileNameMap at: gsFileName put: {}.
