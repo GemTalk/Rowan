@@ -1,16 +1,16 @@
-#!/usr/bin/gemstone/topaz
+#!/usr/local/bin/smalltalk/gemstone/topaz
 #
 # If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
 #	script can be directly executed:
 #
-#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/install_3.tpz <gsdevkit-stone-name> -lq
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3.tpz <gsdevkit-stone-name> -lq
 #
 # If you are not using GsDevKit_home, you can directly run this script as long as
 # 	1. $GEMSTONE is defined
 # 	2. $GEMSTONE/bin is you path
 #	then execute using the following invocation
 #
-#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.3.0/install_1.tpz -lq
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz -lq
 #
 #	[1] https://github.com/GsDevKit/GsDevKit_home
 # [2] https://github.com/dalehenrich/stash
@@ -27,7 +27,7 @@
 # Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
-	"install_3.tpz"
+	"install_3_V2.tpz"
  	| projectSetDefinition gitRepoPath packageCreateTool loadedProjectInfo auditFailures readTool
 		reAudit gitRoot |
   SessionTemps current at: #ROWAN_TRACE put: #gciLogServer . "log to topaz output file"
@@ -37,7 +37,7 @@
 	readTool := Rowan projectTools read.
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/specs/FileSystemGs_component.ston'. 
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/FileSystemGs_component.ston'. 
 			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
 		}.
 		{
@@ -45,15 +45,15 @@
 			'$ROWAN_PROJECTS_HOME'
 		}.
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/specs/Cypress_component.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Cypress_component.ston'.
 			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
 		}.
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/specs/STON_component.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/STON_component.ston'.
 			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
 		}.
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/specs/Tonel_component.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Tonel_component.ston'.
 			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
 		}.
 	} 
@@ -70,7 +70,7 @@
 		theProjectSetDefinition := readTool 
 			readProjectSetForComponentProjectDefinition: projectDefinition 
 				withConfigurations: projectDefinition defaultConfigurationNames 
-				groupNames: projectDefinition defaultGroupNames.
+				groupNames: {'core'. 'tests' . 'jadeServer' }.
 
 		loadedProjectInfo 
 			at: projectDefinition name 
@@ -181,6 +181,17 @@ GsFile gciLogServer: 'FAILED AUDIT: ', projectName.
   commit
 
   logout
+  set u DataCurator p swordfish
+  login
+
+# set rowanCompile to true 
+#
+run
+UserGlobals at: #rowanCompile put: true.
+%
+  commit
+
+	logout
 
 	errorCount
 
