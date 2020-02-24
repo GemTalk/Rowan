@@ -482,6 +482,30 @@ RwResolvedProjectV2 >> loadedCommitId [
 	^ self _projectSpecification loadedCommitId
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> loadProjectSet [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"load a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(self readProjectSet: self platformConditionalAttributes)
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> loadProjectSet: platformConfigurationAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"load a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(self readProjectSet: platformConfigurationAttributes)
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
 	^ self _projectDefinition
@@ -587,7 +611,11 @@ RwResolvedProjectV2 >> read [
 
 	"return the receiver with a new set of definitions read from disk"
 
-	^ self readProjectComponentNames: self componentNames groupNames: self groupNames
+	self repositoryExists
+		ifTrue: [ 
+			^ self
+				readProjectComponentNames: self componentNames
+				groupNames: self groupNames ]
 ]
 
 { #category : 'actions' }

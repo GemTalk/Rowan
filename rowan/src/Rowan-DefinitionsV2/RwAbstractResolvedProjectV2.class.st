@@ -149,3 +149,8 @@ RwAbstractResolvedProjectV2 >> repository [
 		_projectStructure: projectStructure;
 		yourself
 ]
+
+{ #category : 'testing' }
+RwAbstractResolvedProjectV2 >> repositoryExists [
+	^ self _projectRepository repositoryExists
+]

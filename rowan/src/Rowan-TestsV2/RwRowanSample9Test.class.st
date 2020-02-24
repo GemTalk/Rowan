@@ -1002,7 +1002,7 @@ RwRowanSample9Test >> testIssue_571_1 [
 	self assert: resolvedProject repositoryRoot basename = projectAlias.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := resolvedProject loadProjectSet.
 
 "validate"
 	self
@@ -1784,7 +1784,7 @@ RwRowanSample9Test >> testSpec_0025 [
 	resolvedProject := loadSpec resolve.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := resolvedProject loadProjectSet.
 
 "validate"
 	self

@@ -125,25 +125,10 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
-	| projectSetDefinition sourceProperty rereadProject |
-	sourceProperty := projectDefinition projectDefinitionSourceProperty.
-	rereadProject := (sourceProperty
-		= RwLoadedProject _projectModifiedProjectSourceValue
-		or: [ sourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue ])
-		not.
-	projectSetDefinition := (projectDefinition repositoryRoot exists
-		and: [ rereadProject ])
-		ifTrue: [ 
-			"only read from disk if the repository exists and the project definition has not 
-				already been loaded from disk"
-			projectDefinition readProjectSet: platformConfigurationAttributes ]
-		ifFalse: [ 
-			"If this project definition _was_ read from disk, we cannot trust that it was 
-				not modified, so clear source property"
-			projectDefinition projectDefinitionSourceProperty: nil.
-			RwProjectSetDefinition new
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new
 				addProject: projectDefinition;
-				yourself ].
+				yourself.
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator

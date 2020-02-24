@@ -920,21 +920,18 @@ RwPrjBrowserToolV2 >> copyClassNamed: className to: newName [
 
 { #category : 'class browsing' }
 RwPrjBrowserToolV2 >> createClass: classDefinition inPackageNamed: packageName [
-
-	| loadedPackage projectDefinition projectTools |
+	| loadedPackage projectDefinition |
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'The package named ' , packageName printString , ' was not found' ].
-	projectDefinition := loadedPackage loadedProject asDefinition.
+	projectDefinition := loadedPackage loadedProject asDefinition read.
 
-	projectTools := Rowan projectTools.
-
-	projectTools edit
+	Rowan projectTools edit
 		addClass: classDefinition
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-		projectTools load loadProjectDefinition: projectDefinition
+	projectDefinition load
 ]
 
 { #category : 'project browsing' }
