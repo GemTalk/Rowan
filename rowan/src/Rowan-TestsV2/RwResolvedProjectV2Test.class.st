@@ -49,7 +49,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 
 	project resolve.
 
-	self assert: expectedRepositoryRoot exists.
+	self deny: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
@@ -85,7 +85,7 @@ RwResolvedProjectV2Test >> testBasicResolve_2 [
 
 	project resolve.
 
-	self assert: expectedRepositoryRoot exists.
+	self deny: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.

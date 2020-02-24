@@ -240,7 +240,7 @@ RwGitRepositoryDefinitionV2 >> repositoryUrl: aRepositoryUrlStrng [
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> resolve [
-	"attach to existing repository structure or create"
+	"attach to existing repository structure or clone"
 
 	"answer true if attaching to an existing repository"
 

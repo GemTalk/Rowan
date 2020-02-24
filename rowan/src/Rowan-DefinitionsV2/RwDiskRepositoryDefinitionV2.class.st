@@ -90,13 +90,9 @@ RwDiskRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
 
 { #category : 'actions' }
 RwDiskRepositoryDefinitionV2 >> resolve [
-	"attach to existing repository structure or create"
+	"attach to existing repository structure"
 
 	"answer true if attaching to an existing repository"
 
 	^ self repositoryRoot exists
-		ifTrue: [ true ]
-		ifFalse: [ 
-			self repositoryRoot ensureCreateDirectory.
-			false ]
 ]

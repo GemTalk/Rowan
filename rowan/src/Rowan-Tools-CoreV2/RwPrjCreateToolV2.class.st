@@ -25,7 +25,6 @@ RwPrjCreateToolV2 >> createProjectRepository: projectDefinition [
 RwPrjCreateToolV2 >> createResolvedProjectRepository: resolvedRepository [
 	"Create create new repository on `disk`, based on the given resolved project, if it does not already exist."
 
-	resolvedRepository repositoryRoot exists
-		ifFalse: [ self error: 'internal error - expected the repository root to be created' ].
+	resolvedRepository repositoryRoot ensureCreateDirectory.
 	resolvedRepository projectRoots do: [ :path | path ensureCreateDirectory ]
 ]
