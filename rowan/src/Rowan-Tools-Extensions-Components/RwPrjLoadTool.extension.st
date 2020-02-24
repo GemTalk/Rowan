@@ -33,7 +33,7 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 	| projectSetDefinition sourceProperty rereadProject |
 	sourceProperty := projectDefinition projectDefinitionSourceProperty.
 	rereadProject := sourceProperty
-		~= RwLoadedProject _projectSourceValueNewProject
+		~= RwLoadedProject _projectModifiedProjectSourceValue
 		and: [ sourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue ].
 	projectSetDefinition := (projectDefinition repositoryRoot exists
 		and: [ rereadProject ])

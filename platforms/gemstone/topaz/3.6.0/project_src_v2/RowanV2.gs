@@ -6307,7 +6307,7 @@ true.
 
 doit
 (RwProjectTool
-	subclass: 'RwPrjBrowserTool'
+	subclass: 'RwPrjBrowserToolV2'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -6315,7 +6315,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Tools-Core';
+		category: 'Rowan-Tools-CoreV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -63814,7 +63814,7 @@ basicLoadSpecification: anRwLoadSpecificationV2
 						yourself);
 		packages: Dictionary new;
 		components: RwResolvedLoadComponentsV2 new;
-		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
+		projectDefinitionSourceProperty: RwLoadedProject _projectModifiedProjectSourceValue;
 		yourself.
 	^ self basicNew
 		_projectDefinition: projectDefinition;
@@ -66402,13 +66402,6 @@ audit
 
 category: 'commands'
 classmethod: RwProjectTool
-browser
-
-	^ RwPrjBrowserTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
 checkout
 
 	^RwPrjCheckoutTool new
@@ -66611,12 +66604,12 @@ auditProjectsNamed: aCol
 	^res
 %
 
-! Class implementation for 'RwPrjBrowserTool'
+! Class implementation for 'RwPrjBrowserToolV2'
 
-!		Instance methods for 'RwPrjBrowserTool'
+!		Instance methods for 'RwPrjBrowserToolV2'
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName constraints: constraintsArray options: optionsArray
 
 	| loadedPackage loadedProject loadedClass theOptions theConstraints |
@@ -66695,7 +66688,7 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName options: optionsArray
 
 	^ self 
@@ -66713,7 +66706,7 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 %
 
 category: 'method browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: className isMeta: isMeta
 
 	"If the method is already installed in a different package, remove the method from that package.
@@ -66763,7 +66756,7 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 %
 
 category: 'method browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName
 
 	"If the method is already installed in a different package, remove the method from that package.
@@ -66861,7 +66854,7 @@ addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className is
 %
 
 category: 'method browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addOrUpdateMethodX: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName
 
 	"If the method is already installed in a different package, remove the method from that package.
@@ -66959,7 +66952,7 @@ addOrUpdateMethodX: methodSource inProtocol: protocol forClassNamed: className i
 %
 
 category: 'method browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addOrUpdateMethodY: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName
 
 	"If the method is already installed in a different package, remove the method from that package.
@@ -67015,7 +67008,7 @@ addOrUpdateMethodY: methodSource inProtocol: protocol forClassNamed: className i
 %
 
 category: 'package browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addPackageNamed: packageName toProjectNamed: projectName
 
 	| projectDefinition |
@@ -67025,7 +67018,7 @@ addPackageNamed: packageName toProjectNamed: projectName
 %
 
 category: 'package browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addPackagesNamed: packageNames toProjectNamed: projectName
 
 	| projectDefinition |
@@ -67036,14 +67029,14 @@ addPackagesNamed: packageNames toProjectNamed: projectName
 %
 
 category: 'project browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addRowanSymbolDictionariesToPersistentSymbolList
 
 	self addRowanSymbolDictionariesToPersistentSymbolListFor: System myUserProfile
 %
 
 category: 'project browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addRowanSymbolDictionariesToPersistentSymbolListFor: userProfile
 
 	| systemUser |
@@ -67057,7 +67050,7 @@ addRowanSymbolDictionariesToPersistentSymbolListFor: userProfile
 %
 
 category: 'project browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 addRowanSymbolDictionariesToTransientSymbolList
   | systemUser |
   systemUser := AllUsers userWithId: 'SystemUser'.
@@ -67071,14 +67064,14 @@ addRowanSymbolDictionariesToTransientSymbolList
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classCreationTemplateForClass: aClass
 
 	^ self classCreationTemplateForClass: aClass hybridBrowser: false
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classCreationTemplateForClass: aClass hybridBrowser: hybridBrowser
 
 	| result anArray lfsp newByteSubclass civs superClass className thePackageName nonRowanClass |
@@ -67184,7 +67177,7 @@ classCreationTemplateForClass: aClass hybridBrowser: hybridBrowser
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classCreationTemplateForSubclassOf: superclassName category: category
 
 	^ self
@@ -67194,7 +67187,7 @@ classCreationTemplateForSubclassOf: superclassName category: category
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classCreationTemplateForSubclassOf: superclassName category: category packageName: packageName
 
 	^ self
@@ -67205,7 +67198,7 @@ classCreationTemplateForSubclassOf: superclassName category: category packageNam
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classCreationTemplateForSubclassOf: superclassName className: className category: category
 
 	^ self
@@ -67216,7 +67209,7 @@ classCreationTemplateForSubclassOf: superclassName className: className category
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classCreationTemplateForSubclassOf: superclassName className: className category: category packageName: packageName
 
 	^ self
@@ -67228,7 +67221,7 @@ classCreationTemplateForSubclassOf: superclassName className: className category
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classCreationTemplateForSubclassOf: superclassName className: className type: classType category: category packageName: packageNameOrNil
 
 	"classType may be 'normal', 'byteSubclass', or 'variable'"
@@ -67275,7 +67268,7 @@ classCreationTemplateForSubclassOf: superclassName className: className type: cl
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classCreationTemplateForSubclassOf: superclassName className: className type: classType instanceVariablesString: instanceVariablesString classVariablesString: classVariablesString classInstanceVariablesString: classInstanceVariablesString poolDictionariesString: poolDictionariesString 
 comment: comment category: category
 
@@ -67330,7 +67323,7 @@ comment: comment category: category
 %
 
 category: 'definition updating'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classNamed: className updateDefinition: updateBlock
 
 	^ self
@@ -67343,7 +67336,7 @@ classNamed: className updateDefinition: updateBlock
 %
 
 category: 'definition updating'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 classNamed: className updateDefinition: updateBlock ifAbsent: absentBlock
 
 	| projectDefinition classDefinition |
@@ -67359,7 +67352,7 @@ classNamed: className updateDefinition: updateBlock ifAbsent: absentBlock
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 copyClassNamed: className to: newName
 
 	"anser the new copy of the class"
@@ -67373,7 +67366,7 @@ copyClassNamed: className to: newName
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 createClass: classDefinition inPackageNamed: packageName
 
 	| loadedPackage projectDefinition projectTools |
@@ -67389,11 +67382,11 @@ createClass: classDefinition inPackageNamed: packageName
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectDefinition load
+		projectTools load loadProjectDefinition: projectDefinition
 %
 
 category: 'project browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 exposeRowanToolsSymbolDictionary
 
 	| transient size dict |
@@ -67404,7 +67397,7 @@ exposeRowanToolsSymbolDictionary
 %
 
 category: 'method browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 isExtensionMethod: methodSelector forClassNamed: className isMeta: isMeta
 
 	"Answer true if the specified method is a Rowan extension method"
@@ -67432,7 +67425,7 @@ isExtensionMethod: methodSelector forClassNamed: className isMeta: isMeta
 %
 
 category: 'method browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: hybridPackageName
 
 	"hybridPackageName is expected to be an existing protocol in className"
@@ -67569,14 +67562,14 @@ moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: h
 %
 
 category: 'project browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 projectNamed: projectName
 
 	^ self _projectNamed: projectName
 %
 
 category: 'definition updating'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 projectNamed: projectName updateDefinition: updateBlock
 
 	| projectDefinition |
@@ -67586,7 +67579,7 @@ projectNamed: projectName updateDefinition: updateBlock
 %
 
 category: 'definition updating'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 projectsNamed: projectNames updateDefinition: updateBlock
 
 	| projectSetDefinition |
@@ -67601,7 +67594,7 @@ projectsNamed: projectNames updateDefinition: updateBlock
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 removeClassNamed: className
 
 	| projectSetDefinition loadedClass loadedClassProjectDef  loadedClassProjectDefName loadedClassExtensions |
@@ -67658,7 +67651,7 @@ removeClassNamed: className
 %
 
 category: 'method browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 removeMethod: methodSelector forClassNamed: className isMeta: isMeta
 
 	"Remove the given method selector from the class named className"
@@ -67695,7 +67688,7 @@ removeMethod: methodSelector forClassNamed: className isMeta: isMeta
 %
 
 category: 'package browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 removePackageNamed: packageName
 
 	| loadedPackage projectDef |
@@ -67707,7 +67700,7 @@ removePackageNamed: packageName
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 removeProtocol: hybridPackageName fromClassNamed: className isMeta: isMeta
 
 	"hybridPackageName is expected to be an existing protocol in className, that may or may not be empty"
@@ -67779,7 +67772,7 @@ removeProtocol: hybridPackageName fromClassNamed: className isMeta: isMeta
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 renameClassNamed: className to: newName
 
 	"During renameClassNamed:to: a class is created with the new name and all methods 
@@ -67840,7 +67833,7 @@ renameClassNamed: className to: newName
 %
 
 category: 'class browsing'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 updateClassComment: aString forClassNamed: className 
 
 	"update the comment of the named class"
@@ -67862,7 +67855,7 @@ updateClassComment: aString forClassNamed: className
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _copyClassDefinitionNamed: className to: newName
 
 	"answer a projectSetDefinition that includes the copied class definition"
@@ -67903,7 +67896,7 @@ _copyClassDefinitionNamed: className to: newName
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedClassExtensionsNamed: className
 
 	^ self
@@ -67915,7 +67908,7 @@ _loadedClassExtensionsNamed: className
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedClassExtensionsNamed: className ifAbsent: absentBlock
 
 	^ Rowan image
@@ -67925,7 +67918,7 @@ _loadedClassExtensionsNamed: className ifAbsent: absentBlock
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedClassNamed: className
 
 	^ self
@@ -67934,14 +67927,14 @@ _loadedClassNamed: className
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedClassNamed: className ifAbsent: absentBlock
 
 	^ Rowan image loadedClassNamed: className ifAbsent: absentBlock
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta
 
 	^ self
@@ -67956,7 +67949,7 @@ _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta ifAbsent: absentBlock
 
 	^ Rowan image
@@ -67968,7 +67961,7 @@ _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta ifAbsent: a
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedPackageNamed: packageName
 
 	^ self
@@ -67977,21 +67970,21 @@ _loadedPackageNamed: packageName
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedPackageNamed: packageName ifAbsent: absentBlock
 
 	^ Rowan image loadedPackageNamed: packageName ifAbsent: absentBlock
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedProjectForClassNamed: className
 
 	^ (self _loadedClassNamed: className) loadedProject
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedProjectForMethod: methodSelector inClassNamed: className isMeta: isMeta
 
 	^ (self _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta)
@@ -67999,14 +67992,14 @@ _loadedProjectForMethod: methodSelector inClassNamed: className isMeta: isMeta
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedProjectForPackageNamed: packageName
 
 	^ (self _loadedPackageNamed: packageName) loadedProject
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _loadedProjectNamed: projectName
 
 	^ Rowan image
@@ -68015,14 +68008,14 @@ _loadedProjectNamed: projectName
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _projectForClassNamed: className
 
 	^ (self _loadedProjectForClassNamed: className) asDefinition
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _projectForMethod: methodSelector inClassNamed: className isMeta: isMeta
 
 	^ (self
@@ -68032,21 +68025,21 @@ _projectForMethod: methodSelector inClassNamed: className isMeta: isMeta
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _projectForPackageNamed: packageName
 
 	^ (self _loadedProjectForPackageNamed: packageName) asDefinition
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _projectNamed: projectName
 
 	^ (self _loadedProjectNamed: projectName) asDefinition
 %
 
 category: 'private'
-method: RwPrjBrowserTool
+method: RwPrjBrowserToolV2
 _rowanSymbolDictionaryNames
 
 	^ #( #RowanKernel #RowanLoader #RowanTools )
@@ -68440,7 +68433,6 @@ disownProjectNamed: projectName
 category: 'class editing'
 method: RwPrjEditTool
 addClass: classDefinition inPackageNamed: packageName inProject: projectDefinition
-
 	"Add the given class definition to the named package in the given project. 
 		Return the projectDefinition"
 
@@ -68466,7 +68458,6 @@ addClass: classDefinition inPackageNamed: packageName inProjectNamed: projectNam
 category: 'class extension editting'
 method: RwPrjEditTool
 addClassExtension: classExtensionDefinition inPackageNamed: packageName inProject: projectDefinition
-
 	"Add the given class extension definition to the named package in the given project. 
 		Return the projectDefinition"
 
@@ -68492,7 +68483,6 @@ addClassExtension: classExtensionDefinition inPackageNamed: packageName inProjec
 category: 'class editing'
 method: RwPrjEditTool
 removeClass: classDefinition fromPackageNamed: packageName inProject: projectDefinition
-
 	"Remove the given class definition from the named package in the given project. 
 		Return the projectDefinition"
 
@@ -68518,7 +68508,6 @@ removeClass: classDefinition fromPackageNamed: packageName inProjectNamed: proje
 category: 'class editing'
 method: RwPrjEditTool
 removeClassNamed: className fromPackageNamed: packageName inProject: projectDefinition
-
 	"Remove the named class definition from the named package in the given project. 
 		Return the projectDefinition"
 
@@ -68544,7 +68533,6 @@ removeClassNamed: className fromPackageNamed: packageName inProjectNamed: projec
 category: 'class editing'
 method: RwPrjEditTool
 updateOrAddClass: classDefinition inPackageNamed: packageName inProject: projectDefinition
-
 	"Update or add the given class definition to the named package in the given project. 
 		Return the projectDefinition"
 
@@ -68607,9 +68595,10 @@ loadProjectDefinition: projectDefinition platformConfigurationAttributes: platfo
 
 	| projectSetDefinition sourceProperty rereadProject |
 	sourceProperty := projectDefinition projectDefinitionSourceProperty.
-	rereadProject := sourceProperty
-		~= RwLoadedProject _projectSourceValueNewProject
-		and: [ sourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue ].
+	rereadProject := (sourceProperty
+		= RwLoadedProject _projectModifiedProjectSourceValue
+		or: [ sourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue ])
+		not.
 	projectSetDefinition := (projectDefinition repositoryRoot exists
 		and: [ rereadProject ])
 		ifTrue: [ 
@@ -83094,10 +83083,10 @@ _projectLoadedDefinitionSourceWithDependentProjectsValue
 
 category: 'accessing'
 classmethod: RwLoadedProject
-_projectSourceValueNewProject
-	"This value of the property key indicates that the source of the project definition is a newly created project, so we explicitly don't want to read project from disk on load."
+_projectModifiedProjectSourceValue
+	"This value of the property key indicates that the source of the project definition is newly created project or explicitly modified, so we don't want to read project from disk on load."
 
-	^ 'new project'
+	^ 'modified project'
 %
 
 category: 'accessing'
@@ -83550,6 +83539,9 @@ asDefinition
 		loadSpecification: handle _loadSpecification copy)
 		packages: self loadedPackageDefinitions;
 		yourself.
+	resolvedProject _projectDefinition
+		projectDefinitionSourceProperty:
+			RwLoadedProject _projectLoadedDefinitionSourceValue.
 	resolvedProject _projectDefinition components: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
 	^ resolvedProject
 %
@@ -141063,6 +141055,19 @@ asProjectDefinitonWithComment: commentString
 ! Class extensions for 'RwProjectTool'
 
 !		Class methods for 'RwProjectTool'
+
+category: '*rowan-tools-onlyv2'
+classmethod: RwProjectTool
+browser
+
+	^RwPrjBrowserToolV2 new
+%
+
+category: '*rowan-tools-corev2'
+classmethod: RwProjectTool
+browserV2
+	^ RwPrjBrowserToolV2 new
+%
 
 category: '*rowan-tools-corev2'
 classmethod: RwProjectTool

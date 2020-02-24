@@ -6171,7 +6171,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Tools-Core';
+		category: 'Rowan-Tools-CoreV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -63681,13 +63681,6 @@ audit
 
 category: 'commands'
 classmethod: RwProjectTool
-browser
-
-	^ RwPrjBrowserTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
 checkout
 
 	^RwPrjCheckoutTool new
@@ -64668,7 +64661,25 @@ createClass: classDefinition inPackageNamed: packageName
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectDefinition load
+		projectDefinition _loadTool loadProjectDefinition: projectDefinition
+%
+
+category: 'project browsing'
+method: RwPrjBrowserTool
+createGitPackageProjectNamed: projectName
+
+	self createGitPackageProjectNamed: projectName updateDefinition: [  ]
+%
+
+category: 'project browsing'
+method: RwPrjBrowserTool
+createGitPackageProjectNamed: projectName updateDefinition: updateBlock
+
+	| projectDefinition |
+	projectDefinition := RwProjectDefinition
+		newForGitBasedProjectNamed: projectName.
+	updateBlock cull: projectDefinition.
+	self class load loadProjectDefinition: projectDefinition
 %
 
 category: 'project browsing'
@@ -65733,7 +65744,6 @@ disownProjectNamed: projectName
 category: 'class editing'
 method: RwPrjEditTool
 addClass: classDefinition inPackageNamed: packageName inProject: projectDefinition
-
 	"Add the given class definition to the named package in the given project. 
 		Return the projectDefinition"
 
@@ -65759,7 +65769,6 @@ addClass: classDefinition inPackageNamed: packageName inProjectNamed: projectNam
 category: 'class extension editting'
 method: RwPrjEditTool
 addClassExtension: classExtensionDefinition inPackageNamed: packageName inProject: projectDefinition
-
 	"Add the given class extension definition to the named package in the given project. 
 		Return the projectDefinition"
 
@@ -65785,7 +65794,6 @@ addClassExtension: classExtensionDefinition inPackageNamed: packageName inProjec
 category: 'class editing'
 method: RwPrjEditTool
 removeClass: classDefinition fromPackageNamed: packageName inProject: projectDefinition
-
 	"Remove the given class definition from the named package in the given project. 
 		Return the projectDefinition"
 
@@ -65811,7 +65819,6 @@ removeClass: classDefinition fromPackageNamed: packageName inProjectNamed: proje
 category: 'class editing'
 method: RwPrjEditTool
 removeClassNamed: className fromPackageNamed: packageName inProject: projectDefinition
-
 	"Remove the named class definition from the named package in the given project. 
 		Return the projectDefinition"
 
@@ -65837,7 +65844,6 @@ removeClassNamed: className fromPackageNamed: packageName inProjectNamed: projec
 category: 'class editing'
 method: RwPrjEditTool
 updateOrAddClass: classDefinition inPackageNamed: packageName inProject: projectDefinition
-
 	"Update or add the given class definition to the named package in the given project. 
 		Return the projectDefinition"
 
@@ -78656,10 +78662,10 @@ _projectLoadedDefinitionSourceWithDependentProjectsValue
 
 category: 'accessing'
 classmethod: RwLoadedProject
-_projectSourceValueNewProject
-	"This value of the property key indicates that the source of the project definition is a newly created project, so we explicitly don't want to read project from disk on load."
+_projectModifiedProjectSourceValue
+	"This value of the property key indicates that the source of the project definition is newly created project or explicitly modified, so we don't want to read project from disk on load."
 
-	^ 'new project'
+	^ 'modified project'
 %
 
 category: 'accessing'
@@ -142299,28 +142305,6 @@ projectNamed: aName ifPresent: presentBlock ifAbsent: absentBlock
 		ifAbsent: absentBlock
 %
 
-! Class extensions for 'RwPrjBrowserTool'
-
-!		Instance methods for 'RwPrjBrowserTool'
-
-category: '*rowan-tools-corev1'
-method: RwPrjBrowserTool
-createGitPackageProjectNamed: projectName
-
-	self createGitPackageProjectNamed: projectName updateDefinition: [  ]
-%
-
-category: '*rowan-tools-corev1'
-method: RwPrjBrowserTool
-createGitPackageProjectNamed: projectName updateDefinition: updateBlock
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	updateBlock cull: projectDefinition.
-	self class load loadProjectDefinition: projectDefinition
-%
-
 ! Class extensions for 'RwPrjCloneTool'
 
 !		Instance methods for 'RwPrjCloneTool'
@@ -143438,6 +143422,13 @@ platformSpec
 ! Class extensions for 'RwProjectTool'
 
 !		Class methods for 'RwProjectTool'
+
+category: '*rowan-tools-corev1'
+classmethod: RwProjectTool
+browser
+
+	^ RwPrjBrowserTool new
+%
 
 category: '*rowan-tools-corev1'
 classmethod: RwProjectTool

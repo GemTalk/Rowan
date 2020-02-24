@@ -127,9 +127,10 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 
 	| projectSetDefinition sourceProperty rereadProject |
 	sourceProperty := projectDefinition projectDefinitionSourceProperty.
-	rereadProject := sourceProperty
-		~= RwLoadedProject _projectSourceValueNewProject
-		and: [ sourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue ].
+	rereadProject := (sourceProperty
+		= RwLoadedProject _projectModifiedProjectSourceValue
+		or: [ sourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue ])
+		not.
 	projectSetDefinition := (projectDefinition repositoryRoot exists
 		and: [ rereadProject ])
 		ifTrue: [ 

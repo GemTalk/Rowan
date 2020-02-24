@@ -1,6 +1,12 @@
 Extension { #name : 'RwProjectTool' }
 
 { #category : '*rowan-tools-corev1' }
+RwProjectTool class >> browser [
+
+	^ RwPrjBrowserTool new
+]
+
+{ #category : '*rowan-tools-corev1' }
 RwProjectTool class >> create [
   ^ RwPrjCreateTool new
 ]

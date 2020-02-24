@@ -20,7 +20,7 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 						yourself);
 		packages: Dictionary new;
 		components: RwResolvedLoadComponentsV2 new;
-		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
+		projectDefinitionSourceProperty: RwLoadedProject _projectModifiedProjectSourceValue;
 		yourself.
 	^ self basicNew
 		_projectDefinition: projectDefinition;

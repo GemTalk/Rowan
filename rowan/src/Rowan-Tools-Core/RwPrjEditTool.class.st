@@ -6,7 +6,6 @@ Class {
 
 { #category : 'class editing' }
 RwPrjEditTool >> addClass: classDefinition inPackageNamed: packageName inProject: projectDefinition [
-
 	"Add the given class definition to the named package in the given project. 
 		Return the projectDefinition"
 
@@ -31,7 +30,6 @@ RwPrjEditTool >> addClass: classDefinition inPackageNamed: packageName inProject
 
 { #category : 'class extension editting' }
 RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: packageName inProject: projectDefinition [
-
 	"Add the given class extension definition to the named package in the given project. 
 		Return the projectDefinition"
 
@@ -56,7 +54,6 @@ RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: pac
 
 { #category : 'class editing' }
 RwPrjEditTool >> removeClass: classDefinition fromPackageNamed: packageName inProject: projectDefinition [
-
 	"Remove the given class definition from the named package in the given project. 
 		Return the projectDefinition"
 
@@ -81,7 +78,6 @@ RwPrjEditTool >> removeClass: classDefinition fromPackageNamed: packageName inPr
 
 { #category : 'class editing' }
 RwPrjEditTool >> removeClassNamed: className fromPackageNamed: packageName inProject: projectDefinition [
-
 	"Remove the named class definition from the named package in the given project. 
 		Return the projectDefinition"
 
@@ -106,7 +102,6 @@ RwPrjEditTool >> removeClassNamed: className fromPackageNamed: packageName inPro
 
 { #category : 'class editing' }
 RwPrjEditTool >> updateOrAddClass: classDefinition inPackageNamed: packageName inProject: projectDefinition [
-
 	"Update or add the given class definition to the named package in the given project. 
 		Return the projectDefinition"
 

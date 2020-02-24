@@ -21,6 +21,9 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 		loadSpecification: handle _loadSpecification copy)
 		packages: self loadedPackageDefinitions;
 		yourself.
+	resolvedProject _projectDefinition
+		projectDefinitionSourceProperty:
+			RwLoadedProject _projectLoadedDefinitionSourceValue.
 	resolvedProject _projectDefinition components: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
 	^ resolvedProject
 ]
