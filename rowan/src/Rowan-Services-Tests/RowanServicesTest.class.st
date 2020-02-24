@@ -149,34 +149,6 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 		https://github.com/GemTalk/Jadeite/issues/"
 ]
 
-{ #category : 'support' }
-RowanServicesTest >> loadRowanSample1 [
-  | gitRoot projectName spec projectTools |
-  projectName := 'RowanSample1'.
-  (Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-    ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-  gitRoot := self _testRowanProjectsSandbox.
-  (gitRoot / projectName) ensureDeleteAll.
-	spec := 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston' asRwUrl asSpecification.
-	projectTools := Rowan projectTools.
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRoot pathString
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
-	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectTools create createProjectFromSpecUrl: 'file:', gitRoot pathString, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
-	projectTools load loadProjectNamed: 'RowanSample1'.
-]
-
-{ #category : 'support' }
-RowanServicesTest >> loadServicesTestProject [
-  | projectSetDefinition |
-  projectSetDefinition := RwProjectSetDefinition new.
-  projectSetDefinition addDefinition: self defaultProjectDefinition.
-  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
-]
-
 { #category : 'unicode method' }
 RowanServicesTest >> removeUnicodeSymbolsFromUserGlobals [
   "RowanServicesTest new addUnicodeSymbolToUserGlobals"
@@ -223,6 +195,7 @@ RowanServicesTest >> setUp [
 "ensure that project is unloaded"
 	(Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(self _testRowanProjectsSandbox / self servicesTestProjectName) ensureDeleteAll.
 "ensure that the default symbol dictionary has been removed and that any classes used in tests are not preset"
 	user := System myUserProfile.
 	symListP := user symbolList.
