@@ -337,6 +337,7 @@ RowanBrowserService >> saveRootObject: oop windowHandle: integer [
     ifAbsentPut: [ Dictionary new ].
   dictionary at: integer ifAbsentPut: [ Array new ].
   (dictionary at: integer) add: (Object _objectForOop: oop)
+
 ]
 
 { #category : 'other' }
