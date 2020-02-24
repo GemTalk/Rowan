@@ -58,7 +58,7 @@ RowanServicesTest >> loadRowanSample1 [
 	projectTools load loadProjectNamed: 'RowanSample1'.
 ]
 
-{ #category : '*rowan-services-testsv2' }
+{ #category : '*rowan-services-testsv1' }
 RowanServicesTest >> loadServicesTestProject [
   | projectSetDefinition |
   projectSetDefinition := RwProjectSetDefinition new.
