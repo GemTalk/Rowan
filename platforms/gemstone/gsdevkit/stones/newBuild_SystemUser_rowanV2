@@ -8,10 +8,4 @@ rm -rf *.log *.out
 
 newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
 
-startTopaz $GEMSTONE_NAME -l << EOF
-
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/installRowanV2.tpz $GEMSTONE_NAME -lq
-
-	exit
-
-EOF
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/installRowanV2.tpz $GEMSTONE_NAME -lq

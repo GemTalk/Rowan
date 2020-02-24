@@ -67578,7 +67578,7 @@ createClass: classDefinition inPackageNamed: packageName
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition
+	projectDefinition load
 %
 
 category: 'project browsing'
@@ -68399,8 +68399,7 @@ method: RwPrjCreateToolV2
 createResolvedProjectRepository: resolvedRepository
 	"Create create new repository on `disk`, based on the given resolved project, if it does not already exist."
 
-	resolvedRepository repositoryRoot exists
-		ifFalse: [ self error: 'internal error - expected the repository root to be created' ].
+	resolvedRepository repositoryRoot ensureCreateDirectory.
 	resolvedRepository projectRoots do: [ :path | path ensureCreateDirectory ]
 %
 
@@ -73111,15 +73110,11 @@ repositoryRoot: pathStringOrReference
 category: 'actions'
 method: RwDiskRepositoryDefinitionV2
 resolve
-	"attach to existing repository structure or create"
+	"attach to existing repository structure"
 
 	"answer true if attaching to an existing repository"
 
 	^ self repositoryRoot exists
-		ifTrue: [ true ]
-		ifFalse: [ 
-			self repositoryRoot ensureCreateDirectory.
-			false ]
 %
 
 category: 'private'
@@ -73375,7 +73370,7 @@ repositoryUrl: aRepositoryUrlStrng
 category: 'actions'
 method: RwGitRepositoryDefinitionV2
 resolve
-	"attach to existing repository structure or create"
+	"attach to existing repository structure or clone"
 
 	"answer true if attaching to an existing repository"
 
@@ -108645,7 +108640,7 @@ testBasicResolve_1
 
 	project resolve.
 
-	self assert: expectedRepositoryRoot exists.
+	self deny: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
@@ -108682,7 +108677,7 @@ testBasicResolve_2
 
 	project resolve.
 
-	self assert: expectedRepositoryRoot exists.
+	self deny: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
@@ -111167,6 +111162,74 @@ testReadUpdateProposed_2_ComponentStructure_001
 
 category: 'tests'
 method: RwSimpleComponentRowanExperiment
+testReadUpdateProposed_2_ComponentStructure_002
+	"add attributes: v1Only and v2Only for managing the tools packages. The `Rowan projectTools load` command is ambiguous when both
+		v1 and v2 are loaded, however if v2 is loaded without v1. then the message is no longer ambiguous."
+
+	| resolvedProject definedAttributes category commonComponentName componentName newComponent pathNameArray referencePath |
+	true
+		ifTrue: [ 
+			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
+			^ self ].
+	definedAttributes := {'common'.
+	'deprecated'.
+	'v1'.
+	'v2'.
+	'v1Only'.
+	'v2Only'.
+	'testsV1'.
+	'testsV2'.
+	'tests'.
+	'componentsV2'}.
+
+	resolvedProject := self
+		_readProposed_2_ComponentStructure:
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
+
+	category := 'Tools'.
+	{{'v1'.
+	'v1Only'.
+	{'Rowan-Tools-OnlyV1'}}.
+	{'v2'.
+	'v2Only'.
+	{'Rowan-Tools-OnlyV2'}}}
+		do: [ :ar | 
+			| packageNames parent attribute |
+			packageNames := ar at: 3.
+			attribute := ar at: 2.
+			parent := ar at: 1.
+
+			referencePath := Path * 'common' / parent / attribute / category.
+			pathNameArray := referencePath parent segments.
+
+			commonComponentName := (Path * 'common' / category) pathString.
+			resolvedProject
+				componentNamed: commonComponentName
+				ifAbsent: [ 
+					resolvedProject
+						addNewComponentNamed: category
+						toComponentNamed: 'Rowan'
+						condition: #('common') ].
+			componentName := referencePath pathString.
+			resolvedProject
+				componentNamed: componentName
+				ifAbsent: [ 
+					"add a component"
+					componentName := resolvedProject
+						addNewComponentNamed: category
+						toComponentNamed: commonComponentName
+						condition: pathNameArray ].
+
+			(newComponent := resolvedProject componentNamed: componentName) packageNames
+				addAll: packageNames ].
+
+	resolvedProject componentsRoot ensureDeleteAll.
+
+	resolvedProject exportComponents
+%
+
+category: 'tests'
+method: RwSimpleComponentRowanExperiment
 testReadWriteProposed_ComponentStructure
 	"harvest full list of packages and record the condition and path for each package, then reconstruct by creating the components that have packages and let the rest fill-in automatically ... may want to review the path that is calculated, since I want to get rid of platform layer and I want to use platform components for the leaves"
 
@@ -112563,6 +112626,10 @@ _readProposed_2_ComponentStructure: loadSpecUrl
 	'deprecated'.
 	'v1'.
 	'v2'.
+	'v1Only'.
+	'v2Only'.
+	'testsV1'.
+	'testsV2'.
 	'tests'.
 	'componentsV2'}.
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
@@ -141401,6 +141468,13 @@ category: '*rowan-tools-corev2'
 classmethod: RwProjectTool
 createV2
 	^ RwPrjCreateToolV2 new
+%
+
+category: '*rowan-tools-onlyv2'
+classmethod: RwProjectTool
+load
+
+	^RwPrjLoadToolV2 new
 %
 
 category: '*rowan-tools-corev2'

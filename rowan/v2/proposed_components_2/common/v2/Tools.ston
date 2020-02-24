@@ -2,7 +2,9 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'common/v2/Tools',
 	#condition : 'v2',
 	#projectNames : [ ],
-	#componentNames : [ ],
+	#componentNames : [
+		'common/v2/v2Only/Tools'
+	],
 	#packageNames : [
 		'Rowan-Tools-CoreV2'
 	],

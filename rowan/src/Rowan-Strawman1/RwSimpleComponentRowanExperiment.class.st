@@ -1043,6 +1043,10 @@ RwSimpleComponentRowanExperiment >> _readProposed_2_ComponentStructure: loadSpec
 	'deprecated'.
 	'v1'.
 	'v2'.
+	'v1Only'.
+	'v2Only'.
+	'testsV1'.
+	'testsV2'.
 	'tests'.
 	'componentsV2'}.
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
@@ -1193,6 +1197,73 @@ RwSimpleComponentRowanExperiment >> testReadUpdateProposed_2_ComponentStructure_
 						toComponentNamed: commonComponentName
 						pathNameArray: pathNameArray
 						conditionPathArray: conditionPathArray ].
+
+			(newComponent := resolvedProject componentNamed: componentName) packageNames
+				addAll: packageNames ].
+
+	resolvedProject componentsRoot ensureDeleteAll.
+
+	resolvedProject exportComponents
+]
+
+{ #category : 'tests' }
+RwSimpleComponentRowanExperiment >> testReadUpdateProposed_2_ComponentStructure_002 [
+	"add attributes: v1Only and v2Only for managing the tools packages. The `Rowan projectTools load` command is ambiguous when both
+		v1 and v2 are loaded, however if v2 is loaded without v1. then the message is no longer ambiguous."
+
+	| resolvedProject definedAttributes category commonComponentName componentName newComponent pathNameArray referencePath |
+	true
+		ifTrue: [ 
+			"This test is no longer valid, if it is run, it will corrupt the Rowan component structure"
+			^ self ].
+	definedAttributes := {'common'.
+	'deprecated'.
+	'v1'.
+	'v2'.
+	'v1Only'.
+	'v2Only'.
+	'testsV1'.
+	'testsV2'.
+	'tests'.
+	'componentsV2'}.
+
+	resolvedProject := self
+		_readProposed_2_ComponentStructure:
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
+
+	category := 'Tools'.
+	{{'v1'.
+	'v1Only'.
+	{'Rowan-Tools-OnlyV1'}}.
+	{'v2'.
+	'v2Only'.
+	{'Rowan-Tools-OnlyV2'}}}
+		do: [ :ar | 
+			| packageNames parent attribute |
+			packageNames := ar at: 3.
+			attribute := ar at: 2.
+			parent := ar at: 1.
+
+			referencePath := Path * 'common' / parent / attribute / category.
+			pathNameArray := referencePath parent segments.
+
+			commonComponentName := (Path * 'common' / category) pathString.
+			resolvedProject
+				componentNamed: commonComponentName
+				ifAbsent: [ 
+					resolvedProject
+						addNewComponentNamed: category
+						toComponentNamed: 'Rowan'
+						condition: #('common') ].
+			componentName := referencePath pathString.
+			resolvedProject
+				componentNamed: componentName
+				ifAbsent: [ 
+					"add a component"
+					componentName := resolvedProject
+						addNewComponentNamed: category
+						toComponentNamed: commonComponentName
+						condition: pathNameArray ].
 
 			(newComponent := resolvedProject componentNamed: componentName) packageNames
 				addAll: packageNames ].

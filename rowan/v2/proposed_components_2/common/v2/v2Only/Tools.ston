@@ -1,0 +1,21 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v2/v2Only/Tools',
+	#condition : 'v2Only',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Tools-OnlyV2'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tools-OnlyV2' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : ''
+}

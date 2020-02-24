@@ -64668,7 +64668,7 @@ createClass: classDefinition inPackageNamed: packageName
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition
+	projectDefinition load
 %
 
 category: 'project browsing'
