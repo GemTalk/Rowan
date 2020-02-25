@@ -122,7 +122,7 @@ RwGitRepositoryDefinitionV2 >> commitId [
 { #category : 'loading' }
 RwGitRepositoryDefinitionV2 >> commitLog: logLimit [
 
-	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRoot pathString
 ]
 
 { #category : 'accessing' }
@@ -270,4 +270,9 @@ RwGitRepositoryDefinitionV2 >> revision [
 		do: [ :ignored | 
 			"most likely no commits yet"
 			'' ]
+]
+
+{ #category : 'testing' }
+RwGitRepositoryDefinitionV2 >> useGit [
+	^ true
 ]

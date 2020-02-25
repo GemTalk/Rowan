@@ -84,8 +84,11 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			| theLoadedProject |
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
-			projectDef projectDefinitionSourceProperty
+			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
+				or: [ 
+					projectDef projectDefinitionSourceProperty
+						= RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ])
 				ifTrue: [ 
 					theLoadedProject
 						updateLoadedCommitId;

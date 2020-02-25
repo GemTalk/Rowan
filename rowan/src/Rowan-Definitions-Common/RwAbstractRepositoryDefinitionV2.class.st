@@ -108,3 +108,8 @@ RwAbstractRepositoryDefinitionV2 >> revision [
 
 	^ ''
 ]
+
+{ #category : 'testing' }
+RwAbstractRepositoryDefinitionV2 >> useGit [
+	^ false
+]

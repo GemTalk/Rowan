@@ -344,6 +344,11 @@ RwResolvedProjectV2 >> comment: aString [
 	self _projectDefinition comment: aString
 ]
 
+{ #category : 'querying' }
+RwResolvedProjectV2 >> commitLog: logLimit [
+	^ self _projectRepository commitLog: logLimit
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> componentNamed: aComponentName [
 	^ self _projectDefinition componentNamed: aComponentName
@@ -838,4 +843,9 @@ RwResolvedProjectV2 >> symbolDictNameForPackageNamed: aPackageName [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> updateLoadedCommitId [
 	self _projectSpecification loadedCommitId: self _projectRepository commitId
+]
+
+{ #category : 'testing' }
+RwResolvedProjectV2 >> useGit [
+	^ self _projectRepository useGit
 ]
