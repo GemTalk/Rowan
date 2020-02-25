@@ -5,12 +5,16 @@ RwPlatformNestedProjectLoadComponentV2 {
 	],
 	#packageNames : [
 		'Rowan-Tools-Extensions-GemStone',
-		'Rowan-Tools-GemStone'
+		'Rowan-Tools-GemStone',
+		'Rowan-Tools-Kernel'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tools-Kernel' : {
+						'symbolDictName' : 'Globals'
+					},
 					'Rowan-Tools-GemStone' : {
 						'symbolDictName' : 'RowanTools'
 					}
