@@ -362,6 +362,15 @@ RwResolvedLoadComponentsV2 >> categoryComponentsFor: componentNameList [
 	^ categoryComponents asArray
 ]
 
+{ #category : 'querying' }
+RwResolvedLoadComponentsV2 >> componentForPackageNamed: packageName [
+	self components
+		do: [ :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ ^ component ] ].
+	^ nil
+]
+
 { #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> componentNamed: aComponentName [
 	^ self

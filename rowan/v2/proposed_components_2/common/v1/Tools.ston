@@ -7,8 +7,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/v1/v1Only/Tools'
 	],
 	#packageNames : [
-		'Rowan-Tools-CoreV1',
-		'Rowan-Tools-Kernel'
+		'Rowan-Tools-CoreV1'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
