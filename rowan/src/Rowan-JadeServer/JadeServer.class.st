@@ -4995,6 +4995,7 @@ JadeServer >> terminate: aGsProcess [
 { #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
   | services organizer resultString |
+  [ 
   Rowan commandResultClass initializeResults.
   services := STON fromString: stonString.
   organizer := ClassOrganizer new.
@@ -5013,7 +5014,11 @@ JadeServer >> updateFromSton: stonString [
   self autoCommitIfRequired.
   Rowan loggingServiceClass current logSentServices.
   resultString := STON toString: Rowan commandResultClass results.
-  ^ resultString
+  ^ resultString ]
+    on: Error
+    do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
+      ex pass ]
 ]
 
 { #category : 'category' }

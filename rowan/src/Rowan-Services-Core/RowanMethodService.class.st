@@ -288,6 +288,7 @@ RowanMethodService >> debugTest: testSelector inClassName: theClassName [
   [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
     on: Exception
     do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
       testResult := ex class = TestFailure
         ifTrue: [ 'failure' ]
         ifFalse: [ 
@@ -307,6 +308,7 @@ RowanMethodService >> debugTestAsFailure: testSelector inClassName: theClassName
     debugAsFailure ]
     on: Exception
     do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
       testResult := ex class = TestFailure
         ifTrue: [ 'failure' ]
         ifFalse: [ 
