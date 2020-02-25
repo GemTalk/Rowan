@@ -8,7 +8,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	],
 	#packageNames : [
 		'Rowan-Core-DefinitionsV1',
-		'Rowan-Cypress-Kernel',
 		'Rowan-DefinitionsV1',
 		'Rowan-DefinitionsV1-Kernel',
 		'Rowan-Url-CoreV1'
@@ -19,9 +18,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-Core-DefinitionsV1' : {
 						'symbolDictName' : 'RowanTools'
-					},
-					'Rowan-Cypress-Kernel' : {
-						'symbolDictName' : 'Globals'
 					},
 					'Rowan-DefinitionsV1' : {
 						'symbolDictName' : 'RowanTools'

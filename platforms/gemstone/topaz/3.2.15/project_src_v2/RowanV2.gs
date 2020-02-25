@@ -64344,6 +64344,12 @@ comment: aString
 	self _projectDefinition comment: aString
 %
 
+category: 'querying'
+method: RwResolvedProjectV2
+commitLog: logLimit
+	^ self _projectRepository commitLog: logLimit
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 componentNamed: aComponentName
@@ -64902,6 +64908,12 @@ category: 'project definition'
 method: RwResolvedProjectV2
 updateLoadedCommitId
 	self _projectSpecification loadedCommitId: self _projectRepository commitId
+%
+
+category: 'testing'
+method: RwResolvedProjectV2
+useGit
+	^ self _projectRepository useGit
 %
 
 category: 'private'
@@ -68959,8 +68971,11 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			| theLoadedProject |
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
-			projectDef projectDefinitionSourceProperty
+			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
+				or: [ 
+					projectDef projectDefinitionSourceProperty
+						= RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ])
 				ifTrue: [ 
 					theLoadedProject
 						updateLoadedCommitId;
@@ -73016,6 +73031,12 @@ revision
 	^ ''
 %
 
+category: 'testing'
+method: RwAbstractRepositoryDefinitionV2
+useGit
+	^ false
+%
+
 ! Class implementation for 'RwDiskRepositoryDefinitionV2'
 
 !		Class methods for 'RwDiskRepositoryDefinitionV2'
@@ -73242,7 +73263,7 @@ category: 'loading'
 method: RwGitRepositoryDefinitionV2
 commitLog: logLimit
 
-	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRoot pathString
 %
 
 category: 'accessing'
@@ -73406,6 +73427,12 @@ revision
 		do: [ :ignored | 
 			"most likely no commits yet"
 			'' ]
+%
+
+category: 'testing'
+method: RwGitRepositoryDefinitionV2
+useGit
+	^ true
 %
 
 category: 'private'
@@ -86027,6 +86054,16 @@ categoryComponentsFor: componentNameList
 			component componentNames
 				do: [ :componentName | categoryComponents add: (self componentNamed: componentName) ] ].
 	^ categoryComponents asArray
+%
+
+category: 'querying'
+method: RwResolvedLoadComponentsV2
+componentForPackageNamed: packageName
+	self components
+		do: [ :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ ^ component ] ].
+	^ nil
 %
 
 category: 'accessing'
@@ -137540,6 +137577,12 @@ stonContainSubObjects
 
 !		Instance methods for 'CypressAddition'
 
+category: '*rowan-cypress-kernel'
+method: CypressAddition
+isAddition
+  ^ true
+%
+
 category: '*cypress-environmental-tools'
 method: CypressAddition
 loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader
@@ -137659,6 +137702,12 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 
 !		Instance methods for 'CypressClassDefinition'
 
+category: '*rowan-cypress-kernel'
+method: CypressClassDefinition
+accept: aVisitor
+	aVisitor visitClassDefinition: self.
+%
+
 category: '*Cypress-Comparison'
 method: CypressClassDefinition
 category: aString
@@ -137726,6 +137775,30 @@ classDefinitionString
 	^stream contents
 %
 
+category: '*rowan-cypress-kernel'
+method: CypressClassDefinition
+commentStamp
+
+	^ ''
+%
+
+category: '*rowan-cypress-kernel'
+method: CypressClassDefinition
+createOrReviseClass
+
+	^ self subclassType = ''
+		ifTrue: [ self createOrReviseRegularClass ]
+		ifFalse: [ 
+			self subclassType = 'byteSubclass'
+				ifTrue: [ self createOrReviseByteClass ]
+				ifFalse: [ 
+					| typ |
+					typ := self subclassType.
+					(typ = 'indexableSubclass' or: [ typ = 'variable' ])
+						ifTrue: [ self createOrReviseIndexableClass ]
+						ifFalse: [ self error: 'unknown subclass type: ' , self subclassType printString ] ] ]
+%
+
 category: '*cypress-environmental-tools'
 method: CypressClassDefinition
 createOrReviseClass: aSymbolDictionaryName environmentLoader: environmentLoader
@@ -137772,6 +137845,40 @@ createOrReviseRegularClass: aSymbolDictionaryName environmentLoader: environment
     options: #())
     category: category;
     comment: self comment
+%
+
+category: '*rowan-tools-kernel'
+method: CypressClassDefinition
+definitionString
+
+	| classType type |
+	type := self subclassType.
+	type = ''
+		ifTrue: [ classType := 'normal' ]
+		ifFalse: [ 
+			(type = 'indexableSubclass' or: [ type = 'variable' ])
+				ifTrue: [ classType := 'variable' ]
+				ifFalse: [ 
+					type = 'byteSubclass'
+						ifTrue: [ classType := 'byteSubclass' ]
+						ifFalse: [ self error: 'unknown subclass type: ' , type ] ] ].
+	^ Rowan projectTools browser
+		classCreationTemplateForSubclassOf: superclassName
+		className: self name printString
+		type: classType
+		instanceVariablesString: self instanceVariablesString
+		classVariablesString: self classVariablesString
+		classInstanceVariablesString: self classInstanceVariablesString
+		poolDictionariesString: self poolDictionariesString
+		comment: self comment printString
+		category: self category printString
+%
+
+category: '*rowan-cypress-kernel'
+method: CypressClassDefinition
+hasClassInstanceVariables
+
+	^ self classInstVarNames isEmpty not
 %
 
 category: '*cypresstonel-core'
@@ -137828,6 +137935,31 @@ method: CypressClassDefinition
 poolDictionaries
 
 	^self poolDictionaryNames
+%
+
+category: '*rowan-cypress-kernel'
+method: CypressClassDefinition
+printDefinitionOn: stream
+
+        stream
+            nextPutAll: self superclassName;
+            space;
+            nextPutAll: self classCreationSelector;
+            nextPut: $# ;
+            nextPutAll: self className;
+            cr; tab.
+        stream
+            nextPutAll: 'instanceVariableNames: ';
+            store: self instanceVariablesString;
+            cr; tab;
+            nextPutAll: 'classVariableNames: ';
+            store: self classVariablesString;
+            cr; tab;
+            nextPutAll: 'poolDictionaries: ';
+            store: self poolDictionariesString;
+            cr; tab;
+            nextPutAll: 'category: ';
+            store: self category asString 
 %
 
 category: '*cypresstonel-core'
@@ -137951,6 +138083,12 @@ isMethodDefinition
   ^ false
 %
 
+category: '*rowan-tools-kernel'
+method: CypressDefinition
+isOrganizationDefinition
+  ^false
+%
+
 category: '*cypresstonel-core'
 method: CypressDefinition
 isTraitDefinition
@@ -138025,6 +138163,12 @@ segments
 
 !		Instance methods for 'CypressMethodDefinition'
 
+category: '*rowan-cypress-kernel'
+method: CypressMethodDefinition
+accept: aVisitor
+	^ aVisitor visitMethodDefinition: self
+%
+
 category: '*cypresstonel-core'
 method: CypressMethodDefinition
 fullClassName
@@ -138061,6 +138205,12 @@ loadMethodDefinition: lookupSymbolList environmentLoader: environmentLoader
     environmentId: environmentLoader defaultEnvironmentId
 %
 
+category: '*rowan-cypress-kernel'
+method: CypressMethodDefinition
+offset: anInteger inFile: aFileName
+	"noop"
+%
+
 category: '*cypress-environmental-tools'
 method: CypressMethodDefinition
 postLoadOver: aDefinition lookupSymbolList: lookupSymbolList environmentId: environmentId
@@ -138089,6 +138239,16 @@ theNonMetaClass: lookupSymbolList
     resolveGlobalNamed: self className
     lookupSymbolList: lookupSymbolList
     or: [  ]
+%
+
+category: '*rowan-tools-kernel'
+method: CypressMethodDefinition
+timeStamp
+
+	"fake out a timeStamp for GsJade package changes browser... should not end up being 
+		displayed in chagnes browser, but transport layer expects a timeStamp at the moment"
+
+	^ 'dkh 3/29/2018 14:21'
 %
 
 ! Class extensions for 'CypressMethodStructure'
@@ -138150,6 +138310,12 @@ isSkeleton
 ! Class extensions for 'CypressModification'
 
 !		Instance methods for 'CypressModification'
+
+category: '*rowan-cypress-kernel'
+method: CypressModification
+isModification
+  ^ true
+%
 
 category: '*cypress-environmental-tools'
 method: CypressModification
@@ -138249,9 +138415,43 @@ isSkeleton
 		and: [extensions isNil]]
 %
 
+! Class extensions for 'CypressPatchOperation'
+
+!		Instance methods for 'CypressPatchOperation'
+
+category: '*rowan-cypress-kernel'
+method: CypressPatchOperation
+<= other
+	^ self definition <= other definition
+%
+
+category: '*rowan-cypress-kernel'
+method: CypressPatchOperation
+isAddition
+	^ false
+%
+
+category: '*rowan-cypress-kernel'
+method: CypressPatchOperation
+isModification
+	^ false
+%
+
+category: '*rowan-cypress-kernel'
+method: CypressPatchOperation
+isRemoval
+	^ false
+%
+
 ! Class extensions for 'CypressRemoval'
 
 !		Instance methods for 'CypressRemoval'
+
+category: '*rowan-cypress-kernel'
+method: CypressRemoval
+isRemoval
+  ^ true
+%
 
 category: '*cypress-environmental-tools'
 method: CypressRemoval
@@ -138318,6 +138518,29 @@ method: CypressStructure
 isSkeleton
 
 	^self subclassResponsibility: #isSkeleton
+%
+
+! Class extensions for 'CypressTonelRepository'
+
+!		Instance methods for 'CypressTonelRepository'
+
+category: '*rowan-cypress-kernel'
+method: CypressTonelRepository
+packageNames
+
+	"only directories with a package.st file in them"
+
+	| utils |
+	utils := self fileUtils.
+	^ (((utils directoryEntriesFrom: self directoryPath , '*')
+		reject: [ :each | 
+			| aGsFileStat |
+			aGsFileStat := GsFile _stat: each isLstat: false.
+			aGsFileStat _isSmallInteger
+				ifTrue: [ false ]
+				ifFalse: [ aGsFileStat isDirectory not ] ])
+		collect: [ :each | utils localNameFrom: each ])
+		reject: [ :each | each = '.' or: [ each = '..' ] ]
 %
 
 ! Class extensions for 'Date'
@@ -139713,22 +139936,19 @@ createServicesTestPackage
 category: '*rowan-services-testsv2'
 method: RowanServicesTest
 loadRowanSample1
-  | gitRoot projectName spec projectTools |
-  projectName := 'RowanSample1'.
-  (Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-    ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-  gitRoot := self _testRowanProjectsSandbox.
-  (gitRoot / projectName) ensureDeleteAll.
-	spec := 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston' asRwUrl asSpecification.
-	projectTools := Rowan projectTools.
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRoot pathString
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
-	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectTools create createProjectFromSpecUrl: 'file:', gitRoot pathString, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
-	projectTools load loadProjectNamed: 'RowanSample1'.
+	| projectsHome projectName loadSpec resolvedProject |
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	projectsHome := self _testRowanProjectsSandbox.
+	(projectsHome / projectName) ensureDeleteAll.
+	loadSpec := (RwSpecification
+		fromUrl:
+			'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1_resolved_v2.ston')
+		projectsHome: projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	resolvedProject load
 %
 
 category: '*rowan-services-testsv2'
