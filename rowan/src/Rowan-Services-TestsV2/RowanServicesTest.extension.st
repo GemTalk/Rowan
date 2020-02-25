@@ -3,6 +3,8 @@ Extension { #name : 'RowanServicesTest' }
 { #category : '*rowan-services-testsv2' }
 RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: packageName [
 	| project componentName |
+	Rowan image
+		newOrExistingSymbolDictionaryNamed: self defaultSymbolDictionaryName.	"make sure symbol dictionary is created at same time project is created"
 	componentName := self servicesTestComponentName.
 	project := RwResolvedProjectV2 new
 		projectName: projectName;
@@ -11,8 +13,11 @@ RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: pac
 		yourself.
 	project resolve.
 
-	(project addSimpleComponentNamed: componentName comment: 'a test component')
+	project
+		addSimpleComponentNamed: componentName comment: 'a test component';
 		addPackageNamed: packageName toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self defaultSymbolDictionaryName
+			forPackageNamed: packageName;
 		yourself.
 
 	project load.
@@ -22,6 +27,8 @@ RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: pac
 { #category : '*rowan-services-testsv2' }
 RowanServicesTest >> createProjectDefinitionNamed: projectName [
 	| project |
+	Rowan image
+		newOrExistingSymbolDictionaryNamed: self defaultSymbolDictionaryName.	"make sure symbol dictionary is created at same time project is created"
 	project := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
@@ -29,7 +36,11 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 		yourself.
 	project resolve.
 
-	project addSimpleComponentNamed: self servicesTestComponentName comment: 'a test component'.
+	project
+		addSimpleComponentNamed: self servicesTestComponentName
+		comment: 'a test component'.
+
+	project load.
 	^ project
 ]
 

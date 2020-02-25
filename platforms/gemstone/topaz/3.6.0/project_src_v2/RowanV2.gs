@@ -63570,6 +63570,12 @@ repository
 		yourself
 %
 
+category: 'testing'
+method: RwAbstractResolvedProjectV2
+repositoryExists
+	^ self _projectRepository repositoryExists
+%
+
 category: 'private'
 method: RwAbstractResolvedProjectV2
 _projectDefinition
@@ -64319,6 +64325,32 @@ loadedCommitId
 	^ self _projectSpecification loadedCommitId
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+loadProjectSet
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"load a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(self readProjectSet: self platformConditionalAttributes)
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+loadProjectSet: platformConfigurationAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"load a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(self readProjectSet: platformConfigurationAttributes)
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 movePackageNamed: aPackageName toComponentNamed: aComponentName
@@ -64442,7 +64474,11 @@ read
 
 	"return the receiver with a new set of definitions read from disk"
 
-	^ self readProjectComponentNames: self componentNames groupNames: self groupNames
+	self repositoryExists
+		ifTrue: [ 
+			^ self
+				readProjectComponentNames: self componentNames
+				groupNames: self groupNames ]
 %
 
 category: 'actions'
@@ -67368,21 +67404,18 @@ copyClassNamed: className to: newName
 category: 'class browsing'
 method: RwPrjBrowserToolV2
 createClass: classDefinition inPackageNamed: packageName
-
-	| loadedPackage projectDefinition projectTools |
+	| loadedPackage projectDefinition |
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'The package named ' , packageName printString , ' was not found' ].
-	projectDefinition := loadedPackage loadedProject asDefinition.
+	projectDefinition := loadedPackage loadedProject asDefinition read.
 
-	projectTools := Rowan projectTools.
-
-	projectTools edit
+	Rowan projectTools edit
 		addClass: classDefinition
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-		projectTools load loadProjectDefinition: projectDefinition
+	projectDefinition load
 %
 
 category: 'project browsing'
@@ -68593,25 +68626,10 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
-	| projectSetDefinition sourceProperty rereadProject |
-	sourceProperty := projectDefinition projectDefinitionSourceProperty.
-	rereadProject := (sourceProperty
-		= RwLoadedProject _projectModifiedProjectSourceValue
-		or: [ sourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue ])
-		not.
-	projectSetDefinition := (projectDefinition repositoryRoot exists
-		and: [ rereadProject ])
-		ifTrue: [ 
-			"only read from disk if the repository exists and the project definition has not 
-				already been loaded from disk"
-			projectDefinition readProjectSet: platformConfigurationAttributes ]
-		ifFalse: [ 
-			"If this project definition _was_ read from disk, we cannot trust that it was 
-				not modified, so clear source property"
-			projectDefinition projectDefinitionSourceProperty: nil.
-			RwProjectSetDefinition new
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new
 				addProject: projectDefinition;
-				yourself ].
+				yourself.
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
@@ -106349,37 +106367,6 @@ test_compileClassSelectsPackageAndClass
 
 category: 'tests'
 method: RowanPackageServiceTest
-test_packageWasDeleted
-  "NOTE - use commit/abort in tests carefully. 
-	Can cause hard-to-diagnose problems later 
-	in test runs"
-
-  | packageService projectDef packageDef |
-  self
-    jadeiteIssueTested: #'issue284'
-    withTitle:
-      '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
-  projectDef := self defaultProjectDefinition.
-  [ 
-  System commitTransaction.	"commit project but not package"
-  projectDef
-    packageNamed: self servicesTestPackageName
-    ifAbsent: [ 
-      packageDef := RwPackageDefinition newNamed: self servicesTestPackageName.
-      projectDef addPackage: packageDef ].
-  Rowan projectTools load loadProjectDefinition: projectDef.
-  packageService := RowanPackageService
-    forPackageNamed: self servicesTestPackageName.
-  self deny: packageService wasDeleted.
-  System abortTransaction.
-  self assert: packageService wasDeleted ]
-    ensure: [ 
-      self unloadServicesTestProject.
-      System commitTransaction ]
-%
-
-category: 'tests'
-method: RowanPackageServiceTest
 test_testClassesIncludesExtensions
 	| packageService testClassNames |
 	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
@@ -109620,7 +109607,7 @@ testIssue_571_1
 	self assert: resolvedProject repositoryRoot basename = projectAlias.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := resolvedProject loadProjectSet.
 
 "validate"
 	self
@@ -110352,7 +110339,7 @@ testSpec_0025
 	resolvedProject := loadSpec resolve.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := resolvedProject loadProjectSet.
 
 "validate"
 	self
@@ -139197,6 +139184,42 @@ _gemstonePlatformSpec
 	^ self _specification platformSpec at: 'gemstone'
 %
 
+! Class extensions for 'RowanPackageServiceTest'
+
+!		Instance methods for 'RowanPackageServiceTest'
+
+category: '*rowan-services-testsv2'
+method: RowanPackageServiceTest
+test_packageWasDeleted
+	"NOTE - use commit/abort in tests carefully. 
+	Can cause hard-to-diagnose problems later 
+	in test runs"
+
+	| packageService projectDef |
+	self
+		jadeiteIssueTested: #'issue284'
+		withTitle:
+			'(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+	projectDef := self defaultProjectDefinition.
+	[ 
+	System commitTransaction.	"commit project but not package"
+	projectDef
+		packageNamed: self servicesTestPackageName
+		ifAbsent: [ 
+			projectDef
+				addPackageNamed: self servicesTestPackageName
+				toComponentNamed: self servicesTestComponentName ].
+	projectDef load.
+	packageService := RowanPackageService
+		forPackageNamed: self servicesTestPackageName.
+	self deny: packageService wasDeleted.
+	System abortTransaction.
+	self assert: packageService wasDeleted ]
+		ensure: [ 
+			self unloadServicesTestProject.
+			System commitTransaction ]
+%
+
 ! Class extensions for 'RowanServicesTest'
 
 !		Instance methods for 'RowanServicesTest'
@@ -139230,7 +139253,7 @@ createProjectDefinitionNamed: projectName
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictionaryName;
 		yourself.
-	project resolve.
+	project resolve; load.
 
 	project addSimpleComponentNamed: self servicesTestComponentName comment: 'a test component'.
 	^ project

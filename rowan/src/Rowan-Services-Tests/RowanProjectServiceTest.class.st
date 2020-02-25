@@ -24,8 +24,13 @@ RowanProjectServiceTest >> projectServiceNamed: projectName [
 
 { #category : 'setup teardown' }
 RowanProjectServiceTest >> setUp [
-  super setUp.
-  self loadServicesTestProject
+	super setUp.
+	self loadServicesTestProject.
+
+"ensure that test project is unloaded"
+	(Rowan image loadedProjectNamed: self testProjectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(self _testRowanProjectsSandbox / self testProjectName) ensureDeleteAll
 ]
 
 { #category : 'setup teardown' }
@@ -39,14 +44,14 @@ RowanProjectServiceTest >> tearDown [
 RowanProjectServiceTest >> test_addedProjectNotOnDisk [
 
 	| projectService projectName |
-	projectName := 'Tashkent'. 
+	projectName := self testProjectName. 
 	self jadeiteIssueTested: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
 	self createNonDiskTestProjectNamed:  projectName packageName: 'Packagekent'. 
 	projectService := RowanProjectService newNamed: projectName. 
 	projectService refresh. "<-- walkback occured here" 
 	[self deny: projectService existsOnDisk.
 	self deny: projectService isSkew "no skew if not on disk"]
-		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Tashkent')]
+		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: projectName)]
 ]
 
 { #category : 'tests' }
@@ -85,4 +90,10 @@ RowanProjectServiceTest >> test_updateAddsCommandResult [
 	projectService update. 
 	self assert: RowanCommandResult results size equals: 1. 
 	self assert: RowanCommandResult results first == projectService.
+]
+
+{ #category : 'support' }
+RowanProjectServiceTest >> testProjectName [
+
+	^'Tashkent'
 ]
