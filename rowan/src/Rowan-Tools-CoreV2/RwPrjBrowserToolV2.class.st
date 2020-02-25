@@ -574,6 +574,14 @@ RwPrjBrowserToolV2 >> addOrUpdateMethodY: methodSource inProtocol: protocol forC
 ]
 
 { #category : 'package browsing' }
+RwPrjBrowserToolV2 >> addPackageNamed: packageName toComponentNamed: componentName andProjectNamed: projectName [
+	| projectDefinition |
+	projectDefinition := self _projectNamed: projectName.
+	projectDefinition addPackageNamed: packageName toComponentNamed: componentName.
+	projectDefinition load
+]
+
+{ #category : 'package browsing' }
 RwPrjBrowserToolV2 >> addPackageNamed: packageName toProjectNamed: projectName [
 
 	| projectDefinition |

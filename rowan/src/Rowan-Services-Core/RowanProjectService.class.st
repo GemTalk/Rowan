@@ -53,16 +53,6 @@ RowanProjectService >> = projectService [
 	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
 ]
 
-{ #category : 'client commands' }
-RowanProjectService >> addPackageNamed: packageName [
-
-	Rowan image loadedPackageNamed: packageName ifAbsent: [
-		self browserTool addPackageNamed: packageName toProjectNamed: name. 
-		self update.
-		^self answer: #added.].
-	self answer: #duplicatePackage
-]
-
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
 	name = Rowan unpackagedName ifTrue:[

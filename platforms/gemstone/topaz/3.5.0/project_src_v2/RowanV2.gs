@@ -57532,17 +57532,6 @@ method: RowanProjectService
 	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
 %
 
-category: 'client commands'
-method: RowanProjectService
-addPackageNamed: packageName
-
-	Rowan image loadedPackageNamed: packageName ifAbsent: [
-		self browserTool addPackageNamed: packageName toProjectNamed: name. 
-		self update.
-		^self answer: #added.].
-	self answer: #duplicatePackage
-%
-
 category: 'initialization'
 method: RowanProjectService
 basicRefresh
@@ -67041,6 +67030,15 @@ addOrUpdateMethodY: methodSource inProtocol: protocol forClassNamed: className i
 			classExtensionDef ].
 
 	^ updateBlock value: classExtensionDef value: projectDefinition
+%
+
+category: 'package browsing'
+method: RwPrjBrowserToolV2
+addPackageNamed: packageName toComponentNamed: componentName andProjectNamed: projectName
+	| projectDefinition |
+	projectDefinition := self _projectNamed: projectName.
+	projectDefinition addPackageNamed: packageName toComponentNamed: componentName.
+	projectDefinition load
 %
 
 category: 'package browsing'
@@ -106409,8 +106407,13 @@ projectServiceNamed: projectName
 category: 'setup teardown'
 method: RowanProjectServiceTest
 setUp
-  super setUp.
-  self loadServicesTestProject
+	super setUp.
+	self loadServicesTestProject.
+
+"ensure that test project is unloaded"
+	(Rowan image loadedProjectNamed: self testProjectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(self _testRowanProjectsSandbox / self testProjectName) ensureDeleteAll
 %
 
 category: 'setup teardown'
@@ -106421,32 +106424,26 @@ tearDown
 	super tearDown.
 %
 
+category: 'support'
+method: RowanProjectServiceTest
+testProjectName
+
+	^'Tashkent'
+%
+
 category: 'tests'
 method: RowanProjectServiceTest
 test_addedProjectNotOnDisk
 
 	| projectService projectName |
-	projectName := 'Tashkent'. 
+	projectName := self testProjectName. 
 	self jadeiteIssueTested: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
 	self createNonDiskTestProjectNamed:  projectName packageName: 'Packagekent'. 
 	projectService := RowanProjectService newNamed: projectName. 
 	projectService refresh. "<-- walkback occured here" 
 	[self deny: projectService existsOnDisk.
 	self deny: projectService isSkew "no skew if not on disk"]
-		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Tashkent')]
-%
-
-category: 'tests'
-method: RowanProjectServiceTest
-test_addPackage
-
-	| projectService  packageName loadedPackage |
-	packageName := 'TestAddPackage'.
-	projectService := self projectServiceNamed: self servicesTestProjectName.
-	projectService addPackageNamed: packageName.
-	loadedPackage := Rowan image loadedPackageNamed: packageName.
-	self assert: loadedPackage name equals: packageName. 
-	self assert: loadedPackage projectName equals: self servicesTestProjectName
+		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: projectName)]
 %
 
 category: 'tests'
@@ -139247,6 +139244,38 @@ test_packageWasDeleted
 			System commitTransaction ]
 %
 
+! Class extensions for 'RowanProjectService'
+
+!		Instance methods for 'RowanProjectService'
+
+category: '*rowan-services-corev2'
+method: RowanProjectService
+addPackageNamed: packageName toComponentNamed: componentName
+
+	Rowan image loadedPackageNamed: packageName ifAbsent: [
+		self browserTool addPackageNamed: packageName toComponentNamed: componentName andProjectNamed: name. 
+		self update.
+		^self answer: #added.].
+	self answer: #duplicatePackage
+%
+
+! Class extensions for 'RowanProjectServiceTest'
+
+!		Instance methods for 'RowanProjectServiceTest'
+
+category: '*rowan-services-testsv2'
+method: RowanProjectServiceTest
+test_addPackage
+
+	| projectService  packageName loadedPackage |
+	packageName := 'TestAddPackage'.
+	projectService := self projectServiceNamed: self servicesTestProjectName.
+	projectService addPackageNamed: packageName toComponentNamed: self servicesTestComponentName.
+	loadedPackage := Rowan image loadedPackageNamed: packageName.
+	self assert: loadedPackage name equals: packageName. 
+	self assert: loadedPackage projectName equals: self servicesTestProjectName
+%
+
 ! Class extensions for 'RowanServicesTest'
 
 !		Instance methods for 'RowanServicesTest'
@@ -139255,6 +139284,8 @@ category: '*rowan-services-testsv2'
 method: RowanServicesTest
 createNonDiskTestProjectNamed: projectName packageName: packageName
 	| project componentName |
+	Rowan image
+		newOrExistingSymbolDictionaryNamed: self defaultSymbolDictionaryName.	"make sure symbol dictionary is created at same time project is created"
 	componentName := self servicesTestComponentName.
 	project := RwResolvedProjectV2 new
 		projectName: projectName;
@@ -139263,8 +139294,11 @@ createNonDiskTestProjectNamed: projectName packageName: packageName
 		yourself.
 	project resolve.
 
-	(project addSimpleComponentNamed: componentName comment: 'a test component')
+	project
+		addSimpleComponentNamed: componentName comment: 'a test component';
 		addPackageNamed: packageName toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self defaultSymbolDictionaryName
+			forPackageNamed: packageName;
 		yourself.
 
 	project load.
@@ -139275,14 +139309,20 @@ category: '*rowan-services-testsv2'
 method: RowanServicesTest
 createProjectDefinitionNamed: projectName
 	| project |
+	Rowan image
+		newOrExistingSymbolDictionaryNamed: self defaultSymbolDictionaryName.	"make sure symbol dictionary is created at same time project is created"
 	project := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictionaryName;
 		yourself.
-	project resolve; load.
+	project resolve.
 
-	project addSimpleComponentNamed: self servicesTestComponentName comment: 'a test component'.
+	project
+		addSimpleComponentNamed: self servicesTestComponentName
+		comment: 'a test component'.
+
+	project load.
 	^ project
 %
 

@@ -57159,17 +57159,6 @@ method: RowanProjectService
 	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
 %
 
-category: 'client commands'
-method: RowanProjectService
-addPackageNamed: packageName
-
-	Rowan image loadedPackageNamed: packageName ifAbsent: [
-		self browserTool addPackageNamed: packageName toProjectNamed: name. 
-		self update.
-		^self answer: #added.].
-	self answer: #duplicatePackage
-%
-
 category: 'initialization'
 method: RowanProjectService
 basicRefresh
@@ -96809,8 +96798,13 @@ projectServiceNamed: projectName
 category: 'setup teardown'
 method: RowanProjectServiceTest
 setUp
-  super setUp.
-  self loadServicesTestProject
+	super setUp.
+	self loadServicesTestProject.
+
+"ensure that test project is unloaded"
+	(Rowan image loadedProjectNamed: self testProjectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(self _testRowanProjectsSandbox / self testProjectName) ensureDeleteAll
 %
 
 category: 'setup teardown'
@@ -96821,32 +96815,26 @@ tearDown
 	super tearDown.
 %
 
+category: 'support'
+method: RowanProjectServiceTest
+testProjectName
+
+	^'Tashkent'
+%
+
 category: 'tests'
 method: RowanProjectServiceTest
 test_addedProjectNotOnDisk
 
 	| projectService projectName |
-	projectName := 'Tashkent'. 
+	projectName := self testProjectName. 
 	self jadeiteIssueTested: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
 	self createNonDiskTestProjectNamed:  projectName packageName: 'Packagekent'. 
 	projectService := RowanProjectService newNamed: projectName. 
 	projectService refresh. "<-- walkback occured here" 
 	[self deny: projectService existsOnDisk.
 	self deny: projectService isSkew "no skew if not on disk"]
-		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Tashkent')]
-%
-
-category: 'tests'
-method: RowanProjectServiceTest
-test_addPackage
-
-	| projectService  packageName loadedPackage |
-	packageName := 'TestAddPackage'.
-	projectService := self projectServiceNamed: self servicesTestProjectName.
-	projectService addPackageNamed: packageName.
-	loadedPackage := Rowan image loadedPackageNamed: packageName.
-	self assert: loadedPackage name equals: packageName. 
-	self assert: loadedPackage projectName equals: self servicesTestProjectName
+		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: projectName)]
 %
 
 category: 'tests'
@@ -139119,6 +139107,38 @@ test_packageWasDeleted
     ensure: [ 
       self unloadServicesTestProject.
       System commitTransaction ]
+%
+
+! Class extensions for 'RowanProjectService'
+
+!		Instance methods for 'RowanProjectService'
+
+category: '*rowan-services-corev1'
+method: RowanProjectService
+addPackageNamed: packageName
+
+	Rowan image loadedPackageNamed: packageName ifAbsent: [
+		self browserTool addPackageNamed: packageName toProjectNamed: name. 
+		self update.
+		^self answer: #added.].
+	self answer: #duplicatePackage
+%
+
+! Class extensions for 'RowanProjectServiceTest'
+
+!		Instance methods for 'RowanProjectServiceTest'
+
+category: '*rowan-services-testsv1'
+method: RowanProjectServiceTest
+test_addPackage
+
+	| projectService  packageName loadedPackage |
+	packageName := 'TestAddPackage'.
+	projectService := self projectServiceNamed: self servicesTestProjectName.
+	projectService addPackageNamed: packageName.
+	loadedPackage := Rowan image loadedPackageNamed: packageName.
+	self assert: loadedPackage name equals: packageName. 
+	self assert: loadedPackage projectName equals: self servicesTestProjectName
 %
 
 ! Class extensions for 'RowanServicesTest'
