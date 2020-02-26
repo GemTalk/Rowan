@@ -2,7 +2,9 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'common/tests/v2/Components',
 	#condition : 'v2',
 	#projectNames : [ ],
-	#componentNames : [ ],
+	#componentNames : [ 
+		'common/tests/v2/v2Only/Components'
+	],
 	#packageNames : [
 		'Rowan-Tests-ComponentsV2'
 	],
