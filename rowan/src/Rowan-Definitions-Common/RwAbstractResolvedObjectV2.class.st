@@ -174,6 +174,14 @@ RwAbstractResolvedObjectV2 >> platformConditionalAttributes [
 	^ self _loadSpecification customConditionalAttributes
 ]
 
+{ #category : 'copying' }
+RwAbstractResolvedObjectV2 >> postCopy [
+	super postCopy.
+	projectRepository := projectRepository copy.
+	loadSpecification := loadSpecification copy.
+	projectSpecification := projectSpecification copy
+]
+
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectAlias [
 	^ self _loadSpecification projectAlias ifNil: [ self projectName ]

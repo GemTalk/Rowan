@@ -117,6 +117,13 @@ RwAbstractResolvedProjectV2 >> platformConditionalAttributes [
 	^ super platformConditionalAttributes,  Rowan platformConditionalAttributes
 ]
 
+{ #category : 'copying' }
+RwAbstractResolvedProjectV2 >> postCopy [
+	super postCopy.
+	projectDefinition := projectDefinition copy.
+	projectStructure := projectStructure copy
+]
+
 { #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> projectDefinition [
 	^ RwResolvedProjectV2 new
