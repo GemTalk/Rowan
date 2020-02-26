@@ -5,10 +5,11 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 
 	"multiple class extensions from multiple packages for multiple classes"
 
-	| packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition packageName3 rowanProject projectHome |
+	| packageName1 packageName2 resolvedProject classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition packageName3 rowanProject projectsHome componentName |
 
 	self _markForProjectCleanup: projectName.
+	componentName := 'Core'.
 	packageName1 := 'Issue361-Core'.
 	packageName2 := 'Issue361-Extension1'.
 	packageName3 := 'Issue361-Extension2'.
@@ -17,22 +18,21 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 	className3 := 'Issue361Class3'. 
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := self _testRowanProjectsSandbox pathString.
+	projectsHome := self _testRowanProjectsSandbox.
 
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition')
-		newForDiskBasedProjectNamed: projectName)
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
 		packageFormat: repositoryFormat;
-		projectHome: projectHome;
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		diskUrl: 'file://' , (projectsHome / projectName) pathString;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1 . packageName2 . packageName3 } toComponentNamed: componentName;	
 		yourself.
 
-	packageDefinition := projectDefinition packageNamed: packageName1.
+	packageDefinition := resolvedProject packageNamed: packageName1.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: className1
@@ -115,10 +115,10 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 					newForSelector: #'method1'
 					protocol: '*', packageName2 asLowercase
 					source: 'method1 ^1').
-	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition := resolvedProject packageNamed: packageName2.
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
-	packageDefinition := projectDefinition packageNamed: packageName3.
+	packageDefinition := resolvedProject packageNamed: packageName3.
 
 	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
 	classExtensionDefinition
@@ -134,5 +134,5 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 					source: 'method6 ^6').
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
-	^ projectDefinition
+	^ resolvedProject
 ]
