@@ -208,17 +208,13 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 RwRowanSample9Test >> _validateSpec_0017_componentStructure: resolvedProject [
 	self
 		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'core'
-			componentNames: {}
+			componentNames: { 'tests/Tests'}
 			packageNames:
 				{'RowanSample9-Core'.
 				'RowanSample9-Extensions'.
 				'RowanSample9-Extensions1'}
 			projectNames: {};
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'tests'
+		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
 			packageNames: {'RowanSample9-Tests'}
 			projectNames: {};
@@ -229,16 +225,12 @@ RwRowanSample9Test >> _validateSpec_0017_componentStructure: resolvedProject [
 RwRowanSample9Test >> _validateSpec_0021_componentStructure: resolvedProject [
 	self
 		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'core'
-			componentNames: {}
+			componentNames: {'tests/Tests'}
 			packageNames:
 				{'RowanSample9-Core'.
 				'RowanSample9-Extensions'}
 			projectNames: {};
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'tests'
+		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
 			packageNames: {'RowanSample9-Tests'}
 			projectNames: {};
@@ -877,7 +869,7 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 
 "resolve project"
 	resolvedProject1 := loadSpec resolve.
-	resolvedProject1 repository checkout: 'rowan_issue_549'.	"tag pointing to inconsistent checkout"
+	resolvedProject1 repository checkout: 'issue_549'.	"tag pointing to inconsistent checkout"
 	resolvedProject1 read.
 
 "load project"
@@ -1197,9 +1189,7 @@ RwRowanSample9Test >> testSpec_0001_A [
 	resolvedProject := loadSpecification resolve. "project is not being loaded from disk on resolve"
 	resolvedProject
 		addPackagesNamed: {(loadSpecification projectName , '-Core')}
-		toComponentNamed: 'Core'
-		withConditions: {'common'}
-		andGroupName: 'core'.
+		toComponentNamed: 'Core'.
 ]
 
 { #category : 'tests' }
@@ -1235,8 +1225,6 @@ RwRowanSample9Test >> testSpec_0001_B [
 	resolvedProject
 		addPackagesNamed: {(loadSpecification projectName , '-Core')}
 		toComponentNamed: 'Core'
-		withConditions: {'common'}
-		andGroupName: 'core'
 ]
 
 { #category : 'tests' }
@@ -1621,16 +1609,13 @@ RwRowanSample9Test >> testSpec_0019 [
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 	self
 		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'core'
 			componentNames:
 				{'subs/Core1'.
-				'subs/Core2'}
+				'subs/Core2'.
+				'tests/Tests'}
 			packageNames: {'RowanSample9-Core'}
 			projectNames: {};
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'tests'
+		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
 			packageNames: {'RowanSample9-Tests'}
 			projectNames: {};
@@ -1724,7 +1709,7 @@ RwRowanSample9Test >> testSpec_0023_2 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 	componentNames := {}.
-	loadSpec groupNames: {'core'}.
+	loadSpec customConditionalAttributes: {}.
 	{'Core1' . 'Core2' . 'Core3' . 'Core4' }
 		do: [:componentName |
 "load all of the components in proper sequence"

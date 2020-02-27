@@ -15,6 +15,7 @@ RwProjectComponentVisitorV2Test >> _cloneRowanSample9: projectAlias [
 		specName: projectAlias;
 		projectsHome: projectsHome;
 		componentNames: #('Core');
+		customConditionalAttributes: {'tests'};
 		projectSpecFile: 'rowan/project.ston';
 		gitUrl: 'https://github.com/dalehenrich/RowanSample9';
 		revision: 'spec_0008';

@@ -44,49 +44,27 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 	projectName := resolvedProject projectName.
 	(resolvedProject
 		comment: 'Project created using the V2 project creation api ';
-		addComponentNamed: 'Core'
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						add: 'tests' -> {'core'};
-						yourself)
+		addNewComponentNamed: 'Core'
 			comment: 'Primary component used for loading the system.')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
 			addComponentNames: {'subs/Nested'};
 		yourself.
 
 	resolvedProject
-		addNestedComponentNamed: 'subs/Nested'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
+		addNewNestedComponentNamed: 'subs/Nested'
 		comment: 'Nested component defines a shared subsystem of the primary project.'.
 
 	resolvedProject
 		addPackagesNamed: {(projectName , '-Core')}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
+			toComponentNamed: 'Core';
 		addPackageNamed: projectName , '-Tests'
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'Core';
 		addPackageNamed: projectName , '-GemStone-Extensions'
 			toComponentNamed: 'Core'
-			withConditions: {'gemstone'}
-			andGroupName: 'core'
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
 		addPackageNamed: projectName , '-GemStone-Tests'
-			toComponentNamed: 'Core'
-			withConditions: {'gemstone'}
-			andGroupName: 'tests';
+			toComponentNamed: 'Core';
 		addPackagesNamed: {(projectName , '-Shared')}
-			toComponentNamed: 'subs/Nested'
-			withConditions: {'common'}
-			andGroupName: 'core';
+			toComponentNamed: 'subs/Nested';
 		yourself.
 	packageName := projectName , '-Core'.
 	className := projectName , 'Class1'.
@@ -221,6 +199,23 @@ RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
 	(resolvedProject specsRoot).
 	(resolvedProject specsRoot / resolvedProject projectName , 'ston').
 	(resolvedProject projectsRoot)} do: [ :fileRef | self assert: fileRef exists ]
+]
+
+{ #category : 'private' }
+RwAbstractV2Test >> _validateComponent: component componentNames: componentNames packageNames: packageNames projectNames: projectNames [
+	| x |
+	self
+		assert:
+			(x := component
+				componentNames) asArray sort = componentNames sort.
+	self
+		assert:
+			(x := component
+				packageNames) asArray sort = packageNames sort.
+	self
+		assert:
+			(x := component
+				projectNames) asArray sort = projectNames sort
 ]
 
 { #category : 'private' }

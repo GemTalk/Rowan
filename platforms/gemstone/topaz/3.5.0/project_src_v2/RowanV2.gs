@@ -6756,7 +6756,7 @@ true.
 doit
 (RwAbstractSimpleProjectLoadComponentV2
 	subclass: 'RwAbstractRowanProjectLoadComponentV2'
-	instVarNames: #( componentNames groupName )
+	instVarNames: #( componentNames )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -58474,20 +58474,6 @@ componentsPath
 	^ self subclassResponsibility: #'componentsPath'
 %
 
-category: 'accessing'
-method: RwAbstractProjectComponentVisitorV2
-groupNames
-
-	^ groupNames
-%
-
-category: 'accessing'
-method: RwAbstractProjectComponentVisitorV2
-groupNames: aColl
-
-	groupNames := aColl copy
-%
-
 category: 'initialization'
 method: RwAbstractProjectComponentVisitorV2
 initialize
@@ -58497,7 +58483,6 @@ initialize
 	readComponents := Dictionary new.
 	readProjects := Dictionary new.
 	platformConditionalAttributes := #().
-	groupNames := Set new.
 	projectLoadSpecs := Set new.
 	visitedComponents := Dictionary new
 %
@@ -58595,7 +58580,6 @@ visitProjectLoadComponent: aProjectLoadComponent
 	self _visited: aProjectLoadComponent.
 
 	definedGroupNames := aProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
 
 	self _processConditionalProperties: aProjectLoadComponent.
 
@@ -58618,24 +58602,21 @@ visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent
 
 	self _visited: aSimpleProjectLoadComponent.
 
-	(self groupNames isEmpty
-		or: [ self groupNames includes: aSimpleProjectLoadComponent groupName ])
-		ifTrue: [ 
-			aSimpleProjectLoadComponent conditionalPropertyMatchers
-				keysAndValuesDo: [ :platformMatchers :ignored | 
-					(self _platformAttributeMatchIn: platformMatchers)
-						ifTrue: [ 
-							self
-								_addPackageNames: aSimpleProjectLoadComponent packageNames
-								for: aSimpleProjectLoadComponent.
-							self componentNames addAll: aSimpleProjectLoadComponent componentNames.
-							self projectNames addAll: aSimpleProjectLoadComponent projectNames ] ] ].
+	aSimpleProjectLoadComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					self
+						_addPackageNames: aSimpleProjectLoadComponent packageNames
+						for: aSimpleProjectLoadComponent.
+					self componentNames addAll: aSimpleProjectLoadComponent componentNames.
+					self projectNames addAll: aSimpleProjectLoadComponent projectNames ] ].
 
 	(self
 		_components: self componentsPath
 		forProject: aSimpleProjectLoadComponent projectName)
 		do: [ :component | 
-			(visitedComponentNames includes:component name)
+			(visitedComponentNames includes: component name)
 				ifFalse: [ component acceptNestedVisitor: self ] ].
 
 	(self
@@ -58679,37 +58660,11 @@ _processConditionalProperties: aProjectLoadConfiguration
 				ifTrue: [ 
 					groupMap
 						keysAndValuesDo: [ :group :map | 
-							(self groupNames includes: group)
-								ifTrue: [ 
-									self
-										_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
-										for: aProjectLoadConfiguration.
-									self componentNames
-										addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
-									self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ] ]
-%
-
-category: 'private'
-method: RwAbstractProjectComponentVisitorV2
-_processGroupNames
-
-	| seedGroupNames seeded |
-	seedGroupNames := groupNames asSet copy.
-	seeded := Set new.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				referencedGroupNames do: [:refGroupName |
-					(seeded includes: refGroupName)
-						ifFalse: [
-						"ensure that we seed each group only once"
-						seeded add: refGroupName.
-						seedGroupNames add: refGroupName ] ] ] ].
+							self
+								_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
+								for: aProjectLoadConfiguration.
+							self componentNames addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
+							self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ]
 %
 
 category: 'private'
@@ -58775,12 +58730,11 @@ _addPackageNames: somePackageNames for: aComponent
 
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: platformConditionalAttributes
 	| visitor |
 	visitor := self new
 		_readComponentsForResolvedProject: resolvedProject
 		withComponentNames: componentNamesToRead
-		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes.
 	resolvedProject
 		projectDefinitionSourceProperty:
@@ -58792,26 +58746,22 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead.
-	groupNames}}.
+	componentNamesToRead}}.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| nextDefArray rp cn gn |
+			| nextDefArray rp cn |
 			nextDefArray := projectVisitorQueue removeFirst.
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
-			gn := nextDefArray at: 3.
-			gn := nextDefArray at: 3.
 
 			visitor := self
 				readProjectForResolvedProject: rp
 				withComponentNames: cn
-				groupNames: gn
 				platformConditionalAttributes: platformConditionalAttributes.
 
 			projectVisitedQueue
@@ -58826,8 +58776,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 					projectVisitorQueue
 						addLast:
 							{theResolvedProject.
-							(loadSpec componentNames).
-							(loadSpec groupNames)} ] ].
+							(loadSpec componentNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
@@ -58841,10 +58790,9 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 
 category: 'instance creation'
 classmethod: RwResolvedProjectComponentVisitorV2
-resolvedProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes groupNames: groupNames
+resolvedProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes
 	^ self new
 		platformConditionalAttributes: platformConditionalAttributes;
-		groupNames: groupNames;
 		resolvedProject: resolvedProject;
 		yourself
 %
@@ -58905,8 +58853,8 @@ _addPackageNames: somePackageNames for: aComponent
 
 category: 'private'
 method: RwResolvedProjectComponentVisitorV2
-_readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead groupNames: aGroupNames platformConditionalAttributes: aPlatformConditionalAttributes
-	| theComponentNames theGroupNames |
+_readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: aPlatformConditionalAttributes
+	| theComponentNames  |
 	resolvedProject := aResolvedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 
@@ -58915,17 +58863,13 @@ _readComponentsForResolvedProject: aResolvedProject withComponentNames: componen
 	theComponentNames := componentNamesToRead isEmpty
 		ifTrue: [ resolvedProject componentNames ]
 		ifFalse: [ componentNamesToRead ].
-	theGroupNames := aGroupNames isEmpty
-		ifTrue: [ resolvedProject groupNames ]
-		ifFalse: [ aGroupNames ].
-	^ self _visitComponents: theComponentNames groupNames: theGroupNames
+	^ self _visitComponents: theComponentNames
 %
 
 category: 'private'
 method: RwResolvedProjectComponentVisitorV2
-_visitComponents: componentNamesToRead groupNames: aGroupNames
+_visitComponents: componentNamesToRead
 	| projectName componentDirectory projectsDirectory |
-	groupNames := aGroupNames.
 
 	projectName := resolvedProject projectName.
 	componentDirectory := resolvedProject componentsRoot.
@@ -62751,7 +62695,7 @@ packageExtension
 	^ packageExtension 
 		ifNil: [ 
 			| ext |
-			ext := (self _filetreeRepositoryPropertyDictFor: currentProjectReferenceDefinition packagesRoot) at: 'packageExtension'.
+			ext := (self _filetreeRepositoryPropertyDictFor: currentProjectDefinition packagesRoot) at: 'packageExtension'.
 			packageExtension := ext copyFrom: 2 to: ext size ]
 %
 
@@ -63258,6 +63202,15 @@ platformConditionalAttributes
 	^ self _loadSpecification customConditionalAttributes
 %
 
+category: 'copying'
+method: RwAbstractResolvedObjectV2
+postCopy
+	super postCopy.
+	projectRepository := projectRepository copy.
+	loadSpecification := loadSpecification copy.
+	projectSpecification := projectSpecification copy
+%
+
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectAlias
@@ -63336,7 +63289,7 @@ projectSpecPath: aString
 	self _projectSpecification projectSpecPath: aString.
 	self _loadSpecification
 		projectSpecFile:
-			(Path from: aString / self _projectSpecification specName , 'ston') pathString
+			((Path from: aString) / self _projectSpecification specName , 'ston') pathString
 %
 
 category: 'accessing'
@@ -63523,6 +63476,14 @@ platformConditionalAttributes
 	^ super platformConditionalAttributes,  Rowan platformConditionalAttributes
 %
 
+category: 'copying'
+method: RwAbstractResolvedProjectV2
+postCopy
+	super postCopy.
+	projectDefinition := projectDefinition copy.
+	projectStructure := projectStructure copy
+%
+
 category: 'accessing'
 method: RwAbstractResolvedProjectV2
 projectDefinition
@@ -63640,7 +63601,7 @@ _validate: platformConfigurationAttributes
 		responsiblity for them to have valid data"
 
 	super _validate: platformConfigurationAttributes.
-	self _projectDefinition _validate: platformConfigurationAttributes groupNames: self groupNames.
+	self _projectDefinition _validate: platformConfigurationAttributes.
 	^ true
 %
 
@@ -63927,11 +63888,28 @@ addNewComponentNamed: aComponentName comment: aString
 
 category: 'project definition'
 method: RwResolvedProjectV2
+addNewComponentNamed: aComponentName condition: condition comment: aString
+	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
 addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray
+	^ self
+		addNewComponentNamed: componentName
+		toComponentNamed: toComponentName
+		condition: conditionPathArray
+		comment: ''
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
 	^ self _projectDefinition
 		addNewComponentNamed: componentName
 		toComponentNamed: toComponentName
 		condition: conditionPathArray
+		comment: aString
 %
 
 category: 'project definition'
@@ -63948,6 +63926,15 @@ addPackageNamed: packageName toComponentNamed: componentName
 	^ self _projectDefinition
 		addPackageNamed: packageName
 		toComponentNamed: componentName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+	^ self _projectDefinition
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
 %
 
 category: 'project definition'
@@ -64006,11 +63993,23 @@ addPlatformComponentNamed: componentName toComponentNamed: toComponentName alias
 category: 'project definition'
 method: RwResolvedProjectV2
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
+	^ self
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: ''
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	^ self _projectDefinition
 		addPlatformComponentNamed: aComponentName
 		toComponentNamed: toComponentName
 		pathNameArray: pathNameArray
 		conditionPathArray: conditionPathArray
+		comment: aString
 %
 
 category: 'project definition'
@@ -64470,10 +64469,7 @@ read
 	"return the receiver with a new set of definitions read from disk"
 
 	self repositoryExists
-		ifTrue: [ 
-			^ self
-				readProjectComponentNames: self componentNames
-				groupNames: self groupNames ]
+		ifTrue: [ ^ self readProjectComponentNames: self componentNames ]
 %
 
 category: 'actions'
@@ -64485,7 +64481,6 @@ read: platformConditionalAttributes
 
 	^ self
 		readProjectComponentNames: self componentNames
-		groupNames: self groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -64513,20 +64508,19 @@ readPackageNames: packageNames
 
 category: 'actions'
 method: RwResolvedProjectV2
-readProjectComponentNames: componentNames groupNames: groupNames
+readProjectComponentNames: componentNames
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return the receiver with a new set of definitions read from disk"
 
 	^ self
 		readProjectComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: self platformConditionalAttributes
 %
 
 category: 'actions'
 method: RwResolvedProjectV2
-readProjectComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return the receiver with a new set of definitions read from disk"
@@ -64534,7 +64528,6 @@ readProjectComponentNames: componentNames groupNames: groupNames platformConditi
 	^ Rowan projectTools readV2
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -64545,7 +64538,7 @@ readProjectSet
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	^ self readProjectSetComponentNames: self componentNames groupNames: self groupNames
+	^ self readProjectSetComponentNames: self componentNames
 %
 
 category: 'actions'
@@ -64557,35 +64550,19 @@ readProjectSet: platformConditionalAttributes
 
 	^ self
 		readProjectSetComponentNames: self componentNames
-		groupNames: self groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'actions'
 method: RwResolvedProjectV2
-readProjectSetComponentNames: componentNames groupNames: groupNames
+readProjectSetComponentNames: componentNames
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ self
 		readProjectSetComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: self platformConditionalAttributes
-%
-
-category: 'actions'
-method: RwResolvedProjectV2
-readProjectSetComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
-		withComponentNames: componentNames
-		groupNames: groupNames
-		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'actions'
@@ -64598,7 +64575,6 @@ readProjectSetComponentNames: componentNames platformConditionalAttributes: plat
 	^ Rowan projectTools readV2
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
-		groupNames: #()
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -64622,6 +64598,14 @@ category: 'project definition'
 method: RwResolvedProjectV2
 removePackageNamed: packageName
 	^ self _projectDefinition removePackageNamed: packageName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+removePackageNamed: packageName fromComponentNamed: componentName
+	^ self _projectDefinition
+		removePackageNamed: packageName
+		fromComponentNamed: componentName
 %
 
 category: 'project definition'
@@ -68959,23 +68943,21 @@ classExtensionsForProjectNamed: projectName
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readProjectForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames
+readProjectForResolvedProject: resolvedProject withComponentNames: componentNames
 	"read packages and project metadata into projectDefinition ... return the resolvedProject"
 
 	^ self
 		readProjectForResolvedProject: resolvedProject
 		withComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: resolvedProject platformConditionalAttributes
 %
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readProjectForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+readProjectForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	RwResolvedProjectComponentVisitorV2
 		readProjectForResolvedProject: resolvedProject
 		withComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes.
 	resolvedProject readPackageNames: resolvedProject packageNames.
 	^ resolvedProject
@@ -68996,24 +68978,22 @@ readProjectSetForProjectNamed: projectName platformConditionalAttributes: platfo
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames
+readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames 
 	"read packages and project metadata into projectDefinition ... return a project definition
 		set that contains projectDefinition and any dependent projects"
 
 	^ self
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: resolvedProject platformConditionalAttributes
 %
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -70127,31 +70107,6 @@ packageNames
 
 category: 'accessing'
 method: RwAbstractProjectLoadComponentV2
-packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames
-	"Answer the collection of package names defined in the receiver."
-
-	| allDefinedPackageNames matchers |
-	allDefinedPackageNames := Set new.
-	matchers := self conditionalPropertyMatchers.
-	self conditionalProperties
-		keysAndValuesDo: [ :conditions :ignored | 
-			platformConfigurationAttributes
-				do: [ :anObject | 
-					matchers
-						keysAndValuesDo: [ :ar :groupMap | 
-							ar
-								do: [ :matcher | 
-									(matcher match: anObject)
-										ifTrue: [ 
-											groupMap
-												keysAndValuesDo: [ :groupName :packageMap | 
-													(groupNames includes: groupName)
-														ifTrue: [ allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ] ] ] ] ] ].
-	^ allDefinedPackageNames
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
 removeComponentNamed: aComponentName
 	"this can create empty componentName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
 
@@ -70302,14 +70257,13 @@ method: RwAbstractSimpleProjectLoadComponentV2
 = aRwAbstractSimpleProjectLoadComponentV2
 	(aRwAbstractSimpleProjectLoadComponentV2 isKindOf: self class)
 		ifFalse: [ ^ false ].
-	^ ((((self name = aRwAbstractSimpleProjectLoadComponentV2 name
+	^ (((self name = aRwAbstractSimpleProjectLoadComponentV2 name
 		and: [ self comment = aRwAbstractSimpleProjectLoadComponentV2 comment ])
 		and: [ 
 			self conditionalPackageMapSpecs
 				= aRwAbstractSimpleProjectLoadComponentV2 conditionalPackageMapSpecs ])
 		and: [ self condition = aRwAbstractSimpleProjectLoadComponentV2 condition ])
-		and: [ self packageNames = aRwAbstractSimpleProjectLoadComponentV2 packageNames ])
-		and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ]
+		and: [ self packageNames = aRwAbstractSimpleProjectLoadComponentV2 packageNames ]
 %
 
 category: 'accessing'
@@ -70457,7 +70411,7 @@ initialize
 
 category: 'accessing'
 method: RwAbstractEnvyProjectLoadComponentV2
-packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames
+packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes
 	"Answer the collection of package names defined in the receiver."
 
 	| allDefinedPackageNames matchers |
@@ -70549,9 +70503,7 @@ category: 'comparing'
 method: RwAbstractRowanProjectLoadComponentV2
 = aRwAbstractSimpleProjectLoadComponentV2
 	^ super = aRwAbstractSimpleProjectLoadComponentV2
-		and: [ 
-			self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames
-				and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ] ]
+		and: [ self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames ]
 %
 
 category: 'accessing'
@@ -70559,6 +70511,15 @@ method: RwAbstractRowanProjectLoadComponentV2
 addComponentNamed: aComponentName 
 	"avoid duplicates and keep the list sorted"
 	self componentNames add: aComponentName.
+	componentNames := componentNames asSet asArray sort
+%
+
+category: 'accessing'
+method: RwAbstractRowanProjectLoadComponentV2
+addComponentNames: aComponentNames
+	"add component names"
+
+	self componentNames addAll: aComponentNames.
 	componentNames := componentNames asSet asArray sort
 %
 
@@ -70574,29 +70535,15 @@ method: RwAbstractRowanProjectLoadComponentV2
 conditionalPropertyMatchers
 	| conditionalPropertyMatchers |
 	conditionalPropertyMatchers := Dictionary new
-		at: {(self _platformPatternMatcherFor: self condition)} put: {groupName};
+		at: {(self _platformPatternMatcherFor: self condition)} put: {};
 		yourself.
 	^ conditionalPropertyMatchers
-%
-
-category: 'accessing'
-method: RwAbstractRowanProjectLoadComponentV2
-groupName
-	^groupName
-%
-
-category: 'accessing'
-method: RwAbstractRowanProjectLoadComponentV2
-groupName: object
-	groupName := object
 %
 
 category: 'comparing'
 method: RwAbstractRowanProjectLoadComponentV2
 hash
-	| hashValue |
-	hashValue := super hash bitXor: self groupName hash.
-	^ hashValue bitXor: self componentNames hash
+	^ super hash bitXor: self componentNames hash
 %
 
 category: 'initialization'
@@ -70608,7 +70555,7 @@ initialize
 
 category: 'accessing'
 method: RwAbstractRowanProjectLoadComponentV2
-packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames
+packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes
 	"Answer the collection of package names defined in the receiver."
 
 	| allDefinedPackageNames matchers |
@@ -70617,13 +70564,11 @@ packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes 
 	platformConfigurationAttributes
 		do: [ :anObject | 
 			matchers
-				keysAndValuesDo: [ :ar :theGroupNames | 
+				keysAndValuesDo: [ :ar :ignored | 
 					ar
 						do: [ :matcher | 
 							(matcher match: anObject)
-								ifTrue: [ 
-									(theGroupNames includes: groupName)
-										ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ] ].
+								ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ].
 	^ allDefinedPackageNames
 %
 
@@ -70690,7 +70635,7 @@ initialize
 category: 'ston'
 method: RwSimpleProjectLoadComponentV2
 instVarNamesInOrderForSton
-	^ #(#'name' #'projectName' #'condition' #'groupName' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
+	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 %
 
 category: 'accessing'
@@ -72072,18 +72017,21 @@ addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment
 category: 'accessing'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: 'common'
-		comment: ''
+	^ self addNewComponentNamed: aComponentName condition: 'common' comment: ''
 %
 
 category: 'accessing'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName comment: aString
+	^ self addNewComponentNamed: aComponentName condition: 'common' comment: aString
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addNewComponentNamed: aComponentName condition: condition comment: aString
 	^ self components
 		addSimpleComponentNamed: aComponentName
-		condition: 'common'
+		condition: condition
 		comment: aString
 %
 
@@ -72101,7 +72049,33 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition
 
 category: 'accessing'
 method: RwProjectDefinitionV2
+addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
+	"return the path name of the new component"
+
+	^ self
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
+	"return the path name of the new component"
+
+	^ self
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: ''
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	"return the path name of the new component"
 
 	| theComponentName toComponent path compositePath |
@@ -72129,7 +72103,7 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameA
 	self components
 		addSimpleNestedComponentNamed: theComponentName
 		condition: conditionPathArray last
-		comment: ''.
+		comment: aString.
 	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
 %
@@ -72164,6 +72138,26 @@ addPackageNamed: packageName toComponentNamed: componentName
 			"no problem ... just update the component"
 			 ].
 	self components addPackageNamed: packageName toComponentNamed: componentName.
+	^ package
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+	| package |
+	self components
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	package := RwPackageDefinition newNamed: packageName.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
+	self components
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc.
 	^ package
 %
 
@@ -72293,6 +72287,19 @@ addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName alia
 category: 'accessing'
 method: RwProjectDefinitionV2
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
+	"return the path name of the new component"
+
+	^ self
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: ''
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	"return the path name of the new component"
 
 	| theComponentName toComponent path compositePath condition |
@@ -72606,6 +72613,18 @@ removePackage: aPackageDefinition
 
 category: 'accessing'
 method: RwProjectDefinitionV2
+removePackageNamed: packageName fromComponentNamed: componentName
+	"do not remove package from defintion, remove it from the named component only. 
+		Use removePackage:, if you want the package completely removed from definition"
+
+	| component |
+	component := self componentNamed: componentName.
+	component removePackageNamed: packageName.
+	^ component
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
 removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
 	"do not remove package from defintion, remove it from the named component only. 
 		Use removePackage:, if you want the package completely removed from definition"
@@ -72699,7 +72718,7 @@ _validate
 
 category: 'private'
 method: RwProjectDefinitionV2
-_validate: platformConfigurationAttributes groupNames: groupNames
+_validate: platformConfigurationAttributes
 	"ensure that the data structures within the receiver contain valid information"
 
 	"make sure that list of packages is consistent between components and project definition
@@ -72708,10 +72727,7 @@ _validate: platformConfigurationAttributes groupNames: groupNames
 
 	| definitionPackageNames componentPackageNames missingFromComponent errorMessage |
 	definitionPackageNames := self packageNames asSet.
-	componentPackageNames := Set new.
-	self components
-		_validate: platformConfigurationAttributes
-		groupNames: groupNames.
+	componentPackageNames := self components _validate: platformConfigurationAttributes.
 	missingFromComponent := componentPackageNames - definitionPackageNames.
 	missingFromComponent isEmpty
 		ifTrue: [ ^ true ].
@@ -85666,6 +85682,21 @@ addPackageNamed: packageName toComponentNamed: componentName
 
 category: 'accessing'
 method: RwResolvedLoadComponentsV2
+addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+	| component |
+	component := self
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	component
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
+			andPackageName: packageName
+			setSymbolDictNameTo: aSymbolDictAssoc value;
+		addPackageNames: {packageName}.
+	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
 addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
 	| component |
 	component := self
@@ -86164,7 +86195,7 @@ _validate
 
 category: 'private'
 method: RwResolvedLoadComponentsV2
-_validate: platformConfigurationAttributes groupNames: groupNames
+_validate: platformConfigurationAttributes
 	"ensure that each of the components is valid and return a list of the package names managed by all components for the given group name"
 
 	| componentPackageNames |
@@ -86178,8 +86209,7 @@ _validate: platformConfigurationAttributes groupNames: groupNames
 				addAll:
 					(component
 						packageNamesForPlatformConfigurationAttributes:
-							platformConfigurationAttributes
-						groupNames: groupNames) ].
+							platformConfigurationAttributes) ].
 	^ componentPackageNames
 %
 
@@ -86328,26 +86358,24 @@ method: RwLoadSpecificationV2
 										and: [ 
 											self componentNames asArray sort = anObject componentNames asArray sort
 												and: [ 
-													self groupNames asArray sort = anObject groupNames asArray sort
+													self projectSpecFile = anObject projectSpecFile
 														and: [ 
-															self projectSpecFile = anObject projectSpecFile
+															self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
 																and: [ 
-																	self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
+																	self gitUrl = anObject gitUrl
 																		and: [ 
-																			self gitUrl = anObject gitUrl
+																			self diskUrl = anObject diskUrl
 																				and: [ 
-																					self diskUrl = anObject diskUrl
+																					self mercurialUrl = anObject mercurialUrl
 																						and: [ 
-																							self mercurialUrl = anObject mercurialUrl
+																							self svnUrl = anObject svnUrl
 																								and: [ 
-																									self svnUrl = anObject svnUrl
+																									self revision = anObject revision
 																										and: [ 
-																											self revision = anObject revision
+																											self comment = anObject comment
 																												and: [ 
-																													self comment = anObject comment
-																														and: [ 
-																															self _platformProperties = anObject _platformProperties
-																																or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																													self _platformProperties = anObject _platformProperties
+																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 %
 
 category: 'visiting'
@@ -86541,20 +86569,6 @@ gitUrl: anUrlString
 	gitUrl := anUrlString
 %
 
-category: 'accessing'
-method: RwLoadSpecificationV2
-groupNames
-	^ groupNames
-%
-
-category: 'accessing'
-method: RwLoadSpecificationV2
-groupNames: anArray
-	anArray
-		ifNil: [ groupNames := anArray ]
-		ifNotNil: [ groupNames := anArray asArray ]
-%
-
 category: 'comparing'
 method: RwLoadSpecificationV2
 hash
@@ -86572,7 +86586,6 @@ hash
 	hashValue := hashValue bitXor: self comment hash.
 	hashValue := hashValue bitXor: self componentNames hash.
 	hashValue := hashValue bitXor: self projectsHome hash.
-	hashValue := hashValue bitXor: self groupNames hash.
 	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
 	hashValue := hashValue bitXor: self _platformProperties hash.
 	^ hashValue
@@ -86583,7 +86596,6 @@ method: RwLoadSpecificationV2
 initialize
 	super initialize.
 	componentNames := {}.
-	groupNames := {'core'}.
 	projectSpecFile := 'rowan/project.ston'.
 	comment := ''
 %
@@ -86632,7 +86644,6 @@ postCopy
 
 	super postCopy.
 	componentNames := componentNames copy.
-	groupNames := groupNames copy.
 	customConditionalAttributes := customConditionalAttributes copy.
 	platformProperties
 		ifNotNil: [ 
@@ -86865,7 +86876,7 @@ _validate
 		1. platform implementation is responsible for validating platform structures"
 
 	| repoUrls |
-	#(#'componentNames' #'groupNames' #'specName' #'projectSpecFile')
+	#(#'componentNames' #'specName' #'projectSpecFile')
 		do: [ :messageName | 
 			(self perform: messageName)
 				ifNil: [ 
@@ -87283,6 +87294,7 @@ genSpec_0000: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87329,6 +87341,7 @@ genSpec_0001: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87374,9 +87387,7 @@ genSpec_0002: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87422,9 +87433,7 @@ genSpec_0003: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87493,9 +87502,7 @@ genSpec_0004: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core1'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87543,9 +87550,7 @@ genSpec_0004_b: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core3'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87598,9 +87603,7 @@ genSpec_0005: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87649,9 +87652,7 @@ genSpec_0006: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87705,9 +87706,7 @@ genSpec_0007: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87759,9 +87758,7 @@ genSpec_0008: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87811,9 +87808,7 @@ genSpec_0009: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87863,9 +87858,7 @@ genSpec_0010: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87914,9 +87907,7 @@ genSpec_0011: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -87970,9 +87961,7 @@ genSpec_0012: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -88026,9 +88015,7 @@ genSpec_0013: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -88084,9 +88071,7 @@ genSpec_0014: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -88151,9 +88136,7 @@ genSpec_0015: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -88203,9 +88186,7 @@ genSpec_0016: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -88254,9 +88235,7 @@ genSpec_0017: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -88307,9 +88286,6 @@ genSpec_0018: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
 		comment: indexCard title;
 		yourself.
 
@@ -88358,9 +88334,7 @@ genSpec_0019: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88412,9 +88386,7 @@ genSpec_0020: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88466,9 +88438,7 @@ genSpec_0021: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88520,9 +88490,7 @@ genSpec_0022: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88574,9 +88542,7 @@ genSpec_0023: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88632,9 +88598,7 @@ genSpec_0024: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88686,9 +88650,7 @@ genSpec_0025: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88742,9 +88704,7 @@ genSpec_0026: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88799,7 +88759,7 @@ genSpec_0027: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
-		groupNames: {};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88853,7 +88813,7 @@ genSpec_0028: commitMessage
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
-		groupNames: {};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88908,7 +88868,6 @@ genSpec_0029: commitMessage
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
 		customConditionalAttributes: #('tests');
-		groupNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -88963,7 +88922,6 @@ genSpec_0030: commitMessage
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
 		customConditionalAttributes: #('tests');
-		groupNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -89018,7 +88976,6 @@ genSpec_0031: commitMessage
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
 		customConditionalAttributes: #('tests');
-		groupNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -89073,7 +89030,6 @@ genSpec_0032: commitMessage
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
 		customConditionalAttributes: #('tests');
-		groupNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -89243,13 +89199,9 @@ _addDefinitionsFor: resolvedProject projectName: aProjectName
 	| className packageName |
 	resolvedProject
 		addPackagesNamed: {(aProjectName , '-Core')}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
+			toComponentNamed: 'Core';
 		addPackageNamed: aProjectName , '-Tests'
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'tests/Tests';
 		yourself.
 	packageName := aProjectName , '-Core'.
 	className := aProjectName , 'Class1'.
@@ -89278,13 +89230,12 @@ method: RwTestProjectLibraryGenerator
 _addDefinitionsFor_0000: resolvedProject
 	resolvedProject
 		comment: 'spec_0000 definitions';
-		addComponentNamed: 'Core'
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						add: 'tests' -> {'core'};
-						yourself)
+		addNewComponentNamed: 'Core'
 			comment: 'Primary component used for loading the core classes.';
+		addNewComponentNamed: 'Tests'
+			toComponentNamed: 'Core'
+			condition: {'tests'}
+			comment: 'Primary component used for loading the test classes.';
 		yourself.
 	^ resolvedProject
 %
@@ -89307,20 +89258,15 @@ _addDefinitionsFor_0002: resolvedProject
 	packageName4 := projectName , '-' , 'GemStone-Tests'.
 	packageName5 := projectName , '-' , 'Tests'.
 	resolvedProject
-		addPackagesNamed:
-				{packageName1.
+		addPackagesNamed: {packageName1.
 				packageName2.
 				packageName3}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		addPackagesNamed:
-				{packageName4.
+			toComponentNamed: 'Core';
+		addPackagesNamed: {packageName4.
 				packageName5}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'tests/Tests';
 		yourself.
+
 	className := projectName , 'Class1'.
 	((resolvedProject packageNamed: packageName1)
 		addClassNamed: className
@@ -89387,47 +89333,31 @@ method: RwTestProjectLibraryGenerator
 _addDefinitionsFor_0004: resolvedProject
 	| className packageName userId |
 	userId := resolvedProject _gemstoneAllUsersName.
-	(resolvedProject
-		addComponentNamed: 'Core1'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
-		comment: 'contains ' , projectName , '-Core1 package')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
-			addComponentNames: #('Core2');
+	resolvedProject
+		addNewComponentNamed: 'Core1'
+			comment:  'contains ' , projectName , '-Core1 package';
+		addNewComponentNamed: 'Tests'
+			toComponentNamed: 'Core1'
+			condition: {'tests'}
+			comment: 'contains ' , projectName , '-Tests package';
+		addNewComponentNamed: 'Core2'
+			comment: 'contains ' , projectName , '-Core2 package';
 		yourself.
-	(resolvedProject
-		addComponentNamed: 'Core2'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
-		comment: 'contains ' , projectName , '-Core2 package')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
-			addComponentNames: #('Core1');
-		yourself.
+	(resolvedProject componentNamed: 'Core1')
+		addComponentNamed: 'Core2'.
+	(resolvedProject componentNamed: 'Core2')
+		addComponentNamed: 'Core1'.
 	resolvedProject
 		addPackageNamed: projectName , '-Core1'
 			toComponentNamed: 'Core1'
-			withConditions: {'common'}
-			andGroupName: 'core'
 			gemstoneDefaultSymbolDictionaryForUser:
 				userId -> RwAbstractV2Test _sampleSymbolDictionaryName2;
 		addPackageNamed: projectName , '-Core2'
-			toComponentNamed: 'Core2'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName3
+			toComponentNamed: 'Core2';
+		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName3 
 			forPackageNamed: projectName , '-Core2';
 		addPackageNamed: projectName , '-Tests'
-			toComponentNamed: 'Core1'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'tests/Tests';
 		gemstoneSetDefaultSymbolDictNameForUser: userId
 			to: RwAbstractV2Test _sampleSymbolDictionaryName1;
 		yourself.
@@ -89457,30 +89387,17 @@ _addDefinitionsFor_0004: resolvedProject
 category: 'private'
 method: RwTestProjectLibraryGenerator
 _addDefinitionsFor_0004_b: resolvedProject
-	| userId |
-	userId := 'SystemUser'.
-	(resolvedProject
-		addComponentNamed: 'Core3'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
+	resolvedProject
+		addNewComponentNamed: 'Core3'
 		comment:
 			'contains ' , projectName
 				,
 					'-Core1 package, which is a duplicate reference, since the Core1 component also references the '
-				, projectName , '-Core1 package')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
-			addComponentNames: #('Core1');
-		yourself.
+				, projectName , '-Core1 package'.
+	(resolvedProject componentNamed: 'Core3') addComponentNamed: 'Core1'.
 	resolvedProject
 		addPackageNamed: projectName , '-Core1'
-			toComponentNamed: 'Core3'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		yourself.
+		toComponentNamed: 'Core3' yourself.
 	^ self _addPackageCore1DefinitionsFor_0004: resolvedProject
 %
 
@@ -89496,17 +89413,11 @@ _addDefinitionsFor_0005: resolvedProject
 	className2 := projectName , 'IdentityKeyValueDictionary'.
 
 	resolvedProject
-		addPackagesNamed:
-				{packageName1.
+		addPackagesNamed: {packageName1.
 				packageName2}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		addPackagesNamed:
-				{packageName3}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'Core';
+		addPackagesNamed: {packageName3}
+			toComponentNamed: 'tests/Tests';
 		yourself.
 
 	resolvedProject
@@ -89728,9 +89639,7 @@ _addDefinitionsFor_0011: resolvedProject
 				{
 				packageName2.
 				}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
+			toComponentNamed: 'Core';
 		yourself.
 	((resolvedProject packageNamed: packageName2)
 		addClassExtensionNamed: className1)
@@ -89769,8 +89678,6 @@ _addDefinitionsFor_0012: resolvedProject
 	resolvedProject
 		addPackagesNamed: {packageName4}
 			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
 		yourself.
 
 	resolvedProject
@@ -89827,8 +89734,6 @@ _addDefinitionsFor_0013: resolvedProject
 	resolvedProject
 		addPackagesNamed: {packageName4}
 			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
 		yourself.
 
 	resolvedProject
@@ -89885,8 +89790,6 @@ _addDefinitionsFor_0014: resolvedProject
 	resolvedProject
 		addPackagesNamed: {packageName4}
 			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
 		yourself.
 
 	resolvedProject
@@ -90008,9 +89911,8 @@ _addDefinitionsFor_0018: resolvedProject
 
 	"https://github.com/GemTalk/Rowan/issues/553"
 
-	| componentName groupName packageName1 packageName2 extensionClassName1 className1 className2 |
+	| componentName packageName1 packageName2 extensionClassName1 className1 className2 |
 	componentName := 'Core'.
-	groupName := 'core'.
 	packageName1 := projectName , '-Vast-Application'.
 	packageName2 := projectName , '-Common-Core'.
 	extensionClassName1 := 'TestCase'.
@@ -90022,27 +89924,17 @@ _addDefinitionsFor_0018: resolvedProject
 		packageConvention: 'Rowan';
 		yourself.
 
-	resolvedProject loadSpecification
-		groupNames: {groupName};
-		yourself.
-
 	resolvedProject
 		comment:
 				'sample vast/gemstone project, based on project structure in https://github.com/dalehenrich/tonel-demos/tree/rowan_553';
-		addComponentNamed: componentName
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						yourself)
+		addNewComponentNamed: 'Core'
 			comment: 'Primary component used for loading the core classes.';
-		addPackageNamed: packageName1
+		addNewComponentNamed: componentName
 			toComponentNamed: componentName
-			withConditions: {'vast'}
-			andGroupName: groupName;
-		addPackageNamed: packageName2
-			toComponentNamed: componentName
-			withConditions: {'common'}
-			andGroupName: groupName;
+			condition: {'vast'}
+			comment: 'manage vast packages';
+		addPackageNamed: packageName1 toComponentNamed: 'vast/' , componentName;
+		addPackageNamed: packageName2 toComponentNamed: componentName;
 		yourself.
 
 	(resolvedProject packageNamed: packageName1)
@@ -90186,48 +90078,26 @@ _addDefinitionsFor_0019: resolvedProject
 	groupName := 'core'.
 
 	resolvedProject
-		addNestedComponentNamed: componentName1
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						add: 'tests' -> {'core'};
-						yourself)
+		addSimpleNestedComponentNamed: componentName1
+			condition: 'common'
 			comment: '';
-		addNestedComponentNamed: componentName2
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						add: 'tests' -> {'core'};
-						yourself)
+		addSimpleNestedComponentNamed: componentName2
+			condition: 'common'
 			comment: '';
 		gemstoneSetSymbolDictName: nil forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: nil forPackageNamed: packageName2;
 		removePackageNamed: packageName1
-			fromComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			fromComponentNamed: componentName;
 		removePackageNamed: packageName2
-			fromComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			fromComponentNamed: componentName;
 		addPackageNamed: packageName1
-			toComponentNamed: componentName1
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName1;
 		addPackageNamed: packageName2
-			toComponentNamed: componentName2
-			withConditions: conditionArray
-			andGroupName: groupName;
-
+			toComponentNamed: componentName2;
 		addComponentNamed: componentName1
-			toComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName;
 		addComponentNamed: componentName2
-			toComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
-
+			toComponentNamed: componentName;
 		yourself.
 
 	((resolvedProject packageNamed: packageName2)
@@ -90264,13 +90134,9 @@ _addDefinitionsFor_0020: resolvedProject
 		removeComponentNamed: componentName1;
 		removeComponentNamed: componentName2;
 		addPackageNamed: packageName1
-			toComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName;
 		addPackageNamed: packageName2
-			toComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName1
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName1
@@ -90507,41 +90373,37 @@ _addDefinitionsFor_0023: resolvedProject
 		yourself.
 
 	resolvedProject removeComponentNamed: 'Core'.
-	resolvedProject components
-		addSimpleComponentNamed: 'Core'
+	resolvedProject removeComponentNamed: 'tests/Tests'.
+	resolvedProject
+		addNewComponentNamed: 'Core'
 		condition: 'common'
-		groupName: 'core'
 		comment:
 			'master component, that will load 4 simple components in order with each component doing a complete, independent load'.
 
 	resolvedProject
-		addSimpleComponentNamed: 'Core1'
+		addNewComponentNamed: 'Core1'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'First component for loading first package';
 		addPackagesNamed:
 				{packageName1.
 					testPackageName1}
 			toComponentNamed: 'Core1';
-		addSimpleComponentNamed: 'Core2'
+		addNewComponentNamed: 'Core2'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'Second component for loading second package';
 		addPackagesNamed:
 				{packageName2.
 					testPackageName2}
 			toComponentNamed: 'Core2';
-		addSimpleComponentNamed: 'Core3'
+		addNewComponentNamed: 'Core3'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'Third component for loading third package';
 		addPackagesNamed:
 				{packageName3.
 					testPackageName3}
 			toComponentNamed: 'Core3';
-		addSimpleComponentNamed: 'Core4'
+		addNewComponentNamed: 'Core4'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'Fourth component for loading fourth package';
 		addPackagesNamed:
 				{packageName4.
@@ -90624,7 +90486,9 @@ _addDefinitionsFor_0024: resolvedProject
 				'testExport
 	"exexute without error"
 	| filePath object |
-	filePath := (FileReference newTempFilePrefix: ''', projectName , '_export'' suffix: ''ston'') pathString.
+	filePath := (FileReference newTempFilePrefix: ''' , projectName
+						,
+							'_export'' suffix: ''ston'') pathString.
 	object := ' , className1
 						,
 							' new ivar1: filePath.
@@ -90697,25 +90561,36 @@ _addDefinitionsFor_0024: resolvedProject
 
 	resolvedProject
 		removeComponentNamed: 'Core';
-		addSimpleComponentNamed: 'Core'
+		removeComponentNamed: 'tests/Tests';
+		addNewComponentNamed: 'Core'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'Top-level component for loading the application';
-		addSimpleComponentNamed: 'Tests'
-			condition: 'common'
-			groupName: 'tests'
-			comment: 'Top-level component for the application tests';
-		addSimpleNestedComponentNamed: 'platform/Extensions-GemStone'
-			condition: 'gemstone'
-			groupName: 'core'
+		addPlatformComponentNamed: 'Core'
+			toComponentNamed: 'Core'
+			pathNameArray:
+				{'platform'.
+				'gemstone'}
+			conditionPathArray:
+				{'common'.
+				{'gemstone'}}
 			comment: 'Component for loading gemstone-specific packages';
-		addSimpleNestedComponentNamed: 'platform/Extensions-Pharo'
-			condition: 'pharo'
-			groupName: 'core'
+		addPlatformComponentNamed: 'Core'
+			toComponentNamed: 'Core'
+			pathNameArray:
+				{'platform'.
+				'pharo'}
+			conditionPathArray:
+				{'common'.
+				{'pharo'}}
 			comment: 'Component for loading pharo-specific packages';
-		addSimpleNestedComponentNamed: 'platform/Extensions-VAST'
-			condition: 'vast'
-			groupName: 'core'
+		addPlatformComponentNamed: 'Core'
+			toComponentNamed: 'Core'
+			pathNameArray:
+				{'platform'.
+				'vast'}
+			conditionPathArray:
+				{'common'.
+				{'vast'}}
 			comment:
 				'Component for loading vast-specific test packages and components. 
 		The component named VAST_IMAGE/STON is a pseudo-component that refers to 
@@ -90723,9 +90598,16 @@ _addDefinitionsFor_0024: resolvedProject
 
 		The package named RowanSample9-VAST-Application, which contains the Envy 
 		Application class is also included in this component.';
-		addSimpleNestedComponentNamed: 'platform/Tests-VAST'
-			condition: 'vast'
-			groupName: 'tests'
+		addPlatformComponentNamed: 'Tests'
+			toComponentNamed: 'Core'
+			pathNameArray:
+				{'tests'.
+				'platform'.
+				'vast'}
+			conditionPathArray:
+				{'test'.
+				'common'.
+				{'vast'}}
 			comment:
 				'Component for loading vast-specific test packages and components. 
 		The component named VAST_IMAGE/SUnit is a pseudo-component that refers to 
@@ -90733,36 +90615,27 @@ _addDefinitionsFor_0024: resolvedProject
 		yourself.
 
 	resolvedProject
-		addComponentNamed: 'Tests' toComponentNamed: 'Core';
-		addComponentNamed: 'Core' toComponentNamed: 'Tests';
-		addComponentNamed: 'platform/Tests-VAST' toComponentNamed: 'Tests';
-		addComponentNamed: 'platform/Extensions-GemStone' toComponentNamed: 'Core';
-		addComponentNamed: 'platform/Extensions-Pharo' toComponentNamed: 'Core';
-		addComponentNamed: 'platform/Extensions-VAST' toComponentNamed: 'Core';
-		yourself.
-
-	resolvedProject
 		addPackagesNamed:
 				{packageName1.
 					packageName2}
 			toComponentNamed: 'Core';
-		addPackageNamed: packageName3 toComponentNamed: 'Tests';
-		addPackageNamed: packageName4
-			toComponentNamed: 'platform/Extensions-GemStone';
-		addPackageNamed: packageName5 toComponentNamed: 'platform/Extensions-Pharo';
+		addPackageNamed: packageName3 toComponentNamed: 'tests/Tests';
+		addPackageNamed: packageName4 toComponentNamed: 'platform/gemstone/Core';
+		addPackageNamed: packageName5 toComponentNamed: 'platform/pharo/Core';
 		addPackagesNamed:
 				{packageName6.
 					packageName7}
-			toComponentNamed: 'platform/Extensions-VAST';
-		addPackageNamed: packageName8 toComponentNamed: 'platform/Tests-VAST';
+			toComponentNamed: 'platform/vast/Core';
+		addPackageNamed: packageName8 toComponentNamed: 'tests/platform/vast/Tests';
 		yourself.
 
+false ifTrue: [ 
 	resolvedProject
-		addComponentNamed: 'VAST_IMAGE/STON'
-			toComponentNamed: 'platform/Extensions-VAST';
-		addComponentNamed: 'VAST_IMAGE/Sunit' toComponentNamed: 'platform/Tests-VAST';
+		addComponentNamed: 'VAST_IMAGE/STON' toComponentNamed: 'platform/vast/Core';
+		addComponentNamed: 'VAST_IMAGE/Sunit'
+			toComponentNamed: 'tests/platform/vastCore';
 		yourself.	"add the VAST_IMAGE application dependencies"
-
+].
 	resolvedProject
 		_validate:
 				{'common'.
@@ -90791,14 +90664,17 @@ _addDefinitionsFor_0025: resolvedProject_0025
 	loadSpecification_0025 := resolvedProject_0025 _loadSpecification.
 	packageNames := resolvedProject_0025 packageNames.
 
-	loadSpecification_0025 groupNames: {}.
+	loadSpecification_0025 customConditionalAttributes: {'tests'}.
 
 	resolvedProject_0025
 		removeComponentNamed: 'Core';
-		addSimpleComponentNamed: 'Core' condition: 'common' comment: 'the component';
+		addNewComponentNamed: 'Core' condition: 'common' comment: 'the component';
+		addComponentNamed: 'tests/Tests' toComponentNamed: 'Core';
 		yourself.
 	packageNames
-		do: [ :packageName | resolvedProject_0025 addPackageNamed: packageName toComponentNamed: 'Core' ].
+		do: [ :packageName | 
+			packageName ~= (projectName , '-Tests')
+				ifTrue: [ resolvedProject_0025 addPackageNamed: packageName toComponentNamed: 'Core' ] ].
 
 	1 to: 3 do: [ :index | 
 		| resolvedProjectName suffix loadSpecification specName resolvedProject baseName |
@@ -90811,7 +90687,6 @@ _addDefinitionsFor_0025: resolvedProject_0025
 			projectAlias: resolvedProject_0025 projectName;
 			projectsHome: self projectsHome;
 			gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-			groupNames: {};
 			yourself.
 
 		baseName := 'rowan' , suffix.
@@ -90820,15 +90695,18 @@ _addDefinitionsFor_0025: resolvedProject_0025
 			revision: loadSpecification_0025 revision;
 			gitUrl: self projectUrl;
 			componentNames: {'Core'};
+			customConditionalAttributes: {'tests'};
 			comment: loadSpecification_0025 comment;
 			yourself.
 
 		resolvedProject := loadSpecification resolve.
 
 		resolvedProject
-			addSimpleComponentNamed: 'Core'
-			condition: 'common'
-			comment: 'the component'.
+			addNewComponentNamed: 'Core' condition: 'common' comment: 'the component';
+			addNewComponentNamed: 'tests/Tests'
+				condition: 'tests'
+				comment: 'the test component';
+			yourself.
 
 		resolvedProject projectSpecification
 			componentsPath: baseName , '/components';
@@ -90881,7 +90759,6 @@ _addDefinitionsFor_0026: resolvedProject
 
 	resolvedProject loadSpecification
 		componentNames: {componentName1};
-		groupNames: #();
 		yourself.
 
 	resolvedProject addNewComponentNamed: componentName1.
@@ -91471,10 +91348,12 @@ method: RwTestProjectLibraryGenerator
 _addSimpleDefinitionsFor: resolvedProject projectName: aProjectName
 	| className packageName |
 	resolvedProject
+		addComponentNamed:  'tests/Tests'
+			toComponentNamed: 'Core';
 		addPackagesNamed: {(aProjectName , '-Core')}
 			toComponentNamed: 'Core';
 		addPackageNamed: aProjectName , '-Tests'
-			toComponentNamed: 'Core';
+			toComponentNamed: 'tests/Tests';
 		yourself.
 	packageName := aProjectName , '-Core'.
 	className := aProjectName , 'Class1'.
@@ -91705,7 +91584,7 @@ _genSpecFor: specName loadSpecification: loadSpecification addDefinitions: addDe
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
-	(resolvedProject repositoryRoot / 'rowan/doits') ensureDeleteAll.
+	(resolvedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
 
 	addDefinitionsBlock value: resolvedProject.
 
@@ -108106,49 +107985,27 @@ _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject
 	projectName := resolvedProject projectName.
 	(resolvedProject
 		comment: 'Project created using the V2 project creation api ';
-		addComponentNamed: 'Core'
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						add: 'tests' -> {'core'};
-						yourself)
+		addNewComponentNamed: 'Core'
 			comment: 'Primary component used for loading the system.')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
 			addComponentNames: {'subs/Nested'};
 		yourself.
 
 	resolvedProject
-		addNestedComponentNamed: 'subs/Nested'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
+		addNewNestedComponentNamed: 'subs/Nested'
 		comment: 'Nested component defines a shared subsystem of the primary project.'.
 
 	resolvedProject
 		addPackagesNamed: {(projectName , '-Core')}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
+			toComponentNamed: 'Core';
 		addPackageNamed: projectName , '-Tests'
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'Core';
 		addPackageNamed: projectName , '-GemStone-Extensions'
 			toComponentNamed: 'Core'
-			withConditions: {'gemstone'}
-			andGroupName: 'core'
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
 		addPackageNamed: projectName , '-GemStone-Tests'
-			toComponentNamed: 'Core'
-			withConditions: {'gemstone'}
-			andGroupName: 'tests';
+			toComponentNamed: 'Core';
 		addPackagesNamed: {(projectName , '-Shared')}
-			toComponentNamed: 'subs/Nested'
-			withConditions: {'common'}
-			andGroupName: 'core';
+			toComponentNamed: 'subs/Nested';
 		yourself.
 	packageName := projectName , '-Core'.
 	className := projectName , 'Class1'.
@@ -108291,6 +108148,24 @@ _validateCanonicalRowanSample9ProjectFor: resolvedProject
 	(resolvedProject specsRoot).
 	(resolvedProject specsRoot / resolvedProject projectName , 'ston').
 	(resolvedProject projectsRoot)} do: [ :fileRef | self assert: fileRef exists ]
+%
+
+category: 'private'
+method: RwAbstractV2Test
+_validateComponent: component componentNames: componentNames packageNames: packageNames projectNames: projectNames
+	| x |
+	self
+		assert:
+			(x := component
+				componentNames) asArray sort = componentNames sort.
+	self
+		assert:
+			(x := component
+				packageNames) asArray sort = packageNames sort.
+	self
+		assert:
+			(x := component
+				projectNames) asArray sort = projectNames sort
 %
 
 category: 'private'
@@ -108601,7 +108476,7 @@ testCreateNewDiskProject_removePackageNamed
 	"move packages from one component to another, using removePackageNamed:... 
 		and addPackageNamed:... methods for RwResolvedProject. "
 
-	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject packageName componentName1 componentName2 conditionArray groupName component |
+	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject packageName componentName1 componentName2 conditionArray component |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -108637,31 +108512,24 @@ testCreateNewDiskProject_removePackageNamed
 	componentName1 := 'Core'.
 	componentName2 := 'subs/Nested'.
 	conditionArray := {'gemstone'}.
-	groupName := 'tests'.
 	resolvedProject
 		removePackageNamed: packageName
-		fromComponentNamed: componentName1
-		withConditions: conditionArray
-		andGroupName: groupName.
+		fromComponentNamed: componentName1.
 	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 	resolvedProject
 		addPackageNamed: packageName
-			toComponentNamed: componentName2
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName2;
 		yourself.
 	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
 	self
 		deny:
 			(((resolvedProject componentNamed: componentName1)
-				conditionalPackagesAtConditions: conditionArray
-				andGroup: groupName) includes: packageName).
+				packageNames) includes: packageName).
 	self
 		assert:
 			(((resolvedProject componentNamed: componentName2)
-				conditionalPackagesAtConditions: conditionArray
-				andGroup: groupName) includes: packageName).	"validate move in image"
+				packageNames) includes: packageName).	"validate move in image"
 
 	resolvedProject exportComponents.
 
@@ -108672,7 +108540,7 @@ testCreateNewDiskProject_removePackageNamed
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	self
 		deny:
-			((component conditionalPackagesAtConditions: conditionArray andGroup: groupName)
+			((component packageNames)
 				includes: packageName).	"validate move on disk"
 
 
@@ -108683,7 +108551,7 @@ testCreateNewDiskProject_removePackageNamed
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	self
 		assert:
-			((component conditionalPackagesAtConditions: conditionArray andGroup: groupName)
+			((component packageNames)
 				includes: packageName)	"validate move on disk"
 %
 
@@ -109526,7 +109394,7 @@ testIssue_549_errorCondition
 
 "resolve project"
 	resolvedProject1 := loadSpec resolve.
-	resolvedProject1 repository checkout: 'rowan_issue_549'.	"tag pointing to inconsistent checkout"
+	resolvedProject1 repository checkout: 'issue_549'.	"tag pointing to inconsistent checkout"
 	resolvedProject1 read.
 
 "load project"
@@ -109778,9 +109646,7 @@ testSpec_0001_A
 	resolvedProject := loadSpecification resolve. "project is not being loaded from disk on resolve"
 	resolvedProject
 		addPackagesNamed: {(loadSpecification projectName , '-Core')}
-		toComponentNamed: 'Core'
-		withConditions: {'common'}
-		andGroupName: 'core'.
+		toComponentNamed: 'Core'.
 %
 
 category: 'tests'
@@ -109817,8 +109683,6 @@ testSpec_0001_B
 	resolvedProject
 		addPackagesNamed: {(loadSpecification projectName , '-Core')}
 		toComponentNamed: 'Core'
-		withConditions: {'common'}
-		andGroupName: 'core'
 %
 
 category: 'tests'
@@ -110217,16 +110081,13 @@ testSpec_0019
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 	self
 		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'core'
 			componentNames:
 				{'subs/Core1'.
-				'subs/Core2'}
+				'subs/Core2'.
+				'tests/Tests'}
 			packageNames: {'RowanSample9-Core'}
 			projectNames: {};
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'tests'
+		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
 			packageNames: {'RowanSample9-Tests'}
 			projectNames: {};
@@ -110324,7 +110185,7 @@ testSpec_0023_2
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 	componentNames := {}.
-	loadSpec groupNames: {'core'}.
+	loadSpec customConditionalAttributes: {}.
 	{'Core1' . 'Core2' . 'Core3' . 'Core4' }
 		do: [:componentName |
 "load all of the components in proper sequence"
@@ -110811,17 +110672,13 @@ method: RwRowanSample9Test
 _validateSpec_0017_componentStructure: resolvedProject
 	self
 		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'core'
-			componentNames: {}
+			componentNames: { 'tests/Tests'}
 			packageNames:
 				{'RowanSample9-Core'.
 				'RowanSample9-Extensions'.
 				'RowanSample9-Extensions1'}
 			projectNames: {};
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'tests'
+		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
 			packageNames: {'RowanSample9-Tests'}
 			projectNames: {};
@@ -110833,16 +110690,12 @@ method: RwRowanSample9Test
 _validateSpec_0021_componentStructure: resolvedProject
 	self
 		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'core'
-			componentNames: {}
+			componentNames: {'tests/Tests'}
 			packageNames:
 				{'RowanSample9-Core'.
 				'RowanSample9-Extensions'}
 			projectNames: {};
-		_validateComponent: (resolvedProject componentNamed: 'Core')
-			condition: {'common'}
-			group: 'tests'
+		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
 			packageNames: {'RowanSample9-Tests'}
 			projectNames: {};
@@ -129394,7 +129247,6 @@ testBasic_1
 		projectName: projectName;
 		specName: specName;
 		componentNames: #('Default');
-		groupNames: #('core');
 		projectSpecFile: 'rowan/xxx.ston';
 		yourself.
 
@@ -129415,7 +129267,6 @@ testBasic_2
 		projectName: projectName;
 		specName: specName;
 		componentNames: #('Default');
-		groupNames: #('core');
 		projectSpecFile: 'rowan/xxx.ston';
 		revision: 'master';
 		gitUrl: 'file://x/y/z';
@@ -129702,7 +129553,7 @@ testIssue_530_3
 		projectName: projectName;
 		specName: specName;
 		componentNames: #('Default');
-		groupNames: #('core');
+		customConditionalAttributes: {'mine'};
 		projectSpecFile: 'rowan/xxx.ston';
 		revision: 'master';
 		gitUrl: 'file://x/y/z';
@@ -129714,7 +129565,7 @@ testIssue_530_3
 	self assert: projectSpecCopy = loadSpecification.
 
 	projectSpecCopy componentNames add: 'Boom'.
-	projectSpecCopy groupNames add: 'boom'.
+	projectSpecCopy customConditionalAttributes add: 'boom'.
 
 	self deny: projectSpecCopy = loadSpecification.
 
@@ -129925,19 +129776,17 @@ method: RwProjectComponentVisitorV2Test
 testBasicVisit_independent
 	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
 
-	| platformConditionalAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
+	| platformConditionalAttributes visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
 	platformConditionalAttributes := {'common'.
 	'gemstone'.
 	('3.5.0' asRwGemStoneVersionNumber)}.
 	projectAlias := 'RowanSample9_DiskConfig_Test'.
 	componentNamesToLoad := #('Core').
-	groupNames := #('core').
 
 	projectPath := self _cloneRowanSample9: projectAlias.	"clone https://github.com/dalehenrich/RowanSample9"
 
 	visitor := RwIndependentComponentVisitorV2 new
 		platformConditionalAttributes: platformConditionalAttributes;
-		groupNames: groupNames;
 		yourself.
 
 	self assert: visitor packageNames isEmpty.
@@ -141435,7 +141284,7 @@ method: RwProjectComponentVisitorV2Test
 testBasicVisit_withResolvedProject
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
 
-	| platformConditionalAttributes groupNames componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
+	| platformConditionalAttributes componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
 	platformConditionalAttributes := {'common'.
 	'gemstone'.
 	('3.5.0' asRwGemStoneVersionNumber)}.
@@ -141454,22 +141303,19 @@ testBasicVisit_withResolvedProject
 		specName: projectName;
 		projectsHome: projectsHome;
 		componentNames: componentNamesToLoad;
-		groupNames: #('core');
 		projectSpecFile: 'rowan/project.ston';
 		gitUrl: 'https://github.com/dalehenrich/RowanSample9';
 		revision: 'spec_0008';
 		yourself.
 	basicProject := RwResolvedProjectV2 basicLoadSpecification: loadSpec.
 	basicProject _projectRepository resolve.	"create clone"
-	groupNames := loadSpec groupNames.
 	componentsRoot := basicProject componentsRoot.
 
 	self assert: basicProject packageNames isEmpty.
 
 	visitor := RwResolvedProjectComponentVisitorV2
 		resolvedProject: basicProject
-		platformConditionalAttributes: platformConditionalAttributes
-		groupNames: groupNames.
+		platformConditionalAttributes: platformConditionalAttributes.
 	projectName := basicProject projectAlias.
 
 	self assert: visitor packageNames isEmpty.
@@ -141544,7 +141390,7 @@ _cloneRowanSample9: projectAlias
 		specName: projectAlias;
 		projectsHome: projectsHome;
 		componentNames: #('Core');
-		groupNames: #('core');
+		customConditionalAttributes: {'tests'};
 		projectSpecFile: 'rowan/project.ston';
 		gitUrl: 'https://github.com/dalehenrich/RowanSample9';
 		revision: 'spec_0008';
@@ -142036,10 +141882,11 @@ _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat
 
 	"multiple class extensions from multiple packages for multiple classes"
 
-	| packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition packageName3 rowanProject projectHome |
+	| packageName1 packageName2 resolvedProject classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition packageName3 rowanProject projectsHome componentName |
 
 	self _markForProjectCleanup: projectName.
+	componentName := 'Core'.
 	packageName1 := 'Issue361-Core'.
 	packageName2 := 'Issue361-Extension1'.
 	packageName3 := 'Issue361-Extension2'.
@@ -142048,22 +141895,21 @@ _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat
 	className3 := 'Issue361Class3'. 
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectHome := self _testRowanProjectsSandbox pathString.
+	projectsHome := self _testRowanProjectsSandbox.
 
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition')
-		newForDiskBasedProjectNamed: projectName)
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
 		packageFormat: repositoryFormat;
-		projectHome: projectHome;
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		diskUrl: 'file://' , (projectsHome / projectName) pathString;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1 . packageName2 . packageName3 } toComponentNamed: componentName;	
 		yourself.
 
-	packageDefinition := projectDefinition packageNamed: packageName1.
+	packageDefinition := resolvedProject packageNamed: packageName1.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: className1
@@ -142146,10 +141992,10 @@ _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat
 					newForSelector: #'method1'
 					protocol: '*', packageName2 asLowercase
 					source: 'method1 ^1').
-	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition := resolvedProject packageNamed: packageName2.
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
-	packageDefinition := projectDefinition packageNamed: packageName3.
+	packageDefinition := resolvedProject packageNamed: packageName3.
 
 	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
 	classExtensionDefinition
@@ -142165,7 +142011,7 @@ _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat
 					source: 'method6 ^6').
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
-	^ projectDefinition
+	^ resolvedProject
 %
 
 ! Class extensions for 'RwProjectSetDefinition'
@@ -142337,6 +142183,13 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 			modification := after compareAgainstBase: before.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
+%
+
+category: '*rowan-tests-definitionsv2-extensions-onlyv2'
+method: RwResolvedProjectV2
+create
+	"RwComponentProjectDefinition tests compatibility ... eventually get rid of this"
+	self resolve; export
 %
 
 category: '*rowan-gemstone-definitionsv2'

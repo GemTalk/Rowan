@@ -64,7 +64,7 @@ RwAbstractEnvyProjectLoadComponentV2 >> initialize [
 ]
 
 { #category : 'accessing' }
-RwAbstractEnvyProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames [
+RwAbstractEnvyProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes [
 	"Answer the collection of package names defined in the receiver."
 
 	| allDefinedPackageNames matchers |

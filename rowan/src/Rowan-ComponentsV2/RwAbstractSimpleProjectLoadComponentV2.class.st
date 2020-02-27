@@ -12,14 +12,13 @@ Class {
 RwAbstractSimpleProjectLoadComponentV2 >> = aRwAbstractSimpleProjectLoadComponentV2 [
 	(aRwAbstractSimpleProjectLoadComponentV2 isKindOf: self class)
 		ifFalse: [ ^ false ].
-	^ ((((self name = aRwAbstractSimpleProjectLoadComponentV2 name
+	^ (((self name = aRwAbstractSimpleProjectLoadComponentV2 name
 		and: [ self comment = aRwAbstractSimpleProjectLoadComponentV2 comment ])
 		and: [ 
 			self conditionalPackageMapSpecs
 				= aRwAbstractSimpleProjectLoadComponentV2 conditionalPackageMapSpecs ])
 		and: [ self condition = aRwAbstractSimpleProjectLoadComponentV2 condition ])
-		and: [ self packageNames = aRwAbstractSimpleProjectLoadComponentV2 packageNames ])
-		and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ]
+		and: [ self packageNames = aRwAbstractSimpleProjectLoadComponentV2 packageNames ]
 ]
 
 { #category : 'accessing' }

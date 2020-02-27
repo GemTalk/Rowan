@@ -28,7 +28,6 @@ RwLoadSpecificationV2Test >> testBasic_1 [
 		projectName: projectName;
 		specName: specName;
 		componentNames: #('Default');
-		groupNames: #('core');
 		projectSpecFile: 'rowan/xxx.ston';
 		yourself.
 
@@ -48,7 +47,6 @@ RwLoadSpecificationV2Test >> testBasic_2 [
 		projectName: projectName;
 		specName: specName;
 		componentNames: #('Default');
-		groupNames: #('core');
 		projectSpecFile: 'rowan/xxx.ston';
 		revision: 'master';
 		gitUrl: 'file://x/y/z';
@@ -326,7 +324,7 @@ RwLoadSpecificationV2Test >> testIssue_530_3 [
 		projectName: projectName;
 		specName: specName;
 		componentNames: #('Default');
-		groupNames: #('core');
+		customConditionalAttributes: {'mine'};
 		projectSpecFile: 'rowan/xxx.ston';
 		revision: 'master';
 		gitUrl: 'file://x/y/z';
@@ -338,7 +336,7 @@ RwLoadSpecificationV2Test >> testIssue_530_3 [
 	self assert: projectSpecCopy = loadSpecification.
 
 	projectSpecCopy componentNames add: 'Boom'.
-	projectSpecCopy groupNames add: 'boom'.
+	projectSpecCopy customConditionalAttributes add: 'boom'.
 
 	self deny: projectSpecCopy = loadSpecification.
 

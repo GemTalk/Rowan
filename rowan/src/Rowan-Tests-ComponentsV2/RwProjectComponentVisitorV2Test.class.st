@@ -35,13 +35,12 @@ RwProjectComponentVisitorV2Test >> _visitVastTonelDemo_555: platformConditionalA
 RwProjectComponentVisitorV2Test >> testBasicVisit_independent [
 	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
 
-	| platformConditionalAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
+	| platformConditionalAttributes visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
 	platformConditionalAttributes := {'common'.
 	'gemstone'.
 	('3.5.0' asRwGemStoneVersionNumber)}.
 	projectAlias := 'RowanSample9_DiskConfig_Test'.
 	componentNamesToLoad := #('Core').
-	groupNames := #('core').
 
 	projectPath := self _cloneRowanSample9: projectAlias.	"clone https://github.com/dalehenrich/RowanSample9"
 

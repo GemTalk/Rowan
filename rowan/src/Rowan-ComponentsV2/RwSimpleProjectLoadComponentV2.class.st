@@ -59,7 +59,7 @@ RwSimpleProjectLoadComponentV2 >> initialize [
 
 { #category : 'ston' }
 RwSimpleProjectLoadComponentV2 >> instVarNamesInOrderForSton [
-	^ #(#'name' #'projectName' #'condition' #'groupName' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
+	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 ]
 
 { #category : 'accessing' }

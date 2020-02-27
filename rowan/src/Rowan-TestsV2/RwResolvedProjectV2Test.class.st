@@ -169,7 +169,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 	"move packages from one component to another, using removePackageNamed:... 
 		and addPackageNamed:... methods for RwResolvedProject. "
 
-	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject packageName componentName1 componentName2 conditionArray groupName component |
+	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject packageName componentName1 componentName2 conditionArray component |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -205,31 +205,24 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 	componentName1 := 'Core'.
 	componentName2 := 'subs/Nested'.
 	conditionArray := {'gemstone'}.
-	groupName := 'tests'.
 	resolvedProject
 		removePackageNamed: packageName
-		fromComponentNamed: componentName1
-		withConditions: conditionArray
-		andGroupName: groupName.
+		fromComponentNamed: componentName1.
 	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 	resolvedProject
 		addPackageNamed: packageName
-			toComponentNamed: componentName2
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName2;
 		yourself.
 	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
 	self
 		deny:
 			(((resolvedProject componentNamed: componentName1)
-				conditionalPackagesAtConditions: conditionArray
-				andGroup: groupName) includes: packageName).
+				packageNames) includes: packageName).
 	self
 		assert:
 			(((resolvedProject componentNamed: componentName2)
-				conditionalPackagesAtConditions: conditionArray
-				andGroup: groupName) includes: packageName).	"validate move in image"
+				packageNames) includes: packageName).	"validate move in image"
 
 	resolvedProject exportComponents.
 
@@ -240,7 +233,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	self
 		deny:
-			((component conditionalPackagesAtConditions: conditionArray andGroup: groupName)
+			((component packageNames)
 				includes: packageName).	"validate move on disk"
 
 
@@ -251,8 +244,9 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 	stonString := STON toStringPretty: component.	"useful in case of error"
 	self
 		assert:
-			((component conditionalPackagesAtConditions: conditionArray andGroup: groupName)
+			((component packageNames)
 				includes: packageName)	"validate move on disk"
+
 ]
 
 { #category : 'tests' }

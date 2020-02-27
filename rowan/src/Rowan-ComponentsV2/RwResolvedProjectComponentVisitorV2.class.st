@@ -126,40 +126,6 @@ RwResolvedProjectComponentVisitorV2 >> _visitComponents: componentNamesToRead [
 			self visit: component	"expect all component names to represent loadable components - throw error if a nested component is encountered" ]
 ]
 
-{ #category : 'private' }
-RwResolvedProjectComponentVisitorV2 >> _visitComponents: componentNamesToRead groupNames: aGroupNames [
-	| projectName componentDirectory projectsDirectory |
-	groupNames := aGroupNames.
-
-	projectName := resolvedProject projectName.
-	componentDirectory := resolvedProject componentsRoot.
-	componentDirectory exists
-		ifFalse: [ 
-			^ self
-				error:
-					'No component directory (' , componentDirectory pathString printString
-						, ') found for project ' , projectName printString ].
-	projectsDirectory := resolvedProject projectsRoot.
-	projectsDirectory exists
-		ifFalse: [ 
-			^ self
-				error:
-					'No projects directory (' , projectsDirectory pathString printString
-						, ') found for project ' , projectName printString ].
-	componentNamesToRead
-		do: [ :componentName | 
-			| component |
-			component := self readComponents
-				at: componentName
-				ifAbsentPut: [ 
-					RwBasicProjectLoadComponentV2
-						fromComponentsDirectory: componentDirectory
-						named: componentName ].
-			component projectName: projectName.
-
-			self visit: component	"expect all component names to represent loadable components - throw error if a nested component is encountered" ]
-]
-
 { #category : 'accessing' }
 RwResolvedProjectComponentVisitorV2 >> componentsPath [
 

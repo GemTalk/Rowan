@@ -322,30 +322,6 @@ RwAbstractProjectLoadComponentV2 >> packageNames [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames [
-	"Answer the collection of package names defined in the receiver."
-
-	| allDefinedPackageNames matchers |
-	allDefinedPackageNames := Set new.
-	matchers := self conditionalPropertyMatchers.
-	self conditionalProperties
-		keysAndValuesDo: [ :conditions :ignored | 
-			platformConfigurationAttributes
-				do: [ :anObject | 
-					matchers
-						keysAndValuesDo: [ :ar :groupMap | 
-							ar
-								do: [ :matcher | 
-									(matcher match: anObject)
-										ifTrue: [ 
-											groupMap
-												keysAndValuesDo: [ :groupName :packageMap | 
-													(groupNames includes: groupName)
-														ifTrue: [ allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ] ] ] ] ] ].
-	^ allDefinedPackageNames
-]
-
-{ #category : 'accessing' }
 RwAbstractProjectLoadComponentV2 >> removeComponentNamed: aComponentName [
 	"this can create empty componentName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
 

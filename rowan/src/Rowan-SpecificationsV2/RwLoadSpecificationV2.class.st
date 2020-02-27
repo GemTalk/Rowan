@@ -154,26 +154,24 @@ RwLoadSpecificationV2 >> = anObject [
 										and: [ 
 											self componentNames asArray sort = anObject componentNames asArray sort
 												and: [ 
-													self groupNames asArray sort = anObject groupNames asArray sort
+													self projectSpecFile = anObject projectSpecFile
 														and: [ 
-															self projectSpecFile = anObject projectSpecFile
+															self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
 																and: [ 
-																	self repositoryResolutionPolicy = anObject repositoryResolutionPolicy
+																	self gitUrl = anObject gitUrl
 																		and: [ 
-																			self gitUrl = anObject gitUrl
+																			self diskUrl = anObject diskUrl
 																				and: [ 
-																					self diskUrl = anObject diskUrl
+																					self mercurialUrl = anObject mercurialUrl
 																						and: [ 
-																							self mercurialUrl = anObject mercurialUrl
+																							self svnUrl = anObject svnUrl
 																								and: [ 
-																									self svnUrl = anObject svnUrl
+																									self revision = anObject revision
 																										and: [ 
-																											self revision = anObject revision
+																											self comment = anObject comment
 																												and: [ 
-																													self comment = anObject comment
-																														and: [ 
-																															self _platformProperties = anObject _platformProperties
-																																or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																													self _platformProperties = anObject _platformProperties
+																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'visiting' }
@@ -360,7 +358,6 @@ RwLoadSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self comment hash.
 	hashValue := hashValue bitXor: self componentNames hash.
 	hashValue := hashValue bitXor: self projectsHome hash.
-	hashValue := hashValue bitXor: self groupNames hash.
 	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
 	hashValue := hashValue bitXor: self _platformProperties hash.
 	^ hashValue

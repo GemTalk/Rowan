@@ -76,8 +76,7 @@ RwProjectDefinitionV2 >> _validate: platformConfigurationAttributes [
 
 	| definitionPackageNames componentPackageNames missingFromComponent errorMessage |
 	definitionPackageNames := self packageNames asSet.
-	componentPackageNames := Set new.
-	self components _validate: platformConfigurationAttributes.
+	componentPackageNames := self components _validate: platformConfigurationAttributes.
 	missingFromComponent := componentPackageNames - definitionPackageNames.
 	missingFromComponent isEmpty
 		ifTrue: [ ^ true ].

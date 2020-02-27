@@ -2,8 +2,7 @@ Class {
 	#name : 'RwAbstractRowanProjectLoadComponentV2',
 	#superclass : 'RwAbstractSimpleProjectLoadComponentV2',
 	#instVars : [
-		'componentNames',
-		'groupName'
+		'componentNames'
 	],
 	#category : 'Rowan-ComponentsV2'
 }
@@ -11,15 +10,21 @@ Class {
 { #category : 'comparing' }
 RwAbstractRowanProjectLoadComponentV2 >> = aRwAbstractSimpleProjectLoadComponentV2 [
 	^ super = aRwAbstractSimpleProjectLoadComponentV2
-		and: [ 
-			self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames
-				and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ] ]
+		and: [ self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames ]
 ]
 
 { #category : 'accessing' }
 RwAbstractRowanProjectLoadComponentV2 >> addComponentNamed: aComponentName [ 
 	"avoid duplicates and keep the list sorted"
 	self componentNames add: aComponentName.
+	componentNames := componentNames asSet asArray sort
+]
+
+{ #category : 'accessing' }
+RwAbstractRowanProjectLoadComponentV2 >> addComponentNames: aComponentNames [
+	"add component names"
+
+	self componentNames addAll: aComponentNames.
 	componentNames := componentNames asSet asArray sort
 ]
 
@@ -33,26 +38,14 @@ RwAbstractRowanProjectLoadComponentV2 >> componentNames [
 RwAbstractRowanProjectLoadComponentV2 >> conditionalPropertyMatchers [
 	| conditionalPropertyMatchers |
 	conditionalPropertyMatchers := Dictionary new
-		at: {(self _platformPatternMatcherFor: self condition)} put: {groupName};
+		at: {(self _platformPatternMatcherFor: self condition)} put: {};
 		yourself.
 	^ conditionalPropertyMatchers
 ]
 
-{ #category : 'accessing' }
-RwAbstractRowanProjectLoadComponentV2 >> groupName [
-	^groupName
-]
-
-{ #category : 'accessing' }
-RwAbstractRowanProjectLoadComponentV2 >> groupName: object [
-	groupName := object
-]
-
 { #category : 'comparing' }
 RwAbstractRowanProjectLoadComponentV2 >> hash [
-	| hashValue |
-	hashValue := super hash bitXor: self groupName hash.
-	^ hashValue bitXor: self componentNames hash
+	^ super hash bitXor: self componentNames hash
 ]
 
 { #category : 'initialization' }
@@ -76,26 +69,6 @@ RwAbstractRowanProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAtt
 						do: [ :matcher | 
 							(matcher match: anObject)
 								ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ].
-	^ allDefinedPackageNames
-]
-
-{ #category : 'accessing' }
-RwAbstractRowanProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames [
-	"Answer the collection of package names defined in the receiver."
-
-	| allDefinedPackageNames matchers |
-	allDefinedPackageNames := Set new.
-	matchers := self conditionalPropertyMatchers.
-	platformConfigurationAttributes
-		do: [ :anObject | 
-			matchers
-				keysAndValuesDo: [ :ar :theGroupNames | 
-					ar
-						do: [ :matcher | 
-							(matcher match: anObject)
-								ifTrue: [ 
-									(theGroupNames includes: groupName)
-										ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ] ].
 	^ allDefinedPackageNames
 ]
 
