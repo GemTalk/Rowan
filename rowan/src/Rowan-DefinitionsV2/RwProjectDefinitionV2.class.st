@@ -250,8 +250,21 @@ RwProjectDefinitionV2 >> addNewNestedComponentNamed: aComponentName comment: aSt
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName [
+	"the package is expected to already be present in a component - used when reading packages from disk"
 
-	self shouldNotImplement
+	| package |
+	(self components componentForPackageNamed: packageName)
+		ifNil: [ 
+			self
+				error:
+					'The package ' , packageName printString
+						, ' must already be present in a component' ].
+	package := RwPackageDefinition newNamed: packageName.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ]
 ]
 
 { #category : 'accessing' }

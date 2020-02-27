@@ -170,6 +170,13 @@ RwResolvedProjectV2 >> addNewNestedComponentNamed: aComponentName comment: aStri
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addPackageNamed: packageName [
+	"the package is expected to already be present in a component - used when reading packages from disk"
+
+	^ self _projectDefinition addPackageNamed: packageName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName [
 	^ self _projectDefinition
 		addPackageNamed: packageName

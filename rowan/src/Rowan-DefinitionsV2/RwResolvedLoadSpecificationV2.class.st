@@ -25,22 +25,6 @@ RwResolvedLoadSpecificationV2 >> customConditionalAttributes: anArray [
 	^ self _loadSpecification customConditionalAttributes: anArray
 ]
 
-{ #category : 'accessing' }
-RwResolvedLoadSpecificationV2 >> groupNames [
-	"list of groups to be loaded. 
-		Default is {'core' 'tests'}"
-
-	^ self _loadSpecification groupNames
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadSpecificationV2 >> groupNames: anArray [
-	"list of groups to be loaded. 
-		Default is {'core' 'tests'}"
-
-	self _loadSpecification groupNames: anArray
-]
-
 { #category : 'printing' }
 RwResolvedLoadSpecificationV2 >> printOn: aStream [
 	super printOn: aStream.
