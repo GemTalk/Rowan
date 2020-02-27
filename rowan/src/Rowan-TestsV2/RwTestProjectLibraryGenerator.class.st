@@ -151,13 +151,12 @@ RwTestProjectLibraryGenerator >> _addApplication_SubApplicationComponentsFor_002
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
 	resolvedProject
 		comment: 'spec_0000 definitions';
-		addComponentNamed: 'Core'
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						add: 'tests' -> {'core'};
-						yourself)
+		addNewComponentNamed: 'Core'
 			comment: 'Primary component used for loading the core classes.';
+		addNewComponentNamed: 'Tests'
+			toComponentNamed: 'Core'
+			condition: {'tests'}
+			comment: 'Primary component used for loading the test classes.';
 		yourself.
 	^ resolvedProject
 ]
@@ -178,20 +177,15 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0002: resolvedProject [
 	packageName4 := projectName , '-' , 'GemStone-Tests'.
 	packageName5 := projectName , '-' , 'Tests'.
 	resolvedProject
-		addPackagesNamed:
-				{packageName1.
+		addPackagesNamed: {packageName1.
 				packageName2.
 				packageName3}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		addPackagesNamed:
-				{packageName4.
+			toComponentNamed: 'Core';
+		addPackagesNamed: {packageName4.
 				packageName5}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'tests/Tests';
 		yourself.
+
 	className := projectName , 'Class1'.
 	((resolvedProject packageNamed: packageName1)
 		addClassNamed: className
@@ -254,30 +248,17 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0003: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004_b: resolvedProject [
-	| userId |
-	userId := 'SystemUser'.
-	(resolvedProject
-		addComponentNamed: 'Core3'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
+	resolvedProject
+		addNewComponentNamed: 'Core3'
 		comment:
 			'contains ' , projectName
 				,
 					'-Core1 package, which is a duplicate reference, since the Core1 component also references the '
-				, projectName , '-Core1 package')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
-			addComponentNames: #('Core1');
-		yourself.
+				, projectName , '-Core1 package'.
+	(resolvedProject componentNamed: 'Core3') addComponentNamed: 'Core1'.
 	resolvedProject
 		addPackageNamed: projectName , '-Core1'
-			toComponentNamed: 'Core3'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		yourself.
+		toComponentNamed: 'Core3' yourself.
 	^ self _addPackageCore1DefinitionsFor_0004: resolvedProject
 ]
 
@@ -285,47 +266,31 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004_b: resolvedProject [
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: resolvedProject [
 	| className packageName userId |
 	userId := resolvedProject _gemstoneAllUsersName.
-	(resolvedProject
-		addComponentNamed: 'Core1'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
-		comment: 'contains ' , projectName , '-Core1 package')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
-			addComponentNames: #('Core2');
+	resolvedProject
+		addNewComponentNamed: 'Core1'
+			comment:  'contains ' , projectName , '-Core1 package';
+		addNewComponentNamed: 'Tests'
+			toComponentNamed: 'Core1'
+			condition: {'tests'}
+			comment: 'contains ' , projectName , '-Tests package';
+		addNewComponentNamed: 'Core2'
+			comment: 'contains ' , projectName , '-Core2 package';
 		yourself.
-	(resolvedProject
-		addComponentNamed: 'Core2'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
-		comment: 'contains ' , projectName , '-Core2 package')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
-			addComponentNames: #('Core1');
-		yourself.
+	(resolvedProject componentNamed: 'Core1')
+		addComponentNamed: 'Core2'.
+	(resolvedProject componentNamed: 'Core2')
+		addComponentNamed: 'Core1'.
 	resolvedProject
 		addPackageNamed: projectName , '-Core1'
 			toComponentNamed: 'Core1'
-			withConditions: {'common'}
-			andGroupName: 'core'
 			gemstoneDefaultSymbolDictionaryForUser:
 				userId -> RwAbstractV2Test _sampleSymbolDictionaryName2;
 		addPackageNamed: projectName , '-Core2'
-			toComponentNamed: 'Core2'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName3
+			toComponentNamed: 'Core2';
+		gemstoneSetSymbolDictName: RwAbstractV2Test _sampleSymbolDictionaryName3 
 			forPackageNamed: projectName , '-Core2';
 		addPackageNamed: projectName , '-Tests'
-			toComponentNamed: 'Core1'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'tests/Tests';
 		gemstoneSetDefaultSymbolDictNameForUser: userId
 			to: RwAbstractV2Test _sampleSymbolDictionaryName1;
 		yourself.
@@ -363,17 +328,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedProject [
 	className2 := projectName , 'IdentityKeyValueDictionary'.
 
 	resolvedProject
-		addPackagesNamed:
-				{packageName1.
+		addPackagesNamed: {packageName1.
 				packageName2}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
-		addPackagesNamed:
-				{packageName3}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'Core';
+		addPackagesNamed: {packageName3}
+			toComponentNamed: 'tests/Tests';
 		yourself.
 
 	resolvedProject
@@ -589,9 +548,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0011: resolvedProject [
 				{
 				packageName2.
 				}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
+			toComponentNamed: 'Core';
 		yourself.
 	((resolvedProject packageNamed: packageName2)
 		addClassExtensionNamed: className1)
@@ -629,8 +586,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0012: resolvedProject [
 	resolvedProject
 		addPackagesNamed: {packageName4}
 			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
 		yourself.
 
 	resolvedProject
@@ -686,8 +641,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0013: resolvedProject [
 	resolvedProject
 		addPackagesNamed: {packageName4}
 			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
 		yourself.
 
 	resolvedProject
@@ -743,8 +696,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0014: resolvedProject [
 	resolvedProject
 		addPackagesNamed: {packageName4}
 			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
 		yourself.
 
 	resolvedProject
@@ -862,9 +813,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/553"
 
-	| componentName groupName packageName1 packageName2 extensionClassName1 className1 className2 |
+	| componentName packageName1 packageName2 extensionClassName1 className1 className2 |
 	componentName := 'Core'.
-	groupName := 'core'.
 	packageName1 := projectName , '-Vast-Application'.
 	packageName2 := projectName , '-Common-Core'.
 	extensionClassName1 := 'TestCase'.
@@ -876,27 +826,17 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 		packageConvention: 'Rowan';
 		yourself.
 
-	resolvedProject loadSpecification
-		groupNames: {groupName};
-		yourself.
-
 	resolvedProject
 		comment:
 				'sample vast/gemstone project, based on project structure in https://github.com/dalehenrich/tonel-demos/tree/rowan_553';
-		addComponentNamed: componentName
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						yourself)
+		addNewComponentNamed: 'Core'
 			comment: 'Primary component used for loading the core classes.';
-		addPackageNamed: packageName1
+		addNewComponentNamed: componentName
 			toComponentNamed: componentName
-			withConditions: {'vast'}
-			andGroupName: groupName;
-		addPackageNamed: packageName2
-			toComponentNamed: componentName
-			withConditions: {'common'}
-			andGroupName: groupName;
+			condition: {'vast'}
+			comment: 'manage vast packages';
+		addPackageNamed: packageName1 toComponentNamed: 'vast/' , componentName;
+		addPackageNamed: packageName2 toComponentNamed: componentName;
 		yourself.
 
 	(resolvedProject packageNamed: packageName1)
@@ -1039,48 +979,26 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 	groupName := 'core'.
 
 	resolvedProject
-		addNestedComponentNamed: componentName1
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						add: 'tests' -> {'core'};
-						yourself)
+		addSimpleNestedComponentNamed: componentName1
+			condition: 'common'
 			comment: '';
-		addNestedComponentNamed: componentName2
-			definedGroupNames:
-				(Dictionary new
-						add: 'core' -> {};
-						add: 'tests' -> {'core'};
-						yourself)
+		addSimpleNestedComponentNamed: componentName2
+			condition: 'common'
 			comment: '';
 		gemstoneSetSymbolDictName: nil forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: nil forPackageNamed: packageName2;
 		removePackageNamed: packageName1
-			fromComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			fromComponentNamed: componentName;
 		removePackageNamed: packageName2
-			fromComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			fromComponentNamed: componentName;
 		addPackageNamed: packageName1
-			toComponentNamed: componentName1
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName1;
 		addPackageNamed: packageName2
-			toComponentNamed: componentName2
-			withConditions: conditionArray
-			andGroupName: groupName;
-
+			toComponentNamed: componentName2;
 		addComponentNamed: componentName1
-			toComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName;
 		addComponentNamed: componentName2
-			toComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
-
+			toComponentNamed: componentName;
 		yourself.
 
 	((resolvedProject packageNamed: packageName2)
@@ -1116,13 +1034,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0020: resolvedProject [
 		removeComponentNamed: componentName1;
 		removeComponentNamed: componentName2;
 		addPackageNamed: packageName1
-			toComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName;
 		addPackageNamed: packageName2
-			toComponentNamed: componentName
-			withConditions: conditionArray
-			andGroupName: groupName;
+			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName1
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName1
@@ -1356,41 +1270,37 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 		yourself.
 
 	resolvedProject removeComponentNamed: 'Core'.
-	resolvedProject components
-		addSimpleComponentNamed: 'Core'
+	resolvedProject removeComponentNamed: 'tests/Tests'.
+	resolvedProject
+		addNewComponentNamed: 'Core'
 		condition: 'common'
-		groupName: 'core'
 		comment:
 			'master component, that will load 4 simple components in order with each component doing a complete, independent load'.
 
 	resolvedProject
-		addSimpleComponentNamed: 'Core1'
+		addNewComponentNamed: 'Core1'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'First component for loading first package';
 		addPackagesNamed:
 				{packageName1.
 					testPackageName1}
 			toComponentNamed: 'Core1';
-		addSimpleComponentNamed: 'Core2'
+		addNewComponentNamed: 'Core2'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'Second component for loading second package';
 		addPackagesNamed:
 				{packageName2.
 					testPackageName2}
 			toComponentNamed: 'Core2';
-		addSimpleComponentNamed: 'Core3'
+		addNewComponentNamed: 'Core3'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'Third component for loading third package';
 		addPackagesNamed:
 				{packageName3.
 					testPackageName3}
 			toComponentNamed: 'Core3';
-		addSimpleComponentNamed: 'Core4'
+		addNewComponentNamed: 'Core4'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'Fourth component for loading fourth package';
 		addPackagesNamed:
 				{packageName4.
@@ -1472,7 +1382,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 				'testExport
 	"exexute without error"
 	| filePath object |
-	filePath := (FileReference newTempFilePrefix: ''', projectName , '_export'' suffix: ''ston'') pathString.
+	filePath := (FileReference newTempFilePrefix: ''' , projectName
+						,
+							'_export'' suffix: ''ston'') pathString.
 	object := ' , className1
 						,
 							' new ivar1: filePath.
@@ -1545,25 +1457,36 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 
 	resolvedProject
 		removeComponentNamed: 'Core';
-		addSimpleComponentNamed: 'Core'
+		removeComponentNamed: 'tests/Tests';
+		addNewComponentNamed: 'Core'
 			condition: 'common'
-			groupName: 'core'
 			comment: 'Top-level component for loading the application';
-		addSimpleComponentNamed: 'Tests'
-			condition: 'common'
-			groupName: 'tests'
-			comment: 'Top-level component for the application tests';
-		addSimpleNestedComponentNamed: 'platform/Extensions-GemStone'
-			condition: 'gemstone'
-			groupName: 'core'
+		addPlatformComponentNamed: 'Core'
+			toComponentNamed: 'Core'
+			pathNameArray:
+				{'platform'.
+				'gemstone'}
+			conditionPathArray:
+				{'common'.
+				{'gemstone'}}
 			comment: 'Component for loading gemstone-specific packages';
-		addSimpleNestedComponentNamed: 'platform/Extensions-Pharo'
-			condition: 'pharo'
-			groupName: 'core'
+		addPlatformComponentNamed: 'Core'
+			toComponentNamed: 'Core'
+			pathNameArray:
+				{'platform'.
+				'pharo'}
+			conditionPathArray:
+				{'common'.
+				{'pharo'}}
 			comment: 'Component for loading pharo-specific packages';
-		addSimpleNestedComponentNamed: 'platform/Extensions-VAST'
-			condition: 'vast'
-			groupName: 'core'
+		addPlatformComponentNamed: 'Core'
+			toComponentNamed: 'Core'
+			pathNameArray:
+				{'platform'.
+				'vast'}
+			conditionPathArray:
+				{'common'.
+				{'vast'}}
 			comment:
 				'Component for loading vast-specific test packages and components. 
 		The component named VAST_IMAGE/STON is a pseudo-component that refers to 
@@ -1571,9 +1494,16 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 
 		The package named RowanSample9-VAST-Application, which contains the Envy 
 		Application class is also included in this component.';
-		addSimpleNestedComponentNamed: 'platform/Tests-VAST'
-			condition: 'vast'
-			groupName: 'tests'
+		addPlatformComponentNamed: 'Tests'
+			toComponentNamed: 'Core'
+			pathNameArray:
+				{'tests'.
+				'platform'.
+				'vast'}
+			conditionPathArray:
+				{'test'.
+				'common'.
+				{'vast'}}
 			comment:
 				'Component for loading vast-specific test packages and components. 
 		The component named VAST_IMAGE/SUnit is a pseudo-component that refers to 
@@ -1581,36 +1511,27 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 		yourself.
 
 	resolvedProject
-		addComponentNamed: 'Tests' toComponentNamed: 'Core';
-		addComponentNamed: 'Core' toComponentNamed: 'Tests';
-		addComponentNamed: 'platform/Tests-VAST' toComponentNamed: 'Tests';
-		addComponentNamed: 'platform/Extensions-GemStone' toComponentNamed: 'Core';
-		addComponentNamed: 'platform/Extensions-Pharo' toComponentNamed: 'Core';
-		addComponentNamed: 'platform/Extensions-VAST' toComponentNamed: 'Core';
-		yourself.
-
-	resolvedProject
 		addPackagesNamed:
 				{packageName1.
 					packageName2}
 			toComponentNamed: 'Core';
-		addPackageNamed: packageName3 toComponentNamed: 'Tests';
-		addPackageNamed: packageName4
-			toComponentNamed: 'platform/Extensions-GemStone';
-		addPackageNamed: packageName5 toComponentNamed: 'platform/Extensions-Pharo';
+		addPackageNamed: packageName3 toComponentNamed: 'tests/Tests';
+		addPackageNamed: packageName4 toComponentNamed: 'platform/gemstone/Core';
+		addPackageNamed: packageName5 toComponentNamed: 'platform/pharo/Core';
 		addPackagesNamed:
 				{packageName6.
 					packageName7}
-			toComponentNamed: 'platform/Extensions-VAST';
-		addPackageNamed: packageName8 toComponentNamed: 'platform/Tests-VAST';
+			toComponentNamed: 'platform/vast/Core';
+		addPackageNamed: packageName8 toComponentNamed: 'tests/platform/vast/Tests';
 		yourself.
 
+false ifTrue: [ 
 	resolvedProject
-		addComponentNamed: 'VAST_IMAGE/STON'
-			toComponentNamed: 'platform/Extensions-VAST';
-		addComponentNamed: 'VAST_IMAGE/Sunit' toComponentNamed: 'platform/Tests-VAST';
+		addComponentNamed: 'VAST_IMAGE/STON' toComponentNamed: 'platform/vast/Core';
+		addComponentNamed: 'VAST_IMAGE/Sunit'
+			toComponentNamed: 'tests/platform/vastCore';
 		yourself.	"add the VAST_IMAGE application dependencies"
-
+].
 	resolvedProject
 		_validate:
 				{'common'.
@@ -1638,14 +1559,17 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 	loadSpecification_0025 := resolvedProject_0025 _loadSpecification.
 	packageNames := resolvedProject_0025 packageNames.
 
-	loadSpecification_0025 groupNames: {}.
+	loadSpecification_0025 customConditionalAttributes: {'tests'}.
 
 	resolvedProject_0025
 		removeComponentNamed: 'Core';
-		addSimpleComponentNamed: 'Core' condition: 'common' comment: 'the component';
+		addNewComponentNamed: 'Core' condition: 'common' comment: 'the component';
+		addComponentNamed: 'tests/Tests' toComponentNamed: 'Core';
 		yourself.
 	packageNames
-		do: [ :packageName | resolvedProject_0025 addPackageNamed: packageName toComponentNamed: 'Core' ].
+		do: [ :packageName | 
+			packageName ~= (projectName , '-Tests')
+				ifTrue: [ resolvedProject_0025 addPackageNamed: packageName toComponentNamed: 'Core' ] ].
 
 	1 to: 3 do: [ :index | 
 		| resolvedProjectName suffix loadSpecification specName resolvedProject baseName |
@@ -1658,7 +1582,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 			projectAlias: resolvedProject_0025 projectName;
 			projectsHome: self projectsHome;
 			gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-			groupNames: {};
 			yourself.
 
 		baseName := 'rowan' , suffix.
@@ -1667,15 +1590,18 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 			revision: loadSpecification_0025 revision;
 			gitUrl: self projectUrl;
 			componentNames: {'Core'};
+			customConditionalAttributes: {'tests'};
 			comment: loadSpecification_0025 comment;
 			yourself.
 
 		resolvedProject := loadSpecification resolve.
 
 		resolvedProject
-			addSimpleComponentNamed: 'Core'
-			condition: 'common'
-			comment: 'the component'.
+			addNewComponentNamed: 'Core' condition: 'common' comment: 'the component';
+			addNewComponentNamed: 'tests/Tests'
+				condition: 'tests'
+				comment: 'the test component';
+			yourself.
 
 		resolvedProject projectSpecification
 			componentsPath: baseName , '/components';
@@ -2294,13 +2220,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName
 	| className packageName |
 	resolvedProject
 		addPackagesNamed: {(aProjectName , '-Core')}
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core';
+			toComponentNamed: 'Core';
 		addPackageNamed: aProjectName , '-Tests'
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'tests';
+			toComponentNamed: 'tests/Tests';
 		yourself.
 	packageName := aProjectName , '-Core'.
 	className := aProjectName , 'Class1'.
@@ -2344,10 +2266,12 @@ RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDef
 RwTestProjectLibraryGenerator >> _addSimpleDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
+		addComponentNamed:  'tests/Tests'
+			toComponentNamed: 'Core';
 		addPackagesNamed: {(aProjectName , '-Core')}
 			toComponentNamed: 'Core';
 		addPackageNamed: aProjectName , '-Tests'
-			toComponentNamed: 'Core';
+			toComponentNamed: 'tests/Tests';
 		yourself.
 	packageName := aProjectName , '-Core'.
 	className := aProjectName , 'Class1'.
@@ -2596,7 +2520,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
-	(resolvedProject repositoryRoot / 'rowan/doits') ensureDeleteAll.
+	(resolvedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
 
 	addDefinitionsBlock value: resolvedProject.
 
@@ -2664,6 +2588,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -2709,6 +2634,7 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -2753,9 +2679,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -2800,9 +2724,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -2848,9 +2770,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core3'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -2917,9 +2837,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core1'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -2973,9 +2891,7 @@ RwTestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -3023,9 +2939,7 @@ RwTestProjectLibraryGenerator >> genSpec_0006: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -3078,9 +2992,7 @@ RwTestProjectLibraryGenerator >> genSpec_0007: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -3131,9 +3043,7 @@ RwTestProjectLibraryGenerator >> genSpec_0008: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -3182,9 +3092,7 @@ RwTestProjectLibraryGenerator >> genSpec_0009: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -3233,9 +3141,7 @@ RwTestProjectLibraryGenerator >> genSpec_0010: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -3283,9 +3189,7 @@ RwTestProjectLibraryGenerator >> genSpec_0011: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -3338,9 +3242,7 @@ RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: title;
 		yourself.
 
@@ -3393,9 +3295,7 @@ RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -3450,9 +3350,7 @@ RwTestProjectLibraryGenerator >> genSpec_0014: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -3516,9 +3414,7 @@ RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -3567,9 +3463,7 @@ RwTestProjectLibraryGenerator >> genSpec_0016: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -3617,9 +3511,7 @@ RwTestProjectLibraryGenerator >> genSpec_0017: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		comment: indexCard title;
 		yourself.
 
@@ -3669,9 +3561,6 @@ RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
 		comment: indexCard title;
 		yourself.
 
@@ -3719,9 +3608,7 @@ RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -3772,9 +3659,7 @@ RwTestProjectLibraryGenerator >> genSpec_0020: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -3825,9 +3710,7 @@ RwTestProjectLibraryGenerator >> genSpec_0021: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -3878,9 +3761,7 @@ RwTestProjectLibraryGenerator >> genSpec_0022: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -3931,9 +3812,7 @@ RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -3988,9 +3867,7 @@ RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -4041,9 +3918,7 @@ RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.

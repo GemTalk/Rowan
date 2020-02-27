@@ -56,36 +56,11 @@ RwAbstractProjectComponentVisitorV2 >> _processConditionalProperties: aProjectLo
 				ifTrue: [ 
 					groupMap
 						keysAndValuesDo: [ :group :map | 
-							(self groupNames includes: group)
-								ifTrue: [ 
-									self
-										_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
-										for: aProjectLoadConfiguration.
-									self componentNames
-										addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
-									self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ] ]
-]
-
-{ #category : 'private' }
-RwAbstractProjectComponentVisitorV2 >> _processGroupNames [
-
-	| seedGroupNames seeded |
-	seedGroupNames := groupNames asSet copy.
-	seeded := Set new.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				referencedGroupNames do: [:refGroupName |
-					(seeded includes: refGroupName)
-						ifFalse: [
-						"ensure that we seed each group only once"
-						seeded add: refGroupName.
-						seedGroupNames add: refGroupName ] ] ] ].
+							self
+								_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
+								for: aProjectLoadConfiguration.
+							self componentNames addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
+							self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ]
 ]
 
 { #category : 'private' }
@@ -106,20 +81,6 @@ RwAbstractProjectComponentVisitorV2 >> componentsPath [
 	^ self subclassResponsibility: #'componentsPath'
 ]
 
-{ #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> groupNames [
-
-	^ groupNames
-
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectComponentVisitorV2 >> groupNames: aColl [
-
-	groupNames := aColl copy
-
-]
-
 { #category : 'initialization' }
 RwAbstractProjectComponentVisitorV2 >> initialize [
 	visitedComponentNames := Set new.
@@ -128,7 +89,6 @@ RwAbstractProjectComponentVisitorV2 >> initialize [
 	readComponents := Dictionary new.
 	readProjects := Dictionary new.
 	platformConditionalAttributes := #().
-	groupNames := Set new.
 	projectLoadSpecs := Set new.
 	visitedComponents := Dictionary new
 ]
@@ -213,7 +173,6 @@ RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadCo
 	self _visited: aProjectLoadComponent.
 
 	definedGroupNames := aProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
 
 	self _processConditionalProperties: aProjectLoadComponent.
 
@@ -235,24 +194,21 @@ RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleP
 
 	self _visited: aSimpleProjectLoadComponent.
 
-	(self groupNames isEmpty
-		or: [ self groupNames includes: aSimpleProjectLoadComponent groupName ])
-		ifTrue: [ 
-			aSimpleProjectLoadComponent conditionalPropertyMatchers
-				keysAndValuesDo: [ :platformMatchers :ignored | 
-					(self _platformAttributeMatchIn: platformMatchers)
-						ifTrue: [ 
-							self
-								_addPackageNames: aSimpleProjectLoadComponent packageNames
-								for: aSimpleProjectLoadComponent.
-							self componentNames addAll: aSimpleProjectLoadComponent componentNames.
-							self projectNames addAll: aSimpleProjectLoadComponent projectNames ] ] ].
+	aSimpleProjectLoadComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					self
+						_addPackageNames: aSimpleProjectLoadComponent packageNames
+						for: aSimpleProjectLoadComponent.
+					self componentNames addAll: aSimpleProjectLoadComponent componentNames.
+					self projectNames addAll: aSimpleProjectLoadComponent projectNames ] ].
 
 	(self
 		_components: self componentsPath
 		forProject: aSimpleProjectLoadComponent projectName)
 		do: [ :component | 
-			(visitedComponentNames includes:component name)
+			(visitedComponentNames includes: component name)
 				ifFalse: [ component acceptNestedVisitor: self ] ].
 
 	(self

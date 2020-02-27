@@ -47,7 +47,6 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_independent [
 
 	visitor := RwIndependentComponentVisitorV2 new
 		platformConditionalAttributes: platformConditionalAttributes;
-		groupNames: groupNames;
 		yourself.
 
 	self assert: visitor packageNames isEmpty.

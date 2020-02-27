@@ -8,12 +8,11 @@ Class {
 }
 
 { #category : 'reading' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
 	visitor := self new
 		_readComponentsForResolvedProject: resolvedProject
 		withComponentNames: componentNamesToRead
-		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes.
 	resolvedProject
 		projectDefinitionSourceProperty:
@@ -24,26 +23,22 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 ]
 
 { #category : 'reading' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead.
-	groupNames}}.
+	componentNamesToRead}}.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| nextDefArray rp cn gn |
+			| nextDefArray rp cn |
 			nextDefArray := projectVisitorQueue removeFirst.
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
-			gn := nextDefArray at: 3.
-			gn := nextDefArray at: 3.
 
 			visitor := self
 				readProjectForResolvedProject: rp
 				withComponentNames: cn
-				groupNames: gn
 				platformConditionalAttributes: platformConditionalAttributes.
 
 			projectVisitedQueue
@@ -58,8 +53,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 					projectVisitorQueue
 						addLast:
 							{theResolvedProject.
-							(loadSpec componentNames).
-							(loadSpec groupNames)} ] ].
+							(loadSpec componentNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
@@ -72,10 +66,9 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 ]
 
 { #category : 'instance creation' }
-RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes groupNames: groupNames [
+RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes [
 	^ self new
 		platformConditionalAttributes: platformConditionalAttributes;
-		groupNames: groupNames;
 		resolvedProject: resolvedProject;
 		yourself
 ]
@@ -87,8 +80,8 @@ RwResolvedProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: a
 ]
 
 { #category : 'private' }
-RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead groupNames: aGroupNames platformConditionalAttributes: aPlatformConditionalAttributes [
-	| theComponentNames theGroupNames |
+RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: aPlatformConditionalAttributes [
+	| theComponentNames  |
 	resolvedProject := aResolvedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 
@@ -97,10 +90,40 @@ RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResol
 	theComponentNames := componentNamesToRead isEmpty
 		ifTrue: [ resolvedProject componentNames ]
 		ifFalse: [ componentNamesToRead ].
-	theGroupNames := aGroupNames isEmpty
-		ifTrue: [ resolvedProject groupNames ]
-		ifFalse: [ aGroupNames ].
-	^ self _visitComponents: theComponentNames groupNames: theGroupNames
+	^ self _visitComponents: theComponentNames
+]
+
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _visitComponents: componentNamesToRead [
+	| projectName componentDirectory projectsDirectory |
+
+	projectName := resolvedProject projectName.
+	componentDirectory := resolvedProject componentsRoot.
+	componentDirectory exists
+		ifFalse: [ 
+			^ self
+				error:
+					'No component directory (' , componentDirectory pathString printString
+						, ') found for project ' , projectName printString ].
+	projectsDirectory := resolvedProject projectsRoot.
+	projectsDirectory exists
+		ifFalse: [ 
+			^ self
+				error:
+					'No projects directory (' , projectsDirectory pathString printString
+						, ') found for project ' , projectName printString ].
+	componentNamesToRead
+		do: [ :componentName | 
+			| component |
+			component := self readComponents
+				at: componentName
+				ifAbsentPut: [ 
+					RwBasicProjectLoadComponentV2
+						fromComponentsDirectory: componentDirectory
+						named: componentName ].
+			component projectName: projectName.
+
+			self visit: component	"expect all component names to represent loadable components - throw error if a nested component is encountered" ]
 ]
 
 { #category : 'private' }

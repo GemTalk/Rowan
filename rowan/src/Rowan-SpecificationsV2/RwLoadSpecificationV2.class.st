@@ -68,7 +68,7 @@ RwLoadSpecificationV2 >> _validate [
 		1. platform implementation is responsible for validating platform structures"
 
 	| repoUrls |
-	#(#'componentNames' #'groupNames' #'specName' #'projectSpecFile')
+	#(#'componentNames' #'specName' #'projectSpecFile')
 		do: [ :messageName | 
 			(self perform: messageName)
 				ifNil: [ 
@@ -344,18 +344,6 @@ RwLoadSpecificationV2 >> gitUrl: anUrlString [
 	gitUrl := anUrlString
 ]
 
-{ #category : 'accessing' }
-RwLoadSpecificationV2 >> groupNames [
-	^ groupNames
-]
-
-{ #category : 'accessing' }
-RwLoadSpecificationV2 >> groupNames: anArray [
-	anArray
-		ifNil: [ groupNames := anArray ]
-		ifNotNil: [ groupNames := anArray asArray ]
-]
-
 { #category : 'comparing' }
 RwLoadSpecificationV2 >> hash [
 	| hashValue |
@@ -382,7 +370,6 @@ RwLoadSpecificationV2 >> hash [
 RwLoadSpecificationV2 >> initialize [
 	super initialize.
 	componentNames := {}.
-	groupNames := {'core'}.
 	projectSpecFile := 'rowan/project.ston'.
 	comment := ''
 ]
@@ -425,7 +412,6 @@ RwLoadSpecificationV2 >> postCopy [
 
 	super postCopy.
 	componentNames := componentNames copy.
-	groupNames := groupNames copy.
 	customConditionalAttributes := customConditionalAttributes copy.
 	platformProperties
 		ifNotNil: [ 

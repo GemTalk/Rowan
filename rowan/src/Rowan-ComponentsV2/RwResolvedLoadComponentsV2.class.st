@@ -47,7 +47,7 @@ RwResolvedLoadComponentsV2 >> _validate [
 ]
 
 { #category : 'private' }
-RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes groupNames: groupNames [
+RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes [
 	"ensure that each of the components is valid and return a list of the package names managed by all components for the given group name"
 
 	| componentPackageNames |
@@ -61,8 +61,7 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes groupNa
 				addAll:
 					(component
 						packageNamesForPlatformConfigurationAttributes:
-							platformConfigurationAttributes
-						groupNames: groupNames) ].
+							platformConfigurationAttributes) ].
 	^ componentPackageNames
 ]
 
@@ -156,6 +155,20 @@ RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: com
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	component
+		addPackageNames: {packageName}.
+	^ component
+]
+
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+	| component |
+	component := self
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	component
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
+			andPackageName: packageName
+			setSymbolDictNameTo: aSymbolDictAssoc value;
 		addPackageNames: {packageName}.
 	^ component
 ]

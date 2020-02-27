@@ -140,11 +140,26 @@ RwResolvedProjectV2 >> addNewComponentNamed: aComponentName comment: aString [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
+	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray [
+	^ self
+		addNewComponentNamed: componentName
+		toComponentNamed: toComponentName
+		condition: conditionPathArray
+		comment: ''
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
 	^ self _projectDefinition
 		addNewComponentNamed: componentName
 		toComponentNamed: toComponentName
 		condition: conditionPathArray
+		comment: aString
 ]
 
 { #category : 'project definition' }
@@ -159,6 +174,14 @@ RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentN
 	^ self _projectDefinition
 		addPackageNamed: packageName
 		toComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+	^ self _projectDefinition
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
 ]
 
 { #category : 'project definition' }
@@ -211,11 +234,22 @@ RwResolvedProjectV2 >> addPlatformComponentNamed: componentName toComponentNamed
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	^ self
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: ''
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	^ self _projectDefinition
 		addPlatformComponentNamed: aComponentName
 		toComponentNamed: toComponentName
 		pathNameArray: pathNameArray
 		conditionPathArray: conditionPathArray
+		comment: aString
 ]
 
 { #category : 'project definition' }
@@ -617,10 +651,7 @@ RwResolvedProjectV2 >> read [
 	"return the receiver with a new set of definitions read from disk"
 
 	self repositoryExists
-		ifTrue: [ 
-			^ self
-				readProjectComponentNames: self componentNames
-				groupNames: self groupNames ]
+		ifTrue: [ ^ self readProjectComponentNames: self componentNames ]
 ]
 
 { #category : 'actions' }
@@ -631,7 +662,6 @@ RwResolvedProjectV2 >> read: platformConditionalAttributes [
 
 	^ self
 		readProjectComponentNames: self componentNames
-		groupNames: self groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
@@ -657,19 +687,18 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> readProjectComponentNames: componentNames groupNames: groupNames [
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return the receiver with a new set of definitions read from disk"
 
 	^ self
 		readProjectComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> readProjectComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return the receiver with a new set of definitions read from disk"
@@ -677,7 +706,6 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames groupNames: gro
 	^ Rowan projectTools readV2
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
@@ -687,7 +715,7 @@ RwResolvedProjectV2 >> readProjectSet [
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	^ self readProjectSetComponentNames: self componentNames groupNames: self groupNames
+	^ self readProjectSetComponentNames: self componentNames
 ]
 
 { #category : 'actions' }
@@ -698,33 +726,18 @@ RwResolvedProjectV2 >> readProjectSet: platformConditionalAttributes [
 
 	^ self
 		readProjectSetComponentNames: self componentNames
-		groupNames: self groupNames
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames groupNames: groupNames [
+RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ self
 		readProjectSetComponentNames: componentNames
-		groupNames: groupNames
 		platformConditionalAttributes: self platformConditionalAttributes
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
-		withComponentNames: componentNames
-		groupNames: groupNames
-		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'actions' }
@@ -736,7 +749,6 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformCond
 	^ Rowan projectTools readV2
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
-		groupNames: #()
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
@@ -757,6 +769,13 @@ RwResolvedProjectV2 >> removeComponentNamed: componentName fromComponentNamed: f
 { #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
 	^ self _projectDefinition removePackageNamed: packageName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removePackageNamed: packageName fromComponentNamed: componentName [
+	^ self _projectDefinition
+		removePackageNamed: packageName
+		fromComponentNamed: componentName
 ]
 
 { #category : 'project definition' }

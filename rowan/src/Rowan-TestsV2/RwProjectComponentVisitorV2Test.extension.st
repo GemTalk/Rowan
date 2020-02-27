@@ -15,7 +15,6 @@ RwProjectComponentVisitorV2Test >> _cloneRowanSample9: projectAlias [
 		specName: projectAlias;
 		projectsHome: projectsHome;
 		componentNames: #('Core');
-		groupNames: #('core');
 		projectSpecFile: 'rowan/project.ston';
 		gitUrl: 'https://github.com/dalehenrich/RowanSample9';
 		revision: 'spec_0008';
@@ -97,7 +96,7 @@ RwProjectComponentVisitorV2Test >> _readVastTonelDemo_555: platformAttributes de
 RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
 
-	| platformConditionalAttributes groupNames componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
+	| platformConditionalAttributes componentsRoot basicProject visitor componentNamesToLoad projectName loadSpec projectAlias projectPath projectsHome |
 	platformConditionalAttributes := {'common'.
 	'gemstone'.
 	('3.5.0' asRwGemStoneVersionNumber)}.
@@ -116,22 +115,19 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 		specName: projectName;
 		projectsHome: projectsHome;
 		componentNames: componentNamesToLoad;
-		groupNames: #('core');
 		projectSpecFile: 'rowan/project.ston';
 		gitUrl: 'https://github.com/dalehenrich/RowanSample9';
 		revision: 'spec_0008';
 		yourself.
 	basicProject := RwResolvedProjectV2 basicLoadSpecification: loadSpec.
 	basicProject _projectRepository resolve.	"create clone"
-	groupNames := loadSpec groupNames.
 	componentsRoot := basicProject componentsRoot.
 
 	self assert: basicProject packageNames isEmpty.
 
 	visitor := RwResolvedProjectComponentVisitorV2
 		resolvedProject: basicProject
-		platformConditionalAttributes: platformConditionalAttributes
-		groupNames: groupNames.
+		platformConditionalAttributes: platformConditionalAttributes.
 	projectName := basicProject projectAlias.
 
 	self assert: visitor packageNames isEmpty.

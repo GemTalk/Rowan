@@ -62,6 +62,24 @@ RwAbstractRowanProjectLoadComponentV2 >> initialize [
 ]
 
 { #category : 'accessing' }
+RwAbstractRowanProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes [
+	"Answer the collection of package names defined in the receiver."
+
+	| allDefinedPackageNames matchers |
+	allDefinedPackageNames := Set new.
+	matchers := self conditionalPropertyMatchers.
+	platformConfigurationAttributes
+		do: [ :anObject | 
+			matchers
+				keysAndValuesDo: [ :ar :ignored | 
+					ar
+						do: [ :matcher | 
+							(matcher match: anObject)
+								ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ].
+	^ allDefinedPackageNames
+]
+
+{ #category : 'accessing' }
 RwAbstractRowanProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames [
 	"Answer the collection of package names defined in the receiver."
 

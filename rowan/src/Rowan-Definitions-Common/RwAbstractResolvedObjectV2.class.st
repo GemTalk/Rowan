@@ -250,7 +250,7 @@ RwAbstractResolvedObjectV2 >> projectSpecPath: aString [
 	self _projectSpecification projectSpecPath: aString.
 	self _loadSpecification
 		projectSpecFile:
-			(Path from: aString / self _projectSpecification specName , 'ston') pathString
+			((Path from: aString) / self _projectSpecification specName , 'ston') pathString
 ]
 
 { #category : 'accessing' }

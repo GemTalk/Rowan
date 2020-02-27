@@ -67,7 +67,7 @@ RwProjectDefinitionV2 >> _validate [
 ]
 
 { #category : 'private' }
-RwProjectDefinitionV2 >> _validate: platformConfigurationAttributes groupNames: groupNames [
+RwProjectDefinitionV2 >> _validate: platformConfigurationAttributes [
 	"ensure that the data structures within the receiver contain valid information"
 
 	"make sure that list of packages is consistent between components and project definition
@@ -77,9 +77,7 @@ RwProjectDefinitionV2 >> _validate: platformConfigurationAttributes groupNames: 
 	| definitionPackageNames componentPackageNames missingFromComponent errorMessage |
 	definitionPackageNames := self packageNames asSet.
 	componentPackageNames := Set new.
-	self components
-		_validate: platformConfigurationAttributes
-		groupNames: groupNames.
+	self components _validate: platformConfigurationAttributes.
 	missingFromComponent := componentPackageNames - definitionPackageNames.
 	missingFromComponent isEmpty
 		ifTrue: [ ^ true ].
@@ -158,17 +156,19 @@ RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName definedGroupNam
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: 'common'
-		comment: ''
+	^ self addNewComponentNamed: aComponentName condition: 'common' comment: ''
 ]
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName comment: aString [
+	^ self addNewComponentNamed: aComponentName condition: 'common' comment: aString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self components
 		addSimpleComponentNamed: aComponentName
-		condition: 'common'
+		condition: condition
 		comment: aString
 ]
 
@@ -184,7 +184,31 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: 
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
+	"return the path name of the new component"
+
+	^ self
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	"return the path name of the new component"
+
+	^ self
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: ''
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	"return the path name of the new component"
 
 	| theComponentName toComponent path compositePath |
@@ -212,7 +236,7 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: 
 	self components
 		addSimpleNestedComponentNamed: theComponentName
 		condition: conditionPathArray last
-		comment: ''.
+		comment: aString.
 	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
 ]
@@ -244,6 +268,25 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 			"no problem ... just update the component"
 			 ].
 	self components addPackageNamed: packageName toComponentNamed: componentName.
+	^ package
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+	| package |
+	self components
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	package := RwPackageDefinition newNamed: packageName.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
+	self components
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc.
 	^ package
 ]
 
@@ -365,6 +408,18 @@ RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNa
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	"return the path name of the new component"
+
+	^ self
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: ''
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	"return the path name of the new component"
 
 	| theComponentName toComponent path compositePath condition |
@@ -646,6 +701,17 @@ RwProjectDefinitionV2 >> removeComponentNamed: componentName fromComponentNamed:
 RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
 	self components removePackageNamed: aPackageDefinition name.
 	^ super removePackage: aPackageDefinition
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: componentName [
+	"do not remove package from defintion, remove it from the named component only. 
+		Use removePackage:, if you want the package completely removed from definition"
+
+	| component |
+	component := self componentNamed: componentName.
+	component removePackageNamed: packageName.
+	^ component
 ]
 
 { #category : 'accessing' }
