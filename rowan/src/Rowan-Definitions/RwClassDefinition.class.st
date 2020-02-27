@@ -67,6 +67,20 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName ins
 ]
 
 { #category : 'utility' }
+RwClassDefinition >> _removeSubclassesDisallowed [
+  "Only for use in building definitions for bootstap of the base image.
+   image bootstrap code responsible for setting subclassesDisallowed on
+   appropriate classes after they are all defined."
+  | propertyName oldValue newValue |
+  propertyName := 'gs_options'.
+  oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
+  oldValue isEmpty ifFalse:[
+     newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
+     self propertyAt: propertyName put: newValue
+  ]
+]
+
+{ #category : 'utility' }
 RwClassDefinition >> _updateCategoryFromClass: aClass [
 
 	| propertyName newValue |
@@ -300,18 +314,4 @@ RwClassDefinition >> updatePropertiesFromClass: aClass [
 		_updateConstraintsFromClass: aClass;
 		_updateCommentFromClass: aClass;
 		_updateCategoryFromClass: aClass
-]
-
-{ #category : 'utility' }
-RwClassDefinition >> _removeSubclassesDisallowed [
-  "Only for use in building definitions for bootstap of the base image.
-   image bootstrap code responsible for setting subclassesDisallowed on
-   appropriate classes after they are all defined."
-  | propertyName oldValue newValue |
-  propertyName := 'gs_options'.
-  oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
-  oldValue isEmpty ifFalse:[
-     newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
-     self propertyAt: propertyName put: newValue
-  ]
 ]

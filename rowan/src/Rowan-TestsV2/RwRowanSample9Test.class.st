@@ -133,6 +133,7 @@ RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: c
 
 { #category : 'private' }
 RwRowanSample9Test >> _loadSpecNamed: specName [
+""
 	^ self class _loadSpecNamed: specName
 ]
 

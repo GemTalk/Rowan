@@ -1,7 +1,7 @@
 Extension { #name : 'RwRowanProjectIssuesTest' }
 
 { #category : '*rowan-testsv2' }
-RwRowanProjectIssuesTestV2 >> testIssue495_move_class_and_extension_method_to_new_symbol_dict [
+RwRowanProjectIssuesTest >> testIssue495_move_class_and_extension_method_to_new_symbol_dict [
 
 	"Port of RwRowanProjectIssuesTest debug: #testIssue215_move_class_and_extension_method_to_new_symbol_dict
 		to V2 api and reproduce Issue #495"

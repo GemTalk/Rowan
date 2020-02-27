@@ -236,7 +236,7 @@ RwModificationTonelWriterVisitorV2 >> addedPackage: aPackageModification [
 	exportedPackageProperties at: #'name' put: (packageProperties at: 'name').
 	(packageProperties at: 'comment' ifAbsent: [  ])
 		ifNotNil: [ :comment | exportedPackageProperties at: #'comment' put: comment ].
-	(packageProperties keys reject: [ :key | key = 'name' ]) asArray sort
+	(packageProperties keys reject: [ :key | key = 'name' or: [key = 'gs_SymbolDictionary']]) asArray sort
 		do: [ :key | exportedPackageProperties at: key asSymbol put: (packageProperties at: key) ].
 
 	self _packageSourceDir ensureCreateDirectory.
