@@ -1653,7 +1653,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0026: resolvedProject [
 
 	resolvedProject loadSpecification
 		componentNames: {componentName1};
-		groupNames: #();
 		yourself.
 
 	resolvedProject addNewComponentNamed: componentName1.
@@ -3971,9 +3970,7 @@ RwTestProjectLibraryGenerator >> genSpec_0026: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {'Core'};
-		groupNames:
-				{'core'.
-					'tests'};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -4027,7 +4024,7 @@ RwTestProjectLibraryGenerator >> genSpec_0027: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
-		groupNames: {};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -4080,7 +4077,7 @@ RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
-		groupNames: {};
+		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -4134,7 +4131,6 @@ RwTestProjectLibraryGenerator >> genSpec_0029: commitMessage [
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
 		customConditionalAttributes: #('tests');
-		groupNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -4188,7 +4184,6 @@ RwTestProjectLibraryGenerator >> genSpec_0030: commitMessage [
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
 		customConditionalAttributes: #('tests');
-		groupNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -4242,7 +4237,6 @@ RwTestProjectLibraryGenerator >> genSpec_0031: commitMessage [
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
 		customConditionalAttributes: #('tests');
-		groupNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
@@ -4296,7 +4290,6 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 		gitUrl: self projectUrl;
 		componentNames: {projectName};
 		customConditionalAttributes: #('tests');
-		groupNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.
