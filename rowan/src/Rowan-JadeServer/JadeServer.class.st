@@ -249,6 +249,67 @@ JadeServer >> _describeMCRemoval: anMCRemoval on: aStream [
 ]
 
 { #category : 'category' }
+JadeServer >> _describeMethod: aMethod [
+	"Provide info needed to create a GsMethod in Jade client"
+	"Nice to add packageName and mcTimestamp"
+
+	| allSelectors class list oldGsMethod string x |
+	self environment: (self environmentForMethod: aMethod).
+	writeStream 	"Line 1 for GsMethod (line 3 for JadeSystemBrowserPresenter)"
+"1"		nextPutAll: (class := aMethod inClass) asOop printString; tab;
+"2"		nextPutAll: class printString; tab;
+"3"		nextPutAll: aMethod asOop printString; tab;
+"4"		nextPutAll: ((x := aMethod selector) isNil ifFalse: [x] ifTrue: ['']); tab;
+"5"		nextPutAll: (self categoryOfMethod: aMethod); tab;
+"6"		nextPutAll: (self currentUserMayEditMethod: aMethod) asString; tab;
+		lf.
+
+	"Method source"
+	writeStream nextPutAll: (string := aMethod sourceString).
+	string last = Character lf ifFalse: [writeStream lf].
+	writeStream nextPut: $%; lf.	"Lines 2-N"
+
+	"unimplemented selectors"			"https://github.com/jgfoster/Jade/issues/117"
+	((aMethod class includesSelector: #'_selectorPool') and: [aMethod class includesSelector: #'_sourceOffsetOfFirstSendOf:']) ifTrue: [
+		allSelectors := self _allSelectors.
+		(aMethod _selectorPool reject: [:each | allSelectors includes: each]) do: [:each | 
+			(aMethod _sourceOffsetOfFirstSendOf: each) printOn: writeStream.
+			writeStream space; nextPutAll: each; tab.
+		].
+	].
+	writeStream lf.	"Line N+1"
+
+	"Array of Associations (offset -> selector) indexed by step points"
+	list := self sbUpdateMethodStepPointsFor: aMethod.
+	list := list collect: [:each | each key printString , ' ' , each value].
+	self writeList: list.	"Line N+2"
+
+	"breaks"
+	list := self sbUpdateMethodBreakPointsFor: aMethod.
+	self writeList: (list collect: [:each | each printString]).	"Line N+3"
+
+	"original method"
+	oldGsMethod := (aMethod inClass class canUnderstand: #'persistentMethodDictForEnv:')
+		ifTrue: [(aMethod inClass persistentMethodDictForEnv: 0) at: aMethod selector ifAbsent: [aMethod]]
+		ifFalse: [(aMethod inClass class canUnderstand: #'_rawMethodDict')
+			ifTrue: [aMethod inClass _rawMethodDict at: aMethod selector ifAbsent: [aMethod]]
+			ifFalse: [aMethod]].
+	aMethod ~~ oldGsMethod ifTrue: [
+		string := oldGsMethod sourceString.
+		writeStream nextPutAll: string.
+		(string notEmpty and: [string last = Character lf]) ifFalse: [writeStream lf].
+	].
+	writeStream nextPut: $%; lf.
+
+	"method compile warnings"
+	string := selections isNil 
+		ifTrue: ['']
+		ifFalse: [selections at: #'methodWarnings' ifAbsent: ['']].
+	string isNil ifTrue: [string := ''].
+	writeStream nextPutAll: string; nextPut: $%; lf.
+]
+
+{ #category : 'category' }
 JadeServer >> _mcDescriptionOfPatch: aPatch baseName: aString1 alternateName: aString2 [
 
 	| stream |
@@ -522,6 +583,7 @@ JadeServer >> _sourceForProcess: gsProcess frame: level [
 		nextPutAll: '</frame>'; lf;
 		yourself.
 	^self asAsciiString: writeStream contents.
+
 
 
 ]
@@ -4665,10 +4727,7 @@ JadeServer >> stackForProcess: aGsProcess [
 
 { #category : 'category' }
 JadeServer >> step: aGsProcess inFrame: anInteger [
-
 	aGsProcess _stepOverInFrame: anInteger.
-
-
 ]
 
 { #category : 'category' }
