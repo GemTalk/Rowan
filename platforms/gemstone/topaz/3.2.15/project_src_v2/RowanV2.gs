@@ -83586,9 +83586,10 @@ asDefinition
 
 	| resolvedProject |
 	resolvedProject := (RwResolvedProjectV2
-		loadSpecification: handle _loadSpecification copy)
+		basicLoadSpecification: handle _loadSpecification copy)
 		packages: self loadedPackageDefinitions;
 		yourself.
+	resolvedProject _projectRepository: resolvedProject _projectRepository copy.
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
 			RwLoadedProject _projectLoadedDefinitionSourceValue.
