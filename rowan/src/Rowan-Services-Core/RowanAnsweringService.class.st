@@ -130,6 +130,17 @@ RowanAnsweringService >> basicPrintStringOfObject: object toMaxSize: integer [
   ^ printString
 ]
 
+{ #category : 'client command support' }
+RowanAnsweringService >> basicSortedSymbols [
+  | sortedSymbols |
+  sortedSymbols := SortedCollection new.
+  ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
+    keysDo: [ :symbol | 
+      symbol charSize = 1
+        ifTrue: [ sortedSymbols add: symbol ] ].
+  ^sortedSymbols asArray
+]
+
 { #category : 'client commands' }
 RowanAnsweringService >> breakPointsAreEnabled [
   answer := RowanService breakPointsAreEnabled.
@@ -511,12 +522,7 @@ RowanAnsweringService >> setEnableInteractionHandler: boolean [
 
 { #category : 'client commands' }
 RowanAnsweringService >> sortedSymbols [
-  answer := SortedCollection new.
-  ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
-    keysDo: [ :symbol | 
-      symbol charSize = 1
-        ifTrue: [ answer add: symbol ] ].
-  answer := answer asArray.
+  answer := self basicSortedSymbols. 
   RowanCommandResult addResult: self
 ]
 
@@ -528,6 +534,13 @@ RowanAnsweringService >> subclassCreationTemplate: className [
 { #category : 'client commands' }
 RowanAnsweringService >> symbolExists: aSymbol [
   answer := (Rowan image symbolList resolveSymbol: aSymbol) isNil not.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> symbolsMatching: string [
+  answer := self basicSortedSymbols
+    select: [ :symbol | string sunitMatch: symbol ].
   RowanCommandResult addResult: self
 ]
 
