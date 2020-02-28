@@ -62037,7 +62037,9 @@ addedPackage: aPackageModification
 	exportedPackageProperties at: #'name' put: (packageProperties at: 'name').
 	(packageProperties at: 'comment' ifAbsent: [  ])
 		ifNotNil: [ :comment | exportedPackageProperties at: #'comment' put: comment ].
-	(packageProperties keys reject: [ :key | key = 'name' ]) asArray sort
+	(packageProperties keys
+		reject: [ :key | key = 'name' or: [ key = 'gs_SymbolDictionary' ] ]) asArray
+		sort
 		do: [ :key | exportedPackageProperties at: key asSymbol put: (packageProperties at: key) ].
 
 	self _packageSourceDir ensureCreateDirectory.
@@ -132272,13 +132274,30 @@ subclassType
 category: '*rowan-gemstone-definitions'
 method: RwClassDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
- 
-	propertyKey = 'comment' ifFalse: [ ^super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue ].
-	propertyValue = baseValue
-		ifTrue: [ ^ true ]
-		ifFalse: [ 
-			"empty or nil comments need to compare equal in GemStone"
-			^(propertyValue == nil or: [ propertyValue isEmpty]) and: [ baseValue == nil or: [ baseValue isEmpty] ] ]
+	propertyKey = 'comment'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"empty or nil comments need to compare equal in GemStone"
+					^ (propertyValue == nil or: [ propertyValue isEmpty ])
+						and: [ baseValue == nil or: [ baseValue isEmpty ] ] ] ].
+
+false ifTrue: [
+	"RwRowanSample9Test>>testIssue_495_2 fails if we ignore gs_SymbolDictionary class property changes ..."
+ 	propertyKey = 'gs_SymbolDictionary'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"if one or the other is nil, then count it as equal"
+					^ propertyValue == nil or: [ baseValue == nil ] ] ].
+].
+
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
 %
 
 category: '*rowan-core-definitions-extensions'
@@ -133202,6 +133221,23 @@ category: '*rowan-cypress-definitions'
 method: RwPackageDefinition
 name
   ^ self key
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwPackageDefinition
+_compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+	propertyKey = 'gs_SymbolDictionary'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"if one or the other is nil, then count it as equal"
+					^ propertyValue == nil or: [ baseValue == nil ] ] ].
+
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
 %
 
 ! Class extensions for 'RwPackageSetDefinition'

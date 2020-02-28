@@ -62332,7 +62332,9 @@ addedPackage: aPackageModification
 	exportedPackageProperties at: #'name' put: (packageProperties at: 'name').
 	(packageProperties at: 'comment' ifAbsent: [  ])
 		ifNotNil: [ :comment | exportedPackageProperties at: #'comment' put: comment ].
-	(packageProperties keys reject: [ :key | key = 'name' ]) asArray sort
+	(packageProperties keys
+		reject: [ :key | key = 'name' or: [ key = 'gs_SymbolDictionary' ] ]) asArray
+		sort
 		do: [ :key | exportedPackageProperties at: key asSymbol put: (packageProperties at: key) ].
 
 	self _packageSourceDir ensureCreateDirectory.
@@ -63822,24 +63824,6 @@ customConditionalAttributes: anArray
 	^ self _loadSpecification customConditionalAttributes: anArray
 %
 
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-groupNames
-	"list of groups to be loaded. 
-		Default is {'core' 'tests'}"
-
-	^ self _loadSpecification groupNames
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-groupNames: anArray
-	"list of groups to be loaded. 
-		Default is {'core' 'tests'}"
-
-	self _loadSpecification groupNames: anArray
-%
-
 category: 'printing'
 method: RwResolvedLoadSpecificationV2
 printOn: aStream
@@ -64107,6 +64091,14 @@ addNewNestedComponentNamed: aComponentName comment: aString
 	^ self _projectDefinition
 		addNewNestedComponentNamed: aComponentName
 		comment: aString
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addPackageNamed: packageName
+	"the package is expected to already be present in a component - used when reading packages from disk"
+
+	^ self _projectDefinition addPackageNamed: packageName
 %
 
 category: 'project definition'
@@ -64427,10 +64419,49 @@ exportLoadSpecification
 category: 'exporting'
 method: RwResolvedProjectV2
 exportPackages
-	self _projectDefinition
-		exportPackagesTo: self packagesRoot
+	| projectSetDefinition |
+	projectSetDefinition := [ 
+	RwProjectSetDefinition new
+		addProject: self copy read;
+		yourself ]
+		on: Error
+		do: [ :ignored | RwProjectSetDefinition new ].
+	self
+		exportPackages: projectSetDefinition
+		packagesRoot: self packagesRoot
 		packageFormat: self packageFormat
 		packageConvention: self packageConvention
+%
+
+category: 'exporting'
+method: RwResolvedProjectV2
+exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention
+	| projectSetDefinition visitor projectSetModification writerVisitorClass |
+	packagesRoot / 'properties' , 'st'
+		writeStreamDo: [ :fileStream | 
+			fileStream
+				nextPutAll: '{ ';
+				lf;
+				tab;
+				nextPutAll: '#format : ' , packageFormat printString , ',';
+				lf;
+				tab;
+				nextPutAll: '#convention : ' , packageConvention printString;
+				lf;
+				nextPutAll: '}';
+				lf ].	"write out packages"
+	writerVisitorClass := packageFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
+		ifFalse: [ RwModificationFiletreeWriterVisitorV2 ].
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: diskProjectSetDefinition.
+	visitor := writerVisitorClass new
+		packagesRoot: packagesRoot;
+		yourself.
+
+	visitor visit: projectSetModification
 %
 
 category: 'exporting'
@@ -64824,7 +64855,7 @@ renameComponentNamed: aComponentPath to: aComponentName
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 repositoryCommitId
-	^ self loadedCommitId
+	^ self _projectRepository commitId
 %
 
 category: 'project specification'
@@ -66958,7 +66989,7 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 			loadedClass loadedPackage ].
 
 	^ self
-		addOrUpdateMethodX: methodSource
+		addOrUpdateMethod: methodSource
 		inProtocol: hybridPackageName
 		forClassNamed: className
 		isMeta: isMeta
@@ -67031,160 +67062,6 @@ addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className is
 							cDef addInstanceMethodDefinition: methodDef  ] ] ].
 	projectSetDefinition addProject: pDef.
 	projectTools load loadProjectSetDefinition: projectSetDefinition.
-	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
-		handle ].
-
-	self
-		definitionsForClassNamed: className
-		ifFound: [ :classDef :packageDef :projectDef | 
-			packageDef name = packageName
-				ifTrue: [ ^ updateBlock value: classDef value: projectDef ]
-				ifFalse: [ 
-					"the named package is different from the class definition package"
-					 ] ]
-		ifAbsent: [ 
-			"no loaded class definition, so we probably need to add a class extension"
-			 ].
-	loadedPackage := Rowan image
-		loadedPackageNamed: packageName
-		ifAbsent: [ self error: 'A package named ' , packageName printString , ' was not found.' ].
-	projectDefinition := loadedPackage loadedProject asDefinition.
-	packageDefinition := projectDefinition packageNamed: packageName.
-
-	classExtensionDef := packageDefinition classExtensions
-		at: className
-		ifAbsent: [ 
-			"no existing class extension definition ... create a new one"
-			classExtensionDef := RwClassExtensionDefinition newForClassNamed: className.
-
-			packageDefinition addClassExtensionDefinition: classExtensionDef.
-			classExtensionDef ].
-
-	^ updateBlock value: classExtensionDef value: projectDefinition
-%
-
-category: 'method browsing'
-method: RwPrjBrowserToolV2
-addOrUpdateMethodX: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName
-
-	"If the method is already installed in a different package, remove the method from that package.
-	 If package name matches the name of the package of the class definition, then add the method 
-		to the class definition.
-	 If there is no matching class extension or the package name does not match, add the method 
-		to a class extension in the named package.
-	 Return the resulting compiled method"
-
-	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved |
-	projectSetDefinition := RwProjectSetDefinition new.
-
-	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
-	loadedMethodToBeRemoved := self
-		_loadedMethod: methodDef selector
-		inClassNamed: className
-		isMeta: isMeta
-		ifAbsent: [ 
-			"no pre-existing method for this selector installed"
-			 ].
-
-	projectTools := Rowan projectTools.
-	updateBlock := [ :cDef :pDef | 
-	loadedMethodToBeRemoved
-		ifNil: [
-			"no method needs to be remove, just add the method to the class or extension def"
-			isMeta
-				ifTrue: [ cDef addClassMethodDefinition: methodDef ]
-				ifFalse: [ cDef addInstanceMethodDefinition: methodDef ] ]
-		ifNotNil: [ :loadedMethod | 
-			| loadedPackageForMethod |
-			loadedPackageForMethod := loadedMethod loadedPackage.
-			loadedPackageForMethod name = packageName
-				ifTrue: [ 
-					"loaded method being updated in same package, sjust update the method def"
-					isMeta
-						ifTrue: [ cDef updateClassMethodDefinition: methodDef ]
-						ifFalse: [ cDef updateInstanceMethodDefinition: methodDef ] ]
-				ifFalse: [ 
-					| loadedClassOrExtension projectDef packageDef crDef |
-					"loaded method in different package than new version of method"
-					projectDef := loadedPackageForMethod loadedProject asDefinition.
-					projectDef name = pDef name
-						ifTrue: [ 
-							"both packages are in same project"
-							projectDef := pDef ]
-						ifFalse: [ 
-							"each package in a different project, will need to load loaded method project as well"
-							projectSetDefinition addProject: projectDef ].
-					packageDef := projectDef packageNamed: loadedPackageForMethod name.
-					loadedClassOrExtension := loadedMethod loadedClass.
-					crDef := loadedClassOrExtension isLoadedClass
-						ifTrue: [ packageDef classDefinitions at: loadedClassOrExtension name ]
-						ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].
-					"remove the method from one package and add it to the other"
-					isMeta
-						ifTrue: [ 
-							crDef removeClassMethod: methodDef selector.
-							cDef addClassMethodDefinition: methodDef  ]
-						ifFalse: [ 
-							crDef removeInstanceMethod: methodDef selector.
-							cDef addInstanceMethodDefinition: methodDef  ] ] ].
-	projectSetDefinition addProject: pDef.
-	projectTools load loadProjectSetDefinition: projectSetDefinition.
-	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
-		handle ].
-
-	self
-		definitionsForClassNamed: className
-		ifFound: [ :classDef :packageDef :projectDef | 
-			packageDef name = packageName
-				ifTrue: [ ^ updateBlock value: classDef value: projectDef ]
-				ifFalse: [ 
-					"the named package is different from the class definition package"
-					 ] ]
-		ifAbsent: [ 
-			"no loaded class definition, so we probably need to add a class extension"
-			 ].
-	loadedPackage := Rowan image
-		loadedPackageNamed: packageName
-		ifAbsent: [ self error: 'A package named ' , packageName printString , ' was not found.' ].
-	projectDefinition := loadedPackage loadedProject asDefinition.
-	packageDefinition := projectDefinition packageNamed: packageName.
-
-	classExtensionDef := packageDefinition classExtensions
-		at: className
-		ifAbsent: [ 
-			"no existing class extension definition ... create a new one"
-			classExtensionDef := RwClassExtensionDefinition newForClassNamed: className.
-
-			packageDefinition addClassExtensionDefinition: classExtensionDef.
-			classExtensionDef ].
-
-	^ updateBlock value: classExtensionDef value: projectDefinition
-%
-
-category: 'method browsing'
-method: RwPrjBrowserToolV2
-addOrUpdateMethodY: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName
-
-	"If the method is already installed in a different package, remove the method from that package.
-	 If package name matches the name of the package of the class definition, then add the method 
-		to the class definition.
-	 If there is no matching class extension or the package name does not match, add the method 
-		to a class extension in the named package.
-	 Return the resulting compiled method"
-
-	| loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition |
-
-	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
-
-	updateBlock := [ :cDef :pDef | 
-			"no method needs to be remove, just add the method to the class or extension def"
-			isMeta
-				ifTrue: [ cDef updateClassMethodDefinition: methodDef ]
-				ifFalse: [ cDef updateInstanceMethodDefinition: methodDef ].
-	projectSetDefinition := RwProjectSetDefinition new
-				addProject: pDef;
-				yourself.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
 		handle ].
 
@@ -68398,24 +68275,6 @@ commitProjectNamed: projectName message: messageString
 
 category: 'project repository creation'
 method: RwPrjCreateToolV2
-createProjectRepository: projectDefinition
-	"Create create new repository on `disk`, based on the given project definition, if it does not already exist."
-
-	| projectLoadSpecification |
-	projectLoadSpecification := projectDefinition projectLoadSpecification.
-	projectLoadSpecification repositoryDefinition
-		ifNil: [ self error: 'internal error - expected the repository definition to be defined' ]
-		ifNotNil: [ :repositoryDefinition | 
-			repositoryDefinition repositoryRoot exists
-				ifFalse: [ self error: 'internal error - expected the repository root to be created' ] ].
-	{(projectDefinition componentsRoot).
-	(projectDefinition packagesRoot).
-	(projectDefinition specsRoot).
-	(projectDefinition projectsRoot)} do: [ :path | path ensureCreateDirectory ]
-%
-
-category: 'project repository creation'
-method: RwPrjCreateToolV2
 createResolvedProjectRepository: resolvedRepository
 	"Create create new repository on `disk`, based on the given resolved project, if it does not already exist."
 
@@ -69264,17 +69123,6 @@ trace: message
 ! Class implementation for 'RwPrjWriteToolV2'
 
 !		Instance methods for 'RwPrjWriteToolV2'
-
-category: 'write'
-method: RwPrjWriteToolV2
-writeProjectDefinition: projectDefinition
-"this guy probably shouldn't be used anymore"
-	Rowan projectTools createV2 createProjectRepository: projectDefinition.
-	projectDefinition 
-		exportProjects;
-		exportComponents;
-		exportPackages
-%
 
 category: 'write'
 method: RwPrjWriteToolV2
@@ -72309,8 +72157,21 @@ addNewNestedComponentNamed: aComponentName comment: aString
 category: 'accessing'
 method: RwProjectDefinitionV2
 addPackageNamed: packageName
+	"the package is expected to already be present in a component - used when reading packages from disk"
 
-	self shouldNotImplement
+	| package |
+	(self components componentForPackageNamed: packageName)
+		ifNil: [ 
+			self
+				error:
+					'The package ' , packageName printString
+						, ' must already be present in a component' ].
+	package := RwPackageDefinition newNamed: packageName.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ]
 %
 
 category: 'accessing'
@@ -72633,78 +72494,6 @@ create
 		createComponentProject: self.
 %
 
-category: 'actions'
-method: RwProjectDefinitionV2
-export
-
-	Rowan projectTools writeV2 writeProjectDefinition: self
-%
-
-category: 'exporting'
-method: RwProjectDefinitionV2
-exportComponents
-	self components export: self componentsRoot
-%
-
-category: 'exporting'
-method: RwProjectDefinitionV2
-exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention
-	| projectSetDefinition visitor projectSetModification writerVisitorClass |
-	packagesRoot / 'properties' , 'st'
-		writeStreamDo: [ :fileStream | 
-			fileStream
-				nextPutAll: '{ ';
-				lf;
-				tab;
-				nextPutAll: '#format : ' , packageFormat printString , ',';
-				lf;
-				tab;
-				nextPutAll: '#convention : ' , packageConvention printString;
-				lf;
-				nextPutAll: '}';
-				lf ].	"write out packages"
-	writerVisitorClass := packageFormat = 'tonel'
-		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
-		ifFalse: [ RwModificationFiletreeWriterVisitorV2 ].
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition
-		compareAgainstBase: diskProjectSetDefinition.
-	visitor := writerVisitorClass new
-		packagesRoot: packagesRoot;
-		yourself.
-
-	visitor visit: projectSetModification
-%
-
-category: 'exporting'
-method: RwProjectDefinitionV2
-exportPackagesTo: packagesRoot packageFormat: packageFormat packageConvention: packageConvention
-	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
-
-	| projectSetDefinition |
-	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
-		on: Error
-		do: [ :ignored | RwProjectSetDefinition new ].
-	self
-		exportPackages: projectSetDefinition
-		packagesRoot: packagesRoot
-		packageFormat: packageFormat
-		packageConvention: packageConvention
-%
-
-category: 'exporting'
-method: RwProjectDefinitionV2
-exportProjects
-
-	self projectNames do: [:projectName |
-		self error: 'not yet implemented' ].
-	self projectNames isEmpty
-		ifTrue: [
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
-%
-
 category: 'properties'
 method: RwProjectDefinitionV2
 key
@@ -72764,11 +72553,11 @@ read: platformConfigurationAttributes
 			platformConfigurationAttributes: platformConfigurationAttributes
 %
 
-category: 'tool api'
+category: 'reading'
 method: RwProjectDefinitionV2
 readProjectSet
 
-	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
+	^ Rowan projectTools readV2 readProjectSetForComponentProjectDefinition: self
 %
 
 category: 'reading'
@@ -110779,6 +110568,7 @@ _issue_527_resolve_load_validate: projectSpec className: className expectedSymDi
 category: 'private'
 method: RwRowanSample9Test
 _loadSpecNamed: specName
+""
 	^ self class _loadSpecNamed: specName
 %
 
@@ -140158,13 +139948,30 @@ subclassType
 category: '*rowan-gemstone-definitions'
 method: RwClassDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
- 
-	propertyKey = 'comment' ifFalse: [ ^super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue ].
-	propertyValue = baseValue
-		ifTrue: [ ^ true ]
-		ifFalse: [ 
-			"empty or nil comments need to compare equal in GemStone"
-			^(propertyValue == nil or: [ propertyValue isEmpty]) and: [ baseValue == nil or: [ baseValue isEmpty] ] ]
+	propertyKey = 'comment'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"empty or nil comments need to compare equal in GemStone"
+					^ (propertyValue == nil or: [ propertyValue isEmpty ])
+						and: [ baseValue == nil or: [ baseValue isEmpty ] ] ] ].
+
+false ifTrue: [
+	"RwRowanSample9Test>>testIssue_495_2 fails if we ignore gs_SymbolDictionary class property changes ..."
+ 	propertyKey = 'gs_SymbolDictionary'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"if one or the other is nil, then count it as equal"
+					^ propertyValue == nil or: [ baseValue == nil ] ] ].
+].
+
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
 %
 
 category: '*rowan-core-definitions-extensions'
@@ -141475,6 +141282,23 @@ name
   ^ self key
 %
 
+category: '*rowan-gemstone-definitions'
+method: RwPackageDefinition
+_compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+	propertyKey = 'gs_SymbolDictionary'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"if one or the other is nil, then count it as equal"
+					^ propertyValue == nil or: [ baseValue == nil ] ] ].
+
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
+%
+
 ! Class extensions for 'RwPackageSetDefinition'
 
 !		Instance methods for 'RwPackageSetDefinition'
@@ -142279,7 +142103,12 @@ _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		diskUrl: 'file://' , (projectsHome / projectName) pathString;
 		addNewComponentNamed: componentName;
-		addPackagesNamed: {packageName1 . packageName2 . packageName3 } toComponentNamed: componentName;	
+		addPackagesNamed: {packageName1 . packageName2 . packageName3 } 
+			toComponentNamed: componentName;
+		yourself.
+
+	resolvedProject loadSpecification
+		componentNames: { componentName };
 		yourself.
 
 	packageDefinition := resolvedProject packageNamed: packageName1.
