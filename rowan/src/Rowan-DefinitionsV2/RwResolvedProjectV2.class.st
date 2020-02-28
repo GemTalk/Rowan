@@ -846,7 +846,7 @@ RwResolvedProjectV2 >> renameComponentNamed: aComponentPath to: aComponentName [
 
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> repositoryCommitId [
-	^ self loadedCommitId
+	^ self _projectRepository commitId
 ]
 
 { #category : 'project specification' }
