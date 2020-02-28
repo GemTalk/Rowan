@@ -457,10 +457,48 @@ RwResolvedProjectV2 >> exportLoadSpecification [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportPackages [
-	self _projectDefinition
-		exportPackagesTo: self packagesRoot
+	| projectSetDefinition |
+	projectSetDefinition := [ 
+	RwProjectSetDefinition new
+		addProject: self copy read;
+		yourself ]
+		on: Error
+		do: [ :ignored | RwProjectSetDefinition new ].
+	self
+		exportPackages: projectSetDefinition
+		packagesRoot: self packagesRoot
 		packageFormat: self packageFormat
 		packageConvention: self packageConvention
+]
+
+{ #category : 'exporting' }
+RwResolvedProjectV2 >> exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
+	| projectSetDefinition visitor projectSetModification writerVisitorClass |
+	packagesRoot / 'properties' , 'st'
+		writeStreamDo: [ :fileStream | 
+			fileStream
+				nextPutAll: '{ ';
+				lf;
+				tab;
+				nextPutAll: '#format : ' , packageFormat printString , ',';
+				lf;
+				tab;
+				nextPutAll: '#convention : ' , packageConvention printString;
+				lf;
+				nextPutAll: '}';
+				lf ].	"write out packages"
+	writerVisitorClass := packageFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
+		ifFalse: [ RwModificationFiletreeWriterVisitorV2 ].
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: diskProjectSetDefinition.
+	visitor := writerVisitorClass new
+		packagesRoot: packagesRoot;
+		yourself.
+
+	visitor visit: projectSetModification
 ]
 
 { #category : 'exporting' }

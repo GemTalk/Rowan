@@ -570,67 +570,6 @@ RwProjectDefinitionV2 >> export [
 	Rowan projectTools writeV2 writeProjectDefinition: self
 ]
 
-{ #category : 'exporting' }
-RwProjectDefinitionV2 >> exportComponents [
-	self components export: self componentsRoot
-]
-
-{ #category : 'exporting' }
-RwProjectDefinitionV2 >> exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
-	| projectSetDefinition visitor projectSetModification writerVisitorClass |
-	packagesRoot / 'properties' , 'st'
-		writeStreamDo: [ :fileStream | 
-			fileStream
-				nextPutAll: '{ ';
-				lf;
-				tab;
-				nextPutAll: '#format : ' , packageFormat printString , ',';
-				lf;
-				tab;
-				nextPutAll: '#convention : ' , packageConvention printString;
-				lf;
-				nextPutAll: '}';
-				lf ].	"write out packages"
-	writerVisitorClass := packageFormat = 'tonel'
-		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
-		ifFalse: [ RwModificationFiletreeWriterVisitorV2 ].
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition
-		compareAgainstBase: diskProjectSetDefinition.
-	visitor := writerVisitorClass new
-		packagesRoot: packagesRoot;
-		yourself.
-
-	visitor visit: projectSetModification
-]
-
-{ #category : 'exporting' }
-RwProjectDefinitionV2 >> exportPackagesTo: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
-	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
-
-	| projectSetDefinition |
-	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
-		on: Error
-		do: [ :ignored | RwProjectSetDefinition new ].
-	self
-		exportPackages: projectSetDefinition
-		packagesRoot: packagesRoot
-		packageFormat: packageFormat
-		packageConvention: packageConvention
-]
-
-{ #category : 'exporting' }
-RwProjectDefinitionV2 >> exportProjects [
-
-	self projectNames do: [:projectName |
-		self error: 'not yet implemented' ].
-	self projectNames isEmpty
-		ifTrue: [
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
-]
-
 { #category : 'properties' }
 RwProjectDefinitionV2 >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
@@ -683,10 +622,10 @@ RwProjectDefinitionV2 >> read: platformConfigurationAttributes [
 			platformConfigurationAttributes: platformConfigurationAttributes
 ]
 
-{ #category : 'tool api' }
+{ #category : 'reading' }
 RwProjectDefinitionV2 >> readProjectSet [
 
-	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
+	^ Rowan projectTools readV2 readProjectSetForComponentProjectDefinition: self
 ]
 
 { #category : 'reading' }
