@@ -564,12 +564,6 @@ RwProjectDefinitionV2 >> create [
 		createComponentProject: self.
 ]
 
-{ #category : 'actions' }
-RwProjectDefinitionV2 >> export [
-
-	Rowan projectTools writeV2 writeProjectDefinition: self
-]
-
 { #category : 'properties' }
 RwProjectDefinitionV2 >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."

@@ -5,16 +5,6 @@ Class {
 }
 
 { #category : 'write' }
-RwPrjWriteToolV2 >> writeProjectDefinition: projectDefinition [
-"this guy probably shouldn't be used anymore"
-	Rowan projectTools createV2 createProjectRepository: projectDefinition.
-	projectDefinition 
-		exportProjects;
-		exportComponents;
-		exportPackages
-]
-
-{ #category : 'write' }
 RwPrjWriteToolV2 >> writeProjectNamed: projectName [
 
 	| loadedProject projectDefinition |
