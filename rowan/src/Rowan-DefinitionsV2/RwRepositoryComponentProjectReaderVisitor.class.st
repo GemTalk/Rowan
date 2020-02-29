@@ -17,6 +17,16 @@ RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: package
 	^ packageDir basenameWithoutExtension
 ]
 
+{ #category : 'class reading' }
+RwRepositoryComponentProjectReaderVisitor >> compileWhileReading [
+  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
+]
+
+{ #category : 'class reading' }
+RwRepositoryComponentProjectReaderVisitor >> compileWhileReading: aBoolean [
+  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
+]
+
 { #category : 'accessing' }
 RwRepositoryComponentProjectReaderVisitor >> currentDirectory [
 

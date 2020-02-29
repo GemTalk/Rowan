@@ -390,6 +390,20 @@ RwResolvedProjectV2 >> commitLog: logLimit [
 	^ self _projectRepository commitLog: logLimit
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> compileWhileReading [
+	"true means compile method defs while reading tonel files for immediate detection of syntax errors"
+
+	^ (self dynamicInstVarAt: #'compileWhileReading') ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> compileWhileReading: aBoolean [
+	"true means compile method defs while reading tonel files for immediate detection of syntax errors"
+
+	self dynamicInstVarAt: #'compileWhileReading' put: aBoolean
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> componentNamed: aComponentName [
 	^ self _projectDefinition componentNamed: aComponentName
@@ -727,6 +741,7 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
 		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
 	^ visitorClass new
+		compileWhileReading: self compileWhileReading;
 		packageNames: packageNames;
 		visit: self
 ]

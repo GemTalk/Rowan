@@ -141,16 +141,6 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> classFileExtensions [
 	^ #( 'class' 'st' )
 ]
 
-{ #category : 'class reading' }
-RwRepositoryResolvedProjectTonelReaderVisitorV2 >> compileWhileReading [
-  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
-]
-
-{ #category : 'class reading' }
-RwRepositoryResolvedProjectTonelReaderVisitorV2 >> compileWhileReading: aBoolean [
-  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
-]
-
 { #category : 'tonel parser' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> definitionForType: aString [
   aString = self class tonelClassLabel

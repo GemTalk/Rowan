@@ -62481,6 +62481,18 @@ _writeMethodDefinition: aMethodDefinition  classDefinition: aClassDefinition isM
 
 !		Instance methods for 'RwRepositoryComponentProjectReaderVisitor'
 
+category: 'class reading'
+method: RwRepositoryComponentProjectReaderVisitor
+compileWhileReading
+  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectReaderVisitor
+compileWhileReading: aBoolean
+  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
+%
+
 category: 'accessing'
 method: RwRepositoryComponentProjectReaderVisitor
 currentDirectory
@@ -62948,18 +62960,6 @@ method: RwRepositoryResolvedProjectTonelReaderVisitorV2
 classFileExtensions
 
 	^ #( 'class' 'st' )
-%
-
-category: 'class reading'
-method: RwRepositoryResolvedProjectTonelReaderVisitorV2
-compileWhileReading
-  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
-%
-
-category: 'class reading'
-method: RwRepositoryResolvedProjectTonelReaderVisitorV2
-compileWhileReading: aBoolean
-  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 %
 
 category: 'tonel parser'
@@ -64152,6 +64152,22 @@ commitLog: logLimit
 	^ self _projectRepository commitLog: logLimit
 %
 
+category: 'accessing'
+method: RwResolvedProjectV2
+compileWhileReading
+	"true means compile method defs while reading tonel files for immediate detection of syntax errors"
+
+	^ (self dynamicInstVarAt: #'compileWhileReading') ifNil: [ false ]
+%
+
+category: 'accessing'
+method: RwResolvedProjectV2
+compileWhileReading: aBoolean
+	"true means compile method defs while reading tonel files for immediate detection of syntax errors"
+
+	self dynamicInstVarAt: #'compileWhileReading' put: aBoolean
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 componentNamed: aComponentName
@@ -64533,6 +64549,7 @@ readPackageNames: packageNames
 		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
 		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
 	^ visitorClass new
+		compileWhileReading: self compileWhileReading;
 		packageNames: packageNames;
 		visit: self
 %
