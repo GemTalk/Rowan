@@ -262,7 +262,15 @@ RwAbstractResolvedObjectV2 >> projectsRoot [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> repositoryRoot [
-	projectRepository ifNil: [ ^ self _loadSpecification repositoryRoot ].
+	projectRepository
+		ifNil: [ 
+			self _loadSpecification diskUrl
+				ifNotNil: [ :urlString | 
+					| url |
+					url := urlString asRwUrl.
+					url scheme = 'file'
+						ifTrue: [ url pathString asFileReference ] ]
+				ifNil: [ ^ self _loadSpecification repositoryRoot ] ].
 	^ projectRepository repositoryRoot
 ]
 
