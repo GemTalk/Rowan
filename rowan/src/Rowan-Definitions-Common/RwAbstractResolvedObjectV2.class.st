@@ -61,7 +61,7 @@ RwAbstractResolvedObjectV2 >> _projectSpecification [
 			projectSpecification := projectSpecFileRef exists
 				ifTrue: [ RwSpecification fromFile: projectSpecFileRef ]
 				ifFalse: [ 
-					Rowan projectTools trace trace: '--- creating new project spec'.
+					Rowan projectTools trace trace: '--- creating new project spec. The project spec file ', projectSpecFileRef pathString printString, ' does not exist'.
 					RwProjectSpecificationV2 new ].
 			projectSpecification
 				projectName: pName;
