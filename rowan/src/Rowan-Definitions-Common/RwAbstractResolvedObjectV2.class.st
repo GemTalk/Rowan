@@ -60,7 +60,9 @@ RwAbstractResolvedObjectV2 >> _projectSpecification [
 			pName := self projectName.	"projectSpecification is involved in default logic for projectName"
 			projectSpecification := projectSpecFileRef exists
 				ifTrue: [ RwSpecification fromFile: projectSpecFileRef ]
-				ifFalse: [ RwProjectSpecificationV2 new ].
+				ifFalse: [ 
+					Rowan projectTools trace trace: '--- creating new project spec'.
+					RwProjectSpecificationV2 new ].
 			projectSpecification
 				projectName: pName;
 				yourself ]
