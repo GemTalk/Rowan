@@ -269,7 +269,8 @@ RwAbstractResolvedObjectV2 >> repositoryRoot [
 					| url |
 					url := urlString asRwUrl.
 					url scheme = 'file'
-						ifTrue: [ url pathString asFileReference ] ]
+						ifTrue: [ ^ url pathString asFileReference ]
+						ifFalse: [ self error: 'unknown url scheme' ] ]
 				ifNil: [ ^ self _loadSpecification repositoryRoot ] ].
 	^ projectRepository repositoryRoot
 ]
