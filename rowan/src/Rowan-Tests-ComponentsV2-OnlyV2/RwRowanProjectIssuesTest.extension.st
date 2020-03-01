@@ -1,21 +1,34 @@
 Extension { #name : 'RwRowanProjectIssuesTest' }
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
-RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString [
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
 
-	| rowanProject projectTools gitRootPath |
+	| projectDefinition project |
+
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectTools := Rowan projectTools.
+	projectDefinition := (self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: symbolDictionaryName
+		comment: 'Basic project ', projectName printString)
+			packageFormat: 'tonel';
+			projectHome: rootPath; 
+			configsPath: 'configs';
+			packagesPath: 'src';
+			projectsPath: 'src';
+			specsPath: 'specs';
+			yourself.
 
-	gitRootPath := self _testRowanProjectsSandbox.
+	self
+		handleConfirmationDuring: [
+			projectDefinition create ].
 
-	(gitRootPath / projectName) ensureDeleteAll.
+	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
-	((Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: projectUrlString)
-		projectHome: gitRootPath;
-		clone;
-		register.
+	project := RwProject newNamed: projectName.
+
+	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
+
 ]
