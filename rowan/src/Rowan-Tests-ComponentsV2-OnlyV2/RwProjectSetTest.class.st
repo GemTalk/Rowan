@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwProjectSetTest',
 	#superclass : 'RwToolTest',
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-Tests-ComponentsV2-OnlyV2'
 }
 
 { #category : 'tests' }

@@ -1,6 +1,6 @@
 Extension { #name : 'RwLoadingTest' }
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwLoadingTest >> projectDefinitionFor: packageNames [
 
 	| projectDefinition |

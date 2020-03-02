@@ -1,6 +1,6 @@
 Extension { #name : 'RwUnpackagedBrowserApiTest' }
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwUnpackagedBrowserApiTest >> testIssue263 [
 
 	"https://github.com/GemTalk/Rowan/issues/263"
@@ -54,7 +54,7 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwUnpackagedBrowserApiTest >> testIssue420_A [
 
 	"https://github.com/GemTalk/Rowan/issues/420"
@@ -139,7 +139,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 	self assert: registry methodRegistry size = 0.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwUnpackagedBrowserApiTest >> testIssue420_B [
 
 	"https://github.com/GemTalk/Rowan/issues/420"
@@ -232,7 +232,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 	self assert: registry methodRegistry size = 0.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwUnpackagedBrowserApiTest >> testIssue420_C [
 
 	"https://github.com/GemTalk/Rowan/issues/420"
@@ -318,7 +318,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwUnpackagedBrowserApiTest >> testIssue420_D [
 
 	"https://github.com/GemTalk/Rowan/issues/420"
@@ -406,7 +406,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 	self assert: registry methodRegistry size = 0.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwUnpackagedBrowserApiTest >> testIssue420_E [
 
 	"https://github.com/GemTalk/Rowan/issues/420"

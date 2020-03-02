@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwReconcileToolApiTest',
 	#superclass : 'RwBrowserToolTest',
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-Tests-ComponentsV2-OnlyV2'
 }
 
 { #category : 'tests' }

@@ -1,6 +1,6 @@
 Extension { #name : 'RwBrowserToolApiTest' }
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testDeleteComplicatedClass [
 
 	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
@@ -183,7 +183,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	self assert: registry methodRegistry size = 0.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 
 	"similar to testDeleteComplicatedClass ... but delete package that contains the class ... should be similar result"
@@ -563,7 +563,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	self assert: testPackageNames = {packageName2}
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testIssue471_1 [
 
 	"expected failure until issue #471 is addressed"
@@ -695,7 +695,7 @@ RwBrowserToolApiTest >> testIssue471_1 [
   self assert: oldClass3 == class3.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testIssue471_2 [
 
   "https://github.com/dalehenrich/Rowan/issues/471"
@@ -830,7 +830,7 @@ RwBrowserToolApiTest >> testIssue471_2 [
   self assert: oldClass3 == class3.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testRenameClass_1 [
 
   "rename a class with no subclasses"
@@ -998,7 +998,7 @@ RwBrowserToolApiTest >> testRenameClass_1 [
   self assert: oldClass3 ~~ class3. "renamed class"
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testRenameClass_2 [
 
   "rename a class with a subclass - reference to renamed class in methods"
@@ -1166,7 +1166,7 @@ RwBrowserToolApiTest >> testRenameClass_2 [
   self assert: oldClass3 ~~ class3. "subclass of renamed class"
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testRenameClass_3 [
 
   "rename a class with a subclass - no references to renamed class in methods"
@@ -1334,7 +1334,7 @@ RwBrowserToolApiTest >> testRenameClass_3 [
   self assert: oldClass3 ~~ class3. "subclass of renamed class"
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testRenameClass_4 [
 
   "rename a class with a subclass - reference to renamed class in methods subclass references old superclass in method"
@@ -1482,7 +1482,7 @@ RwBrowserToolApiTest >> testRenameClass_4 [
   validateBlock value: class1 value: class2 value: class3.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testRenameClass_5 [
 
   "rename a class with a subclass - reference to renamed class in methods subclass references old superclass in extension method"
@@ -1630,7 +1630,7 @@ RwBrowserToolApiTest >> testRenameClass_5 [
    validateBlock value: class1 value: class2 value: class3.
 ]
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testRenameClass_Issue_490 [
 
   "rename a class with no subclasses"

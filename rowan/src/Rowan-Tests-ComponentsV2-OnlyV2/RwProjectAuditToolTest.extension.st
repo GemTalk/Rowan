@@ -1,6 +1,6 @@
 Extension { #name : 'RwProjectAuditToolTest' }
 
-{ #category : '*rowan-testsv2' }
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwProjectAuditToolTest >> test_Issue_535 [
 
   "https://github.com/dalehenrich/Rowan/issues/535"
