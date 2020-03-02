@@ -137311,6 +137311,17 @@ fromSton: stonReader
 
 !		Instance methods for 'AbstractDictionary'
 
+category: '*rowan-gemstone-kernel-36x'
+method: AbstractDictionary
+at: key ifPresent: aBlock
+   "Lookup the given key in the receiver. If it is present, answer the value of 
+    evaluating the given block with the value associated with the key. Otherwise, answer nil."
+
+	| v |
+	v := self at: key ifAbsent: [^ nil].
+	^ aBlock cull: v
+%
+
 category: '*ston-gemstonecommon'
 method: AbstractDictionary
 stonOn: stonWriter
@@ -141817,13 +141828,18 @@ _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbol
 category: '*rowan-tests-componentsv2-onlyv2'
 method: RwBrowserToolTest
 _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment
-
-	^ ((Rowan globalNamed: 'RwComponentProjectDefinition') newForGitBasedProjectNamed: projectName)
-		defaultSymbolDictName: defaultSymbolDictName;
-		defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions;
-		packageNames: packageNames;
+	| componentName |
+	componentName := 'Core'.
+	^ RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo:
+				defaultUseSessionMethodsForExtensions;
 		comment: comment;
-		yourself.
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		yourself
 %
 
 ! Class extensions for 'RwClassDefinition'
