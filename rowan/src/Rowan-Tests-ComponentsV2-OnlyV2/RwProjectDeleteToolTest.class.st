@@ -29,7 +29,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 		addPackageNamed: packageName1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
-	projectDefinition2 := (RwProjectDefinition newForGitBasedProjectNamed: projectName2)
+	projectDefinition2 := ((Rowan globalNamed: 'RwProjectDefinition') newForGitBasedProjectNamed: projectName2)
 		addPackageNamed: packageName2;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.

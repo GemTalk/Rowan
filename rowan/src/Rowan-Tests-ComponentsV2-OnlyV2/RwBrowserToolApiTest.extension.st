@@ -587,7 +587,7 @@ RwBrowserToolApiTest >> testIssue471_1 [
         ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-  projectDefinition := (Rowan globalNamed: 'RwProjectDefinition')
+  projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
     newForGitBasedProjectNamed: projectName)
     addPackageNamed: packageName1;
     addPackageNamed: packageName2;
