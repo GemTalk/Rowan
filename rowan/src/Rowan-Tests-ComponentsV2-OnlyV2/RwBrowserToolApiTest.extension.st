@@ -30,7 +30,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	projectTools := Rowan projectTools.
 	browserTool := projectTools browser.
 
-	browserTool addPackageNamed: packageName2 toProjectNamed: projectName1.	"new package packageName2"
+	browserTool addPackageNamed: packageName2  toComponentNamed: 'Core' andProjectNamed: projectName1.	"new package packageName2"
 
 	packageNames1 := {packageName1.
 	packageName2}.
