@@ -13,6 +13,16 @@ RwProject >> platformConditionalAttributes [
 ]
 
 { #category : '*rowan-corev2' }
+RwProject >> projectsHome [
+	^ self _loadedProject resolvedProject projectsHome
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> projectsHome: aFileReference [
+	self _loadedProject resolvedProject projectsHome: aFileReference
+]
+
+{ #category : '*rowan-corev2' }
 RwProject >> topLevelComponentNames [
 	^ self _loadedProject resolvedProject _loadSpecification componentNames
 ]
