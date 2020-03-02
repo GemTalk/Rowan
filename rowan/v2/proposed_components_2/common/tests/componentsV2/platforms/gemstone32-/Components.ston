@@ -4,7 +4,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gs3.[2-]'
 	],
 	#packageNames : [
-		'Rowan-Tests-35x',
+		'Rowan-Tests-35x'
 	],
 	#comment : 'Components gs3.[2-]  packages '
 }

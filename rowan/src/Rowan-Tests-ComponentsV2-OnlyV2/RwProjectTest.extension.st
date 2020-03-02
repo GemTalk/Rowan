@@ -14,7 +14,7 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := (RwComponentProjectDefinition
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition')
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName;
 		defaultSymbolDictName: self _symbolDictionaryName1;
@@ -43,7 +43,7 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
-	projectDefinition := (RwComponentProjectDefinition
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition')
 		newForGitBasedProjectNamed: projectName)
 		addPackagesNamed: packageNames;
 		packageFormat: 'tonel';

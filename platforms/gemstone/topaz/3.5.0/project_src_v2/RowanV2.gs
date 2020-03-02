@@ -11117,6 +11117,22 @@ true.
 %
 
 doit
+(RwProjectReaderWriterTest
+	subclass: 'RwProjectTopazWriterTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-GemStone-35x';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (RwBrowserToolTest
 	subclass: 'RwRowanProjectIssuesTest'
 	instVarNames: #(  )
@@ -11191,6 +11207,22 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwRowanSampleAbstractTest
+	subclass: 'RwRowanSample1Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-ComponentsV2-OnlyV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -63303,7 +63335,16 @@ projectsRoot
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 repositoryRoot
-	projectRepository ifNil: [ ^ self _loadSpecification repositoryRoot ].
+	projectRepository
+		ifNil: [ 
+			self _loadSpecification diskUrl
+				ifNotNil: [ :urlString | 
+					| url |
+					url := urlString asRwUrl.
+					url scheme = 'file'
+						ifTrue: [ ^ url pathString asFileReference ]
+						ifFalse: [ self error: 'unknown url scheme' ] ]
+				ifNil: [ ^ self _loadSpecification repositoryRoot ] ].
 	^ projectRepository repositoryRoot
 %
 
@@ -63398,7 +63439,9 @@ _projectSpecification
 			pName := self projectName.	"projectSpecification is involved in default logic for projectName"
 			projectSpecification := projectSpecFileRef exists
 				ifTrue: [ RwSpecification fromFile: projectSpecFileRef ]
-				ifFalse: [ RwProjectSpecificationV2 new ].
+				ifFalse: [ 
+					Rowan projectTools trace trace: '--- creating new project spec. The project spec file ', projectSpecFileRef pathString printString, ' does not exist'.
+					RwProjectSpecificationV2 new ].
 			projectSpecification
 				projectName: pName;
 				yourself ]
@@ -71815,6 +71858,63 @@ _projectDefinition
 %
 
 ! Class implementation for 'RwProjectDefinitionV2'
+
+!		Class methods for 'RwProjectDefinitionV2'
+
+category: 'topaz tonel support'
+classmethod: RwProjectDefinitionV2
+topazReadTonelFile: fileName
+    "Read a single file and compile the methods within that file.
+     Definition/redefinition of the class not implemented yet "
+  | projectDef package clsName clsDef cls methBlk envId |
+  projectDef := RwRepositoryResolvedProjectTonelReaderVisitorV2
+     readClassFile: fileName
+     projectName: 'TopazLoad'   "synthetic projed and package names"
+     packageName: 'TopazPackage' .
+  package := projectDef packageNamed: 'TopazPackage_1' .
+  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
+  package classDefinitions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class definition in file ' , fileName
+    ].
+    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
+  ].
+  package classExtensions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class extension in file ' , fileName
+    ].
+    sz > 0 ifTrue:[
+      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
+      clsDef :=  defs values at: 1.
+    ].
+  ].   
+  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
+  clsName := clsDef name .
+  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
+    "creating the class not implemented yet"
+    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
+  ].
+  cls := cls"anAssociation" value.
+
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: nil "install into the class's dictionaries"
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  envId
+    ] on: (CompileError, CompileWarning) do:[:ex | 
+      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+   ].
+  clsDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  clsDef classMethodDefinitions do: methBlk .
+%
 
 !		Instance methods for 'RwProjectDefinitionV2'
 
@@ -125215,6 +125315,2166 @@ _repositoryFormat
 	^ 'tonel'
 %
 
+! Class implementation for 'RwProjectTopazWriterTest'
+
+!		Instance methods for 'RwProjectTopazWriterTest'
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_A
+
+	"simple case with only two packages and a single set of extensions for a class"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+"create definitions"
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Array'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className1
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"diff"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+
+"write"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		topazFilename: projectName;
+		yourself.
+	visitor visit: projectSetModification.
+
+	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
+	x := stream contents.
+	y := self _expectedGsTopazWriterFileContents_A.
+	self assert: x = y
+%
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_A_export
+
+	"simple case with only two packages and a single set of extensions for a class"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 topazFileReference classExtensionDefinition 
+		repositoryRootPath x stream y |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+"create definitions"
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Array'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className1
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"export"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	topazFileReference := repositoryRootPath asFileReference / projectName.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+	projectDefinition exportTopazFormatTo: topazFileReference.
+
+"validate"
+	stream := ZnBufferedReadStream on: (topazFileReference, 'gs') readStream.
+	x := stream contents.
+	y := self _expectedGsTopazWriterFileContents_A.
+	self assert: x = y
+%
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_B
+
+	"ramp up to multiple class extensions from multiple packages for multiple classes"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
+		packageName3 |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+"create definitions"
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Array'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className1
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+	packageDefinition := projectDefinition packageNamed: packageName3.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: '*', packageName3 asLowercase
+					source: 'method5 ^5').
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"diff"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+
+"write"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		topazFilename: projectName;
+		yourself.
+	visitor visit: projectSetModification.
+
+	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
+	x := stream contents.
+	y := self _expectedGsTopazWriterFileContents_B.
+	self assert: x = y
+%
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_C
+
+	"ramp up to multiple class extensions from multiple packages for multiple classes"
+
+	"write each package into a separate topaz file"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
+		packageName3 |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+"create definitions"
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Array'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className1
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+	packageDefinition := projectDefinition packageNamed: packageName3.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: '*', packageName3 asLowercase
+					source: 'method5 ^5').
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"diff"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+
+"write"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		topazFilenamePackageNamesMap: 
+			(Dictionary new
+				at: packageName1 put: {packageName1};
+				at: packageName2 put: {packageName2};
+				at: packageName3 put: {packageName3};
+				yourself)
+		yourself.
+	visitor visit: projectSetModification.
+
+	{ packageName1. packageName2. packageName3 }
+		do: [:packageName |
+			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName, visitor filenameExtension) readStream.
+			x := stream contents.
+			y := self perform: #'_expectedGsTopazWriterFileContents_C_', (packageName copyWithout: $-).
+			self assert: x = y ].
+%
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_C_export
+
+	"ramp up to multiple class extensions from multiple packages for multiple classes"
+
+	"write each package into a separate topaz file"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 topazFileReference classExtensionDefinition repositoryRootPath 
+		x stream y packageName3 |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+"create definitions"
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Array'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className1
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+	packageDefinition := projectDefinition packageNamed: packageName3.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: '*', packageName3 asLowercase
+					source: 'method5 ^5').
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"export"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	topazFileReference := repositoryRootPath asFileReference / projectName.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+	projectDefinition exportTopazFormatTo: topazFileReference usingPackageNamesMap: (Dictionary new
+				at: packageName1 put: {packageName1};
+				at: packageName2 put: {packageName2};
+				at: packageName3 put: {packageName3};
+				yourself).
+
+"validate"
+
+	{ packageName1. packageName2. packageName3 }
+		do: [:packageName |
+			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName, 'gs') readStream.
+			x := stream contents.
+			y := self perform: #'_expectedGsTopazWriterFileContents_C_', (packageName copyWithout: $-).
+			self assert: x = y ].
+%
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_D
+
+	"ramp up to multiple class extensions from multiple packages for multiple classes"
+
+	"write each package into a separate topaz file"
+
+	"include class initialization methods"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
+		packageName3 |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+"create definitions"
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2');
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'initialize'
+					protocol: 'initialization'
+					source: 'initialize "noop"').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Array'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className1
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+	packageDefinition := projectDefinition packageNamed: packageName3.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: '*', packageName3 asLowercase
+					source: 'method5 ^5').
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className2.
+	classExtensionDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'initialize'
+					protocol: '*', packageName3 asLowercase
+					source: 'initialize "another noop"').
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+
+"diff"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+
+"write"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		topazFilenamePackageNamesMap: 
+			(Dictionary new
+				at: packageName1 put: {packageName1};
+				at: packageName2 put: {packageName2};
+				at: packageName3 put: {packageName3};
+				yourself)
+		yourself.
+	visitor visit: projectSetModification.
+
+	{ packageName1. packageName2. packageName3 }
+		do: [:packageName |
+			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName, visitor filenameExtension) readStream.
+			x := stream contents.
+			y := self perform: #'_expectedGsTopazWriterFileContents_D_', (packageName copyWithout: $-).
+			self assert: x = y ].
+%
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_error
+
+	"try to write to multiple files when no configs are available"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath
+		packageName3 |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+"create definitions"
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Array'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className1
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+	packageDefinition := projectDefinition packageNamed: packageName3.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: '*', packageName3 asLowercase
+					source: 'method5 ^5').
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"diff"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+
+"write"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+				repositoryRootPath: repositoryRootPath;
+				topazFilenameConfigsMap: (Dictionary new
+						at: 'rowan_bootstrap_app' put: {{'Kernel'}. {}};
+						at: 'rowan_bootstrap_globals' put: {{'Globals'}. {}};
+						at: 'rowan_bootstrap_user_globals' put: {{'UserGlobals'}. {}};
+						yourself);
+				yourself.
+	self should: [ visitor visit: projectSetModification ] raise: Error
+%
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_MultiProject_A
+
+	"ramp up to multiple class extensions from multiple packages and multiple projects"
+
+	"write a single topaz file"
+
+	"include class initialization methods"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
+		packageName3 |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+	projectSetDefinition := RwProjectSetDefinition new.
+
+	{1 . 2 } do: [:projectIndex |
+		| projectExt |
+		projectExt := '_', projectIndex asString.
+
+"create definitions"
+		projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
+			newForGitBasedProjectNamed: projectName, projectExt)
+			addPackageNamed: packageName1, projectExt;
+			addPackageNamed: packageName2, projectExt;
+			addPackageNamed: packageName3, projectExt;
+			setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1, projectExt;
+			setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2, projectExt;
+			yourself.
+
+		packageDefinition := projectDefinition packageNamed: packageName1, projectExt.
+
+		classDefinition := RwClassDefinition
+			newForClassNamed: className1, projectExt
+			super: 'Object'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: packageName1, projectExt
+			comment: ''
+			pools: #()
+			type: 'normal'.
+		classDefinition
+			addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method2'
+						protocol: 'accessing'
+						source: 'method2 ^2');
+			addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: 'initialization'
+						source: 'initialize "noop"').
+		packageDefinition addClassDefinition: classDefinition.
+
+		classDefinition := RwClassDefinition
+			newForClassNamed: className2, projectExt
+			super: 'Array'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: packageName1, projectExt
+			comment: ''
+			pools: #()
+			type: 'normal'.
+		classDefinition
+			addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method3'
+						protocol: 'accessing'
+						source: 'method3 ^3').
+		packageDefinition addClassDefinition: classDefinition.
+
+		classDefinition := RwClassDefinition
+			newForClassNamed: className3, projectExt
+			super: className1
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: packageName1, projectExt
+			comment: ''
+			pools: #()
+			type: 'normal'.
+		classDefinition
+			addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method4'
+						protocol: 'accessing'
+						source: 'method4 ^4').
+		packageDefinition addClassDefinition: classDefinition.
+
+		classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1, projectExt.
+		classExtensionDefinition
+			addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method1'
+						protocol: '*', (packageName2, projectExt) asLowercase
+						source: 'method1 ^1').
+		packageDefinition := projectDefinition packageNamed: packageName2, projectExt.
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+		packageDefinition := projectDefinition packageNamed: packageName3, projectExt.
+
+		classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1, projectExt.
+		classExtensionDefinition
+			addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method5'
+						protocol: '*', (packageName3, projectExt) asLowercase
+						source: 'method5 ^5').
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+		classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className2, projectExt.
+		classExtensionDefinition
+			addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: '*', (packageName3, projectExt) asLowercase
+						source: 'initialize "another noop"').
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+		projectSetDefinition addDefinition: projectDefinition ].
+
+"export"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		topazFilename: projectName;
+		yourself.
+	visitor visit: projectSetModification.
+
+"validate"
+	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
+	x := stream contents.
+	y := self _expectedGsTopazWriterFileContents_Multi_A.
+	self assert: x = y
+%
+
+category: 'tests'
+method: RwProjectTopazWriterTest
+testGsTopazWriter_MultiProject_B
+
+	"ramp up to multiple class extensions from multiple packages and multiple projects"
+
+	"write each package pair into a separate topaz file"
+
+	"include class initialization methods"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
+		packageName3 |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+	projectSetDefinition := RwProjectSetDefinition new.
+
+	{1 . 2 } do: [:projectIndex |
+		| projectExt |
+		projectExt := '_', projectIndex asString.
+
+"create definitions"
+		projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
+			newForGitBasedProjectNamed: projectName, projectExt)
+			addPackageNamed: packageName1, projectExt;
+			addPackageNamed: packageName2, projectExt;
+			addPackageNamed: packageName3, projectExt;
+			setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1, projectExt;
+			setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2, projectExt;
+			yourself.
+
+		packageDefinition := projectDefinition packageNamed: packageName1, projectExt.
+
+		classDefinition := RwClassDefinition
+			newForClassNamed: className1, projectExt
+			super: 'Object'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: packageName1, projectExt
+			comment: ''
+			pools: #()
+			type: 'normal'.
+		classDefinition
+			addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method2'
+						protocol: 'accessing'
+						source: 'method2 ^2');
+			addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: 'initialization'
+						source: 'initialize "noop"').
+		packageDefinition addClassDefinition: classDefinition.
+
+		classDefinition := RwClassDefinition
+			newForClassNamed: className2, projectExt
+			super: 'Array'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: packageName1, projectExt
+			comment: ''
+			pools: #()
+			type: 'normal'.
+		classDefinition
+			addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method3'
+						protocol: 'accessing'
+						source: 'method3 ^3').
+		packageDefinition addClassDefinition: classDefinition.
+
+		classDefinition := RwClassDefinition
+			newForClassNamed: className3, projectExt
+			super: className1
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: packageName1, projectExt
+			comment: ''
+			pools: #()
+			type: 'normal'.
+		classDefinition
+			addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method4'
+						protocol: 'accessing'
+						source: 'method4 ^4').
+		packageDefinition addClassDefinition: classDefinition.
+
+		classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1, projectExt.
+		classExtensionDefinition
+			addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method1'
+						protocol: '*', (packageName2, projectExt) asLowercase
+						source: 'method1 ^1').
+		packageDefinition := projectDefinition packageNamed: packageName2, projectExt.
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+		packageDefinition := projectDefinition packageNamed: packageName3, projectExt.
+
+		classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1, projectExt.
+		classExtensionDefinition
+			addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'method5'
+						protocol: '*', (packageName3, projectExt) asLowercase
+						source: 'method5 ^5').
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+		classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className2, projectExt.
+		classExtensionDefinition
+			addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: '*', (packageName3, projectExt) asLowercase
+						source: 'initialize "another noop"').
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+		projectSetDefinition addDefinition: projectDefinition ].
+
+"export"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		topazFilenamePackageNamesMap: 
+			(Dictionary new
+				at: packageName1 put: {packageName1, '_1' . packageName1, '_2' };
+				at: packageName2 put: {packageName2, '_1' . packageName2, '_2' };
+				at: packageName3 put: {packageName3, '_1' . packageName3, '_2' };
+				yourself)
+		yourself.
+	visitor visit: projectSetModification.
+
+"validate"
+	{ packageName1. packageName2. packageName3 }
+		do: [:packageName |
+			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName, visitor filenameExtension) readStream.
+			x := stream contents.
+			y := self perform: #'_expectedGsTopazWriterFileContents_MULTI_B_', (packageName copyWithout: $-).
+
+			self assert: x size = y size.
+			1 to: x size do: [:i |
+				| a b |
+				a := x at: i.
+				b := y at: i.
+				self assert: a = b ].
+
+			self assert: x = y ].
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_A
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_B
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_C_Issue361Core
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_C_Issue361Extension1
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_C_Issue361Extension2
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_D_Issue361Core
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''initialization''
+classmethod: Issue361Class1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1 initialize.
+true
+', percent, '
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_D_Issue361Extension1
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_D_Issue361Extension2
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2''
+
+!		Class methods for ''Issue361Class2''
+
+category: ''*issue361-extension2''
+classmethod: Issue361Class2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class2 initialize.
+true
+', percent, '
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_Multi_A
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Array
+	subclass: ''Issue361Class2_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2_1''
+
+!		Instance methods for ''Issue361Class2_1''
+
+category: ''accessing''
+method: Issue361Class2_1
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class2_2''
+
+!		Instance methods for ''Issue361Class2_2''
+
+category: ''accessing''
+method: Issue361Class2_2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class3_1''
+
+!		Class methods for ''Issue361Class3_1''
+
+category: ''accessing''
+classmethod: Issue361Class3_1
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class3_2''
+
+!		Class methods for ''Issue361Class3_2''
+
+category: ''accessing''
+classmethod: Issue361Class3_2
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class1_1''
+
+!		Class methods for ''Issue361Class1_1''
+
+category: ''initialization''
+classmethod: Issue361Class1_1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class1_2''
+
+!		Class methods for ''Issue361Class1_2''
+
+category: ''initialization''
+classmethod: Issue361Class1_2
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_2
+method2 ^2
+', percent, '
+
+! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension1_1''
+method: Issue361Class1_1
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2_1''
+method: Issue361Class1_1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension1_2''
+method: Issue361Class1_2
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2_2''
+method: Issue361Class1_2
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2_1''
+
+!		Class methods for ''Issue361Class2_1''
+
+category: ''*issue361-extension2_1''
+classmethod: Issue361Class2_1
+initialize "another noop"
+', percent, '
+
+! Class extensions for ''Issue361Class2_2''
+
+!		Class methods for ''Issue361Class2_2''
+
+category: ''*issue361-extension2_2''
+classmethod: Issue361Class2_2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1_1 initialize.
+Issue361Class1_2 initialize.
+Issue361Class2_1 initialize.
+Issue361Class2_2 initialize.
+true
+', percent, '
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_MULTI_B_Issue361Core
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Array
+	subclass: ''Issue361Class2_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2_1''
+
+!		Instance methods for ''Issue361Class2_1''
+
+category: ''accessing''
+method: Issue361Class2_1
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class2_2''
+
+!		Instance methods for ''Issue361Class2_2''
+
+category: ''accessing''
+method: Issue361Class2_2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class3_1''
+
+!		Class methods for ''Issue361Class3_1''
+
+category: ''accessing''
+classmethod: Issue361Class3_1
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class3_2''
+
+!		Class methods for ''Issue361Class3_2''
+
+category: ''accessing''
+classmethod: Issue361Class3_2
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class1_1''
+
+!		Class methods for ''Issue361Class1_1''
+
+category: ''initialization''
+classmethod: Issue361Class1_1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class1_2''
+
+!		Class methods for ''Issue361Class1_2''
+
+category: ''initialization''
+classmethod: Issue361Class1_2
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_2
+method2 ^2
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1_1 initialize.
+Issue361Class1_2 initialize.
+true
+', percent, '
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension1
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension1_1''
+method: Issue361Class1_1
+method1 ^1
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension1_2''
+method: Issue361Class1_2
+method1 ^1
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectTopazWriterTest
+_expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension2
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension2_1''
+method: Issue361Class1_1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension2_2''
+method: Issue361Class1_2
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2_1''
+
+!		Class methods for ''Issue361Class2_1''
+
+category: ''*issue361-extension2_1''
+classmethod: Issue361Class2_1
+initialize "another noop"
+', percent, '
+
+! Class extensions for ''Issue361Class2_2''
+
+!		Class methods for ''Issue361Class2_2''
+
+category: ''*issue361-extension2_2''
+classmethod: Issue361Class2_2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class2_1 initialize.
+Issue361Class2_2 initialize.
+true
+', percent, '
+'
+%
+
 ! Class implementation for 'RwRowanProjectIssuesTest'
 
 !		Class methods for 'RwRowanProjectIssuesTest'
@@ -126238,6 +128498,203 @@ method: RwPlatformInstanceTest
 _testPreference
 
 	^#'unknown_preference'
+%
+
+! Class implementation for 'RwRowanSample1Test'
+
+!		Class methods for 'RwRowanSample1Test'
+
+category: 'private'
+classmethod: RwRowanSample1Test
+_symbolDictionaryNames
+
+	^ 	super _symbolDictionaryNames, 
+			#( #'SampleSymbolDict')
+%
+
+!		Instance methods for 'RwRowanSample1Test'
+
+category: 'tests'
+method: RwRowanSample1Test
+testIssue345
+
+	"https://github.com/GemTalk/Rowan/issues/514"
+
+	"This test (for 3.5.0) is actually about being able to change the component
+		properties before loading ... post clone ... Right now I am not completely
+		sure what sematics should be applied:
+			- disallow changing component properteis - if you want different properties
+				edit the component --- NOT COOL
+			- somehow arrange for changes made to the ""loaded project"" to survive
+				the read that ??must happend?? before being able to load the project 
+				from disk
+			- require that the project be read from disk before making changes and
+				then somehow arranging to do a load of the project in memory and avoid
+				re-reading from disk ... THIS PROBABLY THE RIGHT ANSWER ... need to 
+				get second and third opinions on this one ... and expand test coverage,
+				I assume that there are existing tests (the extension methods in this 
+				package are good clues) that have hacked some sort of behavior in this
+				area, but we need a REAL solution with some logic behind it more than
+				""this is how it works:)"""
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName projectDef 
+		symDict registry |
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample1LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath
+		registerProject: false.
+
+	projectDef
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+	gitRootPath := projectDef repositoryRootPath asFileReference.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: self _issue_345_branch_name.
+
+"load project"
+	projectDef load.
+
+"validation"
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 3.
+	self assert: registry classRegistry size = 2.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 6.
+
+"delete project"
+	Rowan projectTools delete deleteProjectNamed: projectName.
+
+"validation"
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 0.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+%
+
+category: 'tests'
+method: RwRowanSample1Test
+testIssue514
+
+	"https://github.com/GemTalk/Rowan/issues/514"
+
+	"Explicitly confirm that the property change was made and propogated to loaded project ... 
+		hmmm and loaded project needs to be dirty because it doesn't match disk"
+
+	| specUrlString projectTools rowanProject gitRootPath projectName projectDef propertyModValidationBlock
+		loadedProjectDefinition diskProjectSet imageProjectSet projectSetModification project |
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample1LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath
+		registerProject: false.
+
+	projectDef
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+"load project"
+	projectDef load.
+
+"validation"
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
+
+	self assert: (Rowan globalNamed: self _symbolDictionaryName) notNil.
+
+	project := Rowan projectNamed: projectName.
+	self assert: project isDirty.	"since project not loaded from source that came from disk, it should be dirty"
+
+"compare"
+	loadedProjectDefinition := project asDefinition.
+	diskProjectSet :=  loadedProjectDefinition copy readProjectSet.
+	imageProjectSet := RwProjectSetDefinition new
+		addProject: loadedProjectDefinition;
+		yourself.
+	projectSetModification :=  imageProjectSet compareAgainstBase: diskProjectSet. "new vs. old"
+	self deny: projectSetModification isEmpty.
+
+"validate that property changes are correct"
+	propertyModValidationBlock := [ :propertiesModification | 
+		"property modification should have a new value for gs_SymbolDictionary equal to <self _symbolDictionaryName>"
+		| propertyElementsModified propertyModification |
+		self deny: propertiesModification isEmpty.
+		propertyElementsModified := propertiesModification elementsModified.
+		self assert: propertyElementsModified size = 1.
+		propertyModification := propertyElementsModified at: 'gs_SymbolDictionary'.
+		self assert: propertyModification oldValue isNil.
+		self assert: propertyModification newValue = self _symbolDictionaryName asString ].
+	((Rowan globalNamed: 'RwSample1TestValidationVisitor') new)
+		defaultNoopBlock: [ self assert: false description: 'unexpected modification' ];
+		changedProjectBlock: [:projectModification | self assert: projectModification propertiesModification isEmpty ];
+		changedPackageBlock: [:packageModification | 
+			| packageName |
+			packageName := packageModification key.
+			(#('RowanSample1-Extensions' 'RowanSample1-Core' 'RowanSample1-Tests' ) includes: packageName)
+				ifTrue: [ 
+					packageName = 'RowanSample1-Extensions'
+						ifTrue: [ self assert: packageModification classesModification isEmpty ]
+						ifFalse: [ self deny: packageModification classesModification isEmpty ].
+					self assert: packageModification classExtensionsModification isEmpty.
+					propertyModValidationBlock value: packageModification propertiesModification ]
+				ifFalse: [
+					self assert: packageModification propertiesModification isEmpty ] ];
+		changedClassBlock: [ :classModification :visitor |
+			| packageName |
+			packageName := visitor currentPackageDefinition key.
+			self assert: (#('RowanSample1-Core' 'RowanSample1-Tests' ) includes: packageName).
+			self assert: classModification instanceMethodsModification isEmpty.
+			self assert: classModification classMethodsModification isEmpty.
+			propertyModValidationBlock value: classModification propertiesModification ];
+		visit: projectSetModification.
+%
+
+category: 'private'
+method: RwRowanSample1Test
+_issue_345_branch_name
+
+	^ 'issue_345_v2'
+%
+
+category: 'private'
+method: RwRowanSample1Test
+_rowanSample1LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1_v2.ston'
 %
 
 ! Class implementation for 'RwRowanSample2Test'
@@ -139384,6 +141841,18 @@ _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbol
 	^ projectDefinition
 %
 
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwBrowserToolTest
+_standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment
+
+	^ ((Rowan globalNamed: 'RwComponentProjectDefinition') newForGitBasedProjectNamed: projectName)
+		defaultSymbolDictName: defaultSymbolDictName;
+		defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions;
+		packageNames: packageNames;
+		comment: comment;
+		yourself.
+%
+
 ! Class extensions for 'RwClassDefinition'
 
 !		Class methods for 'RwClassDefinition'
@@ -141931,6 +144400,70 @@ asProjectDefinitonWithComment: commentString
 		yourself
 %
 
+! Class extensions for 'RwProjectTest'
+
+!		Instance methods for 'RwProjectTest'
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwProjectTest
+test_issue428_loaded_no_disk
+
+| projectName  packageName projectDefinition projectSetDefinition |
+
+	projectName := 'Issue428'.
+	packageName := 'Issue428-Extension'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition')
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"test existsOnDisk"
+
+	self deny: (RwProject newNamed: projectName) existsOnDisk.
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwProjectTest
+test_issue428_loaded_on_disk
+
+	| projectName projectDefinition projectTools packageNames |
+	projectName := 'Issue428'.
+	packageNames := #('Issue428-Core' 'Issue428-Tests').
+	projectTools := Rowan projectTools.
+
+	{projectName}
+		do: [ :name | 
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition')
+		newForGitBasedProjectNamed: projectName)
+		addPackagesNamed: packageNames;
+		packageFormat: 'tonel';
+		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/';
+		yourself.
+
+	self
+		handleConfirmationDuring: [ projectDefinition create ].
+
+"test existsOnDisk"
+
+	self assert: (RwProject newNamed: projectName) existsOnDisk.
+%
+
 ! Class extensions for 'RwProjectTool'
 
 !		Class methods for 'RwProjectTool'
@@ -142055,6 +144588,13 @@ category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self _loadSpecification gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+	self _loadSpecification
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 %
 
 category: '*rowan-gemstone-definitionsv2'
@@ -142292,23 +144832,586 @@ testIssue495_move_class_and_extension_method_to_new_symbol_dict
 
 category: '*rowan-tests-componentsv2-onlyv2'
 method: RwRowanProjectIssuesTest
-_cloneGitRepositoryFor: projectName projectUrlString: projectUrlString
+_createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate
 
-	| rowanProject projectTools gitRootPath |
+	| projectDefinition project |
+
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectDefinition := (self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: symbolDictionaryName
+		comment: 'Basic project ', projectName printString)
+			packageFormat: 'tonel';
+			projectHome: rootPath; 
+			configsPath: 'configs';
+			packagesPath: 'src';
+			projectsPath: 'src';
+			specsPath: 'specs';
+			yourself.
+
+	self
+		handleConfirmationDuring: [
+			projectDefinition create ].
+
+	Rowan projectTools load loadProjectDefinition: projectDefinition.
+
+	project := RwProject newNamed: projectName.
+
+	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
+%
+
+! Class extensions for 'RwRowanSample2Test'
+
+!		Instance methods for 'RwRowanSample2Test'
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+testIssue493
+
+	"https://github.com/GemTalk/Rowan/issues/493"
+
+	"started as Issue #515 test, but turned into issue #493 test, once #515 fixed"
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName instanceMap projectDef |
+	projectName := 'RowanSample2'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+  	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
 	gitRootPath := self _testRowanProjectsSandbox.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	((Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: projectUrlString)
-		projectHome: gitRootPath;
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: self _testRowanProjectsSandbox
+		registerProject: false.
+
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
+
+	gitRootPath := projectDef repositoryRoot.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef read; load.
+
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar -> class ].
+
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
+
+	projectDef := (Rowan projectNamed: projectName) asDefinition.
+	projectDef
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		read;
+		load.
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+testIssue515
+
+	"https://github.com/GemTalk/Rowan/issues/515"
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName instanceMap projectDef |
+	projectName := 'RowanSample2'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+  	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample2SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: self _testRowanProjectsSandbox
+		registerProject: false.
+
+	projectDef defaultSymbolDictName: self _symbolDictionaryName.
+
+	gitRootPath := projectDef repositoryRoot.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
+	projectDef read; load.
+
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar -> class ].
+
+	gitTool gitcheckoutIn: gitRootPath with: self _migration_2_branchName.
+
+	projectDef := (Rowan projectNamed: projectName) asDefinition.
+	projectDef
+		defaultSymbolDictName: self _symbolDictionaryName;
+		read;
+		load.
+
+"load RowanSample1 project into RowanSample2 dictionary"
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+	specUrlString := self _rowanSample1LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDef := self 
+		_cloneProjectFromSpecUrl: specUrlString 
+		projectsHome: gitRootPath
+		registerProject: false.
+
+	projectDef
+		defaultSymbolDictName: 'RowanSample2';
+		yourself.
+
+"load project"
+	projectDef load.
+"watch out ... jadeite won't bhave well with class and symbol dictionary of same name ... but that's okay"
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+_migration_0_branchName
+	^   'masterV2.0'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+_migration_1_branchName
+	^ 'migration_1_v2'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+_migration_2_branchName
+	^ 'migration_2_v2'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+_rowanSample1LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1_v2.ston'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+_rowanSample2SpecificationUrl
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_masterV2.ston'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+_rowanSample2_bitbucketSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_bitbucket_v2.ston'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+_rowanSample2_gitlabSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_gitlab_v2.ston'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample2Test
+_rowanSample2_gitoliteSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
+		, '/test/specs/RowanSample2_gitolite_v2.ston'
+%
+
+! Class extensions for 'RwRowanSample4Test'
+
+!		Instance methods for 'RwRowanSample4Test'
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+testIssue185_move_class_to_symbolDict_A_v20
+
+	"https://github.com/dalehenrich/Rowan/issues/185"
+
+	"issue_185_1 --> issue_185_3	:: move NewRowanSample4 class to RowanSample4SymbolDict symbol dictionary (no package rename)"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
+		baselinePackageNames newClass ar audit |
+
+	projectName := 'RowanSample4'.
+	Rowan
+		projectNamed: projectName 
+		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+	Rowan 
+		projectNamed: projectName 
+		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
+
+	project := Rowan projectNamed: projectName.
+	repoRootPath := project repositoryRootPath asFileReference.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_0'.				"starting point of test"
+
+	project load.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
+											'RowanSample4-GemStone-Tests').
+	self
+		assert:
+			(x := project packageNames asArray sort) =  baselinePackageNames sort.
+
+	self assert: (x := project loadedGroupNames asArray) = #('tests').
+	self assert: (x := project loadedConfigurationNames asArray) = #('Load').
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_1'.				"New package added to the project"
+
+	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
+
+	project load.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+	self
+		assert:
+			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
+
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: (newClass new perform: #foo) = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_3'.				"Move NewRowanSample4 class to RowanSample4SymbolDict"
+
+	project load.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: (newClass new perform: #foo) = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+testLoadComponentProjectFromUrl
+
+	| specUrlString projectTools projectName x project masterBranchSHA |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	projectTools load loadFromUrl: specUrlString.
+
+	masterBranchSHA := 'ea371eb'.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('tests').
+	self deny: (x := project loadedCommitId) = masterBranchSHA.
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+testLoadProjectNamed_221A_v20
+
+	"https://github.com/dalehenrich/Rowan/issues/221"
+
+	"default configuration loading behavior differs between v1.2 and v2.0 ... this is the v1.2 variant"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName repoRootPath x 
+		project audit |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: true.
+
+	repoRootPath := gitRootPath / projectName.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
+
+"load core group"
+	self 
+		_loadProjectFromSpecUrl: (self _rowanSample4_coreSpecificationUrl: repoRootPath)
+		repoRootPath: repoRootPath.
+
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('core').
+
+"load tests group"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withGroupNames: #('tests').
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('tests').
+
+"load core group -- unload the tests package"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withGroupNames: #('core').
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('core').
+
+"load Core configuration -- tests loaded"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Core' ) groupNames: #().
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #( 'Core' ).
+	self assert: (x := project loadedGroupNames) asArray = #( 'core' ).
+
+"(re)load project"
+	projectTools load
+		loadProjectNamed: 'RowanSample4'.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := project  loadedConfigurationNames) asArray = #( 'Core' ).
+	self assert: (x := project loadedGroupNames) asArray = #( 'core' ).
+
+"load Load configuraiont and core group -- unload the tests package"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #('Load') groupNames: #('core').
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project  loadedGroupNames) asArray = #('core').
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath
+
+	| projectDefinition projectSetDefinition |
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString)
+		projectHome: projectRootPath parent;
 		clone;
-		register.
+		yourself.
+	projectSetDefinition := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition.
+	^ projectSetDefinition projectNamed: projectDefinition name
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_cloneProjectFromSpecUrl_300: specUrlString projectsHome: projectsHome registerProject: aBool
+
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName
+
+	| rowanProject projectHome projectDefinition loadSpecUrl |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := self _testRowanProjectsSandbox.
+
+	(projectHome / projectName) ensureDeleteAll.
+
+	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
+	projectDefinition projectHome: projectHome.
+	projectDefinition cloneRepository.
+
+	loadSpecUrl := 'file:', (projectHome / projectName / projectDefinition specsPath / 'RowanSample4_load_v2.ston') pathString.
+	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: loadSpecUrl.
+	projectDefinition projectHome: projectHome.
+	projectDefinition register.
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_loadProjectFromSpecUrl: specUrlString repoRootPath: repoRootPath
+
+	| projectDefinition projectSetDefinition |
+	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
+	projectDefinition repositoryRoot: repoRootPath.
+	projectSetDefinition := projectDefinition read.
+	^ projectSetDefinition load
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_projectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath
+
+	| projectDefinition |
+	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
+	projectDefinition repositoryRoot: projectRootPath.
+	projectDefinition cloneRepository.
+	^ projectDefinition read
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_rowanSample4LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_load_v2.ston'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_rowanSample4LoadSpecificationUrl_295
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_295_v2.ston'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_rowanSample4SpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , (rowanProject repositoryRootPath asFileReference / 'test/specs/RowanSample4_v2.ston') pathString
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_rowanSample4_208_LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_208_load_v2.ston'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_rowanSample4_coreSpecificationUrl: repositoryRootPath
+
+	^ 'file:' , repositoryRootPath pathString, '/rowan/specs/RowanSample4_core_v2.ston'
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSample4Test
+_rowanSample4_loadSpecificationUrl: repositoryRootPath
+
+	^ 'file:' , repositoryRootPath pathString, '/rowan/specs/RowanSample4_load_v2.ston'
+%
+
+! Class extensions for 'RwRowanSampleAbstractTest'
+
+!		Instance methods for 'RwRowanSampleAbstractTest'
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSampleAbstractTest
+_cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome
+	^ self
+		_cloneProjectFromSpecUrl: specUrlString
+		projectsHome: projectsHome
+		registerProject: true
+%
+
+category: '*rowan-tests-componentsv2-onlyv2'
+method: RwRowanSampleAbstractTest
+_cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool
+
+	| projectDefinition |
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString)
+		projectHome: projectsHome;
+		clone;
+		yourself.
+	aBool ifTrue: [ projectDefinition register ].
+	^ projectDefinition
 %
 
 ! Class extensions for 'RwSpecification'

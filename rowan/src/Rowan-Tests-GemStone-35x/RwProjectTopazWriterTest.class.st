@@ -962,7 +962,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_A [
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
@@ -1075,7 +1075,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_A_export [
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwComponentProjectDefinition newForGitBasedProjectNamed: projectName)
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
@@ -1180,7 +1180,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_B [
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
@@ -1308,7 +1308,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_C [
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
@@ -1443,7 +1443,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_C_export [
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwComponentProjectDefinition newForGitBasedProjectNamed: projectName)
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		addPackageNamed: packageName3;
@@ -1571,7 +1571,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_D [
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
@@ -1719,7 +1719,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_error [
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
@@ -1854,7 +1854,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_A [
 		projectExt := '_', projectIndex asString.
 
 "create definitions"
-		projectDefinition := (RwProjectDefinition
+		projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
 			newForGitBasedProjectNamed: projectName, projectExt)
 			addPackageNamed: packageName1, projectExt;
 			addPackageNamed: packageName2, projectExt;
@@ -2003,7 +2003,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_B [
 		projectExt := '_', projectIndex asString.
 
 "create definitions"
-		projectDefinition := (RwProjectDefinition
+		projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
 			newForGitBasedProjectNamed: projectName, projectExt)
 			addPackageNamed: packageName1, projectExt;
 			addPackageNamed: packageName2, projectExt;

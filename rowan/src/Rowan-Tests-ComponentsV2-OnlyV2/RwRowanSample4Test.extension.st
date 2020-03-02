@@ -4,7 +4,7 @@ Extension { #name : 'RwRowanSample4Test' }
 RwRowanSample4Test >> _cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath [
 
 	| projectDefinition projectSetDefinition |
-	projectDefinition := (RwComponentProjectDefinition newForUrl: specUrlString)
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString)
 		projectHome: projectRootPath parent;
 		clone;
 		yourself.
@@ -27,12 +27,12 @@ RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString project
 
 	(projectHome / projectName) ensureDeleteAll.
 
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
 	projectDefinition projectHome: projectHome.
 	projectDefinition cloneRepository.
 
 	loadSpecUrl := 'file:', (projectHome / projectName / projectDefinition specsPath / 'RowanSample4_load_v2.ston') pathString.
-	projectDefinition := RwComponentProjectDefinition newForUrl: loadSpecUrl.
+	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: loadSpecUrl.
 	projectDefinition projectHome: projectHome.
 	projectDefinition register.
 ]
@@ -41,7 +41,7 @@ RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString project
 RwRowanSample4Test >> _loadProjectFromSpecUrl: specUrlString repoRootPath: repoRootPath [
 
 	| projectDefinition projectSetDefinition |
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
 	projectDefinition repositoryRoot: repoRootPath.
 	projectSetDefinition := projectDefinition read.
 	^ projectSetDefinition load
@@ -51,7 +51,7 @@ RwRowanSample4Test >> _loadProjectFromSpecUrl: specUrlString repoRootPath: repoR
 RwRowanSample4Test >> _projectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath [
 
 	| projectDefinition |
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
 	projectDefinition repositoryRoot: projectRootPath.
 	projectDefinition cloneRepository.
 	^ projectDefinition read

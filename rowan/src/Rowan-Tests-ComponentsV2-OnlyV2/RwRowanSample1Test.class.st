@@ -165,7 +165,7 @@ RwRowanSample1Test >> testIssue514 [
 		propertyModification := propertyElementsModified at: 'gs_SymbolDictionary'.
 		self assert: propertyModification oldValue isNil.
 		self assert: propertyModification newValue = self _symbolDictionaryName asString ].
-	(RwSample1TestValidationVisitor new)
+	((Rowan globalNamed: 'RwSample1TestValidationVisitor') new)
 		defaultNoopBlock: [ self assert: false description: 'unexpected modification' ];
 		changedProjectBlock: [:projectModification | self assert: projectModification propertiesModification isEmpty ];
 		changedPackageBlock: [:packageModification | 

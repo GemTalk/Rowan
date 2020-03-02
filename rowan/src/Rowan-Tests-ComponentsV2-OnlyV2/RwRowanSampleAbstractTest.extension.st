@@ -12,7 +12,7 @@ RwRowanSampleAbstractTest >> _cloneProjectFromSpecUrl: specUrlString projectsHom
 RwRowanSampleAbstractTest >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool [
 
 	| projectDefinition |
-	projectDefinition := (RwComponentProjectDefinition newForUrl: specUrlString)
+	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString)
 		projectHome: projectsHome;
 		clone;
 		yourself.
