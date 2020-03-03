@@ -60,27 +60,21 @@ RwResolvedProjectV2 >> methodEnvForPackageNamed: packageName [
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> useSessionMethodsForExtensionsForPackageNamed: packageName [
-	"Ignore the package name for now ... will do proper package name lookup when we're ready to support method environments"
-
-	"https://github.com/GemTalk/Rowan/issues/533"
-
-	"first cut at implementation"
-
 	(self componentForPackageNamed: packageName)
 		ifNil: [ self error: 'No component found for package ' , packageName printString ]
 		ifNotNil: [ :component | 
-			| userDict dict default |
+			| packageMap propertiesMap default |
 			default := self _loadSpecification
 				gemstoneDefaultUseSessionMethodsForExtensionsForUser:
 					Rowan image currentUserId.
-			userDict := component
-				conditionalPackageMapSpecsAtGemStoneUserId: Rowan currentUserId
-				ifAbsent: [ 
-					component
-						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
-						ifAbsent: [ ^ default ] ].
-			dict := (userDict
+			packageMap := (component
+				conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId)
 				at: #'packageNameToPlatformPropertiesMap'
-				ifAbsentPut: [ ^ default ]) at: packageName ifAbsentPut: [ ^ default ].
-			^ dict at: 'useSessionMethodsForExtensions' ifAbsent: [ ^ default ] ]
+				ifAbsent: [ 
+					(component
+						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
+						at: #'packageNameToPlatformPropertiesMap'
+						ifAbsent: [ ^ default ] ].
+			propertiesMap := packageMap at: packageName ifAbsent: [ ^ default ].
+			^ propertiesMap at: 'useSessionMethodsForExtensions' ifAbsent: [ ^ default ] ]
 ]
