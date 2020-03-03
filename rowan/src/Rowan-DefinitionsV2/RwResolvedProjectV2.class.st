@@ -404,6 +404,13 @@ RwResolvedProjectV2 >> compileWhileReading: aBoolean [
 	self dynamicInstVarAt: #'compileWhileReading' put: aBoolean
 ]
 
+{ #category : 'querying' }
+RwResolvedProjectV2 >> componentForPackageNamed: packageName [
+	"Answer nil if no component found"
+
+	^ self _projectDefinition componentForPackageNamed: packageName
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> componentNamed: aComponentName [
 	^ self _projectDefinition componentNamed: aComponentName

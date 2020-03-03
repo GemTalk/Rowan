@@ -5,10 +5,11 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 
 	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
 
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool 
-		testProjectDefinition testPackageNames classDefinition testInstance projectTools symDict registry
-		resolvedProject componentName |
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 
+		packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames 
+		classDefinition testInstance projectTools symDict registry resolvedProject componentName |
 	projectName1 := 'Simple Browser1'.
+	componentName := 'Core'.
 	packageName1 := 'Simple1-Core'.
 	packageName2 := 'Simple1-Extensions'.
 	packageNames1 := {packageName1}.
@@ -31,7 +32,10 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	projectTools := Rowan projectTools.
 	browserTool := projectTools browser.
 
-	browserTool addPackageNamed: packageName2  toComponentNamed: 'Core' andProjectNamed: projectName1.	"new package packageName2"
+	browserTool 
+		addPackageNamed: packageName2  
+		toComponentNamed: componentName 
+		andProjectNamed: projectName1.	"new package packageName2"
 
 	packageNames1 := {packageName1.
 	packageName2}.
@@ -80,7 +84,6 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	(Rowan image loadedProjectNamed: projectName2 ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	componentName := 'Core'.
 	resolvedProject := RwResolvedProjectV2 new
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
@@ -186,7 +189,6 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -194,8 +196,11 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 
 	"similar to testDeleteComplicatedClass ... but delete package that contains the class ... should be similar result"
 
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 browserTool classDefinition projectTools testClass testProjectDefinition testPackageNames theProjectNames thePackageNames |
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 
+		packageName2 browserTool classDefinition projectTools testClass testProjectDefinition 
+		testPackageNames theProjectNames thePackageNames componentName resolvedProject |
 	projectName1 := 'Simple Browser1'.
+	componentName := 'Core'.
 	packageName1 := 'Simple1-Core'.
 	packageName2 := 'Simple1-Extensions'.
 	packageNames1 := {packageName1}.
@@ -215,7 +220,10 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	projectTools := Rowan projectTools.
 	browserTool := projectTools browser.
 
-	browserTool addPackageNamed: packageName2 toProjectNamed: projectName1.	"new package packageName2"
+	browserTool 
+		addPackageNamed: packageName2 
+		toComponentNamed: componentName 
+		andProjectNamed: projectName1.	"new package packageName2"
 
 	packageNames1 := {packageName1.
 	packageName2}.
@@ -242,16 +250,19 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	(Rowan image loadedProjectNamed: projectName2 ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	browserTool
-		createGitPackageProjectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			"create a second project for more extension methods"
-			projectDef
-				addPackagesNamed: packageNames2;
-				defaultSymbolDictName: self _symbolDictionaryName1;
-				defaultUseSessionMethodsForExtensions: true;
-				comment: 'another project for testing project browser api';
-				yourself ].
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName2;
+		projectsHome: self _testRowanProjectsSandbox;
+		comment:'another project for testing project browser api';
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames2 toComponentNamed: componentName;
+		yourself.
+
+	resolvedProject
+		resolve;
+		load.
 
 	browserTool
 		addOrUpdateMethod: 'bar ^''bar'''
@@ -567,6 +578,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	testProjectDefinition := browserTool projectNamed: projectName1.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames = {packageName2}
+
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

@@ -2,23 +2,30 @@ Extension { #name : 'RwBrowserToolTest' }
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
-
-	| projectDefinition |
-	projectDefinition := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
+	| resolvedProject componentName |
+	componentName := 'Core'.
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
 		comment: comment;
-		packageNames: packageNames;
-		defaultSymbolDictName: defaultSymbolDictName;
+		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
 		yourself.
 
 	packageNames
 		do: [ :packageName | 
-			projectDefinition
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: packageName ].
+			| component |
+			component := resolvedProject componentForPackageNamed: packageName.
+			component
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+				andPackageName: packageName
+				setUseSessionMethodsForExtensions: true ].
 
-	^ projectDefinition
+	resolvedProject
+		resolve;
+		load.
+	^ resolvedProject
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

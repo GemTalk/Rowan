@@ -372,6 +372,21 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: use
 ]
 
 { #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setUseSessionMethodsForExtensions: aBool [
+	| dict |
+	dict := (((self conditionalPackageMapSpecs
+		at: 'gemstone'
+		ifAbsentPut: [ Dictionary new ]) at: userId ifAbsentPut: [ Dictionary new ])
+		at: #'packageNameToPlatformPropertiesMap'
+		ifAbsentPut: [ Dictionary new ])
+		at: packageName
+		ifAbsentPut: [ Dictionary new ].
+	aBool
+		ifNil: [ dict removeKey: 'useSessionMethodsForExtensions' ifAbsent: [  ] ]
+		ifNotNil: [ dict at: 'useSessionMethodsForExtensions' put: aBool ]
+]
+
+{ #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtPackageName: packageName setVaPrequisitesTo: prereqsArray [
 	| packageDict propertiesDict prereqs |
 	packageDict := self conditionalPackageMapSpecs

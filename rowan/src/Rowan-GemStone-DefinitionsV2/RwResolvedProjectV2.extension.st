@@ -64,7 +64,23 @@ RwResolvedProjectV2 >> useSessionMethodsForExtensionsForPackageNamed: packageNam
 
 	"https://github.com/GemTalk/Rowan/issues/533"
 
-	^ self _loadSpecification
-		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
-			Rowan image currentUserId
+	"first cut at implementation"
+
+	(self componentForPackageNamed: packageName)
+		ifNil: [ self error: 'No component found for package ' , packageName printString ]
+		ifNotNil: [ :component | 
+			| userDict dict default |
+			default := self _loadSpecification
+				gemstoneDefaultUseSessionMethodsForExtensionsForUser:
+					Rowan image currentUserId.
+			userDict := component
+				conditionalPackageMapSpecsAtGemStoneUserId: Rowan currentUserId
+				ifAbsent: [ 
+					component
+						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
+						ifAbsent: [ ^ default ] ].
+			dict := (userDict
+				at: #'packageNameToPlatformPropertiesMap'
+				ifAbsentPut: [ ^ default ]) at: packageName ifAbsentPut: [ ^ default ].
+			^ dict at: 'useSessionMethodsForExtensions' ifAbsent: [ ^ default ] ]
 ]

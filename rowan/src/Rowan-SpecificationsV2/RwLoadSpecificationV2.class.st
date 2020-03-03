@@ -326,10 +326,11 @@ RwLoadSpecificationV2 >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
 
 { #category : 'gemstone-support' }
 RwLoadSpecificationV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
-
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
-		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultUseSessionMethodsForExtensions put: aBool
+		at: userId
+		ifAbsentPut: [ Dictionary new ])
+		at: #'defaultUseSessionMethodsForExtensions'
+		put: aBool
 ]
 
 { #category : 'gemstone-support' }

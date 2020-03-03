@@ -610,6 +610,13 @@ RwProjectDefinitionV2 >> clone [
 	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
 ]
 
+{ #category : 'querying' }
+RwProjectDefinitionV2 >> componentForPackageNamed: packageName [
+	"Answer nil if no component found"
+
+	^ self components componentForPackageNamed: packageName
+]
+
 { #category : 'actions' }
 RwProjectDefinitionV2 >> create [
 	"write the project structure to disk, if it doesn't already exist"

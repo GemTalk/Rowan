@@ -72221,14 +72221,16 @@ symbolDictionaryFor: aPackageName
 category: 'actions'
 method: RwGsClassExtensionSymbolDictPatch
 installClassExtensionInSystem
-
 	"The class must already exist.
         Create or update the LoadedClassExtension for the extended class."
 
 	(self projectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
-		ifTrue: [ | resolved |
-			((resolved := Rowan image symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
+		ifTrue: [ 
+			| resolved |
+			Rowan image ensureSessionMethodsEnabled.
+			((resolved := Rowan image symbolList objectNamed: self className asSymbol)
+				notNil and: [ resolved isBehavior and: [ resolved isMeta not ] ])
 				ifFalse: [ 
 					self
 						error:
