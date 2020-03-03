@@ -173,8 +173,11 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 	self assert: loadedProjects size = 1.
 	loadedProjects
 		do: [ :project | 
+			| testSuite |
 			self assert: (x := project audit) isEmpty.
-			testResult := project testSuite run.
+			testSuite := project testSuite.
+			self deny: testSuite tests isEmpty.
+			testResult := testSuite run.
 			self deny: testResult hasErrors.
 			self deny: testResult hasFailures.
 
@@ -2066,9 +2069,10 @@ RwRowanSample9Test >> testSpec_0032 [
 { #category : 'tests' }
 RwRowanSample9Test >> testSwitchRepository [
 	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
-		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for manipulating projectsHome and repositoryRoot."
+		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 
+		manipulating projectsHome and repositoryRoot."
 
-	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 project2 |
+	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 loadedProjects |
 	loadSpec1 := (self _loadSpecNamed: 'spec_0002')
 		projectAlias: 'RowanSample9_0002';
 		yourself.
@@ -2086,13 +2090,27 @@ RwRowanSample9Test >> testSwitchRepository [
 	resolvedProject1 := loadSpec1 resolve.
 	resolvedProject2 := loadSpec2 resolve.
 
-"load projects"
-false ifTrue: [ 
-	resolvedProject1 load.
+"validate"
+	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+
+"load project1"
+	loadedProjects := resolvedProject1 load.
 	project1 := Rowan projectNamed: loadSpec1 projectName.
 
-	resolvedProject2 load.
-	project2 := Rowan projectNamed: loadSpec2 projectName.
-].
-self halt.
+"change repository root of the loaded project"
+	project1 repositoryRoot: resolvedProject2 repositoryRoot.
+
+"validate"
+	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
+	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
+	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
+	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+
+"load project1 from spec_0002 checkout"
+	loadedProjects := project1 load.
+
+"Validate"
+	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
+	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar = 'bar'.	"bar method not present in spec_0001"
+	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
 ]

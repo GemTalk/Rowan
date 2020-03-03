@@ -65,6 +65,20 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolved
 	handle := aResolvedProject copyForLoadedProject
 ]
 
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> load [
+	"load the receiver into the image"
+
+	^ self asDefinition loadProjectSet
+]
+
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> load: instanceMigrator [
+	"load the receiver into the image"
+
+	self error: 'not yet implemented'
+]
+
 { #category : 'properties' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadedCommitId [
 
