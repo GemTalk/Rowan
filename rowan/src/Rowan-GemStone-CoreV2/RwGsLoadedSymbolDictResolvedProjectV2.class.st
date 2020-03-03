@@ -21,7 +21,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 		basicLoadSpecification: handle _loadSpecification copy)
 		packages: self loadedPackageDefinitions;
 		yourself.
-	resolvedProject _projectRepository: resolvedProject _projectRepository copy.
+	resolvedProject _projectRepository: handle _projectRepository copy.
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
 			RwLoadedProject _projectLoadedDefinitionSourceValue.
