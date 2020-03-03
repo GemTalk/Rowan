@@ -29,7 +29,7 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 		symbolDictionaryName: symDictName 
 		validate: false.
 
-	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName1 toComponentNamed: 'Core' andProjectNamed: projectName validate: false.
 
 	theOriginalClass := Object
 		rwSubclass: className
@@ -91,7 +91,7 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 		symbolDictionaryName: symDictName 
 		validate: false.
 
-	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName1 toComponentNamed: 'Core' andProjectNamed: projectName validate: false.
 
 	theOriginalClass1 := Object
 		rwSubclass: className1
@@ -239,7 +239,7 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 		symbolDictionaryName: symDictName 
 		validate: false.
 
-	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName1 toComponentNamed: 'Core' andProjectNamed: projectName validate: false.
 
 	theOriginalClass := Object
 		rwSubclass: className
@@ -301,7 +301,7 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 		symbolDictionaryName: symDictName 
 		validate: false.
 
-	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName1 toComponentNamed: 'Core' andProjectNamed: projectName validate: false.
 
 	theOriginalClass := Object
 		rwSubclass: className1
