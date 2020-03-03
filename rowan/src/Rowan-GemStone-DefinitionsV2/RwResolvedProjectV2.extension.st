@@ -1,6 +1,11 @@
 Extension { #name : 'RwResolvedProjectV2' }
 
 { #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneDefaultSymbolDictName [
+	^ self _loadSpecification gemstoneDefaultSymbolDictName
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 	^ self _loadSpecification gemstoneDefaultSymbolDictNameForUser: userId
 ]

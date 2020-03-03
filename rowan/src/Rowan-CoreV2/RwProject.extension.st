@@ -14,7 +14,7 @@ RwProject >> platformConditionalAttributes [
 
 { #category : '*rowan-corev2' }
 RwProject >> repositoryRoot [
-	^ self _loadedProject resolvedProject repositoryRoot
+	^ self _loadedProject repositoryRoot
 ]
 
 { #category : '*rowan-corev2' }

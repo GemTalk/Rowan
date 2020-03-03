@@ -260,6 +260,11 @@ RwLoadSpecificationV2 >> gemstoneDefaultMethodEnvForUser: userId [
 ]
 
 { #category : 'gemstone-support' }
+RwLoadSpecificationV2 >> gemstoneDefaultSymbolDictName [
+	^ self gemstoneDefaultSymbolDictNameForUser: self _gemstoneAllUsersName
+]
+
+{ #category : 'gemstone-support' }
 RwLoadSpecificationV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 	| gemstoneProperties userProperties |
 	gemstoneProperties := self platformProperties
