@@ -30278,10 +30278,15 @@ category: 'private'
 method: DiskStore
 basicCreationTimeOf: anEntry
 	" the entry contains the seconds since the squeak epoch in local time"
-	| dt |
-	dt := DateAndTime posixSeconds:  (anEntry at: 2)  offset: (Duration seconds: 0).
-	dt offset: (Duration seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC).
-	^ dt
+
+	"this method should be reimplemented with the new file system code"
+
+	| dt offset |
+	offset := Duration seconds: 0.
+	dt := DateAndTime posixSeconds: (anEntry at: 2) offset: offset.
+	offset := Duration
+		seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC.
+	^ DateAndTime posixSeconds: (anEntry at: 2) offset: offset	"SmallDateAndTime prevents changing the offset, so create a new instance, as suggesed"
 %
 
 category: 'private'
@@ -30343,10 +30348,12 @@ method: DiskStore
 basicModificationTimeOf: anEntry
 	" the entry contains the seconds since the squeak epoch in local time"
 
-	| dt |
-	dt := DateAndTime posixSeconds:  (anEntry at: 3) offset: (Duration seconds: 0).
-	dt offset: (Duration seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC).
-	^ dt
+	| dt offset |
+	offset := Duration seconds: 0.
+	dt := DateAndTime posixSeconds: (anEntry at: 3) offset: offset.
+	offset := Duration
+		seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC.
+	^ DateAndTime posixSeconds: (anEntry at: 3) offset: offset
 %
 
 category: 'public'
@@ -103898,10 +103905,11 @@ testLoadFullMultiProjectDefs
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -103988,10 +103996,11 @@ testLoadMultiProjectDefs
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -104342,10 +104351,11 @@ testNewClassVersionB
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -104903,10 +104913,11 @@ testNewClassVersion_multi_project_change_extension_method_protocol
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: false
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: false ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -105095,10 +105106,11 @@ testNewClassVersion_multi_project_change_extension_method_source
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: false
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: false ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -105281,10 +105293,11 @@ testNewClassVersion_multi_project_unchanged_extension_method_protocol
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: false
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: false  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -105455,10 +105468,11 @@ testNewClassVersion_session_method_change_extension_method_protocol
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -105645,10 +105659,11 @@ testNewClassVersion_session_method_change_extension_method_source
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -105829,10 +105844,11 @@ testNewClassVersion_session_method_unchanged_extension_method_protocol
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''

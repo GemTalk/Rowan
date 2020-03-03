@@ -96,10 +96,15 @@ DiskStore >> basenameFromEntry: entry [
 { #category : 'private' }
 DiskStore >> basicCreationTimeOf: anEntry [
 	" the entry contains the seconds since the squeak epoch in local time"
-	| dt |
-	dt := DateAndTime posixSeconds:  (anEntry at: 2)  offset: (Duration seconds: 0).
-	dt offset: (Duration seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC).
-	^ dt
+
+	"this method should be reimplemented with the new file system code"
+
+	| dt offset |
+	offset := Duration seconds: 0.
+	dt := DateAndTime posixSeconds: (anEntry at: 2) offset: offset.
+	offset := Duration
+		seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC.
+	^ DateAndTime posixSeconds: (anEntry at: 2) offset: offset	"SmallDateAndTime prevents changing the offset, so create a new instance, as suggesed"
 ]
 
 { #category : 'private' }
@@ -155,10 +160,12 @@ DiskStore >> basicIsSymlink: anEntry [
 DiskStore >> basicModificationTimeOf: anEntry [
 	" the entry contains the seconds since the squeak epoch in local time"
 
-	| dt |
-	dt := DateAndTime posixSeconds:  (anEntry at: 3) offset: (Duration seconds: 0).
-	dt offset: (Duration seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC).
-	^ dt
+	| dt offset |
+	offset := Duration seconds: 0.
+	dt := DateAndTime posixSeconds: (anEntry at: 3) offset: offset.
+	offset := Duration
+		seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC.
+	^ DateAndTime posixSeconds: (anEntry at: 3) offset: offset
 ]
 
 { #category : 'public' }

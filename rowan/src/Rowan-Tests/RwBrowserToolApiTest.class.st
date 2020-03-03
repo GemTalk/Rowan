@@ -613,10 +613,11 @@ RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -702,10 +703,11 @@ RwBrowserToolApiTest >> testLoadMultiProjectDefs [
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -1346,10 +1348,11 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: false
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: false ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -1537,10 +1540,11 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_change_extension_metho
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: false
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: false ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -1722,10 +1726,11 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_unchanged_extension_me
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: false
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: false  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -1895,10 +1900,11 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_change_extension_meth
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -2084,10 +2090,11 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_change_extension_meth
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -2267,10 +2274,11 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_unchanged_extension_m
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -2528,10 +2536,11 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :projectDef | 
-			projectDef
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: project2PackageName2 ].
+		updateDefinition: [ :resolvedProject| 
+			(resolvedProject componentNamed: 'Core')
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+				andPackageName: project2PackageName2 
+				setUseSessionMethodsForExtensions: true ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''

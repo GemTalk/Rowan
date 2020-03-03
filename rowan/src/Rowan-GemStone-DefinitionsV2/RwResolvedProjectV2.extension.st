@@ -60,13 +60,14 @@ RwResolvedProjectV2 >> methodEnvForPackageNamed: packageName [
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> useSessionMethodsForExtensionsForPackageNamed: packageName [
+	| default |
+	default := self _loadSpecification
+		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
+			Rowan image currentUserId.
 	(self componentForPackageNamed: packageName)
-		ifNil: [ self error: 'No component found for package ' , packageName printString ]
+		ifNil: [ ^ default ]
 		ifNotNil: [ :component | 
-			| packageMap propertiesMap default |
-			default := self _loadSpecification
-				gemstoneDefaultUseSessionMethodsForExtensionsForUser:
-					Rowan image currentUserId.
+			| packageMap propertiesMap |
 			packageMap := (component
 				conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId)
 				at: #'packageNameToPlatformPropertiesMap'

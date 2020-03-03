@@ -588,10 +588,12 @@ RwBrowserToolApiTest >> testIssue471_1 [
 
   "https://github.com/dalehenrich/Rowan/issues/471"
 
-  | projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-    className4 projectSetDefinition class1 class2 class3 class4 oldClass1 oldClass2 oldClass3  |
+  | projectName  packageName1 packageName2 classDefinition packageDefinition 
+		className1 className2 className3 className4 projectSetDefinition class1 class2 class3 
+		class4 oldClass1 oldClass2 oldClass3 resolvedProject componentName |
 
   projectName := 'Issue471'.
+  componentName := 'Core'.
   packageName1 := 'Issue471-Core'.
   packageName2 := 'Issue471-Extensions'.
   className1 := 'Issue471Class1'.
@@ -605,14 +607,17 @@ RwBrowserToolApiTest >> testIssue471_1 [
         ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-  projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-    newForGitBasedProjectNamed: projectName)
-    addPackageNamed: packageName1;
-    addPackageNamed: packageName2;
-    defaultSymbolDictName: self _symbolDictionaryName1;
-    yourself.
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1. packageName2} toComponentNamed: componentName;
+		yourself.
 
-  packageDefinition := projectDefinition packageNamed: packageName1.
+	resolvedProject resolve.
+
+  packageDefinition := resolvedProject packageNamed: packageName1.
 
   classDefinition := (RwClassDefinition
     newForClassNamed: className1
@@ -658,7 +663,7 @@ RwBrowserToolApiTest >> testIssue471_1 [
 
 "load"
   projectSetDefinition := RwProjectSetDefinition new.
-  projectSetDefinition addDefinition: projectDefinition.
+  projectSetDefinition addDefinition: resolvedProject.
   Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
@@ -673,8 +678,8 @@ RwBrowserToolApiTest >> testIssue471_1 [
   self assert: class3 instVarNames = #(ivar4 ivar3).
   self assert: class3 superClass == class2.
 
-"remove class2 and add class4 -- edit projectDefinition structure in place"
-  packageDefinition := projectDefinition packageNamed: packageName1.
+"remove class2 and add class4 -- edit resolvedProject structure in place"
+  packageDefinition := resolvedProject packageNamed: packageName1.
 
   packageDefinition removeClassNamed: className2.
 
@@ -718,10 +723,12 @@ RwBrowserToolApiTest >> testIssue471_2 [
 
   "https://github.com/dalehenrich/Rowan/issues/471"
 
-  | projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-    className4 projectSetDefinition class1 class2 class3 class4 oldClass1 oldClass2 oldClass3  |
+  | projectName  packageName1 packageName2 resolvedProject classDefinition packageDefinition className1 className2 className3
+    className4 projectSetDefinition class1 class2 class3 class4 oldClass1 oldClass2 oldClass3 componentName |
 
   projectName := 'Issue471'.
+  componentName := 'Core'.
+
   packageName1 := 'Issue471-Core'.
   packageName2 := 'Issue471-Extensions'.
   className1 := 'Issue471Class1'.
@@ -735,14 +742,17 @@ RwBrowserToolApiTest >> testIssue471_2 [
         ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-  projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-    newForGitBasedProjectNamed: projectName)
-    addPackageNamed: packageName1;
-    addPackageNamed: packageName2;
-    defaultSymbolDictName: self _symbolDictionaryName1;
-    yourself.
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1. packageName2} toComponentNamed: componentName;
+		yourself.
 
-  packageDefinition := projectDefinition packageNamed: packageName1.
+	resolvedProject resolve.
+
+  packageDefinition := resolvedProject packageNamed: packageName1.
 
   classDefinition := (RwClassDefinition
     newForClassNamed: className1
@@ -788,7 +798,7 @@ RwBrowserToolApiTest >> testIssue471_2 [
 
 "load"
   projectSetDefinition := RwProjectSetDefinition new.
-  projectSetDefinition addDefinition: projectDefinition.
+  projectSetDefinition addDefinition: resolvedProject.
   Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
@@ -803,11 +813,11 @@ RwBrowserToolApiTest >> testIssue471_2 [
   self assert: class3 instVarNames = #(ivar4 ivar3).
   self assert: class3 superClass == class2.
 
-"remove class2 and add class4 -- edit projectDefinition structure in place"
-  projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-  self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue).
+"remove class2 and add class4 -- edit resolvedProject structure in place"
+  resolvedProject := (Rowan image loadedProjectNamed: projectName) asDefinition.
+  self assert: (resolvedProject projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue).
 
-  packageDefinition := projectDefinition packageNamed: packageName1.
+  packageDefinition := resolvedProject packageNamed: packageName1.
 
   packageDefinition removeClassNamed: className2.
 
@@ -826,7 +836,7 @@ RwBrowserToolApiTest >> testIssue471_2 [
     addClassDefinition: classDefinition.
 "load"
   projectSetDefinition := RwProjectSetDefinition new.
-  projectSetDefinition addDefinition: projectDefinition.
+  projectSetDefinition addDefinition: resolvedProject.
   Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"

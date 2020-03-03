@@ -1,6 +1,8 @@
 RwSimpleProjectLoadComponentV2 {
 	#name : 'Tests',
 	#condition : 'tests',
+	#projectNames : [ ],
+	#componentNames : [ ],
 	#packageNames : [
 		'FileSystem-Tests-Attributes',
 		'FileSystem-Tests-Core',
