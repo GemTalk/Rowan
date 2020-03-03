@@ -2062,3 +2062,37 @@ RwRowanSample9Test >> testSpec_0032 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 ]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSwitchRepository [
+	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
+		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for manipulating projectsHome and repositoryRoot."
+
+	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 project2 |
+	loadSpec1 := (self _loadSpecNamed: 'spec_0002')
+		projectAlias: 'RowanSample9_0002';
+		yourself.
+	loadSpec2 := (self _loadSpecNamed: 'spec_0003')
+		projectAlias: 'RowanSample9_0003';
+		yourself.
+
+	projectNames := {loadSpec1 projectName. loadSpec2 projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve projects"
+	resolvedProject1 := loadSpec1 resolve.
+	resolvedProject2 := loadSpec2 resolve.
+
+"load projects"
+false ifTrue: [ 
+	resolvedProject1 load.
+	project1 := Rowan projectNamed: loadSpec1 projectName.
+
+	resolvedProject2 load.
+	project2 := Rowan projectNamed: loadSpec2 projectName.
+].
+self halt.
+]

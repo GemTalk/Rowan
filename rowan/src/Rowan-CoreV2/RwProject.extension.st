@@ -13,13 +13,13 @@ RwProject >> platformConditionalAttributes [
 ]
 
 { #category : '*rowan-corev2' }
-RwProject >> projectsHome [
-	^ self _loadedProject resolvedProject projectsHome
+RwProject >> repositoryRoot [
+	^ self _loadedProject resolvedProject repositoryRoot
 ]
 
 { #category : '*rowan-corev2' }
-RwProject >> projectsHome: aFileReference [
-	self _loadedProject resolvedProject projectsHome: aFileReference
+RwProject >> repositoryRoot: aFileReference [
+	self _loadedProject resolvedProject repositoryRoot: aFileReference
 ]
 
 { #category : '*rowan-corev2' }
