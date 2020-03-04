@@ -253,35 +253,40 @@ JadeServer >> _describeMethod: aMethod [
 	"Provide info needed to create a GsMethod in Jade client"
 	"Nice to add packageName and mcTimestamp"
 
-	| allSelectors class list oldGsMethod string methodUpdate |
-
-	methodUpdate := methodCommandResult isNil ifTrue:[RowanMethodUpdate new]
-		ifFalse:[methodCommandResult methods detect:[:update | update selector = aMethod selector]].
+	| allSelectors class list oldGsMethod string x |
 	self environment: (self environmentForMethod: aMethod).
-		
-	methodUpdate 	"Line 1 for GsMethod (line 3 for JadeSystemBrowserPresenter)"
-"1"		classOop: (class := aMethod inClass) asOop;
-"2"		className: class printString;
-"3"		methodOop: aMethod asOop;
-"4"		selector: aMethod selector;
-"5"		category: (self categoryOfMethod: aMethod);
-"6"		isReadOnly: (self currentUserMayEditMethod: aMethod);
-			source: (RowanMethodService removeUnicodeFromSource: aMethod sourceString).
+	writeStream 	"Line 1 for GsMethod (line 3 for JadeSystemBrowserPresenter)"
+"1"		nextPutAll: (class := aMethod inClass) asOop printString; tab;
+"2"		nextPutAll: class printString; tab;
+"3"		nextPutAll: aMethod asOop printString; tab;
+"4"		nextPutAll: ((x := aMethod selector) isNil ifFalse: [x] ifTrue: ['']); tab;
+"5"		nextPutAll: (self categoryOfMethod: aMethod); tab;
+"6"		nextPutAll: (self currentUserMayEditMethod: aMethod) asString; tab;
+		lf.
+
+	"Method source"
+	writeStream nextPutAll: (string := aMethod sourceString).
+	string last = Character lf ifFalse: [writeStream lf].
+	writeStream nextPut: $%; lf.	"Lines 2-N"
 
 	"unimplemented selectors"			"https://github.com/jgfoster/Jade/issues/117"
 	((aMethod class includesSelector: #'_selectorPool') and: [aMethod class includesSelector: #'_sourceOffsetOfFirstSendOf:']) ifTrue: [
 		allSelectors := self _allSelectors.
 		(aMethod _selectorPool reject: [:each | allSelectors includes: each]) do: [:each | 
-			methodUpdate firstSendOffsets at: (aMethod _sourceOffsetOfFirstSendOf: each) put: each.
+			(aMethod _sourceOffsetOfFirstSendOf: each) printOn: writeStream.
+			writeStream space; nextPutAll: each; tab.
 		].
 	].
+	writeStream lf.	"Line N+1"
 
 	"Array of Associations (offset -> selector) indexed by step points"
 	list := self sbUpdateMethodStepPointsFor: aMethod.
-	list do:[:each | methodUpdate stepPoints at: each key printString put: each value].
+	list := list collect: [:each | each key printString , ' ' , each value].
+	self writeList: list.	"Line N+2"
 
 	"breaks"
-	methodUpdate breakPoints: (self sbUpdateMethodBreakPointsFor: aMethod).
+	list := self sbUpdateMethodBreakPointsFor: aMethod.
+	self writeList: (list collect: [:each | each printString]).	"Line N+3"
 
 	"original method"
 	oldGsMethod := (aMethod inClass class canUnderstand: #'persistentMethodDictForEnv:')
@@ -290,16 +295,18 @@ JadeServer >> _describeMethod: aMethod [
 			ifTrue: [aMethod inClass _rawMethodDict at: aMethod selector ifAbsent: [aMethod]]
 			ifFalse: [aMethod]].
 	aMethod ~~ oldGsMethod ifTrue: [
-		methodUpdate originalMethodSource: oldGsMethod sourceString.
+		string := oldGsMethod sourceString.
+		writeStream nextPutAll: string.
+		(string notEmpty and: [string last = Character lf]) ifFalse: [writeStream lf].
 	].
+	writeStream nextPut: $%; lf.
 
 	"method compile warnings"
 	string := selections isNil 
 		ifTrue: ['']
 		ifFalse: [selections at: #'methodWarnings' ifAbsent: ['']].
 	string isNil ifTrue: [string := ''].
-	methodUpdate compilationWarnings: string.
-	methodUpdate writeMethodTo: writeStream.
+	writeStream nextPutAll: string; nextPut: $%; lf.
 ]
 
 { #category : 'category' }
@@ -576,6 +583,7 @@ JadeServer >> _sourceForProcess: gsProcess frame: level [
 		nextPutAll: '</frame>'; lf;
 		yourself.
 	^self asAsciiString: writeStream contents.
+
 
 
 ]
@@ -3574,20 +3582,6 @@ JadeServer >> sbClassFrom: anOrderedCollection [
 ]
 
 { #category : 'category' }
-JadeServer >> sbClassTemplate [
-	| def service classInfoUpdate |
-	service := Rowan classServiceClass forClassNamed: 'Object'.
-	def := service classCreationTemplate.
-	classInfoUpdate := RowanClassInfoUpdate new.
-	classInfoUpdate 
-		oop: 0;
-		template: def.
-	classInfoUpdate writeInfoOn: writeStream
-
-
-]
-
-{ #category : 'category' }
 JadeServer >> sbComparePackages: anOrderedCollection [
 
 	| current ancestor repository patch string |
@@ -4270,34 +4264,6 @@ JadeServer >> sbUnloadPackage: anOrderedCollection [
 ]
 
 { #category : 'category' }
-JadeServer >> sbUpdateClassCategories [
-
-	| categories selection override categoryUpdate |
-	categoryUpdate := RowanClassCategoryUpdate new. 
-	categories := Set new.
-	classList do: [:each | categories add: each category].
-	categoryUpdate categories addAll: categories asSortedCollection.
-	categoryUpdate writeCategoriesTo: writeStream.
-	selection := self nextLine.
-	categoryUpdate selection: selection. 
-	(override := selections at: #'category' ifAbsent: [nil]) notNil ifTrue: [selection := override , '-'].
-	selection := 1 < selection size 
-		ifTrue: [selection copyFrom: 1 to: selection size - 1]
-		ifFalse: [''].
-	selection notEmpty ifTrue: [
-		categories := categories select: [:each | (each copyFrom: 1 to: (each size min: selection size)) = selection].
-		categories isEmpty ifTrue: [selection := ''].
-		categories notEmpty ifTrue: [
-			classList := classList select: [:each | categories includes: each category].
-		].
-	].
-	categoryUpdate writeSelectionTo: writeStream.
-
-
-
-]
-
-{ #category : 'category' }
 JadeServer >> sbUpdateClasses [
 
 	| tabName |
@@ -4306,143 +4272,6 @@ JadeServer >> sbUpdateClasses [
 	tabName = 'classList' ifTrue: [^self sbUpdateClassList].
 	tabName = 'classHierarchy' ifTrue: [^self sbUpdateClassHierarchy].
 	self error: 'Unexpected token!'.
-
-
-]
-
-{ #category : 'category' }
-JadeServer >> sbUpdateClassHierarchy [
-
-	| currentSelection currentClass  override classHierarchyUpdate |
-	
-	classHierarchyUpdate := RowanClassHierarchyUpdate new. 
-	classList do: [:each | 
-		classHierarchyUpdate addHierarchyFor: each
-	].
-	classHierarchyUpdate writeHierarchyTo: writeStream. 
-	"now figure out which class to select"
-	currentSelection := self nextLineAsList.
-	(override := selections at: #'className' ifAbsent: [nil]) notNil ifTrue: [currentSelection := Array with: override].
-	currentSelection isEmpty ifTrue: [
-		selectedClass := nil.
-	] ifFalse: [
-		(currentClass := selections at: #'class' ifAbsent: [nil]) isNil ifTrue: [
-			| className |
-			className := (currentSelection last subStrings: Character space) first asSymbol.
-			selectedClass := classHierarchyUpdate allClasses detect: [:each | each name = className] ifNone:[].
-		] ifFalse: [
-			selectedClass := nil.
-			[
-				selectedClass isNil and: [currentClass notNil].
-			] whileTrue: [
-				selectedClass := classHierarchyUpdate allClasses detect: [:each | each = currentClass] ifNone:[].
-				currentClass := currentClass superclass.
-			].
-		].
-	].
-	classHierarchyUpdate addSelectionHierarchyFor: selectedClass.
-	classHierarchyUpdate writeSelectionHierarchyTo: writeStream.
-	classHierarchyUpdate writeTestCaseInfoTo: writeStream.
-
-
-
-
-]
-
-{ #category : 'category' }
-JadeServer >> sbUpdateClassInfo [
-	| classInfoUpdate |
-	selectedClass isNil ifTrue: [
-		^self sbClassTemplate. 
-].
-	classInfoUpdate := RowanClassInfoUpdate new. 
-	classInfoUpdate oop: (self oopOf: selectedClass).
-	classInfoUpdate template: (Rowan classServiceClass forClassNamed: selectedClass name)
-							classCreationTemplate.
-	classInfoUpdate category: ((classInfoUpdate template includesString: 'category: ''')
-					ifFalse: [' category: ' , selectedClass category printString]).
-	classInfoUpdate comment: selectedClass rwComment. 
-	classInfoUpdate writeInfoOn: writeStream.
-]
-
-{ #category : 'category' }
-JadeServer >> sbUpdateClassList [
-
-	| mySelections override classesUpdate |
-	classesUpdate := RowanClassesUpdate new. 
-	(classList asSortedCollection: [:a :b | a name <= b name]) do: [:eachClass | 
-		classesUpdate classNames add: eachClass name. 
-	].
-	classesUpdate writeClassesTo: writeStream. 
-	mySelections := self nextLineAsList collect: [:each | (each subStrings: Character space) first asSymbol].
-	(override := selections at: #'className' ifAbsent: [nil]) notNil ifTrue: [mySelections := Array with: override].
-	mySelections := classList select: [:eachClass | mySelections includes: eachClass name].
-	mySelections do: [:eachClass | 
-		classesUpdate selections add: eachClass asString].
-	classesUpdate writeSelectionsTo: writeStream. 
-	classesUpdate writeTestCaseInfoTo: writeStream. 
-	selectedClass := mySelections size = 1
-		ifTrue: [mySelections first]
-		ifFalse: [nil].
-
-
-]
-
-{ #category : 'category' }
-JadeServer >> sbUpdateDictionaries [
-
-	| override packagePolicy home symbolList oldSelections newSelections fullList globals dictionaryUpdate globalsUpdate |
-	dictionaryUpdate := RowanDictionaryUpdate new. 
-	oldSelections := self nextLineAsList.
-	(override := selections at: #'dictionary' ifAbsent: [nil]) notNil ifTrue: [oldSelections := Array with: override].
-	symbolList := self symbolList.
-	(packagePolicy := self gsPackagePolicy) notNil  ifTrue: [
-		home := packagePolicy homeSymbolDict.
-	].
-	fullList := symbolList collect: [:each | 
-		| hvName | 
-		hvName := (each == home ifTrue: ['H'] ifFalse: ['V']) , each name.
-		dictionaryUpdate dictionaries add: hvName.
-		hvName.
-		].
-	dictionaryUpdate writeDictionariesTo: writeStream.
-	fullList := fullList collect: [:each | each copyFrom: 2 to: each size].
-	newSelections := oldSelections select: [:each | fullList includes: each].
-	globals := Dictionary new.
-	newSelections do: [:eachName | 
-		| symbolDictionary globalKeyPrefix |
-		globalKeyPrefix := 1 < newSelections size ifTrue: [eachName , '.'] ifFalse: [''].
-		dictionaryUpdate selections add: eachName asString.
-		symbolDictionary := symbolList at: (fullList indexOf: eachName).
-		symbolDictionary keys asSortedCollection do: [:eachKey |
-			| eachGlobal |
-			eachGlobal := symbolDictionary at: eachKey.
-			(eachGlobal isBehavior and: [eachGlobal name == eachKey])
-				ifTrue: [classList add: eachGlobal]
-				ifFalse: [globals at: globalKeyPrefix , eachKey put: (symbolDictionary associationAt: eachKey)].
-		].
-	].
-	dictionaryUpdate writeSelectionsTo: writeStream. 
-	globalsUpdate := RowanGlobalsUpdate new. 
-	globals keys asSortedCollection do: [:eachKey | 
-		| eachAssociation eachValue string globalsArray |
-		eachAssociation := globals at: eachKey.
-		eachValue := eachAssociation value.
-		string := self asString: eachValue.
-		100 < string size ifTrue: [string := string copyFrom: 1 to: 100].
-		string := string collect: [:char | (char asciiValue < 32 or: [127 < char asciiValue]) ifTrue: [$.] ifFalse: [char]].
-		string := String withAll: string asArray.
-		globalsArray := Array new. 
-		globalsArray add: eachKey;
-						add: eachValue _class name;
-						add: string;
-						add: (self oopOf: eachValue) printString;
-						add: (self oopOf: eachAssociation) printString.
-		globalsUpdate globals add: globalsArray. 
-	].
-	globalsUpdate writeGlobalsTo: writeStream. 
-	
-
 
 
 ]
@@ -4728,42 +4557,6 @@ JadeServer >> sbUpdatePackage: aString [
 ]
 
 { #category : 'category' }
-JadeServer >> sbUpdatePackages [
-	| override modifiedList oldSelections newSelections fullList packagesUpdate |
-	
-	packagesUpdate := RowanPackageUpdate new. 
-	oldSelections := self nextLineAsList.
-	(override := selections at: #package ifAbsent: [nil]) notNil
-		ifTrue: [oldSelections := Array with: override].
-	fullList := Rowan serviceClass new rowanLoadedPackageNames subStrings: Character lf.
-	fullList := fullList reject: [:each | each isEmpty].
-	fullList := fullList asSortedCollection asArray.
-	fullList := fullList collect: [:each | each subStrings: Character tab].
-	fullList := fullList reject: [:each | each isEmpty].
-	modifiedList := (fullList select: [:each | (each at: 2) = 'Y']) collect: [:each | each at: 3].
-	fullList := fullList collect: [:each | each at: 3].
-	packagesUpdate modifiedPackages addAll: modifiedList. 
-	packagesUpdate packages addAll: (fullList collect: [:packageName | RowanPackageService forPackageNamed: packageName]) . 
-	packagesUpdate writePackagesTo: writeStream. 
-	packagesUpdate writeModifiedPackagesTo: writeStream. 
-	newSelections := oldSelections select: [:each | fullList includes: each].
-	(newSelections isEmpty and: [oldSelections size = 1])
-		ifTrue: 
-			[newSelections := fullList
-						select: [:each | (oldSelections first copyFrom: 1 to: (oldSelections first size min: each size)) = each]].
-	newSelections do: 
-			[:each |
-			| service |
-			packagesUpdate selections add: each asString. 
-			service := Rowan packageServiceClass forPackageNamed: each.
-			classList addAll: service loadedClassHandles].
-	packagesUpdate writeSelectionsTo: writeStream.
-	newSelections size = 1 ifTrue: [self sbUpdatePackage: newSelections first]
-
-
-]
-
-{ #category : 'category' }
 JadeServer >> sbUpdatePackagesOrDictionaries [
 
 	| selectedTab |
@@ -4779,49 +4572,6 @@ JadeServer >> sbUpdatePackagesOrDictionaries [
 		^self updateProjects].
 	self error: 'unexpected token'.
 
-
-]
-
-{ #category : 'category' }
-JadeServer >> sbUpdateSuperclass [
-
-	| class tabName selected index superclassUpdate |
-
-	superclassUpdate := RowanSuperclassUpdate new.
-	tabName := self nextLine. 
-	(#('default' 'instanceTab' 'classTab') includes: tabName) ifFalse: [self error: 'Unexpected token!'].
-	tabName = 'default' ifTrue: [
-		tabName := (selectedClass notNil and: [selectedClass selectors isEmpty and: [selectedClass class selectors notEmpty]]) 
-			ifTrue: ['classTab']
-			ifFalse: ['instanceTab'].
-	]. 
-	superclassUpdate tabName: tabName. 
-	superclassUpdate writeTabNameTo: writeStream.
-	selectedClass notNil ifTrue: [
-		selectedClass := tabName = 'instanceTab'
-			ifTrue: [selectedClass]
-			ifFalse: [selectedClass class].
-	].
-	class := selectedClass.
-	classList := OrderedCollection new.
-	[
-		class notNil.
-	] whileTrue: [
-		classList add: class.
-		superclassUpdate classNames add: class name asString. 
-		class := self environmentSuperClassFor: class.
-	].
-	superclassUpdate writeClassesTo: writeStream.
-	classList := classList reverse.
-	selected := self nextLine.
-	index := classList findFirst: [:each | each name asString = selected].
-	index = 0 ifTrue: [index := classList size].
-	0 < index ifTrue: [classList := classList copyFrom: index to: classList size].
-	classList notEmpty ifTrue: [
-		selectedClass := classList first.
-		superclassUpdate selections add: selectedClass asString.
-	].
-	superclassUpdate writeSelectionsTo: writeStream.
 
 ]
 
@@ -4977,10 +4727,7 @@ JadeServer >> stackForProcess: aGsProcess [
 
 { #category : 'category' }
 JadeServer >> step: aGsProcess inFrame: anInteger [
-
 	aGsProcess _stepOverInFrame: anInteger.
-
-
 ]
 
 { #category : 'category' }
@@ -5256,26 +5003,6 @@ JadeServer >> systemBrowserSTONA: aString [
 
 ]
 
-{ #category : 'jadeite' }
-JadeServer >> systemBrowserUpdate [
-
-	RowanCommandResult initializeResults. 
-	writeStream nextPutAll: 'update'; lf.
-	self 
-		sbUpdatePackagesOrDictionaries;
-		sbUpdateClassCategories;
-		sbUpdateClasses;
-		sbUpdateClassInfo; 
-		sbUpdateSuperclass. 
-		methodCommandResult := RowanMethodsUpdate new. 
-		self sbReadMethodFilter.
-		selectedClass isNil ifFalse:[
-			methodCommandResult selectedClass: selectedClass name.
-			self
-				sbUpdateMethodFilter;
-				sbUpdateMethods]
-]
-
 { #category : 'category' }
 JadeServer >> systemConfigAsDictionary [
 
@@ -5327,6 +5054,7 @@ JadeServer >> terminate: aGsProcess [
 { #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
   | services organizer resultString |
+  [ 
   Rowan commandResultClass initializeResults.
   services := STON fromString: stonString.
   organizer := ClassOrganizer new.
@@ -5345,19 +5073,11 @@ JadeServer >> updateFromSton: stonString [
   self autoCommitIfRequired.
   Rowan loggingServiceClass current logSentServices.
   resultString := STON toString: Rowan commandResultClass results.
-  ^ resultString
-]
-
-{ #category : 'category' }
-JadeServer >> updateProjects [
-	
-	| update |
-	update := RowanProjectsUpdate new. 
-	RowanProjectService new projects do:[:service | 
-		service isDirty ifTrue:[
-			update modifiedProjects add: service name]. 
-			update projects add: service].
-
+  ^ resultString ]
+    on: Error
+    do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
+      ex pass ]
 ]
 
 { #category : 'category' }
