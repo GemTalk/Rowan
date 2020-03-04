@@ -102,7 +102,7 @@ RowanAnsweringService >> basicExec: aString context: oop [
 { #category : 'client command support' }
 RowanAnsweringService >> basicMethodHistoryFor: methodService [
   | rowanMethodHistory |
-  rowanMethodHistory := UserGlobals
+  rowanMethodHistory := self userGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
   answer := (rowanMethodHistory at: methodService ifAbsentPut: [ Array new ])
@@ -130,12 +130,42 @@ RowanAnsweringService >> basicPrintStringOfObject: object toMaxSize: integer [
   ^ printString
 ]
 
+{ #category : 'client command support' }
+RowanAnsweringService >> basicSortedSymbols [
+  | sortedSymbols |
+  sortedSymbols := SortedCollection new.
+  ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
+    keysDo: [ :symbol | 
+      symbol charSize = 1
+        ifTrue: [ sortedSymbols add: symbol ] ].
+  ^sortedSymbols asArray
+]
+
 { #category : 'client commands' }
 RowanAnsweringService >> breakPointsAreEnabled [
   answer := RowanService breakPointsAreEnabled.
   updateType := #'breakpointSettingChanged:'.
   RowanCommandResult addResult: self.
   ^ answer	"for testing"
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> canAccessServiceClasses [
+  "Being able to see RowanLoggingService is a good
+	indication that all of the service classes are visible"
+
+  answer := [ '[RowanLoggingService] value. true.' evaluate ]
+    on: Error
+    do: [ :ex | false ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> classHasSubclasses: oop [
+  | behavior |
+  behavior := Object _objectForOop: oop.
+  answer := behavior subclasses notEmpty.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
@@ -222,7 +252,8 @@ RowanAnsweringService >> exec: aString context: oop [
 { #category : 'client commands' }
 RowanAnsweringService >> exec: aString context: oop inWindow: handle [
   answer := self exec: aString context: oop.
-  RowanBrowserService new saveRootObject: answer value windowHandle: handle.	"return answer for testing"
+  answer key
+    ifTrue: [ RowanBrowserService new saveRootObject: answer value windowHandle: handle ].	"return answer for testing"
   ^ answer
 ]
 
@@ -437,7 +468,7 @@ answeringService answer. "
 { #category : 'client commands' }
 RowanAnsweringService >> removeMethodHistoryFor: methodService [
   | rowanMethodHistory |
-  rowanMethodHistory := UserGlobals
+  rowanMethodHistory := self userGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
   rowanMethodHistory removeKey: methodService ifAbsent: [  ]
@@ -491,12 +522,7 @@ RowanAnsweringService >> setEnableInteractionHandler: boolean [
 
 { #category : 'client commands' }
 RowanAnsweringService >> sortedSymbols [
-  answer := SortedCollection new.
-  ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
-    keysDo: [ :symbol | 
-      symbol charSize = 1
-        ifTrue: [ answer add: symbol ] ].
-  answer := answer asArray.
+  answer := self basicSortedSymbols. 
   RowanCommandResult addResult: self
 ]
 
@@ -508,6 +534,13 @@ RowanAnsweringService >> subclassCreationTemplate: className [
 { #category : 'client commands' }
 RowanAnsweringService >> symbolExists: aSymbol [
   answer := (Rowan image symbolList resolveSymbol: aSymbol) isNil not.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> symbolsMatching: string [
+  answer := self basicSortedSymbols
+    select: [ :symbol | string sunitMatch: symbol ].
   RowanCommandResult addResult: self
 ]
 

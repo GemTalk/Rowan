@@ -133,14 +133,30 @@ RowanQueryService >> literalReferences: string [
 
 { #category : 'queries' }
 RowanQueryService >> methodsContaining: string [
-
-	| methods |
-	methods := organizer substringSearch: string.
-	queryResults := self methodServicesFrom: methods first.
-	self returnQueryToClient.
+  | methods sorted |
+  methods := organizer substringSearch: string.
+  sorted := SortedCollection
+    sortBlock: [ :x :y | 
+      x className = y className
+        ifTrue: [ x selector < y selector ]
+        ifFalse: [ x className < y className ] ].
+  1 to: methods first size do: [ :index | 
+    | methodService |
+    methodService := self methodServiceFrom: (methods first at: index).
+    methodService
+      firstReference: (methods last at: index);
+      searchString: string.
+    sorted add: methodService ].
+  queryResults := sorted asArray.
+  self returnQueryToClient
 ]
 
-{ #category : 'queries' }
+{ #category : 'query support' }
+RowanQueryService >> methodServiceFrom: method [
+  ^ (self methodServicesFrom: (Array with: method)) first
+]
+
+{ #category : 'query support' }
 RowanQueryService >> methodServicesFrom: methods [
 
 	| sorted | 
