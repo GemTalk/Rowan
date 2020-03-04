@@ -30,7 +30,7 @@ RowanServicesTest >> _testRowanProjectsSandbox [
 RowanServicesTest >> addUnicodeSymbolKeyToUserGlobals [
   "RowanServicesTest new addUnicodeSymbolKeyToUserGlobals"
 
-  UserGlobals
+  self userGlobals
     at: (String with: (Character withValue: 16r3DA)) asSymbol
     put: 'fnoodle'
 ]
@@ -39,7 +39,7 @@ RowanServicesTest >> addUnicodeSymbolKeyToUserGlobals [
 RowanServicesTest >> addUnicodeValueToUserGlobals [
   "RowanServicesTest new addUnicodeValueToUserGlobals"
 
-  UserGlobals at: #'bad' put: '£¥' asSymbol
+  self userGlobals at: #'bad' put: '£¥' asSymbol
 ]
 
 { #category : 'unicode method' }
@@ -130,15 +130,6 @@ RowanServicesTest >> defaultSymbolDictionaryName [
 	^'ServicesTestDictionary'
 ]
 
-{ #category : 'unicode method' }
-RowanServicesTest >> iAmAUnicodeMethod [
-
-		| abc |
-		abc := 'Ϛ'.
-		self halt. 
-		^abc
-]
-
 { #category : 'support' }
 RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 	"send this to help identify which tests test which issues
@@ -153,10 +144,10 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 RowanServicesTest >> removeUnicodeSymbolsFromUserGlobals [
   "RowanServicesTest new addUnicodeSymbolToUserGlobals"
 
-  UserGlobals
+  self userGlobals
     removeKey: (String with: (Character withValue: 16r3DA)) asSymbol
     ifAbsent: [  ].
-  UserGlobals removeKey: #'bad' ifAbsent: [  ]
+  self userGlobals removeKey: #'bad' ifAbsent: [  ]
 ]
 
 { #category : 'constants' }
@@ -237,4 +228,9 @@ RowanServicesTest >> unloadServicesTestProject [
 	Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent:[^self].
 	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName.
 	defaultProjectDefinition := nil
+]
+
+{ #category : 'accessing' }
+RowanServicesTest >> userGlobals [
+  ^ Rowan image symbolList objectNamed: #'UserGlobals'
 ]

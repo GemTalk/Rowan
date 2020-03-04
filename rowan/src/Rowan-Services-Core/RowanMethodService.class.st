@@ -32,7 +32,9 @@ Class {
 		'firstReference',
 		'renamedName',
 		'isMethodForBlock',
-		'homeMethodOop'
+		'homeMethodOop',
+		'hasMethodHistory',
+		'searchString'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -139,6 +141,16 @@ RowanMethodService >> addOrUpdateMethod [
                    forClassNamed: self classService name
                    isMeta: meta
                    inPackageNamed: self classService packageName
+]
+
+{ #category : 'method history' }
+RowanMethodService >> addToMethodHistory [
+  | rowanMethodHistory methodHistory |
+  rowanMethodHistory := self userGlobals
+    at: #'RowanMethodHistory'
+    ifAbsentPut: [ Dictionary new ].
+  methodHistory := rowanMethodHistory at: self ifAbsentPut: [ Array new ].
+  methodHistory add: self
 ]
 
 { #category : 'client commands' }
@@ -276,6 +288,27 @@ RowanMethodService >> debugTest: testSelector inClassName: theClassName [
   [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
     on: Exception
     do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
+      ex pass ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> debugTestAsFailure: testSelector inClassName: theClassName [
+  testResult := 'passed'.
+  [ 
+  ((Rowan image objectNamed: theClassName) selector: testSelector asSymbol)
+    debugAsFailure ]
+    on: Exception
+    do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
       testResult := ex class = TestFailure
         ifTrue: [ 'failure' ]
         ifFalse: [ 
@@ -396,6 +429,7 @@ RowanMethodService >> initialize [
 	isTestMethod := false.
 	failedCompile := false.
 	isMethodForBlock := false.
+	hasMethodHistory := true.
 ]
 
 { #category : 'initialization' }
@@ -420,7 +454,8 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
-	self initializeTestMethodsFor: inClass thisClass
+	self initializeTestMethodsFor: inClass thisClass.
+	self setHasMethodHistory
 ]
 
 { #category : 'initialization' }
@@ -497,6 +532,16 @@ RowanMethodService >> name [
 	^selector
 ]
 
+{ #category : 'accessing' }
+RowanMethodService >> oop [
+	^oop
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> oop: object [
+	oop := object
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> packageName [
 	^packageName
@@ -570,6 +615,16 @@ RowanMethodService >> runTest: testSelector inClassName: theClassName [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'accessing' }
+RowanMethodService >> searchString [
+	^searchString
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> searchString: object [
+	searchString := object
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> selectedPackageServices [
 
@@ -620,6 +675,14 @@ RowanMethodService >> setBreakAt: stepPoint [
     ifFalse: [ GsNMethod _disableAllBreaks ].
   self update.
   RowanCommandResult addResult: self
+]
+
+{ #category : 'method history' }
+RowanMethodService >> setHasMethodHistory [
+  | answeringService |
+  answeringService := RowanAnsweringService new.
+  hasMethodHistory := (answeringService basicMethodHistoryFor: self) answer size
+    > 1.
 ]
 
 { #category : 'initialization' }
