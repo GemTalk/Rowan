@@ -9,14 +9,15 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
-{ #category : 'other' }
+{ #category : 'instance creation' }
 RowanProcessService class >> new [
 
-	self error: 'Use on*Process: constructors'.
-
+	"in general use one of the other constructor methods.
+	Needed for STON replication"
+	^super new
 ]
 
-{ #category : 'other' }
+{ #category : 'instance creation' }
 RowanProcessService class >> onActiveProcess: aGsProcess [
 
 	^self basicNew
@@ -25,7 +26,7 @@ RowanProcessService class >> onActiveProcess: aGsProcess [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'instance creation' }
 RowanProcessService class >> onReadyProcess: aGsProcess [
 
 	^self basicNew
@@ -34,7 +35,7 @@ RowanProcessService class >> onReadyProcess: aGsProcess [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'instance creation' }
 RowanProcessService class >> onSuspendedProcess: aGsProcess [
 
 	^self basicNew
@@ -43,7 +44,7 @@ RowanProcessService class >> onSuspendedProcess: aGsProcess [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'instance creation' }
 RowanProcessService class >> onWaitingProcess: aGsProcess [
 
 	^self basicNew
@@ -68,4 +69,11 @@ RowanProcessService >> initialize: aGsProcess status: aString [
 { #category : 'perform' }
 RowanProcessService >> servicePerform: symbol withArguments: collection [
 	^self perform: symbol withArguments: collection.
+]
+
+{ #category : 'updating' }
+RowanProcessService >> update [
+
+	self initialize: (Object _objectForOop: oop) status: 'suspended'.
+	RowanCommandResult addResult: self.
 ]

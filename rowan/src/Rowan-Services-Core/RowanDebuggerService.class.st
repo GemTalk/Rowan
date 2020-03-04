@@ -36,12 +36,53 @@ RowanDebuggerService >> debugStringFrom: aString [
   ^ newStream contents
 ]
 
+{ #category : 'release' }
+RowanDebuggerService >> releaseProcessOop: oop [
+  "not really releasing it. The client should have registered
+	the process with the debugger window it opened before
+	this is run"
+
+  | jadeiteProcesses process |
+  ((process := Object _objectForOop: oop) isKindOf: GsProcess)
+    ifTrue: [ 
+      jadeiteProcesses := SessionTemps current
+        at: #'jadeiteProcesses'
+        ifAbsentPut: [ Array new ].
+      jadeiteProcesses remove: process ifAbsent: [  ] ]
+]
+
+{ #category : 'release' }
+RowanDebuggerService >> saveProcessOop: processOop [
+  | jadeiteProcesses process |
+  process := Object _objectForOop: processOop.
+  (process isKindOf: GsProcess)
+    ifTrue: [ 
+      jadeiteProcesses := SessionTemps current
+        at: #'jadeiteProcesses'
+        ifAbsentPut: [ Array new ].
+      (jadeiteProcesses includes: process)
+        ifFalse: [ 
+          "tests may pass through this method twice"
+          jadeiteProcesses add: process ] ]
+]
+
 { #category : 'perform' }
 RowanDebuggerService >> servicePerform: symbol withArguments: collection [
 	^self perform: symbol withArguments: collection.
 ]
 
-{ #category : 'other' }
+{ #category : 'clientCommands' }
+RowanDebuggerService >> terminateProcess: processOop [
+  | process |
+  process := Object _objectForOop: processOop.
+  (process isKindOf: GsProcess)
+    ifFalse: [ ^ self ].
+  RowanDebuggerService new releaseProcessOop: processOop.
+  process terminate.
+  (Delay forMilliseconds: 10) wait	"allow forked processes to finish"
+]
+
+{ #category : 'updating' }
 RowanDebuggerService >> update [
   processes := OrderedCollection
     with:
@@ -52,5 +93,6 @@ RowanDebuggerService >> update [
     do: [ :each | processes add: (RowanProcessService onSuspendedProcess: each) ].
   ProcessorScheduler scheduler waitingProcesses
     do: [ :each | processes add: (RowanProcessService onWaitingProcess: each) ].
-  RowanCommandResult addResult: self
+  RowanCommandResult addResult: self.
+  self releaseProcessOop: initialProcessOop
 ]

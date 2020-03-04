@@ -81,3 +81,30 @@ RowanDebuggerServiceTest >> test_malformed [
 	debugString := RowanDebuggerService new debugStringFrom: string. 
 	self assert: debugString equals: 'nil halt. abc | def | ^abc'.
 ]
+
+{ #category : 'tests' }
+RowanDebuggerServiceTest >> test_saveUniqueProcess [
+  "sanity test that saving processes handles extra saves and release attempts"
+
+  | debuggerService jadeiteProcesses |
+  self
+    jadeiteIssueTested: #'issue729'
+    withTitle: 'On opening debugger, get walkback MNU #stackDepth (3.0.93-5)'.
+  jadeiteProcesses := SessionTemps current
+    at: #'jadeiteProcesses'
+    put: Array new.
+  self assert: jadeiteProcesses size equals: 0.
+  debuggerService := RowanDebuggerService new.
+  debuggerService saveProcessOop: GsProcess _current asOop.
+  self assert: jadeiteProcesses size equals: 1.
+  debuggerService saveProcessOop: GsProcess _current asOop.
+  self assert: jadeiteProcesses size equals: 1.	"no growth in processes saved"
+  debuggerService saveProcessOop: GsProcess _current asOop.
+  self assert: jadeiteProcesses size equals: 1.
+  debuggerService releaseProcessOop: GsProcess _current asOop.
+  self assert: jadeiteProcesses size equals: 0.
+  debuggerService releaseProcessOop: GsProcess _current asOop.
+  self assert: jadeiteProcesses size equals: 0.
+  debuggerService releaseProcessOop: GsProcess _current asOop.
+  self assert: jadeiteProcesses size equals: 0	"handle extra release attempts."
+]

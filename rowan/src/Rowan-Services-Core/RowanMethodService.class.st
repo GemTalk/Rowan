@@ -33,7 +33,8 @@ Class {
 		'renamedName',
 		'isMethodForBlock',
 		'homeMethodOop',
-		'hasMethodHistory'
+		'hasMethodHistory',
+		'searchString'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -145,7 +146,7 @@ RowanMethodService >> addOrUpdateMethod [
 { #category : 'method history' }
 RowanMethodService >> addToMethodHistory [
   | rowanMethodHistory methodHistory |
-  rowanMethodHistory := (System myUserProfile objectNamed: #UserGlobals)
+  rowanMethodHistory := self userGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
   methodHistory := rowanMethodHistory at: self ifAbsentPut: [ Array new ].
@@ -287,6 +288,27 @@ RowanMethodService >> debugTest: testSelector inClassName: theClassName [
   [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
     on: Exception
     do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
+      ex pass ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> debugTestAsFailure: testSelector inClassName: theClassName [
+  testResult := 'passed'.
+  [ 
+  ((Rowan image objectNamed: theClassName) selector: testSelector asSymbol)
+    debugAsFailure ]
+    on: Exception
+    do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
       testResult := ex class = TestFailure
         ifTrue: [ 'failure' ]
         ifFalse: [ 
@@ -510,6 +532,16 @@ RowanMethodService >> name [
 	^selector
 ]
 
+{ #category : 'accessing' }
+RowanMethodService >> oop [
+	^oop
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> oop: object [
+	oop := object
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> packageName [
 	^packageName
@@ -581,6 +613,16 @@ RowanMethodService >> runTest: testSelector inClassName: theClassName [
 	sunitTestResult passedCount > 0 ifTrue:[testResult := 'passed']. 
 	testRunClassName := theClassName. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> searchString [
+	^searchString
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> searchString: object [
+	searchString := object
 ]
 
 { #category : 'Accessing' }
