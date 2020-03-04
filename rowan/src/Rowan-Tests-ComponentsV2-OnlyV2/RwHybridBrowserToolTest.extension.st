@@ -1,6 +1,27 @@
 Extension { #name : 'RwHybridBrowserToolTest' }
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
+RwHybridBrowserToolTest >> _standardProjectDefinition: projectName packageNameMap: packageNameMap defaultSymbolDictName: defaultSymbolDictName [
+	| projectDefinition componentName |
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
+		addNewComponentNamed: componentName;
+		yourself.
+
+	packageNameMap
+		keysAndValuesDo: [ :packageName :symDictName | 
+			projectDefinition
+				addPackageNamed: packageName toComponentNamed: componentName;
+				gemstoneSetSymbolDictName: symDictName forPackageNamed: packageName;
+				yourself ].
+
+	^ projectDefinition
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 
 	"Write project to disk, make a few modifications and then reload the project from disk"
@@ -8,9 +29,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 
 		normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage 
 		theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 
-		projectDefinition useExport |
-
-	useExport := false.
+		projectDefinition  |
 
 	projectName := 'HybridPatchProjectA'.
 	packageName1 := 'Hybrid-Patch-Core'.
@@ -65,10 +84,11 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	self should: [ normalInstance2 perform: #biff ] raise: MessageNotUnderstood.
 
 	projectTools := Rowan projectTools.
-	projectDefinition exportSpecification.	"when should the spec be exported? ... not on every write since we do expect the spec to manually modified over time"
-	useExport
-		ifTrue: [ projectDefinition export ]
-		ifFalse: [ projectTools write writeProjectNamed: projectName ].
+
+	projectDefinition
+		export;
+		exportLoadSpecification.
+
 	projectTools commit
 		commitProjectNamed: projectName
 		message:
@@ -331,7 +351,7 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 	self assert: (normalInstance perform: #foo) = 'foo'.
 
 	project := RwProject newNamed: projectName.
-	project exportSpecification.
+	project exportLoadSpecification.
 	projectTools write writeProjectNamed: projectName.
 	projectTools commit
 		commitProjectNamed: projectName
@@ -500,21 +520,4 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 	self should: [ normalClass perform: #baz = 'baz' ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
-]
-
-{ #category : '*rowan-tests-componentsv2-onlyv2' }
-RwHybridBrowserToolTest >> _standardProjectDefinition: projectName packageNameMap: packageNameMap defaultSymbolDictName: defaultSymbolDictName [
-
-	| projectDefinition |
-	projectDefinition := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName.
-	packageNameMap keysAndValuesDo: [:packageName :symDictName |
-		projectDefinition
-			addPackageNamed: packageName;
-			setSymbolDictName: symDictName forPackageNamed: packageName
-			yourself ].
-	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
-
-	^ projectDefinition
-
 ]

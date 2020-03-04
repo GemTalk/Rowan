@@ -1,6 +1,11 @@
 Extension { #name : 'RwProject' }
 
 { #category : '*rowan-corev2' }
+RwProject >> exportLoadSpecification [
+	^ self _loadedProject asDefinition exportLoadSpecification
+]
+
+{ #category : '*rowan-corev2' }
 RwProject >> loadedComponents [
 	^ self _loadedProject loadedComponentDefinitions
 ]

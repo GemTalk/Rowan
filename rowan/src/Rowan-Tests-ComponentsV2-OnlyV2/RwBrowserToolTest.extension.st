@@ -30,32 +30,33 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath [
-
-	| projectDefinition projectTools |
+	| projectDefinition projectTools componentName |
 	projectTools := Rowan projectTools.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') 
-		projectName: projectName 
-			projectHome: rootPath "?" 
-			useGit: true 
-			comment: comment)
-		defaultSymbolDictName: defaultSymbolDictName;
-		configsPath: 'configs';
-		packagesPath: 'src';
-		projectsPath: 'projects';
-		specsPath: 'specs';
-		packageNames: packageNames;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: rootPath;
+		comment: 'another project for testing project browser api';
+		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		repoType: #'git';
 		yourself.
+
+	projectDefinition loadSpecification componentNames: {componentName}.
 
 	(rootPath asFileReference / projectName) ensureDeleteAll.
 
-	self
-		handleConfirmationDuring: [ projectDefinition create ].
+	projectDefinition
+		resolve;
+		export;
+		exportLoadSpecification;
+		load.
 
-	projectTools load loadProjectDefinition: projectDefinition.
 	^ projectDefinition
 ]
 
