@@ -83,7 +83,7 @@ RowanService class >> version [
   "change this method carefully and only at Jadeite release boundaries.
 	Failure to do so will prevent logins"
 
-  ^ 3091
+  ^ 3092
 ]
 
 { #category : 'other' }
@@ -469,6 +469,18 @@ RowanService >> stonStringFor: anObject [
 
 ]
 
+{ #category : 'private' }
+RowanService >> stripOutUnicode: string [
+  | asciiString |
+  asciiString := string
+    collect: [ :char | 
+      ((self validLowRangeCharacters includes: char) not
+        and: [ char asciiValue < 32 or: [ char asciiValue > 255 ] ])
+        ifTrue: [ $? ]
+        ifFalse: [ char ] ].
+  ^ asciiString
+]
+
 { #category : 'commands support' }
 RowanService >> superclassChainsFor: behaviors [
 	organizer := ClassOrganizer new. 
@@ -515,6 +527,16 @@ RowanService >> updateLatest [
 RowanService >> updateType: aSymbol [
 
 	updateType := aSymbol
+]
+
+{ #category : 'accessing' }
+RowanService >> userGlobals [
+  ^ Rowan image symbolList objectNamed: #'UserGlobals'
+]
+
+{ #category : 'private' }
+RowanService >> validLowRangeCharacters [
+  ^ Array with: Character lf with: Character tab
 ]
 
 { #category : 'testing' }

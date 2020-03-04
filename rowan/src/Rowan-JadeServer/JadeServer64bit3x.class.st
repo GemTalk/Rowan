@@ -250,7 +250,7 @@ JadeServer64bit3x >> inspect: anObject [
 	indexedSize := (anObject class isNsc or: [anObject class isIndexable]) ifFalse: [
 		0.
 	] ifTrue: [
-		isRcBag ifTrue: [ anObject size min: 200] ifFalse: [(anObject _primitiveSize - namedSize)  min: 200].
+		isRcBag ifTrue: [ anObject size] ifFalse: [(anObject _primitiveSize - namedSize)].
 	].
 	
 	namedSize + dynamicSize + indexedSize printOn: stream.
