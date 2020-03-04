@@ -10320,7 +10320,7 @@ doit
 	inDictionary: RowanKernel
 	options: #()
 )
-		category: 'Rowan-Tests';
+		category: 'Rowan-TestsV1';
 		comment: 'No class-specific documentation for CypLoadingTest, hierarchy is: 
 Object
   TestAsserter
@@ -98624,6 +98624,24 @@ poolDictionaryChangesClassDefinitions4: packageName
 	^ self poolDictionaryChangeClassDefinitions4: packageName in: Dictionary new
 %
 
+category: 'private'
+method: RwLoadingTest
+projectDefinitionFor: packageNames
+
+	| projectDefinition |
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: 'RwloadingTest')
+		comment:
+				'This is a simple project created in memory first, then written to disk.';
+		packageNames: packageNames;
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
+
+	^ projectDefinition
+%
+
 category: 'support'
 method: RwLoadingTest
 propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment pools: pools inPackage: packageName
@@ -132356,28 +132374,6 @@ asDefinition
 	^ RwProjectDefinition
 		withProperties: self propertiesForDefinition
 		packageDefinitions: self loadedPackageDefinitions
-%
-
-! Class extensions for 'RwLoadingTest'
-
-!		Instance methods for 'RwLoadingTest'
-
-category: '*rowan-testsv1'
-method: RwLoadingTest
-projectDefinitionFor: packageNames
-
-	| projectDefinition |
-	projectDefinition := (RwProjectDefinition
-		newForGitBasedProjectNamed: 'RwloadingTest')
-		comment:
-				'This is a simple project created in memory first, then written to disk.';
-		packageNames: packageNames;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
-
-	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
-
-	^ projectDefinition
 %
 
 ! Class extensions for 'RwMethodDefinition'
