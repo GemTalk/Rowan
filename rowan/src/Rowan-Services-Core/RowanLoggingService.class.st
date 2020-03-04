@@ -23,7 +23,7 @@ Class {
 RowanLoggingService class >> current [
 
 	"lazy initialize for a topaz session test" 
-	^SessionTemps current at: #rowanLoggingService ifAbsentPut: [nil]
+	^SessionTemps current at: #rowanLoggingService ifAbsentPut: [RowanLoggingService new]
 ]
 
 { #category : 'accessing' }
@@ -40,6 +40,13 @@ RowanLoggingService >> fileName [
 { #category : 'accessing' }
 RowanLoggingService >> fileName: object [
 	fileName := object
+]
+
+{ #category : 'initialization' }
+RowanLoggingService >> initialize [
+
+	super initialize. 
+	isLogging := false.
 ]
 
 { #category : 'client commands' }
