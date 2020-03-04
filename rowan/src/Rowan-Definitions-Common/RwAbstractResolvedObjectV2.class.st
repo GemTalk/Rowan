@@ -283,23 +283,3 @@ RwAbstractResolvedObjectV2 >> requiredProjectRoots [
 RwAbstractResolvedObjectV2 >> specsRoot [
 	^ self repositoryRoot / self _projectSpecification specsPath
 ]
-
-{ #category : 'package properties' }
-RwAbstractResolvedObjectV2 >> vastSetVaPrequisitesTo: prereqArray forPackageNamed: packageName [
-	self subclassResponsibility: #'vastSetVaPrequisitesTo:forPackageNamed:'
-]
-
-{ #category : 'package properties' }
-RwAbstractResolvedObjectV2 >> vastSetVaSubApplicationsTo: subApplicationsDictionary forPackageNamed: packageName [
-	self subclassResponsibility: #'vastSetVaSubApplicationsTo:forPackageNamed:'
-]
-
-{ #category : 'package properties' }
-RwAbstractResolvedObjectV2 >> vastVaPrequisitesForPackageNamed: packageName [
-	self subclassResponsibility: #'vastVaPrequisitesForPackageNamed:'
-]
-
-{ #category : 'package properties' }
-RwAbstractResolvedObjectV2 >> vastVaSubApplicationsForPackageNamed: packageName [
-	self subclassResponsibility: #'vastVaSubApplicationsForPackageNamed:'
-]

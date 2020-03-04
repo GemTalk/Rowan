@@ -160,22 +160,6 @@ RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	^ self components
-		addApplicationNamed: aComponentName
-		condition: condition
-		groupName: groupName
-		comment: commentString
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addApplicationNamed: componentName toComponentNamed: toComponentName [
-	^ self components
-		addApplicationNamed: componentName
-		toComponentNamed: toComponentName
-]
-
-{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	^ self components
 		addComponentNamed: aComponentName
@@ -561,15 +545,6 @@ RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: cond
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-		groupName: groupName
-		comment: commentString
-]
-
-{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
 	^ self components
 		addSimpleNestedComponentNamed: aComponentName
@@ -584,22 +559,6 @@ RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition
 		condition: condition
 		groupName: groupName
 		comment: commentString
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	^ self components
-		addSubApplicationNamed: aComponentName
-		condition: condition
-		groupName: groupName
-		comment: commentString
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addSubApplicationNamed: componentName toComponentNamed: toComponentName [
-	^ self components
-		addSubApplicationNamed: componentName
-		toComponentNamed: toComponentName
 ]
 
 { #category : 'actions' }

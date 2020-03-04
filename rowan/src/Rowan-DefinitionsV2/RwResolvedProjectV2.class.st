@@ -73,31 +73,6 @@ RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> addApplicationNamed: aComponentName condition: condition comment: commentString [
-	^ self
-		addApplicationNamed: aComponentName
-		condition: condition
-		groupName: 'core'
-		comment: commentString
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	^ self _projectDefinition
-		addApplicationNamed: aComponentName
-		condition: condition
-		groupName: groupName
-		comment: commentString
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addApplicationNamed: componentName toComponentNamed: toComponentName [ 
-	^ self _projectDefinition
-		addApplicationNamed: componentName
-		toComponentNamed: toComponentName
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	^ self _projectDefinition
 		addComponentNamed: aComponentName
@@ -325,15 +300,6 @@ RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condit
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	^ self _projectDefinition
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-		groupName: groupName
-		comment: commentString
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition  comment: commentString [
 	^ self _projectDefinition
 		addSimpleNestedComponentNamed: aComponentName
@@ -348,31 +314,6 @@ RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: 
 		condition: condition
 		groupName: groupName
 		comment: commentString
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addSubApplicationNamed: aComponentName condition: condition comment: commentString [
-	^ self _projectDefinition
-		addSubApplicationNamed: aComponentName
-		condition: condition
-		groupName: 'core'
-		comment: commentString
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	^ self _projectDefinition
-		addSubApplicationNamed: aComponentName
-		condition: condition
-		groupName: groupName
-		comment: commentString
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addSubApplicationNamed: componentName toComponentNamed: toComponentName [
-	^ self _projectDefinition
-		addSubApplicationNamed: componentName
-		toComponentNamed: toComponentName
 ]
 
 { #category : 'project definition' }

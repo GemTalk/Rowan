@@ -56,98 +56,6 @@ Class {
 }
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _addApplication_SubApplicationComponentsFor_0023: resolvedProject [
-	"Start with  spec_0011, add pharo, gemstone, and vast conditional packages using
-		RwSimpleProjectLoadComponentV2, intended to form the basis for working out the
-		details necessary to enable pharo, gemstone and vast to share common code."
-
-	"https://github.com/GemTalk/Rowan/issues/553"
-
-	| packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 className1 className2 |
-	packageName1 := projectName , '-' , 'Core'.
-	packageName2 := projectName , '-' , 'Extensions'.
-	packageName3 := projectName , '-' , 'Tests'.
-
-	packageName4 := projectName , '-' , 'Export-GemStone'.
-	packageName5 := projectName , '-' , 'Export-Pharo'.
-	packageName6 := projectName , '-' , 'Export-VAST'.
-	packageName7 := projectName , '-' , 'VAST-Application'.
-	packageName8 := projectName , '-' , 'VAST-Test-Application'.
-
-	className1 := projectName , 'Class1'.
-	className2 := projectName , 'TestCase'.
-
-	resolvedProject
-		addApplicationNamed: 'envy/Core'
-			condition: 'common'
-			comment:
-				'Top-level application for loading the application core. NOTE: boty envy/Core and envy/Tests are recursive';
-		addApplicationNamed: 'envy/Tests'
-			condition: 'common'
-			comment: 'Top-level application for the application tests';
-		addSubApplicationNamed: 'envy/platform/Extensions-GemStone'
-			condition: 'gemstone'
-			comment: 'Subapplication for loading gemstone-specific packages';
-		addSubApplicationNamed: 'envy/platform/Extensions-Pharo'
-			condition: 'pharo'
-			comment: 'Subapplication for loading pharo-specific packages';
-		addApplicationNamed: 'envy/Extensions-VAST'
-			condition: 'vast'
-			comment:
-				'Subapplication for loading vast-specific test packages and components. 
-		The component named STON is a pseudo-component that refers to 
-		applications expected to reside in the VAST image.
-
-		NOTE: I want this application to be be a subapplication --- it is not a COMPLETE application.
-		It MUST be created in order to reference the VAST specific STON application.';
-		addApplicationNamed: 'envy/Tests-VAST'
-			condition: 'vast'
-			comment:
-				'Subapplication for loading vast-specific test packages and components. 
-		The component named SUnit is a pseudo-component that refers to 
-		applications expected to reside in the VAST image.
-
-		NOTE: I want this application to be be a subapplication --- it is not a COMPLETE application.
-		It MUST be created in order to reference the VAST specific STON application.';
-		yourself.
-
-	resolvedProject
-		addApplicationNamed: 'envy/Tests' toComponentNamed: 'envy/Core';
-		addApplicationNamed: 'envy/Core' toComponentNamed: 'envy/Tests';
-		addApplicationNamed: 'envy/Tests-VAST' toComponentNamed: 'envy/Tests';
-		addApplicationNamed: 'envy/platform/Extensions-GemStone'
-			toComponentNamed: 'envy/Core';
-		addApplicationNamed: 'envy/platform/Extensions-Pharo'
-			toComponentNamed: 'envy/Core';
-		addApplicationNamed: 'envy/Extensions-VAST' toComponentNamed: 'envy/Core';
-		yourself.
-
-	resolvedProject
-		addPackagesNamed:
-				{packageName1.
-					packageName2}
-			toComponentNamed: 'envy/Core';
-		addPackageNamed: packageName3 toComponentNamed: 'envy/Tests';
-		addPackageNamed: packageName4
-			toComponentNamed: 'envy/platform/Extensions-GemStone';
-		addPackageNamed: packageName5
-			toComponentNamed: 'envy/platform/Extensions-Pharo';
-		addPackagesNamed:
-				{packageName6.
-					packageName7}
-			toComponentNamed: 'envy/Extensions-VAST';
-		addPackageNamed: packageName8 toComponentNamed: 'envy/Tests-VAST';
-		yourself.
-
-	resolvedProject
-		addApplicationNamed: 'STON' toComponentNamed: 'envy/Extensions-VAST';
-		addApplicationNamed: 'Sunit' toComponentNamed: 'envy/Tests-VAST';
-		yourself.	"add the VAST image application dependencies"
-
-	^ resolvedProject
-]
-
-{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
 	resolvedProject
 		comment: 'spec_0000 definitions';
@@ -1543,8 +1451,6 @@ false ifTrue: [
 				{'common'.
 					'vast'};
 		yourself.
-
-	self _addApplication_SubApplicationComponentsFor_0023: resolvedProject.
 
 	^ resolvedProject
 ]

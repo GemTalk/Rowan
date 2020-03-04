@@ -50838,6 +50838,14 @@ comment
 	^ self _specification comment
 %
 
+category: 'querying'
+method: RwProject
+componentForPackageNamed: packageName
+	"Answer nil if no component found"
+
+	^ self _loadedProject componentForPackageNamed: packageName
+%
+
 category: 'accessing'
 method: RwProject
 currentBranchName
@@ -119389,13 +119397,21 @@ method: RwDataCuratorTest
 testCreateProjects
 	"https://github.com/GemTalk/Rowan/issues/510"
 
-	| projectTools projectName projectDef packageName className class project audit classNames extendedClasses |
+	| projectTools projectName projectDef packageName className class project audit classNames extendedClasses componentName |
 	projectTools := Rowan projectTools.
 	projectName := 'MySampleProject'.
+	componentName := 'Core'.
 	packageName := projectName , '-Core'.
 	className := 'MySampleClass'.
-	projectDef := projectTools create createComponentProjectNamed: projectName.
-	((projectDef addPackageNamed: packageName)
+
+	projectDef := RwResolvedProjectV2 new
+		projectName: projectName;
+		addNewComponentNamed: componentName;
+		yourself.
+	projectDef resolve.
+
+
+	((projectDef addPackageNamed: packageName toComponentNamed: componentName)
 		addClassNamed: className
 		super: 'Object'
 		category: '*' , packageName asLowercase)

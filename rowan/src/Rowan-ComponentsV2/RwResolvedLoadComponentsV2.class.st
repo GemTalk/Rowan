@@ -66,34 +66,6 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes [
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwEnvyApplicationProjectLoadComponentV2 newNamed: aComponentName ].
-	component
-		condition: condition;
-		groupName: groupName;
-		comment: commentString;
-		yourself.
-	^ component
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addApplicationNamed: componentName toComponentNamed: toComponentName [
-	| component |
-	component := self
-		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
-	component addApplicationNamed: componentName
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	| component |
 	self components
@@ -333,34 +305,6 @@ RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName cond
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwEnvySubApplicationProjectLoadComponentV2 newNamed: aComponentName ].
-	component
-		condition: condition;
-		groupName: groupName;
-		comment: commentString;
-		yourself.
-	^ component
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addSubApplicationNamed: componentName toComponentNamed: toComponentName [
-	| component |
-	component := self
-		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
-	component addSubApplicationNamed: componentName
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> categoryComponentsFor: componentNameList [
 	"category components are the components listed in the top-level loaded components"
 
@@ -537,38 +481,6 @@ RwResolvedLoadComponentsV2 >> renameComponentNamed: aComponentPath to: aComponen
 						addComponentNamed: componentPath ] ].
 	self components at: componentPath put: component.
 	^ componentPath
-]
-
-{ #category : 'vast support' }
-RwResolvedLoadComponentsV2 >> vastSetVaPrequisitesTo: prereqArray forPackageNamed: packageName [
-	| foundOne |
-	foundOne := false.
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					foundOne := true.
-					component
-						conditionalPackageMapSpecsAtPackageName: packageName
-						setVaPrequisitesTo: prereqArray ] ].
-	foundOne
-		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
-]
-
-{ #category : 'vast support' }
-RwResolvedLoadComponentsV2 >> vastSetVaSubApplicationsTo: subApplicationsArray forPackageNamed: packageName [
-	| foundOne |
-	foundOne := false.
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					foundOne := true.
-					component
-						conditionalPackageMapSpecsAtPackageName: packageName
-						setVaSubApplicationsTo: subApplicationsArray ] ].
-	foundOne
-		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
 ]
 
 { #category : 'vast support' }
