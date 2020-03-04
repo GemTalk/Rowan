@@ -41,10 +41,17 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> commitLog: logLimit [
 	^ self resolvedProject commitLog: logLimit
 ]
 
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> componentForPackageNamed: packageName [
+	"Answer nil if no component found"
+
+	^ self components componentForPackageNamed: packageName
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> components [
 
-	^ self resolvedProject components
+	^ handle _projectStructure
 ]
 
 { #category : 'properties' }

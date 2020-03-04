@@ -50,6 +50,13 @@ RwProject >> comment [
 	^ self _specification comment
 ]
 
+{ #category : 'querying' }
+RwProject >> componentForPackageNamed: packageName [
+	"Answer nil if no component found"
+
+	^ self _loadedProject componentForPackageNamed: packageName
+]
+
 { #category : 'accessing' }
 RwProject >> currentBranchName [
 

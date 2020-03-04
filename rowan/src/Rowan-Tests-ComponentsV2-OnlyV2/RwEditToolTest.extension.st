@@ -2,15 +2,14 @@ Extension { #name : 'RwEditToolTest' }
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwEditToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
-
-	| projectDefinition |
-	projectDefinition := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
+	| componentName |
+	componentName := 'Core'.
+	^ RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
 		comment: comment;
-		packageNames: packageNames;
-		yourself.
-	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
-
-	^ projectDefinition
+		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		yourself
 ]
