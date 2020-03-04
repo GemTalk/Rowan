@@ -1121,6 +1121,31 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testReferenceRepositoryDirectory [
+	"Clone RowanSample9, then reference the directory as a plain disk repository, ignoring git"
+
+	| loadSpec1 loadSpec2 projectNames resolvedProject |
+	loadSpec1 := self _loadSpecNamed: 'spec_0002'.
+
+	projectNames := {loadSpec1 projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project --- cloning it to disk"
+	resolvedProject := loadSpec1 resolve.
+
+"now set the diskUrl for loadeSpec2 to the repository root of loadSpec1"
+	loadSpec2 := loadSpec1 copy.
+	loadSpec2 
+		gitUrl: nil;
+		diskUrl: 'file://', resolvedProject repositoryRoot pathString.
+
+	loadSpec2 resolve.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testRowanSample4_basic_504 [
 
 	| loadSpec projectName resolvedProject  loadedProjects |

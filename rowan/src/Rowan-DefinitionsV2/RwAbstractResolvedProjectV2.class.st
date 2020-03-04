@@ -40,18 +40,31 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 							self _loadSpecification mercurialUrl
 								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
 								ifNil: [ 
-									self _projectSpecification repoType == #'git'
-										ifTrue: [ 
-											RwGitRepositoryDefinitionV2
-												newNamed: self projectAlias
-												projectsHome: self projectsHome
-												repositoryUrl: ''
-												revision: self _loadSpecification revision ]
-										ifFalse: [ 
+									self _loadSpecification diskUrl
+										ifNotNil: [ :urlString | 
 											RwDiskRepositoryDefinitionV2
 												newNamed: self projectAlias
 												projectsHome: self projectsHome
-												repositoryUrl: self diskUrl ] ] ] ].
+												repositoryUrl: urlString ]
+										ifNil: [ 
+											projectSpecification
+												ifNil: [ 
+													Error
+														signal:
+															'No url has been specified (gitUrl or diskUrl), so the project repository cannot be created' ].
+
+											self _projectSpecification repoType == #'git'
+												ifTrue: [ 
+													RwGitRepositoryDefinitionV2
+														newNamed: self projectAlias
+														projectsHome: self projectsHome
+														repositoryUrl: ''
+														revision: self _loadSpecification revision ]
+												ifFalse: [ 
+													RwDiskRepositoryDefinitionV2
+														newNamed: self projectAlias
+														projectsHome: self projectsHome
+														repositoryUrl: self diskUrl ] ] ] ] ].
 
 			projectRepository ]
 ]
