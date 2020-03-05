@@ -1,6 +1,10 @@
-Extension { #name : 'RwProjectComponentVisitorV2Test' }
+Class {
+	#name : 'RwProjectComponentVisitorV2Test',
+	#superclass : 'TestCase',
+	#category : 'Rowan-TestsV2'
+}
 
-{ #category : '*rowan-testsV2' }
+{ #category : 'private' }
 RwProjectComponentVisitorV2Test >> _cloneRowanSample9: projectAlias [
 	"clone https://github.com/dalehenrich/RowanSample9 and return full path to the clone"
 
@@ -28,7 +32,7 @@ RwProjectComponentVisitorV2Test >> _cloneRowanSample9: projectAlias [
 	^ projectPath pathString
 ]
 
-{ #category : '*rowan-testsV2' }
+{ #category : 'private' }
 RwProjectComponentVisitorV2Test >> _cloneVastTonelDemo_555: projectAlias deleteClone: deleteClone [
 	"Read project definition from a tonel repository written by VAST .. includes additional package/class/method properties not used by GemStone or Pharo"
 
@@ -61,7 +65,7 @@ RwProjectComponentVisitorV2Test >> _cloneVastTonelDemo_555: projectAlias deleteC
 	^ projectPath pathString
 ]
 
-{ #category : '*rowan-testsV2' }
+{ #category : 'private' }
 RwProjectComponentVisitorV2Test >> _readVastTonelDemo_555: platformAttributes deleteClone: deleteClone [
 	"Read project definition from a tonel repository written by VAST .. includes additional package/class/method properties not used by GemStone or Pharo"
 
@@ -93,7 +97,7 @@ RwProjectComponentVisitorV2Test >> _readVastTonelDemo_555: platformAttributes de
 	^ loadSpec resolve: platformAttributes
 ]
 
-{ #category : '*rowan-testsV2' }
+{ #category : 'tests' }
 RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."
 
@@ -148,7 +152,7 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 	self assert: visitor projectLoadSpecs isEmpty
 ]
 
-{ #category : '*rowan-testsV2' }
+{ #category : 'tests' }
 RwProjectComponentVisitorV2Test >> testReadVastTonelDemo_555 [
 	"Read project definition from a tonel repository written by VAST .. includes additional package/class/method properties not used by GemStone or Pharo"
 
