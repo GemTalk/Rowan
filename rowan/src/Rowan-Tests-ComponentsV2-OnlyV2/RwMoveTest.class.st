@@ -111,8 +111,9 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class symDict registry |
+		className projectSetDefinition class symDict registry componentName |
 	projectName := 'Issue254'.
+	componentName := 'Core'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
 	className := 'Issue254Class'.
@@ -122,11 +123,13 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -184,8 +187,9 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass loadedClass symDict registry |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class ar oldClass loadedClass symDict registry
+		componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -196,10 +200,14 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -226,13 +234,15 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
 
-
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+		addPackageNamed: packageName2 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
@@ -266,7 +276,6 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -274,8 +283,9 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass symDict registry loadedClass |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class oldClass symDict registry loadedClass 
+		componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -286,11 +296,14 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 "setup defintions"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2} toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -382,7 +395,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
-		packageDefinition className projectSetDefinition class project audit
+		packageDefinition className projectSetDefinition class project audit componentName
 		ar oldClass loadedClass symDict registry |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
@@ -395,10 +408,14 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "setup definitions"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -439,10 +456,13 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 "move class; change method"
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+		addPackageNamed: packageName2 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 
@@ -499,8 +519,9 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass symDict registry loadedClass classExtensionDefinition |
+	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
+		classDefinition packageDefinition className projectSetDefinition class oldClass symDict registry 
+		loadedClass classExtensionDefinition componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -513,12 +534,15 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "set up  definitions"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 } 
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -608,7 +632,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 
 	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1
 		projectDefinition2 classDefinition packageDefinition className projectSetDefinition class 
-		classExtensionDefinition ar oldClass loadedClass symDict registry project audit|
+		classExtensionDefinition ar oldClass loadedClass symDict registry project audit componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -622,11 +646,14 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "setup"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -680,13 +707,16 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 	projectSetDefinition := RwProjectSetDefinition new.
 
 "move class and extension method to different packages and symbol dictionaries"
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
 		removePackageNamed: packageName1;
 		removePackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		addPackageNamed: packageName4;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName4.
+		addPackagesNamed: { packageName3 . packageName4 } toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName3;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName4;
+		yourself.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
@@ -740,8 +770,9 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass symDict registry loadedClass |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition componentName className projectSetDefinition class oldClass symDict 
+		registry loadedClass |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -752,11 +783,14 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -829,7 +863,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
 		packageDefinition className projectSetDefinition class ar oldClass loadedClass symDict registry
-		project audit |
+		project audit componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -840,10 +874,14 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -882,10 +920,13 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+		addPackageNamed: packageName2 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
@@ -930,8 +971,9 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass symDict registry loadedClass |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition componentName className projectSetDefinition class oldClass symDict 
+		registry loadedClass |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -942,11 +984,14 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 "setup defintions"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1039,7 +1084,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
 		packageDefinition className projectSetDefinition class ar oldClass loadedClass symDict registry
-		project audit |
+		project audit componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -1050,10 +1095,14 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 "setup definitions"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1095,10 +1144,13 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 "move class; add new method"
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+		addPackageNamed: packageName2 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 
@@ -1156,8 +1208,9 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
-	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class symDict registry classExtensionDefinition oldClass loadedPackage loadedClass loadedClassExtensions |
+	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
+		classDefinition packageDefinition className projectSetDefinition class symDict registry 
+		classExtensionDefinition oldClass loadedPackage loadedClass loadedClassExtensions componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -1169,12 +1222,15 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3} 
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1272,6 +1328,7 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
+
 ]
 
 { #category : 'tests - issue 254' }
@@ -1300,7 +1357,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
-		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 |
+		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 componentName |
 
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
@@ -1319,11 +1376,14 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create old package structure"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
@@ -1510,7 +1570,8 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
-		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 project audit |
+		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 project audit  
+		componentName |
 
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
@@ -1529,12 +1590,16 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create old package structure"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
@@ -1695,6 +1760,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 	self assert: class3 == oldClass3.
 	self assert: class4 == oldClass4.
 	self assert: class5 == oldClass5.
+
 ]
 
 { #category : 'tests - issue 254' }
@@ -1723,7 +1789,8 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
-		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 project audit |
+		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 project audit
+		componentName |
 
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
@@ -1742,12 +1809,16 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create old package structure"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
@@ -1916,8 +1987,8 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages [
 
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class x newClass symDict registry |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class x newClass symDict registry componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -1928,11 +1999,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1995,8 +2069,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar symDict registry project audit |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class oldClass ar symDict registry project audit
+		componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -2007,10 +2082,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2042,10 +2121,13 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
 
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+		addPackageNamed: packageName2 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
 
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
@@ -2090,9 +2172,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 
-		classDefinition packageDefinition className projectSetDefinition class x newClass symDict registry 
-		classExtensionDefinition |
+	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 
+		projectDefinition2 classDefinition packageDefinition className projectSetDefinition class x 
+		newClass symDict registry classExtensionDefinition componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -2105,13 +2187,15 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 "setup"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		addPackageNamed: packageName4;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 . packageName4 } 
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2196,6 +2280,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
+
 ]
 
 { #category : 'tests - issue 254' }
@@ -2207,7 +2292,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 
 		projectDefinition2 classDefinition packageDefinition className projectSetDefinition class 
-		oldClass ar loadedClass symDict registry classExtensionDefinition project audit |
+		oldClass ar loadedClass symDict registry classExtensionDefinition project audit componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -2220,13 +2305,15 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 "setup"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		addPackageNamed: packageName4;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 . packageName4 } 
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2282,9 +2369,13 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 "move class with new version and extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName4.
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName3;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName4;
+		yourself.
 
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
@@ -2345,8 +2436,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class x newClass symDict registry classExtensionDefinition |
+	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 
+		projectDefinition2 classDefinition packageDefinition className projectSetDefinition class x 
+		newClass symDict registry classExtensionDefinition componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -2359,11 +2451,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 "setup"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2} toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2412,12 +2507,13 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 "move class with new version and extension method to new packages"
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
 	projectDefinition2
 		removePackageNamed: packageName1;
 		removePackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		addPackageNamed: packageName4.
+		addPackageNamed: packageName3 toComponentNamed: componentName;
+		addPackageNamed: packageName4 toComponentNamed: componentName;
+		yourself.
 
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
@@ -2456,8 +2552,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar loadedClass symDict registry classExtensionDefinition project audit |
+	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 
+		projectDefinition2 classDefinition packageDefinition className projectSetDefinition class oldClass 
+		ar loadedClass symDict registry classExtensionDefinition project audit componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -2470,11 +2567,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 "setup"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2530,13 +2630,17 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 "move class with new version and extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName3;
+		addPackageNamed: packageName3 toComponentNamed: componentName;
 		removePackageNamed: packageName2;
-		addPackageNamed: packageName4;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName4.
+		addPackageNamed: packageName4 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName3;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName4;
+		yourself.
 
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
@@ -2593,8 +2697,8 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class x newClass symDict registry |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class x newClass symDict registry componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -2605,11 +2709,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2680,8 +2787,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar loadedClass symDict registry project audit |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class oldClass ar loadedClass symDict registry 
+		project audit componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -2692,10 +2800,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2737,9 +2849,12 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
 
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
+		addPackageNamed: packageName2 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
 
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
@@ -2792,8 +2907,8 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class x newClass symDict registry |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class x newClass symDict registry componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -2804,11 +2919,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2878,8 +2996,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar loadedClass symDict registry project audit |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class oldClass ar loadedClass symDict registry 
+		project audit componentName |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -2890,10 +3009,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2934,10 +3057,13 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
 
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+	projectDefinition2 := (Rowan projectNamed: projectName) asDefinition.
+	projectDefinition2
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+		addPackageNamed: packageName2 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: packageName2;
+		yourself.
 
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
