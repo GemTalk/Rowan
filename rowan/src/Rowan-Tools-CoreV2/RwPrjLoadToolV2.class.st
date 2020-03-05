@@ -59,16 +59,9 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			projectDefinition packages
 				keysAndValuesDo: [ :packageName :packageDefinition | 
 					"set the target symbol dictionary name for each incoming package definition"
-					(packageDefinition gs_symbolDictionary isNil
-						or: [ 
-							(projectDefinition projectDefinitionSourceProperty
-								= RwLoadedProject _projectLoadedDefinitionSourceValue) not ])
-						ifTrue: [ 
-							"set gs_symbolDictionary for the first time, or (potentially) override if project 
-								freshly read from disk"
-							packageDefinition
+					packageDefinition
 								gs_symbolDictionary:
-									(projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) ] ] ].
+									(projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) ] ].
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty

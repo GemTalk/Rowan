@@ -11,9 +11,10 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
+	| projectName componentName packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
 		ar oldClass loadedClass symDict registry |
 	projectName := 'Issue254'.
+	componentName := 'Core'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
 	className := 'Issue254Class'.
@@ -23,12 +24,16 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
+
+	projectDefinition1
+		resolve.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: className
@@ -58,7 +63,7 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName1.
 	packageDefinition removeClassDefinition: classDefinition.
