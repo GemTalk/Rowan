@@ -10,9 +10,10 @@ RwProjectSetTest >> testProjectAdoptTool [
 	"Create project definition structure (2 projects), build classes and methods using traditional methods, 
 		then adopt the structure"
 
-	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition projectNames
-		classDefinition packageNames1 packageNames2 classNames1 classNames2 classExtensionDefinition 
-		symDict1 symDict2 symbolList theClass loadedProjectSet diff classComment |
+	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition 
+		projectNames classDefinition packageNames1 packageNames2 classNames1 classNames2 
+		classExtensionDefinition symDict1 symDict2 symbolList theClass loadedProjectSet diff classComment
+		componentName |
 
 	projectTools := Rowan projectTools.
 	projectName1 := 'AdoptProject1'.
@@ -35,21 +36,31 @@ RwProjectSetTest >> testProjectAdoptTool [
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition1 := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName1.
-	projectDefinition1
-		packageNames: packageNames1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: (packageNames1 at: 2).
-
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName1;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames1 
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: (packageNames1 at: 2);
+		resolve;
+		yourself.
 	projectSetDefinition addDefinition: projectDefinition1.
 
-	projectDefinition2 := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName2.
-	projectDefinition2
-		addPackagesNamed: packageNames2;
-		defaultSymbolDictName: self _symbolDictionaryName2;
-		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: (packageNames2 at: 2).
+	projectDefinition2 := RwResolvedProjectV2 new
+		projectName: projectName2;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames2 
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName1 
+			forPackageNamed: (packageNames2 at: 2);
+		resolve;
+		yourself.
 	projectSetDefinition addDefinition: projectDefinition2.
 
 	projectTools load loadProjectSetDefinition: projectSetDefinition. "create loaded project and empty loaded packages"
@@ -212,6 +223,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		asProjectDefinitionSet.
 	diff := projectSetDefinition compareAgainstBase: loadedProjectSet.
 	self assert: diff isEmpty.
+
 ]
 
 { #category : 'tests' }
@@ -222,9 +234,10 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 
 	"test for RwPkgCreateTool>>createLoadedPackageNamed:inProjectNamed:"
 
-	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition projectNames
-		classDefinition packageNames1 packageNames2 classNames1 classNames2 classExtensionDefinition 
-		symDict1 symDict2 symbolList theClass loadedProjectSet diff classComment pkgCreateTool |
+	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition 
+		projectNames classDefinition packageNames1 packageNames2 classNames1 classNames2 
+		classExtensionDefinition symDict1 symDict2 symbolList theClass loadedProjectSet diff classComment 
+		componentName project1 project2 |
 
 	projectTools := Rowan projectTools.
 	projectName1 := 'AdoptProject1'.
@@ -247,36 +260,48 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition1 := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName1.
-	projectDefinition1
-		defaultSymbolDictName: self _symbolDictionaryName1;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: (packageNames1 at: 2).
-
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName1;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		resolve;
+		yourself.
 	projectSetDefinition addDefinition: projectDefinition1.
 
-	projectDefinition2 := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName2.
-	projectDefinition2
-		defaultSymbolDictName: self _symbolDictionaryName2;
-		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: (packageNames2 at: 2).
+	projectDefinition2 := RwResolvedProjectV2 new
+		projectName: projectName2;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
+		addNewComponentNamed: componentName;
+		resolve;
+		yourself.
 	projectSetDefinition addDefinition: projectDefinition2.
 
 	"create projects with no packages"
 	projectTools load loadProjectSetDefinition: projectSetDefinition. "create loaded project and empty loaded packages"
 
 	"add new packages to loaded projects"
-	pkgCreateTool := Rowan packageTools create.
+	project1 := Rowan projectNamed: projectName1.
+	project2 := Rowan projectNamed: projectName2.
 	
-	packageNames1 do: [:packageName |
-		pkgCreateTool createLoadedPackageNamed: packageName inProjectNamed: projectName1 ].
-	packageNames2 do: [:packageName |
-		pkgCreateTool createLoadedPackageNamed: packageName inProjectNamed: projectName2 ].
+	project1 
+		addPackagesNamed: packageNames1 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: (packageNames1 at: 2);
+		yourself.
+
+	project2
+		addPackagesNamed: packageNames2 toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName1 
+			forPackageNamed: (packageNames2 at: 2);
+		yourself.
 
 	"construct project definition structures"
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition1 := (Rowan image loadedProjectNamed: projectName1) asDefinition.
+	projectDefinition1 := project1 asDefinition.
 	projectSetDefinition addProject: projectDefinition1.
 
 	classDefinition := RwClassDefinition
@@ -431,12 +456,13 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		asProjectDefinitionSet.
 	diff := projectSetDefinition compareAgainstBase: loadedProjectSet.
 	self assert: diff isEmpty.
+
 ]
 
 { #category : 'tests' }
 RwProjectSetTest >> testProjectSetLoad1 [
 
-	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition projectNames loadedProjects |
+	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition projectNames loadedProjects componentName |
 	projectTools := Rowan projectTools.
 	projectName1 := 'Simple1'.
 	projectName2 := 'Simple2'.
@@ -454,18 +480,27 @@ RwProjectSetTest >> testProjectSetLoad1 [
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition1 := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName1.
-	projectDefinition1
-		packageNames: #('Simple1-Core');
-		defaultSymbolDictName: self _symbolDictionaryName1.
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName1;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: #('Simple1-Core') 
+			toComponentNamed: componentName;
+		resolve;
+		yourself.
 	projectSetDefinition addDefinition: projectDefinition1.
 
-	projectDefinition2 := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName2.
-	projectDefinition2
-		addPackagesNamed: #('Simple2-Core');
-		defaultSymbolDictName: self _symbolDictionaryName2.
+	projectDefinition2 := RwResolvedProjectV2 new
+		projectName: projectName2;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: #('Simple2-Core') 
+			toComponentNamed: componentName;
+		resolve;
+		yourself.
 	projectSetDefinition addDefinition: projectDefinition2.
 
 	projectTools load loadProjectSetDefinition: projectSetDefinition.
