@@ -1,0 +1,10 @@
+RwProjectSpecificationV2 {
+	#specName : 'project_filetree',
+	#projectSpecPath : 'rowan',
+	#componentsPath : 'rowan/components',
+	#projectsPath : 'rowan/projects',
+	#specsPath : 'rowan/specs',
+	#packagesPath : 'rowan/filetree',
+	#packageFormat : 'filetree',
+	#comment : 'V2 Issue 122 project filetree specification'
+}

@@ -9,8 +9,8 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 
 
 	| class projectName1 projectName2 packageName1 packageName2 className1 className2 classDefinition
-		symDict registry projectDefinition1 projectDefinition2 packageDefinition projectNames classExtensionDefinition
-		projectSetDefinition |
+		symDict registry projectDefinition1 projectDefinition2 packageDefinition projectNames 
+		classExtensionDefinition projectSetDefinition componentName |
 
 	projectName1 := 'DeleteProject'.
 	projectName2 := 'ExtensionProject'.
@@ -25,13 +25,23 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 "create projects"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition') newForGitBasedProjectNamed: projectName1)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName1;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
-	projectDefinition2 := ((Rowan globalNamed: 'RwProjectDefinition') newForGitBasedProjectNamed: projectName2)
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+
+	projectDefinition2 := RwResolvedProjectV2 new
+		projectName: projectName2;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "create classes and methods for project1"
@@ -124,7 +134,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 
 	| class projectName1 packageName1 packageName2 className1 classDefinition
 		symDict registry projectDefinition1 packageDefinition projectNames classExtensionDefinition
-		projectSetDefinition |
+		projectSetDefinition componentName |
 
 	projectName1 := 'DeleteProject'.
 	packageName1 := 'DeleteProject-Core'.
@@ -137,10 +147,14 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 "create projects"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition') newForGitBasedProjectNamed: projectName1)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName1;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "create classes and methods for project1"
@@ -210,7 +224,8 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 { #category : 'tests' }
 RwProjectDeleteToolTest >> testDeleteSimpleProject [
 
-	| class projectName packageName className classDefinition symDict registry projectDefinition packageDefinition |
+	| class projectName packageName className classDefinition symDict registry projectDefinition 
+		packageDefinition componentName |
 
 	projectName := 'DeleteProject'.
 	packageName := 'DeleteProject-Core'.
@@ -220,9 +235,14 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition') newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "create classes and methods"
@@ -284,8 +304,8 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 
 
 	| class projectName1 projectName2 packageName1 packageName2 className1 className2 classDefinition
-		symDict registry projectDefinition1 projectDefinition2 packageDefinition projectNames classExtensionDefinition
-		projectSetDefinition |
+		symDict registry projectDefinition1 projectDefinition2 packageDefinition projectNames 
+		classExtensionDefinition projectSetDefinition componentName |
 
 	projectName1 := 'DeleteProject'.
 	projectName2 := 'ExtensionProject'.
@@ -300,13 +320,22 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 "create projects"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition') newForGitBasedProjectNamed: projectName1)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName1;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
+		resolve;
 		yourself.
-	projectDefinition2 := ((Rowan globalNamed: 'RwProjectDefinition') newForGitBasedProjectNamed: projectName2)
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	projectDefinition2 := RwResolvedProjectV2 new
+		projectName: projectName2;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName2 } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "create classes and methods for project1"
@@ -395,7 +424,8 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 { #category : 'tests' }
 RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 
-	| class projectName packageName className classDefinition symDict registry projectDefinition packageDefinition |
+	| class projectName packageName className classDefinition symDict registry projectDefinition 
+		packageDefinition componentName |
 
 	projectName := 'DeleteProject'.
 	packageName := 'DeleteProject-Core'.
@@ -405,9 +435,14 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition') newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition:= RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName } toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "create classes and methods"

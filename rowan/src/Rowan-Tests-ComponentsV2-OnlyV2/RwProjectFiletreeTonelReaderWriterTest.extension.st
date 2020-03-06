@@ -3,24 +3,27 @@ Extension { #name : 'RwProjectFiletreeTonelReaderWriterTest' }
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
 
-	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	| rowanProject projectHome specUrlString projectDefinitionSet loadSpec |	
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
     projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
+	specUrlString :=  'file:' , projectHome, '/Issue122/v2/rowan/specs/Issue122_', self _repositoryFormat, '.ston'.
 
-"create project definition"
-	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
+"create load spec"
+	loadSpec :=  (RwLoadSpecificationV2 fromUrl: specUrlString)
+		projectsHome: projectHome;
+		diskUrl:  'file:' , projectHome, '/Issue122/v2';
+		yourself.
 
 "read project"
-	projectDefinitionSet := Rowan projectTools read 
-		readProjectSetForComponentProjectDefinition: projectDefinition.
+	projectDefinitionSet := RwProjectSetDefinition new
+		addProject: loadSpec resolve;
+		yourself.
 
 "validation"
-	self _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
+	self _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: loadSpec projectName
+
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -29,20 +32,25 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithBothMet
 
 	"method protocol starts with a * for non-extension method"
 
-	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet patches |	
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet patches loadSpec |	
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Both-ProtocolValidationError.ston'.
+	specUrlString :=  'file:' , projectHome, '/Issue122/v2/rowan/specs/Issue122_Both-ProtocolValidationError_', self _repositoryFormat, '.ston'.
 
-"create project definition"
-	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
+"create load spec"
+	loadSpec :=  (RwLoadSpecificationV2 fromUrl: specUrlString)
+		projectsHome: projectHome;
+		diskUrl:  'file:' , projectHome, '/Issue122/v2';
+		yourself.
 
 "read project -- catch and resume the notification ... repair the protocol"
-	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+	[ 
+		projectDefinition := loadSpec resolve.
+		projectDefinitionSet := RwProjectSetDefinition new
+			addProject: loadSpec resolve;
+			yourself ]
 		on: RwInvalidCategoryProtocolConventionErrorNotification
 		do: [:ex | 
 			ex
