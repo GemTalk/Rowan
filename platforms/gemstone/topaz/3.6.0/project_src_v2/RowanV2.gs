@@ -135273,14 +135273,14 @@ findFirstInString: aString inSet: inclusionMap startingAt: start
 
 !		Instance methods for 'CharacterCollection'
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asFileReference
 
 	^ FileSystem disk referenceTo: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asPath
 	"convert myself to a path"
@@ -135292,13 +135292,13 @@ asPath
 	^ FileSystem disk resolve: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asPathWith: anObject 
 	^ anObject pathFromString: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asResolvedBy: aFileSystem
 	^ aFileSystem resolveString: self
@@ -137410,7 +137410,7 @@ rowanProjectsHome
 
 !		Class methods for 'FileStreamPortable'
 
-category: '*FileSystem-Core'
+category: '*filesystem-gemstone-kernel'
 classmethod: FileStreamPortable
 onHandle: aFileSystemHandle
 	^ self concreteStream new
@@ -137670,14 +137670,14 @@ digitAt: n
 		ifFalse: [ (self bitShift: 8 - (n bitShift: 3)) bitAnd: 255 ]
 %
 
-category: '*FileSystem-Core'
+category: '*filesystem-gemstone-kernel'
 method: Integer
 humanReadableSIByteSize
 	^ String streamContents: [ :s|
 		self humanReadableSIByteSizeOn: s ]
 %
 
-category: '*FileSystem-Core'
+category: '*filesystem-gemstone-kernel'
 method: Integer
 humanReadableSIByteSizeOn: s
 	| exponent base |
