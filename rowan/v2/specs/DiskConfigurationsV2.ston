@@ -1,0 +1,27 @@
+RwLoadSpecificationV2 {
+	#specName : 'DiskConfigurationsV2',
+	#projectName : 'Rowan',
+	#gitUrl : 'https://github.com/GemTalk/Rowan',
+	#revision : 'master',
+	#projectSpecFile : 'rowan/v2/project.ston',
+	#componentNames : [
+		'DiskConfigurationsV2'
+	],
+	#groupNames : [
+		'core',
+		'tests'
+	],
+	#platformProperties : {
+		'gemstone' : {
+		'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals',
+				#defaultUseSessionMethodsForExtensions : false
+			},
+			'SystemUser' : {
+				#defaultSymbolDictName : 'RowanKernel',
+				#defaultUseSessionMethodsForExtensions : false
+			}
+		}
+	},
+	#comment : 'V2 classes that are exported to disk for specifiying configurations. These class definitions should be shared by all platforms that support the Rowan disk spec.'
+}

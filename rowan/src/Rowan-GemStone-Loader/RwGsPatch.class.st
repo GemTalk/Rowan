@@ -31,8 +31,10 @@ RwGsPatch >> packageName [
 
 { #category : 'accessing' }
 RwGsPatch >> projectDefinition [
-
-	^ projectDefinition ifNil: [ RwUnmanagedProjectDefinition new ]
+	^ projectDefinition
+		ifNil: [ 
+			"RwUnmanagedProjectDefinition may not be applicable in V2 system"
+			(Rowan globalNamed: 'RwUnmanagedProjectDefinition') new ]
 ]
 
 { #category : 'accessing' }

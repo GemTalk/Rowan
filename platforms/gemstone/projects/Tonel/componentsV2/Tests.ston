@@ -1,0 +1,12 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Tests',
+	#condition : 'tests',
+	#packageNames : [
+		'CypressTonel-Tests',
+		'CypressTonel-GemStone-Tests',
+		'Tonel-Cypress-Tests',
+		'Tonel-GemStone-Tests',
+		'Tonel-Tests'
+	],
+	#comment : 'Tonel project'
+}

@@ -1463,23 +1463,6 @@ RwLoadingTest >> poolDictionaryChangesClassDefinitions4: packageName [
 	^ self poolDictionaryChangeClassDefinitions4: packageName in: Dictionary new
 ]
 
-{ #category : 'private' }
-RwLoadingTest >> projectDefinitionFor: packageNames [
-
-	| projectDefinition |
-	projectDefinition := (RwProjectDefinition
-		newForGitBasedProjectNamed: 'RwloadingTest')
-		comment:
-				'This is a simple project created in memory first, then written to disk.';
-		packageNames: packageNames;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
-
-	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
-
-	^ projectDefinition
-]
-
 { #category : 'support' }
 RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment pools: pools inPackage: packageName [
 

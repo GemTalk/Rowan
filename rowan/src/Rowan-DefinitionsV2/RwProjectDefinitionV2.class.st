@@ -25,10 +25,7 @@ RwProjectDefinitionV2 >> _validate [
 	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
 	definitionPackageNames := self packageNames asSet.
 	componentPackageNames := Set new.
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			component validate.
-			componentPackageNames addAll: component packageNames ].
+	self components_validate.
 	missingFromComponent := definitionPackageNames - componentPackageNames.
 	missingFromDefinition := componentPackageNames - definitionPackageNames.
 	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
@@ -81,14 +78,8 @@ RwProjectDefinitionV2 >> _validate: platformConfigurationAttributes groupNames: 
 	definitionPackageNames := self packageNames asSet.
 	componentPackageNames := Set new.
 	self components
-		keysAndValuesDo: [ :componentName :component | 
-			component validate.
-			componentPackageNames
-				addAll:
-					(component
-						packageNamesForPlatformConfigurationAttributes:
-							platformConfigurationAttributes
-						groupNames: groupNames) ].
+		_validate: platformConfigurationAttributes
+		groupNames: groupNames.
 	missingFromComponent := componentPackageNames - definitionPackageNames.
 	missingFromComponent isEmpty
 		ifTrue: [ ^ true ].
@@ -118,28 +109,120 @@ RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addComponentNamed: aComponentName comment: commentString [
+RwProjectDefinitionV2 >> addApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self components
+		addApplicationNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
 
-	| component |
-	component := self 
-		components at: aComponentName 
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
-	^ component 
-		addDefinedGroupName: self defaultGroupName includeGroups: #();
-		comment: commentString;
-		yourself
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addApplicationNamed: componentName toComponentNamed: toComponentName [
+	^ self components
+		addApplicationNamed: componentName
+		toComponentNamed: toComponentName
 ]
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
-	| component |
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
-	groupNameDict
-		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
-	component comment: commentString.
-	^ component
+	^ self components
+		addComponentNamed: aComponentName
+		definedGroupNames: groupNameDict
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	^ self components
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	^ self components
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
+	^ self components
+		addNestedComponentNamed: aComponentName
+		definedGroupNames: groupNameDict
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: ''
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName comment: aString [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: aString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
+	"return the path name of the new component"
+
+	^ self
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	"return the path name of the new component"
+
+	| theComponentName toComponent path compositePath |
+	toComponent := self componentNamed: toComponentName.
+	path := RelativePath withAll: pathNameArray.
+	1 to: pathNameArray size - 1 do: [ :pathIndex | 
+		| segmentName intermediateComponentName |
+		"ensure that we have the appropriate intermediate component structure"
+		segmentName := pathNameArray at: pathIndex.
+		compositePath := compositePath
+			ifNil: [ Path * segmentName ]
+			ifNotNil: [ compositePath / segmentName ].
+		intermediateComponentName := (compositePath / aComponentName) pathString.
+		toComponent := self components
+			componentNamed: intermediateComponentName
+			ifAbsent: [ 
+				| newComponent |
+				newComponent := self components
+					addSimpleNestedComponentNamed: intermediateComponentName
+					condition: (conditionPathArray at: pathIndex)
+					comment: ''.
+				toComponent addComponentNamed: intermediateComponentName.
+				newComponent ] ].
+	theComponentName := (path / aComponentName) pathString.
+	self components
+		addSimpleNestedComponentNamed: theComponentName
+		condition: conditionPathArray last
+		comment: ''.
+	toComponent addComponentNamed: theComponentName.
+	^ theComponentName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewNestedComponentNamed: aComponentName comment: aString [
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
+		condition: 'common'
+		comment: aString
 ]
 
 { #category : 'accessing' }
@@ -149,41 +232,59 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName [
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	| package component |
-	self
+RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName [
+	| package |
+	self components
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	package := RwPackageDefinition newNamed: packageName.
-	self _addPackage: package.
-	component := self components
-		at: componentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
-	component
-		conditionalPackagesAtConditions: conditionArray
-		andGroup: groupName
-		addPackageNames: {packageName}.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
+	self components addPackageNamed: packageName toComponentNamed: componentName.
+	^ package
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	| package |
+	self components
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	package := RwPackageDefinition newNamed: packageName.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
+	self components
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName.
 	^ package
 ]
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
-	| package component |
-	self
+	| package |
+	self components
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	package := RwPackageDefinition newNamed: packageName.
-	self _addPackage: package.
-	component := self components
-		at: componentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
-	component
-		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
-			andPackageName: packageName
-			setSymbolDictNameTo: aSymbolDictAssoc value;
-		conditionalPackagesAtConditions: conditionArray
-			andGroup: groupName
-			addPackageNames: {packageName}.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
+	self components
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc.
 	^ package
 ]
 
@@ -191,22 +292,20 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 RwProjectDefinitionV2 >> addPackages: somePackageNames forComponent: aComponent [
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
-	"see similar comment in addRawPackageNamed:"
+	"see similar comment in addRawPackageNamed: _addComponent"
 
 	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
 		component --- presumably freshly read from disk --- wins"
 
-	| componentName |
-	componentName := aComponent name.
-	(self components at: componentName ifAbsent: [  ])
-		ifNil: [ self components at: componentName put: aComponent ]
-		ifNotNil: [ :theComponent | 
-			theComponent ~~ aComponent
-				ifTrue: [ 
-					"newest component wins"
-					self components at: componentName put: aComponent ] ].
+	self components _addComponent: aComponent.
 	somePackageNames asSet
 		do: [ :packageName | self _addPackage: (RwPackageDefinition newNamed: packageName) ]
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: componentName [
+	^ packageNames
+		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
 ]
 
 { #category : 'accessing' }
@@ -225,12 +324,161 @@ RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: compon
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray [
+	"return the path name of the new component"
+
+	| theComponentName toComponent path compositePath condition pathArray |
+	self
+		deprecated:
+			'Should be using addPlatformComponentNamed:toComponentNamed:pathNameArray:conditionPathArray:'.
+	toComponent := self componentNamed: toComponentName.
+	condition := conditionPathArray last.
+	pathArray := conditionPathArray copy.
+	pathArray at: pathArray size put: alias.
+	path := RelativePath withAll: pathArray.
+	path parent
+		do: [ :segment | 
+			| intermediateComponentName |
+			"ensure that we have the appropriate intermediate component structure"
+			compositePath := compositePath
+				ifNil: [ Path * segment ]
+				ifNotNil: [ compositePath / segment ].
+			intermediateComponentName := (compositePath / aComponentName) pathString.
+			toComponent := self components
+				componentNamed: intermediateComponentName
+				ifAbsent: [ 
+					| newComponent |
+					newComponent := self components
+						addSimpleNestedComponentNamed: intermediateComponentName
+						condition: segment
+						comment: ''.
+					toComponent addComponentNamed: intermediateComponentName.
+					newComponent ] ].
+	theComponentName := (path / aComponentName) pathString.
+	self components
+		addPlatformNestedComponentNamed: theComponentName
+		condition: condition
+		comment: ''.
+	toComponent addComponentNamed: theComponentName.
+	^ theComponentName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	"return the path name of the new component"
+
+	| theComponentName toComponent path compositePath condition |
+	toComponent := self componentNamed: toComponentName.
+	condition := conditionPathArray last.
+	path := RelativePath withAll: pathNameArray.
+	1 to: pathNameArray size - 1 do: [ :pathIndex | 
+		| segmentName intermediateComponentName |
+		"ensure that we have the appropriate intermediate component structure"
+		segmentName := pathNameArray at: pathIndex.
+		compositePath := compositePath
+			ifNil: [ Path * segmentName ]
+			ifNotNil: [ compositePath / segmentName ].
+		intermediateComponentName := (compositePath / aComponentName) pathString.
+		toComponent := self components
+			componentNamed: intermediateComponentName
+			ifAbsent: [ 
+				| newComponent |
+				newComponent := self components
+					addSimpleNestedComponentNamed: intermediateComponentName
+					condition: (conditionPathArray at: pathIndex)
+					comment: ''.
+				toComponent addComponentNamed: intermediateComponentName.
+				newComponent ] ].
+	theComponentName := (path / aComponentName) pathString.
+	self components
+		addPlatformNestedComponentNamed: theComponentName
+		condition: condition
+		comment: ''.
+	toComponent addComponentNamed: theComponentName.
+	^ theComponentName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
+	^ self components
+		addPlatformNestedComponentNamed: aComponentName
+		condition: conditionArray
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName [
+	^ self components
+		addProjectNamed: projectName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	^ self components
+		addProjectNamed: projectName
+		toComponentNamed: toComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
-	"see similar comment in addPackages:forComponent:"
+	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self components
+		addSubApplicationNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addSubApplicationNamed: componentName toComponentNamed: toComponentName [
+	^ self components
+		addSubApplicationNamed: componentName
+		toComponentNamed: toComponentName
 ]
 
 { #category : 'actions' }
@@ -257,15 +505,7 @@ RwProjectDefinitionV2 >> export [
 
 { #category : 'exporting' }
 RwProjectDefinitionV2 >> exportComponents [
-
-	self components isEmpty ifTrue: [
-		self addComponentNamed: self defaultComponentName comment: '' ].
-	self components values do: [:component|
-		component exportToUrl: 'file:',  self componentsRoot pathString, '/' ].
-	self components isEmpty
-		ifTrue: [
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			(self componentsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
+	self components export: self componentsRoot
 ]
 
 { #category : 'exporting' }
@@ -345,9 +585,17 @@ RwProjectDefinitionV2 >> load: instanceMigrator [
 	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 ]
 
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
+	self components removePackageNamed: aPackageName.
+	self components
+		addPackageNamed: aPackageName
+		toComponentNamed: aComponentName
+]
+
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectName [
-	^ self propertyAt: 'name'
+	^ self propertyAt: 'name' ifAbsent: [ nil ]
 ]
 
 { #category : 'properties' }
@@ -368,54 +616,10 @@ RwProjectDefinitionV2 >> read: platformConfigurationAttributes [
 			platformConfigurationAttributes: platformConfigurationAttributes
 ]
 
-{ #category : 'actions' }
-RwProjectDefinitionV2 >> readPackageNames: packageNames [
-
-	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
-
-	| format visitorClass |
-	packages := Dictionary new. 
-	format := self 
-		packageFormatIfAbsent: [  
-			| formatFromDisk |
-			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
-				at: #format ifAbsent: [ 'tonel' ].
-			self packageFormat: formatFromDisk.
-			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
-		packageNames: packageNames;
-		visit: self.
-]
-
 { #category : 'tool api' }
 RwProjectDefinitionV2 >> readProjectSet [
 
 	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
-]
-
-{ #category : 'actions' }
-RwProjectDefinitionV2 >> readProjectSetForPackageNames: packageNames [
-
-	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
-
-	| format visitorClass |
-	packages := Dictionary new. 
-	format := self 
-		packageFormatIfAbsent: [  
-			| formatFromDisk |
-			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
-				at: #format ifAbsent: [ 'tonel' ].
-			self packageFormat: formatFromDisk.
-			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
-		packageNames: packageNames;
-		visit: self.
 ]
 
 { #category : 'reading' }
@@ -428,10 +632,39 @@ RwProjectDefinitionV2 >> readProjectSetReadTool: readTool withConfigurations: th
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName [
+	| component |
+	component := self componentNamed: fromComponentName.
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		removeComponentNames: {componentName}.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
-	self components
-		do: [ :component | component removePackageNamed: aPackageDefinition name ].
-	super removePackage: aPackageDefinition
+	self components removePackageNamed: aPackageDefinition name.
+	^ super removePackage: aPackageDefinition
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	"do not remove package from defintion, remove it from the named component only. 
+		Use removePackage:, if you want the package completely removed from definition"
+
+	| component |
+	component := self componentNamed: componentName.
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		removePackageNames: {packageName}.
+	^ component
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> renameComponentNamed: aComponentPath to: aComponentName [
+	^ self components renameComponentNamed: aComponentPath to: aComponentName
 ]
 
 { #category : 'temporary compat' }

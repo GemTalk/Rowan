@@ -1,0 +1,11 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/componentsV2/platform/gemstone32-/Components',
+	#condition : 'gs3.[2-]',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Tests-35x',
+		'Rowan-Tests-GemStone-35x'
+	],
+	#comment : 'Components gs3.[2-]  packages '
+}

@@ -938,23 +938,6 @@ RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 ]
 
 { #category : 'project browsing' }
-RwPrjBrowserTool >> createGitPackageProjectNamed: projectName [
-
-	self createGitPackageProjectNamed: projectName updateDefinition: [  ]
-]
-
-{ #category : 'definition updating' }
-RwPrjBrowserTool >> createGitPackageProjectNamed: projectName updateDefinition: updateBlock [
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	updateBlock cull: projectDefinition.
-	self class load loadProjectDefinition: projectDefinition
-
-]
-
-{ #category : 'project browsing' }
 RwPrjBrowserTool >> exposeRowanToolsSymbolDictionary [
 
 	| transient size dict |

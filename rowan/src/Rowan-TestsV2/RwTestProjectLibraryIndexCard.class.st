@@ -9,10 +9,20 @@ Class {
 		'derivedFrom',
 		'comment',
 		'rowanIssues',
-		'gemstoneIssues'
+		'gemstoneIssues',
+		'rowanSHA'
 	],
 	#category : 'Rowan-TestsV2'
 }
+
+{ #category : 'instance creation' }
+RwTestProjectLibraryIndexCard class >> fromFile: filePath [
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ STON fromStream: stream ]
+]
 
 { #category : 'accessing' }
 RwTestProjectLibraryIndexCard >> comment [
@@ -42,7 +52,12 @@ RwTestProjectLibraryIndexCard >> exportTo: directoryReference [
 { #category : 'export' }
 RwTestProjectLibraryIndexCard >> exportTo: directoryReference as: fileName [
 	directoryReference / fileName
-		writeStreamDo: [ :fileStream | STON put: self onStreamPretty: fileStream ]
+		writeStreamDo: [ :fileStream | self exportToStream: fileStream ]
+]
+
+{ #category : 'export' }
+RwTestProjectLibraryIndexCard >> exportToStream: fileStream [
+	STON put: self onStreamPretty: fileStream
 ]
 
 { #category : 'accessing' }
@@ -83,6 +98,18 @@ RwTestProjectLibraryIndexCard >> rowanIssues [
 { #category : 'accessing' }
 RwTestProjectLibraryIndexCard >> rowanIssues: object [
 	rowanIssues := object
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryIndexCard >> rowanSHA [
+	"The SHA of the Rowan commit used to create this index card"
+
+	^rowanSHA
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryIndexCard >> rowanSHA: object [
+	rowanSHA := object
 ]
 
 { #category : 'accessing' }

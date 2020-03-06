@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwResolvedProjectV2',
-	#superclass : 'RwAbstractResolvedObjectV2',
+	#superclass : 'RwAbstractResolvedProjectV2',
 	#category : 'Rowan-DefinitionsV2'
 }
 
@@ -16,10 +16,10 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
 				(Dictionary new
-						add: 'name' -> loadSpecification projectAlias;
+						add: 'name' -> loadSpecification projectName;
 						yourself);
 		packages: Dictionary new;
-		components: Dictionary new;
+		components: RwResolvedLoadComponentsV2 new;
 		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
 		yourself.
 	^ self basicNew
@@ -39,11 +39,22 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 		resolve
 ]
 
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platformAttributes: platformAttributes [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolve: platformAttributes
+]
+
 { #category : 'private' }
 RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 	"answer true if the basic project directory structure is present"
 
-	self projectRoots
+	self requiredProjectRoots
 		do: [ :fileRef | 
 			fileRef exists
 				ifFalse: [ ^ false ] ].
@@ -62,11 +73,92 @@ RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addApplicationNamed: aComponentName condition: condition comment: commentString [
+	^ self
+		addApplicationNamed: aComponentName
+		condition: condition
+		groupName: 'core'
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self _projectDefinition
+		addApplicationNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addApplicationNamed: componentName toComponentNamed: toComponentName [ 
+	^ self _projectDefinition
+		addApplicationNamed: componentName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
 	^ self _projectDefinition
 		addComponentNamed: aComponentName
 		definedGroupNames: groupNameDict
 		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	^ self _projectDefinition
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
+	^ self _projectDefinition
+		addNestedComponentNamed: aComponentName
+		definedGroupNames: groupNameDict
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: componentName [
+	^ self _projectDefinition addNewComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: aComponentName comment: aString [
+	^ self _projectDefinition addNewComponentNamed: aComponentName comment: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray [
+	^ self _projectDefinition
+		addNewComponentNamed: componentName
+		toComponentNamed: toComponentName
+		condition: conditionPathArray
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addNewNestedComponentNamed: aComponentName comment: aString [
+	^ self _projectDefinition
+		addNewNestedComponentNamed: aComponentName
+		comment: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName [
+	^ self _projectDefinition
+		addPackageNamed: packageName
+		toComponentNamed: componentName
 ]
 
 { #category : 'project definition' }
@@ -91,6 +183,13 @@ RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentN
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componentName [ 
+	^ self _projectDefinition
+		addPackagesNamed: packageNames
+		toComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 	(self groupNames includes: groupName)
 		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
@@ -99,6 +198,140 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 		toComponentNamed: componentName
 		withConditions: conditionArray
 		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPlatformComponentNamed: componentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray [
+	^ self _projectDefinition
+		addPlatformComponentNamed: componentName
+		toComponentNamed: toComponentName
+		alias: alias
+		condition: conditionPathArray
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	^ self _projectDefinition
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
+	^ self _projectDefinition
+		addPlatformNestedComponentNamed: aComponentName
+		condition: conditionArray
+		comment: commentString
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
+	| component |
+	component := self componentNamed: aComponentName.
+	component postloadDoitName: doitName.
+	component doitDict at: doitName put: doitSource
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
+	| component |
+	component := self componentNamed: aComponentName.
+	component preloadDoitName: doitName.
+	component doitDict at: doitName put: doitSource
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName [ 
+	^ self _projectDefinition
+		addProjectNamed:projectName
+		toComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		addProjectNamed:projectName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addRawPackageNamed: packageName [
+	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
+
+	"see similar comment in addPackages:forComponent: and _addComponent"
+
+	^ self _projectDefinition addRawPackageNamed: packageName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName comment: commentString [
+	^ self _projectDefinition
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
+	^ self _projectDefinition
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self _projectDefinition
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition  comment: commentString [
+	^ self _projectDefinition
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self _projectDefinition
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSubApplicationNamed: aComponentName condition: condition comment: commentString [
+	^ self _projectDefinition
+		addSubApplicationNamed: aComponentName
+		condition: condition
+		groupName: 'core'
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSubApplicationNamed: aComponentName condition: condition groupName: groupName comment: commentString [
+	^ self _projectDefinition
+		addSubApplicationNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addSubApplicationNamed: componentName toComponentNamed: toComponentName [
+	^ self _projectDefinition
+		addSubApplicationNamed: componentName
+		toComponentNamed: toComponentName
 ]
 
 { #category : 'project definition' }
@@ -111,19 +344,24 @@ RwResolvedProjectV2 >> comment: aString [
 	self _projectDefinition comment: aString
 ]
 
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> componentNames [
-	^ self _loadSpecification componentNames
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> componentNamed: aComponentName [
+	^ self _projectDefinition componentNamed: aComponentName
 ]
 
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> componentNames: anArray [
-	self _loadSpecification componentNames: anArray
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
+	^ self _projectDefinition componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> components [
 	^ self _projectDefinition components
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> componentsWithDoits [
+	^ self _projectDefinition components componentsWithDoits
 ]
 
 { #category : 'copying' }
@@ -155,10 +393,11 @@ RwResolvedProjectV2 >> export [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportComponents [
-	self components isEmpty
-		ifTrue: [ self addComponentNamed: self defaultComponentName comment: '' ].
-	self components values
-		do: [ :component | component exportToUrl: 'file:' , self componentsRoot pathString , '/' ].
+	self components
+		do: [ :component | 
+			component
+				exportToUrl: 'file:' , self componentsRoot pathString , '/';
+				yourself ].
 	self components isEmpty
 		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"
@@ -202,23 +441,11 @@ RwResolvedProjectV2 >> gitUrl: anUrlString [
 	self _loadSpecification gitUrl: anUrlString
 ]
 
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> groupNames [
-	^ self _loadSpecification groupNames
-]
-
-{ #category : 'project specification' }
-RwResolvedProjectV2 >> groupNames: anArray [
-	self _loadSpecification groupNames: anArray
-]
-
 { #category : 'initialization' }
 RwResolvedProjectV2 >> initialize [
 	"repository must be explicitly created"
 
 	super initialize.
-	projectSpecification := RwProjectSpecificationV2 new.
-	loadSpecification := RwLoadSpecificationV2 new.
 	projectDefinition := RwProjectDefinitionV2 new
 ]
 
@@ -229,15 +456,25 @@ RwResolvedProjectV2 >> isEmpty [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> key [
-	^ self projectAlias
+	^ self projectName
 ]
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> load [
 	"load the receiver into the image"
 
-	self _validate: Rowan platformConfigurationAttributes.
+	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> load: platformConfigurationAttributes [
+	"load the receiver into the image"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectDefinition: self projectDefinition
+		platformConfigurationAttributes: platformConfigurationAttributes
 ]
 
 { #category : 'project definition' }
@@ -245,12 +482,19 @@ RwResolvedProjectV2 >> loadedCommitId [
 	^ self _projectSpecification loadedCommitId
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
+	^ self _projectDefinition
+		movePackageNamed: aPackageName
+		toComponentNamed: aComponentName
+]
+
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> name [
 	"sender in loader code that's shared between RwComponentProjectDefinition and RwResolvedProjectV2, 
 		should use projectAlias, but need to wait until we're no longer using RwComponentProjectDefinition"
 
-	^ self projectAlias
+	^ self projectName
 ]
 
 { #category : 'project definition' }
@@ -279,6 +523,12 @@ RwResolvedProjectV2 >> packageNamed: aString [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> packageNamed: aString ifAbsent: absentBlock [
+
+	^ self _projectDefinition packageNamed: aString ifAbsent: absentBlock
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> packageNames [
 	^ self _projectDefinition packageNames
 ]
@@ -293,9 +543,14 @@ RwResolvedProjectV2 >> packages: aPackageDictionary [
 	^ self _projectDefinition packages: aPackageDictionary
 ]
 
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> projectAlias: aString [
-	self _loadSpecification projectAlias: aString
+{ #category : 'printing' }
+RwResolvedProjectV2 >> printOn: aStream [
+	super printOn: aStream.
+	projectDefinition
+		ifNotNil: [ 
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll: self _projectDefinition projectName ]
 ]
 
 { #category : 'project definition' }
@@ -310,8 +565,7 @@ RwResolvedProjectV2 >> projectDefinitionSourceProperty: sourceKeyOrNil [
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> projectName: aString [
-	self _loadSpecification projectName: aString.
-	self _projectSpecification projectName: aString.
+	super projectName: aString.
 	self _projectDefinition projectName: aString
 ]
 
@@ -320,11 +574,6 @@ RwResolvedProjectV2 >> projectNames [
 	"not yet implemented"
 
 	^ #()
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> projectsHome: aProjectHomeReferenceOrString [
-	self _loadSpecification projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : 'project definition' }
@@ -336,46 +585,21 @@ RwResolvedProjectV2 >> projectUrl [
 RwResolvedProjectV2 >> read [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
-	^ self readComponentNames: self componentNames groupNames: self groupNames
+	^ self readProjectComponentNames: self componentNames groupNames: self groupNames
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> read: platformConfigurationAttributes [
+RwResolvedProjectV2 >> read: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
+	"return the receiver with a new set of definitions read from disk"
 
 	^ self
-		readComponentNames: self componentNames
+		readProjectComponentNames: self componentNames
 		groupNames: self groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ self
-		readComponentNames: componentNames
-		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> readComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
-		withComponentNames: componentNames
-		groupNames: groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'project definition' }
@@ -399,9 +623,133 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 		visit: self
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames groupNames: groupNames [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	^ self
+		readProjectComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	^ Rowan projectTools readV2
+		readProjectForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSet [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self readProjectSetComponentNames: self componentNames groupNames: self groupNames
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSet: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readProjectSetComponentNames: self componentNames
+		groupNames: self groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames groupNames: groupNames [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readProjectSetComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readProjectSetForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readProjectSetForResolvedProject: self
+		withComponentNames: componentNames
+		groupNames: #()
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
+	^ self _projectDefinition removeComponentNamed: aComponentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		removeComponentNamed: componentName
+		fromComponentNamed: fromComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
 	^ self _projectDefinition removePackageNamed: packageName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+	^ self _projectDefinition
+		removePackageNamed: packageName
+		fromComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> removeProjectNamed: aProjectName [
+	^ self _projectDefinition removeProjectNamed: aProjectName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> renameComponentNamed: aComponentPath to: aComponentName [
+	^ self _projectDefinition
+		renameComponentNamed: aComponentPath
+		to: aComponentName
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> repositoryCommitId [
+	^ self loadedCommitId
 ]
 
 { #category : 'project specification' }
@@ -420,7 +768,24 @@ RwResolvedProjectV2 >> resolve [
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
 					"update project definition from disk"
-					self read ] ]
+					self read.
+					self
+						projectDefinitionSourceProperty:
+							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> resolve: platformConfigurationAttributes [
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self read: platformConfigurationAttributes ] ]
 ]
 
 { #category : 'load specification' }

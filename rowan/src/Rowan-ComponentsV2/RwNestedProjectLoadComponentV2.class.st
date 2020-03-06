@@ -7,7 +7,7 @@ Class {
 { #category : 'visiting' }
 RwNestedProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 
-	^aVisitor visitNestedProjectLoadComponent: self
+	^aVisitor visitProjectLoadComponent: self
 ]
 
 { #category : 'visiting' }
@@ -19,6 +19,8 @@ RwNestedProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 
 { #category : 'testing' }
 RwNestedProjectLoadComponentV2 >> isIndependentlyLoadable [
+	"v1 feature"
+
 	"nested configuration is not independently loadable ... they can only be loaded when referenced from another config"
 
 	^ false

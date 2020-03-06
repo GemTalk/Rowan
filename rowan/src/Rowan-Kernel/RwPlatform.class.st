@@ -63,14 +63,13 @@ RwPlatform >> automaticClassInitializationBlackList_global [
 ]
 
 { #category : 'queries' }
-RwPlatform >> basePlatformAttribute [
-	"Answer the generic configuration attribute for the platform"
+RwPlatform >> basePlatformConditionalAttribute [
+	"Answer the generic conditional attribute for the platform"
 
-	"Examples include: 'gemstone', 'pharo', 'squeak'"
+	"Examples include: 'gemstone', 'pharo', 'squeak', 'vast' 
+		(see RwSpecification class >> _supportedPlatformNames)"
 
-
-	self subclassResponsibility: #basePlatformAttribute
-
+	self subclassResponsibility: #'basePlatformConditionalAttribute'
 ]
 
 { #category : 'preferences' }
@@ -158,13 +157,12 @@ RwPlatform >> loadedPackageClass [
 ]
 
 { #category : 'queries' }
-RwPlatform >> platformConfigurationAttributes [
-	"Answer the configuration attributes. Currently 'common' is the only shared attribute."
+RwPlatform >> platformConditionalAttributes [
+	"Answer the platform conditional attributes. Currently 'common' is the only shared attribute."
 
 	"subclasses need to override and provide additional platform-specific attributes"
 
 	^ #('common')
-
 ]
 
 { #category : 'preferences' }

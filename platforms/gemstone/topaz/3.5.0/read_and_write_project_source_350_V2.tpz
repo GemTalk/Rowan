@@ -28,64 +28,130 @@
   login
 
 run
-	| platformConfigurationAttributes projectSetModification visitor
-		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool 
-		auditFailures gsFileName |
+	| platformConditionalAttributes platformConditionalAttributes3215 projectSetModification visitor 
+		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool platformConditionalAttributes360
+	 auditFailures gsFileName repositoryRoot3215 repositoryRoot360 |
 
-	platformConfigurationAttributes := {
+false ifTrue: [ 
+	Rowan projectTools trace startTracing 
+].
+  GsFile gciLogServer: '--- read and write project source RowanV2'.
+	platformConditionalAttributes360 := {
+		'common'.
+		'gemstone'.
+		'gemstone-kernel'.
+		'3.6.0' asRwGemStoneVersionNumber.	"want to read 3.6.0 packages"
+	}.
+	platformConditionalAttributes := {
 		'common'.
 		'gemstone'.
 		'gemstone-kernel'.
 		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
 	}.
-	repositoryRoot := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/rowan_exp_350/rowan_gs' asFileReference.
+	platformConditionalAttributes3215 := {
+		'common'.
+		'gemstone'.
+		'gemstone-kernel'.
+		'3.2.15' asRwGemStoneVersionNumber.	"want to read 3.2.15 packages"
+	}.
+	repositoryRoot360 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src_v2' asFileReference.
+	repositoryRoot360 ensureCreateDirectory.
+false ifTrue: [ 
+	repositoryRoot360 deleteAllChildren.
+ ].
+	repositoryRoot3215 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/project_src_v2' asFileReference.
+	repositoryRoot3215 ensureCreateDirectory.
+false ifTrue: [ 
+	repositoryRoot3215 deleteAllChildren.
+ ].
+	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2' asFileReference.
 	repositoryRoot ensureCreateDirectory.
+false ifTrue: [ 
 	repositoryRoot deleteAllChildren.
+].
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1V2.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes.
+			repositoryRoot.
+			'RowanV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/ComponentV2.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes360.
+			repositoryRoot360.
+			'RowanV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV1.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes3215.
+			repositoryRoot3215.
+			'RowanV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/specs/RowanV2.ston'.
-			'$ROWAN_PROJECTS_HOME'
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes.
+			repositoryRoot.
+			'ComponentV2'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes360.
+			repositoryRoot360.
+			'ComponentV2'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/ComponentV2_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes3215.
+			repositoryRoot3215.
+			'ComponentV2'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/RowanV1_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes.
+			repositoryRoot.
+			'RowanV1'
+		}.		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/RowanV1V2_proposed_2.ston'.
+			'$ROWAN_PROJECTS_HOME'.
+			platformConditionalAttributes.
+			repositoryRoot.
+			'RowanV1V2'
 		}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk."
-		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome |
+		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome conditionalAttributes theRepositoryRoot |
 		loadSpecUrl := ar at: 1.
 		projectsHome := ar at: 2.
+		conditionalAttributes := (ar at: 3) copy.
+		theRepositoryRoot := ar at: 4.
+		gsFileName := ar at: 5.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
-		gsFileName := loadSpec specName.
+		conditionalAttributes addAll: loadSpec customConditionalAttributes.
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		theProjectSetDefinition :=  resolvedProject read: platformConfigurationAttributes.
-		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
+		theProjectSetDefinition :=  resolvedProject readProjectSet: conditionalAttributes.
+		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs'.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
 				GsFile gciLogServer: '	Project: ', projectDefinition name.
 				projectDefinition packageNames do: [:pkgName | GsFile gciLogServer: '		', pkgName ] ].
-		GsFile gciLogServer: 'LoadSpec: ', loadSpec specName.
+		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs (', (conditionalAttributes at: 4) printString, ')'.
 
 		topazFileNameMap := Dictionary new.
 		topazFileNameMap at: gsFileName put: {}.
 		theProjectSetDefinition keys do: [:projectName |
 			| projectDefinition |
 			projectDefinition := theProjectSetDefinition projectNamed: projectName.
-			projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 			projectDefinition packageNames do: [:packageName |
-				(topazFileNameMap at: gsFileName) add: packageName ].
-			visitor := RwGsModificationTopazWriterVisitor new
-				repositoryRootPath: repositoryRoot;
-				topazFilenamePackageNamesMap: topazFileNameMap;
-				yourself.
-			visitor visit: projectSetModification ].
- ].
+				(topazFileNameMap at: gsFileName) add: packageName ] ].
+		projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+		visitor := RwGsModificationTopazWriterVisitor new
+			repositoryRootPath: theRepositoryRoot;
+			topazFilenamePackageNamesMap: topazFileNameMap;
+			yourself.
+		visitor visit: projectSetModification ].
 %

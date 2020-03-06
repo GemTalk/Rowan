@@ -186,13 +186,13 @@ RwGsPatchSet_254 >> _createMovedClasses [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> _currentProjectDefinition [
-
 	^ currentProjectDefinition
 		ifNil: [ 
 			currentProjectDefinition := Rowan image
 				loadedProjectNamed: Rowan unpackagedName
-				ifAbsent: [ RwUnmanagedProjectDefinition new ] ]
-
+				ifAbsent: [ 
+					"RwUnmanagedProjectDefinition may not be applicable in V2 system"
+					(Rowan globalNamed: 'RwUnmanagedProjectDefinition') new ] ]
 ]
 
 { #category : 'private - patch class accessors' }

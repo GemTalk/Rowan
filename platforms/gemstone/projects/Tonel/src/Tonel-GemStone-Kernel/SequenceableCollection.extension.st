@@ -108,10 +108,3 @@ SequenceableCollection >> withIndexDo: elementAndIndexBlock [
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
 
 ]
-
-{ #category : '*tonel-gemstone-kernel' }
-SequenceableCollection >> writeStreamPortable [
-
-	^ WriteStreamPortable on: self
-
-]

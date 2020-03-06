@@ -22,6 +22,14 @@
   set user SystemUser p swordfish
   login
 
+run
+  AlmostOutOfMemory enableAtThreshold: 75.
+  AlmostOutOfMemory
+    addDefaultHandler: [ :ex | 
+      self halt.
+      AlmostOutOfMemory enableAtThreshold: 75.
+      ex resume ]
+%
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuite.gs
 
 	commit

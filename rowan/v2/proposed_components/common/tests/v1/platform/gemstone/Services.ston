@@ -1,0 +1,8 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/v1/platform/gemstone/Services',
+	#condition : 'gemstone',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [ ],
+	#comment : 'Services v1 gemstone test packages: Rowan-Services-TestsV1 abandoned'
+}

@@ -1,0 +1,22 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/gemstone/Tools',
+	#condition : [
+		'gemstone'
+	],
+	#packageNames : [
+		'Rowan-Tools-Extensions-GemStone',
+		'Rowan-Tools-GemStone'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tools-GemStone' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Tools gemstone  packages '
+}

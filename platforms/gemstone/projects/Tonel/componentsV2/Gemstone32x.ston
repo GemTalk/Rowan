@@ -1,0 +1,8 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Gemstone32x',
+	#condition : 'gs3.2.x',
+	#packageNames : [
+		'Tonel-GemStone-32x-Kernel'
+	],
+	#comment : 'Tonel project'
+}

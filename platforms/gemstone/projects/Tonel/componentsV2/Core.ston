@@ -1,33 +1,11 @@
-RwProjectLoadComponentV2 {
+RwSimpleProjectLoadComponentV2 {
 	#name : 'Core',
-	#comment : 'Single component for Tonel project',
-	#conditionalPackages : {
-		[
-			'gemstone'
-		] : {
-			'core' : {
-				#packageNames : [
-					'CypressTonel-Core',
-					'Tonel-Core',
-					'Tonel-GemStoneCommon-Core',
-					'Tonel-GemStone-Kernel'
-				]
-			},
-			'tests' : {
-				#packageNames : [
-					'CypressTonel-Tests',
-					'CypressTonel-GemStone-Tests',
-					'Tonel-Cypress-Tests',
-					'Tonel-GemStone-Tests',
-					'Tonel-Tests'
-				]
-			}
-		}
-	},
-	#definedGroupNames : {
-		'tests' : [
-			'core'
-		],
-		'core' : [ ]
-	}
+	#condition : 'gemstone',
+	#packageNames : [
+		'CypressTonel-Core',
+		'Tonel-Core',
+		'Tonel-GemStoneCommon-Core',
+		'Tonel-GemStone-Kernel'
+	],
+	#comment : 'Tonel project'
 }

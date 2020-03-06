@@ -80,19 +80,50 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: #()
+				type: 'normal')
+]
 
-	^ self addClassDefinition: 
-		(RwClassDefinition 
-			newForClassNamed: className 
-				super: superclassName 
-				instvars: instvars 
-				classinstvars: 
-				classinstvars 
-				classvars: classvars 
-				category: category 
-				comment: comment 
-				pools: pools 
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
+				type: 'normal')
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
 				type: type)
 ]
 
@@ -164,6 +195,22 @@ RwPackageDefinition >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
 	^self propertyAt: 'name' ifAbsent: [nil]
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassNamed: className modifyClassDefinition: classDefinitionBlock toPackage: packageDefinition [
+	| classDefinition |
+	classDefinition := self removeKey: className from: classDefinitions.
+	classDefinitionBlock cull: classDefinition.
+	packageDefinition addClassDefinition: classDefinition
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassNamed: className toPackage: packageDefinition [
+	self
+		moveClassNamed: className
+		modifyClassDefinition: [  ]
+		toPackage: packageDefinition
 ]
 
 { #category : 'copying' }

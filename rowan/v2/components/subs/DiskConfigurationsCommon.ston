@@ -1,0 +1,64 @@
+RwNestedProjectLoadComponentV2 {
+	#name : 'subs/DiskConfigurationsCommon',
+	#comment : 'V2 classes that are exported to disk for specifiying configurations.
+	These class definitions should be shared by all platforms that support the Rowan
+	disk spec.',
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#componentNames : [
+				],
+				#packageNames : [
+					'Rowan-Url-Core',
+					'Rowan-Core-Conditional-Support',
+					'Rowan-Definitions-Common',
+					'Rowan-Specifications'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+				]
+			}
+		},
+		[ 
+			'gemstone', 
+			'gemstoneBase'
+		 ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Components-Kernel',
+					'Rowan-GemStone-Url',
+					'Rowan-Components-Kernel',
+					'Rowan-GemStone-Specifications'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Definitions-Common' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Core-Conditional-Support' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Url' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Components-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+}

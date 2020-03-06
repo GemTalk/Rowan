@@ -1,0 +1,31 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v2/Definitions',
+	#condition : 'v2',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/v2/platforms/Definitions'
+	],
+	#packageNames : [
+		'Rowan-Core-DefinitionsV2',
+		'Rowan-Definitions-Common',
+		'Rowan-DefinitionsV2'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Core-DefinitionsV2' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Definitions-Common' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-DefinitionsV2' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all v2 definitions classes under one component'
+}

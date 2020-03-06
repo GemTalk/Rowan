@@ -19,7 +19,8 @@ Class {
 DiskStore class >> activeClass [
 	self allSubclasses do: [:ea | 
 		ea isActiveClass ifTrue: [^ ea]].
-	^ self
+  "Various methods go into infinite recursion if we return self."
+	Error signal:'Cannot find an active subclass of DiskStore' .
 ]
 
 { #category : 'current' }
@@ -104,14 +105,22 @@ DiskStore >> basicCreationTimeOf: anEntry [
 { #category : 'private' }
 DiskStore >> basicEntry: ignored path: aPath nodesDo: aBlock [
 	| pathString intOrArray |
-		
 	pathString := self stringFromPath: aPath.
 	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
 	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
 	intOrArray
 		do: [:entryPathString |
 			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (File lookupPath: entryPathString) ] ]
+				ifFalse: [ | aFile |
+          aFile := File lookupPath: entryPathString .
+          "For now, ignore symLinks which reference a non-existant file."
+          aFile ifNil:[ 
+             (GsFile isSymbolicLink: entryPathString onClient: false) ifFalse:[
+                self signalFileDoesNotExist: entryPathString 
+             ]
+          ] ifNotNil:[
+            aBlock value: aFile 
+          ]]]
 ]
 
 { #category : 'public' }

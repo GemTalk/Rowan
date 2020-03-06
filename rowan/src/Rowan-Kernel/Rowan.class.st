@@ -159,12 +159,11 @@ Rowan class >> platform [
 ]
 
 { #category : 'public' }
-Rowan class >> platformConfigurationAttributes [
+Rowan class >> platformConditionalAttributes [
 
-	"Return list of platform-specific configuration attributes"
+	"Return list of platform-specific conditional attributes for use by components"
 
-	^ self platform platformConfigurationAttributes
-
+	^ self platform platformConditionalAttributes
 ]
 
 { #category : 'public' }

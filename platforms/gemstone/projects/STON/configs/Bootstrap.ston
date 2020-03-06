@@ -9,7 +9,7 @@ RwProjectLoadConfiguration {
 		'Gs3215'
 	],
   #conditionalPackageMapSpecs : {
-		'gemstone' : {
+		'gemstone-kernel' : {
 			'SystemUser' : {
 				#defaultSymbolDictName : 'Globals'
 			}

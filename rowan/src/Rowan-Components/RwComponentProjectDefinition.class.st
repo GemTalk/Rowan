@@ -116,6 +116,60 @@ RwComponentProjectDefinition class >> projectName: projectName projectHome: proj
 ]
 
 { #category : 'instance creation' }
+RwComponentProjectDefinition class >> topazReadTonelFile: fileName [
+    "Read a single file and compile the methods within that file.
+     Definition/redefinition of the class not implemented yet "
+  | projectDef package clsName clsDef cls methBlk envId |
+  projectDef := RwRepositoryComponentProjectTonelReaderVisitor
+     readClassFile: fileName
+     projectName: 'TopazLoad'   "synthetic projed and package names"
+     packageName: 'TopazPackage' .
+  package := projectDef packageNamed: 'TopazPackage_1' .
+  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
+  package classDefinitions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class definition in file ' , fileName
+    ].
+    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
+  ].
+  package classExtensions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class extension in file ' , fileName
+    ].
+    sz > 0 ifTrue:[
+      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
+      clsDef :=  defs values at: 1.
+    ].
+  ].   
+  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
+  clsName := clsDef name .
+  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
+    "creating the class not implemented yet"
+    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
+  ].
+  cls := cls"anAssociation" value.
+
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: nil "install into the class's dictionaries"
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  envId
+    ] on: (CompileError, CompileWarning) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+   ].
+  clsDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  clsDef classMethodDefinitions do: methBlk .
+]
+
+{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> withProperties: properties packageDefinitions: packageDefinitions [
 
 	^ self basicNew
@@ -429,6 +483,18 @@ RwComponentProjectDefinition >> commit: message [
 	^ self projectRef doCommit: message
 ]
 
+{ #category : 'properties' }
+RwComponentProjectDefinition >> compileWhileReading [
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  ^ properties at: 'CompileWhileReading' otherwise: false
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> compileWhileReading: aBoolean [
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  properties at: 'CompileWhileReading' put: aBoolean
+]
+
 { #category : 'accessing' }
 RwComponentProjectDefinition >> componentNamed: aComponentName [
 
@@ -547,9 +613,8 @@ RwComponentProjectDefinition >> exportComponents [
 RwComponentProjectDefinition >> exportPackages [
 	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
 	| projectSetDefinition |
-	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
-		on: Error
-		do: [:ignored | RwProjectSetDefinition new ].
+	projectSetDefinition := (self class newForProjectReference: self projectRef) readProjectSet .
+
 	self exportPackages: projectSetDefinition.
 ]
 
@@ -813,7 +878,7 @@ RwComponentProjectDefinition >> readPackageNames: packageNames [
 
 	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
-	| format visitorClass |
+	| format aVisitor |
 	packages := Dictionary new. 
 	format := self 
 		packageFormatIfAbsent: [  
@@ -822,10 +887,15 @@ RwComponentProjectDefinition >> readPackageNames: packageNames [
 				at: #format ifAbsent: [ 'tonel' ].
 			self packageFormat: formatFromDisk.
 			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
+	format = 'tonel' ifTrue: [ 
+     aVisitor := RwRepositoryComponentProjectTonelReaderVisitor new .
+     self compileWhileReading ifTrue:[
+       aVisitor compileWhileReading: true .
+     ]
+  ] ifFalse: [ 
+     aVisitor := RwRepositoryComponentProjectFiletreeReaderVisitor new .
+  ].
+	^ aVisitor
 		packageNames: packageNames;
 		visit: self.
 ]
@@ -834,28 +904,6 @@ RwComponentProjectDefinition >> readPackageNames: packageNames [
 RwComponentProjectDefinition >> readProjectSet [
 
 	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
-]
-
-{ #category : 'actions' }
-RwComponentProjectDefinition >> readProjectSetForPackageNames: packageNames [
-
-	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
-
-	| format visitorClass |
-	packages := Dictionary new. 
-	format := self 
-		packageFormatIfAbsent: [  
-			| formatFromDisk |
-			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
-				at: #format ifAbsent: [ 'tonel' ].
-			self packageFormat: formatFromDisk.
-			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
-		packageNames: packageNames;
-		visit: self.
 ]
 
 { #category : 'reading' }

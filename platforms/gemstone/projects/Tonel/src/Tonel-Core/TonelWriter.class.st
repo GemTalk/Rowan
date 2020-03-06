@@ -169,7 +169,6 @@ TonelWriter >> splitMethodSource: aMethodDefinition into: aBlock [
 	aBlock 
 		value: (declaration contents trimLeft withLineEndings: self newLine)
 		value: (source upToEnd withLineEndings: self newLine)
-
 ]
 
 { #category : 'private' }

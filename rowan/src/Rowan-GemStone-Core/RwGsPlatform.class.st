@@ -35,7 +35,8 @@ RwGsPlatform >> _globalPreferenceDict [
 RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId [
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.
-	 Returns the compiled method or signals a CompileError."
+	 Returns the compiled method or signals a CompileError.
+   Only used to parse a method to determine the selector.  "
 
 	| undefinedSymbolList undefinedSymbols |
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
@@ -124,12 +125,13 @@ RwGsPlatform >> automaticClassInitializationBlackList_user [
 ]
 
 { #category : 'queries' }
-RwGsPlatform >> basePlatformAttribute [
-	"Answer the generic configuration attribute for the platform"
+RwGsPlatform >> basePlatformConditionalAttribute [
+	"Answer the generic conditional attribute for the platform"
 
+	"Examples include: 'gemstone', 'pharo', 'squeak', 'vast' 
+		(see RwSpecification class >> _supportedPlatformNames)"
 
 	^ 'gemstone'
-
 ]
 
 { #category : 'preferences' }
@@ -309,10 +311,14 @@ RwGsPlatform >> parseSelectorFrom: methodString [
 ]
 
 { #category : 'queries' }
-RwGsPlatform >> platformConfigurationAttributes [
-	"Answer the configuration attributes for the current platform."
+RwGsPlatform >> platformConditionalAttributes [
+	"Answer the conditional attributes for the current platform."
 
-	^ super platformConfigurationAttributes, {self basePlatformAttribute. 'gemstone-kernel'. (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
+	^ super platformConditionalAttributes
+		,
+			{(self basePlatformConditionalAttribute).
+			'gemstone-kernel'.
+			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}
 ]
 
 { #category : 'preferences' }

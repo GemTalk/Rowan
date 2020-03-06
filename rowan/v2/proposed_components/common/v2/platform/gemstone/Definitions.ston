@@ -1,0 +1,25 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v2/platform/gemstone/Definitions',
+	#condition : 'gemstone',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-GemStone-Definitions-ExtensionsV2',
+		'Rowan-GemStone-DefinitionsV2'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Definitions-ExtensionsV2' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-GemStone-DefinitionsV2' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Definitions vw gemstone packages'
+}

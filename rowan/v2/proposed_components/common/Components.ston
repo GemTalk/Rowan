@@ -1,0 +1,14 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Components',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/componentsV2/Components',
+		'common/platform/gemstone_gemstoneBase/Components',
+		'common/tests/Components',
+		'common/v1/Components',
+		'common/v2/Components'
+	],
+	#packageNames : [ ],
+	#comment : 'Organize all component classes under one component. Shared between Rowan and RowanDiskAPI.'
+}

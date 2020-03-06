@@ -157,11 +157,10 @@ RwProjectDefinition >> configurationTemplate [
 	groupNames
 		do: [:groupName | config addDefinedGroupName: groupName ].
 	config 
-		conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+		conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 		andGroup: (groupNames at: 1) 
 		addPackageNames: self packageNames.
 	^ config
-
 ]
 
 { #category : 'properties' }

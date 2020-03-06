@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/testsV1/Services',
+	#condition : 'testsV1',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/tests/testsV1/platforms/Services'
+	],
+	#packageNames : [ ],
+	#comment : ''
+}

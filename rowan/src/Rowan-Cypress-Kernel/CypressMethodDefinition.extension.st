@@ -4,3 +4,8 @@ Extension { #name : 'CypressMethodDefinition' }
 CypressMethodDefinition >> accept: aVisitor [
 	^ aVisitor visitMethodDefinition: self
 ]
+
+{ #category : '*rowan-cypress-kernel' }
+CypressMethodDefinition >> offset: anInteger inFile: aFileName [
+	"noop"
+]

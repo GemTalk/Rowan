@@ -72,7 +72,12 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
-		ifFalse: [ Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
+		ifFalse: [ 
+			| componentsWithDoits |
+			componentsWithDoits := diff componentsWithDoits.
+			componentsWithDoits do: [ :component | component executePreloadDoit ].
+			Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
+			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
 	loadedProjects := Array new.
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 
@@ -94,7 +99,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
@@ -102,7 +107,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 ]
 
@@ -130,11 +135,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 		ifTrue: [ 
 			"only read from disk if the repository exists and the project definition has not 
 				already been loaded from disk"
-			Rowan projectTools read
-				readProjectSetForComponentProjectDefinition: projectDefinition
-				withConfigurations: projectDefinition loadedConfigurationNames
-				groupNames: projectDefinition loadedGroupNames
-				platformConfigurationAttributes: platformConfigurationAttributes ]
+			projectDefinition readProjectSet: platformConfigurationAttributes ]
 		ifFalse: [ 
 			"If this project definition _was_ read from disk, we cannot trust that it was 
 				not modified, so clear source property"
@@ -145,6 +146,35 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName [
+	| projectSet |
+	projectSet := Rowan projectTools readV2
+		readProjectSetForProjectNamed: projectName.
+	^ self loadProjectSetDefinition: projectSet
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
+	| platformConditionalAttributes project |
+	project := RwProject newNamed: projectName.
+	platformConditionalAttributes := project platformConditionalAttributes copy
+		asSet.
+	platformConditionalAttributes addAll: customConditionalAttributes.
+	^ self
+		loadProjectNamed: projectName
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
+	| projectSet |
+	projectSet := Rowan projectTools readV2
+		readProjectSetForProjectNamed: projectName
+		platformConditionalAttributes: platformConditionalAttributes.
+	^ self loadProjectSetDefinition: projectSet
 ]
 
 { #category : 'load project definitions' }

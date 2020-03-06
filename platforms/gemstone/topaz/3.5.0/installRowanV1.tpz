@@ -20,21 +20,7 @@
 #	display oops
 
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz
-
-	omit pushonly
-  iferr 1 stk
-  iferr 2 stack
-#  iferr 3 exit 1
-
-  set u SystemUser p swordfish
-  login
-
-	input ./rowan_gs/RowanV1.gs
-
-	commit
-
-	logout
-
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_2_RowanV1.tpz
 #	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3.tpz
 #	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_4.tpz
 

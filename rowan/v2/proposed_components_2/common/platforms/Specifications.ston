@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/Specifications',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/platforms/gemstone_gemstoneBase/Specifications'
+	],
+	#packageNames : [ ],
+	#comment : ''
+}

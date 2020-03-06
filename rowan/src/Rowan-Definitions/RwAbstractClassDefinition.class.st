@@ -46,7 +46,7 @@ RwAbstractClassDefinition >> addClassMethod: methodSource protocol: protocol [
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addClassMethodDefinition: aMethodDefinition [
 
-	self addDefinition: aMethodDefinition to: classMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: classMethodDefinitions
 ]
 
 { #category : 'accessing' }
@@ -58,7 +58,7 @@ RwAbstractClassDefinition >> addInstanceMethod: methodSource protocol: protocol 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addInstanceMethodDefinition: aMethodDefinition [
 
-	self addDefinition: aMethodDefinition to: instanceMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: instanceMethodDefinitions
 ]
 
 { #category : 'private' }

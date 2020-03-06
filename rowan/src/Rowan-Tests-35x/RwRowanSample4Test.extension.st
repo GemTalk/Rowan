@@ -109,7 +109,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 	"issue_185_1 --> issue_185_3	:: move NewRowanSample4 class to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
-		baselinePackageNames newClass ar |
+		baselinePackageNames newClass ar audit |
 
 	projectName := 'RowanSample4'.
 	Rowan
@@ -137,6 +137,8 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 
 	project load.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
@@ -152,6 +154,8 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 
 	project load.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 	self
 		assert:
 			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
@@ -166,6 +170,8 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_3'.				"Move NewRowanSample4 class to RowanSample4SymbolDict"
 
 	project load.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
 

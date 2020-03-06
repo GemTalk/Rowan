@@ -57,7 +57,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> defaultUseSessionMethodsForExtensions: 
 
 { #category : 'initialization' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolvedProject [
-	self initializeForName: aResolvedProject projectAlias.
+	self initializeForName: aResolvedProject projectName.
 	handle := aResolvedProject copyForLoadedProject
 ]
 
@@ -69,13 +69,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedCommitId [
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadedComponentDefinitions [
-
-	"Create definitions from all of the components I define, and answer the collection of them"
-
-	| components |
-	components := self components copy.
-	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
-	^ components
+	^ self resolvedProject _projectStructure copy
 ]
 
 { #category : 'accessing' }
@@ -122,6 +116,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> markPackageDirty [
 RwGsLoadedSymbolDictResolvedProjectV2 >> packageNameToPlatformPropertiesMap: aDictionary [
 
 	^self resolvedProject packageNameToPlatformPropertiesMap: aDictionary
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> platformConditionalAttributes [
+	"Answer the platformConditionalAttributes used to load the project"
+
+	^ self resolvedProject platformConditionalAttributes
 ]
 
 { #category : 'accessing' }
