@@ -13,7 +13,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition 
 		projectNames classDefinition packageNames1 packageNames2 classNames1 classNames2 
 		classExtensionDefinition symDict1 symDict2 symbolList theClass loadedProjectSet diff classComment
-		componentName |
+		componentName  project1 project2 audit |
 
 	projectTools := Rowan projectTools.
 	projectName1 := 'AdoptProject1'.
@@ -65,10 +65,17 @@ RwProjectSetTest >> testProjectAdoptTool [
 
 	projectTools load loadProjectSetDefinition: projectSetDefinition. "create loaded project and empty loaded packages"
 
+	project1 := Rowan projectNamed: projectName1.
+	project2 := Rowan projectNamed: projectName2.
+
+"audit"
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
+
 	"construct project definition structures"
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	projectDefinition1 := (Rowan image loadedProjectNamed: projectName1) asDefinition.
+	projectDefinition1 :=project1 asDefinition.
 	projectSetDefinition addProject: projectDefinition1.
 
 	classDefinition := RwClassDefinition
@@ -114,7 +121,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 	(projectDefinition1 packageNamed: (packageNames1 at: 2))
 		addClassExtensionDefinition: classExtensionDefinition.
 
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName2) asDefinition.
+	projectDefinition2 := project2 asDefinition.
 	projectSetDefinition addProject: projectDefinition2.
 
 	classDefinition := RwClassDefinition
@@ -218,12 +225,15 @@ RwProjectSetTest >> testProjectAdoptTool [
 	"adopt the class structure using the project definitions"
 	projectTools adopt adoptProjectSetDefinition: projectSetDefinition.
 
+"audit"
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
+
 	"validate that adopted project structure matches the project defintions"
 	loadedProjectSet := projectSetDefinition deriveLoadedThings
 		asProjectDefinitionSet.
 	diff := projectSetDefinition compareAgainstBase: loadedProjectSet.
 	self assert: diff isEmpty.
-
 ]
 
 { #category : 'tests' }
@@ -286,16 +296,18 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 	project1 := Rowan projectNamed: projectName1.
 	project2 := Rowan projectNamed: projectName2.
 	
-	project1 
+	(project1 asDefinition)
 		addPackagesNamed: packageNames1 toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: (packageNames1 at: 2);
+		load;
 		yourself.
 
-	project2
+	(project2 asDefinition)
 		addPackagesNamed: packageNames2 toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName1 
 			forPackageNamed: (packageNames2 at: 2);
+		load;
 		yourself.
 
 	"construct project definition structures"
@@ -347,7 +359,7 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 	(projectDefinition1 packageNamed: (packageNames1 at: 2))
 		addClassExtensionDefinition: classExtensionDefinition.
 
-	projectDefinition2 := (Rowan image loadedProjectNamed: projectName2) asDefinition.
+	projectDefinition2 := project2 asDefinition.
 	projectSetDefinition addProject: projectDefinition2.
 
 	classDefinition := RwClassDefinition
@@ -456,7 +468,6 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		asProjectDefinitionSet.
 	diff := projectSetDefinition compareAgainstBase: loadedProjectSet.
 	self assert: diff isEmpty.
-
 ]
 
 { #category : 'tests' }

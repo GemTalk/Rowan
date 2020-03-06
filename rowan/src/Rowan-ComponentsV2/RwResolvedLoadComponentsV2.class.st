@@ -393,6 +393,7 @@ RwResolvedLoadComponentsV2 >> gemstoneSetSymbolDictName: symbolDictName forPacka
 						andPackageName: packageName
 						setSymbolDictNameTo: symbolDictName ] ].
 	foundOne ifFalse: [ self error: 'No package named ' , packageName printString , ' found.']
+
 ]
 
 { #category : 'gemstone support' }
