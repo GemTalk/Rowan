@@ -1,0 +1,10 @@
+RwLoadSpecificationV2 {
+	#specName : 'Issue122_filetree',
+	#projectName : 'Issue361',
+	#projectSpecFile : 'rowan/project_filetree.ston',
+	#componentNames : [
+		'Core'
+	],
+	#customConditionalAttributes : [ ],
+	#comment : 'Issue #361: empty extension file (tonel); emtpy extension directory (filetree)'
+}

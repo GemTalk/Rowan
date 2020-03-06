@@ -1,11 +1,10 @@
 RwSimpleProjectLoadComponentV2 {
-	#name : 'Both_ProtocolValidationError',
+	#name : 'Core_CategoryValidationError',
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [
-		'Issue122-Core-ProtocolValidationErro',
-		'Issue122-Extension1-ProtocolValidationError'
+		'Issue122-Core-CategoryValidationError'
  ],
 	#comment : ''
 }

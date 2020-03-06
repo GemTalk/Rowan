@@ -1,0 +1,11 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Issue122-Core',
+		'Issue122-Extension1'
+ ],
+	#comment : 'Issue #361: empty extension file (tonel); empty extension directory (filetree)'
+}
