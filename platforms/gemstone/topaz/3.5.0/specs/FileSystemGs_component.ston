@@ -4,7 +4,7 @@ RwComponentSpecification {
 	#projectUrl : 'https://github.com/GemTalk/FileSystemGs',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
-			#defaultSymbolDictName : 'Globals' 
+			#defaultSymbolDictName : 'RowanFileSystem' 
 		}
 	},
 	#repoSpec : RwGitRepositorySpecification {
