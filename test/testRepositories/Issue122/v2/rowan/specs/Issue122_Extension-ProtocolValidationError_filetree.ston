@@ -1,0 +1,10 @@
+RwLoadSpecificationV2 {
+	#specName : 'Issue122_Extension_ProtocolValidationError_filetree',
+	#projectName : 'Issue122',
+	#projectSpecFile : 'rowan/project_filetree.ston',
+	#componentNames : [
+		'Extension_ProtocolValidationError'
+	],
+	#customConditionalAttributes : [ ],
+	#comment : 'filetree loadSpec - package source is in filetree format'
+}

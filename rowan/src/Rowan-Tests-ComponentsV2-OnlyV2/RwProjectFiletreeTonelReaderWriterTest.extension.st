@@ -175,31 +175,34 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithExtensi
 		extension method protocol does start with a *, but does not match the package name
 	"
 
-	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet loadSpec |	
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Extension-ProtocolValidationError.ston'.
+	specUrlString := 'file:' , projectHome, '/Issue122/v2/rowan/specs/Issue122_Extension-ProtocolValidationError_', self _repositoryFormat, '.ston'.
 
-"create project definition"
-	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
+"create load spec"
+	loadSpec :=  (RwLoadSpecificationV2 fromUrl: specUrlString)
+		projectsHome: projectHome;
+		diskUrl:  'file:' , projectHome, '/Issue122/v2';
+		yourself.
 
 "read project -- hit protocol is invalid error"
 	self 
-		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		should: [ 
+			projectDefinition := loadSpec resolve.
+			projectDefinitionSet := RwProjectSetDefinition new
+				addProject: projectDefinition;
+				yourself ]
 		raise: Error.
 
-"recreate project definition"
-	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
-
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
 "read project -- catch and resume the notification ... repair the protocol"
-	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+	[ 
+		projectDefinition := loadSpec resolve.
+		projectDefinitionSet := RwProjectSetDefinition new
+			addProject: projectDefinition;
+			yourself ]
 		on: RwInvalidCategoryProtocolConventionErrorNotification
 		do: [:ex | 
 			ex
@@ -224,30 +227,33 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 
 	"method protocol starts with a * for non-extension method"
 
-	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet loadSpec |	
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 "identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Core-ProtocolValidationError.ston'.
+	specUrlString :=  'file:' , projectHome, '/Issue122/v2/rowan/specs/Issue122_Core-ProtocolValidationError_', self _repositoryFormat, '.ston'.
 
-"create project definition"
-	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
+"create load spec"
+	loadSpec :=  (RwLoadSpecificationV2 fromUrl: specUrlString)
+		projectsHome: projectHome;
+		diskUrl:  'file:' , projectHome, '/Issue122/v2';
+		yourself.
 
 "read project -- hit protocol is invalid error"
 	self 
-		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		should: [ 
+			projectDefinition := loadSpec resolve.
+			projectDefinitionSet := RwProjectSetDefinition new
+				addProject: projectDefinition;
+				yourself ]
 		raise: Error.
 
-"recreate project definition"
-	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') newForUrl: specUrlString.
-
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
 "read project -- catch and resume the notification ... repair the protocol"
-	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+	[ 
+		projectDefinition := loadSpec resolve.
+		projectDefinitionSet := RwProjectSetDefinition new
+			addProject: projectDefinition;
+			yourself ]
 		on: RwInvalidCategoryProtocolConventionErrorNotification
 		do: [:ex | 
 			ex
@@ -261,6 +267,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 
 "validation"
 	self _validateIssue122Repaired_CoreProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
+
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
