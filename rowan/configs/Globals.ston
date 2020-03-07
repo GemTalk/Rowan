@@ -65,7 +65,7 @@
 				#packageNameToPlatformPropertiesMap : {
 					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Components-Kernel' : { 'symbolDictName' : 'RowanFileSystem' },
-					'Rowan-DefinitionsV1-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-DefinitionsV1-Kernel' : { 'symbolDictName' : 'RowanFileSystem' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Url' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
