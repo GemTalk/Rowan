@@ -195,7 +195,7 @@ RwRowanProjectIssuesTest >> testIssue582 [
 	projectSetDefinition addDefinition: projectDefinition2.
 
 	"create projects with no packages"
-	projectTools load loadProjectSetDefinition: projectSetDefinition. "create loaded project and empty loaded packages"
+	projectTools loadV2 loadProjectSetDefinition: projectSetDefinition. "create loaded project and empty loaded packages"
 
 	"add new packages to loaded projects"
 	project1 := Rowan projectNamed: projectName1.
