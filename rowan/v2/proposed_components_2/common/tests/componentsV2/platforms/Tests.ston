@@ -1,9 +1,9 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'common/componentsV2/platforms/Components',
+	#name : 'common/tests/componentsV2/platforms/Tests',
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/componentsV2/platforms/gemstone/Components'
+		'common/tests/componentsV2/platforms/gemstone/Tests'
 	],
 	#packageNames : [ ],
 	#comment : ''

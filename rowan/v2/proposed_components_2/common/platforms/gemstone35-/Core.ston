@@ -1,5 +1,5 @@
 RwPlatformNestedProjectLoadComponentV2 {
-	#name : 'common/componentsV2/platforms/gemstone35-/Components',
+	#name : 'common/platforms/gemstone35-/Core',
 	#condition : [
 		'gs3.[5-]'
 	],

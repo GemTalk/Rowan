@@ -1,5 +1,5 @@
 RwPlatformNestedProjectLoadComponentV2 {
-	#name : 'common/tests/testsV2/platforms/gemstone/Tests',
+	#name : 'common/tests/componentsV2/platforms/gemstone/Tests',
 	#condition : [
 		'gemstone'
 	],
