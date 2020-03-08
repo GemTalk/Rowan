@@ -379,8 +379,6 @@ RwResolvedLoadComponentsV2 >> export: componentsRoot [
 
 { #category : 'gemstone support' }
 RwResolvedLoadComponentsV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
-	"answer true if the package was found in one of the receivers components"
-
 	| foundOne |
 	foundOne := false.
 	self components
@@ -392,8 +390,33 @@ RwResolvedLoadComponentsV2 >> gemstoneSetSymbolDictName: symbolDictName forPacka
 						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
 						andPackageName: packageName
 						setSymbolDictNameTo: symbolDictName ] ].
-	foundOne ifFalse: [ self error: 'No package named ' , packageName printString , ' found.']
+	foundOne
+		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
+]
 
+{ #category : 'gemstone support' }
+RwResolvedLoadComponentsV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+	self
+		gemstoneSetUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName
+		to: aBool
+		forPackageNamed: packageName
+]
+
+{ #category : 'gemstone support' }
+RwResolvedLoadComponentsV2 >> gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNamed: packageName [
+	| foundOne |
+	foundOne := false.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					foundOne := true.
+					component
+						conditionalPackageMapSpecsAtGemStoneUserId: userId
+						andPackageName: packageName
+						setUseSessionMethodsForExtensions: aBool ] ].
+	foundOne
+		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
 ]
 
 { #category : 'gemstone support' }

@@ -15,12 +15,10 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 
 	packageNames
 		do: [ :packageName | 
-			| component |
-			component := resolvedProject componentForPackageNamed: packageName.
-			component
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
-				andPackageName: packageName
-				setUseSessionMethodsForExtensions: true ].
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: true
+				forPackageNamed: packageName ].
 
 	resolvedProject
 		resolve;

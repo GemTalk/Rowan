@@ -9,7 +9,9 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 
 	"This test attempts to add extension methods to a class that is not in the dictionary that the package is being loaded into ... this should actually error out ... all definitions in a package should be applied to a single symbol dictionary ... create separate packages to do cross symbol dictionary updateds ... or possibly use session methods (yet to be determined."
 
-	| projectName1 projectName2 projectDefinition1 projectDefinition2 projectTools classDefinition packageDefinition1 packageNames1 packageDefinition2 packageNames2 className classExtensionDefinition |
+	| projectName1 projectName2 projectDefinition1 projectDefinition2 projectTools classDefinition 
+		packageDefinition1 packageNames1 packageDefinition2 packageNames2 className 
+		classExtensionDefinition componentName |
 	projectName1 := 'Simple'.
 	packageNames1 := #('Simple-Core' 'Simple-Tests').
 	projectName2 := 'Simple Extensions'.
@@ -22,12 +24,15 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName1)
-		comment:
-				'This is a simple project created in memory first, then written to disk.';
-		packageNames: #('Simple-Core' 'Simple-Tests');
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName1;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: #('Simple-Core' 'Simple-Tests')
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
@@ -49,12 +54,16 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 
 	projectTools load loadProjectDefinition: projectDefinition1.
 
-	projectDefinition2 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName2)
+	projectDefinition2 := RwResolvedProjectV2 new
+		projectName: projectName2;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: #('Simple-Extensions')
+			toComponentNamed: componentName;
 		comment:
 				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
-		addPackagesNamed: #('Simple-Extensions');
-		defaultSymbolDictName: self _symbolDictionaryName2;
+		resolve;
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
@@ -93,7 +102,9 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 
 	"This test attempts to add extension methods to a class that is not in the dictionary that the package is being loaded into ... and the extension methods are kept in session methods in the package's symbol dictionary ..."
 
-	| projectName projectDefinition projectTools classDefinition1 classDefinition2 packageDefinition1 packageDefinition2 className1 className2 testClass1 testInstance1 testClass2 testInstance2 classExtensionDefinition packageNames |
+	| projectName projectDefinition projectTools classDefinition1 classDefinition2 packageDefinition1 
+		packageDefinition2 className1 className2 testClass1 testInstance1 testClass2 testInstance2 
+		classExtensionDefinition packageNames componentName |
 	projectName := 'Simple'.
 	packageNames := #('Simple-Core' 'Simple-Extensions' 'Simple-Tests').
 	projectTools := Rowan projectTools.
@@ -103,16 +114,21 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
+			forPackageNamed: 'Simple-Extensions';
+		gemstoneSetUseSessionMethodsForExtensions: true 
+			forPackageNamed: 'Simple-Extensions';
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNames: packageNames;
-		defaultSymbolDictName: self _symbolDictionaryName1;
-		setSymbolDictName: self _symbolDictionaryName2
-			forPackageNamed: 'Simple-Extensions';
-		defaultUseSessionMethodsForExtensions: false;
-		setUseSessionMethodsForExtensions: true forPackageNamed: 'Simple-Extensions';
+		resolve;
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.

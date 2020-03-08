@@ -43,10 +43,23 @@ RwProjectDefinitionV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
-	"answer true if the package was found in one of the receivers components"
-
 	self components
 		gemstoneSetSymbolDictName: symbolDictName
+		forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwProjectDefinitionV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+	self components
+		gemstoneSetUseSessionMethodsForExtensions: aBool
+		forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwProjectDefinitionV2 >> gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNamed: packageName [
+	self components
+		gemstoneSetUseSessionMethodsForExtensionsForUser: userId
+		to: aBool
 		forPackageNamed: packageName
 ]
 

@@ -21,6 +21,13 @@ RwResolvedProjectV2 >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
+	self _loadSpecification
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId
+		to: aBool
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
 	self _loadSpecification
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
@@ -29,6 +36,21 @@ RwResolvedProjectV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 	self _projectDefinition gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+	self _projectDefinition
+		gemstoneSetUseSessionMethodsForExtensions: aBool
+		forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNamed: packageName [
+	self _projectDefinition
+		gemstoneSetUseSessionMethodsForExtensionsForUser: userId
+		to: aBool
+		forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
