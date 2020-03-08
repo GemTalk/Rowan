@@ -103252,10 +103252,10 @@ testLoadFullMultiProjectDefs
 	browserTool
 		projectNamed: projectName2
 		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: true ].
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: true
+				forPackageNamed: project2PackageName2 ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -103342,11 +103342,11 @@ testLoadMultiProjectDefs
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: true ].
+		updateDefinition: [ :resolvedProject | 
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: true
+				forPackageNamed: project2PackageName2 ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -103697,11 +103697,11 @@ testNewClassVersionB
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: true ].
+		updateDefinition: [ :resolvedProject | 
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: true
+				forPackageNamed: project2PackageName2 ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -104259,11 +104259,11 @@ testNewClassVersion_multi_project_change_extension_method_protocol
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: false ].
+		updateDefinition: [ :resolvedProject | 
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: false
+				forPackageNamed: project2PackageName2 ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -104452,11 +104452,11 @@ testNewClassVersion_multi_project_change_extension_method_source
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: false ].
+		updateDefinition: [ :resolvedProject | 
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: false
+				forPackageNamed: project2PackageName2 ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -104639,11 +104639,11 @@ testNewClassVersion_multi_project_unchanged_extension_method_protocol
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: false  ].
+		updateDefinition: [ :resolvedProject | 
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: false
+				forPackageNamed: project2PackageName2  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -104814,11 +104814,11 @@ testNewClassVersion_session_method_change_extension_method_protocol
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: true  ].
+		updateDefinition: [ :resolvedProject | 
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: true
+				forPackageNamed: project2PackageName2  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -105005,11 +105005,11 @@ testNewClassVersion_session_method_change_extension_method_source
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: true ].
+		updateDefinition: [ :resolvedProject | 
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: true
+				forPackageNamed: project2PackageName2 ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -105190,11 +105190,11 @@ testNewClassVersion_session_method_unchanged_extension_method_protocol
 
 	browserTool
 		projectNamed: projectName2
-		updateDefinition: [ :resolvedProject| 
-			(resolvedProject componentNamed: 'Core')
-				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
-				andPackageName: project2PackageName2 
-				setUseSessionMethodsForExtensions: true  ].
+		updateDefinition: [ :resolvedProject | 
+			resolvedProject
+				gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser'
+				to: true
+				forPackageNamed: project2PackageName2  ].
 
 	browserTool
 		addOrUpdateMethod: 'bar "instance" ^''bar'''
@@ -109494,6 +109494,960 @@ category: 'private'
 method: RwProjectReaderWriterTest
 _createFileSystem
 	^ FileSystem disk "currentMemoryFileSystem"
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_A
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_B
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_C_Issue361Core
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_C_Issue361Extension1
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_C_Issue361Extension2
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_D_Issue361Core
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''initialization''
+classmethod: Issue361Class1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1 initialize.
+true
+', percent, '
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_D_Issue361Extension1
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_D_Issue361Extension2
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2''
+
+!		Class methods for ''Issue361Class2''
+
+category: ''*issue361-extension2''
+classmethod: Issue361Class2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class2 initialize.
+true
+', percent, '
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_Multi_A
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Array
+	subclass: ''Issue361Class2_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2_1''
+
+!		Instance methods for ''Issue361Class2_1''
+
+category: ''accessing''
+method: Issue361Class2_1
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class2_2''
+
+!		Instance methods for ''Issue361Class2_2''
+
+category: ''accessing''
+method: Issue361Class2_2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class3_1''
+
+!		Class methods for ''Issue361Class3_1''
+
+category: ''accessing''
+classmethod: Issue361Class3_1
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class3_2''
+
+!		Class methods for ''Issue361Class3_2''
+
+category: ''accessing''
+classmethod: Issue361Class3_2
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class1_1''
+
+!		Class methods for ''Issue361Class1_1''
+
+category: ''initialization''
+classmethod: Issue361Class1_1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class1_2''
+
+!		Class methods for ''Issue361Class1_2''
+
+category: ''initialization''
+classmethod: Issue361Class1_2
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_2
+method2 ^2
+', percent, '
+
+! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension1_1''
+method: Issue361Class1_1
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2_1''
+method: Issue361Class1_1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension1_2''
+method: Issue361Class1_2
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2_2''
+method: Issue361Class1_2
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2_1''
+
+!		Class methods for ''Issue361Class2_1''
+
+category: ''*issue361-extension2_1''
+classmethod: Issue361Class2_1
+initialize "another noop"
+', percent, '
+
+! Class extensions for ''Issue361Class2_2''
+
+!		Class methods for ''Issue361Class2_2''
+
+category: ''*issue361-extension2_2''
+classmethod: Issue361Class2_2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1_1 initialize.
+Issue361Class1_2 initialize.
+Issue361Class2_1 initialize.
+Issue361Class2_2 initialize.
+true
+', percent, '
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_MULTI_B_Issue361Core
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Array
+	subclass: ''Issue361Class2_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2_1''
+
+!		Instance methods for ''Issue361Class2_1''
+
+category: ''accessing''
+method: Issue361Class2_1
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class2_2''
+
+!		Instance methods for ''Issue361Class2_2''
+
+category: ''accessing''
+method: Issue361Class2_2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class3_1''
+
+!		Class methods for ''Issue361Class3_1''
+
+category: ''accessing''
+classmethod: Issue361Class3_1
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class3_2''
+
+!		Class methods for ''Issue361Class3_2''
+
+category: ''accessing''
+classmethod: Issue361Class3_2
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class1_1''
+
+!		Class methods for ''Issue361Class1_1''
+
+category: ''initialization''
+classmethod: Issue361Class1_1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class1_2''
+
+!		Class methods for ''Issue361Class1_2''
+
+category: ''initialization''
+classmethod: Issue361Class1_2
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_2
+method2 ^2
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1_1 initialize.
+Issue361Class1_2 initialize.
+true
+', percent, '
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension1
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension1_1''
+method: Issue361Class1_1
+method1 ^1
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension1_2''
+method: Issue361Class1_2
+method1 ^1
+', percent, '
+
+'
+%
+
+category: 'private'
+method: RwProjectReaderWriterTest
+_expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension2
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension2_1''
+method: Issue361Class1_1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension2_2''
+method: Issue361Class1_2
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2_1''
+
+!		Class methods for ''Issue361Class2_1''
+
+category: ''*issue361-extension2_1''
+classmethod: Issue361Class2_1
+initialize "another noop"
+', percent, '
+
+! Class extensions for ''Issue361Class2_2''
+
+!		Class methods for ''Issue361Class2_2''
+
+category: ''*issue361-extension2_2''
+classmethod: Issue361Class2_2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class2_1 initialize.
+Issue361Class2_2 initialize.
+true
+', percent, '
+'
 %
 
 category: 'private'
@@ -125448,24 +126402,6 @@ rwCompileMethod: sourceString category: aCategoryString packageName: packageName
 		inPackageNamed: packageName
 %
 
-category: '*rowan-gemstone-35x'
-method: Behavior
-rwGuaranteePersistentMethodDictForEnv: envId
-	"in 3.5, the method persistentMethodDictForEnv: DOES NOT always return a GsMethodDictionary,
-		as classes are created without a GsMethodDictionary for envId 0."
-
-	<primitive: 2001>
-	| prot |
-	prot := System _protectedMode .
-	[ 
-		| newDict |
-		(self persistentMethodDictForEnv: envId) ifNotNil: [:oldDict | ^ oldDict ].
-		newDict := GsMethodDictionary new.
-		self persistentMethodDictForEnv: envId put: newDict.
-		^ newDict ] 
-		ensure:[ prot _leaveProtectedMode ].
-%
-
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rwMoveMethod: methodSelector toCategory: categoryName
@@ -125495,73 +126431,6 @@ rwRemoveSelector: methodSelector
 		removeMethod: methodSelector
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_constraintOn: aSymbol
-
-"Returns the class kind constraint for the instance variable represented by
- aSymbol.  If aSymbol does not represent an instance variable of objects whose
- behavior is defined by the receiver, returns nil.
- If the instance variable aSymbol is not constrained, returns Object ."
-
-| ivNams constrs |
-
-ivNams := instVarNames .
-constrs := constraints .
-1 to: self instSize do: [ :i |
-  aSymbol == (ivNams  at: i) ifTrue:[ ^ self _constraintAt: i ].
-].
-^ nil
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_ivOffsetAndConstraint: aSymbol
-
-"Searches the instVarNames instance variable of the receiver for an instance
- variable named aSymbol, and returns an Array containing the offset and the
- constraint for that instance variable.  Returns nil if no instance variable
- exists with the name aSymbol."
-
-| idx |
-idx := instVarNames indexOfIdentical: aSymbol .
-idx == 0 ifTrue:[ ^ nil ].
-^ { idx .  self _constraintAt: idx } 
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_namedIvConstraintAtOffset: offset
-
-"Returns the constraint, if any, on the named instance variable at the
- specified offset.  Returns Object if there is no such named instance variable,
- or if the instance variable at that offset is not constrained."
-
-(offset > self instSize ) ifTrue:[ ^ Object ] .
-^ self _constraintAt: offset 
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_newConstraint: aClass atOffset: offset
-
-"Execute the constraint change for Behavior | instvar:ConstraintTo:
- assuming all error and variance checks have been done."
-| constrs |
-self deprecated: 'Behavior>>_newConstraint:atOffset: deprecated, Constraints are no longer supported'.
-self _validatePrivilege ifTrue:[ 
-  (constrs := constraints) size == 0 ifTrue:[ | sz |
-    aClass == Object ifTrue:[ ^ self "do nothing"].
-    sz := self instSize .
-    (constrs := Array new: sz ) replaceFrom: 1 to: sz withObject: Object.
-    constraints := constrs .
-  ].
-  constrs at: offset put: aClass .
-  (aClass == Object) ifFalse:[ self _setConstraintBit ].
-  self _refreshClassCache: false .
-]
 %
 
 category: '*rowan-gemstone-kernel'
@@ -125717,42 +126586,6 @@ self _validatePrivilege ifTrue:[
   ] .
 ]
  
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_setConstraintBit
-
-"Sets the constraint bit in the 'format' instance variable of the receiver."
-
-self deprecated: 'Behavior>>_setConstraintBit deprecated, Constraints are no longer supported'.
-self _validatePrivilege ifTrue:[
-  format := format bitOr: 16#10 .
-]
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_setVaryingConstraint: aClass
-
-"Assign a new value to the constraint on unnamed variables of the receiver,
- assuming all checks have been made."
-
-| constrs ofs |
-
-self deprecated: 'Behavior>>_setVaryingConstraint: deprecated, Constraints are no longer supported'.
-self _validatePrivilege ifTrue:[
-  constrs := constraints .
-  ofs := self instSize + 1 .
-  constrs size == 0 ifTrue:[ 
-    aClass == Object ifTrue:[ ^ self "nothing to do"].
-    (constrs := Array new: ofs) replaceFrom: 1 to: ofs withObject: Object .
-    constraints := constrs .
-  ].
-  constrs at: ofs put: aClass .
-  (aClass == Object) ifFalse:[ self _setConstraintBit ].
-  self _refreshClassCache: false .
-]
 %
 
 ! Class extensions for 'BinaryFloat'
@@ -126510,15 +127343,6 @@ withoutGemstoneLineEndings
 
 !		Instance methods for 'Class'
 
-category: '*rowan-gemstone-35x'
-method: Class
-indexableSubclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDict inDictionary: aDictionary newVersionOf: oldClass description: aDescription constraints: constraintsArray options: optionsArray
-
-	| newClass |
-	newClass := self indexableSubclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDict inDictionary: aDictionary newVersionOf: oldClass description: aDescription options: optionsArray.
-	^ newClass
-%
-
 category: '*rowan-gemstone-kernel'
 method: Class
 rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray
@@ -126722,157 +127546,6 @@ stonName
 	^ self name
 %
 
-category: '*rowan-gemstone-35x'
-method: Class
-subclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass description: aDescription constraints: theConstraints options: optionsArray
-	"class creation creates a class with no constraints, so if constraints _are_ specified, we need to add them separately"
-
-	| newClass |
-	newClass := self 
-		subclass: aString 
-		instVarNames: anArrayOfInstvarNames 
-		classVars: anArrayOfClassVars 
-		classInstVars: anArrayOfClassInstVars 
-		poolDictionaries: anArrayOfPoolDicts 
-		inDictionary: aDictionary 
-		newVersionOf: oldClass 
-		description: aDescription 
-		options: optionsArray.
-	newClass _installConstraints: theConstraints oldClass: oldClass.
-	^ newClass
-%
-
-category: '*rowan-gemstone-35x'
-method: Class
-_constraintsEqual: anArray
-  "Result true if receiver's constraints equal to anArray or 
-   if anArray is empty and receiver's constraints are all Object ."
-^ [ | myConstr superInstSiz ofs arySiz |
-    anArray _isArray ifTrue:[
-      myConstr := constraints .
-      superInstSiz := superClass ifNil:[ 0 ] ifNotNil:[:sc | sc instSize] .
-      (arySiz := anArray size) == 0 ifTrue:[
-	superInstSiz + 1 to: myConstr size do:[:j | 
-	  (myConstr at:j ) == Object ifFalse:[ 
-	     (j == (self instSize + 1) and:[ superClass ~~ nil]) ifTrue:[
-	       ^ self _varyingConstraint isVersionOf: superClass _varyingConstraint 
-	     ].
-	     ^ false 
-	  ].
-	].
-      ] ifFalse:[ | varConstr instSiz myConstrSiz ivNams |
-	instSiz := self instSize .
-	varConstr := (myConstr atOrNil: instSiz + 1) ifNil:[ Object]. 
-	ofs := 1 .
-	myConstr := myConstr copyFrom: superInstSiz + 1 to: instSiz .
-	"elements of myConstr, and varConstr, set to nil when finding a matching
-	 element in anArray."
-	myConstrSiz := myConstr size .
-	ivNams := instVarNames .
-	1 to: arySiz do:[:j | | elem |
-	  elem := anArray at: j .
-	  elem _isArray ifTrue:[ | ivNam |
-	    ivNam := elem atOrNil: 1 .
-	    1 to: myConstrSiz do:[:m |
-	      (ivNams at: (superInstSiz + m)) == ivNam ifTrue:[ 
-		 ((elem atOrNil: 2) isVersionOf: (myConstr at: m))   ifTrue:[
-		   myConstr at: m put: nil .
-		 ] ifFalse:[
-		   ^ false 
-		 ].
-	      ].
-	    ].
-	  ] ifFalse:[
-	    j == arySiz ifTrue:[ 
-	      (elem isVersionOf: varConstr) ifTrue:[ varConstr := nil ] ifFalse:[ ^ false ]
-	    ] ifFalse:[ 
-	      ^ false 
-	    ].
-	  ].
-	].
-	"items neither nil nor Object were missing from anArray"
-	(varConstr == nil or:[ varConstr == Object ]) ifFalse:[ ^ false ].
-	1 to: myConstrSiz do:[:j| | cx |
-	  ((cx := myConstr at: j ) == nil or:[ cx == Object]) ifFalse:[ ^ false ]
-	].
-      ]
-    ] ifFalse:[
-      (self _varyingConstraint isVersionOf: anArray) ifFalse:[ ^ false ].
-    ].
-    true
-  ] onSynchronous: Error do:[:ex| false ].
-%
-
-category: '*rowan-gemstone-35x'
-method: Class
-_equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary constraints: aConstraint isKernel: isKernelBool
-
-	 self _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary isKernel: isKernelBool
-%
-
-category: '*rowan-gemstone-35x'
-method: Class
-_installConstraints: theConstraints
-
-	| existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys 
-		existingConstraints myInstVarNames |
-	existingConstraintsMap := Dictionary new.
-	existingVaryingConstraint := self _varyingConstraint.
-	myInstVarNames := self allInstVarNames.
-	existingConstraints := [ self _constraints ifNil: [ {} ] ] on: Deprecated do: [:ex | ex resume ].
-	1 to: existingConstraints size do: [:index |
-		existingConstraintsMap at: (myInstVarNames at: index) put: (existingConstraints at: index ) ].
-	theConstraintsMap := Dictionary new.
-	theVaryingConstraint := Object.
-	theConstraints do: [:arrayOrVaryingConstraintClass |
-		arrayOrVaryingConstraintClass _isArray
-			ifTrue: [ theConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ]
-			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
-	keys := existingConstraintsMap keys copy.
-	keys addAll: theConstraintsMap keys.
-	keys do: [:key | 
-		| existingConstraint theConstraint |
-		existingConstraint := existingConstraintsMap at: key ifAbsent: [].
-		theConstraint := theConstraintsMap at: key ifAbsent: [].
-		existingConstraint == theConstraint
-			ifFalse: [ 
-				| instVarString |
-				instVarString := key asString.
-				existingConstraint == nil
-					ifTrue: [ 
-						"add theConstraint" 
-						self _rwInstVar: instVarString constrainTo: theConstraint ]
-					ifFalse: [ 
-						theConstraint == nil
-							ifTrue: [ 
-								"remove the constraint" 
-								self _rwInstVar: instVarString constrainTo: Object ]
-							ifFalse: [
-								"change the value of the constraint"
-                                self _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
-	existingVaryingConstraint == theVaryingConstraint
-		ifFalse: [
-			"change the varying constraint"
-			[ self _setVaryingConstraint: theVaryingConstraint] on: Deprecated do: [:ex | ex resume ] ].
-%
-
-category: '*rowan-gemstone-35x'
-method: Class
-_installConstraints: theConstraints oldClass: oldClass
-
-	oldClass ifNotNil: [ [ self _installOldConstraints: oldClass _constraints ] on: Deprecated do: [:ex | ex resume ] ].
-	theConstraints 
-		ifNil: [ constraints := nil ]
-		ifNotNil: [ self _installConstraints: theConstraints ]
-%
-
-category: '*rowan-gemstone-35x'
-method: Class
-_installOldConstraints: theConstraints
-
-	constraints := theConstraints copy
-%
-
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwDefinitionOfConstraints
@@ -126995,12 +127668,6 @@ _rwSortedConstraints
   ].
 
 ^constraintArray
-%
-
-category: '*rowan-gemstone-35x'
-method: Class
-_subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
-  ^ self _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
 %
 
 ! Class extensions for 'Collection'
