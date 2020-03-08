@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwProjectTopazWriterTest',
+	#name : 'RwProjectTopazWriterTestV2',
 	#superclass : 'RwProjectReaderWriterTest',
-	#category : 'Rowan-Tests-GemStone-35x'
+	#category : 'Rowan-Tests-ComponentsV2-OnlyV2'
 }
 
 { #category : 'private' }
-RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_A [
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_A [
 
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
@@ -100,7 +100,7 @@ method1 ^1
 ]
 
 { #category : 'private' }
-RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_B [
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_B [
 
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
@@ -200,7 +200,7 @@ method5 ^5
 ]
 
 { #category : 'private' }
-RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Core [
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_C_Issue361Core [
 
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
@@ -286,7 +286,7 @@ method4 ^4
 ]
 
 { #category : 'private' }
-RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension1 [
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_C_Issue361Extension1 [
 
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
@@ -303,7 +303,7 @@ method1 ^1
 ]
 
 { #category : 'private' }
-RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension2 [
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_C_Issue361Extension2 [
 
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
@@ -320,7 +320,7 @@ method5 ^5
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_A [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 
 	"simple case with only two packages and a single set of extensions for a class"
 
@@ -432,7 +432,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_A [
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_A_export [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 
 	"simple case with only two packages and a single set of extensions for a class"
 
@@ -536,7 +536,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_A_export [
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_B [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 
 	"ramp up to multiple class extensions from multiple packages for multiple classes"
 
@@ -662,7 +662,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_B [
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_C [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_C [
 
 	"ramp up to multiple class extensions from multiple packages for multiple classes"
 
@@ -797,7 +797,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_C [
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_C_export [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 
 	"ramp up to multiple class extensions from multiple packages for multiple classes"
 
@@ -923,7 +923,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_C_export [
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_D [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_D [
 
 	"ramp up to multiple class extensions from multiple packages for multiple classes"
 
@@ -1075,7 +1075,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_D [
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_error [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_error [
 
 	"try to write to multiple files when no configs are available"
 
@@ -1200,7 +1200,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_error [
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_A [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_A [
 
 	"ramp up to multiple class extensions from multiple packages and multiple projects"
 
@@ -1349,7 +1349,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_A [
 ]
 
 { #category : 'tests' }
-RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_B [
+RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_B [
 
 	"ramp up to multiple class extensions from multiple packages and multiple projects"
 
