@@ -13,7 +13,7 @@ RwProjectDefinitionV2 >> exportTopazFormatTo: filePath [
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference basename;
 		yourself.
@@ -28,7 +28,7 @@ RwProjectDefinitionV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: pac
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference basename;
 		topazFilenamePackageNamesMap: packageNamesMap;
