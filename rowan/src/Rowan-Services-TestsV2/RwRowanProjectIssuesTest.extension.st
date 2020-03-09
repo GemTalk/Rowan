@@ -11,7 +11,7 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 	| rowanProject projectName service testBranch testClass  queryService |
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	projectName := 'RowanSample1'.
+	projectName := 'RowanSample3'.
 	self 
 		_cloneGitRepositoryFor: projectName 
 		projectUrlString:  'file:' , rowanProject repositoryRootPath , '/samples/', projectName, '_resolved_v2.ston'.

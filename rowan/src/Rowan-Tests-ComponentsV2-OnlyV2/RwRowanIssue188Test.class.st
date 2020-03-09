@@ -20,18 +20,22 @@ RwRowanIssue188Test >> _createBaselineClassesInSingleLoad: projectName packageNa
 			2. Class B has a method w that returns class A.
 	"
 
-	| projectDefinition packageDefinition |
+	| projectDefinition packageDefinition componentName |
 	{projectName}
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
-	projectDefinition := (Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
-		addPackagesNamed: {packageName};
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName  }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
-	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
 

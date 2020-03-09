@@ -132,6 +132,26 @@ RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projec
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
+RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString [
+	| rowanProject projectTools gitRootPath projectDefinition |
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	projectDefinition := (RwLoadSpecificationV2 fromUrl: projectUrlString)
+		projectsHome: gitRootPath;
+		resolve.
+
+	projectDefinition load.
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
 
 	| projectDefinition project |
@@ -1349,8 +1369,9 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className1 className2 projectDefinition classDefinition1 classDefinition2 packageDefinition
-		projectSetDefinition theClass1 theClass2 ivNames oldClass1 oldClass2 project audit |
+	| projectName packageName1 packageName2 className1 className2 projectDefinition classDefinition1 
+		classDefinition2 packageDefinition projectSetDefinition theClass1 theClass2 ivNames oldClass1 
+		oldClass2 project audit componentName |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1363,11 +1384,15 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
