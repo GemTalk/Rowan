@@ -477,6 +477,37 @@ RwResolvedProjectV2 >> exportProjectSpecification [
 	self _projectSpecification exportTo: self repositoryRoot
 ]
 
+{ #category : 'exporting' }
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath [
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitorV2 new
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference basename;
+		yourself.
+	visitor visit: projectSetModification
+]
+
+{ #category : 'exporting' }
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitorV2 new
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference basename;
+		topazFilenamePackageNamesMap: packageNamesMap;
+		yourself.
+	visitor visit: projectSetModification
+]
+
 { #category : 'load specification' }
 RwResolvedProjectV2 >> gitUrl [
 	^ self _loadSpecification gitUrl

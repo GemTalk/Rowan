@@ -6,37 +6,6 @@ RwProjectDefinitionV2 >> _gemstoneAllUsersName [
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
-RwProjectDefinitionV2 >> exportTopazFormatTo: filePath [
-	| projectSetDefinition projectSetModification visitor fileReference |
-	fileReference := filePath asFileReference.
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition
-		compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitorV2 new
-		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
-		yourself.
-	visitor visit: projectSetModification
-]
-
-{ #category : '*rowan-gemstone-definitionsv2' }
-RwProjectDefinitionV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
-	| projectSetDefinition projectSetModification visitor fileReference |
-	fileReference := filePath asFileReference.
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition
-		compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitorV2 new
-		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
-		topazFilenamePackageNamesMap: packageNamesMap;
-		yourself.
-	visitor visit: projectSetModification
-]
-
-{ #category : '*rowan-gemstone-definitionsv2' }
 RwProjectDefinitionV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 	^ self projectSpecification gemstoneDefaultSymbolDictNameForUser: userId
 ]

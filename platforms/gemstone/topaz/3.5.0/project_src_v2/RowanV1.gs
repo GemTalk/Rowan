@@ -134319,9 +134319,9 @@ exportTopazFormatTo: filePath
 category: '*rowan-gemstone-core'
 method: RwProject
 exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
-
-
-	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+	^ self _loadedProject asDefinition
+		exportTopazFormatTo: filePath
+		usingPackageNamesMap: packageNamesMap
 %
 
 category: '*rowan-gemstone-core'

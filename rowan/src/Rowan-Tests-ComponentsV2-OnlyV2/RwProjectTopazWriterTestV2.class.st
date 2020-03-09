@@ -324,8 +324,9 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 
 	"simple case with only two packages and a single set of extensions for a class"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y |
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 classExtensionDefinition projectSetDefinition 
+		projectSetModification visitor repositoryRootPath x stream y componentName projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -333,14 +334,24 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 }
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -414,12 +425,12 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 	projectSetDefinition addDefinition: projectDefinition.
 
 "write"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: repositoryRootPath;
 		topazFilename: projectName;
 		yourself.
@@ -438,7 +449,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 
 	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
 		className1 className2 className3 topazFileReference classExtensionDefinition 
-		repositoryRootPath x stream y |
+		repositoryRootPath x stream y componentName projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -446,13 +457,24 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 }
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -522,9 +544,9 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "export"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
 	topazFileReference := repositoryRootPath asFileReference / projectName.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 	projectDefinition exportTopazFormatTo: topazFileReference.
 
@@ -540,9 +562,10 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 
 	"ramp up to multiple class extensions from multiple packages for multiple classes"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
-		packageName3 |
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 classExtensionDefinition projectSetDefinition 
+		projectSetModification visitor repositoryRootPath x stream y packageName3 componentName
+		projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -551,15 +574,24 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -644,12 +676,12 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 	projectSetDefinition addDefinition: projectDefinition.
 
 "write"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: repositoryRootPath;
 		topazFilename: projectName;
 		yourself.
@@ -668,9 +700,10 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C [
 
 	"write each package into a separate topaz file"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
-		packageName3 |
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 classExtensionDefinition projectSetDefinition 
+		projectSetModification visitor repositoryRootPath x stream y packageName3 componentName 
+		projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -679,15 +712,24 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -772,12 +814,12 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C [
 	projectSetDefinition addDefinition: projectDefinition.
 
 "write"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: repositoryRootPath;
 		topazFilenamePackageNamesMap: 
 			(Dictionary new
@@ -805,7 +847,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 
 	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
 		className1 className2 className3 topazFileReference classExtensionDefinition repositoryRootPath 
-		x stream y packageName3 |
+		x stream y packageName3 componentName projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -814,14 +856,24 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwComponentProjectDefinition') newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -902,9 +954,9 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "export"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
 	topazFileReference := repositoryRootPath asFileReference / projectName.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 	projectDefinition exportTopazFormatTo: topazFileReference usingPackageNamesMap: (Dictionary new
 				at: packageName1 put: {packageName1};
@@ -931,9 +983,10 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_D [
 
 	"include class initialization methods"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
-		packageName3 |
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 classExtensionDefinition projectSetDefinition 
+		projectSetModification visitor repositoryRootPath x stream y packageName3 componentName
+		projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -942,15 +995,24 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_D [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -1050,12 +1112,12 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_D [
 	projectSetDefinition addDefinition: projectDefinition.
 
 "write"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: repositoryRootPath;
 		topazFilenamePackageNamesMap: 
 			(Dictionary new
@@ -1079,9 +1141,9 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_error [
 
 	"try to write to multiple files when no configs are available"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath
-		packageName3 |
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 classExtensionDefinition projectSetDefinition 
+		projectSetModification visitor repositoryRootPath packageName3 componentName projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -1090,15 +1152,24 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_error [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 "create definitions"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
+			toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName 
+			forPackageNamed: packageName2;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -1183,14 +1254,14 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_error [
 	projectSetDefinition addDefinition: projectDefinition.
 
 "write"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 				repositoryRootPath: repositoryRootPath;
-				topazFilenameConfigsMap: (Dictionary new
+				topazFilenameComponentMap: (Dictionary new
 						at: 'rowan_bootstrap_app' put: {{'Kernel'}. {}};
 						at: 'rowan_bootstrap_globals' put: {{'Globals'}. {}};
 						at: 'rowan_bootstrap_user_globals' put: {{'UserGlobals'}. {}};
@@ -1208,9 +1279,10 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_A [
 
 	"include class initialization methods"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
-		packageName3 |
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 classExtensionDefinition projectSetDefinition 
+		projectSetModification visitor repositoryRootPath x stream y packageName3 componentName
+		projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -1219,6 +1291,10 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_A [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	componentName := 'Core'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
@@ -1227,13 +1303,21 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_A [
 		projectExt := '_', projectIndex asString.
 
 "create definitions"
-		projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-			newForGitBasedProjectNamed: projectName, projectExt)
-			addPackageNamed: packageName1, projectExt;
-			addPackageNamed: packageName2, projectExt;
-			addPackageNamed: packageName3, projectExt;
-			setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1, projectExt;
-			setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2, projectExt;
+		projectDefinition := RwResolvedProjectV2 new
+			projectName: projectName, projectExt;
+			projectsHome: projectsHome;
+			gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+			addNewComponentNamed: componentName;
+			addPackagesNamed: { 
+				packageName1, projectExt . 
+				packageName2, projectExt . 
+				packageName3, projectExt}
+				toComponentNamed: componentName;
+			gemstoneSetSymbolDictName: self _symbolDictionaryName 
+				forPackageNamed: packageName1, projectExt;
+			gemstoneSetSymbolDictName: self _symbolDictionaryName 
+				forPackageNamed: packageName2, projectExt;
+			resolve;
 			yourself.
 
 		packageDefinition := projectDefinition packageNamed: packageName1, projectExt.
@@ -1330,12 +1414,12 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_A [
 		projectSetDefinition addDefinition: projectDefinition ].
 
 "export"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: repositoryRootPath;
 		topazFilename: projectName;
 		yourself.
@@ -1357,9 +1441,10 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_B [
 
 	"include class initialization methods"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
-		packageName3 |
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
+		className1 className2 className3 classExtensionDefinition projectSetDefinition
+		projectSetModification visitor repositoryRootPath x stream y packageName3 componentName
+		projectsHome |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -1368,21 +1453,33 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_B [
 	className1 := 'Issue361Class1'. 
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
+	componentName := 'Core'.
+	projectsHome := self _testRowanProjectsSandbox.
 
 	projectSetDefinition := RwProjectSetDefinition new.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 	{1 . 2 } do: [:projectIndex |
 		| projectExt |
 		projectExt := '_', projectIndex asString.
 
 "create definitions"
-		projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-			newForGitBasedProjectNamed: projectName, projectExt)
-			addPackageNamed: packageName1, projectExt;
-			addPackageNamed: packageName2, projectExt;
-			addPackageNamed: packageName3, projectExt;
-			setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1, projectExt;
-			setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2, projectExt;
+		projectDefinition := RwResolvedProjectV2 new
+			projectName: projectName, projectExt;
+			projectsHome: projectsHome;
+			gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+			addNewComponentNamed: componentName;
+			addPackagesNamed: { 
+				packageName1, projectExt . 
+				packageName2, projectExt . 
+				packageName3, projectExt}
+				toComponentNamed: componentName;
+			gemstoneSetSymbolDictName: self _symbolDictionaryName 
+				forPackageNamed: packageName1, projectExt;
+			gemstoneSetSymbolDictName: self _symbolDictionaryName 
+				forPackageNamed: packageName2, projectExt;
+			resolve;
 			yourself.
 
 		packageDefinition := projectDefinition packageNamed: packageName1, projectExt.
@@ -1479,12 +1576,12 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_B [
 		projectSetDefinition addDefinition: projectDefinition ].
 
 "export"
-	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
+	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: repositoryRootPath;
 		topazFilenamePackageNamesMap: 
 			(Dictionary new
