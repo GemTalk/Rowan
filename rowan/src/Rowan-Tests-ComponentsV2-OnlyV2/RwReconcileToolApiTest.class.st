@@ -9,13 +9,16 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 
 	| projectDefinitionSet projectName  packageName1 packageName2 packageName3 projectDefinition 
 		classDefinition classExtensionDefinition packageDefinition1 packageDefinition2 packageDefinition3
-		className |
+		className componentName projectsHome |
 
 	projectName := 'GlobalsExtensionMethods'.
 	packageName1 := 'GlobalsExtensionMethods-Core1'.
 	packageName2 := 'GlobalsExtensionMethods-Extension1'.
 	packageName3 := 'GlobalsExtensionMethods-Extension2'.
 	className := 'GlobalsExtensionMethods'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 	{projectName}
 		do: [ :pn | 
@@ -23,11 +26,15 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: self _testRowanProjectsSandbox pathString, '/rowanTest/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'cypress:', self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
-		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3  }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition1 := projectDefinition packageNamed: packageName1.
@@ -112,7 +119,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 		addProject: projectDefinition;
 		yourself.
 
-	Rowan projectTools reconcile
+	Rowan projectTools reconcileV2
 		reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet
 		defaultGroupName: 'default' 
 		globalsGroupName: 'globals' 
@@ -128,13 +135,16 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 
 	| projectDefinitionSet projectName  packageName1 packageName2 packageName3 projectDefinition 
 		classDefinition classExtensionDefinition packageDefinition1 packageDefinition2 packageDefinition3
-		className classFileString |
+		className classFileString componentName projectsHome |
 
 	projectName := 'GlobalsExtensionMethods'.
 	packageName1 := 'GlobalsExtensionMethods-Core1'.
 	packageName2 := 'GlobalsExtensionMethods-Extension1'.
 	packageName3 := 'GlobalsExtensionMethods-Extension2'.
 	className := 'GlobalsExtensionMethods'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 	{projectName}
 		do: [ :pn | 
@@ -142,11 +152,15 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: self _testRowanProjectsSandbox pathString, '/rowanTest/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'tonel:', self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
-		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3  }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition1 := projectDefinition packageNamed: packageName1.
@@ -236,17 +250,22 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 		addProject: projectDefinition;
 		yourself.
 
-	Rowan projectTools reconcile
+	Rowan projectTools reconcileV2
 		reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet
 		defaultGroupName: 'default' 
 		globalsGroupName: 'globals' 
 		globalsUserId: 'SystemUser'.
 
-	Rowan projectTools write writeProjectDefinition: projectDefinition.
+	projectDefinition
+		export;
+		exportLoadSpecification;
+		yourself.
+
 "validate"
 
 	Rowan fileUtilities 
-		readStreamFor: self _testRowanProjectsSandbox pathString, '/rowanTest/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
+		readStreamFor: (projectsHome / projectName) pathString, '/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
 		do: [:fileStream | classFileString := fileStream contents ].
 	self deny: (classFileString includesString: 'classSide')
+
 ]

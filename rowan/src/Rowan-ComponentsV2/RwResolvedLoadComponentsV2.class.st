@@ -379,6 +379,14 @@ RwResolvedLoadComponentsV2 >> export: componentsRoot [
 
 { #category : 'gemstone support' }
 RwResolvedLoadComponentsV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
+	self
+		gemstoneSetSymbolDictNameForUser: self _gemstoneAllUsersName
+		to: symbolDictName
+		forPackageNamed: packageName
+]
+
+{ #category : 'gemstone support' }
+RwResolvedLoadComponentsV2 >> gemstoneSetSymbolDictNameForUser: userId to: symbolDictName forPackageNamed: packageName [
 	| foundOne |
 	foundOne := false.
 	self components
@@ -387,7 +395,7 @@ RwResolvedLoadComponentsV2 >> gemstoneSetSymbolDictName: symbolDictName forPacka
 				ifTrue: [ 
 					foundOne := true.
 					component
-						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
+						conditionalPackageMapSpecsAtGemStoneUserId: userId
 						andPackageName: packageName
 						setSymbolDictNameTo: symbolDictName ] ].
 	foundOne

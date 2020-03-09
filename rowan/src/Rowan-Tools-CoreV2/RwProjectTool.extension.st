@@ -22,6 +22,12 @@ RwProjectTool class >> readV2 [
 ]
 
 { #category : '*rowan-tools-corev2' }
+RwProjectTool class >> reconcileV2 [
+
+	^ RwPrjReconcileToolV2 new
+]
+
+{ #category : '*rowan-tools-corev2' }
 RwProjectTool class >> writeV2 [
 	^ RwPrjWriteToolV2 new
 ]

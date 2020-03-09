@@ -18,6 +18,14 @@ RwProjectDefinitionV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNam
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
+RwProjectDefinitionV2 >> gemstoneSetSymbolDictNameForUser: userId to: symbolDictName forPackageNamed: packageName [
+	self components
+		gemstoneSetSymbolDictNameForUser: userId
+		to: symbolDictName
+		forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
 RwProjectDefinitionV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
 	self components
 		gemstoneSetUseSessionMethodsForExtensions: aBool
