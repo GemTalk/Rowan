@@ -770,7 +770,7 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 	"Answers an Array of Associations (offset -> selector) indexed by step point"
 
 	|  selectors list |
-	(selectors := aGsNMethod _allDebugInfo: 10) ifNil: [^#()].
+	(selectors := aGsNMethod _sourceOffsetsOfSends) ifNil: [^#()].
 	list := aGsNMethod homeMethod  _sourceOffsets.
 	list := list collect: [:each |
 		| index eachSelector |
@@ -780,7 +780,6 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 		each -> eachSelector.
 	].
 	^list
-
 ]
 
 { #category : 'Accessing' }
