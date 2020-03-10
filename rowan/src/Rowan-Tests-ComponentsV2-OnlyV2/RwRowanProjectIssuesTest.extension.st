@@ -353,9 +353,9 @@ RwRowanProjectIssuesTest >> _writeProjectNamed: projectName validate: validate [
 	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
 
 	Rowan projectTools write writeProjectNamed: projectName.
+	project exportLoadSpecification.
 
 	validate ifTrue: [ self deny: project isDirty ]. "a project is not dirty if it has been written to disk"
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

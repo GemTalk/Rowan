@@ -777,7 +777,7 @@ RwPrjBrowserToolV2 >> createClass: classDefinition inPackageNamed: packageName [
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'The package named ' , packageName printString , ' was not found' ].
-	projectDefinition := loadedPackage loadedProject asDefinition read.
+	projectDefinition := loadedPackage loadedProject asDefinition.
 
 	Rowan projectTools edit
 		addClass: classDefinition
