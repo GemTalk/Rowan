@@ -200,6 +200,15 @@ RowanAnsweringService >> disableAllBreaks [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> disableMethodBreaks: methodServices [
+  methodServices
+    do: [ :methodService | 
+      methodService
+        organizer: organizer;
+        disableMethodBreaks ]
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> doClientAndServerVersionsMatch: clientVersion [
   "Not to be sent through services so return an answer directly.
 	Sent immediately after Jadeite login"
@@ -229,6 +238,15 @@ RowanAnsweringService >> enableAllBreaks [
   GsNMethod _enableAllBreaks.
   methodServices
     do: [ :methodService | RowanCommandResult addResult: methodService update ]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> enableMethodBreaks: methodServices [
+  methodServices
+    do: [ :methodService | 
+      methodService
+        organizer: organizer;
+        enableMethodBreaks ]
 ]
 
 { #category : 'client commands' }

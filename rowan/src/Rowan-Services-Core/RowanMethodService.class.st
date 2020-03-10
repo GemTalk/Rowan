@@ -192,7 +192,7 @@ RowanMethodService >> breakPointsFor: aGsNMethod [
       1 to: anArray size by: 3 do: [ :i | 
         list
           add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2) abs) ] ].
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
   ^ list asOrderedCollection
 ]
 
@@ -331,6 +331,40 @@ RowanMethodService >> definitionClass [
 
 	^RwMethodDefinition
 
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> disableBreakAt: stepPoint [
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
+			ifFalse:[self gsNMethod].
+	method disableBreakAtStepPoint: stepPoint.
+	self update. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> disableMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self disableBreakAt: breakPoint ]
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> enableBreakAt: stepPoint [
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
+			ifFalse:[self gsNMethod].
+	method setBreakAtStepPoint: stepPoint.
+	self update. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> enableMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self enableBreakAt: breakPoint ]
 ]
 
 { #category : 'Updating' }
