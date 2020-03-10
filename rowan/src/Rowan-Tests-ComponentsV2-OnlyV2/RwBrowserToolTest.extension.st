@@ -60,9 +60,9 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment [
-	| componentName |
+	| componentName resolvedProject |
 	componentName := 'Core'.
-	^ RwResolvedProjectV2 new
+	resolvedProject := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
@@ -71,5 +71,7 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 		comment: comment;
 		addNewComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
-		yourself
+		yourself.
+	resolvedProject loadSpecification componentNames: {componentName}.
+	^ resolvedProject
 ]

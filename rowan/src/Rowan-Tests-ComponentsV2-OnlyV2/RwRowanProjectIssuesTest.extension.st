@@ -3610,7 +3610,7 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_constraints [
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
-		projectSetDefinition class1 oldClass x |
+		projectSetDefinition class1 oldClass x componentName |
 
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
@@ -3622,10 +3622,15 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_constraints [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3705,7 +3710,7 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_no_constraints [
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
-		projectSetDefinition class1 oldClass x |
+		projectSetDefinition class1 oldClass x componentName |
 
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
@@ -3717,10 +3722,15 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_no_constraints [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3795,7 +3805,8 @@ RwRowanProjectIssuesTest >> testIssue255_constraints [
 	"test modifying constraints"
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
-	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 projectSetDefinition class1 |
+	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
+		projectSetDefinition class1 componentName |
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -3806,10 +3817,15 @@ RwRowanProjectIssuesTest >> testIssue255_constraints [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3846,8 +3862,9 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 	"basic test case"
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 projectSetDefinition 
-		class1 class2 className3 class3 |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition2 classDefinition3 
+		packageDefinition className1 className2 projectSetDefinition class1 class2 className3 class3 
+		componentName |
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -3860,10 +3877,15 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3930,8 +3952,8 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_1 [
 	"reproduce bug"
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition2 packageDefinition className1 className2 projectSetDefinition 
-		class1 class2 |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition2 packageDefinition
+		className1 className2 projectSetDefinition class1 class2 componentName |
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -3943,10 +3965,15 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_1 [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3997,8 +4024,9 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_2 [
 	"varian of bug"
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 projectSetDefinition 
-		class1 class2 className3 |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition2 classDefinition3 
+		packageDefinition className1 className2 projectSetDefinition class1 class2 className3 
+		componentName |
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -4011,10 +4039,15 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_2 [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4078,8 +4111,9 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_3 [
 	"reproduce bug encountered at client site - constraints on subclasses"
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 projectSetDefinition 
-		class1 class2 className3 |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition2 classDefinition3 
+		packageDefinition className1 className2 projectSetDefinition class1 class2 className3 
+		componentName |
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -4092,10 +4126,15 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_3 [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4159,7 +4198,8 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 	"test modifying constraints"
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
-	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 projectSetDefinition class1 |
+	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
+		projectSetDefinition class1 componentName |
 
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
@@ -4171,10 +4211,15 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4221,7 +4266,7 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 RwRowanProjectIssuesTest >> testIssue263 [
 	"https://github.com/dalehenrich/Rowan/issues/263"
 
-	| projectName packageName projectDefinition projectSetDefinition |
+	| projectName packageName projectDefinition projectSetDefinition componentName |
 	projectName := 'Issue263'.
 	packageName := 'Issue263-Kernel'.
 
@@ -4230,10 +4275,15 @@ RwRowanProjectIssuesTest >> testIssue263 [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: 'Globals';
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "load"
@@ -4269,7 +4319,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_keep_in_system [
 	"https://github.com/dalehenrich/Rowan/issues/275"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
-		projectSetDefinition class1 oldClass |
+		projectSetDefinition class1 oldClass componentName |
 
 	projectName := 'Issue275'.
 	packageName := 'Issue275-Core'.
@@ -4281,10 +4331,15 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_keep_in_system [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4338,7 +4393,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_remove_from_system 
 	"https://github.com/dalehenrich/Rowan/issues/275"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
-		projectSetDefinition class1 oldClass handled |
+		projectSetDefinition class1 oldClass handled componentName |
 
 	projectName := 'Issue275'.
 	packageName := 'Issue275-Core'.
@@ -4350,10 +4405,15 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_remove_from_system 
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4410,7 +4470,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_remove_from_system [
 	"https://github.com/dalehenrich/Rowan/issues/275"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
-		projectSetDefinition class1 oldClass |
+		projectSetDefinition class1 oldClass componentName |
 
 	projectName := 'Issue275'.
 	packageName := 'Issue275-Core'.
@@ -4422,10 +4482,15 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_remove_from_system [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4472,8 +4537,9 @@ RwRowanProjectIssuesTest >> testIssue275_delete_subclass_handle_keep_in_system [
 
 	"https://github.com/dalehenrich/Rowan/issues/275"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition2 packageDefinition className1 className2 
-		projectSetDefinition class1 class2 oldClass1 oldClass2 handled |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition2 packageDefinition 
+		className1 className2 projectSetDefinition class1 class2 oldClass1 oldClass2 handled 
+		componentName |
 
 	projectName := 'Issue275'.
 	packageName := 'Issue275-Core'.
@@ -4486,10 +4552,15 @@ RwRowanProjectIssuesTest >> testIssue275_delete_subclass_handle_keep_in_system [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4570,8 +4641,9 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 
 	"https://github.com/dalehenrich/Rowan/issues/291"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition 
+		className1 className2 className3 projectSetDefinition class1 class2 class3 oldClass1 oldClass2 
+		oldClass3 componentName |
 
 	projectName := 'Issue291'.
 	packageName := 'Issue255-Core'.
@@ -4585,10 +4657,15 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -4691,8 +4768,9 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 
 	"https://github.com/dalehenrich/Rowan/issues/291"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition 
+		className1 className2 className3 projectSetDefinition class1 class2 class3 oldClass1 oldClass2 
+		oldClass3 newClass1 componentName |
 
 	projectName := 'Issue291'.
 	packageName := 'Issue255-Core'.
@@ -4706,10 +4784,15 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -4820,8 +4903,9 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 
 	"super class has constraint on instance of subclass"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition 
+		className1 className2 className3 projectSetDefinition class1 class2 class3 oldClass1 oldClass2 
+		oldClass3 newClass1 componentName |
 
 	projectName := 'Issue291'.
 	packageName := 'Issue255-Core'.
@@ -4835,10 +4919,15 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -4949,8 +5038,9 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 
 	"subclass overrides constraint of superclass (ivar1 has different constraint for each of classes)"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition 
+		className1 className2 className3 projectSetDefinition class1 class2 class3 oldClass1 oldClass2 
+		oldClass3 newClass1 componentName |
 
 	projectName := 'Issue291'.
 	packageName := 'Issue255-Core'.
@@ -4964,10 +5054,15 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -5079,7 +5174,7 @@ RwRowanProjectIssuesTest >> testIssue293_constraint_ordering [
 	"constraints should be displayed in inst var order, not alphabetical order"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 
-		className3 projectSetDefinition class |
+		className3 projectSetDefinition class componentName |
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -5091,10 +5186,15 @@ RwRowanProjectIssuesTest >> testIssue293_constraint_ordering [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -5162,7 +5262,8 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_class [
 
 	"https://github.com/dalehenrich/Rowan/issues/305"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class componentName |
 	projectName := 'Issue305'.
 	packageName1 := 'Issue305-Core1'.
 	packageName2 := 'Issue305-Core2'.
@@ -5173,11 +5274,15 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_class [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -5207,7 +5312,7 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_class [
 	projectDefinition2 removePackageNamed: packageName2.
 
 	projectSetDefinition addDefinition: projectDefinition2.
-	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	class := Rowan globalNamed: className.
 	self assert: class isNil.
@@ -5220,7 +5325,7 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 	"https://github.com/dalehenrich/Rowan/issues/305"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
-		classExtension packageDefinition className projectSetDefinition class oldClass |
+		classExtension packageDefinition className projectSetDefinition class oldClass componentName |
 	projectName := 'Issue305'.
 	packageName1 := 'Issue305-Core1'.
 	packageName2 := 'Issue305-Core2'.
@@ -5231,11 +5336,15 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -5287,7 +5396,7 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
-	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
 	oldClass := class.
