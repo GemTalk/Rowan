@@ -1,22 +1,21 @@
-RwComponentSpecification {
-	#specName : 'RowanSample1',
-	#comment : 'standard load spec',
-	#version : '0.3.0',
-	#projectUrl : 'https://github.com/dalehenrich/RowanSample1',
-	#configsPath : 'rowan/components',
-	#specsPath : 'rowan/specs',
-	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'sampleV2.0',
-		#committishType : 'branch'
-	},
-	#repoPath : 'rowan/src',
-	#defaultConfigurationNames : [
+RwLoadSpecificationV2 {
+	#specName : 'RowanSample3_resolved_v2',
+	#projectName : 'RowanSample3',
+	#gitUrl : 'https://github.com/dalehenrich/RowanSample3',
+	#revision : 'issue_150_proposed_v2',
+	#projectSpecFile : 'rowan/v2/project.ston',
+	#componentNames : [
 		'Core'
 	],
-	#defaultGroupNames : [
-		'core',
-		'tests'
-	],
-	#projectsPath : 'rowan/projects',
-	#defaultComponentName : 'Core'
+	#customConditionalAttributes : [ ],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultUseSessionMethodsForExtensions : false,
+				#defaultSymbolDictName : 'RowanTestData'
+			}
+		}
+	},
+
+	#comment : 'standard load spec'
 }

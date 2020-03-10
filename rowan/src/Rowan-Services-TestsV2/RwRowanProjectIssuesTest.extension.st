@@ -24,7 +24,7 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 		name: projectName;
 		yourself.
 
-	testBranch := 'issue_150_v2'.
+	testBranch := 'issue_150_proposed_v2'.
 	service 
 		checkout: testBranch;
 		branch;

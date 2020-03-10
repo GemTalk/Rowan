@@ -183,7 +183,7 @@ self halt.
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> remote [
 
-	^ self resolvedProject remote
+	^ self resolvedProject repository remote
 ]
 
 { #category : 'accessing' }
