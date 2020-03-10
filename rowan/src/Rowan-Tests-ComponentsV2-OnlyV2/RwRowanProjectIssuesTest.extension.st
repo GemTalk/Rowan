@@ -169,17 +169,8 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames:
 			packageFormat: 'tonel';
 			projectsHome: rootPath; 
 			yourself.
-	projectDefinition projectSpecification
-			componentsPath: 'rowan/components';
-			packagesPath: 'rowan/src';
-			projectsPath: 'rowan/src';
-			specsPath: 'rowan/specs';
-			projectSpecPath: 'rowan';
-			yourself.
 
-	self
-		handleConfirmationDuring: [
-			projectDefinition resolve ].
+	projectDefinition resolve.
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
@@ -3028,8 +3019,9 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 
 	"based on testIssue185_move_extension_method_to_new_package_1"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		classExtensionDefinition packageName3 |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class classExtensionDefinition packageName3
+		componentName |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core1'.
 	packageName2 := 'Issue185-Core2'.
@@ -3041,12 +3033,15 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -3110,6 +3105,7 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 
 	"validate"
 	self assert: (class new perform: #mover) = 2. "method not installed when class extension does not have a proper class name"
+
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3123,8 +3119,9 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 
 	"simplification of RwRowanSample4Test>>testIssue208_adopt_load"
 
-	| projectName1 projectName2 packageName1 packageName2 packageName3 className projectDefinition1 classDefinition
-		packageDefinition projectSetDefinition projectDefinition2 classExtensionDefinition class ar symDict registry oldClass |
+	| projectName1 projectName2 packageName1 packageName2 packageName3 className projectDefinition1 
+		classDefinition packageDefinition projectSetDefinition projectDefinition2 classExtensionDefinition class 
+		ar symDict registry oldClass componentName |
 	projectName1 := 'Issue208_moveMethodBetweenProjects1'.
 	projectName2 := 'Issue208_moveMethodBetweenProjects2'.
 	packageName1 := 'Issue208-Core1'.
@@ -3138,10 +3135,15 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project 1"
-	projectDefinition1 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName1)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition1 := RwResolvedProjectV2 new
+		projectName: projectName1;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -3179,11 +3181,14 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
 
 "create project2"
-	projectDefinition2 := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName2)
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		defaultSymbolDictName: self _symbolDictionaryName2;
+	projectDefinition2 := RwResolvedProjectV2 new
+		projectName: projectName2;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
+			toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
@@ -3234,22 +3239,6 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
-]
-
-{ #category : '*rowan-tests-componentsv2-onlyv2' }
-RwRowanProjectIssuesTest >> testIssue217 [
-
-	"https://github.com/dalehenrich/Rowan/issues/217"
-
-	| spec specExportString |
-	[spec := (Rowan image _projectForNonTestProject: 'Rowan') specification asSpecification ] 
-		on: Deprecated 
-		do: [:ex | 
-			"ignore any Deprecation errors ... we're specification testing the speciciation"
-			ex resume ].
-	specExportString := STON toStringPretty: spec.
-	self assert: (specExportString includes: Character lf).
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
