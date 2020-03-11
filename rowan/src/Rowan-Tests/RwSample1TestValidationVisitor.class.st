@@ -22,7 +22,7 @@ Class {
 		'deletedPackageBlock',
 		'deletedProjectBlock'
 	],
-	#category : 'Rowan-Tests-35x'
+	#category : 'Rowan-Tests'
 }
 
 { #category : 'actions' }

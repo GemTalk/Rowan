@@ -2121,6 +2121,35 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0032: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0033: resolvedProject [
+	"Start with  spec_0011, update class definition to match RowanSample1 branch issue_345 - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2"
+
+	"https://github.com/GemTalk/Rowan/issues/573"
+
+	| packageName1 packageName2 packageName3 className1 className2  |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName1)
+		classDefinitionNamed:className1)
+		instVarNames: #('aaa' 'bbb' 'ccc');
+		 gs_constraints: { {'aaa' . 'String'} . {'bbb' . 'Integer'} };
+		yourself.
+
+	((resolvedProject packageNamed: packageName3)
+		classDefinitionNamed:className2)
+		addInstanceMethod: 'testConstraints
+	self assert: (', className1, ' _constraintsEqual: { { #''aaa'' . String } . { #''bbb'' . Integer }})'
+			protocol: 'tests';
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -4204,6 +4233,57 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0032: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
+	"Start with  spec_0011, update class definition to match RowanSample1 branch issue_345 - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2"
+
+	"https://github.com/GemTalk/Rowan/issues/345; https://github.com/GemTalk/Rowan/issues/514"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	postfix := '0033'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title:
+			'Start with  spec_0011, update class definition to match RowanSample1 branch issue_345 - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2.'
+		index: 33
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(345 514);
+		yourself.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectsHome: self projectsHome;
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes: #('tests');
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		comment: indexCard title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0033: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

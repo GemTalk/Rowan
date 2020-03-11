@@ -74,6 +74,8 @@ RwLoadedPackage >> classOrExtensionForClassNamed: className ifAbsent: absentBloc
 
 { #category : 'testing' }
 RwLoadedPackage >> isDirty [
+	"a project is dirty if it has changes that are not written to disk, or it's packages 
+		have changes that are not written to  disk."
 
 	^ isDirty
 ]
