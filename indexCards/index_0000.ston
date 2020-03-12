@@ -1,0 +1,11 @@
+RwTestProjectLibraryIndexCard {
+	#name : 'index_0000',
+	#title : 'Empty project with no packages',
+	#specName : 'spec_0000',
+	#index : 0,
+	#derivedFrom : 'master',
+	#comment : '',
+	#rowanIssues : [ ],
+	#gemstoneIssues : [ ],
+	#rowanSHA : 'dee7ce80'
+}
