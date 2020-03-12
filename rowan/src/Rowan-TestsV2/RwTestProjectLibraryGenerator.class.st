@@ -41,6 +41,10 @@ RwTestProjectLibraryGenerator new
 	genSpec_0030: commitComment;
 	genSpec_0031: commitComment;
 	genSpec_0032: commitComment;
+	genSpec_0033: commitComment;
+	genSpec_0034: commitComment;
+	genSpec_0035: commitComment;
+	genSpec_0036: commitComment;
 	yourself
 "
 Class {
@@ -2150,6 +2154,103 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0033: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0034: resolvedProject [
+	"Start with spec_0001, remove the class. Foundation for instance migration testing - _migration_0."
+
+	| packageName1 className1 |
+	packageName1 := projectName , '-' , 'Core'.
+	className1 := projectName , 'Class1'.
+
+	(resolvedProject packageNamed: packageName1)
+		removeClassNamed:className1.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0035: resolvedProject [
+	"Start with spec_0034, add class hierarchy with instance variables and methods. _migration_1."
+
+	| packageName1 packageDef |
+	packageName1 := projectName , '-' , 'Core'.
+	packageDef := resolvedProject packageNamed: packageName1.
+	{#('Object' 'RowanSample9Class' #('ivar0')).
+	#('RowanSample9Class' 'RowanSample9ClassA' #('a' 'ivar1')).
+	#('RowanSample9ClassA' 'RowanSample9ClassC' #('c' 'ivar2')).
+	#('RowanSample9ClassA' 'RowanSample9ClassD' #('d' 'ivar2')).
+	#('RowanSample9Class' 'RowanSample9ClassB' #('b' 'ivar1')).
+	#('RowanSample9ClassB' 'RowanSample9ClassE' #('e' 'ivar2')).
+	#('RowanSample9ClassB' 'RowanSample9ClassF' #('f' 'ivar2'))}
+		do: [ :ar | 
+			| superClassName className instvars classDef |
+			superClassName := ar at: 1.
+			className := ar at: 2.
+			instvars := ar at: 3.
+			classDef := packageDef
+				classDefinitionNamed: className
+				ifAbsent: [ 
+					RwClassDefinition
+						newForClassNamed: className
+						super: superClassName
+						category: packageName1 ].
+			classDef instVarNames: instvars.
+			packageDef updateClassDefinition: classDef.
+			instvars
+				do: [ :iv | 
+					classDef
+						updateInstanceMethod: iv , ' ^ ' , iv protocol: 'accessing';
+						updateInstanceMethod: iv , ': obj ' , iv , ' := obj'
+							protocol: 'accessing';
+						yourself ] ].
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0036: resolvedProject [
+	"Start with spec_0035, move ivs ivar1 and ivar2 up to the top of the hierarcy; methods should be okay. _migration_2."
+
+	| packageName1 packageDef |
+	packageName1 := projectName , '-' , 'Core'.
+	packageDef := resolvedProject packageNamed: packageName1.
+	{#('Object' 'RowanSample9Class' #('ivar0' 'ivar1' 'ivar2') #()).
+	#('RowanSample9Class' 'RowanSample9ClassA' #('a') #(#'ivar1' #'ivar2')).
+	#('RowanSample9ClassA' 'RowanSample9ClassC' #('c') #(#'ivar1' #'ivar2')).
+	#('RowanSample9ClassA' 'RowanSample9ClassD' #('d') #(#'ivar1' #'ivar2')).
+	#('RowanSample9Class' 'RowanSample9ClassB' #('b') #(#'ivar1' #'ivar2')).
+	#('RowanSample9ClassB' 'RowanSample9ClassE' #('e') #(#'ivar1' #'ivar2')).
+	#('RowanSample9ClassB' 'RowanSample9ClassF' #('f') #(#'ivar1' #'ivar2'))}
+		do: [ :ar | 
+			| superClassName className instvars classDef removeSelectors |
+			superClassName := ar at: 1.
+			className := ar at: 2.
+			instvars := ar at: 3.
+			removeSelectors := ar at: 4.
+			classDef := packageDef
+				classDefinitionNamed: className
+				ifAbsent: [ 
+					RwClassDefinition
+						newForClassNamed: className
+						super: superClassName
+						category: packageName1 ].
+			classDef instVarNames: instvars.
+			packageDef updateClassDefinition: classDef.
+			instvars
+				do: [ :iv | 
+					classDef
+						updateInstanceMethod: iv , ' ^ ' , iv protocol: 'accessing';
+						updateInstanceMethod: iv , ': obj ' , iv , ' := obj'
+							protocol: 'accessing';
+						yourself ].
+			removeSelectors
+				do: [ :sel | 
+					classDef removeInstanceMethod: sel ifAbsent: [  ].
+					classDef removeInstanceMethod: (sel , ':') asSymbol ifAbsent: [  ] ] ].
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -2533,7 +2634,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
@@ -2579,7 +2680,7 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -2624,7 +2725,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -2669,7 +2770,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -2782,7 +2883,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage.
@@ -2836,7 +2937,7 @@ RwTestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -2884,7 +2985,7 @@ RwTestProjectLibraryGenerator >> genSpec_0006: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -2937,7 +3038,7 @@ RwTestProjectLibraryGenerator >> genSpec_0007: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -2988,7 +3089,7 @@ RwTestProjectLibraryGenerator >> genSpec_0008: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3037,7 +3138,7 @@ RwTestProjectLibraryGenerator >> genSpec_0009: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3086,7 +3187,7 @@ RwTestProjectLibraryGenerator >> genSpec_0010: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3134,7 +3235,7 @@ RwTestProjectLibraryGenerator >> genSpec_0011: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3187,7 +3288,7 @@ RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3240,7 +3341,7 @@ RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3295,7 +3396,7 @@ RwTestProjectLibraryGenerator >> genSpec_0014: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3359,7 +3460,7 @@ RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3408,7 +3509,7 @@ RwTestProjectLibraryGenerator >> genSpec_0016: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3456,7 +3557,7 @@ RwTestProjectLibraryGenerator >> genSpec_0017: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification:  resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3505,7 +3606,7 @@ RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
@@ -3554,7 +3655,7 @@ RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3605,7 +3706,7 @@ RwTestProjectLibraryGenerator >> genSpec_0020: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3656,7 +3757,7 @@ RwTestProjectLibraryGenerator >> genSpec_0021: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3707,7 +3808,7 @@ RwTestProjectLibraryGenerator >> genSpec_0022: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3758,7 +3859,7 @@ RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3813,7 +3914,7 @@ RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3864,7 +3965,7 @@ RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3917,7 +4018,7 @@ RwTestProjectLibraryGenerator >> genSpec_0026: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -3971,7 +4072,7 @@ RwTestProjectLibraryGenerator >> genSpec_0027: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -4024,7 +4125,7 @@ RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -4077,7 +4178,7 @@ RwTestProjectLibraryGenerator >> genSpec_0029: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -4130,7 +4231,7 @@ RwTestProjectLibraryGenerator >> genSpec_0030: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -4183,7 +4284,7 @@ RwTestProjectLibraryGenerator >> genSpec_0031: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -4236,7 +4337,7 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -4287,7 +4388,142 @@ RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0034: commitMessage [
+	"Start with spec_0001, remove the class. Foundation for instance migration testing - _migration_0."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0034'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001, remove the class. Foundation for instance migration testing - _migration_0.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 34
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #();
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  {};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
 		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0034: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0035: commitMessage [
+	"Start with spec_0034, add class hierarchy with instance variables and methods. _migration_1."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0035'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0034'.
+	title := 'Start with spec_0034, add class hierarchy with instance variables and methods. _migration_1.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 35
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #();
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0035: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0036: commitMessage [
+	"Start with spec_0035, move ivs ivar1 and ivar2 up to the top of the hierarcy; methods should be okay. _migration_2."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0036'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0035'.
+	title := 'Start with spec_0035, move ivs ivar1 and ivar2 up to the top of the hierarcy; methods should be okay. _migration_2.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 36
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #();
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0036: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository

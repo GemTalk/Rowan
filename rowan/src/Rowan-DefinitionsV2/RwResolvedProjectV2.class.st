@@ -545,13 +545,13 @@ RwResolvedProjectV2 >> load [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> load: platformConfigurationAttributes [
+RwResolvedProjectV2 >> load: instanceMigrator [
 	"load the receiver into the image"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
-		loadProjectDefinition: self projectDefinition
-		platformConfigurationAttributes: platformConfigurationAttributes
+		loadProjectDefinition: self
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'project definition' }
@@ -572,15 +572,15 @@ RwResolvedProjectV2 >> loadProjectSet [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> loadProjectSet: platformConfigurationAttributes [
+RwResolvedProjectV2 >> loadProjectSet: instanceMigrator [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"load a project definition set that will contain the project definition along with any dependent project definitions"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
-		loadProjectSetDefinition:
-			(self readProjectSet: platformConfigurationAttributes)
+		loadProjectSetDefinition: self readProjectSet
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'project definition' }

@@ -45,6 +45,11 @@ RwProject >> canCommit [
 ]
 
 { #category : 'properties' }
+RwProject >> checkout: revision [
+	^ self _loadedProject checkout: revision
+]
+
+{ #category : 'properties' }
 RwProject >> comment [
 
 	^ self _specification comment

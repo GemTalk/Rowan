@@ -254,26 +254,36 @@ RwAbstractClassDefinition >> postCopy [
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> removeClassMethod: selector [
+	^ self
+		removeClassMethod: selector
+		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ]
+]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> removeClassMethod: selector ifAbsent: absentBlock [
 	| definition |
 	definition := classMethodDefinitions
 		at: selector
-		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
+		ifAbsent: [ absentBlock value ].
 	self removeDefinition: definition from: classMethodDefinitions.
 	^ definition
-
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> removeInstanceMethod: selector [
+	^ self
+		removeInstanceMethod: selector
+		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ]
+]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> removeInstanceMethod: selector ifAbsent: absentBlock [
 	| definition |
 	definition := instanceMethodDefinitions
 		at: selector
-		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
+		ifAbsent: [ ^ absentBlock value ].
 	self removeDefinition: definition from: instanceMethodDefinitions.
 	^ definition
-
 ]
 
 { #category : 'accessing' }

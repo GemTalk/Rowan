@@ -143,6 +143,18 @@ RwRowanSample9Test >> _loadSpecSessionCacheKey [
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _migrationClassMap [
+
+	^ {#(#'RowanSample9Class' #(#'ivar0')).
+	#(#'RowanSample9ClassA' #(#'ivar0' #'a' #'ivar1')).
+	#(#'RowanSample9ClassC' #(#'ivar0' #'a' #'ivar1' #'c' #'ivar2')).
+	#(#'RowanSample9ClassD' #(#'ivar0' #'a' #'ivar1' #'d' #'ivar2')).
+	#(#'RowanSample9ClassB' #(#'ivar0' #'b' #'ivar1')).
+	#(#'RowanSample9ClassE' #(#'ivar0' #'b' #'ivar1' #'e' #'ivar2')).
+	#(#'RowanSample9ClassF' #(#'ivar0' #'b' #'ivar1' #'f' #'ivar2'))}
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 	^ self class _rowanSample9_0000_load_spec
 ]
@@ -294,6 +306,71 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 												, ' not present in the expected symbol dictionary '
 												, symDictName printString ] ] ] ].
 	self assert: exceptions isEmpty
+]
+
+{ #category : 'migration tests' }
+RwRowanSample9Test >> testAutomaticMigration [
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
+
+	| loadSpec projectName resolvedProject loadedProjects project audit instanceMap |
+	loadSpec := self _loadSpecNamed: 'spec_0034'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_0"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+
+"checkout migration_step_1 branch; read and load"
+	project checkout: 'spec_0035'.
+	resolvedProject read; load.
+
+"build instance map; for validation in next step"
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar -> class ].
+
+"checkout migration_step_2 branch; read and load"
+	project checkout: 'spec_0036'.
+	project asDefinition
+		read;
+		load: RwGsInstanceMigrator aggressiveMigration.
+
+	self assert: (audit := project audit) isEmpty.
+
+"validate migration"
+	instanceMap
+		keysAndValuesDo: [ :instance :assoc | 
+			| ivNames ar oldClass className class |
+			ar := assoc key.
+			oldClass := assoc value.
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			self assert: oldClass ~= class.
+			self assert: instance class == class.
+			ivNames := ar at: 2.
+			1 to: ivNames size do: [ :index | 
+				| ivName |
+				ivName := ivNames at: index.
+				self assert: (instance perform: ivName) == ivName ] ]
 ]
 
 { #category : 'tests' }
@@ -1305,6 +1382,71 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 ]
 
+{ #category : 'migration tests' }
+RwRowanSample9Test >> testNoMigration [
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
+
+	| loadSpec projectName resolvedProject loadedProjects project audit instanceMap |
+	loadSpec := self _loadSpecNamed: 'spec_0034'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_0"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+
+"checkout migration_step_1 branch; read and load"
+	project checkout: 'spec_0035'.
+	resolvedProject read; load.
+
+"build instance map; for validation in next step"
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar -> class ].
+
+"checkout migration_step_2 branch; read and load"
+	project checkout: 'spec_0036'.
+	project asDefinition
+		read;
+		load: RwGsInstanceMigrator noMigration.
+
+	self assert: (audit := project audit) isEmpty.
+
+"validate migration"
+	instanceMap
+		keysAndValuesDo: [ :instance :assoc | 
+			| ivNames ar oldClass className class |
+			ar := assoc key.
+			oldClass := assoc value.
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			self assert: oldClass ~= class.
+			self assert: instance class == oldClass.
+			ivNames := ar at: 2.
+			1 to: ivNames size do: [ :index | 
+				| ivName |
+				ivName := ivNames at: index.
+				self assert: (instance perform: ivName) == ivName ] ]
+]
+
 { #category : 'tests' }
 RwRowanSample9Test >> testReferenceRepositoryDirectory [
 	"Clone RowanSample9, then reference the directory as a plain disk repository, ignoring git"
@@ -2278,7 +2420,7 @@ RwRowanSample9Test >> testSpec_0032 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0033 [
-	"spec_0029 should load cleanly"
+	"spec_0033 should load cleanly"
 
 	"https://github.com/dalehenrich/Rowan/issues/345; https://github.com/dalehenrich/Rowan/issues/514"
 
@@ -2303,6 +2445,90 @@ RwRowanSample9Test >> testSpec_0033 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0034 [
+	"spec_0034 should load cleanly"
+
+	"migration step 0"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit |
+	loadSpec := self _loadSpecNamed: 'spec_0034'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0035 [
+	"spec_0035 should load cleanly"
+
+	"migration step 1"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit |
+	loadSpec := self _loadSpecNamed: 'spec_0035'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0036 [
+	"spec_0036 should load cleanly"
+
+	"migration step 2"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit |
+	loadSpec := self _loadSpecNamed: 'spec_0036'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
 ]
 
 { #category : 'tests' }

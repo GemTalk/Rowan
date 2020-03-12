@@ -5492,6 +5492,22 @@ true.
 %
 
 doit
+(RwAbstractProjectSetModificationVisitor
+	subclass: 'RwSample1TestValidationVisitor'
+	instVarNames: #( defaultNoopBlock addedClassBlock addedClassExtensionBlock addedMethodBlock addedMethodExtensionBlock addedPackageBlock addedProjectBlock changedClassBlock changedClassExtensionBlock changedMethodBlock changedMethodExtensionBlock changedPackageBlock changedProjectBlock deletedClassBlock deletedClassExtensionBlock deletedMethodBlock deletedMethodExtensionBlock deletedPackageBlock deletedProjectBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'RwAbstractReaderWriterVisitor'
 	instVarNames: #( currentProjectDefinition packageConvention currentPackageDefinition currentClassDefinition currentClassExtension )
@@ -50787,8 +50803,10 @@ extendedClasses
 category: 'testing'
 method: RwPackage
 isDirty
+	"a project is dirty if it has changes that are not written to disk, or it's packages 
+		have changes that are not written to  disk."
 
-	^self _loadedPackage isDirty
+	^ self _loadedPackage isDirty
 %
 
 category: 'private'
@@ -50829,6 +50847,12 @@ method: RwProject
 canCommit
 
 	^ self _loadedProject canCommit
+%
+
+category: 'properties'
+method: RwProject
+checkout: revision
+	^ self _loadedProject checkout: revision
 %
 
 category: 'properties'
@@ -50895,8 +50919,10 @@ extendedClasses
 category: 'testing'
 method: RwProject
 isDirty
+	"a project is dirty if it has changes that are not written to disk, or it's packages 
+		have changes that are not written to  disk."
 
-	^self _loadedProject isDirty
+	^ self _loadedProject isDirty
 %
 
 category: 'actions'
@@ -58231,6 +58257,354 @@ visitProjectModification: aProjectModification
 		ifTrue: [ ^ self deletedProject: aProjectModification ].
 	self changedProject: aProjectModification.
 	^ aProjectModification packagesModification acceptVisitor: self
+%
+
+! Class implementation for 'RwSample1TestValidationVisitor'
+
+!		Instance methods for 'RwSample1TestValidationVisitor'
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedClass: aClassModification
+	currentClassDefinition := aClassModification after.
+	self addedClassBlock cull: aClassModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedClassBlock
+	^ addedClassBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedClassBlock: aBlock
+	addedClassBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedClassExtension: aClassExtensionModification
+	currentClassExtension := aClassExtensionModification after.
+	self addedClassExtensionBlock cull: aClassExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedClassExtensionBlock
+	^ addedClassExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedClassExtensionBlock: aBlock
+	addedClassExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedMethod: aMethodModification
+	self addedMethodBlock cull: aMethodModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedMethodBlock
+	^ addedMethodBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedMethodBlock: aBlock
+	addedMethodBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedMethodExtension: aMethodExtensionModification
+	self addedMethodExtensionBlock cull: aMethodExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedMethodExtensionBlock
+	^ addedMethodExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedMethodExtensionBlock: aBlock
+	addedMethodExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedPackage: aPackageModification
+	currentPackageDefinition := aPackageModification after.
+	self addedPackageBlock cull: aPackageModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedPackageBlock
+	^ addedPackageBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedPackageBlock: aBlock
+	addedPackageBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+addedProject: aProjectModification
+	currentProjectDefinition := aProjectModification after.
+	self addedProjectBlock cull: aProjectModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedProjectBlock
+	^ addedProjectBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+addedProjectBlock: aBlock
+	addedProjectBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedClass: aClassModification
+	currentClassDefinition := aClassModification after.
+	self changedClassBlock cull: aClassModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedClassBlock
+	^ changedClassBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedClassBlock: aBlock
+	changedClassBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedClassExtension: aClassExtensionModification
+	currentClassExtension := aClassExtensionModification after.
+	self changedClassExtensionBlock cull: aClassExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedClassExtensionBlock
+	^ changedClassExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedClassExtensionBlock: aBlock
+	changedClassExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedMethod: aMethodModification
+	self changedMethodBlock cull: aMethodModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedMethodBlock
+	^ changedMethodBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedMethodBlock: aBlock
+	changedMethodBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedMethodExtension: aMethodExtensionModification
+	self changedMethodExtensionBlock cull: aMethodExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedMethodExtensionBlock
+	^ changedMethodExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedMethodExtensionBlock: aBlock
+	changedMethodExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedPackage: aPackageModification
+	currentPackageDefinition := aPackageModification after.
+	self changedPackageBlock cull: aPackageModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedPackageBlock
+	^ changedPackageBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedPackageBlock: aBlock
+	changedPackageBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+changedProject: aProjectModification
+	currentProjectDefinition := aProjectModification after.
+	self changedProjectBlock cull: aProjectModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedProjectBlock
+	^ changedProjectBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+changedProjectBlock: aBlock
+	changedProjectBlock := aBlock
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+defaultNoopBlock
+	^ defaultNoopBlock ifNil: [ [  ] ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+defaultNoopBlock: aBlock
+	defaultNoopBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedClass: aClassModification
+	self deletedClassBlock cull: aClassModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedClassBlock
+	^ deletedClassBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedClassBlock: aBlock
+	deletedClassBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedClassExtension: aClassExtensionModification
+	self deletedClassExtensionBlock cull: aClassExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedClassExtensionBlock
+	^ deletedClassExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedClassExtensionBlock: aBlock
+	deletedClassExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedMethod: aMethodModification
+	self deletedMethodBlock cull: aMethodModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedMethodBlock
+	^ deletedMethodBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedMethodBlock: aBlock
+	deletedMethodBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedMethodExtension: aMethodExtensionModification
+	self deletedMethodExtensionBlock cull: aMethodExtensionModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedMethodExtensionBlock
+	^ deletedMethodExtensionBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedMethodExtensionBlock: aBlock
+	deletedMethodExtensionBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedPackage: aPackageModification
+	self deletedPackageBlock cull: aPackageModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedPackageBlock
+	^ deletedPackageBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedPackageBlock: aBlock
+	deletedPackageBlock := aBlock
+%
+
+category: 'actions'
+method: RwSample1TestValidationVisitor
+deletedProject: aProjectModification
+	self deletedProjectBlock cull: aProjectModification cull: self
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedProjectBlock
+	^ deletedProjectBlock ifNil: [ self defaultNoopBlock ]
+%
+
+category: 'accessing'
+method: RwSample1TestValidationVisitor
+deletedProjectBlock: aBlock
+	deletedProjectBlock := aBlock
 %
 
 ! Class implementation for 'RwAbstractReaderWriterVisitor'
@@ -66589,11 +66963,18 @@ postCopy
 category: 'accessing'
 method: RwAbstractClassDefinition
 removeClassMethod: selector
+	^ self
+		removeClassMethod: selector
+		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ]
+%
 
+category: 'accessing'
+method: RwAbstractClassDefinition
+removeClassMethod: selector ifAbsent: absentBlock
 	| definition |
 	definition := classMethodDefinitions
 		at: selector
-		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
+		ifAbsent: [ absentBlock value ].
 	self removeDefinition: definition from: classMethodDefinitions.
 	^ definition
 %
@@ -66601,11 +66982,18 @@ removeClassMethod: selector
 category: 'accessing'
 method: RwAbstractClassDefinition
 removeInstanceMethod: selector
+	^ self
+		removeInstanceMethod: selector
+		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ]
+%
 
+category: 'accessing'
+method: RwAbstractClassDefinition
+removeInstanceMethod: selector ifAbsent: absentBlock
 	| definition |
 	definition := instanceMethodDefinitions
 		at: selector
-		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
+		ifAbsent: [ ^ absentBlock value ].
 	self removeDefinition: definition from: instanceMethodDefinitions.
 	^ definition
 %
@@ -66691,6 +67079,22 @@ newForClassNamed: className super: superClassName category: category comment: co
 		classvars: #() 
 		category: category 
 		comment: comment 
+		pools: #() 
+		type: 'normal'
+%
+
+category: 'instance creation'
+classmethod: RwClassDefinition
+newForClassNamed: className super: superClassName instvars: instvars category: category
+
+	^ self 
+		newForClassNamed: className 
+		super: superClassName 
+		instvars: instvars
+		classinstvars: #() 
+		classvars: #() 
+		category: category 
+		comment: nil 
 		pools: #() 
 		type: 'normal'
 %
@@ -77521,6 +77925,8 @@ classOrExtensionForClassNamed: className ifAbsent: absentBlock
 category: 'testing'
 method: RwLoadedPackage
 isDirty
+	"a project is dirty if it has changes that are not written to disk, or it's packages 
+		have changes that are not written to  disk."
 
 	^ isDirty
 %
@@ -77879,10 +78285,10 @@ initializeForLoadSpecification: aLoadSpecification
 category: 'testing'
 method: RwLoadedProject
 isDirty
-
 	"a project is dirty if it has changes that are not written to disk, or it's packages have changes that are not written to  disk."
 
-	isDirty ifTrue: [ ^ true].
+	isDirty
+		ifTrue: [ ^ true ].
 	self loadedPackages
 		do: [ :loadedPackage | 
 			loadedPackage isDirty

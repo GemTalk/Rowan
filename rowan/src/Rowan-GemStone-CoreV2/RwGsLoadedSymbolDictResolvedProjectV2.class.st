@@ -35,6 +35,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> canCommit [
 	^ self resolvedProject canCommit
 ]
 
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> checkout: revision [
+	^ self resolvedProject repository checkout: revision
+]
+
 { #category : 'commit log' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> commitLog: logLimit [
 
