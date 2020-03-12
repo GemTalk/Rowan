@@ -706,7 +706,7 @@ RowanMethodService >> setBreakAt: stepPoint [
     ifFalse: [ self gsNMethod ].
   method setBreakAtStepPoint: stepPoint.
   self class breakPointsAreEnabled
-    ifFalse: [ GsNMethod _disableAllBreaks ].
+    ifFalse: [ self disableBreakAt: stepPoint ].
   self update.
   RowanCommandResult addResult: self
 ]

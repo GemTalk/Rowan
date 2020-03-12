@@ -50,7 +50,7 @@ RowanAnsweringService >> allTestsIn: classServices [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanAnsweringService >> answer [
 
 	^answer
@@ -522,7 +522,7 @@ RowanAnsweringService >> setAutoCommit: object [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'other' }
+{ #category : 'client commands' }
 RowanAnsweringService >> setBreakPointsAreEnabled: boolean [
   boolean
     ifTrue: [ self enableAllBreaks ]
