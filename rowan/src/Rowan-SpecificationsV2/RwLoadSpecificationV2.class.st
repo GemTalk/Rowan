@@ -523,7 +523,7 @@ RwLoadSpecificationV2 >> repositoryResolutionPolicy: aSymbolOrNil [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> repositoryRoot [
-	^ self projectsHome / self projectName
+	^ self projectsHome / self projectAlias
 ]
 
 { #category : 'actions' }

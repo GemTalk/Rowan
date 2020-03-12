@@ -6,7 +6,7 @@ RwRowanSample9Test _clearLoadSpecSessionCache.
 commitComment := ''.
 RwTestProjectLibraryGenerator new
 	projectName: 'RowanSample9';
-	projectUrl: 'https://github.com/dalehenrich/RowanSample9';
+	projectUrl: 'git@github.com:dalehenrich/RowanSample9.git';
 	preserveChangesOnGithub: true;
 	genSpec_0000: commitComment;
 	genSpec_0001: commitComment;
@@ -2155,14 +2155,15 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0033: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0034: resolvedProject [
-	"Start with spec_0001, remove the class. Foundation for instance migration testing - _migration_0."
+	"Start with spec_0001, remove the instance variable. Foundation for instance migration testing - _migration_0."
 
 	| packageName1 className1 |
 	packageName1 := projectName , '-' , 'Core'.
 	className1 := projectName , 'Class1'.
 
-	(resolvedProject packageNamed: packageName1)
-		removeClassNamed:className1.
+	((resolvedProject packageNamed: packageName1)
+		classDefinitionNamed:className1)
+			instVarNames: #().
 
 	^ resolvedProject
 ]
@@ -4397,7 +4398,7 @@ RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0034: commitMessage [
-	"Start with spec_0001, remove the class. Foundation for instance migration testing - _migration_0."
+	"Start with spec_0001, remove the instance variable. Foundation for instance migration testing - _migration_0."
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -4406,7 +4407,7 @@ RwTestProjectLibraryGenerator >> genSpec_0034: commitMessage [
 	postfix := '0034'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
-	title := 'Start with spec_0001, remove the class. Foundation for instance migration testing - _migration_0.'.
+	title := 'Start with spec_0001, remove the instance variable. Foundation for instance migration testing - _migration_0.'.
 
 	indexCard := (self
 		_createCard: postfix

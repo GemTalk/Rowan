@@ -154,6 +154,24 @@ RwRowanSample9Test >> _migrationClassMap [
 	#(#'RowanSample9ClassF' #(#'ivar0' #'b' #'ivar1' #'f' #'ivar2'))}
 ]
 
+{ #category : 'migration tests' }
+RwRowanSample9Test >> _migrationLoadSpecNamed: specName projectName: projectName projectAlias: projectAlias gitUrl: gitUrl [
+	"fabricate a load spec to be used for cloning a rowanSample9 project from a specific remote git repository"
+
+	^ RwLoadSpecificationV2 new
+		specName: specName;
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: self _testRowanProjectsSandbox;
+		gitUrl: gitUrl;
+		revision: specName;
+		projectSpecFile: 'rowan/project.ston';
+		componentNames: {'Core'};
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		comment: 'Generated loadSpec for RowanSample9 migration tests';
+		yourself
+]
+
 { #category : 'private' }
 RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 	^ self class _rowanSample9_0000_load_spec
@@ -218,6 +236,62 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 			self
 				assert:
 					loadedProjectDefinition class = resolvedProject projectDefinition class ]
+]
+
+{ #category : 'migration tests' }
+RwRowanSample9Test >> _testMigration: loadSpec instanceMigrator: instanceMigrator [
+
+	"this test is used for testing non-github remote repositories; so the gitUrl will be used to control which remote the repository is cloned from.
+	instanceMap is returned, so caller can properly validate the migration results"
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
+
+	| projectName resolvedProject loadedProjects project audit instanceMap |
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"we want to clone the repository using the specified gitUrl"
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_0"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+
+"checkout migration_step_1 branch; read and load"
+	project checkout: 'spec_0035'.
+	resolvedProject read; load.
+
+"build instance map; for validation in next step"
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar -> class ].
+
+"checkout migration_step_2 branch; read and load"
+	project checkout: 'spec_0036'.
+	project asDefinition
+		read;
+		load: instanceMigrator.
+
+	self assert: (audit := project audit) isEmpty.
+
+	^ instanceMap
 ]
 
 { #category : 'private' }
@@ -309,52 +383,20 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 ]
 
 { #category : 'migration tests' }
-RwRowanSample9Test >> testAutomaticMigration [
+RwRowanSample9Test >> testAutomaticMigration_gitolite [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
 
-	| loadSpec projectName resolvedProject loadedProjects project audit instanceMap |
-	loadSpec := self _loadSpecNamed: 'spec_0034'.
+	| loadSpec instanceMap |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0034' 
+		projectName: 'RowanSample9' 
+		projectAlias: 'RowanSample9_Automatic_Migration' 
+		gitUrl: 'git@git.gemtalksystems.com:RowanSample9.git'.
 
-	projectName := loadSpec projectName.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"resolve project"
-	resolvedProject := loadSpec resolveStrict.
-
-"load project - migration_step_0"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: (audit := project audit) isEmpty.
-
-"checkout migration_step_1 branch; read and load"
-	project checkout: 'spec_0035'.
-	resolvedProject read; load.
-
-"build instance map; for validation in next step"
-	instanceMap := IdentityKeyValueDictionary new.
-	self _migrationClassMap
-		do: [ :ar | 
-			| className ivs class instance |
-			className := ar at: 1.
-			class := Rowan globalNamed: className.
-			instance := class new.
-			ivs := ar at: 2.
-			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
-			instanceMap at: instance put: ar -> class ].
-
-"checkout migration_step_2 branch; read and load"
-	project checkout: 'spec_0036'.
-	project asDefinition
-		read;
-		load: RwGsInstanceMigrator aggressiveMigration.
-
-	self assert: (audit := project audit) isEmpty.
+	instanceMap := self 
+		_testMigration: loadSpec 
+		instanceMigrator:RwGsInstanceMigrator aggressiveMigration.
 
 "validate migration"
 	instanceMap
@@ -411,6 +453,29 @@ RwRowanSample9Test >> testCategoryComponents [
 	categoryComponents := components categoryComponentsFor: project topLevelComponentNames.
 "I think I want a component visitor to extract the list of packages from the loaded components"
 	false ifTrue: [ self halt]
+]
+
+{ #category : 'migration tests' }
+RwRowanSample9Test >> testDeferredMigration_gitlab [
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after deferred migration ..."
+
+	| loadSpec instanceMap instanceMigrator classesToMigrate expectedClassesToMigrate |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0034' 
+		projectName: 'RowanSample9' 
+		projectAlias: 'RowanSample9_Deferred_Migration' 
+		gitUrl: 'git@gitlab.com:dalehenrichs/rowansample9.git'.
+
+	instanceMigrator := RwGsDeferredInstanceMigrator noMigration.
+	instanceMap := self 
+		_testMigration: loadSpec 
+		instanceMigrator: instanceMigrator.
+
+"validate deferred migration"
+	classesToMigrate := (instanceMigrator classesToMigrate collect: [:each | each name ]) sort.
+	expectedClassesToMigrate := (self _migrationClassMap collect: [:each | each at: 1 ]) sort.
+	self assert: classesToMigrate = expectedClassesToMigrate
 ]
 
 { #category : 'tests' }
@@ -1383,52 +1448,20 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 ]
 
 { #category : 'migration tests' }
-RwRowanSample9Test >> testNoMigration [
+RwRowanSample9Test >> testNoMigration_bitbucket [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| loadSpec projectName resolvedProject loadedProjects project audit instanceMap |
-	loadSpec := self _loadSpecNamed: 'spec_0034'.
+	| loadSpec instanceMap |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0034' 
+		projectName: 'RowanSample9' 
+		projectAlias: 'RowanSample9_No_Migration' 
+		gitUrl: 'git@bitbucket.org:dalehenrich/rowansample9.git'.
 
-	projectName := loadSpec projectName.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"resolve project"
-	resolvedProject := loadSpec resolveStrict.
-
-"load project - migration_step_0"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: (audit := project audit) isEmpty.
-
-"checkout migration_step_1 branch; read and load"
-	project checkout: 'spec_0035'.
-	resolvedProject read; load.
-
-"build instance map; for validation in next step"
-	instanceMap := IdentityKeyValueDictionary new.
-	self _migrationClassMap
-		do: [ :ar | 
-			| className ivs class instance |
-			className := ar at: 1.
-			class := Rowan globalNamed: className.
-			instance := class new.
-			ivs := ar at: 2.
-			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
-			instanceMap at: instance put: ar -> class ].
-
-"checkout migration_step_2 branch; read and load"
-	project checkout: 'spec_0036'.
-	project asDefinition
-		read;
-		load: RwGsInstanceMigrator noMigration.
-
-	self assert: (audit := project audit) isEmpty.
+	instanceMap := self 
+		_testMigration: loadSpec 
+		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 "validate migration"
 	instanceMap
