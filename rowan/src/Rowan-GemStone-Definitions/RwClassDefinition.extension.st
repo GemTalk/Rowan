@@ -10,18 +10,6 @@ RwClassDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue a
 					"empty or nil comments need to compare equal in GemStone"
 					^ (propertyValue == nil or: [ propertyValue isEmpty ])
 						and: [ baseValue == nil or: [ baseValue isEmpty ] ] ] ].
-
-false ifTrue: [
-	"RwRowanSample9Test>>testIssue_495_2 fails if we ignore gs_SymbolDictionary class property changes ..."
- 	propertyKey = 'gs_SymbolDictionary'
-		ifTrue: [ 
-			propertyValue = baseValue
-				ifTrue: [ ^ true ]
-				ifFalse: [ 
-					"if one or the other is nil, then count it as equal"
-					^ propertyValue == nil or: [ baseValue == nil ] ] ].
-].
-
 	^ super
 		_compareProperty: propertyKey
 		propertyVaue: propertyValue

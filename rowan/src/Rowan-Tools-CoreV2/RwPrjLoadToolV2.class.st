@@ -56,10 +56,13 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 		keysAndValuesDo: [ :projectName :projectDefinition | 
 			projectDefinition packages
 				keysAndValuesDo: [ :packageName :packageDefinition | 
+					| symdictName |
 					"set the target symbol dictionary name for each incoming package definition"
-					packageDefinition
-								gs_symbolDictionary:
-									(projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) ] ].
+					symdictName := projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName.
+					symdictName asString = packageDefinition gs_symbolDictionary
+						ifFalse: [ 
+							packageDefinition gs_symbolDictionary: symdictName.
+							packageDefinition classDefinitions values do: [:classDef | classDef gs_symbolDictionary: symdictName ] ] ] ].
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
