@@ -173,6 +173,15 @@ RwRowanSample9Test >> _migrationLoadSpecNamed: specName projectName: projectName
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _rowanSample1LoadSpecificationUrl_515 [
+	"https://github.com/GemTalk/Rowan/issues/515"
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1_v2.ston'
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 	^ self class _rowanSample9_0000_load_spec
 ]
@@ -1247,6 +1256,57 @@ RwRowanSample9Test >> testIssue345 [
 	self assert: registry methodRegistry size = 0.
 ]
 
+{ #category : 'issue 493' }
+RwRowanSample9Test >> testIssue493_RowanSample2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	"duplicate of RwRowanSample2Test debug: #testIssue493 (no existing LoadedMethod found for the old compiledMethod.) ... "
+
+	"https://github.com/GemTalk/Rowan/issues/254  (no existing LoadedMethod found for the old compiledMethod.) ... "
+
+	"using the migration tests set of definitions"
+
+	| loadSpec projectName resolvedProject loadedProjects project  audit |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0035' 
+		projectName: 'RowanSample9' 
+		projectAlias: 'RowanSample9_Issue_493' 
+		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"we want to clone the repository using the specified gitUrl"
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"Issue #493: use _symbolDictionaryName for initial load"
+	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_1"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+
+"checkout and load - migration_step_2 -- Issue #493: switch symbol dicts and use _symbolDictionaryName_1 for second load"
+	resolvedProject := project asDefinition.
+	resolvedProject 
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		checkout: 'spec_0036';
+		read;
+		load.
+
+	self assert: (audit := project audit) isEmpty.
+]
+
 { #category : 'issue 495' }
 RwRowanSample9Test >> testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1 [
 	"https://github.com/dalehenrich/Rowan/issues/495"
@@ -1407,6 +1467,75 @@ RwRowanSample9Test >> testIssue514 [
 			self assert: classModification classMethodsModification isEmpty.
 			propertyModValidationBlock value: classModification propertiesModification ];
 		visit: projectSetModification.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue515_RowanSample2 [
+
+	"https://github.com/GemTalk/Rowan/issues/515"
+
+	"duplicate of RwRowanSample2Test debug: #testIssue515"
+
+	"using the migration tests set of definitions"
+
+	| loadSpec projectName resolvedProject loadedProjects project  audit loadSpec2 resolvedProject2 |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0035' 
+		projectName: 'RowanSample9' 
+		projectAlias: 'RowanSample9'
+		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"we want to clone the repository using the specified gitUrl"
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"Issue #493: use _symbolDictionaryName for initial load"
+	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_1"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+
+"checkout and load - migration_step_2"
+	resolvedProject := project asDefinition.
+	resolvedProject 
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		checkout: 'spec_0036';
+		read;
+		load.
+
+	self assert: (audit := project audit) isEmpty.
+
+"load RowanSample1 project into RowanSample9 dictionary"
+
+	loadSpec2 := (RwSpecification fromUrl: self _rowanSample1LoadSpecificationUrl_515)
+		projectsHome:  self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9Class1';
+		yourself.
+
+	loadSpec2 repositoryRoot ensureDeleteAll.
+
+	resolvedProject2 := loadSpec2 resolve.
+	loadedProjects := resolvedProject2 load.
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+
+"watch out ... jadeite won't bhave well with class and symbol dictionary of same name ... but that's okay"
+
+self halt.
 ]
 
 { #category : 'issue 493' }
