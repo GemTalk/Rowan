@@ -10742,7 +10742,7 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tests';
-		comment: '';
+		comment: 'There are not tests in this class for Rowan V2.0 ... still have tests floating around in post V1.2 work, so this class will hang out until no longer needed';
 		immediateInvariant.
 true.
 %
@@ -118279,128 +118279,6 @@ _symbolDictionaryNames
 	^ super _symbolDictionaryNames , #(#'SampleSymbolDict'  #'RowanSample2' #'RowanSample2_SD')
 %
 
-!		Instance methods for 'RwRowanSample2Test'
-
-category: 'tests'
-method: RwRowanSample2Test
-testRemoveSubclassOfClassWithNewVersion
-
-	"#RowanSample2 project
-		## branch migration_1
-			class structure:
-				RowanSample2
-				    instVarNames: #( ivar0)
-				 RowanSample2A
-				    instVarNames: #( a ivar1)
-				  RowanSample2C
-				    instVarNames: #( c ivar2)
-				  RowanSample2D
-				    instVarNames: #( d ivar2)
-				 RowanSample2B
-				    instVarNames: #( b ivar1)
-				  RowanSample2E
-				    instVarNames: #( e ivar2)
-				  RowanSample2F
-				    instVarNames: #( f ivar2)
-		## branch migration_0
-			class structure:
-				RowanSample2
-"
-
-	"load migration_1, then load migration_0 (new version of RowanSample2 and all subclasses deleted"
-
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSample2Class 
-		subclasses projectDef |
-	projectName := 'RowanSample2'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample2SpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := self _testRowanProjectsSandbox.
-
-	(gitRootPath / projectName) ensureDeleteAll.
-
-	projectDef := (self 
-		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: gitRootPath
-		registerProject: false) asDefinition.
-
-	projectDef defaultSymbolDictName: self _symbolDictionaryName.
-
-	gitRootPath := projectDef repositoryRoot.
-
-	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: self _migration_1_branchName.
-	projectDef read; load.
-
-	rowanSample2Class := Rowan globalNamed: 'RowanSample2'.
-	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
-	self assert: subclasses size = 6.
-
-	gitTool gitcheckoutIn: gitRootPath with: self _migration_0_branchName.
-
-	(Rowan projectNamed: projectName) asDefinition
-		defaultSymbolDictName: self _symbolDictionaryName;
-		read;
-		load: RwGsInstanceMigrator aggressiveMigration.
-
-	rowanSample2Class := Rowan globalNamed: 'RowanSample2'.
-	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
-	self assert: subclasses size = 0
-%
-
-category: 'tests'
-method: RwRowanSample2Test
-testSampleDefaultConfiguration
-
-	"SampleDefault configuration is an instance of RwProjectConfiguration"
-
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x projectDef |
-	projectName := 'RowanSample2'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample2SpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := self _testRowanProjectsSandbox.
-
-	(gitRootPath / projectName) ensureDeleteAll.
-
-	projectDef := (self 
-		_cloneProjectFromSpecUrl: specUrlString 
-		projectsHome: gitRootPath
-		registerProject: false) asDefinition.
-
-	projectDef defaultSymbolDictName: self _symbolDictionaryName.
-
-	gitRootPath := projectDef repositoryRoot.
-
-	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with:  self _migration_0_branchName.
-	projectDef read; load.
-
-	project := RwProject newNamed: projectName.
-	self assert: (x := project packageNames) = #('RowanSample2-Core')
-%
-
-category: 'private'
-method: RwRowanSample2Test
-_migrationClassMap
-
-	^ {#(#'RowanSample2' #(#'ivar0')).
-	#(#'RowanSample2A' #(#'ivar0' #'a' #'ivar1')).
-	#(#'RowanSample2C' #(#'ivar0' #'a' #'ivar1' #'c' #'ivar2')).
-	#(#'RowanSample2D' #(#'ivar0' #'a' #'ivar1' #'d' #'ivar2')).
-	#(#'RowanSample2B' #(#'ivar0' #'b' #'ivar1')).
-	#(#'RowanSample2E' #(#'ivar0' #'b' #'ivar1' #'e' #'ivar2')).
-	#(#'RowanSample2F' #(#'ivar0' #'b' #'ivar1' #'f' #'ivar2'))}
-%
-
 ! Class implementation for 'RwRowanSample4Test'
 
 !		Class methods for 'RwRowanSample4Test'
@@ -118422,120 +118300,6 @@ setUp
 
 	super setUp.
 	Transcript cr; show: self printString
-%
-
-category: 'tests'
-method: RwRowanSample4Test
-testCreateProjectDefinition
-
-	| specUrlString projectTools rowanProject gitRootPath projectName projectDefinition x |
-	projectName := 'RowanSample4'.
-	Rowan
-		projectNamed: projectName 
-		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
-	Rowan 
-		projectNamed: projectName 
-		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample4SpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := self _testRowanProjectsSandbox.
-
-	(gitRootPath / projectName) ensureDeleteAll.
-
-	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectDefinition := self _cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
-
-	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
-
-	self assert: (x := projectDefinition packageNames asArray sort) = #('RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests' 'RowanSample4-Tests') sort.
-
-	Rowan 
-		projectNamed: projectName 
-			ifPresent: [:project | self assert: false description: 'The project ', projectName printString. ' is not expected to be loaded.' ].
-%
-
-category: 'tests'
-method: RwRowanSample4Test
-testCreateProjectFromUrl
-
-	| specUrlString projectTools projectName |
-	projectName := 'RowanSample4'.
-	Rowan
-		projectNamed: projectName 
-		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
-	Rowan 
-		projectNamed: projectName 
-		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
-
-	specUrlString := self _rowanSample4SpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	self _createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName.
-
-	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
-
-	projectTools load loadProjectNamed: projectName.
-
-	Rowan 
-		projectNamed: projectName 
-			ifPresent: [:project | "noop" ]
-			ifAbsent: [ self assert: false description: 'expected project ', projectName printString, ' to be loaded' ].
-%
-
-category: 'tests'
-method: RwRowanSample4Test
-testIssue14
-
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project 
-		x repoRootPath theClass constraint |
-	projectName := 'RowanSample4'.
-	Rowan
-		projectNamed: projectName 
-		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
-	Rowan 
-		projectNamed: projectName 
-		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := self _testRowanProjectsSandbox.
-
-	(gitRootPath / projectName) ensureDeleteAll.
-
-	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
-
-	repoRootPath := (Rowan projectNamed: projectName) repositoryRootPath asFileReference.
-
-	gitTool := projectTools git.
-	gitTool gitcheckoutIn: repoRootPath with: 'issue_231_0'.
-
-	projectTools load
-		loadProjectNamed: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-	project := RwProject newNamed: projectName.
-	self
-		assert:
-			(x := project packageNames asArray sort)
-				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort.
-
-	self assert: (x := project loadedGroupNames asArray) = #('tests').
-	self assert: (x := project loadedConfigurationNames asArray) = #('Load').
-
-	theClass := Rowan globalNamed: 'RowanSample4'.
-	self assert: (x := theClass _constraintOn: #instvar1) = Integer.
-	self assert: (x := theClass _constraintOn: #instvar2) = Array.
-	self assert: (x := theClass _constraintOn: #instvar3) = Boolean.
-	self assert: (x := theClass _constraintOn: #instvar4) = Array.
-
-	theClass := Rowan globalNamed: 'RowanSample4IdentityBag'.
-	constraint := theClass _varyingConstraint.
-	self assert: constraint = String.
 %
 
 category: 'tests'
@@ -132629,18 +132393,6 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 					"empty or nil comments need to compare equal in GemStone"
 					^ (propertyValue == nil or: [ propertyValue isEmpty ])
 						and: [ baseValue == nil or: [ baseValue isEmpty ] ] ] ].
-
-false ifTrue: [
-	"RwRowanSample9Test>>testIssue_495_2 fails if we ignore gs_SymbolDictionary class property changes ..."
- 	propertyKey = 'gs_SymbolDictionary'
-		ifTrue: [ 
-			propertyValue = baseValue
-				ifTrue: [ ^ true ]
-				ifFalse: [ 
-					"if one or the other is nil, then count it as equal"
-					^ propertyValue == nil or: [ baseValue == nil ] ] ].
-].
-
 	^ super
 		_compareProperty: propertyKey
 		propertyVaue: propertyValue
