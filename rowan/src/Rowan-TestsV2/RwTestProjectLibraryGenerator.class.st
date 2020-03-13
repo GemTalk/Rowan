@@ -45,6 +45,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0034: commitComment;
 	genSpec_0035: commitComment;
 	genSpec_0036: commitComment;
+	genSpec_0037: commitComment;
 	yourself
 "
 Class {
@@ -2126,7 +2127,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0032: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0033: resolvedProject [
-	"Start with  spec_0011, update class definition to match RowanSample1 branch issue_345 - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2"
+	"Start with  spec_0011, update class definition to match RowanSample1 branch issue_345, i.e., add constraints to a class - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2"
 
 	"https://github.com/GemTalk/Rowan/issues/573"
 
@@ -2247,6 +2248,56 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0036: resolvedProject [
 				do: [ :sel | 
 					classDef removeInstanceMethod: sel ifAbsent: [  ].
 					classDef removeInstanceMethod: (sel , ':') asSymbol ifAbsent: [  ] ] ].
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0037: resolvedProject [
+	"Start with spec_0002, add constraints to RowanSample9Class1 and RowanSample9IdentityKeyValueDictionary, plus tests to validate the constraints"
+
+	| packageName1 packageName2 packageName3 packageName4 packageName5 className1 className2 className3 className4 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 :=  projectName , 'IdentityKeyValueDictionary'.
+	className3 := projectName , 'TestCase'.
+	className4 := projectName , 'GemStoneTestCase'.
+
+	((resolvedProject packageNamed: packageName1)
+		classDefinitionNamed:className1)
+		instVarNames: #( 'instvar3' 'instvar1' 'instvar2' 'instvar4');
+		 gs_constraints: { {'instvar1' . 'Integer'} . {'instvar2' . 'Array'} . {'instvar3' . 'Boolean'} . {'instvar4' . 'Array'} };
+		yourself.
+
+	((resolvedProject packageNamed: packageName3)
+		classDefinitionNamed: className2)
+		 gs_constraints: { 'String' };
+		yourself.
+
+	((resolvedProject packageNamed: packageName4)
+		classDefinitionNamed: className4)
+		addInstanceMethod: 'testConstraints
+	| x |
+	self assert: (x := ', className2, ' _varyingConstraint) = String.
+'
+			protocol: 'tests';
+		yourself.
+
+	((resolvedProject packageNamed: packageName5)
+		classDefinitionNamed: className3)
+		addInstanceMethod: 'testConstraints
+	| x |
+	self assert: (x := ', className1, ' _constraintOn: #instvar1) = Integer.
+	self assert: (x := ', className1, ' _constraintOn: #instvar2) = Array.
+	self assert: (x := ', className1, ' _constraintOn: #instvar3) = Boolean.
+	self assert: (x := ', className1, ' _constraintOn: #instvar4) = Array.
+'
+			protocol: 'tests';
+		yourself.
 
 	^ resolvedProject
 ]
@@ -4347,7 +4398,7 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
-	"Start with  spec_0011, update class definition to match RowanSample1 branch issue_345 - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2"
+	"Start with  spec_0011, update class definition to match RowanSample1 branch issue_345, i.e., add constraints to a class - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2"
 
 	"https://github.com/GemTalk/Rowan/issues/345; https://github.com/GemTalk/Rowan/issues/514"
 
@@ -4363,7 +4414,7 @@ RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
 		_createCard: postfix
 		specName: specName
 		title:
-			'Start with  spec_0011, update class definition to match RowanSample1 branch issue_345 - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2.'
+			'Start with  spec_0011, update class definition to match RowanSample1 branch issue_345, i.e., add constraints to a class - porting RwRowanSample1Test>>testIssue345 and RwRowanSample1Test>>testIssue514 to v2'
 		index: 33
 		derivedFrom: derivedFrom
 		comment: '')
@@ -4521,6 +4572,51 @@ RwTestProjectLibraryGenerator >> genSpec_0036: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0036: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0037: commitMessage [
+	"Start with spec_0002, add constraints to RowanSample9Class1 and RowanSample9IdentityKeyValueDictionary, plus tests to validate the constraints"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0037'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0002'.
+	title := 'Start with spec_0002, add constraints to RowanSample9Class1 and RowanSample9IdentityKeyValueDictionary, plus tests to validate the constraints'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 37
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(14);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0037: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

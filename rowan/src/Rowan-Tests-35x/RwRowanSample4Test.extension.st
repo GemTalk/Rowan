@@ -102,6 +102,117 @@ RwRowanSample4Test >> _rowanSample4SpecificationUrl [
 ]
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> testCreateProjectDefinition [
+
+	| specUrlString projectTools rowanProject gitRootPath projectName projectDefinition x |
+	projectName := 'RowanSample4'.
+	Rowan
+		projectNamed: projectName 
+		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+	Rowan 
+		projectNamed: projectName 
+		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
+	projectDefinition := self _cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
+
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
+	self assert: (x := projectDefinition packageNames asArray sort) = #('RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests' 'RowanSample4-Tests') sort.
+
+	Rowan 
+		projectNamed: projectName 
+			ifPresent: [:project | self assert: false description: 'The project ', projectName printString. ' is not expected to be loaded.' ].
+]
+
+{ #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> testCreateProjectFromUrl [
+
+	| specUrlString projectTools projectName |
+	projectName := 'RowanSample4'.
+	Rowan
+		projectNamed: projectName 
+		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+	Rowan 
+		projectNamed: projectName 
+		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
+
+	specUrlString := self _rowanSample4SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	self _createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName.
+
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
+
+	projectTools load loadProjectNamed: projectName.
+
+	Rowan 
+		projectNamed: projectName 
+			ifPresent: [:project | "noop" ]
+			ifAbsent: [ self assert: false description: 'expected project ', projectName printString, ' to be loaded' ].
+]
+
+{ #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> testIssue14 [
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project 
+		x repoRootPath theClass constraint |
+	projectName := 'RowanSample4'.
+	Rowan
+		projectNamed: projectName 
+		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+	Rowan 
+		projectNamed: projectName 
+		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := self _testRowanProjectsSandbox.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
+
+	repoRootPath := (Rowan projectNamed: projectName) repositoryRootPath asFileReference.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_231_0'.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	self
+		assert:
+			(x := project packageNames asArray sort)
+				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort.
+
+	self assert: (x := project loadedGroupNames asArray) = #('tests').
+	self assert: (x := project loadedConfigurationNames asArray) = #('Load').
+
+	theClass := Rowan globalNamed: 'RowanSample4'.
+	self assert: (x := theClass _constraintOn: #instvar1) = Integer.
+	self assert: (x := theClass _constraintOn: #instvar2) = Array.
+	self assert: (x := theClass _constraintOn: #instvar3) = Boolean.
+	self assert: (x := theClass _constraintOn: #instvar4) = Array.
+
+	theClass := Rowan globalNamed: 'RowanSample4IdentityBag'.
+	constraint := theClass _varyingConstraint.
+	self assert: constraint = String.
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 
 	"https://github.com/dalehenrich/Rowan/issues/185"
