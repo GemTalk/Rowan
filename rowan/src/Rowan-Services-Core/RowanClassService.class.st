@@ -482,7 +482,9 @@ RowanClassService >> initializeMethodHistoryFor: source [
   rowanMethodHistory := self userGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
-  selector := (Rowan platform parseSelectorFrom: source) asSymbol.
+  selector := [ (Rowan platform parseSelectorFrom: source) asSymbol ]
+    on: CompileWarning
+    do: [ :ex | ex resume ].
   selector = #'_____could_not_parse_selector_from_method_source_____'
     ifTrue: [ ^ self	"invalid source, continue and let save method fail" ]
     ifFalse: [ 
