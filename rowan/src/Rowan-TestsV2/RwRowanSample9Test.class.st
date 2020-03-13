@@ -1725,14 +1725,13 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 	loadedProjects := resolvedProject load.
 
 "validate"
+	class := Rowan globalNamed: className.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-
-	class := Rowan globalNamed: className.
-	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
 ]
 
 { #category : 'issue 586' }
@@ -1781,14 +1780,14 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_2 [
 	loadedProjects := resolvedProject load.
 
 "validate"
+	class := Rowan globalNamed: className.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
+
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-
-	class := Rowan globalNamed: className.
-	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
 ]
 
 { #category : 'issue 586' }
@@ -1829,21 +1828,20 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName1.
 
-
 "load project using symbol dict  _sampleSymbolDictionaryName2"
 	resolvedProject := project asDefinition.
 	resolvedProject gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 forPackageNamed: packageName.
 	loadedProjects := resolvedProject load.
 
 "validate"
+	class := Rowan globalNamed: className.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
+
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-
-	class := Rowan globalNamed: className.
-	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
 ]
 
 { #category : 'issue 493' }
