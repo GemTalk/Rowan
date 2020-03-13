@@ -18,9 +18,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 				ifTrue: [ ex resume ].
 			theClass := Rowan globalNamed: theClassName.
 			theClass isBehavior
-				ifFalse: [ 
-					self halt.
-					ex pass ].
+				ifFalse: [ ex pass ].
 			theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
 			theLoadedProject
 				ifNil: [ 
