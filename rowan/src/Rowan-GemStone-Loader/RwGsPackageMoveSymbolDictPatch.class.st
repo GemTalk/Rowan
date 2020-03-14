@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'moving' }
-RwGsPackageMoveSymbolDictPatch >> movePackage: classesWithNewVersions [
+RwGsPackageMoveSymbolDictPatch >> movePackage: classesWithNewVersions movedClassesMap: movedClassesMap [
 	"Loader already makes sure that the package is created properly, but we do have to 
 		make sure that the old package is deleted from it's original location. Class extensions
 		have to be removed as well (https://github.com/dalehenrich/Rowan/issues/495)"
@@ -14,4 +14,5 @@ RwGsPackageMoveSymbolDictPatch >> movePackage: classesWithNewVersions [
 		movePackage: packageDefinition name
 		to: packageDefinition gs_symbolDictionary
 		classesWithNewVersions: classesWithNewVersions
+		movedClassesMap: movedClassesMap
 ]

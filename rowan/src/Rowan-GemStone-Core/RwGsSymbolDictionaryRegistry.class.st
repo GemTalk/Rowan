@@ -651,11 +651,12 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions [
+RwGsSymbolDictionaryRegistry >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions movedClassesMap: movedClassesMap [
 	^ self class registry_ImplementationClass
 		movePackage: packageName
 		to: symbolDictionaryName
 		classesWithNewVersions: classesWithNewVersions
+		movedClassesMap: movedClassesMap
 		instance: self
 ]
 

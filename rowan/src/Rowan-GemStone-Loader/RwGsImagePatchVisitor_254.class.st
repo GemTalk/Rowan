@@ -257,18 +257,32 @@ RwGsImagePatchVisitor_254 >> visitMethodsModification: aMethodsModification [
 
 { #category : 'visting' }
 RwGsImagePatchVisitor_254 >> visitPackageModification: aPackageModification [
-
-	| propertiesModification |
+	| propertiesModification beforePackage |
 	aPackageModification isAddition
 		ifTrue: [ self addAddedPackage: aPackageModification after ].
 	aPackageModification isDeletion
 		ifTrue: [ self addDeletedPackage: aPackageModification before ].
 	currentPackage := aPackageModification after.
+	beforePackage := aPackageModification before.
 	aPackageModification isModification
 		ifTrue: [ 
 			propertiesModification := aPackageModification propertiesModification.
-			propertiesModification isEmpty
-				ifFalse: [ patchSet addMovedPackage: currentPackage inProject: currentProject ] ].
+			(propertiesModification elementsModified includesKey: 'gs_SymbolDictionary')
+				ifTrue: [ 
+					currentPackage classDefinitions
+						keysAndValuesDo: [ :className :afterClassDef | 
+							beforePackage classDefinitions
+								at: className
+								ifPresent: [ :beforeClassDef | 
+									patchSet
+										addClassMove:
+											(RwClassMove
+												classBefore: beforeClassDef
+												classAfter: afterClassDef
+												packageBefore: beforePackage
+												packageAfter: currentPackage
+												projectBefore: currentProject
+												projectAfter: currentProject) ] ] ] ].
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
 

@@ -176,12 +176,8 @@ RwGsPatchSet_254 >> _classVersioningPatchClass [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> _createMovedClasses [
-
-	movedClasses do: [:movedClass | 
-		movedClassesMap 
-			at: movedClass classBefore name 
-			put: movedClass ].
-
+	movedClasses
+		do: [ :movedClass | movedClassesMap at: movedClass classBefore name put: movedClass ]
 ]
 
 { #category : 'private - applying' }
@@ -598,6 +594,7 @@ RwGsPatchSet_254 >> addMethodMove: aRwMethodMove [
 
 { #category : 'building' }
 RwGsPatchSet_254 >> addMovedPackage: packageDefinition inProject: aProjectDefinition [
+	"no longer used ... methinks"
 
 	currentProjectDefinition := aProjectDefinition.
 	movedPackages
@@ -605,7 +602,6 @@ RwGsPatchSet_254 >> addMovedPackage: packageDefinition inProject: aProjectDefini
 			((self _packageMovePatchClass for: packageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
-
 ]
 
 { #category : 'building' }
@@ -1169,8 +1165,8 @@ RwGsPatchSet_254 >> movedClassesMap [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> movePackages [
-
-	movedPackages do: [:each | each movePackage: classesWithNewVersions ]
+	movedPackages
+		do: [ :each | each movePackage: classesWithNewVersions movedClassesMap: movedClassesMap ]
 ]
 
 { #category : 'private - applying' }

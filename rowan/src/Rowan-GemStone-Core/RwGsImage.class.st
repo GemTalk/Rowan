@@ -535,7 +535,7 @@ RwGsImage class >> symbolDictNamed: symbolDictName ifAbsent: absentBlock [
 	"Search symbol list for a symbol dictionary with the given name"
 
 	| symbolDictNameSymbol |
-	symbolDictNameSymbol := symbolDictName asString.
+	symbolDictNameSymbol := symbolDictName asSymbol.
 	^ self symbolList
 		detect: [ :each | (each at: symbolDictNameSymbol ifAbsent: [ nil ]) == each ]
 		ifNone: absentBlock

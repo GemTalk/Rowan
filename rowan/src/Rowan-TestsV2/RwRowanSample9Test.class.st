@@ -1689,7 +1689,8 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 
 	"move RowanSample9Class from symbol dictionary RowanSample9_1 to _sampleSymbolDictionaryName2, changing project default symbol dictionary name"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x
+		symDict registry |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
 	projectName := loadSpec projectName.
@@ -1732,6 +1733,22 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+
+	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 1.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+
+	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName2.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 1.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
 ]
 
 { #category : 'issue 586' }
@@ -1742,7 +1759,8 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_2 [
 	"move RowanSample9Class from symbol dictionary RowanSample9_1 to _sampleSymbolDictionaryName2, changing project default symbol dictionary name
 		AND changing class version (load spec_0034)"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x 
+		symDict registry |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
 	projectName := loadSpec projectName.
@@ -1771,6 +1789,13 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_2 [
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName1.
 
+	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 2.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 2.
 
 "load project using symbol dict  _sampleSymbolDictionaryName2"
 	resolvedProject := project asDefinition.
@@ -1788,6 +1813,22 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_2 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+
+	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 0.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+
+	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName2.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 2.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 2.
 ]
 
 { #category : 'issue 586' }
@@ -1797,7 +1838,8 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 
 	"move RowanSample9Class from symbol dictionary RowanSample9_1 to _sampleSymbolDictionaryName2, changing PACKAGE default symbol dictionary name"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x packageName |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x 
+		packageName symDict registry |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
 	projectName := loadSpec projectName.
@@ -1842,6 +1884,22 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+
+	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 1.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+
+	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName2.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 1.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
 ]
 
 { #category : 'issue 493' }
