@@ -65,6 +65,12 @@ RwGsLoadedSymbolDictPackage >> loadedClassOrClassExtensionForClass: aClass ifAbs
 		ifAbsent: [ self loadedClassExtensionForClass: aClass ifAbsent: absentBlock ]
 ]
 
+{ #category : 'queries' }
+RwGsLoadedSymbolDictPackage >> packageSymbolDictionaryName [
+
+	^self propertyAt: 'gs_SymbolDictionary'
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictPackage >> propertiesForDefinition [
 
