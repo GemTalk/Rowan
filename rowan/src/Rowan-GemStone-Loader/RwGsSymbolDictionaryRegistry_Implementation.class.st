@@ -929,6 +929,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to
 					'package ' , packageName printString , ' unexpectedly found in '
 						, symbolDictionaryName printString ].
 	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
+	loadedPackage updatePropertiesFromRegistryFor: toRegistryInstance.
 	^ fromRegistryInstance
 ]
 
