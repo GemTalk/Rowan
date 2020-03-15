@@ -594,7 +594,6 @@ RwGsPatchSet_254 >> addMethodMove: aRwMethodMove [
 
 { #category : 'building' }
 RwGsPatchSet_254 >> addMovedPackage: packageDefinition inProject: aProjectDefinition [
-	"no longer used ... methinks"
 
 	currentProjectDefinition := aProjectDefinition.
 	movedPackages
