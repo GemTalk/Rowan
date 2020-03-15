@@ -282,10 +282,10 @@ RwGsImagePatchVisitor_254 >> visitPackageModification: aPackageModification [
 												packageBefore: beforePackage
 												packageAfter: currentPackage
 												projectBefore: currentProject
-												projectAfter: currentProject) ] ] ] ].
+												projectAfter: currentProject) ] ].
+					patchSet addMovedPackage: currentPackage inProject: currentProject ] ].
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
-
 ]
 
 { #category : 'visting' }

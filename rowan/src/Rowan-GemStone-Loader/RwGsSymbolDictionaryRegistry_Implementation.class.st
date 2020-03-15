@@ -902,7 +902,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions movedClassesMap: movedClassesMap instance: fromRegistryInstance [
+RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions instance: fromRegistryInstance [
 	| loadedPackage toRegistryInstance newClassVersionMap |
 	loadedPackage := fromRegistryInstance packageRegistry
 		removeKey: packageName
@@ -921,7 +921,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to
 			newClassVersionMap
 				at: loadedClassExtensions handle
 				ifPresent: [ :newClassVersion | loadedClassExtensions handle: newClassVersion ].
-			loadedClassExtensions moveTo: toRegistryInstance ].
+			loadedClassExtensions moveTo: toRegistryInstance.].
 	(toRegistryInstance packageRegistry at: packageName ifAbsent: [  ])
 		ifNotNil: [ :unexpectedLoadedPackage | 
 			toRegistryInstance

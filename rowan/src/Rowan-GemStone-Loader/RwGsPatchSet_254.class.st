@@ -1165,8 +1165,7 @@ RwGsPatchSet_254 >> movedClassesMap [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> movePackages [
-	movedPackages
-		do: [ :each | each movePackage: classesWithNewVersions movedClassesMap: movedClassesMap ]
+	movedPackages do: [ :each | each movePackage: classesWithNewVersions ]
 ]
 
 { #category : 'private - applying' }
