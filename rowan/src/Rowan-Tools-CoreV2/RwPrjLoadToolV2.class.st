@@ -68,7 +68,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			| componentsWithDoits |
 			componentsWithDoits := diff componentsWithDoits.
 			componentsWithDoits do: [ :component | component executePreloadDoit ].
-			Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
+			Rowan image applyModification_V2: diff instanceMigrator: instanceMigrator.
 			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
 	loadedProjects := Array new.
 	projectSetDefinitionToLoad definitions

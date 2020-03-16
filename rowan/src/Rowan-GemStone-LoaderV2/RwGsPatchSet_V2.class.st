@@ -145,7 +145,7 @@ RwGsPatchSet_V2 >> _classDeletionPatchClass [
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classExtensionPatchClass [
 
-	^ RwGsClassExtensionSymbolDictPatch
+	^ RwGsClassExtensionSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }

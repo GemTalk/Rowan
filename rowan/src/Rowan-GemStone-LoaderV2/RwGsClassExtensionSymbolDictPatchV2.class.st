@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwGsClassExtensionSymbolDictPatchV2',
-	#superclass : 'RwGsClassPatch',
+	#superclass : 'RwGsClassPatchV2',
 	#instVars : [
 		'patchClass'
 	],

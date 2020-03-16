@@ -14,9 +14,9 @@ SymbolDictionary >> _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbol
 	toBeOrdered := (self values select: [:each | each isBehavior ]) asIdentitySet.
 	order := OrderedCollection new.
 	processed := IdentitySet new.
-	[ (aClass := RwGsPatchSet_254 _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
+	[ (aClass := RwGsPatchSet_V2 _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
 		whileFalse: [ 
-			RwGsPatchSet_254
+			RwGsPatchSet_V2
 				_orderBySuperclass: aClass
 				from: toBeOrdered
 				into: order

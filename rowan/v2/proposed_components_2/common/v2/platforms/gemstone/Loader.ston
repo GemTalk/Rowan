@@ -1,8 +1,8 @@
 RwPlatformNestedProjectLoadComponentV2 {
 	#name : 'common/v2/platforms/gemstone/Loader',
-	#condition : [ 'gemstone' ],
-	#projectNames : [ ],
-	#componentNames : [ ],
+	#condition : [
+		'gemstone'
+	],
 	#packageNames : [
 		'Rowan-GemStone-LoaderV2'
 	],

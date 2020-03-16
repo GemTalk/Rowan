@@ -73,3 +73,20 @@ RwGsImage class >> applyModification_254: aProjectSetModification visitorClass: 
 	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
 
 ]
+
+{ #category : '*rowan-gemstone-loader-extensions' }
+RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator [
+	(self _shouldCloneRowanLoader: aProjectSetModification)
+		ifTrue: [ 
+			| visitorClass |
+			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor_V2.
+			self 
+				applyModification_254: aProjectSetModification 
+				visitorClass:visitorClass 
+				instanceMigrator: instanceMigrator ]
+		ifFalse: [ 
+			self 
+				applyModification_254: aProjectSetModification 
+				visitorClass: RwGsImagePatchVisitor_V2 
+				instanceMigrator: instanceMigrator ]
+]

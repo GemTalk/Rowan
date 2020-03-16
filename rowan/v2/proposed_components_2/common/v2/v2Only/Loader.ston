@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v2/v2Only/Loader',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/v2/v2Only/platforms/Loader'
+ ],
+	#packageNames : [ ],
+	#comment : ''
+}
