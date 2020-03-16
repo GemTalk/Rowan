@@ -63148,16 +63148,75 @@ loadPackageSetDefinition: packageSetDefinitionToLoad instanceMigrator: instanceM
 category: 'other'
 method: RwPkgAuditTool
 auditForPackage: loadedPackage
-"audit dirty packages"
-	|  res|
+	"audit dirty packages"
+
+	| res loadedPackageRegistry packageSymbolDictionaryName registrySymbolDictionaryName packageAuditDetail |
 	res := RwAuditReport for: loadedPackage.
-	"self _log: '===Auditing package ', loadedPackage name."
-	loadedPackage 
-				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
-					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl]]				
-				loadedClassExtensionsDo: [:aLoadedClass | (self auditLoadedClassExtension: aLoadedClass) 
-					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl] ] .
-	^res
+	packageAuditDetail := {}.
+	loadedPackageRegistry := Rowan image
+		loadedRegistryForPackageNamed: loadedPackage name
+		ifAbsent: [ 
+			packageAuditDetail
+				add:
+					(RwAuditDetail
+						for: loadedPackage
+						message:
+							'The loaded package ' , loadedPackage name printString
+								, ' is not found in a package registry') ].
+	packageSymbolDictionaryName := loadedPackage packageSymbolDictionaryName.
+	registrySymbolDictionaryName := loadedPackageRegistry _symbolDictionary name
+		asString.
+	registrySymbolDictionaryName = packageSymbolDictionaryName
+		ifFalse: [ 
+			packageAuditDetail
+				add:
+					(RwAuditDetail
+						for: loadedPackage
+						message:
+							'The loaded package ' , loadedPackage name printString
+								, ' is registered in the wrong symbol dictionary ('
+								, registrySymbolDictionaryName printString
+								, '). It is expected to be registered in '
+								, packageSymbolDictionaryName printString) ].
+	loadedPackage
+		loadedClassesDo: [ :aLoadedClass | 
+			| classSymbolDictName |
+			classSymbolDictName := aLoadedClass classSymbolDictionaryName.
+			classSymbolDictName = packageSymbolDictionaryName
+				ifFalse: [ 
+					packageAuditDetail
+						add:
+							(RwAuditDetail
+								for: loadedPackage
+								message:
+									'The loaded class symbol dictionary name ' , classSymbolDictName printString
+										, ' does not match the loaded package symbol dictionary name '
+										, packageSymbolDictionaryName printString) ].
+			(self auditLoadedClass: aLoadedClass)
+				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
+		loadedClassExtensionsDo: [ :aLoadedClass | 
+			| loadedClassExtensionRegistry classEtensionSymbolDictionaryName |
+			loadedClassExtensionRegistry := Rowan image
+				loadedRegistryForClassExtensionNamed: aLoadedClass name
+				ifAbsent: [  ].
+			classEtensionSymbolDictionaryName := loadedClassExtensionRegistry
+				_symbolDictionary name asString.
+			classEtensionSymbolDictionaryName = packageSymbolDictionaryName
+				ifFalse: [ 
+					packageAuditDetail
+						add:
+							(RwAuditDetail
+								for: loadedPackage
+								message:
+									'The loaded extenstion class symbol dictionary name '
+										, classEtensionSymbolDictionaryName printString
+										, ' does not match the loaded package symbol dictionary name '
+										, packageSymbolDictionaryName printString) ].
+			(self auditLoadedClassExtension: aLoadedClass)
+				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ].
+	packageAuditDetail
+		ifNotEmpty: [ :aColl | res at: loadedPackage name put: aColl ].
+	^ res
 %
 
 category: 'other'
@@ -70499,8 +70558,53 @@ loadedProjects
 
 category: 'querying'
 classmethod: RwGsImage
-loadedRegistryForPackageNamed:  aName
+loadedRegistryForClassExtensionNamed: className ifAbsent: absentBlock
+	"scan the symbol list for a RwLoadedClassExtension instance of the given name and return the registry"
 
+	| history class |
+	class := self objectNamed: className.
+	class ifNil: [ ^ absentBlock value ].
+	history := class classHistory.
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry classExtensionRegistry includesKey: history)
+						ifTrue: [ ^ registry ] ] ].
+	^ absentBlock value
+%
+
+category: 'querying'
+classmethod: RwGsImage
+loadedRegistryForClassNamed: className ifAbsent: absentBlock
+	"scan the symbol list for a RwLoadedClass instance of the given name and return the registry"
+
+	| history class |
+	class := self objectNamed: className.
+	class ifNil: [ ^ absentBlock value ].
+	history := class classHistory.
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry classRegistry includesKey: history)
+						ifTrue: [ ^ registry ] ] ].
+	^ absentBlock value
+%
+
+category: 'querying'
+classmethod: RwGsImage
+loadedRegistryForPackageNamed: aName
+	"scan the symbol list for a RwLoadedPackage instance of the given name and return the registry"
+
+	^ self
+		loadedRegistryForPackageNamed: aName
+		ifAbsent: [ self error: 'The package ' , aName printString , ' was not found' ]
+%
+
+category: 'querying'
+classmethod: RwGsImage
+loadedRegistryForPackageNamed: aName ifAbsent: absentBlock
 	"scan the symbol list for a RwLoadedPackage instance of the given name and return the registry"
 
 	self symbolList
@@ -70509,7 +70613,7 @@ loadedRegistryForPackageNamed:  aName
 				ifNotNil: [ :registry | 
 					(registry loadedPackageNamed: aName ifAbsent: [  ])
 						ifNotNil: [ :loadedPackage | ^ registry ] ] ].
-	^self error: 'The package ', aName printString, ' was not found'
+	^ absentBlock value
 %
 
 category: 'querying'
@@ -70673,7 +70777,7 @@ symbolDictNamed: symbolDictName ifAbsent: absentBlock
 	"Search symbol list for a symbol dictionary with the given name"
 
 	| symbolDictNameSymbol |
-	symbolDictNameSymbol := symbolDictName asString.
+	symbolDictNameSymbol := symbolDictName asSymbol.
 	^ self symbolList
 		detect: [ :each | (each at: symbolDictNameSymbol ifAbsent: [ nil ]) == each ]
 		ifNone: absentBlock
@@ -71092,18 +71196,33 @@ visitMethodsModification: aMethodsModification
 category: 'visting'
 method: RwGsImagePatchVisitor_254
 visitPackageModification: aPackageModification
-
-	| propertiesModification |
+	| propertiesModification beforePackage |
 	aPackageModification isAddition
 		ifTrue: [ self addAddedPackage: aPackageModification after ].
 	aPackageModification isDeletion
 		ifTrue: [ self addDeletedPackage: aPackageModification before ].
 	currentPackage := aPackageModification after.
+	beforePackage := aPackageModification before.
 	aPackageModification isModification
 		ifTrue: [ 
 			propertiesModification := aPackageModification propertiesModification.
-			propertiesModification isEmpty
-				ifFalse: [ patchSet addMovedPackage: currentPackage inProject: currentProject ] ].
+			(propertiesModification elementsModified includesKey: 'gs_SymbolDictionary')
+				ifTrue: [ 
+					currentPackage classDefinitions
+						keysAndValuesDo: [ :className :afterClassDef | 
+							beforePackage classDefinitions
+								at: className
+								ifPresent: [ :beforeClassDef | 
+									patchSet
+										addClassMove:
+											(RwClassMove
+												classBefore: beforeClassDef
+												classAfter: afterClassDef
+												packageBefore: beforePackage
+												packageAfter: currentPackage
+												projectBefore: currentProject
+												projectAfter: currentProject) ] ].
+					patchSet addMovedPackage: currentPackage inProject: currentProject ] ].
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
 %
@@ -74459,8 +74578,7 @@ movedClassesMap
 category: 'private - applying'
 method: RwGsPatchSet_254
 movePackages
-
-	movedPackages do: [:each | each movePackage: classesWithNewVersions ]
+	movedPackages do: [ :each | each movePackage: classesWithNewVersions ]
 %
 
 category: 'private - applying'
@@ -74780,11 +74898,8 @@ _classVersioningPatchClass
 category: 'private - applying'
 method: RwGsPatchSet_254
 _createMovedClasses
-
-	movedClasses do: [:movedClass | 
-		movedClassesMap 
-			at: movedClass classBefore name 
-			put: movedClass ].
+	movedClasses
+		do: [ :movedClass | movedClassesMap at: movedClass classBefore name put: movedClass ]
 %
 
 category: 'private - applying'
@@ -76168,7 +76283,7 @@ moveClassFor: classMove
 	theBehavior := theClass class.
 	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan image symbolDictNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newSymbolDictionary := Rowan image symbolDictNamed: (classMove classAfter gs_symbolDictionary) .
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
@@ -76274,6 +76389,7 @@ movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classe
 					'package ' , packageName printString , ' unexpectedly found in '
 						, symbolDictionaryName printString ].
 	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
+	loadedPackage updatePropertiesFromRegistryFor: toRegistryInstance.
 	^ fromRegistryInstance
 %
 
@@ -78161,6 +78277,19 @@ loadedClassOrClassExtensionForClass: aClass ifAbsent: absentBlock
 		ifAbsent: [ self loadedClassExtensionForClass: aClass ifAbsent: absentBlock ]
 %
 
+category: 'queries'
+method: RwGsLoadedSymbolDictPackage
+packageSymbolDictionaryName
+
+	^self propertyAt: 'gs_SymbolDictionary'
+%
+
+category: 'queries'
+method: RwGsLoadedSymbolDictPackage
+packageSymbolDictionaryName: symDictName
+	self propertyAt: 'gs_SymbolDictionary' put: symDictName asString
+%
+
 category: 'private'
 method: RwGsLoadedSymbolDictPackage
 propertiesForDefinition
@@ -78169,6 +78298,18 @@ propertiesForDefinition
 	props := super propertiesForDefinition.
 	props at:  'gs_SymbolDictionary' put: (Rowan image loadedRegistryForPackageNamed: self name) _symbolDictionary name asString.
 	^ props
+%
+
+category: 'private'
+method: RwGsLoadedSymbolDictPackage
+updatePropertiesFromRegistryFor: aSymbolDictionaryRegistry
+	"Update my properties from the symbol dictionary registry."
+
+	| newName oldName |
+	newName := aSymbolDictionaryRegistry _symbolDictionary name.
+	oldName := self propertyAt: 'gs_SymbolDictionary'.
+	oldName = newName
+		ifFalse: [ self packageSymbolDictionaryName: newName ]
 %
 
 ! Class implementation for 'RwLoadedProject'
@@ -133305,14 +133446,16 @@ name
 category: '*rowan-gemstone-definitions'
 method: RwPackageDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
-	propertyKey = 'gs_SymbolDictionary'
+false ifTrue: [
+"gs_SymbolDictionary is now explicitly set before load, so no longer special case for nil"
+ 	propertyKey = 'gs_SymbolDictionary'
 		ifTrue: [ 
 			propertyValue = baseValue
 				ifTrue: [ ^ true ]
 				ifFalse: [ 
 					"if one or the other is nil, then count it as equal"
 					^ propertyValue == nil or: [ baseValue == nil ] ] ].
-
+].
 	^ super
 		_compareProperty: propertyKey
 		propertyVaue: propertyValue
