@@ -34,8 +34,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2 >> deleteMethodNewClas
 	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
 		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'deleting' }
@@ -50,8 +49,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2 >> deleteMovedLoadedMe
 	self symbolDictionaryRegistry
 		deleteMovedLoadedMethod: methodDefinition selector
 		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'deleting' }
@@ -66,8 +64,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2 >> deleteMovedMethodNe
 	self symbolDictionaryRegistry
 		deleteMovedMethod: methodDefinition selector
 		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'deleting' }

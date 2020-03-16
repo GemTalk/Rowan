@@ -16,8 +16,7 @@ RwGsMethodDeletionSymbolDictPatchV2 >> deleteMethodNewClasses: createdClasses an
 	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
 		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'deleting' }
@@ -32,8 +31,7 @@ RwGsMethodDeletionSymbolDictPatchV2 >> deleteMovedLoadedMethodNewClasses: create
 	self symbolDictionaryRegistry
 		deleteMovedLoadedMethod: methodDefinition selector
 		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'deleting' }
@@ -48,8 +46,7 @@ RwGsMethodDeletionSymbolDictPatchV2 >> deleteMovedMethodNewClasses: createdClass
 	self symbolDictionaryRegistry
 		deleteMovedMethod: methodDefinition selector
 		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'deleting' }
@@ -60,8 +57,7 @@ RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClasses: created
 	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'initializers' }

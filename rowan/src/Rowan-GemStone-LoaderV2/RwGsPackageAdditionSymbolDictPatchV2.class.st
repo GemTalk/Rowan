@@ -10,7 +10,7 @@ RwGsPackageAdditionSymbolDictPatchV2 >> createLoadedPackage [
 	| loadedPackage loadedProject |
 	loadedPackage := self symbolDictionaryRegistry
 		createLoadedPackageFromDefinition: self packageDefinition
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 
 	projectDefinition ifNil: [ ^ self ].
 
@@ -22,5 +22,4 @@ RwGsPackageAdditionSymbolDictPatchV2 >> createLoadedPackage [
 					'expected a loaded project named ' , projectDefinition name printString ].
 
 	loadedProject addLoadedPackage: loadedPackage
-
 ]

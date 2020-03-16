@@ -11,7 +11,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-GemStone-Loader-Extensions-OnlyV2' : {
-						'symbolDictName' : 'RowanLoader'
+						'symbolDictName' : 'RowanKernel'
 					}
 				}
 			}

@@ -26,8 +26,7 @@ RwGsMethodPropertiesSymDictPatchV2 >> installPropertiesPatchNewClasses: createdC
 	self symbolDictionaryRegistry
 		moveCompiledMethod: oldCompiledMethod
 		toProtocol: self propertiesProtocolName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'initializers' }

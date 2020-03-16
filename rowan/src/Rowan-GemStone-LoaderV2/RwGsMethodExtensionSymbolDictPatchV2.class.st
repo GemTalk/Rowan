@@ -12,9 +12,8 @@ RwGsMethodExtensionSymbolDictPatchV2 >> installMethod [
 		for: behavior
 		protocol: self propertiesProtocolName
 		toPackageNamed: self packageName
-		 implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+		 implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 	selector := compiledMethod selector
-
 ]
 
 { #category : 'installing' }
@@ -53,6 +52,6 @@ RwGsMethodExtensionSymbolDictPatchV2 >> installMovedMethod: aMethodMove newClass
 		for: behavior
 		protocol: self propertiesProtocolName
 		toPackageNamed: aMethodMove packageAfter name
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 	selector := compiledMethod selector
 ]

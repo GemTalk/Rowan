@@ -72,5 +72,5 @@ RwGsClassConstraintsSymDictPatchV2 >> installPropertiesPatchFor: aPatchSet regis
 		ifFalse: [
 			"change the varying constraint"
 			[ existingClass _setVaryingConstraint: theVaryingConstraint] on: Deprecated do: [:ex | ex resume ] ].
-	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 ]

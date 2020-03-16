@@ -48,8 +48,7 @@ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> installMethod [
 		catDict: catDict
 		for: behavior
 		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 
 	selector := compiledMethod selector
-
 ]

@@ -27,7 +27,7 @@ RwGsClassAdditionSymbolDictPatchV2 >> installClassInSystem [
 		addClassAssociation: symbolAssociation
 		forClass: newClass
 		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 ]
 

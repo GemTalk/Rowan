@@ -197,8 +197,7 @@ RwGsClassVersioningSymbolDictPatchV2 >> installNewClassVersionInSystem [
 	"Install the new class association in the symbolAssociation for the class.
 	 Update the LoadedClass with properties for the new classversion."
 
-	self symbolDictionaryRegistry addNewClassVersionToAssociation: newClassVersion implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+	self symbolDictionaryRegistry addNewClassVersionToAssociation: newClassVersion implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'patching' }
@@ -212,7 +211,7 @@ RwGsClassVersioningSymbolDictPatchV2 >> moveNewClassVersionInSystem: aClassMove 
 		rowanSymbolDictionaryRegistry.
 
 	theRegistry addNewClassVersionToAssociation: newClassVersion 
-			implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+			implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'versioning' }

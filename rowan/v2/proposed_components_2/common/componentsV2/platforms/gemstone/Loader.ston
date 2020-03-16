@@ -4,6 +4,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gemstone'
 	],
 	#packageNames : [
+		'Rowan-GemStone-Kernel-Extensions',
 		'Rowan-GemStone-Loader',
 		'Rowan-GemStone-Loader-Extensions'
 	],
@@ -11,11 +12,14 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Kernel-Extensions' : {
+						'symbolDictName' : 'Globals'
+					},
 					'Rowan-GemStone-Loader' : {
 						'symbolDictName' : 'RowanLoader'
 					},
 					'Rowan-GemStone-Loader-Extensions' : {
-						'symbolDictName' : 'RowanLoader'
+						'symbolDictName' : 'RowanKernel'
 					}
 				}
 			}

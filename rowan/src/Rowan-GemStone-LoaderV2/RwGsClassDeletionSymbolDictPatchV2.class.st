@@ -24,8 +24,7 @@ RwGsClassDeletionSymbolDictPatchV2 >> addToNewClassesByName: aDictionary [
 { #category : 'deleting' }
 RwGsClassDeletionSymbolDictPatchV2 >> deleteClassFromSystem [
 
-	self symbolDictionaryRegistry deleteClassNamedFromPackage: self className implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+	self symbolDictionaryRegistry deleteClassNamedFromPackage: self className implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'accessing' }

@@ -125,21 +125,19 @@ RwGsPatchSet_V2 class >> new [
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classAdditionPatchClass [
 
-	^ RwGsClassAdditionSymbolDictPatch
+	^ RwGsClassAdditionSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classConstraintPatchClass [
 
-	^ RwGsClassConstraintsSymDictPatch
-
+	^ RwGsClassConstraintsSymDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classDeletionPatchClass [
 
-	^ RwGsClassDeletionSymbolDictPatch
-
+	^ RwGsClassDeletionSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
@@ -151,27 +149,25 @@ RwGsPatchSet_V2 >> _classExtensionPatchClass [
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classPropertiesPatchClass [
 
-	^ RwGsClassPropertiesSymDictPatch
+	^ RwGsClassPropertiesSymDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classSymbolDictionaryMovePatchClass [
 
-	^ RwGsClassSymbolDictionaryMoveSymDictPatch
-
+	^ RwGsClassSymbolDictionaryMoveSymDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classVariablePatchClass [
 
-	^ RwGsClassVariableChangeSymbolDictPatch 
+	^ RwGsClassVariableChangeSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classVersioningPatchClass [
 
-	^ RwGsClassVersioningSymbolDictPatch
-
+	^ RwGsClassVersioningSymbolDictPatchV2
 ]
 
 { #category : 'private - applying' }
@@ -194,13 +190,13 @@ RwGsPatchSet_V2 >> _currentProjectDefinition [
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _methodAdditionPatchClass [
 
-	^ RwGsMethodAdditionSymbolDictPatch
+	^ RwGsMethodAdditionSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _methodDeletionPatchClass [
 
-	^ RwGsMethodDeletionSymbolDictPatch
+	^ RwGsMethodDeletionSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
@@ -208,8 +204,8 @@ RwGsPatchSet_V2 >> _methodExtensionDeletionPatchClass: packageName [
 
 	^ (self _currentProjectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: packageName)
-			ifTrue: [ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch ]
-			ifFalse: [ RwGsMethodDeletionExtensionSymbolDictPatch ]
+			ifTrue: [ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2 ]
+			ifFalse: [ RwGsMethodDeletionExtensionSymbolDictPatchV2 ]
 ]
 
 { #category : 'private - patch class accessors' }
@@ -217,8 +213,8 @@ RwGsPatchSet_V2 >> _methodExtensionPatchClass: packageName [
 
 	^ (self _currentProjectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: packageName)
-			ifTrue: [ RwGsMethodExtensionSessionMethodSymbolDictPatch ]
-			ifFalse: [ RwGsMethodExtensionSymbolDictPatch ]
+			ifTrue: [ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 ]
+			ifFalse: [ RwGsMethodExtensionSymbolDictPatchV2 ]
 ]
 
 { #category : 'private - patch class accessors' }
@@ -226,8 +222,8 @@ RwGsPatchSet_V2 >> _methodExtensionPropertiesPatchClass:  packageName [
 
 	^ (self _currentProjectDefinition
 			useSessionMethodsForExtensionsForPackageNamed: packageName)
-				ifTrue: [ RwGsMethodExtensionSessionMethodPropertiesSymDictPatch ]
-				ifFalse: [ RwGsMethodPropertiesSymDictPatch ]
+				ifTrue: [ RwGsMethodExtensionSessionMethodPropertiesSymDictPatchV2 ]
+				ifFalse: [ RwGsMethodPropertiesSymDictPatchV2 ]
 ]
 
 { #category : 'private - patch class accessors' }
@@ -235,45 +231,44 @@ RwGsPatchSet_V2 >> _methodExtensionSourcePatchClass: packageName [
 
 	^ (self _currentProjectDefinition
 			useSessionMethodsForExtensionsForPackageNamed: packageName)
-				ifTrue: [ RwGsMethodExtensionSessionMethodSourceSymbolDictPatch ]
-				ifFalse: [ RwGsMethodSourceSymbolDictPatch ]
+				ifTrue: [ RwGsMethodExtensionSessionMethodSourceSymbolDictPatchV2 ]
+				ifFalse: [ RwGsMethodSourceSymbolDictPatchV2 ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _methodPropertiesPatchClass [
 
-	^ RwGsMethodPropertiesSymDictPatch
+	^ RwGsMethodPropertiesSymDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _methodSourcePatchClass [
 
-	^ RwGsMethodSourceSymbolDictPatch
+	^ RwGsMethodSourceSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _packageAdditionPatchClass [
 
-	^ RwGsPackageAdditionSymbolDictPatch
+	^ RwGsPackageAdditionSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _packageDeletionPatchClass [
 
-	^ RwGsPackageDeletionSymbolDictPatch
+	^ RwGsPackageDeletionSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _packageMovePatchClass [
 
-	^ RwGsPackageMoveSymbolDictPatch
-
+	^ RwGsPackageMoveSymbolDictPatchV2
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _projectAdditionPatchClass [
 
-	^ RwGsProjectAdditionPatch
+	^ RwGsProjectAdditionPatchV2
 ]
 
 { #category : 'building' }
@@ -401,7 +396,7 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 				inProject: aProjectDefinition ].
 	aRwClassModification isModification
 		ifTrue: [ 
-			RwGsClassVersioningPatch
+			RwGsClassVersioningPatchV2
 				addPatchedClassModification: aRwClassModification
 				inPackage: aPackage
 				inProject: aProjectDefinition
@@ -413,7 +408,6 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 						addPatchedClassConstraints: aRwClassModification after 
 						inPackage: aPackage 
 						inProject: aProjectDefinition ] ]
-
 ]
 
 { #category : 'building' }
@@ -577,12 +571,11 @@ RwGsPatchSet_V2 >> addForcingNewClassVersionModification: aRwClassModificationFo
 		ifTrue: [ self error: 'unexpected deletion for modification forcing new class version' ].
 	aRwClassModificationForcingNewClassVersion isModification
 		ifTrue: [ 
-			RwGsClassVersioningPatch
+			RwGsClassVersioningPatchV2
 				addPatchedClassModificationForcingNewClassVersion: aRwClassModificationForcingNewClassVersion
 				inPackage: aPackage
 				inProject: aProjectDefinition
 				toPatchSet: self ]
-
 ]
 
 { #category : 'building' }
@@ -1062,7 +1055,7 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 									registry
 										ensureExtensionClassNamed: classOrExtensionDef name
 										existsForPackageNamed: packageDef name
-										implementationClass: RwGsSymbolDictionaryRegistry_Implementation ].
+										implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ].
 							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
 						ifFalse: [ 
 							self error: 'internal error - no loaded class found for class ', 
