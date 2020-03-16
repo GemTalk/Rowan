@@ -29,25 +29,24 @@ RwGsImage class >> _shouldCloneRowanLoader: aProjectSetModification [
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
-RwGsImage class >> applyModification_254: aProjectSetModification instanceMigrator: instanceMigrator [
+RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator [
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
 			| visitorClass |
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor_254.
+			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor_V2.
 			self 
-				applyModification_254: aProjectSetModification 
+				applyModification_V2: aProjectSetModification 
 				visitorClass:visitorClass 
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
 			self 
-				applyModification_254: aProjectSetModification 
-				visitorClass: RwGsImagePatchVisitor_254 
+				applyModification_V2: aProjectSetModification 
+				visitorClass: RwGsImagePatchVisitor_V2 
 				instanceMigrator: instanceMigrator ]
-
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
-RwGsImage class >> applyModification_254: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator [
+RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator [
 
 	| visitor patchSet newClassVersionPatchSet |
 	visitor := visitorClass new.
@@ -71,22 +70,4 @@ RwGsImage class >> applyModification_254: aProjectSetModification visitorClass: 
 	visitor visit: aProjectSetModification.
 	newClassVersionPatchSet := visitor patchSet.
 	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
-
-]
-
-{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
-RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator [
-	(self _shouldCloneRowanLoader: aProjectSetModification)
-		ifTrue: [ 
-			| visitorClass |
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor_V2.
-			self 
-				applyModification_254: aProjectSetModification 
-				visitorClass:visitorClass 
-				instanceMigrator: instanceMigrator ]
-		ifFalse: [ 
-			self 
-				applyModification_254: aProjectSetModification 
-				visitorClass: RwGsImagePatchVisitor_V2 
-				instanceMigrator: instanceMigrator ]
 ]
