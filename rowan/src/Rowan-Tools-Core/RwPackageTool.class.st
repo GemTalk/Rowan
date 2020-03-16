@@ -10,12 +10,6 @@ RwPackageTool class >> adopt [
 ]
 
 { #category : 'commands' }
-RwPackageTool class >> audit [
-  ^ RwPkgAuditTool new
-
-]
-
-{ #category : 'commands' }
 RwPackageTool class >> create [
   ^ RwPkgCreateTool new
 ]
