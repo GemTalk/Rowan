@@ -1450,7 +1450,12 @@ RwRowanSample9Test >> testIssue345 [
 RwRowanSample9Test >> testIssue493_RowanSample2 [
 	"load spec_0035; fiddle symbol dictionary, load spec_0036"
 
+	"https://github.com/GemTalk/Rowan/issues/313"
+
 	"testIssue_587 is the same test without introducing class versions"
+
+	"the fix for this test will involve changing the code that was written to addresss issue #313;
+		which has been reopened"
 
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
