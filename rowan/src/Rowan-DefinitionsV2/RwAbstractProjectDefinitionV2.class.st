@@ -133,12 +133,11 @@ RwAbstractProjectDefinitionV2 >> removeComponentNamed: aComponentName [
 
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removePackage: aPackageDefinition [
-
 	| key |
 	key := aPackageDefinition key.
-	(packages includesKey: key) ifFalse: [self error: 'Package not present.'].
-	packages removeKey: key
-
+	(packages includesKey: key)
+		ifFalse: [ self error: 'Package not present.' ].
+	^ packages removeKey: key
 ]
 
 { #category : 'accessing' }

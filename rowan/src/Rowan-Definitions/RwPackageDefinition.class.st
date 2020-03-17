@@ -256,6 +256,25 @@ RwPackageDefinition >> removeClassNamed: className ifAbsent: absentBlock [
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> renameTo: newPackageName packageConvention: thePackageConvention [
+	self propertyAt: 'name' put: newPackageName.
+	thePackageConvention = 'Rowan'
+		ifTrue: [ ^ self ].
+	thePackageConvention = 'Monticello'
+		ifTrue: [ self error: 'not yet implemented' ].
+	thePackageConvention ~= 'RowanHybrid'
+		ifTrue: [ self error: 'unknown package convention' ].
+	self classDefinitions
+		valuesDo: [ :classDef | classDef category: newPackageName ].
+	self classExtensions
+		valuesDo: [ :classDef | 
+			classDef instanceMethodDefinitions
+				valuesDo: [ :methodDef | methodDef protocol: '*' , newPackageName asLowercase ].
+			classDef classMethodDefinitions
+				valuesDo: [ :methodDef | methodDef protocol: '*' , newPackageName asLowercase ] ]
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> updateClassDefinition: aClassDefinition [
 
 	self updateDefinition: aClassDefinition in: classDefinitions

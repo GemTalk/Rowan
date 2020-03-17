@@ -607,9 +607,17 @@ RwProjectDefinitionV2 >> load: instanceMigrator [
 
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
+	self
+		movePackageNamed: aPackageName
+		toComponentNamed: aComponentName
+		asPackageName: aPackageName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName asPackageName: newPackageName [
 	self components removePackageNamed: aPackageName.
 	self components
-		addPackageNamed: aPackageName
+		addPackageNamed: newPackageName
 		toComponentNamed: aComponentName
 ]
 
@@ -696,6 +704,16 @@ RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: com
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> renameComponentNamed: aComponentPath to: aComponentName [
 	^ self components renameComponentNamed: aComponentPath to: aComponentName
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> renamePackageNamed: packageName to: newPackageName [
+	| theComponent |
+	theComponent := self componentForPackageNamed: packageName.
+	self
+		movePackageNamed: packageName
+		toComponentNamed: theComponent name
+		asPackageName: newPackageName
 ]
 
 { #category : 'temporary compat' }

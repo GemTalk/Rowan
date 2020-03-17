@@ -843,6 +843,22 @@ RwResolvedProjectV2 >> renameComponentNamed: aComponentPath to: aComponentName [
 		to: aComponentName
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> renamePackageNamed: packageName to: newPackageName [
+	| thePackageDef theComponent |
+	theComponent := self componentForPackageNamed: packageName.
+	thePackageDef := self removePackageNamed: packageName.
+	thePackageDef
+		renameTo: newPackageName
+		packageConvention: self packageConvention.
+	self _projectDefinition _addPackage: thePackageDef.
+	self _projectDefinition
+		movePackageNamed: packageName
+		toComponentNamed: theComponent name
+		asPackageName: newPackageName.
+	^ thePackageDef
+]
+
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> repositoryCommitId [
 	^ self _projectRepository commitId
