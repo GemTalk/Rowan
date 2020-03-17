@@ -1185,6 +1185,54 @@ RwRowanSample9Test >> testIssue_571_1 [
 		expectedProjectNames: expectedProjectNames
 ]
 
+{ #category : 'issue 493' }
+RwRowanSample9Test >> testIssue_587 [
+	"supplement to testIssue493_RowanSample2"
+
+	"load spec_0035; fiddle symbol dictionary, load spec_0035"
+
+	"https://github.com/dalehenrich/Rowan/issues/587"
+
+	| loadSpec projectName resolvedProject loadedProjects project  audit |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0035' 
+		projectName: 'RowanSample9' 
+		projectAlias: 'RowanSample9_Issue_493' 
+		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"we want to clone the repository using the specified gitUrl"
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"Issue #587: use _symbolDictionaryName for initial load"
+	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_1"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+
+"checkout and load - migration_step_2 -- Issue #487: switch symbol dicts and use _symbolDictionaryName_1 for second load"
+	resolvedProject := project asDefinition.
+	resolvedProject 
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		checkout: 'spec_0035';
+		read;
+		load.
+
+	self assert: (audit := project audit) isEmpty.
+]
+
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue14 [
 	"ported from RowanSample4>>testIssue14, start with issue_231_0 (spec_0037)"
@@ -1400,6 +1448,9 @@ RwRowanSample9Test >> testIssue345 [
 
 { #category : 'issue 493' }
 RwRowanSample9Test >> testIssue493_RowanSample2 [
+	"load spec_0035; fiddle symbol dictionary, load spec_0036"
+
+	"testIssue_587 is the same test without introducing class versions"
 
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
@@ -1410,6 +1461,7 @@ RwRowanSample9Test >> testIssue493_RowanSample2 [
 	"using the migration tests set of definitions"
 
 	| loadSpec projectName resolvedProject loadedProjects project  audit |
+UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9' 
@@ -1440,6 +1492,7 @@ RwRowanSample9Test >> testIssue493_RowanSample2 [
 
 "checkout and load - migration_step_2 -- Issue #493: switch symbol dicts and use _symbolDictionaryName_1 for second load"
 	resolvedProject := project asDefinition.
+UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject 
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		checkout: 'spec_0036';
