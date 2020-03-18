@@ -172,6 +172,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	projectName := classOrMeta rowanProjectName.
 	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
+	self updateIsExtension.
 ]
 
 { #category : 'Accessing' }
@@ -1177,6 +1178,13 @@ RowanClassService >> updateDirtyState [
 		RowanCommandResult addResult: packageService].
 	projectService := RowanProjectService newNamed: self theClass rowanProjectName. 
 	RowanCommandResult addResult: projectService.
+]
+
+{ #category : 'initialization' }
+RowanClassService >> updateIsExtension [
+  isExtension := ((selectedPackageServices
+    collect: [ :packageService | packageService name ])
+    includes: definedPackageName) not
 ]
 
 { #category : 'updates' }
