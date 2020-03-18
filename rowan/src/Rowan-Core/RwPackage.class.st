@@ -39,3 +39,9 @@ RwPackage >> isDirty [
 
 	^ self _loadedPackage isDirty
 ]
+
+{ #category : 'testing' }
+RwPackage >> isEmpty [
+
+	^ self _loadedPackage isEmpty
+]
