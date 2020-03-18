@@ -54,6 +54,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0043: commitComment;
 	genSpec_0044: commitComment;
 	genSpec_0045: commitComment;
+	genSpec_0046: commitComment;
 	yourself
 "
 Class {
@@ -2560,6 +2561,53 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0045: resolvedProject [
 
 	component := resolvedProject componentNamed: componentName.
 	component comment: 'https://github.com/dalehenrich/Rowan/issues/284 ... benign commit, loaded commit id should be updated'.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0046: resolvedProject [
+	"Start with spec_0041, add inst vars to NewRowanSample9Class and rename the rest of the packages (add _295) to package name (issue_295_2)"
+
+	| componentName packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 className1 className2 className3 className4 className5 packageName7 |
+	componentName := 'Core'.
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	className1 := projectName , 'Class1'.
+	className2 :=  projectName , 'IdentityKeyValueDictionary'.
+	className3 := projectName , 'TestCase'.
+	className4 := projectName , 'GemStoneTestCase'.
+	className5 := 'New', projectName , 'Class'.
+
+	((resolvedProject packageNamed: packageName7)
+		classDefinitionNamed: className5)
+		instVarNames: #('ivar2' 'ivar3');
+		addInstanceMethod: 'ivar2 ^ ivar2' protocol: 'accessing';
+		addInstanceMethod: 'initialize ivar2 := 2' protocol: 'initialization';
+		addClassMethod: 'new ^ (self basicNew) initialize; yourself' protocol: 'instance creation';
+		yourself.
+
+	((resolvedProject packageNamed: packageName5)
+		classDefinitionNamed: className3)
+		addInstanceMethod: 'testInstVars_', className5, '
+	| x |
+	self assert: (x := ', className5, ' new ivar2) = 2.
+'
+			protocol: 'tests';
+		yourself.
+
+	resolvedProject 
+		renamePackageNamed: packageName1 to: packageName1, '_295';
+		renamePackageNamed: packageName2 to: packageName2, '_295';
+		renamePackageNamed: packageName3 to: packageName3, '_295';
+		renamePackageNamed: packageName4 to: packageName4, '_295';
+		renamePackageNamed: packageName5 to: packageName5, '_295';
+		yourself.
 
 	^ resolvedProject
 ]
@@ -5239,6 +5287,51 @@ RwTestProjectLibraryGenerator >> genSpec_0045: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0045: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0046: commitMessage [
+	"Start with spec_0041, add inst vars to NewRowanSample9Class and rename the rest of the packages (add _295) to package name (issue_295_2)"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0046'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0041'.
+	title := 'Start with spec_0041, add inst vars to NewRowanSample9Class and rename the rest of the packages (add _295) to package name (issue_295_2)'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 45
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(295);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0046: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

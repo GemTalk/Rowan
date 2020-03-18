@@ -2258,9 +2258,13 @@ RwRowanSample9Test >> testIssue284 [
 
 	"https://github.com/dalehenrich/Rowan/issues/284"
 
+	"issue_185_0 --> issue_284_0"
+
+	"spec_0038 --> spec_0045		:: benign commit"
+
 	"ensure that loaded commit id is changed after loading a benign commit (no definition changes)"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project loadedCommitId x projectDef y |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project loadedCommitId x |
 	loadSpec := self _loadSpecNamed: 'spec_0038'.
 
 	projectName := loadSpec projectName.
@@ -2272,6 +2276,10 @@ RwRowanSample9Test >> testIssue284 [
 
 "resolve project"
 	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests';
+		yourself.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -2286,13 +2294,15 @@ RwRowanSample9Test >> testIssue284 [
 	project := loadedProjects at: 1.
 	loadedCommitId := project loadedCommitId.
 
-	projectDef := project asDefinition.
-
 "benign load sequence - loaded commit id should change"
 	loadSpec := self _loadSpecNamed: 'spec_0045'.
 
 "resolve project"
 	resolvedProject := loadSpec resolve.
+
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		yourself.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -2303,9 +2313,78 @@ RwRowanSample9Test >> testIssue284 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self assert: (y := projectDef compareAgainstBase: (x := project asDefinition)) isEmpty.	"verify that definitions have not changed"
-
 	self deny: loadedCommitId = (x := project loadedCommitId). "loaded commit id SHOULD change"
+
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_newProject_1 [
+
+	"This test is also important for validating the fix to Issue #504:
+		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
+		At least confirm that it is NOT a good candidate, since this test is now failing
+		with the new error introduced in the partial for for Issue #504"
+
+	"https://github.com/dalehenrich/Rowan/issues/295"
+
+	"port of RowanSample4>>testIssue295_rename_package_move_newClassVersion_newProject_1"
+
+	"Error creating a new class version while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_1 --> issue_295_2	:: "
+
+	"spec_0040 --> spec_0046		:: "
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0040'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"benign load sequence - loaded commit id should change"
+	loadSpec := self _loadSpecNamed: 'spec_0046'.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone_295';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests_295';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"unload"
+	(loadedProjects at: 1) unload.
 ]
 
 { #category : 'tests' }
@@ -4313,6 +4392,33 @@ RwRowanSample9Test >> testSpec_0045 [
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0045'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0046 [
+	"spec_0046 should load cleanly"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0046'.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.
