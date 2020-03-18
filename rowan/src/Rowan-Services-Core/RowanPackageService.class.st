@@ -71,17 +71,6 @@ RowanPackageService >> classHierarchy: theClasses [
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> createPackage [
-	| projectService default |
-	default := RowanProjectService defaultProjectName.
-	projectService := RowanProjectService new.
-	projectService createProjectNamed: default.  
-	(Rowan packageNames includes: name) ifFalse:[
-		self browserTool addPackageNamed: name toProjectNamed: default].
-
-]
-
-{ #category : 'rowan' }
 RowanPackageService >> createPackageNamed: aString inProject: projName [
 	| projectService | 
 	name := aString.

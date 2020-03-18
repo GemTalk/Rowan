@@ -3160,17 +3160,6 @@ JadeServer >> sbAddNameOf: aClass [
 ]
 
 { #category : 'category' }
-JadeServer >> sbAddPackage: anOrderedCollection [
-	| string service |
-	string := anOrderedCollection removeFirst.
-	selections at: #package put: string.
-	service := Rowan packageServiceClass forPackageNamed: string.
-	service createPackage.
-	self systemBrowserUpdate
-
-]
-
-{ #category : 'category' }
 JadeServer >> sbAddRepository: list [
 
 	| description repository packages |
