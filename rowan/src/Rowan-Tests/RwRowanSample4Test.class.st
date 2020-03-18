@@ -28,50 +28,6 @@ RwRowanSample4Test >> setUp [
 ]
 
 { #category : 'tests' }
-RwRowanSample4Test >> testIssue284 [
-
-	"https://github.com/dalehenrich/Rowan/issues/284"
-
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project repoRootPath loadedCommitId |
-
-	projectName := 'RowanSample4'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := self _testRowanProjectsSandbox.
-
-	(gitRootPath / projectName) ensureDeleteAll.
-
-	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
-
-	project := Rowan projectNamed: projectName.
-	repoRootPath := project repositoryRootPath asFileReference.
-
-	gitTool := projectTools git.
-	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_0'.				"starting point of test"
-
-	projectTools load
-		loadProjectNamed: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-	loadedCommitId := project loadedCommitId.
-	self assert: loadedCommitId = '0f7683b'.
-
-	gitTool gitcheckoutIn: repoRootPath with: 'issue_284_0'.				"README commit"
-
-	projectTools load
-		loadProjectNamed: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-	loadedCommitId := project loadedCommitId.
-	self assert: loadedCommitId = '322983e'
-]
-
-{ #category : 'tests' }
 RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProject_1 [
 
 	"This test is also important for validating the fix to Issue #504:

@@ -53,6 +53,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0042: commitComment;
 	genSpec_0043: commitComment;
 	genSpec_0044: commitComment;
+	genSpec_0045: commitComment;
 	yourself
 "
 Class {
@@ -2534,6 +2535,31 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0044: resolvedProject [
 	className5 := 'New', projectName , 'Class'.
 
 	resolvedProject renamePackageNamed: packageName6 to: packageName7.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0045: resolvedProject [
+	"Start with spec_0038, change a comment in the component (benign commit)"
+
+	| componentName packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 className1 className2 className3 className4 className5 component |
+	componentName := 'Core'.
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+	className3 := projectName , 'TestCase'.
+	className4 := projectName , 'GemStoneTestCase'.
+	className5 := 'New' , projectName , 'Class'.
+
+	component := resolvedProject componentNamed: componentName.
+	component comment: 'https://github.com/dalehenrich/Rowan/issues/284 ... benign commit, loaded commit id should be updated'.
 
 	^ resolvedProject
 ]
@@ -5168,6 +5194,51 @@ RwTestProjectLibraryGenerator >> genSpec_0044: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0044: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0045: commitMessage [
+	"Start with spec_0038, change a comment in the component (benign commit)"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0045'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0038'.
+	title := 'Start with spec_0038, change a comment in the component (benign commit)'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 45
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(284);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0045: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

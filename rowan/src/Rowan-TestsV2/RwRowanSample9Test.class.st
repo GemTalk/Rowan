@@ -2137,6 +2137,178 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue230 [
+
+	"This test is also important for validating the fix to Issue #504:
+		https://github.com/GemTalk/Rowan/issues/504#issuecomment-530599164
+		At least confirm that it is NOT a good candidate, since this test is now failing
+		with the new error introduced in the partial for for Issue #504"
+	"https://github.com/dalehenrich/Rowan/issues/230"
+
+	"new class version for class being loaded in after adopt --- initial RowanSample9Class1 class created with an instance variable that's not present in spec_0002, 
+		so we get new version when class is loaded from disk"
+
+	"ported from RowanSample4>>testIssue208_adopt_load"
+
+	"based on RowanSample9>>testIssue208_adopt_load"
+
+	| primerProjectName projectName symDictName1 symDictName2 symDict theClass instanceMethod classMethod symbolList resolvedProject 
+		primerPackageName1 primerPackageName2 loadedPrimerProject componentName loadSpec primerResolvedProject audit className class newClass |
+
+	primerProjectName := 'PrimerSample9'.
+	symDictName1 := self _symbolDictionaryName1.
+	symDictName2 := self _symbolDictionaryName2.
+	primerPackageName1 := primerProjectName, '-', symDictName1.
+	primerPackageName2 := primerProjectName, '-', symDictName2.
+	projectName := 'RowanSample9'.
+	symbolList := Rowan image symbolList.
+	componentName := 'Core'.
+	className := 'RowanSample9Class1'.
+
+	{ primerProjectName. projectName} 
+		do: [:pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+					ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+
+	"Create classes in a couple of symbol dictionaries"
+	symDict := Rowan image newOrExistingSymbolDictionaryNamed: symDictName1.
+	theClass := Object subclass: className
+		instVarNames: #('xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().	"new class version will e created after load of spec_0002"
+	instanceMethod := theClass
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	symDict := Rowan image newOrExistingSymbolDictionaryNamed: symDictName2.
+	theClass := IdentityKeyValueDictionary
+		subclass: 'RowanSample9IdentityKeyValueDictionary'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+	instanceMethod := theClass
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+	classMethod := theClass class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	"Create and load the primer project ... with two packages (one for each symbol dictionary) into which the classes will be adopted"
+	primerResolvedProject := RwResolvedProjectV2 new
+		projectName: primerProjectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		yourself.
+
+	primerResolvedProject
+		addNewComponentNamed: componentName;
+		addPackageNamed: primerPackageName1 toComponentNamed: componentName;
+		addPackageNamed: primerPackageName2  toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: symDictName1 forPackageNamed: primerPackageName1;
+		gemstoneSetSymbolDictName: symDictName2 forPackageNamed: primerPackageName2;
+		yourself.
+
+	primerResolvedProject resolve; load.
+
+	"Adopt the classes into the primer project"
+	Rowan packageTools adopt
+		adoptSymbolDictionaryNamed: symDictName1 intoPackageNamed: primerPackageName1;
+		adoptSymbolDictionaryNamed: symDictName2 intoPackageNamed: primerPackageName2.
+
+	"load the RowanSample4 project from disk - overly the correct project structure over the primer project classes"
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+	resolvedProject := loadSpec resolveStrict.
+
+class := Rowan globalNamed: className.
+	resolvedProject load.
+newClass := Rowan globalNamed: className.
+
+"validate that we got a new class version"
+	self assert: class ~~ newClass.
+
+"validate that the primer project packages are empty"
+	loadedPrimerProject := Rowan projectNamed: primerProjectName.
+	loadedPrimerProject packages 
+		do: [:loadedPackage |
+			self assert: loadedPackage isEmpty ].
+
+	self assert: loadedPrimerProject isDirty.
+	self deny: (Rowan projectNamed: projectName) isDirty.
+
+	self assert: (audit := loadedPrimerProject audit) isEmpty.
+	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue284 [
+
+	"https://github.com/dalehenrich/Rowan/issues/284"
+
+	"ensure that loaded commit id is changed after loading a benign commit (no definition changes)"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project loadedCommitId x projectDef y |
+	loadSpec := self _loadSpecNamed: 'spec_0038'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"get project and record load commit id"
+	project := loadedProjects at: 1.
+	loadedCommitId := project loadedCommitId.
+
+	projectDef := project asDefinition.
+
+"benign load sequence - loaded commit id should change"
+	loadSpec := self _loadSpecNamed: 'spec_0045'.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (y := projectDef compareAgainstBase: (x := project asDefinition)) isEmpty.	"verify that definitions have not changed"
+
+	self deny: loadedCommitId = (x := project loadedCommitId). "loaded commit id SHOULD change"
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue345 [
 
 	"ported from RwRowanSample1Test>>testIssue345"
@@ -4114,6 +4286,33 @@ RwRowanSample9Test >> testSpec_0044 [
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0044'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0045 [
+	"spec_0045 should load cleanly"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0045'.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.
