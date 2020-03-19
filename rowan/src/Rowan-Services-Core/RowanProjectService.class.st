@@ -275,6 +275,17 @@ RowanProjectService >> packageServices [
 
 ]
 
+{ #category : 'client commands' }
+RowanProjectService >> performGitCommand: gitCommand with: argsString [
+  | project |
+  project := RwProject newNamed: name.
+  Rowan gitTools
+    performGitCommand: gitCommand
+    in: project repositoryRootPath
+    with: argsString.
+  RowanCommandResult addResult: self
+]
+
 { #category : 'printing' }
 RowanProjectService >> printOn: aStream [
 
