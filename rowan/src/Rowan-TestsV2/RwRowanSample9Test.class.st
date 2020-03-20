@@ -2531,6 +2531,74 @@ RwRowanSample9Test >> testIssue304 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue305 [
+
+	"https://github.com/dalehenrich/Rowan/issues/305"
+
+	"load spec_0049, then remove tests attribute and reload"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project x packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 className6 y |
+	loadSpec := self _loadSpecNamed: 'spec_0049'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	packageName1 := projectName , '-' , 'Core', '_295'.
+	packageName2 := projectName , '-' , 'Extensions', '_295'.
+	packageName3 := projectName , '-' , 'GemStone', '_295'.
+	packageName4 := projectName , '-' , 'GemStone-Tests', '_295'.
+	packageName5 := projectName , '-' , 'Tests', '_295'.
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	packageName8 := projectName , '-' , 'Tests-RenamedPackage'.
+	className6 := 'New', projectName , 'Subclass'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5 . packageName7 . packageName8 } sort).
+	self assert: (x := Rowan globalNamed: className6) notNil.	
+
+"resolve project"
+	loadSpec customConditionalAttributes:  { }. "unload several packages: 'RowanSample9-GemStone-Tests_295',
+		'RowanSample9-Tests_295', 'RowanSample9-Tests-RenamedPackage' 'RowanSample9-RenamedPackage' "
+	resolvedProject := loadSpec resolve.
+
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 } sort).
+	self assert: (x := Rowan globalNamed: className6) isNil.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue345 [
 
 	"ported from RwRowanSample1Test>>testIssue345"

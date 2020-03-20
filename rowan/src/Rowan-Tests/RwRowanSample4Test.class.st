@@ -28,45 +28,6 @@ RwRowanSample4Test >> setUp [
 ]
 
 { #category : 'tests' }
-RwRowanSample4Test >> testIssue305 [
-
-	"https://github.com/dalehenrich/Rowan/issues/305"
-
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project repoRootPath |
-
-	projectName := 'RowanSample4'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	specUrlString := self _rowanSample4LoadSpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := self _testRowanProjectsSandbox.
-
-	(gitRootPath / projectName) ensureDeleteAll.
-
-	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
-
-	project := Rowan projectNamed: projectName.
-	repoRootPath := project repositoryRootPath asFileReference.
-
-	projectTools load
-		loadProjectNamed: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
-
-	gitTool := projectTools git.
-	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.				"useful spec --- no tests group"
-
-	self 
-		_loadProjectFromSpecUrl: (self _rowanSample4_coreSpecificationUrl: repoRootPath)
-		repoRootPath: repoRootPath.
-
-	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
-]
-
-{ #category : 'tests' }
 RwRowanSample4Test >> testIssue460_1 [
 
 	"https://github.com/dalehenrich/Rowan/issues/260"
