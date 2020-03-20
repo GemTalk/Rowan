@@ -2674,6 +2674,258 @@ RwRowanSample9Test >> testIssue345 [
 	self assert: registry methodRegistry size = 0.
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue460_0 [
+
+	"confirm that normal load sequence can be executed without errors"
+
+	"https://github.com/dalehenrich/Rowan/issues/260"
+
+	"Error creating a new class version of a superclass while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_6 --> issue_295_5	:: "
+	"spec_0050 --> spec_0048		:: "
+
+	| projectName projectNames loadSpec loadedProjects resolvedProject packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 x y className6 oldClass6 class6 ar className1 class1 className2 class2 className5 class5 oldClass5 |
+	loadSpec := self _loadSpecNamed: 'spec_0050'.
+
+	projectName := 'RowanSample9'.
+	projectNames := {projectName . projectName, '_295'}.
+
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	packageName8 := projectName , '-' , 'Tests-RenamedPackage'.
+	className1 := projectName , 'Class1'.
+	className2 :=  projectName , 'IdentityKeyValueDictionary'.
+	className5 := 'New', projectName , 'Class'.
+	className6 := 'New', projectName , 'Subclass'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	projectNames := { projectName }.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5 . packageName6 } sort).
+	self assert: (class1 := Rowan globalNamed: className1) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName.
+	self assert: (class2 := Rowan globalNamed: className2) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class2.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2.
+	self assert: (oldClass5 := Rowan globalNamed: className5) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: oldClass5.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2.
+	self assert: (oldClass6 := Rowan globalNamed: className6) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: oldClass6.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2.
+
+"trigger bug ... load spec_0048"
+	loadSpec := self _loadSpecNamed: 'spec_0048'.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName3;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName4 forPackageNamed: projectName , '-' , 'GemStone_295';
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName4 forPackageNamed: projectName , '-' , 'GemStone-Tests_295';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	packageName1 := projectName , '-' , 'Core', '_295'.
+	packageName2 := projectName , '-' , 'Extensions', '_295'.
+	packageName3 := projectName , '-' , 'GemStone', '_295'.
+	packageName4 := projectName , '-' , 'GemStone-Tests', '_295'.
+	packageName5 := projectName , '-' , 'Tests', '_295'.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5 . packageName7 . packageName8 } sort).
+	self assert: (class1 := Rowan globalNamed: className1) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class1.
+	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName3.
+	self assert: (class2 := Rowan globalNamed: className2) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class2.
+	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName4.
+	self assert: (class5 := Rowan globalNamed: className5) notNil.	
+	self assert: oldClass5 ~~ class5.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class5.
+	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName3.
+	self assert: (class6 := Rowan globalNamed: className6) notNil.	
+	self assert: oldClass6 ~~ class6.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class6.
+	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName3.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue460_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/260"
+
+	"Error creating a new class version of a superclass while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_6 --> issue_295_5	:: "
+	"spec_0050 --> spec_0048		:: "
+
+	| projectName projectNames loadSpec loadedProjects resolvedProject packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 x y className6 oldClass6 class6 ar className1 class1 className2 class2 className5 class5 oldClass5 projectName2 resolvedProject2 project oldResolvedProject projectSetDefinition |
+	loadSpec := self _loadSpecNamed: 'spec_0050'.
+
+	projectName := 'RowanSample9'.
+	projectName2 := projectName, '_295'.
+	projectNames := {projectName . projectName2}.
+
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	packageName8 := projectName , '-' , 'Tests-RenamedPackage'.
+	className1 := projectName , 'Class1'.
+	className2 :=  projectName , 'IdentityKeyValueDictionary'.
+	className5 := 'New', projectName , 'Class'.
+	className6 := 'New', projectName , 'Subclass'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	projectNames := { projectName }.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5 . packageName6 } sort).
+	self assert: (class1 := Rowan globalNamed: className1) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName.
+	self assert: (class2 := Rowan globalNamed: className2) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class2.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2.
+	self assert: (oldClass5 := Rowan globalNamed: className5) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: oldClass5.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2.
+	self assert: (oldClass6 := Rowan globalNamed: className6) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: oldClass6.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2.
+
+"trigger bug ... load spec_0048"
+	loadSpec := self _loadSpecNamed: 'spec_0048'.
+
+"resolve project for spec_0048"
+	projectNames := {projectName . projectName2}.
+
+	loadSpec
+		projectName: projectName2;
+		projectAlias: projectName;
+		yourself.
+	resolvedProject := loadSpec resolveStrict.
+
+"need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
+
+	projectSetDefinition := resolvedProject readProjectSet.
+	resolvedProject2 := projectSetDefinition projectNamed: projectName2.
+	resolvedProject2
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName3;
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName4 forPackageNamed: projectName , '-' , 'GemStone_295';
+		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName4 forPackageNamed: projectName , '-' , 'GemStone-Tests_295';
+		yourself.
+
+	self assert: (resolvedProject2 projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
+	oldResolvedProject := project asDefinition.
+	projectSetDefinition addProject: oldResolvedProject.
+
+	oldResolvedProject packages do: [:pkgDefinition |
+	    pkgDefinition classDefinitions do: [:classDefinition |
+	        pkgDefinition removeClassDefinition: classDefinition ].
+	    pkgDefinition classExtensions do: [:classExtension |
+        	pkgDefinition removeClassExtensionDefinition: classExtension ]].
+
+"load project set"
+	loadedProjects := Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	self assert: (Rowan projectNamed: projectName) isDirty.
+	self deny: (Rowan projectNamed: projectName2) isDirty.
+	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
+	self deny: (Rowan projectNamed: projectName) isDirty.
+
+"validate"
+	self
+		_standard_validate: resolvedProject2
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	packageName1 := projectName , '-' , 'Core', '_295'.
+	packageName2 := projectName , '-' , 'Extensions', '_295'.
+	packageName3 := projectName , '-' , 'GemStone', '_295'.
+	packageName4 := projectName , '-' , 'GemStone-Tests', '_295'.
+	packageName5 := projectName , '-' , 'Tests', '_295'.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5 . packageName7 . packageName8 } sort).
+	self assert: (class1 := Rowan globalNamed: className1) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class1.
+	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName3.
+	self assert: (class2 := Rowan globalNamed: className2) notNil.	
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class2.
+	self assert: (ar first at: 1) name = (x := self _sampleSymbolDictionaryName4).
+	self assert: (class5 := Rowan globalNamed: className5) notNil.	
+	self assert: oldClass5 ~~ class5.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class5.
+	self assert: (ar first at: 1) name = (x := self _sampleSymbolDictionaryName3).
+	self assert: (class6 := Rowan globalNamed: className6) notNil.	
+	self assert: oldClass6 ~~ class6.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class6.
+	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName3.
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testIssue493_RowanSample2 [
 	"load spec_0035; fiddle symbol dictionary, load spec_0036"
@@ -4804,6 +5056,33 @@ RwRowanSample9Test >> testSpec_0049 [
 
 	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5  } sort).
 	self deny: (x := Rowan globalNamed: className6) notNil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0050 [
+	"spec_0050 should load cleanly ... both specs"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0050'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
 ]
 
 { #category : 'tests' }

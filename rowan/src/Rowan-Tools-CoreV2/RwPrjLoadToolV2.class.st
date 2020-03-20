@@ -132,10 +132,13 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 
 { #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName [
-	| projectSet |
+	| projectSet  res |
 	projectSet := Rowan projectTools readV2
 		readProjectSetForProjectNamed: projectName.
-	^ self loadProjectSetDefinition: projectSet
+	res := self loadProjectSetDefinition: projectSet.
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSet.
+	^ res
 ]
 
 { #category : 'load project by name' }
@@ -152,11 +155,14 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: cu
 
 { #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
-	| projectSet |
+	| projectSet res |
 	projectSet := Rowan projectTools readV2
 		readProjectSetForProjectNamed: projectName
 		platformConditionalAttributes: platformConditionalAttributes.
-	^ self loadProjectSetDefinition: projectSet
+	res := self loadProjectSetDefinition: projectSet.
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSet.
+	^ res
 ]
 
 { #category : 'load project definitions' }
@@ -178,4 +184,15 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrat
 		instanceMigrator: instanceMigrator 
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new
+]
+
+{ #category : 'utilities' }
+RwPrjLoadToolV2 >> markProjectSetNotDirty: projectSetDefinition [
+	"This method should only be used when the projectSetDefinitions have been read from disk - mark them not dirty. Not dirty means that the loaded things match the code on disk."
+
+	projectSetDefinition deriveLoadedThings
+		do: [ :loadedProject | 
+			loadedProject markNotDirty.
+			loadedProject loadedPackages
+				valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ]
 ]
