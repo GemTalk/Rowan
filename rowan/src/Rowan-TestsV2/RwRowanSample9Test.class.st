@@ -2456,6 +2456,67 @@ RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue300 [
+
+	"https://github.com/dalehenrich/Rowan/issues/300"
+
+	"regression test for bug ... mixed symbolic link and absolute path referencing same git repository"
+
+	| loadSpec projectName resolvedProject loadedProjects projectsHome projectsHome_symLink symLinkName commandLine |
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	projectName := loadSpec projectName.
+
+	{ projectName } do: [:projName |
+		(Rowan image loadedProjectNamed: projName ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"prepare directories"
+
+	projectsHome :=  self _testRowanProjectsSandbox / 'issue_300_dir'.
+	projectsHome ensureDeleteAll.
+
+"resolve project"
+	loadSpec projectsHome: projectsHome.
+	resolvedProject := loadSpec resolve.
+"load project"
+	loadedProjects := resolvedProject load.
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	self assert: (projectsHome / projectName) exists.
+
+	self assert: (Rowan projectNamed: projectName) currentBranchName = 'spec_0002'.
+
+"create symbolic link..."
+	self assert: (projectsHome / projectName) exists.
+
+	projectsHome_symLink  := self _testRowanProjectsSandbox / 'rowan_issue_300'.
+	projectsHome_symLink ensureDeleteAll.
+
+	symLinkName := 'issue_300_symLink'.
+	commandLine := 'set -e;  cd ' , projectsHome pathString, '; mkdir ', projectsHome_symLink pathString, '; ln -s ', projectsHome pathString , ' ', projectsHome_symLink pathString, '/', symLinkName.
+	Rowan gitTools performOnServer: commandLine.
+
+	self assert: (projectsHome_symLink / symLinkName / projectName ) exists.
+
+"...and now resolve project using symbolic link"
+	loadSpec 
+		projectsHome: projectsHome_symLink / symLinkName;
+		yourself.
+
+	resolvedProject := loadSpec resolve.
+"load project"
+	loadedProjects := resolvedProject load.
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	self assert: (projectsHome_symLink / symLinkName / projectName ) exists.
+
+	self assert: (Rowan projectNamed: projectName) currentBranchName = 'spec_0002'.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue304 [
 
 	"https://github.com/dalehenrich/Rowan/issues/304"
@@ -2924,6 +2985,107 @@ RwRowanSample9Test >> testIssue460_1 [
 	self assert: oldClass6 ~~ class6.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class6.
 	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName3.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue490_rename_package_move_newClassVersion_newProject_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/490"
+
+	"extension package that should have been emptied when loading a new project that is taking over management of the classes and axtensions methods"
+
+	"issue_295_1 --> issue_295_2	:: "
+	"spec_0040 --> spec_0046		:: issue_295_1 has a couple more ivs than spec_0040, but otherwise the same"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project |
+	loadSpec := self _loadSpecNamed: 'spec_0040'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"get project"
+	project := loadedProjects at: 1.
+	
+"resolve project"
+	loadSpec := self _loadSpecNamed: 'spec_0046'.
+
+	resolvedProject := loadSpec resolveStrict.
+
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone_295';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests_295';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue493 [
+
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0051'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project using Core component"
+	resolvedProject readProjectComponentNames: {'Core'}.
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"load project using Issue_493 component"
+	resolvedProject readProjectComponentNames: {'Issue_493'}.
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
 ]
 
 { #category : 'issue 493' }
@@ -5064,6 +5226,33 @@ RwRowanSample9Test >> testSpec_0050 [
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0050'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0051 [
+	"spec_0051 should load cleanly ... both specs"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0051'.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.

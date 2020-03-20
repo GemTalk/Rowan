@@ -59,6 +59,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0048: commitComment;
 	genSpec_0049: commitComment;
 	genSpec_0050: commitComment;
+	genSpec_0051: commitComment;
 	yourself
 "
 Class {
@@ -2782,6 +2783,36 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0050: resolvedProject [
 
 	resolvedProject loadSpecification
 		customConditionalAttributes:  { 'tests' };
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0051: resolvedProject [
+	"Start with spec_0002; add a component that includes tests as part of core attributes (issue_493)"
+
+	| packageName1 packageName2 packageName3 packageName4 packageName5 componentName1 componentName2 component1 component2 testComponentName testComponent |
+	componentName1 := 'Core'.
+	componentName2 := 'Issue_493'.
+	testComponentName := 'tests/Tests'.
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+
+	component1 := resolvedProject componentNamed: componentName1.
+	component2 := resolvedProject addNewComponentNamed: componentName2.
+	testComponent := resolvedProject componentNamed: testComponentName.
+
+	component2
+		addPackageNames: component1 packageNames, testComponent packageNames;
+		comment: 'Single component that includes all of the packages';
+		yourself.
+
+	resolvedProject loadSpecification
+		componentNames: { componentName2 };
 		yourself.
 
 	^ resolvedProject
@@ -5687,6 +5718,51 @@ RwTestProjectLibraryGenerator >> genSpec_0050: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0050: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0051: commitMessage [
+	"Start with spec_0002; add a component that includes tests as part of core attributes (issue_493)"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0051'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0002'.
+	title := 'Start with spec_0002; add a component that includes tests as part of core attributes (issue_493)'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 51
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(493);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0051: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
