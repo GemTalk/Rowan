@@ -7,7 +7,7 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 
 	"Add extension method to an unpackaged class"
 
-	| projectName  packageName projectDefinition projectSetDefinition audit testClass |
+	| projectName  packageName resolvedProject projectSetDefinition audit testClass componentName |
 
 	projectName := 'Issue263_A'.
 	packageName := 'Issue263_A-Extension'.
@@ -18,17 +18,22 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName} toComponentNamed: componentName;
 		yourself.
 
-	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectUnknownDefinitionSourceValue).
+	resolvedProject resolve.
+
+	self assert: (resolvedProject projectDefinitionSourceProperty = RwLoadedProject _projectUnknownDefinitionSourceValue).
 
 "load"
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
+	projectSetDefinition addDefinition: resolvedProject.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	testClass := self _testClass.
@@ -44,7 +49,7 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 
 "load -- effectively unload extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
+	projectSetDefinition addDefinition: resolvedProject.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
@@ -61,7 +66,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 
 	"move method from packaged category to another packaged category (different package) (class is unpackaged)"
 
-	| projectName  packageName1 packageName2 projectDefinition projectSetDefinition audit testClass symDict registry |
+	| projectName  packageName1 packageName2 resolvedProject projectSetDefinition audit testClass symDict registry componentName |
 
 	projectName := 'Issue364'.
 	packageName1 := 'Issue364-Extension-1'.
@@ -73,16 +78,20 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
 		yourself.
+
+	resolvedProject resolve.
 
 "load"
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
+	projectSetDefinition addDefinition: resolvedProject.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	testClass := self _testClass.
@@ -121,7 +130,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 
 "load -- effectively unload extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
+	projectSetDefinition addDefinition: resolvedProject.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
@@ -146,7 +155,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 
 	"move method from extension category to packaged category (class is packaged)"
 
-	| projectName  packageName1 packageName2 projectDefinition projectSetDefinition audit testClass symDict registry |
+	| projectName  packageName1 packageName2 projectDefinition projectSetDefinition audit testClass symDict registry componentName |
 
 	projectName := 'Issue364'.
 	packageName1 := 'Issue364-Core-1'.
@@ -158,11 +167,14 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "load"
@@ -239,7 +251,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 
 	"move method from packaged category to unpackaged category (class is unpackaged)"
 
-	| projectName  packageName1 packageName2 projectDefinition projectSetDefinition audit testClass symDict registry |
+	| projectName  packageName1 packageName2 projectDefinition projectSetDefinition audit testClass symDict registry componentName |
 
 	projectName := 'Issue364'.
 	packageName1 := 'Issue364-Extension-1'.
@@ -251,11 +263,14 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "load"
@@ -325,7 +340,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 
 	"move method from unpackaged category to packaged category (class is unpackaged)"
 
-	| projectName  packageName1 projectDefinition projectSetDefinition audit testClass symDict registry |
+	| projectName  packageName1 projectDefinition projectSetDefinition audit testClass symDict registry componentName |
 
 	projectName := 'Issue364'.
 	packageName1 := 'Issue364-Extension-1'.
@@ -336,10 +351,14 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1} toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "load"
@@ -413,7 +432,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 
 	"move method from unpackaged category to category in another unpackaged category (class is unpackaged)"
 
-	| projectName  packageName1 projectDefinition projectSetDefinition audit testClass symDict registry |
+	| projectName  packageName1 projectDefinition projectSetDefinition audit testClass symDict registry componentName |
 
 	projectName := 'Issue364'.
 	packageName1 := 'Issue364-Extension-1'.
@@ -424,10 +443,14 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := ((Rowan globalNamed: 'RwProjectDefinition')
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	projectDefinition := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName1} toComponentNamed: componentName;
+		resolve;
 		yourself.
 
 "load"
