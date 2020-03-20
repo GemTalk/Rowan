@@ -287,6 +287,17 @@ RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
 ]
 
 { #category : 'accessing' }
+RwClassDefinition >> moveToPackageNamed: newPackageName packageConvention: thePackageConvention [
+	thePackageConvention = 'Rowan'
+		ifTrue: [ ^ self ].
+	thePackageConvention = 'Monticello'
+		ifTrue: [ self error: 'not yet implemented' ].
+	thePackageConvention ~= 'RowanHybrid'
+		ifTrue: [ self error: 'unknown package convention' ].
+	self category: newPackageName
+]
+
+{ #category : 'accessing' }
 RwClassDefinition >> shebang [
 
 	^ self propertyAt: 'shebang' ifAbsent: []

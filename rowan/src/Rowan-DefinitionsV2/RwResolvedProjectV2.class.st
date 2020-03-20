@@ -402,6 +402,7 @@ RwResolvedProjectV2 >> diskUrl: anUrlString [
 { #category : 'actions' }
 RwResolvedProjectV2 >> export [
 	Rowan projectTools writeV2 writeResolvedProject: self
+
 ]
 
 { #category : 'exporting' }
@@ -415,11 +416,6 @@ RwResolvedProjectV2 >> exportComponents [
 		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"
 			self componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
-]
-
-{ #category : 'exporting' }
-RwResolvedProjectV2 >> exportLoadSpecification [
-	self _loadSpecification exportTo: self specsRoot
 ]
 
 { #category : 'exporting' }
@@ -589,10 +585,35 @@ RwResolvedProjectV2 >> loadProjectSet: instanceMigrator [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> moveClassNamed: aClassName toPackageNamed: aPackageName [
+	| thePackage |
+	thePackage := self
+		packageNamed: aPackageName
+		ifAbsent: [ self error: 'No package found name ' , aPackageName printString ].
+	(self packageForClassNamed: aClassName)
+		ifNil: [ self error: 'No class definition found for ' , aClassName printString ]
+		ifNotNil: [ :package | 
+			| classDef |
+			classDef := package removeClassNamed: aClassName.
+			classDef
+				moveToPackageNamed: aPackageName
+				packageConvention: self packageConvention.
+			thePackage addClassDefinition: classDef ]
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
 	^ self _projectDefinition
 		movePackageNamed: aPackageName
 		toComponentNamed: aComponentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName asPackageName: newPackageName [
+	^ self _projectDefinition
+		movePackageNamed: aPackageName
+		toComponentNamed: aComponentName
+		asPackageName: newPackageName
 ]
 
 { #category : '-- loader compat --' }
@@ -606,6 +627,13 @@ RwResolvedProjectV2 >> name [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packageConvention [
 	^ self _projectSpecification packageConvention
+]
+
+{ #category : 'querying' }
+RwResolvedProjectV2 >> packageForClassNamed: className [
+	"Answer nil if no class found"
+
+	^ self _projectDefinition packageForClassNamed: className
 ]
 
 { #category : 'project definition' }

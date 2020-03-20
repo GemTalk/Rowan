@@ -55,6 +55,8 @@ RwTestProjectLibraryGenerator new
 	genSpec_0044: commitComment;
 	genSpec_0045: commitComment;
 	genSpec_0046: commitComment;
+	genSpec_0047: commitComment;
+	genSpec_0048: commitComment;
 	yourself
 "
 Class {
@@ -2608,6 +2610,149 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0046: resolvedProject [
 		renamePackageNamed: packageName4 to: packageName4, '_295';
 		renamePackageNamed: packageName5 to: packageName5, '_295';
 		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0047: resolvedProject [
+	"Start with spec_0040, move RowanSample9IdentityKeyValueDictionary to -Core package; add subclass of NewRowanSample9Class in New package  (issue_295_4)"
+
+	| componentName packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 className1 className2 className3 className4 className5 className6 |
+	componentName := 'Core'.
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'GemStone'.
+	packageName4 := projectName , '-' , 'GemStone-Tests'.
+	packageName5 := projectName , '-' , 'Tests'.
+	packageName6 := projectName , '-' , 'NewPackage'.
+	className1 := projectName , 'Class1'.
+	className2 :=  projectName , 'IdentityKeyValueDictionary'.
+	className3 := projectName , 'TestCase'.
+	className4 := projectName , 'GemStoneTestCase'.
+	className5 := 'New', projectName , 'Class'.
+	className6 := 'New', projectName , 'Subclass'.
+
+	resolvedProject moveClassNamed: className2 toPackageNamed: packageName1.
+
+	(resolvedProject packageNamed: packageName6)
+		addClassNamed: className6
+		super: className5
+		instvars: #()
+		category: packageName6
+		comment: 'I am a new subclass';
+		yourself.
+
+	((resolvedProject packageNamed: packageName5)
+		classDefinitionNamed: className3)
+		addInstanceMethod: 'testInstVars_', className6, '
+	| x |
+	self assert: (x := ', className6, ' new ivar1) = 1.
+'
+			protocol: 'tests';
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0048: resolvedProject [
+	"Start with spec_0046; add subclass of NewRowanSample9Class in Renamed package (issue_295_5); for issue #304, make Renamed package conditional on renamed attribute"
+
+	| componentName1 componentName2 componentName3 packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 className1 className2 className3 className4 className5 packageName7 className6 packageName8 loadSpec componentPath |
+	componentName1 := 'Core'.
+	componentName2 := 'Rename'.
+	componentName3 := 'Tests'.
+	packageName1 := projectName , '-' , 'Core', '_295'.
+	packageName2 := projectName , '-' , 'Extensions', '_295'.
+	packageName3 := projectName , '-' , 'GemStone', '_295'.
+	packageName4 := projectName , '-' , 'GemStone-Tests', '_295'.
+	packageName5 := projectName , '-' , 'Tests', '_295'.
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	packageName8 := projectName , '-' , 'Tests-RenamedPackage'.
+	className1 := projectName , 'Class1'.
+	className2 :=  projectName , 'IdentityKeyValueDictionary'.
+	className3 := projectName , 'TestCase'.
+	className4 := projectName , 'GemStoneTestCase'.
+	className5 := 'New', projectName , 'Class'.
+	className6 := 'New', projectName , 'Subclass'.
+
+"Issue #304 support: add conditional component structure"
+		(resolvedProject componentNamed: componentName1)
+		removePackageNamed: packageName7;
+		yourself.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName2 
+			toComponentNamed: componentName1 
+			condition: {'renamed'}.
+	(resolvedProject componentNamed: componentPath)
+		addPackageNames: {packageName7}.
+
+	componentPath := resolvedProject
+		addNewComponentNamed: componentName3 
+			toComponentNamed: componentName1 
+			condition: {'renamed' . 'tests'}.
+	(resolvedProject componentNamed: componentPath)
+		addPackageNames: {packageName8}.
+
+"update load spec"
+	loadSpec := resolvedProject loadSpecification.
+	loadSpec customConditionalAttributes:  loadSpec customConditionalAttributes,  { 'renamed'}.
+
+"add definitions"
+	(resolvedProject packageNamed: packageName7)
+		addClassNamed: className6
+		super: className5
+		instvars: #()
+		category: packageName7
+		comment: 'I am a new subclass';
+		yourself.
+
+	((resolvedProject addPackageNamed: packageName8)
+		addClassExtensionNamed: className3)
+		addInstanceMethod: 'testInstVars_', className6, '
+	| x |
+	self assert: (x := ', className6, ' new ivar2) = 2.
+'
+			protocol: '*', packageName8 asLowercase;
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0049: resolvedProject [
+	"Start with spec_0048; create an additional load spec without the renamed atribute"
+
+	| componentName1 componentName2 componentName3 packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 className1 className2 className3 className4 className5 packageName7 className6 packageName8 loadSpec |
+	componentName1 := 'Core'.
+	componentName2 := 'Rename'.
+	componentName3 := 'Tests'.
+	packageName1 := projectName , '-' , 'Core', '_295'.
+	packageName2 := projectName , '-' , 'Extensions', '_295'.
+	packageName3 := projectName , '-' , 'GemStone', '_295'.
+	packageName4 := projectName , '-' , 'GemStone-Tests', '_295'.
+	packageName5 := projectName , '-' , 'Tests', '_295'.
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	packageName8 := projectName , '-' , 'Tests-RenamedPackage'.
+	className1 := projectName , 'Class1'.
+	className2 :=  projectName , 'IdentityKeyValueDictionary'.
+	className3 := projectName , 'TestCase'.
+	className4 := projectName , 'GemStoneTestCase'.
+	className5 := 'New', projectName , 'Class'.
+	className6 := 'New', projectName , 'Subclass'.
+
+	loadSpec := resolvedProject loadSpecification copy .
+
+	loadSpec 
+		specName: 'Issue_304';
+		customConditionalAttributes:  { 'tests' };
+		revision: 'spec_0048';
+		comment: 'variant of load spec without renamed attribute (Issue #304)';
+		export.
 
 	^ resolvedProject
 ]
@@ -5314,7 +5459,7 @@ RwTestProjectLibraryGenerator >> genSpec_0046: commitMessage [
 		_createCard: postfix
 		specName: specName
 		title: title
-		index: 45
+		index: 46
 		derivedFrom: derivedFrom
 		comment: '')
 		rowanIssues: #(295);
@@ -5332,6 +5477,141 @@ RwTestProjectLibraryGenerator >> genSpec_0046: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0046: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0047: commitMessage [
+	"Start with spec_0040, move RowanSample9IdentityKeyValueDictionary to -Core package; add subclass of NewRowanSample9Class in New package  (issue_295_4)"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0047'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0040'.
+	title := 'Start with spec_0040, move RowanSample9IdentityKeyValueDictionary to -Core package; add subclass of NewRowanSample9Class in New package (issue_295_4)'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 47
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(295);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0047: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0048: commitMessage [
+	"Start with spec_0046; add subclass of NewRowanSample9Class in Renamed package (issue_295_5); for issue #304, make Renamed package conditional of renamed attribute"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0048'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0046'.
+	title := 'Start with spec_0046; add subclass of NewRowanSample9Class in Renamed package (issue_295_5); for issue #304, make Renamed package conditional on renamed attribute'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 48
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(295 304);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' . 'renamed'};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0048: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0049: commitMessage [
+	"Start with spec_0048; create an additional load spec without the renamed atribute"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0049'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0048'.
+	title := 'Start with spec_0048; create an additional load spec without the renamed atribute'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 49
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(304);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' . 'renamed'};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0049: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

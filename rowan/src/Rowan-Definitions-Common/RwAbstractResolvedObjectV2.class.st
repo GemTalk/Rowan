@@ -132,6 +132,16 @@ RwAbstractResolvedObjectV2 >> componentsRoot [
 	^ self repositoryRoot / self _projectSpecification componentsPath
 ]
 
+{ #category : 'exporting' }
+RwAbstractResolvedObjectV2 >> exportLoadSpecification [
+	self _loadSpecification exportTo: self specsRoot
+]
+
+{ #category : 'exporting' }
+RwAbstractResolvedObjectV2 >> exportProjectSpecification [
+	self _projectSpecification exportTo: self repositoryRoot
+]
+
 { #category : 'package properties' }
 RwAbstractResolvedObjectV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 	self subclassResponsibility: #'gemstoneSetSymbolDictName:forPackageNamed:'

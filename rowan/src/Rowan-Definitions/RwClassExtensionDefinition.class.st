@@ -57,3 +57,17 @@ RwClassExtensionDefinition >> isClassExtension [
 	^ true
 
 ]
+
+{ #category : 'accessing' }
+RwClassExtensionDefinition >> moveToPackageNamed: newPackageName packageConvention: thePackageConvention [
+	thePackageConvention = 'Rowan'
+		ifTrue: [ ^ self ].
+	thePackageConvention = 'Monticello'
+		ifTrue: [ self error: 'not yet implemented' ].
+	thePackageConvention ~= 'RowanHybrid'
+		ifTrue: [ self error: 'unknown package convention' ].
+	self instanceMethodDefinitions
+		valuesDo: [ :methodDef | methodDef protocol: '*' , newPackageName asLowercase ].
+	self classMethodDefinitions
+		valuesDo: [ :methodDef | methodDef protocol: '*' , newPackageName asLowercase ]
+]

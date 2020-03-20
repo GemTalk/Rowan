@@ -265,13 +265,15 @@ RwPackageDefinition >> renameTo: newPackageName packageConvention: thePackageCon
 	thePackageConvention ~= 'RowanHybrid'
 		ifTrue: [ self error: 'unknown package convention' ].
 	self classDefinitions
-		valuesDo: [ :classDef | classDef category: newPackageName ].
+		valuesDo: [ :classDef | 
+			classDef
+				moveToPackageNamed: newPackageName
+				packageConvention: thePackageConvention ].
 	self classExtensions
 		valuesDo: [ :classDef | 
-			classDef instanceMethodDefinitions
-				valuesDo: [ :methodDef | methodDef protocol: '*' , newPackageName asLowercase ].
-			classDef classMethodDefinitions
-				valuesDo: [ :methodDef | methodDef protocol: '*' , newPackageName asLowercase ] ]
+			classDef
+				moveToPackageNamed: newPackageName
+				packageConvention: thePackageConvention ]
 ]
 
 { #category : 'accessing' }

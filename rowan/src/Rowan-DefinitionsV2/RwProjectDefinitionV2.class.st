@@ -302,7 +302,8 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName [
 		_addPackage: package
 		ifPresent: [ 
 			"no problem ... just update the component"
-			 ]
+			 ].
+	^ package
 ]
 
 { #category : 'accessing' }
@@ -619,6 +620,17 @@ RwProjectDefinitionV2 >> movePackageNamed: aPackageName toComponentNamed: aCompo
 	self components
 		addPackageNamed: newPackageName
 		toComponentNamed: aComponentName
+]
+
+{ #category : 'querying' }
+RwProjectDefinitionV2 >> packageForClassNamed: className [
+	"Answer nil if no class found"
+
+	self packages
+		do: [ :package | 
+			(package classDefinitions includesKey: className)
+				ifTrue: [ ^ package ] ].
+	^ nil
 ]
 
 { #category : 'properties' }

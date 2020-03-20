@@ -14,6 +14,11 @@ RwResolvedProjectSpecificationV2 >> componentsPath: aString [
 	self _projectSpecification componentsPath: aString
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectSpecificationV2 >> export [
+	self exportProjectSpecification
+]
+
 { #category : 'accessubg' }
 RwResolvedProjectSpecificationV2 >> packageConvention [
 	"

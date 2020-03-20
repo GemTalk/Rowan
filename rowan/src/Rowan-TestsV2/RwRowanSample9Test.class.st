@@ -2388,6 +2388,149 @@ RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_with_subclass_newProject [
+
+	"attempting to reproduce the actual issue (_1 doesn't reproduce problem, but should remain static to ensure behavior does not change detrimentally"
+
+	"https://github.com/dalehenrich/Rowan/issues/295"
+
+	"Error creating a new class version of a superclass while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_4 --> issue_295_5"
+
+	"spec_0047 --> spec_0048"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project |
+	loadSpec := self _loadSpecNamed: 'spec_0047'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"get project"
+	project := loadedProjects at: 1.
+	
+"resolve project"
+	resolvedProject := project asDefinition.
+	resolvedProject loadSpecification customConditionalAttributes: resolvedProject loadSpecification customConditionalAttributes, {'renamed'}. "since we're not loading the spec from disk"
+	resolvedProject 
+		checkout: 'spec_0048';
+		read;
+		yourself.
+
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone_295';
+		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests_295';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue304 [
+
+	"https://github.com/dalehenrich/Rowan/issues/304"
+
+	"ported from RowanSampl4>>testIssue304"
+
+	"
+		Original test comment:
+
+			load a different config and group using the spec url load api ... SHA needs to change as well
+
+		For V2, the test should:
+
+			load two different load specs that specify a different revision and different customConditionalAttributes
+			spec_0048 --> spec_0049
+"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects fileUrl project loadedCommitId x |
+	loadSpec := self _loadSpecNamed: 'spec_0049'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"record the loaded commit id"
+	self assert: project currentBranchName =  'spec_0049'.
+
+	loadedCommitId := project loadedCommitId.
+
+"Use a different load spec in spec_0049, that has a different revision (spec_0048) and a different customConditionalAttributes"
+	fileUrl := 'file:' , (resolvedProject specsRoot / 'Issue_304', 'ston') pathString.
+	loadSpec := (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+	
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+	resolvedProject
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: project currentBranchName =  'spec_0048'.
+	self deny: (x := project loadedCommitId) = loadedCommitId.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue345 [
 
 	"ported from RwRowanSample1Test>>testIssue345"
@@ -2483,7 +2626,6 @@ RwRowanSample9Test >> testIssue493_RowanSample2 [
 	"using the migration tests set of definitions"
 
 	| loadSpec projectName resolvedProject loadedProjects project  audit |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9' 
@@ -2514,7 +2656,6 @@ UserGlobals at: #ConditionalHalt put: false.
 
 "checkout and load - migration_step_2 -- Issue #493: switch symbol dicts and use _symbolDictionaryName_1 for second load"
 	resolvedProject := project asDefinition.
-UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject 
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		checkout: 'spec_0036';
@@ -4438,6 +4579,163 @@ RwRowanSample9Test >> testSpec_0046 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0047 [
+	"spec_0047 should load cleanly"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0047'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0048 [
+	"spec_0048 ensure that the custom attribute renamed contols the right set of packages"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 x y className6 |
+	loadSpec := self _loadSpecNamed: 'spec_0048'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	packageName1 := projectName , '-' , 'Core', '_295'.
+	packageName2 := projectName , '-' , 'Extensions', '_295'.
+	packageName3 := projectName , '-' , 'GemStone', '_295'.
+	packageName4 := projectName , '-' , 'GemStone-Tests', '_295'.
+	packageName5 := projectName , '-' , 'Tests', '_295'.
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	packageName8 := projectName , '-' , 'Tests-RenamedPackage'.
+	className6 := 'New', projectName , 'Subclass'.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5 . packageName7 . packageName8 } sort).
+	self assert: (x := Rowan globalNamed: className6) notNil.
+
+	self deny: (resolvedProject packageNamed: packageName7) isEmpty.
+	self deny: (resolvedProject packageNamed: packageName8) isEmpty.
+
+"remove the renamed attribute"
+	loadSpec customConditionalAttributes: { 'tests' }.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5  } sort).
+	self deny: (x := Rowan globalNamed: className6) notNil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0049 [
+	"spec_0049 should load cleanly ... both specs"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects fileUrl packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 className6 x y project |
+	loadSpec := self _loadSpecNamed: 'spec_0049'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: project currentBranchName =  'spec_0049'.
+
+	packageName1 := projectName , '-' , 'Core', '_295'.
+	packageName2 := projectName , '-' , 'Extensions', '_295'.
+	packageName3 := projectName , '-' , 'GemStone', '_295'.
+	packageName4 := projectName , '-' , 'GemStone-Tests', '_295'.
+	packageName5 := projectName , '-' , 'Tests', '_295'.
+	packageName6 := projectName , '-' , 'NewPackage'.
+	packageName7 := projectName , '-' , 'RenamedPackage'.
+	packageName8 := projectName , '-' , 'Tests-RenamedPackage'.
+	className6 := 'New', projectName , 'Subclass'.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5 . packageName7 . packageName8 } sort).
+	self assert: (x := Rowan globalNamed: className6) notNil.
+
+	self deny: (resolvedProject packageNamed: packageName7) isEmpty.
+	self deny: (resolvedProject packageNamed: packageName8) isEmpty.
+
+"create load spec from Issue_304.ston"
+	fileUrl := 'file:' , (resolvedProject specsRoot / 'Issue_304', 'ston') pathString.
+	loadSpec := (RwSpecification fromUrl: fileUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: project currentBranchName =  'spec_0049'.
+
+	self assert: (x := resolvedProject packageNames asArray sort) = (y := { packageName1 . packageName2 . packageName3 . packageName4 . packageName5  } sort).
+	self deny: (x := Rowan globalNamed: className6) notNil.
 ]
 
 { #category : 'tests' }

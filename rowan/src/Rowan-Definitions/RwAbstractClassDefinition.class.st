@@ -233,6 +233,11 @@ RwAbstractClassDefinition >> key [
 ]
 
 { #category : 'accessing' }
+RwAbstractClassDefinition >> moveToPackageNamed: aPackageName packageConvention: aPackageConvention [
+	self subclassResponsibility: #'moveToPackageNamed:packageConvention:'
+]
+
+{ #category : 'accessing' }
 RwAbstractClassDefinition >> name: aString [
 
 	properties at: 'name' put: aString
