@@ -130,6 +130,7 @@ false ifTrue: [
 		gsFileName := ar at: 5.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
 		conditionalAttributes addAll: loadSpec customConditionalAttributes.
+		conditionalAttributes remove: 'tests' ifAbsent: [].
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
