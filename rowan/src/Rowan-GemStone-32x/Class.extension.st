@@ -184,7 +184,7 @@ Class >> _subclass: className instVarNames: anArrayOfInstvarNames format: theFor
   theHist := aClassHistory.
   theHist ifNil: [ theHist := ClassHistory new name: className ].
   theHist notEmpty
-    ifTrue: [ result category: theHist current category ].
+    ifTrue: [ result category: theHist current _classCategory ].
   theHist add: result.
   result classHistory: theHist.
   result timeStamp: DateTime now.
@@ -290,6 +290,21 @@ options: optionsArray [
 		description: descr
 		options: optionsArray
 
+]
+
+{ #category : '*rowan-gemstone-32x' }
+Class >> category: newCategory [
+
+"Sets the classCategory variable of the receiver.
+ The argument should be a kind of CharacterCollection or nil."
+
+newCategory ifNil:[
+	classCategory := nil.
+	^ self ].
+
+(newCategory _validateClass: CharacterCollection ) ifFalse:[ ^ nil ].
+
+classCategory := newCategory asString
 ]
 
 { #category : '*rowan-gemstone-32x' }
