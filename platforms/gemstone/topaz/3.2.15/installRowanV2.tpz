@@ -1,0 +1,12 @@
+#
+
+	omit pushonly
+#	display oops
+
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install_1.tpz
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install_2_RowanV2.tpz
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install_3_RowanV2.tpz
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install_4_RowanV2.tpz
+
+	errorCount
+
