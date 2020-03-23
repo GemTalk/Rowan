@@ -9,6 +9,13 @@ Class {
 }
 
 { #category : 'accessing' }
+RwLoadedProject class >> _projectDefinitionPlatformConditionalAttributesKey [
+	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
+
+	^ '_Project_Definition_PlatformConditionalAttricutes'
+]
+
+{ #category : 'accessing' }
 RwLoadedProject class >> _projectDefinitionSourceKey [
 	"The value of the property key indicates which source the project definition was derived from.
 		Currently used when deciding whether to change the loaded commit id, during a load ... 

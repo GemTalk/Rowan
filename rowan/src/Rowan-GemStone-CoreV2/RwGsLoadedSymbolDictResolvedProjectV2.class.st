@@ -24,7 +24,10 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 	resolvedProject _projectRepository: handle _projectRepository copy.
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
-			RwLoadedProject _projectLoadedDefinitionSourceValue.
+			RwLoadedProject _projectLoadedDefinitionSourceValue;
+		projectDefinitionPlatformConditionalAttributes:
+				handle projectDefinitionPlatformConditionalAttributes copy;
+		yourself.
 	resolvedProject _projectDefinition components: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
 	^ resolvedProject
 ]

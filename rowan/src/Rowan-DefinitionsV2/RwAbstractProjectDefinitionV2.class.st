@@ -126,6 +126,26 @@ RwAbstractProjectDefinitionV2 >> postCopy [
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
 ]
 
+{ #category : 'properties' }
+RwAbstractProjectDefinitionV2 >> projectDefinitionPlatformConditionalAttributes [
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		ifAbsent: [  ]
+]
+
+{ #category : 'properties' }
+RwAbstractProjectDefinitionV2 >> projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil [
+	platformConditionalAtttributesOrNil
+		ifNil: [ 
+			^ properties
+				removeKey:
+					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+				ifAbsent: [  ] ].
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		put: platformConditionalAtttributesOrNil
+]
+
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removeComponentNamed: aComponentName [
 	^ self components removeComponentNamed: aComponentName

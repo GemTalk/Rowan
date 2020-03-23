@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'reading' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: platformConditionalAttributes [
+RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
 	visitor := self new
 		_readComponentsForResolvedProject: resolvedProject
@@ -16,7 +16,10 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 		platformConditionalAttributes: platformConditionalAttributes.
 	resolvedProject
 		projectDefinitionSourceProperty:
-			RwLoadedProject _projectDiskDefinitionSourceValue.
+				RwLoadedProject _projectDiskDefinitionSourceValue;
+		projectDefinitionPlatformConditionalAttributes:
+				platformConditionalAttributes copy;
+		yourself.
 	visitor visitedComponents
 		keysAndValuesDo: [ :cName :cmp | resolvedProject components _addComponent: cmp ].
 	^ visitor

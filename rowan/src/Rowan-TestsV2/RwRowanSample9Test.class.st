@@ -5305,20 +5305,18 @@ RwRowanSample9Test >> testSwitchRepository [
 	loadedProjects := resolvedProject1 load.
 	project1 := Rowan projectNamed: loadSpec1 projectName.
 
-"change repository root of the loaded project"
-	project1 repositoryRoot: resolvedProject2 repositoryRoot.
-
 "validate"
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
-	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
-	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
-	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 
-"load project1 from spec_0002 checkout"
-	loadedProjects := project1 load.
+"load project1 from spec_0002 checkout: changing repository root of loaded project
+	results in a load "
+	loadedProjects := project1 repositoryRoot: resolvedProject2 repositoryRoot.
 
 "Validate"
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
+	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
+	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
+	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar = 'bar'.	"bar method not present in spec_0001"
 	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
 ]

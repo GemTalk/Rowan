@@ -688,6 +688,16 @@ RwResolvedProjectV2 >> printOn: aStream [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> projectDefinitionPlatformConditionalAttributes [
+	^ self _projectDefinition projectDefinitionPlatformConditionalAttributes
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes [
+	self _projectDefinition projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> projectDefinitionSourceProperty [
 	^ self _projectDefinition projectDefinitionSourceProperty
 ]

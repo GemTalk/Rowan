@@ -126,8 +126,8 @@ RwAbstractResolvedProjectV2 >> loadSpecification [
 
 { #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> platformConditionalAttributes [
-
-	^ super platformConditionalAttributes,  Rowan platformConditionalAttributes
+	^ self projectDefinitionPlatformConditionalAttributes
+		ifNil: [ super platformConditionalAttributes , Rowan platformConditionalAttributes ]
 ]
 
 { #category : 'copying' }

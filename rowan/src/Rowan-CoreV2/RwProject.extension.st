@@ -1,6 +1,17 @@
 Extension { #name : 'RwProject' }
 
 { #category : '*rowan-corev2' }
+RwProject >> _requiredProjects [
+	"return list of dependent project names"
+
+	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
+
+	| topLevelComponents |
+	topLevelComponents := self loadSpecification componentNames collect: [:componentName | self componentNamed: componentName ].
+	self halt.
+]
+
+{ #category : '*rowan-corev2' }
 RwProject >> exportLoadSpecification [
 	^ self _loadedProject asDefinition exportLoadSpecification
 ]
@@ -24,6 +35,14 @@ RwProject >> repositoryRoot [
 
 { #category : '*rowan-corev2' }
 RwProject >> repositoryRoot: aFileReference [
+	| resolvedProject |
+	resolvedProject := self asDefinition.
+	resolvedProject repositoryRoot: aFileReference.
+	^ resolvedProject loadProjectSet
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> repositoryRootOld: aFileReference [
 	self _loadedProject resolvedProject repositoryRoot: aFileReference
 ]
 
