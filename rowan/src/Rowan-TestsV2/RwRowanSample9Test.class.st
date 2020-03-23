@@ -309,6 +309,59 @@ RwRowanSample9Test >> _testMigration: loadSpec instanceMigrator: instanceMigrato
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _validate_571: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames expectedPackageName: packageName [
+	| project x y |
+	project := loadedProjects at: 1.
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: expectedProjectNames.
+
+	self
+		assert:
+			resolvedProject projectDefinitionPlatformConditionalAttributes
+				= resolvedProject platformConditionalAttributes.
+	self
+		assert:
+			(x := resolvedProject platformConditionalAttributes)
+				= (y := project platformConditionalAttributes).
+	self
+		assert:
+			(x := resolvedProject projectDefinitionPlatformConditionalAttributes)
+				= (y := project projectDefinitionPlatformConditionalAttributes).
+	self assert: (project packageNames includes: packageName)
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _validate_571: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames packageName: packageName present: isPresent [
+	| project x y |
+	project := loadedProjects at: 1.
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: expectedProjectNames.
+
+	self
+		assert:
+			resolvedProject projectDefinitionPlatformConditionalAttributes
+				= resolvedProject platformConditionalAttributes.
+	self
+		assert:
+			(x := resolvedProject platformConditionalAttributes)
+				= (y := project platformConditionalAttributes).
+	self
+		assert:
+			(x := resolvedProject projectDefinitionPlatformConditionalAttributes)
+				= (y := project projectDefinitionPlatformConditionalAttributes).
+
+	isPresent
+		ifTrue: [ self assert: (project packageNames includes: packageName) ]
+		ifFalse: [ self deny: (project packageNames includes: packageName) ].
+
+	^ project projectDefinitionPlatformConditionalAttributes
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _validate: resolvedProject loadedProjects: loadedProjects expectedTestErrors: expectedTestErrors [
 	| testResult loadedProjectDefinition x |
 	"validate"
@@ -3378,6 +3431,106 @@ RwRowanSample9Test >> testIssue515_RowanSample2 [
 	self assert: (audit := project audit) isEmpty.
 
 "watch out ... jadeite won't bhave well with class and symbol dictionary of same name ... but that's okay"
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue571 [
+	"record/reuse/update the platformConditionalAttributes used to read the project from disk"
+
+	"https://github.com/GemTalk/Rowan/issues/571"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects customConditionalAttributes  
+		defaultPlatformAttributes expectedProjectDefinitionPlatformConditionalAttributes  
+		packageName1 theLoadSpec project thePlatformConditionalAttributes |
+	loadSpec := self _loadSpecNamed: 'spec_0032'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+	packageName1 := 'RowanSample9-Specs-V1'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	customConditionalAttributes := loadSpec customConditionalAttributes.
+	defaultPlatformAttributes := Rowan platformConditionalAttributes.
+	expectedProjectDefinitionPlatformConditionalAttributes := customConditionalAttributes, defaultPlatformAttributes.
+
+"resolve project - baseline"
+	resolvedProject := loadSpec resolve.
+
+	self assert: resolvedProject projectDefinitionPlatformConditionalAttributes = expectedProjectDefinitionPlatformConditionalAttributes.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self
+		_validate_571: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+		packageName: packageName1
+		present: true.
+
+"resolve project using loadSpec - remove v1 attribute, resulting in packageName1 being unloaded"
+	theLoadSpec := loadSpec copy.
+	theLoadSpec customConditionalAttributes remove: 'v1' ifAbsent: [self error: 'missing attribute'].
+	resolvedProject := theLoadSpec resolve.
+	resolvedProject load.
+"validate"
+	self
+		_validate_571: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+		packageName: packageName1
+		present: false.
+
+"resolve project using loadSpec - add v1 attribute back, resulting in packageName1 being loaded"
+	theLoadSpec := theLoadSpec copy.
+	theLoadSpec customConditionalAttributes add: 'v1' .
+	resolvedProject := theLoadSpec resolve.
+	resolvedProject load.
+"validate"
+	thePlatformConditionalAttributes := (self
+		_validate_571: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+		packageName: packageName1
+		present: true) copy.
+
+"resolve project from loaded definition - remove v1 attribute, resulting in packageName1 being unloaded"
+	resolvedProject := project asDefinition.
+	self assert: resolvedProject projectDefinitionPlatformConditionalAttributes =
+		thePlatformConditionalAttributes.
+
+	thePlatformConditionalAttributes remove: 'v1' ifAbsent: [self error: 'missing attribute'].
+
+	resolvedProject read: thePlatformConditionalAttributes.
+	loadedProjects := resolvedProject load.
+"validate"
+	thePlatformConditionalAttributes := (self
+		_validate_571: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+		packageName: packageName1
+		present: false) copy.
+
+"resolve project from loaded definition - add v1 attribute back, resulting in packageName1 being loaded"
+	resolvedProject := project asDefinition.
+	self assert: resolvedProject projectDefinitionPlatformConditionalAttributes =
+		thePlatformConditionalAttributes.
+
+	thePlatformConditionalAttributes add: 'v1'.
+
+	loadedProjects := resolvedProject loadProjectSet: thePlatformConditionalAttributes.
+"validate"
+	thePlatformConditionalAttributes := (self
+		_validate_571: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+		packageName: packageName1
+		present: true) copy.
 ]
 
 { #category : 'issue 586' }

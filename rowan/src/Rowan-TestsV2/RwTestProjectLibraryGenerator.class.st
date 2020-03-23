@@ -2702,7 +2702,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0048: resolvedProject [
 
 "update load spec"
 	loadSpec := resolvedProject loadSpecification.
-	loadSpec customConditionalAttributes:  loadSpec customConditionalAttributes,  { 'renamed'}.
+	loadSpec customConditionalAttributes:  (loadSpec customConditionalAttributes,  { 'renamed'}) asSet asArray.
 
 "add definitions"
 	(resolvedProject packageNamed: packageName7)
@@ -4883,7 +4883,7 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 		index: 32
 		derivedFrom: derivedFrom
 		comment: 'Explore the use of shared directory for sharing code between two conditions, like v1 and v2 ... first create v1 and v2 packages (that can be independently loaded or loaded together in GemStone and use the class in shared component for code that is common to both -- not controlled by attributes.')
-		rowanIssues: #(573);
+		rowanIssues: #(573 571);
 		yourself.
 
 	loadSpecification := RwLoadSpecificationV2 new

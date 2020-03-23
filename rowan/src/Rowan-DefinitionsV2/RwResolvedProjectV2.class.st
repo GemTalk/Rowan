@@ -573,15 +573,26 @@ RwResolvedProjectV2 >> loadProjectSet [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> loadProjectSet: instanceMigrator [
+RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"load a project definition set that will contain the project definition along with any dependent project definitions"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
-		loadProjectSetDefinition: self readProjectSet
-		instanceMigrator: instanceMigrator
+		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"load a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
+		 instanceMigrator: instanceMigrator
 ]
 
 { #category : 'project definition' }

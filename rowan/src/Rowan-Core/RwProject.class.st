@@ -165,6 +165,12 @@ RwProject >> project [
 ]
 
 { #category : 'accessing' }
+RwProject >> projectDefinitionPlatformConditionalAttributes [
+
+	^ self _loadedProject projectDefinitionPlatformConditionalAttributes
+]
+
+{ #category : 'accessing' }
 RwProject >> projectUrl [
 
 	"Return the projectUrl used to clone the project"

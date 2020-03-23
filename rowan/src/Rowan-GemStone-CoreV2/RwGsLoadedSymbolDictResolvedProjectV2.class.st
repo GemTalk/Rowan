@@ -159,6 +159,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> platformConditionalAttributes [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> projectDefinitionPlatformConditionalAttributes [
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self resolvedProject projectDefinitionPlatformConditionalAttributes
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> projectOwnerId [
 
 	^ self propertyAt: 'projectOwnerId'
