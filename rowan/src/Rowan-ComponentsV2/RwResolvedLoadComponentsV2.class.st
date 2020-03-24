@@ -26,12 +26,33 @@ RwResolvedLoadComponentsV2 >> _addComponent: aComponent [
 	^ self components at: aComponent name put: aComponent
 ]
 
+{ #category : 'enumerating' }
+RwResolvedLoadComponentsV2 >> _conditionalComponentsStartingWith: aComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames do: aBlock [
+	visitedComponentNames add: aComponent name.
+	aComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self
+				_platformAttributeMatchIn: platformMatchers
+				using: platformConditionalAttributes)
+				ifTrue: [ 
+					aBlock value: aComponent.
+					aComponent componentNames
+						do: [ :cName | 
+							(visitedComponentNames includes: cName)
+								ifFalse: [ 
+									self
+										_conditionalComponentsStartingWith: (self componentNamed: cName)
+										platformConditionalAttributes: platformConditionalAttributes
+										visited: visitedComponentNames
+										do: aBlock ] ] ] ]
+]
+
 { #category : 'private' }
 RwResolvedLoadComponentsV2 >> _gemstoneAllUsersName [
 	^ RwLoadSpecificationV2 _gemstoneAllUsersName
 ]
 
-{ #category : 'querying' }
+{ #category : 'enumerating' }
 RwResolvedLoadComponentsV2 >> _matchPlatformAttributes: platformPatternMatcher using: platformConditionalAttributes [
 	platformConditionalAttributes
 		do: [ :anObject | 
@@ -40,7 +61,7 @@ RwResolvedLoadComponentsV2 >> _matchPlatformAttributes: platformPatternMatcher u
 	^ false
 ]
 
-{ #category : 'querying' }
+{ #category : 'enumerating' }
 RwResolvedLoadComponentsV2 >> _platformAttributeMatchIn: platformMatchersList using: platformConditionalAttributes [
 	platformMatchersList
 		do: [ :platformPatternMatcher | 
@@ -378,37 +399,20 @@ RwResolvedLoadComponentsV2 >> componentsWithDoits [
 	^ self components select: [ :each | each hasDoits ]
 ]
 
-{ #category : 'querying' }
-RwResolvedLoadComponentsV2 >> conditionalProjectNamesInto: projectNames startingWith: aSimpleProjectLoadComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames [
-	visitedComponentNames add: aSimpleProjectLoadComponent name.
-	aSimpleProjectLoadComponent conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :ignored | 
-			(self
-				_platformAttributeMatchIn: platformMatchers
-				using: platformConditionalAttributes)
-				ifTrue: [ 
-					projectNames addAll: aSimpleProjectLoadComponent projectNames.
-					aSimpleProjectLoadComponent componentNames
-						do: [ :cName | 
-							(visitedComponentNames includes: cName)
-								ifFalse: [ 
-									self
-										conditionalProjectNamesInto: projectNames
-										startingWith: (self componentNamed: cName)
-										platformConditionalAttributes: platformConditionalAttributes
-										visited: visitedComponentNames ] ] ] ]
-]
+{ #category : 'enumerating' }
+RwResolvedLoadComponentsV2 >> conditionalComponentsStartingWith: componentNames platformConditionalAttributes: platformConditionalAttributes do: aBlock [
+	| visited |
+	visited := Set new.
+	componentNames
+		do: [ :componentName | 
+			| theComponent |
+			theComponent := self componentNamed: componentName.
 
-{ #category : 'querying' }
-RwResolvedLoadComponentsV2 >> conditionalProjectNamesStartingWith: aSimpleProjectLoadComponent platformConditionalAttributes: platformConditionalAttributes [
-	| projectNames |
-	projectNames := Set new.
-	self
-		conditionalProjectNamesInto: projectNames
-		startingWith: aSimpleProjectLoadComponent
-		platformConditionalAttributes: platformConditionalAttributes
-		visited: Set new.
-	^ projectNames
+			self
+				_conditionalComponentsStartingWith: theComponent
+				platformConditionalAttributes: platformConditionalAttributes
+				visited: visited
+				do: aBlock ]
 ]
 
 { #category : 'enumerating' }

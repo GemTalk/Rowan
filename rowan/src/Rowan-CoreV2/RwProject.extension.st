@@ -1,31 +1,6 @@
 Extension { #name : 'RwProject' }
 
 { #category : '*rowan-corev2' }
-RwProject >> _requiredProjects [
-	"return list of dependent project names"
-
-	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
-
-	| requiredProjectNames theComponents visited |
-	visited := Set new.
-	theComponents := self loadedComponents.
-	requiredProjectNames := Set new.
-	self componentNames
-		do: [ :componentName | 
-			| theComponent projectNames |
-			theComponent := theComponents componentNamed: componentName.
-			projectNames := Set new.
-			theComponents
-				conditionalProjectNamesInto: projectNames
-				startingWith: theComponent
-				platformConditionalAttributes: self platformConditionalAttributes
-				visited: visited.
-			requiredProjectNames addAll: projectNames ].
-	^ requiredProjectNames asArray
-		collect: [ :projectName | Rowan projectNamed: projectName ]
-]
-
-{ #category : '*rowan-corev2' }
 RwProject >> componentNames [
 	^ self _loadedProject componentNames
 ]
@@ -63,6 +38,23 @@ RwProject >> repositoryRoot: aFileReference [
 { #category : '*rowan-corev2' }
 RwProject >> repositoryRootOld: aFileReference [
 	self _loadedProject resolvedProject repositoryRoot: aFileReference
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> requiredProjects [
+	"return list of dependent project names"
+
+	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
+
+	| requiredProjectNames theComponents |
+	theComponents := self loadedComponents.
+	requiredProjectNames := Set new.
+	theComponents
+		conditionalComponentsStartingWith: self componentNames
+		platformConditionalAttributes: self platformConditionalAttributes
+		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
+	^ requiredProjectNames asArray
+		collect: [ :projectName | Rowan projectNamed: projectName ]
 ]
 
 { #category : '*rowan-corev2' }
