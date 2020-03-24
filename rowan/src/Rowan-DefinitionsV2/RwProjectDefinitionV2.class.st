@@ -553,15 +553,6 @@ RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition
 		comment: commentString
 ]
 
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	^ self components
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		groupName: groupName
-		comment: commentString
-]
-
 { #category : 'actions' }
 RwProjectDefinitionV2 >> clone [
 	"clone remote git project to disk"

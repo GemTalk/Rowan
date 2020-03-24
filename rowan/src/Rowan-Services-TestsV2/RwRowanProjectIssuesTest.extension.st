@@ -8,13 +8,24 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 	"The issue #150 tests are mainly aimed at verifying that the given commands do not fail - ensuring that git version supports the
 		commands and arguments used by Jadeite. "
 
-	| rowanProject projectName service testBranch testClass  queryService |
+	| rowanProject projectName service testBranch testClass  queryService loadSpec |
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectName := 'RowanSample3'.
-	self 
-		_cloneGitRepositoryFor: projectName 
-		projectUrlString:  'file:' , rowanProject repositoryRootPath , '/samples/', projectName, '_resolved_v2.ston'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+
+	loadSpec := (RwSpecification fromUrl:  'file:' , rowanProject repositoryRootPath , '/samples/', projectName, '_resolved_v2.ston')
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName ;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		yourself.
+
+	loadSpec resolveStrict load.
 
 	queryService := 	RowanQueryService new
 		projectBranches: projectName;

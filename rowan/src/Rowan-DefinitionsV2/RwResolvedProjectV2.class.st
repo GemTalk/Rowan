@@ -307,15 +307,6 @@ RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: 
 		comment: commentString
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	^ self _projectDefinition
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		groupName: groupName
-		comment: commentString
-]
-
 { #category : 'actions' }
 RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish

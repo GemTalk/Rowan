@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwNestedProjectLoadComponentV2',
 	#superclass : 'RwAbstractProjectLoadComponentV2',
-	#category : 'Rowan-ComponentsV2'
+	#category : 'Rowan-Components'
 }
 
 { #category : 'visiting' }

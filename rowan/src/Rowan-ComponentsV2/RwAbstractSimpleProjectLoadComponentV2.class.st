@@ -78,6 +78,7 @@ RwAbstractSimpleProjectLoadComponentV2 >> removeComponentNamed: aComponentName [
 
 { #category : 'accessing' }
 RwAbstractSimpleProjectLoadComponentV2 >> removePackageNamed: aPackageName [
+	super removePackageNamed: aPackageName.
 	self packageNames remove: aPackageName ifAbsent: [  ]
 ]
 

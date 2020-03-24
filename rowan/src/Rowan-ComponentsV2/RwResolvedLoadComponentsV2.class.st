@@ -107,23 +107,6 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes [
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName ].
-	groupNameDict
-		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
-	component comment: commentString.
-	^ component
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	| component |
 	component := self
@@ -260,18 +243,6 @@ RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toC
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
-	| component |
-	component := self
-		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		addProjectNames: {projectName}
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
 	| component |
 	self components
@@ -290,25 +261,6 @@ RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition:
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
-	component
-		condition: condition;
-		groupName: groupName;
-		comment: commentString;
-		yourself.
-	^ component
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
 	| component |
 	self components
@@ -321,25 +273,6 @@ RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName cond
 		ifAbsentPut: [ RwSimpleNestedProjectLoadComponentV2 newNamed: aComponentName ].
 	component
 		condition: condition;
-		comment: commentString;
-		yourself.
-	^ component
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwSimpleNestedProjectLoadComponentV2 newNamed: aComponentName ].
-	component
-		condition: condition;
-		groupName: groupName;
 		comment: commentString;
 		yourself.
 	^ component

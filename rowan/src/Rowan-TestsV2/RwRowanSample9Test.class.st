@@ -659,24 +659,14 @@ RwRowanSample9Test >> testIssue_446 [
 	resolvedProject := project1 resolve.
 
 	(resolvedProject
-		addComponentNamed: 'Core1'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
+		addNewComponentNamed: 'Core1'
+		condition: 'common'
 		comment: 'contains ' , projectName , '-Core1 package and Core2 component')
-		conditionalPropertiesAtConditions: {'common'}
-			andGroup: 'core'
 			addComponentNames: #('Core2');
-		yourself.
+			yourself.
 	resolvedProject
-		addComponentNamed: 'Core2'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				add: 'tests' -> {'core'};
-				yourself)
+		addNewComponentNamed: 'Core2'
+		condition: 'common'
 		comment: 'contains ' , projectName , '-Core2 package'.
 
 	resolvedProject

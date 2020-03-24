@@ -25,20 +25,11 @@ RwRowanProjectIssuesTest >> testIssue495_move_class_and_extension_method_to_new_
 
 	project1 := RwResolvedProjectV2 new
 		projectName: projectName;
-		addComponentNamed: 'Core' 
-			definedGroupNames: 
-				(Dictionary new
-						add: 'core' -> {};
-						yourself) 
-			comment: '';
+		addNewComponentNamed: 'Core';
 		addPackageNamed: packageName1 
-			toComponentNamed: 'Core' 
-			withConditions: #('common') 
-			andGroupName: #('core');
+			toComponentNamed: 'Core';
 		addPackageNamed: packageName2 
-			toComponentNamed: 'Core' 
-			withConditions: #('common') 
-			andGroupName: #('core');
+			toComponentNamed: 'Core';
 		gemstoneSetSymbolDictName: self _symbolDictionaryName1
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName1
@@ -95,12 +86,10 @@ RwRowanProjectIssuesTest >> testIssue495_move_class_and_extension_method_to_new_
 	self assert: (class new perform: #mover) = 2.
 
 	"move the class to different symbol dictionary and move extension methods to new package"
-	project2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	project2 := (Rowan projectNamed: projectName) asDefinition.
 	project2
 		addPackageNamed: packageName3 
-			toComponentNamed: 'Core' 
-			withConditions: #('common') 
-			andGroupName: #('core');
+			toComponentNamed: 'Core' ;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
 			forPackageNamed: packageName2;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName1

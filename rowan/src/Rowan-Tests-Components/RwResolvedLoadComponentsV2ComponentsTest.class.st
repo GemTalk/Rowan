@@ -1,62 +1,76 @@
 Class {
-	#name : 'RwResolvedLoadComponentsV2Test',
-	#superclass : 'RwAbstractLoadComponentV2Test',
-	#category : 'Rowan-Tests-ComponentsV2'
+	#name : 'RwResolvedLoadComponentsV2ComponentsTest',
+	#superclass : 'RwAbstractLoadComponentV2TestComponentsTest',
+	#category : 'Rowan-Tests-Components'
 }
 
 { #category : 'tests' }
-RwResolvedLoadComponentsV2Test >> testBasic [
+RwResolvedLoadComponentsV2ComponentsTest >> testBasic [
 	"excercise basic functionality for RwResolvedLoadComponentV2"
 
 	| projectName resolvedComponents allPackageNames stonString |
 	projectName := 'ResolvedLoadComponentsV2Test'.
 	resolvedComponents := RwResolvedLoadComponentsV2 new.
+	(resolvedComponents
+		addComponentNamed: 'Core'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'Primary component used for loading the system.')
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: {'subs/Nested'};
+		yourself.
 	resolvedComponents
-		addSimpleComponentNamed: 'Core'
-			condition: 'common'
-			comment: 'Primary component used for loading the system.'.
-	resolvedComponents
-		addSimpleNestedComponentNamed: 'subs/Nested'
-			condition: 'common'
+		addNestedComponentNamed: 'subs/Nested'
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
 			comment:
 				'Nested component defines a shared subsystem of the primary project.';
-		addSimpleNestedComponentNamed: 'Tests'
-			condition: 'tests'
+		addComponentNamed: 'Tests'
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
 			comment: 'Contains all of the project tests.';
-		addSimpleNestedComponentNamed: 'GemStone'
-			condition: 'gemstone'
-			comment:
-				'Gemstone specific packages.';
-		addSimpleNestedComponentNamed: 'GemStoneTests'
-			condition: 'gemstone'
-			comment:
-				'Gemstone specific test packages.';
 		yourself.
 
 	resolvedComponents
 		addProjectNamed: 'DependentProject'
-			toComponentNamed: 'Core';
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
 		addComponentNamed: 'Tests'
-			toComponentNamed: 'Core';
-		addComponentNamed: 'GemStone'
-			toComponentNamed: 'Core';
-		addComponentNamed: 'subs/Nested'
-			toComponentNamed: 'Core';
-		addComponentNamed: 'GemStoneTests'
-			toComponentNamed: 'Tests';
-
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
 		addPackagesNamed: {(projectName , '-Core')}
-			toComponentNamed: 'Core';
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
 		addPackageNamed: projectName , '-Tests'
-			toComponentNamed: 'Tests';
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
 		addPackageNamed: projectName , '-GemStone-Extensions'
-			toComponentNamed: 'GemStone'
+			toComponentNamed: 'Core'
+			withConditions: {'gemstone'}
+			andGroupName: 'core'
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
 		addPackageNamed: projectName , '-GemStone-Tests'
-			toComponentNamed: 'GemStoneTests';
+			toComponentNamed: 'Tests'
+			withConditions: {'gemstone'}
+			andGroupName: 'tests';
 		addPackagesNamed: {(projectName , '-Shared')}
-			toComponentNamed: 'subs/Nested';
-
+			toComponentNamed: 'subs/Nested'
+			withConditions: {'common'}
+			andGroupName: 'core';
 		gemstoneSetSymbolDictName: 'Globals' forPackageNamed: projectName , '-Shared';
 		yourself.
 
@@ -78,22 +92,40 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 
 	self
 		_validateComponent: (resolvedComponents componentNamed: 'Core')
-			condition: 'common'
-			componentNames: {'Tests' .  'GemStone' . 'subs/Nested'}
+			condition: {'common'}
+			group: 'core'
+			componentNames: {'subs/Nested'}
 			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
 			projectNames: {'DependentProject'};
-		_validateComponent: (resolvedComponents componentNamed: 'Tests')
-			condition: 'tests'
-			componentNames: {'GemStoneTests'}
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {'Tests'}
 			packageNames: {'ResolvedLoadComponentsV2Test-Tests'}
 			projectNames: {};
-		_validateComponent: (resolvedComponents componentNamed: 'GemStone')
-			condition: 'gemstone'
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'gemstone'}
+			group: 'core'
 			componentNames: {}
 			packageNames: {'ResolvedLoadComponentsV2Test-GemStone-Extensions'}
 			projectNames: {};
-		_validateComponent: (resolvedComponents componentNamed: 'GemStoneTests')
-			condition: 'gemstone'
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'gemstone'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {}
+			projectNames: {};
+		yourself.
+	self
+		_validateComponent: (resolvedComponents componentNamed: 'Tests')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {}
+			projectNames: {};
+		_validateComponent: (resolvedComponents componentNamed: 'Tests')
+			condition: {'gemstone'}
+			group: 'tests'
 			componentNames: {}
 			packageNames: {'ResolvedLoadComponentsV2Test-GemStone-Tests'}
 			projectNames: {};
@@ -101,7 +133,8 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 
 	self
 		_validateComponent: (resolvedComponents componentNamed: 'subs/Nested')
-			condition: 'common'
+			condition: {'common'}
+			group: 'core'
 			componentNames: {}
 			packageNames: {'ResolvedLoadComponentsV2Test-Shared'}
 			projectNames: {};
@@ -120,7 +153,8 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 
 	self
 		_validateComponent: (resolvedComponents componentNamed: 'subs/Nested')
-			condition: 'common'
+			condition: {'common'}
+			group: 'core'
 			componentNames: {}
 			packageNames: {}
 			projectNames: {};
@@ -139,8 +173,9 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 
 	self
 		_validateComponent: (resolvedComponents componentNamed: 'Core')
-			condition: 'common'
-			componentNames: { 'GemStone' . 'Tests'}
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
 			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
 			projectNames: {'DependentProject'};
 		yourself.
@@ -161,8 +196,9 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 
 	self
 		_validateComponent: (resolvedComponents componentNamed: 'Core')
-			condition: 'common'
-			componentNames: {  'GemStone' . 'Tests'}
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
 			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
 			projectNames: {};
 		yourself.

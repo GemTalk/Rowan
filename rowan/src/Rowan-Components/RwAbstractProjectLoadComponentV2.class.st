@@ -7,7 +7,7 @@ Class {
 		'conditionalPropertyMatchers',
 		'conditionalPackageMapSpecMatchers'
 	],
-	#category : 'Rowan-ComponentsV2'
+	#category : 'Rowan-Components'
 }
 
 { #category : 'private' }

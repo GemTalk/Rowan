@@ -560,6 +560,17 @@ RwBasicProjectLoadComponentV2 >> projectName: anObject [
 
 ]
 
+{ #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> removePackageNamed: aPackageName [
+	self conditionalPackageMapSpecs
+		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
+			packageMapSpecsMap
+				keysAndValuesDo: [ :userId :packageMapSpecs | 
+					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
+						removeKey: aPackageName
+						ifAbsent: [  ] ] ]
+]
+
 { #category : 'ston' }
 RwBasicProjectLoadComponentV2 >> stonOn: stonWriter [
 	| instanceVariableNames allInstanceVariableNames |
