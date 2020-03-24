@@ -73,35 +73,10 @@ RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
-	^ self _projectDefinition
-		addComponentNamed: aComponentName
-		definedGroupNames: groupNameDict
-		comment: commentString
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	^ self _projectDefinition
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
-	^ self _projectDefinition
-		addComponentNamed: componentName
-		toComponentNamed: toComponentName
-		withConditions: conditionArray
-		andGroupName: groupName
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
-	^ self _projectDefinition
-		addNestedComponentNamed: aComponentName
-		definedGroupNames: groupNameDict
-		comment: commentString
 ]
 
 { #category : 'project definition' }
@@ -167,42 +142,10 @@ RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentN
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	^ self _projectDefinition
-		addPackageNamed: packageName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
-	(self groupNames includes: groupName)
-		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
-	^ self _projectDefinition
-		addPackageNamed: packageName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
-		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componentName [ 
 	^ self _projectDefinition
 		addPackagesNamed: packageNames
 		toComponentNamed: componentName
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	(self groupNames includes: groupName)
-		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
-	^ self _projectDefinition
-		addPackagesNamed: packageNames
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
 ]
 
 { #category : 'project definition' }
@@ -263,15 +206,6 @@ RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentNa
 	^ self _projectDefinition
 		addProjectNamed:projectName
 		toComponentNamed: componentName
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	^ self _projectDefinition
-		addProjectNamed:projectName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
 ]
 
 { #category : 'project definition' }
@@ -842,15 +776,6 @@ RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName [
-	^ self _projectDefinition
-		removeComponentNamed: componentName
-		fromComponentNamed: fromComponentName
-		withConditions: conditionArray
-		andGroupName: groupName
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
 	^ self _projectDefinition removePackageNamed: packageName
 ]
@@ -860,15 +785,6 @@ RwResolvedProjectV2 >> removePackageNamed: packageName fromComponentNamed: compo
 	^ self _projectDefinition
 		removePackageNamed: packageName
 		fromComponentNamed: componentName
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	^ self _projectDefinition
-		removePackageNamed: packageName
-		fromComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
 ]
 
 { #category : 'project definition' }

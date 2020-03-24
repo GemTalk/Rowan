@@ -116,35 +116,6 @@ RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed:
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
-	| component |
-	component :=  self
-		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		addComponentNames: {componentName}
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName ].
-	groupNameDict
-		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
-	component comment: commentString.
-	^ component
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: componentName [ 
 	| component |
 	component := self
@@ -170,49 +141,9 @@ RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: com
 ]
 
 { #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	| component |
-	component := self
-		componentNamed: componentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		addPackageNames: {packageName}.
-	^ component
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
-	| component |
-	component := self
-		componentNamed: componentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	component
-		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
-			andPackageName: packageName
-			setSymbolDictNameTo: aSymbolDictAssoc value;
-		conditionalPropertiesAtConditions: conditionArray
-			andGroup: groupName
-			addPackageNames: {packageName}.
-	^ component
-]
-
-{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addPackagesNamed: packageNames toComponentNamed: aComponentName [
 	packageNames
 		do: [ :packageName | self addPackageNamed: packageName toComponentNamed: aComponentName ]
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	^ packageNames
-		collect: [ :packageName | 
-			self
-				addPackageNamed: packageName
-				toComponentNamed: componentName
-				withConditions: conditionArray
-				andGroupName: groupName ]
 ]
 
 { #category : 'accessing' }

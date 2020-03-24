@@ -160,35 +160,10 @@ RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
-	^ self components
-		addComponentNamed: aComponentName
-		definedGroupNames: groupNameDict
-		comment: commentString
-]
-
-{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	^ self components
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
-	^ self components
-		addComponentNamed: componentName
-		toComponentNamed: toComponentName
-		withConditions: conditionArray
-		andGroupName: groupName
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString [
-	^ self components
-		addNestedComponentNamed: aComponentName
-		definedGroupNames: groupNameDict
-		comment: commentString
 ]
 
 { #category : 'accessing' }
@@ -342,47 +317,6 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	| package |
-	self components
-		componentNamed: componentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	package := RwPackageDefinition newNamed: packageName.
-	self
-		_addPackage: package
-		ifPresent: [ 
-			"no problem ... just update the component"
-			 ].
-	self components
-		addPackageNamed: packageName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName.
-	^ package
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
-	| package |
-	self components
-		componentNamed: componentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	package := RwPackageDefinition newNamed: packageName.
-	self
-		_addPackage: package
-		ifPresent: [ 
-			"no problem ... just update the component"
-			 ].
-	self components
-		addPackageNamed: packageName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
-		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc.
-	^ package
-]
-
-{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackages: somePackageNames forComponent: aComponent [
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
@@ -400,61 +334,6 @@ RwProjectDefinitionV2 >> addPackages: somePackageNames forComponent: aComponent 
 RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: componentName [
 	^ packageNames
 		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-
-
-	^ packageNames collect: [:packageName | 
-		self addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName ]
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName  gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
-
-	^ packageNames collect: [:packageName | 
-		self addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName  gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray [
-	"return the path name of the new component"
-
-	| theComponentName toComponent path compositePath condition pathArray |
-	self
-		deprecated:
-			'Should be using addPlatformComponentNamed:toComponentNamed:pathNameArray:conditionPathArray:'.
-	toComponent := self componentNamed: toComponentName.
-	condition := conditionPathArray last.
-	pathArray := conditionPathArray copy.
-	pathArray at: pathArray size put: alias.
-	path := RelativePath withAll: pathArray.
-	path parent
-		do: [ :segment | 
-			| intermediateComponentName |
-			"ensure that we have the appropriate intermediate component structure"
-			compositePath := compositePath
-				ifNil: [ Path * segment ]
-				ifNotNil: [ compositePath / segment ].
-			intermediateComponentName := (compositePath / aComponentName) pathString.
-			toComponent := self components
-				componentNamed: intermediateComponentName
-				ifAbsent: [ 
-					| newComponent |
-					newComponent := self components
-						addSimpleNestedComponentNamed: intermediateComponentName
-						condition: segment
-						comment: ''.
-					toComponent addComponentNamed: intermediateComponentName.
-					newComponent ] ].
-	theComponentName := (path / aComponentName) pathString.
-	self components
-		addPlatformNestedComponentNamed: theComponentName
-		condition: condition
-		comment: ''.
-	toComponent addComponentNamed: theComponentName.
-	^ theComponentName
 ]
 
 { #category : 'accessing' }
@@ -517,15 +396,6 @@ RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toCompon
 	^ self components
 		addProjectNamed: projectName
 		toComponentNamed: toComponentName
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName [
-	^ self components
-		addProjectNamed: projectName
-		toComponentNamed: toComponentName
-		withConditions: conditionArray
-		andGroupName: groupName
 ]
 
 { #category : 'accessing' }
@@ -663,17 +533,6 @@ RwProjectDefinitionV2 >> readProjectSetReadTool: readTool withConfigurations: th
 ]
 
 { #category : 'accessing' }
-RwProjectDefinitionV2 >> removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName [
-	| component |
-	component := self componentNamed: fromComponentName.
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		removeComponentNames: {componentName}.
-	^ component
-]
-
-{ #category : 'accessing' }
 RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
 	self components removePackageNamed: aPackageDefinition name.
 	^ super removePackage: aPackageDefinition
@@ -687,20 +546,6 @@ RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: com
 	| component |
 	component := self componentNamed: componentName.
 	component removePackageNamed: packageName.
-	^ component
-]
-
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
-	"do not remove package from defintion, remove it from the named component only. 
-		Use removePackage:, if you want the package completely removed from definition"
-
-	| component |
-	component := self componentNamed: componentName.
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		removePackageNames: {packageName}.
 	^ component
 ]
 

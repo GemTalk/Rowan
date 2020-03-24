@@ -23,11 +23,7 @@ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 class >> readClassDirectories
 		yourself.
 
 	resolvedProject
-		addComponentNamed: 'Core'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				yourself)
+		addNewComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 
 	1 to: directoryArray size do: [ :index | 
@@ -35,9 +31,7 @@ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 class >> readClassDirectories
 		directory := directoryArray at: index.
 		packageDefinition := resolvedProject
 			addPackageNamed: packageName , '_' , index asString
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core'.
+			toComponentNamed: 'Core'.
 		visitor := self new
 			currentProjectDefinition: resolvedProject;
 			currentPackageDefinition: packageDefinition;
