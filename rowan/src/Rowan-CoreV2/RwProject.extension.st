@@ -6,9 +6,28 @@ RwProject >> _requiredProjects [
 
 	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
 
-	| topLevelComponents |
-	topLevelComponents := self loadSpecification componentNames collect: [:componentName | self componentNamed: componentName ].
-	self halt.
+	| requiredProjectNames theComponents visited |
+	visited := Set new.
+	theComponents := self loadedComponents.
+	requiredProjectNames := Set new.
+	self componentNames
+		do: [ :componentName | 
+			| theComponent projectNames |
+			theComponent := theComponents componentNamed: componentName.
+			projectNames := Set new.
+			theComponents
+				conditionalProjectNamesInto: projectNames
+				startingWith: theComponent
+				platformConditionalAttributes: self platformConditionalAttributes
+				visited: visited.
+			requiredProjectNames addAll: projectNames ].
+	^ requiredProjectNames asArray
+		collect: [ :projectName | Rowan projectNamed: projectName ]
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> componentNames [
+	^ self _loadedProject componentNames
 ]
 
 { #category : '*rowan-corev2' }

@@ -57,6 +57,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentForPackageNamed: packageName [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> componentNames [
+
+	^ handle componentNames
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> components [
 
 	^ handle _projectStructure

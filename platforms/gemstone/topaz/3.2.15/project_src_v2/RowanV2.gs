@@ -5907,6 +5907,22 @@ true.
 
 doit
 (RwAbstractTool
+	subclass: 'RwGemStoneTool'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Tools-GemStone';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractTool
 	subclass: 'RwGitTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -49504,6 +49520,17 @@ name
 	^ name
 %
 
+category: 'printing'
+method: RowanInterface
+printOn: aStream
+	super printOn: aStream.
+	self name
+		ifNotNil: [:aString |
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll:  aString ]
+%
+
 category: 'accessing'
 method: RowanInterface
 project
@@ -49744,6 +49771,13 @@ method: RwProject
 project
 
 	^ self
+%
+
+category: 'accessing'
+method: RwProject
+projectDefinitionPlatformConditionalAttributes
+
+	^ self _loadedProject projectDefinitionPlatformConditionalAttributes
 %
 
 category: 'accessing'
@@ -56259,7 +56293,7 @@ _visited: aComponent
 
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: platformConditionalAttributes
+readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes
 	| visitor |
 	visitor := self new
 		_readComponentsForResolvedProject: resolvedProject
@@ -56267,7 +56301,10 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 		platformConditionalAttributes: platformConditionalAttributes.
 	resolvedProject
 		projectDefinitionSourceProperty:
-			RwLoadedProject _projectDiskDefinitionSourceValue.
+				RwLoadedProject _projectDiskDefinitionSourceValue;
+		projectDefinitionPlatformConditionalAttributes:
+				platformConditionalAttributes copy;
+		yourself.
 	visitor visitedComponents
 		keysAndValuesDo: [ :cName :cmp | resolvedProject components _addComponent: cmp ].
 	^ visitor
@@ -61920,8 +61957,8 @@ loadSpecification
 category: 'accessing'
 method: RwAbstractResolvedProjectV2
 platformConditionalAttributes
-
-	^ super platformConditionalAttributes,  Rowan platformConditionalAttributes
+	^ self projectDefinitionPlatformConditionalAttributes
+		ifNil: [ super platformConditionalAttributes , Rowan platformConditionalAttributes ]
 %
 
 category: 'copying'
@@ -62872,15 +62909,27 @@ loadProjectSet
 
 category: 'actions'
 method: RwResolvedProjectV2
-loadProjectSet: instanceMigrator
+loadProjectSet: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"load a project definition set that will contain the project definition along with any dependent project definitions"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
-		loadProjectSetDefinition: self readProjectSet
-		instanceMigrator: instanceMigrator
+		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"load a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
+		 instanceMigrator: instanceMigrator
 %
 
 category: 'project definition'
@@ -62999,6 +63048,18 @@ printOn: aStream
 			aStream
 				nextPutAll: ' for ';
 				nextPutAll: self _projectDefinition projectName ]
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+projectDefinitionPlatformConditionalAttributes
+	^ self _projectDefinition projectDefinitionPlatformConditionalAttributes
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+	self _projectDefinition projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'project definition'
@@ -63869,6 +63930,40 @@ _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoad
 								message: 'Missing expected instances methods in the category' , ' #' , anExtentionCategory asString)   ].
 	].
 	^res
+%
+
+! Class implementation for 'RwGemStoneTool'
+
+!		Instance methods for 'RwGemStoneTool'
+
+category: 'repository'
+method: RwGemStoneTool
+newRepositoryRoot: repositoryRoot forProjectNamed: projectName
+	"change the repositoryRoot and then load from disk"
+
+	| resolvedProject project |
+	project := Rowan projectNamed: projectName.
+	resolvedProject := project asDefinition.
+	resolvedProject repositoryRoot: repositoryRoot.
+	^ resolvedProject loadProjectSet
+%
+
+category: 'repository'
+method: RwGemStoneTool
+newRepositoryRootForRowan: repositoryRoot
+	"Rowan has several embedded projects and that means for the moment that the repsitoryRoot for the 
+		projects must be changed at the same time, then load Rowan which will load the embedded projects"
+
+	"https://github.com/GemTalk/Rowan/issues/591"
+
+	| resolvedProject project |
+	#('Cypress' 'FileSystemGs' 'Rowan' 'STON' 'Tonel')
+		do: [ :projectName | 
+			project := RwProject newNamed: projectName.
+			project repositoryRoot: repositoryRoot ].
+
+	resolvedProject := (Rowan image loadedProjectNamed: 'Rowan') asDefinition.
+	resolvedProject loadProjectSet
 %
 
 ! Class implementation for 'RwGitTool'
@@ -66917,6 +67012,8 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			theLoadedProject handle _projectStructure: projectDef components copy.
+			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
+			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
 				or: [ 
@@ -70278,6 +70375,28 @@ postCopy
 	oldPackages := packages.
 	packages := Dictionary new.
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
+%
+
+category: 'properties'
+method: RwAbstractProjectDefinitionV2
+projectDefinitionPlatformConditionalAttributes
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		ifAbsent: [  ]
+%
+
+category: 'properties'
+method: RwAbstractProjectDefinitionV2
+projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil
+	platformConditionalAtttributesOrNil
+		ifNil: [ 
+			^ properties
+				removeKey:
+					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+				ifAbsent: [  ] ].
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		put: platformConditionalAtttributesOrNil
 %
 
 category: 'accessing'
@@ -81490,6 +81609,14 @@ newForLoadSpecification: aLoadSpecification
 
 category: 'accessing'
 classmethod: RwLoadedProject
+_projectDefinitionPlatformConditionalAttributesKey
+	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
+
+	^ '_Project_Definition_PlatformConditionalAttricutes'
+%
+
+category: 'accessing'
+classmethod: RwLoadedProject
 _projectDefinitionSourceKey
 	"The value of the property key indicates which source the project definition was derived from.
 		Currently used when deciding whether to change the loaded commit id, during a load ... 
@@ -81987,7 +82114,10 @@ asDefinition
 	resolvedProject _projectRepository: handle _projectRepository copy.
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
-			RwLoadedProject _projectLoadedDefinitionSourceValue.
+			RwLoadedProject _projectLoadedDefinitionSourceValue;
+		projectDefinitionPlatformConditionalAttributes:
+				handle projectDefinitionPlatformConditionalAttributes copy;
+		yourself.
 	resolvedProject _projectDefinition components: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
 	^ resolvedProject
 %
@@ -82018,6 +82148,13 @@ componentForPackageNamed: packageName
 	"Answer nil if no component found"
 
 	^ self components componentForPackageNamed: packageName
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+componentNames
+
+	^ handle componentNames
 %
 
 category: 'accessing'
@@ -82135,6 +82272,14 @@ platformConditionalAttributes
 	"Answer the platformConditionalAttributes used to load the project"
 
 	^ self resolvedProject platformConditionalAttributes
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+projectDefinitionPlatformConditionalAttributes
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self resolvedProject projectDefinitionPlatformConditionalAttributes
 %
 
 category: 'accessing'
@@ -84299,6 +84444,41 @@ componentsWithDoits
 	^ self components select: [ :each | each hasDoits ]
 %
 
+category: 'querying'
+method: RwResolvedLoadComponentsV2
+conditionalProjectNamesInto: projectNames startingWith: aSimpleProjectLoadComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames
+	visitedComponentNames add: aSimpleProjectLoadComponent name.
+	aSimpleProjectLoadComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self
+				_platformAttributeMatchIn: platformMatchers
+				using: platformConditionalAttributes)
+				ifTrue: [ 
+					projectNames addAll: aSimpleProjectLoadComponent projectNames.
+					aSimpleProjectLoadComponent componentNames
+						do: [ :cName | 
+							(visitedComponentNames includes: cName)
+								ifFalse: [ 
+									self
+										conditionalProjectNamesInto: projectNames
+										startingWith: (self componentNamed: cName)
+										platformConditionalAttributes: platformConditionalAttributes
+										visited: visitedComponentNames ] ] ] ]
+%
+
+category: 'querying'
+method: RwResolvedLoadComponentsV2
+conditionalProjectNamesStartingWith: aSimpleProjectLoadComponent platformConditionalAttributes: platformConditionalAttributes
+	| projectNames |
+	projectNames := Set new.
+	self
+		conditionalProjectNamesInto: projectNames
+		startingWith: aSimpleProjectLoadComponent
+		platformConditionalAttributes: platformConditionalAttributes
+		visited: Set new.
+	^ projectNames
+%
+
 category: 'enumerating'
 method: RwResolvedLoadComponentsV2
 do: aBlock
@@ -84470,38 +84650,6 @@ renameComponentNamed: aComponentPath to: aComponentName
 	^ componentPath
 %
 
-category: 'vast support'
-method: RwResolvedLoadComponentsV2
-vastVaPrequisitesForPackageNamed: packageName ifAbsent: absentBlock
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					| packageMap propertiesMap |
-					packageMap := component
-						conditionalPackageMapSpecsAt: 'vast'
-						ifAbsent: absentBlock.
-					propertiesMap := packageMap at: packageName ifAbsent: absentBlock.
-					^ propertiesMap at: 'vaPrerequisites' ifAbsent: absentBlock ] ].
-	^ absentBlock value
-%
-
-category: 'vast support'
-method: RwResolvedLoadComponentsV2
-vastVaSubApplicationsForPackageNamed: packageName ifAbsent: absentBlock
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					| packageMap propertiesMap |
-					packageMap := component
-						conditionalPackageMapSpecsAt: 'vast'
-						ifAbsent: absentBlock.
-					propertiesMap := packageMap at: packageName ifAbsent: absentBlock.
-					^ propertiesMap at: 'vaSubApplications' ifAbsent: absentBlock ] ].
-	^ absentBlock value
-%
-
 category: 'accessing'
 method: RwResolvedLoadComponentsV2
 _addComponent: aComponent
@@ -84519,6 +84667,28 @@ category: 'private'
 method: RwResolvedLoadComponentsV2
 _gemstoneAllUsersName
 	^ RwLoadSpecificationV2 _gemstoneAllUsersName
+%
+
+category: 'querying'
+method: RwResolvedLoadComponentsV2
+_matchPlatformAttributes: platformPatternMatcher using: platformConditionalAttributes
+	platformConditionalAttributes
+		do: [ :anObject | 
+			(platformPatternMatcher match: anObject)
+				ifTrue: [ ^ true ] ].
+	^ false
+%
+
+category: 'querying'
+method: RwResolvedLoadComponentsV2
+_platformAttributeMatchIn: platformMatchersList using: platformConditionalAttributes
+	platformMatchersList
+		do: [ :platformPatternMatcher | 
+			(self
+				_matchPlatformAttributes: platformPatternMatcher
+				using: platformConditionalAttributes)
+				ifTrue: [ ^ true ] ].
+	^ false
 %
 
 category: 'private'
@@ -108871,6 +109041,13 @@ clearUserAutomaticClassInitializationBlackList
 
 category: '*rowan-gemstone-core'
 classmethod: Rowan
+gemstoneTools
+
+	^self platform gemstoneTools
+%
+
+category: '*rowan-gemstone-core'
+classmethod: Rowan
 globalAutomaticClassInitializationBlackList
 
 	"Answer global list of project names for which automatic class initialiation should be disabled.
@@ -109041,15 +109218,22 @@ symbolDictionaryRegistryClass
 category: '*rowan-gemstone-definitionsv2'
 method: RwAbstractProjectDefinitionV2
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
-
-	({ 'projectOwnerId' . 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
+	({'projectOwnerId'.
+	'spec'.
+	(RwLoadedProject _projectDefinitionSourceKey).
+	(RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey).
+	'projectRef'} includes: propertyKey)
 		ifTrue: [ 
-		"projectRef entries are considered to be equal for comparison purposes"
-		"spec entries are considered to be equal for comparison purposes"
-		"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
-		"projectOwnerId entries are considered equal for comparison purpposes"
-		^ true ].
-	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+			"projectRef entries are considered to be equal for comparison purposes"
+			"spec entries are considered to be equal for comparison purposes"
+			"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
+			"_projectDefinitionPlatformConditionalAttributesKey entries are considered equal for comparison purpposes"
+			"projectOwnerId entries are considered equal for comparison purpposes"
+			^ true ].
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
 %
 
 ! Class extensions for 'RwAbstractTool'
@@ -109627,6 +109811,14 @@ commandResultClass
 
 category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
+gemstoneTools
+	"Answer the platform-specific class for project tools"
+
+	^RwGemStoneTool
+%
+
+category: '*rowan-tools-extensions-gemstone'
+method: RwGsPlatform
 gitTools
 
 	"Answer the platform-specific class for git tools"
@@ -110088,6 +110280,12 @@ projectNamed: aName ifPresent: presentBlock ifAbsent: absentBlock
 
 !		Instance methods for 'RwProject'
 
+category: '*rowan-corev2'
+method: RwProject
+componentNames
+	^ self _loadedProject componentNames
+%
+
 category: '*rowan-gemstone-core'
 method: RwProject
 defaultSymbolDictName
@@ -110161,6 +110359,15 @@ repositoryRoot
 category: '*rowan-corev2'
 method: RwProject
 repositoryRoot: aFileReference
+	| resolvedProject |
+	resolvedProject := self asDefinition.
+	resolvedProject repositoryRoot: aFileReference.
+	^ resolvedProject loadProjectSet
+%
+
+category: '*rowan-corev2'
+method: RwProject
+repositoryRootOld: aFileReference
 	self _loadedProject resolvedProject repositoryRoot: aFileReference
 %
 
@@ -110183,6 +110390,32 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 	^ self _gemstonePlatformSpec
 		useSessionMethodsForExtensionsForPackageNamed: packageName
+%
+
+category: '*rowan-corev2'
+method: RwProject
+_requiredProjects
+	"return list of dependent project names"
+
+	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
+
+	| requiredProjectNames theComponents visited |
+	visited := Set new.
+	theComponents := self loadedComponents.
+	requiredProjectNames := Set new.
+	self componentNames
+		do: [ :componentName | 
+			| theComponent projectNames |
+			theComponent := theComponents componentNamed: componentName.
+			projectNames := Set new.
+			theComponents
+				conditionalProjectNamesInto: projectNames
+				startingWith: theComponent
+				platformConditionalAttributes: self platformConditionalAttributes
+				visited: visited.
+			requiredProjectNames addAll: projectNames ].
+	^ requiredProjectNames asArray
+		collect: [ :projectName | Rowan projectNamed: projectName ]
 %
 
 ! Class extensions for 'RwProjectDefinitionV2'

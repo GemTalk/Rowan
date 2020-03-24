@@ -31,6 +31,26 @@ RwResolvedLoadComponentsV2 >> _gemstoneAllUsersName [
 	^ RwLoadSpecificationV2 _gemstoneAllUsersName
 ]
 
+{ #category : 'querying' }
+RwResolvedLoadComponentsV2 >> _matchPlatformAttributes: platformPatternMatcher using: platformConditionalAttributes [
+	platformConditionalAttributes
+		do: [ :anObject | 
+			(platformPatternMatcher match: anObject)
+				ifTrue: [ ^ true ] ].
+	^ false
+]
+
+{ #category : 'querying' }
+RwResolvedLoadComponentsV2 >> _platformAttributeMatchIn: platformMatchersList using: platformConditionalAttributes [
+	platformMatchersList
+		do: [ :platformPatternMatcher | 
+			(self
+				_matchPlatformAttributes: platformPatternMatcher
+				using: platformConditionalAttributes)
+				ifTrue: [ ^ true ] ].
+	^ false
+]
+
 { #category : 'private' }
 RwResolvedLoadComponentsV2 >> _validate [
 	"ensure that each of the components is valid and return a list of the package names managed by all components"
@@ -358,6 +378,39 @@ RwResolvedLoadComponentsV2 >> componentsWithDoits [
 	^ self components select: [ :each | each hasDoits ]
 ]
 
+{ #category : 'querying' }
+RwResolvedLoadComponentsV2 >> conditionalProjectNamesInto: projectNames startingWith: aSimpleProjectLoadComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames [
+	visitedComponentNames add: aSimpleProjectLoadComponent name.
+	aSimpleProjectLoadComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self
+				_platformAttributeMatchIn: platformMatchers
+				using: platformConditionalAttributes)
+				ifTrue: [ 
+					projectNames addAll: aSimpleProjectLoadComponent projectNames.
+					aSimpleProjectLoadComponent componentNames
+						do: [ :cName | 
+							(visitedComponentNames includes: cName)
+								ifFalse: [ 
+									self
+										conditionalProjectNamesInto: projectNames
+										startingWith: (self componentNamed: cName)
+										platformConditionalAttributes: platformConditionalAttributes
+										visited: visitedComponentNames ] ] ] ]
+]
+
+{ #category : 'querying' }
+RwResolvedLoadComponentsV2 >> conditionalProjectNamesStartingWith: aSimpleProjectLoadComponent platformConditionalAttributes: platformConditionalAttributes [
+	| projectNames |
+	projectNames := Set new.
+	self
+		conditionalProjectNamesInto: projectNames
+		startingWith: aSimpleProjectLoadComponent
+		platformConditionalAttributes: platformConditionalAttributes
+		visited: Set new.
+	^ projectNames
+]
+
 { #category : 'enumerating' }
 RwResolvedLoadComponentsV2 >> do: aBlock [
 	"For each component in the receiver, evaluates the one-argument block
@@ -513,34 +566,4 @@ RwResolvedLoadComponentsV2 >> renameComponentNamed: aComponentPath to: aComponen
 						addComponentNamed: componentPath ] ].
 	self components at: componentPath put: component.
 	^ componentPath
-]
-
-{ #category : 'vast support' }
-RwResolvedLoadComponentsV2 >> vastVaPrequisitesForPackageNamed: packageName ifAbsent: absentBlock [
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					| packageMap propertiesMap |
-					packageMap := component
-						conditionalPackageMapSpecsAt: 'vast'
-						ifAbsent: absentBlock.
-					propertiesMap := packageMap at: packageName ifAbsent: absentBlock.
-					^ propertiesMap at: 'vaPrerequisites' ifAbsent: absentBlock ] ].
-	^ absentBlock value
-]
-
-{ #category : 'vast support' }
-RwResolvedLoadComponentsV2 >> vastVaSubApplicationsForPackageNamed: packageName ifAbsent: absentBlock [
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					| packageMap propertiesMap |
-					packageMap := component
-						conditionalPackageMapSpecsAt: 'vast'
-						ifAbsent: absentBlock.
-					propertiesMap := packageMap at: packageName ifAbsent: absentBlock.
-					^ propertiesMap at: 'vaSubApplications' ifAbsent: absentBlock ] ].
-	^ absentBlock value
 ]

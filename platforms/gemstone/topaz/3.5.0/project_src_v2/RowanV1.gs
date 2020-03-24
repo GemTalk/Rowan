@@ -5761,6 +5761,22 @@ true.
 
 doit
 (RwAbstractTool
+	subclass: 'RwGemStoneTool'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Tools-GemStone';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractTool
 	subclass: 'RwGitTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -48572,6 +48588,17 @@ name
 	^ name
 %
 
+category: 'printing'
+method: RowanInterface
+printOn: aStream
+	super printOn: aStream.
+	self name
+		ifNotNil: [:aString |
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll:  aString ]
+%
+
 category: 'accessing'
 method: RowanInterface
 project
@@ -48812,6 +48839,13 @@ method: RwProject
 project
 
 	^ self
+%
+
+category: 'accessing'
+method: RwProject
+projectDefinitionPlatformConditionalAttributes
+
+	^ self _loadedProject projectDefinitionPlatformConditionalAttributes
 %
 
 category: 'accessing'
@@ -60225,6 +60259,40 @@ _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoad
 	^res
 %
 
+! Class implementation for 'RwGemStoneTool'
+
+!		Instance methods for 'RwGemStoneTool'
+
+category: 'repository'
+method: RwGemStoneTool
+newRepositoryRoot: repositoryRoot forProjectNamed: projectName
+	"change the repositoryRoot and then load from disk"
+
+	| resolvedProject project |
+	project := Rowan projectNamed: projectName.
+	resolvedProject := project asDefinition.
+	resolvedProject repositoryRoot: repositoryRoot.
+	^ resolvedProject loadProjectSet
+%
+
+category: 'repository'
+method: RwGemStoneTool
+newRepositoryRootForRowan: repositoryRoot
+	"Rowan has several embedded projects and that means for the moment that the repsitoryRoot for the 
+		projects must be changed at the same time, then load Rowan which will load the embedded projects"
+
+	"https://github.com/GemTalk/Rowan/issues/591"
+
+	| resolvedProject project |
+	#('Cypress' 'FileSystemGs' 'Rowan' 'STON' 'Tonel')
+		do: [ :projectName | 
+			project := RwProject newNamed: projectName.
+			project repositoryRoot: repositoryRoot ].
+
+	resolvedProject := (Rowan image loadedProjectNamed: 'Rowan') asDefinition.
+	resolvedProject loadProjectSet
+%
+
 ! Class implementation for 'RwGitTool'
 
 !		Instance methods for 'RwGitTool'
@@ -71165,6 +71233,14 @@ newForLoadSpecification: aLoadSpecification
 		initialize;
 		initializeForLoadSpecification: aLoadSpecification;
 		yourself
+%
+
+category: 'accessing'
+classmethod: RwLoadedProject
+_projectDefinitionPlatformConditionalAttributesKey
+	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
+
+	^ '_Project_Definition_PlatformConditionalAttricutes'
 %
 
 category: 'accessing'
@@ -97910,6 +97986,13 @@ clearUserAutomaticClassInitializationBlackList
 
 category: '*rowan-gemstone-core'
 classmethod: Rowan
+gemstoneTools
+
+	^self platform gemstoneTools
+%
+
+category: '*rowan-gemstone-core'
+classmethod: Rowan
 globalAutomaticClassInitializationBlackList
 
 	"Answer global list of project names for which automatic class initialiation should be disabled.
@@ -98478,6 +98561,14 @@ method: RwGsPlatform
 commandResultClass
 
 	^ RowanCommandResult
+%
+
+category: '*rowan-tools-extensions-gemstone'
+method: RwGsPlatform
+gemstoneTools
+	"Answer the platform-specific class for project tools"
+
+	^RwGemStoneTool
 %
 
 category: '*rowan-tools-extensions-gemstone'
