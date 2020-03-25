@@ -1,6 +1,11 @@
 Extension { #name : 'RwProject' }
 
 { #category : '*rowan-corev2' }
+RwProject >> _repositoryRoot: aFileReference [
+	self _loadedProject resolvedProject repositoryRoot: aFileReference
+]
+
+{ #category : '*rowan-corev2' }
 RwProject >> componentNames [
 	^ self _loadedProject componentNames
 ]
@@ -30,14 +35,10 @@ RwProject >> repositoryRoot [
 { #category : '*rowan-corev2' }
 RwProject >> repositoryRoot: aFileReference [
 	| resolvedProject |
+	self requiredProjects do: [:project | project _repositoryRoot: aFileReference ].
 	resolvedProject := self asDefinition.
 	resolvedProject repositoryRoot: aFileReference.
 	^ resolvedProject loadProjectSet
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> repositoryRootOld: aFileReference [
-	self _loadedProject resolvedProject repositoryRoot: aFileReference
 ]
 
 { #category : '*rowan-corev2' }

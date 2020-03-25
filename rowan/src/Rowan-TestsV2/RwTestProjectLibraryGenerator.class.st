@@ -60,6 +60,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0049: commitComment;
 	genSpec_0050: commitComment;
 	genSpec_0051: commitComment;
+	genSpec_0052: commitComment;
 	yourself
 "
 Class {
@@ -2819,6 +2820,58 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0051: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
+	"Start with spec_0001; add an embedded project that is basically a copy of spec_001; and adjust class in primary project be a subclass of class in embedded project"
+
+	| dependentProjectName dependentLoadSpec dependentProject embeddedProjectReference componentName |
+	dependentProjectName := projectName , '_embedded_1'.
+	embeddedProjectReference := Path * 'embededProjects' / dependentProjectName
+		/ 'rowan'.
+	componentName := 'Core'.
+	dependentLoadSpec := RwEmbeddedLoadSpecificationV2 new
+		specName: dependentProjectName;
+		projectName: dependentProjectName;
+		projectAlias: projectName;
+		revision: 'spec_0052';
+		gitUrl: self projectUrl;
+		componentNames: {componentName};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: { 'tests' }
+		yourself.
+
+	dependentProject := dependentLoadSpec resolveWithParentProject: resolvedProject.
+	dependentProject projectSpecification
+		specsPath: (embeddedProjectReference / 'specs') pathString;
+		projectsPath: (embeddedProjectReference / 'projects') pathString;
+		packagesPath: (embeddedProjectReference / 'src') pathString;
+		componentsPath: (embeddedProjectReference / 'components') pathString;
+		yourself.
+	dependentProject
+		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
+		addNewComponentNamed: componentName;
+		addNewComponentNamed: 'Tests'
+			toComponentNamed: componentName
+			condition: {'tests'};
+		yourself.
+	self _addDefinitionsFor: dependentProject projectName: dependentProjectName.
+
+	dependentProject
+		projectsHome: self projectsHome;
+		export;
+		exportLoadSpecification.	"write the embedded project directory structure"
+
+	resolvedProject projectsRoot ensureCreateDirectory.
+	dependentProject specsRoot / dependentLoadSpec specName , 'ston'
+		copyTo: resolvedProject projectsRoot / dependentLoadSpec specName , 'ston'.
+
+	(resolvedProject componentNamed: componentName)
+		addProjectNamed: dependentProjectName;
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -3137,6 +3190,11 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _sampleSymbolDictionaryName1 [
 	^ RwAbstractV2Test _sampleSymbolDictionaryName1
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _sampleSymbolDictionaryName2 [
+	^ RwAbstractV2Test _sampleSymbolDictionaryName2
 ]
 
 { #category : 'private' }
@@ -5763,6 +5821,51 @@ RwTestProjectLibraryGenerator >> genSpec_0051: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0051: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0052: commitMessage [
+	"Start with spec_0001; add an embedded project that is basically a copy of spec_001; and adjust class in primary project be a subclass of class in embedded project"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0052'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001; add an embedded project that is basically a copy of spec_001; and adjust class in primary project be a subclass of class in embedded project'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 52
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(591 571);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0052: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

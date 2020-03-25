@@ -5365,7 +5365,7 @@ RwRowanSample9Test >> testSpec_0049 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0050 [
-	"spec_0050 should load cleanly ... both specs"
+	"spec_0050 should load cleanly"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0050'.
@@ -5392,13 +5392,43 @@ RwRowanSample9Test >> testSpec_0050 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0051 [
-	"spec_0051 should load cleanly ... both specs"
+	"spec_0051 should load cleanly"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0051'.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0052 [
+	"spec_0052 should load cleanly ... both projects"
+
+	"https://github.com/GemTalk/Rowan/issues/571"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects dependentProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0052'.
+
+	projectName := loadSpec projectName.
+	dependentProjectName := 'RowanSample9_embedded_1'.
+	projectNames := {projectName . dependentProjectName}.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
