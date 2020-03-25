@@ -5418,12 +5418,12 @@ RwRowanSample9Test >> testSpec_0051 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testSpec_0052 [
+RwRowanSample9Test >> testSpec_0052_1 [
 	"spec_0052 should load cleanly ... both projects"
 
 	"https://github.com/GemTalk/Rowan/issues/571"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects dependentProjectName |
+	| loadSpec projectName projectNames resolvedProject loadedProjects dependentProjectName errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0052'.
 
 	projectName := loadSpec projectName.
@@ -5437,14 +5437,106 @@ RwRowanSample9Test >> testSpec_0052 [
 "resolve project"
 	resolvedProject := loadSpec resolveStrict.
 
+"expect an error for #load"
+	errorHit := false.
+	[ resolvedProject load ] 
+		on: Error do: [:ex | 
+			ex description ='UserDefinedError: Missing required projects for the project ''RowanSample9''. Use loadProjectSet to ensure that all required projects are installed.'
+				ifTrue: [ errorHit := true ] ].
+	self assert: errorHit description: 'Expected an error on #load'.
+
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := resolvedProject loadProjectSet.
 
 "validate"
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0052_2 [
+	"spec_0052 should load cleanly ... using resolveProjectSet: message"
+
+	"https://github.com/GemTalk/Rowan/issues/571"
+
+	| loadSpec projectName projectNames projectSet loadedProjects dependentProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0052'.
+
+	projectName := loadSpec projectName.
+	dependentProjectName := 'RowanSample9_embedded_1'.
+	projectNames := {projectName . dependentProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	projectSet := loadSpec resolveProjectSetStrict.
+
+"load project set"
+	loadedProjects := Rowan projectTools loadV2 loadProjectSetDefinition: projectSet.
+
+"validate"
+	self
+		_standard_validate: (projectSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"unload projects"
+	(Rowan projectNamed: projectName) unload.
+	(Rowan projectNamed: dependentProjectName) unload.	"unload second, because it is required by project name"
+
+"resolve project using resolveProjectSet:"
+	projectSet := loadSpec resolveProjectSet: (projectSet projectNamed: projectName) platformConditionalAttributes.
+
+"load project set"
+	loadedProjects := Rowan projectTools loadV2 loadProjectSetDefinition: projectSet.
+
+"validate"
+	self
+		_standard_validate: (projectSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0052_3 [
+	"spec_0052 should load cleanly ... testing unload of a project that is required by another project"
+
+	"https://github.com/GemTalk/Rowan/issues/571"
+
+	| loadSpec projectName projectNames projectSet loadedProjects dependentProjectName errorHit |
+	loadSpec := self _loadSpecNamed: 'spec_0052'.
+
+	projectName := loadSpec projectName.
+	dependentProjectName := 'RowanSample9_embedded_1'.
+	projectNames := {projectName . dependentProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	projectSet := loadSpec resolveProjectSetStrict.
+
+"load project set"
+	loadedProjects := Rowan projectTools loadV2 loadProjectSetDefinition: projectSet.
+
+"validate"
+	self
+		_standard_validate: (projectSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"should get an error if attempting to unload a project that is required by another project"
+	errorHit := false.
+	[ (Rowan projectNamed: dependentProjectName) unload ]
+		on: Error do: [:ex |
+			self assert: ex description = ''.
+			errorHit := true ].
+	self assert: errorHit.
 ]
 
 { #category : 'tests' }

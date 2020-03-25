@@ -48,7 +48,7 @@ RwProject >> requiredProjects [
 	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
 
 	| requiredProjectNames theComponents |
-	theComponents := self loadedComponents.
+	theComponents := self loadedComponents. "use loadedComponents, not _loadedProjectDefinition - loadedComponents kept up to date"
 	requiredProjectNames := Set new.
 	theComponents
 		conditionalComponentsStartingWith: self componentNames

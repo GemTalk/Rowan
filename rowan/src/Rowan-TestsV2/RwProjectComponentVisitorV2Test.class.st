@@ -65,38 +65,6 @@ RwProjectComponentVisitorV2Test >> _cloneVastTonelDemo_555: projectAlias deleteC
 	^ projectPath pathString
 ]
 
-{ #category : 'private' }
-RwProjectComponentVisitorV2Test >> _readVastTonelDemo_555: platformAttributes deleteClone: deleteClone [
-	"Read project definition from a tonel repository written by VAST .. includes additional package/class/method properties not used by GemStone or Pharo"
-
-	"https://github.com/GemTalk/Rowan/issues/555"
-
-	| projectName loadSpec projectAlias projectsHome projectPath |
-	projectName := 'tonel-demo'.
-	projectAlias := projectName , '_DiskConfig_Test'.
-
-	projectsHome := RwRowanSample9Test _testRowanProjectsSandbox asFileReference.
-	deleteClone
-		ifTrue: [ 
-			projectPath := projectsHome / projectAlias.
-			projectPath exists
-				ifTrue: [ projectPath deleteAll ] ].
-
-	loadSpec := RwLoadSpecificationV2 new
-		projectName: projectName;
-		projectAlias: projectAlias;
-		specName: projectName;
-		projectsHome: projectsHome;
-		componentNames: #('Core');
-		groupNames: #('core');
-		projectSpecFile: 'rowan/project.ston';
-		gitUrl: 'https://github.com/dalehenrich/tonel-demos';
-		revision: 'rowan_553';
-		yourself.
-
-	^ loadSpec resolve: platformAttributes
-]
-
 { #category : 'tests' }
 RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 	"test of RwProjectLoadComponentVisitorV2 as it is used in the RwPrjReadToolV2."

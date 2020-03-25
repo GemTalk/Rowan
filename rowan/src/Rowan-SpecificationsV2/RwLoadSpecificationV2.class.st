@@ -527,6 +527,21 @@ RwLoadSpecificationV2 >> repositoryRoot [
 ]
 
 { #category : 'actions' }
+RwLoadSpecificationV2 >> resolveProjectSetStrict [
+	"resolve using #strict repositoryResolutionpolicy"
+
+	| oldPolicy |
+	self isStrict
+		ifTrue: [ ^ self resolve ].
+	oldPolicy := self repositoryResolutionPolicy.
+	[ 
+	"force #strict policy to ensure that the revision is checked out out in the repository"
+	self repositoryResolutionPolicy: #'strict'.
+	^ self resolveProjectSet ]
+		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
+]
+
+{ #category : 'actions' }
 RwLoadSpecificationV2 >> resolveStrict [
 	"resolve using #strict repositoryResolutionpolicy"
 

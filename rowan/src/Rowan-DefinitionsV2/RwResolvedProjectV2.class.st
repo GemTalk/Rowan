@@ -50,6 +50,28 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platform
 		resolve: platformAttributes
 ]
 
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^(self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolveProjectSet
+]
+
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 platformAttributes: platformAttributes [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolveProjectSet: platformAttributes
+]
+
 { #category : 'private' }
 RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 	"answer true if the basic project directory structure is present"
@@ -464,7 +486,13 @@ RwResolvedProjectV2 >> key [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> load [
-	"load the receiver into the image"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
@@ -472,7 +500,10 @@ RwResolvedProjectV2 >> load [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> load: instanceMigrator [
-	"load the receiver into the image"
+	"
+		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
@@ -487,9 +518,10 @@ RwResolvedProjectV2 >> loadedCommitId [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> loadProjectSet [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"load a project definition set that will contain the project definition along with any dependent project definitions"
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
@@ -499,9 +531,12 @@ RwResolvedProjectV2 >> loadProjectSet [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
 
-	"load a project definition set that will contain the project definition along with any dependent project definitions"
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
@@ -510,14 +545,18 @@ RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set, using the specified 
+			instance migrator.
 
-	"load a project definition set that will contain the project definition along with any dependent project definitions"
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
-		 instanceMigrator: instanceMigrator
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'project definition' }
@@ -721,6 +760,7 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames platformConditi
 
 	"return the receiver with a new set of definitions read from disk"
 
+	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames
@@ -825,6 +865,22 @@ RwResolvedProjectV2 >> repoType: aSymbol [
 	self _projectSpecification repoType: aSymbol
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> requiredProjectNames [
+	^ self requiredProjectNames: self platformConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> requiredProjectNames: platformConditionalAttributes [
+	| requiredProjectNames |
+	requiredProjectNames := Set new.
+	self components
+		conditionalComponentsStartingWith: self componentNames
+		platformConditionalAttributes: platformConditionalAttributes
+		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
+	^ requiredProjectNames
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> resolve [
 	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
@@ -854,6 +910,41 @@ RwResolvedProjectV2 >> resolve: platformConfigurationAttributes [
 				ifTrue: [ 
 					"update project definition from disk"
 					self read: platformConfigurationAttributes ] ]
+
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> resolveProjectSet [
+	"resolve the loadSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project set from disk, if project is present on disk (project set will include required projects)"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"read project and required projects from disk"
+					^ self readProjectSet ] ].
+	^ RwProjectSetDefinition new
+		addProject: self;
+		yourself
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> resolveProjectSet: platformConfigurationAttributes [
+	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project set from disk, if project is present on disk (includes required projects)t"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					^ self readProjectSet: platformConfigurationAttributes ] ].
+	^ RwProjectSetDefinition new
+		addProject: self;
+		yourself
 ]
 
 { #category : 'load specification' }
