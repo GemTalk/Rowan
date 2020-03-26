@@ -34,8 +34,14 @@ RwProject >> repositoryRoot [
 
 { #category : '*rowan-corev2' }
 RwProject >> repositoryRoot: aFileReference [
-	| resolvedProject |
-	self requiredProjects do: [:project | project _repositoryRoot: aFileReference ].
+	| resolvedProject originalRepositoryRoot |
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _repositoryRoot: aFileReference ] ].
 	resolvedProject := self asDefinition.
 	resolvedProject repositoryRoot: aFileReference.
 	^ resolvedProject loadProjectSet

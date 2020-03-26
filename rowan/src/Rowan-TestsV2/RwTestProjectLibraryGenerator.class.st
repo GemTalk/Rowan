@@ -61,6 +61,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0050: commitComment;
 	genSpec_0051: commitComment;
 	genSpec_0052: commitComment;
+	genSpec_0053: commitComment;
 	yourself
 "
 Class {
@@ -2823,14 +2824,18 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0051: resolvedProject [
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 	"Start with spec_0001; add an embedded project that is basically a copy of spec_001; and adjust class in primary project be a subclass of class in embedded project"
 
-	| dependentProjectName dependentLoadSpec dependentProject embeddedProjectReference componentName |
-	dependentProjectName := projectName , '_embedded_1'.
-	embeddedProjectReference := Path * 'embededProjects' / dependentProjectName
+	| requiredProjectName requiredLoadSpec requiredProject embeddedProjectReference componentName requiredClassName1 className1 packageName1 |
+	requiredProjectName := projectName , '_embedded_1'.
+	embeddedProjectReference := Path * 'embededProjects' / requiredProjectName
 		/ 'rowan'.
 	componentName := 'Core'.
-	dependentLoadSpec := RwEmbeddedLoadSpecificationV2 new
-		specName: dependentProjectName;
-		projectName: dependentProjectName;
+	requiredClassName1 :=  requiredProjectName , 'Class1'.
+	className1 :=  projectName , 'Class1'.
+	packageName1 := projectName , '-Core'.
+	
+	requiredLoadSpec := RwEmbeddedLoadSpecificationV2 new
+		specName: requiredProjectName;
+		projectName: requiredProjectName;
 		projectAlias: projectName;
 		revision: 'spec_0052';
 		gitUrl: self projectUrl;
@@ -2839,34 +2844,78 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 		customConditionalAttributes: { 'tests' }
 		yourself.
 
-	dependentProject := dependentLoadSpec resolveWithParentProject: resolvedProject.
-	dependentProject projectSpecification
+	requiredProject := requiredLoadSpec resolveWithParentProject: resolvedProject.
+	requiredProject projectSpecification
 		specsPath: (embeddedProjectReference / 'specs') pathString;
 		projectsPath: (embeddedProjectReference / 'projects') pathString;
 		packagesPath: (embeddedProjectReference / 'src') pathString;
 		componentsPath: (embeddedProjectReference / 'components') pathString;
 		yourself.
-	dependentProject
+	requiredProject
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
 		addNewComponentNamed: componentName;
 		addNewComponentNamed: 'Tests'
 			toComponentNamed: componentName
 			condition: {'tests'};
 		yourself.
-	self _addDefinitionsFor: dependentProject projectName: dependentProjectName.
+	self _addDefinitionsFor: requiredProject projectName: requiredProjectName.
 
-	dependentProject
+	requiredProject
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
 	resolvedProject projectsRoot ensureCreateDirectory.
-	dependentProject specsRoot / dependentLoadSpec specName , 'ston'
-		copyTo: resolvedProject projectsRoot / dependentLoadSpec specName , 'ston'.
+	requiredProject specsRoot / requiredLoadSpec specName , 'ston'
+		copyTo: resolvedProject projectsRoot / requiredLoadSpec specName , 'ston'.
 
 	(resolvedProject componentNamed: componentName)
-		addProjectNamed: dependentProjectName;
+		addProjectNamed: requiredProjectName;
 		yourself.
+
+	((resolvedProject packageNamed: packageName1)
+		classDefinitionNamed: className1)
+			superclassName: requiredClassName1;
+			instVarNames: #();
+			yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject [
+	"Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project"
+
+	| requiredProjectName componentName requiredClassName1 className1 packageName1 className2 packageName2
+		embeddedProjectReference |
+	requiredProjectName := projectName , '_embedded_1'.
+	embeddedProjectReference := Path * 'embededProjects' / requiredProjectName
+		/ 'rowan'.
+	componentName := 'Core'.
+	requiredClassName1 :=  requiredProjectName , 'Class1'.
+	className1 :=  projectName , 'Class1'.
+	className2 :=  projectName , 'TestCase'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	
+	((resolvedProject packageNamed: packageName1)
+		classDefinitionNamed: className1)
+			addInstanceMethod: 'ivar1 ^ ivar1'
+			protocol: 'accessing';
+			yourself.
+
+	((resolvedProject packageNamed: packageName2)
+		classDefinitionNamed: className2)
+		addInstanceMethod: 'testInstVars_', className1, '
+	| x |
+	self assert: (x := ', className1, ' new ivar1) isNil.
+'
+			protocol: 'tests';
+		yourself.
+
+	resolvedProject projectsRoot ensureCreateDirectory.
+	(RwEmbeddedLoadSpecificationV2 fromFile: self projectsHome / projectName / embeddedProjectReference pathString / 'specs' / 'RowanSample9_embedded_1', 'ston')
+		exportTo: resolvedProject projectsRoot.
 
 	^ resolvedProject
 ]
@@ -5866,6 +5915,51 @@ RwTestProjectLibraryGenerator >> genSpec_0052: commitMessage [
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0052: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
+	"Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	postfix := '0053'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0052'.
+	title := 'Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 53
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(591);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0053: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

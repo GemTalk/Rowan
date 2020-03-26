@@ -5423,12 +5423,12 @@ RwRowanSample9Test >> testSpec_0052_1 [
 
 	"https://github.com/GemTalk/Rowan/issues/571"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects dependentProjectName errorHit |
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0052'.
 
 	projectName := loadSpec projectName.
-	dependentProjectName := 'RowanSample9_embedded_1'.
-	projectNames := {projectName . dependentProjectName}.
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -5461,12 +5461,12 @@ RwRowanSample9Test >> testSpec_0052_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/571"
 
-	| loadSpec projectName projectNames projectSet loadedProjects dependentProjectName |
+	| loadSpec projectName projectNames projectSet loadedProjects requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0052'.
 
 	projectName := loadSpec projectName.
-	dependentProjectName := 'RowanSample9_embedded_1'.
-	projectNames := {projectName . dependentProjectName}.
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -5486,7 +5486,7 @@ RwRowanSample9Test >> testSpec_0052_2 [
 
 "unload projects"
 	(Rowan projectNamed: projectName) unload.
-	(Rowan projectNamed: dependentProjectName) unload.	"unload second, because it is required by project name"
+	(Rowan projectNamed: requiredProjectName) unload.	"unload second, because it is required by project name"
 
 "resolve project using resolveProjectSet:"
 	projectSet := loadSpec resolveProjectSet: (projectSet projectNamed: projectName) platformConditionalAttributes.
@@ -5507,12 +5507,12 @@ RwRowanSample9Test >> testSpec_0052_3 [
 
 	"https://github.com/GemTalk/Rowan/issues/571"
 
-	| loadSpec projectName projectNames projectSet loadedProjects dependentProjectName errorHit |
+	| loadSpec projectName projectNames projectSet loadedProjects requiredProjectName errorHit |
 	loadSpec := self _loadSpecNamed: 'spec_0052'.
 
 	projectName := loadSpec projectName.
-	dependentProjectName := 'RowanSample9_embedded_1'.
-	projectNames := {projectName . dependentProjectName}.
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -5532,11 +5532,39 @@ RwRowanSample9Test >> testSpec_0052_3 [
 
 "should get an error if attempting to unload a project that is required by another project"
 	errorHit := false.
-	[ (Rowan projectNamed: dependentProjectName) unload ]
+	[ (Rowan projectNamed: requiredProjectName) unload ]
 		on: Error do: [:ex |
 			self assert: ex description = ''.
 			errorHit := true ].
 	self assert: errorHit.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0053 [
+	"spec_0053 should load cleanly"
+
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0053'.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectName := loadSpec projectName.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProjectSet := loadSpec resolveProjectSet.
+
+"load project"
+	loadedProjects := resolvedProjectSet load.
+
+"validate"
+	self
+		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
 ]
 
 { #category : 'tests' }
@@ -5573,7 +5601,7 @@ RwRowanSample9Test >> testSwitchRepository [
 "validate"
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
 
-"load project1 from spec_0002 checkout: changing repository root of loaded project
+"load project1 from spec_0003 checkout: changing repository root of loaded project
 	results in a load "
 	loadedProjects := project1 repositoryRoot: resolvedProject2 repositoryRoot.
 
@@ -5583,5 +5611,69 @@ RwRowanSample9Test >> testSwitchRepository [
 	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar = 'bar'.	"bar method not present in spec_0001"
+	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSwitchRepository_591 [
+	"https://github.com/GemTalk/Rowan/issues/591"
+
+	"spec_0052 and spec_0053 have embedded projects"
+
+	| projectName1 projectName2 loadSpec1 loadSpec2 projectNames resolvedProjectSet1 
+		resolvedProjectSet2 project1 loadedProjects resolvedProject1 resolvedProject2 
+		requiredProjectName |
+	
+	projectName1 := 'RowanSample9'.
+	projectName2 :=  'RowanSample9_embedded_1'.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+
+	loadSpec1 := (self _loadSpecNamed: 'spec_0052')
+		projectAlias: 'RowanSample9_0052';
+		yourself.
+	loadSpec2 := (self _loadSpecNamed: 'spec_0053')
+		projectAlias: 'RowanSample9_0053';
+		yourself.
+
+	projectNames := {projectName1 . requiredProjectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve projects"
+	resolvedProjectSet1 := loadSpec1 resolveProjectSet.
+	resolvedProject1 := resolvedProjectSet1 projectNamed: projectName1.
+
+	resolvedProjectSet2 := loadSpec2 resolveProjectSet.	"only used to extract target repositoryRoot ... load of spec_0053 will happen via using spec_0053 repositoryRoot"
+	resolvedProject2 := resolvedProjectSet2 projectNamed: projectName2.
+
+"validate"
+	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+
+"load project1 from spec_0052"
+	loadedProjects := resolvedProjectSet1 load.
+	project1 := Rowan projectNamed: projectName1.
+
+"validate"
+	self 
+		_standard_validate: resolvedProject1 
+		loadedProjects: loadedProjects 
+		expectedProjectNames: projectNames.
+
+"load project1 from spec_0053 checkout: changing repository root of loaded project
+	results in a load "
+	loadedProjects := project1 repositoryRoot: resolvedProject2 repositoryRoot.
+
+"Validate"
+	self 
+		_standard_validate: resolvedProject1 
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
+	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
+	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+	self assert: (Rowan globalNamed: 'RowanSample9Class1') new ivar1 isNil.	"ivar1 method not present in spec_0052"
 	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
 ]
