@@ -113,6 +113,11 @@ RowanProjectService >> checkout: branchName [
 ]
 
 { #category : 'client commands' }
+RowanProjectService >> checkoutTag: tagName [
+  Rowan gitTools gitcheckoutIn: self repositoryRootPath with: tagName
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> commitWithMessage: message [
 	
 	Rowan projectTools write writeProjectNamed: name.

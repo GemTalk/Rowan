@@ -47,6 +47,24 @@ RowanQueryService >> defaultProjectLogSize [
 ]
 
 { #category : 'queries' }
+RowanQueryService >> gitTagListUsing: projectService [
+  | answerString readStream |
+  Rowan gitTools
+    performGitCommand: 'fetch'
+    in: projectService repositoryRootPath
+    with: '--tags'.
+  answerString := Rowan gitTools
+    performGitCommand: 'tag'
+    in: projectService repositoryRootPath
+    with: '--sort=-taggerdate'.
+  queryResults := Array new.
+  readStream := ReadStream on: answerString.
+  [ readStream atEnd ]
+    whileFalse: [ queryResults add: (readStream upTo: Character lf) ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'queries' }
 RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 
 	| methods behavior classes |
