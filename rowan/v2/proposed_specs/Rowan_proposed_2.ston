@@ -9,10 +9,8 @@ RwLoadSpecificationV2 {
 	],
 	#groupNames : [ ],
 	#customConditionalAttributes : [
-		'tests',
 		'v2',
-		'v2Only',
-		'testsV2'
+		'v2Only'
 	],
 	#platformProperties : {
 		'gemstone' : {
