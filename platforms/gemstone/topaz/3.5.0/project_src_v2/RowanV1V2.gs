@@ -6641,54 +6641,6 @@ true.
 
 doit
 (RwBasicProjectLoadComponentV2
-	subclass: 'RwAbstractProjectLoadComponentV2'
-	instVarNames: #( definedGroupNames conditionalProperties conditionalPropertyMatchers conditionalPackageMapSpecMatchers )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwAbstractProjectLoadComponentV2
-	subclass: 'RwNestedProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwAbstractProjectLoadComponentV2
-	subclass: 'RwProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwBasicProjectLoadComponentV2
 	subclass: 'RwAbstractSimpleProjectLoadComponentV2'
 	instVarNames: #( packageNames condition )
 	classVars: #(  )
@@ -6705,72 +6657,8 @@ true.
 
 doit
 (RwAbstractSimpleProjectLoadComponentV2
-	subclass: 'RwAbstractEnvyProjectLoadComponentV2'
-	instVarNames: #( subApplicationNames )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwAbstractEnvyProjectLoadComponentV2
-	subclass: 'RwEnvyApplicationProjectLoadComponentV2'
-	instVarNames: #( applicationNames )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwAbstractEnvyProjectLoadComponentV2
-	subclass: 'RwEnvySubApplicationProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwAbstractSimpleProjectLoadComponentV2
 	subclass: 'RwAbstractRowanProjectLoadComponentV2'
 	instVarNames: #( componentNames )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwAbstractRowanProjectLoadComponentV2
-	subclass: 'RwAtomicProjectLoadComponentV2'
-	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -62169,11 +62057,7 @@ readClassDirectories: directoryArray projectName: projectName packageName: packa
 		yourself.
 
 	resolvedProject
-		addComponentNamed: 'Core'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				yourself)
+		addNewComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 
 	1 to: directoryArray size do: [ :index | 
@@ -62181,9 +62065,7 @@ readClassDirectories: directoryArray projectName: projectName packageName: packa
 		directory := directoryArray at: index.
 		packageDefinition := resolvedProject
 			addPackageNamed: packageName , '_' , index asString
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core'.
+			toComponentNamed: 'Core'.
 		visitor := self new
 			currentProjectDefinition: resolvedProject;
 			currentPackageDefinition: packageDefinition;
@@ -62389,20 +62271,14 @@ readClassFiles: fileArray projectName: projectName packageName: packageName
 		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
 		yourself.
 	resolvedProject
-		addComponentNamed: 'Core'
-		definedGroupNames:
-			(Dictionary new
-				add: 'core' -> {};
-				yourself)
+		addNewComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 	1 to: fileArray size do: [ :index | 
 		| file |
 		file := fileArray at: index.
 		packageDefinition := resolvedProject
 			addPackageNamed: packageName , '_' , index asString
-			toComponentNamed: 'Core'
-			withConditions: {'common'}
-			andGroupName: 'core'.
+			toComponentNamed: 'Core'.
 		visitor := self new
 			currentProjectDefinition: resolvedProject;
 			currentPackageDefinition: packageDefinition;
@@ -63358,6 +63234,30 @@ loadSpecification: anRwLoadSpecificationV2 platformAttributes: platformAttribute
 		resolve: platformAttributes
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProjectV2
+loadSpecificationProjectSet: anRwLoadSpecificationV2
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^(self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolveProjectSet
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProjectV2
+loadSpecificationProjectSet: anRwLoadSpecificationV2 platformAttributes: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolveProjectSet: platformAttributes
+%
+
 !		Instance methods for 'RwResolvedProjectV2'
 
 category: 'visiting'
@@ -63368,38 +63268,10 @@ acceptVisitor: aVisitor
 
 category: 'project definition'
 method: RwResolvedProjectV2
-addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
-	^ self _projectDefinition
-		addComponentNamed: aComponentName
-		definedGroupNames: groupNameDict
-		comment: commentString
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
 addComponentNamed: componentName toComponentNamed: toComponentName
 	^ self _projectDefinition
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
-	^ self _projectDefinition
-		addComponentNamed: componentName
-		toComponentNamed: toComponentName
-		withConditions: conditionArray
-		andGroupName: groupName
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
-	^ self _projectDefinition
-		addNestedComponentNamed: aComponentName
-		definedGroupNames: groupNameDict
-		comment: commentString
 %
 
 category: 'project definition'
@@ -63475,45 +63347,10 @@ addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymb
 
 category: 'project definition'
 method: RwResolvedProjectV2
-addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	^ self _projectDefinition
-		addPackageNamed: packageName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
-	(self groupNames includes: groupName)
-		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
-	^ self _projectDefinition
-		addPackageNamed: packageName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
-		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
 addPackagesNamed: packageNames toComponentNamed: componentName 
 	^ self _projectDefinition
 		addPackagesNamed: packageNames
 		toComponentNamed: componentName
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	(self groupNames includes: groupName)
-		ifFalse: [ self error: 'The group ' , groupName printString , ' is undefined' ].
-	^ self _projectDefinition
-		addPackagesNamed: packageNames
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
 %
 
 category: 'project definition'
@@ -63585,16 +63422,6 @@ addProjectNamed:projectName toComponentNamed: componentName
 
 category: 'project definition'
 method: RwResolvedProjectV2
-addProjectNamed:projectName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	^ self _projectDefinition
-		addProjectNamed:projectName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
 addRawPackageNamed: packageName
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
@@ -63627,16 +63454,6 @@ addSimpleNestedComponentNamed: aComponentName condition: condition  comment: com
 	^ self _projectDefinition
 		addSimpleNestedComponentNamed: aComponentName
 		condition: condition
-		comment: commentString
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
-	^ self _projectDefinition
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		groupName: groupName
 		comment: commentString
 %
 
@@ -63890,7 +63707,13 @@ key
 category: 'actions'
 method: RwResolvedProjectV2
 load
-	"load the receiver into the image"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
@@ -63899,7 +63722,10 @@ load
 category: 'actions'
 method: RwResolvedProjectV2
 load: instanceMigrator
-	"load the receiver into the image"
+	"
+		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
@@ -63916,9 +63742,10 @@ loadedCommitId
 category: 'actions'
 method: RwResolvedProjectV2
 loadProjectSet
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"load a project definition set that will contain the project definition along with any dependent project definitions"
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
@@ -63929,9 +63756,12 @@ loadProjectSet
 category: 'actions'
 method: RwResolvedProjectV2
 loadProjectSet: platformConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
 
-	"load a project definition set that will contain the project definition along with any dependent project definitions"
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
@@ -63941,14 +63771,18 @@ loadProjectSet: platformConditionalAttributes
 category: 'actions'
 method: RwResolvedProjectV2
 loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set, using the specified 
+			instance migrator.
 
-	"load a project definition set that will contain the project definition along with any dependent project definitions"
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
 
 	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
-		 instanceMigrator: instanceMigrator
+		instanceMigrator: instanceMigrator
 %
 
 category: 'project definition'
@@ -64179,6 +64013,7 @@ readProjectComponentNames: componentNames platformConditionalAttributes: platfor
 
 	"return the receiver with a new set of definitions read from disk"
 
+	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames
@@ -64240,16 +64075,6 @@ removeComponentNamed: aComponentName
 
 category: 'project definition'
 method: RwResolvedProjectV2
-removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName
-	^ self _projectDefinition
-		removeComponentNamed: componentName
-		fromComponentNamed: fromComponentName
-		withConditions: conditionArray
-		andGroupName: groupName
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
 removePackageNamed: packageName
 	^ self _projectDefinition removePackageNamed: packageName
 %
@@ -64260,16 +64085,6 @@ removePackageNamed: packageName fromComponentNamed: componentName
 	^ self _projectDefinition
 		removePackageNamed: packageName
 		fromComponentNamed: componentName
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	^ self _projectDefinition
-		removePackageNamed: packageName
-		fromComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
 %
 
 category: 'project definition'
@@ -64315,6 +64130,24 @@ repoType: aSymbol
 	self _projectSpecification repoType: aSymbol
 %
 
+category: 'accessing'
+method: RwResolvedProjectV2
+requiredProjectNames
+	^ self requiredProjectNames: self platformConditionalAttributes
+%
+
+category: 'accessing'
+method: RwResolvedProjectV2
+requiredProjectNames: platformConditionalAttributes
+	| requiredProjectNames |
+	requiredProjectNames := Set new.
+	self components
+		conditionalComponentsStartingWith: self componentNames
+		platformConditionalAttributes: platformConditionalAttributes
+		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
+	^ requiredProjectNames
+%
+
 category: 'actions'
 method: RwResolvedProjectV2
 resolve
@@ -64346,6 +64179,42 @@ resolve: platformConfigurationAttributes
 				ifTrue: [ 
 					"update project definition from disk"
 					self read: platformConfigurationAttributes ] ]
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+resolveProjectSet
+	"resolve the loadSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project set from disk, if project is present on disk (project set will include required projects)"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"read project and required projects from disk"
+					^ self readProjectSet ] ].
+	^ RwProjectSetDefinition new
+		addProject: self;
+		yourself
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+resolveProjectSet: platformConfigurationAttributes
+	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project set from disk, if project is present on disk (includes required projects)t"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					^ self readProjectSet: platformConfigurationAttributes ] ].
+	^ RwProjectSetDefinition new
+		addProject: self;
+		yourself
 %
 
 category: 'load specification'
@@ -64960,29 +64829,9 @@ method: RwGemStoneTool
 newRepositoryRoot: repositoryRoot forProjectNamed: projectName
 	"change the repositoryRoot and then load from disk"
 
-	| resolvedProject project |
+	| project |
 	project := Rowan projectNamed: projectName.
-	resolvedProject := project asDefinition.
-	resolvedProject repositoryRoot: repositoryRoot.
-	^ resolvedProject loadProjectSet
-%
-
-category: 'repository'
-method: RwGemStoneTool
-newRepositoryRootForRowan: repositoryRoot
-	"Rowan has several embedded projects and that means for the moment that the repsitoryRoot for the 
-		projects must be changed at the same time, then load Rowan which will load the embedded projects"
-
-	"https://github.com/GemTalk/Rowan/issues/591"
-
-	| resolvedProject project |
-	#('Cypress' 'FileSystemGs' 'Rowan' 'STON' 'Tonel')
-		do: [ :projectName | 
-			project := RwProject newNamed: projectName.
-			project repositoryRoot: repositoryRoot ].
-
-	resolvedProject := (Rowan image loadedProjectNamed: 'Rowan') asDefinition.
-	resolvedProject loadProjectSet
+	^ project repositoryRoot: repositoryRoot
 %
 
 ! Class implementation for 'RwGitTool'
@@ -69674,10 +69523,25 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
-	| projectSetDefinition |
+	| projectSetDefinition requiredProjectNames |
 	projectSetDefinition := RwProjectSetDefinition new
-				addProject: projectDefinition;
-				yourself.
+		addProject: projectDefinition;
+		yourself.
+	(requiredProjectNames := projectDefinition
+		requiredProjectNames: platformConfigurationAttributes) isEmpty
+		ifFalse: [ 
+			| absentProjectNames |
+			"if required projects are not already present in the image, then they must be loaded at this time"
+			absentProjectNames := requiredProjectNames
+				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
+			absentProjectNames isEmpty
+				ifFalse: [ 
+					self
+						error:
+							'Missing required projects for the project '
+								, projectDefinition name printString
+								,
+									'. Use loadProjectSet to ensure that all required projects are installed.' ] ].
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
@@ -71225,6 +71089,18 @@ projectName: anObject
    projectName := anObject
 %
 
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+removePackageNamed: aPackageName
+	self conditionalPackageMapSpecs
+		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
+			packageMapSpecsMap
+				keysAndValuesDo: [ :userId :packageMapSpecs | 
+					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
+						removeKey: aPackageName
+						ifAbsent: [  ] ] ]
+%
+
 category: 'ston'
 method: RwBasicProjectLoadComponentV2
 stonOn: stonWriter
@@ -71473,424 +71349,6 @@ _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap
 										ifFalse: [ Error signal: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
 %
 
-! Class implementation for 'RwAbstractProjectLoadComponentV2'
-
-!		Instance methods for 'RwAbstractProjectLoadComponentV2'
-
-category: 'visiting'
-method: RwAbstractProjectLoadComponentV2
-acceptNestedVisitor: aVisitor
-
-	^ self acceptVisitor: aVisitor
-%
-
-category: 'visiting'
-method: RwAbstractProjectLoadComponentV2
-acceptVisitor: aVisitor
-
-	^ self subclassResponsibility: #acceptVisitor:
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalComponentsAtConditions: conditions andGroup: groupName
-	^ self
-		conditionalPropertiesAt: #'componentNames'
-		conditions: conditions
-		andGroup: groupName
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackageMapSpecMatchers
-
-	conditionalPackageMapSpecMatchers ifNotNil: [:val | ^ val ]. 
-	conditionalPackageMapSpecMatchers := Dictionary new.
-	self conditionalPackageMapSpecs keysAndValuesDo: [:platformPattern :packageMapSpecsMap |
-		conditionalPackageMapSpecMatchers
-			at: (self _platformPatternMatcherFor: platformPattern)
-			put: packageMapSpecsMap ].
-	^ conditionalPackageMapSpecMatchers
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackagesAtConditions: conditions andGroup: groupName
-	^ self
-		conditionalPropertiesAt: #'packageNames'
-		conditions: conditions
-		andGroup: groupName
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalProjectsAtConditions: conditions andGroup: groupName
-	^ self
-		conditionalPropertiesAt: #'projectNames'
-		conditions: conditions
-		andGroup: groupName
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalProperties
-	^ conditionalProperties ifNil: [ conditionalProperties := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPropertiesAt: key conditions: conditions andGroup: groupName
-
-	| thePropertiesMap |
-	thePropertiesMap := (self conditionalProperties at: conditions asArray sort ifAbsent: [ ^ Set new])
-		at: groupName ifAbsent: [ ^ Set new ].
-	^ (thePropertiesMap at: key asSymbol ifAbsent: [ Set new ]) asSet
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPropertiesAtConditions: conditions andGroup: groupName addComponentNames: names
-	^ self
-		_conditionalPropertiesAt: #'componentNames'
-		conditions: conditions
-		andGroup: groupName
-		addNames: names
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPropertiesAtConditions: conditions andGroup: groupName addPackageNames: names
-	^ self
-		_conditionalPropertiesAt: #'packageNames'
-		conditions: conditions
-		andGroup: groupName
-		addNames: names
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPropertiesAtConditions: conditions andGroup: groupName addProjectNames: names
-	^ self
-		_conditionalPropertiesAt: #'projectNames'
-		conditions: conditions
-		andGroup: groupName
-		addNames: names
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPropertiesAtConditions: conditions andGroup: groupName removeComponentNames: names
-	^ self
-		_conditionalPropertiesAt: #'componentNames'
-		conditions: conditions
-		andGroup: groupName
-		removeNames: names
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPropertiesAtConditions: conditions andGroup: groupName removePackageNames: names
-	^ self
-		_conditionalPropertiesAt: #'packageNames'
-		conditions: conditions
-		andGroup: groupName
-		removeNames: names
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPropertiesAtConditions: conditions andGroup: groupName removeProjectNames: names
-	^ self
-		_conditionalPropertiesAt: #'projectNames'
-		conditions: conditions
-		andGroup: groupName
-		removeNames: names
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-conditionalPropertyMatchers
-
-	conditionalPropertyMatchers ifNotNil: [:val | ^ val ]. 
-	conditionalPropertyMatchers := Dictionary new.
-	self conditionalProperties keysAndValuesDo: [:platformPatterns :groupMap |
-		conditionalPropertyMatchers
-			at: (platformPatterns collect: [:pattern | self _platformPatternMatcherFor: pattern ])
-			put: groupMap ].
-	^ conditionalPropertyMatchers
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-definedGroupNames
-
-	^ definedGroupNames 
-		ifNil: [ definedGroupNames :=  Dictionary new]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-definedGroupNames: aColl
-
-	definedGroupNames := aColl
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-defineGroupNamed: groupName 
-
-	"add a group that does not include any other groups"
-
-	self defineGroupNamed: groupName toIncludeGroups: #()
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-defineGroupNamed: groupName toIncludeGroups: includedGroups
-
-	"add a group that does not include any other groups"
-
-	self definedGroupNames at: groupName put: includedGroups asArray sort
-%
-
-category: 'ston'
-method: RwAbstractProjectLoadComponentV2
-excludedInstVars
-	^ super excludedInstVars
-		, #(#'conditionalPropertyMatchers' #'conditionalPackageMapSpecMatchers')
-%
-
-category: 'exporting'
-method: RwAbstractProjectLoadComponentV2
-export
-
-	|  exportUrl exportPath |
-	exportPath := self _repositoryRootPath asFileReference / self _configsPath.
-	exportPath ensureCreateDirectory.
-	exportUrl := exportPath fileSystem isMemoryFileSystem
-		ifTrue: [ 'memory:' , exportPath pathString ]
-		ifFalse: [ 'file:' , exportPath pathString, '/' ].
-	^ self exportToUrl: exportUrl
-%
-
-category: 'ston'
-method: RwAbstractProjectLoadComponentV2
-fromSton: stonReader
-	"componentNames and projectNames no longer supported ... componentNames and projectnames should be inserted into conditionalProperties under 'common'"
-
-	| instanceVariableNames componentNames projectNames |
-	instanceVariableNames := self class allInstVarNames.
-	stonReader
-		parseMapDo: [ :instVarName :value | 
-			instVarName = #'componentNames'
-				ifTrue: [ 
-					componentNames ifNil: [ componentNames := Set new ].
-					componentNames addAll: value ]
-				ifFalse: [ 
-					instVarName = #'projectNames'
-						ifTrue: [ 
-							projectNames ifNil: [ projectNames := Set new ].
-							projectNames addAll: value ]
-						ifFalse: [ 
-							instVarName = #'conditionalPackages'
-								ifTrue: [ conditionalProperties := value ]
-								ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ] ].
-	componentNames
-		ifNotNil: [ 
-			self
-				conditionalPropertiesAtConditions: {'common'}
-				andGroup: 'core'
-				addComponentNames: componentNames ].
-	projectNames
-		ifNotNil: [ 
-			self
-				conditionalPropertiesAtConditions: {'common'}
-				andGroup: 'core'
-				addProjectNames: projectNames ]
-%
-
-category: 'initialization'
-method: RwAbstractProjectLoadComponentV2
-initializeForExport
-	"if spec is to be exported, clear out any of the fields that represent state that should 
-	not be shared"
-
-	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
-
-	super initializeForExport.
-	conditionalPropertyMatchers := conditionalPackageMapSpecMatchers := nil.
-	self conditionalProperties
-		ifNotNil: [ :cp | 
-			| orderedConditionalProperties |
-			orderedConditionalProperties := self class orderedDictionaryClass new.
-			(cp keys asSortedCollection: [ :a :b | (a at: 1) <= (b at: 1) ])
-				do: [ :ar | 
-					| dict orderedPropertyNames |
-					dict := cp at: ar.
-					orderedPropertyNames := self class orderedDictionaryClass new.
-					dict keys asArray sort
-						do: [ :group | orderedPropertyNames at: group put: (dict at: group) ].
-					orderedConditionalProperties at: ar put: orderedPropertyNames ].
-			conditionalProperties := orderedConditionalProperties ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-packageNames
-	"Answer the collection of package names defined in the receiver."
-
-	| allDefinedPackageNames |
-	allDefinedPackageNames := Set new.
-	self conditionalProperties
-		keysAndValuesDo: [ :conditions :groupMap | 
-			groupMap
-				keysAndValuesDo: [ :groupName :propertiesMap | allDefinedPackageNames addAll: (propertiesMap at: #'packageNames') ] ].
-	^ allDefinedPackageNames
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-removeComponentNamed: aComponentName
-	"this can create empty componentName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
-
-	self conditionalProperties
-		keysAndValuesDo: [ :conditionsArray :conditionMap | 
-			conditionMap
-				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'componentNames' ifAbsent: [#()]) remove: aComponentName ifAbsent: [  ] ] ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-removePackageNamed: aPackageName
-	"this can create empty packageName lists or empty packageMapSpecMaps ... the export logic _should_ cleanup empty list, which is sufficient"
-
-	self conditionalProperties
-		keysAndValuesDo: [ :conditionsArray :conditionMap | 
-			conditionMap
-				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'packageNames' ifAbsent: [#()]) remove: aPackageName ifAbsent: [  ] ] ].
-	self conditionalPackageMapSpecs
-		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
-			packageMapSpecsMap
-				keysAndValuesDo: [ :userId :packageMapSpecs | 
-					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
-						removeKey: aPackageName
-						ifAbsent: [  ] ] ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-removeProjectNamed: aProjectName
-	"this can create empty projectName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
-
-	self conditionalProperties
-		keysAndValuesDo: [ :conditionsArray :conditionMap | 
-			conditionMap
-				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'projectNames' ifAbsent: [#()]) remove: aProjectName ifAbsent: [  ] ] ].
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-_conditionalPropertiesAt: key conditions: conditions andGroup: groupName addNames: names
-	| theNames theConditionalPropertiesMap |
-	theConditionalPropertiesMap := (self conditionalProperties
-		at: conditions asArray sort
-		ifAbsentPut: [ Dictionary new ]) at: groupName ifAbsentPut: [ Dictionary new ].
-	theNames := (theConditionalPropertiesMap
-		at: key asSymbol
-		ifAbsentPut: [ Set new ]) asSet.
-	theNames addAll: names.
-	theNames := theNames asArray sort.
-	theConditionalPropertiesMap at: key asSymbol put: theNames.
-	^ theNames
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-_conditionalPropertiesAt: key conditions: conditions andGroup: groupName removeNames: names
-	| theNames theConditionalPropertiesMap |
-	theConditionalPropertiesMap := (self conditionalProperties
-		at: conditions asArray sort
-		ifAbsentPut: [ Dictionary new ]) at: groupName ifAbsentPut: [ Dictionary new ].
-	theNames := (theConditionalPropertiesMap
-		at: key asSymbol
-		ifAbsentPut: [ Set new ]) asSet.
-	theNames removeAll: names.
-	theNames := theNames asArray sort.
-	theConditionalPropertiesMap at: key asSymbol put: theNames.
-	^ theNames
-%
-
-category: 'validation'
-method: RwAbstractProjectLoadComponentV2
-_validatedPackageNames
-	"answer the validated set of package names"
-
-	| allDefinedPackageNames knownGroupNames |
-	allDefinedPackageNames := Set new.
-	knownGroupNames := self definedGroupNames keys.
-	self definedGroupNames
-		keysAndValuesDo: [ :groupName :dependentGroups | 
-			dependentGroups
-				do: [ :dependentGroupName | 
-					(knownGroupNames includes: dependentGroupName)
-						ifFalse: [ 
-							Error
-								signal:
-									'The group ' , dependentGroupName printString , ' is not a defined group' ] ] ].
-	self conditionalProperties
-		keysAndValuesDo: [ :conditions :groupMap | 
-			groupMap
-				keysAndValuesDo: [ :groupName :propertiesMap | 
-					(self definedGroupNames keys includes: groupName)
-						ifFalse: [ 
-							Error
-								signal:
-									'Conditional packages includes group name ' , groupName printString
-										, ' that is not a defined group' ].
-					allDefinedPackageNames
-						addAll: (propertiesMap at: #'packageNames' ifAbsent: [ #() ]) ] ].
-	^ allDefinedPackageNames
-%
-
-! Class implementation for 'RwNestedProjectLoadComponentV2'
-
-!		Instance methods for 'RwNestedProjectLoadComponentV2'
-
-category: 'visiting'
-method: RwNestedProjectLoadComponentV2
-acceptNestedVisitor: aVisitor
-
-	^aVisitor visitProjectLoadComponent: self
-%
-
-category: 'visiting'
-method: RwNestedProjectLoadComponentV2
-acceptVisitor: aVisitor
-
-	^self error: 'nested configuration cannot be used as a top-level configuration. The receiver is nested inside of project load configurations'
-%
-
-category: 'testing'
-method: RwNestedProjectLoadComponentV2
-isIndependentlyLoadable
-	"v1 feature"
-
-	"nested configuration is not independently loadable ... they can only be loaded when referenced from another config"
-
-	^ false
-%
-
-! Class implementation for 'RwProjectLoadComponentV2'
-
-!		Instance methods for 'RwProjectLoadComponentV2'
-
-category: 'visiting'
-method: RwProjectLoadComponentV2
-acceptVisitor: aVisitor
-
-	^aVisitor visitProjectLoadComponent: self
-%
-
 ! Class implementation for 'RwAbstractSimpleProjectLoadComponentV2'
 
 !		Instance methods for 'RwAbstractSimpleProjectLoadComponentV2'
@@ -71975,6 +71433,7 @@ removeComponentNamed: aComponentName
 category: 'accessing'
 method: RwAbstractSimpleProjectLoadComponentV2
 removePackageNamed: aPackageName
+	super removePackageNamed: aPackageName.
 	self packageNames remove: aPackageName ifAbsent: [  ]
 %
 
@@ -71982,160 +71441,6 @@ category: 'accessing'
 method: RwAbstractSimpleProjectLoadComponentV2
 removeProjectNamed: aProjectName
 	self subclassResponsibility: #'removeProjectNamed:'
-%
-
-! Class implementation for 'RwAbstractEnvyProjectLoadComponentV2'
-
-!		Instance methods for 'RwAbstractEnvyProjectLoadComponentV2'
-
-category: 'comparing'
-method: RwAbstractEnvyProjectLoadComponentV2
-= aRwAbstractSimpleProjectLoadComponentV2
-	^ super = aRwAbstractSimpleProjectLoadComponentV2
-		and: [ 
-			self subApplicationNames
-				= aRwAbstractSimpleProjectLoadComponentV2 subApplicationNames ]
-%
-
-category: 'visiting'
-method: RwAbstractEnvyProjectLoadComponentV2
-acceptNestedVisitor: aVisitor
-	"an ENVY component may be nested inside of any other component"
-
-	^ self acceptVisitor: aVisitor
-%
-
-category: 'accessing'
-method: RwAbstractEnvyProjectLoadComponentV2
-addApplicationNamed: aComponentName
-	"avoid duplicates and keep the list sorted"
-
-	self error: 'application components may not be added to subapplication components'
-%
-
-category: 'accessing'
-method: RwAbstractEnvyProjectLoadComponentV2
-addSubApplicationNamed: aComponentName
-	"avoid duplicates and keep the list sorted"
-
-	self subApplicationNames add: aComponentName.
-	subApplicationNames := subApplicationNames asSet asArray sort
-%
-
-category: 'private'
-method: RwAbstractEnvyProjectLoadComponentV2
-conditionalPropertyMatchers
-	| conditionalPropertyMatchers |
-	conditionalPropertyMatchers := Dictionary new
-		at: {(self _platformPatternMatcherFor: self condition)} put: {};
-		yourself.
-	^ conditionalPropertyMatchers
-%
-
-category: 'accessing'
-method: RwAbstractEnvyProjectLoadComponentV2
-groupName: aGroupName
-
-"not implemented ... yet ... keep it simple at first"
-%
-
-category: 'comparing'
-method: RwAbstractEnvyProjectLoadComponentV2
-hash
-	^ super hash bitXor: self subApplicationNames hash
-%
-
-category: 'initialization'
-method: RwAbstractEnvyProjectLoadComponentV2
-initialize
-	super initialize.
-	subApplicationNames := {}
-%
-
-category: 'accessing'
-method: RwAbstractEnvyProjectLoadComponentV2
-packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes
-	"Answer the collection of package names defined in the receiver."
-
-	| allDefinedPackageNames matchers |
-	allDefinedPackageNames := Set new.
-	matchers := self conditionalPropertyMatchers.
-	platformConfigurationAttributes
-		do: [ :anObject | 
-			matchers
-				keysAndValuesDo: [ :ar :ignored | 
-					ar
-						do: [ :matcher | 
-							(matcher match: anObject)
-								ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ].
-	^ allDefinedPackageNames
-%
-
-category: 'accessing'
-method: RwAbstractEnvyProjectLoadComponentV2
-subApplicationNames
-	^ subApplicationNames
-%
-
-! Class implementation for 'RwEnvyApplicationProjectLoadComponentV2'
-
-!		Instance methods for 'RwEnvyApplicationProjectLoadComponentV2'
-
-category: 'comparing'
-method: RwEnvyApplicationProjectLoadComponentV2
-= aRwAbstractSimpleProjectLoadComponentV2
-	^ super = aRwAbstractSimpleProjectLoadComponentV2
-		and: [ 
-			self applicationNames
-				= aRwAbstractSimpleProjectLoadComponentV2 applicationNames ]
-%
-
-category: 'visiting'
-method: RwEnvyApplicationProjectLoadComponentV2
-acceptVisitor: aVisitor
-	"an ENVY component may be nested inside of any other component"
-
-	^ aVisitor visitEnvyApplicationProjectLoadComponent: self
-%
-
-category: 'accessing'
-method: RwEnvyApplicationProjectLoadComponentV2
-addApplicationNamed: aComponentName
-	"avoid duplicates and keep the list sorted"
-
-	self applicationNames add: aComponentName.
-	applicationNames := applicationNames asSet asArray sort
-%
-
-category: 'accessing'
-method: RwEnvyApplicationProjectLoadComponentV2
-applicationNames
-	^ applicationNames
-%
-
-category: 'comparing'
-method: RwEnvyApplicationProjectLoadComponentV2
-hash
-	^ super hash bitXor: self applicationNames hash
-%
-
-category: 'initialization'
-method: RwEnvyApplicationProjectLoadComponentV2
-initialize
-	super initialize.
-	applicationNames := {}
-%
-
-! Class implementation for 'RwEnvySubApplicationProjectLoadComponentV2'
-
-!		Instance methods for 'RwEnvySubApplicationProjectLoadComponentV2'
-
-category: 'visiting'
-method: RwEnvySubApplicationProjectLoadComponentV2
-acceptVisitor: aVisitor
-	"an ENVY component may be nested inside of any other component"
-
-	^ aVisitor visitEnvySubApplicationProjectLoadComponent: self
 %
 
 ! Class implementation for 'RwAbstractRowanProjectLoadComponentV2'
@@ -73747,38 +73052,10 @@ acceptVisitor: aVisitor
 
 category: 'accessing'
 method: RwProjectDefinitionV2
-addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
-	^ self components
-		addComponentNamed: aComponentName
-		definedGroupNames: groupNameDict
-		comment: commentString
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
 addComponentNamed: componentName toComponentNamed: toComponentName
 	^ self components
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
-	^ self components
-		addComponentNamed: componentName
-		toComponentNamed: toComponentName
-		withConditions: conditionArray
-		andGroupName: groupName
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
-	^ self components
-		addNestedComponentNamed: aComponentName
-		definedGroupNames: groupNameDict
-		comment: commentString
 %
 
 category: 'accessing'
@@ -73944,49 +73221,6 @@ addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymb
 
 category: 'accessing'
 method: RwProjectDefinitionV2
-addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	| package |
-	self components
-		componentNamed: componentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	package := RwPackageDefinition newNamed: packageName.
-	self
-		_addPackage: package
-		ifPresent: [ 
-			"no problem ... just update the component"
-			 ].
-	self components
-		addPackageNamed: packageName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName.
-	^ package
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
-	| package |
-	self components
-		componentNamed: componentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	package := RwPackageDefinition newNamed: packageName.
-	self
-		_addPackage: package
-		ifPresent: [ 
-			"no problem ... just update the component"
-			 ].
-	self components
-		addPackageNamed: packageName
-		toComponentNamed: componentName
-		withConditions: conditionArray
-		andGroupName: groupName
-		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc.
-	^ package
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
 addPackages: somePackageNames forComponent: aComponent
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
@@ -74005,64 +73239,6 @@ method: RwProjectDefinitionV2
 addPackagesNamed: packageNames toComponentNamed: componentName
 	^ packageNames
 		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-
-
-	^ packageNames collect: [:packageName | 
-		self addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName ]
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName  gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
-
-	^ packageNames collect: [:packageName | 
-		self addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName  gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray
-	"return the path name of the new component"
-
-	| theComponentName toComponent path compositePath condition pathArray |
-	self
-		deprecated:
-			'Should be using addPlatformComponentNamed:toComponentNamed:pathNameArray:conditionPathArray:'.
-	toComponent := self componentNamed: toComponentName.
-	condition := conditionPathArray last.
-	pathArray := conditionPathArray copy.
-	pathArray at: pathArray size put: alias.
-	path := RelativePath withAll: pathArray.
-	path parent
-		do: [ :segment | 
-			| intermediateComponentName |
-			"ensure that we have the appropriate intermediate component structure"
-			compositePath := compositePath
-				ifNil: [ Path * segment ]
-				ifNotNil: [ compositePath / segment ].
-			intermediateComponentName := (compositePath / aComponentName) pathString.
-			toComponent := self components
-				componentNamed: intermediateComponentName
-				ifAbsent: [ 
-					| newComponent |
-					newComponent := self components
-						addSimpleNestedComponentNamed: intermediateComponentName
-						condition: segment
-						comment: ''.
-					toComponent addComponentNamed: intermediateComponentName.
-					newComponent ] ].
-	theComponentName := (path / aComponentName) pathString.
-	self components
-		addPlatformNestedComponentNamed: theComponentName
-		condition: condition
-		comment: ''.
-	toComponent addComponentNamed: theComponentName.
-	^ theComponentName
 %
 
 category: 'accessing'
@@ -74133,16 +73309,6 @@ addProjectNamed: projectName toComponentNamed: toComponentName
 
 category: 'accessing'
 method: RwProjectDefinitionV2
-addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
-	^ self components
-		addProjectNamed: projectName
-		toComponentNamed: toComponentName
-		withConditions: conditionArray
-		andGroupName: groupName
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
 addRawPackageNamed: packageName
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
@@ -74166,16 +73332,6 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 	^ self components
 		addSimpleNestedComponentNamed: aComponentName
 		condition: condition
-		comment: commentString
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
-	^ self components
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		groupName: groupName
 		comment: commentString
 %
 
@@ -74271,20 +73427,6 @@ projectName: aString
 	self propertyAt: 'name' put: aString
 %
 
-category: 'actions'
-method: RwProjectDefinitionV2
-read: platformConfigurationAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools read
-		readProjectSetForComponentProjectDefinition: self 
-			withConfigurations: self defaultConfigurationNames
-			groupNames: self defaultGroupNames
-			platformConfigurationAttributes: platformConfigurationAttributes
-%
-
 category: 'reading'
 method: RwProjectDefinitionV2
 readProjectSet
@@ -74304,18 +73446,6 @@ readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: 
 
 category: 'accessing'
 method: RwProjectDefinitionV2
-removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName
-	| component |
-	component := self componentNamed: fromComponentName.
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		removeComponentNames: {componentName}.
-	^ component
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
 removePackage: aPackageDefinition
 	self components removePackageNamed: aPackageDefinition name.
 	^ super removePackage: aPackageDefinition
@@ -74330,21 +73460,6 @@ removePackageNamed: packageName fromComponentNamed: componentName
 	| component |
 	component := self componentNamed: componentName.
 	component removePackageNamed: packageName.
-	^ component
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	"do not remove package from defintion, remove it from the named component only. 
-		Use removePackage:, if you want the package completely removed from definition"
-
-	| component |
-	component := self componentNamed: componentName.
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		removePackageNames: {packageName}.
 	^ component
 %
 
@@ -88585,61 +87700,12 @@ new
 
 category: 'accessing'
 method: RwResolvedLoadComponentsV2
-addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName ].
-	groupNameDict
-		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
-	component comment: commentString.
-	^ component
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
 addComponentNamed: componentName toComponentNamed: toComponentName
 	| component |
 	component := self
 		componentNamed: toComponentName
 		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
 	component addComponentNamed: componentName
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
-addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
-	| component |
-	component :=  self
-		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		addComponentNames: {componentName}
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
-addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName ].
-	groupNameDict
-		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
-	component comment: commentString.
-	^ component
 %
 
 category: 'accessing'
@@ -88671,52 +87737,9 @@ addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymb
 
 category: 'accessing'
 method: RwResolvedLoadComponentsV2
-addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	| component |
-	component := self
-		componentNamed: componentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		addPackageNames: {packageName}.
-	^ component
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
-addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
-	| component |
-	component := self
-		componentNamed: componentName
-		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
-	component
-		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
-			andPackageName: packageName
-			setSymbolDictNameTo: aSymbolDictAssoc value;
-		conditionalPropertiesAtConditions: conditionArray
-			andGroup: groupName
-			addPackageNames: {packageName}.
-	^ component
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
 addPackagesNamed: packageNames toComponentNamed: aComponentName
 	packageNames
 		do: [ :packageName | self addPackageNamed: packageName toComponentNamed: aComponentName ]
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
-addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	^ packageNames
-		collect: [ :packageName | 
-			self
-				addPackageNamed: packageName
-				toComponentNamed: componentName
-				withConditions: conditionArray
-				andGroupName: groupName ]
 %
 
 category: 'accessing'
@@ -88750,19 +87773,6 @@ addProjectNamed: projectName toComponentNamed: toComponentName
 
 category: 'accessing'
 method: RwResolvedLoadComponentsV2
-addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
-	| component |
-	component := self
-		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
-	component
-		conditionalPropertiesAtConditions: conditionArray
-		andGroup: groupName
-		addProjectNames: {projectName}
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
 addSimpleComponentNamed: aComponentName condition: condition comment: commentString
 	| component |
 	self components
@@ -88782,26 +87792,6 @@ addSimpleComponentNamed: aComponentName condition: condition comment: commentStr
 
 category: 'accessing'
 method: RwResolvedLoadComponentsV2
-addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
-	component
-		condition: condition;
-		groupName: groupName;
-		comment: commentString;
-		yourself.
-	^ component
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
 addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString
 	| component |
 	self components
@@ -88814,26 +87804,6 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 		ifAbsentPut: [ RwSimpleNestedProjectLoadComponentV2 newNamed: aComponentName ].
 	component
 		condition: condition;
-		comment: commentString;
-		yourself.
-	^ component
-%
-
-category: 'accessing'
-method: RwResolvedLoadComponentsV2
-addSimpleNestedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwSimpleNestedProjectLoadComponentV2 newNamed: aComponentName ].
-	component
-		condition: condition;
-		groupName: groupName;
 		comment: commentString;
 		yourself.
 	^ component
@@ -88900,39 +87870,21 @@ componentsWithDoits
 	^ self components select: [ :each | each hasDoits ]
 %
 
-category: 'querying'
+category: 'enumerating'
 method: RwResolvedLoadComponentsV2
-conditionalProjectNamesInto: projectNames startingWith: aSimpleProjectLoadComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames
-	visitedComponentNames add: aSimpleProjectLoadComponent name.
-	aSimpleProjectLoadComponent conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :ignored | 
-			(self
-				_platformAttributeMatchIn: platformMatchers
-				using: platformConditionalAttributes)
-				ifTrue: [ 
-					projectNames addAll: aSimpleProjectLoadComponent projectNames.
-					aSimpleProjectLoadComponent componentNames
-						do: [ :cName | 
-							(visitedComponentNames includes: cName)
-								ifFalse: [ 
-									self
-										conditionalProjectNamesInto: projectNames
-										startingWith: (self componentNamed: cName)
-										platformConditionalAttributes: platformConditionalAttributes
-										visited: visitedComponentNames ] ] ] ]
-%
+conditionalComponentsStartingWith: componentNames platformConditionalAttributes: platformConditionalAttributes do: aBlock
+	| visited |
+	visited := Set new.
+	componentNames
+		do: [ :componentName | 
+			| theComponent |
+			theComponent := self componentNamed: componentName.
 
-category: 'querying'
-method: RwResolvedLoadComponentsV2
-conditionalProjectNamesStartingWith: aSimpleProjectLoadComponent platformConditionalAttributes: platformConditionalAttributes
-	| projectNames |
-	projectNames := Set new.
-	self
-		conditionalProjectNamesInto: projectNames
-		startingWith: aSimpleProjectLoadComponent
-		platformConditionalAttributes: platformConditionalAttributes
-		visited: Set new.
-	^ projectNames
+			self
+				_conditionalComponentsStartingWith: theComponent
+				platformConditionalAttributes: platformConditionalAttributes
+				visited: visited
+				do: aBlock ]
 %
 
 category: 'enumerating'
@@ -89119,13 +88071,35 @@ _addComponent: aComponent
 	^ self components at: aComponent name put: aComponent
 %
 
+category: 'enumerating'
+method: RwResolvedLoadComponentsV2
+_conditionalComponentsStartingWith: aComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames do: aBlock
+	visitedComponentNames add: aComponent name.
+	aComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self
+				_platformAttributeMatchIn: platformMatchers
+				using: platformConditionalAttributes)
+				ifTrue: [ 
+					aBlock value: aComponent.
+					aComponent componentNames
+						do: [ :cName | 
+							(visitedComponentNames includes: cName)
+								ifFalse: [ 
+									self
+										_conditionalComponentsStartingWith: (self componentNamed: cName)
+										platformConditionalAttributes: platformConditionalAttributes
+										visited: visitedComponentNames
+										do: aBlock ] ] ] ]
+%
+
 category: 'private'
 method: RwResolvedLoadComponentsV2
 _gemstoneAllUsersName
 	^ RwLoadSpecificationV2 _gemstoneAllUsersName
 %
 
-category: 'querying'
+category: 'enumerating'
 method: RwResolvedLoadComponentsV2
 _matchPlatformAttributes: platformPatternMatcher using: platformConditionalAttributes
 	platformConditionalAttributes
@@ -89135,7 +88109,7 @@ _matchPlatformAttributes: platformPatternMatcher using: platformConditionalAttri
 	^ false
 %
 
-category: 'querying'
+category: 'enumerating'
 method: RwResolvedLoadComponentsV2
 _platformAttributeMatchIn: platformMatchersList using: platformConditionalAttributes
 	platformMatchersList
@@ -89810,6 +88784,22 @@ category: 'accessing'
 method: RwLoadSpecificationV2
 repositoryRoot
 	^ self projectsHome / self projectAlias
+%
+
+category: 'actions'
+method: RwLoadSpecificationV2
+resolveProjectSetStrict
+	"resolve using #strict repositoryResolutionpolicy"
+
+	| oldPolicy |
+	self isStrict
+		ifTrue: [ ^ self resolve ].
+	oldPolicy := self repositoryResolutionPolicy.
+	[ 
+	"force #strict policy to ensure that the revision is checked out out in the repository"
+	self repositoryResolutionPolicy: #'strict'.
+	^ self resolveProjectSet ]
+		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
 %
 
 category: 'actions'
@@ -115187,6 +114177,28 @@ resolve: platformAttributes
 	^ RwResolvedProjectV2 loadSpecification: self platformAttributes: platformAttributes
 %
 
+category: '*rowan-definitionsv2'
+method: RwLoadSpecificationV2
+resolveProjectSet
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecificationProjectSet: self
+%
+
+category: '*rowan-definitionsv2'
+method: RwLoadSpecificationV2
+resolveProjectSet: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecificationProjectSet: self platformAttributes: platformAttributes
+%
+
 ! Class extensions for 'RwMethodDefinition'
 
 !		Class methods for 'RwMethodDefinition'
@@ -115574,17 +114586,36 @@ repositoryRoot
 
 category: '*rowan-corev2'
 method: RwProject
-repositoryRoot: aFileReference
-	| resolvedProject |
+repositoryRoot: aFileReferenceOrString
+	| resolvedProject originalRepositoryRoot |
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _repositoryRoot: aFileReferenceOrString ] ].
 	resolvedProject := self asDefinition.
-	resolvedProject repositoryRoot: aFileReference.
+	resolvedProject repositoryRoot: aFileReferenceOrString.
 	^ resolvedProject loadProjectSet
 %
 
 category: '*rowan-corev2'
 method: RwProject
-repositoryRootOld: aFileReference
-	self _loadedProject resolvedProject repositoryRoot: aFileReference
+requiredProjects
+	"return list of dependent project names"
+
+	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
+
+	| requiredProjectNames theComponents |
+	theComponents := self loadedComponents. "use loadedComponents, not _loadedProjectDefinition - loadedComponents kept up to date"
+	requiredProjectNames := Set new.
+	theComponents
+		conditionalComponentsStartingWith: self componentNames
+		platformConditionalAttributes: self platformConditionalAttributes
+		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
+	^ requiredProjectNames asArray
+		collect: [ :projectName | Rowan projectNamed: projectName ]
 %
 
 category: '*rowan-gemstone-core'
@@ -115610,28 +114641,8 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 category: '*rowan-corev2'
 method: RwProject
-_requiredProjects
-	"return list of dependent project names"
-
-	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
-
-	| requiredProjectNames theComponents visited |
-	visited := Set new.
-	theComponents := self loadedComponents.
-	requiredProjectNames := Set new.
-	self componentNames
-		do: [ :componentName | 
-			| theComponent projectNames |
-			theComponent := theComponents componentNamed: componentName.
-			projectNames := Set new.
-			theComponents
-				conditionalProjectNamesInto: projectNames
-				startingWith: theComponent
-				platformConditionalAttributes: self platformConditionalAttributes
-				visited: visited.
-			requiredProjectNames addAll: projectNames ].
-	^ requiredProjectNames asArray
-		collect: [ :projectName | Rowan projectNamed: projectName ]
+_repositoryRoot: aFileReference
+	self _loadedProject resolvedProject repositoryRoot: aFileReference
 %
 
 ! Class extensions for 'RwProjectDefinition'
