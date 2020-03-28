@@ -6,8 +6,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/tests/Tests',
 		'common/tests/componentsV2/Tests'
 	],
-	#packageNames : [
-		'Rowan-Tests'
-	],
+	#packageNames : [ ],
 	#comment : 'Rowan System test component. Shared between Rowan and RowanDiskAPI.'
 }
