@@ -30,7 +30,7 @@ run
       AlmostOutOfMemory enableAtThreshold: 75.
       ex resume ]
 %
-break RwProjectTopazWriterTestV2 >> testGsTopazWriter_A @ 28
+#	break RwProjectTopazWriterTestV2 >> testGsTopazWriter_A @ 28
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.gs
 
 	commit

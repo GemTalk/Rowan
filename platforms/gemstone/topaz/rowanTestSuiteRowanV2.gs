@@ -30,7 +30,7 @@ run
 				"make sure test group is loaded ... do NOT include deprecated packages"
 				Rowan projectTools loadV2
 					loadProjectNamed: projectName
-					customConditionalAttributes: #('tests') ] ]
+					customConditionalAttributes: #('tests' 'testsV2') ] ]
 					on: CompileWarning do: [:ex |
 						(ex description includesString: 'not optimized')
 							ifFalse: [ warnings add: ex asString printString ].

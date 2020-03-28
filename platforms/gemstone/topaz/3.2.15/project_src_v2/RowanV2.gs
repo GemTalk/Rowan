@@ -5906,6 +5906,22 @@ true.
 %
 
 doit
+(RwGemStoneTool
+	subclass: 'RwGsImageTool'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Tools-GemStone';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (RwAbstractTool
 	subclass: 'RwGitTool'
 	instVarNames: #(  )
@@ -49204,7 +49220,13 @@ isDirty
 category: 'actions'
 method: RwProject
 load
-	"load the receiver into the image"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	^ self _loadedProject load
 %
@@ -49212,7 +49234,10 @@ load
 category: 'actions'
 method: RwProject
 load: instanceMigrator
-	"load the receiver into the image"
+	"
+		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
 
 	^ self _loadedProject load: instanceMigrator
 %
@@ -49238,6 +49263,48 @@ loadedGroupNames
 	"Answer the list of group names that were explicitly specified when the project was loaded"
 
 	^ self _loadedProject loadedGroupNames
+%
+
+category: 'actions'
+method: RwProject
+loadProjectSet
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
+
+	^ self _loadedProject loadProjectSet
+%
+
+category: 'actions'
+method: RwProject
+loadProjectSet: platformConditionalAttributes
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
+
+	^ self _loadedProject loadProjectSet: platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwProject
+loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set, using the specified 
+			instance migrator.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+
+		Use the instanceMigrator to handle new versions of any classes that may result from the load.
+	"
+
+	^ self _loadedProject
+		loadProjectSet: platformConditionalAttributes
+		instanceMigrator: instanceMigrator
 %
 
 category: 'accessing'
@@ -62010,6 +62077,8 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 			instance migrator.
 
 		Use the specified platform conditional attributes when reading the receiver from disk.
+
+		Use the instanceMigrator to handle new versions of any classes that may result from the load.
 	"
 
 	self _validate: self platformConditionalAttributes.
@@ -63055,16 +63124,57 @@ _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoad
 
 ! Class implementation for 'RwGemStoneTool'
 
-!		Instance methods for 'RwGemStoneTool'
+!		Class methods for 'RwGemStoneTool'
+
+category: 'commands'
+classmethod: RwGemStoneTool
+image
+
+	^RwGsImageTool new
+%
+
+! Class implementation for 'RwGsImageTool'
+
+!		Instance methods for 'RwGsImageTool'
+
+category: 'testing'
+method: RwGsImageTool
+loadTestsForProjectsNamed: projectNames
+%
 
 category: 'repository'
-method: RwGemStoneTool
+method: RwGsImageTool
 newRepositoryRoot: repositoryRoot forProjectNamed: projectName
-	"change the repositoryRoot and then load from disk"
+	"change the repositoryRoot and then load from disk, includes enbedded projects"
 
 	| project |
 	project := Rowan projectNamed: projectName.
 	^ project repositoryRoot: repositoryRoot
+%
+
+category: 'repository'
+method: RwGsImageTool
+newRepositoryRoot: repositoryRoot platformConditionalAttributes: platformConditionalAttributes forProjectNamed: projectName
+	"change the repositoryRoot and then load from disk, includes enbedded projects"
+
+	| project |
+	project := Rowan projectNamed: projectName.
+	^ project
+		repositoryRoot: repositoryRoot
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'repository'
+method: RwGsImageTool
+newRepositoryRoot: repositoryRoot platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator forProjectNamed: projectName
+	"change the repositoryRoot and then load from disk, includes enbedded projects"
+
+	| project |
+	project := Rowan projectNamed: projectName.
+	^ project
+		repositoryRoot: repositoryRoot
+		platformConditionalAttributes: platformConditionalAttributes
+		instanceMigrator: instanceMigrator
 %
 
 ! Class implementation for 'RwGitTool'
@@ -80555,17 +80665,26 @@ initializeForResolvedProject: aResolvedProject
 category: 'actions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 load
-	"load the receiver into the image"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
 
-	^ self asDefinition loadProjectSet
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
+
+	^ self asDefinition load
 %
 
 category: 'actions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 load: instanceMigrator
-	"load the receiver into the image"
+	"
+		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
 
-	self error: 'not yet implemented'
+	^ self asDefinition load: instanceMigrator
 %
 
 category: 'properties'
@@ -80616,6 +80735,48 @@ loadedGroupNames: groupNames
 
 
 	self resolvedProject loadedGroupNames: groupNames
+%
+
+category: 'actions'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+loadProjectSet
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
+
+	^ self asDefinition loadProjectSet
+%
+
+category: 'actions'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+loadProjectSet: platformConditionalAttributes
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
+
+	^ self asDefinition loadProjectSet: platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set, using the specified 
+			instance migrator.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+
+		Use the instanceMigrator to handle new versions of any classes that may result from the load.
+	"
+
+	^ self asDefinition
+		loadProjectSet: platformConditionalAttributes
+		instanceMigrator: instanceMigrator
 %
 
 category: 'private'
@@ -95272,6 +95433,38 @@ repositoryRoot: aFileReferenceOrString
 	resolvedProject := self asDefinition.
 	resolvedProject repositoryRoot: aFileReferenceOrString.
 	^ resolvedProject loadProjectSet
+%
+
+category: '*rowan-corev2'
+method: RwProject
+repositoryRoot: aFileReferenceOrString platformConditionalAttributes: platformConditionalAttributes
+	| resolvedProject originalRepositoryRoot |
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _repositoryRoot: aFileReferenceOrString ] ].
+	resolvedProject := self asDefinition.
+	resolvedProject repositoryRoot: aFileReferenceOrString.
+	^ resolvedProject loadProjectSet: platformConditionalAttributes
+%
+
+category: '*rowan-corev2'
+method: RwProject
+repositoryRoot: aFileReferenceOrString platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator
+	| resolvedProject originalRepositoryRoot |
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _repositoryRoot: aFileReferenceOrString ] ].
+	resolvedProject := self asDefinition.
+	resolvedProject repositoryRoot: aFileReferenceOrString.
+	^ resolvedProject loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 %
 
 category: '*rowan-corev2'

@@ -4,11 +4,8 @@ Class {
 	#category : 'Rowan-Tools-GemStone'
 }
 
-{ #category : 'repository' }
-RwGemStoneTool >> newRepositoryRoot: repositoryRoot forProjectNamed: projectName [
-	"change the repositoryRoot and then load from disk"
+{ #category : 'commands' }
+RwGemStoneTool class >> image [
 
-	| project |
-	project := Rowan projectNamed: projectName.
-	^ project repositoryRoot: repositoryRoot
+	^RwGsImageTool new
 ]

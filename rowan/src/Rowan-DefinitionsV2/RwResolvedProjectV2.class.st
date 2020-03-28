@@ -551,6 +551,8 @@ RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes instanceMig
 			instance migrator.
 
 		Use the specified platform conditional attributes when reading the receiver from disk.
+
+		Use the instanceMigrator to handle new versions of any classes that may result from the load.
 	"
 
 	self _validate: self platformConditionalAttributes.
