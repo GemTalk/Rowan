@@ -93441,7 +93441,7 @@ isMemoryFileSystem
 
 !		Class methods for 'GsFile'
 
-category: '*rowan-gemstone-3215'
+category: '*rowan-gemstone-kernel-32x'
 classmethod: GsFile
 _stat: aName  isLstat: aBoolean 
 
@@ -93502,7 +93502,7 @@ rowanProjectName
 
 !		Class methods for 'GsPackagePolicy'
 
-category: '*rowan-gemstone-3215'
+category: '*rowan-gemstone-kernel-32x'
 classmethod: GsPackagePolicy
 currentOrNil
 

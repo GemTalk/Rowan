@@ -109390,7 +109390,7 @@ _contentsOfServerDirectory: aPathName expandPath: aBoolean
 	^ self _contentsOfServerDirectory: aPathName expandPath: aBoolean utf8Results: false
 %
 
-category: '*rowan-gemstone-3215'
+category: '*rowan-gemstone-kernel-32x'
 classmethod: GsFile
 _stat: aName  isLstat: aBoolean 
 
@@ -109451,7 +109451,7 @@ rowanProjectName
 
 !		Class methods for 'GsPackagePolicy'
 
-category: '*rowan-gemstone-3215'
+category: '*rowan-gemstone-kernel-32x'
 classmethod: GsPackagePolicy
 currentOrNil
 

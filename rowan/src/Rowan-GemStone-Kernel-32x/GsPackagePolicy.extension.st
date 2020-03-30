@@ -1,6 +1,6 @@
 Extension { #name : 'GsPackagePolicy' }
 
-{ #category : '*rowan-gemstone-3215' }
+{ #category : '*rowan-gemstone-kernel-32x' }
 GsPackagePolicy class >> currentOrNil [
 
 	"Returns nil or the previously installed and enabled GsPackagePolicy."

@@ -93036,20 +93036,6 @@ _contentsOfServerDirectory: aPathName expandPath: aBoolean
 	^ self _contentsOfServerDirectory: aPathName expandPath: aBoolean utf8Results: false
 %
 
-category: '*rowan-gemstone-3215'
-classmethod: GsFile
-_stat: aName  isLstat: aBoolean 
-
-"uses the server file system access. 
- Returns a SmallInteger errno value if an error occurs or 
- or if aName is not a valid file or directory. Otherwise
- returns a new instance of GsFileStat. "
-<primitive: 757>
-aName _validateClass: String .
-aBoolean _validateClass: Boolean .
-self _primitiveFailed: #stat:isLstat: args: { aName . aBoolean }
-%
-
 !		Instance methods for 'GsFile'
 
 category: '*tonel-gemstonecommon-core'
@@ -93091,27 +93077,6 @@ rowanProjectName
 		loadedMethodForMethod: self
 		ifAbsent: [ ^ Rowan unpackagedName ].
 	^ loadedMethod loadedProject name
-%
-
-! Class extensions for 'GsPackagePolicy'
-
-!		Class methods for 'GsPackagePolicy'
-
-category: '*rowan-gemstone-3215'
-classmethod: GsPackagePolicy
-currentOrNil
-
-	"Returns nil or the previously installed and enabled GsPackagePolicy."
-
-	| pp |
-	pp := ((GsSession currentSession objectNamed: #'UserGlobals') ifNil: [ ^ nil ])
-		at: self globalName
-		otherwise: nil.
-	pp
-		ifNotNil: [ 
-			pp enabled
-				ifTrue: [ ^ pp ] ].
-	^ nil
 %
 
 ! Class extensions for 'Integer'
