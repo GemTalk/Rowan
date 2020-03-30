@@ -1,6 +1,6 @@
 Extension { #name : 'String' }
 
-{ #category : '*rowan-gemstone-kernel' }
+{ #category : '*rowan-gemstone-kernel-32x' }
 String >> decodeFromUTF8 [
 
 "Deprecated.  Applications should use instances of Utf8 to hold UTF-8 data.

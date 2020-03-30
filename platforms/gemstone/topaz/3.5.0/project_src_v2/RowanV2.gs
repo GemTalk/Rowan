@@ -96161,7 +96161,7 @@ wrappedStreamName
 
 !		Instance methods for 'String'
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-kernel-32x'
 method: String
 decodeFromUTF8
 
