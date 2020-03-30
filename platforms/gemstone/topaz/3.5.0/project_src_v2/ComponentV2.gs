@@ -109193,7 +109193,7 @@ rbStoreOn: aStream
 
 !		Instance methods for 'ExecBlock'
 
-category: '*rowan-gemstone-3215'
+category: '*rowan-gemstone-kernel-32x'
 method: ExecBlock
 cull: anArg
 
@@ -109205,7 +109205,7 @@ cull: anArg
 		ifFalse: [ self value: anArg ]
 %
 
-category: '*rowan-gemstone-3215'
+category: '*rowan-gemstone-kernel-32x'
 method: ExecBlock
 cull: firstArg cull: secondArg
 
@@ -109221,7 +109221,7 @@ cull: firstArg cull: secondArg
 	^ self value: firstArg value: secondArg
 %
 
-category: '*rowan-gemstone-3215'
+category: '*rowan-gemstone-kernel-32x'
 method: ExecBlock
 cull: firstArg cull: secondArg cull: thirdArg
 
@@ -109239,7 +109239,7 @@ cull: firstArg cull: secondArg cull: thirdArg
 	^ self value: firstArg value: secondArg value: thirdArg
 %
 
-category: '*rowan-gemstone-3215'
+category: '*rowan-gemstone-kernel-32x'
 method: ExecBlock
 cull: firstArg cull: secondArg cull: thirdArg cull: fourthArg
 
