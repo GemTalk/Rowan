@@ -131,6 +131,28 @@ RowanAnsweringService >> basicPrintStringOfObject: object toMaxSize: integer [
 ]
 
 { #category : 'client command support' }
+RowanAnsweringService >> basicSortedSelectors [
+  | selectors |
+  selectors := IdentitySet new.
+  organizer classes
+    do: [ :aClass | 
+      | metaClass |
+      metaClass := aClass.
+      2
+        timesRepeat: [ 
+          | methodDictionary |
+          methodDictionary := metaClass _fullMethodDictEnv0.
+          methodDictionary
+            valuesDo: [ :method | 
+              | selector |
+              selector := method selector.
+              selector charSize = 1
+                ifTrue: [ selectors add: selector ] ].
+          metaClass := metaClass class ] ].
+  ^ selectors asSortedCollection asArray
+]
+
+{ #category : 'client command support' }
 RowanAnsweringService >> basicSortedSymbols [
   | sortedSymbols |
   sortedSymbols := SortedCollection new.
@@ -506,12 +528,16 @@ RowanAnsweringService >> runMethodTests: methodServices [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> selectorsMatching: string [
+  answer := self basicSortedSelectors
+    select: [ :symbol | string sunitMatch: symbol ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> selectorsMatchingPattern: pattern [
-  answer := ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols')
-    value.
-  answer := answer
-    select: [ :each | each charSize = 1 and: [ each _matchPatternNoCase: pattern ] ].
-  answer := answer asSortedCollection asArray.
+  answer := self basicSortedSelectors.
+  answer := answer select: [ :each | each _matchPatternNoCase: pattern ].
   RowanCommandResult addResult: self
 ]
 
@@ -536,6 +562,12 @@ RowanAnsweringService >> setBreakPointsAreEnabled: boolean [
 { #category : 'client commands' }
 RowanAnsweringService >> setEnableInteractionHandler: boolean [
   SessionTemps current at: #'rowanServiceInteractionActive' put: boolean
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> sortedSelectors [
+  answer := self basicSortedSelectors.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
