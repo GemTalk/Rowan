@@ -5568,6 +5568,38 @@ RwRowanSample9Test >> testSpec_0053 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0054_1 [
+	"spec_0054 should load cleanly ... without the new gnu classes and tests"
+
+	"https://github.com/GemTalk/Rowan/issues/594"
+
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0054'.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectName := loadSpec projectName.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProjectSet := loadSpec resolveProjectSet.
+
+"load project"
+	loadedProjects := resolvedProjectSet load.
+
+"validate"
+	self
+		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self deny: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSwitchRepository [
 	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 

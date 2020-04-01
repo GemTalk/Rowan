@@ -62,6 +62,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0051: commitComment;
 	genSpec_0052: commitComment;
 	genSpec_0053: commitComment;
+	genSpec_0054: commitComment;
 	yourself
 "
 Class {
@@ -2921,6 +2922,73 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0054: resolvedProject requiredProject: requiredProject [
+	"Start with spec_0052; add platform conditional packages to the embedded project"
+
+	| requiredProjectName componentName1 componentName2 requiredClassName1 className1 className2 packageName1 requiredLoadSpec gnuComponentName1 gnuComponentName2 gnuPackageName1 gnuClassName1 gnuPackageName2 |
+
+	requiredProjectName := requiredProject name.
+
+	componentName1 := 'Core'.
+	componentName2 := 'Tests'.
+	requiredClassName1 := requiredProjectName , 'Class1'.
+	className1 := requiredProjectName , 'Class1'.
+	className2 := requiredProjectName , 'TestCase'.
+	packageName1 := requiredProjectName , '-Core'.
+
+	gnuClassName1 := projectName , 'GnuClass1'.
+	gnuPackageName1 := requiredProjectName , '-Gnu-Core'.
+	gnuPackageName2 := requiredProjectName , '-Gnu-Tests'.
+
+	gnuComponentName1 := requiredProject
+		addNewComponentNamed: componentName1
+			toComponentNamed: componentName1
+			condition: #('gnu').
+	gnuComponentName2 := requiredProject
+		addNewComponentNamed: componentName2
+			toComponentNamed: componentName1
+			condition: #('tests' 'gnu').
+	((requiredProject
+		addPackageNamed: gnuPackageName1
+		toComponentNamed: gnuComponentName1)
+		addClassNamed: gnuClassName1
+		super: className1
+		instvars: #()
+		category: gnuPackageName1
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^2' protocol: 'accessing';
+		yourself.
+
+	((requiredProject
+		addPackageNamed: gnuPackageName2
+		toComponentNamed: gnuComponentName2) addClassExtensionNamed: className2)
+		addInstanceMethod:
+				'test_' , gnuClassName1
+						,
+							'
+	| x |
+	self assert: (x := ' , gnuClassName1
+						,
+							' new foo) = 2.
+'
+			protocol: '*' , gnuPackageName2 asLowercase;
+		yourself.
+
+	requiredProject
+		projectsHome: self projectsHome;
+		export;
+		exportLoadSpecification.	"write the embedded project directory structure"
+
+	requiredLoadSpec := requiredProject loadSpecification.
+
+	resolvedProject projectsRoot ensureCreateDirectory.
+	requiredProject specsRoot / requiredLoadSpec specName , 'ston'
+		copyTo: resolvedProject projectsRoot / requiredLoadSpec specName , 'ston'.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -3228,6 +3296,55 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 	(resolvedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
 
 	addDefinitionsBlock value: resolvedProject.
+
+	resolvedProject
+		export;
+		exportLoadSpecification.	"write the rowan directory structure"
+
+	^ resolvedRepository
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSpecification requiredLoadSpecification: requiredLoadSpecification addDefinitions: addDefinitionsBlock [
+	"Coming in the load spec revision is pointing at the desired starting 
+		point --- the structure to _start_ with. Since we don't know whether the 
+		repository has been cloned or not, we do a resolve, which will ensure
+		that the repository is on the revision specifiied in the incoming load spec.
+	Once we've resolved and read, we reset the revision of the load spec
+		to point to the branch we want to write to. We wipe out the project
+		roots, so we have a clean sarting point and then export the project
+		definition and load spec."
+
+	| resolvedRepository resolvedProject requiredProject |
+	resolvedProject := loadSpecification resolveStrict.
+	requiredProject := requiredLoadSpecification resolveWithParentProject: resolvedProject.
+
+	resolvedRepository := resolvedProject repository.
+	(resolvedRepository branches includes: specName)
+		ifTrue: [ 
+			"branch exists, so we'll check it out and make the necessary mods"
+			resolvedRepository checkout: specName.
+			resolvedRepository pull: resolvedRepository remote branch: specName ]
+		ifFalse: [ 
+			"create the branch"
+			resolvedRepository createBranch: specName ].
+
+	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	requiredProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+
+	resolvedProject projectRoots
+		do: [ :rootDir | 
+			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
+			rootDir ensureDeleteAll ].
+	(resolvedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
+
+	requiredProject projectRoots
+		do: [ :rootDir | 
+			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
+			rootDir ensureDeleteAll ].
+	(requiredProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
+
+	addDefinitionsBlock value: resolvedProject value: requiredProject.
 
 	resolvedProject
 		export;
@@ -5959,11 +6076,73 @@ RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
 	resolvedRepository := self
 		_genSpecFor: specName
 		loadSpecification: loadSpecification
-		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0053: resolvedProject ].
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0053: resolvedProject ].	"WARNING should be using loadSpecification:requiredLoadSpecification:addDefinitions:; follow the genSpec_0054 model"
 
 	self
 		_finishCommitAndPush: specName
 		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0054: commitMessage [
+	"Start with spec_0052; add platform conditional packages to the embedded project"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title requiredLoadSpecification requiredProjectName embeddedProjectReference embededProjectDirName |
+	postfix := '0054'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0052'.
+	title := 'Start with spec_0052; add platform conditional packages to the embedded project'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 54
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(594);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	requiredProjectName := projectName , '_embedded_1'.
+	embededProjectDirName := 'embededProjects' .
+	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
+		/ 'rowan'.
+	requiredLoadSpecification := RwEmbeddedLoadSpecificationV2 new
+		specName: requiredProjectName;
+		projectName: requiredProjectName;
+		projectAlias: projectName;
+		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: { 'tests' }
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		requiredLoadSpecification: requiredLoadSpecification
+		addDefinitions: [ :resolvedProject :requiredProject | self _addDefinitionsFor_0054: resolvedProject requiredProject: requiredProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
