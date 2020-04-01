@@ -63,6 +63,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0052: commitComment;
 	genSpec_0053: commitComment;
 	genSpec_0054: commitComment;
+	genSpec_0055: commitComment;
 	yourself
 "
 Class {
@@ -2926,8 +2927,30 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0054: resolvedProject requir
 	"Start with spec_0052; add platform conditional packages to the embedded project and the primary project."
 
 	| requiredLoadSpec |
-	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject.
+	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject  condition: 'gnu' packageLabel: 'Gnu'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gnu' packageLabel: 'Gnu'.
+
+	requiredProject
+		projectsHome: self projectsHome;
+		export;
+		exportLoadSpecification.	"write the embedded project directory structure"
+
+	requiredLoadSpec := requiredProject loadSpecification.
+
+	resolvedProject projectsRoot ensureCreateDirectory.
+	requiredProject specsRoot / requiredLoadSpec specName , 'ston'
+		copyTo: resolvedProject projectsRoot / requiredLoadSpec specName , 'ston'.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0055: resolvedProject requiredProject: requiredProject [
+	"Start with spec_0052; add platform conditional packages (GemStone version 2.4.x) to the embedded project and the primary project."
+
+	| requiredLoadSpec |
+	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: '2.[4-]' packageLabel: 'GemStone24x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: '2.[4-]'  packageLabel: 'GemStone24x'.
 
 	requiredProject
 		projectsHome: self projectsHome;
@@ -2991,7 +3014,7 @@ RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDef
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _addPlatformConditionalDefinitionsFor_0054Project: theProject [
+RwTestProjectLibraryGenerator >> _addPlatformConditionalDefinitionsFor_0054Project: theProject condition: condition packageLabel: packageLabel [
 	"Start with spec_0052; add platform conditional packages to the embedded project and the primary project."
 
 	| theProjectName componentName1 componentName2 requiredClassName1 className1 className2 packageName1 gnuComponentName1 gnuComponentName2 gnuPackageName1 gnuClassName1 gnuPackageName2 |
@@ -3004,18 +3027,20 @@ RwTestProjectLibraryGenerator >> _addPlatformConditionalDefinitionsFor_0054Proje
 	className2 := theProjectName , 'TestCase'.
 	packageName1 := theProjectName , '-Core'.
 
-	gnuClassName1 := theProjectName , 'GnuClass1'.
-	gnuPackageName1 := theProjectName , '-Gnu-Core'.
-	gnuPackageName2 := theProjectName , '-Gnu-Tests'.
+	gnuClassName1 := theProjectName , packageLabel, 'Class1'.
+	gnuPackageName1 := theProjectName , '-', packageLabel, '-Core'.
+	gnuPackageName2 := theProjectName , '-', packageLabel, '-Tests'.
 
 	gnuComponentName1 := theProject
-		addNewComponentNamed: componentName1
+		addPlatformComponentNamed: componentName1
 		toComponentNamed: componentName1
-		condition: #('gnu').
+		pathNameArray: {packageLabel} 
+		conditionPathArray: { {condition} }.
 	gnuComponentName2 := theProject
-		addNewComponentNamed: componentName2
+		addPlatformComponentNamed: componentName2
 		toComponentNamed: componentName1
-		condition: #('tests' 'gnu').
+		pathNameArray: {'tests' . packageLabel} 
+		conditionPathArray: {'tests' . {condition}}.
 	((theProject
 		addPackageNamed: gnuPackageName1
 		toComponentNamed: gnuComponentName1)
@@ -6147,6 +6172,68 @@ RwTestProjectLibraryGenerator >> genSpec_0054: commitMessage [
 		loadSpecification: loadSpecification
 		requiredLoadSpecification: requiredLoadSpecification
 		addDefinitions: [ :resolvedProject :requiredProject | self _addDefinitionsFor_0054: resolvedProject requiredProject: requiredProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0055: commitMessage [
+	"Start with spec_0052; add platform conditional packages (GemStone version 2.4.0) to the embedded project and the primary project."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title requiredLoadSpecification requiredProjectName embeddedProjectReference embededProjectDirName |
+	postfix := '0055'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0052'.
+	title := 'Start with spec_0052; add platform conditional packages (GemStone version 2.4.0) to the embedded project and the primary project.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 55
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(594);
+		yourself.
+	loadSpecification := (self _createLoadSpecification: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	requiredProjectName := projectName , '_embedded_1'.
+	embededProjectDirName := 'embededProjects' .
+	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
+		/ 'rowan'.
+	requiredLoadSpecification := RwEmbeddedLoadSpecificationV2 new
+		specName: requiredProjectName;
+		projectName: requiredProjectName;
+		projectAlias: projectName;
+		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		componentNames: {'Core'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: { 'tests' }
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		loadSpecification: loadSpecification
+		requiredLoadSpecification: requiredLoadSpecification
+		addDefinitions: [ :resolvedProject :requiredProject | self _addDefinitionsFor_0055: resolvedProject requiredProject: requiredProject ].
 
 	self
 		_finishCommitAndPush: specName

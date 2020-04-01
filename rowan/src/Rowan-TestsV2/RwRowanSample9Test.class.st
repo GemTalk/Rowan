@@ -5653,7 +5653,7 @@ RwRowanSample9Test >> testSpec_0054_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet: #('common' 'gnu').
+	resolvedProjectSet := loadSpec resolveProjectSet: #('common' 'gnu' 'tests').
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5666,6 +5666,107 @@ RwRowanSample9Test >> testSpec_0054_3 [
 
 	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
 	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0055_1 [
+	"spec_0055 should load cleanly ... without the new GemStone24x classes and tests"
+
+	"https://github.com/GemTalk/Rowan/issues/594"
+
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0055'.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectName := loadSpec projectName.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProjectSet := loadSpec resolveProjectSet.
+
+"load project"
+	loadedProjects := resolvedProjectSet load.
+
+"validate"
+	self
+		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self deny: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
+	self deny: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
+self halt.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0055_2 [
+	"spec_0054 should load cleanly ... with the new GemStone24x classes and tests"
+
+	"https://github.com/GemTalk/Rowan/issues/594"
+
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0055'.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectName := loadSpec projectName.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: ({ '2.4.0' asRwGemStoneVersionNumber }, loadSpec customConditionalAttributes).
+	resolvedProjectSet := loadSpec resolveProjectSet.
+
+"load project"
+	loadedProjects := resolvedProjectSet load.
+
+"validate"
+	self
+		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0055_3 [
+	"spec_0054 should load cleanly ... with the new GemStone24x classes and tests"
+
+	"https://github.com/GemTalk/Rowan/issues/594"
+
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0055'.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectName := loadSpec projectName.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProjectSet := loadSpec resolveProjectSet: {'common' . '2.4.0' asRwGemStoneVersionNumber . 'tests'}.
+
+"load project"
+	loadedProjects := resolvedProjectSet load.
+
+"validate"
+	self
+		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
 ]
 
 { #category : 'tests' }
