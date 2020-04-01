@@ -2923,56 +2923,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0054: resolvedProject requiredProject: requiredProject [
-	"Start with spec_0052; add platform conditional packages to the embedded project"
+	"Start with spec_0052; add platform conditional packages to the embedded project and the primary project."
 
-	| requiredProjectName componentName1 componentName2 requiredClassName1 className1 className2 packageName1 requiredLoadSpec gnuComponentName1 gnuComponentName2 gnuPackageName1 gnuClassName1 gnuPackageName2 |
-
-	requiredProjectName := requiredProject name.
-
-	componentName1 := 'Core'.
-	componentName2 := 'Tests'.
-	requiredClassName1 := requiredProjectName , 'Class1'.
-	className1 := requiredProjectName , 'Class1'.
-	className2 := requiredProjectName , 'TestCase'.
-	packageName1 := requiredProjectName , '-Core'.
-
-	gnuClassName1 := projectName , 'GnuClass1'.
-	gnuPackageName1 := requiredProjectName , '-Gnu-Core'.
-	gnuPackageName2 := requiredProjectName , '-Gnu-Tests'.
-
-	gnuComponentName1 := requiredProject
-		addNewComponentNamed: componentName1
-			toComponentNamed: componentName1
-			condition: #('gnu').
-	gnuComponentName2 := requiredProject
-		addNewComponentNamed: componentName2
-			toComponentNamed: componentName1
-			condition: #('tests' 'gnu').
-	((requiredProject
-		addPackageNamed: gnuPackageName1
-		toComponentNamed: gnuComponentName1)
-		addClassNamed: gnuClassName1
-		super: className1
-		instvars: #()
-		category: gnuPackageName1
-		comment: 'I am an example class')
-		addInstanceMethod: 'foo ^2' protocol: 'accessing';
-		yourself.
-
-	((requiredProject
-		addPackageNamed: gnuPackageName2
-		toComponentNamed: gnuComponentName2) addClassExtensionNamed: className2)
-		addInstanceMethod:
-				'test_' , gnuClassName1
-						,
-							'
-	| x |
-	self assert: (x := ' , gnuClassName1
-						,
-							' new foo) = 2.
-'
-			protocol: '*' , gnuPackageName2 asLowercase;
-		yourself.
+	| requiredLoadSpec |
+	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject.
+	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject.
 
 	requiredProject
 		projectsHome: self projectsHome;
@@ -3033,6 +2988,59 @@ RwTestProjectLibraryGenerator >> _addPackageCore1DefinitionsFor_0004: projectDef
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
 		yourself.
 	^ projectDefinition
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addPlatformConditionalDefinitionsFor_0054Project: theProject [
+	"Start with spec_0052; add platform conditional packages to the embedded project and the primary project."
+
+	| theProjectName componentName1 componentName2 requiredClassName1 className1 className2 packageName1 gnuComponentName1 gnuComponentName2 gnuPackageName1 gnuClassName1 gnuPackageName2 |
+	theProjectName := theProject name.
+
+	componentName1 := 'Core'.
+	componentName2 := 'Tests'.
+	requiredClassName1 := theProjectName , 'Class1'.
+	className1 := theProjectName , 'Class1'.
+	className2 := theProjectName , 'TestCase'.
+	packageName1 := theProjectName , '-Core'.
+
+	gnuClassName1 := theProjectName , 'GnuClass1'.
+	gnuPackageName1 := theProjectName , '-Gnu-Core'.
+	gnuPackageName2 := theProjectName , '-Gnu-Tests'.
+
+	gnuComponentName1 := theProject
+		addNewComponentNamed: componentName1
+		toComponentNamed: componentName1
+		condition: #('gnu').
+	gnuComponentName2 := theProject
+		addNewComponentNamed: componentName2
+		toComponentNamed: componentName1
+		condition: #('tests' 'gnu').
+	((theProject
+		addPackageNamed: gnuPackageName1
+		toComponentNamed: gnuComponentName1)
+		addClassNamed: gnuClassName1
+		super: className1
+		instvars: #()
+		category: gnuPackageName1
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^2' protocol: 'accessing';
+		yourself.
+
+	((theProject
+		addPackageNamed: gnuPackageName2
+		toComponentNamed: gnuComponentName2) addClassExtensionNamed: className2)
+		addInstanceMethod:
+				'test_' , gnuClassName1
+						,
+							'
+	| x |
+	self assert: (x := ' , gnuClassName1
+						,
+							' new foo) = 2.
+'
+			protocol: '*' , gnuPackageName2 asLowercase;
+		yourself
 ]
 
 { #category : 'private' }
@@ -6089,7 +6097,7 @@ RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0054: commitMessage [
-	"Start with spec_0052; add platform conditional packages to the embedded project"
+	"Start with spec_0052; add platform conditional packages to the embedded project and the primary project."
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -6098,7 +6106,7 @@ RwTestProjectLibraryGenerator >> genSpec_0054: commitMessage [
 	postfix := '0054'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0052'.
-	title := 'Start with spec_0052; add platform conditional packages to the embedded project'.
+	title := 'Start with spec_0052; add platform conditional packages to the embedded project and the primary project.'.
 
 	indexCard := (self
 		_createCard: postfix
