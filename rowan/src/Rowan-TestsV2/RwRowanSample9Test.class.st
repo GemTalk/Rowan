@@ -5699,7 +5699,6 @@ RwRowanSample9Test >> testSpec_0055_1 [
 
 	self deny: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
 	self deny: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
-self halt.
 ]
 
 { #category : 'tests' }
@@ -5738,7 +5737,7 @@ RwRowanSample9Test >> testSpec_0055_2 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0055_3 [
-	"spec_0054 should load cleanly ... with the new GemStone24x classes and tests"
+	"spec_0055 should load cleanly ... with the new GemStone24x classes and tests"
 
 	"https://github.com/GemTalk/Rowan/issues/594"
 

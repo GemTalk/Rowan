@@ -2949,8 +2949,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0055: resolvedProject requir
 	"Start with spec_0052; add platform conditional packages (GemStone version 2.4.x) to the embedded project and the primary project."
 
 	| requiredLoadSpec |
-	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: '2.[4-]' packageLabel: 'GemStone24x'.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: '2.[4-]'  packageLabel: 'GemStone24x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs2.[4-]' packageLabel: 'GemStone24x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
 
 	requiredProject
 		projectsHome: self projectsHome;
