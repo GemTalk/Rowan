@@ -62,16 +62,6 @@ SequenceableCollection >> putOn: aStream [
 ]
 
 { #category : '*tonel-gemstone-kernel' }
-SequenceableCollection >> second [
-
-	"Answer the second element of the receiver.
-	Raise an error if there are not enough elements."
-
-	^ self at: 2
-
-]
-
-{ #category : '*tonel-gemstone-kernel' }
 SequenceableCollection >> sixth [
 
 	"Answer the sixth element of the receiver.

@@ -7,8 +7,7 @@ RwEmbeddedLoadSpecificationV2 {
 	#projectSpecFile : 'platforms/gemstone/projects/Tonel/project.ston',
 	#componentNames : [
 		'Core',
-		'Tests',
-		'Gemstone32x'
+		'Tests'
 	],
 	#customConditionalAttributes : [
 		'tests'
