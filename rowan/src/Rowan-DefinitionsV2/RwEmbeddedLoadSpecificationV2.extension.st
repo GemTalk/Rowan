@@ -9,5 +9,6 @@ RwEmbeddedLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
 	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
 	basicProject _projectRepository: aResolvedProject _projectRepository copy.
 	self projectsHome: aResolvedProject repositoryRoot.
-	^ basicProject resolve
+	basicProject _projectRepository resolve.
+	^ basicProject
 ]

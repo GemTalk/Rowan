@@ -66,6 +66,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 			theResolvedProject readPackageNames: theResolvedProject packageNames.
 			projectSetDefinition addProject: theResolvedProject ].
 	^ projectSetDefinition
+
 ]
 
 { #category : 'instance creation' }

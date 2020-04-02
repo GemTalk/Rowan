@@ -215,4 +215,5 @@ RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleP
 		_projects: self projectsPath
 		forProject: aSimpleProjectLoadComponent projectName)
 		do: [ :projectSpec | projectSpec acceptVisitor: self ]
+
 ]
