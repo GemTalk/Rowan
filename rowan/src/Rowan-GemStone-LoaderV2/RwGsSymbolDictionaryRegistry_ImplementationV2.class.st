@@ -320,7 +320,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addClassAssociation: asso
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
-
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
 	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
@@ -330,7 +329,13 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 			compiledMethod == oldCompiledMethod
 				ifFalse: [ 
 					"only a problem, if the new and old compiled method are not identical"
-					self error: 'internal error - compiled method already exists in method dictionary when new extension method is expected' ] ].
+					self
+						error:
+							'internal error - Compiled method ' , behavior name asString , '>>'
+								, selector asString
+								,
+									' already exists in method dictionary when new extension method is expected ( package '
+								, packageName , ').' ] ].
 
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
@@ -340,18 +345,22 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior moveMethod: selector toCategory: protocolSymbol.
 
-	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing := registryInstance methodRegistry
+		at: compiledMethod
+		ifAbsent: [ nil ].
 	existing
 		ifNotNil: [ 
 			registryInstance
 				error:
-					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
+					'internal error - Existing LoadedMethod ' , behavior name asString , '>>'
+						, selector asString , ' found for extension compiled method ( package '
+						, packageName , ').' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
 	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
 
-	loadedPackage := Rowan image 
-		loadedPackageNamed: packageName 
+	loadedPackage := Rowan image
+		loadedPackageNamed: packageName
 		ifAbsent: [ self existingOrNewLoadedPackageNamed: packageName instance: registryInstance ].
 
 	loadedClassExtension := loadedPackage
