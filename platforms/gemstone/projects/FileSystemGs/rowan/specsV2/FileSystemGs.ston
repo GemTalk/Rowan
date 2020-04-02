@@ -8,6 +8,7 @@ RwEmbeddedLoadSpecificationV2 {
 	#componentNames : [
 		'Core',
 		'Gemstone32x',
+		'Gemstone32-5',
 		'Gemstone35-',
 		'Tests'
 	],

@@ -32,7 +32,7 @@ run
 		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool platformConditionalAttributes360
 	 auditFailures gsFileName repositoryRoot3215 repositoryRoot360 |
 
-true ifTrue: [ 
+false ifTrue: [ 
 	Rowan projectTools trace startTracing 
 ].
   GsFile gciLogServer: '--- read and write project source RowanV2'.
