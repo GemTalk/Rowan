@@ -61505,6 +61505,16 @@ addPlatformNestedComponentNamed: aComponentName condition: conditionArray commen
 		comment: commentString
 %
 
+category: 'project definition'
+method: RwResolvedProjectV2
+addPlatformNestedComponentNamed: aComponentName pathNameArray: conditionPathArray conditionPathArray: conditionArray comment: commentString
+	^ self _projectDefinition
+		addPlatformNestedComponentNamed: aComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionArray
+		comment: commentString
+%
+
 category: 'accessing'
 method: RwResolvedProjectV2
 addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
@@ -83630,7 +83640,7 @@ resolveWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly"
 
 	self projectsHome: aResolvedProject projectsHome.
-	^ self resolve
+	self _projectRepository resolve
 %
 
 category: 'accessing'
@@ -94417,7 +94427,8 @@ resolveWithParentProject: aResolvedProject
 	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
 	basicProject _projectRepository: aResolvedProject _projectRepository copy.
 	self projectsHome: aResolvedProject repositoryRoot.
-	^ basicProject resolve
+	basicProject _projectRepository resolve.
+	^ basicProject
 %
 
 ! Class extensions for 'RwGitTool'
