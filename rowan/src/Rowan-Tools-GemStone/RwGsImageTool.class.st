@@ -81,20 +81,7 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 				do: [ :projectDefinition | 
 					| audit projectName |
 					projectName := projectDefinition name.
-					[ audit := Rowan projectTools audit auditForProjectNamed: projectName ]
-						on: RwAuditMethodErrorNotification
-						do: [ :ex | 
-							| beh |
-							tracer
-								trace:
-									'extra unpackaged method ' , ex methodPrintString
-										, ' encountered during audit ... REMOVED (audit will be rerun)'.	"method is not present in the current package structure, so it should be removed"
-							beh := Rowan globalNamed: ex className.
-							ex isMetaclass
-								ifTrue: [ beh := beh class ].
-							beh removeSelector: ex selector.
-							reAudit := true.	"don't record as an audit error, but make sure that we rerun the audit"
-							ex resume: false ].
+					audit := Rowan projectTools audit auditForProjectNamed: projectName.
 					tracer trace: '	-- audit finished '.
 					audit isEmpty
 						ifFalse: [ 

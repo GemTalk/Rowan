@@ -84,9 +84,10 @@ RwClsAuditTool >> _auditClassSelector: aSelector forBehavior: aBehavior loadedCl
 RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior [
 "Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| res  aDict |
+	| res  aDict superclassName |
 	res :=  self _result.
-	(aLoadedClass classSuperclass isEquivalent: aBehavior superclass name ) 
+	superclassName := aBehavior superclass ifNil: [ 'nil' ] ifNotNil: [:superCls | superCls name ].
+	(aLoadedClass classSuperclass isEquivalent: superclassName ) 
 		ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Superclass is different from loaded class')].
 	(aLoadedClass classInstVarNames = (aBehavior instVarNames collect: [:e | e asString]) ) 
 			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'instVarNames changed in compiled class v loaded class')].
