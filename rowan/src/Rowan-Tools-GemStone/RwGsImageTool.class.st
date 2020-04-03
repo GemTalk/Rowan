@@ -81,7 +81,11 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 				do: [ :projectDefinition | 
 					| audit projectName |
 					projectName := projectDefinition name.
-					audit := Rowan projectTools audit auditForProjectNamed: projectName.
+					[ audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+						on: RwAdoptAuditErrorNotification
+						do: [ :ex | 
+							false ifTrue: [ self halt ].
+							ex resume: true ].
 					tracer trace: '	-- audit finished '.
 					audit isEmpty
 						ifFalse: [ 
@@ -130,4 +134,55 @@ RwGsImageTool >> newRepositoryRoot: repositoryRoot platformConditionalAttributes
 		repositoryRoot: repositoryRoot
 		platformConditionalAttributes: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
+]
+
+{ #category : 'packages' }
+RwGsImageTool >> readRewriteGemStone64Packages: archBase [
+	"
+		Rowan gemstoneTools image readRewriteGemStone64Packages: '/home/dhenrich/work/j_36x/'
+	"
+
+	| repositoryRoot platformConfigurationAttributes specUrl loadSpec resolvedProject |
+	SessionTemps current at: #'ROWAN_TRACE' put: nil.	"#gciLogServer "
+	repositoryRoot := archBase , '/image'.
+
+	platformConfigurationAttributes := {'common'.
+	'gemstone'.
+	'bootstraponly'}.
+
+	specUrl := repositoryRoot asFileReference / 'rowan' / 'specs'
+		/ 'GemStone64.ston'.
+	(loadSpec := RwSpecification fromUrl: 'file://' , specUrl pathString)
+		projectsHome: repositoryRoot;
+		diskUrl: 'file://' , repositoryRoot;
+		yourself.
+	resolvedProject := loadSpec resolve.
+
+	[ resolvedProject read: platformConfigurationAttributes ]
+		on: CompileWarning
+		do: [ :ex | 
+			| str |
+			((str := ex asString) includesString: 'not optimized')
+				ifTrue: [ ex resume ]
+				ifFalse: [ 
+					GsFile gciLogServer: str.
+					ex pass ] ].
+
+	resolvedProject packages
+		do: [ :packageDef | 
+			| classExtensions |
+			"merge class extensions into class definitions and remove class dextension"
+			classExtensions := packageDef classExtensions.
+			packageDef classDefinitions
+				do: [ :classDef | 
+					classExtensions
+						at: classDef name
+						ifPresent: [ :classExtension | 
+							classExtension instanceMethodDefinitions
+								do: [ :meth | classDef addInstanceMethodDefinition: meth ].
+							classExtension classMethodDefinitions
+								do: [ :meth | classDef addClassMethodDefinition: meth ].
+							packageDef removeClassExtensionDefinition: classExtension ] ] ].
+
+	resolvedProject exportPackages
 ]
