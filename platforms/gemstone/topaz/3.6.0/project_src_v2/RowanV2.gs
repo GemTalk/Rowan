@@ -93544,13 +93544,6 @@ stonShouldWriteNilInstVars
 	^ false
 %
 
-category: '*ast-kernel-core'
-method: Object
-value
-
-	^self
-%
-
 category: '*Cypress-PackageManagement'
 method: Object
 _writeCypressJsonOn: fileStream

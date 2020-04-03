@@ -93669,7 +93669,7 @@ stonShouldWriteNilInstVars
 	^ false
 %
 
-category: '*ast-kernel-core'
+category: '*rowan-gemstone-kernel-32x'
 method: Object
 value
 
