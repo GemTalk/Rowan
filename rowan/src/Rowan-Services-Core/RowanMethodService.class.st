@@ -34,7 +34,8 @@ Class {
 		'isMethodForBlock',
 		'homeMethodOop',
 		'hasMethodHistory',
-		'searchString'
+		'searchString',
+		'definedClassName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -318,6 +319,16 @@ RowanMethodService >> debugTestAsFailure: testSelector inClassName: theClassName
       ex pass ].
   testRunClassName := theClassName.
   RowanCommandResult addResult: self
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> definedClassName [
+	^definedClassName
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> definedClassName: object [
+	definedClassName := object
 ]
 
 { #category : 'Accessing' }
