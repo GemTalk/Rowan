@@ -141,7 +141,7 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 						description: 'Missing loaded method. ';
 						yourself.
 				(notification signal) 
-					ifTrue: [ RwAuditDetail for: aBehavior message: 'Missing loaded method>>' , aSelector asString ]
+					ifTrue: [ self halt. RwAuditDetail for: aBehavior message: 'Missing loaded method>>' , aSelector asString ]
 					ifFalse: [ 
 						"don't record audit error"
 						nil ]  ]

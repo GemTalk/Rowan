@@ -24,50 +24,89 @@ RwClsExtensionAuditTool >> _auditCategory: anExtentionCategory forBehavior: aCla
 
 { #category : 'other' }
 RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
-"look for methods compiled into class without Rowan API"
-| res   extensionCategoryName|
+	"look for methods compiled into class without Rowan API"
 
+	| res extensionCategoryName |
 	res := self _result.
-	extensionCategoryName :=  aLoadedClassExtension loadedPackage asExtensionName "'*' , aLoadedClassExtension loadedPackage name" .
-	(Rowan globalNamed: aLoadedClassExtension name) 
-		ifNil: [(RwAuditDetail for: aLoadedClassExtension message: ' Class does not exists for loaded class extension')] 
-		ifNotNil: [:aBehavior ||categories | 
-					
-				aBehavior == aLoadedClassExtension handle
-					ifFalse: [ 
-						self
-							errorLog: res
-							add:
-								(aLoadedClassExtension name , ' #' , extensionCategoryName)
-									->
-										(' loaded extension class (' , aLoadedClassExtension handle asOop printString
-										, ') not latest version of class ('
-										, aBehavior asOop printString , ') ') ].
+	extensionCategoryName := aLoadedClassExtension loadedPackage asExtensionName.	"'*' , aLoadedClassExtension loadedPackage name"
+	(Rowan globalNamed: aLoadedClassExtension name)
+		ifNil: [ 
+			RwAuditDetail
+				for: aLoadedClassExtension
+				message: ' Class does not exists for loaded class extension' ]
+		ifNotNil: [ :aBehavior | 
+			| categories |
+			aBehavior == aLoadedClassExtension handle
+				ifFalse: [ 
+					self
+						errorLog: res
+						add:
+							(aLoadedClassExtension name , ' #' , extensionCategoryName)
+								->
+									(' loaded extension class (' , aLoadedClassExtension handle asOop printString
+										, ') not latest version of class (' , aBehavior asOop printString
+										, ') ') ].
 
-			categories := (aBehavior _baseCategorys: 0)
-				ifNil: [ #() ]
-				ifNotNil: [:catDict | catDict keys ].
-			(categories	
-				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-					ifNotNil: [:aCategory | res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
-					ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
-						res add: (RwAuditDetail for: aLoadedClassExtension message: 'Missing instance method extension category named ', extensionCategoryName) ] ].
-			categories := (aBehavior class _baseCategorys: 0)
-				ifNil: [ #() ]
-				ifNotNil: [:catDict | catDict keys ].
-			(categories
-				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-					ifNotNil: [:aCategory | res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
-					ifNil: [aLoadedClassExtension loadedClassMethods notEmpty ifTrue: [
-						res add: (RwAuditDetail for: aLoadedClassExtension message: 'Missing class method extension category named ' ,extensionCategoryName) ] ].
+			aLoadedClassExtension loadedProject packageConvention = 'RowanHybrid'
+				ifTrue: [ 
+					categories := (aBehavior _baseCategorys: 0)
+						ifNil: [ #() ]
+						ifNotNil: [ :catDict | catDict keys ].
+					(categories
+						detect: [ :each | each equalsNoCase: extensionCategoryName ]
+						ifNone: [  ])
+						ifNotNil: [ :aCategory | 
+							res
+								addAll:
+									(self
+										_auditCategory: aCategory
+										forBehavior: aBehavior
+										loadedClass: aLoadedClassExtension) ]
+						ifNil: [ 
+							aLoadedClassExtension loadedInstanceMethods notEmpty
+								ifTrue: [ 
+									res
+										add:
+											(RwAuditDetail
+												for: aLoadedClassExtension
+												message:
+													'Missing instance method extension category named ' , extensionCategoryName) ] ].
+					categories := (aBehavior class _baseCategorys: 0)
+						ifNil: [ #() ]
+						ifNotNil: [ :catDict | catDict keys ].
+					(categories
+						detect: [ :each | each equalsNoCase: extensionCategoryName ]
+						ifNone: [  ])
+						ifNotNil: [ :aCategory | 
+							res
+								addAll:
+									(self
+										_auditCategory: aCategory
+										forBehavior: aBehavior class
+										loadedClass: aLoadedClassExtension) ]
+						ifNil: [ 
+							aLoadedClassExtension loadedClassMethods notEmpty
+								ifTrue: [ 
+									res
+										add:
+											(RwAuditDetail
+												for: aLoadedClassExtension
+												message:
+													'Missing class method extension category named ' , extensionCategoryName) ] ] ]
+				ifFalse: [ 
+					aLoadedClassExtension loadedProject packageConvention = 'Monticello'
+						ifTrue: [ self error: 'Monticlello package conventions not yet supported' ] ].
 
-			aLoadedClassExtension 
-				loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | res add: x]
-				] 
-				loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-					(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass) ifNotNil: [:x | res add: x]
-				]
-		].
-		^res
+			aLoadedClassExtension
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					(self
+						_auditLoadedMethod: aLoadedMethod
+						forBehavior: aBehavior
+						loadedClass: loadedClass) ifNotNil: [ :x | res add: x ] ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					(self
+						_auditLoadedMethod: aLoadedMethod
+						forBehavior: aBehavior class
+						loadedClass: loadedClass) ifNotNil: [ :x | res add: x ] ] ].
+	^ res
 ]

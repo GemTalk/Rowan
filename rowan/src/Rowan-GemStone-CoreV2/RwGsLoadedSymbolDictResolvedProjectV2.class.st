@@ -200,6 +200,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> markPackageDirty [
 ]
 
 { #category : 'properties' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> packageConvention [
+
+	^ self resolvedProject packageConvention
+]
+
+{ #category : 'properties' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> packageNameToPlatformPropertiesMap: aDictionary [
 
 	^self resolvedProject packageNameToPlatformPropertiesMap: aDictionary
