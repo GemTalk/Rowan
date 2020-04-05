@@ -20,9 +20,11 @@
 
 	run
 	| specPath |
+false ifTrue: [ 
+	Rowan projectTools trace startTracing.
+].
 "DOES NOT WORK?"	specPath := '$ARCHBASE/image/rowan/specs/GemStone64.ston' asFileReference pathString.
 	specPath := '/home/dhenrich/work/j_36x/image/rowan/specs/GemStone64.ston' asFileReference pathString.
-	Rowan projectTools trace trace: 'specPath ', specPath printString.
 	Rowan gemstoneTools image
 		adoptGemStone64: 'file://', specPath 
 		projectsHome: '/home/dhenrich/work/j_36x/image'
