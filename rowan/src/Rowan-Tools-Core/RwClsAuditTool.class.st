@@ -145,7 +145,7 @@ RwClsAuditTool >> _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta lo
 { #category : 'audit' }
 RwClsAuditTool >> _auditRowanCategory: category forBehavior: aBehavior loadedClass: aLoadedClass [
 	| res |
-	res := self _resul.
+	res := self _result.
 	(aBehavior selectorsIn: category)
 		do: [ :aSelector | 
 			(aLoadedClass loadedMethodAt: aSelector isMeta: aBehavior isMeta)
