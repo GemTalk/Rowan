@@ -31,9 +31,9 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 	extensionCategoryName := aLoadedClassExtension loadedPackage asExtensionName.	"'*' , aLoadedClassExtension loadedPackage name"
 	(Rowan globalNamed: aLoadedClassExtension name)
 		ifNil: [ 
-			RwAuditDetail
+			res add: (RwAuditDetail
 				for: aLoadedClassExtension
-				message: ' Class does not exists for loaded class extension' ]
+				message: ' Class does not exists for loaded class extension' )]
 		ifNotNil: [ :aBehavior | 
 			| categories |
 			aBehavior == aLoadedClassExtension handle
@@ -99,14 +99,18 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 
 			aLoadedClassExtension
 				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(self
-						_auditLoadedMethod: aLoadedMethod
-						forBehavior: aBehavior
-						loadedClass: loadedClass) ifNotNil: [ :x | res add: x ] ]
+					res
+						addAll:
+							(self
+								_auditLoadedMethod: aLoadedMethod
+								forBehavior: aBehavior
+								loadedClass: loadedClass) ]
 				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(self
-						_auditLoadedMethod: aLoadedMethod
-						forBehavior: aBehavior class
-						loadedClass: loadedClass) ifNotNil: [ :x | res add: x ] ] ].
+					res
+						addAll:
+							(self
+								_auditLoadedMethod: aLoadedMethod
+								forBehavior: aBehavior class
+								loadedClass: loadedClass) ] ].
 	^ res
 ]
