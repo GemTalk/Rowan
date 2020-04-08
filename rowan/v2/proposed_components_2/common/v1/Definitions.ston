@@ -23,7 +23,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 						'symbolDictName' : 'RowanTools'
 					},
 					'Rowan-DefinitionsV1-Kernel' : {
-						'symbolDictName' : 'Globals'
+						'symbolDictName' : 'RowanFileSystem'
 					}
 				}
 			}

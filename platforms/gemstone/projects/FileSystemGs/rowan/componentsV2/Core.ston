@@ -13,5 +13,14 @@ RwSimpleProjectLoadComponentV2 {
 		'Files',
 		'Network-UUID'
 	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'FileSystem-GemStone-Kernel' : { 'symbolDictName' : 'Globals' }
+				}
+			}
+		}
+	},
 	#comment : 'FileSystemGs component. For now all packages are expected to be loaded into Globals by SystemUser'
 }

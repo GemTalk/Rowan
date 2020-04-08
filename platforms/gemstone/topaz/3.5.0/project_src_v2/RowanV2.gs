@@ -8,7 +8,7 @@ doit
 	classVars: #( GeneratorClass )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Network-UUID';
@@ -100,7 +100,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -116,7 +116,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -132,7 +132,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -148,7 +148,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -176,7 +176,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -192,7 +192,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -208,7 +208,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -224,7 +224,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -240,7 +240,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -256,7 +256,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -272,7 +272,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -339,7 +339,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -777,7 +777,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -1148,7 +1148,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -1164,7 +1164,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -1210,7 +1210,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -2729,7 +2729,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Network-UUID';
@@ -2745,7 +2745,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -2799,7 +2799,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -2828,7 +2828,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -2861,7 +2861,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -2883,7 +2883,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -2910,7 +2910,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -2936,7 +2936,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -2962,7 +2962,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -2978,7 +2978,7 @@ doit
 	classVars: #( Registry )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -2996,7 +2996,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -3012,7 +3012,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3028,7 +3028,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3048,7 +3048,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3064,7 +3064,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3080,7 +3080,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3096,7 +3096,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3112,7 +3112,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3128,7 +3128,7 @@ doit
 	classVars: #( UserLocalDirectory )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3144,7 +3144,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3167,7 +3167,7 @@ doit
 	classVars: #( CurrentFS DefaultWorkingDirectory )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -3184,7 +3184,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -3200,7 +3200,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -3216,7 +3216,7 @@ doit
 	classVars: #( Disks )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Disk';
@@ -3232,7 +3232,7 @@ doit
 	classVars: #( CurrentFS )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -3248,7 +3248,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3264,7 +3264,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3280,7 +3280,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3298,7 +3298,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3316,7 +3316,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3332,7 +3332,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Core';
@@ -3620,7 +3620,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -3637,7 +3637,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -3653,7 +3653,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -3669,7 +3669,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -3685,7 +3685,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Path';
@@ -3713,7 +3713,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Path';
@@ -3729,7 +3729,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Path';
@@ -9023,7 +9023,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9047,7 +9047,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9073,7 +9073,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9098,7 +9098,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9147,7 +9147,7 @@ doit
 	classVars: #( Default )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9170,7 +9170,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9186,7 +9186,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9204,7 +9204,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9222,7 +9222,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9244,7 +9244,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9262,7 +9262,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
@@ -9281,7 +9281,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -9327,7 +9327,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'Files';
@@ -9412,7 +9412,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanFileSystem
 	options: #()
 )
 		category: 'FileSystem-Memory';
@@ -62647,103 +62647,117 @@ clas
 category: 'audit'
 method: RwClsAuditTool
 auditLoadedClass: aLoadedClass
-"look for methods compiled into class without Rowan API"
-| res  |
+	"look for methods compiled into class without Rowan API"
 
+	| res |
 	res := self _result.
-	(Rowan globalNamed: aLoadedClass name)  
-		ifNil: [res add: (RwAuditDetail for: aLoadedClass message:  'Missing gemstone class for loaded class ') "aLoadedClass name -> 'Missing gemstone class for loaded class '" ] "there is no matching Class for LoadedClass"
-		ifNotNil: [:aBehavior | 
-
+	(Rowan globalNamed: aLoadedClass name)
+		ifNil: [ 
+			"there is no matching Class for LoadedClass"
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Missing gemstone class for loaded class ') ]
+		ifNotNil: [ :aBehavior | 
 			aBehavior == aLoadedClass handle
 				ifFalse: [ 
-					self
-						errorLog: res
+					res
 						add:
-							aLoadedClass name
-								->
-									('loaded class (' , aLoadedClass handle asOop printString
-									, ') not latest version of class ('
-									, aBehavior asOop printString , ') ') ].
-
-			"audit class properties"
-			res addAll:  (self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
-			"audit categories"
-
-			aBehavior categorysDo: [:category :selectors | 
-				res addAll: (self  _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass)
-			].
-			aBehavior class categorysDo: [:category :selectors | 
-				res  addAll: (self  _auditCategory: category forBehavior: aBehavior class loadedClass: aLoadedClass)
-			].
-		"audit loaded class methods"
-		aLoadedClass 
-			loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | (aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil) 
-					ifNil: [(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:a | self errorLog: res add: a]]]
-
-			loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
-					ifNil: [(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass)  ifNotNil: [:a | self errorLog: res add: a]]
-			]
-	].
-	^res
+							(RwAuditDetail
+								for: aLoadedClass
+								message:
+									'Not latest version of class (' , aBehavior asOop printString , ')') ].
+			res
+				addAll:
+					(self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
+			aBehavior
+				categorysDo: [ :category :selectors | 
+					res
+						addAll:
+							(self _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass) ].
+			aBehavior class
+				categorysDo: [ :category :selectors | 
+					res
+						addAll:
+							(self
+								_auditCategory: category
+								forBehavior: aBehavior class
+								loadedClass: aLoadedClass) ].
+			aLoadedClass
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil)
+						ifNil: [ 
+							res
+								addAll:
+									(self
+										_auditLoadedMethod: aLoadedMethod
+										forBehavior: aBehavior
+										loadedClass: loadedClass) ] ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil)
+						ifNil: [ 
+							res
+								addAll:
+									(self
+										_auditLoadedMethod: aLoadedMethod
+										forBehavior: aBehavior class
+										loadedClass: loadedClass) ] ] ].
+	^ res
 %
 
 category: 'audit'
 method: RwClsAuditTool
-errorLog: aResult add: aMessage	
-"add error to results. print to file"
+errorLog: aResult add: aMessage
+	"add error to results. print to file"
+
 	aResult add: aMessage.
-	GsFile gciLogServer: aMessage value asString,'  ', aMessage key asString.
-	Notification signal: aMessage value asString,'  ', aMessage key asString.
+	GsFile gciLogServer: aMessage value asString , '  ' , aMessage key asString
 %
 
 category: 'audit'
 method: RwClsAuditTool
-errorLog: aResult addAll: aCol	
-"add all messages to result"
-	aCol do: [:e | self errorLog: aResult add: e].
+errorLog: aResult addAll: aCol
+	"add all messages to result"
+
+	aCol do: [ :e | self errorLog: aResult add: e ]
 %
 
 category: 'audit'
 method: RwClsAuditTool
 _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
-	| aPackage |
-		"must be an extension. Do basic checks"
-	aPackage := (category copyFrom: 2 to: category size).
+	| packageConvention |
+	packageConvention := aLoadedClass loadedProject packageConvention.
 
-	^category first == $*	ifTrue: ["must be an extension category. See if package exists"
-		(aPackage asLowercase isEquivalent: aBehavior rowanPackageName asLowercase) 
-			ifTrue: [{RwAuditDetail for: aLoadedClass message: 'Extension category name <', category, '>  must not match class package name.' 
-							"aLoadedClass name , ' #' , category asString -> 'Extension category name can not be same as class package' "}]
-			ifFalse: [
-				(Rowan image loadedClassExtensionsNamed: aBehavior thisClass name 
-					ifFound: [:extensions | extensions detect: [:e | e loadedPackage name asLowercase isEquivalent: aPackage] ifNone: [nil]] 
-					ifAbsent: [nil]) isNil 
-						ifTrue: [ | res | 
-									res := self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		.
-						] 
-						ifFalse: [{}"no basic extension problems found, class extension will be audited separately"]
-			]
-	] ifFalse: [
-		self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		
-	]
+	^ packageConvention = 'RowanHybrid'
+		ifTrue: [ 
+			self
+				_auditRowanHybridCategory: category
+				forBehavior: aBehavior
+				loadedClass: aLoadedClass ]
+		ifFalse: [ 
+			packageConvention = 'Rowan'
+				ifTrue: [ 
+					self
+						_auditRowanCategory: category
+						forBehavior: aBehavior
+						loadedClass: aLoadedClass ]
+				ifFalse: [ 
+					self
+						error:
+							'package convention ' , packageConvention printString , ' not yet supported' ] ]
 %
 
 category: 'audit'
 method: RwClsAuditTool
 _auditCategory: category selectors: aSelectorSet forBehavior: aBehavior loadedClass: aLoadedClass
-	|  res |
-	
-		res := res := self _result.
-
-		aSelectorSet do: [:aSelector |
-				( self  _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass)  
-					ifNotNil: [:aRes | res add: aRes]
-				
-		].
-
-		^res
-
+	| res |
+	res := self _result.
+	aSelectorSet
+		do: [ :aSelector | 
+			(self _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass)
+				ifNotNil: [ :aRes | res addAll: aRes ] ].
+	^ res
 %
 
 category: 'audit'
@@ -62784,9 +62798,10 @@ method: RwClsAuditTool
 _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
 "Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| res  aDict |
+	| res  aDict superclassName |
 	res :=  self _result.
-	(aLoadedClass classSuperclass isEquivalent: aBehavior superclass name ) 
+	superclassName := aBehavior superclass ifNil: [ 'nil' ] ifNotNil: [:superCls | superCls name ].
+	(aLoadedClass classSuperclass isEquivalent: superclassName ) 
 		ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Superclass is different from loaded class')].
 	(aLoadedClass classInstVarNames = (aBehavior instVarNames collect: [:e | e asString]) ) 
 			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'instVarNames changed in compiled class v loaded class')].
@@ -62810,56 +62825,161 @@ _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
 category: 'audit'
 method: RwClsAuditTool
 _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension
-"verify that compiled method is present for each loaded class method. return nil if no error"
-"we already check verifying selectors that compiled method matches loaded method"
+	"verify that compiled method is present for each loaded class method. return nil if no error"
 
-		^( aClassOrMeta compiledMethodAt: aLoadedMethod name  otherwise: nil) 
-				ifNil: [RwAuditDetail for: aLoadedClassOrExtension message: 'Missing compiled method>>', aLoadedMethod name 
-							"(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled class method. ' "]
-				ifNotNil: [:aMethod | aMethod == aLoadedMethod handle 
-						ifTrue: [((aLoadedMethod methodCategory) equalsNoCase: (aClassOrMeta categoryOfSelector: aMethod selector) ) 
-							ifTrue: [nil]
-							ifFalse: [ RwAuditDetail for: aClassOrMeta  message: 'Missing method category: ', aLoadedMethod methodCategory, ' for loaded class' ] ]
-						ifFalse: [RwAuditDetail for: aLoadedClassOrExtension 
-										message:  'Compiled method is not identical to loaded class method>>' , aLoadedMethod name]	]
+	"we already check verifying selectors that compiled method matches loaded method"
+
+	| res |
+	res := self _result.
+	(aClassOrMeta compiledMethodAt: aLoadedMethod name otherwise: nil)
+		ifNil: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClassOrExtension
+						message: 'Missing compiled method>>' , aLoadedMethod name) ]
+		ifNotNil: [ :aMethod | 
+			aMethod == aLoadedMethod handle
+				ifTrue: [ 
+					| expected actual |
+					((expected := aLoadedMethod methodCategory)
+						equalsNoCase:
+							(actual := aClassOrMeta categoryOfSelector: aMethod selector))
+						ifFalse: [ 
+							res
+								add:
+									(RwAuditDetail
+										for: aClassOrMeta
+										message:
+											'Mismatched method category (expected: ' , expected printString , ' actual: '
+												, actual printString , ')') ] ]
+				ifFalse: [ 
+					res
+						add:
+							(RwAuditDetail
+								for: aLoadedClassOrExtension
+								message:
+									'Compiled method is not identical to loaded class method>>' , aLoadedMethod name) ] ].
+	^ res
+%
+
+category: 'audit'
+method: RwClsAuditTool
+_auditRowanCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
+	| res |
+	res := self _result.
+	(aBehavior selectorsIn: category)
+		do: [ :aSelector | 
+			(aLoadedClass loadedMethodAt: aSelector isMeta: aBehavior isMeta)
+				ifNil: [ 
+					| foundExtensionClass |
+					"should be an extension method"
+					foundExtensionClass := false.
+					(Rowan image loadedClassExtensionsForClass: aBehavior)
+						do: [ :aLoadedClassExtension | 
+							(aLoadedClassExtension loadedMethodAt: aSelector isMeta: aBehavior isMeta)
+								ifNotNil: [ :aLoadedMethod | 
+									res
+										addAll:
+											(self
+												_auditLoadedMethod: aLoadedMethod
+												forBehavior: aBehavior
+												loadedClass: aLoadedClassExtension).
+									foundExtensionClass := true ] ].
+					foundExtensionClass
+						ifFalse: [ 
+							res
+								add:
+									(RwAuditDetail for: aLoadedClass message: 'Missing Loaded method>>' , aSelector) ] ]
+				ifNotNil: [ :aLoadedMethod | 
+					res
+						addAll:
+							(self
+								_auditLoadedMethod: aLoadedMethod
+								forBehavior: aBehavior
+								loadedClass: aLoadedClass) ] ].
+	^ res
+%
+
+category: 'audit'
+method: RwClsAuditTool
+_auditRowanHybridCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
+	| aPackage res |
+	"must be an extension. Do basic checks"
+	aPackage := category copyFrom: 2 to: category size.
+	res := self _result.
+	category first == $*
+		ifTrue: [ 
+			"must be an extension category. See if package exists"
+			(aPackage asLowercase isEquivalent: aBehavior rowanPackageName asLowercase)
+				ifTrue: [ 
+					"aLoadedClass name , ' #' , category asString -> 'Extension category name can not be same as class package' "
+					res
+						add:
+							(RwAuditDetail
+								for: aLoadedClass
+								message:
+									'Extension category name <' , category , '>  must not match class package name.') ]
+				ifFalse: [ 
+					(Rowan image
+						loadedClassExtensionsNamed: aBehavior thisClass name
+						ifFound: [ :extensions | 
+							extensions
+								detect: [ :e | e loadedPackage name asLowercase isEquivalent: aPackage ]
+								ifNone: [ nil ] ]
+						ifAbsent: [ nil ]) isNil
+						ifTrue: [ 
+							res
+								addAll:
+									(self
+										_auditCategory: category
+										selectors: (aBehavior selectorsIn: category)
+										forBehavior: aBehavior
+										loadedClass: aLoadedClass) ]
+						ifFalse: [ 
+							"no basic extension problems found, class extension will be audited separately"
+							 ] ] ]
+		ifFalse: [ 
+			res
+				addAll:
+					(self
+						_auditCategory: category
+						selectors: (aBehavior selectorsIn: category)
+						forBehavior: aBehavior
+						loadedClass: aLoadedClass) ].
+	^ res
 %
 
 category: 'audit'
 method: RwClsAuditTool
 _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
-"#rentamed from _auidtClassSelector since functionality is same for instanance and class
+	"#rentamed from _auidtClassSelector since functionality is same for instanance and class
  verify compiled method matches loaded method reference return nil if no problem found"
 
-	^(aLoadedClass loadedMethodAt: aSelector isMeta:  aBehavior isMeta)
-			ifNil: [
-				| notification |
-				notification := (RwAuditMethodErrorNotification
-					method: aSelector 
-					isMeta: aBehavior isMeta
-					inClassNamed: aBehavior theNonMetaClass name
-					isClassExtension: aLoadedClass isLoadedClassExtension
-					intoPackageNamed: aLoadedClass packageName )
-						description: 'Missing loaded method. ';
-						yourself.
-				(notification signal) 
-					ifTrue: [ RwAuditDetail for: aBehavior message: 'Missing loaded method>>' , aSelector asString ]
-					ifFalse: [ 
-						"don't record audit error"
-						nil ]  ]
-			ifNotNil: [:aLoadedMethod |
-				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
-					ifTrue: [
-						| expected actual |
-						((expected := aLoadedMethod methodCategory) equalsNoCase: (actual := aBehavior categoryOfSelector:  aSelector ) ) 
-							ifTrue: [nil]
-							ifFalse: [RwAuditDetail for: aBehavior message: (
-										'Mismatched method category (expected: ', expected printString, 
-										' actual: ', actual printString, ')')
-						]
-					] 
-					ifFalse: [RwAuditDetail for: aLoadedClass message:  'Compiled method is not identical to loaded method '
-				] 
-			]
+	^ (aLoadedClass loadedMethodAt: aSelector isMeta: aBehavior isMeta)
+		ifNil: [ 
+			| notification |
+			notification := (RwAuditMethodErrorNotification
+				method: aSelector
+				isMeta: aBehavior isMeta
+				inClassNamed: aBehavior theNonMetaClass name
+				isClassExtension: aLoadedClass isLoadedClassExtension
+				intoPackageNamed: aLoadedClass packageName)
+				description: 'Missing loaded method. ';
+				yourself.
+			notification signal
+				ifTrue: [ 
+					{(RwAuditDetail
+						for: aBehavior
+						message: 'Missing loaded method>>' , aSelector asString)} ]
+				ifFalse: [ 
+					"don't record audit error"
+					{} ] ]
+		ifNotNil: [ :aLoadedMethod | 
+			self
+				_auditLoadedMethod: aLoadedMethod
+				forBehavior: aBehavior
+				loadedClass: aLoadedClass ]
 %
 
 category: 'audit'
@@ -62876,52 +62996,95 @@ _result
 category: 'other'
 method: RwClsExtensionAuditTool
 auditLoadedClassExtension: aLoadedClassExtension
-"look for methods compiled into class without Rowan API"
-| res   extensionCategoryName|
+	"look for methods compiled into class without Rowan API"
 
+	| res extensionCategoryName |
 	res := self _result.
-	extensionCategoryName :=  aLoadedClassExtension loadedPackage asExtensionName "'*' , aLoadedClassExtension loadedPackage name" .
-	(Rowan globalNamed: aLoadedClassExtension name) 
-		ifNil: [(RwAuditDetail for: aLoadedClassExtension message: ' Class does not exists for loaded class extension')] 
-		ifNotNil: [:aBehavior ||categories | 
-					
-				aBehavior == aLoadedClassExtension handle
-					ifFalse: [ 
-						self
-							errorLog: res
-							add:
-								(aLoadedClassExtension name , ' #' , extensionCategoryName)
-									->
-										(' loaded extension class (' , aLoadedClassExtension handle asOop printString
-										, ') not latest version of class ('
-										, aBehavior asOop printString , ') ') ].
+	extensionCategoryName := aLoadedClassExtension loadedPackage asExtensionName.	"'*' , aLoadedClassExtension loadedPackage name"
+	(Rowan globalNamed: aLoadedClassExtension name)
+		ifNil: [ 
+			res add: (RwAuditDetail
+				for: aLoadedClassExtension
+				message: ' Class does not exists for loaded class extension' )]
+		ifNotNil: [ :aBehavior | 
+			| categories |
+			aBehavior == aLoadedClassExtension handle
+				ifFalse: [ 
+					self
+						errorLog: res
+						add:
+							(aLoadedClassExtension name , ' #' , extensionCategoryName)
+								->
+									(' loaded extension class (' , aLoadedClassExtension handle asOop printString
+										, ') not latest version of class (' , aBehavior asOop printString
+										, ') ') ].
 
-			categories := (aBehavior _baseCategorys: 0)
-				ifNil: [ #() ]
-				ifNotNil: [:catDict | catDict keys ].
-			(categories	
-				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-					ifNotNil: [:aCategory | res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
-					ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
-						res add: (RwAuditDetail for: aLoadedClassExtension message: 'Missing instance method extension category named ', extensionCategoryName) ] ].
-			categories := (aBehavior class _baseCategorys: 0)
-				ifNil: [ #() ]
-				ifNotNil: [:catDict | catDict keys ].
-			(categories
-				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-					ifNotNil: [:aCategory | res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
-					ifNil: [aLoadedClassExtension loadedClassMethods notEmpty ifTrue: [
-						res add: (RwAuditDetail for: aLoadedClassExtension message: 'Missing class method extension category named ' ,extensionCategoryName) ] ].
+			aLoadedClassExtension loadedProject packageConvention = 'RowanHybrid'
+				ifTrue: [ 
+					categories := (aBehavior _baseCategorys: 0)
+						ifNil: [ #() ]
+						ifNotNil: [ :catDict | catDict keys ].
+					(categories
+						detect: [ :each | each equalsNoCase: extensionCategoryName ]
+						ifNone: [  ])
+						ifNotNil: [ :aCategory | 
+							res
+								addAll:
+									(self
+										_auditCategory: aCategory
+										forBehavior: aBehavior
+										loadedClass: aLoadedClassExtension) ]
+						ifNil: [ 
+							aLoadedClassExtension loadedInstanceMethods notEmpty
+								ifTrue: [ 
+									res
+										add:
+											(RwAuditDetail
+												for: aLoadedClassExtension
+												message:
+													'Missing instance method extension category named ' , extensionCategoryName) ] ].
+					categories := (aBehavior class _baseCategorys: 0)
+						ifNil: [ #() ]
+						ifNotNil: [ :catDict | catDict keys ].
+					(categories
+						detect: [ :each | each equalsNoCase: extensionCategoryName ]
+						ifNone: [  ])
+						ifNotNil: [ :aCategory | 
+							res
+								addAll:
+									(self
+										_auditCategory: aCategory
+										forBehavior: aBehavior class
+										loadedClass: aLoadedClassExtension) ]
+						ifNil: [ 
+							aLoadedClassExtension loadedClassMethods notEmpty
+								ifTrue: [ 
+									res
+										add:
+											(RwAuditDetail
+												for: aLoadedClassExtension
+												message:
+													'Missing class method extension category named ' , extensionCategoryName) ] ] ]
+				ifFalse: [ 
+					aLoadedClassExtension loadedProject packageConvention = 'Monticello'
+						ifTrue: [ self error: 'Monticlello package conventions not yet supported' ] ].
 
-			aLoadedClassExtension 
-				loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | res add: x]
-				] 
-				loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-					(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass) ifNotNil: [:x | res add: x]
-				]
-		].
-		^res
+			aLoadedClassExtension
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					res
+						addAll:
+							(self
+								_auditLoadedMethod: aLoadedMethod
+								forBehavior: aBehavior
+								loadedClass: loadedClass) ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					res
+						addAll:
+							(self
+								_auditLoadedMethod: aLoadedMethod
+								forBehavior: aBehavior class
+								loadedClass: loadedClass) ] ].
+	^ res
 %
 
 category: 'other'
@@ -63037,19 +63200,10 @@ adoptGemStone64: specUrl projectsHome: projectsHome
 					| audit projectName |
 					projectName := projectDefinition name.
 					[ audit := Rowan projectTools audit auditForProjectNamed: projectName ]
-						on: RwAuditMethodErrorNotification
+						on: RwAdoptAuditErrorNotification
 						do: [ :ex | 
-							| beh |
-							tracer
-								trace:
-									'extra unpackaged method ' , ex methodPrintString
-										, ' encountered during audit ... REMOVED (audit will be rerun)'.	"method is not present in the current package structure, so it should be removed"
-							beh := Rowan globalNamed: ex className.
-							ex isMetaclass
-								ifTrue: [ beh := beh class ].
-							beh removeSelector: ex selector.
-							reAudit := true.	"don't record as an audit error, but make sure that we rerun the audit"
-							ex resume: false ].
+							false ifTrue: [ self halt ].
+							ex resume: true ].
 					tracer trace: '	-- audit finished '.
 					audit isEmpty
 						ifFalse: [ 
@@ -63101,6 +63255,58 @@ newRepositoryRoot: repositoryRoot platformConditionalAttributes: platformConditi
 		repositoryRoot: repositoryRoot
 		platformConditionalAttributes: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
+%
+
+category: 'packages'
+method: RwGsImageTool
+readRewriteGemStone64Packages: archBase
+	"
+		Rowan gemstoneTools image readRewriteGemStone64Packages: '/home/dhenrich/work/j_36x/'
+	"
+
+	| repositoryRoot platformConfigurationAttributes specUrl loadSpec resolvedProject |
+	SessionTemps current at: #'ROWAN_TRACE' put: nil.	"#gciLogServer "
+	repositoryRoot := archBase , '/image'.
+
+	platformConfigurationAttributes := {'common'.
+	'gemstone'.
+	'bootstraponly'}.
+
+	specUrl := repositoryRoot asFileReference / 'rowan' / 'specs'
+		/ 'GemStone64.ston'.
+	(loadSpec := RwSpecification fromUrl: 'file://' , specUrl pathString)
+		projectsHome: repositoryRoot;
+		diskUrl: 'file://' , repositoryRoot;
+		yourself.
+	resolvedProject := loadSpec resolve.
+
+	[ resolvedProject read: platformConfigurationAttributes ]
+		on: CompileWarning
+		do: [ :ex | 
+			| str |
+			((str := ex asString) includesString: 'not optimized')
+				ifTrue: [ ex resume ]
+				ifFalse: [ 
+					GsFile gciLogServer: str.
+					ex pass ] ].
+
+	resolvedProject packages
+		do: [ :packageDef | 
+			| classExtensions |
+			"merge class extensions into class definitions and remove class dextension"
+			classExtensions := packageDef classExtensions.
+			packageDef classDefinitions
+				do: [ :classDef | 
+					classExtensions
+						at: classDef name
+						ifPresent: [ :classExtension | 
+							classExtension instanceMethodDefinitions
+								do: [ :meth | classDef addInstanceMethodDefinition: meth ].
+							classExtension classMethodDefinitions
+								do: [ :meth | classDef addClassMethodDefinition: meth ].
+							packageDef removeClassExtensionDefinition: classExtension ] ] ].
+
+	resolvedProject exportPackages
 %
 
 ! Class implementation for 'RwGitTool'
@@ -80724,6 +80930,13 @@ markPackageDirty
 
 category: 'properties'
 method: RwGsLoadedSymbolDictResolvedProjectV2
+packageConvention
+
+	^ self resolvedProject packageConvention
+%
+
+category: 'properties'
+method: RwGsLoadedSymbolDictResolvedProjectV2
 packageNameToPlatformPropertiesMap: aDictionary
 
 	^self resolvedProject packageNameToPlatformPropertiesMap: aDictionary
@@ -90654,14 +90867,14 @@ findFirstInString: aString inSet: inclusionMap startingAt: start
 
 !		Instance methods for 'CharacterCollection'
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asFileReference
 
 	^ FileSystem disk referenceTo: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asPath
 	"convert myself to a path"
@@ -90673,13 +90886,13 @@ asPath
 	^ FileSystem disk resolve: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asPathWith: anObject 
 	^ anObject pathFromString: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asResolvedBy: aFileSystem
 	^ aFileSystem resolveString: self
@@ -92974,7 +93187,7 @@ rowanProjectsHome
 
 !		Class methods for 'FileStreamPortable'
 
-category: '*FileSystem-Core'
+category: '*filesystem-gemstone-kernel'
 classmethod: FileStreamPortable
 onHandle: aFileSystemHandle
 	^ self concreteStream new
@@ -93234,14 +93447,14 @@ digitAt: n
 		ifFalse: [ (self bitShift: 8 - (n bitShift: 3)) bitAnd: 255 ]
 %
 
-category: '*FileSystem-Core'
+category: '*filesystem-gemstone-kernel'
 method: Integer
 humanReadableSIByteSize
 	^ String streamContents: [ :s|
 		self humanReadableSIByteSizeOn: s ]
 %
 
-category: '*FileSystem-Core'
+category: '*filesystem-gemstone-kernel'
 method: Integer
 humanReadableSIByteSizeOn: s
 	| exponent base |
