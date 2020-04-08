@@ -41,10 +41,14 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 						classExtensions: Dictionary new;
 						yourself ].
 			theProjectSetDefinition addProject: resolvedProject_copy ].
+	wasTracing
+		ifFalse: [ 
+			"reduce noise if tracing not already set"
+			tracer stopTracing ].
 	Rowan projectTools loadV2 loadProjectSetDefinition: theProjectSetDefinition.	"Load the project shell -- project and empty packages"
-	SessionTemps current removeKey: #'ROWAN_TRACE' ifAbsent: [  ].
+	wasTracing
+		ifFalse: [ tracer startTracing ].
 	[ 
-	"end logging to topaz output file"
 	"Adopt the project set definition ... 
 		Log and ignore any missing method or missing classes encountered as they may not be
 		present in the .gs bootstrap file for the proejct ... The will be created when we
@@ -84,7 +88,8 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 					[ audit := Rowan projectTools audit auditForProjectNamed: projectName ]
 						on: RwAdoptAuditErrorNotification
 						do: [ :ex | 
-							false ifTrue: [ self halt ].
+							false
+								ifTrue: [ self halt ].
 							ex resume: true ].
 					tracer trace: '	-- audit finished '.
 					audit isEmpty
