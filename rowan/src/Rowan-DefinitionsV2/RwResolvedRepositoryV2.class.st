@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwResolvedRepositoryV2',
-	#superclass : 'RwAbstractResolvedObjectV2',
+	#superclass : 'RwAbstractResolvedProjectV2',
 	#category : 'Rowan-DefinitionsV2'
 }
 
@@ -27,6 +27,16 @@ RwResolvedRepositoryV2 >> createBranch: branchName [
 { #category : 'repository' }
 RwResolvedRepositoryV2 >> fetch [
 	^ self _projectRepository fetch
+]
+
+{ #category : 'printing' }
+RwResolvedRepositoryV2 >> printOn: aStream [
+	super printOn: aStream.
+	projectRepository
+		ifNotNil: [ 
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll: self _projectRepository name ]
 ]
 
 { #category : 'repository' }

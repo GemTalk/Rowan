@@ -2,6 +2,7 @@ Class {
 	#name : 'RowanProjectService',
 	#superclass : 'RowanService',
 	#instVars : [
+		'rwProject',
 		'name',
 		'sha',
 		'branch',
@@ -52,16 +53,6 @@ RowanProjectService >> = projectService [
 	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
 ]
 
-{ #category : 'client commands' }
-RowanProjectService >> addPackageNamed: packageName [
-
-	Rowan image loadedPackageNamed: packageName ifAbsent: [
-		self browserTool addPackageNamed: packageName toProjectNamed: name. 
-		self update.
-		^self answer: #added.].
-	self answer: #duplicatePackage
-]
-
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
 	name = Rowan unpackagedName ifTrue:[
@@ -85,8 +76,7 @@ RowanProjectService >> basicRefresh [
 RowanProjectService >> branch [
 
 	name isNil ifTrue:[^String new].
-	^(RwProject newNamed: name) currentBranchName
-
+	^self rwProject currentBranchName
 ]
 
 { #category : 'accessing' }
@@ -122,7 +112,7 @@ RowanProjectService >> checkout: branchName [
 
 	| project branches |
 
-	project := (RwProject newNamed: name). 
+	project := self rwProject. 
 	branches := Rowan gitTools gitcheckoutIn: project repositoryRootPath asFileReference with: branchName.
 	^branches
 ]
@@ -167,6 +157,13 @@ RowanProjectService >> defaultProjectName: aString [
 
 ]
 
+{ #category : 'replication' }
+RowanProjectService >> excludedInstVars [
+
+	^ super excludedInstVars, #( #rwProject)
+
+]
+
 { #category : 'accessing' }
 RowanProjectService >> existsOnDisk [
 
@@ -187,10 +184,9 @@ RowanProjectService >> initialize [
 
 { #category : 'rowan' }
 RowanProjectService >> isDirty [
-
-	name isNil ifTrue:[^false].
-	^(RwProject newNamed: name) isDirty
-
+	name isNil
+		ifTrue: [ ^ false ].
+	^ self rwProject isDirty
 ]
 
 { #category : 'accessing' }
@@ -238,7 +234,6 @@ RowanProjectService >> name [
 RowanProjectService >> name: anObject [
 
 	name := anObject
-
 ]
 
 { #category : 'client commands' }
@@ -338,24 +333,22 @@ RowanProjectService >> projectUrl: anObject [
 RowanProjectService >> pullFromGit [
 
 	| project |
-	project := RwProject newNamed: name. 
+	project := self rwProject. 
 	Rowan gitTools
 		gitpullIn: project repositoryRootPath
 		remote: project remote
 		branch: project currentBranchName
-
 ]
 
 { #category : 'client commands' }
 RowanProjectService >> pushToGit [
 
 	| project |
-	project := RwProject newNamed: name. 
+	project := self rwProject. 
 	Rowan gitTools
 		gitpushIn: project repositoryRootPath
 		remote: project remote
 		branch: project currentBranchName
-
 ]
 
 { #category : 'initialization' }
@@ -390,17 +383,14 @@ RowanProjectService >> removeProjectNamed: projectName [
 
 { #category : 'rowan' }
 RowanProjectService >> repositorySha [
-
-	^(RwProject newNamed: name) repositoryCommitId
-
+	^ self rwProject repositoryCommitId
 ]
 
 { #category : 'rowan' }
 RowanProjectService >> rowanBranch [
 	
 	name isNil ifTrue:[^String new].
-	^ [ (RwProject newNamed: name) currentBranchName ] on: Error do: [:ex | ^'ERROR getting repository branch' ]
-
+	^ [  self rwProject currentBranchName ] on: Error do: [:ex | ^'ERROR getting repository branch' ]
 ]
 
 { #category : 'rowan' }
@@ -437,6 +427,11 @@ RowanProjectService >> rowanSkew [
 
 ]
 
+{ #category : 'accessing' }
+RowanProjectService >> rwProject [
+	^ rwProject ifNil: [ rwProject := RwProject newNamed: name ]
+]
+
 { #category : 'perform' }
 RowanProjectService >> servicePerform: symbol withArguments: collection [
   self isUpdatingButFoundToBeDeleted
@@ -463,8 +458,7 @@ RowanProjectService >> setExistsOnDisk [
 RowanProjectService >> sha [
 
 	name isNil ifTrue:[^0].
-	^(RwProject newNamed: name) loadedCommitId
-
+	^self rwProject loadedCommitId
 ]
 
 { #category : 'accessing' }

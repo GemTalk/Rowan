@@ -1,0 +1,34 @@
+#!/usr/local/bin/smalltalk/gemstone/topaz
+#
+#	point the Rowan repository of the 3.6.0 extent0.dbf $ROWAN_PROJECTS_HOME/Rowan
+#		and adopt the GemStone64 package structure using $ARCHBASE/image/
+#
+	iferr 1 stk
+	iferr 2 stack
+#	iferr 3 exit 1
+
+	set user SystemUser p swordfish
+  login
+
+	run
+	Rowan gemstoneTools image 
+		newRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan' 
+		platformConditionalAttributes: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2')
+		forProjectNamed: 'Rowan'
+%
+	commit
+
+	run
+	| specPath |
+false ifTrue: [ 
+	Rowan projectTools trace startTracing.
+].
+"DOES NOT WORK?"	specPath := '$ARCHBASE/image/rowan/specs/GemStone64.ston' asFileReference pathString.
+	specPath := '/home/dhenrich/work/j_36x/image/rowan/specs/GemStone64.ston' asFileReference pathString.
+	Rowan gemstoneTools image
+		adoptGemStone64: 'file://', specPath 
+		projectsHome: '/home/dhenrich/work/j_36x/image'
+%
+	commit
+
+	errorCount

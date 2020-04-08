@@ -8,13 +8,14 @@ RwProjectLoadConfiguration {
 	],
 	#conditionalPackages : { },
 	#conditionalPackageMapSpecs : {
-		'gemstone' : {
+		'gemstone-kernel' : {
 			'SystemUser' : {
 				#defaultSymbolDictName : 'Globals'
 			}
 		}
 	},
 	#definedGroupNames : {
-		'core' : [ ]
+		'core' : [ ] ,
+		'tests' : [ 'core' ]
 	}
 }

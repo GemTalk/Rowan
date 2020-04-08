@@ -24,18 +24,9 @@
   set u SystemUser p swordfish
   login
 
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src/FileSystemGs.gs
+#  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src_v2/ComponentV2.gs
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src_v2/RowanV2.gs
   commit
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src/STON.gs
-  commit
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src/Cypress.gs
-  commit
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src/Tonel.gs
-  commit
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src/Rowan.gs
-  commit
-#  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src/Rowan-Tests.gs
-#  commit
 
 	logout
 

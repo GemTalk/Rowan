@@ -46,7 +46,7 @@ RwAbstractClassDefinition >> addClassMethod: methodSource protocol: protocol [
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addClassMethodDefinition: aMethodDefinition [
 
-	self addDefinition: aMethodDefinition to: classMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: classMethodDefinitions
 ]
 
 { #category : 'accessing' }
@@ -58,7 +58,7 @@ RwAbstractClassDefinition >> addInstanceMethod: methodSource protocol: protocol 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addInstanceMethodDefinition: aMethodDefinition [
 
-	self addDefinition: aMethodDefinition to: instanceMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: instanceMethodDefinitions
 ]
 
 { #category : 'private' }
@@ -233,6 +233,11 @@ RwAbstractClassDefinition >> key [
 ]
 
 { #category : 'accessing' }
+RwAbstractClassDefinition >> moveToPackageNamed: aPackageName packageConvention: aPackageConvention [
+	self subclassResponsibility: #'moveToPackageNamed:packageConvention:'
+]
+
+{ #category : 'accessing' }
 RwAbstractClassDefinition >> name: aString [
 
 	properties at: 'name' put: aString
@@ -254,26 +259,36 @@ RwAbstractClassDefinition >> postCopy [
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> removeClassMethod: selector [
+	^ self
+		removeClassMethod: selector
+		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ]
+]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> removeClassMethod: selector ifAbsent: absentBlock [
 	| definition |
 	definition := classMethodDefinitions
 		at: selector
-		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
+		ifAbsent: [ absentBlock value ].
 	self removeDefinition: definition from: classMethodDefinitions.
 	^ definition
-
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> removeInstanceMethod: selector [
+	^ self
+		removeInstanceMethod: selector
+		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ]
+]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> removeInstanceMethod: selector ifAbsent: absentBlock [
 	| definition |
 	definition := instanceMethodDefinitions
 		at: selector
-		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
+		ifAbsent: [ ^ absentBlock value ].
 	self removeDefinition: definition from: instanceMethodDefinitions.
 	^ definition
-
 ]
 
 { #category : 'accessing' }

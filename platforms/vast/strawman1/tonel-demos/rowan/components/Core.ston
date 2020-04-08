@@ -1,0 +1,29 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core',
+	#comment : 'Primary component used for loading the system.',
+	#condition : 'vast',
+	#groupName : 'core',
+	#packageNames : [
+		'TonelExampleApp'
+	],
+	#componentNames : [ ],
+	#projectNames : [ ],
+	#conditionalPackageMapSpecs : {
+		'vast' : {
+			'TonelExampleApp' : {
+				'vaPrerequisites' : [
+					'SUnit',
+					'TonelWriterModel'
+				],
+				'vaSubApplications' : [
+					{
+						#subapps : [
+							'TonelExampleSubApp'
+						],
+						#condition : true
+					}
+				]
+			}
+		}
+	}
+}

@@ -42,6 +42,21 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName cat
 ]
 
 { #category : 'instance creation' }
+RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars category: category [
+
+	^ self 
+		newForClassNamed: className 
+		super: superClassName 
+		instvars: instvars
+		classinstvars: #() 
+		classvars: #() 
+		category: category 
+		comment: nil 
+		pools: #() 
+		type: 'normal'
+]
+
+{ #category : 'instance creation' }
 RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
 
 	| propertiesDictionary |
@@ -64,6 +79,20 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName ins
 		withProperties: propertiesDictionary
 		classMethodDefinitions: Dictionary new
 		instanceMethodDefinitions: Dictionary new
+]
+
+{ #category : 'utility' }
+RwClassDefinition >> _removeSubclassesDisallowed [
+  "Only for use in building definitions for bootstap of the base image.
+   image bootstrap code responsible for setting subclassesDisallowed on
+   appropriate classes after they are all defined."
+  | propertyName oldValue newValue |
+  propertyName := 'gs_options'.
+  oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
+  oldValue isEmpty ifFalse:[
+     newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
+     self propertyAt: propertyName put: newValue
+  ]
 ]
 
 { #category : 'utility' }
@@ -255,6 +284,17 @@ RwClassDefinition >> instVarNames [
 RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
 
 	^ properties at: 'instvars' put: arrayOfInstanceVariableNames
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> moveToPackageNamed: newPackageName packageConvention: thePackageConvention [
+	thePackageConvention = 'Rowan'
+		ifTrue: [ ^ self ].
+	thePackageConvention = 'Monticello'
+		ifTrue: [ self error: 'not yet implemented' ].
+	thePackageConvention ~= 'RowanHybrid'
+		ifTrue: [ self error: 'unknown package convention' ].
+	self category: newPackageName
 ]
 
 { #category : 'accessing' }

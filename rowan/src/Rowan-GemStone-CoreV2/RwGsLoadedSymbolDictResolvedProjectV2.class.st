@@ -18,8 +18,15 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 
 	| resolvedProject |
 	resolvedProject := (RwResolvedProjectV2
-		loadSpecification: handle _loadSpecification copy)
+		basicLoadSpecification: handle _loadSpecification copy)
 		packages: self loadedPackageDefinitions;
+		yourself.
+	resolvedProject _projectRepository: handle _projectRepository copy.
+	resolvedProject _projectDefinition
+		projectDefinitionSourceProperty:
+			RwLoadedProject _projectLoadedDefinitionSourceValue;
+		projectDefinitionPlatformConditionalAttributes:
+				handle projectDefinitionPlatformConditionalAttributes copy;
 		yourself.
 	resolvedProject _projectDefinition components: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
 	^ resolvedProject
@@ -31,16 +38,34 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> canCommit [
 	^ self resolvedProject canCommit
 ]
 
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> checkout: revision [
+	^ self resolvedProject repository checkout: revision
+]
+
 { #category : 'commit log' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> commitLog: logLimit [
 
 	^ self resolvedProject commitLog: logLimit
 ]
 
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> componentForPackageNamed: packageName [
+	"Answer nil if no component found"
+
+	^ self components componentForPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> componentNames [
+
+	^ handle componentNames
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> components [
 
-	^ self resolvedProject components
+	^ handle _projectStructure
 ]
 
 { #category : 'properties' }
@@ -57,8 +82,31 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> defaultUseSessionMethodsForExtensions: 
 
 { #category : 'initialization' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolvedProject [
-	self initializeForName: aResolvedProject projectAlias.
+	self initializeForName: aResolvedProject projectName.
 	handle := aResolvedProject copyForLoadedProject
+]
+
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> load [
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
+
+	^ self asDefinition load
+]
+
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> load: instanceMigrator [
+	"
+		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
+
+	^ self asDefinition load: instanceMigrator
 ]
 
 { #category : 'properties' }
@@ -69,13 +117,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedCommitId [
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadedComponentDefinitions [
-
-	"Create definitions from all of the components I define, and answer the collection of them"
-
-	| components |
-	components := self components copy.
-	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
-	^ components
+	^ self resolvedProject _projectStructure copy
 ]
 
 { #category : 'accessing' }
@@ -111,6 +153,45 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedGroupNames: groupNames [
 	self resolvedProject loadedGroupNames: groupNames
 ]
 
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
+
+	^ self asDefinition loadProjectSet
+]
+
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
+
+	^ self asDefinition loadProjectSet: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set, using the specified 
+			instance migrator.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+
+		Use the instanceMigrator to handle new versions of any classes that may result from the load.
+	"
+
+	^ self asDefinition
+		loadProjectSet: platformConditionalAttributes
+		instanceMigrator: instanceMigrator
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> markPackageDirty [
 	"... indicates that receiver needs to mark it's container as dirty .... "
@@ -119,9 +200,29 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> markPackageDirty [
 ]
 
 { #category : 'properties' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> packageConvention [
+
+	^ self resolvedProject packageConvention
+]
+
+{ #category : 'properties' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> packageNameToPlatformPropertiesMap: aDictionary [
 
 	^self resolvedProject packageNameToPlatformPropertiesMap: aDictionary
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> platformConditionalAttributes [
+	"Answer the platformConditionalAttributes used to load the project"
+
+	^ self resolvedProject platformConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> projectDefinitionPlatformConditionalAttributes [
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self resolvedProject projectDefinitionPlatformConditionalAttributes
 ]
 
 { #category : 'accessing' }
@@ -157,7 +258,7 @@ self halt.
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> remote [
 
-	^ self resolvedProject remote
+	^ self resolvedProject repository remote
 ]
 
 { #category : 'accessing' }

@@ -19,20 +19,6 @@ RwGitRepositoryDefinitionV2 class >> newNamed: repositoryName projectsHome: aFil
 		yourself
 ]
 
-{ #category : 'private' }
-RwGitRepositoryDefinitionV2 >> _createRemoteUrl [
-	| aRepositoryUrl aRemoteUrl segments |
-	self repositoryUrl isEmpty
-		ifTrue: [ ^ nil ].
-	aRepositoryUrl := RwUrl fromString: self  repositoryUrl.
-	aRemoteUrl := 'git@' , aRepositoryUrl authority , ':'.
-	segments := aRepositoryUrl segments.
-	aRemoteUrl := segments size = 1
-		ifTrue: [ aRemoteUrl , (segments at: 1) , '.git ' ]
-		ifFalse: [ aRemoteUrl , (segments at: 1) , '/' , (aRepositoryUrl segments at: 2) , '.git ' ].
-	^ aRemoteUrl
-]
-
 { #category : 'comparing' }
 RwGitRepositoryDefinitionV2 >> = anObject [
 	"remote remoteUrl committish"
@@ -122,7 +108,7 @@ RwGitRepositoryDefinitionV2 >> commitId [
 { #category : 'loading' }
 RwGitRepositoryDefinitionV2 >> commitLog: logLimit [
 
-	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRoot pathString
 ]
 
 { #category : 'accessing' }
@@ -223,7 +209,7 @@ RwGitRepositoryDefinitionV2 >> remote: remoteName [
 
 { #category : 'accessing' }
 RwGitRepositoryDefinitionV2 >> remoteUrl [
-	^ remoteUrl ifNil: [ remoteUrl := self _createRemoteUrl ]
+	^ remoteUrl ifNil: [ remoteUrl := self repositoryUrl ]
 ]
 
 { #category : 'accessing' }
@@ -235,12 +221,12 @@ RwGitRepositoryDefinitionV2 >> remoteUrl: aRemoteUrlString [
 { #category : 'accessing' }
 RwGitRepositoryDefinitionV2 >> repositoryUrl: aRepositoryUrlStrng [
 	super repositoryUrl: aRepositoryUrlStrng.
-	self remoteUrl: self _createRemoteUrl
+	self remoteUrl: aRepositoryUrlStrng
 ]
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> resolve [
-	"attach to existing repository structure or create"
+	"attach to existing repository structure or clone"
 
 	"answer true if attaching to an existing repository"
 
@@ -270,4 +256,9 @@ RwGitRepositoryDefinitionV2 >> revision [
 		do: [ :ignored | 
 			"most likely no commits yet"
 			'' ]
+]
+
+{ #category : 'testing' }
+RwGitRepositoryDefinitionV2 >> useGit [
+	^ true
 ]

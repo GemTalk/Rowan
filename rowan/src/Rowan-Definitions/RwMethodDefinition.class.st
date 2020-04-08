@@ -37,6 +37,16 @@ RwMethodDefinition class >> withProperties: propertiesDictionary source: sourceS
 
 ]
 
+{ #category : 'private' }
+RwMethodDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+
+	({'_gsFileOffset'. '_gsFileName' } includes: propertyKey)
+		ifTrue: [ 
+		"_gsFileOffset' '_gsFileName' are informational properties so any differences can be ignored "
+		^ true ].
+	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+]
+
 { #category : 'testing' }
 RwMethodDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
@@ -50,6 +60,14 @@ RwMethodDefinition >> key [
 
 	^properties at: 'selector' ifAbsent: [nil]
 
+]
+
+{ #category : 'accessing' }
+RwMethodDefinition >> offset: anInteger inFile: aFileName [
+  "these properties are used when handling a CompileError or
+   a tonel parse error."
+  properties at:'_gsFileOffset' put: anInteger .
+  properties at:'_gsFileName' put: aFileName .
 ]
 
 { #category : 'accessing' }
@@ -83,5 +101,4 @@ RwMethodDefinition >> source [
 RwMethodDefinition >> source: sourceString [
 
 	source := sourceString
-
 ]

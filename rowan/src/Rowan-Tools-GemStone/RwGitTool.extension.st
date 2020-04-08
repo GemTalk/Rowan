@@ -4,7 +4,7 @@ Extension { #name : 'RwGitTool' }
 RwGitTool >> createTmpFileWith: fileContents [
 
 	| file filename |
-	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
+	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX') trimRight.
 	[ 
 	| count |
 	file := GsFile openWriteOnServer: filename.

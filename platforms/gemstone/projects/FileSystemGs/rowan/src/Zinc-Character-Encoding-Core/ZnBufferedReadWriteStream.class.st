@@ -229,6 +229,12 @@ ZnBufferedReadWriteStream >> wrappedStream [
 ]
 
 { #category : 'accessing' }
+ZnBufferedReadWriteStream >> wrappedStreamName [
+
+	^ readStream wrappedStreamName
+]
+
+{ #category : 'accessing' }
 ZnBufferedReadWriteStream >> writingActionDo: aBlock [
 	
 	"Writing to the write stream.

@@ -1,0 +1,10 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core_CategoryValidationError',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Issue122-Core-CategoryValidationError'
+ ],
+	#comment : ''
+}

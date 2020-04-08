@@ -1,6 +1,68 @@
 Extension { #name : 'RwPrjReadTool' }
 
 { #category : '*rowan-tools-extensions-components' }
+RwPrjReadTool >> _visitConfigurations: visitorClass forProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
+
+	| projectName configDirectory projectsDirectory visitor |
+	projectName := projectComponentDefinition name.
+	configDirectory := projectComponentDefinition repositoryRoot / projectComponentDefinition configsPath.
+	configDirectory exists
+		ifFalse: [ ^ self error: 'No configuration directory (', configDirectory pathString printString, ') found for project ', projectName printString ].
+	projectsDirectory := projectComponentDefinition repositoryRoot / projectComponentDefinition projectsPath.
+	projectsDirectory exists
+		ifFalse: [ ^ self error: 'No projects directory (', projectsDirectory pathString printString, ') found for project ', projectName printString ].
+	visitor := visitorClass new
+		platformAttributes: platformConfigurationAttributes;
+		groupNames: groupNames;
+		configurationBasePath: configDirectory pathString;
+		projectBasePath: projectsDirectory pathString;
+		projectComponentDefinition: projectComponentDefinition;
+		yourself.
+	configNames do: [:configName |
+		| config url |
+		url := 'file:' , ((configDirectory / configName) , 'ston') pathString.
+		config := RwAbstractProjectConfiguration fromUrl: url.
+		config projectName: projectName.
+		forLoad
+			ifTrue: [
+				"expect all config names to represent loadable configurations - throw error if a nested configuration is encountered"
+				visitor visit: config ]
+			ifFalse: [ 
+				"resolve config names without respect to whether or not the configuration is loadable"
+				visitor visitNested: config ] ].
+	^visitor
+]
+
+{ #category : '*rowan-tools-extensions-components' }
+RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
+
+	| projectName configDirectory visitor |
+	projectDefinition repositoryRootPath ifNil: [ ^ nil ].
+	projectName := projectDefinition name.
+	configDirectory := projectDefinition repositoryRootPath asFileReference / projectDefinition configsPath.
+	configDirectory exists
+		ifFalse: [ ^ nil ].
+	visitor := visitorClass new
+		platformAttributes: platformConfigurationAttributes;
+		groupNames: groupNames;
+		configurationBasePath: configDirectory pathString;
+		yourself.
+	configNames do: [:configName |
+		| config url |
+		url := 'file:' , ((configDirectory / configName) , 'ston') pathString.
+		config := RwAbstractProjectConfiguration fromUrl: url.
+		config projectName: projectName.
+		forLoad
+			ifTrue: [
+				"expect all config names to represent loadable configurations - throw error if a nested configuration is encountered"
+				visitor visit: config ]
+			ifFalse: [ 
+				"resolve config names without respect to whether or not the configuration is loadable"
+				visitor visitNested: config ] ].
+	^visitor
+]
+
+{ #category : '*rowan-tools-extensions-components' }
 RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
 
 	^self 
@@ -33,6 +95,31 @@ RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectCompone
 ]
 
 { #category : '*rowan-tools-extensions-components' }
+RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames [
+
+	^self readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: true
+]
+
+{ #category : '*rowan-tools-extensions-components' }
+RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad [
+
+	| theConfigNames theGroupNames |
+	theConfigNames := configNames isEmpty
+		ifTrue: [ projectDefinition defaultConfigurationNames ]
+		ifFalse: [ configNames ].
+	theGroupNames := groupNames isEmpty
+		ifTrue: [  projectDefinition defaultGroupNames ]
+		ifFalse: [ groupNames ].
+	^ self 
+		_visitConfigurations: RwProjectLoadConfigurationVisitor 
+		forProjectDefinition: projectDefinition 
+		withConfigurations: theConfigNames 
+		groupNames: theGroupNames
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		forLoad: forLoad
+]
+
+{ #category : '*rowan-tools-extensions-components' }
 RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDefinition [
 
 	projectComponentDefinition loadedConfigurationNames
@@ -59,7 +146,7 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
 			withConfigurations: configNames 
 			groupNames: groupNames 
-			platformConfigurationAttributes: Rowan platformConfigurationAttributes
+			platformConfigurationAttributes: Rowan platformConditionalAttributes
 ]
 
 { #category : '*rowan-tools-extensions-components' }

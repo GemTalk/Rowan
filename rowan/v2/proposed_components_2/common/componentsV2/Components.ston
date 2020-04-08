@@ -1,0 +1,31 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/componentsV2/Components',
+	#condition : 'componentsV2',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/componentsV2/platforms/Components'
+	],
+	#packageNames : [
+		'Rowan-Components',
+		'Rowan-Cypress-Components',
+		'Rowan-Tools-Extensions-Components'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Components' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Cypress-Components' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Tools-Extensions-Components' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all componentsV2 components classes under one component. componentsV2 will eventually be deprecated, when v2 is fully functional.'
+}

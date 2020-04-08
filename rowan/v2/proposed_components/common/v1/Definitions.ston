@@ -1,0 +1,37 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v1/Definitions',
+	#condition : 'v1',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/v1/deprecated/Definitions',
+		'common/v1/platform/gemstone/Definitions'
+	],
+	#packageNames : [
+		'Rowan-Core-DefinitionsV1',
+		'Rowan-Cypress-Kernel',
+		'Rowan-DefinitionsV1',
+		'Rowan-DefinitionsV1-Kernel',
+		'Rowan-Url-CoreV1'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Core-DefinitionsV1' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Cypress-Kernel' : {
+						'symbolDictName' : 'Globals'
+					},
+					'Rowan-DefinitionsV1' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-DefinitionsV1-Kernel' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all v1 Definitions classes under one component'
+}

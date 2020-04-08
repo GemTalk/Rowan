@@ -1,0 +1,21 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/v2/v2Only/platforms/gemstone/Loader',
+	#condition : [
+		'gemstone'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Loader-Extensions-OnlyV2'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Loader-Extensions-OnlyV2' : {
+						'symbolDictName' : 'RowanKernel'
+					}
+				}
+			}
+		}
+	},
+	#comment : ''
+}

@@ -1,0 +1,26 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Specifications',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/platforms/Specifications',
+		'common/tests/Specifications',
+		'common/v1/Specifications',
+		'common/v2/Specifications'
+	],
+	#packageNames : [
+		'Rowan-Specifications'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Specifications' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all specification classes under one component. Shared between Rowan and RowanDiskAPI.'
+}

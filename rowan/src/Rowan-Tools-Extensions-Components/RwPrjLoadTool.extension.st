@@ -4,7 +4,7 @@ Extension { #name : 'RwPrjLoadTool' }
 RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition [
 	^ self
 		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
@@ -12,7 +12,7 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition [
 RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
 	^ self
 		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 ]
 
@@ -33,7 +33,7 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 	| projectSetDefinition sourceProperty rereadProject |
 	sourceProperty := projectDefinition projectDefinitionSourceProperty.
 	rereadProject := sourceProperty
-		~= RwLoadedProject _projectSourceValueNewProject
+		~= RwLoadedProject _projectModifiedProjectSourceValue
 		and: [ sourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue ].
 	projectSetDefinition := (projectDefinition repositoryRoot exists
 		and: [ rereadProject ])

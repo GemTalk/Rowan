@@ -7,8 +7,12 @@
 			'tests' : {
 				#packageNames : [
 					'Rowan-Tests',
+					'Rowan-TestsV1',
 					'Rowan-TestsV2',
-					'Rowan-Tests-Components'
+					'Rowan-Tests-Components',
+					'Rowan-Tests-ComponentsV2',
+					'Rowan-Tests-Core',
+					'Rowan-Tests-SpecificationsV2'
 					]
 				}
 			},
@@ -16,9 +20,11 @@
 			'tests' : {
 				#packageNames : [
 					'Rowan-Services-Tests',
+					'Rowan-Services-TestsV2',
 					'AST-Tests-Core',
 					'AST-Kernel-Tests-Core',
 					'Rowan-Tests-GemStone',
+					'Rowan-Tests-GemStoneV1',
 					'Rowan-DataCurator-Tests'
 					]
 				},
@@ -28,14 +34,7 @@
 					]
 				}
 			},
-		[ 'gs3.[2-4]' ] : {
-      'tests': {
-				#packageNames : [
-					'Rowan-Tests-32x'
-					]
-				}
-			},
-		[ 'gs3.[5-]' ] : {
+		[ 'gs3.[2-]' ] : {
       'tests': {
 				#packageNames : [
 					'Rowan-Tests-35x',

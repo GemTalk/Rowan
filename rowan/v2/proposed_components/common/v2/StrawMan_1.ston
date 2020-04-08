@@ -1,0 +1,21 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v2/StrawMan_1',
+	#condition : 'v2',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Strawman1'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Strawman1' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all strawman v2 classes under one component'
+}

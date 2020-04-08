@@ -321,3 +321,9 @@ AbstractBinaryFileStream >> upToEnd [
 		[ (next := self next) isNil ] whileFalse: [
 			newStream nextPut: next ] ]
 ]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> wrappedStreamName [
+
+	^self name
+]

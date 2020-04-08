@@ -3,7 +3,7 @@ Extension { #name : 'RwProjectTest' }
 { #category : '*rowan-tests-35x' }
 RwProjectTest >> test_issue428_loaded_no_disk [
 
-| projectName  packageName projectDefinition projectSetDefinition |
+| projectName  packageName project projectSetDefinition componentName |
 
 	projectName := 'Issue428'.
 	packageName := 'Issue428-Extension'.
@@ -14,16 +14,19 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
-	projectDefinition := (RwComponentProjectDefinition
-		newForGitBasedProjectNamed: projectName)
-		addPackageNamed: packageName;
-		defaultSymbolDictName: self _symbolDictionaryName1;
+	componentName := 'Core'.
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName} toComponentNamed: componentName;
 		yourself.
 
 "load"
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	projectSetDefinition addDefinition: project.
+	Rowan projectTools load2 loadProjectSetDefinition: projectSetDefinition.
 
 "test existsOnDisk"
 
@@ -33,7 +36,7 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 { #category : '*rowan-tests-35x' }
 RwProjectTest >> test_issue428_loaded_on_disk [
 
-	| projectName projectDefinition projectTools packageNames |
+	| projectName project projectTools packageNames componentName |
 	projectName := 'Issue428'.
 	packageNames := #('Issue428-Core' 'Issue428-Tests').
 	projectTools := Rowan projectTools.
@@ -41,17 +44,20 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 	{projectName}
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-	projectDefinition := (RwComponentProjectDefinition
-		newForGitBasedProjectNamed: projectName)
-		addPackagesNamed: packageNames;
+	componentName := 'Core'.
+	project := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox / 'rowanSimpleProject';
 		packageFormat: 'tonel';
-		projectHome: self _testRowanProjectsSandbox pathString, '/rowanSimpleProject/';
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addNewComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
 		yourself.
 
 	self
-		handleConfirmationDuring: [ projectDefinition create ].
+		handleConfirmationDuring: [ project resolve; export ].
 
 "test existsOnDisk"
 

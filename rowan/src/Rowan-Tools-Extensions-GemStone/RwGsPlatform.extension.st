@@ -9,6 +9,13 @@ RwGsPlatform >> classTools [
 ]
 
 { #category : '*rowan-tools-extensions-gemstone' }
+RwGsPlatform >> gemstoneTools [
+	"Answer the platform-specific class for project tools"
+
+	^RwGemStoneTool
+]
+
+{ #category : '*rowan-tools-extensions-gemstone' }
 RwGsPlatform >> gitTools [
 
 	"Answer the platform-specific class for git tools"

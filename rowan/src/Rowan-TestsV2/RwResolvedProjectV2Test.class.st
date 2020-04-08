@@ -8,7 +8,7 @@ Class {
 RwResolvedProjectV2Test >> testBasic [
 	"Create project ... without errors"
 
-	| projectName projectAlias project stonString  |
+	| projectName projectAlias project stonString |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	project := RwResolvedProjectV2 new
@@ -22,7 +22,7 @@ RwResolvedProjectV2Test >> testBasic [
 
 	project resolve.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: project.
-	stonString := STON toStringPretty: project	"useful to view full structure"
+	stonString := STON toStringPretty: project.	"useful to view full structure"
 ]
 
 { #category : 'tests' }
@@ -39,8 +39,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 	self deny: expectedRepositoryRoot exists.
 
 	project := RwResolvedProjectV2 new
-		projectName: projectName;
-		projectAlias: projectAlias;
+		projectName: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
@@ -50,7 +49,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 
 	project resolve.
 
-	self assert: expectedRepositoryRoot exists.
+	self deny: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
@@ -86,7 +85,7 @@ RwResolvedProjectV2Test >> testBasicResolve_2 [
 
 	project resolve.
 
-	self assert: expectedRepositoryRoot exists.
+	self deny: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
@@ -163,6 +162,90 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject [
 
 	self assert: resolvedRepository = resolvedRepositoryCopy.
 	self assert: resolvedRepository ~~ resolvedRepositoryCopy
+]
+
+{ #category : 'tests' }
+RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
+	"move packages from one component to another, using removePackageNamed:... 
+		and addPackageNamed:... methods for RwResolvedProject. "
+
+	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject packageName componentName1 componentName2 conditionArray component |
+	projectName := 'RowanSample9'.
+	projectAlias := projectName , '_Test'.
+	projectsHome := self _testRowanProjectsSandbox.
+	projectRoot := projectsHome / projectAlias.
+
+	projectSpecification := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectAlias: projectAlias;
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		diskUrl: 'file://' , projectRoot pathString;
+		yourself.
+
+	self deny: projectRoot exists.
+
+	resolvedProject := projectSpecification resolve.
+	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+
+	resolvedProject
+		export;
+		exportLoadSpecification.
+
+	informed := false.
+	self
+		handleInformDuring: [ resolvedProject commit: 'first commit' ]
+		interactionBlock: [ :inform | informed := true ].
+	self assert: informed description: 'expected an inform'.
+
+	self _validateCanonicalRowanSample9ProjectFor: resolvedProject.
+
+	packageName := projectName , '-GemStone-Tests'.
+	componentName1 := 'Core'.
+	componentName2 := 'subs/Nested'.
+	conditionArray := {'gemstone'}.
+	resolvedProject
+		removePackageNamed: packageName
+		fromComponentNamed: componentName1.
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+	resolvedProject
+		addPackageNamed: packageName
+			toComponentNamed: componentName2;
+		yourself.
+	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
+
+	self
+		deny:
+			(((resolvedProject componentNamed: componentName1)
+				packageNames) includes: packageName).
+	self
+		assert:
+			(((resolvedProject componentNamed: componentName2)
+				packageNames) includes: packageName).	"validate move in image"
+
+	resolvedProject exportComponents.
+
+	component := RwBasicProjectLoadComponentV2
+		fromFile:
+			resolvedProject componentsRoot
+				/ (resolvedProject componentNamed: componentName1) name , 'ston'.
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self
+		deny:
+			((component packageNames)
+				includes: packageName).	"validate move on disk"
+
+
+	component := RwBasicProjectLoadComponentV2
+		fromFile:
+			resolvedProject componentsRoot
+				/ (resolvedProject componentNamed: componentName2) name , 'ston'.
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self
+		assert:
+			((component packageNames)
+				includes: packageName)	"validate move on disk"
 ]
 
 { #category : 'tests' }

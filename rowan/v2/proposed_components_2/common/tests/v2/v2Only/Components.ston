@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/v2/v2Only/Components',
+	#condition : 'v2Only',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Tests-ComponentsV2-OnlyV2'
+	],
+	#comment : 'Organize all v2Only component tests under one component'
+}

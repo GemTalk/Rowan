@@ -1,0 +1,10 @@
+RwProjectSpecificationV2 {
+	#specName : 'project_tonel',
+	#projectSpecPath : 'rowan',
+	#componentsPath : 'rowan/components',
+	#projectsPath : 'rowan/projects',
+	#specsPath : 'rowan/specs',
+	#packagesPath : 'rowan/tonel',
+	#packageFormat : 'tonel',
+	#comment : 'Issue #361: empty extension file (tonel); emtpy extension directory (filetree)'
+}

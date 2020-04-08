@@ -1,0 +1,39 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Core',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/platform/gemstone/Core',
+		'common/platform/gemstone32-/Core',
+		'common/platform/gemstone32-4/Core',
+		'common/platform/gemstone32-5/Core',
+		'common/platform/gemstone35-/Core',
+		'common/platform/gemstone36-/Core',
+		'common/platform/gemstone_gemstoneBase/Core',
+		'common/tests/Core',
+		'common/v1/Core',
+		'common/v2/Core'
+	],
+	#packageNames : [
+		'Rowan-Core',
+		'Rowan-Core-Conditional-Support',
+		'Rowan-Core-Definitions-Extensions',
+		'Rowan-Kernel',
+		'Rowan-Url-Core'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Core-Conditional-Support' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Core-Definitions-Extensions' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all core classes under one component. Shared between Rowan and RowanDiskAPI.'
+}

@@ -92,6 +92,13 @@ cls := (symList resolveSymbol: clsName) value .
 
 ]
 
+{ #category : 'accessing' }
+TonelParser class >> lineEnding [
+  "Answer the os-specific line endings"
+
+  ^ String with: Character lf
+]
+
 { #category : 'instance creation' }
 TonelParser class >> on: aStream forReader: aTonelReader [
 	^ self new 
@@ -117,6 +124,20 @@ TonelParser class >> parseStream: aStream forReader: aTonelReader [
 { #category : 'parsing' }
 TonelParser class >> parseString: aString forReader: aTonelReader [
 	^ self parseStream: (self readStreamClass on: aString) forReader: aTonelReader
+
+]
+
+{ #category : 'accessing' }
+TonelParser class >> readStreamClass [
+
+	^ ReadStreamPortable
+
+]
+
+{ #category : 'accessing' }
+TonelParser class >> writeStreamClass [
+
+	^ WriteStreamPortable
 
 ]
 
@@ -312,19 +333,21 @@ TonelParser >> methodDef [
 
 { #category : 'parsing' }
 TonelParser >> methodDef: aBlock [
-	| ar def |
-	ar := { 
-		self separator.
-		self try: [ self metadata ]. 
-		self separator. 
-		self method. 
-		self methodBody 
-	}.
-	def := self newMethodDefinitionFrom: ar.
-	aBlock 
-		value: ar fourth first second notNil 
-		value: def
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStreamName .
 
+  aBlock
+    value: ar fourth first second notNil
+    value: def
 ]
 
 { #category : 'parsing' }
@@ -344,14 +367,14 @@ TonelParser >> methodDefList [
 					"skip possible spaces at the end"
 					self separator ]
 			] 
-  ] on: TonelParseError do:[:ex | 
-		lastSelectorParsed ifNotNil:[ | str |
+  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
       str := ex details ifNil:[ '' ].
-      ex details: str, ', after tonel method selector: ', lastSelectorParsed printString 
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
     ].
-		ex pass 
+    ex pass 
   ].
-	^ result
+  ^ result
 ]
 
 { #category : 'private factory' }
@@ -413,7 +436,7 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
   result skip: 1.
   (#(#'both' #'left') includes: cleanSymbol)
     ifTrue: [ 
-      stop := TonelWriter lineEnding size.
+      stop := self class lineEnding size.
       [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
         whileTrue: [ 
           (self isEnter: ch)
@@ -427,7 +450,7 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
   result skip: -1.
   (#(#'both' #'right') includes: cleanSymbol)
     ifTrue: [ 
-      stop := TonelWriter lineEnding size.
+      stop := self class lineEnding size.
       [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
         whileTrue: [ 
           (self isEnter: ch)
@@ -435,7 +458,6 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
           result skip: -1 ] ].
   end := result position.
   ^ result originalContents copyFrom: start + 1 to: end + 1
-
 ]
 
 { #category : 'parsing' }

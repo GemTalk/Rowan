@@ -5,9 +5,9 @@ RwProjectLoadConfiguration {
 	#configurationNames : [ ],
 	#conditionalPackages : {
 		[
-			'gemstone'
+			'gemstone-kernel'
 		] : {
-			'core' : {
+			'tests' : {
 				#packageNames : [
 					'STON-Tests',
 					'STON-GemStone-Tests'

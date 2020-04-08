@@ -9,16 +9,23 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 RwAbstractProjectDefinitionV2 >> _addPackage: aPackageDefinition [
+	^ self
+		_addPackage: aPackageDefinition
+		ifPresent: [ self error: 'Duplicate package' ]
+]
 
+{ #category : 'private' }
+RwAbstractProjectDefinitionV2 >> _addPackage: aPackageDefinition ifPresent: presentBlock [
 	| key |
 	key := aPackageDefinition key.
-	(packages includesKey: key) ifTrue: [self error: 'Duplicate package'].
+	(packages includesKey: key)
+		ifTrue: [ ^ presentBlock value ].
 	^ packages at: key put: aPackageDefinition
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 RwAbstractProjectDefinitionV2 >> _projectDefinition [
 	^ self
 ]
@@ -51,10 +58,7 @@ RwAbstractProjectDefinitionV2 >> componentNamed: aComponentName [
 
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
-
-	^ self components 
-		at: aComponentName 
-		ifAbsent: absentBlock
+	^ self components componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
@@ -71,7 +75,7 @@ RwAbstractProjectDefinitionV2 >> components: aComponentDefinitionDictionary [
 RwAbstractProjectDefinitionV2 >> initialize [
 	super initialize.
 	packages := Dictionary new.
-	components := Dictionary new
+	components := RwResolvedLoadComponentsV2 new
 ]
 
 { #category : 'testing' }
@@ -122,21 +126,48 @@ RwAbstractProjectDefinitionV2 >> postCopy [
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
 ]
 
+{ #category : 'properties' }
+RwAbstractProjectDefinitionV2 >> projectDefinitionPlatformConditionalAttributes [
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		ifAbsent: [  ]
+]
+
+{ #category : 'properties' }
+RwAbstractProjectDefinitionV2 >> projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil [
+	platformConditionalAtttributesOrNil
+		ifNil: [ 
+			^ properties
+				removeKey:
+					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+				ifAbsent: [  ] ].
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		put: platformConditionalAtttributesOrNil
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> removeComponentNamed: aComponentName [
+	^ self components removeComponentNamed: aComponentName
+]
+
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removePackage: aPackageDefinition [
-
 	| key |
 	key := aPackageDefinition key.
-	(packages includesKey: key) ifFalse: [self error: 'Package not present.'].
-	packages removeKey: key
-
+	(packages includesKey: key)
+		ifFalse: [ self error: 'Package not present.' ].
+	^ packages removeKey: key
 ]
 
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removePackageNamed: packageName [
+	^ self removePackage: (self packageNamed: packageName)
+]
 
-	^self removePackage: (self packageNamed: packageName)
-
+{ #category : 'accessing' }
+RwAbstractProjectDefinitionV2 >> removeProjectNamed: aProjectName [
+	^ self components removeProjectNamed: aProjectName
 ]
 
 { #category : 'properties' }

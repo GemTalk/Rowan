@@ -5,13 +5,15 @@ Class {
 }
 
 { #category : 'write' }
-RwPrjWriteToolV2 >> writeProjectDefinition: projectDefinition [
+RwPrjWriteToolV2 >> writeProjectNamed: projectName [
 
-	Rowan projectTools createV2 createProjectRepository: projectDefinition.
-	projectDefinition 
-		exportProjects;
-		exportComponents;
-		exportPackages
+	| loadedProject projectDefinition |
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	projectDefinition := loadedProject asDefinition.
+	self writeResolvedProject: projectDefinition.
+	"loaded project and loaded packages written to disk - mark them not dirty"
+	loadedProject markNotDirty.
+	loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ].
 ]
 
 { #category : 'write' }

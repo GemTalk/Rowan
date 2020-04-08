@@ -1,21 +1,20 @@
 RwProjectLoadComponentV2 {
 	#name : 'RowanV2',
 	#comment : 'RowanV2 support',
-	#componentNames : [
-			'CommonCore',
-			'Services'
-		],
 	#conditionalPackages : {
 		[
 			'common'
 		] : {
 			'core' : {
+				#componentNames : [
+					'subs/CommonCore',
+					'subs/Services',
+					'StrawMan_1',
+					'DiskConfigurationsV2'
+				],
 				#packageNames : [
 					'Rowan-DefinitionsV2',
-					'Rowan-GemStone-Definitions-ExtensionsV2',
 					'Rowan-Core-DefinitionsV2',
-					'Rowan-GemStone-CoreV2',
-					'Rowan-GemStone-DefinitionsV2',
 					'Rowan-Tools-CoreV2'
 				]
 			},
@@ -28,6 +27,9 @@ RwProjectLoadComponentV2 {
 		[ 'gemstone' ] : {
       'core': {
 				#packageNames : [
+					'Rowan-GemStone-Definitions-ExtensionsV2',
+					'Rowan-GemStone-CoreV2',
+					'Rowan-GemStone-DefinitionsV2'
 				]
 			}
 		}

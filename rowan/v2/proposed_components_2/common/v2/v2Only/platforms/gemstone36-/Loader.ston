@@ -1,0 +1,21 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/v2/v2Only/platforms/gemstone36-/Loader',
+	#condition : [
+		'gs3.[6-]'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Kernel-Extensions-36x'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Kernel-Extensions-36x' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+	#comment : ''
+}

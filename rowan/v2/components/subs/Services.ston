@@ -1,0 +1,46 @@
+RwNestedProjectLoadComponentV2 {
+	#name : 'subs/Services',
+	#comment : 'Jadeite Services implementation',
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-Services-Core',
+					'Rowan-Services-CoreV1',
+					'Rowan-Services-CoreV2',
+					'Rowan-Services-Extensions',
+					'Rowan-JadeServer'
+				]
+			},
+			'tests' : {
+				#packageNames : [
+					'Rowan-Services-Tests',
+					'Rowan-Services-TestsV2'
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-JadeServer' : { 'symbolDictName' : 'UserGlobals' }
+				}
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+}

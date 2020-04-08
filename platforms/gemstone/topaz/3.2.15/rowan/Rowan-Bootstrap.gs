@@ -99,6 +99,41 @@ keywords
 	^ keywords
 %
 
+method: Symbol
+keywords
+  "Disabled for now by rename to _keywords ; see if 3.6 base image is ok.
+   NOTE, you also need to override in DoubleByteSymbol and QuadByteSymbol
+   if a reimplementation is needed for Rowan .
+   To override in one place for all Symbol classes, 
+    reimplement Symbol class >> _keywords:    instead ."
+
+	"Answer an array of the keywords that compose the receiver."
+
+	| kwd char keywords |
+	keywords := Array new.
+			kwd := WriteStreamPortable on: String new.
+			1 to: self size do: [ :i | 
+				kwd nextPut: (char := self at: i).
+				char = $:
+					ifTrue: [ 
+						keywords add: kwd contents.
+						kwd reset ] ].
+			kwd position = 0
+				ifFalse: [ keywords add: kwd contents ].
+	(keywords size >= 1 and: [ (keywords at: 1) = ':' ])
+		ifTrue: [ 
+			"Has an initial keyword, as in #:if:then:else:"
+			keywords := keywords allButFirst ].
+	(keywords size >= 2 and: [ (keywords at: keywords size - 1) = ':' ])
+		ifTrue: [ 
+			"Has a final keyword, as in #nextPut::andCR"
+			keywords := keywords
+				copyReplaceFrom: keywords size - 1
+				to: keywords size
+				with: {(':' , keywords last)} ].
+	^ keywords
+%
+
 method: CharacterCollection
 endsWith: suffix
 
@@ -623,8 +658,9 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
-    value: #('Rowan-Definitions' 'Rowan-DefinitionsV1' 'Rowan-Configurations-Common' 'Rowan-Configurations' 
-			'Rowan-Specifications'
+    value: #('Rowan-Definitions' 'Rowan-DefinitionsV1' 'Rowan-Configurations-Common' 
+			'Rowan-Configurations' 'Rowan-Specifications' 'Rowan-SpecificationsV1' 
+			'Rowan-SpecificationsV2'
 	).	"Rowan Definitions, Configurations and Specifications"
 %
   commit
@@ -645,7 +681,8 @@ commit
     value: 'RowanTools'
     value: #('Rowan-DefinitionsV2' 'Rowan-Tools-Core' 'Rowan-Tools-CoreV2' 'Rowan-Cypress-Definitions'
 							'Rowan-GemStone-Definitions' 'Rowan-GemStone-DefinitionsV1' 'Rowan-GemStone-DefinitionsV2'
-							'Rowan-GemStone-Specifications' 'Rowan-Components' 'Rowan-ComponentsV2'
+							'Rowan-GemStone-Specifications' 'Rowan-GemStone-SpecificationsV1' 'Rowan-Components' 
+							'Rowan-ComponentsV2' 'Rowan-GemStone-ComponentsV2'
 							'Rowan-Tools-GemStone' 'Rowan-Definitions-Deprecated' 'Rowan-Tools-Deprecated'
 							'Rowan-Core-Definitions-Extensions' 'Rowan-Core-DefinitionsV1' 'Rowan-Core-DefinitionsV2'
 	).	"Rowan Tools"

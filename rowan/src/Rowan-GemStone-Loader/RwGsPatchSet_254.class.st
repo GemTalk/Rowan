@@ -176,23 +176,19 @@ RwGsPatchSet_254 >> _classVersioningPatchClass [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> _createMovedClasses [
-
-	movedClasses do: [:movedClass | 
-		movedClassesMap 
-			at: movedClass classBefore name 
-			put: movedClass ].
-
+	movedClasses
+		do: [ :movedClass | movedClassesMap at: movedClass classBefore name put: movedClass ]
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> _currentProjectDefinition [
-
 	^ currentProjectDefinition
 		ifNil: [ 
 			currentProjectDefinition := Rowan image
 				loadedProjectNamed: Rowan unpackagedName
-				ifAbsent: [ RwUnmanagedProjectDefinition new ] ]
-
+				ifAbsent: [ 
+					"RwUnmanagedProjectDefinition may not be applicable in V2 system"
+					(Rowan globalNamed: 'RwUnmanagedProjectDefinition') new ] ]
 ]
 
 { #category : 'private - patch class accessors' }
@@ -605,7 +601,6 @@ RwGsPatchSet_254 >> addMovedPackage: packageDefinition inProject: aProjectDefini
 			((self _packageMovePatchClass for: packageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
-
 ]
 
 { #category : 'building' }
@@ -1169,8 +1164,7 @@ RwGsPatchSet_254 >> movedClassesMap [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> movePackages [
-
-	movedPackages do: [:each | each movePackage: classesWithNewVersions ]
+	movedPackages do: [ :each | each movePackage: classesWithNewVersions ]
 ]
 
 { #category : 'private - applying' }

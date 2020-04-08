@@ -45,9 +45,21 @@ RwProject >> canCommit [
 ]
 
 { #category : 'properties' }
+RwProject >> checkout: revision [
+	^ self _loadedProject checkout: revision
+]
+
+{ #category : 'properties' }
 RwProject >> comment [
 
 	^ self _specification comment
+]
+
+{ #category : 'querying' }
+RwProject >> componentForPackageNamed: packageName [
+	"Answer nil if no component found"
+
+	^ self _loadedProject componentForPackageNamed: packageName
 ]
 
 { #category : 'accessing' }
@@ -94,21 +106,31 @@ RwProject >> extendedClasses [
 
 { #category : 'testing' }
 RwProject >> isDirty [
+	"a project is dirty if it has changes that are not written to disk, or it's packages 
+		have changes that are not written to  disk."
 
-	^self _loadedProject isDirty
-
+	^ self _loadedProject isDirty
 ]
 
 { #category : 'actions' }
 RwProject >> load [
-	"load the receiver into the image"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	^ self _loadedProject load
 ]
 
 { #category : 'actions' }
 RwProject >> load: instanceMigrator [
-	"load the receiver into the image"
+	"
+		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
 
 	^ self _loadedProject load: instanceMigrator
 ]
@@ -133,6 +155,45 @@ RwProject >> loadedGroupNames [
 	^ self _loadedProject loadedGroupNames
 ]
 
+{ #category : 'actions' }
+RwProject >> loadProjectSet [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
+
+	^ self _loadedProject loadProjectSet
+]
+
+{ #category : 'actions' }
+RwProject >> loadProjectSet: platformConditionalAttributes [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
+
+	^ self _loadedProject loadProjectSet: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwProject >> loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set, using the specified 
+			instance migrator.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+
+		Use the instanceMigrator to handle new versions of any classes that may result from the load.
+	"
+
+	^ self _loadedProject
+		loadProjectSet: platformConditionalAttributes
+		instanceMigrator: instanceMigrator
+]
+
 { #category : 'accessing' }
 RwProject >> packageNames [
 
@@ -149,6 +210,12 @@ RwProject >> packages [
 RwProject >> project [
 
 	^ self
+]
+
+{ #category : 'accessing' }
+RwProject >> projectDefinitionPlatformConditionalAttributes [
+
+	^ self _loadedProject projectDefinitionPlatformConditionalAttributes
 ]
 
 { #category : 'accessing' }
@@ -178,13 +245,6 @@ RwProject >> repositoryCommitId [
 
 	^ self _loadedProject repositoryCommitId
 
-]
-
-{ #category : 'properties' }
-RwProject >> repositoryRoot [
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self _loadedProject repositoryRoot
 ]
 
 { #category : 'properties' }

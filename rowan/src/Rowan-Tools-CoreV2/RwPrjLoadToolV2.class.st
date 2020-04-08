@@ -18,9 +18,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 				ifTrue: [ ex resume ].
 			theClass := Rowan globalNamed: theClassName.
 			theClass isBehavior
-				ifFalse: [ 
-					self halt.
-					ex pass ].
+				ifFalse: [ ex pass ].
 			theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
 			theLoadedProject
 				ifNil: [ 
@@ -58,29 +56,34 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 		keysAndValuesDo: [ :projectName :projectDefinition | 
 			projectDefinition packages
 				keysAndValuesDo: [ :packageName :packageDefinition | 
+					| symdictName |
 					"set the target symbol dictionary name for each incoming package definition"
-					(packageDefinition gs_symbolDictionary isNil
-						or: [ 
-							(projectDefinition projectDefinitionSourceProperty
-								= RwLoadedProject _projectLoadedDefinitionSourceValue) not ])
-						ifTrue: [ 
-							"set gs_symbolDictionary for the first time, or (potentially) override if project 
-								freshly read from disk"
-							packageDefinition
-								gs_symbolDictionary:
-									(projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) ] ] ].
+					symdictName := projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName.
+						packageDefinition gs_symbolDictionary: symdictName.
+						packageDefinition classDefinitions values do: [:classDef | classDef gs_symbolDictionary: symdictName ] ] ].
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
-		ifFalse: [ Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
+		ifFalse: [ 
+			| componentsWithDoits |
+			componentsWithDoits := diff componentsWithDoits.
+			componentsWithDoits do: [ :component | component executePreloadDoit ].
+			Rowan image applyModification_V2: diff instanceMigrator: instanceMigrator.
+			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
 	loadedProjects := Array new.
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 
 			| theLoadedProject |
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
-			projectDef projectDefinitionSourceProperty
+			theLoadedProject handle _projectStructure: projectDef components copy.
+			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
+			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
+			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
+				or: [ 
+					projectDef projectDefinitionSourceProperty
+						= RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ])
 				ifTrue: [ 
 					theLoadedProject
 						updateLoadedCommitId;
@@ -94,7 +97,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
@@ -102,7 +105,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 ]
 
@@ -120,31 +123,63 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
-	| projectSetDefinition sourceProperty rereadProject |
-	sourceProperty := projectDefinition projectDefinitionSourceProperty.
-	rereadProject := sourceProperty
-		~= RwLoadedProject _projectSourceValueNewProject
-		and: [ sourceProperty ~= RwLoadedProject _projectDiskDefinitionSourceValue ].
-	projectSetDefinition := (projectDefinition repositoryRoot exists
-		and: [ rereadProject ])
-		ifTrue: [ 
-			"only read from disk if the repository exists and the project definition has not 
-				already been loaded from disk"
-			Rowan projectTools read
-				readProjectSetForComponentProjectDefinition: projectDefinition
-				withConfigurations: projectDefinition loadedConfigurationNames
-				groupNames: projectDefinition loadedGroupNames
-				platformConfigurationAttributes: platformConfigurationAttributes ]
+	| projectSetDefinition requiredProjectNames |
+	projectSetDefinition := RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself.
+	(requiredProjectNames := projectDefinition
+		requiredProjectNames: platformConfigurationAttributes) isEmpty
 		ifFalse: [ 
-			"If this project definition _was_ read from disk, we cannot trust that it was 
-				not modified, so clear source property"
-			projectDefinition projectDefinitionSourceProperty: nil.
-			RwProjectSetDefinition new
-				addProject: projectDefinition;
-				yourself ].
+			| absentProjectNames |
+			"if required projects are not already present in the image, then they must be loaded at this time"
+			absentProjectNames := requiredProjectNames
+				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
+			absentProjectNames isEmpty
+				ifFalse: [ 
+					self
+						error:
+							'Missing required projects for the project '
+								, projectDefinition name printString
+								,
+									'. Use loadProjectSet to ensure that all required projects are installed.' ] ].
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName [
+	| projectSet  res |
+	projectSet := Rowan projectTools readV2
+		readProjectSetForProjectNamed: projectName.
+	res := self loadProjectSetDefinition: projectSet.
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSet.
+	^ res
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
+	| platformConditionalAttributes project |
+	project := RwProject newNamed: projectName.
+	platformConditionalAttributes := project platformConditionalAttributes copy
+		asSet.
+	platformConditionalAttributes addAll: customConditionalAttributes.
+	^ self
+		loadProjectNamed: projectName
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
+	| projectSet res |
+	projectSet := Rowan projectTools readV2
+		readProjectSetForProjectNamed: projectName
+		platformConditionalAttributes: platformConditionalAttributes.
+	res := self loadProjectSetDefinition: projectSet.
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSet.
+	^ res
 ]
 
 { #category : 'load project definitions' }
@@ -166,4 +201,15 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrat
 		instanceMigrator: instanceMigrator 
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new
+]
+
+{ #category : 'utilities' }
+RwPrjLoadToolV2 >> markProjectSetNotDirty: projectSetDefinition [
+	"This method should only be used when the projectSetDefinitions have been read from disk - mark them not dirty. Not dirty means that the loaded things match the code on disk."
+
+	projectSetDefinition deriveLoadedThings
+		do: [ :loadedProject | 
+			loadedProject markNotDirty.
+			loadedProject loadedPackages
+				valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ]
 ]

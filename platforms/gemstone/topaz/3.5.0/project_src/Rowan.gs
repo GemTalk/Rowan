@@ -2865,6 +2865,54 @@ true.
 
 doit
 (Object
+	subclass: 'RwAbstractProjectComponentVisitorV2'
+	instVarNames: #( projectLoadSpecs visitedComponents visitedComponentNames platformConditionalAttributes definedGroupNames projectNames groupNames componentNames )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractProjectComponentVisitorV2
+	subclass: 'RwIndependentComponentVisitorV2'
+	instVarNames: #( packageNames componentsPath projectsPath )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractProjectComponentVisitorV2
+	subclass: 'RwResolvedProjectComponentVisitorV2'
+	instVarNames: #( resolvedProject )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'RwAbstractProjectConfiguration'
 	instVarNames: #( name comment projectName version configurationNames )
 	classVars: #(  )
@@ -2954,54 +3002,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Configurations';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(Object
-	subclass: 'RwAbstractProjectLoadComponentV2'
-	instVarNames: #( name comment projectName projectNames componentNames definedGroupNames conditionalPackages conditionalPackageMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwAbstractProjectLoadComponentV2
-	subclass: 'RwNestedProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwAbstractProjectLoadComponentV2
-	subclass: 'RwProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3241,23 +3241,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwRepositoryComponentProjectFiletreeReaderVisitor
-	subclass: 'RwRepositoryResolvedProjectFiletreeReaderVisitorV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-Components';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3273,6 +3257,22 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
+		category: 'Rowan-Components';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwRepositoryComponentProjectReaderVisitor
+	subclass: 'RwRepositoryResolvedProjectFiletreeReaderVisitorV2'
+	instVarNames: #( packageExtension )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
 		category: 'Rowan-DefinitionsV2';
 		comment: '';
 		immediateInvariant.
@@ -3280,7 +3280,7 @@ true.
 %
 
 doit
-(RwRepositoryComponentProjectTonelReaderVisitor
+(RwRepositoryComponentProjectReaderVisitor
 	subclass: 'RwRepositoryResolvedProjectTonelReaderVisitorV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -3298,7 +3298,23 @@ true.
 doit
 (Object
 	subclass: 'RwAbstractResolvedObjectV2'
-	instVarNames: #( projectDefinition projectRepository loadSpecification projectSpecification projectStructure )
+	instVarNames: #( projectRepository loadSpecification projectSpecification )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Definitions-Common';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractResolvedObjectV2
+	subclass: 'RwAbstractResolvedProjectV2'
+	instVarNames: #( projectDefinition projectStructure )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -3312,7 +3328,7 @@ true.
 %
 
 doit
-(RwAbstractResolvedObjectV2
+(RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedLoadSpecificationV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -3328,7 +3344,7 @@ true.
 %
 
 doit
-(RwAbstractResolvedObjectV2
+(RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedProjectSpecificationV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -3344,7 +3360,7 @@ true.
 %
 
 doit
-(RwAbstractResolvedObjectV2
+(RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedProjectV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -3360,7 +3376,7 @@ true.
 %
 
 doit
-(RwAbstractResolvedObjectV2
+(RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedRepositoryV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -3370,6 +3386,22 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractResolvedObjectV2
+	subclass: 'RwStrawmanProjectV2'
+	instVarNames: #( loadComponents comment packages )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Strawman1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3735,7 +3767,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Tools-Core';
+		category: 'Rowan-Tools-CoreV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3831,7 +3863,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Tools-Core';
+		category: 'Rowan-Tools-CoreV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -3927,7 +3959,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Tools-Core';
+		category: 'Rowan-Tools-CoreV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4007,7 +4039,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Tools-Core';
+		category: 'Rowan-Tools-CoreV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4040,6 +4072,118 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RwBasicProjectLoadComponentV2'
+	instVarNames: #( name comment projectName conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwBasicProjectLoadComponentV2
+	subclass: 'RwAbstractProjectLoadComponentV2'
+	instVarNames: #( definedGroupNames conditionalProperties conditionalPropertyMatchers conditionalPackageMapSpecMatchers )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractProjectLoadComponentV2
+	subclass: 'RwNestedProjectLoadComponentV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractProjectLoadComponentV2
+	subclass: 'RwProjectLoadComponentV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwBasicProjectLoadComponentV2
+	subclass: 'RwAbstractSimpleProjectLoadComponentV2'
+	instVarNames: #( condition groupName componentNames )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractSimpleProjectLoadComponentV2
+	subclass: 'RwSequencedProjectLoadComponentV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractSimpleProjectLoadComponentV2
+	subclass: 'RwSimpleProjectLoadComponentV2'
+	instVarNames: #( packageNames projectNames )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -4334,6 +4478,70 @@ true.
 
 doit
 (RwDefinition
+	subclass: 'RwAbstractRepositoryDefinitionV2'
+	instVarNames: #( projectsHome repositoryRoot repositoryUrl )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Definitions-Common';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractRepositoryDefinitionV2
+	subclass: 'RwDiskRepositoryDefinitionV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwDiskRepositoryDefinitionV2
+	subclass: 'RwGitRepositoryDefinitionV2'
+	instVarNames: #( remote remoteUrl committish )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractRepositoryDefinitionV2
+	subclass: 'RwStrawmanDiskRepositoryDefinition'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Strawman1';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwDefinition
 	subclass: 'RwDefinitionSetDefinition'
 	instVarNames: #( definitions )
 	classVars: #(  )
@@ -4388,38 +4596,6 @@ Object
   CypDefinition( properties)
     CypPackageSetDefinition( packages)
 ';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwDefinition
-	subclass: 'RwDiskRepositoryDefinitionV2'
-	instVarNames: #( projectsHome repositoryRoot repositoryUrl )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-DefinitionsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwDiskRepositoryDefinitionV2
-	subclass: 'RwGitRepositoryDefinitionV2'
-	instVarNames: #( remote remoteUrl committish )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4511,22 +4687,6 @@ doit
 (RwDefinition
 	subclass: 'RwProjectReferenceDefinition'
 	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Components';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwDefinition
-	subclass: 'RwProjectReferenceDefinitionV2'
-	instVarNames: #( components projectLoadSpecification projectSpecification )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -6070,38 +6230,6 @@ true.
 
 doit
 (Object
-	subclass: 'RwProjectLoadConfigurationVisitorV2'
-	instVarNames: #( packageNames visitedComponentNames platformAttributes definedGroupNames groupNames componentNames componentsRoot )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-ComponentsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwProjectLoadConfigurationVisitorV2
-	subclass: 'RwProjectLoadComponentVisitorV2'
-	instVarNames: #( projectNames projectsRoot repositoryRoot projectLoadSpecs visitedComponents projectDefinition resolvedProject )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-DefinitionsV2';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(Object
 	subclass: 'RwPropertyModification'
 	instVarNames: #( key oldValue newValue )
 	classVars: #(  )
@@ -6144,6 +6272,22 @@ true.
 
 doit
 (Object
+	subclass: 'RwResolvedLoadComponentsV2'
+	instVarNames: #( components )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-ComponentsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'RwSpecification'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -6168,7 +6312,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6184,7 +6328,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6193,14 +6337,14 @@ true.
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl svnUrl revision projectSpecFile componentNames groupNames platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6216,7 +6360,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6232,7 +6376,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6248,7 +6392,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-GemStone-Specifications';
+		category: 'Rowan-GemStone-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6264,7 +6408,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6296,7 +6440,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: 'RwPackageLoadSpecification new
     specName: ''rowanLoadSpec'';
     packageNames:
@@ -6321,7 +6465,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-DefinitionsV2';
+		category: 'Rowan-SpecificationsV2';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6337,7 +6481,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6353,7 +6497,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6369,7 +6513,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6385,7 +6529,7 @@ doit
 	inDictionary: RowanTools
 	options: #()
 )
-		category: 'Rowan-Specifications';
+		category: 'Rowan-SpecificationsV1';
 		comment: '';
 		immediateInvariant.
 true.
@@ -6707,6 +6851,38 @@ true.
 
 doit
 (RwHierarchicalUrl
+	subclass: 'RwHttpUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Url-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwHttpUrl
+	subclass: 'RwHttpsUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Url-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwHierarchicalUrl
 	subclass: 'RwSmalltalkRepositoryUrl'
 	instVarNames: #( project committish dir )
 	classVars: #(  )
@@ -6949,6 +7125,54 @@ true.
 
 doit
 (TestCase
+	subclass: 'RwAbstractLoadComponentV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractLoadComponentV2Test
+	subclass: 'RwProjectLoadComponentV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractLoadComponentV2Test
+	subclass: 'RwResolvedLoadComponentsV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
 	subclass: 'RwDataCuratorTest'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -6959,6 +7183,118 @@ doit
 )
 		category: 'Rowan-DataCurator-Tests';
 		comment: 'Set of tests that can be compiled and run as a non-SystemUser user. That means all operations, including the load (see platforms/gemstone/topaz/rowanDataCuratorTestSuite.gs) of the project must be accomplished by referencing only the Published/Globals Rowan classes.';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwGemStoneVersionNumberTestCase'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwLoadSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwProjectComponentVisitorV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwProjectSpecificationV2Test'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwSemanticVersionNumber200TestCase'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: 'The tests in this class were extracted from the examples in Semantic Version Specification ...';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwSemanticVersionNumberTestCase'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tests-DiskConfigurationsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RwStrawmanProjectTestsV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Strawman1';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -26550,11 +26886,11 @@ platform
 
 category: 'public'
 classmethod: Rowan
-platformConfigurationAttributes
+platformConditionalAttributes
 
-	"Return list of platform-specific configuration attributes"
+	"Return list of platform-specific conditional attributes for use by components"
 
-	^ self platform platformConfigurationAttributes
+	^ self platform platformConditionalAttributes
 %
 
 category: 'public'
@@ -34346,6 +34682,395 @@ matchVersion: aGemStoneVersion
 	^ false
 %
 
+! Class implementation for 'RwAbstractProjectComponentVisitorV2'
+
+!		Class methods for 'RwAbstractProjectComponentVisitorV2'
+
+category: 'instance creation'
+classmethod: RwAbstractProjectComponentVisitorV2
+new
+
+	^super new initialize
+%
+
+!		Instance methods for 'RwAbstractProjectComponentVisitorV2'
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+componentNames
+
+	^ componentNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+componentsPath
+	^ self subclassResponsibility: #'componentsPath'
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+groupNames
+
+	^ groupNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+groupNames: aColl
+
+	groupNames := aColl copy
+%
+
+category: 'initialization'
+method: RwAbstractProjectComponentVisitorV2
+initialize
+	visitedComponentNames := Set new.
+	projectNames := Set new.
+	componentNames := Set new.
+	platformConditionalAttributes := #().
+	groupNames := Set new.
+	projectLoadSpecs := Set new.
+	visitedComponents := Dictionary new
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+packageNames
+
+	self subclassResponsibility: #packageNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+platformConditionalAttributes
+
+	^ platformConditionalAttributes
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+platformConditionalAttributes: aColl
+
+	platformConditionalAttributes := aColl
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+projectLoadSpecs
+
+	^ projectLoadSpecs
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+projectNames
+
+	^ projectNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+projectsPath
+	^ self subclassResponsibility: #'projectsPath'
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visit: aProjectLoadComponent
+
+	^aProjectLoadComponent acceptVisitor: self
+%
+
+category: 'accessing'
+method: RwAbstractProjectComponentVisitorV2
+visitedComponents
+
+	^ visitedComponents
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitLoadSpecification: aLoadSpecification
+
+	self projectLoadSpecs add: aLoadSpecification
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitNested: aProjectLoadComponent
+
+	^aProjectLoadComponent acceptNestedVisitor: self
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitProjectLoadComponent: aProjectLoadComponent
+
+	(visitedComponentNames includes: aProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aProjectLoadComponent.
+
+	definedGroupNames := aProjectLoadComponent definedGroupNames.
+	self _processGroupNames.
+
+	self _processConditionalProperties: aProjectLoadComponent.
+
+	(self
+		_components: self componentsPath
+		forProject: aProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	(self
+		_projects: self projectsPath
+		forProject: aProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitSequencedProjectLoadComponent: aSequencedProjectLoadComponent
+	| urlBase |
+	(visitedComponentNames includes: aSequencedProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aSequencedProjectLoadComponent.
+
+	urlBase := 'file:' , self componentsPath asFileReference pathString , '/'.
+	aSequencedProjectLoadComponent componentNames
+		do: [ :componentName | 
+			| url component |
+			url := urlBase , componentName , '.ston'.
+			component := (RwAbstractProjectLoadComponentV2 fromUrl: url)
+				projectName: aSequencedProjectLoadComponent projectName;
+				yourself.
+
+			component acceptNestedVisitor: self.
+
+			self error: 'need to perform load operation at this point' ]
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent
+	(visitedComponentNames includes: aSimpleProjectLoadComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aSimpleProjectLoadComponent.
+
+	(self groupNames includes: aSimpleProjectLoadComponent groupName)
+		ifTrue: [ 
+			self
+				_addPackageNames: aSimpleProjectLoadComponent packageNames
+				for: aSimpleProjectLoadComponent.
+			self componentNames addAll: aSimpleProjectLoadComponent componentNames.
+			self projectNames addAll: aSimpleProjectLoadComponent projectNames ].
+
+	(self
+		_components: self componentsPath
+		forProject: aSimpleProjectLoadComponent projectName)
+		do: [ :component | component acceptNestedVisitor: self ].
+
+	(self
+		_projects: self projectsPath
+		forProject: aSimpleProjectLoadComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_addPackageNames: somePackageNames for: aComponent
+
+	self subclassResponsibility: #_addPackageNames:for:
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_matchPlatformAttributes: platformPatternMatcher
+
+	self platformConditionalAttributes do: [:anObject |
+		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
+	^false
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_platformAttributeMatchIn: platformMatchersList
+
+	platformMatchersList do: [:platformPatternMatcher |
+		(self _matchPlatformAttributes: platformPatternMatcher) 
+			ifTrue: [ ^true ] ].
+	^false
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_processConditionalProperties: aProjectLoadConfiguration
+	aProjectLoadConfiguration conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :groupMap | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					groupMap
+						keysAndValuesDo: [ :group :map | 
+							(self groupNames includes: group)
+								ifTrue: [ 
+									self
+										_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
+										for: aProjectLoadConfiguration.
+									self componentNames
+										addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
+									self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ] ]
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_processGroupNames
+
+	| seedGroupNames seeded |
+	seedGroupNames := groupNames asSet copy.
+	seeded := Set new.
+	[seedGroupNames isEmpty ]
+		whileFalse: [ 
+			seedGroupNames copy do: [:groupName |
+				| referencedGroupNames |
+				"make sure that required groups are included in group names, recursively"
+				seedGroupNames remove: groupName.
+				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
+				groupNames addAll: referencedGroupNames.
+				referencedGroupNames do: [:refGroupName |
+					(seeded includes: refGroupName)
+						ifFalse: [
+						"ensure that we seed each group only once"
+						seeded add: refGroupName.
+						seedGroupNames add: refGroupName ] ] ] ].
+%
+
+category: 'private'
+method: RwAbstractProjectComponentVisitorV2
+_visited: aComponent
+
+	visitedComponentNames add:  aComponent name.
+	visitedComponents at: aComponent name put: aComponent.
+%
+
+! Class implementation for 'RwIndependentComponentVisitorV2'
+
+!		Instance methods for 'RwIndependentComponentVisitorV2'
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+componentsPath
+	^ componentsPath
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+componentsPath: aString
+	componentsPath := aString
+%
+
+category: 'initialization'
+method: RwIndependentComponentVisitorV2
+initialize
+	super initialize.
+	packageNames := Set new.
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+packageNames
+
+	^ packageNames
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+projectsPath
+	^ projectsPath
+%
+
+category: 'accessing'
+method: RwIndependentComponentVisitorV2
+projectsPath: aString
+	projectsPath := aString
+%
+
+category: 'private'
+method: RwIndependentComponentVisitorV2
+_addPackageNames: somePackageNames for: aComponent
+
+	self packageNames addAll: somePackageNames
+%
+
+! Class implementation for 'RwResolvedProjectComponentVisitorV2'
+
+!		Class methods for 'RwResolvedProjectComponentVisitorV2'
+
+category: 'instance creation'
+classmethod: RwResolvedProjectComponentVisitorV2
+resolvedProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes groupNames: groupNames
+	^ self new
+		platformConditionalAttributes: platformConditionalAttributes;
+		groupNames: groupNames;
+		resolvedProject: resolvedProject;
+		yourself
+%
+
+!		Instance methods for 'RwResolvedProjectComponentVisitorV2'
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+componentsPath
+
+	^ self resolvedProject componentsRoot
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+packageNames
+	^ self resolvedProject packageNames
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+projectDefinition
+	^ self resolvedProject _projectDefinition
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+projectsPath
+
+	^ self resolvedProject projectsRoot
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+resolvedProject
+	^ resolvedProject
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
+resolvedProject: aResolvedProject
+	resolvedProject := aResolvedProject
+%
+
+category: 'visiting'
+method: RwResolvedProjectComponentVisitorV2
+visit: aProjectLoadComponent
+
+	^aProjectLoadComponent acceptVisitor: self
+%
+
+category: 'private'
+method: RwResolvedProjectComponentVisitorV2
+_addPackageNames: somePackageNames for: aComponent
+
+	self projectDefinition addPackages: somePackageNames forComponent: aComponent
+%
+
 ! Class implementation for 'RwAbstractProjectConfiguration'
 
 !		Class methods for 'RwAbstractProjectConfiguration'
@@ -35005,21 +35730,6 @@ projectNames: anArray
 	projectNames := anArray
 %
 
-category: 'private'
-method: RwComponentLoadConfiguration
-_processConditionalPackageNames: aProjectLoadConfiguration
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #() ] ).
-							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
-%
-
 ! Class implementation for 'RwProjectCompoundConfiguration'
 
 !		Instance methods for 'RwProjectCompoundConfiguration'
@@ -35103,682 +35813,6 @@ _configurations
 			(RwAbstractProjectConfiguration fromUrl: url)
 				projectName: self projectName;
 				yourself ]
-%
-
-! Class implementation for 'RwAbstractProjectLoadComponentV2'
-
-!		Class methods for 'RwAbstractProjectLoadComponentV2'
-
-category: 'instance creation'
-classmethod: RwAbstractProjectLoadComponentV2
-fromUrl: specNameOrUrl
-
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
-
-	| url |
-	url := specNameOrUrl asRwUrl.
-	url scheme isNil
-		ifTrue: [ self error: 'scheme must be file: or https:' ].
-	url scheme = 'file'
-		ifTrue: [ 
-			CypressFileUtilities current
-				readStreamFor: url fileName
-				in: url pathForDirectory
-				do: [ :stream | ^ self _readStonFrom: stream ] ].
-	url scheme asString = 'https'
-		ifTrue: [ 
-self error: 'not yet supported'.
-"
-			| client response |
-			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (Rowan globalNamed: 'ZnClient') new.
-			response := client
-				beOneShot;
-				enforceHttpSuccess: true;
-				get: url.
-			^ self _readStonFrom: response decodeFromUTF8
-" ].
-	self error: 'Unknown scheme: ' , url scheme printString
-%
-
-category: 'instance creation'
-classmethod: RwAbstractProjectLoadComponentV2
-new
-
-	^self basicNew initialize
-%
-
-category: 'instance creation'
-classmethod: RwAbstractProjectLoadComponentV2
-newNamed: aName for: projectName
-
-	^ self new
-		name: aName;
-		projectName: projectName;
-		yourself
-%
-
-category: 'private'
-classmethod: RwAbstractProjectLoadComponentV2
-_gemstoneSupportedPackagePropertyNames
-	^ #('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
-%
-
-category: 'private'
-classmethod: RwAbstractProjectLoadComponentV2
-_readStonFrom: stream
-	| reader component |
-	(reader := STONReader on: stream) allowComplexMapKeys: true.
-	component := reader next
-		initializeForImport;
-		yourself.
-	component validate.	"validate when reading from disk, since hand editting could create inconsistencies"
-	^ component
-%
-
-category: 'private'
-classmethod: RwAbstractProjectLoadComponentV2
-_supportedPlatformNames
-	^ #('gemstone')
-%
-
-!		Instance methods for 'RwAbstractProjectLoadComponentV2'
-
-category: 'visiting'
-method: RwAbstractProjectLoadComponentV2
-acceptNestedVisitor: aVisitor
-
-	^ self acceptVisitor: aVisitor
-%
-
-category: 'visiting'
-method: RwAbstractProjectLoadComponentV2
-acceptVisitor: aVisitor
-
-	^ self subclassResponsibility: #acceptVisitor:
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-comment
-
-   ^comment
-%
-
-category: 'initialization'
-method: RwAbstractProjectLoadComponentV2
-comment: anObject
-
-   comment := anObject
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-componentNames
-	^ componentNames ifNil: [ Array new ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-componentNames: anArray
-	componentNames := anArray
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackageMapSpecMatchers
-
-	conditionalPackageMapSpecMatchers ifNotNil: [:val | ^ val ]. 
-	conditionalPackageMapSpecMatchers := Dictionary new.
-	self conditionalPackageMapSpecs keysAndValuesDo: [:platformPattern :packageMapSpecsMap |
-		conditionalPackageMapSpecMatchers
-			at: (self _platformPatternMatcherFor: platformPattern)
-			put: packageMapSpecsMap ].
-	^ conditionalPackageMapSpecMatchers
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackageMapSpecs
-
-	^ conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackageMapSpecsAtGemStoneUserId: userId 
-
-	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsent: [ ^ Dictionary new ])
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName
-
-	^ (((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsentPut: [ ^ Dictionary new ])
-			at: #packageNameToPlatformPropertiesMap ifAbsent: [ ^ Dictionary new ])
-				at: packageName ifAbsent: [ ^ Dictionary new ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setSymbolDictNameTo: symbolDictName
-	| dict |
-	dict := (((self conditionalPackageMapSpecs
-		at: 'gemstone'
-		ifAbsentPut: [ Dictionary new ]) at: userId ifAbsentPut: [ Dictionary new ])
-		at: #'packageNameToPlatformPropertiesMap'
-		ifAbsentPut: [ Dictionary new ])
-		at: packageName
-		ifAbsentPut: [ Dictionary new ].
-	symbolDictName
-		ifNil: [ dict removeKey: 'symbolDictName' ifAbsent: [  ] ]
-		ifNotNil: [ dict at: 'symbolDictName' put: symbolDictName asString ]
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackageMatchers
-
-	conditionalPackageMatchers ifNotNil: [:val | ^ val ]. 
-	conditionalPackageMatchers := Dictionary new.
-	self conditionalPackages keysAndValuesDo: [:platformPatterns :groupMap |
-		conditionalPackageMatchers
-			at: (platformPatterns collect: [:pattern | self _platformPatternMatcherFor: pattern ])
-			put: groupMap ].
-	^ conditionalPackageMatchers
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackages
-
-	^ conditionalPackages ifNil: [ conditionalPackages := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackagesAtConditions: conditions andGroup: groupName
-
-	| thePackageNameMap |
-	thePackageNameMap := (self conditionalPackages at: conditions asArray sort ifAbsent: [ ^ Set new])
-		at: groupName ifAbsent: [ ^ Set new ].
-	^ (thePackageNameMap at: #packageNames ifAbsent: [ Set new ]) asSet
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-conditionalPackagesAtConditions: conditions andGroup: groupName addPackageNames: packageNames
-
-	| thePackageNames thePackageNameMap |
-	thePackageNameMap := (self conditionalPackages at: conditions asArray sort ifAbsentPut: [ Dictionary new])
-		at: groupName ifAbsentPut: [ Dictionary new ].
-	thePackageNames := (thePackageNameMap at: #packageNames ifAbsentPut: [ Set new ]) asSet.
-	thePackageNames addAll: packageNames.
-	thePackageNameMap at: #packageNames put: thePackageNames asArray sort
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-definedGroupNames
-
-	^ definedGroupNames 
-		ifNil: [ definedGroupNames :=  Dictionary new]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-definedGroupNames: aColl
-
-	definedGroupNames := aColl
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-defineGroupNamed: groupName 
-
-	"add a group that does not include any other groups"
-
-	self defineGroupNamed: groupName toIncludeGroups: #()
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-defineGroupNamed: groupName toIncludeGroups: includedGroups
-
-	"add a group that does not include any other groups"
-
-	self definedGroupNames at: groupName put: includedGroups asArray sort
-%
-
-category: 'ston'
-method: RwAbstractProjectLoadComponentV2
-excludedInstVars
-	^ #(#'conditionalPackageMatchers' #'conditionalPackageMapSpecMatchers')
-%
-
-category: 'exporting'
-method: RwAbstractProjectLoadComponentV2
-export
-
-	|  exportUrl exportPath |
-	exportPath := self _repositoryRootPath asFileReference / self _configsPath.
-	exportPath ensureCreateDirectory.
-	exportUrl := exportPath fileSystem isMemoryFileSystem
-		ifTrue: [ 'memory:' , exportPath pathString ]
-		ifFalse: [ 'file:' , exportPath pathString, '/' ].
-	^ self exportToUrl: exportUrl
-%
-
-category: 'exporting'
-method: RwAbstractProjectLoadComponentV2
-exportToUrl: fileUrl
-
-	^ self copy
-		initializeForExport
-		_exportToUrl: fileUrl
-%
-
-category: 'initialization'
-method: RwAbstractProjectLoadComponentV2
-initialize
-	comment := ''
-%
-
-category: 'initialization'
-method: RwAbstractProjectLoadComponentV2
-initializeForExport
-	"if spec is to be exported, clear out any of the fields that represent state that should 
-	not be shared"
-
-	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
-
-	projectName := nil.
-	conditionalPackageMatchers := conditionalPackageMapSpecMatchers := nil.
-	self conditionalPackages
-		ifNotNil: [ :cp | 
-			| orderedConditionalPackages |
-			orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
-			(cp keys asSortedCollection: [ :a :b | (a at: 1) <= (b at: 1) ])
-				do: [ :ar | 
-					| dict orderedPackageNames |
-					dict := cp at: ar.
-					orderedPackageNames := Rowan platform orderedDictionaryClass new.
-					dict keys asArray sort
-						do: [ :group | orderedPackageNames at: group put: (dict at: group) ].
-					orderedConditionalPackages at: ar put: orderedPackageNames ].
-			conditionalPackages := orderedConditionalPackages ].
-	conditionalPackageMapSpecs
-		ifNotNil: [ 
-			| orderedConditionalPackageMapSpecs |
-			orderedConditionalPackageMapSpecs := Rowan platform orderedDictionaryClass
-				new.
-			(conditionalPackageMapSpecs keys asSortedCollection: [ :a :b | a <= b ])
-				do: [ :platformName | 
-					| orderedUserMap userMap |
-					orderedUserMap := Rowan platform orderedDictionaryClass new.
-					userMap := conditionalPackageMapSpecs at: platformName.
-					(userMap keys asSortedCollection: [ :a :b | a <= b ])
-						do: [ :userName | 
-							| attributeMap orderedAttributeMap |
-							attributeMap := userMap at: userName.
-							orderedAttributeMap := Rowan platform orderedDictionaryClass new.
-							(attributeMap keys asSortedCollection: [ :a :b | a <= b ])
-								do: [ :attributeName | orderedAttributeMap at: attributeName put: (attributeMap at: attributeName) ].
-							orderedUserMap at: userName put: orderedAttributeMap ].
-					orderedConditionalPackageMapSpecs at: platformName put: orderedUserMap ].
-			conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
-%
-
-category: 'initialization'
-method: RwAbstractProjectLoadComponentV2
-initializeForImport
-
-	"if spec has been imported, clear out any of the fields that represent state that should 
-	not be shared"
-
-	projectName := nil
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-name
-
-   ^name
-%
-
-category: 'initialization'
-method: RwAbstractProjectLoadComponentV2
-name: anObject
-
-   name := anObject
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-packageNames
-	"Answer the collection of package names defined in the receiver."
-
-	| allDefinedPackageNames |
-	allDefinedPackageNames := Set new.
-	self conditionalPackages
-		keysAndValuesDo: [ :conditions :groupMap | 
-			groupMap
-				keysAndValuesDo: [ :groupName :packageMap | allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
-	^ allDefinedPackageNames
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames
-	"Answer the collection of package names defined in the receiver."
-
-	| allDefinedPackageNames matchers |
-	allDefinedPackageNames := Set new.
-	matchers := self conditionalPackageMatchers.
-	self conditionalPackages
-		keysAndValuesDo: [ :conditions :ignored | 
-			platformConfigurationAttributes
-				do: [ :anObject | 
-					matchers
-						keysAndValuesDo: [ :ar :groupMap | 
-							ar
-								do: [ :matcher | 
-									(matcher match: anObject)
-										ifTrue: [ 
-											groupMap
-												keysAndValuesDo: [ :groupName :packageMap | 
-													(groupNames includes: groupName)
-														ifTrue: [ allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ] ] ] ] ] ].
-	^ allDefinedPackageNames
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-projectName
-
-   ^projectName
-%
-
-category: 'initialization'
-method: RwAbstractProjectLoadComponentV2
-projectName: anObject
-
-   projectName := anObject
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-projectNames
-
-	^ projectNames ifNil: [ #() ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-projectNames: anArray
-
-	projectNames := anArray
-%
-
-category: 'accessing'
-method: RwAbstractProjectLoadComponentV2
-removePackageNamed: aPackageName
-	"this can create empty packageName lists or empty packageMapSpecMaps ... the export logic _should_ cleanup empty list, which is sufficient"
-
-	self conditionalPackages
-		keysAndValuesDo: [ :conditionsArray :conditionMap | 
-			conditionMap
-				keysAndValuesDo: [ :groupName :groupMap | (groupMap at: #'packageNames') remove: aPackageName ifAbsent: [  ] ] ].
-	self conditionalPackageMapSpecs
-		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
-			packageMapSpecsMap
-				keysAndValuesDo: [ :userId :packageMapSpecs | 
-					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
-						removeKey: aPackageName
-						ifAbsent: [  ] ] ]
-%
-
-category: 'ston'
-method: RwAbstractProjectLoadComponentV2
-stonOn: stonWriter   
-	| instanceVariableNames |
-	instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
-	stonWriter writeObject: self
-		streamMap: 
-			[:dictionary |
-			instanceVariableNames do: 
-					[:each |
-					(self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
-						ifNotNil: [:value | dictionary at: each asSymbol put: value]
-						ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
-%
-
-category: 'validation'
-method: RwAbstractProjectLoadComponentV2
-validate
-	"ensure that the data structures within the receiver contain valid information:
-		1. only packages defined in the receiver may be referenced in the reciever
-		2. platform implementation is responsible for validating platform structures"
-
-	| allDefinedPackageNames knownGroupNames |
-	self name ifNil: [ self error: 'name is nil' ].
-	allDefinedPackageNames := Set new.
-	knownGroupNames := self definedGroupNames keys.
-	self definedGroupNames
-		keysAndValuesDo: [ :groupName :dependentGroups | 
-			dependentGroups
-				do: [ :dependentGroupName | 
-					(knownGroupNames includes: dependentGroupName)
-						ifFalse: [ 
-							Error
-								signal:
-									'The group ' , dependentGroupName printString , ' is not a defined group' ] ] ].
-	self conditionalPackages
-		keysAndValuesDo: [ :conditions :groupMap | 
-			groupMap
-				keysAndValuesDo: [ :groupName :packageMap | 
-					(self definedGroupNames keys includes: groupName)
-						ifFalse: [ 
-							Error
-								signal:
-									'Conditional packages includes group name ' , groupName printString
-										, ' that is not a defined group' ].
-					allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ].
-	self conditionalPackageMapSpecs
-		keysAndValuesDo: [ :platformName :userIdMap | 
-			(self class _supportedPlatformNames includes: platformName)
-				ifFalse: [ 
-					Error
-						signal:
-							'Unknown platform name ' , platformName printString
-								, ' in conditional package map specs' ].
-			platformName = 'gemstone'
-				ifTrue: [ self _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap ] ].
-	^ true
-%
-
-category: 'exporting'
-method: RwAbstractProjectLoadComponentV2
-_exportToUrl: fileUrl
-
-	| url |
-	url := fileUrl asRwUrl.
-	url schemeName = 'file'
-		ifTrue: [ 
-			Rowan fileUtilities
-				writeStreamFor: self name , '.ston'
-				in: url pathForDirectory
-				do: [ :stream | 
-					| string |
-					string := STON toStringPretty: self.
-					stream nextPutAll: string.
-					^ self ] ].
-  url schemeName = 'memory'
-    ifTrue: [ 
-		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
-			writeStreamDo: [ :stream | 
-			  | string |
-			  string := STON toStringPretty: self.
-			  stream nextPutAll: string.
-			  ^ self ] ].
-	^ nil	"otherwise a noop"
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-_platformPatternMatcherFor: pattern
-
-	" Returns an instance of RwAbstractConfigurationPlatformAttributeMatcher:
-		RwStringConfigurationPlatformAttributeMatcher,
-		RwGemStoneVersionConfigurationPlatformAttributeMatcher,
-		or RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher
-	"
-
-	| versionPattern gsVersion1 gsVersion2 |
-	(pattern beginsWith: 'gs')
-		ifFalse: [ 
-			"simple equality match"
-			^ RwStringConfigurationPlatformAttributeMatcher new
-					pattern: pattern;
-					patternMatchBlock: [:a :b | a = b ];
-					yourself ].
-	"GemStone version pattern"
-	versionPattern := (pattern copyFrom: 3 to: pattern size) substrings: '.'.
-	(versionPattern last beginsWith: '[')
-		ifTrue: [ 
-			| vpSize rangePattern dashIndex |
-			"range pattern"
-			vpSize := versionPattern size.
-			gsVersion1 := RwGemStoneVersionNumber new: vpSize .
-			1 to: vpSize - 1
-				do: [:index | gsVersion1 at: index put: (versionPattern at: index) asInteger ].
-			gsVersion1 at: vpSize put: 0.
-			rangePattern := (versionPattern at: vpSize) trimBoth.
-			(((rangePattern at: 1) = $[) and: [ (rangePattern at: rangePattern size) = $] ])
-				ifFalse: [ self error: 'Poorly formed GemStone version range pattern ', rangePattern printString, ' in ', pattern printString ].
-			rangePattern := rangePattern copyFrom: 2 to: rangePattern size -1.
-			dashIndex := rangePattern indexOf: $-.
-			dashIndex <= 1
-				ifTrue: [ self error: 'Invalid version range pattern missing range begin' , rangePattern printString, ' in ', pattern printString ].
-			gsVersion1 at: vpSize put: (rangePattern copyFrom: 1 to: dashIndex -1) asInteger.
-			dashIndex = rangePattern size
-				ifTrue: [
-					"open range"
-					gsVersion2 := gsVersion1 copyFrom: 1 to: gsVersion1 size -1.
-					gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
-					^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
-							pattern: gsVersion1;
-							pattern2: gsVersion2;
-							patternMatchBlock: [:a :b :c | (a <= b) & (b < c ) ];
-							yourself ].
-			"closed range"
-			gsVersion2 := gsVersion1 copy.
-			gsVersion2 at: vpSize put: (rangePattern copyFrom: dashIndex + 1 to: rangePattern size) asInteger.
-			^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
-					pattern: gsVersion1;
-					pattern2: gsVersion2;
-					patternMatchBlock: [:a :b :c | (a <= b) & (b <= c ) ];
-					yourself ].
-	versionPattern last = 'x' 
-		ifFalse: [
-			"specific version number match, use ="
-			^ RwGemStoneVersionConfigurationPlatformAttributeMatcher new
-					pattern: (pattern copyFrom: 3 to: pattern size) asRwGemStoneVersionNumber;
-					patternMatchBlock: [:a :b | a = b ];
-					yourself ].
-	" 'gs', <gemstone-version-number> , '.x'"
-	"match all values in x field"
-	gsVersion1 := ((pattern copyFrom: 3 to: pattern size - 2), '.0') asRwGemStoneVersionNumber.
-	gsVersion2 := gsVersion1 copyFrom: 1 to: gsVersion1 size - 1.
-	gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
-	^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
-			pattern: gsVersion1;
-			pattern2: gsVersion2;
-			patternMatchBlock: [:a :b :c | (a <= b) & (b < c ) ];
-			yourself
-%
-
-category: 'private'
-method: RwAbstractProjectLoadComponentV2
-_processConditionalPackageNames: aProjectLoadConfiguration
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #componentNames ifAbsent: [ #() ] ).
-							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
-%
-
-category: 'validation'
-method: RwAbstractProjectLoadComponentV2
-_validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap
-	"ensure that the data structures within the receiver contain valid information:
-		1. only packages defined in the receiver may be referenced in the reciever
-		2. platform implementation is responsible for validating platform structures"
-
-	userIdMap
-		keysAndValuesDo: [ :userId :platformPropertiesMap | 
-			platformPropertiesMap
-				keysAndValuesDo: [ :key :packagePropertiesMap | 
-					key == #'packageNameToPlatformPropertiesMap'
-						ifFalse: [ Error signal: 'Unknown platformPropertiesMap key ' , key printString ].
-					packagePropertiesMap
-						keysAndValuesDo: [ :packageName :packageProperties | 
-							(allDefinedPackageNames includes: packageName)
-								ifFalse: [ 
-									Error
-										signal:
-											'Undefined package name ' , packageName printString
-												, ' used in plaform properties map' ].
-							packageProperties
-								keysDo: [ :packagePropertyName | 
-									(self class _gemstoneSupportedPackagePropertyNames
-										includes: packagePropertyName)
-										ifFalse: [ Error signal: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
-%
-
-! Class implementation for 'RwNestedProjectLoadComponentV2'
-
-!		Instance methods for 'RwNestedProjectLoadComponentV2'
-
-category: 'visiting'
-method: RwNestedProjectLoadComponentV2
-acceptNestedVisitor: aVisitor
-
-	^aVisitor visitNestedProjectLoadComponent: self
-%
-
-category: 'visiting'
-method: RwNestedProjectLoadComponentV2
-acceptVisitor: aVisitor
-
-	^self error: 'nested configuration cannot be used as a top-level configuration. The receiver is nested inside of project load configurations'
-%
-
-category: 'testing'
-method: RwNestedProjectLoadComponentV2
-isIndependentlyLoadable
-	"nested configuration is not independently loadable ... they can only be loaded when referenced from another config"
-
-	^ false
-%
-
-! Class implementation for 'RwProjectLoadComponentV2'
-
-!		Instance methods for 'RwProjectLoadComponentV2'
-
-category: 'visiting'
-method: RwProjectLoadComponentV2
-acceptVisitor: aVisitor
-
-	^aVisitor visitComponentLoadConfiguration: self
 %
 
 ! Class implementation for 'RwAbstractProjectSetModificationVisitor'
@@ -36074,17 +36108,19 @@ _readObjectFrom: aFileReference
 category: 'private'
 classmethod: RwAbstractReaderWriterVisitor
 _repositoryPropertyDictFor: packagesRoot
-
 	| propertiesFile |
-	propertiesFile := packagesRoot / 'properties', 'st'.
+	propertiesFile := packagesRoot / 'properties' , 'st'.
 	propertiesFile exists
-		ifFalse: [
+		ifFalse: [ 
 			| propertiesDict |
 			propertiesFile := packagesRoot / '.filetree'.
 			propertiesFile exists
-					ifFalse: [^ Dictionary new ].
+				ifFalse: [ 
+					propertiesFile := packagesRoot / '.properties'.
+					propertiesFile exists
+						ifFalse: [ ^ Dictionary new ] ].
 			propertiesDict := self _readObjectFrom: propertiesFile.
-			propertiesDict at: #format put: 'filetree'.
+			propertiesDict at: #'format' put: 'filetree'.
 			^ propertiesDict ].
 	^ self _readObjectFrom: propertiesFile
 %
@@ -39002,17 +39038,22 @@ addedClassExtension: aClassExtensionModification
 category: 'actions'
 method: RwModificationTonelWriterVisitorV2
 addedPackage: aPackageModification
-
+	| packageProperties exportedPackageProperties |
 	currentPackageDefinition := aPackageModification after.
 
-	"create package directory and package.st file"
+	packageProperties := currentPackageDefinition properties.
+	exportedPackageProperties := self class orderedDictionaryClass new.
+	exportedPackageProperties at: #'name' put: (packageProperties at: 'name').
+	(packageProperties at: 'comment' ifAbsent: [  ])
+		ifNotNil: [ :comment | exportedPackageProperties at: #'comment' put: comment ].
+	(packageProperties keys reject: [ :key | key = 'name' ]) asArray sort
+		do: [ :key | exportedPackageProperties at: key asSymbol put: (packageProperties at: key) ].
+
 	self _packageSourceDir ensureCreateDirectory.
-	(self _packageSourceDir /  'package.st')
-		writeStreamDo: [:aStream |
-		aStream 
-			<< 'Package ' 
-			<< (self _toSTON: { #name ->  currentPackageDefinition name } asDictionary) 
-			<< self  _newLine ].
+	self _packageSourceDir / 'package.st'
+		writeStreamDo: [ :aStream | 
+			aStream << 'Package ' << (self _toSTON: exportedPackageProperties)
+				<< self _newLine ].
 
 	self processPackage: aPackageModification
 %
@@ -39167,9 +39208,16 @@ _hasShebangOf: aClassDefinition
 category: 'class writing'
 method: RwModificationTonelWriterVisitorV2
 _methodDefinitionOf: aMethodDefinition
-	^ self _toSTON: (self class orderedDictionaryClass new 
-		at: #category put: aMethodDefinition protocol; 
-		yourself)
+	| excludedMethodProperties methodProperties exportedProperties |
+	excludedMethodProperties := #('_gsFileOffset' '_gsFileName' 'category' 'protocol' 'selector').
+	exportedProperties := self class orderedDictionaryClass new
+		at: #'category' put: aMethodDefinition protocol;
+		yourself.
+	methodProperties := aMethodDefinition properties.
+	(methodProperties keys
+		reject: [ :each | excludedMethodProperties includes: each ]) asArray sort
+		do: [ :key | exportedProperties at: key asSymbol put: (methodProperties at: key) ].
+	^ self _toSTON: exportedProperties
 %
 
 category: 'class writing'
@@ -39425,14 +39473,17 @@ readClassesFor: packageName packageRoot: packageRoot
 	^ self subclassResponsibility: #readClassesFor:packageRoot:
 %
 
-category: 'other'
+category: 'package reading'
 method: RwRepositoryComponentProjectReaderVisitor
-readPackages: aPackagesRoot
-	aPackagesRoot directories do: [:packageDir |
-		| packageName |
-		packageName := self _packageNameFromPackageDir: packageDir.
-		(packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
-			ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
+readPackages: packagesRoot
+	packagesRoot directories do: [:packageDir | | dir |
+    dir := packageDir path basename .
+    dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
+		  | packageName |
+		  packageName := self _packageNameFromPackageDir: packageDir.
+		  (packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
+			  ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
+    ].
 %
 
 category: 'public'
@@ -39621,11 +39672,13 @@ readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClass
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream methodDef |
+				| protocol methodSource methodStream methodDef offset |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
+        offset := methodStream position .
 				methodSource := methodStream upToEnd.
 				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+        methodDef offset: offset inFile: file pathString .
 				self 
 					validateMethodDefinitionProtocol: methodDef 
 						className: classDefinition name
@@ -39646,6 +39699,35 @@ _filetreeRepositoryPropertyDictFor: aPackagesRoot
 ! Class implementation for 'RwRepositoryComponentProjectTonelReaderVisitor'
 
 !		Class methods for 'RwRepositoryComponentProjectTonelReaderVisitor'
+
+category: 'class file reading'
+classmethod: RwRepositoryComponentProjectTonelReaderVisitor
+lineNumberStringForMethod: anRwMethodDefinition
+  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
+		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
+			 ^ self lineNumberStringForOffset: offset fileName: fName
+			] 
+	].
+  ^ '  (Unable to determine line )' .
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryComponentProjectTonelReaderVisitor
+lineNumberStringForOffset: offset fileName: fName
+  | res |
+  res :='  (Unable to determine line number)' .
+  [ | fRef |
+    fRef := fName asFileReference .
+    fRef readStreamDo:[ :fStream |  | buf lf lNum |
+      buf := fStream contents .
+      buf size > offset ifTrue:[ buf size: offset ].
+      lNum := 1 + (buf occurrencesOf: (lf := Character lf)) .
+      res := '', lf , ' near line ' , lNum asString , lf , ' in file ', fName .
+    ]
+  ] on: Error do:[:ex | "ignore" ].
+  ^ res
+%
 
 category: 'class file reading'
 classmethod: RwRepositoryComponentProjectTonelReaderVisitor
@@ -39695,6 +39777,47 @@ readClassFiles: fileArray projectName: projectName packageName: packageName
 
 category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
+checkMethodDefinitions: aClassDef
+  | cls clsName methBlk fakeMethDict pkgName |
+
+  self compileWhileReading ifFalse:[ ^ self "do nothing"  ].
+
+  clsName := aClassDef  name asSymbol .
+  (pkgName := currentPackageDefinition name) = 'Filein1C' ifTrue:[ 
+     "lookup in GemStone_Legacy_Streams first"
+     cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
+  ].
+  cls ifNil:[   
+    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+       "creating the class not implemented yet"
+       Warning signal:'class ' , clsName , ' not found by name lookup'.
+       ^ self "can't check syntax on the methods until class is defined"
+    ].
+  ].
+  cls := cls"anAssociation" value.
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: fakeMethDict
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  0
+    ] on: ( CompileError , CompileWarning ) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+  ].
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef classMethodDefinitions do: methBlk .
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
 classExtensionFileExtensions
 
 	^ #( 'extension' 'st' )
@@ -39705,6 +39828,18 @@ method: RwRepositoryComponentProjectTonelReaderVisitor
 classFileExtensions
 
 	^ #( 'class' 'st' )
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
+compileWhileReading
+  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
+%
+
+category: 'class reading'
+method: RwRepositoryComponentProjectTonelReaderVisitor
+compileWhileReading: aBoolean
+  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 %
 
 category: 'tonel parser'
@@ -39781,35 +39916,54 @@ readClassExtensionFile: file inPackage: packageName
 
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		| definitions stream |
-		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		definitions := (TonelParser on: stream forReader: self) start.
-		((definitions at: 2) at: 1) do: [:mDef |
-			currentClassExtension addClassMethodDefinition: mDef ].
-		((definitions at: 2) at: 2) do: [:mDef |
-			currentClassExtension addInstanceMethodDefinition: mDef ] ].
+	fileReference readStreamDo: [:fileStream | | stream |
+		[ | definitions |
+		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  currentClassExtension addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  currentClassExtension addInstanceMethodDefinition: mDef ] .
+      self checkMethodDefinitions: currentClassExtension .
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
 %
 
 category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
 readClassFile: file inPackage: packageName
-
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		| definitions stream |
-		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		definitions := (TonelParser on: stream forReader: self) start.
-		self validateClassCategory: currentClassDefinition forPackageNamed: packageName.
-		((definitions at: 2) at: 1) do: [:mDef |
-			currentClassDefinition addClassMethodDefinition: mDef ].
-		((definitions at: 2) at: 2) do: [:mDef |
-			currentClassDefinition addInstanceMethodDefinition: mDef ].
-		(currentProjectDefinition packageNamed: packageName)
-			addClassDefinition: currentClassDefinition ].
+	fileReference readStreamDo: [:fileStream | | stream |
+    [
+		  | definitions clsDef projectDef |
+      "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream := ZnBufferedReadStream on: fileStream. 
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+      clsDef := currentClassDefinition ifNotNil:[:def |
+                  currentClassExtension ifNotNil:[ 
+                    Error signal:'both a class definition and extension in file ', file name ].
+                  def
+                ] ifNil:[ currentClassExtension ].
+		  self validateClassCategory: clsDef forPackageNamed: packageName.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  clsDef addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  clsDef addInstanceMethodDefinition: mDef ].
+      self checkMethodDefinitions: clsDef .
+		  projectDef := currentProjectDefinition packageNamed: packageName .
+      currentClassDefinition ifNotNil:[ projectDef addClassDefinition: clsDef ] .
+                             "ifNil:[ projectDef addClassExtensionDefinition: clsDef]."
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
 %
 
 category: 'package reading'
@@ -39821,9 +39975,385 @@ _packageNameFromPackageDir: packageDir
 	^ (self _readObjectFrom: (packageDir / 'package', 'st')) at: #name
 %
 
+! Class implementation for 'RwRepositoryResolvedProjectFiletreeReaderVisitorV2'
+
+!		Class methods for 'RwRepositoryResolvedProjectFiletreeReaderVisitorV2'
+
+category: 'class directory reading'
+classmethod: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readClassDirectories: directoryArray
+
+	^ self readClassDirectories: directoryArray  projectName: '___READ_CLASS_Project___' packageName: '___READ_CLASS_Package___'
+%
+
+category: 'class directory reading'
+classmethod: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readClassDirectories: directoryArray projectName: projectName packageName: packageName
+	| visitor resolvedProject packageDefinition |
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		packageConvention: 'Rowan';
+		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
+		yourself.
+
+	resolvedProject
+		addComponentNamed: 'Core'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				yourself)
+		comment: 'Temporary project to hold class definitions read from disk'.
+
+	1 to: directoryArray size do: [ :index | 
+		| directory |
+		directory := directoryArray at: index.
+		packageDefinition := resolvedProject
+			addPackageNamed: packageName , '_' , index asString
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core'.
+		visitor := self new
+			currentProjectDefinition: resolvedProject;
+			currentPackageDefinition: packageDefinition;
+			_packageConvention: 'Rowan';
+			yourself.
+		visitor readClassDirectory: directory inPackage: packageDefinition name ].
+	^ resolvedProject
+%
+
+category: 'class directory reading'
+classmethod: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readClassDirectory: directory
+
+	^ self readClassDirectories: {directory}
+%
+
+category: 'class directory reading'
+classmethod: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readClassDirectory: directory projectName: projectName packageName: packageName
+
+	^ self readClassDirectories: {directory} projectName: projectName packageName: packageName
+%
+
+!		Instance methods for 'RwRepositoryResolvedProjectFiletreeReaderVisitorV2'
+
+category: 'accessing'
+method: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+packageExtension
+
+	^ packageExtension 
+		ifNil: [ 
+			| ext |
+			ext := (self _filetreeRepositoryPropertyDictFor: currentProjectReferenceDefinition packagesRoot) at: 'packageExtension'.
+			packageExtension := ext copyFrom: 2 to: ext size ]
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readClassDirectory: classDirectory inPackage: packageName
+
+	| classDirectoryReference classProperties classComment normalizedMetadata classDef |
+	classDirectoryReference := classDirectory asFileReference.
+	classProperties :=  self _readObjectFrom: classDirectoryReference / 'properties' , 'json'.
+	classComment := (classDirectoryReference / 'README' , 'md') contents.
+	normalizedMetadata := Dictionary new.
+	classProperties keysAndValuesDo: [:key :value |
+		normalizedMetadata at: key asLowercase asSymbol put: value ].
+	classDef :=	self newClassDefinitionFrom: {
+		nil.
+		classComment. 
+		nil. 
+		normalizedMetadata at: 'type' ifAbsent: ['normal']. 
+		nil. 
+		normalizedMetadata
+	}.
+	self validateClassCategory: classDef forPackageNamed: packageName.
+	(currentProjectDefinition packageNamed: packageName)
+		addClassDefinition: currentClassDefinition.
+
+	self readMethodDirectories: classDirectoryReference forClassDefinition: classDef inPackage: packageName
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readClassesFor: packageName packageRoot: packageRoot
+
+	currentPackageDefinition := currentProjectDefinition 
+		packageNamed: packageName 
+		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+	packageRoot directories do: [:directory |
+		| directoryExtension |
+		directoryExtension := directory extension.
+		directoryExtension = 'class'
+			ifTrue: [ self readClassDirectory: directory inPackage: packageName ]
+			ifFalse: [
+				directoryExtension = 'extension'
+					ifTrue: [ self readClassExtensionDirectory: directory  inPackage: packageName ] ] ]
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readClassExtensionDirectory: classExtensionDirectory inPackage: packageName
+
+	| classExtensionProperties className package |
+	classExtensionProperties :=  self _readObjectFrom: classExtensionDirectory / 'properties' , 'json'.
+	className := classExtensionProperties at: 'name'.
+	package := currentProjectDefinition packageNamed: packageName.
+	currentClassDefinition := nil.
+	currentClassExtension := package 
+		classExtensionDefinitionNamed: className 
+		ifAbsent: [ package addClassExtensionNamed: className ].
+
+	self readMethodDirectories: classExtensionDirectory forClassDefinition: currentClassExtension inPackage: packageName
+%
+
+category: 'method reading'
+method: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readMethodDirectories: classDirectory forClassDefinition: classDefinition inPackage: packageName
+
+	(self readMethodDirectory: classDirectory / 'instance' forClassDefinition: classDefinition isClassMeta: false inPackage: packageName) do: [:methodDefinition |
+		classDefinition addInstanceMethodDefinition: methodDefinition ].
+	(self readMethodDirectory: classDirectory / 'class' forClassDefinition: classDefinition isClassMeta: true inPackage: packageName) do: [:methodDefinition |
+		classDefinition addClassMethodDefinition: methodDefinition ]
+%
+
+category: 'method reading'
+method: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClassMeta: isClassMeta inPackage: packageName
+
+	| methodDefinitions methodDefinitionStream |
+	methodDefinitions := {}.
+	methodDirectory exists ifFalse: [ ^ methodDefinitions ].
+
+	methodDefinitionStream := methodDefinitions writeStreamPortable.
+	methodDirectory files do: [:file |
+		file extension = 'st'
+			ifTrue: [ 
+				| protocol methodSource methodStream methodDef offset |
+				methodStream := file contents  readStreamPortable.
+				protocol := methodStream nextLine.
+        offset := methodStream position .
+				methodSource := methodStream upToEnd.
+				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+        methodDef offset: offset inFile: file pathString .
+				self 
+					validateMethodDefinitionProtocol: methodDef 
+						className: classDefinition name
+						isMeta: isClassMeta 
+						forPackageNamed:  packageName.
+				methodDefinitionStream nextPut: methodDef ] ].
+
+	^ methodDefinitions
+%
+
+category: 'other'
+method: RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+_filetreeRepositoryPropertyDictFor: aPackagesRoot
+
+	^ self _readObjectFrom: aPackagesRoot / '.filetree'
+%
+
 ! Class implementation for 'RwRepositoryResolvedProjectTonelReaderVisitorV2'
 
+!		Class methods for 'RwRepositoryResolvedProjectTonelReaderVisitorV2'
+
+category: 'class file reading'
+classmethod: RwRepositoryResolvedProjectTonelReaderVisitorV2
+lineNumberStringForMethod: anRwMethodDefinition
+  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
+		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
+			 ^ self lineNumberStringForOffset: offset fileName: fName
+			] 
+	].
+  ^ '  (Unable to determine line )' .
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryResolvedProjectTonelReaderVisitorV2
+lineNumberStringForOffset: offset fileName: fName
+  | res |
+  res :='  (Unable to determine line number)' .
+  [ | fRef |
+    fRef := fName asFileReference .
+    fRef readStreamDo:[ :fStream |  | buf lf lNum |
+      buf := fStream contents .
+      buf size > offset ifTrue:[ buf size: offset ].
+      lNum := 1 + (buf occurrencesOf: (lf := Character lf)) .
+      res := '', lf , ' near line ' , lNum asString , lf , ' in file ', fName .
+    ]
+  ] on: Error do:[:ex | "ignore" ].
+  ^ res
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryResolvedProjectTonelReaderVisitorV2
+readClassFile: file
+
+	^ self readClassFiles: { file }
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryResolvedProjectTonelReaderVisitorV2
+readClassFile: file projectName: projectName packageName: packageName
+
+	^ self readClassFiles: { file } projectName: projectName packageName: packageName
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryResolvedProjectTonelReaderVisitorV2
+readClassFiles: fileArray
+
+	^ self readClassFiles: fileArray projectName: '___READ_CLASS_Project___' packageName: '___READ_CLASS_Package___'
+%
+
+category: 'class file reading'
+classmethod: RwRepositoryResolvedProjectTonelReaderVisitorV2
+readClassFiles: fileArray projectName: projectName packageName: packageName
+	| visitor resolvedProject packageDefinition |
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		packageConvention: 'Rowan';
+		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
+		yourself.
+	resolvedProject
+		addComponentNamed: 'Core'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				yourself)
+		comment: 'Temporary project to hold class definitions read from disk'.
+	1 to: fileArray size do: [ :index | 
+		| file |
+		file := fileArray at: index.
+		packageDefinition := resolvedProject
+			addPackageNamed: packageName , '_' , index asString
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core'.
+		visitor := self new
+			currentProjectDefinition: resolvedProject;
+			currentPackageDefinition: packageDefinition;
+			_packageConvention: 'Rowan';
+			yourself.
+		visitor readClassFile: file inPackage: packageDefinition name ].
+	^ resolvedProject
+%
+
 !		Instance methods for 'RwRepositoryResolvedProjectTonelReaderVisitorV2'
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+checkMethodDefinitions: aClassDef
+  | cls clsName methBlk fakeMethDict pkgName |
+
+  self compileWhileReading ifFalse:[ ^ self "do nothing"  ].
+
+  clsName := aClassDef  name asSymbol .
+  (pkgName := currentPackageDefinition name) = 'Filein1C' ifTrue:[ 
+     "lookup in GemStone_Legacy_Streams first"
+     cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
+  ].
+  cls ifNil:[   
+    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+       "creating the class not implemented yet"
+       Warning signal:'class ' , clsName , ' not found by name lookup'.
+       ^ self "can't check syntax on the methods until class is defined"
+    ].
+  ].
+  cls := cls"anAssociation" value.
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: fakeMethDict
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  0
+    ] on: ( CompileError , CompileWarning ) do:[:ex | 
+      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+  ].
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  fakeMethDict := GsMethodDictionary new .
+  aClassDef classMethodDefinitions do: methBlk .
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+classExtensionFileExtensions
+
+	^ #( 'extension' 'st' )
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+classFileExtensions
+
+	^ #( 'class' 'st' )
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+compileWhileReading
+  ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+compileWhileReading: aBoolean
+  self dynamicInstVarAt: #compileWhileReading put: aBoolean 
+%
+
+category: 'tonel parser'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+definitionForType: aString
+  aString = TonelWriter classLabel
+    ifTrue: [ ^ #class ].
+  aString = TonelWriter extensionLabel
+    ifTrue: [ ^ #classExtension ].
+  TonelParseError signal: 'Unknown type declaration.'
+%
+
+category: 'tonel parser'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: protocol source: source
+
+	| methodDef |
+	methodDef := RwMethodDefinition
+		newForSelector: selector 
+			protocol: protocol 
+			source: source.
+	self 
+		validateMethodDefinitionProtocol: methodDef 
+			className: className
+			isMeta: meta
+			forPackageNamed: self currentPackageDefinition name.
+	^ methodDef
+%
+
+category: 'tonel parser'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+newTypeDefinitionFrom: anArray
+  | typeClass |
+  typeClass := self definitionForType: anArray fourth.
+  typeClass == #class
+    ifTrue: [ ^  self newClassDefinitionFrom: anArray ].
+  typeClass == #classExtension
+	ifTrue: [ ^ self newClassExtensionDefinitionFrom: anArray ].
+  ^ self error: 'unexpected typeClass: ', typeClass printString
+%
+
+category: 'package reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+packageExtension
+
+	^ ''
+%
 
 category: 'class reading'
 method: RwRepositoryResolvedProjectTonelReaderVisitorV2
@@ -39831,9 +40361,9 @@ readClassesFor: packageName packageRoot: packageRoot
 
 	| classFileExtensions classExtensionFileExtensions trace |
   trace := SessionTemps current at: #ROWAN_TRACE otherwise: nil .
-	currentPackageDefinition := currentProjectDefinition _projectDefinition 
+	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
-		ifAbsent: [ currentProjectDefinition  _projectDefinition addRawPackageNamed: packageName ].
+		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	classExtensionFileExtensions := self classExtensionFileExtensions.
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
@@ -39845,6 +40375,71 @@ readClassesFor: packageName packageRoot: packageRoot
 			ifFalse: [
 				fileExtensions = classExtensionFileExtensions
 					ifTrue: [ self readClassExtensionFile: file  inPackage: packageName ] ] ]
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+readClassExtensionFile: file inPackage: packageName
+
+	| fileReference |
+	fileReference := file asFileReference.
+	fileReference readStreamDo: [:fileStream | | stream |
+		[ | definitions |
+		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  currentClassExtension addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  currentClassExtension addInstanceMethodDefinition: mDef ] .
+      self checkMethodDefinitions: currentClassExtension .
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
+%
+
+category: 'class reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+readClassFile: file inPackage: packageName
+	| fileReference |
+	fileReference := file asFileReference.
+	fileReference readStreamDo: [:fileStream | | stream |
+    [
+		  | definitions clsDef projectDef |
+      "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		  stream := ZnBufferedReadStream on: fileStream. 
+		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  definitions := (TonelParser on: stream forReader: self) start.
+      clsDef := currentClassDefinition ifNotNil:[:def |
+                  currentClassExtension ifNotNil:[ 
+                    Error signal:'both a class definition and extension in file ', file name ].
+                  def
+                ] ifNil:[ currentClassExtension ].
+		  self validateClassCategory: clsDef forPackageNamed: packageName.
+		  ((definitions at: 2) at: 1) do: [:mDef |
+			  clsDef addClassMethodDefinition: mDef ].
+		  ((definitions at: 2) at: 2) do: [:mDef |
+			  clsDef addInstanceMethodDefinition: mDef ].
+      self checkMethodDefinitions: clsDef .
+		  projectDef := currentProjectDefinition packageNamed: packageName .
+      currentClassDefinition ifNotNil:[ projectDef addClassDefinition: clsDef ] .
+                             "ifNil:[ projectDef addClassExtensionDefinition: clsDef]."
+    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex pass .
+    ].
+  ].
+%
+
+category: 'package reading'
+method: RwRepositoryResolvedProjectTonelReaderVisitorV2
+_packageNameFromPackageDir: packageDir
+
+	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
+
+	^ (self _readObjectFrom: (packageDir / 'package', 'st')) at: #name
 %
 
 ! Class implementation for 'RwAbstractResolvedObjectV2'
@@ -39860,25 +40455,36 @@ new
 
 !		Instance methods for 'RwAbstractResolvedObjectV2'
 
-category: 'testing'
+category: 'accessing'
 method: RwAbstractResolvedObjectV2
-canCommit
-	^ self _projectRepository canCommit
+addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
+	self
+		subclassResponsibility:
+			#'addSimpleComponentNamed:condition:groupName:comment:'
 %
 
-category: 'project definition'
+category: 'accessing'
 method: RwAbstractResolvedObjectV2
-commit: message
-	"commit the repository associated with receiver ..."
+comment
+	^ self subclassResponsibility: #'comment'
+%
 
-	self _projectRepository canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for project ' , self projectAlias printString
-				, ' does not support commit operations.'.
-			self inform: msg.
-			^ msg ].
-	^ self _projectRepository doCommit: message
+category: 'accessing'
+method: RwAbstractResolvedObjectV2
+comment: aString
+	^ self subclassResponsibility: #'comment:'
+%
+
+category: 'project specification'
+method: RwAbstractResolvedObjectV2
+componentNames
+	^ self _loadSpecification componentNames
+%
+
+category: 'project specification'
+method: RwAbstractResolvedObjectV2
+componentNames: anArray
+	self _loadSpecification componentNames: anArray
 %
 
 category: 'accessing'
@@ -39887,9 +40493,37 @@ componentsRoot
 	^ self repositoryRoot / self _projectSpecification componentsPath
 %
 
+category: 'package properties'
+method: RwAbstractResolvedObjectV2
+gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
+	self subclassResponsibility: #'gemstoneSetSymbolDictName:forPackageNamed:'
+%
+
+category: 'package properties'
+method: RwAbstractResolvedObjectV2
+gemstoneSymbolDictNameForPackageNamed: packageName
+	self subclassResponsibility: #'gemstoneSymbolDictNameForPackageNamed:'
+%
+
+category: 'project specification'
+method: RwAbstractResolvedObjectV2
+groupNames
+	^ self _loadSpecification groupNames
+%
+
+category: 'project specification'
+method: RwAbstractResolvedObjectV2
+groupNames: anArray
+	self _loadSpecification groupNames: anArray
+%
+
 category: 'initialization'
 method: RwAbstractResolvedObjectV2
 initialize
+	"repository must be explicitly created"
+
+	projectSpecification := RwProjectSpecificationV2 new.
+	loadSpecification := RwLoadSpecificationV2 new.
 %
 
 category: 'testing'
@@ -39900,20 +40534,15 @@ isStrict
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-loadSpecification
-	^ RwResolvedLoadSpecificationV2 new
-		_projectDefinition: projectDefinition;
-		_projectRepository: projectRepository;
-		_loadSpecification: loadSpecification;
-		_projectSpecification: projectSpecification;
-		_projectStructure: projectStructure;
-		yourself
+packagesRoot
+	^ self repositoryRoot / self _projectSpecification packagesPath
 %
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-packagesRoot
-	^ self repositoryRoot / self _projectSpecification packagesPath
+platformConditionalAttributes
+
+	^ self _loadSpecification customConditionalAttributes
 %
 
 category: 'accessing'
@@ -39924,20 +40553,21 @@ projectAlias
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-projectDefinition
-	^ RwResolvedProjectV2 new
-		_projectDefinition: projectDefinition;
-		_projectRepository: projectRepository;
-		_loadSpecification: loadSpecification;
-		_projectSpecification: projectSpecification;
-		_projectStructure: projectStructure;
-		yourself
+projectAlias: aString
+	self _loadSpecification projectAlias: aString
 %
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectName
 	^ self _projectSpecification projectName
+%
+
+category: 'accessing'
+method: RwAbstractResolvedObjectV2
+projectName: aString
+	self _loadSpecification projectName: aString.
+	self _projectSpecification projectName: aString
 %
 
 category: 'accessing'
@@ -39953,6 +40583,12 @@ category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectsHome
 	^ self _loadSpecification projectsHome
+%
+
+category: 'accessing'
+method: RwAbstractResolvedObjectV2
+projectsHome: aProjectHomeReferenceOrString
+	self _loadSpecification projectsHome: aProjectHomeReferenceOrString
 %
 
 category: 'accessing'
@@ -39977,18 +40613,6 @@ projectSpecFile: relativePathString
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-projectSpecification
-	^ RwResolvedProjectSpecificationV2 new
-		_projectDefinition: projectDefinition;
-		_projectRepository: projectRepository;
-		_loadSpecification: loadSpecification;
-		_projectSpecification: projectSpecification;
-		_projectStructure: projectStructure;
-		yourself
-%
-
-category: 'accessing'
-method: RwAbstractResolvedObjectV2
 projectSpecPath: aString
 	"full path to the project specification file - default rowan/project.ston"
 
@@ -40002,16 +40626,29 @@ projectsRoot
 	^ self repositoryRoot / self _projectSpecification projectsPath
 %
 
-category: 'accessing'
+category: 'actions'
 method: RwAbstractResolvedObjectV2
-repository
-	^ RwResolvedRepositoryV2 new
-		_projectDefinition: projectDefinition;
-		_projectRepository: projectRepository;
-		_loadSpecification: loadSpecification;
-		_projectSpecification: projectSpecification;
-		_projectStructure: projectStructure;
-		yourself
+readComponentNames: componentNames groupNames: groupNames
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readComponentNames: componentNames
+		groupNames: groupNames
+		platformConditionalAttributes: self platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwAbstractResolvedObjectV2
+readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self
+		subclassResonsibility:
+			#'readComponentNames:groupNames:platformConditionalAttributes:'
 %
 
 category: 'accessing'
@@ -40023,8 +40660,48 @@ repositoryRoot
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
+requiredProjectRoots
+
+	^ {(self componentsRoot).
+	(self packagesRoot).
+	(self specsRoot).
+	(self projectsRoot)}
+%
+
+category: 'accessing'
+method: RwAbstractResolvedObjectV2
 specsRoot
 	^ self repositoryRoot / self _projectSpecification specsPath
+%
+
+category: 'package properties'
+method: RwAbstractResolvedObjectV2
+vastSetVaPrequisitesTo: prereqArray forPackageNamed: packageName
+	self subclassResponsibility: #'vastSetVaPrequisitesTo:forPackageNamed:'
+%
+
+category: 'package properties'
+method: RwAbstractResolvedObjectV2
+vastSetVaSubApplicationsTo: subApplicationsDictionary forPackageNamed: packageName
+	self subclassResponsibility: #'vastSetVaSubApplicationsTo:forPackageNamed:'
+%
+
+category: 'package properties'
+method: RwAbstractResolvedObjectV2
+vastVaPrequisitesForPackageNamed: packageName
+	self subclassResponsibility: #'vastVaPrequisitesForPackageNamed:'
+%
+
+category: 'package properties'
+method: RwAbstractResolvedObjectV2
+vastVaSubApplicationsForPackageNamed: packageName
+	self subclassResponsibility: #'vastVaSubApplicationsForPackageNamed:'
+%
+
+category: 'private'
+method: RwAbstractResolvedObjectV2
+_gemstoneAllUsersName
+	^ self _loadSpecification _gemstoneAllUsersName
 %
 
 category: 'private'
@@ -40045,53 +40722,8 @@ _loadSpecification: object
 
 category: 'private'
 method: RwAbstractResolvedObjectV2
-_projectDefinition
-	"project definition should not be accessed directly -- Rowan private state"
-
-	^ projectDefinition
-%
-
-category: 'private'
-method: RwAbstractResolvedObjectV2
-_projectDefinition: object
-	"project definition should not be accessed directly -- Rowan private state"
-
-	projectDefinition := object
-%
-
-category: 'private'
-method: RwAbstractResolvedObjectV2
 _projectRepository
-	^ projectRepository
-		ifNil: [ 
-			projectRepository := self gitUrl
-				ifNotNil: [ :urlString | 
-					RwGitRepositoryDefinitionV2
-						newNamed: self projectAlias
-						projectsHome: self projectsHome
-						repositoryUrl: urlString
-						revision: self _loadSpecification revision ]
-				ifNil: [ 
-					self _loadSpecification svnUrl
-						ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
-						ifNil: [ 
-							self _loadSpecification mercurialUrl
-								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
-								ifNil: [ 
-									self _projectSpecification repoType == #'git'
-										ifTrue: [ 
-											RwGitRepositoryDefinitionV2
-												newNamed: self projectAlias
-												projectsHome: self projectsHome
-												repositoryUrl: ''
-												revision: self _loadSpecification revision ]
-										ifFalse: [ 
-											RwDiskRepositoryDefinitionV2
-												newNamed: self projectAlias
-												projectsHome: self projectsHome
-												repositoryUrl: self diskUrl ] ] ] ].
-
-			projectRepository ]
+	self subclassResponsibility: #'_projectRepository'
 %
 
 category: 'private'
@@ -40132,28 +40764,12 @@ _projectSpecification: object
 
 category: 'private'
 method: RwAbstractResolvedObjectV2
-_projectStructure
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ projectStructure
-%
-
-category: 'private'
-method: RwAbstractResolvedObjectV2
-_projectStructure: object
-	"project structure should not be accessed directly -- Rowan private state"
-
-	projectStructure := object
-%
-
-category: 'private'
-method: RwAbstractResolvedObjectV2
 _validate
 	"ensure that the receiver's specifications contain valid information ... 
-		the specs must be able to stand on their, when they are written to disk, so there is a 
+		the specs must be able to stand on their own, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	^ self _validate: Rowan platformConfigurationAttributes
+	^ self _validate: self platformConditionalAttributes
 %
 
 category: 'private'
@@ -40163,10 +40779,230 @@ _validate: platformConfigurationAttributes
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	self _projectDefinition _validate: platformConfigurationAttributes groupNames: self groupNames.
 	self _projectSpecification _validate.
 	self _loadSpecification _validate.
 	^ true
+%
+
+! Class implementation for 'RwAbstractResolvedProjectV2'
+
+!		Instance methods for 'RwAbstractResolvedProjectV2'
+
+category: 'testing'
+method: RwAbstractResolvedProjectV2
+canCommit
+	^ self _projectRepository canCommit
+%
+
+category: 'project definition'
+method: RwAbstractResolvedProjectV2
+commit: message
+	"commit the repository associated with receiver ..."
+
+	self _projectRepository canCommit
+		ifFalse: [ 
+			| msg |
+			msg := 'repository for project ' , self projectAlias printString
+				, ' does not support commit operations.'.
+			self inform: msg.
+			^ msg ].
+	^ self _projectRepository doCommit: message
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+loadSpecification
+	^ RwResolvedLoadSpecificationV2 new
+		_projectDefinition: projectDefinition;
+		_projectRepository: projectRepository;
+		_loadSpecification: loadSpecification;
+		_projectSpecification: projectSpecification;
+		_projectStructure: projectStructure;
+		yourself
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+platformConditionalAttributes
+
+	^ super platformConditionalAttributes,  Rowan platformConditionalAttributes
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+projectDefinition
+	^ RwResolvedProjectV2 new
+		_projectDefinition: projectDefinition;
+		_projectRepository: projectRepository;
+		_loadSpecification: loadSpecification;
+		_projectSpecification: projectSpecification;
+		_projectStructure: projectStructure;
+		yourself
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+projectSpecification
+	^ RwResolvedProjectSpecificationV2 new
+		_projectDefinition: projectDefinition;
+		_projectRepository: projectRepository;
+		_loadSpecification: loadSpecification;
+		_projectSpecification: projectSpecification;
+		_projectStructure: projectStructure;
+		yourself
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+repository
+	^ RwResolvedRepositoryV2 new
+		_projectDefinition: projectDefinition;
+		_projectRepository: projectRepository;
+		_loadSpecification: loadSpecification;
+		_projectSpecification: projectSpecification;
+		_projectStructure: projectStructure;
+		yourself
+%
+
+category: 'private'
+method: RwAbstractResolvedProjectV2
+_projectDefinition
+	"project definition should not be accessed directly -- Rowan private state"
+
+	^ projectDefinition
+%
+
+category: 'private'
+method: RwAbstractResolvedProjectV2
+_projectDefinition: object
+	"project definition should not be accessed directly -- Rowan private state"
+
+	projectDefinition := object
+%
+
+category: 'private'
+method: RwAbstractResolvedProjectV2
+_projectRepository
+	^ projectRepository
+		ifNil: [ 
+			projectRepository := self gitUrl
+				ifNotNil: [ :urlString | 
+					RwGitRepositoryDefinitionV2
+						newNamed: self projectAlias
+						projectsHome: self projectsHome
+						repositoryUrl: urlString
+						revision: self _loadSpecification revision ]
+				ifNil: [ 
+					self _loadSpecification svnUrl
+						ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
+						ifNil: [ 
+							self _loadSpecification mercurialUrl
+								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
+								ifNil: [ 
+									self _projectSpecification repoType == #'git'
+										ifTrue: [ 
+											RwGitRepositoryDefinitionV2
+												newNamed: self projectAlias
+												projectsHome: self projectsHome
+												repositoryUrl: ''
+												revision: self _loadSpecification revision ]
+										ifFalse: [ 
+											RwDiskRepositoryDefinitionV2
+												newNamed: self projectAlias
+												projectsHome: self projectsHome
+												repositoryUrl: self diskUrl ] ] ] ].
+
+			projectRepository ]
+%
+
+category: 'private'
+method: RwAbstractResolvedProjectV2
+_projectStructure
+	"project structure should not be accessed directly -- Rowan private state"
+
+	^ projectStructure
+%
+
+category: 'private'
+method: RwAbstractResolvedProjectV2
+_projectStructure: object
+	"project structure should not be accessed directly -- Rowan private state"
+
+	projectStructure := object
+%
+
+category: 'private'
+method: RwAbstractResolvedProjectV2
+_validate: platformConfigurationAttributes
+	"ensure that the receiver's specifications contain valid information ... 
+		the specs must be able to stand on their, when they are written to disk, so there is a 
+		responsiblity for them to have valid data"
+
+	super _validate: platformConfigurationAttributes.
+	self _projectDefinition _validate: platformConfigurationAttributes groupNames: self groupNames.
+	^ true
+%
+
+! Class implementation for 'RwResolvedLoadSpecificationV2'
+
+!		Instance methods for 'RwResolvedLoadSpecificationV2'
+
+category: 'accessing'
+method: RwResolvedLoadSpecificationV2
+groupNames
+	"list of groups to be loaded. 
+		Default is {'core' 'tests'}"
+
+	^ self _loadSpecification groupNames
+%
+
+category: 'accessing'
+method: RwResolvedLoadSpecificationV2
+groupNames: anArray
+	"list of groups to be loaded. 
+		Default is {'core' 'tests'}"
+
+	self _loadSpecification groupNames: anArray
+%
+
+! Class implementation for 'RwResolvedProjectSpecificationV2'
+
+!		Instance methods for 'RwResolvedProjectSpecificationV2'
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+packageConvention
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	^ self _projectSpecification packageConvention
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+packageConvention: aString
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	self _projectSpecification packageConvention: aString
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+packagesPath
+	^self _projectSpecification packagesPath
+%
+
+category: 'accessubg'
+method: RwResolvedProjectSpecificationV2
+packagesPath: aString
+	self _projectSpecification packagesPath: aString
 %
 
 ! Class implementation for 'RwResolvedProjectV2'
@@ -40189,7 +41025,7 @@ basicLoadSpecification: anRwLoadSpecificationV2
 						add: 'name' -> loadSpecification projectAlias;
 						yourself);
 		packages: Dictionary new;
-		components: Dictionary new;
+		components: RwResolvedLoadComponentsV2 new;
 		projectDefinitionSourceProperty: RwLoadedProject _projectSourceValueNewProject;
 		yourself.
 	^ self basicNew
@@ -40210,6 +41046,18 @@ loadSpecification: anRwLoadSpecificationV2
 		resolve
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProjectV2
+loadSpecification: anRwLoadSpecificationV2 platformAttributes: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolve: platformAttributes
+%
+
 !		Instance methods for 'RwResolvedProjectV2'
 
 category: 'visiting'
@@ -40223,6 +41071,25 @@ method: RwResolvedProjectV2
 addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
 	^ self _projectDefinition
 		addComponentNamed: aComponentName
+		definedGroupNames: groupNameDict
+		comment: commentString
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
+	^ self _projectDefinition
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
+	^ self _projectDefinition
+		addNestedComponentNamed: aComponentName
 		definedGroupNames: groupNameDict
 		comment: commentString
 %
@@ -40262,6 +41129,44 @@ addPackagesNamed: packageNames toComponentNamed: componentName withConditions: c
 		andGroupName: groupName
 %
 
+category: 'accessing'
+method: RwResolvedProjectV2
+addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
+	| component |
+	component := self componentNamed: aComponentName.
+	component postloadDoitName: doitName.
+	component doitDict at: doitName put: doitSource
+%
+
+category: 'accessing'
+method: RwResolvedProjectV2
+addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
+	| component |
+	component := self componentNamed: aComponentName.
+	component preloadDoitName: doitName.
+	component doitDict at: doitName put: doitSource
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addProjectNamed:projectName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
+	^ self _projectDefinition
+		addProjectNamed:projectName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addRawPackageNamed: packageName
+	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
+
+	"see similar comment in addPackages:forComponent: and _addComponent"
+
+	^ self _projectDefinition addRawPackageNamed: packageName
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 comment
@@ -40274,22 +41179,22 @@ comment: aString
 	self _projectDefinition comment: aString
 %
 
-category: 'project specification'
+category: 'project definition'
 method: RwResolvedProjectV2
-componentNames
-	^ self _loadSpecification componentNames
-%
-
-category: 'project specification'
-method: RwResolvedProjectV2
-componentNames: anArray
-	self _loadSpecification componentNames: anArray
+componentNamed: aComponentName
+	^ self _projectDefinition componentNamed: aComponentName
 %
 
 category: 'project definition'
 method: RwResolvedProjectV2
 components
 	^ self _projectDefinition components
+%
+
+category: 'accessing'
+method: RwResolvedProjectV2
+componentsWithDoits
+	^ self _projectDefinition components componentsWithDoits
 %
 
 category: 'copying'
@@ -40326,10 +41231,11 @@ export
 category: 'exporting'
 method: RwResolvedProjectV2
 exportComponents
-	self components isEmpty
-		ifTrue: [ self addComponentNamed: self defaultComponentName comment: '' ].
-	self components values
-		do: [ :component | component exportToUrl: 'file:' , self componentsRoot pathString , '/' ].
+	self components
+		do: [ :component | 
+			component
+				exportToUrl: 'file:' , self componentsRoot pathString , '/';
+				yourself ].
 	self components isEmpty
 		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"
@@ -40379,26 +41285,12 @@ gitUrl: anUrlString
 	self _loadSpecification gitUrl: anUrlString
 %
 
-category: 'project specification'
-method: RwResolvedProjectV2
-groupNames
-	^ self _loadSpecification groupNames
-%
-
-category: 'project specification'
-method: RwResolvedProjectV2
-groupNames: anArray
-	self _loadSpecification groupNames: anArray
-%
-
 category: 'initialization'
 method: RwResolvedProjectV2
 initialize
 	"repository must be explicitly created"
 
 	super initialize.
-	projectSpecification := RwProjectSpecificationV2 new.
-	loadSpecification := RwLoadSpecificationV2 new.
 	projectDefinition := RwProjectDefinitionV2 new
 %
 
@@ -40419,8 +41311,19 @@ method: RwResolvedProjectV2
 load
 	"load the receiver into the image"
 
-	self _validate: Rowan platformConfigurationAttributes.
+	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+load: platformConfigurationAttributes
+	"load the receiver into the image"
+
+	self _validate: self platformConditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectDefinition: self projectDefinition
+		platformConfigurationAttributes: platformConfigurationAttributes
 %
 
 category: 'project definition'
@@ -40470,6 +41373,13 @@ packageNamed: aString
 
 category: 'project definition'
 method: RwResolvedProjectV2
+packageNamed: aString ifAbsent: absentBlock
+
+	^ self _projectDefinition packageNamed: aString ifAbsent: absentBlock
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
 packageNames
 	^ self _projectDefinition packageNames
 %
@@ -40484,12 +41394,6 @@ category: 'project definition'
 method: RwResolvedProjectV2
 packages: aPackageDictionary
 	^ self _projectDefinition packages: aPackageDictionary
-%
-
-category: 'accessing'
-method: RwResolvedProjectV2
-projectAlias: aString
-	self _loadSpecification projectAlias: aString
 %
 
 category: 'project definition'
@@ -40507,8 +41411,7 @@ projectDefinitionSourceProperty: sourceKeyOrNil
 category: 'accessing'
 method: RwResolvedProjectV2
 projectName: aString
-	self _loadSpecification projectName: aString.
-	self _projectSpecification projectName: aString.
+	super projectName: aString.
 	self _projectDefinition projectName: aString
 %
 
@@ -40518,12 +41421,6 @@ projectNames
 	"not yet implemented"
 
 	^ #()
-%
-
-category: 'accessing'
-method: RwResolvedProjectV2
-projectsHome: aProjectHomeReferenceOrString
-	self _loadSpecification projectsHome: aProjectHomeReferenceOrString
 %
 
 category: 'project definition'
@@ -40544,7 +41441,7 @@ read
 
 category: 'actions'
 method: RwResolvedProjectV2
-read: platformConfigurationAttributes
+read: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
@@ -40552,7 +41449,7 @@ read: platformConfigurationAttributes
 	^ self
 		readComponentNames: self componentNames
 		groupNames: self groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'actions'
@@ -40565,12 +41462,12 @@ readComponentNames: componentNames groupNames: groupNames
 	^ self
 		readComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
 %
 
 category: 'actions'
 method: RwResolvedProjectV2
-readComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
@@ -40579,7 +41476,7 @@ readComponentNames: componentNames groupNames: groupNames platformConfigurationA
 		readProjectSetForResolvedProject: self
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'project definition'
@@ -40606,8 +41503,40 @@ readPackageNames: packageNames
 
 category: 'project definition'
 method: RwResolvedProjectV2
+removeComponentNamed: aComponentName
+	^ self _projectDefinition removeComponentNamed: aComponentName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName
+	^ self _projectDefinition
+		removeComponentNamed: componentName
+		fromComponentNamed: fromComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
 removePackageNamed: packageName
 	^ self _projectDefinition removePackageNamed: packageName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
+	^ self _projectDefinition
+		removePackageNamed: packageName
+		fromComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+removeProjectNamed: aProjectName
+	^ self _projectDefinition removeProjectNamed: aProjectName
 %
 
 category: 'project specification'
@@ -40629,6 +41558,21 @@ resolve
 				ifTrue: [ 
 					"update project definition from disk"
 					self read ] ]
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+resolve: platformConfigurationAttributes
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self read: platformConfigurationAttributes ] ]
 %
 
 category: 'load specification'
@@ -40664,7 +41608,7 @@ method: RwResolvedProjectV2
 _checkProjectDirectoryStructure
 	"answer true if the basic project directory structure is present"
 
-	self projectRoots
+	self requiredProjectRoots
 		do: [ :fileRef | 
 			fileRef exists
 				ifFalse: [ ^ false ] ].
@@ -40728,6 +41672,319 @@ category: 'repository'
 method: RwResolvedRepositoryV2
 remote
 	^ self _projectRepository remote
+%
+
+! Class implementation for 'RwStrawmanProjectV2'
+
+!		Class methods for 'RwStrawmanProjectV2'
+
+category: 'instance creation'
+classmethod: RwStrawmanProjectV2
+basicLoadSpecification: anRwLoadSpecificationV2
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	| loadSpecification |
+	loadSpecification := anRwLoadSpecificationV2 copy.
+	^ self new
+		_loadSpecification: loadSpecification;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwStrawmanProjectV2
+loadSpecification: anRwLoadSpecificationV2
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ self
+		loadSpecification: anRwLoadSpecificationV2
+		platformAttributes: self platformConditionalAttributes
+%
+
+category: 'instance creation'
+classmethod: RwStrawmanProjectV2
+loadSpecification: anRwLoadSpecificationV2 platformAttributes: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolve: platformAttributes
+%
+
+category: 'accessing'
+classmethod: RwStrawmanProjectV2
+platformConditionalAttributes
+
+	^ {'common'}
+%
+
+!		Instance methods for 'RwStrawmanProjectV2'
+
+category: 'accessing'
+method: RwStrawmanProjectV2
+addPackagesNamed: packageNames toComponentNamed: aComponentName
+	self _loadComponents
+		addPackagesNamed: packageNames
+		toComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RwStrawmanProjectV2
+addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
+	self _loadSpecification componentNames add: aComponentName.
+	^ self _loadComponents
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+		groupName: groupName
+		comment: commentString
+%
+
+category: 'accessing'
+method: RwStrawmanProjectV2
+comment
+	^ comment
+%
+
+category: 'accessing'
+method: RwStrawmanProjectV2
+comment: aString
+	comment := aString
+%
+
+category: 'accessing'
+method: RwStrawmanProjectV2
+diskUrl
+	^ self _loadSpecification diskUrl
+%
+
+category: 'actions'
+method: RwStrawmanProjectV2
+export
+	self repositoryRoot exists
+		ifFalse: [ self error: 'internal error - expected the repository root to be created' ].
+	self projectRoots do: [ :path | path ensureCreateDirectory ].
+	self
+		exportProjectSpecification;
+		exportComponents;
+		exportPackages
+%
+
+category: 'exporting'
+method: RwStrawmanProjectV2
+exportComponents
+	self _loadComponents
+		do: [ :component | component exportToUrl: 'file:' , self componentsRoot pathString , '/' ].
+	self _loadComponents isEmpty
+		ifTrue: [ 
+			"add README.md as placeholder to ensure that the directory is preserved by git"
+			self componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+%
+
+category: 'exporting'
+method: RwStrawmanProjectV2
+exportLoadSpecification
+	self _loadSpecification exportTo: self specsRoot
+%
+
+category: 'exporting'
+method: RwStrawmanProjectV2
+exportPackages
+	"not in scope for strawman"
+%
+
+category: 'exporting'
+method: RwStrawmanProjectV2
+exportProjectSpecification
+	self _projectSpecification exportTo: self repositoryRoot
+%
+
+category: 'initiailization'
+method: RwStrawmanProjectV2
+initialize
+	super initialize.
+	loadComponents := RwResolvedLoadComponentsV2 new.
+	packages := Dictionary new
+%
+
+category: 'accessing'
+method: RwStrawmanProjectV2
+packages
+	^ packages
+%
+
+category: 'accessing'
+method: RwStrawmanProjectV2
+platformConditionalAttributes
+
+	^ self class platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwStrawmanProjectV2
+read
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self readComponentNames: self componentNames groupNames: self groupNames
+%
+
+category: 'actions'
+method: RwStrawmanProjectV2
+read: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self
+		readComponentNames: self componentNames
+		groupNames: self groupNames
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'private'
+method: RwStrawmanProjectV2
+readComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	| visitor packageDict |
+	visitor := RwIndependentComponentVisitorV2 new
+		platformConditionalAttributes: platformConditionalAttributes;
+		groupNames: groupNames;
+		yourself.
+
+	componentNames
+		do: [ :componentName | 
+			| component |
+			component := RwBasicProjectLoadComponentV2
+				fromComponentsDirectory: self componentsRoot
+				named: componentName.
+			component projectName: self projectAlias.
+
+			visitor visit: component ].
+
+	self _loadComponents components: visitor visitedComponents.
+
+	visitor packageNames
+		do: [ :packageName | 
+			packageDict := packages
+				at: packageName
+				put:
+					(Dictionary new
+						at: #'name' put: packageName;
+						at: #'properties' put: Dictionary new;
+						at: #'definitions' put: Dictionary new;
+						yourself).	"to be populated by VAST tonel reader"
+			(self vastVaPrequisitesForPackageNamed: packageName)
+				ifNotNil: [ :prereqs | (packageDict at: #'properties') at: 'vaPrerequisites' put: prereqs ].
+			(self vastVaSubApplicationsForPackageNamed: packageName)
+				ifNotNil: [ :subApplications | (packageDict at: #'properties') at: 'vaSubApplications' put: subApplications ] ]
+%
+
+category: 'actions'
+method: RwStrawmanProjectV2
+resolve
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self read ] ]
+%
+
+category: 'actions'
+method: RwStrawmanProjectV2
+resolve: platformConfigurationAttributes
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self read: platformConfigurationAttributes ] ]
+%
+
+category: 'package properties'
+method: RwStrawmanProjectV2
+vastSetVaPrequisitesTo: prereqArray forPackageNamed: packageName
+	self _loadComponents
+		vastSetVaPrequisitesTo: prereqArray
+		forPackageNamed: packageName
+%
+
+category: 'package properties'
+method: RwStrawmanProjectV2
+vastSetVaSubApplicationsTo: subApplicationsArray forPackageNamed: packageName
+	self _loadComponents
+		vastSetVaSubApplicationsTo: subApplicationsArray
+		forPackageNamed: packageName
+%
+
+category: 'package properties'
+method: RwStrawmanProjectV2
+vastVaPrequisitesForPackageNamed: packageName
+	^ self _loadComponents vastVaPrequisitesForPackageNamed: packageName ifAbsent: []
+%
+
+category: 'package properties'
+method: RwStrawmanProjectV2
+vastVaSubApplicationsForPackageNamed: packageName
+	^ self _loadComponents vastVaSubApplicationsForPackageNamed: packageName ifAbsent: []
+%
+
+category: 'private'
+method: RwStrawmanProjectV2
+_checkProjectDirectoryStructure
+	"answer true if the basic project directory structure is present"
+
+	self projectRoots
+		do: [ :fileRef | 
+			fileRef exists
+				ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'private'
+method: RwStrawmanProjectV2
+_loadComponents
+	"load component should not be accessed directly -- Rowan private state"
+
+	^ loadComponents
+%
+
+category: 'private'
+method: RwStrawmanProjectV2
+_loadComponents: aRwResolvedLoadComponentsV2
+	"load component should not be accessed directly -- Rowan private state"
+
+	loadComponents := aRwResolvedLoadComponentsV2
+%
+
+category: 'private'
+method: RwStrawmanProjectV2
+_projectRepository
+	^ projectRepository
+		ifNil: [ 
+			projectRepository := RwStrawmanDiskRepositoryDefinition
+				newNamed: self projectAlias
+				projectsHome: self projectsHome
+				repositoryUrl: self diskUrl ]
 %
 
 ! Class implementation for 'RwAbstractTool'
@@ -44530,7 +45787,7 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 %
 
@@ -44539,7 +45796,7 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
 	^ self
 		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 %
 
@@ -44679,7 +45936,12 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
-		ifFalse: [ Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
+		ifFalse: [ 
+			| componentsWithDoits |
+			componentsWithDoits := diff componentsWithDoits.
+			componentsWithDoits do: [ :component | component executePreloadDoit ].
+			Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
+			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
 	loadedProjects := Array new.
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 
@@ -44858,33 +46120,6 @@ classExtensionsForProjectNamed: projectName
 
 !		Instance methods for 'RwPrjReadTool'
 
-category: 'read configurations'
-method: RwPrjReadTool
-readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
-
-	^self readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: true
-%
-
-category: 'read configurations'
-method: RwPrjReadTool
-readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad
-
-	| theConfigNames theGroupNames |
-	theConfigNames := configNames isEmpty
-		ifTrue: [ projectDefinition defaultConfigurationNames ]
-		ifFalse: [ configNames ].
-	theGroupNames := groupNames isEmpty
-		ifTrue: [  projectDefinition defaultGroupNames ]
-		ifFalse: [ groupNames ].
-	^ self 
-		_visitConfigurations: RwProjectLoadConfigurationVisitor 
-		forProjectDefinition: projectDefinition 
-		withConfigurations: theConfigNames 
-		groupNames: theGroupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
-		forLoad: forLoad
-%
-
 category: 'read project definitions'
 method: RwPrjReadTool
 readProjectDefinition: projectDefinition
@@ -45033,90 +46268,26 @@ _readProjectSetForProjectDefinition: projectDefinition packageNames: packageName
 		yourself
 %
 
-category: 'private'
-method: RwPrjReadTool
-_visitConfigurations: visitorClass forProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
-
-	| projectName configDirectory projectsDirectory visitor |
-	projectName := projectComponentDefinition name.
-	configDirectory := projectComponentDefinition repositoryRoot / projectComponentDefinition configsPath.
-	configDirectory exists
-		ifFalse: [ ^ self error: 'No configuration directory (', configDirectory pathString printString, ') found for project ', projectName printString ].
-	projectsDirectory := projectComponentDefinition repositoryRoot / projectComponentDefinition projectsPath.
-	projectsDirectory exists
-		ifFalse: [ ^ self error: 'No projects directory (', projectsDirectory pathString printString, ') found for project ', projectName printString ].
-	visitor := visitorClass new
-		platformAttributes: platformConfigurationAttributes;
-		groupNames: groupNames;
-		configurationBasePath: configDirectory pathString;
-		projectBasePath: projectsDirectory pathString;
-		projectComponentDefinition: projectComponentDefinition;
-		yourself.
-	configNames do: [:configName |
-		| config url |
-		url := 'file:' , ((configDirectory / configName) , 'ston') pathString.
-		config := RwAbstractProjectConfiguration fromUrl: url.
-		config projectName: projectName.
-		forLoad
-			ifTrue: [
-				"expect all config names to represent loadable configurations - throw error if a nested configuration is encountered"
-				visitor visit: config ]
-			ifFalse: [ 
-				"resolve config names without respect to whether or not the configuration is loadable"
-				visitor visitNested: config ] ].
-	^visitor
-%
-
-category: 'private'
-method: RwPrjReadTool
-_visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
-
-	| projectName configDirectory visitor |
-	projectDefinition repositoryRootPath ifNil: [ ^ nil ].
-	projectName := projectDefinition name.
-	configDirectory := projectDefinition repositoryRootPath asFileReference / projectDefinition configsPath.
-	configDirectory exists
-		ifFalse: [ ^ nil ].
-	visitor := visitorClass new
-		platformAttributes: platformConfigurationAttributes;
-		groupNames: groupNames;
-		configurationBasePath: configDirectory pathString;
-		yourself.
-	configNames do: [:configName |
-		| config url |
-		url := 'file:' , ((configDirectory / configName) , 'ston') pathString.
-		config := RwAbstractProjectConfiguration fromUrl: url.
-		config projectName: projectName.
-		forLoad
-			ifTrue: [
-				"expect all config names to represent loadable configurations - throw error if a nested configuration is encountered"
-				visitor visit: config ]
-			ifFalse: [ 
-				"resolve config names without respect to whether or not the configuration is loadable"
-				visitor visitNested: config ] ].
-	^visitor
-%
-
 ! Class implementation for 'RwPrjReadToolV2'
 
 !		Instance methods for 'RwPrjReadToolV2'
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
 	^ self
 		readComponentsForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		forLoad: true
 %
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
+readComponentsForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad
 	| theComponentNames theGroupNames |
-	resolvedProject _projectDefinition components: Dictionary new.	"build new list of components based on (potentially) new list of configNames"
+	resolvedProject _projectDefinition components: RwResolvedLoadComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theComponentNames := componentNames isEmpty
 		ifTrue: [ resolvedProject componentNames ]
@@ -45125,11 +46296,11 @@ readComponentsForResolvedProject: resolvedProject withComponentNames: componentN
 		ifTrue: [ resolvedProject groupNames ]
 		ifFalse: [ groupNames ].
 	^ self
-		_visitComponents: RwProjectLoadComponentVisitorV2
+		_visitComponents: RwResolvedProjectComponentVisitorV2
 		forResolvedProject: resolvedProject
 		withComponentNames: theComponentNames
 		groupNames: theGroupNames
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		forLoad: forLoad
 %
 
@@ -45143,12 +46314,12 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		groupNames: groupNames
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConditionalAttributes: resolvedProject platformConditionalAttributes
 %
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -45166,12 +46337,12 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 				readComponentsForResolvedProject: rp
 				withComponentNames: cn
 				groupNames: gn
-				platformConfigurationAttributes: platformConfigurationAttributes.
+				platformConditionalAttributes: platformConditionalAttributes.
 			rp
 				projectDefinitionSourceProperty:
 					RwLoadedProject _projectDiskDefinitionSourceValue.
 			visitor visitedComponents
-				keysAndValuesDo: [ :cName :cmp | rp components at: cName put: cmp ].
+				keysAndValuesDo: [ :cName :cmp | rp components _addComponent: cmp ].
 			projectVisitedQueue
 				addLast:
 					{visitor.
@@ -45198,7 +46369,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 
 category: 'private'
 method: RwPrjReadToolV2
-_visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
+_visitComponents: visitorClass forResolvedProject: resolvedProject withComponentNames: componentNames groupNames: groupNames platformConditionalAttributes: platformConditionalAttributes forLoad: forLoad
 	| projectName componentDirectory projectsDirectory visitor |
 	projectName := resolvedProject projectAlias.
 	componentDirectory := resolvedProject componentsRoot.
@@ -45215,18 +46386,16 @@ _visitComponents: visitorClass forResolvedProject: resolvedProject withComponent
 				error:
 					'No projects directory (' , projectsDirectory pathString printString
 						, ') found for project ' , projectName printString ].
-	visitor := visitorClass new
-		platformAttributes: platformConfigurationAttributes;
-		groupNames: groupNames;
-		componentsRoot: componentDirectory;
-		projectsRoot: projectsDirectory;
-		resolvedProject: resolvedProject;
-		yourself.
+	visitor := visitorClass
+		resolvedProject: resolvedProject
+		platformConditionalAttributes: platformConditionalAttributes
+		groupNames: groupNames.
 	componentNames
 		do: [ :componentName | 
-			| component url |
-			url := 'file:' , (componentDirectory / componentName , 'ston') pathString.
-			component := RwAbstractProjectConfiguration fromUrl: url.
+			| component |
+			component := RwBasicProjectLoadComponentV2
+				fromComponentsDirectory: componentDirectory
+				named: componentName.
 			component projectName: projectName.
 			forLoad
 				ifTrue: [ 
@@ -45280,10 +46449,10 @@ reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet defa
 		{ defaultGroupName . globalsGroupName }
 			do: [:groupName | config addDefinedGroupName: groupName ].
 		config 
-			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+			conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 				andGroup: defaultGroupName 
 				addPackageNames: originalPackageNames;
-			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+			conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 				andGroup: globalsGroupName 
 				addPackageNames: globalPackageNames.
 		globalPackageNames do: [:packageName |
@@ -45631,6 +46800,1288 @@ printOn: aStream
 			nextPutAll: self message
 %
 
+! Class implementation for 'RwBasicProjectLoadComponentV2'
+
+!		Class methods for 'RwBasicProjectLoadComponentV2'
+
+category: 'instance creation'
+classmethod: RwBasicProjectLoadComponentV2
+fromComponentsDirectory: componentsDirectory named: componentName
+	| component url |
+	url := 'file:' , (componentsDirectory / componentName , 'ston') pathString.
+	component := self fromUrl: url.
+	component _readDoitsFrom: componentsDirectory.
+	^ component
+%
+
+category: 'instance creation'
+classmethod: RwBasicProjectLoadComponentV2
+fromUrl: specNameOrUrl
+
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme isNil
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
+	url scheme = 'file'
+		ifTrue: [ ^ self fromFile: url pathForFile ].
+	url scheme asString = 'https'
+		ifTrue: [ 
+self error: 'not yet supported'.
+"
+			| client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := (Rowan globalNamed: 'ZnClient') new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
+	self error: 'Unknown scheme: ' , url scheme printString
+%
+
+category: 'instance creation'
+classmethod: RwBasicProjectLoadComponentV2
+new
+
+	^self basicNew initialize
+%
+
+category: 'instance creation'
+classmethod: RwBasicProjectLoadComponentV2
+newNamed: aName
+
+	^ self new
+		name: aName;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwBasicProjectLoadComponentV2
+newNamed: aName for: projectName
+	"this method should not exist"
+
+	^ (self newNamed: aName)
+		projectName: projectName;
+		yourself
+%
+
+category: 'private'
+classmethod: RwBasicProjectLoadComponentV2
+_gemstoneSupportedPackagePropertyNames
+	^ #('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
+%
+
+category: 'private'
+classmethod: RwBasicProjectLoadComponentV2
+_readStonFrom: stream
+	| reader component |
+	(reader := STONReader on: stream) allowComplexMapKeys: true.
+	component := reader next
+		initializeForImport;
+		yourself.
+	component validate.	"validate when reading from disk, since hand editting could create inconsistencies"
+	^ component
+%
+
+!		Instance methods for 'RwBasicProjectLoadComponentV2'
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+addComponentNamed: aComponentName
+	self subclassResponsibility: #'addComponentNamed:'
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+addPackageNames: aPackageNames
+	"add packages to default conditional/group if applicable"
+
+	self subclassResponsibility: #'addPackageNames:'
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+addProjectNamed: aProjectName
+	self subclassResponsibility: #'addProjectNamed:'
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+comment
+
+   ^comment
+%
+
+category: 'initialization'
+method: RwBasicProjectLoadComponentV2
+comment: anObject
+
+   comment := anObject
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecs
+
+	^ conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecsAt: key ifAbsent: absentBlock
+	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
+
+	^ conditionalPackageMapSpecs at: key ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecsAtGemStoneUserId: userId 
+
+	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
+		at: userId ifAbsent: [ ^ Dictionary new ])
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName
+
+	^ (((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
+		at: userId ifAbsentPut: [ ^ Dictionary new ])
+			at: #packageNameToPlatformPropertiesMap ifAbsent: [ ^ Dictionary new ])
+				at: packageName ifAbsent: [ ^ Dictionary new ]
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setSymbolDictNameTo: symbolDictName
+	| dict |
+	dict := (((self conditionalPackageMapSpecs
+		at: 'gemstone'
+		ifAbsentPut: [ Dictionary new ]) at: userId ifAbsentPut: [ Dictionary new ])
+		at: #'packageNameToPlatformPropertiesMap'
+		ifAbsentPut: [ Dictionary new ])
+		at: packageName
+		ifAbsentPut: [ Dictionary new ].
+	symbolDictName
+		ifNil: [ dict removeKey: 'symbolDictName' ifAbsent: [  ] ]
+		ifNotNil: [ dict at: 'symbolDictName' put: symbolDictName asString ]
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecsAtPackageName: packageName setVaPrequisitesTo: prereqsArray
+	| packageDict propertiesDict prereqs |
+	packageDict := self conditionalPackageMapSpecs
+		at: 'vast'
+		ifAbsentPut: [ Dictionary new ].
+
+	propertiesDict := packageDict at: packageName ifAbsentPut: [ Dictionary new ].
+
+	prereqs := propertiesDict at: 'vaPrerequisites' ifAbsent: [ {} ].
+	prereqs addAll: prereqsArray.
+
+	propertiesDict at: 'vaPrerequisites' put: prereqs asSet asArray
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecsAtPackageName: packageName setVaSubApplicationsTo: subApplicationsArray
+	| packageDict propertiesDict subApplications |
+	packageDict := self conditionalPackageMapSpecs
+		at: 'vast'
+		ifAbsentPut: [ Dictionary new ].
+
+	propertiesDict := packageDict at: packageName ifAbsentPut: [ Dictionary new ].
+
+	subApplications := propertiesDict at: 'vaSubApplications' ifAbsentPut: [ {} ].
+	subApplicationsArray do: [ :value | subApplications add: value ]
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+doitDict
+	^doitDict
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+doitDict: object
+	doitDict := object
+%
+
+category: 'ston'
+method: RwBasicProjectLoadComponentV2
+excludedInstVars
+	^ #()
+%
+
+category: 'doits'
+method: RwBasicProjectLoadComponentV2
+executePostloadDoit
+	(self doitDict at: self postloadDoitName) evaluate
+%
+
+category: 'doits'
+method: RwBasicProjectLoadComponentV2
+executePreloadDoit
+	(self doitDict at: self preloadDoitName) evaluate
+%
+
+category: 'exporting'
+method: RwBasicProjectLoadComponentV2
+exportDoitsToUrl: directoryUrl
+	| doitsRoot url |
+	url := directoryUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			doitsRoot := url pathForDirectory asFileReference.
+			{(self preloadDoitName).
+			(self postloadDoitName)}
+				do: [ :doitName | 
+					doitName
+						ifNotNil: [ 
+							(self doitDict at: doitName ifAbsent: [  ])
+								ifNotNil: [ :doitString | 
+									| fileRef |
+									fileRef := doitsRoot / doitName , 'st'.
+									fileRef exists
+										ifFalse: [ fileRef ensureCreateFile ].
+									fileRef
+										writeStreamDo: [ :fileStream | fileStream nextPutAll: doitString ] ] ] ] ]
+		ifFalse: [ self error: 'unsupported url scheme ' , url schemeName printString ]
+%
+
+category: 'exporting'
+method: RwBasicProjectLoadComponentV2
+exportToUrl: directoryUrl
+	self exportDoitsToUrl: directoryUrl.
+	^ self copy initializeForExport
+		_exportToUrl: directoryUrl;
+		yourself
+%
+
+category: 'testing'
+method: RwBasicProjectLoadComponentV2
+hasDoits
+	^ preloadDoitName notNil and: [ postloadDoitName notNil ]
+%
+
+category: 'initialization'
+method: RwBasicProjectLoadComponentV2
+initialize
+	comment := ''.
+	doitDict := Dictionary new
+%
+
+category: 'initialization'
+method: RwBasicProjectLoadComponentV2
+initializeForExport
+	"if spec is to be exported, clear out any of the fields that represent state that should 
+	not be shared"
+
+	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
+
+	doitDict := projectName := nil.
+	conditionalPackageMapSpecs
+		ifNotNil: [ 
+			| orderedConditionalPackageMapSpecs |
+			orderedConditionalPackageMapSpecs := self class orderedDictionaryClass new.
+			(conditionalPackageMapSpecs keys asSortedCollection: [ :a :b | a <= b ])
+				do: [ :platformName | 
+					| orderedPlatformMap platformMap |
+					platformMap := conditionalPackageMapSpecs at: platformName.
+					orderedPlatformMap := platformName = 'gemstone'
+						ifTrue: [ self _canonicalizeGemStonePackageMapSpecs: platformMap ]
+						ifFalse: [ 
+							platformName = 'vast'
+								ifTrue: [ self _canonicalizeVastPackageMapSpecs: platformMap ]
+								ifFalse: [ self error: 'Unknown platform name ' , platformName printString ] ].
+					orderedPlatformMap isEmpty
+						ifFalse: [ orderedConditionalPackageMapSpecs at: platformName put: orderedPlatformMap ] ].
+			conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
+%
+
+category: 'initialization'
+method: RwBasicProjectLoadComponentV2
+initializeForImport
+
+	"if spec has been imported, clear out any of the fields that represent state that should 
+	not be shared"
+
+	projectName := nil
+%
+
+category: 'ston'
+method: RwBasicProjectLoadComponentV2
+instVarNamesInOrderForSton
+
+	^ self class allInstVarNames
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+name
+
+   ^name
+%
+
+category: 'initialization'
+method: RwBasicProjectLoadComponentV2
+name: anObject
+
+   name := anObject
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+postloadDoitName
+	^postloadDoitName
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+postloadDoitName: object
+	postloadDoitName := object
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+preloadDoitName
+	^preloadDoitName
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+preloadDoitName: object
+	preloadDoitName := object
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+projectName
+
+   ^projectName
+%
+
+category: 'initialization'
+method: RwBasicProjectLoadComponentV2
+projectName: anObject
+
+   projectName := anObject
+%
+
+category: 'ston'
+method: RwBasicProjectLoadComponentV2
+stonOn: stonWriter
+	| instanceVariableNames allInstanceVariableNames |
+	instanceVariableNames := self instVarNamesInOrderForSton
+		reject: [ :iv | self excludedInstVars includes: iv ].
+	allInstanceVariableNames := self class allInstVarNames.
+	stonWriter
+		writeObject: self
+		streamMap: [ :dictionary | 
+			instanceVariableNames
+				do: [ :each | 
+					(self instVarAt: (allInstanceVariableNames indexOf: each asSymbol))
+						ifNotNil: [ :value | dictionary at: each asSymbol put: value ]
+						ifNil: [ 
+							self stonShouldWriteNilInstVars
+								ifTrue: [ dictionary at: each asSymbol put: nil ] ] ] ]
+%
+
+category: 'validation'
+method: RwBasicProjectLoadComponentV2
+validate
+	"ensure that the data structures within the receiver contain valid information:
+		1. only packages defined in the receiver may be referenced in the reciever
+		2. platform implementation is responsible for validating platform structures"
+
+	| allDefinedPackageNames |
+	self name ifNil: [ self error: 'name is nil' ].
+	self _validateDoits.
+	allDefinedPackageNames := self _validatedPackageNames.
+	self conditionalPackageMapSpecs
+		keysAndValuesDo: [ :platformName :platformPropertiesMap | 
+			(RwSpecification _supportedPlatformNames includes: platformName)
+				ifFalse: [ 
+					Error
+						signal:
+							'Unknown platform name ' , platformName printString
+								, ' in conditional package map specs' ].
+			platformName = 'gemstone'
+				ifTrue: [ self _validateGemStonePlatform: allDefinedPackageNames userIdMap: platformPropertiesMap ] ].
+	^ true
+%
+
+category: 'private'
+method: RwBasicProjectLoadComponentV2
+_canonicalizeGemStonePackageMapSpecs: userMap
+	| orderedUserMap |
+	orderedUserMap := self class orderedDictionaryClass new.
+	(userMap keys asSortedCollection: [ :a :b | a <= b ])
+		do: [ :userName | 
+			| attributeMap orderedAttributeMap |
+			attributeMap := userMap at: userName.
+			orderedAttributeMap := self class orderedDictionaryClass new.
+			(attributeMap keys asSortedCollection: [ :a :b | a <= b ])
+				do: [ :attributeName | 
+					| packageMap orderedPackageMap |
+					packageMap := attributeMap at: attributeName.
+					orderedPackageMap := self class orderedDictionaryClass new.
+					(packageMap keys asSortedCollection: [ :a :b | a <= b ])
+						do: [ :packageName | 
+							(packageMap at: packageName) isEmpty
+								ifFalse: [ orderedPackageMap at: packageName put: (packageMap at: packageName) ] ].
+					orderedPackageMap isEmpty
+						ifFalse: [ orderedAttributeMap at: attributeName put: orderedPackageMap ] ].
+			orderedAttributeMap isEmpty
+				ifFalse: [ orderedUserMap at: userName put: orderedAttributeMap ] ].
+	^ orderedUserMap
+%
+
+category: 'private'
+method: RwBasicProjectLoadComponentV2
+_canonicalizeVastPackageMapSpecs: propertiesMap
+	| orderedPropertyMap |
+	orderedPropertyMap := self class orderedDictionaryClass new.
+	(propertiesMap keys asSortedCollection: [ :a :b | a <= b ])
+		do: [ :vaPropertyName | 
+			propertiesMap at: vaPropertyName.
+			propertiesMap isEmpty
+				ifFalse: [ orderedPropertyMap at: vaPropertyName put: (propertiesMap at: vaPropertyName) ] ].
+	^ orderedPropertyMap
+%
+
+category: 'doits'
+method: RwBasicProjectLoadComponentV2
+_readDoitsFrom: componentsRoot
+	| fileRef |
+	preloadDoitName
+		ifNotNil: [ 
+			fileRef := componentsRoot / preloadDoitName , 'st'.
+			fileRef exists
+				ifTrue: [ 
+					fileRef
+						readStreamDo: [ :fileStream | self doitDict at: preloadDoitName put: fileStream contents ] ]
+				ifFalse: [ self error: '"no doit file ' , preloadDoitName printString , ' found"' ] ].
+	postloadDoitName
+		ifNotNil: [ 
+			fileRef := componentsRoot / postloadDoitName , 'st'.
+
+			fileRef exists
+				ifTrue: [ 
+					fileRef
+						readStreamDo: [ :fileStream | self doitDict at: postloadDoitName put: fileStream contents ] ]
+				ifFalse: [ self error: '"no doit file ' , postloadDoitName printString , ' found"' ] ]
+%
+
+category: 'validation'
+method: RwBasicProjectLoadComponentV2
+_validateDoits
+true ifTrue: [ "short term hack" ^self].
+	self preloadDoitName
+		ifNotNil: [ 
+			((self doitDict
+				at: self preloadDoitName
+				ifAbsent: [ 
+					self
+						error:
+							'Expected doit for ' , self preloadDoitName printString , ' to exist.' ])
+				isKindOf: CharacterCollection)
+				ifFalse: [ 
+					self
+						error:
+							'Doit for ' , self preloadDoitName printString , ' is not a CharacterCollection' ] ].
+	self postloadDoitName
+		ifNotNil: [ 
+			((self doitDict
+				at: self postloadDoitName
+				ifAbsent: [ 
+					self
+						error:
+							'Expected doit for ' , self postloadDoitName printString , ' to exist.' ])
+				isKindOf: CharacterCollection)
+				ifFalse: [ 
+					self
+						error:
+							'Doit for ' , self postloadDoitName printString
+								, ' is not a CharacterCollection' ] ]
+%
+
+category: 'validation'
+method: RwBasicProjectLoadComponentV2
+_validatedPackageNames
+	"answer the validated set of package names"
+
+	self subclassResponsibility: #'_validatedPackageNames'
+%
+
+! Class implementation for 'RwAbstractProjectLoadComponentV2'
+
+!		Instance methods for 'RwAbstractProjectLoadComponentV2'
+
+category: 'visiting'
+method: RwAbstractProjectLoadComponentV2
+acceptNestedVisitor: aVisitor
+
+	^ self acceptVisitor: aVisitor
+%
+
+category: 'visiting'
+method: RwAbstractProjectLoadComponentV2
+acceptVisitor: aVisitor
+
+	^ self subclassResponsibility: #acceptVisitor:
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalComponentsAtConditions: conditions andGroup: groupName
+	^ self
+		conditionalPropertiesAt: #'componentNames'
+		conditions: conditions
+		andGroup: groupName
+%
+
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+conditionalPackageMapSpecMatchers
+
+	conditionalPackageMapSpecMatchers ifNotNil: [:val | ^ val ]. 
+	conditionalPackageMapSpecMatchers := Dictionary new.
+	self conditionalPackageMapSpecs keysAndValuesDo: [:platformPattern :packageMapSpecsMap |
+		conditionalPackageMapSpecMatchers
+			at: (self _platformPatternMatcherFor: platformPattern)
+			put: packageMapSpecsMap ].
+	^ conditionalPackageMapSpecMatchers
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPackagesAtConditions: conditions andGroup: groupName
+	^ self
+		conditionalPropertiesAt: #'packageNames'
+		conditions: conditions
+		andGroup: groupName
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalProjectsAtConditions: conditions andGroup: groupName
+	^ self
+		conditionalPropertiesAt: #'projectNames'
+		conditions: conditions
+		andGroup: groupName
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalProperties
+	^ conditionalProperties ifNil: [ conditionalProperties := Dictionary new ]
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAt: key conditions: conditions andGroup: groupName
+
+	| thePropertiesMap |
+	thePropertiesMap := (self conditionalProperties at: conditions asArray sort ifAbsent: [ ^ Set new])
+		at: groupName ifAbsent: [ ^ Set new ].
+	^ (thePropertiesMap at: key asSymbol ifAbsent: [ Set new ]) asSet
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName addComponentNames: names
+	^ self
+		_conditionalPropertiesAt: #'componentNames'
+		conditions: conditions
+		andGroup: groupName
+		addNames: names
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName addPackageNames: names
+	^ self
+		_conditionalPropertiesAt: #'packageNames'
+		conditions: conditions
+		andGroup: groupName
+		addNames: names
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName addProjectNames: names
+	^ self
+		_conditionalPropertiesAt: #'projectNames'
+		conditions: conditions
+		andGroup: groupName
+		addNames: names
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName removeComponentNames: names
+	^ self
+		_conditionalPropertiesAt: #'componentNames'
+		conditions: conditions
+		andGroup: groupName
+		removeNames: names
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName removePackageNames: names
+	^ self
+		_conditionalPropertiesAt: #'packageNames'
+		conditions: conditions
+		andGroup: groupName
+		removeNames: names
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertiesAtConditions: conditions andGroup: groupName removeProjectNames: names
+	^ self
+		_conditionalPropertiesAt: #'projectNames'
+		conditions: conditions
+		andGroup: groupName
+		removeNames: names
+%
+
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+conditionalPropertyMatchers
+
+	conditionalPropertyMatchers ifNotNil: [:val | ^ val ]. 
+	conditionalPropertyMatchers := Dictionary new.
+	self conditionalProperties keysAndValuesDo: [:platformPatterns :groupMap |
+		conditionalPropertyMatchers
+			at: (platformPatterns collect: [:pattern | self _platformPatternMatcherFor: pattern ])
+			put: groupMap ].
+	^ conditionalPropertyMatchers
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+definedGroupNames
+
+	^ definedGroupNames 
+		ifNil: [ definedGroupNames :=  Dictionary new]
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+definedGroupNames: aColl
+
+	definedGroupNames := aColl
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+defineGroupNamed: groupName 
+
+	"add a group that does not include any other groups"
+
+	self defineGroupNamed: groupName toIncludeGroups: #()
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+defineGroupNamed: groupName toIncludeGroups: includedGroups
+
+	"add a group that does not include any other groups"
+
+	self definedGroupNames at: groupName put: includedGroups asArray sort
+%
+
+category: 'ston'
+method: RwAbstractProjectLoadComponentV2
+excludedInstVars
+	^ super excludedInstVars
+		, #(#'conditionalPropertyMatchers' #'conditionalPackageMapSpecMatchers')
+%
+
+category: 'exporting'
+method: RwAbstractProjectLoadComponentV2
+export
+
+	|  exportUrl exportPath |
+	exportPath := self _repositoryRootPath asFileReference / self _configsPath.
+	exportPath ensureCreateDirectory.
+	exportUrl := exportPath fileSystem isMemoryFileSystem
+		ifTrue: [ 'memory:' , exportPath pathString ]
+		ifFalse: [ 'file:' , exportPath pathString, '/' ].
+	^ self exportToUrl: exportUrl
+%
+
+category: 'ston'
+method: RwAbstractProjectLoadComponentV2
+fromSton: stonReader
+	"componentNames and projectNames no longer supported ... componentNames and projectnames should be inserted into conditionalProperties under 'common'"
+
+	| instanceVariableNames componentNames projectNames |
+	instanceVariableNames := self class allInstVarNames.
+	stonReader
+		parseMapDo: [ :instVarName :value | 
+			instVarName = #'componentNames'
+				ifTrue: [ 
+					componentNames ifNil: [ componentNames := Set new ].
+					componentNames addAll: value ]
+				ifFalse: [ 
+					instVarName = #'projectNames'
+						ifTrue: [ 
+							projectNames ifNil: [ projectNames := Set new ].
+							projectNames addAll: value ]
+						ifFalse: [ 
+							instVarName = #'conditionalPackages'
+								ifTrue: [ conditionalProperties := value ]
+								ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ] ].
+	componentNames
+		ifNotNil: [ 
+			self
+				conditionalPropertiesAtConditions: {'common'}
+				andGroup: 'core'
+				addComponentNames: componentNames ].
+	projectNames
+		ifNotNil: [ 
+			self
+				conditionalPropertiesAtConditions: {'common'}
+				andGroup: 'core'
+				addProjectNames: projectNames ]
+%
+
+category: 'initialization'
+method: RwAbstractProjectLoadComponentV2
+initializeForExport
+	"if spec is to be exported, clear out any of the fields that represent state that should 
+	not be shared"
+
+	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
+
+	super initializeForExport.
+	conditionalPropertyMatchers := conditionalPackageMapSpecMatchers := nil.
+	self conditionalProperties
+		ifNotNil: [ :cp | 
+			| orderedConditionalProperties |
+			orderedConditionalProperties := self class orderedDictionaryClass new.
+			(cp keys asSortedCollection: [ :a :b | (a at: 1) <= (b at: 1) ])
+				do: [ :ar | 
+					| dict orderedPropertyNames |
+					dict := cp at: ar.
+					orderedPropertyNames := self class orderedDictionaryClass new.
+					dict keys asArray sort
+						do: [ :group | orderedPropertyNames at: group put: (dict at: group) ].
+					orderedConditionalProperties at: ar put: orderedPropertyNames ].
+			conditionalProperties := orderedConditionalProperties ]
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+packageNames
+	"Answer the collection of package names defined in the receiver."
+
+	| allDefinedPackageNames |
+	allDefinedPackageNames := Set new.
+	self conditionalProperties
+		keysAndValuesDo: [ :conditions :groupMap | 
+			groupMap
+				keysAndValuesDo: [ :groupName :propertiesMap | allDefinedPackageNames addAll: (propertiesMap at: #'packageNames') ] ].
+	^ allDefinedPackageNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes groupNames: groupNames
+	"Answer the collection of package names defined in the receiver."
+
+	| allDefinedPackageNames matchers |
+	allDefinedPackageNames := Set new.
+	matchers := self conditionalPropertyMatchers.
+	self conditionalProperties
+		keysAndValuesDo: [ :conditions :ignored | 
+			platformConfigurationAttributes
+				do: [ :anObject | 
+					matchers
+						keysAndValuesDo: [ :ar :groupMap | 
+							ar
+								do: [ :matcher | 
+									(matcher match: anObject)
+										ifTrue: [ 
+											groupMap
+												keysAndValuesDo: [ :groupName :packageMap | 
+													(groupNames includes: groupName)
+														ifTrue: [ allDefinedPackageNames addAll: (packageMap at: #'packageNames') ] ] ] ] ] ] ].
+	^ allDefinedPackageNames
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+removeComponentNamed: aComponentName
+	"this can create empty componentName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
+
+	self conditionalProperties
+		keysAndValuesDo: [ :conditionsArray :conditionMap | 
+			conditionMap
+				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'componentNames' ifAbsent: [#()]) remove: aComponentName ifAbsent: [  ] ] ]
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+removePackageNamed: aPackageName
+	"this can create empty packageName lists or empty packageMapSpecMaps ... the export logic _should_ cleanup empty list, which is sufficient"
+
+	self conditionalProperties
+		keysAndValuesDo: [ :conditionsArray :conditionMap | 
+			conditionMap
+				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'packageNames' ifAbsent: [#()]) remove: aPackageName ifAbsent: [  ] ] ].
+	self conditionalPackageMapSpecs
+		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
+			packageMapSpecsMap
+				keysAndValuesDo: [ :userId :packageMapSpecs | 
+					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
+						removeKey: aPackageName
+						ifAbsent: [  ] ] ]
+%
+
+category: 'accessing'
+method: RwAbstractProjectLoadComponentV2
+removeProjectNamed: aProjectName
+	"this can create empty projectName lists  ... the export logic _should_ cleanup empty list, which is sufficient"
+
+	self conditionalProperties
+		keysAndValuesDo: [ :conditionsArray :conditionMap | 
+			conditionMap
+				keysAndValuesDo: [ :groupName :propertiesMap | (propertiesMap at: #'projectNames' ifAbsent: [#()]) remove: aProjectName ifAbsent: [  ] ] ].
+%
+
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+_conditionalPropertiesAt: key conditions: conditions andGroup: groupName addNames: names
+	| theNames theConditionalPropertiesMap |
+	theConditionalPropertiesMap := (self conditionalProperties
+		at: conditions asArray sort
+		ifAbsentPut: [ Dictionary new ]) at: groupName ifAbsentPut: [ Dictionary new ].
+	theNames := (theConditionalPropertiesMap
+		at: key asSymbol
+		ifAbsentPut: [ Set new ]) asSet.
+	theNames addAll: names.
+	theNames := theNames asArray sort.
+	theConditionalPropertiesMap at: key asSymbol put: theNames.
+	^ theNames
+%
+
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+_conditionalPropertiesAt: key conditions: conditions andGroup: groupName removeNames: names
+	| theNames theConditionalPropertiesMap |
+	theConditionalPropertiesMap := (self conditionalProperties
+		at: conditions asArray sort
+		ifAbsentPut: [ Dictionary new ]) at: groupName ifAbsentPut: [ Dictionary new ].
+	theNames := (theConditionalPropertiesMap
+		at: key asSymbol
+		ifAbsentPut: [ Set new ]) asSet.
+	theNames removeAll: names.
+	theNames := theNames asArray sort.
+	theConditionalPropertiesMap at: key asSymbol put: theNames.
+	^ theNames
+%
+
+category: 'private'
+method: RwAbstractProjectLoadComponentV2
+_platformPatternMatcherFor: pattern
+
+	" Returns an instance of RwAbstractConfigurationPlatformAttributeMatcher:
+		RwStringConfigurationPlatformAttributeMatcher,
+		RwGemStoneVersionConfigurationPlatformAttributeMatcher,
+		or RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher
+	"
+
+	| versionPattern gsVersion1 gsVersion2 |
+	(pattern beginsWith: 'gs')
+		ifFalse: [ 
+			"simple equality match"
+			^ RwStringConfigurationPlatformAttributeMatcher new
+					pattern: pattern;
+					patternMatchBlock: [:a :b | a = b ];
+					yourself ].
+	"GemStone version pattern"
+	versionPattern := (pattern copyFrom: 3 to: pattern size) substrings: '.'.
+	(versionPattern last beginsWith: '[')
+		ifTrue: [ 
+			| vpSize rangePattern dashIndex |
+			"range pattern"
+			vpSize := versionPattern size.
+			gsVersion1 := RwGemStoneVersionNumber new: vpSize .
+			1 to: vpSize - 1
+				do: [:index | gsVersion1 at: index put: (versionPattern at: index) asInteger ].
+			gsVersion1 at: vpSize put: 0.
+			rangePattern := (versionPattern at: vpSize) trimBoth.
+			(((rangePattern at: 1) = $[) and: [ (rangePattern at: rangePattern size) = $] ])
+				ifFalse: [ self error: 'Poorly formed GemStone version range pattern ', rangePattern printString, ' in ', pattern printString ].
+			rangePattern := rangePattern copyFrom: 2 to: rangePattern size -1.
+			dashIndex := rangePattern indexOf: $-.
+			dashIndex <= 1
+				ifTrue: [ self error: 'Invalid version range pattern missing range begin' , rangePattern printString, ' in ', pattern printString ].
+			gsVersion1 at: vpSize put: (rangePattern copyFrom: 1 to: dashIndex -1) asInteger.
+			dashIndex = rangePattern size
+				ifTrue: [
+					"open range"
+					gsVersion2 := gsVersion1 copyFrom: 1 to: gsVersion1 size -1.
+					gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
+					^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
+							pattern: gsVersion1;
+							pattern2: gsVersion2;
+							patternMatchBlock: [:a :b :c | (a <= b) & (b < c ) ];
+							yourself ].
+			"closed range"
+			gsVersion2 := gsVersion1 copy.
+			gsVersion2 at: vpSize put: (rangePattern copyFrom: dashIndex + 1 to: rangePattern size) asInteger.
+			^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
+					pattern: gsVersion1;
+					pattern2: gsVersion2;
+					patternMatchBlock: [:a :b :c | (a <= b) & (b <= c ) ];
+					yourself ].
+	versionPattern last = 'x' 
+		ifFalse: [
+			"specific version number match, use ="
+			^ RwGemStoneVersionConfigurationPlatformAttributeMatcher new
+					pattern: (pattern copyFrom: 3 to: pattern size) asRwGemStoneVersionNumber;
+					patternMatchBlock: [:a :b | a = b ];
+					yourself ].
+	" 'gs', <gemstone-version-number> , '.x'"
+	"match all values in x field"
+	gsVersion1 := ((pattern copyFrom: 3 to: pattern size - 2), '.0') asRwGemStoneVersionNumber.
+	gsVersion2 := gsVersion1 copyFrom: 1 to: gsVersion1 size - 1.
+	gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
+	^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
+			pattern: gsVersion1;
+			pattern2: gsVersion2;
+			patternMatchBlock: [:a :b :c | (a <= b) & (b < c ) ];
+			yourself
+%
+
+category: 'validation'
+method: RwAbstractProjectLoadComponentV2
+_validatedPackageNames
+	"answer the validated set of package names"
+
+	| allDefinedPackageNames knownGroupNames |
+	allDefinedPackageNames := Set new.
+	knownGroupNames := self definedGroupNames keys.
+	self definedGroupNames
+		keysAndValuesDo: [ :groupName :dependentGroups | 
+			dependentGroups
+				do: [ :dependentGroupName | 
+					(knownGroupNames includes: dependentGroupName)
+						ifFalse: [ 
+							Error
+								signal:
+									'The group ' , dependentGroupName printString , ' is not a defined group' ] ] ].
+	self conditionalProperties
+		keysAndValuesDo: [ :conditions :groupMap | 
+			groupMap
+				keysAndValuesDo: [ :groupName :propertiesMap | 
+					(self definedGroupNames keys includes: groupName)
+						ifFalse: [ 
+							Error
+								signal:
+									'Conditional packages includes group name ' , groupName printString
+										, ' that is not a defined group' ].
+					allDefinedPackageNames
+						addAll: (propertiesMap at: #'packageNames' ifAbsent: [ #() ]) ] ].
+	^ allDefinedPackageNames
+%
+
+category: 'validation'
+method: RwAbstractProjectLoadComponentV2
+_validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap
+	"ensure that the data structures within the receiver contain valid information:
+		1. only packages defined in the receiver may be referenced in the reciever
+		2. platform implementation is responsible for validating platform structures"
+
+	userIdMap
+		keysAndValuesDo: [ :userId :platformPropertiesMap | 
+			platformPropertiesMap
+				keysAndValuesDo: [ :key :packagePropertiesMap | 
+					key == #'packageNameToPlatformPropertiesMap'
+						ifFalse: [ Error signal: 'Unknown platformPropertiesMap key ' , key printString ].
+					packagePropertiesMap
+						keysAndValuesDo: [ :packageName :packageProperties | 
+							(allDefinedPackageNames includes: packageName)
+								ifFalse: [ 
+									Error
+										signal:
+											'Undefined package name ' , packageName printString
+												, ' used in plaform properties map' ].
+							packageProperties
+								keysDo: [ :packagePropertyName | 
+									(self class _gemstoneSupportedPackagePropertyNames
+										includes: packagePropertyName)
+										ifFalse: [ Error signal: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
+%
+
+! Class implementation for 'RwNestedProjectLoadComponentV2'
+
+!		Instance methods for 'RwNestedProjectLoadComponentV2'
+
+category: 'visiting'
+method: RwNestedProjectLoadComponentV2
+acceptNestedVisitor: aVisitor
+
+	^aVisitor visitProjectLoadComponent: self
+%
+
+category: 'visiting'
+method: RwNestedProjectLoadComponentV2
+acceptVisitor: aVisitor
+
+	^self error: 'nested configuration cannot be used as a top-level configuration. The receiver is nested inside of project load configurations'
+%
+
+category: 'testing'
+method: RwNestedProjectLoadComponentV2
+isIndependentlyLoadable
+	"nested configuration is not independently loadable ... they can only be loaded when referenced from another config"
+
+	^ false
+%
+
+! Class implementation for 'RwProjectLoadComponentV2'
+
+!		Instance methods for 'RwProjectLoadComponentV2'
+
+category: 'visiting'
+method: RwProjectLoadComponentV2
+acceptVisitor: aVisitor
+
+	^aVisitor visitProjectLoadComponent: self
+%
+
+! Class implementation for 'RwAbstractSimpleProjectLoadComponentV2'
+
+!		Instance methods for 'RwAbstractSimpleProjectLoadComponentV2'
+
+category: 'comparing'
+method: RwAbstractSimpleProjectLoadComponentV2
+= aRwAbstractSimpleProjectLoadComponentV2
+	(aRwAbstractSimpleProjectLoadComponentV2 isKindOf: self class)
+		ifFalse: [ ^ false ].
+	^ ((((self name = aRwAbstractSimpleProjectLoadComponentV2 name
+		and: [ self comment = aRwAbstractSimpleProjectLoadComponentV2 comment ])
+		and: [ 
+			self conditionalPackageMapSpecs
+				= aRwAbstractSimpleProjectLoadComponentV2 conditionalPackageMapSpecs ])
+		and: [ self condition = aRwAbstractSimpleProjectLoadComponentV2 condition ])
+		and: [ self groupName = aRwAbstractSimpleProjectLoadComponentV2 groupName ])
+		and: [ self componentNames = aRwAbstractSimpleProjectLoadComponentV2 componentNames ]
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+addComponentNamed: aComponentName 
+	"avoid duplicates and keep the list sorted"
+	self componentNames add: aComponentName.
+	componentNames := componentNames asSet asArray sort
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+componentNames
+
+	^ componentNames
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+condition
+	^condition
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+condition: object
+	condition := object
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+groupName
+	^groupName
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+groupName: object
+	groupName := object
+%
+
+category: 'comparing'
+method: RwAbstractSimpleProjectLoadComponentV2
+hash
+	| hashValue |
+	hashValue := self name hash.
+	hashValue := hashValue bitXor: self comment.
+	hashValue := hashValue bitXor: self conditionalPackageMapSpecs.
+	hashValue := hashValue bitXor: self groupName.
+	hashValue := hashValue bitXor: self componentNames.
+	^ hashValue
+%
+
+category: 'initialization'
+method: RwAbstractSimpleProjectLoadComponentV2
+initialize
+	super initialize.
+	condition := 'common'.
+	groupName := 'core'.
+	componentNames := {}.
+%
+
+! Class implementation for 'RwSequencedProjectLoadComponentV2'
+
+!		Instance methods for 'RwSequencedProjectLoadComponentV2'
+
+category: 'visiting'
+method: RwSequencedProjectLoadComponentV2
+acceptNestedVisitor: aVisitor
+	^ self
+		error:
+			'The sequenced project load component ' , self name printString
+				,
+					' can only be loaded as a top-level component and cannot be nested within another component."'
+%
+
+category: 'visiting'
+method: RwSequencedProjectLoadComponentV2
+acceptVisitor: aVisitor
+	^ aVisitor visitSequencedProjectLoadComponent: self
+%
+
+category: 'accessing'
+method: RwSequencedProjectLoadComponentV2
+addComponentNamed: aComponentName
+	"preserve the load order"
+
+	self componentNames add: aComponentName
+%
+
+category: 'accessing'
+method: RwSequencedProjectLoadComponentV2
+conditionalPackageMapSpecs
+	^ Dictionary new
+%
+
+category: 'accessing'
+method: RwSequencedProjectLoadComponentV2
+conditionalPackageMapSpecsAt: key ifAbsent: absentBlock
+	self shouldNotImplement: #'conditionalPackageMapSpecsAt:ifAbsent:'
+%
+
+category: 'ston'
+method: RwSequencedProjectLoadComponentV2
+instVarNamesInOrderForSton
+	^ #(#'name' #'projectName' #'comment' #'condition' #'groupName' #'preloadDoitName' #'postloadDoitName' #'componentNames')
+%
+
+category: 'validation'
+method: RwSequencedProjectLoadComponentV2
+_validatedPackageNames
+	"answer the validated set of package names"
+
+	^ #()
+%
+
+! Class implementation for 'RwSimpleProjectLoadComponentV2'
+
+!		Instance methods for 'RwSimpleProjectLoadComponentV2'
+
+category: 'comparing'
+method: RwSimpleProjectLoadComponentV2
+= aRwSimpleProjectLoadComponentV2
+	^ (super = aRwSimpleProjectLoadComponentV2
+		and: [ self packageNames = aRwSimpleProjectLoadComponentV2 packageNames ])
+		and: [ self projectNames = aRwSimpleProjectLoadComponentV2 projectNames ]
+%
+
+category: 'visiting'
+method: RwSimpleProjectLoadComponentV2
+acceptNestedVisitor: aVisitor
+
+	^ self acceptVisitor: aVisitor
+%
+
+category: 'visiting'
+method: RwSimpleProjectLoadComponentV2
+acceptVisitor: aVisitor
+	^ aVisitor visitSimpleProjectLoadComponent: self
+%
+
+category: 'accessing'
+method: RwSimpleProjectLoadComponentV2
+addPackageNames: aPackageNames
+	"add packages to default conditional/group if applicable"
+
+	self packageNames addAll: aPackageNames.
+	packageNames := packageNames asSet asArray sort
+%
+
+category: 'accessing'
+method: RwSimpleProjectLoadComponentV2
+addProjectNamed: aProjectName
+	self projectNames add: aProjectName.
+	projectNames := projectNames asSet asArray sort
+%
+
+category: 'comparing'
+method: RwSimpleProjectLoadComponentV2
+hash
+	| hashValue |
+	hashValue := super hash.
+	hashValue := hashValue bitXor: self packageNames.
+	hashValue := hashValue bitXor: self projectNames.
+	^ hashValue
+%
+
+category: 'initialization'
+method: RwSimpleProjectLoadComponentV2
+initialize
+	super initialize.
+	packageNames := {}.
+	projectNames := {}
+%
+
+category: 'ston'
+method: RwSimpleProjectLoadComponentV2
+instVarNamesInOrderForSton
+	^ #(#'name' #'projectName' #'comment' #'condition' #'groupName' #'preloadDoitName' #'postloadDoitName' #'packageNames' #'componentNames' #'projectNames' #'conditionalPackageMapSpecs')
+%
+
+category: 'accessing'
+method: RwSimpleProjectLoadComponentV2
+packageNames
+
+	^ packageNames
+%
+
+category: 'accessing'
+method: RwSimpleProjectLoadComponentV2
+projectNames
+	^projectNames
+%
+
+category: 'validation'
+method: RwSimpleProjectLoadComponentV2
+_validatedPackageNames
+	"answer the validated set of package names"
+
+	^ self packageNames asSet
+%
+
 ! Class implementation for 'RwClassAdditionOrRemoval'
 
 !		Class methods for 'RwClassAdditionOrRemoval'
@@ -45965,7 +48416,7 @@ category: 'accessing'
 method: RwAbstractClassDefinition
 addClassMethodDefinition: aMethodDefinition
 
-	self addDefinition: aMethodDefinition to: classMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: classMethodDefinitions
 %
 
 category: 'accessing'
@@ -45979,7 +48430,7 @@ category: 'accessing'
 method: RwAbstractClassDefinition
 addInstanceMethodDefinition: aMethodDefinition
 
-	self addDefinition: aMethodDefinition to: instanceMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: instanceMethodDefinitions
 %
 
 category: 'private'
@@ -46414,6 +48865,21 @@ updatePropertiesFromClass: aClass
 
 category: 'utility'
 method: RwClassDefinition
+_removeSubclassesDisallowed
+  "Only for use in building definitions for bootstap of the base image.
+   image bootstrap code responsible for setting subclassesDisallowed on
+   appropriate classes after they are all defined."
+  | propertyName oldValue newValue |
+  propertyName := 'gs_options'.
+  oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
+  oldValue isEmpty ifFalse:[
+     newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
+     self propertyAt: propertyName put: newValue
+  ]
+%
+
+category: 'utility'
+method: RwClassDefinition
 _updateCategoryFromClass: aClass
 
 	| propertyName newValue |
@@ -46759,10 +49225,7 @@ componentNamed: aComponentName
 category: 'accessing'
 method: RwAbstractProjectDefinitionV2
 componentNamed: aComponentName ifAbsent: absentBlock
-
-	^ self components 
-		at: aComponentName 
-		ifAbsent: absentBlock
+	^ self components componentNamed: aComponentName ifAbsent: absentBlock
 %
 
 category: 'accessing'
@@ -46782,7 +49245,7 @@ method: RwAbstractProjectDefinitionV2
 initialize
 	super initialize.
 	packages := Dictionary new.
-	components := Dictionary new
+	components := RwResolvedLoadComponentsV2 new
 %
 
 category: 'testing'
@@ -46842,6 +49305,12 @@ postCopy
 
 category: 'accessing'
 method: RwAbstractProjectDefinitionV2
+removeComponentNamed: aComponentName
+	^ self components removeComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RwAbstractProjectDefinitionV2
 removePackage: aPackageDefinition
 
 	| key |
@@ -46853,8 +49322,13 @@ removePackage: aPackageDefinition
 category: 'accessing'
 method: RwAbstractProjectDefinitionV2
 removePackageNamed: packageName
+	^ self removePackage: (self packageNamed: packageName)
+%
 
-	^self removePackage: (self packageNamed: packageName)
+category: 'accessing'
+method: RwAbstractProjectDefinitionV2
+removeProjectNamed: aProjectName
+	^ self components removeProjectNamed: aProjectName
 %
 
 category: 'properties'
@@ -46865,17 +49339,25 @@ repositoryRoot
 	^ self repositoryRootPath asFileReference
 %
 
-category: 'accessing'
+category: 'private'
 method: RwAbstractProjectDefinitionV2
 _addPackage: aPackageDefinition
+	^ self
+		_addPackage: aPackageDefinition
+		ifPresent: [ self error: 'Duplicate package' ]
+%
 
+category: 'private'
+method: RwAbstractProjectDefinitionV2
+_addPackage: aPackageDefinition ifPresent: presentBlock
 	| key |
 	key := aPackageDefinition key.
-	(packages includesKey: key) ifTrue: [self error: 'Duplicate package'].
+	(packages includesKey: key)
+		ifTrue: [ ^ presentBlock value ].
 	^ packages at: key put: aPackageDefinition
 %
 
-category: 'accessing'
+category: 'private'
 method: RwAbstractProjectDefinitionV2
 _projectDefinition
 	^ self
@@ -46894,29 +49376,30 @@ acceptVisitor: aVisitor
 
 category: 'accessing'
 method: RwProjectDefinitionV2
-addComponentNamed: aComponentName comment: commentString
-
-	| component |
-	component := self 
-		components at: aComponentName 
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
-	^ component 
-		addDefinedGroupName: self defaultGroupName includeGroups: #();
-		comment: commentString;
-		yourself
+addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
+	^ self components
+		addComponentNamed: aComponentName
+		definedGroupNames: groupNameDict
+		comment: commentString
 %
 
 category: 'accessing'
 method: RwProjectDefinitionV2
-addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
-	| component |
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName for: self projectName ].
-	groupNameDict
-		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
-	component comment: commentString.
-	^ component
+addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
+	^ self components
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
+	^ self components
+		addNestedComponentNamed: aComponentName
+		definedGroupNames: groupNameDict
+		comment: commentString
 %
 
 category: 'accessing'
@@ -46929,41 +49412,43 @@ addPackageNamed: packageName
 category: 'accessing'
 method: RwProjectDefinitionV2
 addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
-	| package component |
-	self
+	| package |
+	self components
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	package := RwPackageDefinition newNamed: packageName.
-	self _addPackage: package.
-	component := self components
-		at: componentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
-	component
-		conditionalPackagesAtConditions: conditionArray
-		andGroup: groupName
-		addPackageNames: {packageName}.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
+	self components
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName.
 	^ package
 %
 
 category: 'accessing'
 method: RwProjectDefinitionV2
 addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
-	| package component |
-	self
+	| package |
+	self components
 		componentNamed: componentName
 		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
 	package := RwPackageDefinition newNamed: packageName.
-	self _addPackage: package.
-	component := self components
-		at: componentName
-		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: componentName for: self name ].
-	component
-		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
-			andPackageName: packageName
-			setSymbolDictNameTo: aSymbolDictAssoc value;
-		conditionalPackagesAtConditions: conditionArray
-			andGroup: groupName
-			addPackageNames: {packageName}.
+	self
+		_addPackage: package
+		ifPresent: [ 
+			"no problem ... just update the component"
+			 ].
+	self components
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		withConditions: conditionArray
+		andGroupName: groupName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc.
 	^ package
 %
 
@@ -46972,20 +49457,12 @@ method: RwProjectDefinitionV2
 addPackages: somePackageNames forComponent: aComponent
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
-	"see similar comment in addRawPackageNamed:"
+	"see similar comment in addRawPackageNamed: _addComponent"
 
 	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
 		component --- presumably freshly read from disk --- wins"
 
-	| componentName |
-	componentName := aComponent name.
-	(self components at: componentName ifAbsent: [  ])
-		ifNil: [ self components at: componentName put: aComponent ]
-		ifNotNil: [ :theComponent | 
-			theComponent ~~ aComponent
-				ifTrue: [ 
-					"newest component wins"
-					self components at: componentName put: aComponent ] ].
+	self components _addComponent: aComponent.
 	somePackageNames asSet
 		do: [ :packageName | self _addPackage: (RwPackageDefinition newNamed: packageName) ]
 %
@@ -47009,10 +49486,20 @@ addPackagesNamed: packageNames toComponentNamed: componentName withConditions: c
 
 category: 'accessing'
 method: RwProjectDefinitionV2
+addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
+	^ self components
+		addProjectNamed: projectName
+		toComponentNamed: toComponentName
+		withConditions: conditionArray
+		andGroupName: groupName
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
 addRawPackageNamed: packageName
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
-	"see similar comment in addPackages:forComponent:"
+	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
 %
@@ -47045,15 +49532,7 @@ export
 category: 'exporting'
 method: RwProjectDefinitionV2
 exportComponents
-
-	self components isEmpty ifTrue: [
-		self addComponentNamed: self defaultComponentName comment: '' ].
-	self components values do: [:component|
-		component exportToUrl: 'file:',  self componentsRoot pathString, '/' ].
-	self components isEmpty
-		ifTrue: [
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			(self componentsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
+	self components export: self componentsRoot
 %
 
 category: 'exporting'
@@ -47165,57 +49644,11 @@ read: platformConfigurationAttributes
 			platformConfigurationAttributes: platformConfigurationAttributes
 %
 
-category: 'actions'
-method: RwProjectDefinitionV2
-readPackageNames: packageNames
-
-	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
-
-	| format visitorClass |
-	packages := Dictionary new. 
-	format := self 
-		packageFormatIfAbsent: [  
-			| formatFromDisk |
-			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
-				at: #format ifAbsent: [ 'tonel' ].
-			self packageFormat: formatFromDisk.
-			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
-		packageNames: packageNames;
-		visit: self.
-%
-
 category: 'tool api'
 method: RwProjectDefinitionV2
 readProjectSet
 
 	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
-%
-
-category: 'actions'
-method: RwProjectDefinitionV2
-readProjectSetForPackageNames: packageNames
-
-	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
-
-	| format visitorClass |
-	packages := Dictionary new. 
-	format := self 
-		packageFormatIfAbsent: [  
-			| formatFromDisk |
-			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
-				at: #format ifAbsent: [ 'tonel' ].
-			self packageFormat: formatFromDisk.
-			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
-		packageNames: packageNames;
-		visit: self.
 %
 
 category: 'reading'
@@ -47230,10 +49663,36 @@ readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: 
 
 category: 'accessing'
 method: RwProjectDefinitionV2
+removeComponentNamed: componentName fromComponentNamed: fromComponentName withConditions: conditionArray andGroupName: groupName
+	| component |
+	component := self componentNamed: fromComponentName.
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		removeComponentNames: {componentName}.
+	^ component
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
 removePackage: aPackageDefinition
-	self components
-		do: [ :component | component removePackageNamed: aPackageDefinition name ].
-	super removePackage: aPackageDefinition
+	self components removePackageNamed: aPackageDefinition name.
+	^ super removePackage: aPackageDefinition
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+removePackageNamed: packageName fromComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
+	"do not remove package from defintion, remove it from the named component only. 
+		Use removePackage:, if you want the package completely removed from definition"
+
+	| component |
+	component := self componentNamed: componentName.
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		removePackageNames: {packageName}.
+	^ component
 %
 
 category: 'temporary compat'
@@ -47267,10 +49726,7 @@ _validate
 	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
 	definitionPackageNames := self packageNames asSet.
 	componentPackageNames := Set new.
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			component validate.
-			componentPackageNames addAll: component packageNames ].
+	self components_validate.
 	missingFromComponent := definitionPackageNames - componentPackageNames.
 	missingFromDefinition := componentPackageNames - definitionPackageNames.
 	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
@@ -47324,14 +49780,8 @@ _validate: platformConfigurationAttributes groupNames: groupNames
 	definitionPackageNames := self packageNames asSet.
 	componentPackageNames := Set new.
 	self components
-		keysAndValuesDo: [ :componentName :component | 
-			component validate.
-			componentPackageNames
-				addAll:
-					(component
-						packageNamesForPlatformConfigurationAttributes:
-							platformConfigurationAttributes
-						groupNames: groupNames) ].
+		_validate: platformConfigurationAttributes
+		groupNames: groupNames.
 	missingFromComponent := componentPackageNames - definitionPackageNames.
 	missingFromComponent isEmpty
 		ifTrue: [ ^ true ].
@@ -47783,206 +50233,125 @@ _fileSystem
 	^ FileSystem memory
 %
 
-! Class implementation for 'RwDefinitionSetDefinition'
+! Class implementation for 'RwAbstractRepositoryDefinitionV2'
 
-!		Instance methods for 'RwDefinitionSetDefinition'
+!		Class methods for 'RwAbstractRepositoryDefinitionV2'
 
-category: 'accessing'
-method: RwDefinitionSetDefinition
-addDefinition: aDefinition
-
-	| key |
-	key := aDefinition key.
-	(definitions includesKey: key)
-		ifTrue: [ self error: 'Duplicate definition ' ].
-	definitions at: key put: aDefinition
+category: 'instance creation'
+classmethod: RwAbstractRepositoryDefinitionV2
+newNamed: repositoryName projectsHome: aFileReference repositoryUrl: aRepositoryUrlString
+	^ self new
+		name: repositoryName;
+		projectsHome: aFileReference;
+		repositoryUrl: aRepositoryUrlString;
+		yourself
 %
 
-category: 'accessing'
-method: RwDefinitionSetDefinition
-definitionNames
+!		Instance methods for 'RwAbstractRepositoryDefinitionV2'
 
-	^ self definitions keys asArray
-%
-
-category: 'accessing'
-method: RwDefinitionSetDefinition
-definitions
-
-	^ definitions
-%
-
-category: 'accessing'
-method: RwDefinitionSetDefinition
-definitionWithKey: aKey ifAbsent: absentBlock
-
-	^ definitions at: aKey ifAbsent: absentBlock
-%
-
-category: 'deriving'
-method: RwDefinitionSetDefinition
-deriveLoadedThings
-
-	self subclassResponsibility: #'deriveLoadedThings'
-%
-
-category: 'enumerating'
-method: RwDefinitionSetDefinition
-do: aBlock
-
-	^ self definitions do: aBlock
-%
-
-category: 'initialization'
-method: RwDefinitionSetDefinition
-initialize
-
-	super initialize.
-	definitions := Dictionary new
-%
-
-category: 'testing'
-method: RwDefinitionSetDefinition
-isEmpty
-
-	"Answer true if this definition does not actually define anything."
-
-	^ super isEmpty & definitions isEmpty
-%
-
-category: 'properties'
-method: RwDefinitionSetDefinition
-key
-	"Answer an object that can be used to uniquely identify myself in the context of my container.
-	But PackageSets have no container, so we don't expect them to have a key."
-
-	^nil
-%
-
-category: 'accessing'
-method: RwDefinitionSetDefinition
-keys
-
-	^ definitions keys
-%
-
-category: 'copying'
-method: RwDefinitionSetDefinition
-postCopy
-
-	super postCopy.
-	definitions := definitions copy
-%
-
-category: 'printing'
-method: RwDefinitionSetDefinition
-printOn: aStream
-
-	aStream nextPutAll: self asString
-%
-
-category: 'accessing'
-method: RwDefinitionSetDefinition
-size
-
-	^ definitions size
-%
-
-! Class implementation for 'RwPackageSetDefinition'
-
-!		Instance methods for 'RwPackageSetDefinition'
-
-category: 'accessing'
-method: RwPackageSetDefinition
-addPackage: aDefinition
-
-	self addDefinition: aDefinition
-%
-
-category: 'deriving'
-method: RwPackageSetDefinition
-deriveLoadedThings
-
-	^ RwEntitySet
-		withAll:
-			((self definitionNames
-				collect: [ :packageName | Rowan image loadedPackageNamed: packageName ifAbsent: [  ] ])
-				select: [ :each | each notNil ])
-%
-
-category: 'accessing'
-method: RwPackageSetDefinition
-packageNames
-
-	^ self definitionNames
-%
-
-category: 'accessing'
-method: RwPackageSetDefinition
-packages
-
-	^ self definitions
-%
-
-! Class implementation for 'RwProjectSetDefinition'
-
-!		Instance methods for 'RwProjectSetDefinition'
-
-category: 'accessing'
-method: RwProjectSetDefinition
-addProject: aDefinition
-
-	self addDefinition: aDefinition
-%
-
-category: 'deriving'
-method: RwProjectSetDefinition
-deriveLoadedThings
-
-	"extract the loaded projects that correspond to the project defintions held by the receiver"
-
-	^ RwEntitySet
-		withAll:
-			((self definitionNames
-				collect: [ :projectName | Rowan image loadedProjectNamed: projectName ifAbsent: [  ] ])
-				select: [ :each | each notNil ])
+category: 'comparing'
+method: RwAbstractRepositoryDefinitionV2
+= anObject
+	^ self projectsHome = anObject projectsHome
+		and: [ 
+			self repositoryRoot = anObject repositoryRoot
+				and: [ self repositoryUrl = anObject repositoryUrl ] ]
 %
 
 category: 'actions'
-method: RwProjectSetDefinition
-load
+method: RwAbstractRepositoryDefinitionV2
+checkAndUpdateRepositoryRevision: aRwProjectLoadSpecificationV2
+	"noop"
+%
 
-	^ Rowan projectTools load loadProjectSetDefinition: self
+category: 'comparing'
+method: RwAbstractRepositoryDefinitionV2
+hash
+	| hashValue |
+	hashValue := self projectsHome hash.
+	hashValue := hashValue bitXor: self repositoryRoot hash.
+	hashValue := hashValue bitXor: self repositoryUrl hash.
+	^ hashValue
 %
 
 category: 'accessing'
-method: RwProjectSetDefinition
-projectNamed: projectName
+method: RwAbstractRepositoryDefinitionV2
+key
 
-	^ self 
-		projectNamed: projectName
-		ifAbsent: [ self error: 'No project named ', projectName printString , ' found.']
+	^properties at: 'name' ifAbsent: [nil]
 %
 
 category: 'accessing'
-method: RwProjectSetDefinition
-projectNamed: projectName ifAbsent: absentBlock
+method: RwAbstractRepositoryDefinitionV2
+name
 
-	^ self definitionWithKey: projectName ifAbsent: absentBlock
+	^ self key
 %
 
 category: 'accessing'
-method: RwProjectSetDefinition
-projectNames
+method: RwAbstractRepositoryDefinitionV2
+name: aString 
 
-	^ self definitionNames
+	properties at: 'name' put: aString
 %
 
 category: 'accessing'
-method: RwProjectSetDefinition
-projects
+method: RwAbstractRepositoryDefinitionV2
+projectsHome
+	^ projectsHome
+%
 
-	^ self definitions
+category: 'accessing'
+method: RwAbstractRepositoryDefinitionV2
+projectsHome: aFileReference
+	projectsHome := aFileReference
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinitionV2
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ repositoryRoot
+		ifNil: [ 
+			repositoryUrl
+				ifNotNil: [ :urlString | 
+					| url |
+					url := urlString asRwUrl.
+					url scheme = 'file'
+						ifTrue: [ ^ repositoryRoot := url pathString ] ].
+			repositoryRoot := self projectsHome / self name ]
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinitionV2
+repositoryRoot: pathStringOrReference
+	repositoryRoot := pathStringOrReference
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinitionV2
+repositoryUrl
+	^ repositoryUrl
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinitionV2
+repositoryUrl: anUrlString
+	repositoryUrl := anUrlString
+%
+
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
+resolve
+	self subclassResponsibility: #'resolve'
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinitionV2
+revision
+
+	^ ''
 %
 
 ! Class implementation for 'RwDiskRepositoryDefinitionV2'
@@ -48000,15 +50369,6 @@ newNamed: repositoryName projectsHome: aFileReference repositoryUrl: aRepository
 %
 
 !		Instance methods for 'RwDiskRepositoryDefinitionV2'
-
-category: 'comparing'
-method: RwDiskRepositoryDefinitionV2
-= anObject
-	^ self projectsHome = anObject projectsHome
-		and: [ 
-			self repositoryRoot = anObject repositoryRoot
-				and: [ self repositoryUrl = anObject repositoryUrl ] ]
-%
 
 category: 'testing'
 method: RwDiskRepositoryDefinitionV2
@@ -48061,49 +50421,6 @@ doCommit: message
 	"noop by default"
 %
 
-category: 'comparing'
-method: RwDiskRepositoryDefinitionV2
-hash
-	| hashValue |
-	hashValue := self projectsHome hash.
-	hashValue := hashValue bitXor: self repositoryRoot hash.
-	hashValue := hashValue bitXor: self repositoryUrl hash.
-	^ hashValue
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-key
-
-	^properties at: 'name' ifAbsent: [nil]
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-name
-
-	^ self key
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-name: aString 
-
-	properties at: 'name' put: aString
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-projectsHome
-	^ projectsHome
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-projectsHome: aFileReference
-	projectsHome := aFileReference
-%
-
 category: 'testing'
 method: RwDiskRepositoryDefinitionV2
 repositoryExists
@@ -48133,18 +50450,6 @@ repositoryRoot: pathStringOrReference
 	repositoryRoot := pathStringOrReference asFileReference
 %
 
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-repositoryUrl
-	^ repositoryUrl
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-repositoryUrl: anUrlString
-	repositoryUrl := anUrlString
-%
-
 category: 'actions'
 method: RwDiskRepositoryDefinitionV2
 resolve
@@ -48157,13 +50462,6 @@ resolve
 		ifFalse: [ 
 			self repositoryRoot ensureCreateDirectory.
 			false ]
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-revision
-
-	^ ''
 %
 
 category: 'private'
@@ -48467,6 +50765,226 @@ _createRemoteUrl
 	^ aRemoteUrl
 %
 
+! Class implementation for 'RwStrawmanDiskRepositoryDefinition'
+
+!		Instance methods for 'RwStrawmanDiskRepositoryDefinition'
+
+category: 'actions'
+method: RwStrawmanDiskRepositoryDefinition
+resolve
+	"attach to existing repository structure or create"
+
+	"answer true if attaching to an existing repository"
+
+	^ self repositoryRoot exists
+		ifTrue: [ true ]
+		ifFalse: [ 
+			self repositoryRoot ensureCreateDirectory.
+			false ]
+%
+
+! Class implementation for 'RwDefinitionSetDefinition'
+
+!		Instance methods for 'RwDefinitionSetDefinition'
+
+category: 'accessing'
+method: RwDefinitionSetDefinition
+addDefinition: aDefinition
+
+	| key |
+	key := aDefinition key.
+	(definitions includesKey: key)
+		ifTrue: [ self error: 'Duplicate definition ' ].
+	definitions at: key put: aDefinition
+%
+
+category: 'accessing'
+method: RwDefinitionSetDefinition
+definitionNames
+
+	^ self definitions keys asArray
+%
+
+category: 'accessing'
+method: RwDefinitionSetDefinition
+definitions
+
+	^ definitions
+%
+
+category: 'accessing'
+method: RwDefinitionSetDefinition
+definitionWithKey: aKey ifAbsent: absentBlock
+
+	^ definitions at: aKey ifAbsent: absentBlock
+%
+
+category: 'deriving'
+method: RwDefinitionSetDefinition
+deriveLoadedThings
+
+	self subclassResponsibility: #'deriveLoadedThings'
+%
+
+category: 'enumerating'
+method: RwDefinitionSetDefinition
+do: aBlock
+
+	^ self definitions do: aBlock
+%
+
+category: 'initialization'
+method: RwDefinitionSetDefinition
+initialize
+
+	super initialize.
+	definitions := Dictionary new
+%
+
+category: 'testing'
+method: RwDefinitionSetDefinition
+isEmpty
+
+	"Answer true if this definition does not actually define anything."
+
+	^ super isEmpty & definitions isEmpty
+%
+
+category: 'properties'
+method: RwDefinitionSetDefinition
+key
+	"Answer an object that can be used to uniquely identify myself in the context of my container.
+	But PackageSets have no container, so we don't expect them to have a key."
+
+	^nil
+%
+
+category: 'accessing'
+method: RwDefinitionSetDefinition
+keys
+
+	^ definitions keys
+%
+
+category: 'copying'
+method: RwDefinitionSetDefinition
+postCopy
+
+	super postCopy.
+	definitions := definitions copy
+%
+
+category: 'printing'
+method: RwDefinitionSetDefinition
+printOn: aStream
+
+	aStream nextPutAll: self asString
+%
+
+category: 'accessing'
+method: RwDefinitionSetDefinition
+size
+
+	^ definitions size
+%
+
+! Class implementation for 'RwPackageSetDefinition'
+
+!		Instance methods for 'RwPackageSetDefinition'
+
+category: 'accessing'
+method: RwPackageSetDefinition
+addPackage: aDefinition
+
+	self addDefinition: aDefinition
+%
+
+category: 'deriving'
+method: RwPackageSetDefinition
+deriveLoadedThings
+
+	^ RwEntitySet
+		withAll:
+			((self definitionNames
+				collect: [ :packageName | Rowan image loadedPackageNamed: packageName ifAbsent: [  ] ])
+				select: [ :each | each notNil ])
+%
+
+category: 'accessing'
+method: RwPackageSetDefinition
+packageNames
+
+	^ self definitionNames
+%
+
+category: 'accessing'
+method: RwPackageSetDefinition
+packages
+
+	^ self definitions
+%
+
+! Class implementation for 'RwProjectSetDefinition'
+
+!		Instance methods for 'RwProjectSetDefinition'
+
+category: 'accessing'
+method: RwProjectSetDefinition
+addProject: aDefinition
+
+	self addDefinition: aDefinition
+%
+
+category: 'deriving'
+method: RwProjectSetDefinition
+deriveLoadedThings
+
+	"extract the loaded projects that correspond to the project defintions held by the receiver"
+
+	^ RwEntitySet
+		withAll:
+			((self definitionNames
+				collect: [ :projectName | Rowan image loadedProjectNamed: projectName ifAbsent: [  ] ])
+				select: [ :each | each notNil ])
+%
+
+category: 'actions'
+method: RwProjectSetDefinition
+load
+
+	^ Rowan projectTools load loadProjectSetDefinition: self
+%
+
+category: 'accessing'
+method: RwProjectSetDefinition
+projectNamed: projectName
+
+	^ self 
+		projectNamed: projectName
+		ifAbsent: [ self error: 'No project named ', projectName printString , ' found.']
+%
+
+category: 'accessing'
+method: RwProjectSetDefinition
+projectNamed: projectName ifAbsent: absentBlock
+
+	^ self definitionWithKey: projectName ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwProjectSetDefinition
+projectNames
+
+	^ self definitionNames
+%
+
+category: 'accessing'
+method: RwProjectSetDefinition
+projects
+
+	^ self definitions
+%
+
 ! Class implementation for 'RwMethodDefinition'
 
 !		Class methods for 'RwMethodDefinition'
@@ -48522,6 +51040,15 @@ key
 
 category: 'accessing'
 method: RwMethodDefinition
+offset: anInteger inFile: aFileName
+  "these properties are used when handling a CompileError or
+   a tonel parse error."
+  properties at:'_gsFileOffset' put: anInteger .
+  properties at:'_gsFileName' put: aFileName .
+%
+
+category: 'accessing'
+method: RwMethodDefinition
 protocol
 
 	^properties at: 'protocol'
@@ -48553,6 +51080,17 @@ method: RwMethodDefinition
 source: sourceString
 
 	source := sourceString
+%
+
+category: 'private'
+method: RwMethodDefinition
+_compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+
+	({'_gsFileOffset'. '_gsFileName' } includes: propertyKey)
+		ifTrue: [ 
+		"_gsFileOffset' '_gsFileName' are informational properties so any differences can be ignored "
+		^ true ].
+	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 %
 
 ! Class implementation for 'RwPackageDefinition'
@@ -48636,19 +51174,52 @@ addClassNamed: className super: superclassName instvars: instvars category: cate
 
 category: 'accessing'
 method: RwPackageDefinition
-addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type
+addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: #()
+				type: 'normal')
+%
 
-	^ self addClassDefinition: 
-		(RwClassDefinition 
-			newForClassNamed: className 
-				super: superclassName 
-				instvars: instvars 
-				classinstvars: 
-				classinstvars 
-				classvars: classvars 
-				category: category 
-				comment: comment 
-				pools: pools 
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
+				type: 'normal')
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
 				type: type)
 %
 
@@ -48937,7 +51508,7 @@ configurationTemplate
 	groupNames
 		do: [:groupName | config addDefinedGroupName: groupName ].
 	config 
-		conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+		conditionalPackagesAtConditions: { Rowan platform basePlatformConditionalAttribute } 
 		andGroup: (groupNames at: 1) 
 		addPackageNames: self packageNames.
 	^ config
@@ -49402,6 +51973,61 @@ projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: u
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
+topazReadTonelFile: fileName
+    "Read a single file and compile the methods within that file.
+     Definition/redefinition of the class not implemented yet "
+  | projectDef package clsName clsDef cls methBlk envId |
+  projectDef := RwRepositoryComponentProjectTonelReaderVisitor
+     readClassFile: fileName
+     projectName: 'TopazLoad'   "synthetic projed and package names"
+     packageName: 'TopazPackage' .
+  package := projectDef packageNamed: 'TopazPackage_1' .
+  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
+  package classDefinitions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class definition in file ' , fileName
+    ].
+    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
+  ].
+  package classExtensions ifNotNil:[:defs | | sz |
+    (sz := defs size) > 1 ifTrue:[
+      Error signal:'more than one class extension in file ' , fileName
+    ].
+    sz > 0 ifTrue:[
+      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
+      clsDef :=  defs values at: 1.
+    ].
+  ].   
+  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
+  clsName := clsDef name .
+  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
+    "creating the class not implemented yet"
+    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
+  ].
+  cls := cls"anAssociation" value.
+
+  methBlk := [ :methDef "a RwMethodDefinition" |
+    [
+      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
+      cls compileMethod: methDef source
+      dictionaries: System myUserProfile symbolList
+      category: methDef protocol asSymbol
+      intoMethodDict: nil "install into the class's dictionaries"
+      intoCategories: nil
+      intoPragmas: nil
+      environmentId:  envId
+    ] on: (CompileError, CompileWarning) do:[:ex | 
+      ex addText: (RwRepositoryComponentProjectTonelReaderVisitor lineNumberStringForMethod: methDef ).
+      ex pass
+    ]
+   ].
+  clsDef instanceMethodDefinitions do: methBlk .
+  cls := cls class .
+  clsDef classMethodDefinitions do: methBlk .
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
 withProperties: properties packageDefinitions: packageDefinitions
 
 	^ self basicNew
@@ -49744,6 +52370,20 @@ commit: message
 	^ self projectRef doCommit: message
 %
 
+category: 'properties'
+method: RwComponentProjectDefinition
+compileWhileReading
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  ^ properties at: 'CompileWhileReading' otherwise: false
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+compileWhileReading: aBoolean
+  "true means compile method defs while reading tonel files for immediate detection of syntax errors"
+  properties at: 'CompileWhileReading' put: aBoolean
+%
+
 category: 'accessing'
 method: RwComponentProjectDefinition
 componentNamed: aComponentName
@@ -49880,9 +52520,8 @@ method: RwComponentProjectDefinition
 exportPackages
 	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
 	| projectSetDefinition |
-	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
-		on: Error
-		do: [:ignored | RwProjectSetDefinition new ].
+	projectSetDefinition := (self class newForProjectReference: self projectRef) readProjectSet .
+
 	self exportPackages: projectSetDefinition.
 %
 
@@ -50181,7 +52820,7 @@ readPackageNames: packageNames
 
 	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
-	| format visitorClass |
+	| format aVisitor |
 	packages := Dictionary new. 
 	format := self 
 		packageFormatIfAbsent: [  
@@ -50190,10 +52829,15 @@ readPackageNames: packageNames
 				at: #format ifAbsent: [ 'tonel' ].
 			self packageFormat: formatFromDisk.
 			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
+	format = 'tonel' ifTrue: [ 
+     aVisitor := RwRepositoryComponentProjectTonelReaderVisitor new .
+     self compileWhileReading ifTrue:[
+       aVisitor compileWhileReading: true .
+     ]
+  ] ifFalse: [ 
+     aVisitor := RwRepositoryComponentProjectFiletreeReaderVisitor new .
+  ].
+	^ aVisitor
 		packageNames: packageNames;
 		visit: self.
 %
@@ -50203,29 +52847,6 @@ method: RwComponentProjectDefinition
 readProjectSet
 
 	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
-%
-
-category: 'actions'
-method: RwComponentProjectDefinition
-readProjectSetForPackageNames: packageNames
-
-	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
-
-	| format visitorClass |
-	packages := Dictionary new. 
-	format := self 
-		packageFormatIfAbsent: [  
-			| formatFromDisk |
-			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
-				at: #format ifAbsent: [ 'tonel' ].
-			self packageFormat: formatFromDisk.
-			formatFromDisk ].
-	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
-		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
-	^ visitorClass new
-		packageNames: packageNames;
-		visit: self.
 %
 
 category: 'reading'
@@ -51106,562 +53727,6 @@ _repositoryDefinitionClass
 
 category: 'private'
 method: RwProjectReferenceDefinition
-_repositoryDefinitionForProjectHome: projectHomeFileReferenceOrString
-
-
-	| newProjectRepository |
-	newProjectRepository := self _repositoryDefinitionClass
-		newNamed: self projectAlias
-			repositoryRoot: self repositoryRoot	"not a good idea to have repository root stored in two spots"
-			projectUrl: self projectUrl
-			committish: self committish 
-			committishType: self committishType.
-	^ newProjectRepository
-%
-
-! Class implementation for 'RwProjectReferenceDefinitionV2'
-
-!		Class methods for 'RwProjectReferenceDefinitionV2'
-
-category: 'instance creation'
-classmethod: RwProjectReferenceDefinitionV2
-fromLoadSpecification: aRwProjectLoadSpecification
-	^ self new
-		projectSpecification: aRwProjectLoadSpecification;
-		yourself
-%
-
-!		Instance methods for 'RwProjectReferenceDefinitionV2'
-
-category: 'visiting'
-method: RwProjectReferenceDefinitionV2
-acceptVisitor: aVisitor
-
-	^ aVisitor visitProjectReferenceDefinition: self
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-branch: aString
-
-	self committish: aString committishType: 'branch'
-%
-
-category: 'properties'
-method: RwProjectReferenceDefinitionV2
-canCommit
-
-	^ self repositoryDefinition canCommit
-%
-
-category: 'actions'
-method: RwProjectReferenceDefinitionV2
-clone
-
-	"who wins? resolve or clone"
-
-	^ self repositoryDefinition clone
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-comment
-
-	^ self properties at: 'comment' ifAbsent: [ '' ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-comment: aString
-
-	^ self properties at: 'comment' put: aString
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-commitLog: logLimit
-
-	^ self repositoryDefinition commitLog: logLimit
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-committish
-
-	^ self projectLoadSpecification committish
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-committish: aString 
-
-	self projectLoadSpecification committish: aString.
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-componentNames
-
-	^ self projectSpecification componentNames
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-componentNames: anArray
-
-	^ self projectLoadSpecification componentNames: anArray
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-components
-	^ components ifNil: [ components := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-components: aComponentDefinitionDictionary
-	^ components := aComponentDefinitionDictionary
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-componentsPath
-
-	^ self projectLoadSpecification componentsPath
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-componentsPath: aString
-
-	^ self projectLoadSpecification componentsPath: aString
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-componentsRoot
-	^ self projectSpecification componentsRoot
-%
-
-category: 'actions'
-method: RwProjectReferenceDefinitionV2
-create
-	"write the project structure to disk, if it doesn't already exist"
-
-	Rowan projectTools create
-		createProjectRepository: self.
-%
-
-category: 'actions'
-method: RwProjectReferenceDefinitionV2
-doCommit: message
-
-	^ self repositoryDefinition doCommit: message
-%
-
-category: 'exporting'
-method: RwProjectReferenceDefinitionV2
-exportSpecification
-
-	| spec |
-	spec := self asSpecification.
-	spec exportToUrl: 'file:',  self specsRoot pathString, '/'
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-gitRoot: aGitRootReferenceOrString 
-
-	self repositoryDefinition gitRoot: aGitRootReferenceOrString
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-groupNames
-
-	^self projectSpecification groupNames
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-groupNames: aCollection
-
-	^ self projectLoadSpecification groupNames: aCollection asArray
-%
-
-category: 'temporary compat'
-method: RwProjectReferenceDefinitionV2
-imageSpec
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-	^self
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-key
-
-	^ self projectName
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-loadedCommitId
-
-	^ self properties at: 'loadedCommitId' ifAbsent: [ '' ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-loadedCommitId:  aCommitId
-
-	^ self properties at: 'loadedCommitId' put: aCommitId
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packageConvention
-
-	^ self properties at: 'packageConvention' ifAbsent: [ 'RowanHybrid' ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packageConvention: aString
-
-	"
-		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
-		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
-		Rowan			- Class category and method protocol are not overloaded with packaging information
-	"
-
-	(#( 'RowanHybrid' 'Monticello' 'Rowan' ) includes: aString)
-		ifFalse: [ self error: 'Unknown package convention ', aString printString, '. Should be one of: RowanHybrid, Monticello, or Rowan' ].
-	^ self properties at: 'packageConvention' put: aString
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packageFormat
-	^ self projectSpecification packageFormat
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packageFormat: aString
-	self projectSpecification packageFormat: aString
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packageFormatIfAbsent: absentBlock
-
-	^ self properties at: 'packageFormat' ifAbsent: absentBlock
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packageNameToPlatformPropertiesMap: aDictionary
-
-	^ self properties at: 'packageNameToPlatformPropertiesMap' put: aDictionary
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packagesPath
-
-	^ self projectLoadSpecification packagesPath
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packagesPath: aString
-
-	^ self projectLoadSpecification packagesPath: aString
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-packagesRoot
-	^ self projectSpecification packagesRoot
-%
-
-category: 'copying'
-method: RwProjectReferenceDefinitionV2
-postCopy
-	| componentsCopy |
-	super postCopy.
-	componentsCopy := self components copy.
-	componentsCopy
-		keysAndValuesDo: [ :key :value | componentsCopy at: key put: value copy ].
-	self components: componentsCopy.
-	self projectLoadSpecification: self projectLoadSpecification copy
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectAlias
-	"project alias is used as the name of the root directory for the project ... necessary if the project is 
-		embedded in another project's git repository or you want use a non-default directory on disk"
-
-	^ self projectSpecification projectAlias
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectAlias: aStringOrNil
-	"project alias is used as the name of the root directory for the project ... necessary if the project is 
-		embedded in another project's git repository or you want use a non-default directory on disk"
-
-	self projectLoadSpecification projectAlias: aStringOrNil
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectHome
-
-	^ self properties at: 'projectHome' ifAbsent: [ FileLocator rowanProjectsHome ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectHome: projectHomeFileReferenceOrString
-
-	self repositoryDefinition: nil. "changing project home invalidates the current repository definition"
-	projectHomeFileReferenceOrString
-		ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
-	self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference.
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectLoadSpecification
-	^ projectLoadSpecification
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectLoadSpecification: aRwProjectLoadSpecification
-	"make a copy of the aRwProjectLoadSpecification, because we need to preserve
-		isolation of the load spec once it has been associated with the project definition"
-
-	projectLoadSpecification := aRwProjectLoadSpecification copy
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectName
-	^ self projectSpecification projectName
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectNames
-
-	^ self properties at: 'projectNames' ifAbsent: [ #() ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectNames: anArray
-
-	^ self properties at: 'projectNames' put: anArray
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectsPath
-
-	^ self projectLoadSpecification projectsPath
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectsPath: aString
-
-	^ self projectLoadSpecification projectsPath: aString
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectSpecification
-	^ projectSpecification
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectSpecification: aRwProjectSpecification
-	projectSpecification := aRwProjectSpecification
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectsRoot
-	^ self projectSpecification projectsRoot
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-projectUrl
-
-	^ self projectLoadSpecification projectUrl
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-remote
-
-	^ self properties at: 'remote' ifAbsent: [ 'origin' ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-remoteUrl
-
-	^ self repositoryDefinition remoteUrl
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-remoteUrl: aRemoteUrl
-
-	self repositoryDefinition remoteUrl: aRemoteUrl
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-repositoryCommitId
-
-	^ self repositoryDefinition repositoryCommitId
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-repositoryDefinition
-	projectSpecification ifNil: [ ^ nil ].
-	^ self projectSpecification repositoryDefinition
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-repositoryRoot
-	"Root directory of the project. The componentsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self projectSpecification repositoryRoot
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-repositoryRoot: aFileReferenceOrPath
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	| fileRef projectDirName |
-	fileRef := aFileReferenceOrPath asFileReference.
-	self projectHome: fileRef parent.	 "changing project home invalidates the current repository definition"
-	"the project name should match the name of the directory ... use the alias if the names don't match"
-	projectDirName := fileRef basename.
-	self projectName
-		ifNotNil: [:nm | 
-			nm = projectDirName
-				ifTrue: [
-					"we're done"
-					^ self ].
-			"project name does not equal name project directory"
-			self projectAlias = self projectName
-				ifTrue: [
-					"move the old name to the alias"
-					self projectAlias: self projectName ] ].
-	"set project name to projectDirName "
-	self projectName: projectDirName
-%
-
-category: 'temporary compat'
-method: RwProjectReferenceDefinitionV2
-repositoryRootPath
-
-	^ self repositoryRoot pathString
-%
-
-category: 'temporary compat'
-method: RwProjectReferenceDefinitionV2
-repoSpec
-
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-	^self
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-SHA: aString
-
-	self committish: aString committishType: 'SHA'
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-specsPath
-
-	^ self projectLoadSpecification specsPath
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-specsPath: aString
-
-	^ self projectLoadSpecification specsPath: aString
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-specsRoot
-	^ self projectLoadSpecification specsRoot
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-tag: aString
-
-	self committish: aString committishType: 'tag'
-%
-
-category: 'loading'
-method: RwProjectReferenceDefinitionV2
-updateLoadedCommitId
-
-	self loadedCommitId: self repositoryDefinition repositoryCommitId
-%
-
-category: 'temporary compat'
-method: RwProjectReferenceDefinitionV2
-updateLoadedCommitIdForTool: aRwTool
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-  ^ aRwTool doGitUpdateLoadedCommitId
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-useGit
-
-	^ self properties at: 'useGit' ifAbsent: [ false ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinitionV2
-useGit: aBool
-
-	^ self properties at: 'useGit' put: aBool
-%
-
-category: 'private'
-method: RwProjectReferenceDefinitionV2
-_repositoryDefinitionClass
-
-	self useGit ifTrue: [ ^ RwGitRepositoryDefinition ].
-	^ RwAbstractRepositoryDefinition
-%
-
-category: 'private'
-method: RwProjectReferenceDefinitionV2
 _repositoryDefinitionForProjectHome: projectHomeFileReferenceOrString
 
 
@@ -55304,22 +57369,27 @@ category: 'compiling'
 method: RwGsMethodPatch
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		intoCategories: nil
-		intoPragmas: nil
-		environmentId: self methodEnvironmentId
+  [
+	  | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
+		  intoCategories: nil
+		  intoPragmas: nil
+		  environmentId: self methodEnvironmentId
+  ] on: (CompileError, CompileWarning) do:[:ex |
+    ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
+    ex pass 
+  ]
 %
 
 category: 'initializers'
@@ -55811,25 +57881,29 @@ category: 'compiling'
 method: RwGsMethodExtensionSessionMethodSymbolDictPatch
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| sourceString symbolList protocol |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+  [ | sourceString symbolList protocol |
+	  sourceString := methodDefinition source.
+	  symbolList := SymbolList with: tempSymbols.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
 
-	methDict := GsMethodDictionary new.
-	catDict := GsMethodDictionary new.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: methDict
-		intoCategories: catDict
-		intoPragmas: pArray
-		environmentId: self methodEnvironmentId
+	  methDict := GsMethodDictionary new.
+	  catDict := GsMethodDictionary new.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: symbolList
+		  category: protocol
+		  intoMethodDict: methDict
+		  intoCategories: catDict
+		  intoPragmas: pArray
+		  environmentId: self methodEnvironmentId
+   ] on: (CompileError, CompileWarning) do:[:ex |
+     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
+     ex pass
+   ]
 %
 
 category: 'installing'
@@ -58839,7 +60913,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+	behavior moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := registryInstance methodRegistry
 		at: compiledMethod
@@ -62829,13 +64903,13 @@ automaticClassInitializationBlackList_global
 
 category: 'queries'
 method: RwPlatform
-basePlatformAttribute
-	"Answer the generic configuration attribute for the platform"
+basePlatformConditionalAttribute
+	"Answer the generic conditional attribute for the platform"
 
-	"Examples include: 'gemstone', 'pharo', 'squeak'"
+	"Examples include: 'gemstone', 'pharo', 'squeak', 'vast' 
+		(see RwSpecification class >> _supportedPlatformNames)"
 
-
-	self subclassResponsibility: #basePlatformAttribute
+	self subclassResponsibility: #'basePlatformConditionalAttribute'
 %
 
 category: 'preferences'
@@ -62933,8 +65007,8 @@ loadedPackageClass
 
 category: 'queries'
 method: RwPlatform
-platformConfigurationAttributes
-	"Answer the configuration attributes. Currently 'common' is the only shared attribute."
+platformConditionalAttributes
+	"Answer the platform conditional attributes. Currently 'common' is the only shared attribute."
 
 	"subclasses need to override and provide additional platform-specific attributes"
 
@@ -63024,9 +65098,11 @@ automaticClassInitializationBlackList_user
 
 category: 'queries'
 method: RwGsPlatform
-basePlatformAttribute
-	"Answer the generic configuration attribute for the platform"
+basePlatformConditionalAttribute
+	"Answer the generic conditional attribute for the platform"
 
+	"Examples include: 'gemstone', 'pharo', 'squeak', 'vast' 
+		(see RwSpecification class >> _supportedPlatformNames)"
 
 	^ 'gemstone'
 %
@@ -63230,10 +65306,14 @@ parseSelectorFrom: methodString
 
 category: 'queries'
 method: RwGsPlatform
-platformConfigurationAttributes
-	"Answer the configuration attributes for the current platform."
+platformConditionalAttributes
+	"Answer the conditional attributes for the current platform."
 
-	^ super platformConfigurationAttributes, {self basePlatformAttribute. 'gemstone-kernel'. (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
+	^ super platformConditionalAttributes
+		,
+			{(self basePlatformConditionalAttribute).
+			'gemstone-kernel'.
+			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}
 %
 
 category: 'preferences'
@@ -63349,7 +65429,8 @@ method: RwGsPlatform
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.
-	 Returns the compiled method or signals a CompileError."
+	 Returns the compiled method or signals a CompileError.
+   Only used to parse a method to determine the selector.  "
 
 	| undefinedSymbolList undefinedSymbols |
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
@@ -63852,356 +65933,6 @@ _visited: aConfiguration
 	visitedConfigurationMap at:  aConfiguration name put: aConfiguration.
 %
 
-! Class implementation for 'RwProjectLoadConfigurationVisitorV2'
-
-!		Class methods for 'RwProjectLoadConfigurationVisitorV2'
-
-category: 'instance creation'
-classmethod: RwProjectLoadConfigurationVisitorV2
-new
-
-	^super new initialize
-%
-
-!		Instance methods for 'RwProjectLoadConfigurationVisitorV2'
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-componentNames
-
-	^ componentNames
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-componentsRoot
-	^ componentsRoot
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-componentsRoot: aStringOrFileReference
-	componentsRoot := aStringOrFileReference asFileReference
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-groupNames
-
-	^ groupNames
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-groupNames: aColl
-
-	groupNames := aColl copy
-%
-
-category: 'initialization'
-method: RwProjectLoadConfigurationVisitorV2
-initialize
-	packageNames := Set new.
-	visitedComponentNames := Set new.
-	componentNames := Set new.
-	platformAttributes := #().
-	groupNames := Set new
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-packageNames
-
-	^ packageNames
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-platformAttributes
-
-	^ platformAttributes
-%
-
-category: 'accessing'
-method: RwProjectLoadConfigurationVisitorV2
-platformAttributes: aColl
-
-	platformAttributes := aColl
-%
-
-category: 'visiting'
-method: RwProjectLoadConfigurationVisitorV2
-visit: aProjectComponent
-
-	^aProjectComponent acceptVisitor: self
-%
-
-category: 'visiting'
-method: RwProjectLoadConfigurationVisitorV2
-visitNested: aProjectComponent
-
-	^aProjectComponent acceptNestedVisitor: self
-%
-
-category: 'visiting'
-method: RwProjectLoadConfigurationVisitorV2
-visitProjectLoadComponent: aProjectLoadComponent
-	(visitedComponentNames includes: aProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aProjectLoadComponent.
-
-	definedGroupNames := aProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aProjectLoadComponent.
-
-	self componentNames addAll: aProjectLoadComponent componentNames.
-	(self
-		_components: self componentsRoor
-		forProject: aProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ]
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_addPackageNames: somePackageNames for: aConfiguration
-
-	self packageNames addAll: somePackageNames
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_components: componentDirPath forProject: aProjectName
-
-	| urlBase |
-	self componentNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
-	^ self componentNames
-		collect: [ :componentName | 
-			| url |
-			url := urlBase , componentName , '.ston'.
-			(RwAbstractProjectConfiguration fromUrl: url)
-				projectName: aProjectName;
-				yourself ]
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_matchPlatformAttributes: platformPatternMatcher
-
-	self platformAttributes do: [:anObject |
-		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
-	^false
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_platformAttributeMatchIn: platformMatchersList
-
-	platformMatchersList do: [:platformPatternMatcher |
-		(self _matchPlatformAttributes: platformPatternMatcher) 
-			ifTrue: [ ^true ] ].
-	^false
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_processConditionalPackageNames: aProjectLoadConfiguration
-
-	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #componentNames ifAbsent: [ #()] ) ] ] ] ].
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_processGroupNames
-
-	| seedGroupNames seeded |
-	seedGroupNames := groupNames asSet copy.
-	seeded := Set new.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				referencedGroupNames do: [:refGroupName |
-					(seeded includes: refGroupName)
-						ifFalse: [
-						"ensure that we seed each group only once"
-						seeded add: refGroupName.
-						seedGroupNames add: refGroupName ] ] ] ].
-%
-
-category: 'private'
-method: RwProjectLoadConfigurationVisitorV2
-_visited: aComponent
-
-	visitedComponentNames add:  aComponent name.
-%
-
-! Class implementation for 'RwProjectLoadComponentVisitorV2'
-
-!		Instance methods for 'RwProjectLoadComponentVisitorV2'
-
-category: 'initialization'
-method: RwProjectLoadComponentVisitorV2
-initialize
-
-	super initialize.
-	projectNames := Set new.
-	projectLoadSpecs := Set new.
-	visitedComponents := Dictionary new
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectDefinition
-	^ self resolvedProject _projectDefinition
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectLoadSpecs
-
-	^ projectLoadSpecs
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectNames
-
-	^ projectNames
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectsRoot
-	^ projectsRoot
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-projectsRoot: aString
-	projectsRoot := aString asFileReference
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-resolvedProject
-	^ resolvedProject
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-resolvedProject: aResolvedProject
-	resolvedProject := aResolvedProject
-%
-
-category: 'visiting'
-method: RwProjectLoadComponentVisitorV2
-visitComponentLoadConfiguration: aComponentLoadConfiguration
-	(visitedComponentNames includes: aComponentLoadConfiguration name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aComponentLoadConfiguration.
-
-	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aComponentLoadConfiguration.
-
-	self componentNames addAll: aComponentLoadConfiguration componentNames.
-	(self
-		_components: self componentsRoot
-		forProject: aComponentLoadConfiguration projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aComponentLoadConfiguration projectNames.
-	(self
-		_projects: self projectsRoot
-		forProject: aComponentLoadConfiguration projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-%
-
-category: 'accessing'
-method: RwProjectLoadComponentVisitorV2
-visitedComponents
-
-	^ visitedComponents
-%
-
-category: 'visiting'
-method: RwProjectLoadComponentVisitorV2
-visitLoadSpecification: aLoadSpecification
-
-	self projectLoadSpecs add: aLoadSpecification
-%
-
-category: 'visiting'
-method: RwProjectLoadComponentVisitorV2
-visitNestedProjectLoadComponent: aNestedProjectLoadComponent
-	(visitedComponentNames includes: aNestedProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aNestedProjectLoadComponent.
-
-	definedGroupNames := aNestedProjectLoadComponent definedGroupNames.
-	self _processGroupNames.
-
-	self _processConditionalPackageNames: aNestedProjectLoadComponent.
-
-	self componentNames addAll: aNestedProjectLoadComponent componentNames.
-	(self
-		_components: self componentsRoot
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	self projectNames addAll: aNestedProjectLoadComponent projectNames.
-	(self
-		_projects: self projectsRoot
-		forProject: aNestedProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-%
-
-category: 'private'
-method: RwProjectLoadComponentVisitorV2
-_addPackageNames: somePackageNames for: aComponent
-
-	self projectDefinition addPackages: somePackageNames forComponent: aComponent
-%
-
-category: 'private'
-method: RwProjectLoadComponentVisitorV2
-_projects: projectDirPath forProject: ignored
-
-	| urlBase |
-	self projectNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
-	^ self projectNames
-		collect: [ :prjName | 
-			| url |
-			url := urlBase , prjName , '.ston'.
-			RwSpecification fromUrl: url ]
-%
-
-category: 'private'
-method: RwProjectLoadComponentVisitorV2
-_visited: aComponent
-
-	super _visited: aComponent.
-	visitedComponents at: aComponent name put: aComponent.
-%
-
 ! Class implementation for 'RwPropertyModification'
 
 !		Class methods for 'RwPropertyModification'
@@ -64273,50 +66004,483 @@ isEmpty
 	^ false
 %
 
+! Class implementation for 'RwResolvedLoadComponentsV2'
+
+!		Class methods for 'RwResolvedLoadComponentsV2'
+
+category: 'instance creation'
+classmethod: RwResolvedLoadComponentsV2
+new
+
+	^self basicNew initialize
+%
+
+!		Instance methods for 'RwResolvedLoadComponentsV2'
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwProjectLoadComponentV2 newNamed: aComponentName ].
+	groupNameDict
+		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
+	component comment: commentString.
+	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addComponentNamed: componentName toComponentNamed: toComponentName
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component addComponentNamed: componentName
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addComponentNamed: componentName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
+	| component |
+	component :=  self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		addComponentNames: {componentName}
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addNestedComponentNamed: aComponentName definedGroupNames: groupNameDict comment: commentString
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwNestedProjectLoadComponentV2 newNamed: aComponentName ].
+	groupNameDict
+		keysAndValuesDo: [ :groupName :includeGroups | component defineGroupNamed: groupName toIncludeGroups: includeGroups ].
+	component comment: commentString.
+	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addPackageNamed: packageName toComponentNamed: componentName 
+	| component |
+	component := self
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	component
+		addPackageNames: {packageName}.
+	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
+	| component |
+	component := self
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		addPackageNames: {packageName}.
+	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+	| component |
+	component := self
+		componentNamed: componentName
+		ifAbsent: [ self error: 'The component ' , componentName printString , ' is undefined' ].
+	component
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
+			andPackageName: packageName
+			setSymbolDictNameTo: aSymbolDictAssoc value;
+		conditionalPropertiesAtConditions: conditionArray
+			andGroup: groupName
+			addPackageNames: {packageName}.
+	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addPackagesNamed: packageNames toComponentNamed: aComponentName
+	packageNames
+		do: [ :packageName | self addPackageNamed: packageName toComponentNamed: aComponentName ]
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName
+	^ packageNames
+		collect: [ :packageName | 
+			self
+				addPackageNamed: packageName
+				toComponentNamed: componentName
+				withConditions: conditionArray
+				andGroupName: groupName ]
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addProjectNamed: projectName toComponentNamed: toComponentName
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component addProjectNamed: projectName
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addProjectNamed: projectName toComponentNamed: toComponentName withConditions: conditionArray andGroupName: groupName
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component
+		conditionalPropertiesAtConditions: conditionArray
+		andGroup: groupName
+		addProjectNames: {projectName}
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addSequencedComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwSequencedProjectLoadComponentV2 newNamed: aComponentName ].
+	component
+		condition: condition;
+		groupName: groupName;
+		comment: commentString;
+		yourself.
+	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
+	component
+		condition: condition;
+		groupName: groupName;
+		comment: commentString;
+		yourself.
+	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+componentNamed: aComponentName
+	^ self
+		componentNamed: aComponentName
+		ifAbsent: [ self error: 'No component named ' , aComponentName printString , ' found' ]
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+componentNamed: aComponentName ifAbsent: absentBlock
+
+	^ self components 
+		at: aComponentName 
+		ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+components
+	^components
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+components: object
+	components := object
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+componentsWithDoits
+	^ self components select: [ :each | each hasDoits ]
+%
+
+category: 'enumerating'
+method: RwResolvedLoadComponentsV2
+do: aBlock
+	"For each component in the receiver, evaluates the one-argument block
+ aBlock with the value as the argument.  Returns the receiver."
+
+	self components do: aBlock
+%
+
+category: 'exporting'
+method: RwResolvedLoadComponentsV2
+export: componentsRoot
+
+	self components values do: [:component|
+		component exportToUrl: 'file:',  componentsRoot pathString, '/' ].
+	self components isEmpty
+		ifTrue: [
+			"add README.md as placeholder to ensure that the directory is preserved by git"
+			(componentsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
+%
+
+category: 'gemstone support'
+method: RwResolvedLoadComponentsV2
+gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
+	"answer true if the package was found in one of the receivers components"
+
+	| foundOne |
+	foundOne := false.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					foundOne := true.
+					component
+						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
+						andPackageName: packageName
+						setSymbolDictNameTo: symbolDictName ] ].
+	foundOne ifFalse: [ self error: 'No package named ' , packageName printString , ' found.']
+%
+
+category: 'gemstone support'
+method: RwResolvedLoadComponentsV2
+gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					| userIdPropertiesMap packagePropertiesMap |
+					userIdPropertiesMap := (component
+						conditionalPackageMapSpecsAtGemStoneUserId: userId)
+						at: #'packageNameToPlatformPropertiesMap'
+						ifAbsent: [ 
+							"no entries for the specific userId, check if there's an entry for allusers"
+							(component
+								conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
+								at: #'packageNameToPlatformPropertiesMap'
+								ifAbsent: absentBlock ].
+					packagePropertiesMap := userIdPropertiesMap
+						at: packageName
+						ifAbsent: absentBlock.
+					^ packagePropertiesMap at: 'symbolDictName' ifAbsent: absentBlock ] ].
+	^ absentBlock value
+%
+
+category: 'initialization'
+method: RwResolvedLoadComponentsV2
+initialize
+	components := Dictionary new
+%
+
+category: 'testing'
+method: RwResolvedLoadComponentsV2
+isEmpty
+	^ self components isEmpty
+%
+
+category: 'copying'
+method: RwResolvedLoadComponentsV2
+postCopy
+	super postCopy.
+	components := self components copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+removeComponentNamed: aComponentName
+	self components
+		do: [ :component | component removeComponentNamed: aComponentName ].
+	^ self components removeKey: aComponentName ifAbsent: [  ].
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+removePackageNamed: aPackageName
+	self components do: [ :component | component removePackageNamed: aPackageName ]
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+removeProjectNamed: aProjectName
+	self components do: [ :component | component removeProjectNamed: aProjectName ]
+%
+
+category: 'vast support'
+method: RwResolvedLoadComponentsV2
+vastSetVaPrequisitesTo: prereqArray forPackageNamed: packageName
+	| foundOne |
+	foundOne := false.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					foundOne := true.
+					component
+						conditionalPackageMapSpecsAtPackageName: packageName
+						setVaPrequisitesTo: prereqArray ] ].
+	foundOne
+		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
+%
+
+category: 'vast support'
+method: RwResolvedLoadComponentsV2
+vastSetVaSubApplicationsTo: subApplicationsArray forPackageNamed: packageName
+	| foundOne |
+	foundOne := false.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					foundOne := true.
+					component
+						conditionalPackageMapSpecsAtPackageName: packageName
+						setVaSubApplicationsTo: subApplicationsArray ] ].
+	foundOne
+		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
+%
+
+category: 'vast support'
+method: RwResolvedLoadComponentsV2
+vastVaPrequisitesForPackageNamed: packageName ifAbsent: absentBlock
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					| packageMap propertiesMap |
+					packageMap := component
+						conditionalPackageMapSpecsAt: 'vast'
+						ifAbsent: absentBlock.
+					propertiesMap := packageMap at: packageName ifAbsent: absentBlock.
+					^ propertiesMap at: 'vaPrerequisites' ifAbsent: absentBlock ] ].
+	^ absentBlock value
+%
+
+category: 'vast support'
+method: RwResolvedLoadComponentsV2
+vastVaSubApplicationsForPackageNamed: packageName ifAbsent: absentBlock
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					| packageMap propertiesMap |
+					packageMap := component
+						conditionalPackageMapSpecsAt: 'vast'
+						ifAbsent: absentBlock.
+					propertiesMap := packageMap at: packageName ifAbsent: absentBlock.
+					^ propertiesMap at: 'vaSubApplications' ifAbsent: absentBlock ] ].
+	^ absentBlock value
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+_addComponent: aComponent
+	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
+
+	"see similar comment in addRawPackageNamed: and addPackages:forComponent: "
+
+	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
+		component --- presumably freshly read from disk --- wins"
+
+	^ self components at: aComponent name put: aComponent
+%
+
+category: 'private'
+method: RwResolvedLoadComponentsV2
+_gemstoneAllUsersName
+	^ RwLoadSpecificationV2 _gemstoneAllUsersName
+%
+
+category: 'private'
+method: RwResolvedLoadComponentsV2
+_validate
+	"ensure that each of the components is valid and return a list of the package names managed by all components"
+
+	| componentPackageNames |
+	componentPackageNames := Set new.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			component
+				validate;
+				_validateDoits.
+			componentPackageNames addAll: component packageNames ].
+	^ componentPackageNames
+%
+
+category: 'private'
+method: RwResolvedLoadComponentsV2
+_validate: platformConfigurationAttributes groupNames: groupNames
+	"ensure that each of the components is valid and return a list of the package names managed by all components for the given group name"
+
+	| componentPackageNames |
+	componentPackageNames := Set new.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			component
+				validate;
+				_validateDoits.
+			componentPackageNames
+				addAll:
+					(component
+						packageNamesForPlatformConfigurationAttributes:
+							platformConfigurationAttributes
+						groupNames: groupNames) ].
+	^ componentPackageNames
+%
+
 ! Class implementation for 'RwSpecification'
 
 !		Class methods for 'RwSpecification'
 
 category: 'instance creation'
 classmethod: RwSpecification
-fromFile: filePath
-	filePath asFileReference
-		readStreamDo: [ :fileStream | 
-			| stream |
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			^ (STON fromStream: stream)
-				initializeForImport;
-				yourself ]
-%
-
-category: 'instance creation'
-classmethod: RwSpecification
 fromUrl: specNameOrUrl
 
-	"self fromUrl: 'file:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston'"
-
-	"self fromUrl: 'sampleLoadSpec'"
-
-	"self fromUrl: 'https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston'"
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
 
 	| url |
 	url := specNameOrUrl asRwUrl.
 	url scheme isNil
-		ifTrue: [ 
-			^ Rowan image
-				loadedProjectNamed: specNameOrUrl
-				ifAbsent: [ self error: 'No project named ' , specNameOrUrl printString , ' found' ] ].
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
 	url scheme = 'file'
-		ifTrue: [ 
-			CypressFileUtilities current
-				readStreamFor: url fileName
-				in: url pathForDirectory
-				do: [ :stream | 
-					^ (STON fromStream: stream)
-						initializeForImport;
-						yourself ] ].
+		ifTrue: [ ^ self fromFile: url pathForFile ].
 	url scheme asString = 'https'
-		ifTrue: [ 
+		ifTrue: [ self error: 'not yet supported'.
+"
 			| client response |
 			GsSecureSocket disableCertificateVerificationOnClient.
 			client := (Rowan globalNamed: 'ZnClient') new.
@@ -64324,9 +66488,8 @@ fromUrl: specNameOrUrl
 				beOneShot;
 				enforceHttpSuccess: true;
 				get: url.
-			^ (STON fromString: response decodeFromUTF8)
-				initializeForImport;
-				yourself ].
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
 	self error: 'Unknown scheme: ' , url scheme printString
 %
 
@@ -64335,6 +66498,12 @@ classmethod: RwSpecification
 new
 
 	^self basicNew initialize
+%
+
+category: 'accessing'
+classmethod: RwSpecification
+_supportedPlatformNames
+	^ #('gemstone' 'pharo' 'squeak' 'vast')
 %
 
 !		Instance methods for 'RwSpecification'
@@ -64467,6 +66636,14 @@ repositoryUrl: anObject
 
 ! Class implementation for 'RwLoadSpecificationV2'
 
+!		Class methods for 'RwLoadSpecificationV2'
+
+category: 'gemstone-support'
+classmethod: RwLoadSpecificationV2
+_gemstoneAllUsersName
+	^ 'allusers'
+%
+
 !		Instance methods for 'RwLoadSpecificationV2'
 
 category: 'comparing'
@@ -64537,6 +66714,20 @@ componentNames: anArray
 
 category: 'accessing'
 method: RwLoadSpecificationV2
+customConditionalAttributes
+
+	^ customConditionalAttributes ifNil: [ #() ]
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+customConditionalAttributes: anArray
+
+	customConditionalAttributes := anArray
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
 diskUrl
 	^ diskUrl
 %
@@ -64550,8 +66741,14 @@ diskUrl: anUrlString
 category: 'exporting'
 method: RwLoadSpecificationV2
 exportTo: directoryReference
-	(directoryReference / self specName, 'ston')
-		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
+	directoryReference / self specName , 'ston'
+		writeStreamDo: [ :fileStream | self exportToStream: fileStream ]
+%
+
+category: 'exporting'
+method: RwLoadSpecificationV2
+exportToStream: fileStream
+	STON put: self copy initializeForExport onStreamPretty: fileStream
 %
 
 category: 'ston'
@@ -64562,6 +66759,105 @@ fromSton: stonReader
 	^ (super fromSton: stonReader)
 		_validate;
 		yourself
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneDefaultMethodEnvForUser: userId
+	| gemstoneProperties userProperties |
+	gemstoneProperties := self platformProperties
+		at: 'gemstone'
+		ifAbsent: [ ^ self _gemstoneDefaultMethodEnv ].
+	userProperties := gemstoneProperties
+		at: userId
+		ifAbsent: [ 
+			gemstoneProperties
+				at: self _gemstoneAllUsersName
+				ifAbsent: [ ^ self _gemstoneDefaultMethodEnv ] ].
+	^ userProperties
+		at: #'defaultMethodEnv'
+		ifAbsent: [ self _gemstoneDefaultMethodEnv ]
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneDefaultSymbolDictNameForUser: userId
+	| gemstoneProperties userProperties |
+	gemstoneProperties := self platformProperties
+		at: 'gemstone'
+		ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ].
+	userProperties := gemstoneProperties
+		at: userId
+		ifAbsent: [ 
+			gemstoneProperties
+				at: self _gemstoneAllUsersName
+				ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ] ].
+	^ userProperties
+		at: #'defaultSymbolDictName'
+		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
+	| gemstoneProperties userProperties |
+	gemstoneProperties := self platformProperties
+		at: 'gemstone'
+		ifAbsent: [ ^ self _gemstoneDefaultUseSessionMethodsForExtensions ].
+	userProperties := gemstoneProperties
+		at: userId
+		ifAbsent: [ 
+			gemstoneProperties
+				at: self _gemstoneAllUsersName
+				ifAbsent: [ ^ self _gemstoneDefaultUseSessionMethodsForExtensions ] ].
+	^ userProperties
+		at: #'defaultUseSessionMethodsForExtensions'
+		ifAbsent: [ self _gemstoneDefaultUseSessionMethodsForExtensions ]
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultMethodEnvForUser: userId to: env
+
+	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
+		at: userId ifAbsentPut: [ Dictionary new ])
+			at: #defaultMethodEnv put: env
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultMethodEnvTo: env
+	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: env
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+
+	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
+		at: userId ifAbsentPut: [ Dictionary new ])
+			at: #defaultSymbolDictName put: symbolDictName
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+	self gemstoneSetDefaultSymbolDictNameForUser: self _gemstoneAllUsersName to: symbolDictName
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
+
+	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
+		at: userId ifAbsentPut: [ Dictionary new ])
+			at: #defaultUseSessionMethodsForExtensions put: aBool
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
 %
 
 category: 'accessing'
@@ -64626,7 +66922,11 @@ initializeForExport
 	"if spec is to be exported, clear out any of the fields that represent local disk state"
 
 	super initializeForExport.
-	repositoryResolutionPolicy := projectsHome :=  nil
+	platformProperties
+		ifNotNil: [ 
+			platformProperties isEmpty
+				ifTrue: [ platformProperties := nil ] ].
+	repositoryResolutionPolicy := projectsHome := nil
 %
 
 category: 'testing'
@@ -64776,17 +67076,6 @@ repositoryRoot
 
 category: 'actions'
 method: RwLoadSpecificationV2
-resolve
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecification: self
-%
-
-category: 'actions'
-method: RwLoadSpecificationV2
 resolveStrict
 	"resolve using #strict repositoryResolutionpolicy"
 
@@ -64851,6 +67140,33 @@ svnUrlUrl: anUrlString
 	svnUrl := anUrlString
 %
 
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+_gemstoneAllUsersName
+
+	^ self class _gemstoneAllUsersName
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+_gemstoneDefaultMethodEnv
+	^ 0
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+_gemstoneDefaultSymbolDictName
+
+	^ 'UserGlobals'
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+_gemstoneDefaultUseSessionMethodsForExtensions
+
+	^ false
+%
+
 category: 'accessing'
 method: RwLoadSpecificationV2
 _platformProperties
@@ -64897,7 +67213,7 @@ _validate
 										, (repoUrls at: 1) asString printString ] ] ].
 	self platformProperties
 		keysAndValuesDo: [ :platformName :userIdMap | 
-			(RwAbstractProjectLoadComponentV2 _supportedPlatformNames includes: platformName)
+			(self class _supportedPlatformNames includes: platformName)
 				ifFalse: [ 
 					Error
 						signal:
@@ -64936,23 +67252,6 @@ _validateGemStonePlatformUserIdMap: userIdMap
 												, expectedClass name asString printString , ' not class '
 												, propertyValue class name asString printString ] ]
 						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
-%
-
-! Class implementation for 'RwEmbeddedLoadSpecificationV2'
-
-!		Instance methods for 'RwEmbeddedLoadSpecificationV2'
-
-category: 'actions'
-method: RwEmbeddedLoadSpecificationV2
-resolveWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly"
-
-	| basicProject |
-	self projectsHome: aResolvedProject projectsHome.
-	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
-	basicProject _projectRepository: aResolvedProject _projectRepository copy.
-	self projectsHome: aResolvedProject repositoryRoot.
-	^ basicProject resolve
 %
 
 ! Class implementation for 'RwGemStoneSpecification'
@@ -65729,20 +68028,6 @@ method: RwProjectSpecificationV2
 																				and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ]
 %
 
-category: 'converting'
-method: RwProjectSpecificationV2
-asProjectDefiniton
-	^ RwProjectDefinitionV2 fromLoadSpecification: self
-%
-
-category: 'converting'
-method: RwProjectSpecificationV2
-asProjectDefinitonWithComment: commentString
-	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
-		comment: commentString;
-		yourself
-%
-
 category: 'accessing'
 method: RwProjectSpecificationV2
 comment
@@ -65766,12 +68051,6 @@ category: 'accessing'
 method: RwProjectSpecificationV2
 componentsPath: aString
 	componentsPath := aString
-%
-
-category: 'accessing'
-method: RwProjectSpecificationV2
-componentsRoot
-	^ self repositoryRoot / self componentsPath
 %
 
 category: 'exporting'
@@ -65843,6 +68122,12 @@ packageConvention
 category: 'accessing'
 method: RwProjectSpecificationV2
 packageConvention: aString
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
 	packageConvention := aString
 %
 
@@ -65885,12 +68170,6 @@ packagesPath: aString
 
 category: 'accessing'
 method: RwProjectSpecificationV2
-packagesRoot
-	^ self repositoryRoot / self packagesPath
-%
-
-category: 'accessing'
-method: RwProjectSpecificationV2
 projectName
 
 	^ projectName
@@ -65900,15 +68179,6 @@ category: 'accessing'
 method: RwProjectSpecificationV2
 projectName: aString
 	projectName := aString
-%
-
-category: 'accessing'
-method: RwProjectSpecificationV2
-projectRoots
-	^ {(self componentsRoot).
-	(self packagesRoot).
-	(self specsRoot).
-	(self projectsRoot)}
 %
 
 category: 'accessing'
@@ -65935,12 +68205,6 @@ category: 'accessing'
 method: RwProjectSpecificationV2
 projectSpecPath: aString
 	projectSpecPath := aString
-%
-
-category: 'accessing'
-method: RwProjectSpecificationV2
-projectsRoot
-	^ self repositoryRoot / self projectsPath
 %
 
 category: 'accessing'
@@ -65981,12 +68245,6 @@ category: 'accessing'
 method: RwProjectSpecificationV2
 specsPath: aString
 	specsPath := aString
-%
-
-category: 'accessing'
-method: RwProjectSpecificationV2
-specsRoot
-	^ self repositoryRoot / self specsPath
 %
 
 category: 'accessing'
@@ -66388,8 +68646,6 @@ fromString: aString
       fragment := remainder copyFrom: index + 1 to: remainder size.
       remainder := remainder copyFrom: 1 to: index - 1 ].
   scheme := self schemeNameForString: remainder.
-  (scheme = 'http' or: [ scheme = 'https' ])
-    ifTrue: [ ^ self httpFromString: aString ].
   newUrl := (self urlClassForScheme: scheme) new
     privateInitializeFromText: remainder.
   newUrl privateFragment: fragment.
@@ -66426,12 +68682,21 @@ schemeNameForString: aString
 category: 'parsing'
 classmethod: RwUrl
 urlClassForScheme: scheme
-
 	"explicitly list the classes to be matched: https://github.com/dalehenrich/Rowan/issues/211"
 
-	^ {RwFileUrl. RwCypressUrl. RwTonelUrl. RwFiletreeUrl. RwGithubUrl. RwGenericUrl. RwHierarchicalUrl. RwSmalltalkRepositoryUrl. RwGitFileTreeUrl}
-				detect: [ :urlClass | urlClass schemeName = scheme ]
-				ifNone: [ RwGenericUrl ].
+	^ {RwFileUrl.
+	RwCypressUrl.
+	RwTonelUrl.
+	RwFiletreeUrl.
+	RwGithubUrl.
+	RwGenericUrl.
+	RwHierarchicalUrl.
+	RwSmalltalkRepositoryUrl.
+	RwGitFileTreeUrl.
+	RwHttpUrl.
+	RwHttpsUrl}
+		detect: [ :urlClass | urlClass schemeName = scheme ]
+		ifNone: [ RwGenericUrl ]
 %
 
 !		Instance methods for 'RwUrl'
@@ -66467,59 +68732,6 @@ category: 'accessing'
 method: RwUrl
 authority
 	^''
-%
-
-category: 'rowan support'
-method: RwUrl
-createRwRepositoryForFormat: repositoryFormat forPath: repositoryDirectoryPath
-  repositoryFormat = 'tonel'
-    ifTrue: [ ^ self createRwTonelRepositoryForPath: repositoryDirectoryPath ].
-  repositoryFormat = 'filetree'
-    ifTrue: [ ^ self createRwFiletreeRepositoryForPath: repositoryDirectoryPath ].
-  repositoryFormat = 'cypress'
-    ifTrue: [ ^ self createRwCypressRepositoryForPath: repositoryDirectoryPath ]
-%
-
-category: 'rowan support'
-method: RwUrl
-createRwRepositoryForPath: repositoryDirectoryPath
-  | hasCypress hasFiletree hasTonel repositoryFormat |
-  hasTonel := hasCypress := hasFiletree := false.
-  (self fileUtils directoryEntriesFrom: repositoryDirectoryPath)
-    do: [ :entry | 
-      | filename |
-      filename := self fileUtils localNameFrom: entry.
-      filename = 'properties.st'
-        ifTrue: [ hasTonel := true ].
-      filename = '.cypress'
-        ifTrue: [ hasCypress := true ].
-      filename = '.filetree'
-        ifTrue: [ hasFiletree := true ] ].
-  hasCypress | hasTonel
-    ifTrue: [
-      | theFilename |
-      theFilename := hasTonel
-        ifTrue: [ 'properties.st' ]
-        ifFalse: [ '.cypress' ].
-      self fileUtils
-        readStreamFor: theFilename
-        in: repositoryDirectoryPath
-        do: [ :fileStream | 
-          repositoryFormat := (STON fromStream: fileStream)
-            at: #'format'
-            ifAbsent: [ 'filetree' ] ].
-      ^ self
-        createRwRepositoryForFormat: repositoryFormat
-        forPath: repositoryDirectoryPath ].
-  hasFiletree
-    ifTrue: [ ^ self createRwRepositoryForFormat: 'filetree' forPath: repositoryDirectoryPath ].
-  ^ self createRwRepositoryForFormat: 'cypress' forPath: repositoryDirectoryPath
-%
-
-category: 'rowan support'
-method: RwUrl
-fileUtils
-  ^ Rowan fileUtilities
 %
 
 category: 'fragment'
@@ -66734,7 +68946,7 @@ pathForDirectory
 	they are absolute. Filename is left out."
 
 	| delimiter |
-	delimiter :=  CypressFileUtilities current pathNameDelimiter.
+	delimiter :=  '/'.
 	^String streamContents: [ :s |
 		(self isAbsolute and: [self firstPartIsDriveLetter not])
 			ifTrue: [ s nextPutAll: delimiter ].
@@ -67287,13 +69499,17 @@ privateInitializeFromText: aString
 			| lastColonIndex portString |
 			lastColonIndex := authority findLast: [ :c | c = $: ].
 			portString := authority copyFrom: lastColonIndex + 1 to: authority size.
-			(portString allSatisfy: [ :each | each isDigit ])
-				ifTrue: [ 
-					port := Integer fromString: portString.
-					port > 65535
-						ifTrue: [ self error: 'Invalid port number' ].
-					authority := authority copyFrom: 1 to: lastColonIndex - 1 ]
-				ifFalse: [ self error: 'Invalid port number' ] ].	"get the path"
+			(portString size > 0) 
+				ifTrue: [
+					(portString allSatisfy: [ :each | each isDigit ])
+						ifTrue: [ 
+							port := Integer fromString: portString.
+							port > 65535
+								ifTrue: [ self error: 'Invalid port number' ] ]
+						ifFalse: [ self error: 'Invalid port number' ] ].
+			authority := authority copyFrom: 1 to: lastColonIndex - 1 ].	
+
+	"get the path"
 	path := self privateParsePath: remainder relativeTo: #()
 %
 
@@ -67349,9 +69565,36 @@ schemeName: schemeName0  authority: authority0  path: path0  query: query0
 
 category: 'access'
 method: RwHierarchicalUrl
+segments
+
+	^ path
+%
+
+category: 'access'
+method: RwHierarchicalUrl
 username
 	"http://user:pword@foo.com' asUrl username"
 	^username
+%
+
+! Class implementation for 'RwHttpUrl'
+
+!		Class methods for 'RwHttpUrl'
+
+category: 'constants'
+classmethod: RwHttpUrl
+schemeName
+	^'http'
+%
+
+! Class implementation for 'RwHttpsUrl'
+
+!		Class methods for 'RwHttpsUrl'
+
+category: 'constants'
+classmethod: RwHttpsUrl
+schemeName
+	^'https'
 %
 
 ! Class implementation for 'RwSmalltalkRepositoryUrl'
@@ -68953,6 +71196,622 @@ testValuesDo
 	self assert: values asArray = #('Paris' 'Rome')
 %
 
+! Class implementation for 'RwAbstractLoadComponentV2Test'
+
+!		Instance methods for 'RwAbstractLoadComponentV2Test'
+
+category: 'private'
+method: RwAbstractLoadComponentV2Test
+_validateComponent: component condition: conditionArray group: groupName componentNames: componentNames packageNames: packageNames projectNames: projectNames
+	| x |
+	self
+		assert:
+			(x := component
+				conditionalComponentsAtConditions: conditionArray
+				andGroup: groupName) asArray = componentNames.
+	self
+		assert:
+			(x := component
+				conditionalPackagesAtConditions: conditionArray
+				andGroup: groupName) asArray = packageNames.
+	self
+		assert:
+			(x := component
+				conditionalProjectsAtConditions: conditionArray
+				andGroup: groupName) asArray = projectNames
+%
+
+! Class implementation for 'RwProjectLoadComponentV2Test'
+
+!		Instance methods for 'RwProjectLoadComponentV2Test'
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testBasic
+	"excercise basic functionality for RwProjectLoadComponentV2"
+
+	self
+		_testComponentClass: RwProjectLoadComponentV2
+		projectName: 'RowanSample9'
+		componentName: 'Core'
+		projectRef: 'Project'
+		componentRef: 'Nested'
+		projectRef: 'Project1'
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testBasic_nested
+	"excercise basic functionality for RwNestedProjectLoadComponentV2"
+
+	self
+		_testComponentClass: RwNestedProjectLoadComponentV2
+		projectName: 'RowanSample9'
+		componentName: 'Core'
+		projectRef: 'Project'
+		componentRef: 'Nested'
+		projectRef: 'Project1'
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testInvalidConditionalGroupName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString conditionalPackages hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	conditionalPackages := component conditionalProperties.
+	(conditionalPackages at: #('common')) at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Conditional packages includes group name ''boom'' that is not a defined group'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testInvalidGroupName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component defineGroupNamed: 'core' toIncludeGroups: #('boom').
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The group ''boom'' is not a defined group'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUknownPlatform
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	component conditionalPackageMapSpecs at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Unknown platform name ''boom'' in conditional package map specs'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUknownPlatformPropertiesKey
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'boom'
+		put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown platformPropertiesMap key #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUndefinedPackageName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	(((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'packageNameToPlatformPropertiesMap') at: 'boom' put: Dictionary new.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Undefined package name ''boom'' used in plaform properties map'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwProjectLoadComponentV2Test
+testUnknownPackagePropertName
+	"error coverage for invalid components"
+
+	| componentName projectName component packageName stonString hitError |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	component := RwProjectLoadComponentV2 newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName := projectName , '-Core'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName
+			setSymbolDictNameTo: 'UserGlobals'.
+	(((component conditionalPackageMapSpecs at: 'gemstone') at: 'SystemUser')
+		at: #'packageNameToPlatformPropertiesMap')
+		at: packageName
+		put:
+			(Dictionary new
+				at: #'boom' put: 'boom';
+				yourself).
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	hitError := false.
+	[ component validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown package property name #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'private'
+method: RwProjectLoadComponentV2Test
+_testComponentClass: componentClass projectName: projectName componentName: componentName projectRef: projectRef componentRef: componentRef projectRef: projectRef1
+	"excercise basic functionality"
+
+	| component packageName1 packageName2 stonString conditionalProperties |
+	component := componentClass newNamed: componentName for: projectName.
+
+	self assert: component validate.
+
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Extension'.
+	component
+		defineGroupNamed: 'core';
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addPackageNames: {packageName1};
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: {componentRef};
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addProjectNames: {projectRef};
+		conditionalPropertiesAtConditions: {'gemstone'}
+			andGroup: 'core'
+			addComponentNames: {componentRef};
+		conditionalPropertiesAtConditions: {'gemstone'}
+			andGroup: 'core'
+			addPackageNames: {packageName2};
+		conditionalPropertiesAtConditions: {'vast'}
+			andGroup: 'core'
+			addProjectNames: {projectRef1};
+		conditionalPropertiesAtConditions: {'vast'}
+			andGroup: 'core'
+			addPackageNames: {packageName2};
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+			andPackageName: packageName1
+			setSymbolDictNameTo: 'UserGlobals'.
+
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self assert: component validate.
+	self assert: component definedGroupNames keys asArray sort = {'core'}.
+	conditionalProperties := component copy initializeForExport
+		conditionalProperties.	"sorted in canonical key order"
+	self
+		assert:
+			conditionalProperties keys
+				=
+					{{'common'}.
+					{'gemstone'}.
+					{'vast'}}.
+
+	self
+		_validateComponent: component
+			condition: {'common'}
+			group: 'core'
+			componentNames: {componentRef}
+			packageNames: {packageName1}
+			projectNames: {projectRef};
+		_validateComponent: component
+			condition: {'gemstone'}
+			group: 'core'
+			componentNames: {componentRef}
+			packageNames: {packageName2}
+			projectNames: {};
+		_validateComponent: component
+			condition: {'vast'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {packageName2}
+			projectNames: {projectRef1};
+		yourself.
+
+	component
+		removePackageNamed: packageName1;
+		removeProjectNamed: projectRef1;
+		removeComponentNamed: componentRef;
+		yourself.
+
+	stonString := STON toStringPretty: component.	"useful in case of error"
+	self assert: component validate.
+
+	self
+		_validateComponent: component
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {}
+			projectNames: {projectRef};
+		_validateComponent: component
+			condition: {'gemstone'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {packageName2}
+			projectNames: {};
+		_validateComponent: component
+			condition: {'vast'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {packageName2}
+			projectNames: {};
+		yourself
+%
+
+category: 'private'
+method: RwProjectLoadComponentV2Test
+_validateComponent: component condition: conditionArray group: groupName componentNames: componentNames packageNames: packageNames projectNames: projectNames
+	| x |
+	self
+		assert:
+			(x := component
+				conditionalComponentsAtConditions: conditionArray
+				andGroup: groupName) asArray = componentNames.
+	self
+		assert:
+			(x := component
+				conditionalPackagesAtConditions: conditionArray
+				andGroup: groupName) asArray = packageNames.
+	self
+		assert:
+			(x := component
+				conditionalProjectsAtConditions: conditionArray
+				andGroup: groupName) asArray = projectNames
+%
+
+! Class implementation for 'RwResolvedLoadComponentsV2Test'
+
+!		Instance methods for 'RwResolvedLoadComponentsV2Test'
+
+category: 'tests'
+method: RwResolvedLoadComponentsV2Test
+testBasic
+	"excercise basic functionality for RwResolvedLoadComponentV2"
+
+	| projectName resolvedComponents allPackageNames stonString |
+	projectName := 'ResolvedLoadComponentsV2Test'.
+	resolvedComponents := RwResolvedLoadComponentsV2 new.
+	(resolvedComponents
+		addComponentNamed: 'Core'
+		definedGroupNames:
+			(Dictionary new
+				add: 'core' -> {};
+				add: 'tests' -> {'core'};
+				yourself)
+		comment: 'Primary component used for loading the system.')
+		conditionalPropertiesAtConditions: {'common'}
+			andGroup: 'core'
+			addComponentNames: {'subs/Nested'};
+		yourself.
+	resolvedComponents
+		addNestedComponentNamed: 'subs/Nested'
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
+			comment:
+				'Nested component defines a shared subsystem of the primary project.';
+		addComponentNamed: 'Tests'
+			definedGroupNames:
+				(Dictionary new
+						add: 'core' -> {};
+						add: 'tests' -> {'core'};
+						yourself)
+			comment: 'Contains all of the project tests.';
+		yourself.
+
+	resolvedComponents
+		addProjectNamed: 'DependentProject'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addComponentNamed: 'Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		addPackagesNamed: {(projectName , '-Core')}
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		addPackageNamed: projectName , '-Tests'
+			toComponentNamed: 'Core'
+			withConditions: {'common'}
+			andGroupName: 'tests';
+		addPackageNamed: projectName , '-GemStone-Extensions'
+			toComponentNamed: 'Core'
+			withConditions: {'gemstone'}
+			andGroupName: 'core'
+			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
+		addPackageNamed: projectName , '-GemStone-Tests'
+			toComponentNamed: 'Tests'
+			withConditions: {'gemstone'}
+			andGroupName: 'tests';
+		addPackagesNamed: {(projectName , '-Shared')}
+			toComponentNamed: 'subs/Nested'
+			withConditions: {'common'}
+			andGroupName: 'core';
+		gemstoneSetSymbolDictName: 'Globals' forPackageNamed: projectName , '-Shared';
+		yourself.
+
+	stonString := STON toStringPretty: resolvedComponents.	"useful to view full structure"
+	allPackageNames := resolvedComponents _validate.
+	self
+		assert:
+			allPackageNames asArray sort
+				=
+					#('ResolvedLoadComponentsV2Test-Tests' 'ResolvedLoadComponentsV2Test-GemStone-Tests' 'ResolvedLoadComponentsV2Test-Shared' 'ResolvedLoadComponentsV2Test-Core' 'ResolvedLoadComponentsV2Test-GemStone-Extensions')
+						sort.
+	self
+		assert:
+			(resolvedComponents
+				gemstoneSymbolDictNameForPackageNamed: projectName , '-Shared'
+				forUser: 'AUser'
+				ifAbsent: [  ]) = 'Globals'.
+
+
+	self
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {'subs/Nested'}
+			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
+			projectNames: {'DependentProject'};
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {'Tests'}
+			packageNames: {'ResolvedLoadComponentsV2Test-Tests'}
+			projectNames: {};
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'gemstone'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {'ResolvedLoadComponentsV2Test-GemStone-Extensions'}
+			projectNames: {};
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'gemstone'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {}
+			projectNames: {};
+		yourself.
+	self
+		_validateComponent: (resolvedComponents componentNamed: 'Tests')
+			condition: {'common'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {}
+			projectNames: {};
+		_validateComponent: (resolvedComponents componentNamed: 'Tests')
+			condition: {'gemstone'}
+			group: 'tests'
+			componentNames: {}
+			packageNames: {'ResolvedLoadComponentsV2Test-GemStone-Tests'}
+			projectNames: {};
+		yourself.
+
+	self
+		_validateComponent: (resolvedComponents componentNamed: 'subs/Nested')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {'ResolvedLoadComponentsV2Test-Shared'}
+			projectNames: {};
+		yourself.
+
+	resolvedComponents removePackageNamed: 'ResolvedLoadComponentsV2Test-Shared'.
+	stonString := STON toStringPretty: resolvedComponents.	"useful to view full structure"
+
+	allPackageNames := resolvedComponents _validate.
+	self
+		assert:
+			allPackageNames asArray sort
+				=
+					#('ResolvedLoadComponentsV2Test-Tests' 'ResolvedLoadComponentsV2Test-GemStone-Tests' 'ResolvedLoadComponentsV2Test-Core' 'ResolvedLoadComponentsV2Test-GemStone-Extensions')
+						sort.
+
+	self
+		_validateComponent: (resolvedComponents componentNamed: 'subs/Nested')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {}
+			projectNames: {};
+		yourself.
+
+	resolvedComponents removeComponentNamed: 'subs/Nested'.
+	stonString := STON toStringPretty: resolvedComponents.	"useful to view full structure"
+
+	allPackageNames := resolvedComponents _validate.
+	self
+		assert:
+			allPackageNames asArray sort
+				=
+					#('ResolvedLoadComponentsV2Test-Tests' 'ResolvedLoadComponentsV2Test-GemStone-Tests' 'ResolvedLoadComponentsV2Test-Core' 'ResolvedLoadComponentsV2Test-GemStone-Extensions')
+						sort.
+
+	self
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
+			projectNames: {'DependentProject'};
+		yourself.
+	self
+		assert:
+			(resolvedComponents componentNamed: 'subs/Nested' ifAbsent: [  ]) isNil.
+
+	resolvedComponents removeProjectNamed: 'DependentProject'.
+	stonString := STON toStringPretty: resolvedComponents.	"useful to view full structure"
+
+	allPackageNames := resolvedComponents _validate.
+	self
+		assert:
+			allPackageNames asArray sort
+				=
+					#('ResolvedLoadComponentsV2Test-Tests' 'ResolvedLoadComponentsV2Test-GemStone-Tests' 'ResolvedLoadComponentsV2Test-Core' 'ResolvedLoadComponentsV2Test-GemStone-Extensions')
+						sort.
+
+	self
+		_validateComponent: (resolvedComponents componentNamed: 'Core')
+			condition: {'common'}
+			group: 'core'
+			componentNames: {}
+			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
+			projectNames: {};
+		yourself.
+%
+
 ! Class implementation for 'RwDataCuratorTest'
 
 !		Instance methods for 'RwDataCuratorTest'
@@ -68997,6 +71856,1688 @@ testCreateProjects
 			self
 				assert: false
 				description: 'The project ' , projectName printString , ' should not exist' ]
+%
+
+! Class implementation for 'RwGemStoneVersionNumberTestCase'
+
+!		Class methods for 'RwGemStoneVersionNumberTestCase'
+
+category: 'Tests'
+classmethod: RwGemStoneVersionNumberTestCase
+shouldInheritSelectors
+
+	^true
+%
+
+!		Instance methods for 'RwGemStoneVersionNumberTestCase'
+
+category: 'test alpha/numeric version numbers'
+method: RwGemStoneVersionNumberTestCase
+testAlphaNumericVersion1
+
+	"Use numeric comparison for pure numbers. If you non-numeric version separate with '-'"
+	
+	| x y |
+	self assert: ((x := self versionClass fromString: '2.9.0') < (y := self versionClass fromString: '2.10.0')).
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion01
+
+	self assert: '1.1.1' asRwGemStoneVersionNumber ~> '1.1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion02
+
+	self deny: '1.1' asRwGemStoneVersionNumber ~> '1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion03
+
+	self assert: '1.1' asRwGemStoneVersionNumber ~> '1.1' asRwGemStoneVersionNumber
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion04
+
+	self assert: '3.2.0' asRwGemStoneVersionNumber approximateBase asString = '4'.
+	self assert: '3.2' asRwGemStoneVersionNumber approximateBase asString = '4'.
+%
+
+category: 'test approximately greater than'
+method: RwGemStoneVersionNumberTestCase
+testApproxVersion05
+
+	self assert: '3.2.16' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.2.14' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.3' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+	self deny: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.15' asRwGemStoneVersionNumber.
+
+	self assert: '3.2.15.5' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.2.15.0' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.2.16' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.3' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+	self deny: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.15.1' asRwGemStoneVersionNumber.
+
+	self assert: '3.3' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.3.0' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.3.1' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+	self assert: '3.4' asRwGemStoneVersionNumber ~> '3.2' asRwGemStoneVersionNumber.
+
+	self assert: '3.3.1' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+	self assert: '3.3.0' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+	self assert: '3.3' asRwGemStoneVersionNumber ~> '3.2.0' asRwGemStoneVersionNumber.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testCollapseZeros
+
+	self assert: (RwGemStoneVersionNumber fromString: '1.0') collapseZeros printString = '1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0') collapseZeros printString = '1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0') collapseZeros printString = '1'.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion01
+
+	self assert: ((self versionClass fromString: '1.1.1') versionString = '1.1.1')
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion02
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.1.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 = v1).	
+	self assert: (v2 = v2).
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion03
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion04
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion05
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion06
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3.'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion07
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '3.0.0'.
+	v2 := self versionClass fromString: '2'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion09
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0'.
+	v2 := self versionClass fromString: '0.7'.
+	self assert: (v1 >= v2).
+	self assert: (v2 <= v1)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion10
+
+	| x y |
+	self assert: ((x := (({
+		self versionClass fromString: '1.0'.
+		self versionClass fromString: '0.7'.
+		self versionClass fromString: '0.8'.
+		self versionClass fromString: '0.9'.
+		self versionClass fromString: '1.0.1'
+	} sort: [:a :b | a <= b ]) collect: [:each | each versionString ]) asArray) = (y := #( '0.7' '0.8' '0.9' '1.0' '1.0.1')))
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion11
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1b'.
+	v2 := self versionClass fromString: '1.0.1a'.
+	self assert: (v1 >= v2).
+	self assert: (v2 <= v1)
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion12
+
+	self deny: ((self versionClass fromString: '1.0') <= (self versionClass fromString: '0.7'))
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion13
+
+	self deny: ((self versionClass fromString: '0.8') <= (self versionClass fromString: '0.7')).
+	self deny: ((self versionClass fromString: '0.8.1.8') <= (self versionClass fromString: '0.7.0.5')).
+	
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion17
+
+	self assert: ((self versionClass fromString: '1.0') = (self versionClass fromString: '1.0.0')).
+	self assert: ((self versionClass fromString: '1') = (self versionClass fromString: '1.0')).
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion18
+
+	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1')).
+	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1-0')).
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion20
+
+	self assert: (RwGemStoneVersionNumber fromString: '') printString = ''.
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion21
+
+	self deny: (RwGemStoneVersionNumber fromString: '') > (RwGemStoneVersionNumber fromString: '0').
+	self assert: (RwGemStoneVersionNumber fromString: '') < (RwGemStoneVersionNumber fromString: '0').
+	self assert: (RwGemStoneVersionNumber fromString: '') = (RwGemStoneVersionNumber fromString: '').
+
+%
+
+category: 'tests'
+method: RwGemStoneVersionNumberTestCase
+testVersion24
+
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0.1.0.0') = (RwGemStoneVersionNumber fromString: '1.0.0.1').
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0.1') ~= (RwGemStoneVersionNumber fromString: '1..1').
+%
+
+category: 'private'
+method: RwGemStoneVersionNumberTestCase
+versionClass
+
+	^RwGemStoneVersionNumber
+%
+
+! Class implementation for 'RwLoadSpecificationV2Test'
+
+!		Instance methods for 'RwLoadSpecificationV2Test'
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_1
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_2
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		revision: 'master';
+		gitUrl: 'file://x/y/z';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testBasic_3
+	"excercise basic functionality"
+
+	| projectName loadSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	self assert: loadSpecification  _validate
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testComparison_1
+	| projectName loadSpecification specName projectSpecCopy stonString stonStringCopy x |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	self
+		assert:
+			(x := RwLoadSpecificationV2 allInstVarNames)
+				=
+					#(#'specName' #'projectName' #'projectAlias' #'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #'revision' #'projectSpecFile' #'componentNames' #'groupNames' #'customConditionalAttributes' #'platformProperties' #'comment' #'projectsHome' #'repositoryResolutionPolicy').	"If inst vars don't match, copy and hash methods have to change"
+
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+	self assert: projectSpecCopy hash = loadSpecification hash
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testComparison_2
+	"compare equal even if lazy initialization has taken place"
+
+	| projectName loadSpecification specName projectSpecCopy stonString stonStringCopy stonStringLazy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	projectSpecCopy platformProperties.	"trigger the selectors that cause lazy initialization"
+
+	stonStringLazy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+	self assert: projectSpecCopy hash = loadSpecification hash.
+	self deny: stonStringLazy = stonStringCopy
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidPropertyValue
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 'boom';
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidPropertyValueForUser
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 'boom';
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Value of property (#''defaultMethodEnv''->''boom'') is expected to be class ''SmallInteger'' not class ''String'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testInvalidRevision
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		revision: 'boom';
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: Invalid revision ''boom''. Should be nil for disk-based repository'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_1
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"original has no predefined platformSpec dictionary"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString stonStringCopy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {
+	(STON toStringPretty: loadSpecification).
+	(STON toStringPretty: projectSpecCopy)}	"useful in case of test failure"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_2
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"predefine platformSpec dictionary in original"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultSymbolDictNameForUser: 'Bozo'
+			to: self _sampleSymbolDictionaryName2;
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultMethodEnvForUser: 'PharoGs' to: 2;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultSymbolDictNameForUser: 'DataCurator'
+			to: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 'DataCurator'
+			to: true;
+		yourself.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}.
+	self assert: stonString = (stonStrings at: 1).	"duh"
+	self assert: stonString = (stonStrings at: 2).	"point of test"
+	self deny: stonString = (stonStrings at: 3)	"duh"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testIssue_530_3
+	"https://github.com/GemTalk/Rowan/issues/530"
+
+	"state changes to a copy of a loadSpec should not affect oriinal load spec"
+
+	"componentNames and groupNames need to be isolated"
+
+	| projectName loadSpecification stonStrings specName projectSpecCopy stonString |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		componentNames: #('Default');
+		groupNames: #('core');
+		projectSpecFile: 'rowan/xxx.ston';
+		revision: 'master';
+		gitUrl: 'file://x/y/z';
+		yourself.
+	stonString := STON toStringPretty: loadSpecification.
+
+	projectSpecCopy := loadSpecification copy.
+
+	self assert: projectSpecCopy = loadSpecification.
+
+	projectSpecCopy componentNames add: 'Boom'.
+	projectSpecCopy groupNames add: 'boom'.
+
+	self deny: projectSpecCopy = loadSpecification.
+
+	stonStrings := {stonString.	"original loadSpec"
+	(STON toStringPretty: loadSpecification).	"origiinal after copy modified"
+	(STON toStringPretty: projectSpecCopy)	"copy"}.
+	self assert: stonString = (stonStrings at: 1).	"duh"
+	self assert: stonString = (stonStrings at: 2).	"point of test"
+	self deny: stonString = (stonStrings at: 3)	"duh"
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testMissingRevision
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						=
+							'Error: The instance variable ''revision'' must be set for the''gitUrl'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testNilInstanceVariable
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		projectSpecFile: nil;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''projectSpecFile'' cannot be nil'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testOnlyOneRepositoryUrl
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		diskUrl: 'ftp://$ROWAN_PROJECTS_HOME/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testRevisionMustBeSet
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		gitUrl: 'https://github.com/user/' , projectName;
+		yourself.
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''revision'' must be set for the''gitUrl'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testUknownPlatform
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+
+	hitError := false.
+	loadSpecification platformProperties at: 'boom' put: Dictionary new.
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: Unknown platform name ''boom'' in platform properties'.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'tests'
+method: RwLoadSpecificationV2Test
+testUnknownPropertyKey
+	"error coverage for invalid load specs"
+
+	| projectName loadSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		gemstoneSetDefaultMethodEnvTo: 0;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
+		yourself.
+	(loadSpecification platformProperties at: 'gemstone')
+		at: 'BOOM'
+		put:
+			(Dictionary new
+				at: #'boom' put: nil;
+				yourself).
+
+	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
+	hitError := false.
+	[ loadSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description) = 'Error: Unknown platform property key #''boom'''.
+			hitError := true ].
+	self assert: hitError
+%
+
+category: 'private'
+method: RwLoadSpecificationV2Test
+_sampleSymbolDictionaryName1
+
+	^ #'RowanSample9_1'
+%
+
+category: 'private'
+method: RwLoadSpecificationV2Test
+_sampleSymbolDictionaryName2
+
+	^ #'RowanSample9_2'
+%
+
+! Class implementation for 'RwProjectComponentVisitorV2Test'
+
+!		Instance methods for 'RwProjectComponentVisitorV2Test'
+
+category: 'tests'
+method: RwProjectComponentVisitorV2Test
+testBasicVisit_independent
+	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
+
+	| platformConditionalAttributes groupNames visitor componentNamesToLoad projectAlias projectPath projectSpecUrl projectSpec |
+	platformConditionalAttributes := {'common'.
+	'gemstone'.
+	('3.5.0' asRwGemStoneVersionNumber)}.
+	projectAlias := 'RowanSample9_DiskConfig_Test'.
+	componentNamesToLoad := #('Core').
+	groupNames := #('core').
+
+	projectPath := self _cloneRowanSample9: projectAlias.	"clone https://github.com/dalehenrich/RowanSample9"
+
+	visitor := RwIndependentComponentVisitorV2 new
+		platformConditionalAttributes: platformConditionalAttributes;
+		groupNames: groupNames;
+		yourself.
+
+	self assert: visitor packageNames isEmpty.
+	projectSpecUrl := 'file:' , projectPath , '/rowan/project.ston'.
+	projectSpec := RwSpecification fromUrl: projectSpecUrl.
+
+	componentNamesToLoad
+		do: [ :componentName | 
+			| component url |
+			url := 'file:' , projectPath , '/' , projectSpec componentsPath , '/'
+				, componentName , '.ston'.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
+			component projectName: projectAlias.
+
+			visitor visit: component ].
+	self
+		assert: visitor packageNames sort
+		equals:
+			#('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone') sort.
+	self assert: visitor projectLoadSpecs isEmpty
+%
+
+category: 'tests'
+method: RwProjectComponentVisitorV2Test
+testVisitVastTonelDemo_555_independent
+	"test of RwProjectLoadComponentVisitorV2 as it would be used without a RwResolvedProject."
+
+	"https://github.com/GemTalk/Rowan/issues/555"
+
+	| visitor projectAlias projectPath componentNamesToLoad groupNames |
+
+	projectAlias := 'tonel-demo_DiskConfig_Test'.
+	componentNamesToLoad := #('Core').
+	groupNames := #('core').
+
+	projectPath := self _cloneVastTonelDemo_555: projectAlias deleteClone: true.
+
+"vast"
+	visitor := self
+		_visitVastTonelDemo_555:
+			{'common'.
+			'vast'}
+		projectAlias: projectAlias
+		projectPath: projectPath.
+	self
+		assert: visitor packageNames sort
+		equals:
+			#('TonelExampleAnotherSubSubApp' 'TonelAnotherShadowSubSubApp' 'TonelExampleApp' 'TonelExampleShadowSubSubApp' 'TonelExampleSubApp' 'TonelExampleShadowSubSubSubApp' 'TonelExampleSubSubApp' 'TonelExampleForVastPharoApp')
+				sort.
+
+"pharo"
+	visitor := self
+		_visitVastTonelDemo_555:
+			{'common'.
+			'pharo'}
+		projectAlias: projectAlias
+		projectPath: projectPath.
+	self
+		assert: visitor packageNames sort
+		equals: #('TonelExampleApp' 'TonelExampleForPharoApp' 'TonelExampleForVastPharoApp') sort.
+
+"gemstone"
+	visitor := self
+		_visitVastTonelDemo_555:
+			{'common'.
+			'gemstone'}
+		projectAlias: projectAlias
+		projectPath: projectPath.
+	self assert: visitor packageNames sort equals: #('TonelExampleApp' 'TonelExampleForGemStoneApp') sort
+%
+
+category: 'private'
+method: RwProjectComponentVisitorV2Test
+_visitVastTonelDemo_555: platformConditionalAttributes projectAlias: projectAlias projectPath: projectPath
+	| groupNames visitor componentNamesToLoad projectSpecUrl projectSpec |
+	componentNamesToLoad := #('Core').
+	groupNames := #('core').
+
+	visitor := RwIndependentComponentVisitorV2 new
+		platformConditionalAttributes: platformConditionalAttributes;
+		groupNames: groupNames;
+		yourself.
+
+	self assert: visitor packageNames isEmpty.
+	projectSpecUrl := 'file:' , projectPath , '/rowan/project.ston'.
+	projectSpec := RwSpecification fromUrl: projectSpecUrl.
+
+	componentNamesToLoad
+		do: [ :componentName | 
+			| component url |
+			url := 'file:' , projectPath , '/' , projectSpec componentsPath , '/'
+				, componentName , '.ston'.
+			component := RwAbstractProjectLoadComponentV2 fromUrl: url.
+			component projectName: projectAlias.
+
+			visitor visit: component ].
+	^ visitor
+%
+
+! Class implementation for 'RwProjectSpecificationV2Test'
+
+!		Instance methods for 'RwProjectSpecificationV2Test'
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testBasic
+	"excercise basic functionality"
+
+	| projectName projectSpecification stonString specName |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
+	self assert: projectSpecification  _validate
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testComparison_1
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy x |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+
+	self
+		assert:
+			(x := RwProjectSpecificationV2 allInstVarNames)
+				=
+					#(#'specName' #'projectName' #'projectSpecPath' #'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'comment' #'repoType' #'loadedCommitId').	"If inst vars don't match, copy and hash methods have to change"
+
+	stonString := STON toStringPretty: projectSpecification.
+
+	projectSpecCopy := projectSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = projectSpecification.
+	self assert: projectSpecCopy hash = projectSpecification hash
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testComparison_2
+	"compare equal even if lazy initialization has taken place"
+
+	| projectName projectSpecification specName projectSpecCopy stonString stonStringCopy stonStringLazy |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	stonString := STON toStringPretty: projectSpecification.
+
+	projectSpecCopy := projectSpecification copy.
+
+	stonStringCopy := STON toStringPretty: projectSpecCopy.
+
+	projectSpecCopy repoType.	"trigger the selectors that cause lazy initialization"
+
+	stonStringLazy := STON toStringPretty: projectSpecCopy.
+
+	self assert: stonString = stonStringCopy.
+	self assert: projectSpecCopy = projectSpecification.
+	self assert: projectSpecCopy hash = projectSpecification hash.
+	self deny: stonStringLazy = stonStringCopy
+%
+
+category: 'tests'
+method: RwProjectSpecificationV2Test
+testNilInstanceVariable
+	"error coverage for invalid load specs"
+
+	| projectName projectSpecification stonString specName hitError |
+	projectName := 'RowanSample9'.
+	specName := projectName , 'Core'.
+	projectSpecification := RwProjectSpecificationV2 new
+		projectName: projectName;
+		projectsPath: nil;
+		yourself.
+
+	stonString := STON toStringPretty: projectSpecification.	"useful in case of error"
+	hitError := false.
+	[ projectSpecification _validate ]
+		on: Error
+		do: [ :ex | 
+			| x |
+			self
+				assert:
+					(x := ex description)
+						= 'Error: The instance variable ''projectsPath'' cannot be nil'.
+			hitError := true ].
+	self assert: hitError
+%
+
+! Class implementation for 'RwSemanticVersionNumber200TestCase'
+
+!		Instance methods for 'RwSemanticVersionNumber200TestCase'
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testGitDescribe
+
+	"https://github.com/GemTalk/Rowan/issues/381#issuecomment-450502212"
+
+	"
+`git describe --match v0.0.1` can produce a version number that looks like the following v0.0.1-1-g832d2b5 ... ensure that we can use this result to compare version numbers ... the leading `-` needs to be transformed to `+`, but other than that I think that the following comparisons are correct for what we are trying to do o
+	"
+	| s1 s2 s3 s4 v1 v2 v3 v4 |
+	s1 := '0.0.1'.
+	s2 := '0.0.1+1-g832d2b5'. "git describe output .. compares equal to 0.0.1, which is acceptable - I think"
+	s3 := '0.0.1+2-g59a4bdf'.	"git describe output .. compares equal to 0.0.1, which is acceptable - I think"
+	s4 := '0.0.2'.
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 = v2.	"acceptable, I think"
+
+	self assert: v1 = v3.	"acceptable, I think"
+	self assert: v2 = v3.	"acceptable, I think"
+
+	self assert: v1 < v4.
+	self assert: v2 < v4.
+	self assert: v3 < v4.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_02
+
+	"
+A normal version number MUST take the form X.Y.Z where X, Y, and Z are
+non-negative integers, and MUST NOT contain leading zeroes. X is the
+major version, Y is the minor version, and Z is the patch version.
+Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.
+	"
+	| s1 s2 s3 v1 v2 v3 |
+	s1 := '1.9.0' .
+	s2 := '1.10.0' .
+	s3 := '1.11.0' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+
+	self assert: v1 < v2.
+	self assert: v2 < v3.
+	self assert: v1 < v3.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_09
+
+	"
+A pre-release version MAY be denoted by appending a hyphen and a
+series of dot separated identifiers immediately following the patch
+version. Identifiers MUST comprise only ASCII alphanumerics and hyphen
+[0-9A-Za-z-]. Identifiers MUST NOT be empty. Numeric identifiers MUST
+NOT include leading zeroes. Pre-release versions have a lower
+precedence than the associated normal version. A pre-release version
+indicates that the version is unstable and might not satisfy the
+intended compatibility requirements as denoted by its associated
+normal version. Examples: 1.0.0-alpha, 1.0.0-alpha.1, 1.0.0-0.3.7,
+1.0.0-x.7.z.92.
+	"
+	| s1 s2 s3 s4 s5 v1 v2 v3 v4 v5 |
+	s1 := '1.0.0-alpha' .
+	s2 := '1.0.0-alpha.1' .
+	s3 := '1.0.0-0.3.7' .
+	s4 := '1.0.0-x.7.z.92' .
+
+	s5 := '1.0.0' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+	v5 := s5 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 < v5.
+	self assert: v2 < v5.
+	self assert: v3 < v5.
+	self assert: v4 < v5.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+	self assert: v5 = v5.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_10
+
+	"
+Build metadata MAY be denoted by appending a plus sign and a series of dot
+separated identifiers immediately following the patch or pre-release version.
+Identifiers MUST comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-].
+Identifiers MUST NOT be empty. Build metadata MUST be ignored when determining
+version precedence. Thus two versions that differ only in the build metadata,
+have the same precedence. Examples: 1.0.0-alpha+001, 1.0.0+20130313144700,
+1.0.0-beta+exp.sha.5114f85.
+	"
+
+	| s1 s2 s3 s4 v1 v2 v3 v4 |
+	s1 := '1.0.0-alpha+001' .
+	s2 := '1.0.0-beta+exp.sha.5114f85' .
+	s3 := '1.0.0+20130313144700' .
+	s4 := '1.0.0+99999999999999' .
+
+	v1 := s1 asRwSemanticVersionNumber.
+	v2 := s2 asRwSemanticVersionNumber.
+	v3 := s3 asRwSemanticVersionNumber.
+	v4 := s4 asRwSemanticVersionNumber.
+
+	self assert: v1 printString = s1.
+	self assert: v2 printString = s2.
+	self assert: v3 printString = s3.
+	self assert: v4 printString = s4.
+
+	self assert: v1 < v2.
+	self assert: v2 < v3.
+	self assert: v1 < v3.
+	self assert: v1 < v4.
+
+	self assert: v1 = v1.
+	self assert: v2 = v2.
+	self assert: v3 = v3.
+	self assert: v4 = v4.
+	self assert: v4 = v3.
+%
+
+category: 'tests'
+method: RwSemanticVersionNumber200TestCase
+testSpec_11
+
+	"
+Precedence refers to how versions are compared to each other when ordered.
+Precedence MUST be calculated by separating the version into major, minor, patch
+and pre-release identifiers in that order (Build metadata does not figure
+into precedence). Precedence is determined by the first difference when
+comparing each of these identifiers from left to right as follows: Major, minor,
+and patch versions are always compared numerically. Example: 1.0.0 < 2.0.0 <
+2.1.0 < 2.1.1. When major, minor, and patch are equal, a pre-release version has
+lower precedence than a normal version. Example: 1.0.0-alpha < 1.0.0. Precedence
+for two pre-release versions with the same major, minor, and patch version MUST
+be determined by comparing each dot separated identifier from left to right
+until a difference is found as follows: identifiers consisting of only digits
+are compared numerically and identifiers with letters or hyphens are compared
+lexically in ASCII sort order. Numeric identifiers always have lower precedence
+than non-numeric identifiers. A larger set of pre-release fields has a higher
+precedence than a smaller set, if all of the preceding identifiers are equal.
+Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta <
+1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
+	"
+
+	| vrsns vrsna vrsnb |
+	vrsns := #( '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-alpha.beta' '1.0.0-beta' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0').
+	vrsns
+		do: [:str |
+			vrsnb := str asRwSemanticVersionNumber.
+			self assert: vrsnb printString = str.
+			self assert: vrsnb = vrsnb.
+			vrsna ifNotNil: [ self assert: vrsna < vrsnb ].
+			vrsna := vrsnb ].
+	vrsna := nil.
+	vrsns reverse
+		do: [:str |
+			vrsnb := str asRwSemanticVersionNumber.
+			self assert: vrsnb printString = str.
+			self assert: vrsnb = vrsnb.
+			vrsna ifNotNil: [ self assert: vrsna > vrsnb ].
+			vrsna := vrsnb ].
+
+	self deny: '1.0.0-alpha.beta' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber
+%
+
+! Class implementation for 'RwSemanticVersionNumberTestCase'
+
+!		Class methods for 'RwSemanticVersionNumberTestCase'
+
+category: 'Tests'
+classmethod: RwSemanticVersionNumberTestCase
+shouldInheritSelectors
+
+	^true
+%
+
+!		Instance methods for 'RwSemanticVersionNumberTestCase'
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+sampleVersionStrings
+    ^ #('1.0.0+-' '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-0.3.7' '1.0.0-x.7.z.92')
+        , #('1.0.0+build.1' '1.3.7+build.11.e0f985a')
+        ,
+            #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0-rc.1+build.1' '1.0.0' '1.0.0+0.3.7' '1.3.7+build' '1.3.7+build.2.b8f12d7' '1.3.7+build.11.e0f985a')
+        , #('1.0.0-alp-h-a' '1.0.0-r-c.1' '1.0.0+alp-h-a' '1.0.0+r-c.1')
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion1
+
+	"Use numeric comparison for pure numbers. If you non-numeric version separate with '-'"
+	
+	| x y |
+	self assert: ((x := self versionClass fromString: '2.9.0') < (y := self versionClass fromString: '2.10.0')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion2
+
+	self assert: ((self versionClass fromString: '2.9.0-alpha.2') < (self versionClass fromString: '2.9.0-alpha.3')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion3
+
+	self assert: ((self versionClass fromString: '2.9.9-alpha.2') < (self versionClass fromString: '2.9.10')).
+%
+
+category: 'test alpha/numeric version numbers'
+method: RwSemanticVersionNumberTestCase
+testAlphaNumericVersion4
+
+	self assert: ((self versionClass fromString: '2.9.9-alpha.2') < (self versionClass fromString: '2.9.9')).
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testEqualityComparison
+    self deny: '1.0.0+-' asRwSemanticVersionNumber = '1.0.0--' asRwSemanticVersionNumber.
+	self assert: '1.0.0+-' asRwSemanticVersionNumber = '1.0.0+a' asRwSemanticVersionNumber.
+	self sampleVersionStrings
+        do: [ :versionString | self assert: versionString asRwSemanticVersionNumber = versionString asRwSemanticVersionNumber ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testLessThanComparison
+    self assert: '1.0.0-rc.1+build.1' asRwSemanticVersionNumber < '1.0.0' asRwSemanticVersionNumber.
+    self
+        assert: '1.0.0-rc.1+build.1' asRwSemanticVersionNumber < '1.0.0+build.0' asRwSemanticVersionNumber.
+    self assert:  '1.0.0-0.3.7' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber.
+    self assert: '1.0.0-alpha' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber.
+    self assert: '1.0.0-0.3.7' asRwSemanticVersionNumber < '1.0.0-x.7.z.92' asRwSemanticVersionNumber
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testOfficialInvalidSemanticVersions
+	"https://github.com/semver/semver/issues/232#issuecomment-430813095"
+
+	"https://github.com/GemTalk/Rowan/issues/381"
+
+    | vrsn |
+    {
+		'1'.
+		'1.2'.
+		'1.2.3-0123'.
+		'1.2.3-0123.0123'.
+		'1.1.2+.123'.
+		'+invalid'.
+		'-invalid'.
+		'-invalid+invalid'.
+		'-invalid.01'.
+		'alpha'.
+		'alpha.beta'.
+		'alpha.beta.1'.
+		'alpha.1'.
+		'alpha+beta'.
+		'alpha_beta'.
+		'alpha.'.
+		'alpha..'.
+		'beta'.
+		'1.0.0-alpha_beta'.
+		'-alpha.'.
+		'1.0.0-alpha..'.
+		'1.0.0-alpha..1'.
+		'1.0.0-alpha...1'.
+		'1.0.0-alpha....1'.
+		'1.0.0-alpha.....1'.
+		'1.0.0-alpha......1'.
+		'1.0.0-alpha.......1'.
+		'01.1.1'.
+		'1.01.1'.
+		'1.1.01'.
+		'1.2'.
+		'1.2.3.DEV'.
+		'1.2-SNAPSHOT'.
+		'1.2.31.2.3----RC-SNAPSHOT.12.09.1--..12+788'.
+		'1.2-RC-SNAPSHOT'.
+		'-1.0.3-gamma+b7718'.
+		'+justmeta'.
+		'9.8.7+meta+meta'.
+		'9.8.7-whatever+meta+meta'.
+		'99999999999999999999999.999999999999999999.99999999999999999----RC-SNAPSHOT.12.09.1--------------------------------..12'.
+	}
+	do: [ :versionString |
+		self should: [ vrsn := versionString asRwSemanticVersionNumber ] raise: Error ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testOfficialValidSemanticVersions
+	"https://github.com/semver/semver/issues/232#issuecomment-430813095"
+
+	"https://github.com/GemTalk/Rowan/issues/381"
+
+	| x vrsn |
+    {
+		'0.0.0'.
+		'0.0.1'.
+		'0.0.4'.
+		'1.2.3'.
+		'10.20.30'.
+		'1.1.2-prerelease+meta'.
+		'1.1.2+meta'.
+		'1.1.2+meta-valid'.
+		'1.0.0-alpha'.
+		'1.0.0-beta'.
+		'1.0.0-alpha.beta'.
+		'1.0.0-alpha.beta.1'.
+		'1.0.0-alpha.1'.
+		'1.0.0-alpha0.valid'.
+		'1.0.0-alpha.0valid'.
+		'1.0.0-alpha-a.b-c-somethinglong+build.1-aef.1-its-okay'.
+		'1.0.0-rc.1+build.1'.
+		'2.0.0-rc.1+build.123'.
+		'1.2.3-beta'.
+		'10.2.3-DEV-SNAPSHOT'.
+		'1.2.3-SNAPSHOT-123'.
+		'1.0.0'.
+		'2.0.0'.
+		'1.1.7'.
+		'2.0.0+build.1848'.
+		'2.0.1-alpha.1227'.
+		'1.0.0-alpha+beta'.
+		'1.2.3----RC-SNAPSHOT.12.9.1--.12+788'.
+		'1.2.3----R-S.12.9.1--.12+meta'.
+		'1.2.3----RC-SNAPSHOT.12.9.1--.12'.
+		'1.0.0+0.build.1-rc.10000aaa-kk-0.1'.
+		'99999999999999999999999.999999999999999999.99999999999999999'.
+		'1.0.0-0A.is.legal'.
+		}
+	do: [ :versionString | self assert: versionString = (x := (vrsn := versionString asRwSemanticVersionNumber) printString) ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testPrinting
+    | x vrsn |
+    self sampleVersionStrings
+        do: [ :versionString | self assert: versionString = (x := (vrsn := versionString asRwSemanticVersionNumber) printString) ]
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioning
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.1.0' '1.0.0-rc.2').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0').
+    self validateSemanticVersionStrings: #('1.0.0-1' '1.0.0-alpha').
+    self validateSemanticVersionStrings: #('1.0.0-alpha' '1.0.0+1').
+    self validateSemanticVersionStrings: #('1.0.0' '1.0.1').
+    self validateSemanticVersionStrings: #('1.0.0--' '1.0.0-a').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0' '1.0.1').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.2' '1.0.0-rc.3').
+    self validateSemanticVersionStrings: #('1.0.0-10000' '1.0.0-a')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioningSpecItem10
+    "[Semantic Versioning 2.0.0-rc.1](http://semver.org/)"
+
+    self validateSemanticVersionStrings: #( '1.0.0-0.3.7' '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-x.7.z.92')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testSemanticVersioningSubsetCompliance
+    "subset of sample versions that are compatible with MetacellVersionNumber syntax"
+
+    self
+        validateSemanticVersionStrings:
+            #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion01
+
+	self assert: ((self versionClass fromString: '1.1.1') versionString = '1.1.1')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion02
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.1.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 = v1).	
+	self assert: (v2 = v2).
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion04
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion05
+    | v1 v2 |
+    v1 := self versionClass fromString: '3.0.0'.
+    v2 := self versionClass fromString: '2.0.0'.
+    self assert: v1 > v2
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion09
+    | v1 v2 |
+    v1 := self versionClass fromString: '1.0.0'.
+    v2 := self versionClass fromString: '0.7.0'.
+    self assert: v1 >= v2.
+    self assert: v2 <= v1
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion10
+    | x y |
+    self
+        assert:
+            (x := (({(self versionClass fromString: '1.0.0').
+            (self versionClass fromString: '0.7.0').
+            (self versionClass fromString: '0.8.0').
+            (self versionClass fromString: '0.9.0').
+            (self versionClass fromString: '1.0.1')} sort: [ :a :b | a <= b ]) collect: [ :each | each versionString ])
+                asArray) = (y := #('0.7.0' '0.8.0' '0.9.0' '1.0.0' '1.0.1'))
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion12
+    self deny: (self versionClass fromString: '1.0.0') <= (self versionClass fromString: '0.7.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion14
+
+	self assert: ((self versionClass fromString: '2.9.0-alpha02') < (self versionClass fromString: '2.9.0-alpha03')).
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion15
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0-beta.1')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion16
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion17
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-0').
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-beta.0').
+    self assert: (self versionClass fromString: '1.0.0') > (self versionClass fromString: '1.0.0-beta')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion18
+    | x y |
+    self deny: (x := self versionClass fromString: '1.0.0') < (y := self versionClass fromString: '1.0.0-0').
+    self assert: (x := self versionClass fromString: '1.0.0') > (y := self versionClass fromString: '1.0.0-0').
+    self assert: (x := self versionClass fromString: '1.0.0') = (y := self versionClass fromString: '1.0.0+0').
+ 
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+testVersion19
+    self assert: (self versionClass fromString: '1.0.0-beta.0') < (self versionClass fromString: '1.0.0')
+%
+
+category: 'tests'
+method: RwSemanticVersionNumberTestCase
+validateSemanticVersionStrings: versionStrings
+    | versions version |
+    versions := versionStrings collect: [ :each | each asRwSemanticVersionNumber ].
+    version := versions at: 1.
+    2 to: versions size do: [ :index | 
+        | nextVersion |
+        nextVersion := versions at: index.
+        self assert: version < nextVersion.
+        version := nextVersion ]
+%
+
+category: 'private'
+method: RwSemanticVersionNumberTestCase
+versionClass
+    ^ RwSemanticVersionNumber
+%
+
+! Class implementation for 'RwStrawmanProjectTestsV2'
+
+!		Instance methods for 'RwStrawmanProjectTestsV2'
+
+category: 'tests'
+method: RwStrawmanProjectTestsV2
+testBasic
+	"Create project ... without errors  the project structure should parallel
+		https://github.com/dalehenrich/tonel-demos ...
+		reading and writing packages is beyond the scope of this strawman"
+
+	| projectName project stonString loadSpec resolvedProject x y |
+	projectName := 'tonel-demos'.
+	project := RwStrawmanProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		comment: 'Project created using the Strawman1 V2 project creation api ';
+		yourself.
+
+	project repositoryRoot ensureDeleteAll.
+
+"create project from scratch"
+	project
+		addSimpleComponentNamed: 'Core'
+			condition: 'vast'
+			groupName: 'core'
+			comment: 'Primary component used for loading the system.';
+		addPackagesNamed:
+				{'TonelExampleApp'}
+			toComponentNamed: 'Core';
+		vastSetVaPrequisitesTo: #('SUnit' 'TonelWriterModel')
+			forPackageNamed: 'TonelExampleApp';
+		vastSetVaSubApplicationsTo: {(Dictionary new
+				at: #'condition' put: true;
+				at: #'subapps' put: {'TonelExampleSubApp'};
+				yourself)}
+			forPackageNamed: 'TonelExampleApp';
+		yourself.
+
+	stonString := STON toStringPretty: project.	"useful to view full structure"
+	self assert: project _validate.
+
+	project resolve.
+
+"export project arififacts to disk"
+	stonString := STON toStringPretty: project.	"useful to view full structure"
+	project
+		export;
+		exportLoadSpecification.
+
+"read load spec from disk"
+	loadSpec := (RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(project repositoryRoot / 'rowan' / 'specs' / projectName , 'ston') pathString)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+
+"read project from disk"
+	resolvedProject := loadSpec resolveStrawman.
+
+	stonString := STON
+		toStringPretty:
+			{resolvedProject.
+			project}.	"useful to view full structure"
+
+"repository and components should match"
+	self assert: resolvedProject _projectRepository = project _projectRepository.
+
+	self assert: (x := resolvedProject _loadComponents components) = (y := project _loadComponents components).
+
+	self assert: (x := resolvedProject packages) = (y := self _expectedPackageDefinitions).
+%
+
+category: 'private'
+method: RwStrawmanProjectTestsV2
+_expectedPackageDefinitions
+	^ Dictionary new
+		at: 'TonelExampleApp'
+			put:
+				(Dictionary new
+						at: #'name' put: 'TonelExampleApp';
+						at: #'properties'
+							put:
+								(Dictionary new
+										at: 'vaPrerequisites' put: #('SUnit' 'TonelWriterModel');
+										at: 'vaSubApplications'
+											put:
+												{(Dictionary new
+														at: #'condition' put: true;
+														at: #'subapps' put: {'TonelExampleSubApp'};
+														yourself)};
+										yourself);
+						at: #'definitions' put: Dictionary new;
+						yourself);
+		yourself
+%
+
+category: 'private'
+method: RwStrawmanProjectTestsV2
+_testRowanProjectsSandbox
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX')
+		ifNotNil: [ :sandboxPath | ^ sandboxPath ]
 %
 
 ! Class implementation for 'NewTonelParser'
@@ -69081,46 +73622,20 @@ newMethodDefinitionFrom: anArray
 		source: source
 %
 
+! Class extensions for 'AbstractException'
+
+!		Instance methods for 'AbstractException'
+
+category: '*rowan-gemstone-kernel-32x'
+method: AbstractException
+addText: aString
+  messageText ifNil:[ self asString "build the default messageText" ].
+  messageText := (messageText ifNil:[ String new ]), ', ', aString .
+%
+
 ! Class extensions for 'Behavior'
 
 !		Instance methods for 'Behavior'
-
-category: '*rowan-gemstone-3215'
-method: Behavior
-moveMethod: aSelector toCategory: categoryName environmentId: envId
-
-	"Moves the method aSelector (a String) from its current category to the
- specified category (also a String).  If either aSelector or categoryName is
- not in the receiver's method dictionary, or if aSelector is already in
- categoryName, generates an error..
- This method does not account for selectors inherited from superclasses."
-
-	| selSym catSym oldCat |
-	self _validatePrivilege
-		ifFalse: [ ^ nil ].
-	(self includesCategory: categoryName environmentId: envId)
-		ifFalse: [ ^ self _categoryNotFound: categoryName ].
-	oldCat := self categoryOfSelector: aSelector environmentId: envId.
-
-"Backport of a change in behavior that was made in 3.4 and is needed for Rowan" 
-"
-	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
-"
-
-	catSym := categoryName asSymbol.
-	selSym := aSelector asSymbol.
-
-	(envId ~~ 0
-		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
-		ifTrue: [ 
-			| catDict |
-			catDict := self _baseCategorysForStore: envId.
-			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
-			(catDict at: catSym) add: selSym ]
-		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
-	self _needsAnnouncement
-		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
-%
 
 category: '*ast-kernel-core'
 method: Behavior
@@ -69545,7 +74060,7 @@ byteArrayMap
 
 !		Instance methods for 'CharacterCollection'
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 asRwGemStoneVersionNumber
 
@@ -69561,14 +74076,14 @@ asRwRepository
 	^ self asRwUrl asRwRepository
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 asRwSemanticVersionNumber
 
 	^ RwSemanticVersionNumber fromString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-url'
 method: CharacterCollection
 asRwUrl
 
@@ -69577,7 +74092,7 @@ asRwUrl
 	^ RwUrl fromString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-url'
 method: CharacterCollection
 indexOfAnyOf: specialChars startingAt: oldPos
 
@@ -69617,21 +74132,21 @@ rbStoreOn: aStream
   aStream nextPut: $'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher
 
 	^ anRwGemStoneVersionConfigurationPlatformAttributeMatcher matchString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwPlatformAttributeMatchForString: anRwStringConfigurationPlatformAttributeMatcher
 
 	^ anRwStringConfigurationPlatformAttributeMatcher matchString: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticIntegerLessThanSelf: anInteger
 
@@ -69641,21 +74156,48 @@ rwSemanticIntegerLessThanSelf: anInteger
   ^ true
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticStringLessThanSelf: aString
 
 	^ aString < self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 
 	^ aRwSemanticVersonComponent rwSemanticStringLessThanSelf: self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
+method: CharacterCollection
+substrings: separators 
+	"Answer an array containing the substrings in the receiver separated 
+	by the elements of separators."
+	| result sourceStream subStringStream |
+	
+	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
+		ifFalse: [ ^ self error: 'separators must be Characters.' ].
+	sourceStream := self readStream.
+	result := OrderedCollection new.
+	subStringStream := String new writeStreamPortable.
+	[ sourceStream atEnd ] whileFalse: [
+		| char |
+		char := sourceStream next.
+		(separators includes: char)
+			ifTrue: [
+				subStringStream isEmpty ifFalse: [
+					result add: subStringStream contents.
+					subStringStream := String new writeStreamPortable ] ]
+			ifFalse: [
+				subStringStream nextPut: char ] ].
+	subStringStream isEmpty ifFalse: [
+		result add: subStringStream contents ].
+	^ result asArray
+%
+
+category: '*rowan-gemstone-url'
 method: CharacterCollection
 unescapePercents
 
@@ -70233,9 +74775,10 @@ _rwOptionsForDefinition
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwReservedOop
- "returns nil or the SmallInteger specifying a reserved oopNumber"
-  | oop|
-  ^ (oop := self asOopNumber) <= System _lastReservedOopNumber ifTrue:[ oop ] ifFalse:[ nil ].
+ "returns nil or the SmallInteger specifying a reserved oop"
+  ^ self asOopNumber <= System _lastReservedOopNumber 
+    ifTrue:[ self asOop ] 
+    ifFalse:[ nil ].
 %
 
 category: '*rowan-gemstone-kernel'
@@ -70274,6 +74817,20 @@ category: '*rowan-gemstone-35x'
 method: Class
 _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
   ^ self _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
+%
+
+! Class extensions for 'Collection'
+
+!		Instance methods for 'Collection'
+
+category: '*rowan-gemstone-components-kernel'
+method: Collection
+sort: aSortBlock
+
+	"Sort this array using aSortBlock. The block should take two arguments
+	and return true if the first element should preceed the second one."
+
+	^ self sortWithBlock: aSortBlock
 %
 
 ! Class extensions for 'CypressAddition'
@@ -70409,6 +74966,12 @@ accept: aVisitor
 	^ aVisitor visitMethodDefinition: self
 %
 
+category: '*rowan-cypress-kernel'
+method: CypressMethodDefinition
+offset: anInteger inFile: aFileName
+	"noop"
+%
+
 category: '*rowan-tools-kernel'
 method: CypressMethodDefinition
 timeStamp
@@ -70494,7 +75057,7 @@ packageNames
 
 !		Instance methods for 'DiskStore'
 
-category: '*rowan-components-kernel'
+category: '*rowan-definitionsv1-kernel'
 method: DiskStore
 rowanRepositoryDefinitionClass
 
@@ -70602,7 +75165,7 @@ rowanProjectsHome
 
 !		Instance methods for 'FileSystem'
 
-category: '*rowan-components-kernel'
+category: '*rowan-definitionsv1-kernel'
 method: FileSystem
 rowanRepositoryDefinitionClass
 
@@ -70613,7 +75176,7 @@ rowanRepositoryDefinitionClass
 
 !		Instance methods for 'FileSystemStore'
 
-category: '*rowan-components-kernel'
+category: '*rowan-definitionsv1-kernel'
 method: FileSystemStore
 rowanRepositoryDefinitionClass
 
@@ -70741,14 +75304,14 @@ _rwFinishFromStream: aStream signFound: aSignFound factor: aFactor radix: radix
 
 !		Instance methods for 'Integer'
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticIntegerLessThanSelf: anInteger
 
 	^ anInteger < self
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticStringLessThanSelf:  aString
   "integers have greater precedence than strings"
@@ -70757,7 +75320,7 @@ rwSemanticStringLessThanSelf:  aString
   ^ false
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 
@@ -70797,7 +75360,7 @@ stonOn: stonWriter
 
 !		Instance methods for 'MemoryStore'
 
-category: '*rowan-components-kernel'
+category: '*rowan-definitionsv1-kernel'
 method: MemoryStore
 rowanRepositoryDefinitionClass
 
@@ -70933,35 +75496,35 @@ isValue
 	^false
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher
   ^ self
     error: 'Expected a String or a RwGemStoneVersion'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwPlatformAttributeMatchForString: anRwStringConfigurationPlatformAttributeMatcher
   ^ self
     error: 'Expected a String or a RwGemStoneVersion'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticIntegerLessThanSelf: anInteger
   ^ self
     error: 'Invalid semantic verson component - should be an Integer.'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticStringLessThanSelf: aString
   ^ self
     error: 'Invalid semantic verson component - should be String.'
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: Object
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
   ^ self
@@ -71088,6 +75651,40 @@ name
   ^ self key
 %
 
+! Class extensions for 'RwAbstractProjectComponentVisitorV2'
+
+!		Instance methods for 'RwAbstractProjectComponentVisitorV2'
+
+category: '*rowan-gemstone-componentsv2'
+method: RwAbstractProjectComponentVisitorV2
+_components: componentDirPath forProject: aProjectName
+
+	| urlBase |
+	self componentNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,componentDirPath asFileReference pathString, '/'.
+	^ self componentNames
+		collect: [ :componentName | 
+			| url |
+			url := urlBase , componentName , '.ston'.
+			(RwAbstractProjectLoadComponentV2 fromUrl: url)
+				projectName: aProjectName;
+				yourself ]
+%
+
+category: '*rowan-gemstone-componentsv2'
+method: RwAbstractProjectComponentVisitorV2
+_projects: projectDirPath forProject: ignored
+
+	| urlBase |
+	self projectNames isEmpty ifTrue: [ ^ #() ].
+	urlBase := 'file:' ,projectDirPath asFileReference pathString, '/'.
+	^ self projectNames
+		collect: [ :prjName | 
+			| url |
+			url := urlBase , prjName , '.ston'.
+			RwSpecification fromUrl: url ]
+%
+
 ! Class extensions for 'RwAbstractProjectDefinitionV2'
 
 !		Instance methods for 'RwAbstractProjectDefinitionV2'
@@ -71146,16 +75743,6 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 %
 
-! Class extensions for 'RwAbstractResolvedObjectV2'
-
-!		Instance methods for 'RwAbstractResolvedObjectV2'
-
-category: '*rowan-gemstone-definitionsV2'
-method: RwAbstractResolvedObjectV2
-_gemstoneAllUsersName
-	^ self _loadSpecification _gemstoneAllUsersName
-%
-
 ! Class extensions for 'RwAbstractTool'
 
 !		Instance methods for 'RwAbstractTool'
@@ -71170,6 +75757,57 @@ If the client is a topaz process, the default logger writes to the
  else to stdout.
 "
 	GsFile gciLogClient: aString
+%
+
+! Class extensions for 'RwBasicProjectLoadComponentV2'
+
+!		Class methods for 'RwBasicProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwBasicProjectLoadComponentV2
+fromFile: filePath
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ self _readStonFrom: stream ]
+%
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwBasicProjectLoadComponentV2
+orderedDictionaryClass
+
+	^ Rowan platform orderedDictionaryClass
+%
+
+!		Instance methods for 'RwBasicProjectLoadComponentV2'
+
+category: '*rowan-gemstone-componentsv2'
+method: RwBasicProjectLoadComponentV2
+_exportToUrl: directoryUrl
+	| url |
+	url := directoryUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			| fileRef |
+			fileRef := url pathForDirectory asFileReference / self name , 'ston'.
+			fileRef parent ensureCreateDirectory.
+			fileRef
+				writeStreamDo: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+	url schemeName = 'memory'
+		ifTrue: [ 
+			FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory
+				/ self name , 'ston'
+				writeStreamDo: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+	^ nil	"otherwise a noop"
 %
 
 ! Class extensions for 'RwClassDefinition'
@@ -71562,7 +76200,7 @@ methodEnvForPackageNamed: packageName
 	^self projectRef methodEnvForPackageNamed: packageName
 %
 
-category: '*rowan-cypress-definitions'
+category: '*rowan-cypress-components'
 method: RwComponentProjectDefinition
 name
   ^ self projectAlias
@@ -71659,7 +76297,7 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 !		Instance methods for 'RwComponentSpecification'
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-components-extensions'
 method: RwComponentSpecification
 initialize
 
@@ -71704,6 +76342,23 @@ comparePropertiesAgainstBase: aDefinition
 							oldValue: before
 							newValue: after)]].
 	^modification
+%
+
+! Class extensions for 'RwEmbeddedLoadSpecificationV2'
+
+!		Instance methods for 'RwEmbeddedLoadSpecificationV2'
+
+category: '*rowan-definitionsV2'
+method: RwEmbeddedLoadSpecificationV2
+resolveWithParentProject: aResolvedProject
+	"give embedded projects a chance to resolve cleanly"
+
+	| basicProject |
+	self projectsHome: aResolvedProject projectsHome.
+	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
+	basicProject _projectRepository: aResolvedProject _projectRepository copy.
+	self projectsHome: aResolvedProject repositoryRoot.
+	^ basicProject resolve
 %
 
 ! Class extensions for 'RwFileUrl'
@@ -71989,140 +76644,50 @@ registry_ImplementationClass
 
 ! Class extensions for 'RwLoadSpecificationV2'
 
-!		Class methods for 'RwLoadSpecificationV2'
-
-category: '*rowan-gemstone-definitionsv2'
-classmethod: RwLoadSpecificationV2
-_gemstoneAllUsersName
-	^ 'allusers'
-%
-
 !		Instance methods for 'RwLoadSpecificationV2'
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-definitionsv2'
 method: RwLoadSpecificationV2
-gemstoneDefaultMethodEnvForUser: userId
-	| gemstoneProperties userProperties |
-	gemstoneProperties := self platformProperties
-		at: 'gemstone'
-		ifAbsent: [ ^ self _gemstoneDefaultMethodEnv ].
-	userProperties := gemstoneProperties
-		at: userId
-		ifAbsent: [ 
-			gemstoneProperties
-				at: self _gemstoneAllUsersName
-				ifAbsent: [ ^ self _gemstoneDefaultMethodEnv ] ].
-	^ userProperties
-		at: #'defaultMethodEnv'
-		ifAbsent: [ self _gemstoneDefaultMethodEnv ]
+resolve
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-definitionsv2'
 method: RwLoadSpecificationV2
-gemstoneDefaultSymbolDictNameForUser: userId
-	| gemstoneProperties userProperties |
-	gemstoneProperties := self platformProperties
-		at: 'gemstone'
-		ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ].
-	userProperties := gemstoneProperties
-		at: userId
-		ifAbsent: [ 
-			gemstoneProperties
-				at: self _gemstoneAllUsersName
-				ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ] ].
-	^ userProperties
-		at: #'defaultSymbolDictName'
-		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
+resolve: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self platformAttributes: platformAttributes
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-strawman1'
 method: RwLoadSpecificationV2
-gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
-	| gemstoneProperties userProperties |
-	gemstoneProperties := self platformProperties
-		at: 'gemstone'
-		ifAbsent: [ ^ self _gemstoneDefaultUseSessionMethodsForExtensions ].
-	userProperties := gemstoneProperties
-		at: userId
-		ifAbsent: [ 
-			gemstoneProperties
-				at: self _gemstoneAllUsersName
-				ifAbsent: [ ^ self _gemstoneDefaultUseSessionMethodsForExtensions ] ].
-	^ userProperties
-		at: #'defaultUseSessionMethodsForExtensions'
-		ifAbsent: [ self _gemstoneDefaultUseSessionMethodsForExtensions ]
+resolveStrawman
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwStrawmanProjectV2 loadSpecification: self
 %
 
-category: '*rowan-gemstone-definitionsv2'
+category: '*rowan-strawman1'
 method: RwLoadSpecificationV2
-gemstoneSetDefaultMethodEnvForUser: userId to: env
+resolveStrawman: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
 
-	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
-		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultMethodEnv put: env
-%
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultMethodEnvTo: env
-	self gemstoneSetDefaultMethodEnvForUser: self _gemstoneAllUsersName to: env
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-
-	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
-		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultSymbolDictName put: symbolDictName
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-	self gemstoneSetDefaultSymbolDictNameForUser: self _gemstoneAllUsersName to: symbolDictName
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
-
-	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
-		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultUseSessionMethodsForExtensions put: aBool
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
-	self gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: self _gemstoneAllUsersName to: aBool
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-_gemstoneAllUsersName
-
-	^ self class _gemstoneAllUsersName
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-_gemstoneDefaultMethodEnv
-	^ 0
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-_gemstoneDefaultSymbolDictName
-
-	^ 'UserGlobals'
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwLoadSpecificationV2
-_gemstoneDefaultUseSessionMethodsForExtensions
-
-	^ false
+	^ RwStrawmanProjectV2 loadSpecification: self platformAttributes: platformAttributes
 %
 
 ! Class extensions for 'RwMethodDefinition'
@@ -72444,7 +77009,7 @@ method: RwPrjLoadTool
 loadComponentProjectDefinition: projectDefinition
 	^ self
 		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 %
 
@@ -72453,7 +77018,7 @@ method: RwPrjLoadTool
 loadComponentProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
 	^ self
 		loadComponentProjectDefinition: projectDefinition
-		platformConfigurationAttributes: Rowan platformConfigurationAttributes
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 %
 
@@ -72549,6 +77114,33 @@ readConfigurationsForProjectComponentDefinition: projectComponentDefinition with
 
 category: '*rowan-tools-extensions-components'
 method: RwPrjReadTool
+readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
+
+	^self readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: true
+%
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjReadTool
+readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad
+
+	| theConfigNames theGroupNames |
+	theConfigNames := configNames isEmpty
+		ifTrue: [ projectDefinition defaultConfigurationNames ]
+		ifFalse: [ configNames ].
+	theGroupNames := groupNames isEmpty
+		ifTrue: [  projectDefinition defaultGroupNames ]
+		ifFalse: [ groupNames ].
+	^ self 
+		_visitConfigurations: RwProjectLoadConfigurationVisitor 
+		forProjectDefinition: projectDefinition 
+		withConfigurations: theConfigNames 
+		groupNames: theGroupNames
+		platformConfigurationAttributes: Rowan platformConditionalAttributes
+		forLoad: forLoad
+%
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjReadTool
 readProjectSetForComponentProjectDefinition: projectComponentDefinition
 
 	projectComponentDefinition loadedConfigurationNames
@@ -72576,7 +77168,7 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
 			withConfigurations: configNames 
 			groupNames: groupNames 
-			platformConfigurationAttributes: Rowan platformConfigurationAttributes
+			platformConfigurationAttributes: Rowan platformConditionalAttributes
 %
 
 category: '*rowan-tools-extensions-components'
@@ -72630,6 +77222,70 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 				at: 'loadedGroupNames' put: theGroupNames;
 				at: 'packageMapSpecs' put: thePackageMapSpecs ].
 	^ projectSetDefinition
+%
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjReadTool
+_visitConfigurations: visitorClass forProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
+
+	| projectName configDirectory projectsDirectory visitor |
+	projectName := projectComponentDefinition name.
+	configDirectory := projectComponentDefinition repositoryRoot / projectComponentDefinition configsPath.
+	configDirectory exists
+		ifFalse: [ ^ self error: 'No configuration directory (', configDirectory pathString printString, ') found for project ', projectName printString ].
+	projectsDirectory := projectComponentDefinition repositoryRoot / projectComponentDefinition projectsPath.
+	projectsDirectory exists
+		ifFalse: [ ^ self error: 'No projects directory (', projectsDirectory pathString printString, ') found for project ', projectName printString ].
+	visitor := visitorClass new
+		platformAttributes: platformConfigurationAttributes;
+		groupNames: groupNames;
+		configurationBasePath: configDirectory pathString;
+		projectBasePath: projectsDirectory pathString;
+		projectComponentDefinition: projectComponentDefinition;
+		yourself.
+	configNames do: [:configName |
+		| config url |
+		url := 'file:' , ((configDirectory / configName) , 'ston') pathString.
+		config := RwAbstractProjectConfiguration fromUrl: url.
+		config projectName: projectName.
+		forLoad
+			ifTrue: [
+				"expect all config names to represent loadable configurations - throw error if a nested configuration is encountered"
+				visitor visit: config ]
+			ifFalse: [ 
+				"resolve config names without respect to whether or not the configuration is loadable"
+				visitor visitNested: config ] ].
+	^visitor
+%
+
+category: '*rowan-tools-extensions-components'
+method: RwPrjReadTool
+_visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
+
+	| projectName configDirectory visitor |
+	projectDefinition repositoryRootPath ifNil: [ ^ nil ].
+	projectName := projectDefinition name.
+	configDirectory := projectDefinition repositoryRootPath asFileReference / projectDefinition configsPath.
+	configDirectory exists
+		ifFalse: [ ^ nil ].
+	visitor := visitorClass new
+		platformAttributes: platformConfigurationAttributes;
+		groupNames: groupNames;
+		configurationBasePath: configDirectory pathString;
+		yourself.
+	configNames do: [:configName |
+		| config url |
+		url := 'file:' , ((configDirectory / configName) , 'ston') pathString.
+		config := RwAbstractProjectConfiguration fromUrl: url.
+		config projectName: projectName.
+		forLoad
+			ifTrue: [
+				"expect all config names to represent loadable configurations - throw error if a nested configuration is encountered"
+				visitor visit: config ]
+			ifFalse: [ 
+				"resolve config names without respect to whether or not the configuration is loadable"
+				visitor visitNested: config ] ].
+	^visitor
 %
 
 ! Class extensions for 'RwProject'
@@ -72722,6 +77378,13 @@ compareAgainstBase: aDefinition
 		elementClass: RwPackageDefinition.
 	modification packagesModification: packagesModification.
 	^ modification
+%
+
+category: '*rowan-core-definitionsv2'
+method: RwProjectDefinition
+componentsWithDoits
+	"v2 compat method"
+	^ #()
 %
 
 category: '*rowan-gemstone-definitionsv1'
@@ -72919,39 +77582,17 @@ gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 	"answer true if the package was found in one of the receivers components"
 
 	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					component
-						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName
-						andPackageName: packageName
-						setSymbolDictNameTo: symbolDictName.
-					^ self ] ].
-	self error: 'No package named ', packageName printString, ' found.'.
+		gemstoneSetSymbolDictName: symbolDictName
+		forPackageNamed: packageName
 %
 
 category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					| userIdPropertiesMap packagePropertiesMap |
-					userIdPropertiesMap := (component
-						conditionalPackageMapSpecsAtGemStoneUserId: userId)
-						at: #'packageNameToPlatformPropertiesMap'
-						ifAbsent: [ 
-							"no entries for the specific userId, check if there's an entry for allusers"
-							(component
-								conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
-								at: #'packageNameToPlatformPropertiesMap'
-								ifAbsent: absentBlock ].
-					packagePropertiesMap := userIdPropertiesMap
-						at: packageName
-						ifAbsent: absentBlock.
-					^ packagePropertiesMap at: 'symbolDictName' ifAbsent: absentBlock ] ].
-	self error: 'No package ' , packageName , ' found in the current project.'
+	^ self components
+		gemstoneSymbolDictNameForPackageNamed: packageName
+		forUser: userId
+		ifAbsent: absentBlock
 %
 
 category: '*rowan-gemstone-definitionsv2'
@@ -72973,6 +77614,17 @@ category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
 _gemstoneAllUsersName
 	^ RwLoadSpecificationV2 _gemstoneAllUsersName
+%
+
+! Class extensions for 'RwProjectModification'
+
+!		Instance methods for 'RwProjectModification'
+
+category: '*rowan-corev2'
+method: RwProjectModification
+componentsWithDoits
+	^ self after
+		ifNotNil: [ :projectDef | projectDef componentsWithDoits ]
 %
 
 ! Class extensions for 'RwProjectReferenceDefinition'
@@ -73138,130 +77790,6 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ]
 %
 
-! Class extensions for 'RwProjectReferenceDefinitionV2'
-
-!		Instance methods for 'RwProjectReferenceDefinitionV2'
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-defaultMethodEnv
-	^ self projectLoadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-defaultSymbolDictName
-	^ self projectLoadSpecification
-		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-defaultUseSessionMethodsForExtensions
-	^ self projectLoadSpecification gemstoneDefaultUseSessionMethodsForExtensionsForUser: Rowan image currentUserId
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-gemstoneSetDefaultMethodEnvForUser: userId to: aBool
-	^ self projectLoadSpecification
-		gemstoneSetDefaultMethodEnvForUser: userId
-		to: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-gemstoneSetDefaultMethodEnvTo: aBool
-	^ self projectLoadSpecification gemstoneSetDefaultMethodEnvTo: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-	^ self projectLoadSpecification gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-	^ self projectLoadSpecification gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
-	^ self projectLoadSpecification gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
-	^ self projectLoadSpecification gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-gemstoneSetMethodEnv: env forPackageNamed: packageName
-	"defer implementation til later date"
-
-	"https://github.com/GemTalk/Rowan/issues/533"
-
-	| packageProperties packageNameToPlatformPropertiesMap |
-	packageNameToPlatformPropertiesMap := self packageNameToPlatformPropertiesMap.
-	packageProperties := packageNameToPlatformPropertiesMap
-		at: packageName
-		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
-	env
-		ifNil: [ 
-			"remove the entry if it exists"
-			packageProperties removeKey: 'methodEnv' ifAbsent: [  ].
-			^ self ].
-	packageProperties at: 'methodEnv' put: env
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
-	"defer implementation til later date"
-
-	"https://github.com/GemTalk/Rowan/issues/533"
-
-	| packageProperties |
-	packageProperties := self packageNameToPlatformPropertiesMap
-		at: packageName
-		ifAbsent: [ self packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
-	aBool
-		ifNil: [ 
-			"remove the entry if it exists"
-			packageProperties removeKey: 'useSessionMethodsForExtensions' ifAbsent: [  ].
-			^ self ].
-	aBool
-		ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
-	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-methodEnvForPackageNamed: packageName
-	"Ignore the package name for now ... will do proper package name lookup when we're ready to support method environments"
-
-	"https://github.com/GemTalk/Rowan/issues/533"
-
-	^ self projectSpecification
-		gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
-%
-
-category: '*rowan-gemstone-components-extensions'
-method: RwProjectReferenceDefinitionV2
-useSessionMethodsForExtensionsForPackageNamed: packageName
-	"Ignore the package name for now ... will do proper package name lookup when we're ready to support method environments"
-
-	"https://github.com/GemTalk/Rowan/issues/533"
-
-	^ self projectSpecification
-		gemstoneDefaultUseSessionMethodsForExtensionsForUser: Rowan image currentUserId
-%
-
 ! Class extensions for 'RwProjectSetDefinition'
 
 !		Instance methods for 'RwProjectSetDefinition'
@@ -73298,11 +77826,27 @@ compareAgainstBaseForLoader: aDefinition
 	^ result
 %
 
+! Class extensions for 'RwProjectSetModification'
+
+!		Instance methods for 'RwProjectSetModification'
+
+category: '*rowan-corev2'
+method: RwProjectSetModification
+componentsWithDoits
+	| componentsWithDoits |
+	componentsWithDoits := Set new.
+	self elementsModified
+		keysAndValuesDo: [ :projectName :projectModification | 
+			componentsWithDoits
+				addAll: projectModification componentsWithDoits ].
+	^ componentsWithDoits
+%
+
 ! Class extensions for 'RwProjectSpecification'
 
 !		Instance methods for 'RwProjectSpecification'
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 defaultSymbolDictName: aString
 
@@ -73310,7 +77854,7 @@ defaultSymbolDictName: aString
 	(self platformSpec at: 'gemstone') defaultSymbolDictName: aString
 %
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 initialize
 
@@ -73328,7 +77872,7 @@ initialize
 	defaultGroupNames := {'default'}.
 %
 
-category: '*rowan-gemstone-specifications'
+category: '*rowan-gemstone-specificationsv1'
 method: RwProjectSpecification
 platformSpec
 
@@ -73336,6 +77880,24 @@ platformSpec
 		platformSpec := Dictionary new
 			at: 'gemstone' put: RwGemStoneSpecification new;
 			yourself ].
+%
+
+! Class extensions for 'RwProjectSpecificationV2'
+
+!		Instance methods for 'RwProjectSpecificationV2'
+
+category: '*rowan-definitionsv2'
+method: RwProjectSpecificationV2
+asProjectDefiniton
+	^ RwProjectDefinitionV2 fromLoadSpecification: self
+%
+
+category: '*rowan-definitionsv2'
+method: RwProjectSpecificationV2
+asProjectDefinitonWithComment: commentString
+	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
+		comment: commentString;
+		yourself
 %
 
 ! Class extensions for 'RwProjectTool'
@@ -73447,7 +78009,11 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId
-	^ self _projectDefinition
+	| resolvedLoadComponents |
+	resolvedLoadComponents := self _projectStructure
+		ifNil: [ self _projectDefinition ]
+		ifNotNil: [ :structure | structure ].
+	^ resolvedLoadComponents
 		gemstoneSymbolDictNameForPackageNamed: packageName
 		forUser: userId
 		ifAbsent: [ 
@@ -73476,9 +78042,23 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 ! Class extensions for 'RwSpecification'
 
-!		Instance methods for 'RwSpecification'
+!		Class methods for 'RwSpecification'
 
 category: '*rowan-gemstone-specifications'
+classmethod: RwSpecification
+fromFile: filePath
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ (STON fromStream: stream)
+				initializeForImport;
+				yourself ]
+%
+
+!		Instance methods for 'RwSpecification'
+
+category: '*rowan-gemstone-specificationsv1'
 method: RwSpecification
 register
 
@@ -73531,14 +78111,6 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 ! Class extensions for 'RwUrl'
 
-!		Class methods for 'RwUrl'
-
-category: '*rowan-url-3215'
-classmethod: RwUrl
-httpFromString: aString
-  ^CypressUrl absoluteFromText: aString
-%
-
 !		Instance methods for 'RwUrl'
 
 category: '*rowan-url-cypress'
@@ -73569,6 +78141,53 @@ createRwFiletreeRepositoryForPath: repositoryDirectoryPath
 		yourself
 %
 
+category: '*rowan-url-corev1'
+method: RwUrl
+createRwRepositoryForFormat: repositoryFormat forPath: repositoryDirectoryPath
+  repositoryFormat = 'tonel'
+    ifTrue: [ ^ self createRwTonelRepositoryForPath: repositoryDirectoryPath ].
+  repositoryFormat = 'filetree'
+    ifTrue: [ ^ self createRwFiletreeRepositoryForPath: repositoryDirectoryPath ].
+  repositoryFormat = 'cypress'
+    ifTrue: [ ^ self createRwCypressRepositoryForPath: repositoryDirectoryPath ]
+%
+
+category: '*rowan-url-corev1'
+method: RwUrl
+createRwRepositoryForPath: repositoryDirectoryPath
+  | hasCypress hasFiletree hasTonel repositoryFormat |
+  hasTonel := hasCypress := hasFiletree := false.
+  (self fileUtils directoryEntriesFrom: repositoryDirectoryPath)
+    do: [ :entry | 
+      | filename |
+      filename := self fileUtils localNameFrom: entry.
+      filename = 'properties.st'
+        ifTrue: [ hasTonel := true ].
+      filename = '.cypress'
+        ifTrue: [ hasCypress := true ].
+      filename = '.filetree'
+        ifTrue: [ hasFiletree := true ] ].
+  hasCypress | hasTonel
+    ifTrue: [
+      | theFilename |
+      theFilename := hasTonel
+        ifTrue: [ 'properties.st' ]
+        ifFalse: [ '.cypress' ].
+      self fileUtils
+        readStreamFor: theFilename
+        in: repositoryDirectoryPath
+        do: [ :fileStream | 
+          repositoryFormat := (STON fromStream: fileStream)
+            at: #'format'
+            ifAbsent: [ 'filetree' ] ].
+      ^ self
+        createRwRepositoryForFormat: repositoryFormat
+        forPath: repositoryDirectoryPath ].
+  hasFiletree
+    ifTrue: [ ^ self createRwRepositoryForFormat: 'filetree' forPath: repositoryDirectoryPath ].
+  ^ self createRwRepositoryForFormat: 'cypress' forPath: repositoryDirectoryPath
+%
+
 category: '*rowan-url-cypress'
 method: RwUrl
 createRwTonelRepositoryForPath: repositoryDirectoryPath
@@ -73580,6 +78199,12 @@ createRwTonelRepositoryForPath: repositoryDirectoryPath
     initializeReaderAndWriterClasses;
     url: self printString;
     yourself
+%
+
+category: '*rowan-url-corev1'
+method: RwUrl
+fileUtils
+  ^ Rowan fileUtilities
 %
 
 ! Class extensions for 'SequenceableCollection'
@@ -73645,6 +78270,13 @@ rbStoreOn: aStream
   (self rbStoreElementsFrom: 1 to: self size on: aStream)
     ifFalse: [ aStream nextPutAll: '; yourself' ].
   aStream nextPut: $)
+%
+
+category: '*rowan-gemstone-components-kernel'
+method: SequenceableCollection
+writeStreamPortable
+
+	^ WriteStreamPortable on: self
 %
 
 ! Class extensions for 'String'

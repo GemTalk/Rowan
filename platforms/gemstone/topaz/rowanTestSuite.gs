@@ -4,7 +4,7 @@ run
 	includeDeprecatedPackages := (System stoneVersionReport at: 'gsVersion') = '3.2.15' 
 		ifTrue: [
 			"3.2.15 needs deprecated packages loaded to function"
-			true ]
+			false ]
 		ifFalse: [
 			"3.5.0 can run with or without deprecated packges"
 			false ].
@@ -49,11 +49,13 @@ run
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
-		(System stoneVersionReport at: 'gsVersion') >= '3.5.0' ifTrue: [ Deprecated doErrorOnDeprecated ].
+		(true
+			and: [(System stoneVersionReport at: 'gsVersion') >= '3.5.0']) 
+				ifTrue: [ Deprecated doErrorOnDeprecated ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
-		false	
+		false
 			ifTrue: [ 
 				"custom test debugging"
 				false

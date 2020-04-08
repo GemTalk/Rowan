@@ -129,27 +129,6 @@ RwBrowserToolTest >> _basicClassDefinition: className superclass: superclass typ
 ]
 
 { #category : 'private' }
-RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
-		comment: comment;
-		packageNames: packageNames;
-		defaultSymbolDictName: defaultSymbolDictName;
-		yourself.
-
-	packageNames
-		do: [ :packageName | 
-			projectDefinition
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: packageName ].
-
-	^ projectDefinition
-]
-
-{ #category : 'private' }
 RwBrowserToolTest >> _issue481_loadProjectDefinition: projectName  packageName1: packageName1 packageName2: packageName2 symDictName: symDictName [
 
 	self

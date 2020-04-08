@@ -9,10 +9,3 @@ Object >> isValue [
 
 	^false
 ]
-
-{ #category : '*ast-kernel-core' }
-Object >> value [
-
-	^self
-
-]

@@ -2,15 +2,22 @@ Extension { #name : 'RwAbstractProjectDefinitionV2' }
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwAbstractProjectDefinitionV2 >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
-
-	({ 'projectOwnerId' . 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
+	({'projectOwnerId'.
+	'spec'.
+	(RwLoadedProject _projectDefinitionSourceKey).
+	(RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey).
+	'projectRef'} includes: propertyKey)
 		ifTrue: [ 
-		"projectRef entries are considered to be equal for comparison purposes"
-		"spec entries are considered to be equal for comparison purposes"
-		"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
-		"projectOwnerId entries are considered equal for comparison purpposes"
-		^ true ].
-	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+			"projectRef entries are considered to be equal for comparison purposes"
+			"spec entries are considered to be equal for comparison purposes"
+			"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
+			"_projectDefinitionPlatformConditionalAttributesKey entries are considered equal for comparison purpposes"
+			"projectOwnerId entries are considered equal for comparison purpposes"
+			^ true ].
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }

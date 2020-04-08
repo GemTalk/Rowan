@@ -1,0 +1,10 @@
+RwProjectSpecificationV2 {
+	#specName : 'project_tonel',
+	#projectSpecPath : 'rowan',
+	#componentsPath : 'rowan/components',
+	#projectsPath : 'rowan/projects',
+	#specsPath : 'rowan/specs',
+	#packagesPath : 'rowan/tonel',
+	#packageFormat : 'tonel',
+	#comment : 'V2 Issue 122 project tonel specification'
+}

@@ -9,6 +9,13 @@ Class {
 }
 
 { #category : 'accessing' }
+RwLoadedProject class >> _projectDefinitionPlatformConditionalAttributesKey [
+	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
+
+	^ '_Project_Definition_PlatformConditionalAttricutes'
+]
+
+{ #category : 'accessing' }
 RwLoadedProject class >> _projectDefinitionSourceKey [
 	"The value of the property key indicates which source the project definition was derived from.
 		Currently used when deciding whether to change the loaded commit id, during a load ... 
@@ -35,10 +42,18 @@ RwLoadedProject class >> _projectLoadedDefinitionSourceValue [
 ]
 
 { #category : 'accessing' }
-RwLoadedProject class >> _projectSourceValueNewProject [
-	"This value of the property key indicates that the source of the project definition is a newly created project, so we explicitly don't want to read project from disk on load."
+RwLoadedProject class >> _projectLoadedDefinitionSourceWithDependentProjectsValue [
+	"This value of the property key indicates that the source of the project definition was loaded from disk, 
+		however, the project has dependent projects that will need to be reread from disk on load."
 
-	^ 'new project'
+	^ 'loaded from disk with dependent projects'
+]
+
+{ #category : 'accessing' }
+RwLoadedProject class >> _projectModifiedProjectSourceValue [
+	"This value of the property key indicates that the source of the project definition is newly created project or explicitly modified, so we don't want to read project from disk on load."
+
+	^ 'modified project'
 ]
 
 { #category : 'accessing' }
@@ -63,16 +78,6 @@ RwLoadedProject >> addLoadedPackage: aLoadedPackage [
 	self markDirty.
 	loadedPackages at: aLoadedPackage key put: aLoadedPackage.
 	aLoadedPackage loadedProject: self
-]
-
-{ #category : 'definitions' }
-RwLoadedProject >> asDefinition [
-
-	"Create a Definition corresponding to what I define in the image."
-
-	^ RwProjectDefinition
-		withProperties: self propertiesForDefinition
-		packageDefinitions: self loadedPackageDefinitions
 ]
 
 { #category : 'actions' }
@@ -106,16 +111,15 @@ RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
 
 { #category : 'testing' }
 RwLoadedProject >> isDirty [
-
 	"a project is dirty if it has changes that are not written to disk, or it's packages have changes that are not written to  disk."
 
-	isDirty ifTrue: [ ^ true].
+	isDirty
+		ifTrue: [ ^ true ].
 	self loadedPackages
 		do: [ :loadedPackage | 
 			loadedPackage isDirty
 				ifTrue: [ ^ true ] ].
 	^ false
-
 ]
 
 { #category : 'testing' }

@@ -1,0 +1,10 @@
+RwProjectSpecificationV2 {
+	#specName : 'proposed_project_2',
+	#projectSpecPath : 'rowan/v2',
+	#componentsPath : 'rowan/v2/proposed_components_2',
+	#packagesPath : 'rowan/src',
+	#projectsPath : 'rowan/v2/proposed_projects',
+	#specsPath : 'rowan/v2/proposed_specs',
+	#packageFormat : 'tonel',
+	#comment : 'V2 Rowan project specification - experimental component structure'
+}

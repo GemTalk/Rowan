@@ -1,0 +1,60 @@
+RwProjectLoadComponentV2 {
+	#name : 'StrawMan_1',
+	#comment : 'Supporting classes for building a StrawMan implementation and disk structure for
+		VAST. The plan (https://github.com/GemTalk/Rowan/issues/553#issuecomment-573324469)
+		is to add a resolved project implmentation that is api compatible with RwResolvedProjectV2,
+		so functional tests can be written that illustrate the project life cycle (resolve/load/export)',
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#componentNames : [
+					'DiskConfigurationsV2'
+				],
+				#packageNames : [
+					'Rowan-Strawman1'
+				],
+				#projectNames : [
+				]
+			},
+			'tests' : {
+				#packageNames : [
+				]
+			}
+		},
+		[
+			'gemstoneBase'
+		] : {
+			'core' : {
+				#packageNames : [
+				]
+			}
+		},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+				]
+			},
+			'tests' : {
+				#packageNames : [
+				]
+			}
+		}
+	},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Strawman1' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	},
+	#definedGroupNames : {
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
+	}
+}

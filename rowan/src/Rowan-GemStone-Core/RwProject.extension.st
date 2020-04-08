@@ -27,9 +27,9 @@ RwProject >> exportTopazFormatTo: filePath [
 
 { #category : '*rowan-gemstone-core' }
 RwProject >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
-
-
-	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+	^ self _loadedProject asDefinition
+		exportTopazFormatTo: filePath
+		usingPackageNamesMap: packageNamesMap
 ]
 
 { #category : '*rowan-gemstone-core' }

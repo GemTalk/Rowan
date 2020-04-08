@@ -1448,18 +1448,21 @@ methodDef
 category: 'parsing'
 method: TonelParser
 methodDef: aBlock
-	| ar def |
-	ar := { 
-		self separator.
-		self try: [ self metadata ]. 
-		self separator. 
-		self method. 
-		self methodBody 
-	}.
-	def := self newMethodDefinitionFrom: ar.
-	aBlock 
-		value: ar fourth first second notNil 
-		value: def
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStreamName .
+
+  aBlock
+    value: ar fourth first second notNil
+    value: def
 %
 
 category: 'parsing'
@@ -1480,14 +1483,14 @@ methodDefList
 					"skip possible spaces at the end"
 					self separator ]
 			] 
-  ] on: TonelParseError do:[:ex | 
-		lastSelectorParsed ifNotNil:[ | str |
+  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
       str := ex details ifNil:[ '' ].
-      ex details: str, ', after tonel method selector: ', lastSelectorParsed printString 
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
     ].
-		ex pass 
+    ex pass 
   ].
-	^ result
+  ^ result
 %
 
 category: 'private factory'
@@ -3995,33 +3998,6 @@ putOn: aStream
 
 category: '*tonel-gemstone-kernel'
 method: CharacterCollection
-substrings: separators 
-	"Answer an array containing the substrings in the receiver separated 
-	by the elements of separators."
-	| result sourceStream subStringStream |
-	
-	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
-		ifFalse: [ ^ self error: 'separators must be Characters.' ].
-	sourceStream := self readStream.
-	result := OrderedCollection new.
-	subStringStream := String new writeStreamPortable.
-	[ sourceStream atEnd ] whileFalse: [
-		| char |
-		char := sourceStream next.
-		(separators includes: char)
-			ifTrue: [
-				subStringStream isEmpty ifFalse: [
-					result add: subStringStream contents.
-					subStringStream := String new writeStreamPortable ] ]
-			ifFalse: [
-				subStringStream nextPut: char ] ].
-	subStringStream isEmpty ifFalse: [
-		result add: subStringStream contents ].
-	^ result asArray
-%
-
-category: '*tonel-gemstone-kernel'
-method: CharacterCollection
 trimBoth
 
 	"Trim separators from both sides of the receiving string."
@@ -4175,16 +4151,6 @@ select: selectBlock thenDo: doBlock
   "Utility method to improve readability."
 
   ^ (self select: selectBlock) do: doBlock
-%
-
-category: '*tonel-gemstone-kernel'
-method: Collection
-sort: aSortBlock
-
-	"Sort this array using aSortBlock. The block should take two arguments
-	and return true if the first element should preceed the second one."
-
-	^ self sortWithBlock: aSortBlock
 %
 
 ! Class extensions for 'CypressClassDefinition'
@@ -4465,31 +4431,6 @@ putOn: aStream
 
 category: '*tonel-gemstonecommon-core'
 method: PositionableStreamPortable
-match: subCollection
-  "Set the access position of the receiver to be past the next occurrence of the subCollection. Answer whether subCollection is found.  No wildcards, and case does matter."
-
-  | pattern startMatch |
-  pattern := ReadStreamPortable on: subCollection.
-  startMatch := nil.
-  [ pattern atEnd ]
-    whileFalse: [ 
-      self atEnd
-        ifTrue: [ ^ false ].
-      self next = pattern next
-        ifTrue: [ 
-          pattern position = 1
-            ifTrue: [ startMatch := self position ] ]
-        ifFalse: [ 
-          pattern position: 0.
-          startMatch
-            ifNotNil: [ 
-              self position: startMatch.
-              startMatch := nil ] ] ].
-  ^ true
-%
-
-category: '*tonel-gemstonecommon-core'
-method: PositionableStreamPortable
 originalContents
 	"Answer the receiver's actual contents collection, NOT a copy.  1/29/96 sw"
 
@@ -4622,13 +4563,6 @@ withIndexDo: elementAndIndexBlock
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
 %
 
-category: '*tonel-gemstone-kernel'
-method: SequenceableCollection
-writeStreamPortable
-
-	^ WriteStreamPortable on: self
-%
-
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -4638,41 +4572,6 @@ method: Stream
 << items
 
 	items putOn: self
-%
-
-! Class extensions for 'Symbol'
-
-!		Instance methods for 'Symbol'
-
-category: '*tonel-gemstone-kernel'
-method: Symbol
-keywords
-
-	"Answer an array of the keywords that compose the receiver."
-
-	| kwd char keywords |
-	keywords := Array new.
-			kwd := WriteStreamPortable on: String new.
-			1 to: self size do: [ :i | 
-				kwd nextPut: (char := self at: i).
-				char = $:
-					ifTrue: [ 
-						keywords add: kwd contents.
-						kwd reset ] ].
-			kwd position = 0
-				ifFalse: [ keywords add: kwd contents ].
-	(keywords size >= 1 and: [ (keywords at: 1) = ':' ])
-		ifTrue: [ 
-			"Has an initial keyword, as in #:if:then:else:"
-			keywords := keywords allButFirst ].
-	(keywords size >= 2 and: [ (keywords at: keywords size - 1) = ':' ])
-		ifTrue: [ 
-			"Has a final keyword, as in #nextPut::andCR"
-			keywords := keywords
-				copyReplaceFrom: keywords size - 1
-				to: keywords size
-				with: {(':' , keywords last)} ].
-	^ keywords
 %
 
 ! Class extensions for 'TonelAbstractWriterTest'
