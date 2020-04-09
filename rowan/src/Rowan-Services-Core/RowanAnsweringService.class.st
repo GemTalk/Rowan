@@ -515,6 +515,28 @@ RowanAnsweringService >> removeMethodHistoryFor: methodService [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> resolveAsService: name [
+  | projectService packageService classService |
+  projectService := RowanProjectService new name: name.
+  projectService update projectIsLoaded
+    ifTrue: [ 
+      answer := projectService.
+      ^ RowanCommandResult addResult: self ].
+  packageService := RowanPackageService new name: name.
+  packageService update projectName
+    ifNotNil: [ 
+      answer := packageService.
+      ^ RowanCommandResult addResult: self ].
+  classService := RowanClassService new name: name.
+  classService update projectName
+    ifNotNil: [ 
+      answer := classService.
+      ^ RowanCommandResult addResult: self ].
+  answer := nil.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> runMethodTests: methodServices [
 
 	| behavior |
