@@ -221,8 +221,8 @@ RowanPackageService >> projectDefinition: newValue [
 
 { #category : 'testing' }
 RowanPackageService >> projectIsDirty [
-
-	^(RowanProjectService new name: projectName) rowanDirty
+  projectName ifNil: [ self updateProjectName ].
+  ^ (RowanProjectService new name: projectName) rowanDirty
 ]
 
 { #category : 'Accessing' }
