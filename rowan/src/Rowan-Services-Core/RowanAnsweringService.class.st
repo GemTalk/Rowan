@@ -516,7 +516,7 @@ RowanAnsweringService >> removeMethodHistoryFor: methodService [
 
 { #category : 'client commands' }
 RowanAnsweringService >> resolveAsService: name [
-  | projectService packageService classService |
+  | projectService packageService classService dictionaryService |
   projectService := RowanProjectService new name: name.
   projectService update projectIsLoaded
     ifTrue: [ 
@@ -526,6 +526,11 @@ RowanAnsweringService >> resolveAsService: name [
   packageService update projectName
     ifNotNil: [ 
       answer := packageService.
+      ^ RowanCommandResult addResult: self ].
+  dictionaryService := RowanDictionaryService new name: name.
+  dictionaryService update classes notEmpty
+    ifTrue: [ 
+      answer := dictionaryService.
       ^ RowanCommandResult addResult: self ].
   classService := RowanClassService new name: name.
   classService update projectName
