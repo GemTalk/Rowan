@@ -190,7 +190,7 @@ RwGsModificationTopazWriterVisitor >> _writeClassTypeMessage: classDefinition on
 					ifTrue: [ '_newKernelByteSubclass:' ]
 					ifFalse: [ 'byteSubclass: ' ].
 				hasClassInstVars := hasInstanceVariables := false ]
-			ifFalse: [ classType = ''
+			ifFalse: [ (classType = '' or: [classType = 'immediate'])
 				ifTrue: [ 
 					classTypeMessage :=  hasReservedOop
 						ifTrue: [ '_newKernelSubclass:' ]

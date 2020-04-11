@@ -77,10 +77,9 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFiles: fileArr
 
 { #category : 'package reading' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> _packageNameFromPackageDir: packageDir [
-
 	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
 
-	^ (self _readObjectFrom: (packageDir / 'package', 'st')) at: #name
+	^ ((self _readObjectFrom: packageDir / 'package' , 'st') at: #'name') asString
 ]
 
 { #category : 'class reading' }
@@ -224,30 +223,35 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage: packageName [
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream | | stream |
-    [
-		  | definitions clsDef projectDef |
-      "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		  stream := ZnBufferedReadStream on: fileStream. 
-		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		  definitions := (TonelParser on: stream forReader: self) start.
-      clsDef := currentClassDefinition ifNotNil:[:def |
-                  currentClassExtension ifNotNil:[ 
-                    Error signal:'both a class definition and extension in file ', file name ].
-                  def
-                ] ifNil:[ currentClassExtension ].
-		  self validateClassCategory: clsDef forPackageNamed: packageName.
-		  ((definitions at: 2) at: 1) do: [:mDef |
-			  clsDef addClassMethodDefinition: mDef ].
-		  ((definitions at: 2) at: 2) do: [:mDef |
-			  clsDef addInstanceMethodDefinition: mDef ].
-      self checkMethodDefinitions: clsDef .
-		  projectDef := currentProjectDefinition packageNamed: packageName .
-      currentClassDefinition ifNotNil:[ projectDef addClassDefinition: clsDef ] .
-                             "ifNil:[ projectDef addClassExtensionDefinition: clsDef]."
-    ] on: ( STONReaderError , TonelParseError) do:[:ex |
-      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
-      ex pass .
-    ].
-  ].
+	fileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			[ 
+			| definitions clsDef projectDef |
+			"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			stream := ZnBufferedReadStream on: fileStream.
+			stream sizeBuffer: fileReference size.	"part of workaround for GemTalk/FileSystemGs#9"
+			definitions := (TonelParser on: stream forReader: self) start.
+			clsDef := currentClassDefinition
+				ifNotNil: [ :def | 
+					currentClassExtension
+						ifNotNil: [ Error signal: 'both a class definition and extension in file ' , file name ].
+					def ]
+				ifNil: [ currentClassExtension ].
+			self validateClassCategory: clsDef forPackageNamed: packageName.
+			((definitions at: 2) at: 1)
+				do: [ :mDef | clsDef addClassMethodDefinition: mDef ].
+			((definitions at: 2) at: 2)
+				do: [ :mDef | clsDef addInstanceMethodDefinition: mDef ].
+			self checkMethodDefinitions: clsDef.
+			projectDef := currentProjectDefinition packageNamed: packageName.
+			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ]	"ifNil:[ projectDef addClassExtensionDefinition: clsDef]." ]
+				on: STONReaderError , TonelParseError
+				do: [ :ex | 
+					ex
+						addText:
+							(self class
+								lineNumberStringForOffset: stream position
+								fileName: fileReference fullName).
+					ex pass ] ]
 ]
