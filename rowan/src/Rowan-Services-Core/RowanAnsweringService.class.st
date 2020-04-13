@@ -147,7 +147,11 @@ RowanAnsweringService >> basicSortedSelectors [
               | selector |
               selector := method selector.
               selector charSize = 1
-                ifTrue: [ selectors add: selector ] ].
+                ifTrue: [ selectors add: selector ].
+              method _selectorPool
+                do: [ :sentSelector | 
+                  sentSelector charSize = 1
+                    ifTrue: [ selectors add: sentSelector ] ] ].
           metaClass := metaClass class ] ].
   ^ selectors asSortedCollection asArray
 ]
