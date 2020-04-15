@@ -441,6 +441,13 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> lowercaseSelectorsMatching: lowercaseSymbol [
+  answer := self basicSortedSelectors
+    select: [ :symbol | lowercaseSymbol sunitMatch: symbol asLowercase ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> methodHistoryFor: methodService [
   self basicMethodHistoryFor: methodService.
   RowanCommandResult addResult: self.
@@ -559,9 +566,12 @@ RowanAnsweringService >> runMethodTests: methodServices [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> selectorsMatching: string [
+RowanAnsweringService >> selectorsMatching: lowercaseSymbol [
+  "assume we're passed a lower case symbol to avoid
+	case sensitive misses"
+
   answer := self basicSortedSelectors
-    select: [ :symbol | string sunitMatch: symbol ].
+    select: [ :symbol | lowercaseSymbol sunitMatch: symbol asLowercase ].
   RowanCommandResult addResult: self
 ]
 
