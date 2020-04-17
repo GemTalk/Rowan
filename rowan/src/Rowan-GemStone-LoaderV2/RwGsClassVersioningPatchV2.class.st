@@ -116,11 +116,7 @@ patchedClassNewVersions: patchedClassNewVersionsBlock [
 ]
 
 { #category : 'private' }
-RwGsClassVersioningPatchV2 >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass 
-newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars 
-newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars newConstraints: aConstraint 
-suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBlock poolsBlock: poolsBlock cvarsBlock: cvarsBlock consBlock: consBlock [
-
+RwGsClassVersioningPatchV2 >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars newConstraints: aConstraint suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBlock poolsBlock: poolsBlock cvarsBlock: cvarsBlock consBlock: consBlock [
 	" based on Class>>_equivalentSubclass:superCls:name:newOpts:newFormat:newInstVars:newClassInstVars:newPools:newClassVars:inDict:isKernel: and ultimately needs to be rolled back into base, so that class creation and Rowan use the same new class version rules.
 "
 
@@ -146,7 +142,17 @@ suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBloc
 "
 
 	| fmtArr |
-	fmtArr := newSuperclass _validateOptions: optionsArray withFormat: theFormat newClassName: oldClass name asString.
+	fmtArr := newSuperclass
+		ifNil: [ 
+			Object
+				_validateOptions: optionsArray
+				withFormat: theFormat
+				newClassName: oldClass name asString ]
+		ifNotNil: [ 
+			newSuperclass
+				_validateOptions: optionsArray
+				withFormat: theFormat
+				newClassName: oldClass name asString ].
 	(oldClass isKindOf: Class)
 		ifFalse: [ oldClass _validateClass: Class ].
 	suprBlock value: oldClass superClass == newSuperclass.
@@ -155,23 +161,22 @@ suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBloc
 	civsBlock value: (oldClass class _instVarsEqual: anArrayOfClassInstVars).
 	poolsBlock value: (oldClass _poolDictsEqual: anArrayOfPoolDicts).
 	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy).
-	consBlock value: (aConstraint size = 0 or: [oldClass _constraintsEqual: aConstraint ])
-
+	consBlock
+		value: (aConstraint size = 0 or: [ oldClass _constraintsEqual: aConstraint ])
 ]
 
 { #category : 'patching' }
 RwGsClassVersioningPatchV2 >> addPatchedClassModification: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition toPatchSet: aRwGsPatchSet [
-
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dict existingClass newFormat afterClassDefinition beforeClassDefinition newSuperclassAssoc afterSymDict beforeSymDict |
+	| dict existingClass newFormat afterClassDefinition beforeClassDefinition newSuperclassAssoc afterSymDict beforeSymDict superclassFormat |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	afterClassDefinition := aClassModification after.
 	beforeClassDefinition := aClassModification before.
 	(newSuperclassAssoc := self resolveName: afterClassDefinition superclassName)
-		ifNil: [
+		ifNil: [ 
 			"new superclass does not currently exist ... so it will be a new class, which means a new class version, guaranteed"
 			aRwGsPatchSet
 				addPatchedClassNewVersion: aClassModification
@@ -182,13 +187,16 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModification: aClassModification in
 	existingClass := dict
 		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
+	superclassFormat := existingClass superclass
+		ifNil: [ Object format ]
+		ifNotNil: [ :superClass | superClass format ].
 	newFormat := self
-		_classFormat: existingClass superclass format
+		_classFormat: superclassFormat
 		forSubclassType: afterClassDefinition classType.
 	afterSymDict := self symbolDictionary name asString.
 	beforeSymDict := beforeClassDefinition gs_symbolDictionary.
 	beforeSymDict ~= afterSymDict
-		ifTrue: [
+		ifTrue: [ 
 			aRwGsPatchSet
 				addPatchedClassSymbolDictionaryMove: aClassModification
 				inPackage: aPackageDefinition
@@ -196,25 +204,26 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModification: aClassModification in
 	self
 		_newSubclassWithSuperclass: newSuperclassAssoc value
 		isEquivalentToSubclass: existingClass
-		newOpts: (afterClassDefinition gs_options collect: [:each | each asSymbol])
+		newOpts: (afterClassDefinition gs_options collect: [ :each | each asSymbol ])
 		newFormat: newFormat
 		newInstVars: afterClassDefinition instVarNames
 		newClassInstVars: afterClassDefinition classInstVarNames
 		newPools: afterClassDefinition poolDictionaryNames
 		newClassVars: afterClassDefinition classVarNames
-		newConstraints: (self _gemStoneConstraintsFrom: afterClassDefinition gs_constraints)
-		patchedClassProperties: [
+		newConstraints:
+			(self _gemStoneConstraintsFrom: afterClassDefinition gs_constraints)
+		patchedClassProperties: [ 
 			aClassModification propertiesModification isEmpty
 				ifFalse: [ 
 					aRwGsPatchSet
 						addPatchedClassProperties: afterClassDefinition
 						inPackage: aPackageDefinition
 						inProject: aProjectDefinition ] ]
-		patchedConstraints: [
+		patchedConstraints: [ 
 			aRwGsPatchSet
-						addPatchedClassConstraints: afterClassDefinition
-						inPackage: aPackageDefinition
-						inProject: aProjectDefinition ]
+				addPatchedClassConstraints: afterClassDefinition
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition ]
 		patchedClassVars: [ 
 			aRwGsPatchSet
 				addPatchedClassClassVariables: afterClassDefinition
@@ -225,7 +234,6 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModification: aClassModification in
 				addPatchedClassNewVersion: aClassModification
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
-
 ]
 
 { #category : 'patching' }
