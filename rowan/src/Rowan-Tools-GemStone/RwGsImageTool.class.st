@@ -76,6 +76,8 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 			loadedProject loadedPackages
 				valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ].
 
+	System commit.	"save pre-audit state, so that audit errors can be examined"
+
 	reAudit := true.	"kick off the first audit"
 	[ reAudit ]
 		whileTrue: [ 

@@ -350,7 +350,10 @@ RwGsLoadedSymbolDictClass >> updateOptionsFromClass [
 		ifFalse: [ 
 			newValue == self absentToken
 				ifTrue: [ self removeProperty: propertyName ]
-				ifFalse: [ self propertyAt: propertyName put: newValue ] ]
+				ifFalse: [ self propertyAt: propertyName put: newValue ] ].
+	handle _rwReservedOop
+		ifNotNil: [ :resOop | self propertyAt: 'gs_reservedoop' put: resOop asString ]
+		ifNil: [ self removeProperty: 'gs_reservedoop' ]
 ]
 
 { #category : 'private-updating' }
