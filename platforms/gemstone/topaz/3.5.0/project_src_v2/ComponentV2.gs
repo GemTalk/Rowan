@@ -93993,6 +93993,13 @@ updateLoadedCommitId
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
+packageConvention
+	"hack to be able to use ComponentV2 to develop patch for https://github.com/GemTalk/Rowan/issues/603"
+	^ 'RowanHybrid'
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
 useGit
 
 	^ self projectRef useGit
