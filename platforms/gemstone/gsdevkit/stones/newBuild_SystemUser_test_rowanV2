@@ -27,7 +27,7 @@ branchQuery=`./record.gs.st rowan_test_stats_350 -- --query --branch=$branch --g
 
 if [ "$branchQuery" = "[ ]" ] ; then
 	# this is a branch for which we have no samples with which to compare, so use issue_308 
-  branch=issue_308
+  branch=candidateV2.0
 	echo
 	echo "USING DEFAULT BRANCH -- $branch"
 	echo

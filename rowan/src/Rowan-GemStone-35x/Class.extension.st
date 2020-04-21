@@ -62,8 +62,18 @@ Class >> _constraintsEqual: anArray [
 
 { #category : '*rowan-gemstone-35x' }
 Class >> _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary constraints: aConstraint isKernel: isKernelBool [
-
-	 self _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary isKernel: isKernelBool
+	^ self
+		_equivalentSubclass: oldClass
+		superCls: actualSelf
+		name: aString
+		newOpts: optionsArray
+		newFormat: theFormat
+		newInstVars: anArrayOfInstvarNames
+		newClassInstVars: anArrayOfClassInstVars
+		newPools: anArrayOfPoolDicts
+		newClassVars: anArrayOfClassVars
+		inDict: aDictionary
+		isKernel: isKernelBool
 ]
 
 { #category : '*rowan-gemstone-35x' }

@@ -100,7 +100,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 	self assert: (theClass new perform: #bar) = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
-	self assert: barMethod rowanPackageName = packageName2.
+	self assert: (x := barMethod rowanPackageName) = packageName2.
 
 	packageTools disown
 		disownClassNamed: className.

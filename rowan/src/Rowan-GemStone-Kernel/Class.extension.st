@@ -62,14 +62,6 @@ Class >> _rwOptionsForDefinition [
 ]
 
 { #category : '*rowan-gemstone-kernel' }
-Class >> _rwReservedOop [
- "returns nil or the SmallInteger specifying a reserved oop"
-  ^ self asOopNumber <= System _lastReservedOopNumber 
-    ifTrue:[ self asOop ] 
-    ifFalse:[ nil ].
-]
-
-{ #category : '*rowan-gemstone-kernel' }
 Class >> _rwSortedConstraints [
 "as of https://github.com/dalehenrich/Rowan/issues/293, no longer sorting in alphabetical order ... instance variable order is the right answer"
 

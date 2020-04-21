@@ -63,7 +63,7 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 		instvars: (metadata at: #'instvars' ifAbsent: [ #() ])
 		classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ])
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
-		category: (metadata at: #'category' ifAbsent: [  ]) asString
+		category: (metadata at: #'category' ifAbsent: [  ])
 		comment: (anArray second ifNil: [ '' ])
 		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 		type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
