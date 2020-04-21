@@ -9,7 +9,7 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 	"Create loaded project (if needed), traverse the package definitions and 
 				create loaded packages for each"
 
-	| loadSpec projectSetDefinition auditFailures reAudit theProjectSetDefinition tracer wasTracing |
+	| loadSpec projectSetDefinition auditFailures reAudit theProjectSetDefinition tracer wasTracing adoptErrors |
 	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
 		diskUrl: 'file://' , projectsHome;
@@ -53,17 +53,20 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 		Log and ignore any missing method or missing classes encountered as they may not be
 		present in the .gs bootstrap file for the proejct ... The will be created when we
 		reload the project a little bit later on."
+	adoptErrors := false.
 	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition ]
 		on:
 			RwAdoptMissingMethodErrorNotification , RwAdoptMissingClassErrorNotification
 		do: [ :ex | 
 			ex
 				methodErrorDo: [ 
+					adoptErrors := true.
 					tracer
 						trace:
 							'Missing loaded method ' , ex methodPrintString
 								, ' encountered during adopt ... IGNORED' ]
 				classErrorDo: [ 
+					adoptErrors := true.
 					tracer
 						trace:
 							'Missing loaded class ' , ex className , ' encountered during adopt ... IGNORED' ].
@@ -108,7 +111,9 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 		ifFalse: [ 
 			self
 				error:
-					'Post load Rowan audit failed for projects ' , auditFailures printString ]
+					'Post load Rowan audit failed for projects ' , auditFailures printString ].
+	adoptErrors
+		ifTrue: [ self error: 'Missing methods during adopt step, Check log for details' ]
 ]
 
 { #category : 'repository' }
