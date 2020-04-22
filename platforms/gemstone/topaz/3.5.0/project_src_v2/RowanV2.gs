@@ -60040,7 +60040,7 @@ newClassDefinitionFrom: anArray
 		instvars: (metadata at: #'instvars' ifAbsent: [ #() ])
 		classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ])
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
-		category: (metadata at: #'category' ifAbsent: [  ]) asString
+		category: (metadata at: #'category' ifAbsent: [  ])
 		comment: (anArray second ifNil: [ '' ])
 		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 		type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
@@ -63132,7 +63132,7 @@ adoptGemStone64: specUrl projectsHome: projectsHome
 	"Create loaded project (if needed), traverse the package definitions and 
 				create loaded packages for each"
 
-	| loadSpec projectSetDefinition auditFailures reAudit theProjectSetDefinition tracer wasTracing |
+	| loadSpec projectSetDefinition auditFailures reAudit theProjectSetDefinition tracer wasTracing adoptErrors |
 	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
 		diskUrl: 'file://' , projectsHome;
@@ -63176,17 +63176,20 @@ adoptGemStone64: specUrl projectsHome: projectsHome
 		Log and ignore any missing method or missing classes encountered as they may not be
 		present in the .gs bootstrap file for the proejct ... The will be created when we
 		reload the project a little bit later on."
+	adoptErrors := false.
 	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition ]
 		on:
 			RwAdoptMissingMethodErrorNotification , RwAdoptMissingClassErrorNotification
 		do: [ :ex | 
 			ex
 				methodErrorDo: [ 
+					adoptErrors := true.
 					tracer
 						trace:
 							'Missing loaded method ' , ex methodPrintString
 								, ' encountered during adopt ... IGNORED' ]
 				classErrorDo: [ 
+					adoptErrors := true.
 					tracer
 						trace:
 							'Missing loaded class ' , ex className , ' encountered during adopt ... IGNORED' ].
@@ -63231,7 +63234,9 @@ adoptGemStone64: specUrl projectsHome: projectsHome
 		ifFalse: [ 
 			self
 				error:
-					'Post load Rowan audit failed for projects ' , auditFailures printString ]
+					'Post load Rowan audit failed for projects ' , auditFailures printString ].
+	adoptErrors
+		ifTrue: [ self error: 'Missing methods during adopt step, Check log for details' ]
 %
 
 category: 'repository'
@@ -77874,13 +77879,13 @@ addClassAssociation: assoc forClass: class toPackageNamed: packageName instance:
 	| loadedPackage loadedClass |
 	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
 
-	loadedClass := registryInstance classRegistry
-		at: class classHistory
+	loadedClass := self 
+		loadedClassForClass: class 
 		ifAbsent: [ 
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
 			loadedPackage addLoadedClass: loadedClass.
 			loadedClass updatePropertiesFromClassFor: registryInstance.
-			registryInstance classRegistry at: class classHistory put: loadedClass.
+			self registerLoadedClass: loadedClass forClass: class.
 			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
@@ -77962,9 +77967,9 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 			ext := RwGsLoadedSymbolDictClassExtension
 				newForClass: class
 				inPackage: loadedPackage.
-			(registryInstance classExtensionRegistry
-				at: class classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: ext.
+			self
+				registerLoadedClassExtension: ext
+				forClass: class.
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod.
 	^ registryInstance
@@ -78014,9 +78019,9 @@ addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNam
 			ext := RwGsLoadedSymbolDictClassExtension
 				newForClass: class
 				inPackage: loadedPackage.
-			(registryInstance classExtensionRegistry
-				at: class classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: ext.
+			self
+				registerLoadedClassExtension: ext
+				forClass: class.
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod.
 
@@ -78321,7 +78326,9 @@ disownClass: class instance: registryInstance
 		_loadedClassFor: class
 		noNewVersion: [ :loadedClass | 
 			loadedClass disownFromLoaded: registryInstance.
-			registryInstance classRegistry removeKey: class classHistory ]
+			self 
+				unregisterLoadedClass: loadedClass
+				forClass: class ]
 		instance: registryInstance.
 	^ registryInstance
 %
@@ -78366,9 +78373,9 @@ ensureExtensionClassNamed: className existsForPackageNamed: packageName instance
 			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
 				newForClass: extensionClass
 				inPackage: loadedPackage.
-			(registryInstance classExtensionRegistry
-				at: extensionClass classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: loadedClassExtension ].
+			self
+				registerLoadedClassExtension: loadedClassExtension
+				forClass: extensionClass ].
 	^ registryInstance
 %
 
@@ -78382,6 +78389,34 @@ existingOrNewLoadedPackageNamed: packageName instance: registryInstance
 				registryInstance packageRegistry
 					at: packageName
 					put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+loadedClassExtensionsForClass: aClass
+	^ self
+		loadedClassExtensionsForClass: aClass 
+		ifAbsent: [ self error: 'No loaded extension class found for: ', aClass name printString]
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
+	^ (aClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+loadedClassForClass: aClass
+	^ self 
+		loadedClassForClass: aClass
+		ifAbsent: [ self error: 'No loaded class found for: ', aClass name printString ]
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+loadedClassForClass: aClass ifAbsent: absentBlock
+	^ (aClass _extraDictAt: self _loadedClassKey) ifNil: absentBlock
 %
 
 category: 'loaded queries'
@@ -78432,7 +78467,7 @@ moveClassFor: classMove
 	newSymbolDictionary := Rowan image symbolDictNamed: (classMove classAfter gs_symbolDictionary) .
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
+	loadedClass := self loadedClassForClass: theClass.
 	originalSymbolDictionary removeKey: assoc key.
 
 	self 
@@ -78446,8 +78481,6 @@ moveClassFor: classMove
 								assoc key printString, 
 								' while attempting to move class ', assoc key asString printString ] ]
 		ifAbsent: [ newSymbolDictionary add: assoc ].
-
-	newRegistry classRegistry at: theClass classHistory put: loadedClass.
 
 	loadedClass loadedInstanceMethods values do: [:loadedMethod |
 		| compiledMethod |
@@ -78548,6 +78581,45 @@ newLoadedPackageNamed: packageName instance: registryInstance
 	^ registryInstance existingOrNewLoadedPackageNamed: packageName implementationClass: self
 %
 
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+registerLoadedClass: loadedClass forClass: aClass
+	aClass _extraDictAt: self _loadedClassKey put: loadedClass
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+registerLoadedClassExtension: loadedClass forClass: aClass
+	((aClass _extraDictAt: self _loadedClassExtensionKey) 
+		ifNil: [ | set |
+			set := IdentitySet new.
+			aClass _extraDictAt: self _loadedClassExtensionKey put: set.
+			set ])
+		add: loadedClass
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+unregisterLoadedClass: loadedClass forClass: aClass
+	| lc |
+	(lc := aClass _extraDictAt: self _loadedClassKey) == loadedClass
+		ifFalse: [ self error: 'Loaded class for ', aClass name printString, ' not found. Found ', lc printString, ' instead.' ].
+	aClass _extraDictRemoveKey:  self _loadedClassKey
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
+	(aClass _extraDictAt: self _loadedClassExtensionKey)
+		ifNil: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ]
+		ifNotNil: [:aSet |
+			aSet 
+				remove: loadedClassExtension 
+				ifAbsent: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ].
+			aSet isEmppty
+				ifTrue: [ aClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
+%
+
 category: 'class - patch api'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 updateClassProperties: class instance: registryInstance
@@ -78633,7 +78705,7 @@ _doDeleteClassFromLoadedThings: class removeClassFromSystem: removeClassFromSyst
 		noNewVersion: [ :loadedClass | 
 			"association for class is present, finish delete operation"
 			loadedClass removeFromLoaded: registryInstance.
-			registryInstance classRegistry removeKey: class classHistory.
+			self unregisterLoadedClass: loadedClass forClass: class.
 			removeClassFromSystem ifTrue: [ registryInstance _symbolDictionary removeKey: loadedClass key asSymbol ] ]
 		instance: registryInstance.
 	^ registryInstance
@@ -78681,15 +78753,18 @@ _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: 
 		ifTrue: [
 			loadedClassOrExtension isEmpty
 				ifTrue: [ 
-					| theKey classExtensionRegistry |
-					theKey := loadedClassOrExtension handle classHistory.
-					classExtensionRegistry := registryInstance classExtensionRegistry.
-					(classExtensionRegistry at: theKey) remove: loadedClassOrExtension.
-					(classExtensionRegistry at: theKey) isEmpty
-						ifTrue: [ classExtensionRegistry removeKey: theKey ].
+					self 
+						unregisterLoadedClassExtension: loadedClassOrExtension 
+						forClass: loadedClassOrExtension handle.
 					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
 	^ registryInstance
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+_loadedClassExtensionKey
+	^ #rowanLoadedClassExtension
 %
 
 category: 'private'
@@ -78698,8 +78773,9 @@ _loadedClassExtensionsFor: class noNewVersion: noNewVersionBlock newVersion: new
 	| loadedClassExtensionSet |
 	(class isKindOf: Class)
 		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
-	loadedClassExtensionSet := registryInstance classExtensionRegistry
-		at: class classHistory
+
+	loadedClassExtensionSet :=self 
+		loadedClassExtensionsForClass: class
 		ifAbsent: [ 
 			"we're done here"
 			^ self ].
@@ -78739,12 +78815,12 @@ _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlo
 	| loadedClass classKey |
 	(class isKindOf: Class)
 		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
-	loadedClass := registryInstance classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'internal error - No package found for the class ' , class name printString ].
+	loadedClass := self 
+		loadedClassForClass: class
+		ifAbsent:
+			[ registryInstance
+					error:
+						'internal error - No package found for the class ' , class name printString ].
 	classKey := loadedClass key asSymbol.
 	self
 		_symbolDictionary: registryInstance _symbolDictionary
@@ -78758,6 +78834,12 @@ _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlo
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
 				, classKey asString printString
+%
+
+category: 'class - registration'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+_loadedClassKey
+	^ #rowanLoadedClass
 %
 
 category: 'private'

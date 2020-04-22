@@ -106,7 +106,10 @@ false ifTrue: [
 		gsFileName := ar at: 5.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
 		conditionalAttributes addAll: loadSpec customConditionalAttributes.
-		conditionalAttributes remove: 'tests' ifAbsent: [].
+		gsFileName ~= 'ComponentV2'
+			ifTrue: [ 
+				"remove tests from all bootstrap file except for ComponentV2 - used for debugging"
+				conditionalAttributes remove: 'tests' ifAbsent: []].
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
