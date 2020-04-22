@@ -101,7 +101,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteClassFromLoadedT
 		noNewVersion: [ :loadedClass | 
 			"association for class is present, finish delete operation"
 			loadedClass removeFromLoaded: registryInstance.
-			registryInstance classRegistry removeKey: class classHistory.
+			self unregisterLoadedClass: loadedClass forClass: class.
 			removeClassFromSystem ifTrue: [ registryInstance _symbolDictionary removeKey: loadedClass key asSymbol ] ]
 		instance: registryInstance.
 	^ registryInstance
@@ -290,7 +290,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addClassAssociation: asso
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
 			loadedPackage addLoadedClass: loadedClass.
 			loadedClass updatePropertiesFromClassFor: registryInstance.
-			registryInstance classRegistry at: class classHistory put: loadedClass.
+			self registerLoadedClass: loadedClass forClass: class.
 			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
@@ -965,4 +965,24 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> updateClassProperties: cl
 			loadedClass updatePropertiesFromClassFor: registryInstance ].
 	^ registryInstance
 
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClass: loadedClass forClass: aClass [
+	aClass _extraDictAt: self _loadedClassKey put: loadedClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClass: loadedClass forClass: aClass [
+	(aClass _extraDictAt: self _loadedClassKey) == loadedClass
+		ifFalse: [ self error: 'Loaded class for ', aClass name printString, ' not found' ].
+	aClass _extraDictRemoveKey:  self _loadedClassKey
+]
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassKey [
+	^ #rowanLoadedClass
+]
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionKey [
+	^ #rowanLoadedClassExtension
 ]
