@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwGsSymbolDictionaryRegistry',
+	#name : 'RwGsSymbolDictionaryRegistryV2',
 	#superclass : 'Object',
 	#instVars : [
 		'symbolDictionary',
@@ -8,23 +8,30 @@ Class {
 		'classExtensionRegistry',
 		'methodRegistry'
 	],
-	#category : 'Rowan-GemStone-Core'
+	#category : 'Rowan-GemStone-LoaderV2'
 }
 
 { #category : 'accessing' }
-RwGsSymbolDictionaryRegistry class >> defaultProtocolString [
+RwGsSymbolDictionaryRegistryV2 class >> registry_ImplementationClass [
+
+	^ RwGsSymbolDictionaryRegistry_ImplementationV2
+
+]
+
+{ #category : 'accessing' }
+RwGsSymbolDictionaryRegistryV2 class >> defaultProtocolString [
 
 	^ 'as yet unclassified'
 ]
 
 { #category : 'installation' }
-RwGsSymbolDictionaryRegistry class >> globalSymbol [
+RwGsSymbolDictionaryRegistryV2 class >> globalSymbol [
 
 	^ #'RwSymbolDictionaryRegistry'
 ]
 
 { #category : 'installation' }
-RwGsSymbolDictionaryRegistry class >> installIn: aSymbolDictionary [
+RwGsSymbolDictionaryRegistryV2 class >> installIn: aSymbolDictionary [
 
 	| registry |
 	registry := self newForSymbolDictionary: aSymbolDictionary.
@@ -33,7 +40,7 @@ RwGsSymbolDictionaryRegistry class >> installIn: aSymbolDictionary [
 ]
 
 { #category : 'instance creation' }
-RwGsSymbolDictionaryRegistry class >> newForSymbolDictionary: aSymbolDictionary [
+RwGsSymbolDictionaryRegistryV2 class >> newForSymbolDictionary: aSymbolDictionary [
 
 	^ self new
 		_symbolDictionary: aSymbolDictionary;
@@ -43,7 +50,7 @@ RwGsSymbolDictionaryRegistry class >> newForSymbolDictionary: aSymbolDictionary 
 ]
 
 { #category : 'method - private api' }
-RwGsSymbolDictionaryRegistry >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior [
+RwGsSymbolDictionaryRegistryV2 >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior [
 
 	"remove a compiled method from loaded things"
 
@@ -52,7 +59,7 @@ RwGsSymbolDictionaryRegistry >> _doDeleteCompiledMethodFromLoadedThings: compile
 ]
 
 { #category : 'method - private api' }
-RwGsSymbolDictionaryRegistry >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior implementationClass: implementationClass [
 
 	"remove a compiled method from loaded things"
 
@@ -63,7 +70,7 @@ RwGsSymbolDictionaryRegistry >> _doDeleteCompiledMethodFromLoadedThings: compile
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> _loadedClassFor: class noNewVersion: noNewVersionBlock [
+RwGsSymbolDictionaryRegistryV2 >> _loadedClassFor: class noNewVersion: noNewVersionBlock [
 
 	self
 		_loadedClassFor: class
@@ -76,7 +83,7 @@ RwGsSymbolDictionaryRegistry >> _loadedClassFor: class noNewVersion: noNewVersio
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock [
+RwGsSymbolDictionaryRegistryV2 >> _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock [
 
 	| loadedClass classKey |
 	(class isKindOf: Class)
@@ -102,19 +109,19 @@ RwGsSymbolDictionaryRegistry >> _loadedClassFor: class noNewVersion: noNewVersio
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> _symbolDictionary [
+RwGsSymbolDictionaryRegistryV2 >> _symbolDictionary [
 
 	^ symbolDictionary
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> _symbolDictionary: aSymbolDictionary [
+RwGsSymbolDictionaryRegistryV2 >> _symbolDictionary: aSymbolDictionary [
 
 	symbolDictionary := aSymbolDictionary
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> _symbolDictionaryAssociationAt: aKey ifPresent: oneArgBlock [
+RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAssociationAt: aKey ifPresent: oneArgBlock [
 
 	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer nil."
 
@@ -125,7 +132,7 @@ RwGsSymbolDictionaryRegistry >> _symbolDictionaryAssociationAt: aKey ifPresent: 
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> _symbolDictionaryAssociationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
+RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAssociationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
 
 	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
 
@@ -136,7 +143,7 @@ RwGsSymbolDictionaryRegistry >> _symbolDictionaryAssociationAt: key ifPresent: o
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> _symbolDictionaryAt: key ifPresent: oneArgBlock [
+RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAt: key ifPresent: oneArgBlock [
 
 	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
 
@@ -146,7 +153,7 @@ RwGsSymbolDictionaryRegistry >> _symbolDictionaryAt: key ifPresent: oneArgBlock 
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> _symbolDictionaryAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
+RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
 
 	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the value associated with the key, otherwise answer the value of absentBlock."
 
@@ -157,7 +164,7 @@ RwGsSymbolDictionaryRegistry >> _symbolDictionaryAt: key ifPresent: oneArgBlock 
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPackageNamed: packageName [
+RwGsSymbolDictionaryRegistryV2 >> addClassAssociation: assoc forClass: class toPackageNamed: packageName [
 
 	"Copy the name association to the correct 
         SymbolDictionary in the live SymbolList.
@@ -168,7 +175,7 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPackageNamed: packageName implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> addClassAssociation: assoc forClass: class toPackageNamed: packageName implementationClass: implementationClass [
 
 	"Copy the name association to the correct 
         SymbolDictionary in the live SymbolList.
@@ -181,14 +188,14 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
+RwGsSymbolDictionaryRegistryV2 >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	^ self class registry_ImplementationClass addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -197,7 +204,7 @@ RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: 
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName [
+RwGsSymbolDictionaryRegistryV2 >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName [
 
 	"expecting only a single method to be in methDict/catDict"
 
@@ -206,7 +213,7 @@ RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: ca
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName implementationClass: implementationClass [
 
 	"expecting only a single method to be in methDict/catDict"
 
@@ -217,7 +224,7 @@ RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: ca
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
+RwGsSymbolDictionaryRegistryV2 >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
 		back using specialized processing"
@@ -227,7 +234,7 @@ RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: compiledMethod for: behav
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
 
 	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
 		back using specialized processing"
@@ -239,7 +246,7 @@ RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: compiledMethod for: behav
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addNewClassVersionToAssociation: newClass [
+RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass [
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
@@ -247,7 +254,7 @@ RwGsSymbolDictionaryRegistry >> addNewClassVersionToAssociation: newClass [
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addNewClassVersionToAssociation: newClass implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass implementationClass: implementationClass [
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
@@ -257,14 +264,14 @@ RwGsSymbolDictionaryRegistry >> addNewClassVersionToAssociation: newClass implem
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
+RwGsSymbolDictionaryRegistryV2 >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	^ self class registry_ImplementationClass addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -273,7 +280,7 @@ RwGsSymbolDictionaryRegistry >> addNewCompiledMethod: compiledMethod for: behavi
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addRecompiledMethod: newCompiledMethod [
+RwGsSymbolDictionaryRegistryV2 >> addRecompiledMethod: newCompiledMethod [
 
 	"add a recompiled compiled method to behavior and update the loaded things"
 
@@ -282,7 +289,7 @@ RwGsSymbolDictionaryRegistry >> addRecompiledMethod: newCompiledMethod [
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addRecompiledMethod: newCompiledMethod implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> addRecompiledMethod: newCompiledMethod implementationClass: implementationClass [
 
 	"add a recompiled compiled method to behavior and update the loaded things"
 
@@ -293,7 +300,7 @@ RwGsSymbolDictionaryRegistry >> addRecompiledMethod: newCompiledMethod implement
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMethod [
+RwGsSymbolDictionaryRegistryV2 >> addRecompiledSessionMethodMethod: newCompiledMethod [
 
 	"add a recompiled session method compiled method to behavior and update the loaded things"
 
@@ -302,7 +309,7 @@ RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMet
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMethod implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> addRecompiledSessionMethodMethod: newCompiledMethod implementationClass: implementationClass [
 
 	"add a recompiled session method compiled method to behavior and update the loaded things"
 
@@ -313,7 +320,7 @@ RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMet
 ]
 
 { #category : 'method - adopt api' }
-RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior protocol: protocolString toPackageNamed: packageName [
+RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
 	classExtension
@@ -361,27 +368,27 @@ RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod classExtensi
 ]
 
 { #category : 'accessing' }
-RwGsSymbolDictionaryRegistry >> classExtensionRegistry [
+RwGsSymbolDictionaryRegistryV2 >> classExtensionRegistry [
 
 	^ classExtensionRegistry
 ]
 
 { #category : 'accessing' }
-RwGsSymbolDictionaryRegistry >> classRegistry [
+RwGsSymbolDictionaryRegistryV2 >> classRegistry [
 
    ^classRegistry
 
 ]
 
 { #category : 'package - patch api' }
-RwGsSymbolDictionaryRegistry >> createLoadedPackageFromDefinition: packageDefinition [
+RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageFromDefinition: packageDefinition [
 
 	^ self class registry_ImplementationClass createLoadedPackageFromDefinition: packageDefinition instance: self
 
 ]
 
 { #category : 'package - patch api' }
-RwGsSymbolDictionaryRegistry >> createLoadedPackageFromDefinition: packageDefinition implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageFromDefinition: packageDefinition implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -390,14 +397,14 @@ RwGsSymbolDictionaryRegistry >> createLoadedPackageFromDefinition: packageDefini
 ]
 
 { #category : 'package - patch api' }
-RwGsSymbolDictionaryRegistry >> createLoadedPackageNamed: packageName properties: properties [
+RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageNamed: packageName properties: properties [
 
 	^ self class registry_ImplementationClass createLoadedPackageNamed: packageName properties: properties instance: self
 
 ]
 
 { #category : 'package - patch api' }
-RwGsSymbolDictionaryRegistry >> createLoadedPackageNamed: packageName properties: properties  implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageNamed: packageName properties: properties  implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -406,7 +413,7 @@ RwGsSymbolDictionaryRegistry >> createLoadedPackageNamed: packageName properties
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteClassFromPackage: class [
+RwGsSymbolDictionaryRegistryV2 >> deleteClassFromPackage: class [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
@@ -415,7 +422,7 @@ RwGsSymbolDictionaryRegistry >> deleteClassFromPackage: class [
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteClassFromPackage: class implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> deleteClassFromPackage: class implementationClass: implementationClass [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
@@ -426,7 +433,7 @@ RwGsSymbolDictionaryRegistry >> deleteClassFromPackage: class implementationClas
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteClassNamedFromPackage: className [
+RwGsSymbolDictionaryRegistryV2 >> deleteClassNamedFromPackage: className [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
@@ -435,7 +442,7 @@ RwGsSymbolDictionaryRegistry >> deleteClassNamedFromPackage: className [
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteClassNamedFromPackage: className implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> deleteClassNamedFromPackage: className implementationClass: implementationClass [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
@@ -446,7 +453,7 @@ RwGsSymbolDictionaryRegistry >> deleteClassNamedFromPackage: className implement
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteCompiledMethod: compiledMethod from: behavior [
+RwGsSymbolDictionaryRegistryV2 >> deleteCompiledMethod: compiledMethod from: behavior [
 
 	"delete a compiled method from behavior and remove it from the loaded things"
 
@@ -455,7 +462,7 @@ RwGsSymbolDictionaryRegistry >> deleteCompiledMethod: compiledMethod from: behav
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteCompiledMethod: compiledMethod from: behavior implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> deleteCompiledMethod: compiledMethod from: behavior implementationClass: implementationClass [
 
 	"delete a compiled method from behavior and remove it from the loaded things"
 
@@ -466,14 +473,14 @@ RwGsSymbolDictionaryRegistry >> deleteCompiledMethod: compiledMethod from: behav
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteMethod: selector for: behavior [
+RwGsSymbolDictionaryRegistryV2 >> deleteMethod: selector for: behavior [
 
 	^ self class registry_ImplementationClass deleteMethod: selector for: behavior instance: self
 
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteMethod: selector for: behavior implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> deleteMethod: selector for: behavior implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -482,7 +489,7 @@ RwGsSymbolDictionaryRegistry >> deleteMethod: selector for: behavior implementat
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteMovedLoadedMethod: selector for: behavior implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> deleteMovedLoadedMethod: selector for: behavior implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -491,7 +498,7 @@ RwGsSymbolDictionaryRegistry >> deleteMovedLoadedMethod: selector for: behavior 
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteMovedMethod: selector for: behavior implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> deleteMovedMethod: selector for: behavior implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -500,14 +507,14 @@ RwGsSymbolDictionaryRegistry >> deleteMovedMethod: selector for: behavior implem
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> deletePackage: packageName [
+RwGsSymbolDictionaryRegistryV2 >> deletePackage: packageName [
 
 	^  self class registry_ImplementationClass deletePackage: packageName instance: self
 
 ]
 
 { #category : 'class disown api' }
-RwGsSymbolDictionaryRegistry >> disownClass: class [
+RwGsSymbolDictionaryRegistryV2 >> disownClass: class [
 
 	"Remove the specified class and all of it's packaged instance and class methods from the loaded things."
 
@@ -516,7 +523,7 @@ RwGsSymbolDictionaryRegistry >> disownClass: class [
 ]
 
 { #category : 'class disown api' }
-RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forLoadedPackage: loadedPackage [
+RwGsSymbolDictionaryRegistryV2 >> disownClassExtensions: class forLoadedPackage: loadedPackage [
 
 	"Remove the extension methods in the named class for the named package"
 
@@ -525,7 +532,7 @@ RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forLoadedPackage: l
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPackageNamed: packageName implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> ensureExtensionClassNamed: className existsForPackageNamed: packageName implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -534,7 +541,7 @@ RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPa
 ]
 
 { #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistry >> existingForClass: aClass [
+RwGsSymbolDictionaryRegistryV2 >> existingForClass: aClass [
 
 	"Answer the registered LoadedClass for the given class."
 
@@ -544,7 +551,7 @@ RwGsSymbolDictionaryRegistry >> existingForClass: aClass [
 ]
 
 { #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistry >> existingForClass: aClass ifAbsent: absentBlock [
+RwGsSymbolDictionaryRegistryV2 >> existingForClass: aClass ifAbsent: absentBlock [
 
 	"Answer the registered LoadedClass for the given class."
 
@@ -552,21 +559,21 @@ RwGsSymbolDictionaryRegistry >> existingForClass: aClass ifAbsent: absentBlock [
 ]
 
 { #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistry >> existingOrNewLoadedPackageNamed: packageName [
+RwGsSymbolDictionaryRegistryV2 >> existingOrNewLoadedPackageNamed: packageName [
 
 	^ self class registry_ImplementationClass existingOrNewLoadedPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistry >> existingOrNewLoadedPackageNamed: packageName implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> existingOrNewLoadedPackageNamed: packageName implementationClass: implementationClass [
 
 	^ implementationClass existingOrNewLoadedPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'session methods' }
-RwGsSymbolDictionaryRegistry >> homeSessionMethods [
+RwGsSymbolDictionaryRegistryV2 >> homeSessionMethods [
 
 	| package |
 	package := self _symbolDictionary at: GsPackage globalName otherwise: nil.
@@ -575,7 +582,7 @@ RwGsSymbolDictionaryRegistry >> homeSessionMethods [
 ]
 
 { #category : 'initialization' }
-RwGsSymbolDictionaryRegistry >> initialize [
+RwGsSymbolDictionaryRegistryV2 >> initialize [
 
 	| symbolDictObjectSecurityPolicy |
 	packageRegistry := KeyValueDictionary new.	"keyed by package name"
@@ -592,14 +599,14 @@ RwGsSymbolDictionaryRegistry >> initialize [
 ]
 
 { #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistry >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock [
+RwGsSymbolDictionaryRegistryV2 >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock [
 
 	^ self class registry_ImplementationClass loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock instance: self
 
 ]
 
 { #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistry >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -608,14 +615,14 @@ RwGsSymbolDictionaryRegistry >> loadedHybridPackageNamed: hybridPackageName ifAb
 ]
 
 { #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistry >> loadedPackageNamed: packageName ifAbsent: absentBlock [
+RwGsSymbolDictionaryRegistryV2 >> loadedPackageNamed: packageName ifAbsent: absentBlock [
 
 	^ self class registry_ImplementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
 
 ]
 
 { #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistry >> loadedPackageNamed: packageName ifAbsent: absentBlock implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> loadedPackageNamed: packageName ifAbsent: absentBlock implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
@@ -624,14 +631,14 @@ RwGsSymbolDictionaryRegistry >> loadedPackageNamed: packageName ifAbsent: absent
 ]
 
 { #category : 'accessing' }
-RwGsSymbolDictionaryRegistry >> methodRegistry [
+RwGsSymbolDictionaryRegistryV2 >> methodRegistry [
 
    ^methodRegistry
 
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
+RwGsSymbolDictionaryRegistryV2 >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
 
 	"move a compiled method into a different protocol and update loaded things"
 
@@ -640,7 +647,7 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: newProtocol implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> moveCompiledMethod: compiledMethod toProtocol: newProtocol implementationClass: implementationClass [
 
 	"move a compiled method into a different protocol and update loaded things"
 
@@ -651,7 +658,7 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions [
+RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions [
 	^ self class registry_ImplementationClass
 		movePackage: packageName
 		to: symbolDictionaryName
@@ -660,28 +667,28 @@ RwGsSymbolDictionaryRegistry >> movePackage: packageName to: symbolDictionaryNam
 ]
 
 { #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistry >> newLoadedPackageNamed: packageName [
+RwGsSymbolDictionaryRegistryV2 >> newLoadedPackageNamed: packageName [
 
 	^ self class registry_ImplementationClass newLoadedPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistry >> newLoadedPackageNamed: packageName implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> newLoadedPackageNamed: packageName implementationClass: implementationClass [
 
 	^ implementationClass newLoadedPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'accessing' }
-RwGsSymbolDictionaryRegistry >> packageRegistry [
+RwGsSymbolDictionaryRegistryV2 >> packageRegistry [
 
    ^packageRegistry
 
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> updateClassProperties: class [
+RwGsSymbolDictionaryRegistryV2 >> updateClassProperties: class [
 
 	"class properties have changed, update the clas properties of the loaded things"
 
@@ -690,7 +697,7 @@ RwGsSymbolDictionaryRegistry >> updateClassProperties: class [
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> updateClassProperties: class  implementationClass: implementationClass [
+RwGsSymbolDictionaryRegistryV2 >> updateClassProperties: class  implementationClass: implementationClass [
 
 	"class properties have changed, update the clas properties of the loaded things"
 
@@ -701,41 +708,41 @@ RwGsSymbolDictionaryRegistry >> updateClassProperties: class  implementationClas
 ]
 
 { #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry >> loadedClassForClass: aClass [
+RwGsSymbolDictionaryRegistryV2 >> loadedClassForClass: aClass [
 	^ self class registry_ImplementationClass loadedClassForClass: aClass
 ]
 
 { #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry >> loadedClassForClass: aClass ifAbsent: absentBlock [
+RwGsSymbolDictionaryRegistryV2 >> loadedClassForClass: aClass ifAbsent: absentBlock [
 	^ self class registry_ImplementationClass loadedClassForClass: aClass ifAbsent: absentBlock
 ]
 
 { #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry >> registerLoadedClass: loadedClass forClass: aClass [
+RwGsSymbolDictionaryRegistryV2 >> registerLoadedClass: loadedClass forClass: aClass [
 	^ self class registry_ImplementationClass registerLoadedClass: loadedClass forClass: aClass
 ]
 
 { #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry >> unregisterLoadedClass: loadedClass forClass: aClass [
+RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClass: loadedClass forClass: aClass [
 	^ self class registry_ImplementationClass unregisterLoadedClass: loadedClass forClass: aClass
 ]
 
 { #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry >> loadedClassExtensionsForClass: aClass [
+RwGsSymbolDictionaryRegistryV2 >> loadedClassExtensionsForClass: aClass [
 	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass
 ]
 
 { #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
+RwGsSymbolDictionaryRegistryV2 >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
 	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
 ]
 
 { #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry >> registerLoadedClassExtension: loadedClass forClass: aClass [
+RwGsSymbolDictionaryRegistryV2 >> registerLoadedClassExtension: loadedClass forClass: aClass [
 	^ self class registry_ImplementationClass registerLoadedClassExtension: loadedClass forClass: aClass
 ]
 
 { #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
+RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
 	^ self class registry_ImplementationClass unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
 ]

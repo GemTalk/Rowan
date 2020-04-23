@@ -373,7 +373,7 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
-	methodProtocol := RwGsSymbolDictionaryRegistry defaultProtocolString.
+	methodProtocol := Rowan image symbolDictionaryRegistryClass defaultProtocolString.
 	compiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
