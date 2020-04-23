@@ -4,7 +4,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#projectNames : [ ],
 	#componentNames : [
 		'common/v2/v2Only/platforms/gemstone/Definitions'
- ],
+	],
 	#packageNames : [ ],
 	#comment : 'Organize all v2 definitions classes under one component'
 }
