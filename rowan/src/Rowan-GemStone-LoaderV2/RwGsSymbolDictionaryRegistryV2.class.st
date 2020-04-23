@@ -88,12 +88,12 @@ RwGsSymbolDictionaryRegistryV2 >> _loadedClassFor: class noNewVersion: noNewVers
 	| loadedClass classKey |
 	(class isKindOf: Class)
 		ifFalse: [ self error: 'internal error - expected a class' ].
-	loadedClass := classRegistry
-		at: class classHistory
+	loadedClass := self 
+		loadedClassForClass: class 
 		ifAbsent: [ 
 			self
 				error:
-					'internal error - No package found for the class ' , class name printString ].
+					'internal error - No loaded class found for the class ' , class name printString ].
 	classKey := loadedClass key asSymbol.
 	self
 		_symbolDictionaryAssociationAt: classKey

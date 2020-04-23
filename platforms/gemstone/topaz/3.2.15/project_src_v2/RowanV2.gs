@@ -77910,12 +77910,12 @@ _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlo
 	| loadedClass classKey |
 	(class isKindOf: Class)
 		ifFalse: [ self error: 'internal error - expected a class' ].
-	loadedClass := classRegistry
-		at: class classHistory
+	loadedClass := self 
+		loadedClassForClass: class 
 		ifAbsent: [ 
 			self
 				error:
-					'internal error - No package found for the class ' , class name printString ].
+					'internal error - No loaded class found for the class ' , class name printString ].
 	classKey := loadedClass key asSymbol.
 	self
 		_symbolDictionaryAssociationAt: classKey
@@ -78528,7 +78528,7 @@ loadedClassExtensionsForClass: aClass
 category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
-	^ (aClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
+	^ (aClass theNonMetaClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
 %
 
 category: 'class - registration'
@@ -78542,7 +78542,7 @@ loadedClassForClass: aClass
 category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 loadedClassForClass: aClass ifAbsent: absentBlock
-	^ (aClass _extraDictAt: self _loadedClassKey) ifNil: absentBlock
+	^ (aClass theNonMetaClass _extraDictAt: self _loadedClassKey) ifNil: absentBlock
 %
 
 category: 'loaded queries'
@@ -78710,16 +78710,16 @@ newLoadedPackageNamed: packageName instance: registryInstance
 category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 registerLoadedClass: loadedClass forClass: aClass
-	aClass _extraDictAt: self _loadedClassKey put: loadedClass
+	aClass theNonMetaClass _extraDictAt: self _loadedClassKey put: loadedClass
 %
 
 category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 registerLoadedClassExtension: loadedClass forClass: aClass
-	((aClass _extraDictAt: self _loadedClassExtensionKey) 
+	((aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) 
 		ifNil: [ | set |
 			set := IdentitySet new.
-			aClass _extraDictAt: self _loadedClassExtensionKey put: set.
+			aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey put: set.
 			set ])
 		add: loadedClass
 %
@@ -78728,22 +78728,22 @@ category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 unregisterLoadedClass: loadedClass forClass: aClass
 	| lc |
-	(lc := aClass _extraDictAt: self _loadedClassKey) == loadedClass
+	(lc := aClass theNonMetaClass _extraDictAt: self _loadedClassKey) == loadedClass
 		ifFalse: [ self error: 'Loaded class for ', aClass name printString, ' not found. Found ', lc printString, ' instead.' ].
-	aClass _extraDictRemoveKey:  self _loadedClassKey
+	aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassKey
 %
 
 category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
-	(aClass _extraDictAt: self _loadedClassExtensionKey)
+	(aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey)
 		ifNil: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ]
 		ifNotNil: [:aSet |
 			aSet 
 				remove: loadedClassExtension 
 				ifAbsent: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ].
 			aSet isEmppty
-				ifTrue: [ aClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
+				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
 %
 
 category: 'class - patch api'
