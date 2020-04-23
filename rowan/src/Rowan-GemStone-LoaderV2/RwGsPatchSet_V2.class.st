@@ -1298,7 +1298,7 @@ RwGsPatchSet_V2 >> superclassNamed: aName ifAbsent: absentBlock [
 RwGsPatchSet_V2 >> symbolDictionaryRegistryClass [
 
 	^ self _currentProjectDefinition
-		ifNil: [ RwGsSymbolDictionaryRegistry ]
+		ifNil: [ RwGsSymbolDictionaryRegistryV2 ]
 		ifNotNil: [ :projectDefinition | projectDefinition symbolDictionaryRegistryClass ]
 ]
 

@@ -113,32 +113,6 @@ RwGsImage class >> existingSymbolDictionaryNamed: dictName [
 ]
 
 { #category : 'querying' }
-RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
-	"scan the symbol list for a loaded package that matches the loaded package for the given loaded class"
-
-	| loadedClass loadedPackage packageName |
-	loadedClass := RwGsSymbolDictionaryRegistry registry_ImplementationClass loadedClassForClass: class.
-	loadedPackage := loadedClass loadedPackage.
-	packageName := loadedPackage name.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry loadedPackageNamed: packageName ifAbsent: [  ])
-						ifNotNil: [ :lp | 
-							lp == loadedPackage 
-								ifTrue: [ ^ presentBlock value: (symbolDict) value: loadedClass ] ] ] ].
-	^ absentBlock value
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedClassExtensionsForClass: class [
-	"lookup the loadedClassExtensions for the given class"
-
-	^ RwGsSymbolDictionaryRegistry registry_ImplementationClass loadedClassExtensionsForClass: class ifAbsent: [ IdentitySet new ]
-]
-
-{ #category : 'querying' }
 RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
 	"scan the symbol list for a RwLoadedClassExtension instances of the given name"
@@ -151,15 +125,6 @@ RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifA
 	found isEmpty
 		ifFalse: [ ^ foundBlock value: found ].
 	^ absentBlock value
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedClassForClass: class ifAbsent: absentBlock [
-	"Lookup the given class in the classRegistry"
-
-	^ RwGsSymbolDictionaryRegistry registry_ImplementationClass 
-		loadedClassForClass: class
-		ifAbsent: absentBlock
 ]
 
 { #category : 'querying' }
@@ -177,20 +142,6 @@ RwGsImage class >> loadedClassNamed: className ifAbsent: absentBlock [
 		loadedClassNamed: className
 		ifFound: [ :loadedClass | ^ loadedClass ]
 		ifAbsent: absentBlock
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
-
-	"scan the symbol list for a RwLoadedClass instance of the given name"
-
-	| class loadedClass |
-	class := self objectNamed: className.
-	class ifNil: [ ^ absentBlock value ].
-	loadedClass := RwGsSymbolDictionaryRegistry registry_ImplementationClass 
-		loadedClassForClass: class
-		ifAbsent: [ ^ absentBlock value ].
-	^ foundBlock value: loadedClass
 ]
 
 { #category : 'querying' }
@@ -399,7 +350,7 @@ RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 			System myUserProfile insertDictionary: newDict at: size + 1.
 			newDict ].
 	symbolDict rowanSymbolDictionaryRegistry
-		ifNil: [ RwGsSymbolDictionaryRegistry installIn: symbolDict ].
+		ifNil: [ self symbolDictionaryRegistryClass installIn: symbolDict ].
 	^ symbolDict
 ]
 
@@ -462,15 +413,6 @@ RwGsImage class >> projectNames [
 
 	^ (self loadedProjects collect: [ :loadedProject | loadedProject name ]) asArray
 
-]
-
-{ #category : 'querying' }
-RwGsImage class >> removeLoadedClassExtensionsForClass: class [
-
-	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
-		to the given class"
-
-	RwGsSymbolDictionaryRegistry registry_ImplementationClass  unregisterLoadedClassExtensionForClass: class
 ]
 
 { #category : 'querying' }

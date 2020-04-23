@@ -2,7 +2,9 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'common/v2/v2Only/Definitions',
 	#condition : 'v2Only',
 	#projectNames : [ ],
-	#componentNames : [ ],
+	#componentNames : [
+		'common/v2/v2Only/platforms/Definitions'
+ ],
 	#packageNames : [
 		'Rowan-Tests-DefinitionsV2-Extensions-OnlyV2'
 	],

@@ -60,10 +60,7 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 			(self auditLoadedClass: aLoadedClass)
 				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
 		loadedClassExtensionsDo: [ :aLoadedClass | 
-			| loadedPackageRegistry classEtensionSymbolDictionaryName |
-			loadedPackageRegistry := Rowan image
-				loadedRegistryForPackageNamed: loadedPackage name
-				ifAbsent: [  ].
+			| classEtensionSymbolDictionaryName |
 			classEtensionSymbolDictionaryName := loadedPackageRegistry
 				_symbolDictionary name asString.
 			classEtensionSymbolDictionaryName = packageSymbolDictionaryName

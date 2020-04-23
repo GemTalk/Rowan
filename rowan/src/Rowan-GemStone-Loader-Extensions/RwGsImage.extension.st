@@ -117,3 +117,86 @@ RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: v
 	newClassVersionPatchSet := visitor patchSet.
 	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
 ]
+
+{ #category : '*rowan-gemstone-loader-extensions' }
+RwGsImage class >> symbolDictionaryRegistryClass [
+
+	^ RwGsSymbolDictionaryRegistry
+]
+
+{ #category : '*rowan-gemstone-loader-extensions' }
+RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
+
+
+        "scan the symbol list for a RwLoadedClass instances for the given compiled method"
+
+        self symbolList
+                do: [ :symbolDict |
+                        symbolDict rowanSymbolDictionaryRegistry
+                                ifNotNil: [ :registry |
+                                        (registry classRegistry at: class classHistory ifAbsent: [  ])
+                                                ifNotNil: [ :loadedClass | ^ presentBlock value: symbolDict value: loadedClass ] ] ].
+        ^ absentBlock value
+]
+
+{ #category : '*rowan-gemstone-loader-extensions' }
+RwGsImage class >> loadedClassForClass: class ifAbsent: absentBlock [
+
+	"Lookup the given class in the classRegistry"
+
+	| history |
+	history := class classHistory.
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry classRegistry at: history ifAbsent: [  ])
+						ifNotNil: [ :loadedClass | ^ loadedClass ] ] ].
+	^ absentBlock value
+]
+
+{ #category : '*rowan-gemstone-loader-extensions' }
+RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	"scan the symbol list for a RwLoadedClass instance of the given name"
+
+	| class loadedClass |
+	class := self objectNamed: className.
+	class ifNil: [ ^ absentBlock value ].
+	loadedClass := self
+		loadedClassForClass: class
+		ifAbsent: [ ^ absentBlock value ].
+	^ foundBlock value: loadedClass
+]
+
+{ #category : '*rowan-gemstone-loader-extensions' }
+RwGsImage class >> removeLoadedClassExtensionsForClass: class [
+
+	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
+		to the given class"
+
+	| history |
+	history := class classHistory.
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | registry classExtensionRegistry removeKey: history ifAbsent: [  ] ] ]
+]
+
+{ #category : '*rowan-gemstone-loader-extensions' }
+RwGsImage class >> loadedClassExtensionsForClass: class [
+
+	"lookup the loadedClassExtensions for the given class"
+
+	| history found |
+	history := class classHistory.
+	found := IdentitySet new.
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry classExtensionRegistry at: history ifAbsent: [  ])
+						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
+	^ found
+]
+

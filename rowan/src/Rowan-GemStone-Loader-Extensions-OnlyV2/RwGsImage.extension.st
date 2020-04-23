@@ -71,3 +71,68 @@ RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: v
 	newClassVersionPatchSet := visitor patchSet.
 	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
 ]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> symbolDictionaryRegistryClass [
+
+	^ RwGsSymbolDictionaryRegistryV2
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
+	"scan the symbol list for a loaded package that matches the loaded package for the given loaded class"
+
+	| loadedClass loadedPackage packageName |
+	loadedClass := self symbolDictionaryRegistryClass registry_ImplementationClass loadedClassForClass: class.
+	loadedPackage := loadedClass loadedPackage.
+	packageName := loadedPackage name.
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry loadedPackageNamed: packageName ifAbsent: [  ])
+						ifNotNil: [ :lp | 
+							lp == loadedPackage 
+								ifTrue: [ ^ presentBlock value: (symbolDict) value: loadedClass ] ] ] ].
+	^ absentBlock value
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> loadedClassForClass: class ifAbsent: absentBlock [
+	"Lookup the given class in the classRegistry"
+
+	^ self symbolDictionaryRegistryClass registry_ImplementationClass 
+		loadedClassForClass: class
+		ifAbsent: absentBlock
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	"scan the symbol list for a RwLoadedClass instance of the given name"
+
+	| class loadedClass |
+	class := self objectNamed: className.
+	class ifNil: [ ^ absentBlock value ].
+	loadedClass := self symbolDictionaryRegistryClass registry_ImplementationClass 
+		loadedClassForClass: class
+		ifAbsent: [ ^ absentBlock value ].
+	^ foundBlock value: loadedClass
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> removeLoadedClassExtensionsForClass: class [
+
+	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
+		to the given class"
+
+	self symbolDictionaryRegistryClass registry_ImplementationClass  unregisterLoadedClassExtensionForClass: class
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> loadedClassExtensionsForClass: class [
+	"lookup the loadedClassExtensions for the given class"
+
+	^ self symbolDictionaryRegistryClass registry_ImplementationClass loadedClassExtensionsForClass: class ifAbsent: [ IdentitySet new ]
+]
+
