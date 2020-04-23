@@ -699,3 +699,43 @@ RwGsSymbolDictionaryRegistry >> updateClassProperties: class  implementationClas
 	^ implementationClass updateClassProperties: class instance: self
 
 ]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry >> loadedClassForClass: aClass [
+	^ self class registry_ImplementationClass loadedClassForClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry >> loadedClassForClass: aClass ifAbsent: absentBlock [
+	^ self class registry_ImplementationClass loadedClassForClass: aClass ifAbsent: absentBlock
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry >> registerLoadedClass: loadedClass forClass: aClass [
+	^ self class registry_ImplementationClass registerLoadedClass: loadedClass forClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry >> unregisterLoadedClass: loadedClass forClass: aClass [
+	^ self class registry_ImplementationClass unregisterLoadedClass: loadedClass forClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry >> loadedClassExtensionsForClass: aClass [
+	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
+	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry >> registerLoadedClassExtension: loadedClass forClass: aClass [
+	^ self class registry_ImplementationClass registerLoadedClassExtension: loadedClass forClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
+	^ self class registry_ImplementationClass unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
+]

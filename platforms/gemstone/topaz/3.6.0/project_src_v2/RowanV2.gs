@@ -64119,11 +64119,11 @@ auditForPackage: loadedPackage
 			(self auditLoadedClass: aLoadedClass)
 				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
 		loadedClassExtensionsDo: [ :aLoadedClass | 
-			| loadedClassExtensionRegistry classEtensionSymbolDictionaryName |
-			loadedClassExtensionRegistry := Rowan image
-				loadedRegistryForClassExtensionNamed: aLoadedClass name
+			| loadedPackageRegistry classEtensionSymbolDictionaryName |
+			loadedPackageRegistry := Rowan image
+				loadedRegistryForPackageNamed: loadedPackage name
 				ifAbsent: [  ].
-			classEtensionSymbolDictionaryName := loadedClassExtensionRegistry
+			classEtensionSymbolDictionaryName := loadedPackageRegistry
 				_symbolDictionary name asString.
 			classEtensionSymbolDictionaryName = packageSymbolDictionaryName
 				ifFalse: [ 
@@ -72508,34 +72508,29 @@ existingSymbolDictionaryNamed: dictName
 category: 'querying'
 classmethod: RwGsImage
 loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock
+	"scan the symbol list for a loaded package that matches the loaded package for the given loaded class"
 
-        "scan the symbol list for a RwLoadedClass instances for the given compiled method"
-
-        self symbolList
-                do: [ :symbolDict |
-                        symbolDict rowanSymbolDictionaryRegistry
-                                ifNotNil: [ :registry |
-                                        (registry classRegistry at: class classHistory ifAbsent: [  ])
-                                                ifNotNil: [ :loadedClass | ^ presentBlock value: symbolDict value: loadedClass ] ] ].
-        ^ absentBlock value
+	| loadedClass loadedPackage packageName |
+	loadedClass := RwGsSymbolDictionaryRegistry registry_ImplementationClass loadedClassForClass: class.
+	loadedPackage := loadedClass loadedPackage.
+	packageName := loadedPackage name.
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry loadedPackageNamed: packageName ifAbsent: [  ])
+						ifNotNil: [ :lp | 
+							lp == loadedPackage 
+								ifTrue: [ ^ presentBlock value: (symbolDict) value: loadedClass ] ] ] ].
+	^ absentBlock value
 %
 
 category: 'querying'
 classmethod: RwGsImage
 loadedClassExtensionsForClass: class
-
 	"lookup the loadedClassExtensions for the given class"
 
-	| history found |
-	history := class classHistory.
-	found := IdentitySet new.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry classExtensionRegistry at: history ifAbsent: [  ])
-						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
-	^ found
+	^ RwGsSymbolDictionaryRegistry registry_ImplementationClass loadedClassExtensionsForClass: class ifAbsent: [ IdentitySet new ]
 %
 
 category: 'querying'
@@ -72547,6 +72542,7 @@ loadedClassExtensionsNamed: className ifFound: foundBlock ifAbsent: absentBlock
 	| class found |
 	class := self objectNamed: className.
 	class ifNil: [ ^ absentBlock value ].
+	
 	found := self loadedClassExtensionsForClass: class.
 	found isEmpty
 		ifFalse: [ ^ foundBlock value: found ].
@@ -72556,18 +72552,11 @@ loadedClassExtensionsNamed: className ifFound: foundBlock ifAbsent: absentBlock
 category: 'querying'
 classmethod: RwGsImage
 loadedClassForClass: class ifAbsent: absentBlock
-
 	"Lookup the given class in the classRegistry"
 
-	| history |
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry classRegistry at: history ifAbsent: [  ])
-						ifNotNil: [ :loadedClass | ^ loadedClass ] ] ].
-	^ absentBlock value
+	^ RwGsSymbolDictionaryRegistry registry_ImplementationClass 
+		loadedClassForClass: class
+		ifAbsent: absentBlock
 %
 
 category: 'querying'
@@ -72598,7 +72587,7 @@ loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock
 	| class loadedClass |
 	class := self objectNamed: className.
 	class ifNil: [ ^ absentBlock value ].
-	loadedClass := self
+	loadedClass := RwGsSymbolDictionaryRegistry registry_ImplementationClass 
 		loadedClassForClass: class
 		ifAbsent: [ ^ absentBlock value ].
 	^ foundBlock value: loadedClass
@@ -72776,42 +72765,6 @@ loadedProjects
 
 category: 'querying'
 classmethod: RwGsImage
-loadedRegistryForClassExtensionNamed: className ifAbsent: absentBlock
-	"scan the symbol list for a RwLoadedClassExtension instance of the given name and return the registry"
-
-	| history class |
-	class := self objectNamed: className.
-	class ifNil: [ ^ absentBlock value ].
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry classExtensionRegistry includesKey: history)
-						ifTrue: [ ^ registry ] ] ].
-	^ absentBlock value
-%
-
-category: 'querying'
-classmethod: RwGsImage
-loadedRegistryForClassNamed: className ifAbsent: absentBlock
-	"scan the symbol list for a RwLoadedClass instance of the given name and return the registry"
-
-	| history class |
-	class := self objectNamed: className.
-	class ifNil: [ ^ absentBlock value ].
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry classRegistry includesKey: history)
-						ifTrue: [ ^ registry ] ] ].
-	^ absentBlock value
-%
-
-category: 'querying'
-classmethod: RwGsImage
 loadedRegistryForPackageNamed: aName
 	"scan the symbol list for a RwLoadedPackage instance of the given name and return the registry"
 
@@ -72930,12 +72883,7 @@ removeLoadedClassExtensionsForClass: class
 	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
 		to the given class"
 
-	| history |
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | registry classExtensionRegistry removeKey: history ifAbsent: [  ] ] ]
+	RwGsSymbolDictionaryRegistry registry_ImplementationClass  unregisterLoadedClassExtensionForClass: class
 %
 
 category: 'querying'
@@ -77633,6 +77581,30 @@ initialize
 	methodRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
 %
 
+category: 'class - registration'
+method: RwGsSymbolDictionaryRegistry
+loadedClassExtensionsForClass: aClass
+	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass
+%
+
+category: 'class - registration'
+method: RwGsSymbolDictionaryRegistry
+loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
+	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
+%
+
+category: 'class - registration'
+method: RwGsSymbolDictionaryRegistry
+loadedClassForClass: aClass
+	^ self class registry_ImplementationClass loadedClassForClass: aClass
+%
+
+category: 'class - registration'
+method: RwGsSymbolDictionaryRegistry
+loadedClassForClass: aClass ifAbsent: absentBlock
+	^ self class registry_ImplementationClass loadedClassForClass: aClass ifAbsent: absentBlock
+%
+
 category: 'loaded queries'
 method: RwGsSymbolDictionaryRegistry
 loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock
@@ -77721,6 +77693,30 @@ method: RwGsSymbolDictionaryRegistry
 packageRegistry
 
    ^packageRegistry
+%
+
+category: 'class - registration'
+method: RwGsSymbolDictionaryRegistry
+registerLoadedClass: loadedClass forClass: aClass
+	^ self class registry_ImplementationClass registerLoadedClass: loadedClass forClass: aClass
+%
+
+category: 'class - registration'
+method: RwGsSymbolDictionaryRegistry
+registerLoadedClassExtension: loadedClass forClass: aClass
+	^ self class registry_ImplementationClass registerLoadedClassExtension: loadedClass forClass: aClass
+%
+
+category: 'class - registration'
+method: RwGsSymbolDictionaryRegistry
+unregisterLoadedClass: loadedClass forClass: aClass
+	^ self class registry_ImplementationClass unregisterLoadedClass: loadedClass forClass: aClass
+%
+
+category: 'class - registration'
+method: RwGsSymbolDictionaryRegistry
+unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
+	^ self class registry_ImplementationClass unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
 %
 
 category: 'class - patch api'
