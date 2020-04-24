@@ -7,7 +7,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 
 	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 
 		packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames 
-		classDefinition testInstance projectTools symDict registry resolvedProject componentName |
+		classDefinition testInstance projectTools symDict registry resolvedProject componentName audit
+		project1 project2 |
 	projectName1 := 'Simple Browser1'.
 	componentName := 'Core'.
 	packageName1 := 'Simple1-Core'.
@@ -25,6 +26,9 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 		comment: 'project for testing project browser api'
 		className: className1
 		inPackageName: packageName1.
+
+	project1 := Rowan projectNamed: projectName1.
+	self assert: (audit := project1 audit) isEmpty.
 
 	testClass := Rowan globalNamed: className1.
 	self assert: testClass notNil.
@@ -81,6 +85,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
 		forClassExtensionsIn: className1.
 
+	self assert: (audit := project1 audit) isEmpty.
+
 	(Rowan image loadedProjectNamed: projectName2 ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
@@ -94,10 +100,13 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 		addPackagesNamed: packageNames2 toComponentNamed: componentName;
 		yourself.
 
-	resolvedProject
+	project2 := resolvedProject
 		resolve;
 		load.
 		
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
+
 	testProjectDefinition := browserTool projectNamed: projectName2.
 	self
 		assert:
@@ -133,9 +142,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'bar') ] ]
 		forClassExtensionsIn: className1.
 
-
 	self
-		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		_assertForClassExtensionInClassWithHistory: testClass
 		ifPresent: [ :classExtensionSet | self assert: classExtensionSet size = 2 ]
 		ifAbsent: [ 
 			self
@@ -145,23 +153,22 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	symDict := Rowan globalNamed: self _symbolDictionaryName.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
+
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 2.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
 
 	browserTool removeClassNamed: className1.	"remove class className1"
 
 	self
-		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		_assertForClassExtensionInClassWithHistory: testClass
 		ifPresent: [ :classExtensionSet | 
 			self
 				assert: false
@@ -178,16 +185,15 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
+
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
 
@@ -295,7 +301,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 
 	testClass := Rowan globalNamed: className1.
 	self
-		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		_assertForClassExtensionInClassWithHistory: testClass
 		ifPresent: [ :classExtensionSet | self assert: classExtensionSet size = 2 ]
 		ifAbsent: [ 
 			self
@@ -431,7 +437,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 									'Session methods should not be present for class ' , className1 printString ] ] ].
 
 	self
-		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		_assertForClassExtensionInClassWithHistory: testClass
 		ifPresent: [ :classExtensionSet | 
 			self
 				assert: false
@@ -578,7 +584,6 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	testProjectDefinition := browserTool projectNamed: projectName1.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames = {packageName2}
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

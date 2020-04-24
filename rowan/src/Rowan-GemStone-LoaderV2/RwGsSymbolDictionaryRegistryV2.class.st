@@ -4,8 +4,6 @@ Class {
 	#instVars : [
 		'symbolDictionary',
 		'packageRegistry',
-		'classRegistry',
-		'classExtensionRegistry',
 		'methodRegistry'
 	],
 	#category : 'Rowan-GemStone-LoaderV2'
@@ -367,19 +365,6 @@ RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExten
 
 ]
 
-{ #category : 'accessing' }
-RwGsSymbolDictionaryRegistryV2 >> classExtensionRegistry [
-
-	^ classExtensionRegistry
-]
-
-{ #category : 'accessing' }
-RwGsSymbolDictionaryRegistryV2 >> classRegistry [
-
-   ^classRegistry
-
-]
-
 { #category : 'package - patch api' }
 RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageFromDefinition: packageDefinition [
 
@@ -555,7 +540,7 @@ RwGsSymbolDictionaryRegistryV2 >> existingForClass: aClass ifAbsent: absentBlock
 
 	"Answer the registered LoadedClass for the given class."
 
-	^ classRegistry at: aClass classHistory ifAbsent: absentBlock
+	^ self loadedClassForClass: aClass ifAbsent: absentBlock
 ]
 
 { #category : 'package - creation api' }
@@ -586,14 +571,10 @@ RwGsSymbolDictionaryRegistryV2 >> initialize [
 
 	| symbolDictObjectSecurityPolicy |
 	packageRegistry := KeyValueDictionary new.	"keyed by package name"
-	classRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
-	classExtensionRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
 	methodRegistry := IdentityKeyValueDictionary new.	"keyed by compiledMethod"
 
 	symbolDictObjectSecurityPolicy := symbolDictionary objectSecurityPolicy.
 	packageRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
-	classRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
-	classExtensionRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
 	methodRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
 
 ]

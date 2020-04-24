@@ -10,7 +10,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 
 	| class projectName1 projectName2 packageName1 packageName2 className1 className2 classDefinition
 		symDict registry projectDefinition1 projectDefinition2 packageDefinition projectNames 
-		classExtensionDefinition projectSetDefinition componentName |
+		classExtensionDefinition projectSetDefinition componentName project1 project2 audit |
 
 	projectName1 := 'DeleteProject'.
 	projectName2 := 'ExtensionProject'.
@@ -92,6 +92,11 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 		addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project1 := Rowan projectNamed: projectName1.
+	self assert: (audit := project1 audit) isEmpty.
+	project2 := Rowan projectNamed: projectName2.
+	self assert: (audit := project2 audit) isEmpty.
+
 "validation"
 	class := Rowan globalNamed: className1.
 	self assert: class rowanPackageName = packageName1.
@@ -104,8 +109,6 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 2.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
 
 "delete project"
@@ -121,9 +124,8 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project2 audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
 
@@ -134,7 +136,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 
 	| class projectName1 packageName1 packageName2 className1 classDefinition
 		symDict registry projectDefinition1 packageDefinition projectNames classExtensionDefinition
-		projectSetDefinition componentName |
+		projectSetDefinition componentName project audit |
 
 	projectName1 := 'DeleteProject'.
 	packageName1 := 'DeleteProject-Core'.
@@ -144,7 +146,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 
 	projectNames do: [:projectName | 
 		(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "create projects"
 	componentName := 'Core'.
@@ -192,6 +194,9 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 		addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName1.
+	self assert: (audit := project audit) isEmpty.
+
 "validation"
 	class := Rowan globalNamed: className1.
 	self assert: class rowanPackageName = packageName1.
@@ -201,8 +206,6 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
 
 "delete project"
@@ -215,9 +218,8 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 0.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
 
@@ -225,14 +227,14 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 RwProjectDeleteToolTest >> testDeleteSimpleProject [
 
 	| class projectName packageName className classDefinition symDict registry projectDefinition 
-		packageDefinition componentName |
+		packageDefinition componentName project audit |
 
 	projectName := 'DeleteProject'.
 	packageName := 'DeleteProject-Core'.
 	className := 'DeleteProjectClass'.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "create project"
 	componentName := 'Core'.
@@ -269,6 +271,9 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 "load project definition"
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 "validation"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName.
@@ -278,8 +283,6 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
 
 "delete project"
@@ -293,8 +296,6 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 ]
@@ -305,7 +306,7 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 
 	| class projectName1 projectName2 packageName1 packageName2 className1 className2 classDefinition
 		symDict registry projectDefinition1 projectDefinition2 packageDefinition projectNames 
-		classExtensionDefinition projectSetDefinition componentName |
+		classExtensionDefinition projectSetDefinition componentName project1 project2 audit |
 
 	projectName1 := 'DeleteProject'.
 	projectName2 := 'ExtensionProject'.
@@ -386,6 +387,11 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 		addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project1 := Rowan projectNamed: projectName1.
+	self assert: (audit := project1 audit) isEmpty.
+	project2 := Rowan projectNamed: projectName2.
+	self assert: (audit := project2 audit) isEmpty.
+
 "validation"
 	class := Rowan globalNamed: className1.
 	self assert: class rowanPackageName = packageName1.
@@ -398,8 +404,6 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 2.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
 
 "delete project"
@@ -415,9 +419,8 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project2 audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
 
@@ -425,14 +428,14 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 
 	| class projectName packageName className classDefinition symDict registry projectDefinition 
-		packageDefinition componentName |
+		packageDefinition componentName project audit |
 
 	projectName := 'DeleteProject'.
 	packageName := 'DeleteProject-Core'.
 	className := 'DeleteProjectClass'.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "create project"
 	componentName := 'Core'.
@@ -469,6 +472,9 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 "load project definition"
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 "validation"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName.
@@ -478,8 +484,6 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
 
 "delete project"
@@ -493,8 +497,6 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 ]

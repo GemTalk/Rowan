@@ -120,7 +120,7 @@ RwPkgDisownTool >> disownPackageNamed: packageName [
 			| class |
 			class := Rowan globalNamed: loadedClass key.
 			loadedClass disownFromLoaded: registry.
-			registry classRegistry removeKey: class classHistory ].
+			registry unregisterLoadedClass: loadedClass forClass: class ].
 
 	loadedPackage loadedClassExtensions values 
 		do: [:loadedClassExtension | 

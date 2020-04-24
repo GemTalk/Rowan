@@ -73,12 +73,6 @@ RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: v
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
-RwGsImage class >> symbolDictionaryRegistryClass [
-
-	^ RwGsSymbolDictionaryRegistryV2
-]
-
-{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
 RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
 	"scan the symbol list for a loaded package that matches the loaded package for the given loaded class"
 
@@ -95,6 +89,13 @@ RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: pres
 							lp == loadedPackage 
 								ifTrue: [ ^ presentBlock value: (symbolDict) value: loadedClass ] ] ] ].
 	^ absentBlock value
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> loadedClassExtensionsForClass: class [
+	"lookup the loadedClassExtensions for the given class"
+
+	^ self symbolDictionaryRegistryClass registry_ImplementationClass loadedClassExtensionsForClass: class ifAbsent: [ IdentitySet new ]
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
@@ -122,17 +123,20 @@ RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: abs
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
 RwGsImage class >> removeLoadedClassExtensionsForClass: class [
-
 	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
 		to the given class"
 
-	self symbolDictionaryRegistryClass registry_ImplementationClass  unregisterLoadedClassExtensionForClass: class
+	(self symbolDictionaryRegistryClass registry_ImplementationClass
+		loadedClassExtensionsForClass: class
+		ifAbsent: [ #() ])
+		do: [ :loadedClassExtension | 
+			self symbolDictionaryRegistryClass registry_ImplementationClass
+				unregisterLoadedClassExtension: loadedClassExtension
+				forClass: class ]
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
-RwGsImage class >> loadedClassExtensionsForClass: class [
-	"lookup the loadedClassExtensions for the given class"
+RwGsImage class >> symbolDictionaryRegistryClass [
 
-	^ self symbolDictionaryRegistryClass registry_ImplementationClass loadedClassExtensionsForClass: class ifAbsent: [ IdentitySet new ]
+	^ RwGsSymbolDictionaryRegistryV2
 ]
-

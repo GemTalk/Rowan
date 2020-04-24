@@ -62,7 +62,7 @@ RwBrowserToolTest >> _assert: foundBlock forClassNamed: className [
 ]
 
 { #category : 'private' }
-RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: classHistory ifPresent: presentBlock ifAbsent: absentBlock [
+RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: class ifPresent: presentBlock ifAbsent: absentBlock [
 
 	"validate loaded class extension registry structure"
 
@@ -72,7 +72,7 @@ RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: classHistory if
 		do: [ :symbolDict | 
 			symbolDict rowanSymbolDictionaryRegistry
 				ifNotNil: [ :registry | 
-					(registry classExtensionRegistry at: classHistory ifAbsent: [  ])
+					(registry loadedClassExtensionsForClass: class ifAbsent: [  ])
 						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
 	found isEmpty
 		ifFalse: [ ^ presentBlock cull: found ].

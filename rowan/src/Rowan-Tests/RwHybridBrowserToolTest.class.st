@@ -450,8 +450,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 
 	"https://github.com/dalehenrich/Rowan/issues/315"
 
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance
-		symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod 
+		normalInstance symDict registry project audit  |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -462,6 +462,10 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal3'
 		instVarNames: #()
@@ -489,9 +493,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
 
 "remove methods"
@@ -505,9 +508,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 "re-add methods"
@@ -528,9 +530,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
 
 "remove methods"
@@ -544,10 +545,10 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
+
 ]
 
 { #category : 'tests' }
@@ -919,7 +920,8 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass 
+		packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -935,6 +937,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		packageNameMap: packageNameMap 
 		defaultSymbolDictName: self _symbolDictionaryName1.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #()
@@ -949,17 +954,14 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	movedNormalClass := Object
@@ -972,7 +974,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		options: #().
 
 "validate"
-	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
@@ -983,16 +984,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
 
@@ -1015,6 +1012,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		packageNameMap: packageNameMap 
 		defaultSymbolDictName: self _symbolDictionaryName1.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #(ivar1)
@@ -1029,17 +1029,14 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	movedNormalClass := Object
@@ -1053,7 +1050,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		options: #().
 
 "validate"
-	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
@@ -1065,16 +1061,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
 
@@ -1097,6 +1089,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		packageNameMap: packageNameMap 
 		defaultSymbolDictName: self _symbolDictionaryName1.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #(ivar1)
@@ -1113,17 +1108,14 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	movedNormalClass := Object
@@ -1137,8 +1129,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		options: #().
 
 "validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass ~~ normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1150,17 +1140,14 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
 
@@ -1529,7 +1516,8 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 
 	"https://github.com/dalehenrich/Rowan/issues/309"
 
-	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className symDict registry |
+	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className symDict registry
+		project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions1'.
@@ -1544,6 +1532,9 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 
 	normalClass := Object
 		rwSubclass: className
@@ -1573,9 +1564,8 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 3.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 3.
 
 	self
@@ -1619,9 +1609,8 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 3.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 3.
 
 	self

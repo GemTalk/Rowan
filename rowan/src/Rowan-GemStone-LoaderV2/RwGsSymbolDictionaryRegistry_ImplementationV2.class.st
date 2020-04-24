@@ -158,6 +158,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFr
 
 ]
 
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionKey [
+	^ #rowanLoadedClassExtension
+]
+
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionsFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
 	| loadedClassExtensionSet |
@@ -223,6 +228,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class no
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
 				, classKey asString printString
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassKey [
+	^ #rowanLoadedClass
 ]
 
 { #category : 'private' }
@@ -789,6 +799,30 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> existingOrNewLoadedPackag
 
 ]
 
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassExtensionsForClass: aClass [
+	^ self
+		loadedClassExtensionsForClass: aClass 
+		ifAbsent: [ self error: 'No loaded extension class found for: ', aClass name printString]
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
+	^ (aClass theNonMetaClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassForClass: aClass [
+	^ self 
+		loadedClassForClass: aClass
+		ifAbsent: [ self error: 'No loaded class found for: ', aClass name printString ]
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassForClass: aClass ifAbsent: absentBlock [
+	^ (aClass theNonMetaClass _extraDictAt: self _loadedClassKey) ifNil: absentBlock
+]
+
 { #category : 'loaded queries' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock instance: registryInstance [
 
@@ -949,6 +983,41 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> newLoadedPackageNamed: pa
 
 ]
 
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClass: loadedClass forClass: aClass [
+	aClass theNonMetaClass _extraDictAt: self _loadedClassKey put: loadedClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClassExtension: loadedClass forClass: aClass [
+	((aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) 
+		ifNil: [ | set |
+			set := IdentitySet new.
+			aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey put: set.
+			set ])
+		add: loadedClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClass: loadedClass forClass: aClass [
+	| lc |
+	(lc := aClass theNonMetaClass _extraDictAt: self _loadedClassKey) == loadedClass
+		ifFalse: [ self error: 'Loaded class for ', aClass name printString, ' not found. Found ', lc printString, ' instead.' ].
+	aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassKey
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
+	(aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey)
+		ifNil: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ]
+		ifNotNil: [:aSet |
+			aSet 
+				remove: loadedClassExtension 
+				ifAbsent: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ].
+			aSet isEmpty
+				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
+]
+
 { #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> updateClassProperties: class instance: registryInstance [
 
@@ -963,72 +1032,4 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> updateClassProperties: cl
 			loadedClass updatePropertiesFromClassFor: registryInstance ].
 	^ registryInstance
 
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassForClass: aClass [
-	^ self 
-		loadedClassForClass: aClass
-		ifAbsent: [ self error: 'No loaded class found for: ', aClass name printString ]
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassForClass: aClass ifAbsent: absentBlock [
-	^ (aClass theNonMetaClass _extraDictAt: self _loadedClassKey) ifNil: absentBlock
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClass: loadedClass forClass: aClass [
-	aClass theNonMetaClass _extraDictAt: self _loadedClassKey put: loadedClass
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClass: loadedClass forClass: aClass [
-	| lc |
-	(lc := aClass theNonMetaClass _extraDictAt: self _loadedClassKey) == loadedClass
-		ifFalse: [ self error: 'Loaded class for ', aClass name printString, ' not found. Found ', lc printString, ' instead.' ].
-	aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassKey
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassExtensionsForClass: aClass [
-	^ self
-		loadedClassExtensionsForClass: aClass 
-		ifAbsent: [ self error: 'No loaded extension class found for: ', aClass name printString]
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
-	^ (aClass theNonMetaClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClassExtension: loadedClass forClass: aClass [
-	((aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) 
-		ifNil: [ | set |
-			set := IdentitySet new.
-			aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey put: set.
-			set ])
-		add: loadedClass
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
-	(aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey)
-		ifNil: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ]
-		ifNotNil: [:aSet |
-			aSet 
-				remove: loadedClassExtension 
-				ifAbsent: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ].
-			aSet isEmppty
-				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassKey [
-	^ #rowanLoadedClass
-]
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionKey [
-	^ #rowanLoadedClassExtension
 ]

@@ -7607,7 +7607,7 @@ true.
 doit
 (Object
 	subclass: 'RwGsSymbolDictionaryRegistryV2'
-	instVarNames: #( symbolDictionary packageRegistry classRegistry classExtensionRegistry methodRegistry )
+	instVarNames: #( symbolDictionary packageRegistry methodRegistry )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -64021,7 +64021,7 @@ disownPackageNamed: packageName
 			| class |
 			class := Rowan globalNamed: loadedClass key.
 			loadedClass disownFromLoaded: registry.
-			registry classRegistry removeKey: class classHistory ].
+			registry unregisterLoadedClass: loadedClass forClass: class ].
 
 	loadedPackage loadedClassExtensions values 
 		do: [:loadedClassExtension | 
@@ -74309,16 +74309,16 @@ doMoveMethodsBetweenPackages
 				ifTrue: [
 					loadedClassOrExtension isEmpty
 						ifTrue: [ 
-							| theKey classExtensionRegistry |
-							theKey := loadedClassOrExtension handle classHistory.
-							classExtensionRegistry := registry classExtensionRegistry.
-							(classExtensionRegistry at: theKey ifAbsent: [])
+							(registry loadedClassExtensionsForClass: loadedClassOrExtension handle ifAbsent: [])
 								ifNotNil: [ :loadedClassExtensions |
 									loadedClassExtensions isEmpty
 										ifFalse: [ 
 											loadedClassExtensions remove: loadedClassOrExtension.
 											loadedClassExtensions isEmpty
-												ifTrue: [ classExtensionRegistry removeKey: theKey ] ] ].
+												ifTrue: [ 
+													registry 
+														unregisterLoadedClassExtension: loadedClassOrExtension
+														forClass: loadedClassOrExtension handle ] ] ].
 							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
             compiledMethod := loadedMethod handle.
@@ -77287,20 +77287,6 @@ adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior
 	loadedClassOrExtension addLoadedMethod: loadedMethod
 %
 
-category: 'accessing'
-method: RwGsSymbolDictionaryRegistryV2
-classExtensionRegistry
-
-	^ classExtensionRegistry
-%
-
-category: 'accessing'
-method: RwGsSymbolDictionaryRegistryV2
-classRegistry
-
-   ^classRegistry
-%
-
 category: 'package - patch api'
 method: RwGsSymbolDictionaryRegistryV2
 createLoadedPackageFromDefinition: packageDefinition
@@ -77478,7 +77464,7 @@ existingForClass: aClass ifAbsent: absentBlock
 
 	"Answer the registered LoadedClass for the given class."
 
-	^ classRegistry at: aClass classHistory ifAbsent: absentBlock
+	^ self loadedClassForClass: aClass ifAbsent: absentBlock
 %
 
 category: 'package - creation api'
@@ -77511,14 +77497,10 @@ initialize
 
 	| symbolDictObjectSecurityPolicy |
 	packageRegistry := KeyValueDictionary new.	"keyed by package name"
-	classRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
-	classExtensionRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
 	methodRegistry := IdentityKeyValueDictionary new.	"keyed by compiledMethod"
 
 	symbolDictObjectSecurityPolicy := symbolDictionary objectSecurityPolicy.
 	packageRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
-	classRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
-	classExtensionRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
 	methodRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
 %
 
@@ -78553,7 +78535,7 @@ unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
 			aSet 
 				remove: loadedClassExtension 
 				ifAbsent: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ].
-			aSet isEmppty
+			aSet isEmpty
 				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
 %
 
@@ -95061,11 +95043,16 @@ loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
 removeLoadedClassExtensionsForClass: class
-
 	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
 		to the given class"
 
-	self symbolDictionaryRegistryClass registry_ImplementationClass  unregisterLoadedClassExtensionForClass: class
+	(self symbolDictionaryRegistryClass registry_ImplementationClass
+		loadedClassExtensionsForClass: class
+		ifAbsent: [ #() ])
+		do: [ :loadedClassExtension | 
+			self symbolDictionaryRegistryClass registry_ImplementationClass
+				unregisterLoadedClassExtension: loadedClassExtension
+				forClass: class ]
 %
 
 category: '*rowan-gemstone-loader-extensions-onlyv2'

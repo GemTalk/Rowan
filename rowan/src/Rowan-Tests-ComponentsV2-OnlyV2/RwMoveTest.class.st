@@ -12,7 +12,7 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName componentName packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass loadedClass symDict registry |
+		ar oldClass loadedClass symDict registry project audit |
 	projectName := 'Issue254'.
 	componentName := 'Core'.
 	packageName1 := 'Issue254-Core1'.
@@ -53,6 +53,9 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -88,17 +91,14 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 ]
@@ -111,7 +111,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class symDict registry componentName |
+		className projectSetDefinition class symDict registry componentName project audit |
 	projectName := 'Issue254'.
 	componentName := 'Core'.
 	packageName1 := 'Issue254-Core1'.
@@ -151,6 +151,9 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 
@@ -173,9 +176,8 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 ]
@@ -189,7 +191,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
 		packageDefinition className projectSetDefinition class ar oldClass loadedClass symDict registry
-		componentName |
+		componentName project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -228,6 +230,9 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -264,17 +269,14 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 0.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
 
@@ -285,7 +287,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
 		packageDefinition className projectSetDefinition class oldClass symDict registry loadedClass 
-		componentName |
+		componentName project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -332,6 +334,9 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 "load"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
@@ -341,8 +346,6 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
 
 "move class and add change method"
@@ -380,9 +383,8 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
 
 ]
@@ -499,17 +501,14 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
+
 ]
 
 { #category : 'tests - issue 254' }
@@ -521,7 +520,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 
 	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
 		classDefinition packageDefinition className projectSetDefinition class oldClass symDict registry 
-		loadedClass classExtensionDefinition componentName |
+		loadedClass classExtensionDefinition componentName project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -583,6 +582,9 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 "load"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
@@ -617,10 +619,10 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 3.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
+
 ]
 
 { #category : 'tests - issue 254' }
@@ -772,7 +774,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
 		packageDefinition componentName className projectSetDefinition class oldClass symDict 
-		registry loadedClass |
+		registry loadedClass project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -835,6 +837,9 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class == oldClass.
@@ -848,8 +853,6 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
 
 ]
@@ -952,17 +955,14 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 0.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
 ]
 
@@ -973,7 +973,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
 		packageDefinition componentName className projectSetDefinition class oldClass symDict 
-		registry loadedClass |
+		registry loadedClass project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -1020,6 +1020,9 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 "load"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
@@ -1029,8 +1032,6 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
 
 "move class and add new method"
@@ -1068,9 +1069,8 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 2.
 
 ]
@@ -1188,16 +1188,12 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 2.
 ]
 
@@ -1210,7 +1206,8 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 
 	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
 		classDefinition packageDefinition className projectSetDefinition class symDict registry 
-		classExtensionDefinition oldClass loadedPackage loadedClass loadedClassExtensions componentName |
+		classExtensionDefinition oldClass loadedPackage loadedClass loadedClassExtensions componentName
+		project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -1259,6 +1256,9 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	class := Rowan globalNamed: className.
 	self assert: (class new perform: #mover) = 1.
 	self assert: class rowanPackageName = packageName1.
@@ -1275,8 +1275,6 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 3.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
 
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1324,9 +1322,8 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 3.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
 
 ]
@@ -3424,7 +3421,8 @@ RwMoveTest >> testProjectSet_rename_package [
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
-		packageDefinition className projectSetDefinition class symDict registry componentName |
+		packageDefinition className projectSetDefinition class symDict registry componentName
+		project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue1254-Core'.
 	packageName2 := 'Issue254-RenamedCore'.
@@ -3484,9 +3482,9 @@ RwMoveTest >> testProjectSet_rename_package [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 ]
@@ -3499,7 +3497,8 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
-		packageDefinition className projectSetDefinition class symDict registry x componentName |
+		packageDefinition className projectSetDefinition class symDict registry x componentName
+		project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue1254-Core'.
 	packageName2 := 'Issue254-RenamedCore'.
@@ -3555,6 +3554,9 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -3604,9 +3606,8 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 3.
 
 ]
@@ -3619,7 +3620,8 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
-		packageDefinition className projectSetDefinition class symDict registry x componentName |
+		packageDefinition className projectSetDefinition class symDict registry x componentName
+		project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue1254-Core'.
 	packageName2 := 'Issue254-RenamedCore'.
@@ -3675,6 +3677,9 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -3713,6 +3718,7 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName2.
@@ -3727,15 +3733,11 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 3.
 ]
