@@ -433,7 +433,8 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 
 	"move method from unpackaged category to category in another unpackaged category (class is unpackaged)"
 
-	| projectName  packageName1 projectDefinition projectSetDefinition audit testClass symDict registry componentName |
+	| projectName  packageName1 projectDefinition projectSetDefinition testClass symDict registry 
+	componentName project audit |
 
 	projectName := 'Issue364'.
 	packageName1 := 'Issue364-Extension-1'.
@@ -468,6 +469,8 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 			do: [:ex | ex resume ].	
 
 "validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
 	self assert: (testClass categoryOfSelector: #bar) = 'accessing' asSymbol.
 "registry check"
@@ -475,8 +478,6 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 "move"
@@ -484,6 +485,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 	testClass rwMoveMethod: #bar toCategory: 'other accessing'.	
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
 	self assert: (testClass categoryOfSelector: #bar) = #'other accessing'.
 "registry check"
@@ -491,8 +493,6 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 "load -- effectively unload extension methods"
@@ -501,19 +501,18 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	[ testClass rwRemoveSelector: #bar ]
 			on: RwPerformingUnpackagedEditNotification
 			do: [:ex | ex resume ].	
 	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) isNil.
 
 "audit"
-	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	self assert: (audit := project audit) isEmpty.
 "registry check"
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]

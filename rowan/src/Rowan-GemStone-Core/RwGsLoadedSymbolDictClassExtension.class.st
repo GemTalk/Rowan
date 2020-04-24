@@ -35,21 +35,17 @@ RwGsLoadedSymbolDictClassExtension >> addLoadedMethod: aLoadedMethod [
 ]
 
 { #category : 'removing' }
-RwGsLoadedSymbolDictClassExtension >> disownFromLoaded: aPackageSymbolDictionary [
-
+RwGsLoadedSymbolDictClassExtension >> disownFromLoaded: registry [
 	loadedInstanceMethods
 		valuesDo: [ :loadedInstanceMethod | 
 			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			aPackageSymbolDictionary methodRegistry
-				removeKey: loadedInstanceMethod handle ].
+			registry methodRegistry removeKey: loadedInstanceMethod handle ].
 	loadedClassMethods
 		valuesDo: [ :loadedClassMethod | 
 			self removeLoadedClassMethod: loadedClassMethod.
-			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
+			registry methodRegistry removeKey: loadedClassMethod handle ].
 
-	(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) remove: self.
-	(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) isEmpty
-		ifTrue: [ aPackageSymbolDictionary classExtensionRegistry removeKey: handle classHistory ].
+	registry unregisterLoadedClassExtension: self forClass: handle
 
 ]
 
@@ -125,10 +121,7 @@ RwGsLoadedSymbolDictClassExtension >> moveFrom: fromRegistryInstance [
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
-	(fromRegistryInstance classExtensionRegistry at: handle classHistory)
-		remove: self.
-	(fromRegistryInstance classExtensionRegistry at: handle classHistory) isEmpty
-		ifTrue: [ fromRegistryInstance classExtensionRegistry removeKey: handle classHistory ]
+	fromRegistryInstance unregisterLoadedClassExtension: self forClass: handle
 ]
 
 { #category : 'removing' }
@@ -137,9 +130,7 @@ RwGsLoadedSymbolDictClassExtension >> moveTo: toRegistryInstance [
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
-	(toRegistryInstance classExtensionRegistry
-		at: handle classHistory
-		ifAbsentPut: [ IdentitySet new ]) add: self
+	toRegistryInstance registerLoadedClassExtension: self forClass: handle
 ]
 
 { #category : 'methods' }

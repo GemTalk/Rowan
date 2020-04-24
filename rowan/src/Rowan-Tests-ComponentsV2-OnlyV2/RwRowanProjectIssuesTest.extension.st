@@ -3119,7 +3119,8 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 
 	"simplification of RwRowanSample4Test>>testIssue208_adopt_load"
 
-	| projectName1 projectName2 packageName1 packageName2 packageName3 className projectDefinition1 
+	| projectName1 projectName2 packageName1 packageName2 packageName3 className 
+		projectDefinition1 project1 project2 audit
 		classDefinition packageDefinition projectSetDefinition projectDefinition2 classExtensionDefinition class 
 		ar symDict registry oldClass componentName |
 	projectName1 := 'Issue208_moveMethodBetweenProjects1'.
@@ -3172,6 +3173,8 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validation"
+	project1 := Rowan projectNamed: projectName1.
+	self assert: (audit := project1 audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -3214,6 +3217,9 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validation"
+	project2 := Rowan projectNamed: projectName2.
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: oldClass == class.
@@ -3228,16 +3234,12 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
 ]
 
