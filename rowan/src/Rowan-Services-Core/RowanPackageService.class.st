@@ -332,6 +332,7 @@ RowanPackageService >> testClasses [
               testClasses add: classService ] ] ].
   updateType := #'testClasses:browser:'.
   testClasses := testClasses asArray.
+  testClasses do: [ :classService | classService update ].
   RowanCommandResult addResult: self
 ]
 
