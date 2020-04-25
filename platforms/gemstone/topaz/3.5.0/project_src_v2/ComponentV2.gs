@@ -94175,6 +94175,7 @@ asDefinition
 		packages: self loadedPackageDefinitions;
 		yourself.
 	resolvedProject _projectRepository: handle _projectRepository copy.
+	resolvedProject _projectSpecification: handle _projectSpecification copy.
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
 			RwLoadedProject _projectLoadedDefinitionSourceValue;
