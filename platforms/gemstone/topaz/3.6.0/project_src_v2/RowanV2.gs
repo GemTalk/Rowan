@@ -80970,6 +80970,7 @@ asDefinition
 		packages: self loadedPackageDefinitions;
 		yourself.
 	resolvedProject _projectRepository: handle _projectRepository copy.
+	resolvedProject _projectSpecification: handle _projectSpecification copy.
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
 			RwLoadedProject _projectLoadedDefinitionSourceValue;
@@ -91555,25 +91556,28 @@ withGemstoneLineEndings
 category: '*tonel-gemstonecommon-core'
 method: CharacterCollection
 withLineEndings: lineEndingString
-
 	| stream |
-	
 	stream := nil.
-	self lineIndicesDo: [ :start :endWithoutDelimiters :end |
-		(stream isNil and: [ endWithoutDelimiters ~= end ]) ifTrue: [
-			(self copyFrom: endWithoutDelimiters + 1 to: end) = lineEndingString ifFalse: [
-				stream := WriteStreamPortable with: self copy.
-				stream position: start - 1 ]].
-		stream ifNotNil: [
-			stream next: endWithoutDelimiters - start + 1 putAll: self startingAt: start.
-			endWithoutDelimiters = end ifFalse: [
-				stream nextPutAll: lineEndingString ]]].
-	^stream
+	self
+		lineIndicesDo: [ :start :endWithoutDelimiters :end | 
+			(stream isNil and: [ endWithoutDelimiters ~= end ])
+				ifTrue: [ 
+					((self copyFrom: endWithoutDelimiters + 1 to: end)
+						_unicodeEqual: lineEndingString)
+						ifFalse: [ 
+							stream := WriteStreamPortable with: self copy.
+							stream position: start - 1 ] ].
+			stream
+				ifNotNil: [ 
+					stream next: endWithoutDelimiters - start + 1 putAll: self startingAt: start.
+					endWithoutDelimiters = end
+						ifFalse: [ stream nextPutAll: lineEndingString ] ] ].
+	^ stream
 		ifNil: [ self ]
 		ifNotNil: [ 
 			stream position = self size
 				ifTrue: [ stream originalContents ]
-				ifFalse: [ stream contents ]]
+				ifFalse: [ stream contents ] ]
 %
 
 category: '*rowan-gemstone-kernel'
