@@ -71,17 +71,6 @@ RowanPackageService >> classHierarchy: theClasses [
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> createPackage [
-	| projectService default |
-	default := RowanProjectService defaultProjectName.
-	projectService := RowanProjectService new.
-	projectService createProjectNamed: default.  
-	(Rowan packageNames includes: name) ifFalse:[
-		self browserTool addPackageNamed: name toProjectNamed: default].
-
-]
-
-{ #category : 'rowan' }
 RowanPackageService >> createPackageNamed: aString inProject: projName [
 	| projectService | 
 	name := aString.
@@ -232,8 +221,8 @@ RowanPackageService >> projectDefinition: newValue [
 
 { #category : 'testing' }
 RowanPackageService >> projectIsDirty [
-
-	^(RowanProjectService new name: projectName) rowanDirty
+  projectName ifNil: [ self updateProjectName ].
+  ^ (RowanProjectService new name: projectName) rowanDirty
 ]
 
 { #category : 'Accessing' }
@@ -341,8 +330,9 @@ RowanPackageService >> testClasses [
               | classService |
               classService := RowanClassService basicForClassNamed: cls name.
               testClasses add: classService ] ] ].
-  updateType := #'testClasses:'.
+  updateType := #'testClasses:browser:'.
   testClasses := testClasses asArray.
+  testClasses do: [ :classService | classService update ].
   RowanCommandResult addResult: self
 ]
 

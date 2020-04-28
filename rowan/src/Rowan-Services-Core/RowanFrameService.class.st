@@ -8,7 +8,8 @@ Class {
 		'vars',
 		'oop',
 		'homeMethodSelector',
-		'homeMethodClassName'
+		'homeMethodClassName',
+		'classIsResolvable'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -30,7 +31,7 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
   | frameData gsNMethod homeMethodService |
   frameData := aGsProcess _frameContentsAt: anInteger.
   frameData isNil
-    ifTrue: [^self "not sure if bad frame data is a 3.2.15 bug or not"].
+    ifTrue: [ ^ self	"not sure if bad frame data is a 3.2.15 bug or not" ].
   oop := (frameData at: 8) asOop.
   gsNMethod := frameData at: 1.
   label := aGsProcess _reportAt: anInteger.
@@ -43,7 +44,12 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
   method breakPoints: homeMethodService breakPoints.
   homeMethodSelector := gsNMethod homeMethod selector.
   homeMethodClassName := gsNMethod homeMethod inClass
-    ifNotNil: [ :cls | cls name asString ].
+    ifNotNil: [ :cls | 
+      | className |
+      className := cls name asString.
+      classIsResolvable := (Rowan image
+        resolveClassNamed: cls theNonMetaClass name asString) isNil not.
+      className ].
   stepPoint := gsNMethod == gsNMethod homeMethod
     ifTrue: [ aGsProcess _stepPointAt: anInteger ]
     ifFalse: [ gsNMethod homeMethod _stepPointForMeth: gsNMethod ip: (frameData at: 2) ].

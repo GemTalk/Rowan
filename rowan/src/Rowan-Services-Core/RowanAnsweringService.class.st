@@ -50,7 +50,7 @@ RowanAnsweringService >> allTestsIn: classServices [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanAnsweringService >> answer [
 
 	^answer
@@ -131,6 +131,32 @@ RowanAnsweringService >> basicPrintStringOfObject: object toMaxSize: integer [
 ]
 
 { #category : 'client command support' }
+RowanAnsweringService >> basicSortedSelectors [
+  | selectors |
+  selectors := IdentitySet new.
+  organizer classes
+    do: [ :aClass | 
+      | metaClass |
+      metaClass := aClass.
+      2
+        timesRepeat: [ 
+          | methodDictionary |
+          methodDictionary := metaClass _fullMethodDictEnv0.
+          methodDictionary
+            valuesDo: [ :method | 
+              | selector |
+              selector := method selector.
+              selector charSize = 1
+                ifTrue: [ selectors add: selector ].
+              method _selectorPool
+                do: [ :sentSelector | 
+                  sentSelector charSize = 1
+                    ifTrue: [ selectors add: sentSelector ] ] ].
+          metaClass := metaClass class ] ].
+  ^ selectors asSortedCollection asArray
+]
+
+{ #category : 'client command support' }
 RowanAnsweringService >> basicSortedSymbols [
   | sortedSymbols |
   sortedSymbols := SortedCollection new.
@@ -200,6 +226,15 @@ RowanAnsweringService >> disableAllBreaks [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> disableMethodBreaks: methodServices [
+  methodServices
+    do: [ :methodService | 
+      methodService
+        organizer: organizer;
+        disableMethodBreaks ]
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> doClientAndServerVersionsMatch: clientVersion [
   "Not to be sent through services so return an answer directly.
 	Sent immediately after Jadeite login"
@@ -229,6 +264,15 @@ RowanAnsweringService >> enableAllBreaks [
   GsNMethod _enableAllBreaks.
   methodServices
     do: [ :methodService | RowanCommandResult addResult: methodService update ]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> enableMethodBreaks: methodServices [
+  methodServices
+    do: [ :methodService | 
+      methodService
+        organizer: organizer;
+        enableMethodBreaks ]
 ]
 
 { #category : 'client commands' }
@@ -397,6 +441,13 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> lowercaseSelectorsMatching: lowercaseSymbol [
+  answer := self basicSortedSelectors
+    select: [ :symbol | lowercaseSymbol sunitMatch: symbol asLowercase ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> methodHistoryFor: methodService [
   self basicMethodHistoryFor: methodService.
   RowanCommandResult addResult: self.
@@ -475,6 +526,33 @@ RowanAnsweringService >> removeMethodHistoryFor: methodService [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> resolveAsService: name [
+  | projectService packageService classService dictionaryService |
+  projectService := RowanProjectService new name: name.
+  projectService update projectIsLoaded
+    ifTrue: [ 
+      answer := projectService.
+      ^ RowanCommandResult addResult: self ].
+  packageService := RowanPackageService new name: name.
+  packageService update projectName
+    ifNotNil: [ 
+      answer := packageService.
+      ^ RowanCommandResult addResult: self ].
+  dictionaryService := RowanDictionaryService new name: name.
+  dictionaryService update classes notEmpty
+    ifTrue: [ 
+      answer := dictionaryService.
+      ^ RowanCommandResult addResult: self ].
+  classService := RowanClassService new name: name.
+  classService update projectName
+    ifNotNil: [ 
+      answer := classService.
+      ^ RowanCommandResult addResult: self ].
+  answer := nil.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> runMethodTests: methodServices [
 
 	| behavior |
@@ -488,12 +566,19 @@ RowanAnsweringService >> runMethodTests: methodServices [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> selectorsMatching: lowercaseSymbol [
+  "assume we're passed a lower case symbol to avoid
+	case sensitive misses"
+
+  answer := self basicSortedSelectors
+    select: [ :symbol | lowercaseSymbol sunitMatch: symbol asLowercase ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> selectorsMatchingPattern: pattern [
-  answer := ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols')
-    value.
-  answer := answer
-    select: [ :each | each charSize = 1 and: [ each _matchPatternNoCase: pattern ] ].
-  answer := answer asSortedCollection asArray.
+  answer := self basicSortedSelectors.
+  answer := answer select: [ :each | each _matchPatternNoCase: pattern ].
   RowanCommandResult addResult: self
 ]
 
@@ -504,7 +589,7 @@ RowanAnsweringService >> setAutoCommit: object [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'other' }
+{ #category : 'client commands' }
 RowanAnsweringService >> setBreakPointsAreEnabled: boolean [
   boolean
     ifTrue: [ self enableAllBreaks ]
@@ -518,6 +603,12 @@ RowanAnsweringService >> setBreakPointsAreEnabled: boolean [
 { #category : 'client commands' }
 RowanAnsweringService >> setEnableInteractionHandler: boolean [
   SessionTemps current at: #'rowanServiceInteractionActive' put: boolean
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> sortedSelectors [
+  answer := self basicSortedSelectors.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
