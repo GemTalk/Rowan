@@ -16,9 +16,12 @@ RowanAnsweringServiceTest >> setUp [
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
+  | breakPointsAreEnabled |
   self
     jadeiteIssueTested: #'issue515'
     withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  breakPointsAreEnabled := RowanService breakPointsAreEnabled.
+  [ 
   service setBreakPointsAreEnabled: true.
   self assert: service breakPointsAreEnabled.
   self assert: RowanService breakPointsAreEnabled equals: true.
@@ -26,7 +29,8 @@ RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
   service setBreakPointsAreEnabled: false.
   self deny: service breakPointsAreEnabled.
   self assert: RowanService breakPointsAreEnabled equals: false.
-  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
+    ensure: [ service setBreakPointsAreEnabled: breakPointsAreEnabled ]
 ]
 
 { #category : 'tests' }

@@ -122,16 +122,24 @@ RowanClassService >> allSubclassServices [
 
 { #category : 'Accessing' }
 RowanClassService >> allTests [
-	| allSelectors theClass |
-	self isTestCase ifFalse:[^Array new]. 
-	theClass := self theClass thisClass.
-	theClass isAbstract ifTrue:[^Array new].
-	allSelectors := self theClass thisClass allTestSelectors.
-	^allSelectors collect:[:selector | 
-			RowanMethodService forSelector: selector 
-										class: (theClass whichClassIncludesSelector: selector asString)
-										meta: false
-										organizer: organizer].
+  | allSelectors theClass |
+  self isTestCase
+    ifFalse: [ ^ Array new ].
+  theClass := self theClass thisClass.
+  theClass isAbstract
+    ifTrue: [ ^ Array new ].
+  allSelectors := self theClass thisClass allTestSelectors.
+  ^ allSelectors
+    collect: [ :selector | 
+      | methodService |
+      methodService := RowanMethodService
+        forSelector: selector
+        class: (theClass whichClassIncludesSelector: selector asString)
+        meta: false
+        organizer: organizer.
+      methodService
+        definedClassName: (theClass whichClassIncludesSelector: selector asString) name asString.	"may get changed in client"
+      methodService ]
 ]
 
 { #category : 'testing' }
@@ -172,6 +180,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	projectName := classOrMeta rowanProjectName.
 	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
+	self updateIsExtension.
 ]
 
 { #category : 'Accessing' }
@@ -482,7 +491,9 @@ RowanClassService >> initializeMethodHistoryFor: source [
   rowanMethodHistory := self userGlobals
     at: #'RowanMethodHistory'
     ifAbsentPut: [ Dictionary new ].
-  selector := (Rowan platform parseSelectorFrom: source) asSymbol.
+  selector := [ (Rowan platform parseSelectorFrom: source) asSymbol ]
+    on: CompileWarning
+    do: [ :ex | ex resume ].
   selector = #'_____could_not_parse_selector_from_method_source_____'
     ifTrue: [ ^ self	"invalid source, continue and let save method fail" ]
     ifFalse: [ 
@@ -1175,6 +1186,13 @@ RowanClassService >> updateDirtyState [
 		RowanCommandResult addResult: packageService].
 	projectService := RowanProjectService newNamed: self theClass rowanProjectName. 
 	RowanCommandResult addResult: projectService.
+]
+
+{ #category : 'initialization' }
+RowanClassService >> updateIsExtension [
+  isExtension := ((selectedPackageServices
+    collect: [ :packageService | packageService name ])
+    includes: definedPackageName) not
 ]
 
 { #category : 'updates' }

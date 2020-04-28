@@ -11,6 +11,16 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'accessing' }
+RowanDictionaryService >> classes [
+	^classes
+]
+
+{ #category : 'accessing' }
+RowanDictionaryService >> classes: object [
+	classes := object
+]
+
 { #category : 'client commands' }
 RowanDictionaryService >> classHierarchy [
 	| theClasses |
@@ -108,6 +118,8 @@ RowanDictionaryService >> update [
   sorted := SortedCollection sortBlock: [ :x :y | x first < y first ].
   dictionary := Rowan image symbolList objectNamed: name.
   dictionary ifNil: [ ^ self ].
+  (dictionary isKindOf: SymbolDictionary)
+    ifFalse: [ ^ self ].
   dictionary
     keysAndValuesDo: [ :key :value | 
       value isClass
