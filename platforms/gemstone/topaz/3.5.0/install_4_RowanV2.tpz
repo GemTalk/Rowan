@@ -31,7 +31,8 @@
 
 run
 	"install_4_RowanV2.tpz"
-	| ar resolvedProject loadSpecUrl loadSpec projectsHome loadedProjects warnings |
+	| ar resolvedProject loadSpecUrl loadSpec projectsHome loadedProjects 
+		customConditionalAttributes warnings |
 	Rowan projectTools trace startTracing; trace: '--- installing install_4_RowanV2.tpz'.
 	ar := {
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
@@ -41,6 +42,9 @@ run
 	loadSpecUrl := ar at: 1.
 	projectsHome := ar at: 2.
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+true ifTrue: [ 
+	loadSpec customConditionalAttributes addAll: #( 'tests' 'testsV2').
+].
 	resolvedProject := loadSpec
 		projectsHome: projectsHome;
 		resolve.
