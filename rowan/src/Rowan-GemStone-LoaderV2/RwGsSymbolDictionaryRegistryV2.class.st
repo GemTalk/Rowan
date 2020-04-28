@@ -10,13 +10,6 @@ Class {
 }
 
 { #category : 'accessing' }
-RwGsSymbolDictionaryRegistryV2 class >> registry_ImplementationClass [
-
-	^ RwGsSymbolDictionaryRegistry_ImplementationV2
-
-]
-
-{ #category : 'accessing' }
 RwGsSymbolDictionaryRegistryV2 class >> defaultProtocolString [
 
 	^ 'as yet unclassified'
@@ -44,6 +37,13 @@ RwGsSymbolDictionaryRegistryV2 class >> newForSymbolDictionary: aSymbolDictionar
 		_symbolDictionary: aSymbolDictionary;
 		initialize;
 		yourself
+
+]
+
+{ #category : 'accessing' }
+RwGsSymbolDictionaryRegistryV2 class >> registry_ImplementationClass [
+
+	^ RwGsSymbolDictionaryRegistry_ImplementationV2
 
 ]
 
@@ -244,21 +244,25 @@ RwGsSymbolDictionaryRegistryV2 >> addMovedDeletedMethod: compiledMethod for: beh
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass [
-
+RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass oldClassVersion: oldClass [
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
-	self class registry_ImplementationClass addNewClassVersionToAssociation: newClass instance: self
+	self class registry_ImplementationClass
+		addNewClassVersionToAssociation: newClass
+		oldClassVersion: oldClass
+		instance: self
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass implementationClass: implementationClass [
-
+RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass oldClassVersion: oldClass implementationClass: implementationClass [
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
-	implementationClass addNewClassVersionToAssociation: newClass instance: self
+	implementationClass
+		addNewClassVersionToAssociation: newClass
+		oldClassVersion: oldClass
+		instance: self
 ]
 
 { #category : 'private' }
@@ -579,6 +583,26 @@ RwGsSymbolDictionaryRegistryV2 >> initialize [
 
 ]
 
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistryV2 >> loadedClassExtensionsForClass: aClass [
+	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistryV2 >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
+	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistryV2 >> loadedClassForClass: aClass [
+	^ self class registry_ImplementationClass loadedClassForClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistryV2 >> loadedClassForClass: aClass ifAbsent: absentBlock [
+	^ self class registry_ImplementationClass loadedClassForClass: aClass ifAbsent: absentBlock
+]
+
 { #category : 'loaded queries' }
 RwGsSymbolDictionaryRegistryV2 >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock [
 
@@ -668,6 +692,26 @@ RwGsSymbolDictionaryRegistryV2 >> packageRegistry [
 
 ]
 
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistryV2 >> registerLoadedClass: loadedClass forClass: aClass [
+	^ self class registry_ImplementationClass registerLoadedClass: loadedClass forClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistryV2 >> registerLoadedClassExtension: loadedClass forClass: aClass [
+	^ self class registry_ImplementationClass registerLoadedClassExtension: loadedClass forClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClass: loadedClass forClass: aClass [
+	^ self class registry_ImplementationClass unregisterLoadedClass: loadedClass forClass: aClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
+	^ self class registry_ImplementationClass unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
+]
+
 { #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistryV2 >> updateClassProperties: class [
 
@@ -686,44 +730,4 @@ RwGsSymbolDictionaryRegistryV2 >> updateClassProperties: class  implementationCl
 
 	^ implementationClass updateClassProperties: class instance: self
 
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistryV2 >> loadedClassForClass: aClass [
-	^ self class registry_ImplementationClass loadedClassForClass: aClass
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistryV2 >> loadedClassForClass: aClass ifAbsent: absentBlock [
-	^ self class registry_ImplementationClass loadedClassForClass: aClass ifAbsent: absentBlock
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistryV2 >> registerLoadedClass: loadedClass forClass: aClass [
-	^ self class registry_ImplementationClass registerLoadedClass: loadedClass forClass: aClass
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClass: loadedClass forClass: aClass [
-	^ self class registry_ImplementationClass unregisterLoadedClass: loadedClass forClass: aClass
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistryV2 >> loadedClassExtensionsForClass: aClass [
-	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistryV2 >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
-	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistryV2 >> registerLoadedClassExtension: loadedClass forClass: aClass [
-	^ self class registry_ImplementationClass registerLoadedClassExtension: loadedClass forClass: aClass
-]
-
-{ #category : 'class - registration' }
-RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
-	^ self class registry_ImplementationClass unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
 ]
