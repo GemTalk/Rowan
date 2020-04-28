@@ -2276,9 +2276,9 @@ RwRowanSample9Test >> testIssue230 [
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 	resolvedProject := loadSpec resolveStrict.
 
-class := Rowan globalNamed: className.
+	class := Rowan globalNamed: className.
 	resolvedProject load.
-newClass := Rowan globalNamed: className.
+	newClass := Rowan globalNamed: className.
 
 "validate that we got a new class version"
 	self assert: class ~~ newClass.
