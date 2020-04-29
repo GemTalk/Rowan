@@ -169,6 +169,22 @@ RwGsLoadedSymbolDictClass >> removeLoadedMethod: aLoadedMethod [
 ]
 
 { #category : 'private' }
+RwGsLoadedSymbolDictClass >> reregisterLoadedClassMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedClassMethods := aDictionary
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictClass >> reregisterLoadedInstanceMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedInstanceMethods := aDictionary
+]
+
+{ #category : 'private' }
 RwGsLoadedSymbolDictClass >> symbolDictionaryName: aName [
 
 	self propertyAt: 'gs_SymbolDictionary' put: aName asString

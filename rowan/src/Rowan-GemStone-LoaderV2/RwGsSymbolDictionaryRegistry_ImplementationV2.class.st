@@ -187,6 +187,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionsFor
 			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
 				newForClass: class
 				inPackage: loadedPackage.
+			loadedClassExtension
+				reregisterLoadedInstanceMethods:
+						oldLoadedClassExtension loadedInstanceMethods;
+				reregisterLoadedClassMethods: oldLoadedClassExtension loadedClassMethods;
+				yourself.
 			self registerLoadedClassExtension: loadedClassExtension forClass: class.
 			classKey := loadedClassExtension key asSymbol.
 			self
@@ -223,12 +228,13 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class no
 		associationAt: class name
 		ifPresent: [ :assoc | 
 			| loadedClass |
-			loadedClass := self 
-		loadedClassForClass: class
-		ifAbsent: [loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-"GOT TO PUT THE NEW LOADED CLASS INTO PACKAGE "
-self halt.
-loadedClass].
+			loadedClass := self
+				loadedClassForClass: class
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no loaded class for the class '
+								, class name asString printString ].
 			assoc value == class
 				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
 				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
@@ -259,6 +265,10 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class ol
 			(self loadedClassForClass: class ifAbsent: [  ])
 				ifNil: [ 
 					loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
+					loadedClass
+						reregisterLoadedInstanceMethods: oldLoadedClass loadedInstanceMethods;
+						reregisterLoadedClassMethods: oldLoadedClass loadedClassMethods;
+						yourself.
 					self unregisterLoadedClass: oldLoadedClass forClass: oldClass.
 					self registerLoadedClass: loadedClass forClass: class.
 					loadedPackage removeLoadedClass: oldLoadedClass.

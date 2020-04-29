@@ -156,3 +156,19 @@ RwGsLoadedSymbolDictClassExtension >> removeLoadedMethod: aLoadedMethod [
 		ifTrue: [self removeLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self removeLoadedInstanceMethod: aLoadedMethod]
 ]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictClassExtension >> reregisterLoadedClassMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedClassMethods := aDictionary
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictClassExtension >> reregisterLoadedInstanceMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedInstanceMethods := aDictionary
+]
