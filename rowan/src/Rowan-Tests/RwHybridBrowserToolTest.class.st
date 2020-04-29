@@ -294,8 +294,7 @@ RwHybridBrowserToolTest >> testHybridClassRename [
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridCompileMethod [
-
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -306,6 +305,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #()
@@ -314,19 +315,21 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 		poolDictionaries: #()
 		category: packageName1
 		options: #().
+	self assert: (audit := project audit) isEmpty.
 	self assert: normalClass rowanPackageName = packageName1.
 
-	fooMethod := normalClass
-		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
+	self assert: (audit := project audit) isEmpty.
+
 	barMethod := normalClass class
 		rwCompileMethod: 'bar ^''bar'''
-		category: 'accessing'
+		category: '*' , packageName2
 		packageName: packageName2.
 
-	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (audit := project audit) isEmpty.
+	self assert: (normalClass perform: #'bar') = 'bar'.
 	normalInstance := normalClass new.
-	self assert: (normalInstance perform: #foo) = 'foo'.
+	self assert: (normalInstance perform: #'foo') = 'foo'.
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2
