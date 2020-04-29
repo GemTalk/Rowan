@@ -1671,6 +1671,90 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 ]
 
 { #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridMoveMethod_simple_A [
+	"move a method from the package of the class to an extension package"
+
+	|  normalClass projectName packageNames packageName1 packageName2 className audit project |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions1'.
+	packageNames := {packageName1.
+	packageName2.}.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	normalClass
+		rwCompileMethod: 'foo ^foo'
+		category: 'accessing'.
+	self assert: (audit := project audit) isEmpty.
+
+	Rowan projectTools browser
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: '*' , packageName2 asLowercase;
+		yourself.
+	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridMoveMethod_simple_B [
+	"move an extension method from extension package into the package of the class"
+
+	|  normalClass projectName packageNames packageName1 packageName2 className audit project |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions1'.
+	packageNames := {packageName1.
+	packageName2.}.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	normalClass
+		rwCompileMethod: 'foo ^foo'
+		category:  '*' , packageName2 asLowercase.
+	self assert: (audit := project audit) isEmpty.
+
+	Rowan projectTools browser
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing';
+		yourself.
+	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveMethodFromSessionMethodsIntoSessionMethods [
 
 	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className |

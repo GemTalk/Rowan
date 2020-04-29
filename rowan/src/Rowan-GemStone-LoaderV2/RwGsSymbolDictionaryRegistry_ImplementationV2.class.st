@@ -1074,7 +1074,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClassExte
 		ifNotNil: [:aSet |
 			aSet 
 				remove: loadedClassExtension 
-				ifAbsent: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ].
+				ifAbsent: [ "if the class extension has already been removed we are okay" ].
 			aSet isEmpty
 				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
 ]
