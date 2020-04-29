@@ -34,7 +34,8 @@ Class {
 		'isMethodForBlock',
 		'homeMethodOop',
 		'hasMethodHistory',
-		'searchString'
+		'searchString',
+		'definedClassName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -192,7 +193,7 @@ RowanMethodService >> breakPointsFor: aGsNMethod [
       1 to: anArray size by: 3 do: [ :i | 
         list
           add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2) abs) ] ].
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
   ^ list asOrderedCollection
 ]
 
@@ -320,6 +321,16 @@ RowanMethodService >> debugTestAsFailure: testSelector inClassName: theClassName
   RowanCommandResult addResult: self
 ]
 
+{ #category : 'accessing' }
+RowanMethodService >> definedClassName [
+	^definedClassName
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> definedClassName: object [
+	definedClassName := object
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> definedPackage [
 
@@ -331,6 +342,40 @@ RowanMethodService >> definitionClass [
 
 	^RwMethodDefinition
 
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> disableBreakAt: stepPoint [
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
+			ifFalse:[self gsNMethod].
+	method disableBreakAtStepPoint: stepPoint.
+	self update. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> disableMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self disableBreakAt: breakPoint ]
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> enableBreakAt: stepPoint [
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
+			ifFalse:[self gsNMethod].
+	method setBreakAtStepPoint: stepPoint.
+	self update. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> enableMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self enableBreakAt: breakPoint ]
 ]
 
 { #category : 'Updating' }
@@ -672,7 +717,7 @@ RowanMethodService >> setBreakAt: stepPoint [
     ifFalse: [ self gsNMethod ].
   method setBreakAtStepPoint: stepPoint.
   self class breakPointsAreEnabled
-    ifFalse: [ GsNMethod _disableAllBreaks ].
+    ifFalse: [ self disableBreakAt: stepPoint ].
   self update.
   RowanCommandResult addResult: self
 ]
@@ -736,7 +781,7 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 	"Answers an Array of Associations (offset -> selector) indexed by step point"
 
 	|  selectors list |
-	(selectors := aGsNMethod _allDebugInfo: 10) ifNil: [^#()].
+	(selectors := aGsNMethod _sourceOffsetsOfSends) ifNil: [^#()].
 	list := aGsNMethod homeMethod  _sourceOffsets.
 	list := list collect: [:each |
 		| index eachSelector |
@@ -746,7 +791,6 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 		each -> eachSelector.
 	].
 	^list
-
 ]
 
 { #category : 'Accessing' }

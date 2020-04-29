@@ -54,6 +54,12 @@ RowanProcessService class >> onWaitingProcess: aGsProcess [
 ]
 
 { #category : 'initialize' }
+RowanProcessService >> initialize [
+
+	frames := Array new
+]
+
+{ #category : 'initialize' }
 RowanProcessService >> initialize: aGsProcess status: aString [
 
 	| theOrganizer |
@@ -66,9 +72,29 @@ RowanProcessService >> initialize: aGsProcess status: aString [
 	status := aString.
 ]
 
+{ #category : 'accessing' }
+RowanProcessService >> oop [
+	^oop
+]
+
+{ #category : 'accessing' }
+RowanProcessService >> oop: object [
+	oop := object
+]
+
 { #category : 'perform' }
 RowanProcessService >> servicePerform: symbol withArguments: collection [
 	^self perform: symbol withArguments: collection.
+]
+
+{ #category : 'accessing' }
+RowanProcessService >> status [
+	^status
+]
+
+{ #category : 'accessing' }
+RowanProcessService >> status: object [
+	status := object
 ]
 
 { #category : 'updating' }
