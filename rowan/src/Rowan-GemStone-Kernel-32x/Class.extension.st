@@ -20,3 +20,9 @@ Class >> _rwOptionsArray [
   "self _traversalByCallback ifTrue:[ result add: #traverseByCallback  ]." "commented out variant of _optionsArray (https://github.com/dalehenrich/Rowan/issues/292)"
   ^ result
 ]
+
+{ #category : '*rowan-gemstone-kernel-32x' }
+Class >> _rwReservedOop [
+ "returns nil or the SmallInteger specifying a reserved oop ... need System class>>_lastReservedOopNumber to implement correctly"
+  ^ nil
+]

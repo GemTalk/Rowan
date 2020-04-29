@@ -1,10 +1,11 @@
 RwSimpleProjectLoadComponentV2 {
 	#name : 'Core',
 	#condition : 'gemstone',
+	#projectNames : [ ],
 	#componentNames : [
 		'Gemstone32x',
 		'Gemstone32-5'
- ],
+	],
 	#packageNames : [
 		'CypressTonel-Core',
 		'Tonel-Core',

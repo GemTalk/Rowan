@@ -122,6 +122,15 @@ RowanPackageServiceTest >> test_compileClassSelectsPackageAndClass [
 ]
 
 { #category : 'tests' }
+RowanPackageServiceTest >> test_projectIsDirtyWithNonUpdatedPackage [
+  | packageService |
+  packageService := RowanPackageService new name: 'Rowan-Services-Tests'.
+  self assert: packageService projectName equals: nil.
+  packageService projectIsDirty.	"answer is irrelevant for this test"
+  self assert: packageService projectName equals: 'Rowan'
+]
+
+{ #category : 'tests' }
 RowanPackageServiceTest >> test_testClassesIncludesExtensions [
 	| packageService testClassNames |
 	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.

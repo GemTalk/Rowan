@@ -13,24 +13,11 @@ Class {
 		'existsOnDisk',
 		'isLoaded',
 		'projectUrl',
-		'rowanProjectsHome'
+		'rowanProjectsHome',
+		'isDiskDirty'
 	],
 	#category : 'Rowan-Services-Core'
 }
-
-{ #category : 'accessing' }
-RowanProjectService class >> defaultProjectName [
-
-	^RowanServicePreferences current defaultProjectName
-
-]
-
-{ #category : 'accessing' }
-RowanProjectService class >> defaultProjectName: aString [
-
-	RowanServicePreferences current defaultProjectName: aString
-
-]
 
 { #category : 'instance creation' }
 RowanProjectService class >> newNamed: aString [
@@ -69,6 +56,7 @@ RowanProjectService >> basicRefresh [
 	branch := self rowanBranch.
 	projectUrl := self rowanProjectUrl. 
 	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' .
+	isDiskDirty := self isGitDirty.
 	RowanCommandResult addResult: self
 ]
 
@@ -118,6 +106,11 @@ RowanProjectService >> checkout: branchName [
 ]
 
 { #category : 'client commands' }
+RowanProjectService >> checkoutTag: tagName [
+  Rowan gitTools gitcheckoutIn: self repositoryRootPath with: tagName
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> commitWithMessage: message [
 	
 	Rowan projectTools write writeProjectNamed: name.
@@ -143,20 +136,6 @@ RowanProjectService >> createProjectNamed: projectName in: symbolDictionaryName 
 
 ]
 
-{ #category : 'accessing' }
-RowanProjectService >> defaultProjectName [
-
-	^self class defaultProjectName
-
-]
-
-{ #category : 'accessing' }
-RowanProjectService >> defaultProjectName: aString [
-
-	self class defaultProjectName: aString
-
-]
-
 { #category : 'replication' }
 RowanProjectService >> excludedInstVars [
 
@@ -179,7 +158,8 @@ RowanProjectService >> hash [
 RowanProjectService >> initialize [
 
 	super initialize. 
-	packages := Array new
+	packages := Array new.
+	isDiskDirty := false.
 ]
 
 { #category : 'rowan' }
@@ -194,6 +174,17 @@ RowanProjectService >> isDirty: aBoolean [
 
 	isDirty := aBoolean.
 
+]
+
+{ #category : 'client commands' }
+RowanProjectService >> isGitDirty [
+  "From https://github.com/GemTalk/Jadeite/issues/323#issuecomment-442545934"
+
+  [ 
+  ^ (Rowan gitTools gitstatusIn: self repositoryRootPath with: '--porcelain')
+    isEmpty not ]
+    on: Error
+    do: [ :ignored | ^ false ]
 ]
 
 { #category : 'rowan' }
@@ -285,6 +276,17 @@ RowanProjectService >> packageServices [
 
 	^self packageNames collect:[:packageName | RowanPackageService forPackageNamed: packageName]
 
+]
+
+{ #category : 'client commands' }
+RowanProjectService >> performGitCommand: gitCommand with: argsString [
+  | project |
+  project := RwProject newNamed: name.
+  Rowan gitTools
+    performGitCommand: gitCommand
+    in: project repositoryRootPath
+    with: argsString.
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'printing' }
@@ -382,6 +384,12 @@ RowanProjectService >> removeProjectNamed: projectName [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> repositoryRootPath [
+
+	^(RwProject newNamed: name) repositoryRootPath
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> repositorySha [
 	^ self rwProject repositoryCommitId
 ]
@@ -438,12 +446,6 @@ RowanProjectService >> servicePerform: symbol withArguments: collection [
     ifTrue: [ ^ self handleDeletedService ].
   super servicePerform: symbol withArguments: collection.
   self update
-]
-
-{ #category : 'client commands' }
-RowanProjectService >> setDefaultProject [
-
-	self class defaultProjectName: name
 ]
 
 { #category : 'rowan' }

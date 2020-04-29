@@ -88,11 +88,11 @@ RowanDebuggerService >> update [
     with:
       (RowanProcessService onActiveProcess: (Object _objectForOop: initialProcessOop)).
   ProcessorScheduler scheduler readyProcesses
-    do: [ :each | processes add: (RowanProcessService onReadyProcess: each) ].
+    do: [ :each | processes add: (RowanProcessService new oop: each asOop; status: 'ready')]. 
   ProcessorScheduler scheduler suspendedProcesses
-    do: [ :each | processes add: (RowanProcessService onSuspendedProcess: each) ].
+    do: [ :each | processes add: (RowanProcessService new oop: each asOop; status: 'suspended')]. 
   ProcessorScheduler scheduler waitingProcesses
-    do: [ :each | processes add: (RowanProcessService onWaitingProcess: each) ].
+    do: [ :each | processes add: (RowanProcessService new oop: each asOop; status: 'waiting')]. 
   RowanCommandResult addResult: self.
   self releaseProcessOop: initialProcessOop
 ]

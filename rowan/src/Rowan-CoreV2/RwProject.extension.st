@@ -21,6 +21,11 @@ RwProject >> loadedComponents [
 ]
 
 { #category : '*rowan-corev2' }
+RwProject >> packageConvention [
+	^ self _loadedProject packageConvention
+]
+
+{ #category : '*rowan-corev2' }
 RwProject >> platformConditionalAttributes [
 	"Answer the platformConditionalAttributes used to load the project"
 
