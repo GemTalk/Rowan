@@ -128,7 +128,7 @@ RwGsImage class >> removeLoadedClassExtensionsForClass: class [
 
 	(self symbolDictionaryRegistryClass registry_ImplementationClass
 		loadedClassExtensionsForClass: class
-		ifAbsent: [ #() ])
+		ifAbsent: [ #() ]) copy
 		do: [ :loadedClassExtension | 
 			self symbolDictionaryRegistryClass registry_ImplementationClass
 				unregisterLoadedClassExtension: loadedClassExtension
