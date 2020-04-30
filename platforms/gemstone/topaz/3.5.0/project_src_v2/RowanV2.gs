@@ -62996,9 +62996,11 @@ auditLoadedClassExtension: aLoadedClassExtension
 	extensionCategoryName := aLoadedClassExtension loadedPackage asExtensionName.	"'*' , aLoadedClassExtension loadedPackage name"
 	(Rowan globalNamed: aLoadedClassExtension name)
 		ifNil: [ 
-			res add: (RwAuditDetail
-				for: aLoadedClassExtension
-				message: ' Class does not exists for loaded class extension' )]
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClassExtension
+						message: ' Class does not exists for loaded class extension') ]
 		ifNotNil: [ :aBehavior | 
 			| categories |
 			aBehavior == aLoadedClassExtension handle
@@ -63014,11 +63016,11 @@ auditLoadedClassExtension: aLoadedClassExtension
 
 			aLoadedClassExtension loadedProject packageConvention = 'RowanHybrid'
 				ifTrue: [ 
-					categories := (aBehavior _baseCategorys: 0)
+					categories := aBehavior rwMethodCategories
 						ifNil: [ #() ]
 						ifNotNil: [ :catDict | catDict keys ].
 					(categories
-						detect: [ :each | each equalsNoCase: extensionCategoryName ]
+						detect: [ :each | each asString equalsNoCase: extensionCategoryName ]
 						ifNone: [  ])
 						ifNotNil: [ :aCategory | 
 							res
@@ -63040,7 +63042,7 @@ auditLoadedClassExtension: aLoadedClassExtension
 						ifNil: [ #() ]
 						ifNotNil: [ :catDict | catDict keys ].
 					(categories
-						detect: [ :each | each equalsNoCase: extensionCategoryName ]
+						detect: [ :each | each asString equalsNoCase: extensionCategoryName ]
 						ifNone: [  ])
 						ifNotNil: [ :aCategory | 
 							res
@@ -64653,7 +64655,6 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 category: 'method browsing'
 method: RwPrjBrowserToolV2
 addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName
-
 	"If the method is already installed in a different package, remove the method from that package.
 	 If package name matches the name of the package of the class definition, then add the method 
 		to the class definition.
@@ -64661,7 +64662,7 @@ addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className is
 		to a class extension in the named package.
 	 Return the resulting compiled method"
 
-	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved |
+	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved packageConvention |
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
@@ -64676,7 +64677,7 @@ addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className is
 	projectTools := Rowan projectTools.
 	updateBlock := [ :cDef :pDef | 
 	loadedMethodToBeRemoved
-		ifNil: [
+		ifNil: [ 
 			"no method needs to be remove, just add the method to the class or extension def"
 			isMeta
 				ifTrue: [ cDef addClassMethodDefinition: methodDef ]
@@ -64705,15 +64706,14 @@ addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className is
 					loadedClassOrExtension := loadedMethod loadedClass.
 					crDef := loadedClassOrExtension isLoadedClass
 						ifTrue: [ packageDef classDefinitions at: loadedClassOrExtension name ]
-						ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].
-					"remove the method from one package and add it to the other"
+						ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].	"remove the method from one package and add it to the other"
 					isMeta
 						ifTrue: [ 
 							crDef removeClassMethod: methodDef selector.
-							cDef addClassMethodDefinition: methodDef  ]
+							cDef addClassMethodDefinition: methodDef ]
 						ifFalse: [ 
 							crDef removeInstanceMethod: methodDef selector.
-							cDef addInstanceMethodDefinition: methodDef  ] ] ].
+							cDef addInstanceMethodDefinition: methodDef ] ] ].
 	projectSetDefinition addProject: pDef.
 	projectTools load loadProjectSetDefinition: projectSetDefinition.
 	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
@@ -64723,7 +64723,24 @@ addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className is
 		definitionsForClassNamed: className
 		ifFound: [ :classDef :packageDef :projectDef | 
 			packageDef name = packageName
-				ifTrue: [ ^ updateBlock value: classDef value: projectDef ]
+				ifTrue: [ 
+					packageConvention := projectDef packageConvention.
+					packageConvention = 'Rowan'
+						ifTrue: [ 
+							"method protocol is not restricted"
+							 ]
+						ifFalse: [ 
+							packageConvention = 'RowanHybrid'
+								ifTrue: [ 
+									(protocol equalsNoCase: '*' , packageName)
+										ifTrue: [ 
+											self
+												error:
+													'The supplied method protocol ' , protocol printString
+														,
+															' does not follow the expected package convention for ''RowanHybrid''. The protocol indicates an extension method for the package in which the class resides, which is not an extension method' ] ]
+								ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
+					^ updateBlock value: classDef value: projectDef ]
 				ifFalse: [ 
 					"the named package is different from the class definition package"
 					 ] ]
@@ -64733,8 +64750,28 @@ addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className is
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'A package named ' , packageName printString , ' was not found.' ].
+
 	projectDefinition := loadedPackage loadedProject asDefinition.
 	packageDefinition := projectDefinition packageNamed: packageName.
+
+	packageConvention := projectDefinition packageConvention.
+	packageConvention = 'Rowan'
+		ifTrue: [ 
+			"method protocol is not restricted"
+			 ]
+		ifFalse: [ 
+			packageConvention = 'RowanHybrid'
+				ifTrue: [ 
+					| expectedProtocol |
+					expectedProtocol := loadedPackage asExtensionName.
+					(expectedProtocol equalsNoCase: protocol)
+						ifFalse: [ 
+							self
+								error:
+									'The supplied method protocol ' , protocol printString
+										, ' does not follow the expected package convention '
+										, expectedProtocol printString , ' for ''RowanHybrid''' ] ]
+				ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
 
 	classExtensionDef := packageDefinition classExtensions
 		at: className
@@ -78532,7 +78569,7 @@ unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
 		ifNotNil: [:aSet |
 			aSet 
 				remove: loadedClassExtension 
-				ifAbsent: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ].
+				ifAbsent: [ "if the class extension has already been removed we are okay" ].
 			aSet isEmpty
 				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
 %
@@ -78709,6 +78746,11 @@ _loadedClassExtensionsFor: class oldClassVersion: oldClass noNewVersion: noNewVe
 			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
 				newForClass: class
 				inPackage: loadedPackage.
+			loadedClassExtension
+				reregisterLoadedInstanceMethods:
+						oldLoadedClassExtension loadedInstanceMethods;
+				reregisterLoadedClassMethods: oldLoadedClassExtension loadedClassMethods;
+				yourself.
 			self registerLoadedClassExtension: loadedClassExtension forClass: class.
 			classKey := loadedClassExtension key asSymbol.
 			self
@@ -78746,12 +78788,13 @@ _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlo
 		associationAt: class name
 		ifPresent: [ :assoc | 
 			| loadedClass |
-			loadedClass := self 
-		loadedClassForClass: class
-		ifAbsent: [loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-"GOT TO PUT THE NEW LOADED CLASS INTO PACKAGE "
-self halt.
-loadedClass].
+			loadedClass := self
+				loadedClassForClass: class
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no loaded class for the class '
+								, class name asString printString ].
 			assoc value == class
 				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
 				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
@@ -78783,6 +78826,10 @@ _loadedClassFor: class oldClassVersion: oldClass noNewVersion: noNewVersionBlock
 			(self loadedClassForClass: class ifAbsent: [  ])
 				ifNil: [ 
 					loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
+					loadedClass
+						reregisterLoadedInstanceMethods: oldLoadedClass loadedInstanceMethods;
+						reregisterLoadedClassMethods: oldLoadedClass loadedClassMethods;
+						yourself.
 					self unregisterLoadedClass: oldLoadedClass forClass: oldClass.
 					self registerLoadedClass: loadedClass forClass: class.
 					loadedPackage removeLoadedClass: oldLoadedClass.
@@ -79414,6 +79461,24 @@ removeLoadedMethod: aLoadedMethod
 
 category: 'private'
 method: RwGsLoadedSymbolDictClass
+reregisterLoadedClassMethods: aDictionary
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedClassMethods := aDictionary
+%
+
+category: 'private'
+method: RwGsLoadedSymbolDictClass
+reregisterLoadedInstanceMethods: aDictionary
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedInstanceMethods := aDictionary
+%
+
+category: 'private'
+method: RwGsLoadedSymbolDictClass
 symbolDictionaryName: aName
 
 	self propertyAt: 'gs_SymbolDictionary' put: aName asString
@@ -79983,6 +80048,24 @@ removeLoadedMethod: aLoadedMethod
 	aLoadedMethod classIsMeta
 		ifTrue: [self removeLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self removeLoadedInstanceMethod: aLoadedMethod]
+%
+
+category: 'private'
+method: RwGsLoadedSymbolDictClassExtension
+reregisterLoadedClassMethods: aDictionary
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedClassMethods := aDictionary
+%
+
+category: 'private'
+method: RwGsLoadedSymbolDictClassExtension
+reregisterLoadedInstanceMethods: aDictionary
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedInstanceMethods := aDictionary
 %
 
 ! Class implementation for 'RwLoadedMethod'
@@ -90653,6 +90736,12 @@ rwGuaranteePersistentMethodDictForEnv: envId
 		ensure:[ prot _leaveProtectedMode ].
 %
 
+category: '*rowan-gemstone-kernel-32x'
+method: Behavior
+rwMethodCategories
+	^ self _baseCategorys: 0
+%
+
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rwMoveMethod: methodSelector toCategory: categoryName
@@ -95091,7 +95180,7 @@ removeLoadedClassExtensionsForClass: class
 
 	(self symbolDictionaryRegistryClass registry_ImplementationClass
 		loadedClassExtensionsForClass: class
-		ifAbsent: [ #() ])
+		ifAbsent: [ #() ]) copy
 		do: [ :loadedClassExtension | 
 			self symbolDictionaryRegistryClass registry_ImplementationClass
 				unregisterLoadedClassExtension: loadedClassExtension
