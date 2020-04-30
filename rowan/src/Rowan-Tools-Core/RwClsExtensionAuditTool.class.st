@@ -31,9 +31,11 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 	extensionCategoryName := aLoadedClassExtension loadedPackage asExtensionName.	"'*' , aLoadedClassExtension loadedPackage name"
 	(Rowan globalNamed: aLoadedClassExtension name)
 		ifNil: [ 
-			res add: (RwAuditDetail
-				for: aLoadedClassExtension
-				message: ' Class does not exists for loaded class extension' )]
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClassExtension
+						message: ' Class does not exists for loaded class extension') ]
 		ifNotNil: [ :aBehavior | 
 			| categories |
 			aBehavior == aLoadedClassExtension handle
@@ -49,11 +51,11 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 
 			aLoadedClassExtension loadedProject packageConvention = 'RowanHybrid'
 				ifTrue: [ 
-					categories := (aBehavior _baseCategorys: 0)
+					categories := aBehavior rwMethodCategories
 						ifNil: [ #() ]
 						ifNotNil: [ :catDict | catDict keys ].
 					(categories
-						detect: [ :each | each equalsNoCase: extensionCategoryName ]
+						detect: [ :each | each asString equalsNoCase: extensionCategoryName ]
 						ifNone: [  ])
 						ifNotNil: [ :aCategory | 
 							res
@@ -75,7 +77,7 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 						ifNil: [ #() ]
 						ifNotNil: [ :catDict | catDict keys ].
 					(categories
-						detect: [ :each | each equalsNoCase: extensionCategoryName ]
+						detect: [ :each | each asString equalsNoCase: extensionCategoryName ]
 						ifNone: [  ])
 						ifNotNil: [ :aCategory | 
 							res
