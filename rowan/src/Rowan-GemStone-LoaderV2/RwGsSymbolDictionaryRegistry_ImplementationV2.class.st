@@ -176,7 +176,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionsFor
 			^ self ].
 	oldClass == class
 		ifTrue: [ self error: 'internal error - expected a new class version' ].
-	oldLoadedClassExtensionSet
+	oldLoadedClassExtensionSet copy
 		do: [ :oldLoadedClassExtension | 
 			| classKey loadedClassExtension loadedPackage |
 			loadedPackage := oldLoadedClassExtension loadedPackage.
@@ -199,8 +199,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionsFor
 				associationAt: classKey
 				ifPresent: [ :assoc | 
 					assoc value == loadedClassExtension handle
-						ifTrue: [ ^ noNewVersionBlock cull: loadedClassExtension ]
-						ifFalse: [ ^ newVersionBlock cull: loadedClassExtension ] ] ]
+						ifTrue: [ noNewVersionBlock cull: loadedClassExtension ]
+						ifFalse: [ newVersionBlock cull: loadedClassExtension ] ] ]
 ]
 
 { #category : 'private' }
