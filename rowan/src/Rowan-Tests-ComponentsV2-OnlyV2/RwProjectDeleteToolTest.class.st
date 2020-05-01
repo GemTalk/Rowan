@@ -61,7 +61,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 		addInstanceMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method1'
-					protocol: 'accessing'
+					protocol: '*', packageName1
 					source: 'method1 ^1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
@@ -181,7 +181,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 		addInstanceMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method1'
-					protocol: 'accessing'
+					protocol: '*', packageName2
 					source: 'method1 ^1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
@@ -218,7 +218,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
-	self assert: (audit := project audit) isEmpty.
+	self deny: project isLoaded.
 	self assert: registry packageRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
 ]
@@ -356,7 +356,7 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 		addInstanceMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method1'
-					protocol: 'accessing'
+					protocol: '*', packageName1
 					source: 'method1 ^1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.

@@ -2762,7 +2762,7 @@ RwRowanProjectIssuesTest >> testIssue198A [
 
 	| projectName projectNames packageName1 packageName2 className1 className2 theClass 
 		theSubclass projectDefinition theClassDefinition theSubclassDefinition 
-		packageDefinition1 packageDefinition2 |
+		packageDefinition1 packageDefinition2 x newSubclass project audit |
 
 	projectName := 'Issue198Project'.
 	projectNames := {projectName}.
@@ -2776,6 +2776,9 @@ RwRowanProjectIssuesTest >> testIssue198A [
 		packageNames: {packageName1. packageName2}
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: ''.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 
 	theClass := Object
 		rwSubclass: className1
@@ -2808,7 +2811,11 @@ RwRowanProjectIssuesTest >> testIssue198A [
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
-	self assert: theSubclass rowanPackageName = packageName2.
+	self assert: (audit := project audit) isEmpty.
+
+	newSubclass := Rowan globalNamed: className2.
+	self assert: newSubclass ~~ theSubclass.
+	self assert: (x := newSubclass rowanPackageName) = packageName2.
 
 ]
 
@@ -2822,7 +2829,7 @@ RwRowanProjectIssuesTest >> testIssue198B [
 
 	| projectName projectNames packageName1 packageName2 className1 className2 className3 theClass 
 		theSubclass theReferenceClass projectDefinition theClassDefinition theSubclassDefinition 
-		packageDefinition1 packageDefinition2 theReferenceClassDefinition |
+		packageDefinition1 packageDefinition2 theReferenceClassDefinition project audit newSubclass |
 
 	projectName := 'Issue198Project'.
 	projectNames := {projectName}.
@@ -2837,6 +2844,9 @@ RwRowanProjectIssuesTest >> testIssue198B [
 		packageNames: {packageName1. packageName2}
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: ''.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 
 	theClass := Object
 		rwSubclass: className1
@@ -2885,8 +2895,13 @@ RwRowanProjectIssuesTest >> testIssue198B [
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
+	self assert: (audit := project audit) isEmpty.
+
 	self assert: ((Rowan globalNamed: className3) new perform: #boom) == (Rowan globalNamed: className2).
-	self assert: theSubclass rowanPackageName = packageName2.
+
+	newSubclass := Rowan globalNamed: className2.
+	self assert: newSubclass ~~ theSubclass.
+	self assert: newSubclass rowanPackageName = packageName2.
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

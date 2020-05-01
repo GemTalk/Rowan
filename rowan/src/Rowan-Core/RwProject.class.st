@@ -112,6 +112,11 @@ RwProject >> isDirty [
 	^ self _loadedProject isDirty
 ]
 
+{ #category : 'testing' }
+RwProject >> isLoaded [
+	^ self _loadedProjectIfPresent: [ true ] ifAbsent: [ false ]
+]
+
 { #category : 'actions' }
 RwProject >> load [
 	"

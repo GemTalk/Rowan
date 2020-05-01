@@ -570,7 +570,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 		addInstanceMethodDefinition:
 				(RwMethodDefinition
 						newForSelector: #ext1
-						protocol: 'extension'
+						protocol: '*', packageName3
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName3.
@@ -2045,7 +2045,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages [
 	self assert: (audit := project audit) isEmpty.
 
 	newClass := Rowan globalNamed: className.
-	self assert: (x := class rowanPackageName) = packageName2.
+	self assert: (x := newClass rowanPackageName) = packageName2.
 	self assert: newClass ~~ class.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
@@ -2214,7 +2214,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		addInstanceMethodDefinition:
 				(RwMethodDefinition
 						newForSelector: #ext1
-						protocol: 'extension'
+						protocol: '*', packageName2
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
@@ -2252,6 +2252,10 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
+	(classExtensionDefinition
+		instanceMethodDefinitions at: #ext1)
+ 						protocol: '*', packageName4.
+
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2474,7 +2478,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		addInstanceMethodDefinition:
 				(RwMethodDefinition
 						newForSelector: #ext1
-						protocol: 'extension'
+						protocol: '*', packageName2
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
@@ -2511,6 +2515,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
+	(classExtensionDefinition
+		instanceMethodDefinitions at: #ext1)
+ 						protocol: '*', packageName4.
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition addDefinition: projectDefinition2.
