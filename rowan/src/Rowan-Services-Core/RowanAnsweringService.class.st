@@ -163,8 +163,8 @@ RowanAnsweringService >> basicSortedSymbols [
   ((AllUsers userWithId: #'SymbolUser') resolveSymbol: #'AllSymbols') value
     keysDo: [ :symbol | 
       symbol charSize = 1
-        ifTrue: [ sortedSymbols add: symbol ] ].
-  ^sortedSymbols asArray
+        ifTrue: [ (Rowan globalNamed: symbol) ifNotNil: [ sortedSymbols add: symbol ] ] ].
+  ^ sortedSymbols asArray
 ]
 
 { #category : 'client commands' }
