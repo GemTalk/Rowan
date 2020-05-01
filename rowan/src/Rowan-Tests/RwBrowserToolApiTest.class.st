@@ -1978,7 +1978,7 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_unchanged_extension_me
 
 { #category : 'tests' }
 RwBrowserToolApiTest >> testNewClassVersion_session_method_change_extension_method_protocol [
-	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance sessionMethodsSeen project1 project2 audit |
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance sessionMethodsSeen project1 project2 audit x |
 	projectName1 := 'Simple NewVersionD 1'.
 	projectName2 := 'Simple NewVersionD 2'.
 	projectNames := {projectName1.
@@ -2138,8 +2138,8 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_change_extension_meth
 	self assert: (testInstance perform: #'ivar1') isNil.
 	self assert: (testInstance perform: #'foo') = 'foo'.
 	self assert: (testInstance perform: #'bar') = 'bar'.
-	self assert: (testClass categoryOfSelector: #'foo') = #'accessing'.
-	self assert: (testClass class categoryOfSelector: #'bar') = #'accessing'.
+	self assert: (x := testClass categoryOfSelector: #'foo') =  ('*' , project1PackageName2) asSymbol.
+	self assert: (x := testClass class categoryOfSelector: #'bar') = ('*' , project2PackageName2) asSymbol.
 
 	testNewClass := Rowan globalNamed: className1.
 	self assert: testNewClass ~~ testClass.
@@ -2147,8 +2147,8 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_change_extension_meth
 	self should: [ testNewClass perform: #'cvar1' ] raise: MessageNotUnderstood.
 	self assert: (testNewClass perform: #'foo') = 'foo'.
 	self assert: (testNewClass perform: #'bar') = 'bar'.
-	self assert: (testNewClass categoryOfSelector: #'foo') = #'boom'.
-	self assert: (testNewClass class categoryOfSelector: #'bar') = #'boom'.
+	self assert: (x := testNewClass categoryOfSelector: #'foo') = ('*' , project1PackageName2) asSymbol.
+	self assert: (x := testNewClass class categoryOfSelector: #'bar') = ('*' , project2PackageName2) asSymbol.
 
 	testNewInstance := testNewClass new.
 	self should: [ testNewInstance perform: #'ivar1' ] raise: MessageNotUnderstood.
