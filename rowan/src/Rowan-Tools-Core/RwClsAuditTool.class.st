@@ -116,7 +116,7 @@ RwClsAuditTool >> _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta lo
 				add:
 					(RwAuditDetail
 						for: aLoadedClassOrExtension
-						message: 'Missing compiled method>>' , aLoadedMethod name) ]
+						message: 'Missing compiled method>>' , aClassOrMeta printString, '>>', aLoadedMethod selector) ]
 		ifNotNil: [ :aMethod | 
 			aMethod == aLoadedMethod handle
 				ifTrue: [ 

@@ -1979,7 +1979,6 @@ RwBrowserToolApiTest >> testNewClassVersion_multi_project_unchanged_extension_me
 { #category : 'tests' }
 RwBrowserToolApiTest >> testNewClassVersion_session_method_change_extension_method_protocol [
 	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance sessionMethodsSeen project1 project2 audit |
-UserGlobals at: #ConditionalHalt put: false.
 	projectName1 := 'Simple NewVersionD 1'.
 	projectName2 := 'Simple NewVersionD 2'.
 	projectNames := {projectName1.
@@ -2058,7 +2057,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	self assert: (audit := project1 audit) isEmpty.
 	self assert: (audit := project2 audit) isEmpty.
 
-UserGlobals at: #ConditionalHalt put: false.
 	browserTool
 		addOrUpdateMethod: 'bar "class" ^''bar'''
 		inProtocol: '*' , project2PackageName2
@@ -2819,9 +2817,6 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 					classExtensionDef := packageDef classExtensions at: className1.
 					classExtensionDef removeClassMethod: #'bar' ] ].
 
-	self assert: (audit := project1 audit) isEmpty.
-	self assert: (audit := project2 audit) isEmpty.
-
 	self assert: (testClass perform: #civar1) = 1.
 	self assert: (testClass perform: #cvar1) = 2.
 	self assert: (testClass perform: #foo) = 'foo'.
@@ -2840,6 +2835,10 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 	self should: [ testNewInstance perform: #ivar1 ] raise: MessageNotUnderstood.
 	self should: [ (testNewInstance perform: #foo) = 'foo' ] raise: MessageNotUnderstood.
 	self assert: (testNewInstance perform: #bar) = 'bar'.
+
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
+
 	self
 		should: [ 
 			browserTool

@@ -73,7 +73,7 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 												for: aLoadedClassExtension
 												message:
 													'Missing instance method extension category named ' , extensionCategoryName) ] ].
-					categories := (aBehavior class _baseCategorys: 0)
+					categories := (aBehavior class rwMethodCategories)
 						ifNil: [ #() ]
 						ifNotNil: [ :catDict | catDict keys ].
 					(categories
