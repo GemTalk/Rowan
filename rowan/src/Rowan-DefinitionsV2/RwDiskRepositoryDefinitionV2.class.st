@@ -94,5 +94,7 @@ RwDiskRepositoryDefinitionV2 >> resolve [
 
 	"answer true if attaching to an existing repository"
 
-	^ self repositoryRoot exists
+	self repositoryRoot exists
+		ifFalse: [ self repositoryRoot ensureCreateDirectory ].
+	^ true
 ]

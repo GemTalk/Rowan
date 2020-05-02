@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwProject',
-	#superclass : 'RowanInterface',
+	#superclass : 'RwAbstractProject',
 	#category : 'Rowan-Core'
 }
 
@@ -209,12 +209,6 @@ RwProject >> packageNames [
 RwProject >> packages [
 
 	^ self packageNames collect: [ :packageName | RwPackage newNamed: packageName ]
-]
-
-{ #category : 'accessing' }
-RwProject >> project [
-
-	^ self
 ]
 
 { #category : 'accessing' }

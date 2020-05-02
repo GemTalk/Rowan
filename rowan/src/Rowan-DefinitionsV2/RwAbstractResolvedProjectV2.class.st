@@ -49,22 +49,31 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 										ifNil: [ 
 											projectSpecification
 												ifNil: [ 
-													Error
-														signal:
-															'No url has been specified (gitUrl or diskUrl), so the project repository cannot be created' ].
-
-											self _projectSpecification repoType == #'git'
-												ifTrue: [ 
-													RwGitRepositoryDefinitionV2
+													RwNoRepositoryDefinitionV2
 														newNamed: self projectAlias
-														projectsHome: self projectsHome
-														repositoryUrl: ''
-														revision: self _loadSpecification revision ]
-												ifFalse: [ 
-													RwDiskRepositoryDefinitionV2
-														newNamed: self projectAlias
-														projectsHome: self projectsHome
-														repositoryUrl: self diskUrl ] ] ] ] ].
+														projectsHome: nil
+														repositoryUrl: nil ]
+												ifNotNil: [ 
+													self _projectSpecification repoType == #'git'
+														ifTrue: [ 
+															RwGitRepositoryDefinitionV2
+																newNamed: self projectAlias
+																projectsHome: self projectsHome
+																repositoryUrl: ''
+																revision: self _loadSpecification revision ]
+														ifFalse: [ 
+															self _projectSpecification repoType == #'disk'
+																ifTrue: [ 
+																	RwDiskRepositoryDefinitionV2
+																		newNamed: self projectAlias
+																		projectsHome: self projectsHome
+																		repositoryUrl: self diskUrl ]
+																ifFalse: [ 
+																	"#none"
+																	RwNoRepositoryDefinitionV2
+																		newNamed: self projectAlias
+																		projectsHome: nil
+																		repositoryUrl: nil ] ] ] ] ] ] ].
 
 			projectRepository ]
 ]

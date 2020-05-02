@@ -4975,7 +4975,71 @@ true.
 
 doit
 (RowanInterface
-	subclass: 'RwPackage'
+	subclass: 'RwAbstractProject'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractProject
+	subclass: 'RwAbstractUnloadedProject'
+	instVarNames: #( resolvedProject )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractUnloadedProject
+	subclass: 'RwDefinedProject'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractUnloadedProject
+	subclass: 'RwResolvedProject'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAbstractProject
+	subclass: 'RwProject'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -4991,7 +5055,7 @@ true.
 
 doit
 (RowanInterface
-	subclass: 'RwProject'
+	subclass: 'RwPackage'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -6706,6 +6770,22 @@ doit
 (RwDiskRepositoryDefinitionV2
 	subclass: 'RwGitRepositoryDefinitionV2'
 	instVarNames: #( remote remoteUrl committish )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwDiskRepositoryDefinitionV2
+	subclass: 'RwNoRepositoryDefinitionV2'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -48660,56 +48740,125 @@ _projectTools
 	^ Rowan projectTools
 %
 
-! Class implementation for 'RwPackage'
+! Class implementation for 'RwAbstractProject'
 
-!		Instance methods for 'RwPackage'
-
-category: 'accessing'
-method: RwPackage
-definedClasses
-
-"	^ self _packageTools query classesForPackageNamed: self name"
-
-	^ self error: 'not yet implemented'
-%
+!		Instance methods for 'RwAbstractProject'
 
 category: 'accessing'
-method: RwPackage
-extendedClasses
+method: RwAbstractProject
+project
 
-"	^ self _packageTools query classExtensionsForPackageNamed: self name"
-
-	^ self error: 'not yet implemented'
+	^ self
 %
 
-category: 'testing'
-method: RwPackage
-isDirty
-	"a project is dirty if it has changes that are not written to disk, or it's packages 
-		have changes that are not written to  disk."
-
-	^ self _loadedPackage isDirty
+category: 'transitions'
+method: RwAbstractProject
+resolve
+	self subclassResponsibility: #'resolve'
 %
 
-category: 'testing'
-method: RwPackage
-isEmpty
+! Class implementation for 'RwAbstractUnloadedProject'
 
-	^ self _loadedPackage isEmpty
+!		Instance methods for 'RwAbstractUnloadedProject'
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 %
 
-category: 'private'
-method: RwPackage
-_loadedPackage
-
-	^ Rowan image loadedPackageNamed: self name
+category: 'accessing'
+method: RwAbstractUnloadedProject
+projectsHome: aProjectHomeReferenceOrString
+	self _resolvedProject projectsHome: aProjectHomeReferenceOrString
 %
 
-category: 'private'
-method: RwPackage
-_loadedProject
+category: 'accessing'
+method: RwAbstractUnloadedProject
+_resolvedProject
+	^ resolvedProject
+%
 
-	^ self _loadedPackage loadedProject
+! Class implementation for 'RwDefinedProject'
+
+!		Instance methods for 'RwDefinedProject'
+
+category: 'accessing'
+method: RwDefinedProject
+addNewComponentNamed: componentName
+	^ self _resolvedProject addNewComponentNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addPackageNamed: packageName toComponentNamed: componentName
+	^ self _resolvedProject
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addPackagesNamed: packageName toComponentNamed: componentName
+	^ self _resolvedProject
+		addPackagesNamed: packageName
+		toComponentNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+packageNamed: aString
+	^ self _resolvedProject packageNamed: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+repoType: aSymbol
+	"#disk, #git or #none"
+
+	self _resolvedProject repoType: aSymbol
+%
+
+category: 'transitions'
+method: RwDefinedProject
+resolve
+	^ RwResolvedProject fromDefinedProject: self
+%
+
+category: 'accessing'
+method: RwDefinedProject
+_resolvedProject
+	^ resolvedProject
+		ifNil: [ 
+			resolvedProject := RwResolvedProjectV2 new
+				projectName: self name;
+				yourself ]
+%
+
+! Class implementation for 'RwResolvedProject'
+
+!		Class methods for 'RwResolvedProject'
+
+category: 'instance creation'
+classmethod: RwResolvedProject
+fromDefinedProject: aDefinedProject
+	^ (self newNamed: aDefinedProject name)
+		_resolvedProject: aDefinedProject _resolvedProject resolve;
+		yourself
+%
+
+!		Instance methods for 'RwResolvedProject'
+
+category: 'accessing'
+method: RwResolvedProject
+repositoryRoot
+	^ self _resolvedProject repositoryRoot
+%
+
+category: 'accessing'
+method: RwResolvedProject
+_resolvedProject: aResolvedProject
+	resolvedProject := aResolvedProject
 %
 
 ! Class implementation for 'RwProject'
@@ -48812,6 +48961,12 @@ isDirty
 		have changes that are not written to  disk."
 
 	^ self _loadedProject isDirty
+%
+
+category: 'testing'
+method: RwProject
+isLoaded
+	^ self _loadedProjectIfPresent: [ true ] ifAbsent: [ false ]
 %
 
 category: 'actions'
@@ -48920,13 +49075,6 @@ packages
 
 category: 'accessing'
 method: RwProject
-project
-
-	^ self
-%
-
-category: 'accessing'
-method: RwProject
 projectDefinitionPlatformConditionalAttributes
 
 	^ self _loadedProject projectDefinitionPlatformConditionalAttributes
@@ -49015,6 +49163,58 @@ method: RwProject
 _specification
 
 	^ self _loadedProject specification
+%
+
+! Class implementation for 'RwPackage'
+
+!		Instance methods for 'RwPackage'
+
+category: 'accessing'
+method: RwPackage
+definedClasses
+
+"	^ self _packageTools query classesForPackageNamed: self name"
+
+	^ self error: 'not yet implemented'
+%
+
+category: 'accessing'
+method: RwPackage
+extendedClasses
+
+"	^ self _packageTools query classExtensionsForPackageNamed: self name"
+
+	^ self error: 'not yet implemented'
+%
+
+category: 'testing'
+method: RwPackage
+isDirty
+	"a project is dirty if it has changes that are not written to disk, or it's packages 
+		have changes that are not written to  disk."
+
+	^ self _loadedPackage isDirty
+%
+
+category: 'testing'
+method: RwPackage
+isEmpty
+
+	^ self _loadedPackage isEmpty
+%
+
+category: 'private'
+method: RwPackage
+_loadedPackage
+
+	^ Rowan image loadedPackageNamed: self name
+%
+
+category: 'private'
+method: RwPackage
+_loadedProject
+
+	^ self _loadedPackage loadedProject
 %
 
 ! Class implementation for 'RowanService'
@@ -61054,22 +61254,31 @@ _projectRepository
 										ifNil: [ 
 											projectSpecification
 												ifNil: [ 
-													Error
-														signal:
-															'No url has been specified (gitUrl or diskUrl), so the project repository cannot be created' ].
-
-											self _projectSpecification repoType == #'git'
-												ifTrue: [ 
-													RwGitRepositoryDefinitionV2
+													RwNoRepositoryDefinitionV2
 														newNamed: self projectAlias
-														projectsHome: self projectsHome
-														repositoryUrl: ''
-														revision: self _loadSpecification revision ]
-												ifFalse: [ 
-													RwDiskRepositoryDefinitionV2
-														newNamed: self projectAlias
-														projectsHome: self projectsHome
-														repositoryUrl: self diskUrl ] ] ] ] ].
+														projectsHome: nil
+														repositoryUrl: nil ]
+												ifNotNil: [ 
+													self _projectSpecification repoType == #'git'
+														ifTrue: [ 
+															RwGitRepositoryDefinitionV2
+																newNamed: self projectAlias
+																projectsHome: self projectsHome
+																repositoryUrl: ''
+																revision: self _loadSpecification revision ]
+														ifFalse: [ 
+															self _projectSpecification repoType == #'disk'
+																ifTrue: [ 
+																	RwDiskRepositoryDefinitionV2
+																		newNamed: self projectAlias
+																		projectsHome: self projectsHome
+																		repositoryUrl: self diskUrl ]
+																ifFalse: [ 
+																	"#none"
+																	RwNoRepositoryDefinitionV2
+																		newNamed: self projectAlias
+																		projectsHome: nil
+																		repositoryUrl: nil ] ] ] ] ] ] ].
 
 			projectRepository ]
 %
@@ -61660,6 +61869,7 @@ category: 'load specification'
 method: RwResolvedProjectV2
 diskUrl
 	^ self _loadSpecification diskUrl
+		ifNil: [ ^ 'file:' , self _loadSpecification repositoryRoot pathString ]
 %
 
 category: 'load specification'
@@ -62243,6 +62453,8 @@ repositoryCommitId
 category: 'project specification'
 method: RwResolvedProjectV2
 repoType: aSymbol
+	"#disk, #git or #none"
+
 	self _projectSpecification repoType: aSymbol
 %
 
@@ -62830,7 +63042,7 @@ _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoaded
 				add:
 					(RwAuditDetail
 						for: aLoadedClassOrExtension
-						message: 'Missing compiled method>>' , aLoadedMethod name) ]
+						message: 'Missing compiled method>>' , aClassOrMeta printString, '>>', aLoadedMethod selector) ]
 		ifNotNil: [ :aMethod | 
 			aMethod == aLoadedMethod handle
 				ifTrue: [ 
@@ -63038,7 +63250,7 @@ auditLoadedClassExtension: aLoadedClassExtension
 												for: aLoadedClassExtension
 												message:
 													'Missing instance method extension category named ' , extensionCategoryName) ] ].
-					categories := (aBehavior class _baseCategorys: 0)
+					categories := (aBehavior class rwMethodCategories)
 						ifNil: [ #() ]
 						ifNotNil: [ :catDict | catDict keys ].
 					(categories
@@ -70356,7 +70568,9 @@ resolve
 
 	"answer true if attaching to an existing repository"
 
-	^ self repositoryRoot exists
+	self repositoryRoot exists
+		ifFalse: [ self repositoryRoot ensureCreateDirectory ].
+	^ true
 %
 
 category: 'private'
@@ -70649,6 +70863,32 @@ category: 'testing'
 method: RwGitRepositoryDefinitionV2
 useGit
 	^ true
+%
+
+! Class implementation for 'RwNoRepositoryDefinitionV2'
+
+!		Instance methods for 'RwNoRepositoryDefinitionV2'
+
+category: 'testing'
+method: RwNoRepositoryDefinitionV2
+repositoryExists
+	^ false
+%
+
+category: 'accessing'
+method: RwNoRepositoryDefinitionV2
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ nil
+%
+
+category: 'actions'
+method: RwNoRepositoryDefinitionV2
+resolve
+	"nothing on disk"
+
+	^ false
 %
 
 ! Class implementation for 'RwDefinitionSetDefinition'
@@ -76693,60 +76933,6 @@ compiledMethod
 							'internal error - compiled session method not present in method dictionary' ] ]
 %
 
-category: 'deleting'
-method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
-deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class cannot be found, so the method is already gone"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
-deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class cannot be found, so the method is already gone"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMovedLoadedMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
-deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class cannot be found, so the method is already gone"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMovedMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
-deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-	"noop for class extension methods"
-%
-
 category: 'accessing'
 method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
 symbolDictionary
@@ -78735,7 +78921,7 @@ _loadedClassExtensionsFor: class oldClassVersion: oldClass noNewVersion: noNewVe
 			^ self ].
 	oldClass == class
 		ifTrue: [ self error: 'internal error - expected a new class version' ].
-	oldLoadedClassExtensionSet
+	oldLoadedClassExtensionSet copy
 		do: [ :oldLoadedClassExtension | 
 			| classKey loadedClassExtension loadedPackage |
 			loadedPackage := oldLoadedClassExtension loadedPackage.
@@ -78758,8 +78944,8 @@ _loadedClassExtensionsFor: class oldClassVersion: oldClass noNewVersion: noNewVe
 				associationAt: classKey
 				ifPresent: [ :assoc | 
 					assoc value == loadedClassExtension handle
-						ifTrue: [ ^ noNewVersionBlock cull: loadedClassExtension ]
-						ifFalse: [ ^ newVersionBlock cull: loadedClassExtension ] ] ]
+						ifTrue: [ noNewVersionBlock cull: loadedClassExtension ]
+						ifFalse: [ newVersionBlock cull: loadedClassExtension ] ] ]
 %
 
 category: 'private'
@@ -84640,7 +84826,9 @@ repoType
 category: 'accessing'
 method: RwProjectSpecificationV2
 repoType: aSymbol
-	(#(#'disk' #'git') includes: aSymbol asSymbol)
+	"#disk, #git or #none"
+
+	(#(#'disk' #'git' #'none') includes: aSymbol asSymbol)
 		ifFalse: [ self error: 'Unknown repo type ' , aSymbol asSymbol printString ].
 	^ repoType := aSymbol asSymbol
 %
@@ -94314,6 +94502,12 @@ initialize
 	self platform initialize
 %
 
+category: '*rowan-coreV2'
+classmethod: Rowan
+newProjectNamed: projectName
+	^ self platform newProjectNamed: projectName
+%
+
 category: '*rowan-gemstone-core'
 classmethod: Rowan
 sessionAutomaticClassInitializationBlackList
@@ -95586,6 +95780,12 @@ _userPlatformDictionaryForUser: aUserId
 %
 
 !		Instance methods for 'RwPlatform'
+
+category: '*rowan-corev2'
+method: RwPlatform
+newProjectNamed: projectName
+	^ RwDefinedProject newNamed: projectName
+%
 
 category: '*rowan-core'
 method: RwPlatform

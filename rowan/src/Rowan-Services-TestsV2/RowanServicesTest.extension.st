@@ -10,6 +10,7 @@ RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: pac
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictionaryName;
+		repoType: #none;
 		yourself.
 	project resolve.
 

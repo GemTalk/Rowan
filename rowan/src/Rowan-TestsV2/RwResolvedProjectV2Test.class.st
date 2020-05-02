@@ -42,6 +42,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 		projectName: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #none;
 		yourself.
 	projectSpecification := project _projectSpecification.
 	loadSpecification := project _loadSpecification.
@@ -79,6 +80,7 @@ RwResolvedProjectV2Test >> testBasicResolve_2 [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #none;
 		yourself.
 	projectSpecification := project _projectSpecification.
 	self assert: project _validate.

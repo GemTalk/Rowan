@@ -22,6 +22,7 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 		addNewComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
+		repoType: #none;
 		resolve;
 		yourself.
 
@@ -33,7 +34,6 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 "test existsOnDisk"
 
 	self deny: (RwProject newNamed: projectName) existsOnDisk.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -72,5 +72,35 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 "test existsOnDisk"
 
 	self assert: (RwProject newNamed: projectName) existsOnDisk.
+]
 
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwProjectTest >> testNewProject [
+	| projectName componentName packageName definedProject className resolvedProject x |
+	projectName := 'ExampleProject'.
+	componentName := 'Core'.
+	packageName := projectName , '-' , componentName.
+	className := projectName , 'Class'.
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		repoType: #'disk';
+		addNewComponentNamed: componentName;
+		addPackagesNamed: {packageName} toComponentNamed: componentName;
+		yourself.
+
+	((definedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar')
+		category: packageName
+		comment: 'a class')
+		addInstanceMethod: 'ivar ^ivar' protocol: 'accessing';
+		addInstanceMethod: 'ivar: anObject ivar := anObject' protocol: 'accessing';
+		yourself.
+
+	resolvedProject := definedProject resolve.
+
+	self assert: (x := resolvedProject repositoryRoot) exists
 ]

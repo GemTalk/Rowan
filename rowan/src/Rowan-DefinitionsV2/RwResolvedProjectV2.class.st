@@ -348,6 +348,7 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 { #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl [
 	^ self _loadSpecification diskUrl
+		ifNil: [ ^ 'file:' , self _loadSpecification repositoryRoot pathString ]
 ]
 
 { #category : 'load specification' }
@@ -873,6 +874,8 @@ RwResolvedProjectV2 >> repositoryCommitId [
 
 { #category : 'project specification' }
 RwResolvedProjectV2 >> repoType: aSymbol [
+	"#disk, #git or #none"
+
 	self _projectSpecification repoType: aSymbol
 ]
 
