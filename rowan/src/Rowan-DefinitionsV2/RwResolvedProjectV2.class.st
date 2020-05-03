@@ -272,6 +272,12 @@ RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: 
 		comment: commentString
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName [
+	self _loadSpecification addTopLevelComponentNamed: componentName.
+	^ self _projectDefinition addNewComponentNamed: componentName
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish

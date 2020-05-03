@@ -47,6 +47,25 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
+											"without an explicit repository url in the load specificaction, we have 
+												to fall back to using the repoType in the project specification"
+											projectSpecification
+												ifNil: [ 
+													"without a project specification, we are probably in the process 
+														of being created by resolving a load specification If we were
+														created from from scratch, the project specification is 
+														initialized!"
+													self _loadSpecification repositoryRoot exists
+														ifTrue: [ 
+															"since the repository root does exist, we will attach as a 
+																disk project ... if this were git-based project, we expect 
+																the giturl to have be specified in the project spec (weak 
+																assumption? perhaps - local git repo with no remote,
+																but we'll cross that bridge when we come to it)"
+															^ projectRepository := RwDiskRepositoryDefinitionV2
+																newNamed: self projectAlias
+																projectsHome: self projectsHome
+																repositoryUrl: self diskUrl ] ].
 											projectSpecification
 												ifNil: [ 
 													RwNoRepositoryDefinitionV2

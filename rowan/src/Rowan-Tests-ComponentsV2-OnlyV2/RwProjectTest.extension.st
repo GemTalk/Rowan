@@ -75,18 +75,21 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
-RwProjectTest >> testNewProject [
-	| projectName componentName packageName definedProject className resolvedProject x |
+RwProjectTest >> testProjectLifeCycle [
+	| projectName componentName packageName definedProject className resolvedProject1 resolvedProject2 x projectsHome |
 	projectName := 'ExampleProject'.
 	componentName := 'Core'.
 	packageName := projectName , '-' , componentName.
 	className := projectName , 'Class'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
 
 	definedProject := (Rowan newProjectNamed: projectName)
-		projectsHome: self _testRowanProjectsSandbox;
+		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		repoType: #'disk';
-		addNewComponentNamed: componentName;
+		addTopLevelComponentNamed: componentName;
 		addPackagesNamed: {packageName} toComponentNamed: componentName;
 		yourself.
 
@@ -100,7 +103,19 @@ RwProjectTest >> testNewProject [
 		addInstanceMethod: 'ivar: anObject ivar := anObject' protocol: 'accessing';
 		yourself.
 
-	resolvedProject := definedProject resolve.
+	self assert: definedProject class == RwDefinedProject.
+	resolvedProject1 := definedProject resolve.
 
-	self assert: (x := resolvedProject repositoryRoot) exists
+	self assert: resolvedProject1 class == RwResolvedProject.
+	self assert: (x := resolvedProject1 repositoryRoot) exists.
+
+	resolvedProject1 write.
+
+	resolvedProject2 := Rowan
+		projectFromUrl:
+			'file:' , (resolvedProject1 specsRoot / projectName , 'ston') pathString
+		projectsHome: projectsHome.
+
+	self assert: resolvedProject2 class == RwResolvedProject.
+	self assert: (x := resolvedProject2 repositoryRoot) exists.
 ]

@@ -181,6 +181,11 @@ RwLoadSpecificationV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecificationV2 >> addTopLevelComponentNamed: componentName [
+	componentNames add: componentName
+]
+
+{ #category : 'accessing' }
 RwLoadSpecificationV2 >> comment [
 	^ comment ifNil: [ ^ '' ]
 ]

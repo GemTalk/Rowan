@@ -33,6 +33,11 @@ RwDefinedProject >> addPackagesNamed: packageName toComponentNamed: componentNam
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addTopLevelComponentNamed: componentName [
+	^ self _resolvedProject addTopLevelComponentNamed: componentName
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> packageNamed: aString [
 	^ self _resolvedProject packageNamed: aString
 ]
