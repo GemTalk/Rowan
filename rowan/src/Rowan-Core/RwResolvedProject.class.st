@@ -61,20 +61,6 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 ]
 
 { #category : 'instance creation' }
-RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	| loadSpec resolvedProject |
-	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
-		projectsHome: projectsHome;
-		componentNames: componentNames;
-		customConditionalAttributes: customConditionalAttributes;
-		yourself.
-	resolvedProject := loadSpec resolve: platformConditionalAttributes.
-	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
-		yourself
-]
-
-{ #category : 'instance creation' }
 RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)

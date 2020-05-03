@@ -1,6 +1,99 @@
 Extension { #name : 'RwProjectTest' }
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
+RwProjectTest >> _simpleCreateDefinedProjectForRepoType: repoType [
+	| projectName componentName1 packageName1 className1 componentName2 packageName2 className2 definedProject projectsHome |
+	projectName := 'ExampleProject'.
+	componentName1 := 'Core'.
+	packageName1 := projectName , '-' , componentName1.
+	className1 := projectName , 'Class'.
+
+	componentName2 := 'tests/Test'.
+	packageName2 := projectName , '-Tests'.
+	className2 := projectName , 'Test'.
+
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: projectsHome;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		repoType: repoType;
+		addTopLevelComponentNamed: componentName1;
+		addPackagesNamed: {packageName1} toComponentNamed: componentName1;
+		addNewComponentNamed: componentName2 condition: 'tests' comment: 'tests';
+		addPackagesNamed: {packageName2} toComponentNamed: componentName2;
+		addComponentNamed: componentName2 toComponentNamed: componentName1;
+		yourself.
+
+	((definedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: 'Object'
+		instvars: #('ivar')
+		category: packageName1
+		comment: 'a class')
+		addInstanceMethod: 'ivar ^ivar' protocol: 'accessing';
+		addInstanceMethod: 'ivar: anObject ivar := anObject' protocol: 'accessing';
+		yourself.
+
+	((definedProject packageNamed: packageName2)
+		addClassNamed: className2
+		super: 'TestCase'
+		instvars: #()
+		category: packageName2
+		comment: 'a test')
+		addInstanceMethod:
+				'testClass
+	| object |
+	object := ' , className1
+						,
+							' new.
+	object ivar1: 1.
+	self assert: ivar1 = 1'
+			protocol: 'testing';
+		yourself.
+
+	^ definedProject
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwProjectTest >> _simpleCreateResolvedProjectForRepoType: repoType [
+	| definedProject |
+	definedProject := self _simpleCreateDefinedProjectForRepoType: #'disk'.
+
+	self assert: definedProject class == RwDefinedProject.
+	^ definedProject resolve
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwProjectTest >> _simpleProjectLifeCycleForRepoType: repoType [
+	|  resolvedProject1 resolvedProject2 x projectName packageName2 |
+	resolvedProject1 := self _simpleCreateResolvedProjectForRepoType: repoType.
+
+	projectName :=  resolvedProject1 name.
+	packageName2 := projectName , '-Tests'.
+
+	self assert: resolvedProject1 class == RwResolvedProject.
+	self assert: (x := resolvedProject1 repositoryRoot) exists.
+
+	self assert: (resolvedProject1 packageNames includes: packageName2). "packageName2 created and written to disk"
+
+	resolvedProject1 write.
+
+	resolvedProject2 := Rowan
+		projectFromUrl:
+			'file:' , (resolvedProject1 specsRoot / projectName , 'ston') pathString
+		projectsHome: resolvedProject1 projectsHome.
+
+	self assert: resolvedProject2 class == RwResolvedProject.
+	self assert: (x := resolvedProject2 repositoryRoot) exists.
+	self assert: resolvedProject2 useGit == resolvedProject1 useGit.
+
+	self deny: (resolvedProject2 packageNames includes: packageName2) "packageName2 not read from disk"
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwProjectTest >> test_issue428_loaded_no_disk [
 
 	| projectName  packageName projectDefinition projectSetDefinition  componentName |
@@ -75,47 +168,102 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
-RwProjectTest >> testProjectLifeCycle [
-	| projectName componentName packageName definedProject className resolvedProject1 resolvedProject2 x projectsHome |
-	projectName := 'ExampleProject'.
-	componentName := 'Core'.
-	packageName := projectName , '-' , componentName.
-	className := projectName , 'Class'.
-	projectsHome := self _testRowanProjectsSandbox.
+RwProjectTest >> testResolvedProjectAPI [
+	| resolvedProject1 projectName resolvedProject2 x packageName2 loadSpecUrl packageName1 |
+	resolvedProject1 := self _simpleCreateResolvedProjectForRepoType: #'disk'.
 
-	(projectsHome / projectName) ensureDeleteAll.
-
-	definedProject := (Rowan newProjectNamed: projectName)
-		projectsHome: projectsHome;
-		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
-		repoType: #'disk';
-		addTopLevelComponentNamed: componentName;
-		addPackagesNamed: {packageName} toComponentNamed: componentName;
-		yourself.
-
-	((definedProject packageNamed: packageName)
-		addClassNamed: className
-		super: 'Object'
-		instvars: #('ivar')
-		category: packageName
-		comment: 'a class')
-		addInstanceMethod: 'ivar ^ivar' protocol: 'accessing';
-		addInstanceMethod: 'ivar: anObject ivar := anObject' protocol: 'accessing';
-		yourself.
-
-	self assert: definedProject class == RwDefinedProject.
-	resolvedProject1 := definedProject resolve.
+	projectName := resolvedProject1 name.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	loadSpecUrl := 'file:'
+		, (resolvedProject1 specsRoot / projectName , 'ston') pathString.
 
 	self assert: resolvedProject1 class == RwResolvedProject.
 	self assert: (x := resolvedProject1 repositoryRoot) exists.
 
+	self assert: (resolvedProject1 packageNames includes: packageName1).	"packageName1 created and written to disk"
+	self assert: (resolvedProject1 packageNames includes: packageName2).	"packageName2 created and written to disk"
+
 	resolvedProject1 write.
 
+"tests attribute not specified, so packageName2 is NOT read from disk"
 	resolvedProject2 := Rowan
-		projectFromUrl:
-			'file:' , (resolvedProject1 specsRoot / projectName , 'ston') pathString
-		projectsHome: projectsHome.
+		projectFromUrl: loadSpecUrl
+		projectsHome: resolvedProject1 projectsHome
+		componentNames: #('Core' 'tests/Test').
 
 	self assert: resolvedProject2 class == RwResolvedProject.
 	self assert: (x := resolvedProject2 repositoryRoot) exists.
+	self assert: resolvedProject2 useGit == resolvedProject1 useGit.
+
+	self assert: (resolvedProject2 packageNames includes: packageName1).
+	self deny: (resolvedProject2 packageNames includes: packageName2).
+
+"tests attribute is specified, so packageName2 is read from disk"
+	resolvedProject2 := Rowan
+		projectFromUrl: loadSpecUrl
+		projectsHome: resolvedProject1 projectsHome
+		componentNames: #('Core')
+		customConditionalAttributes: #('tests').
+
+	self assert: resolvedProject2 class == RwResolvedProject.
+	self assert: (x := resolvedProject2 repositoryRoot) exists.
+	self assert: resolvedProject2 useGit == resolvedProject1 useGit.
+
+	self assert: (resolvedProject2 packageNames includes: packageName1).
+	self assert: (resolvedProject2 packageNames includes: packageName2).
+
+"tests attribute is specified, so packageName2 is read from disk"
+	resolvedProject2 := Rowan
+		projectFromUrl: loadSpecUrl
+		projectsHome: resolvedProject1 projectsHome
+		componentNames: #('Core')
+		platformConditionalAttributes: #('common' 'tests').
+
+	self assert: resolvedProject2 class == RwResolvedProject.
+	self assert: (x := resolvedProject2 repositoryRoot) exists.
+	self assert: resolvedProject2 useGit == resolvedProject1 useGit.
+
+	self assert: (resolvedProject2 packageNames includes: packageName1).
+	self assert: (resolvedProject2 packageNames includes: packageName2).
+
+"tests attribute is specified, but Core component not loaded because common attribute is not specified,
+	so packageName1 and packageName2 are NOT read from disk"
+	resolvedProject2 := Rowan
+		projectFromUrl: loadSpecUrl
+		projectsHome: resolvedProject1 projectsHome
+		componentNames: #('Core')
+		platformConditionalAttributes: #('tests').
+
+	self assert: resolvedProject2 class == RwResolvedProject.
+	self assert: (x := resolvedProject2 repositoryRoot) exists.
+	self assert: resolvedProject2 useGit == resolvedProject1 useGit.
+
+	self deny: (resolvedProject2 packageNames includes: packageName1).
+	self deny: (resolvedProject2 packageNames includes: packageName2).
+
+"tests attribute is specified and tests/Test component is specified, so packageName2 is read from disk;
+	common attribute is NOT specified, so packageName1 is not read from disk"
+	resolvedProject2 := Rowan
+		projectFromUrl: loadSpecUrl
+		projectsHome: resolvedProject1 projectsHome
+		componentNames: #('Core' 'tests/Test')
+		platformConditionalAttributes: #('tests').
+
+	self assert: resolvedProject2 class == RwResolvedProject.
+	self assert: (x := resolvedProject2 repositoryRoot) exists.
+	self assert: resolvedProject2 useGit == resolvedProject1 useGit.
+
+	self deny: (resolvedProject2 packageNames includes: packageName1).
+	self assert: (resolvedProject2 packageNames includes: packageName2)
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwProjectTest >> testSimpleProjectLifeCycle_disk [
+	self _simpleProjectLifeCycleForRepoType: #disk
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwProjectTest >> testSimpleProjectLifeCycle_git [
+	self _simpleProjectLifeCycleForRepoType: #git
 ]

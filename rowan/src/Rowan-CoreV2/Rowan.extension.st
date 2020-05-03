@@ -33,16 +33,6 @@ Rowan class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentN
 ]
 
 { #category : '*rowan-coreV2' }
-Rowan class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	^ self platform
-		projectFromUrl: loadSpecUrl
-		projectsHome: projectsHome
-		componentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : '*rowan-coreV2' }
 Rowan class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	^ self platform
 		projectFromUrl: loadSpecUrl

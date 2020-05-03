@@ -14,8 +14,23 @@ RwDefinedProject >> _resolvedProject [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	^ self _resolvedProject
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addNewComponentNamed: componentName [
 	^ self _resolvedProject addNewComponentNamed: componentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition comment: aString [
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		condition: condition
+		comment: aString
 ]
 
 { #category : 'accessing' }
