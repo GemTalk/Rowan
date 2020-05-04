@@ -4,7 +4,19 @@ Class {
 	#category : 'Rowan-Core'
 }
 
-{ #category : 'accessing' }
+{ #category : 'instance creation' }
+RwDefinedProject class >> fromResolvedProject: aResolvedProject [
+	^ (self newNamed: aResolvedProject name)
+		_resolvedProject: aResolvedProject _resolvedProject;
+		yourself
+]
+
+{ #category : 'private' }
+RwDefinedProject >> _loadSpecification [
+	^ self _resolvedProject _loadSpecification
+]
+
+{ #category : 'private' }
 RwDefinedProject >> _resolvedProject [
 	^ resolvedProject
 		ifNil: [ 
@@ -26,10 +38,24 @@ RwDefinedProject >> addNewComponentNamed: componentName [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addNewComponentNamed: aComponentName comment: aString [
+	^ self _resolvedProject addNewComponentNamed: aComponentName comment: aString
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
 		condition: condition
+		comment: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		condition: conditionPathArray
 		comment: aString
 ]
 
@@ -53,6 +79,16 @@ RwDefinedProject >> addTopLevelComponentNamed: componentName [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> customConditionalAttributes: anArray [
+	self _loadSpecification customConditionalAttributes: anArray
+]
+
+{ #category : 'testing' }
+RwDefinedProject >> isStrict [
+	^ self _resolvedProject isStrict
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> packageNamed: aString [
 	^ self _resolvedProject packageNamed: aString
 ]
@@ -67,4 +103,19 @@ RwDefinedProject >> repoType: aSymbol [
 { #category : 'transitions' }
 RwDefinedProject >> resolve [
 	^ RwResolvedProject fromDefinedProject: self
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> resolveStrict [
+	^ RwResolvedProject fromStrictDefinedProject: self
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> revision: aString [
+	self _loadSpecification revision: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> specName: aString [
+	self _loadSpecification specName: aString
 ]

@@ -12,6 +12,22 @@ RwResolvedProject class >> fromDefinedProject: aDefinedProject [
 ]
 
 { #category : 'instance creation' }
+RwResolvedProject class >> fromStrictDefinedProject: aDefinedProject [
+	| createBlock oldPolicy |
+	createBlock := [ 
+	(self newNamed: aDefinedProject name)
+		_resolvedProject: aDefinedProject _resolvedProject resolve;
+		yourself ].
+	aDefinedProject isStrict
+		ifTrue: [ ^ createBlock value ].
+	oldPolicy := aDefinedProject repositoryResolutionPolicy.
+	[ 
+	aDefinedProject repositoryResolutionPolicy: #'strict'.
+	^ createBlock value ]
+		ensure: [ aDefinedProject repositoryResolutionPolicy: oldPolicy ]
+]
+
+{ #category : 'instance creation' }
 RwResolvedProject class >> projectFromUrl: loadSpecUrl [
 	| loadSpec resolvedProject |
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
@@ -73,14 +89,44 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself
 ]
 
+{ #category : 'transitions' }
+RwResolvedProject >> defined [
+	^ RwDefinedProject fromResolvedProject: self
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> export [
+	^ self _resolvedProject export
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> exportLoadSpecification [
+	^ self _resolvedProject exportLoadSpecification
+]
+
 { #category : 'accessing' }
-RwResolvedProject >> _resolvedProject: aResolvedProject [
-	resolvedProject := aResolvedProject
+RwResolvedProject >> projectRoots [
+	^ self _resolvedProject projectRoots
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> repository [
+	^ self _resolvedProject repository
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> repositoryRoot [
 	^ self _resolvedProject repositoryRoot
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> revision [
+	^ self _resolvedProject revision
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> revision: aString [
+	self _resolvedProject revision: aString
 ]
 
 { #category : 'accessing' }
