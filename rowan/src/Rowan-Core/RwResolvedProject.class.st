@@ -100,8 +100,42 @@ RwResolvedProject >> export [
 ]
 
 { #category : 'actions' }
+RwResolvedProject >> exportComponents [
+	^ self _resolvedProject exportComponents
+]
+
+{ #category : 'actions' }
 RwResolvedProject >> exportLoadSpecification [
 	^ self _resolvedProject exportLoadSpecification
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> exportPackages [
+	^ self _resolvedProject exportPackages
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
+	^ self _resolvedProject
+		exportPackages: diskProjectSetDefinition
+		packagesRoot: packagesRoot
+		packageFormat: packageFormat
+		packageConvention: packageConvention
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> exportProjectSpecification [
+	^ self _resolvedProject exportProjectSpecification
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> exportTopazFormatTo: filePath [
+	^ self _resolvedProject exportTopazFormatTo: filePath
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+	^ self _resolvedProject exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 ]
 
 { #category : 'accessing' }

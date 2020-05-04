@@ -12,6 +12,11 @@ RwDefinedProject class >> fromResolvedProject: aResolvedProject [
 ]
 
 { #category : 'private' }
+RwDefinedProject >> _gemstoneAllUsersName [
+	^ self _resolvedProject _gemstoneAllUsersName
+]
+
+{ #category : 'private' }
 RwDefinedProject >> _loadSpecification [
 	^ self _resolvedProject _loadSpecification
 ]
@@ -67,6 +72,14 @@ RwDefinedProject >> addPackageNamed: packageName toComponentNamed: componentName
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+	^ self _resolvedProject
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addPackagesNamed: packageName toComponentNamed: componentName [
 	^ self _resolvedProject
 		addPackagesNamed: packageName
@@ -79,8 +92,27 @@ RwDefinedProject >> addTopLevelComponentNamed: componentName [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> componentNamed: componentName [
+	^ self _resolvedProject componentNamed: componentName
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> customConditionalAttributes: anArray [
 	self _loadSpecification customConditionalAttributes: anArray
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
+	self _resolvedProject
+		gemstoneSetDefaultSymbolDictNameForUser: userId
+		to: symbolDictName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
+	self _resolvedProject
+		gemstoneSetSymbolDictName: symbolDictName
+		forPackageNamed: packageName
 ]
 
 { #category : 'testing' }
