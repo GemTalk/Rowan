@@ -7,6 +7,7 @@ commitComment := ''.
 RwTestProjectLibraryGeneratorV2 new
 	projectName: 'RowanSample9';
 	projectUrl: 'git@github.com:dalehenrich/RowanSample9.git';
+	primeIndexCardMap;
 	preserveChangesOnGithub: false;
 	genSpec_0000: commitComment;
 	genSpec_0001: commitComment;
@@ -74,7 +75,9 @@ Class {
 		'projectsHome',
 		'projectName',
 		'projectUrl',
-		'preserveChangesOnGithub'
+		'preserveChangesOnGithub',
+		'indexCardMap',
+		'preserveRowanSHA'
 	],
 	#category : 'Rowan-TestsV2'
 }
@@ -3128,8 +3131,16 @@ RwTestProjectLibraryGeneratorV2 >> _addSimpleDefinitionsFor: resolvedProject pro
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV2 >> _createCard: postfix specName: specName title: title index: index derivedFrom: parentbranch comment: comment [
+	| indexName sha |
+	indexName := 'index_' , postfix.
+	sha := self preserveRowanSHA
+		ifTrue: [ 
+			self indexCardMap
+				at: indexName
+				ifAbsent: [ (RwProject newNamed: 'Rowan') repositoryCommitId ] ]
+		ifFalse: [ (RwProject newNamed: 'Rowan') repositoryCommitId ].
 	^ RwTestProjectLibraryIndexCard new
-		name: 'index_' , postfix;
+		name: indexName;
 		title: title;
 		specName: specName;
 		index: index;
@@ -3137,7 +3148,7 @@ RwTestProjectLibraryGeneratorV2 >> _createCard: postfix specName: specName title
 		comment: comment;
 		rowanIssues: {};
 		gemstoneIssues: {};
-		rowanSHA: (RwProject newNamed: 'Rowan') repositoryCommitId;
+		rowanSHA: sha;
 		yourself
 ]
 
@@ -6331,6 +6342,11 @@ RwTestProjectLibraryGeneratorV2 >> genSpec_0056: commitMessage [
 ]
 
 { #category : 'accessing' }
+RwTestProjectLibraryGeneratorV2 >> indexCardMap [
+	^ indexCardMap
+]
+
+{ #category : 'accessing' }
 RwTestProjectLibraryGeneratorV2 >> preserveChangesOnGithub [
 	"if true, modifications to git repository will be pushed to remote"
 
@@ -6342,6 +6358,36 @@ RwTestProjectLibraryGeneratorV2 >> preserveChangesOnGithub: aBool [
 	"if true, modifications to git repository will be pushed to remote"
 
 	preserveChangesOnGithub := aBool
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGeneratorV2 >> preserveRowanSHA [
+	^ preserveRowanSHA ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGeneratorV2 >> preserveRowanSHA: aBool [
+	preserveRowanSHA := aBool
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGeneratorV2 >> primeIndexCardMap [
+	self preserveRowanSHA
+		ifFalse: [ ^ self ].
+	Rowan projectTools git
+		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
+		with: 'git@github.com:dalehenrich/RowanSample9.git'.
+	indexCardMap := Dictionary new.
+	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9' / 'indexCards')
+		files
+		do: [ :file | 
+			| indexCard |
+			file
+				readStreamDo: [ :fileStream | 
+					| stream |
+					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+					indexCard := STON fromStream: stream ].
+			indexCardMap at: indexCard name put: indexCard rowanSHA ]
 ]
 
 { #category : 'accessing' }
