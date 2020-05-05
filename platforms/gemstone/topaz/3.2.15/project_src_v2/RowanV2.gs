@@ -6737,6 +6737,38 @@ true.
 %
 
 doit
+(RwDiskRepositoryDefinitionV2
+	subclass: 'RwNoRepositoryDefinitionV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwDiskRepositoryDefinitionV2
+	subclass: 'RwReadOnlyDiskRepositoryDefinitionV2'
+	instVarNames: #( sesstionTempsKey commitId )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (RwDefinition
 	subclass: 'RwDefinitionSetDefinition'
 	instVarNames: #( definitions )
@@ -8271,7 +8303,7 @@ true.
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -49003,6 +49035,12 @@ isDirty
 	^ self _loadedProject isDirty
 %
 
+category: 'testing'
+method: RwProject
+isLoaded
+	^ self _loadedProjectIfPresent: [ true ] ifAbsent: [ false ]
+%
+
 category: 'actions'
 method: RwProject
 load
@@ -61241,24 +61279,75 @@ _projectRepository
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
-											projectSpecification
+											self _loadSpecification readOlyDiskUrl
+												ifNotNil: [ :urlString | 
+													RwReadOnlyDiskRepositoryDefinitionV2
+														newNamed: self projectAlias
+														projectsHome: self projectsHome
+														repositoryUrl: urlString ]
 												ifNil: [ 
-													Error
-														signal:
-															'No url has been specified (gitUrl or diskUrl), so the project repository cannot be created' ].
-
-											self _projectSpecification repoType == #'git'
-												ifTrue: [ 
-													RwGitRepositoryDefinitionV2
-														newNamed: self projectAlias
-														projectsHome: self projectsHome
-														repositoryUrl: ''
-														revision: self _loadSpecification revision ]
-												ifFalse: [ 
-													RwDiskRepositoryDefinitionV2
-														newNamed: self projectAlias
-														projectsHome: self projectsHome
-														repositoryUrl: self diskUrl ] ] ] ] ].
+													"without an explicit repository url in the load specificaction, we have 
+												to fall back to using the repoType in the project specification. If the 
+												logic that follows fails, then a git or disk url should be explicitly specified
+												in the load spec before resolving."
+													projectSpecification
+														ifNil: [ 
+															"without a project specification, we are probably in the process 
+														of being created by resolving a load specification If we were
+														created from from scratch, the project specification is 
+														initialized!"
+															self _loadSpecification repositoryRoot exists
+																ifTrue: [ 
+																	| gitHome gitTool repositoryRootPath |
+																	"since the repository root does exist, we will attach as a 
+																disk project or git project, depending upon whether or git is present
+																and the git home is equal to the repositoryRoot"
+																	gitTool := Rowan projectTools git.
+																	repositoryRootPath := self _loadSpecification repositoryRoot
+																		pathString.
+																	^ projectRepository := ((gitTool
+																		gitPresentIn: repositoryRootPath)
+																		and: [ 
+																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
+																				asFileReference = self _loadSpecification repositoryRoot ])
+																		ifTrue: [ 
+																			RwGitRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: ''
+																				revision: self _loadSpecification revision ]
+																		ifFalse: [ 
+																			RwDiskRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: self diskUrl ] ] ].
+													projectSpecification
+														ifNil: [ 
+															RwNoRepositoryDefinitionV2
+																newNamed: self projectAlias
+																projectsHome: nil
+																repositoryUrl: nil ]
+														ifNotNil: [ 
+															self _projectSpecification repoType == #'git'
+																ifTrue: [ 
+																	RwGitRepositoryDefinitionV2
+																		newNamed: self projectAlias
+																		projectsHome: self projectsHome
+																		repositoryUrl: ''
+																		revision: self _loadSpecification revision ]
+																ifFalse: [ 
+																	self _projectSpecification repoType == #'disk'
+																		ifTrue: [ 
+																			RwDiskRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: self diskUrl ]
+																		ifFalse: [ 
+																			"#none"
+																			RwNoRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: nil
+																				repositoryUrl: nil ] ] ] ] ] ] ] ].
 
 			projectRepository ]
 %
@@ -62276,6 +62365,18 @@ read: platformConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: '-- loader compat --'
+method: RwResolvedProjectV2
+readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	| urlString |
+	urlString := 'file:' , repositoryRootPathString.
+	projectRepository := RwReadOnlyDiskRepositoryDefinitionV2
+		newNamed: self projectAlias
+		projectsHome: self projectsHome
+		repositoryUrl: urlString.
+	projectRepository commitId: commitId
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 readPackageNames: packageNames
@@ -63019,7 +63120,7 @@ _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoaded
 				add:
 					(RwAuditDetail
 						for: aLoadedClassOrExtension
-						message: 'Missing compiled method>>' , aLoadedMethod name) ]
+						message: 'Missing compiled method>>' , aClassOrMeta printString, '>>', aLoadedMethod selector) ]
 		ifNotNil: [ :aMethod | 
 			aMethod == aLoadedMethod handle
 				ifTrue: [ 
@@ -63227,7 +63328,7 @@ auditLoadedClassExtension: aLoadedClassExtension
 												for: aLoadedClassExtension
 												message:
 													'Missing instance method extension category named ' , extensionCategoryName) ] ].
-					categories := (aBehavior class _baseCategorys: 0)
+					categories := (aBehavior class rwMethodCategories)
 						ifNil: [ #() ]
 						ifNotNil: [ :catDict | catDict keys ].
 					(categories
@@ -70840,6 +70941,83 @@ useGit
 	^ true
 %
 
+! Class implementation for 'RwNoRepositoryDefinitionV2'
+
+!		Instance methods for 'RwNoRepositoryDefinitionV2'
+
+category: 'testing'
+method: RwNoRepositoryDefinitionV2
+repositoryExists
+	^ false
+%
+
+category: 'accessing'
+method: RwNoRepositoryDefinitionV2
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ nil
+%
+
+category: 'actions'
+method: RwNoRepositoryDefinitionV2
+resolve
+	"nothing on disk"
+
+	^ false
+%
+
+! Class implementation for 'RwReadOnlyDiskRepositoryDefinitionV2'
+
+!		Instance methods for 'RwReadOnlyDiskRepositoryDefinitionV2'
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+commitId
+	^ commitId ifNil: [ '' ]
+%
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+commitId: aString
+	commitId := aString
+%
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ repositoryRoot
+		ifNil: [ 
+			repositoryUrl
+				ifNil: [ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
+				ifNotNil: [ :urlString | 
+					^ (SessionTemps current
+						at: self _sesstionTempsKey
+						ifAbsentPut: [ 
+							| url |
+							url := urlString asRwUrl.
+							url scheme = 'file'
+								ifFalse:
+									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ]
+										url pathString ]) asFileReference ] ]
+%
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+repositoryRoot: pathStringOrReference
+	SessionTemps current removeKey: self _sesstionTempsKey ifAbsent: [  ].
+	super repositoryRoot: pathStringOrReference
+%
+
+category: 'private'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+_sesstionTempsKey
+	^ sesstionTempsKey
+		ifNil: [ sesstionTempsKey := 'rwReadOnlyRepositoryKey_' , self asOop printString ]
+%
+
 ! Class implementation for 'RwDefinitionSetDefinition'
 
 !		Instance methods for 'RwDefinitionSetDefinition'
@@ -76882,60 +77060,6 @@ compiledMethod
 							'internal error - compiled session method not present in method dictionary' ] ]
 %
 
-category: 'deleting'
-method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
-deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class cannot be found, so the method is already gone"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
-deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class cannot be found, so the method is already gone"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMovedLoadedMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
-deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class cannot be found, so the method is already gone"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMovedMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
-deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-	"noop for class extension methods"
-%
-
 category: 'accessing'
 method: RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
 symbolDictionary
@@ -78924,7 +79048,7 @@ _loadedClassExtensionsFor: class oldClassVersion: oldClass noNewVersion: noNewVe
 			^ self ].
 	oldClass == class
 		ifTrue: [ self error: 'internal error - expected a new class version' ].
-	oldLoadedClassExtensionSet
+	oldLoadedClassExtensionSet copy
 		do: [ :oldLoadedClassExtension | 
 			| classKey loadedClassExtension loadedPackage |
 			loadedPackage := oldLoadedClassExtension loadedPackage.
@@ -78947,8 +79071,8 @@ _loadedClassExtensionsFor: class oldClassVersion: oldClass noNewVersion: noNewVe
 				associationAt: classKey
 				ifPresent: [ :assoc | 
 					assoc value == loadedClassExtension handle
-						ifTrue: [ ^ noNewVersionBlock cull: loadedClassExtension ]
-						ifFalse: [ ^ newVersionBlock cull: loadedClassExtension ] ] ]
+						ifTrue: [ noNewVersionBlock cull: loadedClassExtension ]
+						ifFalse: [ newVersionBlock cull: loadedClassExtension ] ] ]
 %
 
 category: 'private'
@@ -84365,6 +84489,18 @@ projectUrl
 
 category: 'accessing'
 method: RwLoadSpecificationV2
+readonlyDiskUrl
+	^ readonlyDiskUrl
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+readonlyDiskUrl: anUrlString
+	readonlyDiskUrl := anUrlString
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
 repositoryResolutionPolicy
 	^repositoryResolutionPolicy
 %
@@ -84517,11 +84653,11 @@ _validate
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
 	repoUrls := {}.
-	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
+	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #readonlyDiskUrl)
 		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
 	repoUrls size > 1
-		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
+		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl) must be be set' ].
+	(repoUrls size = 0 or: [ (repoUrls includes: #'diskUrl') or: [repoUrls includes: #'readonlyDiskUrl']])
 		ifTrue: [ 
 			self revision
 				ifNotNil: [ :rev | 
@@ -96202,6 +96338,28 @@ platformConditionalAttributes
 
 category: '*rowan-corev2'
 method: RwProject
+readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	| resolvedProject originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project
+						_readOnlyRepositoryRoot: repositoryRootPathString
+						commitId: commitId ] ].
+	resolvedProject := self asDefinition.
+	resolvedProject
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId.
+	^ resolvedProject loadProjectSet
+%
+
+category: '*rowan-corev2'
+method: RwProject
 repositoryRoot
 	^ self _loadedProject repositoryRoot
 %
@@ -96291,6 +96449,14 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 	^ self _gemstonePlatformSpec
 		useSessionMethodsForExtensionsForPackageNamed: packageName
+%
+
+category: '*rowan-corev2'
+method: RwProject
+_readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	self _loadedProject resolvedProject
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
 %
 
 category: '*rowan-corev2'

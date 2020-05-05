@@ -8,6 +8,7 @@ Class {
 		'gitUrl',
 		'diskUrl',
 		'mercurialUrl',
+		'readonlyDiskUrl',
 		'svnUrl',
 		'revision',
 		'projectSpecFile',
@@ -76,11 +77,11 @@ RwLoadSpecificationV2 >> _validate [
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
 	repoUrls := {}.
-	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
+	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #readonlyDiskUrl)
 		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
 	repoUrls size > 1
-		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
+		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl) must be be set' ].
+	(repoUrls size = 0 or: [ (repoUrls includes: #'diskUrl') or: [repoUrls includes: #'readonlyDiskUrl']])
 		ifTrue: [ 
 			self revision
 				ifNotNil: [ :rev | 
@@ -505,6 +506,16 @@ RwLoadSpecificationV2 >> projectUrl [
 			self svnUrl
 				ifNotNil: [ :urlString | urlString ]
 				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ] ] ]
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> readonlyDiskUrl [
+	^ readonlyDiskUrl
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> readonlyDiskUrl: anUrlString [
+	readonlyDiskUrl := anUrlString
 ]
 
 { #category : 'accessing' }

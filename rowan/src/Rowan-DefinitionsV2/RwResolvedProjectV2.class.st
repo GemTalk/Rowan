@@ -732,6 +732,17 @@ RwResolvedProjectV2 >> read: platformConditionalAttributes [
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	| urlString |
+	urlString := 'file:' , repositoryRootPathString.
+	projectRepository := RwReadOnlyDiskRepositoryDefinitionV2
+		newNamed: self projectAlias
+		projectsHome: self projectsHome
+		repositoryUrl: urlString.
+	projectRepository commitId: commitId
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> readPackageNames: packageNames [
 	| format visitorClass |

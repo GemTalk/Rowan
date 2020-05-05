@@ -1,6 +1,13 @@
 Extension { #name : 'RwProject' }
 
 { #category : '*rowan-corev2' }
+RwProject >> _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	self _loadedProject resolvedProject
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
+]
+
+{ #category : '*rowan-corev2' }
 RwProject >> _repositoryRoot: aFileReference [
 	self _loadedProject resolvedProject repositoryRoot: aFileReference
 ]
@@ -30,6 +37,27 @@ RwProject >> platformConditionalAttributes [
 	"Answer the platformConditionalAttributes used to load the project"
 
 	^ self _loadedProject platformConditionalAttributes
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	| resolvedProject originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project
+						_readOnlyRepositoryRoot: repositoryRootPathString
+						commitId: commitId ] ].
+	resolvedProject := self asDefinition.
+	resolvedProject
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId.
+	^ resolvedProject loadProjectSet
 ]
 
 { #category : '*rowan-corev2' }
