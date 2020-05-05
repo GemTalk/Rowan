@@ -288,6 +288,11 @@ RwResolvedProjectV2 >> comment: aString [
 ]
 
 { #category : 'querying' }
+RwResolvedProjectV2 >> commitId [
+	^ self _projectRepository commitId
+]
+
+{ #category : 'querying' }
 RwResolvedProjectV2 >> commitLog: logLimit [
 	^ self _projectRepository commitLog: logLimit
 ]

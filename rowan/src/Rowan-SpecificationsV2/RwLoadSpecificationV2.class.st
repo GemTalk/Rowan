@@ -81,7 +81,7 @@ RwLoadSpecificationV2 >> _validate [
 		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
 	repoUrls size > 1
 		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ (repoUrls includes: #'diskUrl') or: [repoUrls includes: #'readonlyDiskUrl']])
+	(repoUrls size = 0 or: [ (repoUrls includes: 'diskUrl') or: [repoUrls includes: 'readonlyDiskUrl']])
 		ifTrue: [ 
 			self revision
 				ifNotNil: [ :rev | 
@@ -163,6 +163,8 @@ RwLoadSpecificationV2 >> = anObject [
 																		and: [ 
 																			self diskUrl = anObject diskUrl
 																				and: [ 
+																			self readonlyDiskUrl = anObject readonlyDiskUrl
+																				and: [ 
 																					self mercurialUrl = anObject mercurialUrl
 																						and: [ 
 																							self svnUrl = anObject svnUrl
@@ -172,7 +174,7 @@ RwLoadSpecificationV2 >> = anObject [
 																											self comment = anObject comment
 																												and: [ 
 																													self _platformProperties = anObject _platformProperties
-																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'visiting' }
@@ -359,6 +361,7 @@ RwLoadSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self projectSpecFile hash.
 	hashValue := hashValue bitXor: self gitUrl hash.
 	hashValue := hashValue bitXor: self diskUrl hash.
+	hashValue := hashValue bitXor: self readonlyDiskUrl hash.
 	hashValue := hashValue bitXor: self mercurialUrl hash.
 	hashValue := hashValue bitXor: self svnUrl hash.
 	hashValue := hashValue bitXor: self revision hash.
@@ -505,7 +508,7 @@ RwLoadSpecificationV2 >> projectUrl [
 		ifNil: [ 
 			self svnUrl
 				ifNotNil: [ :urlString | urlString ]
-				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ] ] ]
+				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ifNil: [ self readonlyDiskUrl ]] ] ]
 ]
 
 { #category : 'accessing' }

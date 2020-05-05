@@ -55,6 +55,12 @@ RwProject >> comment [
 	^ self _specification comment
 ]
 
+{ #category : 'qurying' }
+RwProject >> commitId [
+
+	^ self _loadedProject commitId
+]
+
 { #category : 'querying' }
 RwProject >> componentForPackageNamed: packageName [
 	"Answer nil if no component found"

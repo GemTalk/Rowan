@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : 'private' }
-RwReadOnlyDiskRepositoryDefinitionV2 >> _sesstionTempsKey [
+RwReadOnlyDiskRepositoryDefinitionV2 >> _sessionTempsKey [
 	^ sesstionTempsKey
-		ifNil: [ sesstionTempsKey := 'rwReadOnlyRepositoryKey_' , self asOop printString ]
+		ifNil: [ sesstionTempsKey := ('rwReadOnlyRepositoryKey_' , self asOop printString) asSymbol ]
 ]
 
 { #category : 'accessing' }
@@ -34,18 +34,18 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot [
 				ifNil: [ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
 				ifNotNil: [ :urlString | 
 					^ (SessionTemps current
-						at: self _sesstionTempsKey
+						at: self _sessionTempsKey
 						ifAbsentPut: [ 
 							| url |
 							url := urlString asRwUrl.
 							url scheme = 'file'
 								ifFalse:
-									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ]
+									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ].
 										url pathString ]) asFileReference ] ]
 ]
 
 { #category : 'accessing' }
 RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
-	SessionTemps current removeKey: self _sesstionTempsKey ifAbsent: [  ].
+	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
 	super repositoryRoot: pathStringOrReference
 ]

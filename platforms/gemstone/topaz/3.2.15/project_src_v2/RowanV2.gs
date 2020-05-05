@@ -48972,6 +48972,13 @@ comment
 	^ self _specification comment
 %
 
+category: 'qurying'
+method: RwProject
+commitId
+
+	^ self _loadedProject commitId
+%
+
 category: 'querying'
 method: RwProject
 componentForPackageNamed: packageName
@@ -61869,6 +61876,12 @@ comment: aString
 
 category: 'querying'
 method: RwResolvedProjectV2
+commitId
+	^ self _projectRepository commitId
+%
+
+category: 'querying'
+method: RwResolvedProjectV2
 commitLog: logLimit
 	^ self _projectRepository commitLog: logLimit
 %
@@ -70994,28 +71007,28 @@ repositoryRoot
 				ifNil: [ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
 				ifNotNil: [ :urlString | 
 					^ (SessionTemps current
-						at: self _sesstionTempsKey
+						at: self _sessionTempsKey
 						ifAbsentPut: [ 
 							| url |
 							url := urlString asRwUrl.
 							url scheme = 'file'
 								ifFalse:
-									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ]
+									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ].
 										url pathString ]) asFileReference ] ]
 %
 
 category: 'accessing'
 method: RwReadOnlyDiskRepositoryDefinitionV2
 repositoryRoot: pathStringOrReference
-	SessionTemps current removeKey: self _sesstionTempsKey ifAbsent: [  ].
+	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
 	super repositoryRoot: pathStringOrReference
 %
 
 category: 'private'
 method: RwReadOnlyDiskRepositoryDefinitionV2
-_sesstionTempsKey
+_sessionTempsKey
 	^ sesstionTempsKey
-		ifNil: [ sesstionTempsKey := 'rwReadOnlyRepositoryKey_' , self asOop printString ]
+		ifNil: [ sesstionTempsKey := ('rwReadOnlyRepositoryKey_' , self asOop printString) asSymbol ]
 %
 
 ! Class implementation for 'RwDefinitionSetDefinition'
@@ -81438,6 +81451,13 @@ checkout: revision
 	^ self resolvedProject repository checkout: revision
 %
 
+category: 'queries'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+commitId
+
+	^ self resolvedProject commitId
+%
+
 category: 'commit log'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 commitLog: logLimit
@@ -84100,6 +84120,8 @@ method: RwLoadSpecificationV2
 																		and: [ 
 																			self diskUrl = anObject diskUrl
 																				and: [ 
+																			self readonlyDiskUrl = anObject readonlyDiskUrl
+																				and: [ 
 																					self mercurialUrl = anObject mercurialUrl
 																						and: [ 
 																							self svnUrl = anObject svnUrl
@@ -84109,7 +84131,7 @@ method: RwLoadSpecificationV2
 																											self comment = anObject comment
 																												and: [ 
 																													self _platformProperties = anObject _platformProperties
-																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 %
 
 category: 'visiting'
@@ -84321,6 +84343,7 @@ hash
 	hashValue := hashValue bitXor: self projectSpecFile hash.
 	hashValue := hashValue bitXor: self gitUrl hash.
 	hashValue := hashValue bitXor: self diskUrl hash.
+	hashValue := hashValue bitXor: self readonlyDiskUrl hash.
 	hashValue := hashValue bitXor: self mercurialUrl hash.
 	hashValue := hashValue bitXor: self svnUrl hash.
 	hashValue := hashValue bitXor: self revision hash.
@@ -84484,7 +84507,7 @@ projectUrl
 		ifNil: [ 
 			self svnUrl
 				ifNotNil: [ :urlString | urlString ]
-				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ] ] ]
+				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ifNil: [ self readonlyDiskUrl ]] ] ]
 %
 
 category: 'accessing'
@@ -84657,7 +84680,7 @@ _validate
 		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
 	repoUrls size > 1
 		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ (repoUrls includes: #'diskUrl') or: [repoUrls includes: #'readonlyDiskUrl']])
+	(repoUrls size = 0 or: [ (repoUrls includes: 'diskUrl') or: [repoUrls includes: 'readonlyDiskUrl']])
 		ifTrue: [ 
 			self revision
 				ifNotNil: [ :rev | 
@@ -96339,7 +96362,7 @@ platformConditionalAttributes
 category: '*rowan-corev2'
 method: RwProject
 readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	| resolvedProject originalRepositoryRoot |
+	| originalRepositoryRoot |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
 	originalRepositoryRoot := self repositoryRoot.
@@ -96351,11 +96374,9 @@ readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 					project
 						_readOnlyRepositoryRoot: repositoryRootPathString
 						commitId: commitId ] ].
-	resolvedProject := self asDefinition.
-	resolvedProject
-		readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId.
-	^ resolvedProject loadProjectSet
+	self
+		_readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
 %
 
 category: '*rowan-corev2'

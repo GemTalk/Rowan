@@ -41,7 +41,7 @@ RwProject >> platformConditionalAttributes [
 
 { #category : '*rowan-corev2' }
 RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-	| resolvedProject originalRepositoryRoot |
+	| originalRepositoryRoot |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
 	originalRepositoryRoot := self repositoryRoot.
@@ -53,11 +53,9 @@ RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 					project
 						_readOnlyRepositoryRoot: repositoryRootPathString
 						commitId: commitId ] ].
-	resolvedProject := self asDefinition.
-	resolvedProject
-		readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId.
-	^ resolvedProject loadProjectSet
+	self
+		_readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
 ]
 
 { #category : '*rowan-corev2' }
