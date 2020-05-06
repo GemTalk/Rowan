@@ -164,9 +164,9 @@ RwGsImageTool >> readRewriteGemStone64Packages: archBase [
 
 	specUrl := repositoryRoot asFileReference / 'rowan' / 'specs'
 		/ 'GemStone64.ston'.
-	(loadSpec := RwSpecification fromUrl: 'file://' , specUrl pathString)
+	(loadSpec := RwSpecification fromUrl: 'file:' , specUrl pathString)
 		projectsHome: repositoryRoot;
-		diskUrl: 'file://' , repositoryRoot;
+		diskUrl: 'file:' , repositoryRoot;
 		yourself.
 	resolvedProject := loadSpec resolve.
 

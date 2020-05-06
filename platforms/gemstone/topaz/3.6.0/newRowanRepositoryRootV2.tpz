@@ -18,13 +18,4 @@
 %
 	commit
 
-	run
-	| specPath |
-	specPath := '$ARCHBASE/image/rowan/specs/gemstoneBaseImage.ston' asFileReference pathString.
-	Rowan gemstoneTools image
-		adoptGemStone64: 'file://', specPath 
-		projectsHome: '$ARCHBASE/image'
-%
-	commit
-
 	errorCount
