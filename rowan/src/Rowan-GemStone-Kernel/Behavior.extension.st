@@ -183,18 +183,19 @@ Behavior >> rowanProjectName [
 
 { #category : '*rowan-gemstone-kernel' }
 Behavior >> rwCompileExtensionMethod: sourceString category: categoryName packageName: packageName [
-
 	| aCategory |
-	
-	categoryName first == $* ifFalse: [self error: 'Extension category must  contain * as first character'].
-	(aCategory isEquivalent: '*', packageName asLowercase) ifFalse: [self error: 'Extension category name must match lowercased name of Rowan package'].
+	(categoryName notEmpty and: [ categoryName first == $* ])
+		ifFalse: [ self error: 'Extension category must  contain * as first character' ].
+	(aCategory isEquivalent: '*' , packageName asLowercase)
+		ifFalse: [ 
+			self
+				error: 'Extension category name must match lowercased name of Rowan package' ].
 	^ Rowan projectTools browser
 		addOrUpdateMethod: sourceString
 		inProtocol: aCategory asString asLowercase
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
 		inPackageNamed: packageName
-
 ]
 
 { #category : '*rowan-gemstone-kernel' }

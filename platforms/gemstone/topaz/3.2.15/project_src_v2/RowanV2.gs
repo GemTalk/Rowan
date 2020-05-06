@@ -63204,7 +63204,7 @@ _auditRowanHybridCategory: category forBehavior: aBehavior loadedClass: aLoadedC
 	"must be an extension. Do basic checks"
 	aPackage := category copyFrom: 2 to: category size.
 	res := self _result.
-	category first == $*
+	(category notEmpty and: [ category first == $* ])
 		ifTrue: [ 
 			"must be an extension category. See if package exists"
 			(aPackage asLowercase isEquivalent: aBehavior rowanPackageName asLowercase)
@@ -91066,11 +91066,13 @@ rowanProjectName
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rwCompileExtensionMethod: sourceString category: categoryName packageName: packageName
-
 	| aCategory |
-	
-	categoryName first == $* ifFalse: [self error: 'Extension category must  contain * as first character'].
-	(aCategory isEquivalent: '*', packageName asLowercase) ifFalse: [self error: 'Extension category name must match lowercased name of Rowan package'].
+	(categoryName notEmpty and: [ categoryName first == $* ])
+		ifFalse: [ self error: 'Extension category must  contain * as first character' ].
+	(aCategory isEquivalent: '*' , packageName asLowercase)
+		ifFalse: [ 
+			self
+				error: 'Extension category name must match lowercased name of Rowan package' ].
 	^ Rowan projectTools browser
 		addOrUpdateMethod: sourceString
 		inProtocol: aCategory asString asLowercase
