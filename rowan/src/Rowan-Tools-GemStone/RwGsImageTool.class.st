@@ -12,7 +12,7 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 	| loadSpec projectSetDefinition auditFailures reAudit theProjectSetDefinition tracer wasTracing adoptErrors |
 	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
-		diskUrl: 'file://' , projectsHome;
+		diskUrl: 'file:' , projectsHome;
 		projectsHome: projectsHome;
 		resolveProjectSet.
 
