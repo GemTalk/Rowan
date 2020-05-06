@@ -13,6 +13,8 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+
 "create project"
 	componentName := 'Core'.
 	projectDefinition := RwResolvedProjectV2 new

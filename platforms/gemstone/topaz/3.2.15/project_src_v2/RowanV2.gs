@@ -61286,7 +61286,7 @@ _projectRepository
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
-											self _loadSpecification readOlyDiskUrl
+											self _loadSpecification readonlyDiskUrl
 												ifNotNil: [ :urlString | 
 													RwReadOnlyDiskRepositoryDefinitionV2
 														newNamed: self projectAlias
