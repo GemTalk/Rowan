@@ -20,7 +20,7 @@
 
 	run
 	| specPath |
-	specPath := '$ARCHBASE/image/rowan/specs/GemStone64.ston' asFileReference pathString.
+	specPath := '$ARCHBASE/image/rowan/specs/gemstoneBaseImage.ston' asFileReference pathString.
 	Rowan gemstoneTools image
 		adoptGemStone64: 'file://', specPath 
 		projectsHome: '$ARCHBASE/image'
