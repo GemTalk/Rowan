@@ -57,6 +57,13 @@ RwDiskRepositoryDefinitionV2 >> create [
 ]
 
 { #category : 'actions' }
+RwDiskRepositoryDefinitionV2 >> diskRepositoryRoot: repositoryRootPathString [
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		repositoryRoot: repositoryRootPathString
+]
+
+{ #category : 'actions' }
 RwDiskRepositoryDefinitionV2 >> doCommit: message [
 
 	"noop by default"

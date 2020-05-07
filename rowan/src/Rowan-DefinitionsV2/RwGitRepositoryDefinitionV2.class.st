@@ -171,6 +171,14 @@ RwGitRepositoryDefinitionV2 >> fetch [
 	Rowan gitTools gitfetchIn: self repositoryRoot with: self remote
 ]
 
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString revision: aString [
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		repositoryRoot: repositoryRootPathString;
+		committish: aString
+]
+
 { #category : 'comparing' }
 RwGitRepositoryDefinitionV2 >> hash [
 	| hashValue |

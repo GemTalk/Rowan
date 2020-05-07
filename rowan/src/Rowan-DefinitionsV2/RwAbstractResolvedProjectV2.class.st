@@ -66,18 +66,14 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 														initialized!"
 															self _loadSpecification repositoryRoot exists
 																ifTrue: [ 
-																	| gitHome gitTool repositoryRootPath |
+																	| gitTool repositoryRootPath |
 																	"since the repository root does exist, we will attach as a 
 																disk project or git project, depending upon whether or git is present
 																and the git home is equal to the repositoryRoot"
 																	gitTool := Rowan projectTools git.
 																	repositoryRootPath := self _loadSpecification repositoryRoot
 																		pathString.
-																	^ projectRepository := ((gitTool
-																		gitPresentIn: repositoryRootPath)
-																		and: [ 
-																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
-																				asFileReference = self _loadSpecification repositoryRoot ])
+																	^ projectRepository := (gitTool isGitHome: repositoryRootPath)
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2
 																				newNamed: self projectAlias

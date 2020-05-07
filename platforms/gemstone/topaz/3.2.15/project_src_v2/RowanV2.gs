@@ -61305,18 +61305,14 @@ _projectRepository
 														initialized!"
 															self _loadSpecification repositoryRoot exists
 																ifTrue: [ 
-																	| gitHome gitTool repositoryRootPath |
+																	| gitTool repositoryRootPath |
 																	"since the repository root does exist, we will attach as a 
 																disk project or git project, depending upon whether or git is present
 																and the git home is equal to the repositoryRoot"
 																	gitTool := Rowan projectTools git.
 																	repositoryRootPath := self _loadSpecification repositoryRoot
 																		pathString.
-																	^ projectRepository := ((gitTool
-																		gitPresentIn: repositoryRootPath)
-																		and: [ 
-																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
-																				asFileReference = self _loadSpecification repositoryRoot ])
+																	^ projectRepository := (gitTool isGitHome: repositoryRootPath)
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2
 																				newNamed: self projectAlias
@@ -61947,6 +61943,13 @@ copyForLoadedProject
 		yourself
 %
 
+category: '-- loader compat --'
+method: RwResolvedProjectV2
+diskRepositoryRoot: repositoryRootPathString
+	projectRepository := self _projectRepository
+		diskRepositoryRoot: repositoryRootPathString
+%
+
 category: 'load specification'
 method: RwResolvedProjectV2
 diskUrl
@@ -62074,6 +62077,14 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
+%
+
+category: '-- loader compat --'
+method: RwResolvedProjectV2
+gitRepositoryRoot: repositoryRootPathString
+	projectRepository := self _projectRepository
+		gitRepositoryRoot: repositoryRootPathString
+		revision: self _loadSpecification revision
 %
 
 category: 'load specification'
@@ -62381,13 +62392,12 @@ read: platformConditionalAttributes
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	| urlString |
-	urlString := 'file:' , repositoryRootPathString.
-	projectRepository := RwReadOnlyDiskRepositoryDefinitionV2
-		newNamed: self projectAlias
-		projectsHome: self projectsHome
-		repositoryUrl: urlString.
-	projectRepository commitId: commitId
+	projectRepository := self _projectRepository
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId.
+
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]
 %
 
 category: 'project definition'
@@ -63797,6 +63807,17 @@ method: RwGitTool
 gitstatusIn: gitRepoPath with: args
 
 	^ self performGitCommand: 'status' in: gitRepoPath with: args
+%
+
+category: 'smalltalk api'
+method: RwGitTool
+isGitHome: dirPath
+	"Answer true if the given directory path is the home directory for a git repository"
+
+	^ (self gitPresentIn: dirPath)
+		and: [ 
+			(self gitrevparseShowTopLevelIn: dirPath) trimBoth asFileReference
+				= dirPath asFileReference ]
 %
 
 category: 'private'
@@ -70460,6 +70481,27 @@ checkAndUpdateRepositoryRevision: aRwProjectLoadSpecificationV2
 	"noop"
 %
 
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
+diskRepositoryRoot: repositoryRootPathString
+	^ RwDiskRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: 'file:' , repositoryRootPathString
+%
+
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
+gitRepositoryRoot: repositoryRootPathString revision: aString
+	| urlString |
+	urlString := 'file:' , repositoryRootPathString.
+	^ RwGitRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: urlString
+		revision: aString
+%
+
 category: 'comparing'
 method: RwAbstractRepositoryDefinitionV2
 hash
@@ -70501,6 +70543,19 @@ category: 'accessing'
 method: RwAbstractRepositoryDefinitionV2
 projectsHome: aFileReference
 	projectsHome := aFileReference
+%
+
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
+readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	| urlString repo |
+	urlString := 'file:' , repositoryRootPathString.
+	repo := RwReadOnlyDiskRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: urlString.
+	repo commitId: commitId.
+	^ repo
 %
 
 category: 'accessing'
@@ -70614,6 +70669,14 @@ method: RwDiskRepositoryDefinitionV2
 create
 
 	self error: 'not yet implemented'
+%
+
+category: 'actions'
+method: RwDiskRepositoryDefinitionV2
+diskRepositoryRoot: repositoryRootPathString
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		repositoryRoot: repositoryRootPathString
 %
 
 category: 'actions'
@@ -70851,6 +70914,15 @@ fetch
 	Rowan gitTools gitfetchIn: self repositoryRoot with: self remote
 %
 
+category: 'actions'
+method: RwGitRepositoryDefinitionV2
+gitRepositoryRoot: repositoryRootPathString revision: aString
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		repositoryRoot: repositoryRootPathString;
+		committish: aString
+%
+
 category: 'comparing'
 method: RwGitRepositoryDefinitionV2
 hash
@@ -70996,6 +71068,15 @@ commitId: aString
 	commitId := aString
 %
 
+category: 'actions'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+readOnlyRepositoryRoot: repositoryRootPathString commitId: aString
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		commitId: aString;
+		loadedCommitId: aString
+%
+
 category: 'accessing'
 method: RwReadOnlyDiskRepositoryDefinitionV2
 repositoryRoot
@@ -71021,7 +71102,13 @@ category: 'accessing'
 method: RwReadOnlyDiskRepositoryDefinitionV2
 repositoryRoot: pathStringOrReference
 	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
-	super repositoryRoot: pathStringOrReference
+%
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+repositoryUrl: urlString
+	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
+	super repositoryUrl: urlString
 %
 
 category: 'private'
@@ -96314,6 +96401,22 @@ defaultUseSessionMethodsForExtensions
 
 category: '*rowan-corev2'
 method: RwProject
+diskRepositoryRoot: repositoryRootPathString
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _diskRepositoryRoot: repositoryRootPathString ] ].
+	self _diskRepositoryRoot: repositoryRootPathString
+%
+
+category: '*rowan-corev2'
+method: RwProject
 exportLoadSpecification
 	^ self _loadedProject asDefinition exportLoadSpecification
 %
@@ -96332,6 +96435,22 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 	^ self _loadedProject asDefinition
 		exportTopazFormatTo: filePath
 		usingPackageNamesMap: packageNamesMap
+%
+
+category: '*rowan-corev2'
+method: RwProject
+gitRepositoryRoot: repositoryRootPathString
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _gitRepositoryRoot: repositoryRootPathString ] ].
+	self _gitRepositoryRoot: repositoryRootPathString
 %
 
 category: '*rowan-corev2'
@@ -96472,6 +96591,18 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 	^ self _gemstonePlatformSpec
 		useSessionMethodsForExtensionsForPackageNamed: packageName
+%
+
+category: '*rowan-corev2'
+method: RwProject
+_diskRepositoryRoot: repositoryRootPathString
+	self _loadedProject resolvedProject diskRepositoryRoot: repositoryRootPathString
+%
+
+category: '*rowan-corev2'
+method: RwProject
+_gitRepositoryRoot: repositoryRootPathString
+	self _loadedProject resolvedProject gitRepositoryRoot: repositoryRootPathString
 %
 
 category: '*rowan-corev2'

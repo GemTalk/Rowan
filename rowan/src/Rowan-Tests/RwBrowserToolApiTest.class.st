@@ -5,17 +5,14 @@ Class {
 }
 
 { #category : 'private' }
-RwBrowserToolApiTest >> _expectedAssociationCreationTemplate [
-
-	^ 'Object subclass: ''Association''
-	instVarNames: #( key value)
+RwBrowserToolApiTest >> _expectedByteClassCreationTemplate [
+	^ 'SequenceableCollection byteSubclass: ''UnpackagedByteClass''
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanTestData2
 	options: #()
 '
-
 ]
 
 { #category : 'private' }
@@ -33,33 +30,6 @@ RwBrowserToolApiTest >> _expectedClassCreationTemplate [
 ]
 
 { #category : 'private' }
-RwBrowserToolApiTest >> _expectedCollectionCreationTemplate [
-
-	^ 'Object indexableSubclass: ''Collection''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-'
-
-]
-
-{ #category : 'private' }
-RwBrowserToolApiTest >> _expectedHybridByteArrayCreationTemplate [
-
-	^ 'SequenceableCollection byteSubclass: ''ByteArray''
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-'
-
-]
-
-{ #category : 'private' }
 RwBrowserToolApiTest >> _expectedHybridClassCreationTemplate [
 
 	^ 'Object rwSubclass: ''NameOfSubclass''
@@ -68,6 +38,19 @@ RwBrowserToolApiTest >> _expectedHybridClassCreationTemplate [
 	classInstVars: #()
 	poolDictionaries: #()
 	category: ''MyClasses''
+	options: #()
+'
+]
+
+{ #category : 'private' }
+RwBrowserToolApiTest >> _expectedIndexableCreationTemplate [
+
+	^ 'Object indexableSubclass: ''UnpackagedIndexableClass''
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanTestData2
 	options: #()
 '
 ]
@@ -143,7 +126,32 @@ RwBrowserToolApiTest >> testAddMethod [
 { #category : 'tests' }
 RwBrowserToolApiTest >> testClassCreationTemplate [
 
-	| template x |
+	| template x unpackagedByteClassName unpackagedByteClass unPackagedNormalClass  unpackagedNormalClassName unpackagedIndexableClassName unpackagedIndexableClass |
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
+	unpackagedByteClassName := 'UnpackagedByteClass'.
+	unpackagedByteClass := SequenceableCollection byteSubclass: unpackagedByteClassName
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan image symbolDictNamed: self _symbolDictionaryName2)
+		options: #().
+	unpackagedIndexableClassName := 'UnpackagedIndexableClass'.
+	unpackagedIndexableClass := Object indexableSubclass: unpackagedIndexableClassName
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan image symbolDictNamed: self _symbolDictionaryName2)
+		options: #().
+	unpackagedNormalClassName := 'UnpackagedClass'.
+	unPackagedNormalClass := Object subclass: unpackagedNormalClassName
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan image symbolDictNamed: self _symbolDictionaryName2)
+		options: #().
+
 	template := Rowan projectTools browser
 		classCreationTemplateForSubclassOf: 'Object'
 		category: 'MyClasses'.
@@ -160,24 +168,17 @@ RwBrowserToolApiTest >> testClassCreationTemplate [
 		description: 'incorrect class creation template'.
 
 	template := Rowan projectTools browser
-		classCreationTemplateForClass: ByteArray
+		classCreationTemplateForClass: unpackagedByteClass
 		hybridBrowser: true.
 	self
-		assert: template = (x := self _expectedHybridByteArrayCreationTemplate)
+		assert: template = (x := self _expectedByteClassCreationTemplate)
 		description: 'incorrect class creation template'.
 
 	template := Rowan projectTools browser
-		classCreationTemplateForClass: ByteArray
+		classCreationTemplateForClass: unpackagedIndexableClass
 		hybridBrowser: false.
 	self
-		assert: template = (x := self _expectedHybridByteArrayCreationTemplate)
-		description: 'incorrect class creation template'.
-
-	template := Rowan projectTools browser
-		classCreationTemplateForClass: Collection
-		hybridBrowser: false.
-	self
-		assert: template = self _expectedCollectionCreationTemplate
+		assert: template = self _expectedIndexableCreationTemplate
 		description: 'incorrect class creation template'.
 
 	template := Rowan projectTools browser
@@ -497,83 +498,6 @@ RwBrowserToolApiTest >> testDeletePackage [
 	testProjectDefinition := browserTool projectNamed: projectName.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames isEmpty
-]
-
-{ #category : 'tests' }
-RwBrowserToolApiTest >> testIsExtensionMethod [
-	| projectName packageNames className packageName1 packageName2 browserTool audit project |
-	projectName := 'Simple Browser'.
-	packageName1 := 'Simple-Core'.
-	packageName2 := 'Simple-Extensions1'.
-	packageNames := {packageName1.
-	packageName2}.
-	className := 'SimpleBrowse'.
-	self
-		_loadStandardProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName
-		comment: 'project for testing project browser api'
-		className: className
-		inPackageName: packageName1.
-
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-
-	browserTool := Rowan projectTools browser.
-
-	browserTool
-		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
-		inProtocol: 'accessing'
-		forClassNamed: className
-		isMeta: false
-		inPackageNamed: packageName1.	"add method in the package of the class"
-
-	self assert: (audit := project audit) isEmpty.
-
-	browserTool
-		addOrUpdateMethod: 'bar ^1'
-		inProtocol: 'accessing'
-		forClassNamed: className
-		isMeta: true
-		inPackageNamed: packageName1.	"add method in the package of the class"
-
-	self assert: (audit := project audit) isEmpty.
-
-	self
-		deny:
-			(browserTool isExtensionMethod: 'ivar1' forClassNamed: className isMeta: false).
-	self
-		deny:
-			(browserTool isExtensionMethod: 'bar' forClassNamed: className isMeta: true).
-
-	browserTool
-		addOrUpdateMethod: 'foo ^1'
-		inProtocol: '*' , packageName2 asLowercase
-		forClassNamed: className
-		isMeta: false
-		inPackageNamed: packageName2.	"add method in a package as a class extension"
-
-	self assert: (audit := project audit) isEmpty.
-
-	browserTool
-		addOrUpdateMethod: 'baz ^1'
-		inProtocol: '*' , packageName2 asLowercase
-		forClassNamed: className
-		isMeta: true
-		inPackageNamed: packageName2.	"add method in a package as a class extension"
-
-	self assert: (audit := project audit) isEmpty.
-
-	self
-		assert:
-			(browserTool isExtensionMethod: 'foo' forClassNamed: className isMeta: false).
-	self
-		assert:
-			(browserTool isExtensionMethod: 'baz' forClassNamed: className isMeta: true).
-
-	self
-		deny:
-			(browserTool isExtensionMethod: 'yourself' forClassNamed: 'Object' isMeta: false)	"not rowanized at moment"
 ]
 
 { #category : 'tests' }

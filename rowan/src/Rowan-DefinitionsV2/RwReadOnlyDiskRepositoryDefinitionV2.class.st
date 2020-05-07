@@ -24,6 +24,14 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> commitId: aString [
 	commitId := aString
 ]
 
+{ #category : 'actions' }
+RwReadOnlyDiskRepositoryDefinitionV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: aString [
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		commitId: aString;
+		loadedCommitId: aString
+]
+
 { #category : 'accessing' }
 RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
@@ -47,5 +55,10 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot [
 { #category : 'accessing' }
 RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
 	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
-	super repositoryRoot: pathStringOrReference
+]
+
+{ #category : 'accessing' }
+RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryUrl: urlString [
+	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
+	super repositoryUrl: urlString
 ]

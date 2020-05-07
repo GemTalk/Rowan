@@ -350,6 +350,12 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		yourself
 ]
 
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
+	projectRepository := self _projectRepository
+		diskRepositoryRoot: repositoryRootPathString
+]
+
 { #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl [
 	^ self _loadSpecification diskUrl
@@ -468,6 +474,13 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packa
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
+	projectRepository := self _projectRepository
+		gitRepositoryRoot: repositoryRootPathString
+		revision: self _loadSpecification revision
 ]
 
 { #category : 'load specification' }
@@ -739,13 +752,12 @@ RwResolvedProjectV2 >> read: platformConditionalAttributes [
 
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-	| urlString |
-	urlString := 'file:' , repositoryRootPathString.
-	projectRepository := RwReadOnlyDiskRepositoryDefinitionV2
-		newNamed: self projectAlias
-		projectsHome: self projectsHome
-		repositoryUrl: urlString.
-	projectRepository commitId: commitId
+	projectRepository := self _projectRepository
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId.
+
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]
 ]
 
 { #category : 'project definition' }
