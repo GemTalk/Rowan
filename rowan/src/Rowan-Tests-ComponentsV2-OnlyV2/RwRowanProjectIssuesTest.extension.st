@@ -297,6 +297,24 @@ RwRowanProjectIssuesTest >> _removeSelector: selector fromBehavior: theBehavior 
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
+RwRowanProjectIssuesTest >> _unpackagedClass [
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
+	^ Object
+		subclass: self _unpackagedClassName
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan image symbolDictNamed: self _symbolDictionaryName2)
+		options: #()
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwRowanProjectIssuesTest >> _unpackagedClassName [
+	^ 'ARowanUnpackageClass'
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName [
 
 	^ self _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: true
@@ -9467,21 +9485,22 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_2 [
 RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
-	| x |
+	| x unpackagedClass |
+	unpackagedClass := self _unpackagedClass.
 	self 
 		should: [
 			"add an unpackaged method - expect error"
-			Object
+			unpackagedClass
 				rwCompileMethod: 'bar ^''bar'''
 				category: 'accessing' ]
 		raise: Error.
 
-	(Object compiledMethodAt: #bar environmentId: 0 otherwise: nil)
+	(unpackagedClass compiledMethodAt: #bar environmentId: 0 otherwise: nil)
 		ifNotNil: [ Object removeSelector: #'bar' ].
 
 	[
 		"handle notification and abort the operation"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
@@ -9490,7 +9509,7 @@ RwRowanProjectIssuesTest >> testIssue72_addMethod [
 
 	[
 		"handle notification and complete operation"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
@@ -9499,14 +9518,13 @@ RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"ensure that the new method is not packaged"
 	Rowan image 
 		loadedMethod: #bar 
-		inClassNamed: 'Object' 
+		inClassNamed: self _unpackagedClassName
 		isMeta: false 
 		ifFound: [self assert: false description: 'unexpected loaded method' ] 
 		ifAbsent: ["expected"].
 
-	self assert: Object new bar = 'bar'.
-	Object removeSelector: #'bar'
-
+	self assert: unpackagedClass new bar = 'bar'.
+	unpackagedClass removeSelector: #'bar'
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -9600,80 +9618,82 @@ RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 RwRowanProjectIssuesTest >> testIssue72_removeMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
+	| unpackagedClass |
+	unpackagedClass := self _unpackagedClass.
 	[
 		"add unpackaged method"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ].
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	self 
 		should: [
 			"attempt to remove existing unpackaged method - expect error"
-			Object rwRemoveSelector: #bar ]
+			unpackagedClass rwRemoveSelector: #bar ]
 		raise: Error.
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	[
 		"handle notification and abort the remove"
-		Object rwRemoveSelector: #bar ]
+		unpackagedClass rwRemoveSelector: #bar ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | "abort"].
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	[
 		"handle notification and complete removal"
-		Object rwRemoveSelector: #bar  ]
+		unpackagedClass rwRemoveSelector: #bar  ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ].
-	self should: [ Object new bar ] raise: MessageNotUnderstood.
-
+	self should: [ unpackagedClass new bar ] raise: MessageNotUnderstood.
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwRowanProjectIssuesTest >> testIssue72_updateMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
+	| unpackagedClass |
+	unpackagedClass := self _unpackagedClass.
 	[
 		"add unpackaged method"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ].
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	self 
 		should: [
 			"attempt to update existing unpackaged method - expect error"
-			Object
+			unpackagedClass
 				rwCompileMethod: 'bar ^''foo'''
 				category: 'accessing' ]
 		raise: Error.
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	[
 		"handle notification and abort the operation"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''foo'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | "abort"].
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	[
 		"handle notification and complete operation"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''foo'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ].
-	self assert: Object new bar = 'foo'.
+	self assert: unpackagedClass new bar = 'foo'.
 
-	Object removeSelector: #'bar'
-
+	unpackagedClass removeSelector: #'bar'
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
