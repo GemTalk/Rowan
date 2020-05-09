@@ -22,12 +22,22 @@ RwDefinedProject >> _loadSpecification [
 ]
 
 { #category : 'private' }
+RwDefinedProject >> _projectSpecification [
+	^ self _resolvedProject _projectSpecification
+]
+
+{ #category : 'private' }
 RwDefinedProject >> _resolvedProject [
 	^ resolvedProject
 		ifNil: [ 
 			resolvedProject := RwResolvedProjectV2 new
 				projectName: self name;
 				yourself ]
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> _validate: platformConfigurationAttributes [
+	^ self _resolvedProject _validate: platformConfigurationAttributes
 ]
 
 { #category : 'accessing' }
@@ -87,6 +97,52 @@ RwDefinedProject >> addPackagesNamed: packageName toComponentNamed: componentNam
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	^ self _resolvedProject
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
+	^ self _resolvedProject
+		addPostloadDoitName: doitName
+		withSource: doitSource
+		toComponentNamed: aComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
+	^ self _resolvedProject
+		addPreloadDoitName: doitName
+		withSource: doitSource
+		toComponentNamed: aComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addProjectNamed: projectName toComponentNamed: toComponentName [
+	^ self _resolvedProject
+		addProjectNamed: projectName
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addRawPackageNamed: packageName [
+	^ self _resolvedProject addRawPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
+	^ self _resolvedProject
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
+		comment: commentString
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addTopLevelComponentNamed: componentName [
 	^ self _resolvedProject addTopLevelComponentNamed: componentName
 ]
@@ -121,8 +177,41 @@ RwDefinedProject >> isStrict [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> packageConvention: aString [
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	self _projectSpecification packageConvention: aString
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> packageNamed: aString [
 	^ self _resolvedProject packageNamed: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> packagesPath: aString [
+	self _projectSpecification packagesPath: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> projectsRoot [
+	^ self _resolvedProject projectsRoot
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> removeComponentNamed: aComponentName [
+	^ self _resolvedProject removeComponentNamed: aComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> removePackageNamed: packageName fromComponentNamed: componentName [
+	^ self _resolvedProject
+		removePackageNamed: packageName
+		fromComponentNamed: componentName
 ]
 
 { #category : 'accessing' }
