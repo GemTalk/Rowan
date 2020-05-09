@@ -4752,6 +4752,7 @@ RwTestProjectLibraryGeneratorV2 >> genSpec_0025: commitMessage [
 		yourself.
 
 	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
