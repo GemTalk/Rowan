@@ -66,6 +66,14 @@ RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition co
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		condition: conditionPathArray
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
@@ -177,6 +185,13 @@ RwDefinedProject >> isStrict [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
+	^ self _resolvedProject
+		movePackageNamed: aPackageName
+		toComponentNamed: aComponentName
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> packageConvention: aString [
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
@@ -212,6 +227,11 @@ RwDefinedProject >> removePackageNamed: packageName fromComponentNamed: componen
 	^ self _resolvedProject
 		removePackageNamed: packageName
 		fromComponentNamed: componentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> renameComponentNamed: aComponentPath to: aComponentName [
+	^ self _resolvedProject renameComponentNamed: aComponentPath to: aComponentName
 ]
 
 { #category : 'accessing' }

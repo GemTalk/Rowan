@@ -1663,8 +1663,7 @@ RwTestProjectLibraryGeneratorV2 >> _addDefinitionsFor_0028: resolvedProject [
 			toComponentNamed: componentPath1
 			condition: #('common' 'tests' ).
 
-	resolvedProject loadSpecification
-		customConditionalAttributes: #('tests').
+	resolvedProject customConditionalAttributes: #('tests').
 
 	resolvedProject 
 		movePackageNamed: packageName2 toComponentNamed: componentPath2;
