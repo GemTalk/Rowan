@@ -83,6 +83,13 @@ RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toCom
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addNewNestedComponentNamed: aComponentName comment: aString [
+	^ self _resolvedProject
+		addNewNestedComponentNamed: aComponentName
+		comment: aString
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addPackageNamed: packageName toComponentNamed: componentName [
 	^ self _resolvedProject
 		addPackageNamed: packageName
@@ -102,6 +109,15 @@ RwDefinedProject >> addPackagesNamed: packageName toComponentNamed: componentNam
 	^ self _resolvedProject
 		addPackagesNamed: packageName
 		toComponentNamed: componentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	^ self _resolvedProject
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
 ]
 
 { #category : 'accessing' }

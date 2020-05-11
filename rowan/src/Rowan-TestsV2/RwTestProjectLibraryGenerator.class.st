@@ -1943,8 +1943,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 	componentPath := resolvedProject
 		addPlatformComponentNamed: componentName4
 		toComponentNamed: componentPath4
-		alias: '_gemstone_glass'
-		condition:
+		pathNameArray:
+			{'common'.
+			'_gemstone_glass'}
+		conditionPathArray:
 			{'common'.
 			{'gemstone'.
 			'glass'}}.
@@ -1955,8 +1957,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 	componentPath := resolvedProject
 		addPlatformComponentNamed: componentName4
 		toComponentNamed: componentPath4
-		alias: '_gemstone_glass'
-		condition:
+		pathNameArray:
+			{'common'.
+			'_gemstone_glass'}
+		conditionPathArray:
 			{'common'.
 			'tests'.
 			{'gemstone'.
@@ -1983,8 +1987,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 	componentPath := resolvedProject
 		addPlatformComponentNamed: componentName4
 		toComponentNamed: componentPath4
-		alias: '_pharo'
-		condition:
+		pathNameArray:
+			{'common'.
+			'_pharo'}
+		conditionPathArray:
 			{'common'.
 			{'pharo'}}.
 	resolvedProject
@@ -1994,8 +2000,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 	componentPath := resolvedProject
 		addPlatformComponentNamed: componentName4
 		toComponentNamed: componentPath4
-		alias: '_pharo'
-		condition:
+		pathNameArray:
+			{'common'.
+			'tests'.
+			'_pharo'}
+		conditionPathArray:
 			{'common'.
 			'tests'.
 			{'pharo'}}.
