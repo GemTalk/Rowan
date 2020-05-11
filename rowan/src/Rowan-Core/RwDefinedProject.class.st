@@ -90,6 +90,13 @@ RwDefinedProject >> addNewNestedComponentNamed: aComponentName comment: aString 
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addPackageNamed: packageName [
+	"the package is expected to already be present in a component - used when reading packages from disk"
+
+	^ self _resolvedProject addPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addPackageNamed: packageName toComponentNamed: componentName [
 	^ self _resolvedProject
 		addPackageNamed: packageName
@@ -177,6 +184,11 @@ RwDefinedProject >> componentNamed: componentName [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> customConditionalAttributes [
+	^ self _loadSpecification customConditionalAttributes
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> customConditionalAttributes: anArray [
 	self _loadSpecification customConditionalAttributes: anArray
 ]
@@ -198,6 +210,17 @@ RwDefinedProject >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: p
 { #category : 'testing' }
 RwDefinedProject >> isStrict [
 	^ self _resolvedProject isStrict
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> loadSpecification [
+
+	^ self _resolvedProject loadSpecification
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> moveClassNamed: aClassName toPackageNamed: aPackageName [
+	^ self _resolvedProject moveClassNamed: aClassName toPackageNamed: aPackageName
 ]
 
 { #category : 'accessing' }
@@ -248,6 +271,11 @@ RwDefinedProject >> removePackageNamed: packageName fromComponentNamed: componen
 { #category : 'accessing' }
 RwDefinedProject >> renameComponentNamed: aComponentPath to: aComponentName [
 	^ self _resolvedProject renameComponentNamed: aComponentPath to: aComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> renamePackageNamed: packageName to: newPackageName [
+	^ self _resolvedProject renamePackageNamed: packageName to: newPackageName
 ]
 
 { #category : 'accessing' }
