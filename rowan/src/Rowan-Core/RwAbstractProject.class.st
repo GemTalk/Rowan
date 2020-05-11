@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'transitions' }
+RwAbstractProject >> defined [
+	self subclassResponsibility: #'defined'
+]
+
 { #category : 'accessing' }
 RwAbstractProject >> project [
 

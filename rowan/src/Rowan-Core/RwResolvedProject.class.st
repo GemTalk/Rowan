@@ -153,6 +153,11 @@ RwResolvedProject >> repositoryRoot [
 	^ self _resolvedProject repositoryRoot
 ]
 
+{ #category : 'transitions' }
+RwResolvedProject >> resolve [
+	^ self
+]
+
 { #category : 'accessing' }
 RwResolvedProject >> revision [
 	^ self _resolvedProject revision

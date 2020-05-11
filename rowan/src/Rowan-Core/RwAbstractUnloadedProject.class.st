@@ -72,6 +72,11 @@ RwAbstractUnloadedProject >> specComponentNames: anArray [
 	self _loadSpecification componentNames: anArray
 ]
 
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> specName [
+	^ self _loadSpecification specName
+]
+
 { #category : 'testing' }
 RwAbstractUnloadedProject >> useGit [
 

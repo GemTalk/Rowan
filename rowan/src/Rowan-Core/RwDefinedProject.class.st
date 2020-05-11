@@ -11,6 +11,26 @@ RwDefinedProject class >> fromResolvedProject: aResolvedProject [
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwDefinedProject class >> newEmbeddedProjectNamed: aName [
+	| new spec |
+	new := self new initializeForName: aName.
+	spec := RwEmbeddedLoadSpecificationV2 new
+		projectName: aName;
+		yourself.
+	new _resolvedProject _loadSpecification: spec.
+	^ new
+]
+
+{ #category : 'instance creation' }
+RwDefinedProject class >> newNamed: aName [
+
+	^ self new
+		initializeForName: aName;
+		_resolvedProject;
+		yourself
+]
+
 { #category : 'private' }
 RwDefinedProject >> _gemstoneAllUsersName [
 	^ self _resolvedProject _gemstoneAllUsersName
@@ -19,6 +39,11 @@ RwDefinedProject >> _gemstoneAllUsersName [
 { #category : 'private' }
 RwDefinedProject >> _loadSpecification [
 	^ self _resolvedProject _loadSpecification
+]
+
+{ #category : 'private' }
+RwDefinedProject >> _projectRepository [
+	^ self _resolvedProject _projectRepository
 ]
 
 { #category : 'private' }
@@ -193,6 +218,11 @@ RwDefinedProject >> customConditionalAttributes: anArray [
 	self _loadSpecification customConditionalAttributes: anArray
 ]
 
+{ #category : 'transitions' }
+RwDefinedProject >> defined [
+	^ self
+]
+
 { #category : 'accessing' }
 RwDefinedProject >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
 	self _resolvedProject
@@ -252,6 +282,16 @@ RwDefinedProject >> packagesPath: aString [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> projectAlias: aString [
+	^ self _resolvedProject projectAlias: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> projectSpecFile: relativePathString [
+	^ self _resolvedProject projectSpecFile: relativePathString
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> projectsRoot [
 	^ self _resolvedProject projectsRoot
 ]
@@ -279,6 +319,11 @@ RwDefinedProject >> renamePackageNamed: packageName to: newPackageName [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> repositoryRoot [
+	^ self _resolvedProject repositoryRoot
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> repoType: aSymbol [
 	"#disk, #git or #none"
 
@@ -293,6 +338,17 @@ RwDefinedProject >> resolve [
 { #category : 'transitions' }
 RwDefinedProject >> resolveStrict [
 	^ RwResolvedProject fromStrictDefinedProject: self
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> resolveWithParentProject: aResolvedRwProject [
+	"give embedded projects a chance to resolve cleanly"
+
+	^ (RwResolvedProject newNamed: aResolvedRwProject name)
+		_resolvedProject:
+				(self _loadSpecification
+						resolveWithParentProject: aResolvedRwProject _resolvedProject) resolve;
+		yourself
 ]
 
 { #category : 'accessing' }
