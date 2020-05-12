@@ -2956,47 +2956,43 @@ RwTestProjectLibraryGeneratorV2 >> _addDefinitionsFor_0054: resolvedProject embe
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGeneratorV2 >> _addDefinitionsFor_0055: resolvedProject requiredProject: requiredProject [
+RwTestProjectLibraryGeneratorV2 >> _addDefinitionsFor_0055: resolvedProject embeddedProject: embeddedProject [
 	"Start with spec_0052; add platform conditional packages (GemStone version 2.4.x) to the embedded project and the primary project."
 
-	| requiredLoadSpec |
+	| resolvedEmbeddedProject |
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs2.[4-]' packageLabel: 'GemStone24x'.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
 
-	requiredProject
+	(resolvedEmbeddedProject := embeddedProject resolve)
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
-	requiredLoadSpec := requiredProject loadSpecification.
-
 	resolvedProject projectsRoot ensureCreateDirectory.
-	requiredProject specsRoot / requiredLoadSpec specName , 'ston'
-		copyTo: resolvedProject projectsRoot / requiredLoadSpec specName , 'ston'.
+	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
+		copyTo: resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
 	^ resolvedProject
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGeneratorV2 >> _addDefinitionsFor_0056: resolvedProject requiredProject: requiredProject [
+RwTestProjectLibraryGeneratorV2 >> _addDefinitionsFor_0056: resolvedProject embeddedProject: embeddedProject [
 	"Start with spec_0052; add platform conditional packages (GemStone version 3.6.x, 3.5.x, and 3.2.15) to the embedded project and the primary project. This is expected to reproduce issue #594 for those three patforms."
 
-	| requiredLoadSpec |
+	| resolvedEmbeddedProject |
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs2.[4-]' packageLabel: 'GemStone24x'.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs3.[2-]' packageLabel: 'GemStone3x'.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gs3.[2-]'  packageLabel: 'GemStone3x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gs3.[2-]'  packageLabel: 'GemStone3x'.
 
-	requiredProject
+	(resolvedEmbeddedProject := embeddedProject resolve)
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
-	requiredLoadSpec := requiredProject loadSpecification.
-
 	resolvedProject projectsRoot ensureCreateDirectory.
-	requiredProject specsRoot / requiredLoadSpec specName , 'ston'
-		copyTo: resolvedProject projectsRoot / requiredLoadSpec specName , 'ston'.
+	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
+		copyTo: resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
 	^ resolvedProject
 ]
@@ -6242,7 +6238,7 @@ RwTestProjectLibraryGeneratorV2 >> genSpec_0055: commitMessage [
 	embededProjectDirName := 'embededProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
-	embededProjectDefinition :=  (Rowan newEmbeddedProjectNamed: projectName)
+	embededProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)
 		specName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
@@ -6303,7 +6299,7 @@ RwTestProjectLibraryGeneratorV2 >> genSpec_0056: commitMessage [
 	embededProjectDirName := 'embededProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
-	embededProjectDefinition :=  (Rowan newEmbeddedProjectNamed: projectName)
+	embededProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)
 		specName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
@@ -6317,8 +6313,8 @@ RwTestProjectLibraryGeneratorV2 >> genSpec_0056: commitMessage [
 	resolvedRepository := self
 		_genSpecFor: specName
 		definedProject: definedProject
-		embededProjectDefinition: embededProjectDefinition
-		addDefinitions: [ :resolvedProject :embededProject | self _addDefinitionsFor_0056: resolvedProject embededProject: embededProject ].
+		embeddedProjectDefinition: embededProjectDefinition
+		addDefinitions: [ :resolvedProject :embededProject | self _addDefinitionsFor_0056: resolvedProject embeddedProject: embededProject ].
 
 	self
 		_finishCommitAndPush: specName
