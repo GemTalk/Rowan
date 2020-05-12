@@ -185,7 +185,7 @@ RwClsAuditTool >> _auditRowanHybridCategory: category forBehavior: aBehavior loa
 	"must be an extension. Do basic checks"
 	aPackage := category copyFrom: 2 to: category size.
 	res := self _result.
-	category first == $*
+	(category notEmpty and: [ category first == $* ])
 		ifTrue: [ 
 			"must be an extension category. See if package exists"
 			(aPackage asLowercase isEquivalent: aBehavior rowanPackageName asLowercase)

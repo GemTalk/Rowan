@@ -12,7 +12,7 @@ RwGsImageTool >> adoptGemStone64: specUrl projectsHome: projectsHome [
 	| loadSpec projectSetDefinition auditFailures reAudit theProjectSetDefinition tracer wasTracing adoptErrors |
 	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
-		diskUrl: 'file://' , projectsHome;
+		diskUrl: 'file:' , projectsHome;
 		projectsHome: projectsHome;
 		resolveProjectSet.
 
@@ -164,9 +164,9 @@ RwGsImageTool >> readRewriteGemStone64Packages: archBase [
 
 	specUrl := repositoryRoot asFileReference / 'rowan' / 'specs'
 		/ 'GemStone64.ston'.
-	(loadSpec := RwSpecification fromUrl: 'file://' , specUrl pathString)
+	(loadSpec := RwSpecification fromUrl: 'file:' , specUrl pathString)
 		projectsHome: repositoryRoot;
-		diskUrl: 'file://' , repositoryRoot;
+		diskUrl: 'file:' , repositoryRoot;
 		yourself.
 	resolvedProject := loadSpec resolve.
 

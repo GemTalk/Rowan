@@ -47,29 +47,55 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
-											"without an explicit repository url in the load specificaction, we have 
+											self _loadSpecification readonlyDiskUrl
+												ifNotNil: [ :urlString | 
+													RwReadOnlyDiskRepositoryDefinitionV2
+														newNamed: self projectAlias
+														projectsHome: self projectsHome
+														repositoryUrl: urlString ]
+												ifNil: [ 
+													"without an explicit repository url in the load specificaction, we have 
 												to fall back to using the repoType in the project specification. If the 
 												logic that follows fails, then a git or disk url should be explicitly specified
 												in the load spec before resolving."
-											projectSpecification
-												ifNil: [ 
-													"without a project specification, we are probably in the process 
+													projectSpecification
+														ifNil: [ 
+															"without a project specification, we are probably in the process 
 														of being created by resolving a load specification If we were
 														created from from scratch, the project specification is 
 														initialized!"
-													self _loadSpecification repositoryRoot exists
-														ifTrue: [ 
-															| gitHome gitTool repositoryRootPath |
-															"since the repository root does exist, we will attach as a 
+															self _loadSpecification repositoryRoot exists
+																ifTrue: [ 
+																	| gitHome gitTool repositoryRootPath |
+																	"since the repository root does exist, we will attach as a 
 																disk project or git project, depending upon whether or git is present
 																and the git home is equal to the repositoryRoot"
-															gitTool := Rowan projectTools git.
-															repositoryRootPath := self _loadSpecification repositoryRoot
-																pathString.
-															^ projectRepository := ((gitTool gitPresentIn: repositoryRootPath)
-																and: [ 
-																	(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
-																		asFileReference = self _loadSpecification repositoryRoot ])
+																	gitTool := Rowan projectTools git.
+																	repositoryRootPath := self _loadSpecification repositoryRoot
+																		pathString.
+																	^ projectRepository := ((gitTool gitPresentIn: repositoryRootPath)
+																			and: [ 
+																				(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
+																					asFileReference = self _loadSpecification repositoryRoot ])
+																		ifTrue: [ 
+																			RwGitRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: ''
+																				revision: self _loadSpecification revision ]
+																		ifFalse: [ 
+																			RwDiskRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: self diskUrl ] ] ].
+													projectSpecification
+														ifNil: [ 
+															RwNoRepositoryDefinitionV2
+																newNamed: self projectAlias
+																projectsHome: nil
+																repositoryUrl: nil ]
+														ifNotNil: [ 
+															self _projectSpecification repoType == #'git'
 																ifTrue: [ 
 																	RwGitRepositoryDefinitionV2
 																		newNamed: self projectAlias
@@ -108,7 +134,6 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 																		newNamed: self projectAlias
 																		projectsHome: nil
 																		repositoryUrl: nil ] ] ] ] ] ] ].
-
 			projectRepository ]
 ]
 

@@ -29,14 +29,14 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 
 		normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage 
 		theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 
-		projectDefinition  |
+		project |
 
 	projectName := 'HybridPatchProjectA'.
 	packageName1 := 'Hybrid-Patch-Core'.
 	packageName2 := 'Hybrid-Patch-Extensions'.
 	packageNames := {packageName1.
 	packageName2}.
-	projectDefinition := self
+	self
 		_loadDiskProjectDefinition: projectName
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
@@ -85,7 +85,8 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 
 	projectTools := Rowan projectTools.
 
-	projectDefinition
+	project := (Rowan projectNamed: projectName).
+	project asDefinition
 		export;
 		exportLoadSpecification.
 

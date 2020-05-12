@@ -6799,6 +6799,22 @@ true.
 %
 
 doit
+(RwDiskRepositoryDefinitionV2
+	subclass: 'RwReadOnlyDiskRepositoryDefinitionV2'
+	instVarNames: #( sesstionTempsKey commitId )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-DefinitionsV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (RwDefinition
 	subclass: 'RwDefinitionSetDefinition'
 	instVarNames: #( definitions )
@@ -8333,7 +8349,7 @@ true.
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -48744,6 +48760,12 @@ _projectTools
 
 !		Instance methods for 'RwAbstractProject'
 
+category: 'transitions'
+method: RwAbstractProject
+defined
+	self subclassResponsibility: #'defined'
+%
+
 category: 'accessing'
 method: RwAbstractProject
 project
@@ -48763,8 +48785,32 @@ resolve
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+comment: aString
+	self _resolvedProject comment: aString
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gitUrl: aString
+	self _loadSpecification gitUrl: aString
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+packageNames
+	^self _resolvedProject packageNames
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+projectsHome
+	^self _resolvedProject projectsHome
 %
 
 category: 'accessing'
@@ -48775,18 +48821,157 @@ projectsHome: aProjectHomeReferenceOrString
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+repositoryResolutionPolicy
+	^ self _loadSpecification repositoryResolutionPolicy
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+repositoryResolutionPolicy: aSymbolOrNil
+	self _loadSpecification repositoryResolutionPolicy: aSymbolOrNil
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+specComment: aString
+	self _loadSpecification comment: aString
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+specComponentNames: anArray
+	self _loadSpecification componentNames: anArray
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+specName
+	^ self _loadSpecification specName
+%
+
+category: 'testing'
+method: RwAbstractUnloadedProject
+useGit
+
+	^self _resolvedProject useGit
+%
+
+category: 'private'
+method: RwAbstractUnloadedProject
+_loadSpecification
+	^ self _resolvedProject _loadSpecification
+%
+
+category: 'private'
+method: RwAbstractUnloadedProject
 _resolvedProject
 	^ resolvedProject
 %
 
+category: 'private'
+method: RwAbstractUnloadedProject
+_resolvedProject: aResolvedProject
+	resolvedProject := aResolvedProject
+%
+
 ! Class implementation for 'RwDefinedProject'
+
+!		Class methods for 'RwDefinedProject'
+
+category: 'instance creation'
+classmethod: RwDefinedProject
+fromResolvedProject: aResolvedProject
+	^ (self newNamed: aResolvedProject name)
+		_resolvedProject: aResolvedProject _resolvedProject;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwDefinedProject
+newEmbeddedProjectNamed: aName
+	| new spec |
+	new := self new initializeForName: aName.
+	spec := RwEmbeddedLoadSpecificationV2 new
+		projectName: aName;
+		yourself.
+	new _resolvedProject _loadSpecification: spec.
+	^ new
+%
+
+category: 'instance creation'
+classmethod: RwDefinedProject
+newNamed: aName
+
+	^ self new
+		initializeForName: aName;
+		_resolvedProject;
+		yourself
+%
 
 !		Instance methods for 'RwDefinedProject'
 
 category: 'accessing'
 method: RwDefinedProject
+addComponentNamed: componentName toComponentNamed: toComponentName
+	^ self _resolvedProject
+		addComponentNamed: componentName
+		toComponentNamed: toComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
 addNewComponentNamed: componentName
 	^ self _resolvedProject addNewComponentNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addNewComponentNamed: aComponentName comment: aString
+	^ self _resolvedProject addNewComponentNamed: aComponentName comment: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addNewComponentNamed: aComponentName condition: condition comment: aString
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		condition: condition
+		comment: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		condition: conditionPathArray
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		condition: conditionPathArray
+		comment: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addNewNestedComponentNamed: aComponentName comment: aString
+	^ self _resolvedProject
+		addNewNestedComponentNamed: aComponentName
+		comment: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addPackageNamed: packageName
+	"the package is expected to already be present in a component - used when reading packages from disk"
+
+	^ self _resolvedProject addPackageNamed: packageName
 %
 
 category: 'accessing'
@@ -48799,6 +48984,15 @@ addPackageNamed: packageName toComponentNamed: componentName
 
 category: 'accessing'
 method: RwDefinedProject
+addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+	^ self _resolvedProject
+		addPackageNamed: packageName
+		toComponentNamed: componentName
+		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
+%
+
+category: 'accessing'
+method: RwDefinedProject
 addPackagesNamed: packageName toComponentNamed: componentName
 	^ self _resolvedProject
 		addPackagesNamed: packageName
@@ -48807,8 +49001,211 @@ addPackagesNamed: packageName toComponentNamed: componentName
 
 category: 'accessing'
 method: RwDefinedProject
+addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
+	^ self _resolvedProject
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
+	^ self _resolvedProject
+		addPlatformComponentNamed: aComponentName
+		toComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
+	^ self _resolvedProject
+		addPostloadDoitName: doitName
+		withSource: doitSource
+		toComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
+	^ self _resolvedProject
+		addPreloadDoitName: doitName
+		withSource: doitSource
+		toComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addProjectNamed: projectName toComponentNamed: toComponentName
+	^ self _resolvedProject
+		addProjectNamed: projectName
+		toComponentNamed: toComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addRawPackageNamed: packageName
+	^ self _resolvedProject addRawPackageNamed: packageName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString
+	^ self _resolvedProject
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
+		comment: commentString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addTopLevelComponentNamed: componentName
+	^ self _resolvedProject addTopLevelComponentNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+componentNamed: componentName
+	^ self _resolvedProject componentNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+customConditionalAttributes
+	^ self _loadSpecification customConditionalAttributes
+%
+
+category: 'accessing'
+method: RwDefinedProject
+customConditionalAttributes: anArray
+	self _loadSpecification customConditionalAttributes: anArray
+%
+
+category: 'transitions'
+method: RwDefinedProject
+defined
+	^ self
+%
+
+category: 'accessing'
+method: RwDefinedProject
+gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+	self _resolvedProject
+		gemstoneSetDefaultSymbolDictNameForUser: userId
+		to: symbolDictName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
+	self _resolvedProject
+		gemstoneSetSymbolDictName: symbolDictName
+		forPackageNamed: packageName
+%
+
+category: 'testing'
+method: RwDefinedProject
+isStrict
+	^ self _resolvedProject isStrict
+%
+
+category: 'accessing'
+method: RwDefinedProject
+loadSpecification
+
+	^ self _resolvedProject loadSpecification
+%
+
+category: 'accessing'
+method: RwDefinedProject
+moveClassNamed: aClassName toPackageNamed: aPackageName
+	^ self _resolvedProject moveClassNamed: aClassName toPackageNamed: aPackageName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+movePackageNamed: aPackageName toComponentNamed: aComponentName
+	^ self _resolvedProject
+		movePackageNamed: aPackageName
+		toComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+packageConvention: aString
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	self _projectSpecification packageConvention: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
 packageNamed: aString
 	^ self _resolvedProject packageNamed: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+packagesPath: aString
+	self _projectSpecification packagesPath: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+projectAlias: aString
+	^ self _resolvedProject projectAlias: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+projectSpecFile: relativePathString
+	^ self _resolvedProject projectSpecFile: relativePathString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+projectsRoot
+	^ self _resolvedProject projectsRoot
+%
+
+category: 'accessing'
+method: RwDefinedProject
+removeComponentNamed: aComponentName
+	^ self _resolvedProject removeComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+removePackageNamed: packageName fromComponentNamed: componentName
+	^ self _resolvedProject
+		removePackageNamed: packageName
+		fromComponentNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+renameComponentNamed: aComponentPath to: aComponentName
+	^ self _resolvedProject renameComponentNamed: aComponentPath to: aComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+renamePackageNamed: packageName to: newPackageName
+	^ self _resolvedProject renamePackageNamed: packageName to: newPackageName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+repositoryRoot
+	^ self _resolvedProject repositoryRoot
 %
 
 category: 'accessing'
@@ -48825,7 +49222,61 @@ resolve
 	^ RwResolvedProject fromDefinedProject: self
 %
 
+category: 'transitions'
+method: RwDefinedProject
+resolveStrict
+	^ RwResolvedProject fromStrictDefinedProject: self
+%
+
 category: 'accessing'
+method: RwDefinedProject
+resolveWithParentProject: aResolvedRwProject
+	"give embedded projects a chance to resolve cleanly"
+
+	^ (RwResolvedProject newNamed: self name)
+		_resolvedProject:
+				(self _loadSpecification
+						resolveWithParentProject: aResolvedRwProject _resolvedProject) resolve;
+		yourself
+%
+
+category: 'accessing'
+method: RwDefinedProject
+revision: aString
+	self _loadSpecification revision: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+specName: aString
+	self _loadSpecification specName: aString
+%
+
+category: 'private'
+method: RwDefinedProject
+_gemstoneAllUsersName
+	^ self _resolvedProject _gemstoneAllUsersName
+%
+
+category: 'private'
+method: RwDefinedProject
+_loadSpecification
+	^ self _resolvedProject _loadSpecification
+%
+
+category: 'private'
+method: RwDefinedProject
+_projectRepository
+	^ self _resolvedProject _projectRepository
+%
+
+category: 'private'
+method: RwDefinedProject
+_projectSpecification
+	^ self _resolvedProject _projectSpecification
+%
+
+category: 'private'
 method: RwDefinedProject
 _resolvedProject
 	^ resolvedProject
@@ -48833,6 +49284,12 @@ _resolvedProject
 			resolvedProject := RwResolvedProjectV2 new
 				projectName: self name;
 				yourself ]
+%
+
+category: 'accessing'
+method: RwDefinedProject
+_validate: platformConfigurationAttributes
+	^ self _resolvedProject _validate: platformConfigurationAttributes
 %
 
 ! Class implementation for 'RwResolvedProject'
@@ -48847,7 +49304,161 @@ fromDefinedProject: aDefinedProject
 		yourself
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProject
+fromStrictDefinedProject: aDefinedProject
+	| createBlock oldPolicy |
+	createBlock := [ 
+	(self newNamed: aDefinedProject name)
+		_resolvedProject: aDefinedProject _resolvedProject resolve;
+		yourself ].
+	aDefinedProject isStrict
+		ifTrue: [ ^ createBlock value ].
+	oldPolicy := aDefinedProject repositoryResolutionPolicy.
+	[ 
+	aDefinedProject repositoryResolutionPolicy: #'strict'.
+	^ createBlock value ]
+		ensure: [ aDefinedProject repositoryResolutionPolicy: oldPolicy ]
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl
+	| loadSpec resolvedProject |
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl projectsHome: projectsHome
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: projectsHome;
+		componentNames: componentNames;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames customConditionalAttributes: customConditionalAttributes
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: projectsHome;
+		componentNames: componentNames;
+		customConditionalAttributes: customConditionalAttributes;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: projectsHome;
+		componentNames: componentNames;
+		yourself.
+	resolvedProject := loadSpec resolve: platformConditionalAttributes.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject;
+		yourself
+%
+
 !		Instance methods for 'RwResolvedProject'
+
+category: 'transitions'
+method: RwResolvedProject
+defined
+	^ RwDefinedProject fromResolvedProject: self
+%
+
+category: 'actions'
+method: RwResolvedProject
+export
+	^ self _resolvedProject export
+%
+
+category: 'actions'
+method: RwResolvedProject
+exportComponents
+	^ self _resolvedProject exportComponents
+%
+
+category: 'actions'
+method: RwResolvedProject
+exportLoadSpecification
+	^ self _resolvedProject exportLoadSpecification
+%
+
+category: 'actions'
+method: RwResolvedProject
+exportPackages
+	^ self _resolvedProject exportPackages
+%
+
+category: 'actions'
+method: RwResolvedProject
+exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention
+	^ self _resolvedProject
+		exportPackages: diskProjectSetDefinition
+		packagesRoot: packagesRoot
+		packageFormat: packageFormat
+		packageConvention: packageConvention
+%
+
+category: 'actions'
+method: RwResolvedProject
+exportProjectSpecification
+	^ self _resolvedProject exportProjectSpecification
+%
+
+category: 'actions'
+method: RwResolvedProject
+exportTopazFormatTo: filePath
+	^ self _resolvedProject exportTopazFormatTo: filePath
+%
+
+category: 'actions'
+method: RwResolvedProject
+exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+	^ self _resolvedProject exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+%
+
+category: 'accessing'
+method: RwResolvedProject
+projectRoots
+	^ self _resolvedProject projectRoots
+%
+
+category: 'accessing'
+method: RwResolvedProject
+repository
+	^ self _resolvedProject repository
+%
 
 category: 'accessing'
 method: RwResolvedProject
@@ -48855,10 +49466,37 @@ repositoryRoot
 	^ self _resolvedProject repositoryRoot
 %
 
+category: 'transitions'
+method: RwResolvedProject
+resolve
+	^ self
+%
+
 category: 'accessing'
 method: RwResolvedProject
-_resolvedProject: aResolvedProject
-	resolvedProject := aResolvedProject
+revision
+	^ self _resolvedProject revision
+%
+
+category: 'accessing'
+method: RwResolvedProject
+revision: aString
+	self _resolvedProject revision: aString
+%
+
+category: 'accessing'
+method: RwResolvedProject
+specsRoot
+	^ self _resolvedProject specsRoot
+%
+
+category: 'transitions'
+method: RwResolvedProject
+write
+
+	self _resolvedProject
+		export;
+		exportLoadSpecification
 %
 
 ! Class implementation for 'RwProject'
@@ -48900,6 +49538,13 @@ comment
 	^ self _specification comment
 %
 
+category: 'qurying'
+method: RwProject
+commitId
+
+	^ self _loadedProject commitId
+%
+
 category: 'querying'
 method: RwProject
 componentForPackageNamed: packageName
@@ -48938,13 +49583,6 @@ existsOnDisk
 					ifNil: [ false ]
 					ifNotNil: [:fileRef | fileRef exists ] ]
 			ifAbsent: [ false ]
-%
-
-category: 'exporting'
-method: RwProject
-exportSpecification
-
-	self _loadedProject asDefinition exportSpecification
 %
 
 category: 'accessing'
@@ -61252,6 +61890,66 @@ _projectRepository
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
+											self _loadSpecification readonlyDiskUrl
+												ifNotNil: [ :urlString | 
+													RwReadOnlyDiskRepositoryDefinitionV2
+														newNamed: self projectAlias
+														projectsHome: self projectsHome
+														repositoryUrl: urlString ]
+												ifNil: [ 
+													"without an explicit repository url in the load specificaction, we have 
+												to fall back to using the repoType in the project specification. If the 
+												logic that follows fails, then a git or disk url should be explicitly specified
+												in the load spec before resolving."
+													projectSpecification
+														ifNil: [ 
+															"without a project specification, we are probably in the process 
+														of being created by resolving a load specification If we were
+														created from from scratch, the project specification is 
+														initialized!"
+															self _loadSpecification repositoryRoot exists
+																ifTrue: [ 
+																	| gitHome gitTool repositoryRootPath |
+																	"since the repository root does exist, we will attach as a 
+																disk project or git project, depending upon whether or git is present
+																and the git home is equal to the repositoryRoot"
+																	gitTool := Rowan projectTools git.
+																	repositoryRootPath := self _loadSpecification repositoryRoot
+																		pathString.
+																	^ projectRepository := ((gitTool gitPresentIn: repositoryRootPath)
+																			and: [ 
+																				(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
+																					asFileReference = self _loadSpecification repositoryRoot ])
+																		ifTrue: [ 
+																			RwGitRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: ''
+																				revision: self _loadSpecification revision ]
+																		ifFalse: [ 
+																			RwDiskRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: self diskUrl ] ] ].
+													projectSpecification
+														ifNil: [ 
+															RwNoRepositoryDefinitionV2
+																newNamed: self projectAlias
+																projectsHome: nil
+																repositoryUrl: nil ]
+														ifNotNil: [ 
+															self _projectSpecification repoType == #'git'
+																ifTrue: [ 
+																	RwGitRepositoryDefinitionV2
+																		newNamed: self projectAlias
+																		projectsHome: self projectsHome
+																		repositoryUrl: ''
+																		revision: self _loadSpecification revision ]
+																ifFalse: [ 
+																	RwDiskRepositoryDefinitionV2
+																		newNamed: self projectAlias
+																		projectsHome: self projectsHome
+																		repositoryUrl: self diskUrl ] ] ].
 											projectSpecification
 												ifNil: [ 
 													RwNoRepositoryDefinitionV2
@@ -61279,7 +61977,6 @@ _projectRepository
 																		newNamed: self projectAlias
 																		projectsHome: nil
 																		repositoryUrl: nil ] ] ] ] ] ] ].
-
 			projectRepository ]
 %
 
@@ -61668,16 +62365,6 @@ addPackagesNamed: packageNames toComponentNamed: componentName
 
 category: 'project definition'
 method: RwResolvedProjectV2
-addPlatformComponentNamed: componentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray
-	^ self _projectDefinition
-		addPlatformComponentNamed: componentName
-		toComponentNamed: toComponentName
-		alias: alias
-		condition: conditionPathArray
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
 	^ self
 		addPlatformComponentNamed: aComponentName
@@ -61780,6 +62467,13 @@ addSimpleNestedComponentNamed: aComponentName condition: condition  comment: com
 		comment: commentString
 %
 
+category: 'project definition'
+method: RwResolvedProjectV2
+addTopLevelComponentNamed: componentName
+	self _loadSpecification addTopLevelComponentNamed: componentName.
+	^ self _projectDefinition addNewComponentNamed: componentName
+%
+
 category: 'actions'
 method: RwResolvedProjectV2
 checkout: aCommittish
@@ -61796,6 +62490,12 @@ category: 'project definition'
 method: RwResolvedProjectV2
 comment: aString
 	self _projectDefinition comment: aString
+%
+
+category: 'querying'
+method: RwResolvedProjectV2
+commitId
+	^ self _projectRepository commitId
 %
 
 category: 'querying'
@@ -61863,6 +62563,13 @@ copyForLoadedProject
 		_projectSpecification: projectSpecification copy;
 		_projectStructure: projectDefinition components copy;
 		yourself
+%
+
+category: '-- loader compat --'
+method: RwResolvedProjectV2
+diskRepositoryRoot: repositoryRootPathString
+	projectRepository := self _projectRepository
+		diskRepositoryRoot: repositoryRootPathString
 %
 
 category: 'load specification'
@@ -61993,6 +62700,14 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
+%
+
+category: '-- loader compat --'
+method: RwResolvedProjectV2
+gitRepositoryRoot: repositoryRootPathString
+	projectRepository := self _projectRepository
+		gitRepositoryRoot: repositoryRootPathString
+		revision: self _loadSpecification revision
 %
 
 category: 'load specification'
@@ -62295,6 +63010,17 @@ read: platformConditionalAttributes
 	^ self
 		readProjectComponentNames: self componentNames
 		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: '-- loader compat --'
+method: RwResolvedProjectV2
+readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	projectRepository := self _projectRepository
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId.
+
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]
 %
 
 category: 'project definition'
@@ -63113,7 +63839,7 @@ _auditRowanHybridCategory: category forBehavior: aBehavior loadedClass: aLoadedC
 	"must be an extension. Do basic checks"
 	aPackage := category copyFrom: 2 to: category size.
 	res := self _result.
-	category first == $*
+	(category notEmpty and: [ category first == $* ])
 		ifTrue: [ 
 			"must be an extension category. See if package exists"
 			(aPackage asLowercase isEquivalent: aBehavior rowanPackageName asLowercase)
@@ -63337,7 +64063,7 @@ adoptGemStone64: specUrl projectsHome: projectsHome
 	| loadSpec projectSetDefinition auditFailures reAudit theProjectSetDefinition tracer wasTracing adoptErrors |
 	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
-		diskUrl: 'file://' , projectsHome;
+		diskUrl: 'file:' , projectsHome;
 		projectsHome: projectsHome;
 		resolveProjectSet.
 
@@ -63493,9 +64219,9 @@ readRewriteGemStone64Packages: archBase
 
 	specUrl := repositoryRoot asFileReference / 'rowan' / 'specs'
 		/ 'GemStone64.ston'.
-	(loadSpec := RwSpecification fromUrl: 'file://' , specUrl pathString)
+	(loadSpec := RwSpecification fromUrl: 'file:' , specUrl pathString)
 		projectsHome: repositoryRoot;
-		diskUrl: 'file://' , repositoryRoot;
+		diskUrl: 'file:' , repositoryRoot;
 		yourself.
 	resolvedProject := loadSpec resolve.
 
@@ -63706,6 +64432,17 @@ method: RwGitTool
 gitstatusIn: gitRepoPath with: args
 
 	^ self performGitCommand: 'status' in: gitRepoPath with: args
+%
+
+category: 'smalltalk api'
+method: RwGitTool
+isGitHome: dirPath
+	"Answer true if the given directory path is the home directory for a git repository"
+
+	^ (self gitPresentIn: dirPath)
+		and: [ 
+			(self gitrevparseShowTopLevelIn: dirPath) trimBoth asFileReference
+				= dirPath asFileReference ]
 %
 
 category: 'private'
@@ -70369,6 +71106,27 @@ checkAndUpdateRepositoryRevision: aRwProjectLoadSpecificationV2
 	"noop"
 %
 
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
+diskRepositoryRoot: repositoryRootPathString
+	^ RwDiskRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: 'file:' , repositoryRootPathString
+%
+
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
+gitRepositoryRoot: repositoryRootPathString revision: aString
+	| urlString |
+	urlString := 'file:' , repositoryRootPathString.
+	^ RwGitRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: urlString
+		revision: aString
+%
+
 category: 'comparing'
 method: RwAbstractRepositoryDefinitionV2
 hash
@@ -70410,6 +71168,19 @@ category: 'accessing'
 method: RwAbstractRepositoryDefinitionV2
 projectsHome: aFileReference
 	projectsHome := aFileReference
+%
+
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
+readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	| urlString repo |
+	urlString := 'file:' , repositoryRootPathString.
+	repo := RwReadOnlyDiskRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: urlString.
+	repo commitId: commitId.
+	^ repo
 %
 
 category: 'accessing'
@@ -70523,6 +71294,14 @@ method: RwDiskRepositoryDefinitionV2
 create
 
 	self error: 'not yet implemented'
+%
+
+category: 'actions'
+method: RwDiskRepositoryDefinitionV2
+diskRepositoryRoot: repositoryRootPathString
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		repositoryRoot: repositoryRootPathString
 %
 
 category: 'actions'
@@ -70762,6 +71541,15 @@ fetch
 	Rowan gitTools gitfetchIn: self repositoryRoot with: self remote
 %
 
+category: 'actions'
+method: RwGitRepositoryDefinitionV2
+gitRepositoryRoot: repositoryRootPathString revision: aString
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		repositoryRoot: repositoryRootPathString;
+		committish: aString
+%
+
 category: 'comparing'
 method: RwGitRepositoryDefinitionV2
 hash
@@ -70889,6 +71677,72 @@ resolve
 	"nothing on disk"
 
 	^ false
+%
+
+! Class implementation for 'RwReadOnlyDiskRepositoryDefinitionV2'
+
+!		Instance methods for 'RwReadOnlyDiskRepositoryDefinitionV2'
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+commitId
+	^ commitId ifNil: [ '' ]
+%
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+commitId: aString
+	commitId := aString
+%
+
+category: 'actions'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+readOnlyRepositoryRoot: repositoryRootPathString commitId: aString
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		commitId: aString;
+		loadedCommitId: aString
+%
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ repositoryRoot
+		ifNil: [ 
+			repositoryUrl
+				ifNil: [ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
+				ifNotNil: [ :urlString | 
+					^ (SessionTemps current
+						at: self _sessionTempsKey
+						ifAbsentPut: [ 
+							| url |
+							url := urlString asRwUrl.
+							url scheme = 'file'
+								ifFalse:
+									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ].
+										url pathString ]) asFileReference ] ]
+%
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+repositoryRoot: pathStringOrReference
+	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
+%
+
+category: 'accessing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+repositoryUrl: urlString
+	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
+	super repositoryUrl: urlString
+%
+
+category: 'private'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+_sessionTempsKey
+	^ sesstionTempsKey
+		ifNil: [ sesstionTempsKey := ('rwReadOnlyRepositoryKey_' , self asOop printString) asSymbol ]
 %
 
 ! Class implementation for 'RwDefinitionSetDefinition'
@@ -81311,6 +82165,13 @@ checkout: revision
 	^ self resolvedProject repository checkout: revision
 %
 
+category: 'queries'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+commitId
+
+	^ self resolvedProject commitId
+%
+
 category: 'commit log'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 commitLog: logLimit
@@ -83973,6 +84834,8 @@ method: RwLoadSpecificationV2
 																		and: [ 
 																			self diskUrl = anObject diskUrl
 																				and: [ 
+																			self readonlyDiskUrl = anObject readonlyDiskUrl
+																				and: [ 
 																					self mercurialUrl = anObject mercurialUrl
 																						and: [ 
 																							self svnUrl = anObject svnUrl
@@ -83982,7 +84845,7 @@ method: RwLoadSpecificationV2
 																											self comment = anObject comment
 																												and: [ 
 																													self _platformProperties = anObject _platformProperties
-																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 %
 
 category: 'visiting'
@@ -83990,6 +84853,12 @@ method: RwLoadSpecificationV2
 acceptVisitor: aVisitor
 
 	^ aVisitor visitLoadSpecification: self
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+addTopLevelComponentNamed: componentName
+	componentNames add: componentName
 %
 
 category: 'accessing'
@@ -84194,6 +85063,7 @@ hash
 	hashValue := hashValue bitXor: self projectSpecFile hash.
 	hashValue := hashValue bitXor: self gitUrl hash.
 	hashValue := hashValue bitXor: self diskUrl hash.
+	hashValue := hashValue bitXor: self readonlyDiskUrl hash.
 	hashValue := hashValue bitXor: self mercurialUrl hash.
 	hashValue := hashValue bitXor: self svnUrl hash.
 	hashValue := hashValue bitXor: self revision hash.
@@ -84357,7 +85227,19 @@ projectUrl
 		ifNil: [ 
 			self svnUrl
 				ifNotNil: [ :urlString | urlString ]
-				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ] ] ]
+				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ifNil: [ self readonlyDiskUrl ]] ] ]
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+readonlyDiskUrl
+	^ readonlyDiskUrl
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+readonlyDiskUrl: anUrlString
+	readonlyDiskUrl := anUrlString
 %
 
 category: 'accessing'
@@ -84514,11 +85396,11 @@ _validate
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
 	repoUrls := {}.
-	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
+	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #readonlyDiskUrl)
 		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
 	repoUrls size > 1
-		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
+		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl) must be be set' ].
+	(repoUrls size = 0 or: [ (repoUrls includes: 'diskUrl') or: [repoUrls includes: 'readonlyDiskUrl']])
 		ifTrue: [ 
 			self revision
 				ifNotNil: [ :rev | 
@@ -90857,11 +91739,13 @@ rowanProjectName
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rwCompileExtensionMethod: sourceString category: categoryName packageName: packageName
-
 	| aCategory |
-	
-	categoryName first == $* ifFalse: [self error: 'Extension category must  contain * as first character'].
-	(aCategory isEquivalent: '*', packageName asLowercase) ifFalse: [self error: 'Extension category name must match lowercased name of Rowan package'].
+	(categoryName notEmpty and: [ categoryName first == $* ])
+		ifFalse: [ self error: 'Extension category must  contain * as first character' ].
+	(aCategory isEquivalent: '*' , packageName asLowercase)
+		ifFalse: [ 
+			self
+				error: 'Extension category name must match lowercased name of Rowan package' ].
 	^ Rowan projectTools browser
 		addOrUpdateMethod: sourceString
 		inProtocol: aCategory asString asLowercase
@@ -94634,8 +95518,55 @@ initialize
 
 category: '*rowan-coreV2'
 classmethod: Rowan
+newEmbeddedProjectNamed: projectName
+	^ self platform newEmbeddedProjectNamed: projectName
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
 newProjectNamed: projectName
 	^ self platform newProjectNamed: projectName
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl
+	^ self platform projectFromUrl: loadSpecUrl
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl projectsHome: projectsHome
+	^ self platform projectFromUrl: loadSpecUrl projectsHome: projectsHome
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames
+	^ self platform
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		componentNames: componentNames
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames customConditionalAttributes: customConditionalAttributes
+	^ self platform
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		componentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
+	^ self platform
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		componentNames: componentNames
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: '*rowan-gemstone-core'
@@ -95913,8 +96844,55 @@ _userPlatformDictionaryForUser: aUserId
 
 category: '*rowan-corev2'
 method: RwPlatform
+newEmbeddedProjectNamed: projectName
+	^ RwDefinedProject newEmbeddedProjectNamed: projectName
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
 newProjectNamed: projectName
 	^ RwDefinedProject newNamed: projectName
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl
+	^ RwResolvedProject projectFromUrl: loadSpecUrl
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl projectsHome: projectsHome
+	^ RwResolvedProject projectFromUrl: loadSpecUrl projectsHome: projectsHome
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames 
+	^ RwResolvedProject
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		componentNames: componentNames
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames customConditionalAttributes: customConditionalAttributes
+	^ RwResolvedProject
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		componentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
+	^ RwResolvedProject
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		componentNames: componentNames
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: '*rowan-core'
@@ -95974,6 +96952,22 @@ defaultUseSessionMethodsForExtensions
 
 category: '*rowan-corev2'
 method: RwProject
+diskRepositoryRoot: repositoryRootPathString
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _diskRepositoryRoot: repositoryRootPathString ] ].
+	self _diskRepositoryRoot: repositoryRootPathString
+%
+
+category: '*rowan-corev2'
+method: RwProject
 exportLoadSpecification
 	^ self _loadedProject asDefinition exportLoadSpecification
 %
@@ -95992,6 +96986,22 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 	^ self _loadedProject asDefinition
 		exportTopazFormatTo: filePath
 		usingPackageNamesMap: packageNamesMap
+%
+
+category: '*rowan-corev2'
+method: RwProject
+gitRepositoryRoot: repositoryRootPathString
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _gitRepositoryRoot: repositoryRootPathString ] ].
+	self _gitRepositoryRoot: repositoryRootPathString
 %
 
 category: '*rowan-corev2'
@@ -96019,6 +97029,32 @@ platformConditionalAttributes
 	"Answer the platformConditionalAttributes used to load the project"
 
 	^ self _loadedProject platformConditionalAttributes
+%
+
+category: '*rowan-corev2'
+method: RwProject
+projectsHome
+	self _loadedProject resolvedProject projectsHome
+%
+
+category: '*rowan-corev2'
+method: RwProject
+readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project
+						_readOnlyRepositoryRoot: repositoryRootPathString
+						commitId: commitId ] ].
+	self
+		_readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
 %
 
 category: '*rowan-corev2'
@@ -96112,6 +97148,26 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 	^ self _gemstonePlatformSpec
 		useSessionMethodsForExtensionsForPackageNamed: packageName
+%
+
+category: '*rowan-corev2'
+method: RwProject
+_diskRepositoryRoot: repositoryRootPathString
+	self _loadedProject resolvedProject diskRepositoryRoot: repositoryRootPathString
+%
+
+category: '*rowan-corev2'
+method: RwProject
+_gitRepositoryRoot: repositoryRootPathString
+	self _loadedProject resolvedProject gitRepositoryRoot: repositoryRootPathString
+%
+
+category: '*rowan-corev2'
+method: RwProject
+_readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	self _loadedProject resolvedProject
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
 %
 
 category: '*rowan-corev2'

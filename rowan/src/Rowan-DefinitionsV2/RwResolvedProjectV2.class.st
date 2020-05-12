@@ -285,6 +285,11 @@ RwResolvedProjectV2 >> comment: aString [
 ]
 
 { #category : 'querying' }
+RwResolvedProjectV2 >> commitId [
+	^ self _projectRepository commitId
+]
+
+{ #category : 'querying' }
 RwResolvedProjectV2 >> commitLog: logLimit [
 	^ self _projectRepository commitLog: logLimit
 ]
@@ -340,6 +345,12 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		_projectSpecification: projectSpecification copy;
 		_projectStructure: projectDefinition components copy;
 		yourself
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
+	projectRepository := self _projectRepository
+		diskRepositoryRoot: repositoryRootPathString
 ]
 
 { #category : 'load specification' }
@@ -461,6 +472,13 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packa
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
+	projectRepository := self _projectRepository
+		gitRepositoryRoot: repositoryRootPathString
+		revision: self _loadSpecification revision
 ]
 
 { #category : 'load specification' }
@@ -728,6 +746,16 @@ RwResolvedProjectV2 >> read: platformConditionalAttributes [
 	^ self
 		readProjectComponentNames: self componentNames
 		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	projectRepository := self _projectRepository
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId.
+
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]
 ]
 
 { #category : 'project definition' }
