@@ -3177,7 +3177,8 @@ RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage resolvedReposit
 	(somethingToCommit and: [ self preserveChangesOnGithub ])
 		ifTrue: [ 
 			"only push if we really want to preserve the changes during this run and something has changed"
-			resolvedRepository push: resolvedRepository remote branch: branchName ]
+			resolvedRepository push: resolvedRepository remote branch: branchName ].
+	^ somethingToCommit
 ]
 
 { #category : 'private' }
