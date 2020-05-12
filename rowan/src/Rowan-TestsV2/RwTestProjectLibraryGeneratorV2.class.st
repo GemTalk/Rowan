@@ -6181,7 +6181,7 @@ RwTestProjectLibraryGeneratorV2 >> genSpec_0054: commitMessage [
 	embededProjectDirName := 'embededProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
-	embeddedProjectDefinition :=  (Rowan newEmbeddedProjectNamed: projectName)
+	embeddedProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)
 		specName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;

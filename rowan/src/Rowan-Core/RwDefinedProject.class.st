@@ -344,7 +344,7 @@ RwDefinedProject >> resolveStrict [
 RwDefinedProject >> resolveWithParentProject: aResolvedRwProject [
 	"give embedded projects a chance to resolve cleanly"
 
-	^ (RwResolvedProject newNamed: aResolvedRwProject name)
+	^ (RwResolvedProject newNamed: self name)
 		_resolvedProject:
 				(self _loadSpecification
 						resolveWithParentProject: aResolvedRwProject _resolvedProject) resolve;
