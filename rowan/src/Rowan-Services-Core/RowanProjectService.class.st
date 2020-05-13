@@ -14,7 +14,8 @@ Class {
 		'isLoaded',
 		'projectUrl',
 		'rowanProjectsHome',
-		'isDiskDirty'
+		'isDiskDirty',
+		'projectOop'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -437,7 +438,11 @@ RowanProjectService >> rowanSkew [
 
 { #category : 'accessing' }
 RowanProjectService >> rwProject [
-	^ rwProject ifNil: [ rwProject := RwProject newNamed: name ]
+	^ rwProject
+		ifNil: [ 
+			rwProject := RwProject newNamed: name. 
+			projectOop := rwProject asOop.
+			rwProject ]
 ]
 
 { #category : 'perform' }

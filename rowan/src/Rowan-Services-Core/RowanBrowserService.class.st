@@ -142,6 +142,13 @@ RowanBrowserService >> confirmDuplicateName: definitionString [
 ]
 
 { #category : 'client commands' }
+RowanBrowserService >> createProject: projectName [
+	| definedProject |
+	definedProject := RowanDefinedProjectService new name: projectName.
+	RowanCommandResult addResult: definedProject
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> defaultClassHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
