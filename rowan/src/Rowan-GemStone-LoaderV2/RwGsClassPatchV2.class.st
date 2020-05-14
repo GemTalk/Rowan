@@ -18,18 +18,24 @@ RwGsClassPatchV2 class >> for: aClassDefinition inPackage: aPackageDefinition [
 
 { #category : 'private' }
 RwGsClassPatchV2 >> _classFormat: fmt forSubclassType: classType [
-	"Legal types are normal, variable, and byteSubclass."
+	"Legal types are normal, variable, immediate, and byteSubclass."
 
 	"These values need to be moved into Class"
-	^classType = 'normal'
+
+	^ classType = 'normal'
 		ifTrue: [ fmt ]
-		ifFalse: 
-			[ classType = 'variable'
-				ifTrue: [ fmt bitOr: 16r4.	"add indexable bit" ]
-				ifFalse: 
-					[ classType = 'byteSubclass'
+		ifFalse: [ 
+			classType = 'variable'
+				ifTrue: [ fmt bitOr: 16r4	"add indexable bit" ]
+				ifFalse: [ 
+					classType = 'byteSubclass'
 						ifTrue: [ (fmt bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4 ]
-						ifFalse: [self error: 'Unknown class type']]]
+						ifFalse: [ 
+							classType = 'immediate'
+								ifTrue: [ 
+									"selfCanBeSpecial"
+									fmt bitOr: 16r2000 ]
+								ifFalse: [ self error: 'Unknown class type' ] ] ] ]
 ]
 
 { #category : 'private' }
@@ -80,9 +86,8 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 	oldConstraints := oldVersion
 		ifNil: [ #() ]
 		ifNotNil: [ oldVersion _rwSortedConstraints ].
-	gs_options := (classDefinition gs_options)
-		collect: [ :each | each asSymbol ].
-	createdClass := type = 'normal'
+	gs_options := classDefinition gs_options collect: [ :each | each asSymbol ].
+	createdClass := (type = 'normal' or: [ type = 'immediate' ])
 		ifTrue: [ 
 			superclass
 				subclass: classDefinition key
