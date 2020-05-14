@@ -505,12 +505,6 @@ RwProjectDefinitionV2 >> projectName: aString [
 ]
 
 { #category : 'reading' }
-RwProjectDefinitionV2 >> readProjectSet [
-
-	^ Rowan projectTools readV2 readProjectSetForComponentProjectDefinition: self
-]
-
-{ #category : 'reading' }
 RwProjectDefinitionV2 >> readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames [
 
 	^ readTool
