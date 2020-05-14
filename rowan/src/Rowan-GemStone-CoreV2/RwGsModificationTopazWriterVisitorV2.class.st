@@ -133,21 +133,23 @@ RwGsModificationTopazWriterVisitorV2 >> _writeClassTypeMessage: classDefinition 
 	classType := classDefinition subclassType.
 	classType = 'variable'
 		ifTrue: [ 
-			classTypeMessage :=  hasReservedOop
+			classTypeMessage := hasReservedOop
 				ifTrue: [ '_newKernelIndexableSubclass:' ]
 				ifFalse: [ 'indexableSubclass: ' ] ]
-		ifFalse: [ classType = 'byteSubclass'
-			ifTrue: [ 
-				classTypeMessage :=  hasReservedOop
-					ifTrue: [ '_newKernelByteSubclass:' ]
-					ifFalse: [ 'byteSubclass: ' ].
-				hasClassInstVars := hasInstanceVariables := false ]
-			ifFalse: [ classType = ''
+		ifFalse: [ 
+			classType = 'byteSubclass'
 				ifTrue: [ 
-					classTypeMessage :=  hasReservedOop
-						ifTrue: [ '_newKernelSubclass:' ]
-						ifFalse: [ 'subclass: ' ] ]
-				ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+					classTypeMessage := hasReservedOop
+						ifTrue: [ '_newKernelByteSubclass:' ]
+						ifFalse: [ 'byteSubclass: ' ].
+					hasClassInstVars := hasInstanceVariables := false ]
+				ifFalse: [ 
+					(classType = '' or: [ classType = 'immediate' ])
+						ifTrue: [ 
+							classTypeMessage := hasReservedOop
+								ifTrue: [ '_newKernelSubclass:' ]
+								ifFalse: [ 'subclass: ' ] ]
+						ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
 	aStream
 		tab;
 		nextPutAll: classTypeMessage , classDefinition name asString printString;

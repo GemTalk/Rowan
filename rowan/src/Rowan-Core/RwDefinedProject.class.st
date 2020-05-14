@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwDefinedProject class >> fromLoadedProject: aLoadedProject [
+	^ (self newNamed: aLoadedProject name)
+		_resolvedProject: aLoadedProject _loadedProject asDefinition;
+		yourself
+]
+
+{ #category : 'instance creation' }
 RwDefinedProject class >> fromResolvedProject: aResolvedProject [
 	^ (self newNamed: aResolvedProject name)
 		_resolvedProject: aResolvedProject _resolvedProject;
@@ -242,6 +249,13 @@ RwDefinedProject >> isStrict [
 	^ self _resolvedProject isStrict
 ]
 
+{ #category : 'transitions' }
+RwDefinedProject >> load [
+	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+
+	^ self _resolvedProject load
+]
+
 { #category : 'accessing' }
 RwDefinedProject >> loadSpecification [
 
@@ -294,6 +308,14 @@ RwDefinedProject >> projectSpecFile: relativePathString [
 { #category : 'accessing' }
 RwDefinedProject >> projectsRoot [
 	^ self _resolvedProject projectsRoot
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> read: platformConditionalAttributes [
+
+	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
+
+	self _resolvedProject read: platformConditionalAttributes
 ]
 
 { #category : 'accessing' }

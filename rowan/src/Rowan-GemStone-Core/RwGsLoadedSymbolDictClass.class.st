@@ -250,7 +250,7 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
-							handle isSpecial
+							handle areInstancesSpecial
 								ifTrue: [ 'immediate' ]
 								ifFalse: 
 									[ handle isNsc

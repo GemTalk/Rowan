@@ -138,7 +138,7 @@ RwClassDefinition >> _updateClassTypeFromClass: aClass [
 								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
-							aClass isSpecial
+							aClass areInstancesSpecial
 								ifTrue: [ 'immediate' ]
 								ifFalse: 
 									[ aClass isNsc

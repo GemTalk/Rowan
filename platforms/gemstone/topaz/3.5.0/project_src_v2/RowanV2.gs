@@ -48880,6 +48880,14 @@ _resolvedProject: aResolvedProject
 
 category: 'instance creation'
 classmethod: RwDefinedProject
+fromLoadedProject: aLoadedProject
+	^ (self newNamed: aLoadedProject name)
+		_resolvedProject: aLoadedProject _loadedProject asDefinition;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwDefinedProject
 fromResolvedProject: aResolvedProject
 	^ (self newNamed: aResolvedProject name)
 		_resolvedProject: aResolvedProject _resolvedProject;
@@ -49113,6 +49121,14 @@ isStrict
 	^ self _resolvedProject isStrict
 %
 
+category: 'transitions'
+method: RwDefinedProject
+load
+	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+
+	^ self _resolvedProject load
+%
+
 category: 'accessing'
 method: RwDefinedProject
 loadSpecification
@@ -49174,6 +49190,15 @@ category: 'accessing'
 method: RwDefinedProject
 projectsRoot
 	^ self _resolvedProject projectsRoot
+%
+
+category: 'transitions'
+method: RwDefinedProject
+read: platformConditionalAttributes
+
+	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
+
+	self _resolvedProject read: platformConditionalAttributes
 %
 
 category: 'accessing'
@@ -49563,6 +49588,12 @@ currentBranchName
 	rootPath := self repositoryRootPath.
 	rootPath ifNil: [ ^ '' ].
 	^ Rowan gitTools gitBranchNameIn:rootPath
+%
+
+category: 'transitions'
+method: RwProject
+defined
+	^ RwDefinedProject fromLoadedProject: self
 %
 
 category: 'accessing'
@@ -58634,21 +58665,23 @@ _writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instan
 	classType := classDefinition subclassType.
 	classType = 'variable'
 		ifTrue: [ 
-			classTypeMessage :=  hasReservedOop
+			classTypeMessage := hasReservedOop
 				ifTrue: [ '_newKernelIndexableSubclass:' ]
 				ifFalse: [ 'indexableSubclass: ' ] ]
-		ifFalse: [ classType = 'byteSubclass'
-			ifTrue: [ 
-				classTypeMessage :=  hasReservedOop
-					ifTrue: [ '_newKernelByteSubclass:' ]
-					ifFalse: [ 'byteSubclass: ' ].
-				hasClassInstVars := hasInstanceVariables := false ]
-			ifFalse: [ classType = ''
+		ifFalse: [ 
+			classType = 'byteSubclass'
 				ifTrue: [ 
-					classTypeMessage :=  hasReservedOop
-						ifTrue: [ '_newKernelSubclass:' ]
-						ifFalse: [ 'subclass: ' ] ]
-				ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+					classTypeMessage := hasReservedOop
+						ifTrue: [ '_newKernelByteSubclass:' ]
+						ifFalse: [ 'byteSubclass: ' ].
+					hasClassInstVars := hasInstanceVariables := false ]
+				ifFalse: [ 
+					(classType = '' or: [ classType = 'immediate' ])
+						ifTrue: [ 
+							classTypeMessage := hasReservedOop
+								ifTrue: [ '_newKernelSubclass:' ]
+								ifFalse: [ 'subclass: ' ] ]
+						ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
 	aStream
 		tab;
 		nextPutAll: classTypeMessage , classDefinition name asString printString;
@@ -70082,7 +70115,7 @@ _updateClassTypeFromClass: aClass
 								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
-							aClass isSpecial
+							aClass areInstancesSpecial
 								ifTrue: [ 'immediate' ]
 								ifFalse: 
 									[ aClass isNsc
@@ -80588,7 +80621,7 @@ updateClassTypeFromClass
 								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
-							handle isSpecial
+							handle areInstancesSpecial
 								ifTrue: [ 'immediate' ]
 								ifFalse: 
 									[ handle isNsc
@@ -91668,6 +91701,13 @@ _writeCypressJsonOn: aStream indent: startIndent
 ! Class extensions for 'Behavior'
 
 !		Instance methods for 'Behavior'
+
+category: '*rowan-gemstone-kernel-32x'
+method: Behavior
+areInstancesSpecial
+	"3.6.0/Rowan compat"
+	^ self isSpecial
+%
 
 category: '*ast-kernel-core'
 method: Behavior

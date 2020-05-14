@@ -782,7 +782,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 		propertyAt: 'vaPrerequisites' put: #('SUnit' 'TonelWriterModel');
 		propertyAt: 'vaSubApplications'
 			put:
-				(Dictionary new
+				(GsTonelOrderedDictionary new
 						add: #'condition' -> true;
 						add: #'#subapps' -> #('TonelExampleSubApp');
 						yourself);

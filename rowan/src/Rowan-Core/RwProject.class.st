@@ -80,6 +80,11 @@ RwProject >> currentBranchName [
 
 ]
 
+{ #category : 'transitions' }
+RwProject >> defined [
+	^ RwDefinedProject fromLoadedProject: self
+]
+
 { #category : 'accessing' }
 RwProject >> definedClasses [
 
