@@ -44,6 +44,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> checkout: revision [
 	^ self resolvedProject repository checkout: revision
 ]
 
+{ #category : 'queries' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> commitId [
+
+	^ self resolvedProject commitId
+]
+
 { #category : 'commit log' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> commitLog: logLimit [
 

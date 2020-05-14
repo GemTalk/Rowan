@@ -30,6 +30,14 @@ run
       AlmostOutOfMemory enableAtThreshold: 75.
       ex resume ]
 %
+
+!	make sure that tests are run against the current checkout of my rowan clone
+	run
+(Rowan projectNamed: 'Rowan') gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'
+%
+	commit
+
+
 #	break RwProjectTopazWriterTestV2 >> testGsTopazWriter_A @ 28
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.gs
 

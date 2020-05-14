@@ -1,6 +1,19 @@
 Extension { #name : 'RwBrowserToolApiTest' }
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
+RwBrowserToolApiTest >> _expectedAssociationCreationTemplate [
+	^'Object rwSubclass: ''Association''
+	instVarNames: #( key value)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: ''Kernel''
+	packageName: ''Filein3B''
+	options: #()
+'
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
 
@@ -592,6 +605,83 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	testProjectDefinition := browserTool projectNamed: projectName1.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames = {packageName2}
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwBrowserToolApiTest >> testIsExtensionMethod [
+	| projectName packageNames className packageName1 packageName2 browserTool audit project |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageNames := {packageName1.
+	packageName2}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool
+		addOrUpdateMethod: 'bar ^1'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: true
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self assert: (audit := project audit) isEmpty.
+
+	self
+		deny:
+			(browserTool isExtensionMethod: 'ivar1' forClassNamed: className isMeta: false).
+	self
+		deny:
+			(browserTool isExtensionMethod: 'bar' forClassNamed: className isMeta: true).
+
+	browserTool
+		addOrUpdateMethod: 'foo ^1'
+		inProtocol: '*' , packageName2 asLowercase
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool
+		addOrUpdateMethod: 'baz ^1'
+		inProtocol: '*' , packageName2 asLowercase
+		forClassNamed: className
+		isMeta: true
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: (audit := project audit) isEmpty.
+
+	self
+		assert:
+			(browserTool isExtensionMethod: 'foo' forClassNamed: className isMeta: false).
+	self
+		assert:
+			(browserTool isExtensionMethod: 'baz' forClassNamed: className isMeta: true).
+
+	self
+		assert:
+			(browserTool isExtensionMethod: 'yourself' forClassNamed: 'Object' isMeta: false)	"not rowanized at moment"
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

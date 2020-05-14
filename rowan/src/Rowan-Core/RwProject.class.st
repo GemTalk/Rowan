@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwProject',
-	#superclass : 'RowanInterface',
+	#superclass : 'RwAbstractProject',
 	#category : 'Rowan-Core'
 }
 
@@ -55,6 +55,12 @@ RwProject >> comment [
 	^ self _specification comment
 ]
 
+{ #category : 'qurying' }
+RwProject >> commitId [
+
+	^ self _loadedProject commitId
+]
+
 { #category : 'querying' }
 RwProject >> componentForPackageNamed: packageName [
 	"Answer nil if no component found"
@@ -90,12 +96,6 @@ RwProject >> existsOnDisk [
 					ifNil: [ false ]
 					ifNotNil: [:fileRef | fileRef exists ] ]
 			ifAbsent: [ false ]
-]
-
-{ #category : 'exporting' }
-RwProject >> exportSpecification [
-
-	self _loadedProject asDefinition exportSpecification
 ]
 
 { #category : 'accessing' }
@@ -209,12 +209,6 @@ RwProject >> packageNames [
 RwProject >> packages [
 
 	^ self packageNames collect: [ :packageName | RwPackage newNamed: packageName ]
-]
-
-{ #category : 'accessing' }
-RwProject >> project [
-
-	^ self
 ]
 
 { #category : 'accessing' }

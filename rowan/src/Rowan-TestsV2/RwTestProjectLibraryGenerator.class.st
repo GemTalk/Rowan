@@ -7,7 +7,9 @@ commitComment := ''.
 RwTestProjectLibraryGenerator new
 	projectName: 'RowanSample9';
 	projectUrl: 'git@github.com:dalehenrich/RowanSample9.git';
-	preserveChangesOnGithub: true;
+	preserveRowanSHA: false;
+	primeIndexCardMap;
+	preserveChangesOnGithub: false;
 	genSpec_0000: commitComment;
 	genSpec_0001: commitComment;
 	genSpec_0002: commitComment;
@@ -74,7 +76,9 @@ Class {
 		'projectsHome',
 		'projectName',
 		'projectUrl',
-		'preserveChangesOnGithub'
+		'preserveChangesOnGithub',
+		'indexCardMap',
+		'preserveRowanSHA'
 	],
 	#category : 'Rowan-TestsV2'
 }
@@ -753,7 +757,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 	className1 := 'TonelExampleTest'.
 	className2 := 'TonelExampleApp'.
 
-	resolvedProject projectSpecification
+	resolvedProject
 		packagesPath: 'source';
 		packageConvention: 'Rowan';
 		yourself.
@@ -1505,11 +1509,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 		| resolvedProjectName suffix loadSpecification specName resolvedProject baseName |
 		suffix := '_' , index asString.
 		specName := loadSpecification_0025 specName , suffix.
-		resolvedProjectName := resolvedProject_0025 projectName , suffix.
+		resolvedProjectName := resolvedProject_0025 name , suffix.
 
 		loadSpecification := RwEmbeddedLoadSpecificationV2 new
 			projectName: resolvedProjectName;
-			projectAlias: resolvedProject_0025 projectName;
+			projectAlias: resolvedProject_0025 name;
 			projectsHome: self projectsHome;
 			gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 			yourself.
@@ -1581,8 +1585,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0026: resolvedProject [
 	className1 := projectName , 'Class1'.
 	testClassName1 := projectName , 'TestCase1'.
 
-	resolvedProject loadSpecification
-		componentNames: {componentName1};
+	resolvedProject 
+		specComponentNames: {componentName1};
 		yourself.
 
 	resolvedProject addNewComponentNamed: componentName1.
@@ -1659,8 +1663,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0028: resolvedProject [
 			toComponentNamed: componentPath1
 			condition: #('common' 'tests' ).
 
-	resolvedProject loadSpecification
-		customConditionalAttributes: #('tests').
+	resolvedProject customConditionalAttributes: #('tests').
 
 	resolvedProject 
 		movePackageNamed: packageName2 toComponentNamed: componentPath2;
@@ -1943,8 +1946,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 	componentPath := resolvedProject
 		addPlatformComponentNamed: componentName4
 		toComponentNamed: componentPath4
-		alias: '_gemstone_glass'
-		condition:
+		pathNameArray:
+			{'common'.
+			'_gemstone_glass'}
+		conditionPathArray:
 			{'common'.
 			{'gemstone'.
 			'glass'}}.
@@ -1955,8 +1960,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 	componentPath := resolvedProject
 		addPlatformComponentNamed: componentName4
 		toComponentNamed: componentPath4
-		alias: '_gemstone_glass'
-		condition:
+		pathNameArray:
+			{'common'.
+			'tests'.
+			'_gemstone_glass'}
+		conditionPathArray:
 			{'common'.
 			'tests'.
 			{'gemstone'.
@@ -1983,8 +1991,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 	componentPath := resolvedProject
 		addPlatformComponentNamed: componentName4
 		toComponentNamed: componentPath4
-		alias: '_pharo'
-		condition:
+		pathNameArray:
+			{'common'.
+			'_pharo'}
+		conditionPathArray:
 			{'common'.
 			{'pharo'}}.
 	resolvedProject
@@ -1994,8 +2004,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 	componentPath := resolvedProject
 		addPlatformComponentNamed: componentName4
 		toComponentNamed: componentPath4
-		alias: '_pharo'
-		condition:
+		pathNameArray:
+			{'common'.
+			'tests'.
+			'_pharo'}
+		conditionPathArray:
 			{'common'.
 			'tests'.
 			{'pharo'}}.
@@ -2065,8 +2078,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0032: resolvedProject [
 	testClassName2 := projectName , 'TestCase2'.
 	testClassName3 := projectName , 'TestCase3'.
 
-	resolvedProject loadSpecification
-		customConditionalAttributes: #('tests' 'v1' 'v2').
+	resolvedProject customConditionalAttributes: #('tests' 'v1' 'v2').
 
 	resolvedProject
 		addNewNestedComponentNamed: componentName7
@@ -2667,7 +2679,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0047: resolvedProject [
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0048: resolvedProject [
 	"Start with spec_0046; add subclass of NewRowanSample9Class in Renamed package (issue_295_5); for issue #304, make Renamed package conditional on renamed attribute"
 
-	| componentName1 componentName2 componentName3 packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 className1 className2 className3 className4 className5 packageName7 className6 packageName8 loadSpec componentPath |
+	| componentName1 componentName2 componentName3 packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 className1 className2 className3 className4 className5 packageName7 className6 packageName8 componentPath |
 	componentName1 := 'Core'.
 	componentName2 := 'Rename'.
 	componentName3 := 'Tests'.
@@ -2706,8 +2718,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0048: resolvedProject [
 		addPackageNames: {packageName8}.
 
 "update load spec"
-	loadSpec := resolvedProject loadSpecification.
-	loadSpec customConditionalAttributes:  (loadSpec customConditionalAttributes,  { 'renamed'}) asSet asArray.
+	resolvedProject customConditionalAttributes:  (resolvedProject customConditionalAttributes,  { 'renamed'}) asSet asArray.
 
 "add definitions"
 	(resolvedProject packageNamed: packageName7)
@@ -2924,69 +2935,64 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject [
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _addDefinitionsFor_0054: resolvedProject requiredProject: requiredProject [
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0054: resolvedProject embeddedProject: embeddedProject [
 	"Start with spec_0052; add platform conditional packages to the embedded project and the primary project."
 
-	| requiredLoadSpec |
-	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject  condition: 'gnu' packageLabel: 'Gnu'.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gnu' packageLabel: 'Gnu'.
+	| resolvedEmbeddedProject |
 
-	requiredProject
+	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject  condition: 'gnu' packageLabel: 'Gnu'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gnu' packageLabel: 'Gnu'.
+
+	(resolvedEmbeddedProject := embeddedProject resolve)
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
-	requiredLoadSpec := requiredProject loadSpecification.
-
 	resolvedProject projectsRoot ensureCreateDirectory.
-	requiredProject specsRoot / requiredLoadSpec specName , 'ston'
-		copyTo: resolvedProject projectsRoot / requiredLoadSpec specName , 'ston'.
+	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
+		copyTo: resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
 	^ resolvedProject
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _addDefinitionsFor_0055: resolvedProject requiredProject: requiredProject [
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0055: resolvedProject embeddedProject: embeddedProject [
 	"Start with spec_0052; add platform conditional packages (GemStone version 2.4.x) to the embedded project and the primary project."
 
-	| requiredLoadSpec |
+	| resolvedEmbeddedProject |
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs2.[4-]' packageLabel: 'GemStone24x'.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
 
-	requiredProject
+	(resolvedEmbeddedProject := embeddedProject resolve)
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
-	requiredLoadSpec := requiredProject loadSpecification.
-
 	resolvedProject projectsRoot ensureCreateDirectory.
-	requiredProject specsRoot / requiredLoadSpec specName , 'ston'
-		copyTo: resolvedProject projectsRoot / requiredLoadSpec specName , 'ston'.
+	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
+		copyTo: resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
 	^ resolvedProject
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _addDefinitionsFor_0056: resolvedProject requiredProject: requiredProject [
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0056: resolvedProject embeddedProject: embeddedProject [
 	"Start with spec_0052; add platform conditional packages (GemStone version 3.6.x, 3.5.x, and 3.2.15) to the embedded project and the primary project. This is expected to reproduce issue #594 for those three patforms."
 
-	| requiredLoadSpec |
+	| resolvedEmbeddedProject |
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs2.[4-]' packageLabel: 'GemStone24x'.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs3.[2-]' packageLabel: 'GemStone3x'.
-	self _addPlatformConditionalDefinitionsFor_0054Project: requiredProject condition: 'gs3.[2-]'  packageLabel: 'GemStone3x'.
+	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gs3.[2-]'  packageLabel: 'GemStone3x'.
 
-	requiredProject
+	(resolvedEmbeddedProject := embeddedProject resolve)
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
-	requiredLoadSpec := requiredProject loadSpecification.
-
 	resolvedProject projectsRoot ensureCreateDirectory.
-	requiredProject specsRoot / requiredLoadSpec specName , 'ston'
-		copyTo: resolvedProject projectsRoot / requiredLoadSpec specName , 'ston'.
+	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
+		copyTo: resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
 	^ resolvedProject
 ]
@@ -3128,8 +3134,16 @@ RwTestProjectLibraryGenerator >> _addSimpleDefinitionsFor: resolvedProject proje
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: title index: index derivedFrom: parentbranch comment: comment [
+	| indexName sha |
+	indexName := 'index_' , postfix.
+	sha := self preserveRowanSHA
+		ifTrue: [ 
+			self indexCardMap
+				at: indexName
+				ifAbsent: [ (RwProject newNamed: 'Rowan') repositoryCommitId ] ]
+		ifFalse: [ (RwProject newNamed: 'Rowan') repositoryCommitId ].
 	^ RwTestProjectLibraryIndexCard new
-		name: 'index_' , postfix;
+		name: indexName;
 		title: title;
 		specName: specName;
 		index: index;
@@ -3137,14 +3151,13 @@ RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: 
 		comment: comment;
 		rowanIssues: {};
 		gemstoneIssues: {};
-		rowanSHA: (RwProject newNamed: 'Rowan') repositoryCommitId;
+		rowanSHA: sha;
 		yourself
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _createLoadSpecification: aString [
-	^ RwLoadSpecificationV2 new
-		projectName: aString;
+RwTestProjectLibraryGenerator >> _createDefinedProject: aString [
+	^ (Rowan newProjectNamed: aString)
 		projectsHome: self projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself
@@ -3164,7 +3177,8 @@ RwTestProjectLibraryGenerator >> _doCommitAndPush: commitMessage resolvedReposit
 	(somethingToCommit and: [ self preserveChangesOnGithub ])
 		ifTrue: [ 
 			"only push if we really want to preserve the changes during this run and something has changed"
-			resolvedRepository push: resolvedRepository remote branch: branchName ]
+			resolvedRepository push: resolvedRepository remote branch: branchName ].
+	^ somethingToCommit
 ]
 
 { #category : 'private' }
@@ -3297,11 +3311,11 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock [
+RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchName definedProject: definedProject addDefinitions: addDefinitionsBlock [
 	"Create a second set of specs/components in an existing branch"
 
 	| resolvedRepository resolvedProject |
-	resolvedProject := loadSpecification resolveStrict.
+	resolvedProject := definedProject resolveStrict.
 
 	resolvedRepository := resolvedProject repository.
 	(resolvedRepository branches includes: branchName)
@@ -3312,7 +3326,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchN
 		ifFalse: [ self error: 'Expected branch ' , branchName printString , ' to already exist' ].
 
 	resolvedProject revision: branchName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	addDefinitionsBlock value: resolvedProject.
+	addDefinitionsBlock value: resolvedProject defined.
 
 	resolvedProject
 		exportComponents;
@@ -3322,7 +3336,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchN
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSpecification addDefinitions: addDefinitionsBlock [
+RwTestProjectLibraryGenerator >> _genSpecFor: specName definedProject: definedProject addDefinitions: addDefinitionsBlock [
 	"Coming in the load spec revision is pointing at the desired starting 
 		point --- the structure to _start_ with. Since we don't know whether the 
 		repository has been cloned or not, we do a resolve, which will ensure
@@ -3333,7 +3347,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 		definition and load spec."
 
 	| resolvedRepository resolvedProject |
-	resolvedProject := loadSpecification resolveStrict.
+	resolvedProject := definedProject resolveStrict.
 
 	resolvedRepository := resolvedProject repository.
 	(resolvedRepository branches includes: specName)
@@ -3353,7 +3367,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 			rootDir ensureDeleteAll ].
 	(resolvedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
 
-	addDefinitionsBlock value: resolvedProject.
+	addDefinitionsBlock value: resolvedProject defined.
 
 	resolvedProject
 		export;
@@ -3363,7 +3377,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSpecification requiredLoadSpecification: requiredLoadSpecification addDefinitions: addDefinitionsBlock [
+RwTestProjectLibraryGenerator >> _genSpecFor: specName definedProject: definedProject embeddedProjectDefinition: embeddedProjectDefinition addDefinitions: addDefinitionsBlock [
 	"Coming in the load spec revision is pointing at the desired starting 
 		point --- the structure to _start_ with. Since we don't know whether the 
 		repository has been cloned or not, we do a resolve, which will ensure
@@ -3373,9 +3387,9 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 		roots, so we have a clean sarting point and then export the project
 		definition and load spec."
 
-	| resolvedRepository resolvedProject requiredProject |
-	resolvedProject := loadSpecification resolveStrict.
-	requiredProject := (requiredLoadSpecification resolveWithParentProject: resolvedProject) resolve.
+	| resolvedRepository resolvedProject embeddedProject |
+	resolvedProject := definedProject resolveStrict.
+	embeddedProject := embeddedProjectDefinition resolveWithParentProject: resolvedProject.
 
 	resolvedRepository := resolvedProject repository.
 	(resolvedRepository branches includes: specName)
@@ -3388,7 +3402,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 			resolvedRepository createBranch: specName ].
 
 	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
-	requiredProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+	embeddedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
 
 	resolvedProject projectRoots
 		do: [ :rootDir | 
@@ -3396,13 +3410,13 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName loadSpecification: loadSp
 			rootDir ensureDeleteAll ].
 	(resolvedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
 
-	requiredProject projectRoots
+	embeddedProject projectRoots
 		do: [ :rootDir | 
 			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
 			rootDir ensureDeleteAll ].
-	(requiredProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
+	(embeddedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
 
-	addDefinitionsBlock value: resolvedProject value: requiredProject.
+	addDefinitionsBlock value: resolvedProject defined value: embeddedProject defined.
 
 	resolvedProject
 		export;
@@ -3455,7 +3469,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0000'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
@@ -3468,18 +3482,18 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 		index: 0
 		derivedFrom: derivedFrom
 		comment: ''.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0000: resolvedProject ].
 
 	self
@@ -3498,7 +3512,7 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0001'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
@@ -3514,18 +3528,18 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 			'One class per package: RowanSample9-Core and RowanSample9-Tests packages')
 		rowanIssues: #(527);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0001: resolvedProject ].
 
 	self
@@ -3544,7 +3558,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0002'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
@@ -3559,18 +3573,18 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		comment: 'RowanSampe9Class1 has extension methods')
 		rowanIssues: #(254 504);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0002: resolvedProject ].
 
 	self
@@ -3589,7 +3603,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0003'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0002'.
@@ -3604,18 +3618,18 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 		comment: 'RowanSample9Class1 has instancesInvariant option set')
 		rowanIssues: #(254);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0003: resolvedProject ].
 
 	self
@@ -3634,7 +3648,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 	"The method is NOT idempotent with respect to the branches involved. It must be run whenever genSpec_0004 is run.
 		Right now it is called from genSpec_0004_b, so explicit top-level call is not necessary."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom branchName title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom branchName title |
 	postfix := '0004_b'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
@@ -3650,19 +3664,19 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 		comment: '')
 		rowanIssues: #(532);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core3'};
+		specComponentNames: {'Core3'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor_004_b: specName
 		branchName: branchName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0004_b: resolvedProject ].
 
 	self
@@ -3702,7 +3716,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0004'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
@@ -3717,18 +3731,18 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		comment: '')
 		rowanIssues: #(500 531);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core1'};
+		specComponentNames: {'Core1'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0004: resolvedProject ].
 
 	self
@@ -3750,7 +3764,7 @@ RwTestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0005'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
@@ -3771,18 +3785,18 @@ RwTestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 				, RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
 		rowanIssues: #(504);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0005: resolvedProject ].
 
 	self
@@ -3803,7 +3817,7 @@ RwTestProjectLibraryGenerator >> genSpec_0006: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0006'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0002'.
@@ -3819,18 +3833,18 @@ RwTestProjectLibraryGenerator >> genSpec_0006: commitMessage [
 			'RowanSample9-Core, RowanSample9-Extensions, RowanSample9-GemStone, RowanSample9-GemStone-Tests and RowanSample9-Tests packages. Tests ensure that all of the classes are in the proper symbol dictionary')
 		rowanIssues: #(504);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0006: resolvedProject ].
 
 	self
@@ -3851,7 +3865,7 @@ RwTestProjectLibraryGenerator >> genSpec_0007: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0007'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0005'.
@@ -3872,18 +3886,18 @@ RwTestProjectLibraryGenerator >> genSpec_0007: commitMessage [
 				, RwRowanSample9Test _sampleSymbolDictionaryName1 printString)
 		rowanIssues: #(504);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0007: resolvedProject ].
 
 	self
@@ -3904,7 +3918,7 @@ RwTestProjectLibraryGenerator >> genSpec_0008: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0008'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0006'.
@@ -3923,18 +3937,18 @@ RwTestProjectLibraryGenerator >> genSpec_0008: commitMessage [
 				, RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
 		rowanIssues: #(493);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0008: resolvedProject ].
 
 	self
@@ -3955,7 +3969,7 @@ RwTestProjectLibraryGenerator >> genSpec_0009: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0009'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0008'.
@@ -3972,18 +3986,18 @@ RwTestProjectLibraryGenerator >> genSpec_0009: commitMessage [
 				, RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
 		rowanIssues: #(493);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0009: resolvedProject ].
 
 	self
@@ -4004,7 +4018,7 @@ RwTestProjectLibraryGenerator >> genSpec_0010: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0010'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0009'.
@@ -4021,18 +4035,18 @@ RwTestProjectLibraryGenerator >> genSpec_0010: commitMessage [
 				, RwRowanSample9Test _sampleSymbolDictionaryName2 printString)
 		rowanIssues: #(493);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0010: resolvedProject ].
 
 	self
@@ -4053,7 +4067,7 @@ RwTestProjectLibraryGenerator >> genSpec_0011: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0011'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
@@ -4069,18 +4083,18 @@ RwTestProjectLibraryGenerator >> genSpec_0011: commitMessage [
 			'RowanSample9-Core, RowanSample9-Extensions, and RowanSample9-Tests packages in default symbol dictionary.')
 		rowanIssues: #(495);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0011: resolvedProject ].
 
 	self
@@ -4103,7 +4117,7 @@ RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0012'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0011'.
@@ -4122,18 +4136,18 @@ RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
 		RowanSample9-Tests packages in default symbol dictionary.')
 		rowanIssues: #(495);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0012: resolvedProject ].
 
 	self
@@ -4156,7 +4170,7 @@ RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0013'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0011'.
@@ -4175,18 +4189,18 @@ RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
 		packages in default symbol dictionary.')
 		rowanIssues: #(495);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0013: resolvedProject ].
 
 	self
@@ -4210,7 +4224,7 @@ RwTestProjectLibraryGenerator >> genSpec_0014: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0014'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0011'.
@@ -4230,18 +4244,18 @@ RwTestProjectLibraryGenerator >> genSpec_0014: commitMessage [
 		to new package. RowanSample9-Tests package in default symbol dictionary.')
 		rowanIssues: #(493);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0014: resolvedProject ].
 
 	self
@@ -4269,7 +4283,7 @@ RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0015'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0014'.
@@ -4294,18 +4308,18 @@ RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
 		to a different symbol dictionary.')
 		rowanIssues: #(495);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0015: resolvedProject ].
 
 	self
@@ -4327,7 +4341,7 @@ RwTestProjectLibraryGenerator >> genSpec_0016: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0016'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0015'.
@@ -4343,18 +4357,18 @@ RwTestProjectLibraryGenerator >> genSpec_0016: commitMessage [
 			'Move extension method from  RowanSample9-Extensions1 to RowanSample9-Extensions.')
 		rowanIssues: #(557);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0016: resolvedProject ].
 
 	self
@@ -4376,7 +4390,7 @@ RwTestProjectLibraryGenerator >> genSpec_0017: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0017'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0015'.
@@ -4391,18 +4405,18 @@ RwTestProjectLibraryGenerator >> genSpec_0017: commitMessage [
 		comment: '')
 		rowanIssues: #(557);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0017: resolvedProject ].
 
 	self
@@ -4423,7 +4437,7 @@ RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0018'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
@@ -4439,19 +4453,18 @@ RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
 		rowanIssues: #(553 555);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
-		comment: indexCard title;
+		specComponentNames: {'Core'};
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0018: resolvedProject ].
 
 	self
@@ -4471,7 +4484,7 @@ RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0019'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0017'.
@@ -4486,21 +4499,20 @@ RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
 		rowanIssues: #(554);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0019: resolvedProject ].
 
 	self
@@ -4521,7 +4533,7 @@ RwTestProjectLibraryGenerator >> genSpec_0020: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0020'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0019'.
@@ -4537,21 +4549,20 @@ RwTestProjectLibraryGenerator >> genSpec_0020: commitMessage [
 		rowanIssues: #(554);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0020: resolvedProject ].
 
 	self
@@ -4572,7 +4583,7 @@ RwTestProjectLibraryGenerator >> genSpec_0021: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0021'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0011'.
@@ -4588,21 +4599,20 @@ RwTestProjectLibraryGenerator >> genSpec_0021: commitMessage [
 		rowanIssues: #(568);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0021: resolvedProject ].
 
 	self
@@ -4623,7 +4633,7 @@ RwTestProjectLibraryGenerator >> genSpec_0022: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0022'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0021'.
@@ -4639,21 +4649,20 @@ RwTestProjectLibraryGenerator >> genSpec_0022: commitMessage [
 		rowanIssues: #(568);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0022: resolvedProject ].
 
 	self
@@ -4674,7 +4683,7 @@ RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0023'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0011'.
@@ -4690,21 +4699,20 @@ RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
 		rowanIssues: #(568);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0023: resolvedProject ].
 
 	self
@@ -4727,7 +4735,7 @@ RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0024'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0011'.
@@ -4745,21 +4753,20 @@ RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
 		rowanIssues: #(553);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0024: resolvedProject ].
 
 	self
@@ -4780,7 +4787,7 @@ RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0025'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
@@ -4796,21 +4803,20 @@ RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
 		rowanIssues: #(571);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0025: resolvedProject ].
 
 	self
@@ -4833,7 +4839,7 @@ RwTestProjectLibraryGenerator >> genSpec_0026: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0026'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
@@ -4849,21 +4855,20 @@ RwTestProjectLibraryGenerator >> genSpec_0026: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0026: resolvedProject ].
 
 	self
@@ -4886,7 +4891,7 @@ RwTestProjectLibraryGenerator >> genSpec_0027: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0027'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0026'.
@@ -4903,21 +4908,20 @@ RwTestProjectLibraryGenerator >> genSpec_0027: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {projectName};
+		specComponentNames: {projectName};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0027: resolvedProject ].
 
 	self
@@ -4940,7 +4944,7 @@ RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0028'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0027'.
@@ -4956,21 +4960,20 @@ RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {projectName};
+		specComponentNames: {projectName};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0028: resolvedProject ].
 
 	self
@@ -4993,7 +4996,7 @@ RwTestProjectLibraryGenerator >> genSpec_0029: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0029'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0028'.
@@ -5009,21 +5012,20 @@ RwTestProjectLibraryGenerator >> genSpec_0029: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {projectName};
+		specComponentNames: {projectName};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0029: resolvedProject ].
 
 	self
@@ -5046,7 +5048,7 @@ RwTestProjectLibraryGenerator >> genSpec_0030: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0030'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0029'.
@@ -5062,21 +5064,20 @@ RwTestProjectLibraryGenerator >> genSpec_0030: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {projectName};
+		specComponentNames: {projectName};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0030: resolvedProject ].
 
 	self
@@ -5099,7 +5100,7 @@ RwTestProjectLibraryGenerator >> genSpec_0031: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0031'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0029'.
@@ -5115,21 +5116,20 @@ RwTestProjectLibraryGenerator >> genSpec_0031: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {projectName};
+		specComponentNames: {projectName};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0031: resolvedProject ].
 
 	self
@@ -5152,7 +5152,7 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0032'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0031'.
@@ -5168,21 +5168,20 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 		rowanIssues: #(573 571);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {projectName};
+		specComponentNames: {projectName};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0032: resolvedProject ].
 
 	self
@@ -5203,7 +5202,7 @@ RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom |
 	postfix := '0033'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0011'.
@@ -5219,21 +5218,20 @@ RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
 		rowanIssues: #(345 514);
 		yourself.
 
-	loadSpecification := RwLoadSpecificationV2 new
-		projectName: projectName;
+	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		comment: indexCard title;
+		specComment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0033: resolvedProject ].
 
 	self
@@ -5252,7 +5250,7 @@ RwTestProjectLibraryGenerator >> genSpec_0034: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0034'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
@@ -5267,18 +5265,18 @@ RwTestProjectLibraryGenerator >> genSpec_0034: commitMessage [
 		comment: '')
 		rowanIssues: #();
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  {};
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0034: resolvedProject ].
 
 	self
@@ -5297,7 +5295,7 @@ RwTestProjectLibraryGenerator >> genSpec_0035: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0035'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0034'.
@@ -5312,18 +5310,18 @@ RwTestProjectLibraryGenerator >> genSpec_0035: commitMessage [
 		comment: '')
 		rowanIssues: #();
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0035: resolvedProject ].
 
 	self
@@ -5342,7 +5340,7 @@ RwTestProjectLibraryGenerator >> genSpec_0036: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0036'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0035'.
@@ -5357,18 +5355,18 @@ RwTestProjectLibraryGenerator >> genSpec_0036: commitMessage [
 		comment: '')
 		rowanIssues: #();
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0036: resolvedProject ].
 
 	self
@@ -5387,7 +5385,7 @@ RwTestProjectLibraryGenerator >> genSpec_0037: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0037'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0002'.
@@ -5402,18 +5400,18 @@ RwTestProjectLibraryGenerator >> genSpec_0037: commitMessage [
 		comment: '')
 		rowanIssues: #(14);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0037: resolvedProject ].
 
 	self
@@ -5432,7 +5430,7 @@ RwTestProjectLibraryGenerator >> genSpec_0038: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0038'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0002'.
@@ -5447,18 +5445,18 @@ RwTestProjectLibraryGenerator >> genSpec_0038: commitMessage [
 		comment: '')
 		rowanIssues: #(185);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0038: resolvedProject ].
 
 	self
@@ -5477,7 +5475,7 @@ RwTestProjectLibraryGenerator >> genSpec_0039: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0039'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0038'.
@@ -5492,18 +5490,18 @@ RwTestProjectLibraryGenerator >> genSpec_0039: commitMessage [
 		comment: '')
 		rowanIssues: #(185);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0039: resolvedProject ].
 
 	self
@@ -5522,7 +5520,7 @@ RwTestProjectLibraryGenerator >> genSpec_0040: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0040'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0038'.
@@ -5537,18 +5535,18 @@ RwTestProjectLibraryGenerator >> genSpec_0040: commitMessage [
 		comment: '')
 		rowanIssues: #(185);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0040: resolvedProject ].
 
 	self
@@ -5567,7 +5565,7 @@ RwTestProjectLibraryGenerator >> genSpec_0041: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0041'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0038'.
@@ -5582,18 +5580,18 @@ RwTestProjectLibraryGenerator >> genSpec_0041: commitMessage [
 		comment: '')
 		rowanIssues: #(185);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0041: resolvedProject ].
 
 	self
@@ -5612,7 +5610,7 @@ RwTestProjectLibraryGenerator >> genSpec_0042: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0042'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0039'.
@@ -5627,18 +5625,18 @@ RwTestProjectLibraryGenerator >> genSpec_0042: commitMessage [
 		comment: '')
 		rowanIssues: #(185);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0042: resolvedProject ].
 
 	self
@@ -5657,7 +5655,7 @@ RwTestProjectLibraryGenerator >> genSpec_0043: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0043'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0040'.
@@ -5672,18 +5670,18 @@ RwTestProjectLibraryGenerator >> genSpec_0043: commitMessage [
 		comment: '')
 		rowanIssues: #(185);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0043: resolvedProject ].
 
 	self
@@ -5702,7 +5700,7 @@ RwTestProjectLibraryGenerator >> genSpec_0044: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0044'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0038'.
@@ -5717,18 +5715,18 @@ RwTestProjectLibraryGenerator >> genSpec_0044: commitMessage [
 		comment: '')
 		rowanIssues: #(185);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0044: resolvedProject ].
 
 	self
@@ -5747,7 +5745,7 @@ RwTestProjectLibraryGenerator >> genSpec_0045: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0045'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0038'.
@@ -5762,18 +5760,18 @@ RwTestProjectLibraryGenerator >> genSpec_0045: commitMessage [
 		comment: '')
 		rowanIssues: #(284);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0045: resolvedProject ].
 
 	self
@@ -5792,7 +5790,7 @@ RwTestProjectLibraryGenerator >> genSpec_0046: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0046'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0041'.
@@ -5807,18 +5805,18 @@ RwTestProjectLibraryGenerator >> genSpec_0046: commitMessage [
 		comment: '')
 		rowanIssues: #(295);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0046: resolvedProject ].
 
 	self
@@ -5837,7 +5835,7 @@ RwTestProjectLibraryGenerator >> genSpec_0047: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0047'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0040'.
@@ -5852,18 +5850,18 @@ RwTestProjectLibraryGenerator >> genSpec_0047: commitMessage [
 		comment: '')
 		rowanIssues: #(295);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0047: resolvedProject ].
 
 	self
@@ -5882,7 +5880,7 @@ RwTestProjectLibraryGenerator >> genSpec_0048: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0048'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0046'.
@@ -5897,18 +5895,18 @@ RwTestProjectLibraryGenerator >> genSpec_0048: commitMessage [
 		comment: '')
 		rowanIssues: #(295 304);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' . 'renamed'};
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0048: resolvedProject ].
 
 	self
@@ -5927,7 +5925,7 @@ RwTestProjectLibraryGenerator >> genSpec_0049: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0049'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0048'.
@@ -5942,18 +5940,18 @@ RwTestProjectLibraryGenerator >> genSpec_0049: commitMessage [
 		comment: '')
 		rowanIssues: #(304);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' . 'renamed'};
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0049: resolvedProject ].
 
 	self
@@ -5972,7 +5970,7 @@ RwTestProjectLibraryGenerator >> genSpec_0050: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0050'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0047'.
@@ -5987,18 +5985,18 @@ RwTestProjectLibraryGenerator >> genSpec_0050: commitMessage [
 		comment: '')
 		rowanIssues: #(460);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' . 'renamed'};
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0050: resolvedProject ].
 
 	self
@@ -6017,7 +6015,7 @@ RwTestProjectLibraryGenerator >> genSpec_0051: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0051'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0002'.
@@ -6032,18 +6030,18 @@ RwTestProjectLibraryGenerator >> genSpec_0051: commitMessage [
 		comment: '')
 		rowanIssues: #(493);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0051: resolvedProject ].
 
 	self
@@ -6062,7 +6060,7 @@ RwTestProjectLibraryGenerator >> genSpec_0052: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0052'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
@@ -6077,18 +6075,18 @@ RwTestProjectLibraryGenerator >> genSpec_0052: commitMessage [
 		comment: '')
 		rowanIssues: #(591 571);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0052: resolvedProject ].
 
 	self
@@ -6107,7 +6105,7 @@ RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
 	postfix := '0053'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0052'.
@@ -6122,18 +6120,18 @@ RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
 		comment: '')
 		rowanIssues: #(591);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		comment: title;
+		specComment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
+		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0053: resolvedProject ].	"WARNING should be using loadSpecification:requiredLoadSpecification:addDefinitions:; follow the genSpec_0054 model"
 
 	self
@@ -6152,7 +6150,7 @@ RwTestProjectLibraryGenerator >> genSpec_0054: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title requiredLoadSpecification requiredProjectName embeddedProjectReference embededProjectDirName |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title embeddedProjectDefinition requiredProjectName embeddedProjectReference embededProjectDirName |
 	postfix := '0054'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0052'.
@@ -6167,36 +6165,35 @@ RwTestProjectLibraryGenerator >> genSpec_0054: commitMessage [
 		comment: '')
 		rowanIssues: #(594);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
-		comment: title;
+		specComment: title;
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
 	embededProjectDirName := 'embededProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
-	requiredLoadSpecification := RwEmbeddedLoadSpecificationV2 new
+	embeddedProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)
 		specName: requiredProjectName;
-		projectName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
 		customConditionalAttributes: { 'tests' }
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
-		requiredLoadSpecification: requiredLoadSpecification
-		addDefinitions: [ :resolvedProject :requiredProject | self _addDefinitionsFor_0054: resolvedProject requiredProject: requiredProject ].
+		definedProject: definedProject
+		embeddedProjectDefinition: embeddedProjectDefinition
+		addDefinitions: [ :resolvedProject :embeddedProject | self _addDefinitionsFor_0054: resolvedProject embeddedProject: embeddedProject ].
 
 	self
 		_finishCommitAndPush: specName
@@ -6214,7 +6211,7 @@ RwTestProjectLibraryGenerator >> genSpec_0055: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title requiredLoadSpecification requiredProjectName embeddedProjectReference embededProjectDirName |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title embededProjectDefinition requiredProjectName embeddedProjectReference embededProjectDirName |
 	postfix := '0055'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0052'.
@@ -6229,36 +6226,35 @@ RwTestProjectLibraryGenerator >> genSpec_0055: commitMessage [
 		comment: '')
 		rowanIssues: #(594);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
-		comment: title;
+		specComment: title;
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
 	embededProjectDirName := 'embededProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
-	requiredLoadSpecification := RwEmbeddedLoadSpecificationV2 new
+	embededProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)
 		specName: requiredProjectName;
-		projectName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
 		customConditionalAttributes: { 'tests' }
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
-		requiredLoadSpecification: requiredLoadSpecification
-		addDefinitions: [ :resolvedProject :requiredProject | self _addDefinitionsFor_0055: resolvedProject requiredProject: requiredProject ].
+		definedProject: definedProject
+		embeddedProjectDefinition: embededProjectDefinition
+		addDefinitions: [ :resolvedProject :embeddedProject | self _addDefinitionsFor_0055: resolvedProject embeddedProject: embeddedProject ].
 
 	self
 		_finishCommitAndPush: specName
@@ -6276,7 +6272,7 @@ RwTestProjectLibraryGenerator >> genSpec_0056: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard loadSpecification resolvedRepository specName postfix derivedFrom title requiredLoadSpecification requiredProjectName embeddedProjectReference embededProjectDirName |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title embededProjectDefinition requiredProjectName embeddedProjectReference embededProjectDirName |
 	postfix := '0056'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0052'.
@@ -6291,36 +6287,35 @@ RwTestProjectLibraryGenerator >> genSpec_0056: commitMessage [
 		comment: '')
 		rowanIssues: #(594);
 		yourself.
-	loadSpecification := (self _createLoadSpecification: self projectName)
+	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
-		comment: title;
+		specComment: title;
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
 	embededProjectDirName := 'embededProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
-	requiredLoadSpecification := RwEmbeddedLoadSpecificationV2 new
+	embededProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)
 		specName: requiredProjectName;
-		projectName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		componentNames: {'Core'};
+		specComponentNames: {'Core'};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
 		customConditionalAttributes: { 'tests' }
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
-		loadSpecification: loadSpecification
-		requiredLoadSpecification: requiredLoadSpecification
-		addDefinitions: [ :resolvedProject :requiredProject | self _addDefinitionsFor_0056: resolvedProject requiredProject: requiredProject ].
+		definedProject: definedProject
+		embeddedProjectDefinition: embededProjectDefinition
+		addDefinitions: [ :resolvedProject :embededProject | self _addDefinitionsFor_0056: resolvedProject embeddedProject: embededProject ].
 
 	self
 		_finishCommitAndPush: specName
@@ -6329,6 +6324,11 @@ RwTestProjectLibraryGenerator >> genSpec_0056: commitMessage [
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGenerator >> indexCardMap [
+	^ indexCardMap
 ]
 
 { #category : 'accessing' }
@@ -6343,6 +6343,36 @@ RwTestProjectLibraryGenerator >> preserveChangesOnGithub: aBool [
 	"if true, modifications to git repository will be pushed to remote"
 
 	preserveChangesOnGithub := aBool
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGenerator >> preserveRowanSHA [
+	^ preserveRowanSHA ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGenerator >> preserveRowanSHA: aBool [
+	preserveRowanSHA := aBool
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGenerator >> primeIndexCardMap [
+	self preserveRowanSHA
+		ifFalse: [ ^ self ].
+	Rowan projectTools git
+		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
+		with: 'git@github.com:dalehenrich/RowanSample9.git'.
+	indexCardMap := Dictionary new.
+	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9' / 'indexCards')
+		files
+		do: [ :file | 
+			| indexCard |
+			file
+				readStreamDo: [ :fileStream | 
+					| stream |
+					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+					indexCard := STON fromStream: stream ].
+			indexCardMap at: indexCard name put: indexCard rowanSHA ]
 ]
 
 { #category : 'accessing' }

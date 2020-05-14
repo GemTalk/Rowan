@@ -31,6 +31,25 @@ RwAbstractRepositoryDefinitionV2 >> checkAndUpdateRepositoryRevision: aRwProject
 	"noop"
 ]
 
+{ #category : 'actions' }
+RwAbstractRepositoryDefinitionV2 >> diskRepositoryRoot: repositoryRootPathString [
+	^ RwDiskRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: 'file:' , repositoryRootPathString
+]
+
+{ #category : 'actions' }
+RwAbstractRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString revision: aString [
+	| urlString |
+	urlString := 'file:' , repositoryRootPathString.
+	^ RwGitRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: urlString
+		revision: aString
+]
+
 { #category : 'comparing' }
 RwAbstractRepositoryDefinitionV2 >> hash [
 	| hashValue |
@@ -66,6 +85,18 @@ RwAbstractRepositoryDefinitionV2 >> projectsHome [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinitionV2 >> projectsHome: aFileReference [
 	projectsHome := aFileReference
+]
+
+{ #category : 'actions' }
+RwAbstractRepositoryDefinitionV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	| urlString repo |
+	urlString := 'file:' , repositoryRootPathString.
+	repo := RwReadOnlyDiskRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: urlString.
+	repo commitId: commitId.
+	^ repo
 ]
 
 { #category : 'accessing' }

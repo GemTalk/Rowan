@@ -171,15 +171,6 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> addPlatformComponentNamed: componentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray [
-	^ self _projectDefinition
-		addPlatformComponentNamed: componentName
-		toComponentNamed: toComponentName
-		alias: alias
-		condition: conditionPathArray
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	^ self
 		addPlatformComponentNamed: aComponentName
@@ -272,6 +263,12 @@ RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: 
 		comment: commentString
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName [
+	self _loadSpecification addTopLevelComponentNamed: componentName.
+	^ self _projectDefinition addNewComponentNamed: componentName
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish
@@ -285,6 +282,11 @@ RwResolvedProjectV2 >> comment [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment: aString [
 	self _projectDefinition comment: aString
+]
+
+{ #category : 'querying' }
+RwResolvedProjectV2 >> commitId [
+	^ self _projectRepository commitId
 ]
 
 { #category : 'querying' }
@@ -345,9 +347,16 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		yourself
 ]
 
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
+	projectRepository := self _projectRepository
+		diskRepositoryRoot: repositoryRootPathString
+]
+
 { #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl [
 	^ self _loadSpecification diskUrl
+		ifNil: [ ^ 'file:' , self _loadSpecification repositoryRoot pathString ]
 ]
 
 { #category : 'load specification' }
@@ -463,6 +472,13 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packa
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
+	projectRepository := self _projectRepository
+		gitRepositoryRoot: repositoryRootPathString
+		revision: self _loadSpecification revision
 ]
 
 { #category : 'load specification' }
@@ -732,6 +748,16 @@ RwResolvedProjectV2 >> read: platformConditionalAttributes [
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	projectRepository := self _projectRepository
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId.
+
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> readPackageNames: packageNames [
 	| format visitorClass |
@@ -873,6 +899,8 @@ RwResolvedProjectV2 >> repositoryCommitId [
 
 { #category : 'project specification' }
 RwResolvedProjectV2 >> repoType: aSymbol [
+	"#disk, #git or #none"
+
 	self _projectSpecification repoType: aSymbol
 ]
 

@@ -255,7 +255,9 @@ RwProjectSpecificationV2 >> repoType [
 
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> repoType: aSymbol [
-	(#(#'disk' #'git') includes: aSymbol asSymbol)
+	"#disk, #git or #none"
+
+	(#(#'disk' #'git' #'none') includes: aSymbol asSymbol)
 		ifFalse: [ self error: 'Unknown repo type ' , aSymbol asSymbol printString ].
 	^ repoType := aSymbol asSymbol
 ]
