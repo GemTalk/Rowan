@@ -14,3 +14,10 @@ RowanSpecificationService >> addInstVars: anObject [
 			add:
 				(self stripOutUnicode: (instVarNames at: i) asString) -> (anObject instVarAt: i) ]
 ]
+
+{ #category : 'initialization' }
+RowanSpecificationService >> initialize: anOop [
+	"intention revealing"
+	isOop := true. 
+	super inspect: anOop
+]

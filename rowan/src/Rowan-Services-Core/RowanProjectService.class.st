@@ -15,7 +15,8 @@ Class {
 		'projectUrl',
 		'rowanProjectsHome',
 		'isDiskDirty',
-		'projectOop'
+		'projectOop',
+		'specService'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -43,20 +44,25 @@ RowanProjectService >> = projectService [
 
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
-	name = Rowan unpackagedName ifTrue:[
-		isLoaded := false.
-		RowanBrowserService new updateDictionaries. ^self]. 
-	(isLoaded := self projectIsLoaded) ifFalse:[
-		existsOnDisk := false. 
-		updateType := #removedProject:. 
-		^RowanCommandResult addResult: self]. 
-	isDirty := self isDirty. 
+	name = Rowan unpackagedName
+		ifTrue: [ 
+			isLoaded := false.
+			RowanBrowserService new updateDictionaries.
+			^ self ].
+	(isLoaded := self projectIsLoaded)
+		ifFalse: [ 
+			existsOnDisk := false.
+			self isDefinedProject
+				ifFalse: [ 
+					updateType := #'removedProject:'.
+					^ RowanCommandResult addResult: self ] ].
+	isDirty := self isDirty.
 	self setExistsOnDisk.
 	isSkew := self isSkew.
 	sha := self rowanSha.
 	branch := self rowanBranch.
-	projectUrl := self rowanProjectUrl. 
-	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' .
+	projectUrl := self rowanProjectUrl.
+	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
 	isDiskDirty := self isGitDirty.
 	RowanCommandResult addResult: self
 ]
@@ -306,6 +312,16 @@ RowanProjectService >> projectIsLoaded [
 		ifAbsent: []) notNil
 ]
 
+{ #category : 'accessing' }
+RowanProjectService >> projectOop [
+	^projectOop
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> projectOop: object [
+	projectOop := object
+]
+
 { #category : 'rowan' }
 RowanProjectService >> projects [
 
@@ -476,6 +492,16 @@ RowanProjectService >> sha: anObject [
 	sha := anObject.
 	isSkew := self rowanSkew
 
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> specService [
+	^specService
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> specService: object [
+	specService := object
 ]
 
 { #category : 'rowan' }

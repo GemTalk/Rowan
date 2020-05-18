@@ -4,6 +4,12 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'testing' }
+RowanDefinedProjectService >> isDefinedProject [
+
+	^true
+]
+
 { #category : 'client commands' }
 RowanDefinedProjectService >> load [
 ]

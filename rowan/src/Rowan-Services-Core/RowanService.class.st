@@ -280,6 +280,12 @@ RowanService >> isClassService [
 ]
 
 { #category : 'testing' }
+RowanService >> isDefinedProject [
+
+	^false
+]
+
+{ #category : 'testing' }
 RowanService >> isDictionaryService [
 
 	^false

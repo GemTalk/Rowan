@@ -1,6 +1,7 @@
 "
 RowanBrowserService handles services that fall outside
-the scope of other services.
+the scope of other services with an emphasis on browser-
+type tasks.
 "
 Class {
 	#name : 'RowanBrowserService',
@@ -142,13 +143,6 @@ RowanBrowserService >> confirmDuplicateName: definitionString [
 ]
 
 { #category : 'client commands' }
-RowanBrowserService >> createProject: projectName [
-	| definedProject |
-	definedProject := RowanDefinedProjectService new name: projectName.
-	RowanCommandResult addResult: definedProject
-]
-
-{ #category : 'client commands' }
 RowanBrowserService >> defaultClassHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
@@ -196,6 +190,17 @@ RowanBrowserService >> newCachedSelectors [
 { #category : 'accessing' }
 RowanBrowserService >> newCachedSelectors: object [
 	newCachedSelectors := object
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> newProjectNamed: projectName windowHandle: handle [
+	| definedProjectService project |
+	definedProjectService := RowanDefinedProjectService new name: projectName.
+	definedProjectService projectOop: (project := Rowan newProjectNamed: projectName) asOop.
+	self saveRootObject: definedProjectService projectOop windowHandle: handle. 
+	definedProjectService := definedProjectService updateType: #newProject:.
+	definedProjectService specService: (RowanSpecificationService new initialize: project _loadSpecification asOop).
+	RowanCommandResult addResult: definedProjectService
 ]
 
 { #category : 'window registry' }
