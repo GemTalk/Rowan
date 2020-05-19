@@ -311,6 +311,14 @@ RwDefinedProject >> projectsRoot [
 ]
 
 { #category : 'transitions' }
+RwDefinedProject >> read [
+
+	"return a RwDefinedProject with definitions read from disk"
+
+	self _resolvedProject read
+]
+
+{ #category : 'transitions' }
 RwDefinedProject >> read: platformConditionalAttributes [
 
 	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"

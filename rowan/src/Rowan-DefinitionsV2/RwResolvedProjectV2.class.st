@@ -275,6 +275,15 @@ RwResolvedProjectV2 >> checkout: aCommittish [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> classNamed: aString ifAbsent: absentBlock [
+	self packages
+		do: [ :packageDef | 
+			(packageDef classDefinitionNamed: aString ifAbsent: [  ])
+				ifNotNil: [ :classDef | ^ classDef ] ].
+	^ absentBlock value
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> comment [
 	^ self _projectDefinition comment
 ]
