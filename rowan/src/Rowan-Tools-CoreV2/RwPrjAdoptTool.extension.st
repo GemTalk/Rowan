@@ -135,3 +135,19 @@ RwPrjAdoptTool >> adoptProjectFromUrl: specUrl projectsHome: projectsHome [
 
 	self _adoptProjectProjectsInProjectSet: projectSetDefinition
 ]
+
+{ #category : '*rowan-tools-corev2' }
+RwPrjAdoptTool >> adoptProjectFromUrl: specUrl readonlyDiskUrl: diskUrl projectsHome: projectsHome [
+	"Create loaded project (if needed), traverse the package definitions and 
+				create loaded packages for each"
+
+	| loadSpec projectSetDefinition |
+	loadSpec := RwSpecification fromUrl: specUrl.
+	projectSetDefinition := loadSpec
+		readonlyDiskUrl: diskUrl;
+		projectsHome: projectsHome;
+		resolveProjectSet.
+
+	Rowan projectTools adopt
+		_adoptProjectProjectsInProjectSet: projectSetDefinition
+]

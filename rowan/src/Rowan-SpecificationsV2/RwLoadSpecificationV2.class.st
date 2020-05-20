@@ -227,6 +227,7 @@ RwLoadSpecificationV2 >> diskUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> diskUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	diskUrl := anUrlString
 ]
 
@@ -353,6 +354,7 @@ RwLoadSpecificationV2 >> gitUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> gitUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	gitUrl := anUrlString
 ]
 
@@ -410,6 +412,7 @@ RwLoadSpecificationV2 >> mercurialUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> mercurialUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	mercurialUrl := anUrlString
 ]
 
@@ -523,6 +526,7 @@ RwLoadSpecificationV2 >> readonlyDiskUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> readonlyDiskUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
 ]
 
@@ -615,5 +619,6 @@ RwLoadSpecificationV2 >> svnUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> svnUrlUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
 ]
