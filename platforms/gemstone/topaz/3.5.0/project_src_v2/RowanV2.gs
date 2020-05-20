@@ -61958,10 +61958,11 @@ _projectRepository
 																	gitTool := Rowan projectTools git.
 																	repositoryRootPath := self _loadSpecification repositoryRoot
 																		pathString.
-																	^ projectRepository := ((gitTool gitPresentIn: repositoryRootPath)
-																			and: [ 
-																				(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
-																					asFileReference = self _loadSpecification repositoryRoot ])
+																	^ projectRepository := ((gitTool
+																		gitPresentIn: repositoryRootPath)
+																		and: [ 
+																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
+																				asFileReference = self _loadSpecification repositoryRoot ])
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2
 																				newNamed: self projectAlias
@@ -61988,37 +61989,18 @@ _projectRepository
 																		repositoryUrl: ''
 																		revision: self _loadSpecification revision ]
 																ifFalse: [ 
-																	RwDiskRepositoryDefinitionV2
-																		newNamed: self projectAlias
-																		projectsHome: self projectsHome
-																		repositoryUrl: self diskUrl ] ] ].
-											projectSpecification
-												ifNil: [ 
-													RwNoRepositoryDefinitionV2
-														newNamed: self projectAlias
-														projectsHome: nil
-														repositoryUrl: nil ]
-												ifNotNil: [ 
-													self _projectSpecification repoType == #'git'
-														ifTrue: [ 
-															RwGitRepositoryDefinitionV2
-																newNamed: self projectAlias
-																projectsHome: self projectsHome
-																repositoryUrl: ''
-																revision: self _loadSpecification revision ]
-														ifFalse: [ 
-															self _projectSpecification repoType == #'disk'
-																ifTrue: [ 
-																	RwDiskRepositoryDefinitionV2
-																		newNamed: self projectAlias
-																		projectsHome: self projectsHome
-																		repositoryUrl: self diskUrl ]
-																ifFalse: [ 
-																	"#none"
-																	RwNoRepositoryDefinitionV2
-																		newNamed: self projectAlias
-																		projectsHome: nil
-																		repositoryUrl: nil ] ] ] ] ] ] ].
+																	self _projectSpecification repoType == #'disk'
+																		ifTrue: [ 
+																			RwDiskRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: self diskUrl ]
+																		ifFalse: [ 
+																			"#none"
+																			RwNoRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: nil
+																				repositoryUrl: nil ] ] ] ] ] ] ] ].
 			projectRepository ]
 %
 
