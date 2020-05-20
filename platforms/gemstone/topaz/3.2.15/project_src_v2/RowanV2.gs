@@ -85048,6 +85048,7 @@ diskUrl
 category: 'accessing'
 method: RwLoadSpecificationV2
 diskUrl: anUrlString
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	diskUrl := anUrlString
 %
 
@@ -85189,6 +85190,7 @@ gitUrl
 category: 'accessing'
 method: RwLoadSpecificationV2
 gitUrl: anUrlString
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	gitUrl := anUrlString
 %
 
@@ -85252,6 +85254,7 @@ mercurialUrl
 category: 'accessing'
 method: RwLoadSpecificationV2
 mercurialUrl: anUrlString
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	mercurialUrl := anUrlString
 %
 
@@ -85379,6 +85382,7 @@ readonlyDiskUrl
 category: 'accessing'
 method: RwLoadSpecificationV2
 readonlyDiskUrl: anUrlString
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
 %
 
@@ -85483,6 +85487,7 @@ svnUrl
 category: 'accessing'
 method: RwLoadSpecificationV2
 svnUrlUrl: anUrlString
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
 %
 
@@ -97290,6 +97295,23 @@ adoptProjectFromUrl: specUrl projectsHome: projectsHome
 		resolveProjectSet.
 
 	self _adoptProjectProjectsInProjectSet: projectSetDefinition
+%
+
+category: '*rowan-tools-corev2'
+method: RwPrjAdoptTool
+adoptProjectFromUrl: specUrl readonlyDiskUrl: diskUrl projectsHome: projectsHome
+	"Create loaded project (if needed), traverse the package definitions and 
+				create loaded packages for each"
+
+	| loadSpec projectSetDefinition |
+	loadSpec := RwSpecification fromUrl: specUrl.
+	projectSetDefinition := loadSpec
+		readonlyDiskUrl: diskUrl;
+		projectsHome: projectsHome;
+		resolveProjectSet.
+
+	Rowan projectTools adopt
+		_adoptProjectProjectsInProjectSet: projectSetDefinition
 %
 
 category: '*rowan-tools-corev2'
