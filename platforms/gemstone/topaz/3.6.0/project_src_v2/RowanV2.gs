@@ -84841,7 +84841,7 @@ diskUrl
 category: 'accessing'
 method: RwLoadSpecificationV2
 diskUrl: anUrlString
-	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
+	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	diskUrl := anUrlString
 %
 
@@ -85175,7 +85175,7 @@ readonlyDiskUrl
 category: 'accessing'
 method: RwLoadSpecificationV2
 readonlyDiskUrl: anUrlString
-	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
+	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
 %
 
