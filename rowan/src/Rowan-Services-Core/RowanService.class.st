@@ -15,10 +15,8 @@ RowanCommandResult addResult: <self>
 "
 Class {
 	#name : 'RowanService',
-	#superclass : 'Object',
+	#superclass : 'RsrService',
 	#instVars : [
-		'definition',
-		'updates',
 		'command',
 		'commandArgs',
 		'updateType',
@@ -39,11 +37,29 @@ RowanService class >> breakPointsAreEnabled [
 	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
 ]
 
+{ #category : 'rsr' }
+RowanService class >> clientClassName [
+
+	^self name
+]
+
 { #category : 'autocommit' }
 RowanService class >> flipAutoCommit [
 	| newValue |
 	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
 	^self setAutoCommit: newValue
+]
+
+{ #category : 'rsr' }
+RowanService class >> isClientClass [
+	
+	^false
+]
+
+{ #category : 'rsr' }
+RowanService class >> isServerClass [
+	
+	^true
 ]
 
 { #category : 'instance creation' }
@@ -65,6 +81,12 @@ RowanService class >> sampleService [
 
 	^self new sampleService
 
+]
+
+{ #category : 'rsr' }
+RowanService class >> serverClassName [
+
+	^self name
 ]
 
 { #category : 'autocommit' }

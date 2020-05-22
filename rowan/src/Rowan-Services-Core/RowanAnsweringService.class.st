@@ -465,7 +465,6 @@ RowanAnsweringService >> methodReferenceCounts: methodServices [
 
 { #category : 'client commands' }
 RowanAnsweringService >> needsCommit [
-
 	answer := System needsCommit.
 	RowanCommandResult addResult: self.
 ]
