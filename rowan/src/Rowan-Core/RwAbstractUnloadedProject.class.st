@@ -37,6 +37,13 @@ RwAbstractUnloadedProject >> gitUrl: aString [
 	self _loadSpecification gitUrl: aString
 ]
 
+{ #category : 'transitions' }
+RwAbstractUnloadedProject >> load [
+	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+
+	^ self _resolvedProject load
+]
+
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> packageNames [
 	^self _resolvedProject packageNames

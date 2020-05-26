@@ -291,6 +291,11 @@ RwDefinedProject >> packageNamed: aString [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> packageNamed: aString ifAbsent: absentBlock [
+	^ self _resolvedProject packageNamed: aString ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> packagesPath: aString [
 	self _projectSpecification packagesPath: aString
 ]
@@ -320,10 +325,29 @@ RwDefinedProject >> read [
 
 { #category : 'transitions' }
 RwDefinedProject >> read: platformConditionalAttributes [
-
 	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
 
 	self _resolvedProject read: platformConditionalAttributes
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> readProjectComponentNames: componentNames [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _resolvedProject readProjectComponentNames: componentNames
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _resolvedProject
+		readProjectComponentNames: componentNames
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'accessing' }

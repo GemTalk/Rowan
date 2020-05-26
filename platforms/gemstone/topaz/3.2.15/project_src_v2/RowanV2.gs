@@ -48990,6 +48990,14 @@ gitUrl: aString
 	self _loadSpecification gitUrl: aString
 %
 
+category: 'transitions'
+method: RwAbstractUnloadedProject
+load
+	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+
+	^ self _resolvedProject load
+%
+
 category: 'accessing'
 method: RwAbstractUnloadedProject
 packageNames
@@ -49359,6 +49367,12 @@ packageNamed: aString
 
 category: 'accessing'
 method: RwDefinedProject
+packageNamed: aString ifAbsent: absentBlock
+	^ self _resolvedProject packageNamed: aString ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwDefinedProject
 packagesPath: aString
 	self _projectSpecification packagesPath: aString
 %
@@ -49393,10 +49407,31 @@ read
 category: 'transitions'
 method: RwDefinedProject
 read: platformConditionalAttributes
-
 	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
 
 	self _resolvedProject read: platformConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedProject
+readProjectComponentNames: componentNames
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _resolvedProject readProjectComponentNames: componentNames
+%
+
+category: 'transitions'
+method: RwDefinedProject
+readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _resolvedProject
+		readProjectComponentNames: componentNames
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'accessing'
@@ -64280,11 +64315,133 @@ image
 category: 'bootstrap'
 method: RwGsImageTool
 adoptGemStone64: specUrl projectsHome: projectsHome
-	"Create loaded project (if needed), traverse the package definitions and 
-				create loaded packages for each"
+	"
+	Create loaded project (if needed), traverse the package definitions and 
+		create loaded packages for each.
+	
+	Then package the unpackaged classes an methods into an UnPackaged
+		package so that the ENTIRE image is packaged. The UnPackaged 
+		should be empty at the end of slow filein ... upgradeImage will be
+		expected to manage the UnPackaged package differently.
+	"
 
-	self deprecated: 'Use Rowan projectTools acopt adoptProjectFromUrl:diskUrl:projectsHome:, instead'.
-	Rowan projectTools adopt adoptProjectFromUrl: specUrl diskUrl: 'file:' , projectsHome projectsHome: projectsHome
+	| project packagePrefix componentName loadedProject unpackagedName adoptTool userName tracer wasTracing symbolList |
+	tracer := Rowan projectTools trace.
+	wasTracing := tracer isTracing.
+	tracer startTracing.
+	Rowan projectTools adopt
+		adoptProjectFromUrl: specUrl
+		diskUrl: 'file:' , projectsHome
+		projectsHome: projectsHome.
+	project := Rowan newProjectNamed: 'UnPackaged'.
+	componentName := 'UnPackaged'.
+	project addNewComponentNamed: componentName.
+	packagePrefix := 'UnPackaged-'.
+	userName := System myUserProfile userId.
+	symbolList := Rowan image symbolList.
+	symbolList
+		do: [ :symbolDictionary | 
+			(#(#'GemStone_Portable_Streams' #'GemStone_Legacy_Streams')
+				includes: symbolDictionary name)
+				ifTrue: [ 
+					"defer handling the classes in this symbol dictionary until a later date"
+					tracer
+						trace:
+							'>>>SKIP Unpackaged package for symbolDictionary '
+								, symbolDictionary name asString printString ]
+				ifFalse: [ 
+					| thePackageName |
+					"create unpackaged packages for each symbol dictionary"
+					thePackageName := packagePrefix , symbolDictionary name asString.
+					tracer
+						trace: '---Creating Unpackaged package ' , thePackageName printString.
+					project
+						packageNamed: thePackageName
+						ifAbsent: [ 
+							project
+								addPackageNamed: thePackageName
+								toComponentNamed: componentName
+								gemstoneDefaultSymbolDictionaryForUser:
+									userName -> symbolDictionary name asString ] ] ].
+	loadedProject := project load first.	"load the projec"
+	unpackagedName := Rowan unpackagedName.
+	adoptTool := Rowan packageTools adopt.
+	Rowan image symbolList
+		do: [ :symbolDictionary | 
+			(#(#'GemStone_Portable_Streams' #'GemStone_Legacy_Streams')
+				includes: symbolDictionary name)
+				ifTrue: [ 
+					"defer handling the classes in this symbol dictionary until a later date"
+					tracer
+						trace:
+							'>>>SKIPPING classes and methods for symbolDictionary '
+								, symbolDictionary name asString printString ]
+				ifFalse: [ 
+					| thePackage thePackageName |
+					thePackageName := packagePrefix , symbolDictionary name asString.
+					thePackage := project packageNamed: thePackageName.
+					tracer
+						trace:
+							'---Adopting Unpackaged classes and methods for package '
+								, thePackageName printString.
+					symbolDictionary
+						classesDo: [ :aUserProfile :aSymbolDictionary :aClass | 
+							(symbolList dictionariesAndSymbolsOf: aClass)
+								do: [ :ar | 
+									| classSymbolDictionary |
+									classSymbolDictionary := ar at: 1.
+									tracer
+										trace:
+											'	--- symbol dictionary name ' , classSymbolDictionary name asString printString
+												, ' for class named: ' , aClass name asString printString.
+									classSymbolDictionary == symbolDictionary
+										ifTrue: [ 
+											aClass rowanProjectName = unpackagedName
+												ifTrue: [ 
+													tracer trace: '	Unpackaged Class ' , aClass name asString printString.
+													adoptTool
+														adoptClassNamed: aClass name asString
+														intoPackageNamed: thePackageName ]
+												ifFalse: [ 
+													| instanceSelectors classSelectors unpackageMethods |
+													instanceSelectors := Set new.
+													classSelectors := Set new.
+													unpackageMethods := false.
+													aClass
+														methodsDo: [ :selector :method | 
+															method rowanProjectName = unpackagedName
+																ifTrue: [ 
+																	tracer
+																		trace:
+																			'	Unpackaged method ' , aClass name asString , ' >> ' , selector printString.
+																	instanceSelectors add: selector.
+																	unpackageMethods := true ] ].
+													aClass class
+														methodsDo: [ :selector :method | 
+															method rowanProjectName = unpackagedName
+																ifTrue: [ 
+																	tracer
+																		trace:
+																			'	Unpackaged method ' , aClass name asString , ' class >> '
+																				, selector printString.
+																	classSelectors add: selector.
+																	unpackageMethods := true ] ].
+													unpackageMethods
+														ifTrue: [ 
+															adoptTool
+																adoptClassExtensionNamed: aClass name asString
+																instanceSelectors: instanceSelectors
+																classSelectors: classSelectors
+																intoPackageNamed: thePackageName ] ] ]
+										ifFalse: [ 
+											tracer
+												trace:
+													'	>>> symbol dictionary mismatch ('
+														, classSymbolDictionary name asString printString , ' instead of '
+														, symbolDictionary name asString printString , ') for class '
+														, aClass name asString printString ] ] ] ] ].
+	wasTracing
+		ifFalse: [ tracer stopTracing ]
 %
 
 category: 'repository'
