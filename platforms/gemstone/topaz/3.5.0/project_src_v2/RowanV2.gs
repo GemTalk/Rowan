@@ -49235,6 +49235,18 @@ readProjectComponentNames: componentNames
 
 category: 'transitions'
 method: RwDefinedProject
+readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _resolvedProject
+		readProjectComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedProject
 readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -63125,6 +63137,22 @@ readProjectComponentNames: componentNames
 	^ self
 		readProjectComponentNames: componentNames
 		platformConditionalAttributes: self platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self componentNames: componentNames.	"record the list of component names used to create this instance of the project definition"
+	self _loadSpecification
+		customConditionalAttributes: customConditionalAttributes.	"record customConditionalAttributes in load spec"
+	^ Rowan projectTools readV2
+		readProjectForResolvedProject: self
+			withComponentNames: componentNames
+			platformConditionalAttributes: (self projectDefinitionPlatformConditionalAttributes , customConditionalAttributes) asSet asArray
 %
 
 category: 'actions'
