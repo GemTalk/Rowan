@@ -8,7 +8,7 @@ RwBrowserToolApiTest >> _expectedAssociationCreationTemplate [
 	classInstVars: #()
 	poolDictionaries: #()
 	category: ''Kernel''
-	packageName: ''Filein3B''
+	packageName: ''Filein4Rowan''
 	options: #()
 '
 ]
