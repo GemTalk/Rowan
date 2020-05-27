@@ -16,6 +16,11 @@ Rowan class >> projectFromUrl: loadSpecUrl [
 ]
 
 { #category : '*rowan-coreV2' }
+Rowan class >> projectFromUrl: loadSpecUrl diskUrl: urlString [
+	^ self platform projectFromUrl: loadSpecUrl diskUrl: urlString
+]
+
+{ #category : '*rowan-coreV2' }
 Rowan class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome [
 	^ self platform projectFromUrl: loadSpecUrl projectsHome: projectsHome
 ]

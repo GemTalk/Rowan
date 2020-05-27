@@ -49409,7 +49409,21 @@ projectFromUrl: loadSpecUrl
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl diskUrl: urlString
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		diskUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
 		yourself
 %
 
@@ -49422,7 +49436,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
 		yourself
 %
 
@@ -49436,7 +49450,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
 		yourself
 %
 
@@ -49451,7 +49465,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
 		yourself
 %
 
@@ -49465,7 +49479,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself.
 	resolvedProject := loadSpec resolve: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
 		yourself
 %
 
@@ -95531,6 +95545,12 @@ projectFromUrl: loadSpecUrl
 
 category: '*rowan-coreV2'
 classmethod: Rowan
+projectFromUrl: loadSpecUrl diskUrl: urlString
+	^ self platform projectFromUrl: loadSpecUrl diskUrl: urlString
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
 projectFromUrl: loadSpecUrl projectsHome: projectsHome
 	^ self platform projectFromUrl: loadSpecUrl projectsHome: projectsHome
 %
@@ -96853,6 +96873,12 @@ category: '*rowan-corev2'
 method: RwPlatform
 projectFromUrl: loadSpecUrl
 	^ RwResolvedProject projectFromUrl: loadSpecUrl
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl diskUrl: urlString
+	^ RwResolvedProject projectFromUrl: loadSpecUrl diskUrl: urlString
 %
 
 category: '*rowan-corev2'

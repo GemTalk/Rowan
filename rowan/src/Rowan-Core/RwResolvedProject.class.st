@@ -33,7 +33,20 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl [
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwResolvedProject class >> projectFromUrl: loadSpecUrl diskUrl: urlString [
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		diskUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -45,7 +58,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -58,7 +71,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -72,7 +85,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -85,7 +98,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject;
+		_resolvedProject: resolvedProject resolve;
 		yourself
 ]
 
