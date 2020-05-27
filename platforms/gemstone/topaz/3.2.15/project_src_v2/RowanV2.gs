@@ -79195,14 +79195,16 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 		ifNotNil: [ :oldCompiledMethod | 
 			compiledMethod == oldCompiledMethod
 				ifFalse: [ 
-					"only a problem, if the new and old compiled method are not identical"
-					self
-						error:
-							'internal error - Compiled method ' , behavior name asString , '>>'
-								, selector asString
-								,
-									' already exists in method dictionary when new extension method is expected ( package '
-								, packageName , ').' ] ].
+					compiledMethod sourceString = oldCompiledMethod sourceString
+						ifFalse: [ 
+							"only a problem, if the new and old compiled method are not identical"
+							self
+								error:
+									'internal error - Compiled method ' , behavior name asString , '>>'
+										, selector asString
+										,
+											' already exists in method dictionary when new extension method is expected ( package '
+										, packageName , ').' ] ] ].
 
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
@@ -79238,9 +79240,7 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 			ext := RwGsLoadedSymbolDictClassExtension
 				newForClass: class
 				inPackage: loadedPackage.
-			self
-				registerLoadedClassExtension: ext
-				forClass: class.
+			self registerLoadedClassExtension: ext forClass: class.
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod.
 	^ registryInstance
@@ -80052,8 +80052,6 @@ _loadedClassExtensionsFor: class oldClassVersion: oldClass noNewVersion: noNewVe
 		ifAbsent: [ 
 			"we're done here"
 			^ self ].
-	oldClass == class
-		ifTrue: [ self error: 'internal error - expected a new class version' ].
 	oldLoadedClassExtensionSet copy
 		do: [ :oldLoadedClassExtension | 
 			| classKey loadedClassExtension loadedPackage |
@@ -80154,11 +80152,15 @@ _loadedClassFor: class oldClassVersion: oldClass noNewVersion: noNewVersionBlock
 					loadedPackage removeLoadedClass: oldLoadedClass.
 					loadedPackage addLoadedClass: loadedClass.
 					loadedClass updatePropertiesFromClassFor: registryInstance ]
-				ifNotNil: [ 
-					registryInstance
-						error:
-							'internal error - found a loaded class for ' , class name asString printString
-								, ' when no loaded class expected' ].
+				ifNotNil: [ :unexpectedLoadedClass | 
+					assoc value == class
+						ifTrue: [ ^ noNewVersionBlock cull: unexpectedLoadedClass cull: assoc ]
+						ifFalse: [ 
+							registryInstance
+								error:
+									'internal error - found a loaded class (' , unexpectedLoadedClass printString
+										, ') for ' , class name asString printString
+										, ' when no loaded class expected' ] ].
 			assoc value == class
 				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
 				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
