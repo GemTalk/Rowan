@@ -71,19 +71,19 @@ false ifTrue: [
 ].
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes.
 			repositoryRoot.
 			'RowanV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes360.
 			repositoryRoot360.
 			'RowanV2'
 		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes3215.
 			repositoryRoot3215.
@@ -100,10 +100,6 @@ false ifTrue: [
 		gsFileName := ar at: 5.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
 		conditionalAttributes addAll: loadSpec customConditionalAttributes.
-		gsFileName ~= 'ComponentV2'
-			ifTrue: [ 
-				"remove tests from all bootstrap file except for ComponentV2 - used for debugging"
-				conditionalAttributes remove: 'tests' ifAbsent: []].
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.

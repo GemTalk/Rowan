@@ -35,7 +35,7 @@ run
 		customConditionalAttributes warnings |
 	Rowan projectTools trace startTracing; trace: '--- installing install_4_RowanV2.tpz'.
 	ar := {
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/v2/proposed_specs/Rowan_proposed_2.ston'.
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 		}.
 	"Load project and packages from disk."
