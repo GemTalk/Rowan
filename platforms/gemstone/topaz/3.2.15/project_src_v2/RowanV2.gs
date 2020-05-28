@@ -62860,7 +62860,6 @@ category: 'load specification'
 method: RwResolvedProjectV2
 diskUrl
 	^ self _loadSpecification diskUrl
-		ifNil: [ ^ 'file:' , self _loadSpecification repositoryRoot pathString ]
 %
 
 category: 'load specification'
@@ -85669,7 +85668,7 @@ svnUrl
 
 category: 'accessing'
 method: RwLoadSpecificationV2
-svnUrlUrl: anUrlString
+svnUrl: anUrlString
 	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
 %

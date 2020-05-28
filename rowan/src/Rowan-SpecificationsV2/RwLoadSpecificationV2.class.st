@@ -618,7 +618,7 @@ RwLoadSpecificationV2 >> svnUrl [
 ]
 
 { #category : 'accessing' }
-RwLoadSpecificationV2 >> svnUrlUrl: anUrlString [
+RwLoadSpecificationV2 >> svnUrl: anUrlString [
 	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
 ]
