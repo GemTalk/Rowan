@@ -6,7 +6,6 @@ Class {
 		'source',
 		'selector',
 		'methodDefinitions',
-		'classService',
 		'category',
 		'packageName',
 		'projectName',
@@ -133,17 +132,6 @@ RowanMethodService >> accessedInstVars: anArray [
 	accessedInstVars := anArray
 ]
 
-{ #category : 'rowan' }
-RowanMethodService >> addOrUpdateMethod [
-
-		self browserTool  
-                   addOrUpdateMethod: source
-                   inProtocol: category
-                   forClassNamed: self classService name
-                   isMeta: meta
-                   inPackageNamed: self classService packageName
-]
-
 { #category : 'method history' }
 RowanMethodService >> addToMethodHistory [
   | rowanMethodHistory methodHistory |
@@ -234,19 +222,6 @@ RowanMethodService >> classOrMeta [
 	^meta 
 			ifTrue:[self classFromName class] 
 			ifFalse: [self classFromName].
-]
-
-{ #category : 'Accessing' }
-RowanMethodService >> classService [
-
-	^classService ifNil:[classService := RowanClassService forClassNamed: className package: packageName]
-
-]
-
-{ #category : 'Updating' }
-RowanMethodService >> classService: newValue [
-	classService := newValue
-
 ]
 
 { #category : 'client commands' }

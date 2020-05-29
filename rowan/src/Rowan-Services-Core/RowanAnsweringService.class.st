@@ -417,7 +417,6 @@ RowanAnsweringService >> interactionHandlerActive [
 
 { #category : 'testing' }
 RowanAnsweringService >> isTranscriptInstalled [
-
 	^self transcriptObject == self jadeiteServer
 ]
 

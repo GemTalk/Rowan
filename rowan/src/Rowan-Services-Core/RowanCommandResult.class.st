@@ -13,7 +13,7 @@ Class {
 { #category : 'accessing' }
 RowanCommandResult class >> addResult: service [
 	service command: nil;
-			commandArgs: nil. 
+			commandArgs: nil.
 	self updateClientBoundServices: service.
 	^service
 ]

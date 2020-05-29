@@ -762,6 +762,13 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 ]
 
+{ #category : 'rsr' }
+RowanClassService >> postCommandExecution [
+	updates := Array new. 
+	methods := Array new. 
+	super postCommandExecution.
+]
+
 { #category : 'printing' }
 RowanClassService >> printOn: aStream [
 

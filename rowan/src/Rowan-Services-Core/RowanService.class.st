@@ -20,10 +20,17 @@ Class {
 		'command',
 		'commandArgs',
 		'updateType',
-		'organizer'
+		'organizer',
+		'updates'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'rsr' }
+RowanService class >> abstractClassName [
+
+	^self name
+]
 
 { #category : 'autocommit' }
 RowanService class >> autoCommit [
@@ -53,7 +60,7 @@ RowanService class >> flipAutoCommit [
 { #category : 'rsr' }
 RowanService class >> isClientClass [
 	
-	^false
+	^true
 ]
 
 { #category : 'rsr' }
@@ -147,6 +154,12 @@ RowanService >> classHierarchy: theClasses [
   ^ hierarchyServices
 ]
 
+{ #category : 'rsr' }
+RowanService >> clearOrganizers [
+	organizer := nil.
+	updates do: [ :update | update organizer: nil ]
+]
+
 { #category : 'accessing' }
 RowanService >> command [
 
@@ -235,6 +248,34 @@ RowanService >> excludedInstVars [
 
 	^#( #organizer)
 
+]
+
+{ #category : 'rsr' }
+RowanService >> executeCommand [
+	"RSR -> RowanServices primary api."
+
+	[ 
+	Rowan commandResultClass initializeResults.
+	organizer := ClassOrganizer new.
+	[ 
+	updateType := nil.	"Update type is only for returned commands"
+	command ifNil: [ command := #'update' ].
+	self servicePerform: command withArguments: commandArgs ]
+		on: GsInteractionRequest
+		do: [ :ex | 
+			ex
+				response:
+					(ex interaction interactWith: self gsInteractionInformFailureHandler) ].	"self autoCommitIfRequired. #fixMe"
+	Rowan loggingServiceClass current logSentServices. 
+	updates :=  Rowan commandResultClass results.
+	self postCommandExecution.
+	]
+		on: Error
+		do: [ :ex | 
+			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
+			ex pass ].
+
+	^self
 ]
 
 { #category : 'commands support' }
@@ -352,6 +393,32 @@ RowanService >> jadeiteServer [
 RowanService >> organizer: anOrganizer [
 
 	organizer := anOrganizer.
+]
+
+{ #category : 'rsr' }
+RowanService >> postCommandExecution [
+	| ws |
+	self clearOrganizers.
+	updates remove: self ifAbsent: [  ].
+	Transcript
+		cr;
+		nextPutAll: '-----------------------'.
+	ws := WriteStream on: String new.
+	self class _variablesToReflect
+		do: [ :ivName | 
+			| index |
+			index := self class allInstVarNames indexOf: ivName asSymbol.
+			ws
+				cr;
+				nextPutAll: ivName , ': ';
+				nextPutAll:
+						([ (self instVarAt: index) printString ]
+								on: Error
+								do: [ :ex | ex printString ]) ].
+	ws cr.
+	Transcript
+		nextPutAll: ws contents;
+		flush
 ]
 
 { #category : 'rowan' }
