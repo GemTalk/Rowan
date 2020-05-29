@@ -48447,6 +48447,14 @@ projectNames
 	^ self image projectNames
 %
 
+category: 'public'
+classmethod: Rowan
+projects
+	"Return list of projects"
+
+	^ self projectNames collect: [ :projectName | self projectNamed: projectName ]
+%
+
 category: 'public client services'
 classmethod: Rowan
 projectServiceClass

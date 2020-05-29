@@ -218,6 +218,13 @@ Rowan class >> projectNames [
 	^ self image projectNames
 ]
 
+{ #category : 'public' }
+Rowan class >> projects [
+	"Return list of projects"
+
+	^ self projectNames collect: [ :projectName | self projectNamed: projectName ]
+]
+
 { #category : 'public client services' }
 Rowan class >> projectServiceClass [
 
