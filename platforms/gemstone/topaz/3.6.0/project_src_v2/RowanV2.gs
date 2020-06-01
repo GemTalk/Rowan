@@ -95241,13 +95241,6 @@ clearUserAutomaticClassInitializationBlackList
 
 category: '*rowan-gemstone-core'
 classmethod: Rowan
-gemstoneTools
-
-	^self platform gemstoneTools
-%
-
-category: '*rowan-gemstone-core'
-classmethod: Rowan
 globalAutomaticClassInitializationBlackList
 
 	"Answer global list of project names for which automatic class initialiation should be disabled.
