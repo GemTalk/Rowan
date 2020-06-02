@@ -404,7 +404,7 @@ RowanService >> postCommandExecution [
 		cr;
 		nextPutAll: '-----------------------'.
 	ws := WriteStream on: String new.
-	self class _variablesToReflect
+	self class reflectedVariableNames
 		do: [ :ivName | 
 			| index |
 			index := self class allInstVarNames indexOf: ivName asSymbol.

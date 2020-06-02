@@ -764,9 +764,30 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 { #category : 'rsr' }
 RowanClassService >> postCommandExecution [
+	| ws | 
 	updates := Array new. 
 	methods := Array new. 
 	super postCommandExecution.
+	true ifTrue:[^self]. 
+	Transcript
+		cr;
+		nextPutAll: '---------RowanMethodService----------'.
+	ws := WriteStream on: String new.
+	self class reflectedVariableNames
+		do: [ :ivName | 
+			| index |
+			index := self class allInstVarNames indexOf: ivName asSymbol.
+			ws
+				cr;
+				nextPutAll: ivName , ': ';
+				nextPutAll:
+						([ (self instVarAt: index) printString ]
+								on: Error
+								do: [ :ex | ex printString ]) ].
+	ws cr.
+	Transcript
+		nextPutAll: ws contents;
+		flush
 ]
 
 { #category : 'printing' }
