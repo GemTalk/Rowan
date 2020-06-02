@@ -26,12 +26,6 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
-{ #category : 'rsr' }
-RowanService class >> abstractClassName [
-
-	^self name
-]
-
 { #category : 'autocommit' }
 RowanService class >> autoCommit [
 
@@ -105,6 +99,12 @@ RowanService class >> setAutoCommit: object [
 { #category : 'autocommit' }
 RowanService class >> setBreakPointsAreEnabled: boolean [
   ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
+]
+
+{ #category : 'rsr' }
+RowanService class >> templateClassName [ 
+
+	^self name
 ]
 
 { #category : 'accessing' }
