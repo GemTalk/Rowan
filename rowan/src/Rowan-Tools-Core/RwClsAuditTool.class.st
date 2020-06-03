@@ -248,7 +248,7 @@ RwClsAuditTool >> _result [
 RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 	"look for methods compiled into class without Rowan API"
 
-	| res |
+	| res aBehavior |
 	res := self _result.
 	(Rowan globalNamed: aLoadedClass name)
 		ifNil: [ 
@@ -257,51 +257,43 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 				add:
 					(RwAuditDetail
 						for: aLoadedClass
-						message: 'Missing gemstone class for loaded class ') ]
-		ifNotNil: [ :aBehavior | 
-			aBehavior == aLoadedClass handle
-				ifFalse: [ 
-					res
-						add:
-							(RwAuditDetail
-								for: aLoadedClass
-								message:
-									'Not latest version of class (' , aBehavior asOop printString , ')') ].
+						message: 'Missing gemstone class for loaded class ') ].
+	aBehavior := aLoadedClass handle.
+	res
+		addAll:
+			(self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
+	aBehavior
+		categorysDo: [ :category :selectors | 
 			res
 				addAll:
-					(self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
-			aBehavior
-				categorysDo: [ :category :selectors | 
-					res
-						addAll:
-							(self _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass) ].
-			aBehavior class
-				categorysDo: [ :category :selectors | 
+					(self _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass) ].
+	aBehavior class
+		categorysDo: [ :category :selectors | 
+			res
+				addAll:
+					(self
+						_auditCategory: category
+						forBehavior: aBehavior class
+						loadedClass: aLoadedClass) ].
+	aLoadedClass
+		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+			(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil)
+				ifNil: [ 
 					res
 						addAll:
 							(self
-								_auditCategory: category
+								_auditLoadedMethod: aLoadedMethod
+								forBehavior: aBehavior
+								loadedClass: loadedClass) ] ]
+		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+			(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil)
+				ifNil: [ 
+					res
+						addAll:
+							(self
+								_auditLoadedMethod: aLoadedMethod
 								forBehavior: aBehavior class
-								loadedClass: aLoadedClass) ].
-			aLoadedClass
-				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil)
-						ifNil: [ 
-							res
-								addAll:
-									(self
-										_auditLoadedMethod: aLoadedMethod
-										forBehavior: aBehavior
-										loadedClass: loadedClass) ] ]
-				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil)
-						ifNil: [ 
-							res
-								addAll:
-									(self
-										_auditLoadedMethod: aLoadedMethod
-										forBehavior: aBehavior class
-										loadedClass: loadedClass) ] ] ].
+								loadedClass: loadedClass) ] ].
 	^ res
 ]
 
