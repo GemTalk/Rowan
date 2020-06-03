@@ -80,12 +80,7 @@ RwPrjAdoptTool >> _adoptProjectProjectsInProjectSet: projectSetDefinition [
 				do: [ :projectDefinition | 
 					| audit projectName |
 					projectName := projectDefinition name.
-					[ audit := Rowan projectTools audit auditForProjectNamed: projectName ]
-						on: RwAdoptAuditErrorNotification
-						do: [ :ex | 
-							false
-								ifTrue: [ self halt ].
-							ex resume: true ].
+					audit := Rowan projectTools audit auditForProjectNamed: projectName.
 					tracer trace: '	-- audit finished '.
 					audit isEmpty
 						ifFalse: [ 
