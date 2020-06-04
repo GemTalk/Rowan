@@ -396,7 +396,7 @@ self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) 
 		assert: (y at: className) size = 1;
 		assert: (y := x at: packageName2 ) notNil;
 		assert: y size = 1;
-		assert: (y at: className) size = 2
+		assert: (y at: className) size = 1
 ]
 
 { #category : 'tests' }
@@ -479,7 +479,7 @@ x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
 
 	self 
 	  assert: x size = 3;
-	  assert: ((y := x at: packageName1) at: className) size = 1;
+	  assert: ((y := x at: packageName1) at: className) size = 4;
 	  assert: ((y := x at: packageName2) at: className) size = 3;
 	  assert: ((y := x at: packageName3) at: className) size = 2
 
@@ -530,9 +530,7 @@ RwProjectAuditToolTest >> testClassVars [
 	self assert: testClassB == (System myUserProfile resolveSymbol: className asSymbol) value.	
 	self assert: testClassB == (Rowan globalNamed: className) description: 'Rowan does not resolve new version of class'.
 	self deny: testClassB == testClass.
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 5 description: 'expected 5 failures superclass instvars classvars comment and loaded class not latest'
-
+	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') isEmpty
 ]
 
 { #category : 'tests' }
@@ -647,7 +645,7 @@ RwProjectAuditToolTest >> testMissingBehavior [
 	
 	(System myUserProfile resolveSymbol: self _symbolDictionaryName1) value removeKey: theClass name asSymbol.
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 1
+	self assert: ((x at: packageName) at: className) size = 2
 ]
 
 { #category : 'tests' }

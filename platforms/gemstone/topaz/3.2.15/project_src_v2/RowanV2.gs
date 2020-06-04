@@ -64115,9 +64115,22 @@ _auditRowanHybridCategory: category forBehavior: aBehavior loadedClass: aLoadedC
 										forBehavior: aBehavior
 										loadedClass: aLoadedClass) ]
 						ifFalse: [ 
-							"no basic extension problems found, class extension will be audited separately"
-							 ] ] ]
+							res
+								addAll:
+									(self
+										_auditCategory: category
+										selectors: (aBehavior selectorsIn: category)
+										forBehavior: aBehavior
+										loadedClass: aLoadedClass) ] ] ]
 		ifFalse: [ 
+			aLoadedClass isLoadedClassExtension
+				ifTrue: [ 
+					res
+						add:
+							(RwAuditDetail
+								for: aLoadedClass
+								message:
+									'Extension category name <' , category , '>  must begin with a `*`.') ].
 			res
 				addAll:
 					(self
@@ -64134,7 +64147,9 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 	"#rentamed from _auidtClassSelector since functionality is same for instanance and class
  verify compiled method matches loaded method reference return nil if no problem found"
 
-	^ (aLoadedClass loadedMethodAt: aSelector isMeta: aBehavior isMeta)
+	| compiledMethod |
+	compiledMethod := aBehavior compiledMethodAt: aSelector otherwise: nil.
+	^ (Rowan image loadedMethodForMethod: compiledMethod ifAbsent: [  ])
 		ifNil: [ 
 			| notification |
 			notification := (RwAuditMethodErrorNotification
@@ -64142,7 +64157,7 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 				isMeta: aBehavior isMeta
 				inClassNamed: aBehavior theNonMetaClass name
 				isClassExtension: aLoadedClass isLoadedClassExtension
-				intoPackageNamed: aLoadedClass packageName)
+				intoPackageNamed: aLoadedClass loadedPackage name)
 				description: 'Missing loaded method. ';
 				yourself.
 			notification signal
@@ -64153,9 +64168,9 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 				ifFalse: [ 
 					"don't record audit error"
 					{} ] ]
-		ifNotNil: [ :aLoadedMethod | 
+		ifNotNil: [ :loadedMethod | 
 			self
-				_auditLoadedMethod: aLoadedMethod
+				_auditLoadedMethod: loadedMethod
 				forBehavior: aBehavior
 				loadedClass: aLoadedClass ]
 %
