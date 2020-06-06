@@ -76751,7 +76751,7 @@ patchedClassNewVersions: patchedClassNewVersionsBlock
 "
 
 	| supr opts ivs civs poolds cvars cons cvarsPatched |
-	cvarsPatched := (anArrayOfClassVars asSortedCollection = oldClass classVarNames asSortedCollection) not.
+	cvarsPatched := (anArrayOfClassVars asSortedCollection = (oldClass classVarNames collect: [:each | each asString ]) asSortedCollection) not.
 	self
 		_newSubclassWithSuperclass: newSuperclass
 		isEquivalentToSubclass: oldClass
