@@ -20,6 +20,11 @@ RwProject >> _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock [
 ]
 
 { #category : 'private' }
+RwProject >> _loadSpecification [
+	^ self _loadedProject loadSpecification
+]
+
+{ #category : 'private' }
 RwProject >> _specification [
 
 	^ self _loadedProject specification

@@ -879,6 +879,7 @@ RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
+	(self componentForPackageNamed: packageName) removePackageNamed: packageName.
 	^ self _projectDefinition removePackageNamed: packageName
 ]
 

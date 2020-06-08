@@ -23,6 +23,43 @@ RwProject >> _repositoryRoot: aFileReference [
 ]
 
 { #category : '*rowan-corev2' }
+RwProject >> addNewPackageNamed: packageName inSybolDictionaryNamed: symbolDictionaryName toComponentNamed: componentName [
+	Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			| projectDefinition component |
+			projectDefinition := self defined.
+			component := projectDefinition
+				componentNamed: componentName
+				ifAbsent: [ 
+					self
+						error:
+							'The component ' , componentName printString , ' does not exist in the project'
+								, self name printString ].
+			self _loadSpecification gemstoneDefaultSymbolDictName = symbolDictionaryName
+				ifTrue: [ projectDefinition addPackageNamed: packageName toComponentNamed: componentName ]
+				ifFalse: [ 
+					projectDefinition
+						addPackageNamed: packageName
+						toComponentNamed: componentName
+						gemstoneDefaultSymbolDictionaryForUser:
+							System myUserProfile userId -> symbolDictionaryName ].
+			^ projectDefinition load ].
+	self
+		error:
+			'The package ' , packageName printString , ' already exists in the project '
+				, self name printString
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> addNewPackageNamed: packageName toComponentNamed: componentName [
+	^ self
+		addNewPackageNamed: packageName
+		inSybolDictionaryNamed: self _loadSpecification gemstoneDefaultSymbolDictName
+		toComponentNamed: componentName
+]
+
+{ #category : '*rowan-corev2' }
 RwProject >> componentNames [
 	^ self _loadedProject componentNames
 ]
@@ -101,6 +138,21 @@ RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 	self
 		_readOnlyRepositoryRoot: repositoryRootPathString
 		commitId: commitId
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> removePackageNamed: packageName [
+	| projectDefinition |
+	Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			self
+				error:
+					'The package ' , packageName printString , ' does not exists in the project '
+						, self name printString ].
+	projectDefinition := self defined.
+	projectDefinition removePackageNamed: packageName.
+	^ projectDefinition load
 ]
 
 { #category : '*rowan-corev2' }

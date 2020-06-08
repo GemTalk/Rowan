@@ -49256,6 +49256,12 @@ componentNamed: componentName
 
 category: 'accessing'
 method: RwDefinedProject
+componentNamed: aComponentName ifAbsent: absentBlock
+	^ self _resolvedProject componentNamed: aComponentName ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwDefinedProject
 customConditionalAttributes
 	^ self _loadSpecification customConditionalAttributes
 %
@@ -49426,6 +49432,12 @@ category: 'accessing'
 method: RwDefinedProject
 removeComponentNamed: aComponentName
 	^ self _resolvedProject removeComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+removePackageNamed: packageName
+	^ self _resolvedProject removePackageNamed: packageName
 %
 
 category: 'accessing'
@@ -50060,6 +50072,12 @@ _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock
 		loadedProjectNamed: self name
 		ifPresent: presentBlock
 		ifAbsent: absentBlock
+%
+
+category: 'private'
+method: RwProject
+_loadSpecification
+	^ self _loadedProject loadSpecification
 %
 
 category: 'private'
@@ -63405,6 +63423,7 @@ removeComponentNamed: aComponentName
 category: 'project definition'
 method: RwResolvedProjectV2
 removePackageNamed: packageName
+	(self componentForPackageNamed: packageName) removePackageNamed: packageName.
 	^ self _projectDefinition removePackageNamed: packageName
 %
 
@@ -82454,6 +82473,13 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 		instanceMigrator: instanceMigrator
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+loadSpecification
+
+	^ handle _loadSpecification
+%
+
 category: 'private'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 markPackageDirty
@@ -97394,6 +97420,45 @@ _adoptProjectProjectsInProjectSet: projectSetDefinition
 
 category: '*rowan-corev2'
 method: RwProject
+addNewPackageNamed: packageName inSybolDictionaryNamed: symbolDictionaryName toComponentNamed: componentName
+	Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			| projectDefinition component |
+			projectDefinition := self defined.
+			component := projectDefinition
+				componentNamed: componentName
+				ifAbsent: [ 
+					self
+						error:
+							'The component ' , componentName printString , ' does not exist in the project'
+								, self name printString ].
+			self _loadSpecification gemstoneDefaultSymbolDictName = symbolDictionaryName
+				ifTrue: [ projectDefinition addPackageNamed: packageName toComponentNamed: componentName ]
+				ifFalse: [ 
+					projectDefinition
+						addPackageNamed: packageName
+						toComponentNamed: componentName
+						gemstoneDefaultSymbolDictionaryForUser:
+							System myUserProfile userId -> symbolDictionaryName ].
+			^ projectDefinition load ].
+	self
+		error:
+			'The package ' , packageName printString , ' already exists in the project '
+				, self name printString
+%
+
+category: '*rowan-corev2'
+method: RwProject
+addNewPackageNamed: packageName toComponentNamed: componentName
+	^ self
+		addNewPackageNamed: packageName
+		inSybolDictionaryNamed: self _loadSpecification gemstoneDefaultSymbolDictName
+		toComponentNamed: componentName
+%
+
+category: '*rowan-corev2'
+method: RwProject
 componentNames
 	^ self _loadedProject componentNames
 %
@@ -97524,6 +97589,22 @@ readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 	self
 		_readOnlyRepositoryRoot: repositoryRootPathString
 		commitId: commitId
+%
+
+category: '*rowan-corev2'
+method: RwProject
+removePackageNamed: packageName
+	| projectDefinition |
+	Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			self
+				error:
+					'The package ' , packageName printString , ' does not exists in the project '
+						, self name printString ].
+	projectDefinition := self defined.
+	projectDefinition removePackageNamed: packageName.
+	^ projectDefinition load
 %
 
 category: '*rowan-corev2'

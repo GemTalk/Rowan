@@ -216,6 +216,11 @@ RwDefinedProject >> componentNamed: componentName [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> componentNamed: aComponentName ifAbsent: absentBlock [
+	^ self _resolvedProject componentNamed: aComponentName ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> customConditionalAttributes [
 	^ self _loadSpecification customConditionalAttributes
 ]
@@ -364,6 +369,11 @@ RwDefinedProject >> readProjectComponentNames: componentNames platformConditiona
 { #category : 'accessing' }
 RwDefinedProject >> removeComponentNamed: aComponentName [
 	^ self _resolvedProject removeComponentNamed: aComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> removePackageNamed: packageName [
+	^ self _resolvedProject removePackageNamed: packageName
 ]
 
 { #category : 'accessing' }
