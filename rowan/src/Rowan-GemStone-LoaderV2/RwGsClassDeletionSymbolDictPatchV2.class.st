@@ -33,11 +33,11 @@ RwGsClassDeletionSymbolDictPatchV2 >> symbolDictionaryFor: aPackageName [
 	"because this is a deletion, we can look up the symbol dictionariy directly"
 
 	| className class | 
+true ifTrue: [ ^ super symbolDictionaryFor: aPackageName].
 	className := self classDefinition name.
 	class := Rowan globalNamed: className.
 	Rowan image 
 		loadedClassAndSymbolDicitonaryForClass: class 
 		ifPresent: [:symDict :loadedClass | ^symDict ]
 		ifAbsent: [ self error: 'No symbol dictionary found for the class ', className printString ].
-
 ]

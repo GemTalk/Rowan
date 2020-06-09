@@ -260,35 +260,101 @@ RwProjectSetModification >> isEmpty [
 	^ super isEmpty and: [ movedClasses isEmpty and: [ movedMethods isEmpty ] ]
 ]
 
+{ #category : 'moves' }
+RwProjectSetModification >> newUpdateForClassMoves [
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					| classesModification |
+					classesModification := packageModification classesModification.
+					classesModification elementsModified
+						do: [ :classModification | 
+							| addedClass removedClass |
+							classModification before isEmpty
+								ifTrue: [ 
+									| newClass |
+									newClass := classModification after.
+									addedClass := RwClassAdditionOrRemoval
+										projectDefinition: projectModification after
+										packageDefinition: packageModification after
+										classKey: newClass key
+										classesModification: classesModification ].
+							classModification after isEmpty
+								ifTrue: [ 
+									| oldClass |
+									oldClass := classModification before.
+									removedClass := RwClassAdditionOrRemoval
+										projectDefinition: projectModification before
+										packageDefinition: packageModification before
+										classKey: oldClass key
+										classesModification: classesModification ].
+							self updateForClassMoveFrom: removedClass to: addedClass ] ] ]
+]
+
+{ #category : 'moves' }
+RwProjectSetModification >> newUpdateForMethodMoves [
+	"Methods that have been moved between packages will initially show up as a remove and an add rather than a move.
+	Find moved methods and correct the structure."
+
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					| addedMethods removedMethods |
+					removedMethods := Dictionary new.
+					addedMethods := Dictionary new.
+					self
+						addMethodsAddedByPackageModification: packageModification
+						inProject: projectModification
+						toDictionary: addedMethods.
+					self
+						addMethodsRemovedByPackageModification: packageModification
+						inProject: projectModification
+						toDictionary: removedMethods.
+					addedMethods
+						keysAndValuesDo: [ :key :addition | 
+							| removal |
+							removal := removedMethods at: key ifAbsent: [ nil ].
+							removal
+								ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value ] ] ] ]
+]
+
 { #category : 'private - moves' }
 RwProjectSetModification >> updateForClassMoveFrom: removal to: addition [
 	"Transform the given removal and addition to a move."
 
 	| oldDefinition newDefinition classModification |
-	oldDefinition := (removal classesModification
-				modificationOf: removal classKey) before.
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal classesModification modificationOf: removal classKey)
+		before.
 	newDefinition := (addition classesModification
-				modificationOf: addition classKey) after.
-
-	"Delete the removal and the addition."
+		modificationOf: addition classKey) after.	"Delete the removal and the addition."
 	removal classesModification removeModificationOf: removal classKey.
-	addition classesModification removeModificationOf: addition classKey.
-
-	"Record the move."
-	movedClasses add: (RwClassMove
+	addition classesModification removeModificationOf: addition classKey.	"Record the move."
+	movedClasses
+		add:
+			(RwClassMove
 				classBefore: oldDefinition
 				classAfter: newDefinition
 				packageBefore: removal packageDefinition
 				packageAfter: addition packageDefinition
 				projectBefore: removal projectDefinition
-				projectAfter: addition projectDefinition).
-
-	"Does the class have other modifications that need to be recorded?"
+				projectAfter: addition projectDefinition).	"Does the class have other modifications that need to be recorded?"
 	classModification := newDefinition compareAgainstBase: oldDefinition.
 	classModification isEmpty
-		ifFalse: 
-			[addition classesModification addElementModification: classModification]
-
+		ifFalse: [ addition classesModification addElementModification: classModification ]
 ]
 
 { #category : 'moves' }
@@ -308,21 +374,29 @@ RwProjectSetModification >> updateForClassMoves [
 ]
 
 { #category : 'private - moves' }
-RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition  isMeta: isMeta [
+RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition isMeta: isMeta [
 	"Transform the given removal and addition to a move."
 
 	| oldDefinition newDefinition methodModification |
-	oldDefinition := (removal methodsModification
-				modificationOf: removal methodKey) before.
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal methodsModification modificationOf: removal methodKey)
+		before.
 	newDefinition := (addition methodsModification
-				modificationOf: addition methodKey) after.
-
+		modificationOf: addition methodKey) after.
 	"Delete the removal and the addition."
 	removal methodsModification removeModificationOf: removal methodKey.
 	addition methodsModification removeModificationOf: addition methodKey.
-
 	"Record the move."
-	movedMethods add: (RwMethodMove
+	movedMethods
+		add:
+			(RwMethodMove
 				methodBefore: oldDefinition
 				methodAfter: newDefinition
 				classOrExtensionBefore: removal classDefinitionOrExtension
@@ -332,16 +406,13 @@ RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition  isMet
 				projectBefore: removal projectDefinition
 				projectAfter: addition projectDefinition
 				isMeta: addition isMeta).
-
 	"Does the method have other modifications that need to be recorded?"
 	methodModification := newDefinition compareAgainstBase: oldDefinition.
-	methodModification 
+	methodModification
 		isMeta: isMeta;
 		classDefinition: addition classDefinitionOrExtension.
 	methodModification isEmpty
-		ifFalse: 
-			[addition methodsModification addElementModification: methodModification]
-
+		ifFalse: [ addition methodsModification addElementModification: methodModification ]
 ]
 
 { #category : 'moves' }

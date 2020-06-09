@@ -368,25 +368,35 @@ RwGsPatchSet_V2 >> addAndUpdateLoadedProjects [
 
 { #category : 'modification dispatching' }
 RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProject: aProjectDefinition [
-
 	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
 		while updating the loader using the loader"
 
 	aRwClassModification isAddition
 		ifTrue: [ 
+			| symDictName symDict |
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
-			(Rowan globalNamed: aRwClassModification after name) ifNotNil: [:global | (RwExistingVisitorAddingExistingClassNotification new classDefinition: aRwClassModification after) signal ].
+			symDictName := aProjectDefinition
+				symbolDictNameForPackageNamed: aPackage name.
+			symDict := Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+			(symDict at: aRwClassModification after name asSymbol otherwise: nil)
+				ifNotNil: [ :global | 
+					(RwExistingVisitorAddingExistingClassNotification new
+						class: global;
+						classDefinition: aRwClassModification after;
+						yourself) signal ].
 			self
 				addAddedClass: aRwClassModification after
 				inPackage: aPackage
 				inProject: aProjectDefinition.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
-				ifNotNil: [:constraints |  
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self 
-						addPatchedClassConstraints: aRwClassModification after 
-						inPackage: aPackage 
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
 						inProject: aProjectDefinition ] ].
 	aRwClassModification isDeletion
 		ifTrue: [ 
@@ -401,12 +411,14 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 				inPackage: aPackage
 				inProject: aProjectDefinition
 				toPatchSet: self.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
-				ifNotNil: [:constraints |  
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self 
-						addPatchedClassConstraints: aRwClassModification after 
-						inPackage: aPackage 
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
 						inProject: aProjectDefinition ] ]
 ]
 

@@ -16,7 +16,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 			theClassName := ex classDefinition name.
 			(processedClassNames includes: theClassName)
 				ifTrue: [ ex resume ].
-			theClass := Rowan globalNamed: theClassName.
+			theClass := ex class.
 			theClass isBehavior
 				ifFalse: [ ex pass ].
 			theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
@@ -36,7 +36,9 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 					projectDef := theLoadedProject asDefinition.
 					copiedProjectSetDef addProject: projectDef.
 					projectDef ].
-			loadedClass := Rowan image loadedClassNamed: theClassName.
+			loadedClass := Rowan image
+				loadedClassForClass: theClass
+				ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
 			packageDef := projectDef packageNamed: loadedClass loadedPackage name.
 			packageDef removeClassNamed: theClassName.
 			processedClassNames add: theClassName ].	"trim the stack"

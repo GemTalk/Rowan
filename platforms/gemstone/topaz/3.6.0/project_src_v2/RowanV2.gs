@@ -997,7 +997,7 @@ true.
 doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingClassNotification'
-	instVarNames: #( classDefinition loadedProject )
+	instVarNames: #( class classDefinition loadedProject )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -11304,6 +11304,18 @@ errorMessage: anObject
 ! Class implementation for 'RwExistingVisitorAddingExistingClassNotification'
 
 !		Instance methods for 'RwExistingVisitorAddingExistingClassNotification'
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingClassNotification
+class
+	^class
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingClassNotification
+class: object
+	class := object
+%
 
 category: 'accessing'
 method: RwExistingVisitorAddingExistingClassNotification
@@ -67474,7 +67486,7 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator origi
 			theClassName := ex classDefinition name.
 			(processedClassNames includes: theClassName)
 				ifTrue: [ ex resume ].
-			theClass := Rowan globalNamed: theClassName.
+			theClass := ex class.
 			theClass isBehavior
 				ifFalse: [ ex pass ].
 			theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
@@ -67494,7 +67506,9 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator origi
 					projectDef := theLoadedProject asDefinition.
 					copiedProjectSetDef addProject: projectDef.
 					projectDef ].
-			loadedClass := Rowan image loadedClassNamed: theClassName.
+			loadedClass := Rowan image
+				loadedClassForClass: theClass
+				ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
 			packageDef := projectDef packageNamed: loadedClass loadedPackage name.
 			packageDef removeClassNamed: theClassName.
 			processedClassNames add: theClassName ].	"trim the stack"
@@ -72725,13 +72739,12 @@ updateForMethodMoves
 
 	| methodAdditions methodRemovals |
 	methodAdditions := self findAddedMethods.
-	methodRemovals := self findRemovedMethods.
-	"Any keys that match between added and removed should be considered a move."
-	methodAdditions keysAndValuesDo: 
-			[:key :addition |
+	methodRemovals := self findRemovedMethods.	"Any keys that match between added and removed should be considered a move."
+	methodAdditions
+		keysAndValuesDo: [ :key :addition | 
 			| removal |
-			removal := methodRemovals at: key ifAbsent: [nil].
-			removal ifNotNil: [self updateForMethodMoveFrom: removal to: addition]]
+			removal := methodRemovals at: key ifAbsent: [ nil ].
+			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition ] ]
 %
 
 ! Class implementation for 'RwProjectSetModification'
@@ -72991,35 +73004,104 @@ isEmpty
 	^ super isEmpty and: [ movedClasses isEmpty and: [ movedMethods isEmpty ] ]
 %
 
+category: 'moves'
+method: RwProjectSetModification
+newUpdateForClassMoves
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					| classesModification |
+					classesModification := packageModification classesModification.
+					classesModification elementsModified
+						do: [ :classModification | 
+							| addedClass removedClass |
+							classModification before isEmpty
+								ifTrue: [ 
+									| newClass |
+									newClass := classModification after.
+									addedClass := RwClassAdditionOrRemoval
+										projectDefinition: projectModification after
+										packageDefinition: packageModification after
+										classKey: newClass key
+										classesModification: classesModification ].
+							classModification after isEmpty
+								ifTrue: [ 
+									| oldClass |
+									oldClass := classModification before.
+									removedClass := RwClassAdditionOrRemoval
+										projectDefinition: projectModification before
+										packageDefinition: packageModification before
+										classKey: oldClass key
+										classesModification: classesModification ].
+							self updateForClassMoveFrom: removedClass to: addedClass ] ] ]
+%
+
+category: 'moves'
+method: RwProjectSetModification
+newUpdateForMethodMoves
+	"Methods that have been moved between packages will initially show up as a remove and an add rather than a move.
+	Find moved methods and correct the structure."
+
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					| addedMethods removedMethods |
+					removedMethods := Dictionary new.
+					addedMethods := Dictionary new.
+					self
+						addMethodsAddedByPackageModification: packageModification
+						inProject: projectModification
+						toDictionary: addedMethods.
+					self
+						addMethodsRemovedByPackageModification: packageModification
+						inProject: projectModification
+						toDictionary: removedMethods.
+					addedMethods
+						keysAndValuesDo: [ :key :addition | 
+							| removal |
+							removal := removedMethods at: key ifAbsent: [ nil ].
+							removal
+								ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value ] ] ] ]
+%
+
 category: 'private - moves'
 method: RwProjectSetModification
 updateForClassMoveFrom: removal to: addition
 	"Transform the given removal and addition to a move."
 
 	| oldDefinition newDefinition classModification |
-	oldDefinition := (removal classesModification
-				modificationOf: removal classKey) before.
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal classesModification modificationOf: removal classKey)
+		before.
 	newDefinition := (addition classesModification
-				modificationOf: addition classKey) after.
-
-	"Delete the removal and the addition."
+		modificationOf: addition classKey) after.	"Delete the removal and the addition."
 	removal classesModification removeModificationOf: removal classKey.
-	addition classesModification removeModificationOf: addition classKey.
-
-	"Record the move."
-	movedClasses add: (RwClassMove
+	addition classesModification removeModificationOf: addition classKey.	"Record the move."
+	movedClasses
+		add:
+			(RwClassMove
 				classBefore: oldDefinition
 				classAfter: newDefinition
 				packageBefore: removal packageDefinition
 				packageAfter: addition packageDefinition
 				projectBefore: removal projectDefinition
-				projectAfter: addition projectDefinition).
-
-	"Does the class have other modifications that need to be recorded?"
+				projectAfter: addition projectDefinition).	"Does the class have other modifications that need to be recorded?"
 	classModification := newDefinition compareAgainstBase: oldDefinition.
 	classModification isEmpty
-		ifFalse: 
-			[addition classesModification addElementModification: classModification]
+		ifFalse: [ addition classesModification addElementModification: classModification ]
 %
 
 category: 'moves'
@@ -73040,21 +73122,29 @@ updateForClassMoves
 
 category: 'private - moves'
 method: RwProjectSetModification
-updateForMethodMoveFrom: removal to: addition  isMeta: isMeta
+updateForMethodMoveFrom: removal to: addition isMeta: isMeta
 	"Transform the given removal and addition to a move."
 
 	| oldDefinition newDefinition methodModification |
-	oldDefinition := (removal methodsModification
-				modificationOf: removal methodKey) before.
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal methodsModification modificationOf: removal methodKey)
+		before.
 	newDefinition := (addition methodsModification
-				modificationOf: addition methodKey) after.
-
+		modificationOf: addition methodKey) after.
 	"Delete the removal and the addition."
 	removal methodsModification removeModificationOf: removal methodKey.
 	addition methodsModification removeModificationOf: addition methodKey.
-
 	"Record the move."
-	movedMethods add: (RwMethodMove
+	movedMethods
+		add:
+			(RwMethodMove
 				methodBefore: oldDefinition
 				methodAfter: newDefinition
 				classOrExtensionBefore: removal classDefinitionOrExtension
@@ -73064,15 +73154,13 @@ updateForMethodMoveFrom: removal to: addition  isMeta: isMeta
 				projectBefore: removal projectDefinition
 				projectAfter: addition projectDefinition
 				isMeta: addition isMeta).
-
 	"Does the method have other modifications that need to be recorded?"
 	methodModification := newDefinition compareAgainstBase: oldDefinition.
-	methodModification 
+	methodModification
 		isMeta: isMeta;
 		classDefinition: addition classDefinitionOrExtension.
 	methodModification isEmpty
-		ifFalse: 
-			[addition methodsModification addElementModification: methodModification]
+		ifFalse: [ addition methodsModification addElementModification: methodModification ]
 %
 
 category: 'moves'
@@ -74050,12 +74138,16 @@ addAddedProject: aProjectDefinition
 category: 'private'
 method: RwGsImagePatchVisitor_V2
 addClasses: classDefinitions
-
 	classDefinitions
 		do: [ :classDefinition | 
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
-			(Rowan globalNamed: classDefinition name) ifNotNil: [:global | (RwExistingVisitorAddingExistingClassNotification new classDefinition: classDefinition) signal ]].
+			(Rowan globalNamed: classDefinition name)
+				ifNotNil: [ :global | 
+					(RwExistingVisitorAddingExistingClassNotification new
+						class: global;
+						classDefinition: classDefinition;
+						yourself) signal ] ].
 	classDefinitions
 		do: [ :classDefinition | 
 			patchSet
@@ -74703,25 +74795,35 @@ addAndUpdateLoadedProjects
 category: 'modification dispatching'
 method: RwGsPatchSet_V2
 addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProject: aProjectDefinition
-
 	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
 		while updating the loader using the loader"
 
 	aRwClassModification isAddition
 		ifTrue: [ 
+			| symDictName symDict |
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
-			(Rowan globalNamed: aRwClassModification after name) ifNotNil: [:global | (RwExistingVisitorAddingExistingClassNotification new classDefinition: aRwClassModification after) signal ].
+			symDictName := aProjectDefinition
+				symbolDictNameForPackageNamed: aPackage name.
+			symDict := Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+			(symDict at: aRwClassModification after name asSymbol otherwise: nil)
+				ifNotNil: [ :global | 
+					(RwExistingVisitorAddingExistingClassNotification new
+						class: global;
+						classDefinition: aRwClassModification after;
+						yourself) signal ].
 			self
 				addAddedClass: aRwClassModification after
 				inPackage: aPackage
 				inProject: aProjectDefinition.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
-				ifNotNil: [:constraints |  
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self 
-						addPatchedClassConstraints: aRwClassModification after 
-						inPackage: aPackage 
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
 						inProject: aProjectDefinition ] ].
 	aRwClassModification isDeletion
 		ifTrue: [ 
@@ -74736,12 +74838,14 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 				inPackage: aPackage
 				inProject: aProjectDefinition
 				toPatchSet: self.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
-				ifNotNil: [:constraints |  
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self 
-						addPatchedClassConstraints: aRwClassModification after 
-						inPackage: aPackage 
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
 						inProject: aProjectDefinition ] ]
 %
 
@@ -76438,6 +76542,7 @@ symbolDictionaryFor: aPackageName
 	"because this is a deletion, we can look up the symbol dictionariy directly"
 
 	| className class | 
+true ifTrue: [ ^ super symbolDictionaryFor: aPackageName].
 	className := self classDefinition name.
 	class := Rowan globalNamed: className.
 	Rowan image 
@@ -77036,10 +77141,9 @@ oldClassVersion
 category: 'new version support'
 method: RwGsClassVersioningSymbolDictPatchV2
 updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification patchSet: aPatchSet
-
 	| className class |
 	className := classDefinition name.
-	class := Rowan globalNamed: className.
+	class := self existingSymbolDictionary at: className asSymbol.
 	self
 		_updateNewClassVersionPatchesForClass: class
 		in: aProjectSetModification
@@ -97338,8 +97442,8 @@ compareAgainstBaseForLoader: aDefinition
 		into: result
 		elementClass: RwProjectDefinitionV2.
 	result
-		updateForClassMoves;
-		updateForMethodMoves.
+		newUpdateForClassMoves;
+		newUpdateForMethodMoves.
 	^ result
 %
 

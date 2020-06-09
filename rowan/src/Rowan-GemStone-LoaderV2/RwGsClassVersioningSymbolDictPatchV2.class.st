@@ -241,10 +241,9 @@ RwGsClassVersioningSymbolDictPatchV2 >> oldClassVersion [
 
 { #category : 'new version support' }
 RwGsClassVersioningSymbolDictPatchV2 >> updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification patchSet: aPatchSet [
-
 	| className class |
 	className := classDefinition name.
-	class := Rowan globalNamed: className.
+	class := self existingSymbolDictionary at: className asSymbol.
 	self
 		_updateNewClassVersionPatchesForClass: class
 		in: aProjectSetModification
