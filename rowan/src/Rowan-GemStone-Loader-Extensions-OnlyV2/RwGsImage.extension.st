@@ -30,18 +30,23 @@ RwGsImage class >> _shouldCloneRowanLoader: aProjectSetModification [
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
 RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator [
+	| visitorClassName visitorClass |
+	visitorClassName := SessionTemps current
+		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
+		ifAbsent: [ #'RwGsImagePatchVisitor_V2' ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
-			| visitorClass |
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor_V2.
-			self 
-				applyModification_V2: aProjectSetModification 
-				visitorClass:visitorClass 
+			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
+			self
+				applyModification_V2: aProjectSetModification
+				visitorClass: visitorClass
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
-			self 
-				applyModification_V2: aProjectSetModification 
-				visitorClass: RwGsImagePatchVisitor_V2 
+			visitorClass := (Rowan image symbolDictNamed: 'RowanLoader')
+				at: visitorClassName.
+			self
+				applyModification_V2: aProjectSetModification
+				visitorClass: visitorClass
 				instanceMigrator: instanceMigrator ]
 ]
 

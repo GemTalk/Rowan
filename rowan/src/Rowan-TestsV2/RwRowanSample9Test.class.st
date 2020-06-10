@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwRowanSample9Test',
 	#superclass : 'RwAbstractV2Test',
+	#instVars : [
+		'skipTestLibraryGenerator'
+	],
 	#category : 'Rowan-TestsV2'
 }
 
@@ -189,6 +192,11 @@ RwRowanSample9Test >> _rowanSample1LoadSpecificationUrl_515 [
 { #category : 'private' }
 RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 	^ self class _rowanSample9_0000_load_spec
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _skipTestLibraryGenerator [
+	^ skipTestLibraryGenerator ifNil: [ false ]
 ]
 
 { #category : 'private' }
@@ -447,6 +455,25 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 												, ' not present in the expected symbol dictionary '
 												, symDictName printString ] ] ] ].
 	self assert: exceptions isEmpty
+]
+
+{ #category : 'running' }
+RwRowanSample9Test >> setUp [
+	super setUp.
+	false
+		ifTrue: [ 
+			skipTestLibraryGenerator := true.	"don't run library generator tests when just testing the new loader ... long test, no loading"
+			SessionTemps current
+				at: #'Experimental_RwGsImagePatchVisitor_V2_className'
+				put: #'RwGsImagePatchVisitor_V2_symbolList' ]
+]
+
+{ #category : 'running' }
+RwRowanSample9Test >> tearDown [
+	SessionTemps current
+		removeKey: #'Experimental_RwGsImagePatchVisitor_V2_className'
+		ifAbsent: [  ].
+	super tearDown
 ]
 
 { #category : 'migration tests' }
@@ -3739,6 +3766,10 @@ RwRowanSample9Test >> testLibraryGenerator [
 	"skip spec_004, because it makes two changes in a row, so always commits"
 
 	| commitComment |
+	self _skipTestLibraryGenerator 
+		ifTrue: [ 
+			"since this test is long and does not use the loader (just Rowan API), it can be useful to bypass the test"
+			^self ].
 	self class _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
