@@ -71,6 +71,22 @@ RwGsClassPatchV2 >> addToNewClassesByName: aDictionary [
 	aDictionary at: name put: self
 ]
 
+{ #category : 'actions' }
+RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
+	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
+
+	| name symDict symDictName |
+	name := classDefinition key asSymbol.
+	name ifNil: [ self error: 'Class definition with no name.' ].
+	symDictName := self symbolDictionaryName asSymbol.
+	symDict := newClassesByNameSymbolList
+		detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+		ifNone: [ self error: 'SymbolDictionary named ' , symDictName printString , ' not found' ].
+	(symDict includesKey: name)
+		ifTrue: [ self error: 'Duplicate new class name ' , name printString ].
+	symDict at: name put: self
+]
+
 { #category : 'private' }
 RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 	"For GemStone, the valid values are:
@@ -160,6 +176,14 @@ RwGsClassPatchV2 >> createClassFor: aPatchSet [
 	^ createdClass
 ]
 
+{ #category : 'actions' }
+RwGsClassPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
+	| createdClass |
+	createdClass := self privateCreateClassFor: aPatchSet inSymDict: symDictName.
+	aPatchSet createdClass: createdClass inSymDict: symDictName.
+	^ createdClass
+]
+
 { #category : 'patching moved classes' }
 RwGsClassPatchV2 >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
 
@@ -184,7 +208,7 @@ RwGsClassPatchV2 >> printOn: aStream [
 ]
 
 { #category : 'private' }
-RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet [
+RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet inSymDict: symDictName [
 
 	| superclass |
 	superclass := aPatchSet 
@@ -194,7 +218,7 @@ RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet [
 			"if we can't look up the class, try accessing the superclass from the class itself"
 			(aPatchSet tempSymbols 
 				at: classDefinition name asSymbol
-				ifAbsent: [ self error: 'Class not found ', classDefinition className printString ]) superClass ].
+				ifAbsent: [ self error: 'Class not found ', classDefinition name printString ]) superClass ].
 	superclass
 		ifNil: [ 
 			classDefinition superclassName = 'nil'

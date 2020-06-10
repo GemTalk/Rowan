@@ -16,6 +16,13 @@ RwGsClassAdditionSymbolDictPatchV2 >> createClassFor: aPatchSet [
 ]
 
 { #category : 'actions' }
+RwGsClassAdditionSymbolDictPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
+	newClass := super createClassFor: aPatchSet inSymDict: symDictName.
+	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
+	^ newClass
+]
+
+{ #category : 'actions' }
 RwGsClassAdditionSymbolDictPatchV2 >> installClassInSystem [
 
 	"Copy the name association to the correct 

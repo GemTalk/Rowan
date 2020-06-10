@@ -21,6 +21,11 @@ RwGsClassDeletionSymbolDictPatchV2 >> addToNewClassesByName: aDictionary [
 	
 ]
 
+{ #category : 'actions' }
+RwGsClassDeletionSymbolDictPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
+	"noop"
+]
+
 { #category : 'deleting' }
 RwGsClassDeletionSymbolDictPatchV2 >> deleteClassFromSystem [
 

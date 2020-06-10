@@ -38,9 +38,33 @@ RwGsPatchSet_V2_symbolList class >> classPatchesInReverseHierarchyOrder: classPa
 RwGsPatchSet_V2_symbolList >> _createMovedClasses [
 	movedClasses
 		do: [ :movedClass | 
-			(movedClassesSymbolList at: movedClass symbolDictionaryNameBefore)
-				at: movedClass classBefore name
+			| symDictName |
+			symDictName := movedClass symbolDictionaryNameBefore asSymbol.
+			(movedClassesSymbolList
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ])
+				at: movedClass classBefore name asSymbol
 				put: movedClass ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2_symbolList >> _createNewSymbolList [
+	| new |
+	new := SymbolList new.
+	Rowan image symbolList
+		do: [ :symDict | 
+			| newSymDict |
+			newSymDict := SymbolDictionary new
+				name: symDict name;
+				yourself.
+			new addLast: newSymDict ].
+	^ new
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2_symbolList >> _symbolListLookupForClassNamed: className in: dictSymbolList ifAbsent:  absentBlock [
+	"dictSymbolList is a dictionary structure, mirroring a SymbolList ... in this case we are looking up a class using symbol list resolution order"
+
+	self halt: '... okay boys we need to use a real symbol list'
 ]
 
 { #category : 'private - applying' }
@@ -49,17 +73,27 @@ RwGsPatchSet_V2_symbolList >> addAddedClassesToTempSymbols [
 
 	addedClasses
 		do: [ :patch | 
-			| key symbolList |
+			| key symDict symDictName |
 			key := patch className asSymbol.
-			symbolList := tempSymbolList
-				at: patch symbolDictionaryName
-				ifAbsent: [ SymbolDictionary new ].
-			(symbolList includesKey: key)
+			symDictName := patch symbolDictionaryName asSymbol.
+			symDict := tempSymbolList
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ].
+			(symDict includesKey: key)
 				ifTrue: [ 
 					self
 						error:
 							'Encountered an existing association for a new class ' , key asString ].
-			symbolList at: key put: nil ]
+			symDict at: key put: nil ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2_symbolList >> addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList [
+
+	addedClasses do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
+	classesWithClassVariableChanges
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
+	classesWithNewVersions
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ]
 ]
 
 { #category : 'private - applying' }
@@ -69,22 +103,117 @@ RwGsPatchSet_V2_symbolList >> compileMethodPatch: aMethodAdditionPatch [
 		andExistingClassSymbolList: tempSymbolList
 ]
 
+{ #category : 'private - applying' }
+RwGsPatchSet_V2_symbolList >> createClassesFromWorklist: workList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
+	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
+	Remove any classes created from the workList."
+
+	| className |
+	className := self anyElementOfCollection: workList.
+	className ifNil: [ self error: 'Empty WorkList.' ].
+	self
+		createClassNamed: className
+		fromWorkList: workList
+		symDictName: symDictName
+		andClassesByNameSymbolList: newClassesByNameSymbolList
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2_symbolList >> createClassNamed: className fromWorkList: workList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
+	"Create the named class from the workList, creating any superclasses or superclass versions that are to be created.
+	Remove any classes created from the workList."
+
+	| patch superclassName |
+	workList remove: className.
+	patch := (newClassesByNameSymbolList
+		detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ])
+		at: className asSymbol.
+	superclassName := patch superclassName.
+	(workList includes: superclassName)
+		ifTrue: [ 
+			self
+				createClassNamed: superclassName
+				fromWorkList: workList
+				symDictName: symDictName
+				andClassesByNameSymbolList: newClassesByNameSymbolList ].
+	patch createClassFor: self inSymDict: symDictName
+]
+
+{ #category : 'patch access' }
+RwGsPatchSet_V2_symbolList >> createdClass: aClass [
+
+	| className |
+	className := aClass name.
+	(createdClasses at: className ifAbsent: [ ])
+		ifNil: [ 
+			createdClasses
+				add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [:cl | 
+			cl == aClass
+				ifFalse: [ 
+					"new version created, update entry in createdClasses"
+					createdClasses at: className put: aClass ] ]
+
+]
+
+{ #category : 'patch access' }
+RwGsPatchSet_V2_symbolList >> createdClass: aClass  inSymDict: symDictName [
+
+	| className |
+	className := aClass name.
+	(createdClasses at: className ifAbsent: [ ])
+		ifNil: [ 
+			createdClasses
+				add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [:cl | 
+			cl == aClass
+				ifFalse: [ 
+					"new version created, update entry in createdClasses"
+					createdClasses at: className put: aClass ] ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2_symbolList >> createNewClassesAndClassVersions [
+	"Who: Added classes and classes with new versions and classes with class variable changes
+	   How: Create the new class or class version. Superclass by identity, not name resolution.
+	   Order: Superclasses first.
+	   Errors: Collect for reporting later"
+
+	| newClassesByNameSymbolList |
+	newClassesByNameSymbolList := self _createNewSymbolList.
+	self addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList.
+	newClassesByNameSymbolList
+		do: [ :symDict | 
+			| workList symDictName |
+			symDictName := symDict name.
+			workList := Set withAll: symDict keys.
+			[ workList isEmpty ]
+				whileFalse: [ 
+					self
+						createClassesFromWorklist: workList
+						symDictName: symDictName
+						andClassesByNameSymbolList: newClassesByNameSymbolList ] ]
+]
+
 { #category : 'initialization' }
 RwGsPatchSet_V2_symbolList >> initialize [
 	super initialize.
 	tempSymbols := nil.
-	tempSymbolList := SymbolDictionary new
+	tempSymbolList := self _createNewSymbolList
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> moveClassesBetweenSymbolDictionaries [
 	classesWithSymbolDictionaryChanges
 		do: [ :patch | 
-			| className |
-			className := patch classDefinition name.
-			((movedClassesSymbolList at: patch symbolDictionaryName)
-				at: className
-				ifAbsent: [  ])
+			| className symDictName symDict |
+			className := patch classDefinition name asSymbol.
+
+			symDictName := patch symbolDictionaryName asSymbol.
+			symDict := movedClassesSymbolList
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ].
+
+			(symDict at: className ifAbsent: [  ])
 				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
 				ifNotNil: [ :classMove | patch installSymbolDictionaryPatchFor: self classMove: classMove ] ]
 ]
@@ -114,8 +243,11 @@ RwGsPatchSet_V2_symbolList >> removeDeletedClassesFromTempSymbols [
 
 	deletedClasses
 		do: [ :patch | 
-			(tempSymbolList at: patch symbolDictionaryName)
-				removeKey: patch className asSymbol ]
+			| symDictName symDict |
+			symDictName := patch symbolDictionaryName asSymbol.
+			symDict := tempSymbolList
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ].
+			symDict removeKey: patch className asSymbol ]
 ]
 
 { #category : 'private - applying' }
@@ -141,14 +273,14 @@ RwGsPatchSet_V2_symbolList >> setupForApply [
 	to compile methods during this apply operation."
 
 	| symbolList |
-	tempSymbols := SymbolDictionary new.
-	symbolList := Rowan image symbolList.
-	"If there are any duplicated symbols, we only want the one that will be found first one, 
+	symbolList := Rowan image symbolList.	"If there are any duplicated symbols, we only want the one that will be found first one, 
 	so we copy in reverse order of search order, thereby overwriting later definitions with earlier ones."
 	symbolList
-		reverseDo: [ :dict | 
-			"Need to preserve association identity, tempSymbols is used for compiling methods"
-			symbolList := tempSymbolList at: dict name ifAbsent: [ SymbolDictionary new ].
+		do: [ :dict | 
+			| symDictName "Need to preserve association identity, tempSymbols is used for compiling methods" symDict |
+			symDictName := dict name asSymbol.
+			symDict := tempSymbolList
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ].
 			dict associationsDo: [ :assoc | symbolList add: assoc ] ].
 
 	self setupForMovedClasses
@@ -156,14 +288,15 @@ RwGsPatchSet_V2_symbolList >> setupForApply [
 
 { #category : 'patch access' }
 RwGsPatchSet_V2_symbolList >> superclassNamed: aName ifAbsent: absentBlock [
-
 	| superclassName |
 	superclassName := aName asSymbol.
-	^ createdClasses
-		at: superclassName
+	^ self
+		_symbolListLookupForClassNamed: superclassName
+		in: createdClasses
 		ifAbsent: [ 
-			tempSymbolList
-				at: superclassName
+			self
+				_symbolListLookupForClassNamed: superclassName
+				in: tempSymbolList
 				ifAbsent: absentBlock ]
 ]
 

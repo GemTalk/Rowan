@@ -12,6 +12,11 @@ RwGsClassPropertiesSymDictPatchV2 >> addToNewClassesByName: aDictionary [
 	
 ]
 
+{ #category : 'actions' }
+RwGsClassPropertiesSymDictPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
+	"noop"
+]
+
 { #category : 'installing' }
 RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchFor: aPatchSet [
 

@@ -460,7 +460,7 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 { #category : 'running' }
 RwRowanSample9Test >> setUp [
 	super setUp.
-	false
+	true
 		ifTrue: [ 
 			skipTestLibraryGenerator := true.	"don't run library generator tests when just testing the new loader ... long test, no loading"
 			SessionTemps current
