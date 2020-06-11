@@ -76551,12 +76551,12 @@ removeDeletedMethods
 			| className |
 			className := methodDeletionPatch className.
 			methodDeletionPatch
-				deleteMethodNewClasses: createdClasses
+				deleteMethodNewClasses: self createdClasses
 				andExistingClassSymbolList: self tempSymbolList ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
-				deleteNewVersionMethodNewClasses: createdClasses
+				deleteNewVersionMethodNewClasses: self createdClasses
 				andExistingClassSymbolList: self tempSymbolList ]
 %
 
