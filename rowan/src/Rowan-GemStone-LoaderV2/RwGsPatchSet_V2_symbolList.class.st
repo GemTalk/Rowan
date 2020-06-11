@@ -10,17 +10,19 @@ Class {
 
 { #category : 'private - method initialization order' }
 RwGsPatchSet_V2_symbolList class >> classPatchesInReverseHierarchyOrder: classPatches tempSymbolList: tempSymbolList [
-
 	"Returns acollection of the specified classPatches ordered in reverse superclass order"
 
 	| order toBeOrdered processed aClass patchMap |
 	patchMap := IdentityKeyValueDictionary new.
-	classPatches do: [:classPatch |
-		| class |
-		class := (tempSymbolList at: classPatch symbolDictionaryName)
-				at: classPatch className
+	classPatches
+		do: [ :classPatch | 
+			| class |
+			class := (self
+				lookupSymbolDictName: classPatch symbolDictionaryName
+				in: tempSymbolList)
+				at: classPatch className asSymbol
 				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ].
-		patchMap at: class put: classPatch ].
+			patchMap at: class put: classPatch ].
 	toBeOrdered := patchMap keys asIdentitySet.
 	order := OrderedCollection new.
 	processed := IdentitySet new.
@@ -31,7 +33,8 @@ RwGsPatchSet_V2_symbolList class >> classPatchesInReverseHierarchyOrder: classPa
 				from: toBeOrdered
 				into: order
 				ignoring: processed ].
-  ^ ((order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]) reverse
+	^ ((order collect: [ :orderedClass | patchMap at: orderedClass ifAbsent: [  ] ])
+		select: [ :patch | patch notNil ]) reverse
 ]
 
 { #category : 'accessing' }
@@ -59,7 +62,7 @@ RwGsPatchSet_V2_symbolList >> _createMovedClasses [
 		do: [ :movedClass | 
 			| symDictName |
 			symDictName := movedClass symbolDictionaryNameBefore asSymbol.
-			( self class  lookupSymbolDictName: symDictName in: movedClassesSymbolList)
+			( self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList)
 				at: movedClass classBefore name asSymbol
 				put: movedClass ]
 ]
@@ -224,7 +227,7 @@ RwGsPatchSet_V2_symbolList >> moveClassesBetweenSymbolDictionaries [
 			className := patch classDefinition name asSymbol.
 
 			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := self class  lookupSymbolDictName: symDictName in: movedClassesSymbolList.
+			symDict := self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList.
 
 			(symDict at: className ifAbsent: [  ])
 				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
@@ -239,6 +242,7 @@ RwGsPatchSet_V2_symbolList >> movedClassesMap [
 { #category : 'accessing' }
 RwGsPatchSet_V2_symbolList >> movedClassesSymbolList [
 	^ movedClassesSymbolList
+		ifNil: [ movedClassesSymbolList := self _createNewSymbolList ]
 ]
 
 { #category : 'private - applying' }
@@ -350,9 +354,9 @@ RwGsPatchSet_V2_symbolList >> updateClassProperties [
 		yourself.
 	classPatches
 		do: [ :patch | 
-			((movedClassesSymbolList at: patch symbolDictionaryName)
-				at: patch className
-				ifAbsent: [  ])
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
 				ifNil: [ patch installPropertiesPatchFor: self ]
 				ifNotNil: [ :aClassMove | patch installPropertiesPatchFor: self classMove: aClassMove ] ]
 ]
