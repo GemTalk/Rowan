@@ -78,12 +78,21 @@ RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList 
 	| name symDict symDictName |
 	name := classDefinition key asSymbol.
 	name ifNil: [ self error: 'Class definition with no name.' ].
-	symDictName := self symbolDictionaryName asSymbol.
-	symDict := newClassesByNameSymbolList
-		detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
-		ifNone: [ self error: 'SymbolDictionary named ' , symDictName printString , ' not found' ].
+	symDictName := self symbolDictionaryName.
+	symDict := RwGsPatchSet_V2_symbolList
+		lookupSymbolDictName: symDictName
+		in: newClassesByNameSymbolList
+		ifAbsent: [ 
+			self
+				error:
+					'SymbolDictionary named ' , symDictName printString
+						, ' not found in new classes symbol list' ].
 	(symDict includesKey: name)
-		ifTrue: [ self error: 'Duplicate new class name ' , name printString ].
+		ifTrue: [ 
+			self
+				error:
+					'Duplicate new class name ' , name printString , ' in symbol dictionary '
+						, symDictName printString ].
 	symDict at: name put: self
 ]
 

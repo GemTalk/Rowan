@@ -76,7 +76,7 @@ RwGsPatchV2 >> symbolDictionaryFor: aPackageName projectDefinition: aProjectDefi
 
 { #category : 'accessing' }
 RwGsPatchV2 >> symbolDictionaryName [
-	^ self projectDefinition symbolDictNameForPackageNamed: self packageName
+	^ (self projectDefinition symbolDictNameForPackageNamed: self packageName) asSymbol
 ]
 
 { #category : 'accessing' }

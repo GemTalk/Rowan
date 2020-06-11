@@ -87,6 +87,31 @@ RwGsMethodPatchV2 >> compileUsingNewClasses: createdClasses andExistingClasses: 
   ]
 ]
 
+{ #category : 'compiling' }
+RwGsMethodPatchV2 >> compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
+
+	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
+	behavior
+		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
+
+  [
+	  | sourceString  protocol |
+	  sourceString := methodDefinition source.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: tempSymbolList
+		  category: protocol
+		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
+		  intoCategories: nil
+		  intoPragmas: nil
+		  environmentId: self methodEnvironmentId
+  ] on: (CompileError, CompileWarning) do:[:ex |
+    ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
+    ex pass 
+  ]
+]
+
 { #category : 'initializers' }
 RwGsMethodPatchV2 >> isAnInitializer [
 
@@ -170,6 +195,30 @@ RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClasses andExistingClasses:
 		at: className
 		ifAbsent: [ 
 			tempSymbols
+				at: className
+				ifAbsent: [ 
+					"cannot find class ... caller can decide whether or not that is a problem"
+					^ self ] ].
+	behavior := isMeta
+		ifTrue: [ class class ]
+		ifFalse: [ class ]
+]
+
+{ #category : 'private' }
+RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClassesSymbolList andExistingClassSymbolList: tempSymbolList [
+	| className class symDictName |
+	classDefinition key
+		ifNil: [ 
+			"class is being deleted ... we're done"
+			^ self ].
+	className := classDefinition key asSymbol.
+	symDictName := self symbolDictionaryName.
+	class := (RwGsPatchSet_V2_symbolList
+		lookupSymbolDictName: symDictName
+		in: createdClassesSymbolList)
+		at: className
+		ifAbsent: [ 
+			(RwGsPatchSet_V2_symbolList lookupSymbolDictName: symDictName in: tempSymbolList)
 				at: className
 				ifAbsent: [ 
 					"cannot find class ... caller can decide whether or not that is a problem"

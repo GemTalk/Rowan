@@ -34,14 +34,32 @@ RwGsPatchSet_V2_symbolList class >> classPatchesInReverseHierarchyOrder: classPa
   ^ ((order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]) reverse
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSet_V2_symbolList class >> lookupSymbolDictName: symDictName in: symbolList [
+	^ self
+		lookupSymbolDictName: symDictName
+		in: symbolList
+		ifAbsent: [ 
+			self
+				error:
+					'the symbol dictionary named ' , symDictName asString printString
+						, ' was not found in the symbol list' ]
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2_symbolList class >> lookupSymbolDictName: symDictName in: symbolList ifAbsent: absentBlock [
+	^ symbolList
+		detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+		ifNone: absentBlock
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> _createMovedClasses [
 	movedClasses
 		do: [ :movedClass | 
 			| symDictName |
 			symDictName := movedClass symbolDictionaryNameBefore asSymbol.
-			(movedClassesSymbolList
-				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ])
+			( self class  lookupSymbolDictName: symDictName in: movedClassesSymbolList)
 				at: movedClass classBefore name asSymbol
 				put: movedClass ]
 ]
@@ -60,30 +78,22 @@ RwGsPatchSet_V2_symbolList >> _createNewSymbolList [
 	^ new
 ]
 
-{ #category : 'accessing' }
-RwGsPatchSet_V2_symbolList >> _symbolListLookupForClassNamed: className in: dictSymbolList ifAbsent:  absentBlock [
-	"dictSymbolList is a dictionary structure, mirroring a SymbolList ... in this case we are looking up a class using symbol list resolution order"
-
-	self halt: '... okay boys we need to use a real symbol list'
-]
-
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> addAddedClassesToTempSymbols [
-	"Just need the names for now, they don't need to resolve to anything in particular."
-
 	addedClasses
 		do: [ :patch | 
 			| key symDict symDictName |
 			key := patch className asSymbol.
-			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := tempSymbolList
-				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ].
+			symDictName := patch symbolDictionaryName.
+			symDict := self class
+				lookupSymbolDictName: symDictName
+				in: self tempSymbolList.
 			(symDict includesKey: key)
 				ifTrue: [ 
 					self
 						error:
 							'Encountered an existing association for a new class ' , key asString ].
-			symDict at: key put: nil ]
+			symDict at: key put: nil	"Just need the names for now, they don't need to resolve to anything in particular" ]
 ]
 
 { #category : 'private - applying' }
@@ -99,8 +109,8 @@ RwGsPatchSet_V2_symbolList >> addCreatedClassesAndVersionsToSymbolList: newClass
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> compileMethodPatch: aMethodAdditionPatch [
 	aMethodAdditionPatch
-		compileUsingNewClasses: createdClasses
-		andExistingClassSymbolList: tempSymbolList
+		compileUsingNewClasses: self createdClasses
+		andExistingClassSymbolList: self tempSymbolList
 ]
 
 { #category : 'private - applying' }
@@ -125,10 +135,10 @@ RwGsPatchSet_V2_symbolList >> createClassNamed: className fromWorkList: workList
 
 	| patch superclassName |
 	workList remove: className.
-	patch := (newClassesByNameSymbolList
-		detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ])
-		at: className asSymbol.
-	superclassName := patch superclassName.
+	patch := (self class
+		lookupSymbolDictName: symDictName
+		in: newClassesByNameSymbolList) at: className asSymbol.
+	superclassName := patch superclassName asSymbol.
 	(workList includes: superclassName)
 		ifTrue: [ 
 			self
@@ -157,19 +167,22 @@ RwGsPatchSet_V2_symbolList >> createdClass: aClass [
 ]
 
 { #category : 'patch access' }
-RwGsPatchSet_V2_symbolList >> createdClass: aClass  inSymDict: symDictName [
-
-	| className |
+RwGsPatchSet_V2_symbolList >> createdClass: aClass inSymDict: symDictName [
+	| className symDict |
 	className := aClass name.
-	(createdClasses at: className ifAbsent: [ ])
-		ifNil: [ 
-			createdClasses
-				add: (SymbolAssociation newWithKey: className value: aClass) ]
-		ifNotNil: [:cl | 
+	symDict := self class lookupSymbolDictName: symDictName in: self createdClasses.
+	(symDict at: className ifAbsent: [  ])
+		ifNil: [ symDict add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [ :cl | 
 			cl == aClass
 				ifFalse: [ 
 					"new version created, update entry in createdClasses"
-					createdClasses at: className put: aClass ] ]
+					symDict at: className put: aClass ] ]
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2_symbolList >> createdClasses [
+	^ createdClasses ifNil: [ createdClasses :=  self _createNewSymbolList ]
 ]
 
 { #category : 'private - applying' }
@@ -186,7 +199,8 @@ RwGsPatchSet_V2_symbolList >> createNewClassesAndClassVersions [
 		do: [ :symDict | 
 			| workList symDictName |
 			symDictName := symDict name.
-			workList := Set withAll: symDict keys.
+			workList := symDict keys.
+			workList remove: symDictName.
 			[ workList isEmpty ]
 				whileFalse: [ 
 					self
@@ -199,7 +213,7 @@ RwGsPatchSet_V2_symbolList >> createNewClassesAndClassVersions [
 RwGsPatchSet_V2_symbolList >> initialize [
 	super initialize.
 	tempSymbols := nil.
-	tempSymbolList := self _createNewSymbolList
+	createdClasses := nil
 ]
 
 { #category : 'private - applying' }
@@ -210,8 +224,7 @@ RwGsPatchSet_V2_symbolList >> moveClassesBetweenSymbolDictionaries [
 			className := patch classDefinition name asSymbol.
 
 			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := movedClassesSymbolList
-				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ].
+			symDict := self class  lookupSymbolDictName: symDictName in: movedClassesSymbolList.
 
 			(symDict at: className ifAbsent: [  ])
 				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
@@ -233,8 +246,8 @@ RwGsPatchSet_V2_symbolList >> recordCompiledForNewClassVersionDeletions [
 	deleteNewVersionMethods
 		do: [ :each | 
 			each
-				primeBehaviorNewClasses: createdClasses
-				andExistingClassSymbolList: tempSymbolList ]
+				primeBehaviorNewClasses: self createdClasses
+				andExistingClassSymbolList: self tempSymbolList ]
 ]
 
 { #category : 'private - applying' }
@@ -245,8 +258,7 @@ RwGsPatchSet_V2_symbolList >> removeDeletedClassesFromTempSymbols [
 		do: [ :patch | 
 			| symDictName symDict |
 			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := tempSymbolList
-				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ].
+			symDict := self class  lookupSymbolDictName: symDictName in: self tempSymbolList.
 			symDict removeKey: patch className asSymbol ]
 ]
 
@@ -258,12 +270,12 @@ RwGsPatchSet_V2_symbolList >> removeDeletedMethods [
 			className := methodDeletionPatch className.
 			methodDeletionPatch
 				deleteMethodNewClasses: createdClasses
-				andExistingClassSymbolList: tempSymbolList ].
+				andExistingClassSymbolList: self tempSymbolList ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
 				deleteNewVersionMethodNewClasses: createdClasses
-				andExistingClassSymbolList: tempSymbolList ]
+				andExistingClassSymbolList: self tempSymbolList ]
 ]
 
 { #category : 'private - applying' }
@@ -273,15 +285,21 @@ RwGsPatchSet_V2_symbolList >> setupForApply [
 	to compile methods during this apply operation."
 
 	| symbolList |
-	symbolList := Rowan image symbolList.	"If there are any duplicated symbols, we only want the one that will be found first one, 
-	so we copy in reverse order of search order, thereby overwriting later definitions with earlier ones."
-	symbolList
-		do: [ :dict | 
-			| symDictName "Need to preserve association identity, tempSymbols is used for compiling methods" symDict |
-			symDictName := dict name asSymbol.
-			symDict := tempSymbolList
-				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ].
-			dict associationsDo: [ :assoc | symbolList add: assoc ] ].
+	symbolList := Rowan image symbolList.
+	1 to: symbolList size do: [ :index | 
+		| dict symDictName symDict |
+		"Need to preserve association identity and symbolList structure tempSymbolList is used for compiling methods"
+		dict := symbolList at: index.
+		symDictName := dict name asSymbol.
+		symDict := self class
+			lookupSymbolDictName: symDictName
+			in: self tempSymbolList.
+		dict
+			associationsDo: [ :assoc | 
+				assoc key ~~ symDictName
+					ifTrue: [ 
+						"avoid add association for the SymbolDictionary name"
+						symDict add: assoc ] ] ].
 
 	self setupForMovedClasses
 ]
@@ -290,24 +308,22 @@ RwGsPatchSet_V2_symbolList >> setupForApply [
 RwGsPatchSet_V2_symbolList >> superclassNamed: aName ifAbsent: absentBlock [
 	| superclassName |
 	superclassName := aName asSymbol.
-	^ self
-		_symbolListLookupForClassNamed: superclassName
-		in: createdClasses
-		ifAbsent: [ 
-			self
-				_symbolListLookupForClassNamed: superclassName
-				in: tempSymbolList
-				ifAbsent: absentBlock ]
+	^ (self createdClasses resolveSymbol: superclassName)
+		ifNotNil: [ :assoc | assoc value ]
+		ifNil: [ 
+			(self tempSymbolList resolveSymbol: superclassName)
+				ifNotNil: [ :assoc | assoc value ]
+				ifNil: absentBlock ]
 ]
 
 { #category : 'patch access' }
 RwGsPatchSet_V2_symbolList >> tempAssociationFor: aName [
-	^ tempSymbolList associationAt: aName
+	^ self tempSymbolList resolveSymbol: aName
 ]
 
 { #category : 'accessing' }
 RwGsPatchSet_V2_symbolList >> tempSymbolList [
-	^ tempSymbolList
+	^ tempSymbolList ifNil: [ tempSymbolList :=  self _createNewSymbolList ]
 ]
 
 { #category : 'private - applying' }
@@ -349,56 +365,80 @@ RwGsPatchSet_V2_symbolList >> updateMethodDictionaries [
 	or LoadedExtension
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	| movedClassesWithNewVersionMap movedExtensionMethodsMap |
-	movedClassesWithNewVersionMap := Dictionary new.
-	classesWithNewVersions do: [:patch | 
-		(movedClassesMap at: patch className ifAbsent: []) 
-			ifNotNil: [:aClassMove | 
-				(movedClassesWithNewVersionMap at: aClassMove symbolDictionaryName ifAbsentPut: [Dictionary new]) at: patch className put: {aClassMove . patch} ] ]. 
-	addedMethods do: [:patch |
-		| className |
-		className := patch className.
-		((movedClassesWithNewVersionMap at: patch symbolDictionaryName) at: className ifAbsent: [])
-			ifNil: [ patch installMethod ]
-			ifNotNil: [:ar | 
-				"https://github.com/dalehenrich/Rowan/issues/316"
-				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
-	movedClassesWithNewVersionMap isEmpty
-		ifFalse: [
+	| movedClassesWithNewVersionMap movedExtensionMethodsMap emptyMap |
+	movedClassesWithNewVersionMap := self _createNewSymbolList.
+	emptyMap := true.
+	classesWithNewVersions
+		do: [ :patch | 
+			(movedClassesMap at: patch className ifAbsent: [  ])
+				ifNotNil: [ :aClassMove | 
+					(self class
+						lookupSymbolDictName: aClassMove symbolDictionaryName
+						in: movedClassesWithNewVersionMap)
+						at: patch className asSymbol
+						put:
+							{aClassMove.
+							patch}.
+					emptyMap := false ] ].
+	addedMethods
+		do: [ :patch | 
+			| className |
+			className := patch className asSymbol.
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: movedClassesWithNewVersionMap) at: className ifAbsent: [  ])
+				ifNil: [ patch installMethod ]
+				ifNotNil: [ :ar | 
+					"https://github.com/dalehenrich/Rowan/issues/316"
+					patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
+	emptyMap
+		ifFalse: [ 
 			"calculate moved extension methods map only if there are moved new class versions as well"
-			movedExtensionMethodsMap := Dictionary new.
-			movedMethods do: [:aMethodMove |
-				| classExtDict key methodDict  |
-				classExtDict := movedExtensionMethodsMap  at: aMethodMove classOrExtensionAfter name ifAbsentPut: [ Dictionary new].
-				key := aMethodMove isMeta ifTrue: [ 'class' ] ifFalse: [ 'instance'].
-				methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ]. 
-				methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
-	extendedMethods do: [:patch |
-		| className |
-		className := patch className.
-		(movedClassesWithNewVersionMap at: className ifAbsent: [])
-			ifNil: [ patch installMethod ]
-			ifNotNil: [:ar | 
-				"https://github.com/dalehenrich/Rowan/issues/316"
-				(movedExtensionMethodsMap at: className ifAbsent: [])
-					ifNil: [ patch installMethod ]
-					ifNotNil: [:classExtDict |
-						| methodDict |
-						methodDict := patch isMeta
-							ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
-							ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
-						(methodDict at: patch methodDefinition selector ifAbsent: [])
-							ifNil: [ patch installMethod ]
-							ifNotNil: [:aMethodMove |
-								patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
-	methodsNeedingRecompile do: [:each | each installSourcePatch ]
+			movedExtensionMethodsMap := self _createNewSymbolList.
+			movedMethods
+				do: [ :aMethodMove | 
+					| classExtDict key methodDict |
+					classExtDict := (self class
+						lookupSymbolDictName: aMethodMove symbolDictionaryName
+						in: movedExtensionMethodsMap)
+						at: aMethodMove classOrExtensionAfter name asSymbol
+						ifAbsentPut: [ Dictionary new ].
+					key := aMethodMove isMeta
+						ifTrue: [ 'class' ]
+						ifFalse: [ 'instance' ].
+					methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ].
+					methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
+	extendedMethods
+		do: [ :patch | 
+			| className |
+			className := patch className asSymbol.
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: movedClassesWithNewVersionMap) at: className ifAbsent: [  ])
+				ifNil: [ patch installMethod ]
+				ifNotNil: [ :ar | 
+					"https://github.com/dalehenrich/Rowan/issues/316"
+					(movedExtensionMethodsMap resolveSymbol: className)
+						ifNil: [ patch installMethod ]
+						ifNotNil: [ :assoc | 
+							| classExtDict methodDict |
+							classExtDict := assoc value.
+							methodDict := patch isMeta
+								ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
+								ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
+							(methodDict at: patch methodDefinition selector ifAbsent: [  ])
+								ifNil: [ patch installMethod ]
+								ifNotNil: [ :aMethodMove | patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
+	methodsNeedingRecompile do: [ :each | each installSourcePatch ]
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> updateMethodProperties [
-
 	methodsWithPropertyChanges
-		do: [:each | each installPropertiesPatchNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList ]
+		do: [ :each | 
+			each
+				installPropertiesPatchNewClasses: createdClasses
+				andExistingClassSymbolList: self tempSymbolList ]
 ]
 
 { #category : 'private - applying' }
