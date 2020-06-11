@@ -78538,32 +78538,17 @@ deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols
 
 category: 'deleting'
 method: RwGsMethodDeletionSymbolDictPatchV2
-deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+deleteMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
+	self
+		primeBehaviorNewClasses: createdClasses
+		andExistingClassSymbolList: tempSymbolList.
 	behavior
 		ifNil: [ 
 			"class is being deleted, nothing else to do"
 			^ self ].
 
 	self symbolDictionaryRegistry
-		deleteMovedLoadedMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
-deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class is being deleted, nothing else to do"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMovedMethod: methodDefinition selector
+		deleteMethod: methodDefinition selector
 		for: behavior
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
@@ -78574,6 +78559,20 @@ deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols
 
 	"remove the method from deleted things"
 
+	self symbolDictionaryRegistry
+		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
+category: 'deleting'
+method: RwGsMethodDeletionSymbolDictPatchV2
+deleteNewVersionMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
+
+	"remove the method from deleted things"
+
+	"self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.		??? how does behavior get set with primieBehavir ???"
+self halt: 'I want to know'.
 	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
