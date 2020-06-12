@@ -76109,17 +76109,19 @@ _projectAdditionPatchClass
 category: 'private - method initialization order'
 classmethod: RwGsPatchSet_V2_symbolList
 classPatchesInReverseHierarchyOrder: classPatches tempSymbolList: tempSymbolList
-
 	"Returns acollection of the specified classPatches ordered in reverse superclass order"
 
 	| order toBeOrdered processed aClass patchMap |
 	patchMap := IdentityKeyValueDictionary new.
-	classPatches do: [:classPatch |
-		| class |
-		class := (tempSymbolList at: classPatch symbolDictionaryName)
-				at: classPatch className
+	classPatches
+		do: [ :classPatch | 
+			| class |
+			class := (self
+				lookupSymbolDictName: classPatch symbolDictionaryName
+				in: tempSymbolList)
+				at: classPatch className asSymbol
 				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ].
-		patchMap at: class put: classPatch ].
+			patchMap at: class put: classPatch ].
 	toBeOrdered := patchMap keys asIdentitySet.
 	order := OrderedCollection new.
 	processed := IdentitySet new.
@@ -76130,7 +76132,8 @@ classPatchesInReverseHierarchyOrder: classPatches tempSymbolList: tempSymbolList
 				from: toBeOrdered
 				into: order
 				ignoring: processed ].
-  ^ ((order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]) reverse
+	^ ((order collect: [ :orderedClass | patchMap at: orderedClass ifAbsent: [  ] ])
+		select: [ :patch | patch notNil ]) reverse
 %
 
 category: 'accessing'
@@ -76312,7 +76315,7 @@ moveClassesBetweenSymbolDictionaries
 			className := patch classDefinition name asSymbol.
 
 			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := self class  lookupSymbolDictName: symDictName in: movedClassesSymbolList.
+			symDict := self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList.
 
 			(symDict at: className ifAbsent: [  ])
 				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
@@ -76329,6 +76332,7 @@ category: 'accessing'
 method: RwGsPatchSet_V2_symbolList
 movedClassesSymbolList
 	^ movedClassesSymbolList
+		ifNil: [ movedClassesSymbolList := self _createNewSymbolList ]
 %
 
 category: 'private - applying'
@@ -76448,11 +76452,11 @@ updateClassProperties
 		yourself.
 	classPatches
 		do: [ :patch | 
-			((movedClassesSymbolList at: patch symbolDictionaryName)
-				at: patch className
-				ifAbsent: [  ])
-				ifNil: [ patch installPropertiesPatchFor: self ]
-				ifNotNil: [ :aClassMove | patch installPropertiesPatchFor: self classMove: aClassMove ] ]
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
+				ifNil: [ patch installPropertiesPatchSymbolListFor: self ]
+				ifNotNil: [ :aClassMove | patch installPropertiesPatchSymbolListFor: self classMove: aClassMove ] ]
 %
 
 category: 'private - applying'
@@ -76560,7 +76564,7 @@ _createMovedClasses
 		do: [ :movedClass | 
 			| symDictName |
 			symDictName := movedClass symbolDictionaryNameBefore asSymbol.
-			( self class  lookupSymbolDictName: symDictName in: movedClassesSymbolList)
+			( self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList)
 				at: movedClass classBefore name asSymbol
 				put: movedClass ]
 %
@@ -77081,6 +77085,85 @@ installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
 	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 %
 
+category: 'installing'
+method: RwGsClassConstraintsSymDictPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet_symbolList
+
+	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
+%
+
+category: 'installing'
+method: RwGsClassConstraintsSymDictPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet registry: aSymbolDictionaryRegistry
+	" update class and update loadedClass with new constraints"
+
+	| className existingClass theConstraints existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys existingConstraints instVarNames |
+	className := classDefinition key asSymbol.
+	existingClass := (aPatchSet class
+		lookupSymbolDictName: self symbolDictionaryName
+		in: aPatchSet createdClasses)
+		at: className
+		ifAbsent: [ 
+			aPatchSet class
+				lookupSymbolDictName: self symbolDictionaryName
+				in: aPatchSet tempSymbolList
+				at: className
+				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ] ].
+	existingConstraintsMap := Dictionary new.
+	existingVaryingConstraint := existingClass _varyingConstraint.
+	instVarNames := existingClass allInstVarNames.
+	existingConstraints := [ existingClass _constraints ]
+		on: Deprecated
+		do: [ :ex | ex resume ].
+	1 to: existingConstraints size do: [ :index | 
+		existingConstraintsMap
+			at: (instVarNames at: index)
+			put: (existingConstraints at: index) ].
+	theConstraints := self _gemStoneConstraintsFrom: classDefinition gs_constraints.
+	theConstraintsMap := Dictionary new.
+	theVaryingConstraint := Object.
+	theConstraints
+		do: [ :arrayOrVaryingConstraintClass | 
+			arrayOrVaryingConstraintClass _isArray
+				ifTrue: [ 
+					theConstraintsMap
+						at: (arrayOrVaryingConstraintClass at: 1)
+						put: (arrayOrVaryingConstraintClass at: 2) ]
+				ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
+	keys := existingConstraintsMap keys copy.
+	keys addAll: theConstraintsMap keys.
+	keys
+		do: [ :key | 
+			| existingConstraint theConstraint |
+			existingConstraint := existingConstraintsMap at: key ifAbsent: [  ].
+			theConstraint := theConstraintsMap at: key ifAbsent: [  ].
+			existingConstraint == theConstraint
+				ifFalse: [ 
+					| instVarString |
+					instVarString := key asString.
+					existingConstraint == nil
+						ifTrue: [ 
+							"add theConstraint"
+							existingClass _rwInstVar: instVarString constrainTo: theConstraint ]
+						ifFalse: [ 
+							theConstraint == nil
+								ifTrue: [ 
+									"remove the constraint"
+									existingClass _rwInstVar: instVarString constrainTo: Object ]
+								ifFalse: [ 
+									"change the value of the constraint"
+									existingClass _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
+	existingVaryingConstraint == theVaryingConstraint
+		ifFalse: [ 
+			"change the varying constraint"
+			[ existingClass _setVaryingConstraint: theVaryingConstraint ]
+				on: Deprecated
+				do: [ :ex | ex resume ] ].
+	aSymbolDictionaryRegistry
+		updateClassProperties: existingClass
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
 ! Class implementation for 'RwGsClassDeletionSymbolDictPatchV2'
 
 !		Class methods for 'RwGsClassDeletionSymbolDictPatchV2'
@@ -77209,6 +77292,36 @@ installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
 	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
 
+category: 'installing'
+method: RwGsClassPropertiesSymDictPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet_symbolList
+
+	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
+%
+
+category: 'installing'
+method: RwGsClassPropertiesSymDictPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet registry: aSymbolDictionaryRegistry
+
+	" update class and update loadedClass with new properties"
+
+	| className existingClass createdClass |
+	className := classDefinition key asSymbol.
+	existingClass := aPatchSet createdClasses
+		at: className
+		ifAbsent: [ 
+			aPatchSet tempSymbols
+				at: className
+				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
+	createdClass := self createClassFor: aPatchSet.	"use createClassFor:, but not expected to create new class version"
+	createdClass == existingClass
+		ifFalse: [ 
+			self
+				error:
+					'internal error - class changed during class property update ... should have been a class versioning patch' ].
+	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
 ! Class implementation for 'RwGsClassSymbolDictionaryMoveSymDictPatchV2'
 
 !		Class methods for 'RwGsClassSymbolDictionaryMoveSymDictPatchV2'
@@ -77300,6 +77413,30 @@ installPropertiesPatchFor: aPatchSet
 category: 'installing'
 method: RwGsClassVariableChangeSymbolDictPatchV2
 installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
+
+	" update class and update loadedClass with new properties"
+
+	| className existingClass |
+	className := classDefinition key asSymbol.
+	existingClass := aPatchSet createdClasses
+		at: className
+		ifAbsent: [ 
+			aPatchSet tempSymbols
+				at: className
+				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
+	aSymbolDictionaryRegistry updateClassProperties: existingClass  implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
+category: 'installing'
+method: RwGsClassVariableChangeSymbolDictPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet_symbolList
+
+	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
+%
+
+category: 'installing'
+method: RwGsClassVariableChangeSymbolDictPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet registry: aSymbolDictionaryRegistry
 
 	" update class and update loadedClass with new properties"
 

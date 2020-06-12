@@ -357,8 +357,8 @@ RwGsPatchSet_V2_symbolList >> updateClassProperties [
 			((self class
 				lookupSymbolDictName: patch symbolDictionaryName
 				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
-				ifNil: [ patch installPropertiesPatchFor: self ]
-				ifNotNil: [ :aClassMove | patch installPropertiesPatchFor: self classMove: aClassMove ] ]
+				ifNil: [ patch installPropertiesPatchSymbolListFor: self ]
+				ifNotNil: [ :aClassMove | patch installPropertiesPatchSymbolListFor: self classMove: aClassMove ] ]
 ]
 
 { #category : 'private - applying' }
