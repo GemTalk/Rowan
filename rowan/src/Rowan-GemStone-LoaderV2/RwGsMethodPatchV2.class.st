@@ -230,8 +230,11 @@ RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClassesSymbolList andExisti
 			(RwGsPatchSet_V2_symbolList lookupSymbolDictName: symDictName in: tempSymbolList)
 				at: className
 				ifAbsent: [ 
-					"cannot find class ... caller can decide whether or not that is a problem"
-					^ self ] ].
+					(tempSymbolList resolveSymbol: className)
+						ifNil: [ 
+							"cannot find class ... caller can decide whether or not that is a problem"
+							^ self ]
+						ifNotNil: [ :assoc | assoc value ] ] ].
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ]

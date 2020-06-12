@@ -21,7 +21,12 @@ RwGsPatchSet_V2_symbolList class >> classPatchesInReverseHierarchyOrder: classPa
 				lookupSymbolDictName: classPatch symbolDictionaryName
 				in: tempSymbolList)
 				at: classPatch className asSymbol
-				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ].
+				ifAbsent: [ 
+					(tempSymbolList resolveSymbol: classPatch className asSymbol)
+						ifNil: [ 
+							"cannot find class ... caller can decide whether or not that is a problem"
+							self error: 'Cannot find class to update constraints for.' ]
+						ifNotNil: [ :assoc | assoc value ] ].
 			patchMap at: class put: classPatch ].
 	toBeOrdered := patchMap keys asIdentitySet.
 	order := OrderedCollection new.
@@ -180,19 +185,15 @@ RwGsPatchSet_V2_symbolList >> createClassNamed: className fromWorkSymbolList: wo
 
 { #category : 'patch access' }
 RwGsPatchSet_V2_symbolList >> createdClass: aClass [
-
 	| className |
-	className := aClass name.
-	(createdClasses at: className ifAbsent: [ ])
-		ifNil: [ 
-			createdClasses
-				add: (SymbolAssociation newWithKey: className value: aClass) ]
-		ifNotNil: [:cl | 
-			cl == aClass
+	className := aClass name asSymbol.
+	(createdClasses resolveSymbol: className)
+		ifNil: [ createdClasses add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [ :assoc | 
+			assoc value == aClass
 				ifFalse: [ 
 					"new version created, update entry in createdClasses"
 					createdClasses at: className put: aClass ] ]
-
 ]
 
 { #category : 'patch access' }
