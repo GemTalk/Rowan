@@ -89,27 +89,35 @@ RwGsMethodPatchV2 >> compileUsingNewClasses: createdClasses andExistingClasses: 
 
 { #category : 'compiling' }
 RwGsMethodPatchV2 >> compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
-
-	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
+	self
+		primeBehaviorNewClasses: createdClasses
+		andExistingClassSymbolList: tempSymbolList.
 	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
+		ifNil: [ 
+			self
+				error:
+					'Class ' , self className printString , ' not found in the symbol dictionary '
+						, self symbolDictionaryName printString ].
 
-  [
-	  | sourceString  protocol |
-	  sourceString := methodDefinition source.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: tempSymbolList
-		  category: protocol
-		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		  intoCategories: nil
-		  intoPragmas: nil
-		  environmentId: self methodEnvironmentId
-  ] on: (CompileError, CompileWarning) do:[:ex |
-    ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-    ex pass 
-  ]
+	[ 
+	| sourceString protocol |
+	sourceString := methodDefinition source.
+	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	compiledMethod := behavior
+		compileMethod: sourceString
+		dictionaries: tempSymbolList
+		category: protocol
+		intoMethodDict: false
+		intoCategories: nil
+		intoPragmas: nil
+		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
+		on: CompileError , CompileWarning
+		do: [ :ex | 
+			ex
+				addText:
+					(RwRepositoryResolvedProjectTonelReaderVisitorV2
+						lineNumberStringForMethod: methodDefinition).
+			ex pass ]
 ]
 
 { #category : 'initializers' }

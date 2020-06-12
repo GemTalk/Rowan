@@ -75193,8 +75193,10 @@ addDeletedPackage: packageDefinition inProject: aProjectDefinition
 category: 'building'
 method: RwGsPatchSet_V2
 addExtendedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition
-
 	currentProjectDefinition := aProjectDefinition.
+	Rowan image
+		newOrExistingSymbolDictionaryNamed:
+			(aProjectDefinition symbolDictNameForPackageNamed: aPackageDefinition name).	"ensure that symbol dictionary exists"
 	extendedClasses
 		add:
 			((self _classExtensionPatchClass
@@ -76887,7 +76889,13 @@ symbolDictionaryFor: aPackageName projectDefinition: aProjectDefinition
 category: 'accessing'
 method: RwGsPatchV2
 symbolDictionaryName
-	^ (self projectDefinition symbolDictNameForPackageNamed: self packageName) asSymbol
+	"Need to create the symbol dictionary at this point, if it doesn't already exist"
+
+	| symDictName |
+	symDictName := (self projectDefinition
+		symbolDictNameForPackageNamed: self packageName) asSymbol.
+	Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+	^ symDictName
 %
 
 category: 'accessing'
@@ -78435,27 +78443,35 @@ compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 category: 'compiling'
 method: RwGsMethodPatchV2
 compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-
-	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
+	self
+		primeBehaviorNewClasses: createdClasses
+		andExistingClassSymbolList: tempSymbolList.
 	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
+		ifNil: [ 
+			self
+				error:
+					'Class ' , self className printString , ' not found in the symbol dictionary '
+						, self symbolDictionaryName printString ].
 
-  [
-	  | sourceString  protocol |
-	  sourceString := methodDefinition source.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: tempSymbolList
-		  category: protocol
-		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		  intoCategories: nil
-		  intoPragmas: nil
-		  environmentId: self methodEnvironmentId
-  ] on: (CompileError, CompileWarning) do:[:ex |
-    ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-    ex pass 
-  ]
+	[ 
+	| sourceString protocol |
+	sourceString := methodDefinition source.
+	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	compiledMethod := behavior
+		compileMethod: sourceString
+		dictionaries: tempSymbolList
+		category: protocol
+		intoMethodDict: false
+		intoCategories: nil
+		intoPragmas: nil
+		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
+		on: CompileError , CompileWarning
+		do: [ :ex | 
+			ex
+				addText:
+					(RwRepositoryResolvedProjectTonelReaderVisitorV2
+						lineNumberStringForMethod: methodDefinition).
+			ex pass ]
 %
 
 category: 'initializers'

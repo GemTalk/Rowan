@@ -529,8 +529,10 @@ RwGsPatchSet_V2 >> addDeletedPackage: packageDefinition inProject: aProjectDefin
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
-
 	currentProjectDefinition := aProjectDefinition.
+	Rowan image
+		newOrExistingSymbolDictionaryNamed:
+			(aProjectDefinition symbolDictNameForPackageNamed: aPackageDefinition name).	"ensure that symbol dictionary exists"
 	extendedClasses
 		add:
 			((self _classExtensionPatchClass
