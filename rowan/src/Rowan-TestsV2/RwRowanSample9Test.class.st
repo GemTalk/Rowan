@@ -4269,7 +4269,7 @@ RwRowanSample9Test >> testSpec_0012 [
 		on: Error 
 		do: [:ex | 
 			| x |
-			self assert: ( x:=  ex description) = 'UserDefinedError: Class ''RowanSample9Class1'' not found in the symbol dictionary #''RowanSample9_3'' associated with the method #''bar'''.
+			self assert: ( x:=  ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_3''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
 			errorHit := true ].
 	self assert: errorHit.
 ]
@@ -4297,7 +4297,7 @@ RwRowanSample9Test >> testSpec_0013 [
 		on: Error 
 		do: [:ex | 
 			| x |
-			self assert: ( x:=  ex description) = 'UserDefinedError: Class ''RowanSample9Class1'' not found in the symbol dictionary #''RowanSample9_1'' associated with the method #''bar'''.
+			self assert: ( x:=  ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
 			errorHit := true ].
 	self assert: errorHit.
 ]
