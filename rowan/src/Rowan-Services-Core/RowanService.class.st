@@ -124,6 +124,17 @@ RowanService >> answer: anObject [
 	RowanCommandResult addResult: answeringService.
 ]
 
+{ #category : 'commands support' }
+RowanService >> autoCommitIfRequired [
+	| commitResult |
+	self class autoCommit == true ifTrue:[
+		commitResult := System commitTransaction.
+		RowanAutoCommitService new autoCommit:  
+			(commitResult 
+				ifTrue:[true] 
+				ifFalse:[#failed])].
+]
+
 { #category : 'rowan' }
 RowanService >> browserTool [
 
@@ -260,22 +271,23 @@ RowanService >> executeCommand [
 	[ 
 	updateType := nil.	"Update type is only for returned commands"
 	command ifNil: [ command := #'update' ].
+	GsFile gciLogClient: '========== about to execute command ============='.
 	self servicePerform: command withArguments: commandArgs ]
 		on: GsInteractionRequest
 		do: [ :ex | 
 			ex
 				response:
-					(ex interaction interactWith: self gsInteractionInformFailureHandler) ].	"self autoCommitIfRequired. #fixMe"
-	Rowan loggingServiceClass current logSentServices. 
-	updates :=  Rowan commandResultClass results.
-	self postCommandExecution.
-	]
+					(ex interaction interactWith: self gsInteractionInformFailureHandler) ].
+	GsFile gciLogClient: '========== about to execute post command ============='.
+	Rowan loggingServiceClass current logSentServices.
+	updates := Rowan commandResultClass results.
+	self postCommandExecution ]
 		on: Error
 		do: [ :ex | 
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
 			ex pass ].
 
-	^self
+	^ self
 ]
 
 { #category : 'commands support' }
@@ -334,6 +346,8 @@ RowanService >> hierarchiesByLevel: hierarchies [
 
 { #category : 'initialization' }
 RowanService >> initialize [
+
+	updates := Array new
 ]
 
 { #category : 'testing' }
@@ -397,28 +411,10 @@ RowanService >> organizer: anOrganizer [
 
 { #category : 'rsr' }
 RowanService >> postCommandExecution [
-	| ws |
-	self clearOrganizers.
+	
+	self clearOrganizers. 
 	updates remove: self ifAbsent: [  ].
-	Transcript
-		cr;
-		nextPutAll: '-----------------------'.
-	ws := WriteStream on: String new.
-	self class reflectedVariableNames
-		do: [ :ivName | 
-			| index |
-			index := self class allInstVarNames indexOf: ivName asSymbol.
-			ws
-				cr;
-				nextPutAll: ivName , ': ';
-				nextPutAll:
-						([ (self instVarAt: index) printString ]
-								on: Error
-								do: [ :ex | ex printString ]) ].
-	ws cr.
-	Transcript
-		nextPutAll: ws contents;
-		flush
+	self autoCommitIfRequired
 ]
 
 { #category : 'rowan' }
