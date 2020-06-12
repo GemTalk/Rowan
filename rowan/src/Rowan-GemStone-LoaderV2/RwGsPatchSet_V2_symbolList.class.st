@@ -56,6 +56,20 @@ RwGsPatchSet_V2_symbolList class >> lookupSymbolDictName: symDictName in: symbol
 		ifNone: absentBlock
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSet_V2_symbolList class >> resolveSymbolDictWith: assocation in: symbolList [
+| res aDict |
+res := { } .
+1 to: symbolList size do:[ :j |
+  (aDict := symbolList at: j) ifNotNil:[
+    aDict associationsDo:[ :assoc |
+      assoc == assocation ifTrue:[ res add: aDict]
+    ].
+  ].
+].
+^ res
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> _createMovedClasses [
 	movedClasses
@@ -117,37 +131,49 @@ RwGsPatchSet_V2_symbolList >> compileMethodPatch: aMethodAdditionPatch [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_V2_symbolList >> createClassesFromWorklist: workList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
+RwGsPatchSet_V2_symbolList >> createClassesFromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
-	| className |
-	className := self anyElementOfCollection: workList.
+	| classNames className |
+	classNames := (self class lookupSymbolDictName: symDictName in: workSymbolList)
+		keys.
+	classNames remove: symDictName.
+	className := self anyElementOfCollection: classNames.
 	className ifNil: [ self error: 'Empty WorkList.' ].
 	self
 		createClassNamed: className
-		fromWorkList: workList
+		fromWorkSymbolList: workSymbolList
 		symDictName: symDictName
 		andClassesByNameSymbolList: newClassesByNameSymbolList
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_V2_symbolList >> createClassNamed: className fromWorkList: workList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
+RwGsPatchSet_V2_symbolList >> createClassNamed: className fromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Create the named class from the workList, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
 	| patch superclassName |
-	workList remove: className.
+	(self class lookupSymbolDictName: symDictName in: workSymbolList)
+		removeKey: className asSymbol.
 	patch := (self class
 		lookupSymbolDictName: symDictName
 		in: newClassesByNameSymbolList) at: className asSymbol.
 	superclassName := patch superclassName asSymbol.
-	(workList includes: superclassName)
-		ifTrue: [ 
+	(workSymbolList resolveSymbol: superclassName)
+		ifNotNil: [ :superclassAssoc | 
+			| ar |
+			ar := self class resolveSymbolDictWith: superclassAssoc in: workSymbolList.
+			ar size ~= 1
+				ifTrue: [ 
+					self
+						error:
+							'Internal error: more than one symbol dictionary with association for class '
+								, superclassName printString ].
 			self
 				createClassNamed: superclassName
-				fromWorkList: workList
-				symDictName: symDictName
+				fromWorkSymbolList: workSymbolList
+				symDictName: (ar at: 1) name
 				andClassesByNameSymbolList: newClassesByNameSymbolList ].
 	patch createClassFor: self inSymDict: symDictName
 ]
@@ -195,20 +221,28 @@ RwGsPatchSet_V2_symbolList >> createNewClassesAndClassVersions [
 	   Order: Superclasses first.
 	   Errors: Collect for reporting later"
 
-	| newClassesByNameSymbolList |
+	| newClassesByNameSymbolList workSymbolList |
 	newClassesByNameSymbolList := self _createNewSymbolList.
 	self addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList.
+	workSymbolList := self _createNewSymbolList.
 	newClassesByNameSymbolList
 		do: [ :symDict | 
 			| workList symDictName |
 			symDictName := symDict name.
 			workList := symDict keys.
 			workList remove: symDictName.
-			[ workList isEmpty ]
+			workList
+				do: [ :className | 
+					(self class lookupSymbolDictName: symDictName in: workSymbolList)
+						at: className
+						put: nil ] ].
+	workSymbolList
+		do: [ :symDict | 
+			[ symDict keys size <= 1 ]
 				whileFalse: [ 
 					self
-						createClassesFromWorklist: workList
-						symDictName: symDictName
+						createClassesFromWorkSymbolList: workSymbolList
+						symDictName: symDict name
 						andClassesByNameSymbolList: newClassesByNameSymbolList ] ]
 ]
 
@@ -236,7 +270,7 @@ RwGsPatchSet_V2_symbolList >> moveClassesBetweenSymbolDictionaries [
 
 { #category : 'accessing' }
 RwGsPatchSet_V2_symbolList >> movedClassesMap [
-	self halt: 'Use movedClassedSymbolList'
+	self error: 'Use movedClassedSymbolList'
 ]
 
 { #category : 'accessing' }
