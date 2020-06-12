@@ -462,7 +462,7 @@ RwRowanSample9Test >> setUp [
 	super setUp.
 	true
 		ifTrue: [ 
-			skipTestLibraryGenerator := true.	"don't run library generator tests when just testing the new loader ... long test, no loading"
+			skipTestLibraryGenerator := false.	"don't run library generator tests when just testing the new loader ... long test, no loading"
 			SessionTemps current
 				at: #'Experimental_RwGsImagePatchVisitor_V2_className'
 				put: #'RwGsImagePatchVisitor_V2_symbolList' ]
@@ -4269,7 +4269,7 @@ RwRowanSample9Test >> testSpec_0012 [
 		on: Error 
 		do: [:ex | 
 			| x |
-			self assert: ( x:=  ex description) = 'UserDefinedError: Class ''RowanSample9Class1'' not found in the symbol dictionary #''RowanSample9_3'''.
+			self assert: ( x:=  ex description) = 'UserDefinedError: Class ''RowanSample9Class1'' not found in the symbol dictionary #''RowanSample9_3'' associated with the method #''bar'''.
 			errorHit := true ].
 	self assert: errorHit.
 ]
@@ -4297,7 +4297,7 @@ RwRowanSample9Test >> testSpec_0013 [
 		on: Error 
 		do: [:ex | 
 			| x |
-			self assert: ( x:=  ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			self assert: ( x:=  ex description) = 'UserDefinedError: Class ''RowanSample9Class1'' not found in the symbol dictionary #''RowanSample9_1'' associated with the method #''bar'''.
 			errorHit := true ].
 	self assert: errorHit.
 ]

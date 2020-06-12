@@ -78451,7 +78451,8 @@ compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolLis
 			self
 				error:
 					'Class ' , self className printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString ].
+						, self symbolDictionaryName printString , ' associated with the method '
+						, methodDefinition selector printString ].
 
 	[ 
 	| sourceString protocol |
