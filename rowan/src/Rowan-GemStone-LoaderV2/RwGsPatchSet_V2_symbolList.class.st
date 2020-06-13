@@ -258,15 +258,14 @@ RwGsPatchSet_V2_symbolList >> initialize [
 RwGsPatchSet_V2_symbolList >> moveClassesBetweenSymbolDictionaries [
 	classesWithSymbolDictionaryChanges
 		do: [ :patch | 
-			| className symDictName symDict |
+			| className |
 			className := patch classDefinition name asSymbol.
-
-			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList.
-
-			(symDict at: className ifAbsent: [  ])
+			(self movedClassesSymbolList resolveSymbol: className)
 				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
-				ifNotNil: [ :classMove | patch installSymbolDictionaryPatchFor: self classMove: classMove ] ]
+				ifNotNil: [ :assoc | 
+					| classMove |
+					classMove := assoc value.
+					patch installSymbolDictionaryPatchFor: self classMove: classMove ] ]
 ]
 
 { #category : 'accessing' }
@@ -480,13 +479,27 @@ RwGsPatchSet_V2_symbolList >> updateMethodProperties [
 				andExistingClassSymbolList: self tempSymbolList ]
 ]
 
+{ #category : 'dispatching' }
+RwGsPatchSet_V2_symbolList >> updatePatchesForNewClassVersion: aClassVersioningPatch projectModification: aProjectSetModification [
+	aClassVersioningPatch
+		updatePatchesForNewClassVersion: aProjectSetModification
+			patchSetSymbolList: self;
+		updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+			patchSet: self;
+		updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
+			patchSet: self
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> updateSymbolAssociations [
 	"Install new class versions."
 
-	classesWithNewVersions do: [:each | 
-		(movedClassesMap at: each className ifAbsent: [])
-			ifNil: [ each installNewClassVersionInSystem ]
-			ifNotNil: [:aClassMove | each moveNewClassVersionInSystem: aClassMove ].
-		 ]
+	classesWithNewVersions
+		do: [ :each | 
+			(self movedClassesSymbolList resolveSymbol: each className asSymbol)
+				ifNil: [ each installNewClassVersionInSystem ]
+				ifNotNil: [ :assoc | 
+					| classMove |
+					classMove := assoc value.
+					each moveNewClassVersionInSystem: classMove ] ]
 ]

@@ -76110,6 +76110,17 @@ updateMethodProperties
 		do: [:each | each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
 %
 
+category: 'dispatching'
+method: RwGsPatchSet_V2
+updatePatchesForNewClassVersion: aClassVersioningPatch projectModification: aProjectSetModification
+	aClassVersioningPatch
+		updatePatchesForNewClassVersion: aProjectSetModification patchSet: self;
+		updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+			patchSet: self;
+		updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
+			patchSet: self
+%
+
 category: 'private - applying'
 method: RwGsPatchSet_V2
 updateSymbolAssociations
@@ -76539,15 +76550,14 @@ method: RwGsPatchSet_V2_symbolList
 moveClassesBetweenSymbolDictionaries
 	classesWithSymbolDictionaryChanges
 		do: [ :patch | 
-			| className symDictName symDict |
+			| className |
 			className := patch classDefinition name asSymbol.
-
-			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList.
-
-			(symDict at: className ifAbsent: [  ])
+			(self movedClassesSymbolList resolveSymbol: className)
 				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
-				ifNotNil: [ :classMove | patch installSymbolDictionaryPatchFor: self classMove: classMove ] ]
+				ifNotNil: [ :assoc | 
+					| classMove |
+					classMove := assoc value.
+					patch installSymbolDictionaryPatchFor: self classMove: classMove ] ]
 %
 
 category: 'accessing'
@@ -76773,16 +76783,31 @@ updateMethodProperties
 				andExistingClassSymbolList: self tempSymbolList ]
 %
 
+category: 'dispatching'
+method: RwGsPatchSet_V2_symbolList
+updatePatchesForNewClassVersion: aClassVersioningPatch projectModification: aProjectSetModification
+	aClassVersioningPatch
+		updatePatchesForNewClassVersion: aProjectSetModification
+			patchSetSymbolList: self;
+		updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+			patchSet: self;
+		updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
+			patchSet: self
+%
+
 category: 'private - applying'
 method: RwGsPatchSet_V2_symbolList
 updateSymbolAssociations
 	"Install new class versions."
 
-	classesWithNewVersions do: [:each | 
-		(movedClassesMap at: each className ifAbsent: [])
-			ifNil: [ each installNewClassVersionInSystem ]
-			ifNotNil: [:aClassMove | each moveNewClassVersionInSystem: aClassMove ].
-		 ]
+	classesWithNewVersions
+		do: [ :each | 
+			(self movedClassesSymbolList resolveSymbol: each className asSymbol)
+				ifNil: [ each installNewClassVersionInSystem ]
+				ifNotNil: [ :assoc | 
+					| classMove |
+					classMove := assoc value.
+					each moveNewClassVersionInSystem: classMove ] ]
 %
 
 category: 'private - applying'
@@ -78079,6 +78104,18 @@ createClassFor: aPatchSet
 	^ newClassVersion
 %
 
+category: 'actions'
+method: RwGsClassVersioningSymbolDictPatchV2
+createClassFor: aPatchSet inSymDict: symDictName
+	"we're using createClassFor: to apply the class modifications to the existing class
+	oldClassVersion and produce a new class version"
+
+	oldClassVersion := self oldClassVersion.	"grab the class version BEFORE creating newClassVersion ...it may be needed later"
+	newClassVersion := super createClassFor: aPatchSet inSymDict: symDictName.
+	symbolAssociation := self resolveName: newClassVersion name.
+	^ newClassVersion
+%
+
 category: 'accessing'
 method: RwGsClassVersioningSymbolDictPatchV2
 existingSymbolDictionary
@@ -78269,6 +78306,54 @@ updatePatchesForNewClassVersion: aProjectSetModification patchSet: patchSet
 										ifFalse: [
 											newVersionClassModification mergeForExistingClassWith: existingClassModification.
 											classesModified at: existingClassName put: newVersionClassModification ] ] ] ] ]
+%
+
+category: 'new version support'
+method: RwGsClassVersioningSymbolDictPatchV2
+updatePatchesForNewClassVersion: aProjectSetModification patchSetSymbolList: patchSet
+	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
+	movedDeletedMap := Dictionary new.
+	(patchSet class
+		lookupSymbolDictName: self symbolDictionaryName
+		in: patchSet movedClassesSymbolList)
+		keysAndValuesDo: [ :className :classMove | movedDeletedMap at: className put: classMove ].
+	existingClass := self oldClassVersion.
+	existingClassName := existingClass name asString.
+
+	loadedClass := self existingSymbolDictionaryRegistry
+		existingForClass: existingClass.
+	loadedClassDefinition := loadedClass asDefinition.
+	loadedPackageName := loadedClass loadedPackage name.
+
+	newVersionClassModification := self classDefinition
+		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
+	newVersionClassModification isEmpty
+		ifFalse: [ 
+			"only newVersionClassModification with substance need further processing"
+			aProjectSetModification
+				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification | 
+					classesModification isEmpty
+						ifFalse: [ 
+							| classesModified |
+							classesModified := classesModification elementsModified.
+							(classesModified at: existingClassName ifAbsent: [  ])
+								ifNil: [ 
+									"not unexpected ... if there are multiple packages involved"
+									 ]
+								ifNotNil: [ :existingClassModification | 
+									| deleteClassModification |
+									deleteClassModification := false.
+									(movedDeletedMap at: existingClassName ifAbsent: [  ])
+										ifNotNil: [ :classMove | 
+											deleteClassModification := classMove packageBefore name
+												= packageModification after name ].
+									deleteClassModification
+										ifTrue: [ classesModified removeKey: existingClassName ]
+										ifFalse: [ 
+											newVersionClassModification mergeForExistingClassWith: existingClassModification.
+											classesModified
+												at: existingClassName
+												put: newVersionClassModification ] ] ] ] ]
 %
 
 category: 'private'
@@ -97596,7 +97681,6 @@ applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
 applyModification_V2: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator
-
 	| visitor patchSet newClassVersionPatchSet |
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
@@ -97608,13 +97692,9 @@ applyModification_V2: aProjectSetModification visitorClass: visitorClass instanc
 	patchSet setupForNewClassVersionUpdates.
 	patchSet classesWithNewVersions
 		do: [ :each | 
-			each
-				updatePatchesForNewClassVersion: aProjectSetModification 
-					patchSet: patchSet;
-				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
-					patchSet: patchSet;
-				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
-					patchSet: patchSet ].
+			patchSet
+				updatePatchesForNewClassVersion: each
+				projectModification: aProjectSetModification ].
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	newClassVersionPatchSet := visitor patchSet.
@@ -98877,8 +98957,8 @@ compareAgainstBaseForLoader: aDefinition
 		into: result
 		elementClass: RwProjectDefinitionV2.
 	result
-		newUpdateForClassMoves;
-		newUpdateForMethodMoves.
+		updateForClassMoves;
+		updateForMethodMoves.
 	^ result
 %
 

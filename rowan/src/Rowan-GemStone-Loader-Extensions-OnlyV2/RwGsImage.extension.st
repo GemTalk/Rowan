@@ -52,7 +52,6 @@ RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrato
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
 RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator [
-
 	| visitor patchSet newClassVersionPatchSet |
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
@@ -64,13 +63,9 @@ RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: v
 	patchSet setupForNewClassVersionUpdates.
 	patchSet classesWithNewVersions
 		do: [ :each | 
-			each
-				updatePatchesForNewClassVersion: aProjectSetModification 
-					patchSet: patchSet;
-				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
-					patchSet: patchSet;
-				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
-					patchSet: patchSet ].
+			patchSet
+				updatePatchesForNewClassVersion: each
+				projectModification: aProjectSetModification ].
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	newClassVersionPatchSet := visitor patchSet.

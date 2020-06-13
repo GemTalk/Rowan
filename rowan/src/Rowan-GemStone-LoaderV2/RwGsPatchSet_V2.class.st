@@ -1409,6 +1409,16 @@ RwGsPatchSet_V2 >> updateMethodProperties [
 		do: [:each | each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
 ]
 
+{ #category : 'dispatching' }
+RwGsPatchSet_V2 >> updatePatchesForNewClassVersion: aClassVersioningPatch projectModification: aProjectSetModification [
+	aClassVersioningPatch
+		updatePatchesForNewClassVersion: aProjectSetModification patchSet: self;
+		updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+			patchSet: self;
+		updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
+			patchSet: self
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> updateSymbolAssociations [
 	"Install new class versions."
