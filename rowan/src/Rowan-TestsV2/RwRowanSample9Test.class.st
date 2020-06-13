@@ -462,7 +462,7 @@ RwRowanSample9Test >> setUp [
 	super setUp.
 	true
 		ifTrue: [ 
-			skipTestLibraryGenerator := false.	"don't run library generator tests when just testing the new loader ... long test, no loading"
+			skipTestLibraryGenerator := true.	"don't run library generator tests when just testing the new loader ... long test, no loading"
 			SessionTemps current
 				at: #'Experimental_RwGsImagePatchVisitor_V2_className'
 				put: #'RwGsImagePatchVisitor_V2_symbolList' ]
@@ -2928,6 +2928,7 @@ RwRowanSample9Test >> testIssue460_1 [
 	"spec_0050 --> spec_0048		:: "
 
 	| projectName projectNames loadSpec loadedProjects resolvedProject packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 x y className6 oldClass6 class6 ar className1 class1 className2 class2 className5 class5 oldClass5 projectName2 resolvedProject2 project oldResolvedProject projectSetDefinition |
+UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0050'.
 
 	projectName := 'RowanSample9'.
@@ -3021,6 +3022,7 @@ RwRowanSample9Test >> testIssue460_1 [
         	pkgDefinition removeClassExtensionDefinition: classExtension ]].
 
 "load project set"
+UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 	self assert: (Rowan projectNamed: projectName) isDirty.
 	self deny: (Rowan projectNamed: projectName2) isDirty.

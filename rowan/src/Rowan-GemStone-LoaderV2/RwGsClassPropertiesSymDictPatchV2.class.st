@@ -92,7 +92,7 @@ RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchSymbolListFor: aPatch
 							"cannot find class ... caller can decide whether or not that is a problem"
 							self error: 'Cannot find class to update properties for.' ]
 						ifNotNil: [ :assoc | assoc value ] ] ].
-	createdClass := self createClassFor: aPatchSet.	"use createClassFor:, but not expected to create new class version"
+	createdClass := self createClassFor: aPatchSet inSymDict: self symbolDictionaryName.	"use createClassFor:, but not expected to create new class version"
 	createdClass == existingClass
 		ifFalse: [ 
 			self

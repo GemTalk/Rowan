@@ -76122,7 +76122,12 @@ classPatchesInReverseHierarchyOrder: classPatches tempSymbolList: tempSymbolList
 				lookupSymbolDictName: classPatch symbolDictionaryName
 				in: tempSymbolList)
 				at: classPatch className asSymbol
-				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ].
+				ifAbsent: [ 
+					(tempSymbolList resolveSymbol: classPatch className asSymbol)
+						ifNil: [ 
+							"cannot find class ... caller can decide whether or not that is a problem"
+							self error: 'Cannot find class to update constraints for.' ]
+						ifNotNil: [ :assoc | assoc value ] ].
 			patchMap at: class put: classPatch ].
 	toBeOrdered := patchMap keys asIdentitySet.
 	order := OrderedCollection new.
@@ -76267,15 +76272,12 @@ createClassNamed: className fromWorkSymbolList: workSymbolList symDictName: symD
 category: 'patch access'
 method: RwGsPatchSet_V2_symbolList
 createdClass: aClass
-
 	| className |
-	className := aClass name.
-	(createdClasses at: className ifAbsent: [ ])
-		ifNil: [ 
-			createdClasses
-				add: (SymbolAssociation newWithKey: className value: aClass) ]
-		ifNotNil: [:cl | 
-			cl == aClass
+	className := aClass name asSymbol.
+	(createdClasses resolveSymbol: className)
+		ifNil: [ createdClasses add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [ :assoc | 
+			assoc value == aClass
 				ifFalse: [ 
 					"new version created, update entry in createdClasses"
 					createdClasses at: className put: aClass ] ]
@@ -76863,7 +76865,6 @@ className
 category: 'actions'
 method: RwGsClassPatchV2
 createClassFor: aPatchSet
-
 	| createdClass |
 	createdClass := self privateCreateClassFor: aPatchSet.
 	aPatchSet createdClass: createdClass.
@@ -76903,6 +76904,29 @@ printOn: aStream
 
 	super printOn: aStream.
 	aStream nextPutAll: '(', classDefinition name, ')'
+%
+
+category: 'private'
+method: RwGsClassPatchV2
+privateCreateClassFor: aPatchSet
+	| superclass |
+	superclass := aPatchSet 
+		superclassNamed: classDefinition superclassName 
+		ifAbsent: [
+			"https://github.com/GemTalk/Rowan/issues/471"
+			"if we can't look up the class, try accessing the superclass from the class itself"
+			(aPatchSet tempSymbols 
+				at: classDefinition name asSymbol
+				ifAbsent: [ self error: 'Class not found ', classDefinition className printString ]) superClass ].
+	superclass
+		ifNil: [ 
+			classDefinition superclassName = 'nil'
+				ifFalse: [ 
+					self
+						error:
+							'The class named ' , classDefinition superclassName printString
+								, ' does not exist.' ] ].
+	^ self privateCreateClassWithSuperclass: superclass
 %
 
 category: 'private'
@@ -77312,6 +77336,16 @@ installPropertiesPatchFor: aPatchSet
 	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
 %
 
+category: 'patching moved classes'
+method: RwGsClassPropertiesSymDictPatchV2
+installPropertiesPatchFor: aPatchSet classMove: aClassMove
+
+	| theRegistry |
+	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+		rowanSymbolDictionaryRegistry.
+	self installPropertiesPatchFor: aPatchSet registry: theRegistry
+%
+
 category: 'installing'
 method: RwGsClassPropertiesSymDictPatchV2
 installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
@@ -77342,27 +77376,48 @@ installPropertiesPatchSymbolListFor: aPatchSet_symbolList
 	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
 %
 
+category: 'patching moved classes'
+method: RwGsClassPropertiesSymDictPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove
+
+	| theRegistry |
+	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+		rowanSymbolDictionaryRegistry.
+	self installPropertiesPatchSymbolListFor: aPatchSet registry: theRegistry
+%
+
 category: 'installing'
 method: RwGsClassPropertiesSymDictPatchV2
 installPropertiesPatchSymbolListFor: aPatchSet registry: aSymbolDictionaryRegistry
-
 	" update class and update loadedClass with new properties"
 
-	| className existingClass createdClass |
+	| className existingClass createdClass symDict |
 	className := classDefinition key asSymbol.
-	existingClass := aPatchSet createdClasses
+	symDict := aPatchSet class
+		lookupSymbolDictName: self symbolDictionaryName
+		in: aPatchSet createdClasses.
+	existingClass := symDict
 		at: className
 		ifAbsent: [ 
-			aPatchSet tempSymbols
+			(aPatchSet class
+				lookupSymbolDictName: self symbolDictionaryName
+				in: aPatchSet tempSymbolList)
 				at: className
-				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
-	createdClass := self createClassFor: aPatchSet.	"use createClassFor:, but not expected to create new class version"
+				ifAbsent: [ 
+					(aPatchSet tempSymbolList resolveSymbol: className)
+						ifNil: [ 
+							"cannot find class ... caller can decide whether or not that is a problem"
+							self error: 'Cannot find class to update properties for.' ]
+						ifNotNil: [ :assoc | assoc value ] ] ].
+	createdClass := self createClassFor: aPatchSet inSymDict: self symbolDictionaryName.	"use createClassFor:, but not expected to create new class version"
 	createdClass == existingClass
 		ifFalse: [ 
 			self
 				error:
 					'internal error - class changed during class property update ... should have been a class versioning patch' ].
-	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+	aSymbolDictionaryRegistry
+		updateClassProperties: existingClass
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
 
 ! Class implementation for 'RwGsClassSymbolDictionaryMoveSymDictPatchV2'
@@ -78400,8 +78455,11 @@ primeBehaviorNewClasses: createdClassesSymbolList andExistingClassSymbolList: te
 			(RwGsPatchSet_V2_symbolList lookupSymbolDictName: symDictName in: tempSymbolList)
 				at: className
 				ifAbsent: [ 
-					"cannot find class ... caller can decide whether or not that is a problem"
-					^ self ] ].
+					(tempSymbolList resolveSymbol: className)
+						ifNil: [ 
+							"cannot find class ... caller can decide whether or not that is a problem"
+							^ self ]
+						ifNotNil: [ :assoc | assoc value ] ] ].
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ]

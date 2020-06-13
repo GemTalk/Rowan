@@ -180,7 +180,7 @@ RwGsClassPatchV2 >> className [
 RwGsClassPatchV2 >> createClassFor: aPatchSet [
 	| createdClass |
 	createdClass := self privateCreateClassFor: aPatchSet.
-	aPatchSet createdClass: createdClass inSymDict: self symbolDictionaryName.
+	aPatchSet createdClass: createdClass.
 	^ createdClass
 ]
 
