@@ -76779,7 +76779,7 @@ updateMethodProperties
 	methodsWithPropertyChanges
 		do: [ :each | 
 			each
-				installPropertiesPatchNewClasses: createdClasses
+				installPropertiesPatchNewClasses: self createdClasses
 				andExistingClassSymbolList: self tempSymbolList ]
 %
 
