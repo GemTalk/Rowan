@@ -76522,10 +76522,12 @@ updateMethodDictionaries
 	emptyMap := true.
 	classesWithNewVersions
 		do: [ :patch | 
-			(movedClassesMap at: patch className ifAbsent: [  ])
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
 				ifNotNil: [ :aClassMove | 
 					(self class
-						lookupSymbolDictName: aClassMove symbolDictionaryName
+						lookupSymbolDictName: aClassMove symbolDictionaryNameAfter asSymbol
 						in: movedClassesWithNewVersionMap)
 						at: patch className asSymbol
 						put:
@@ -76551,9 +76553,9 @@ updateMethodDictionaries
 				do: [ :aMethodMove | 
 					| classExtDict key methodDict |
 					classExtDict := (self class
-						lookupSymbolDictName: aMethodMove symbolDictionaryName
+						lookupSymbolDictName: aMethodMove symbolDictionaryNameAfter asSymbol
 						in: movedExtensionMethodsMap)
-						at: aMethodMove classOrExtensionAfter name asSymbol
+						at: aMethodMove classOrExtensionBefore name asSymbol
 						ifAbsentPut: [ Dictionary new ].
 					key := aMethodMove isMeta
 						ifTrue: [ 'class' ]
@@ -76564,13 +76566,16 @@ updateMethodDictionaries
 		do: [ :patch | 
 			| className |
 			className := patch className asSymbol.
-			((self class
-				lookupSymbolDictName: patch symbolDictionaryName
-				in: movedClassesWithNewVersionMap) at: className ifAbsent: [  ])
+			(movedClassesWithNewVersionMap resolveSymbol: className)
 				ifNil: [ patch installMethod ]
-				ifNotNil: [ :ar | 
+				ifNotNil: [ :movedAssoc | 
+					| ar classMove |
 					"https://github.com/dalehenrich/Rowan/issues/316"
-					(movedExtensionMethodsMap resolveSymbol: className)
+					ar := movedAssoc value.
+					classMove := ar at: 1.
+					((self class
+						lookupSymbolDictName: classMove symbolDictionaryNameAfter
+						in: movedExtensionMethodsMap) at: className ifAbsent: [  ])
 						ifNil: [ patch installMethod ]
 						ifNotNil: [ :assoc | 
 							| classExtDict methodDict |
@@ -76913,6 +76918,23 @@ installPropertiesPatchFor: aPatchSet classMove: aClassMove
 	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
 		rowanSymbolDictionaryRegistry.
 	self installPropertiesPatchFor: aPatchSet registry: theRegistry
+%
+
+category: 'installing'
+method: RwGsClassPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet_symbolList
+
+	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
+%
+
+category: 'patching moved classes'
+method: RwGsClassPatchV2
+installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove
+
+	| theRegistry |
+	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+		rowanSymbolDictionaryRegistry.
+	self installPropertiesPatchSymbolListFor: aPatchSet registry: theRegistry
 %
 
 category: 'versioning'
@@ -78839,9 +78861,10 @@ installMovedMethod: aMethodMove newClassVersionPatch: newClassVersionPatch
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| oldClassVersion oldBehavior theRegistry |
-	theRegistry := (self symbolDictionaryFor: aMethodMove packageAfter name projectDefinition: aMethodMove projectAfter)
-		rowanSymbolDictionaryRegistry.
+	| oldClassVersion oldBehavior theRegistry newBehavior |
+	theRegistry := (self
+		symbolDictionaryFor: aMethodMove packageAfter name
+		projectDefinition: aMethodMove projectAfter) rowanSymbolDictionaryRegistry.
 	oldClassVersion := newClassVersionPatch oldClassVersion.
 	oldClassVersion ~~ newClassVersionPatch newClassVersion
 		ifTrue: [ 
@@ -78850,20 +78873,21 @@ installMovedMethod: aMethodMove newClassVersionPatch: newClassVersionPatch
 				ifTrue: [ oldClassVersion class ]
 				ifFalse: [ oldClassVersion ].
 			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
-				ifNotNil: [ :oldCompiledMethod |
+				ifNotNil: [ :oldCompiledMethod | 
 					"new methods will not be in the old method dictionary"
-					(theRegistry methodRegistry
-						at: oldCompiledMethod
-						ifAbsent: [])
-							ifNil: [
-								theRegistry
-									error:
-										'Internal error -- no existing LoadedMethod found for deleted method.' ]
-							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
+					(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
+						ifNil: [ 
+							theRegistry
+								error:
+									'Internal error -- no existing LoadedMethod found for deleted method.' ]
+						ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
 
+	newBehavior := behavior isMeta
+		ifTrue: [ newClassVersionPatch newClassVersion class ]
+		ifFalse: [ newClassVersionPatch newClassVersion ].
 	theRegistry
 		addExtensionCompiledMethod: compiledMethod
-		for: behavior
+		for: newBehavior
 		protocol: self propertiesProtocolName
 		toPackageNamed: aMethodMove packageAfter name
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.

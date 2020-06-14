@@ -408,10 +408,12 @@ RwGsPatchSet_V2_symbolList >> updateMethodDictionaries [
 	emptyMap := true.
 	classesWithNewVersions
 		do: [ :patch | 
-			(movedClassesMap at: patch className ifAbsent: [  ])
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
 				ifNotNil: [ :aClassMove | 
 					(self class
-						lookupSymbolDictName: aClassMove symbolDictionaryName
+						lookupSymbolDictName: aClassMove symbolDictionaryNameAfter asSymbol
 						in: movedClassesWithNewVersionMap)
 						at: patch className asSymbol
 						put:
@@ -437,9 +439,9 @@ RwGsPatchSet_V2_symbolList >> updateMethodDictionaries [
 				do: [ :aMethodMove | 
 					| classExtDict key methodDict |
 					classExtDict := (self class
-						lookupSymbolDictName: aMethodMove symbolDictionaryName
+						lookupSymbolDictName: aMethodMove symbolDictionaryNameAfter asSymbol
 						in: movedExtensionMethodsMap)
-						at: aMethodMove classOrExtensionAfter name asSymbol
+						at: aMethodMove classOrExtensionBefore name asSymbol
 						ifAbsentPut: [ Dictionary new ].
 					key := aMethodMove isMeta
 						ifTrue: [ 'class' ]
@@ -450,13 +452,16 @@ RwGsPatchSet_V2_symbolList >> updateMethodDictionaries [
 		do: [ :patch | 
 			| className |
 			className := patch className asSymbol.
-			((self class
-				lookupSymbolDictName: patch symbolDictionaryName
-				in: movedClassesWithNewVersionMap) at: className ifAbsent: [  ])
+			(movedClassesWithNewVersionMap resolveSymbol: className)
 				ifNil: [ patch installMethod ]
-				ifNotNil: [ :ar | 
+				ifNotNil: [ :movedAssoc | 
+					| ar classMove |
 					"https://github.com/dalehenrich/Rowan/issues/316"
-					(movedExtensionMethodsMap resolveSymbol: className)
+					ar := movedAssoc value.
+					classMove := ar at: 1.
+					((self class
+						lookupSymbolDictName: classMove symbolDictionaryNameAfter
+						in: movedExtensionMethodsMap) at: className ifAbsent: [  ])
 						ifNil: [ patch installMethod ]
 						ifNotNil: [ :assoc | 
 							| classExtDict methodDict |

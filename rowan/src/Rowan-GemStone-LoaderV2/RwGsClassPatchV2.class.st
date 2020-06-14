@@ -201,6 +201,22 @@ RwGsClassPatchV2 >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
 	self installPropertiesPatchFor: aPatchSet registry: theRegistry
 ]
 
+{ #category : 'patching moved classes' }
+RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove [
+
+	| theRegistry |
+	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+		rowanSymbolDictionaryRegistry.
+	self installPropertiesPatchSymbolListFor: aPatchSet registry: theRegistry
+]
+
+{ #category : 'installing' }
+RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet_symbolList [
+
+	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
+]
+
+
 { #category : 'versioning' }
 RwGsClassPatchV2 >> oldClassVersion [
 	"The old version is what is currently bound to the class definition's name."

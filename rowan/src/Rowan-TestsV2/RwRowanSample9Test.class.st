@@ -1,9 +1,6 @@
 Class {
 	#name : 'RwRowanSample9Test',
 	#superclass : 'RwAbstractV2Test',
-	#instVars : [
-		'skipTestLibraryGenerator'
-	],
 	#category : 'Rowan-TestsV2'
 }
 
@@ -192,11 +189,6 @@ RwRowanSample9Test >> _rowanSample1LoadSpecificationUrl_515 [
 { #category : 'private' }
 RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 	^ self class _rowanSample9_0000_load_spec
-]
-
-{ #category : 'private' }
-RwRowanSample9Test >> _skipTestLibraryGenerator [
-	^ skipTestLibraryGenerator ifNil: [ false ]
 ]
 
 { #category : 'private' }
@@ -462,7 +454,6 @@ RwRowanSample9Test >> setUp [
 	super setUp.
 	true
 		ifTrue: [ 
-			skipTestLibraryGenerator := true.	"don't run library generator tests when just testing the new loader ... long test, no loading"
 			SessionTemps current
 				at: #'Experimental_RwGsImagePatchVisitor_V2_className'
 				put: #'RwGsImagePatchVisitor_V2_symbolList' ]
@@ -961,7 +952,7 @@ RwRowanSample9Test >> testIssue_504_4 [
 	"reverse the use of spec_0007 and spec_0006"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-
+UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0006'.	
 
 	projectName := loadSpec projectName.
@@ -979,6 +970,40 @@ RwRowanSample9Test >> testIssue_504_4 [
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 
 	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
+
+"resolve"
+UserGlobals at: #ConditionalHalt put: false.
+	resolvedProject := loadSpec resolve.
+
+"load"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue_504_5 [
+	"reverse of testIssue_504_3"
+	| loadSpec projectName resolvedProject loadedProjects |
+
+	loadSpec := self _loadSpecNamed: 'spec_0006'.	
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve primer project"
+	resolvedProject := loadSpec resolve.
+
+"load primer project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+
+	loadSpec := self _loadSpecNamed: 'spec_0005'.
 
 "resolve"
 	resolvedProject := loadSpec resolve.
@@ -3755,92 +3780,6 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 
 	self assert: registry packageRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLibraryGenerator [
-	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
-		1. hitting errors
-		2. changing any of the disk content"
-
-	"skip spec_004, because it makes two changes in a row, so always commits"
-
-	| commitComment |
-	self _skipTestLibraryGenerator 
-		ifTrue: [ 
-			"since this test is long and does not use the loader (just Rowan API), it can be useful to bypass the test"
-			^self ].
-	self class _clearLoadSpecSessionCache.
-	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
-
-	commitComment := 'running testLibraryGenerator tests ... no changes expected, thus no commits exprected'.
-	RwTestProjectLibraryGeneratorTester new
-		testCase: self;
-		projectName: 'RowanSample9';
-		projectUrl: 'git@github.com:dalehenrich/RowanSample9.git';
-		preserveRowanSHA: true;
-		primeIndexCardMap;
-		preserveChangesOnGithub: false;
-		genSpec_0000: commitComment;
-		genSpec_0001: commitComment;
-		genSpec_0002: commitComment;
-		genSpec_0003: commitComment;
-"
-		genSpec_0004: commitComment;
-"
-		genSpec_0005: commitComment;
-		genSpec_0006: commitComment;
-		genSpec_0007: commitComment;
-		genSpec_0008: commitComment;
-		genSpec_0009: commitComment;
-		genSpec_0010: commitComment;
-		genSpec_0011: commitComment;
-		genSpec_0012: commitComment;
-		genSpec_0013: commitComment;
-		genSpec_0014: commitComment;
-		genSpec_0015: commitComment;
-		genSpec_0016: commitComment;
-		genSpec_0017: commitComment;
-		genSpec_0018: commitComment;
-		genSpec_0019: commitComment;
-		genSpec_0020: commitComment;
-		genSpec_0021: commitComment;
-		genSpec_0022: commitComment;
-		genSpec_0023: commitComment;
-		genSpec_0024: commitComment;
-		genSpec_0025: commitComment;
-		genSpec_0026: commitComment;
-		genSpec_0027: commitComment;
-		genSpec_0028: commitComment;
-		genSpec_0029: commitComment;
-		genSpec_0030: commitComment;
-		genSpec_0031: commitComment;
-		genSpec_0032: commitComment;
-		genSpec_0033: commitComment;
-		genSpec_0034: commitComment;
-		genSpec_0035: commitComment;
-		genSpec_0036: commitComment;
-		genSpec_0037: commitComment;
-		genSpec_0038: commitComment;
-		genSpec_0039: commitComment;
-		genSpec_0040: commitComment;
-		genSpec_0041: commitComment;
-		genSpec_0042: commitComment;
-		genSpec_0043: commitComment;
-		genSpec_0044: commitComment;
-		genSpec_0045: commitComment;
-		genSpec_0046: commitComment;
-		genSpec_0047: commitComment;
-		genSpec_0048: commitComment;
-		genSpec_0049: commitComment;
-		genSpec_0050: commitComment;
-		genSpec_0051: commitComment;
-		genSpec_0052: commitComment;
-		genSpec_0053: commitComment;
-		genSpec_0054: commitComment;
-		genSpec_0055: commitComment;
-		genSpec_0056: commitComment;
-		yourself
 ]
 
 { #category : 'issue 493' }
