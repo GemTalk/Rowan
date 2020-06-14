@@ -77550,16 +77550,6 @@ installPropertiesPatchFor: aPatchSet
 	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
 %
 
-category: 'patching moved classes'
-method: RwGsClassPropertiesSymDictPatchV2
-installPropertiesPatchFor: aPatchSet classMove: aClassMove
-
-	| theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchFor: aPatchSet registry: theRegistry
-%
-
 category: 'installing'
 method: RwGsClassPropertiesSymDictPatchV2
 installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
@@ -77588,16 +77578,6 @@ method: RwGsClassPropertiesSymDictPatchV2
 installPropertiesPatchSymbolListFor: aPatchSet_symbolList
 
 	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
-%
-
-category: 'patching moved classes'
-method: RwGsClassPropertiesSymDictPatchV2
-installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove
-
-	| theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchSymbolListFor: aPatchSet registry: theRegistry
 %
 
 category: 'installing'
@@ -77749,18 +77729,29 @@ installPropertiesPatchSymbolListFor: aPatchSet_symbolList
 category: 'installing'
 method: RwGsClassVariableChangeSymbolDictPatchV2
 installPropertiesPatchSymbolListFor: aPatchSet registry: aSymbolDictionaryRegistry
-
 	" update class and update loadedClass with new properties"
 
-	| className existingClass |
+	| className symDict existingClass |
 	className := classDefinition key asSymbol.
-	existingClass := aPatchSet createdClasses
+	symDict := aPatchSet class
+		lookupSymbolDictName: self symbolDictionaryName
+		in: aPatchSet createdClasses.
+	existingClass := symDict
 		at: className
 		ifAbsent: [ 
-			aPatchSet tempSymbols
+			(aPatchSet class
+				lookupSymbolDictName: self symbolDictionaryName
+				in: aPatchSet tempSymbolList)
 				at: className
-				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
-	aSymbolDictionaryRegistry updateClassProperties: existingClass  implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+				ifAbsent: [ 
+					(aPatchSet tempSymbolList resolveSymbol: className)
+						ifNil: [ 
+							"cannot find class ... caller can decide whether or not that is a problem"
+							self error: 'Cannot find class to update class variables for.' ]
+						ifNotNil: [ :assoc | assoc value ] ] ].
+	aSymbolDictionaryRegistry
+		updateClassProperties: existingClass
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
 
 ! Class implementation for 'RwGsClassVersioningPatchV2'

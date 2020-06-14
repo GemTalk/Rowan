@@ -24,15 +24,6 @@ RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchFor: aPatchSet [
 
 ]
 
-{ #category : 'patching moved classes' }
-RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
-
-	| theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchFor: aPatchSet registry: theRegistry
-]
-
 { #category : 'installing' }
 RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry [
 
@@ -59,15 +50,6 @@ RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchFor: aPatchSet regist
 RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet_symbolList [
 
 	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
-]
-
-{ #category : 'patching moved classes' }
-RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove [
-
-	| theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchSymbolListFor: aPatchSet registry: theRegistry
 ]
 
 { #category : 'installing' }
