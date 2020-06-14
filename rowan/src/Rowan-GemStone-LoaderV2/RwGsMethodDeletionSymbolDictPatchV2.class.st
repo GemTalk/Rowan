@@ -48,11 +48,10 @@ RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClasses: created
 
 { #category : 'deleting' }
 RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
-
 	"remove the method from deleted things"
 
-	"self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.		??? how does behavior get set with primieBehavir ???"
-self halt: 'I want to know'.
+	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
+
 	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior

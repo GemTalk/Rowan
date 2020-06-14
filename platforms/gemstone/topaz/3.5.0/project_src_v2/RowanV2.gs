@@ -78711,11 +78711,10 @@ deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols
 category: 'deleting'
 method: RwGsMethodDeletionSymbolDictPatchV2
 deleteNewVersionMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-
 	"remove the method from deleted things"
 
-	"self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.		??? how does behavior get set with primieBehavir ???"
-self halt: 'I want to know'.
+	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
+
 	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
@@ -78941,6 +78940,32 @@ installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols
 
 	| methodDictionary oldCompiledMethod |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
+
+	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
+	selector := methodDefinition selector.
+	oldCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing CompileMethod found for patched method.' ].
+
+	self symbolDictionaryRegistry
+		moveCompiledMethod: oldCompiledMethod
+		toProtocol: self propertiesProtocolName
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
+category: 'installing'
+method: RwGsMethodPropertiesSymDictPatchV2
+installPropertiesPatchNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
+
+	" update method protocol and update loadedMethod with new compiled method"
+
+	| methodDictionary oldCompiledMethod |
+	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 

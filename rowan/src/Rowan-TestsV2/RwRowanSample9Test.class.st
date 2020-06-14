@@ -2928,7 +2928,6 @@ RwRowanSample9Test >> testIssue460_1 [
 	"spec_0050 --> spec_0048		:: "
 
 	| projectName projectNames loadSpec loadedProjects resolvedProject packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 x y className6 oldClass6 class6 ar className1 class1 className2 class2 className5 class5 oldClass5 projectName2 resolvedProject2 project oldResolvedProject projectSetDefinition |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0050'.
 
 	projectName := 'RowanSample9'.
@@ -3022,9 +3021,7 @@ UserGlobals at: #ConditionalHalt put: false.
         	pkgDefinition removeClassExtensionDefinition: classExtension ]].
 
 "load project set"
-UserGlobals at: #ConditionalHalt put: true.
 	loadedProjects := Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-UserGlobals at: #ConditionalHalt put: false.
 	self assert: (Rowan projectNamed: projectName) isDirty.
 	self deny: (Rowan projectNamed: projectName2) isDirty.
 	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
