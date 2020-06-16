@@ -204,6 +204,18 @@ RowanProjectService >> isSkew [
 ]
 
 { #category : 'client commands' }
+RowanProjectService >> loadProjectFromFile: fileString [
+	[ (RwSpecification fromUrl: fileString) resolveStrict load ]
+		on: Warning
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: ex description.
+			ex resume ].
+	RowanBrowserService new updateProjects
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName] 
@@ -236,13 +248,14 @@ RowanProjectService >> name: anObject [
 
 { #category : 'client commands' }
 RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
+	"not valid in Rowan V2.0"
 	"set useSsh to false to clone using https:"
 
-	Rowan projectTools clone
+	"Rowan projectTools clone
 		cloneSpecUrl: url
 		gitRootPath: rootPath
 		useSsh: useSsh.
-	(RowanBrowserService new organizer: organizer) updateProjects.
+	(RowanBrowserService new organizer: organizer) updateProjects."
 ]
 
 { #category : 'rowan' }
