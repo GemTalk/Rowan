@@ -100,7 +100,6 @@ RwGsClassVersioningSymbolDictPatchV2 >> _createMethodExtensionModificationForNew
 
 { #category : 'private' }
 RwGsClassVersioningSymbolDictPatchV2 >> _updateNewClassVersionPatchesForClass: class in: aProjectSetModification patchSet: aPatchSet [
-
 	| className extensionMap emptyDict |
 	className := class name asString.
 	extensionMap := Dictionary new.
@@ -120,15 +119,23 @@ RwGsClassVersioningSymbolDictPatchV2 >> _updateNewClassVersionPatchesForClass: c
 						put: loadedMethod ] ].
 	extensionMap isEmpty
 		ifTrue: [ ^ self ].
-	aPatchSet
-		allPatchesAffectingLiveMethodsDo: [ :patch | 
+
+	aPatchSet movedMethods
+		do: [ :aMethodMove | 
 			| methodsDict selectorDict |
 			methodsDict := extensionMap
-				at: patch classDefinition name
+				at: aMethodMove classOrExtensionAfter name
 				ifAbsent: [ emptyDict ].
-			selectorDict := patch isMeta
+
+			selectorDict := aMethodMove isMeta
 				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
-				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ] ]
+				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
+			selectorDict removeKey: aMethodMove methodAfter selector ifAbsent: [  ] ].
+
+	aPatchSet
+		allPatchesAffectingLiveMethodsDo: [ :patch | 
+			"noop"
+			 ]
 		deletedMethodsDo: [ :patch | 
 			| methodsDict selectorDict |
 			methodsDict := extensionMap

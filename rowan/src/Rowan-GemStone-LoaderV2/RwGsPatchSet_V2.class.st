@@ -1170,6 +1170,11 @@ RwGsPatchSet_V2 >> movedClassesMap [
 
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSet_V2 >> movedMethods [
+	^ movedMethods
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> movePackages [
 	movedPackages do: [ :each | each movePackage: classesWithNewVersions ]
