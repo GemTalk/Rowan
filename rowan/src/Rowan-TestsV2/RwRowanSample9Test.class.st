@@ -976,9 +976,7 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolve.
 
 "load"
-self halt.
 	loadedProjects := resolvedProject load.
-self halt.
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.

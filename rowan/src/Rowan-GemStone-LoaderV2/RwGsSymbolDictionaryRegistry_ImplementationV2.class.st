@@ -617,9 +617,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 	methodDictionary at: selector put: newCompiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
-	registryInstance methodRegistry
-		at: newCompiledMethod
-		ifPresent: [:lm | ^ registryInstance ].
 	loadedMethod := registryInstance methodRegistry
 		at: oldCompiledMethod
 		ifAbsent: [ 
@@ -967,10 +964,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveClassFor: classMove [
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryInstance [
 	"move a compiled method into a different protocol and update loaded things"
 
-	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod theCompiledMethod |
+	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
 	selector := compiledMethod selector.
 	behavior := compiledMethod inClass.
-	theCompiledMethod := compiledMethod.
 
 	methodDictionary := (behavior persistentMethodDictForEnv: 0)
 		ifNil: [ Dictionary new ].
@@ -980,13 +976,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 			registryInstance
 				error:
 					'Internal error -- no existing CompileMethod found for patched method.' ].
-	existingCompiledMethod == theCompiledMethod
+	existingCompiledMethod == compiledMethod
 		ifFalse: [ 
-			"extension method recompiled because of new class version, more than a move"
-			registryInstance class registry_ImplementationClass
-				addRecompiledMethod: theCompiledMethod
-				instance: registryInstance.
-			theCompiledMethod := behavior compiledMethodAt: selector ].
+			registryInstance
+				error:
+					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
 
 	oldCat := behavior categoryOfSelector: selector environmentId: 0.
 	catSym := newProtocol asSymbol.
@@ -1000,7 +994,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 	behavior moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := registryInstance methodRegistry
-		at: theCompiledMethod
+		at: compiledMethod
 		ifAbsent: [ 
 			registryInstance
 				error:
