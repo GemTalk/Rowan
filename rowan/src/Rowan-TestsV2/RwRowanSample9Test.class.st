@@ -972,7 +972,7 @@ UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
 
 "resolve"
-UserGlobals at: #ConditionalHalt put: false.
+UserGlobals at: #ConditionalHalt put: true.
 	resolvedProject := loadSpec resolve.
 
 "load"

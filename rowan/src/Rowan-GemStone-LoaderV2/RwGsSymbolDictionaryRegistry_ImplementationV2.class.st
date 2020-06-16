@@ -597,7 +597,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: com
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newCompiledMethod instance: registryInstance [
-
 	"add a recompiled compiled method to behavior and update the loaded things"
 
 	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
@@ -618,6 +617,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 	methodDictionary at: selector put: newCompiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
+	registryInstance methodRegistry
+		at: newCompiledMethod
+		ifPresent: [:lm | ^ registryInstance ].
 	loadedMethod := registryInstance methodRegistry
 		at: oldCompiledMethod
 		ifAbsent: [ 
@@ -625,6 +627,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 				error:
 					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
+
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
 	^ registryInstance
@@ -962,25 +965,28 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveClassFor: classMove [
 
 { #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryInstance [
-
 	"move a compiled method into a different protocol and update loaded things"
 
-	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
+	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod theCompiledMethod |
 	selector := compiledMethod selector.
 	behavior := compiledMethod inClass.
+	theCompiledMethod := compiledMethod.
 
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
+	methodDictionary := (behavior persistentMethodDictForEnv: 0)
+		ifNil: [ Dictionary new ].
 	existingCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
 			registryInstance
 				error:
 					'Internal error -- no existing CompileMethod found for patched method.' ].
-	existingCompiledMethod == compiledMethod
+	existingCompiledMethod == theCompiledMethod
 		ifFalse: [ 
-			registryInstance
-				error:
-					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
+			"extension method recompiled because of new class version, more than a move"
+			registryInstance class registry_ImplementationClass
+				addRecompiledMethod: theCompiledMethod
+				instance: registryInstance.
+			theCompiledMethod := behavior compiledMethodAt: selector ].
 
 	oldCat := behavior categoryOfSelector: selector environmentId: 0.
 	catSym := newProtocol asSymbol.
@@ -994,7 +1000,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 	behavior moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := registryInstance methodRegistry
-		at: compiledMethod
+		at: theCompiledMethod
 		ifAbsent: [ 
 			registryInstance
 				error:
@@ -1002,7 +1008,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 
 	loadedMethod updateForProtocolChange.
 	^ registryInstance
-
 ]
 
 { #category : 'method - patch api' }
