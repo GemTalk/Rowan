@@ -24,6 +24,11 @@ RwGsPlatform >> commandResultClass [
 ]
 
 { #category : '*rowan-services-extensions' }
+RwGsPlatform >> definedProjectServiceClass [
+	^ RowanDefinedProjectService
+]
+
+{ #category : '*rowan-services-extensions' }
 RwGsPlatform >> jadeServerClassNamed: className [
 
 	| jadeClasses |
@@ -31,6 +36,11 @@ RwGsPlatform >> jadeServerClassNamed: className [
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit35). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+]
+
+{ #category : '*rowan-services-extensions' }
+RwGsPlatform >> loadedProjectServiceClass [
+	^ RowanLoadedProjectService
 ]
 
 { #category : '*rowan-services-extensions' }
@@ -61,6 +71,11 @@ RwGsPlatform >> projectServiceClass [
 ]
 
 { #category : '*rowan-services-extensions' }
+RwGsPlatform >> resolvedProjectServiceClass [
+	^ RowanResolvedProjectService
+]
+
+{ #category : '*rowan-services-extensions' }
 RwGsPlatform >> serviceClass [
 
 	^ RowanService
@@ -72,30 +87,40 @@ RwGsPlatform >> serviceClasses [
 	"Explicitly add each class rather than sending #allSubclasses so
 	that users other than SystemUser have visibility. Visibility in Rowan
 	is determined at compile time. See STONReader>>lookupClass:"
-	
+
 	| array |
-	array := Array with: RowanService. 
-	array add: RowanAnsweringService; 
-		add: RowanAutoCommitService; 
+	array := Array with: RowanService.
+	array
+		add: RowanAnsweringService;
+		add: RowanAutoCommitService;
 		add: RowanBrowserService;
-		add: RowanClassService; 
-		add: RowanDebuggerService; 
-		add: RowanDictionaryService; 
+		add: RowanClassService;
+		add: RowanDebuggerService;
+		add: RowanDefinedProjectService;
+		add: RowanDictionaryService;
 		add: RowanFrameService;
 		add: RowanInspectorService;
+		add: RowanLoadedProjectService;
 		add: RowanLoggingService;
 		add: RowanMethodService;
-		add: RowanPackageService; 
+		add: RowanPackageService;
 		add: RowanProcessService;
 		add: RowanProjectService;
 		add: RowanQueryService;
+		add: RowanResolvedProjectService;
+		add: RowanSpecificationService;
 		add: RowanTestService;
 		add: RowanVariableService.
-	^array
+	^ array
 ]
 
 { #category : '*rowan-services-extensions' }
 RwGsPlatform >> serviceClassFor: className [
 
 	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone:[]
+]
+
+{ #category : '*rowan-services-extensions' }
+RwGsPlatform >> specificationServiceClass [
+  ^ RowanSpecificationService
 ]
