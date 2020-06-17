@@ -42,6 +42,21 @@ RowanProjectService >> = projectService [
 	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
 ]
 
+{ #category : 'client commands' }
+RowanProjectService >> addPackageNamed: packageName [
+	self rowanFixMe.	"remove after #addPackageNamed:toComponentNamed: is integrated in v2.0 work"
+	Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			self browserTool
+				addPackageNamed: packageName
+				toComponentNamed: 'Core'
+				andProjectNamed: name.
+			self update.
+			^ self answer: #'added' ].
+	self answer: #'duplicatePackage'
+]
+
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
 	name = Rowan unpackagedName
