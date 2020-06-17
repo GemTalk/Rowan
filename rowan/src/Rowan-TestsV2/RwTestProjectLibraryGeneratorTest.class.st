@@ -13,7 +13,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 	"skip spec_004, because it makes two changes in a row, so always commits"
 
 	| commitComment |
-	self class _clearLoadSpecSessionCache.
+	RwRowanSample9Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
 	commitComment := 'running testLibraryGenerator tests ... no changes expected, thus no commits exprected'.
