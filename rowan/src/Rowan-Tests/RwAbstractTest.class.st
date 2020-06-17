@@ -720,7 +720,13 @@ RwAbstractTest >> setUp [
 	super setUp.
 	self class cleanup.
 
-	Rowan platform _alternateImageClass: Rowan image testImageClass
+	Rowan platform _alternateImageClass: Rowan image testImageClass.
+
+	true
+		ifTrue: [ 
+			SessionTemps current
+				at: #'Experimental_RwGsImagePatchVisitor_V2_className'
+				put: #'RwGsImagePatchVisitor_V2_symbolList' ]
 ]
 
 { #category : 'running' }
@@ -730,4 +736,9 @@ RwAbstractTest >> tearDown [
 	Rowan platform _alternateImageClass: nil.
 	self class cleanup.
 
+	true
+		ifTrue: [ 
+			SessionTemps current
+				removeKey: #'Experimental_RwGsImagePatchVisitor_V2_className'
+				ifAbsent: [  ] ].
 ]

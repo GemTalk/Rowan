@@ -449,26 +449,6 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 	self assert: exceptions isEmpty
 ]
 
-{ #category : 'running' }
-RwRowanSample9Test >> setUp [
-	super setUp.
-	false
-		ifTrue: [ 
-			SessionTemps current
-				at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-				put: #'RwGsImagePatchVisitor_V2_symbolList' ]
-]
-
-{ #category : 'running' }
-RwRowanSample9Test >> tearDown [
-	false
-		ifTrue: [ 
-			SessionTemps current
-				removeKey: #'Experimental_RwGsImagePatchVisitor_V2_className'
-				ifAbsent: [  ] ].
-	super tearDown
-]
-
 { #category : 'migration tests' }
 RwRowanSample9Test >> testAutomaticMigration_gitolite [
 

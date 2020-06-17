@@ -38,6 +38,38 @@ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClasses: cre
    ]
 ]
 
+{ #category : 'compiling' }
+RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
+
+	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
+	behavior
+		ifNil: [ 
+			self
+				error:
+					'Class ' , self className printString , ' not found in the symbol dictionary '
+						, self symbolDictionaryName printString , ' associated with the method '
+						, methodDefinition selector printString ].
+
+  [ | sourceString protocol |
+	  sourceString := methodDefinition source.
+	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+
+	  methDict := GsMethodDictionary new.
+	  catDict := GsMethodDictionary new.
+	  compiledMethod := behavior
+		  compileMethod: sourceString
+		  dictionaries: tempSymbolList
+		  category: protocol
+		  intoMethodDict: methDict
+		  intoCategories: catDict
+		  intoPragmas: pArray
+		  environmentId: self methodEnvironmentId
+   ] on: (CompileError, CompileWarning) do:[:ex |
+     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
+     ex pass
+   ]
+]
+
 { #category : 'installing' }
 RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> installMethod [
 
