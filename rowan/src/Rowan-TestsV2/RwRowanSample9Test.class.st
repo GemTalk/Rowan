@@ -452,7 +452,7 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 { #category : 'running' }
 RwRowanSample9Test >> setUp [
 	super setUp.
-	true
+	false
 		ifTrue: [ 
 			SessionTemps current
 				at: #'Experimental_RwGsImagePatchVisitor_V2_className'
@@ -461,9 +461,11 @@ RwRowanSample9Test >> setUp [
 
 { #category : 'running' }
 RwRowanSample9Test >> tearDown [
-	SessionTemps current
-		removeKey: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [  ].
+	false
+		ifTrue: [ 
+			SessionTemps current
+				removeKey: #'Experimental_RwGsImagePatchVisitor_V2_className'
+				ifAbsent: [  ] ].
 	super tearDown
 ]
 
