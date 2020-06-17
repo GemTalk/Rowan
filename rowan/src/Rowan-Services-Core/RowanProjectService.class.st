@@ -205,7 +205,10 @@ RowanProjectService >> isSkew [
 
 { #category : 'client commands' }
 RowanProjectService >> loadProjectFromFile: fileString [
-	[ (RwSpecification fromUrl: fileString) resolveStrict load ]
+	[ 
+	((RwSpecification fromUrl: fileString)
+		customConditionalAttributes: #('tests');
+		componentNames: #('Core' 'Tests')) resolveStrict load ]
 		on: Warning
 		do: [ :ex | 
 			Transcript
