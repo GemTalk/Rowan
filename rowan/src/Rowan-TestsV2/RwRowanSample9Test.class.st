@@ -952,7 +952,6 @@ RwRowanSample9Test >> testIssue_504_4 [
 	"reverse the use of spec_0007 and spec_0006"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0006'.	
 
 	projectName := loadSpec projectName.
@@ -972,7 +971,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
 
 "resolve"
-UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolve.
 
 "load"

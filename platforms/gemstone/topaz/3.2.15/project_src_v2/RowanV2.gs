@@ -75858,6 +75858,12 @@ movedClassesMap
 	^ movedClassesMap
 %
 
+category: 'accessing'
+method: RwGsPatchSet_V2
+movedMethods
+	^ movedMethods
+%
+
 category: 'private - applying'
 method: RwGsPatchSet_V2
 movePackages
@@ -78371,6 +78377,74 @@ updatePatchesForNewClassVersion: aProjectSetModification patchSetSymbolList: pat
 
 category: 'private'
 method: RwGsClassVersioningSymbolDictPatchV2
+_createMethodAdditionModificationForNewVersionOfClassNamed: className isMeta: isMeta methodMove: aMethodMove projectSetModification: aProjectSetModification
+	| projectModification packageModification classesModification methodsModification methodDef source sourceModification modification afterMethodDef beforeMethodDef |
+	projectModification := aProjectSetModification elementsModified
+		at: aMethodMove projectAfter name
+		ifAbsentPut: [ 
+			| def |
+			def := aMethodMove projectAfter.
+			(RwProjectModification before: def after: def)
+				propertiesModification: RwPropertiesModification new;
+				packagesModification: RwPackagesModification new;
+				yourself ].
+	packageModification := projectModification packagesModification
+		elementsModified
+		at: aMethodMove packageAfter name
+		ifAbsentPut: [ 
+			| def |
+			"arrange for a new package to be added"
+			def := aMethodMove packageAfter.
+			(RwPackageModification before: def after: def)
+				classesModification: RwClassesModification new;
+				classExtensionsModification: RwClassExtensionsModification new;
+				yourself ].
+	classesModification := packageModification classesModification elementsModified
+		at: className
+		ifAbsentPut: [ 
+			| def |
+			def := aMethodMove classOrExtensionAfter.
+			(RwClassModification before: RwClassDefinition new after: def)
+				instanceMethodsModification: RwMethodsModification new;
+				classMethodsModification: RwMethodsModification new;
+				yourself ].
+	methodsModification := isMeta
+		ifTrue: [ classesModification classMethodsModification elementsModified ]
+		ifFalse: [ classesModification instanceMethodsModification elementsModified ].
+	(methodsModification at: aMethodMove methodAfter selector ifAbsent: [  ])
+		ifNil: [ 
+			afterMethodDef := beforeMethodDef := methodDef := aMethodMove methodAfter.
+			source := methodDef source.
+			sourceModification := RwSourceModification new
+				addElementModification:
+						(RwUnconditionalPropertyModification
+								key: 'source'
+								oldValue: source
+								newValue: source);
+				yourself.
+			modification := (RwMethodModificationForNewClassVersion
+				before: beforeMethodDef
+				after: afterMethodDef)
+				isMeta: isMeta;
+				classDefinition: aMethodMove classOrExtensionAfter;
+				propertiesModification: RwPropertiesModification new;
+				sourceModification: sourceModification;
+				yourself ]
+		ifNotNil: [ :theMethodModification | 
+			modification := (RwMethodModificationForNewClassVersion
+				before: theMethodModification before
+				after: theMethodModification after)
+				isMeta: isMeta;
+				classDefinition: aMethodMove classOrExtensionAfter;
+				propertiesModification: theMethodModification propertiesModification;
+				sourceModification: theMethodModification sourceModification;
+				yourself ].
+
+	methodsModification at: aMethodMove methodAfter selector put: modification
+%
+
+category: 'private'
+method: RwGsClassVersioningSymbolDictPatchV2
 _createMethodExtensionModificationForNewVersionOfClassNamed: className isMeta: isMeta loadedMethod: loadedMethod projectSetModification: aProjectSetModification
 
 	| loadedProject loadedPackage loadedClassExtension projectModification packageModification 
@@ -78450,8 +78524,98 @@ _createMethodExtensionModificationForNewVersionOfClassNamed: className isMeta: i
 
 category: 'private'
 method: RwGsClassVersioningSymbolDictPatchV2
-_updateNewClassVersionPatchesForClass: class in: aProjectSetModification patchSet: aPatchSet
+_createMethodExtensionModificationForNewVersionOfClassNamed: className isMeta: isMeta methodMove: aMethodMove projectSetModification: aProjectSetModification
+	| projectModification packageModification classExtensionModification methodsModification methodDef source sourceModification modification afterMethodDef beforeMethodDef |
+	projectModification := aProjectSetModification elementsModified
+		at: aMethodMove projectAfter name
+		ifAbsentPut: [ 
+			| def |
+			def := aMethodMove projectAfter.
+			(RwProjectModification before: def after: def)
+				propertiesModification: RwPropertiesModification new;
+				packagesModification: RwPackagesModification new;
+				yourself ].
+	packageModification := projectModification packagesModification
+		elementsModified
+		at: aMethodMove packageAfter name
+		ifAbsentPut: [ 
+			| def |
+			"arrange for a new package to be added"
+			def := aMethodMove packageAfter.
+			(RwPackageModification before: def after: def)
+				classesModification: RwClassesModification new;
+				classExtensionsModification: RwClassExtensionsModification new;
+				yourself ].
+	classExtensionModification := packageModification classExtensionsModification
+		elementsModified
+		at: className
+		ifAbsentPut: [ 
+			| def |
+			def := aMethodMove classOrExtensionAfter.
+			(RwClassExtensionModification
+				before: RwClassExtensionDefinition new
+				after: def)
+				instanceMethodsModification:
+						(RwExtensionMethodsModification extendedClassName: className);
+				classMethodsModification:
+						(RwExtensionMethodsModification extendedClassName: className);
+				yourself ].
+	methodsModification := isMeta
+		ifTrue: [ classExtensionModification classMethodsModification elementsModified ]
+		ifFalse: [ classExtensionModification instanceMethodsModification elementsModified ].
+	(methodsModification at: aMethodMove methodAfter selector ifAbsent: [  ])
+		ifNil: [ 
+			afterMethodDef := beforeMethodDef := methodDef := aMethodMove methodAfter.
+			source := methodDef source.
+			sourceModification := RwSourceModification new
+				addElementModification:
+						(RwUnconditionalPropertyModification
+								key: 'source'
+								oldValue: source
+								newValue: source);
+				yourself.
+			modification := (RwExtensionMethodModificationForNewClassVersion
+				before: beforeMethodDef
+				after: afterMethodDef)
+				isMeta: isMeta;
+				classDefinition: aMethodMove classOrExtensionAfter;
+				propertiesModification: RwPropertiesModification new;
+				sourceModification: sourceModification;
+				yourself ]
+		ifNotNil: [ :theMethodModification | 
+			modification := (RwExtensionMethodModificationForNewClassVersion
+				before: theMethodModification before
+				after: theMethodModification after)
+				isMeta: isMeta;
+				classDefinition: aMethodMove classOrExtensionAfter;
+				propertiesModification: theMethodModification propertiesModification;
+				sourceModification: theMethodModification sourceModification;
+				yourself ].
 
+	methodsModification at: aMethodMove methodAfter selector put: modification
+%
+
+category: 'private'
+method: RwGsClassVersioningSymbolDictPatchV2
+_createMethodModificationForNewVersionOfClassNamed: className methodMove: aMethodMove projectSetModification: aProjectSetModification
+	aMethodMove classOrExtensionAfter isClassExtension
+		ifTrue: [ 
+			self
+				_createMethodExtensionModificationForNewVersionOfClassNamed: className
+				isMeta: aMethodMove isMeta
+				methodMove: aMethodMove
+				projectSetModification: aProjectSetModification ]
+		ifFalse: [ 
+			self
+				_createMethodAdditionModificationForNewVersionOfClassNamed: className
+				isMeta: aMethodMove isMeta
+				methodMove: aMethodMove
+				projectSetModification: aProjectSetModification ]
+%
+
+category: 'private'
+method: RwGsClassVersioningSymbolDictPatchV2
+_updateNewClassVersionPatchesForClass: class in: aProjectSetModification patchSet: aPatchSet
 	| className extensionMap emptyDict |
 	className := class name asString.
 	extensionMap := Dictionary new.
@@ -78471,15 +78635,29 @@ _updateNewClassVersionPatchesForClass: class in: aProjectSetModification patchSe
 						put: loadedMethod ] ].
 	extensionMap isEmpty
 		ifTrue: [ ^ self ].
-	aPatchSet
-		allPatchesAffectingLiveMethodsDo: [ :patch | 
+
+	aPatchSet movedMethods
+		do: [ :aMethodMove | 
 			| methodsDict selectorDict |
 			methodsDict := extensionMap
-				at: patch classDefinition name
+				at: aMethodMove classOrExtensionAfter name
 				ifAbsent: [ emptyDict ].
-			selectorDict := patch isMeta
+
+			selectorDict := aMethodMove isMeta
 				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
-				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ] ]
+				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
+			(selectorDict removeKey: aMethodMove methodAfter selector ifAbsent: [  ])
+				ifNotNil: [ 
+					"need to arrange to add the method back into the projectSetModification"
+					self
+						_createMethodModificationForNewVersionOfClassNamed: className
+						methodMove: aMethodMove
+						projectSetModification: aProjectSetModification ] ].
+
+	aPatchSet
+		allPatchesAffectingLiveMethodsDo: [ :patch | 
+			"noop"
+			 ]
 		deletedMethodsDo: [ :patch | 
 			| methodsDict selectorDict |
 			methodsDict := extensionMap
@@ -80392,7 +80570,6 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 category: 'private'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 addRecompiledMethod: newCompiledMethod instance: registryInstance
-
 	"add a recompiled compiled method to behavior and update the loaded things"
 
 	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
@@ -80420,6 +80597,7 @@ addRecompiledMethod: newCompiledMethod instance: registryInstance
 				error:
 					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
+
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
 	^ registryInstance
@@ -80764,14 +80942,14 @@ moveClassFor: classMove
 category: 'method - patch api'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryInstance
-
 	"move a compiled method into a different protocol and update loaded things"
 
 	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
 	selector := compiledMethod selector.
 	behavior := compiledMethod inClass.
 
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
+	methodDictionary := (behavior persistentMethodDictForEnv: 0)
+		ifNil: [ Dictionary new ].
 	existingCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
