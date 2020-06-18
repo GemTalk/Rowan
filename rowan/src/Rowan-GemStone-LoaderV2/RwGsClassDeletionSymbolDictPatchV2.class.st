@@ -33,16 +33,24 @@ RwGsClassDeletionSymbolDictPatchV2 >> deleteClassFromSystem [
 ]
 
 { #category : 'accessing' }
-RwGsClassDeletionSymbolDictPatchV2 >> symbolDictionaryFor: aPackageName [
+RwGsClassDeletionSymbolDictPatchV2 >> symbolDictionary [
+	^ Rowan image symbolDictNamed: self symbolDictionaryName
+]
 
+{ #category : 'accessing' }
+RwGsClassDeletionSymbolDictPatchV2 >> symbolDictionaryFor: aPackageName [
+	self error: 'no longer implemented'
+]
+
+{ #category : 'accessing' }
+RwGsClassDeletionSymbolDictPatchV2 >> symbolDictionaryName [
 	"because this is a deletion, we can look up the symbol dictionariy directly"
 
 	| className class | 
-true ifTrue: [ ^ super symbolDictionaryFor: aPackageName].
 	className := self classDefinition name.
 	class := Rowan globalNamed: className.
 	Rowan image 
 		loadedClassAndSymbolDicitonaryForClass: class 
-		ifPresent: [:symDict :loadedClass | ^symDict ]
+		ifPresent: [:symDict :loadedClass | ^symDict  name]
 		ifAbsent: [ self error: 'No symbol dictionary found for the class ', className printString ].
 ]

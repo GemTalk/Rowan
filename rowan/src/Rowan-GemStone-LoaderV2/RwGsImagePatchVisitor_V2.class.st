@@ -263,10 +263,12 @@ RwGsImagePatchVisitor_V2 >> visitPackageModification: aPackageModification [
 	| propertiesModification beforePackage |
 	aPackageModification isAddition
 		ifTrue: [ self addAddedPackage: aPackageModification after ].
-	aPackageModification isDeletion
-		ifTrue: [ self addDeletedPackage: aPackageModification before ].
 	currentPackage := aPackageModification after.
 	beforePackage := aPackageModification before.
+	aPackageModification isDeletion
+		ifTrue: [ 
+			self addDeletedPackage: aPackageModification before.
+			currentPackage := beforePackage ].
 	aPackageModification isModification
 		ifTrue: [ 
 			propertiesModification := aPackageModification propertiesModification.
