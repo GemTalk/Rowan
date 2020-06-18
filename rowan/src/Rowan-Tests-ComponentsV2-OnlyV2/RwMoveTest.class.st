@@ -3316,7 +3316,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = (2+2). "see https://github.com/GemTalk/Rowan/issues/624"
+	self assert: registry methodRegistry size = (2+1). "see https://github.com/GemTalk/Rowan/issues/624"
 ]
 
 { #category : 'tests - issue 254' }

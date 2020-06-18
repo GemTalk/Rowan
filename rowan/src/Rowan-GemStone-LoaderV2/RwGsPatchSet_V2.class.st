@@ -373,13 +373,13 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 
 	aRwClassModification isAddition
 		ifTrue: [ 
-			| symDictName symDict |
+			| symDictName |
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
 			symDictName := aProjectDefinition
 				symbolDictNameForPackageNamed: aPackage name.
-			symDict := Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
-			(symDict at: aRwClassModification after name asSymbol otherwise: nil)
+			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+			(Rowan globalNamed: aRwClassModification after name)
 				ifNotNil: [ :global | 
 					(RwExistingVisitorAddingExistingClassNotification new
 						class: global;
