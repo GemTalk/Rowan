@@ -234,6 +234,24 @@ RowanProjectService >> loadProjectFromFile: fileString [
 ]
 
 { #category : 'client commands' }
+RowanProjectService >> loadProjectFromFile: fileString projectsHome: projectsHomePath [
+	"customConditionalAttributes: and componentNames: will 
+	eventually be parameters" 
+	[ 
+	((RwSpecification fromUrl: fileString)
+		customConditionalAttributes: #('tests');
+		projectsHome: projectsHomePath; 
+		componentNames: #('Core' 'Tests')) resolveStrict load ]
+		on: Warning
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: ex description.
+			ex resume ].
+	RowanBrowserService new updateProjects
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName] 
@@ -410,7 +428,7 @@ RowanProjectService >> refresh [
 
 { #category : 'client commands' }
 RowanProjectService >> reloadProject [
-  [ Rowan projectTools load loadProjectNamed: name ]
+  [ (Rowan projectNamed: name) load ]
     on: Warning
     do: [ :ex | 
       Transcript
