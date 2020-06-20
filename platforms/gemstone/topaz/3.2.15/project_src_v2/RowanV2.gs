@@ -49854,7 +49854,7 @@ comment
 	^ self _specification comment
 %
 
-category: 'qurying'
+category: 'querying'
 method: RwProject
 commitId
 
@@ -99059,7 +99059,7 @@ category: '*rowan-gemstone-core'
 method: RwProject
 symbolDictNameForPackageNamed: packageName
 
-	^ self _gemstonePlatformSpec symbolDictNameForPackageNamed: packageName
+	^ self _loadedProject symbolDictNameForPackageNamed: packageName
 %
 
 category: '*rowan-corev2'

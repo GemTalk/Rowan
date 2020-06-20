@@ -49665,7 +49665,7 @@ comment
 	^ self _specification comment
 %
 
-category: 'qurying'
+category: 'querying'
 method: RwProject
 commitId
 
@@ -93327,6 +93327,29 @@ otherCvs ifNotNil:[ | destCvs |
 ^failed.
 %
 
+category: '*rowan-gemstone-kernel-36x'
+method: Behavior
+_rwGciCompileMethod: sourceString dictionaries: symbolList category: aCategoryString environmentId: envId
+	"used by topaz , when session methods are enabled.
+   Returns nil for successful compilation, a warning String,
+   or signals a CompileError"
+
+	| warnStr |
+	[ 
+	Rowan gemstoneTools topaz
+		addOrUpdateMethod: sourceString
+		inProtocol: aCategoryString asString
+		forBehavior: self
+		symbolList: symbolList
+		environmentId: envId ]
+		onException: CompileWarning
+		do: [ :ex | 
+			"handle CompileWarning"
+			warnStr := ex warningString.
+			ex resume ].
+	^ warnStr
+%
+
 category: '*rowan-gemstone-kernel'
 method: Behavior
 _rwInstVar: aString constrainTo: aClass
@@ -98543,7 +98566,7 @@ category: '*rowan-gemstone-core'
 method: RwProject
 symbolDictNameForPackageNamed: packageName
 
-	^ self _gemstonePlatformSpec symbolDictNameForPackageNamed: packageName
+	^ self _loadedProject symbolDictNameForPackageNamed: packageName
 %
 
 category: '*rowan-corev2'

@@ -60,7 +60,7 @@ RwProject >> comment [
 	^ self _specification comment
 ]
 
-{ #category : 'qurying' }
+{ #category : 'querying' }
 RwProject >> commitId [
 
 	^ self _loadedProject commitId

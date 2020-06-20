@@ -41,7 +41,7 @@ RwProject >> methodEnvForPackageNamed: packageName [
 { #category : '*rowan-gemstone-core' }
 RwProject >> symbolDictNameForPackageNamed: packageName [
 
-	^ self _gemstonePlatformSpec symbolDictNameForPackageNamed: packageName
+	^ self _loadedProject symbolDictNameForPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-core' }

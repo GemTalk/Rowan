@@ -5897,6 +5897,33 @@ RwRowanSample9Test >> testSpec_0056_3 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0057 [
+	"spec_0057 should load cleanly"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSwitchRepository [
 	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 

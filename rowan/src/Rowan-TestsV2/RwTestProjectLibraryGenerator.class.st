@@ -67,6 +67,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0054: commitComment;
 	genSpec_0055: commitComment;
 	genSpec_0056: commitComment;
+	genSpec_0057: commitComment;
 	yourself
 "
 Class {
@@ -2994,6 +2995,25 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0056: resolvedProject embedd
 	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
 		copyTo: resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0057: resolvedProject [
+	"Start with spec_0000, use Rowan packageConvention; simple project with extension methods"
+
+	| packageName1 packageName2 packageName5 className |
+	self _addDefinitionsFor: resolvedProject projectName: projectName.
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName5 := projectName , '-' , 'Tests'.
+	resolvedProject
+		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
+		yourself.
+	className := projectName , 'Class1'.
+	((resolvedProject packageNamed: packageName2) addClassExtensionNamed: className)
+		addClassMethod: 'bar ^''bar''' protocol: 'accessing';
+		yourself.
 	^ resolvedProject
 ]
 
@@ -6316,6 +6336,52 @@ RwTestProjectLibraryGenerator >> genSpec_0056: commitMessage [
 		definedProject: definedProject
 		embeddedProjectDefinition: embededProjectDefinition
 		addDefinitions: [ :resolvedProject :embededProject | self _addDefinitionsFor_0056: resolvedProject embeddedProject: embededProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0057: commitMessage [
+	"Start with spec_0000, use Rowan packageConvention; simple project with extension methods"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0057'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+	title := 'Start with spec_0000, use Rowan packageConvention; simple project with extension methods'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 3
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #();
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		packageConvention: 'Rowan';
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests' };
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0057: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
