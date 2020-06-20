@@ -82950,7 +82950,7 @@ classmethod: RwLoadedProject
 _projectDefinitionPlatformConditionalAttributesKey
 	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
 
-	^ '_Project_Definition_PlatformConditionalAttricutes'
+	^ '_Project_Definition_PlatformConditionalAttributes'
 %
 
 category: 'accessing'
@@ -97415,7 +97415,7 @@ applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
 				visitorClass: visitorClass
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
-			visitorClass := (Rowan image symbolDictNamed: 'RowanLoader')
+			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
 				at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification

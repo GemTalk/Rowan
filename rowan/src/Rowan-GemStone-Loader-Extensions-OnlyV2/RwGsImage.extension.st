@@ -40,7 +40,7 @@ RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrato
 				visitorClass: visitorClass
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
-			visitorClass := (Rowan image symbolDictNamed: 'RowanLoader')
+			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
 				at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification

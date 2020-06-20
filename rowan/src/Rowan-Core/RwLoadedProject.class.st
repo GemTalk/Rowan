@@ -12,7 +12,7 @@ Class {
 RwLoadedProject class >> _projectDefinitionPlatformConditionalAttributesKey [
 	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
 
-	^ '_Project_Definition_PlatformConditionalAttricutes'
+	^ '_Project_Definition_PlatformConditionalAttributes'
 ]
 
 { #category : 'accessing' }
