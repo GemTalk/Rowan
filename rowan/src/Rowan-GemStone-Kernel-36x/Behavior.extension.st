@@ -2,9 +2,11 @@ Extension { #name : 'Behavior' }
 
 { #category : '*rowan-gemstone-kernel-36x' }
 Behavior >> _rwGciCompileMethod: sourceString dictionaries: symbolList category: aCategoryString environmentId: envId [
-	"used by topaz , when session methods are enabled.
+	"used by GCI implementation , when session methods are enabled.
    Returns nil for successful compilation, a warning String,
    or signals a CompileError"
+
+	"uses Rowan API to ensure that the method is properly packaged by Rowan"
 
 	| warnStr |
 	[ 

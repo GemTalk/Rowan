@@ -50019,6 +50019,14 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 		instanceMigrator: instanceMigrator
 %
 
+category: 'querying'
+method: RwProject
+packageNamed: aString ifAbsent: absentBlock
+	^ self packages
+		detect: [ :package | package name = aString ]
+		ifNone: absentBlock
+%
+
 category: 'accessing'
 method: RwProject
 packageNames
