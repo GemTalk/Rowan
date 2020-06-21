@@ -48491,10 +48491,25 @@ serviceClass
 category: 'public'
 classmethod: Rowan
 unpackagedName
-
-	"Answer the name used for unpackaged projects and packages"
+	"Answer the name used for projects and packages that are not in a package ... unpackaged projects and packages are where pacakge things go by default."
 
 	^ '(NONE)'
+%
+
+category: 'public'
+classmethod: Rowan
+unpackagedPackagePrefix
+	"Answer the prefix used for naming unpackaged packages"
+
+	^ self unpackagedProjectName , '-'
+%
+
+category: 'public'
+classmethod: Rowan
+unpackagedProjectName
+	"Answer the name of the unpackaged project that manages unpackaged things"
+
+	^ 'UnPackaged'
 %
 
 ! Class implementation for 'RowanCommandResult'
