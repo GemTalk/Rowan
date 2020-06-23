@@ -7223,7 +7223,7 @@ true.
 doit
 (RwGsPatchSet_V2
 	subclass: 'RwGsPatchSet_V2_symbolList'
-	instVarNames: #( tempSymbolList movedClassesSymbolList )
+	instVarNames: #( tempSymbolList movedClassesSymbolList addedUnmanagedClasses )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -7272,6 +7272,22 @@ doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassAdditionSymbolDictPatchV2'
 	instVarNames: #( newClass symbolAssociation )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanLoader
+	options: #()
+)
+		category: 'Rowan-GemStone-LoaderV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwGsClassAdditionSymbolDictPatchV2
+	subclass: 'RwGsClassUnmanagedAdditionSymbolDictPatchV2'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -65386,9 +65402,9 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 			classDef := RwClassDefinition
 				newForClassNamed: className
 				super: superclassName
-				instvars: anArrayOfStrings
-				classinstvars: anArrayOfClassInstVars
-				classvars: anArrayOfClassVars
+				instvars: (anArrayOfStrings collect: [ :each | each asString ])
+				classinstvars: (anArrayOfClassInstVars collect: [ :each | each asString ])
+				classvars: (anArrayOfClassVars collect: [ :each | each asString ])
 				category: category
 				comment: nil
 				pools: #()
@@ -65406,9 +65422,9 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 					projectSetDef addProject: classProjectDef.
 					classDef
 						superclassName: superclassName;
-						instVarNames: anArrayOfStrings;
-						classVarNames: anArrayOfClassVars;
-						classInstVarNames: anArrayOfClassInstVars;
+						instVarNames: (anArrayOfStrings collect: [ :each | each asString ]);
+						classVarNames: (anArrayOfClassVars collect: [ :each | each asString ]);
+						classInstVarNames: (anArrayOfClassInstVars collect: [ :each | each asString ]);
 						gs_options: theOptions;
 						gs_constraints: theConstraints;
 						category: category;
@@ -74867,9 +74883,10 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 
 	aRwClassModification isAddition
 		ifTrue: [ 
-			| symDictName |
+			| symDictName className |
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
+			className := aRwClassModification after name.
 			symDictName := aProjectDefinition
 				symbolDictNameForPackageNamed: aPackage name.
 			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
@@ -76019,6 +76036,13 @@ _classSymbolDictionaryMovePatchClass
 
 category: 'private - patch class accessors'
 method: RwGsPatchSet_V2
+_classUnmanagedAdditionPatchClass
+
+	^ RwGsClassUnmanagedAdditionSymbolDictPatchV2
+%
+
+category: 'private - patch class accessors'
+method: RwGsPatchSet_V2
 _classVariablePatchClass
 
 	^ RwGsClassVariableChangeSymbolDictPatchV2
@@ -76242,6 +76266,108 @@ addAddedClassesToTempSymbols
 			symDict at: key put: nil	"Just need the names for now, they don't need to resolve to anything in particular" ]
 %
 
+category: 'building'
+method: RwGsPatchSet_V2_symbolList
+addAddedUnmanagedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition
+
+	currentProjectDefinition := aProjectDefinition.
+self halt.
+	addedUnmanagedClasses
+		add:
+			((self _classUnmanagedAdditionPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+%
+
+category: 'modification dispatching'
+method: RwGsPatchSet_V2_symbolList
+addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProject: aProjectDefinition
+	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
+		while updating the loader using the loader"
+
+	aRwClassModification isAddition
+		ifTrue: [ 
+			| symDictName className |
+			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
+				in a project that is not included in this load"
+			className := aRwClassModification after name.
+			symDictName := aProjectDefinition
+				symbolDictNameForPackageNamed: aPackage name.
+			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+			(Rowan globalNamed: aRwClassModification after name)
+				ifNotNil: [ :class | 
+					(Rowan image loadedClassForClass: class ifAbsent: [  ])
+						ifNil: [ 
+							| theClassDefinition theClassModification |
+							"no loaded class exists for the class"
+							theClassDefinition := class
+								rwClassDefinitionInSymbolDictionaryNamed: symDictName.
+							theClassModification := aRwClassModification after
+								compareAgainstBase: theClassDefinition.
+							theClassModification isEmpty
+								ifTrue: [ 
+self halt.
+									self
+										addAddedUnmanagedClass: aRwClassModification after
+										inPackage: aPackage
+										inProject: aProjectDefinition.
+									(aRwClassModification propertiesModification elementsModified
+										at: 'gs_constraints'
+										ifAbsent: [  ])
+										ifNotNil: [ :constraints | 
+											"arrange to add constraints to a newly created class - constraints not created during class creation"
+											self
+												addPatchedClassConstraints: aRwClassModification after
+												inPackage: aPackage
+												inProject: aProjectDefinition ] .
+^self]
+								ifFalse: [ self halt ] ]
+						ifNotNil: [ 
+							"if the class is packaged, then it must be in another project, signal notification"
+							(RwExistingVisitorAddingExistingClassNotification new
+								class: class;
+								classDefinition: aRwClassModification after;
+								yourself) signal ] ].
+			self
+				addAddedClass: aRwClassModification after
+				inPackage: aPackage
+				inProject: aProjectDefinition.
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
+					"arrange to add constraints to a newly created class - constraints not created during class creation"
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
+						inProject: aProjectDefinition ].
+			^ self ].
+	aRwClassModification isDeletion
+		ifTrue: [ 
+			self
+				addDeletedClass: aRwClassModification before
+				inPackage: aPackage
+				inProject: aProjectDefinition ].
+	aRwClassModification isModification
+		ifTrue: [ 
+			RwGsClassVersioningPatchV2
+				addPatchedClassModification: aRwClassModification
+				inPackage: aPackage
+				inProject: aProjectDefinition
+				toPatchSet: self.
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
+					"arrange to add constraints to a newly created class - constraints not created during class creation"
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
+						inProject: aProjectDefinition ] ]
+%
+
 category: 'private - applying'
 method: RwGsPatchSet_V2_symbolList
 addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList
@@ -76384,7 +76510,20 @@ method: RwGsPatchSet_V2_symbolList
 initialize
 	super initialize.
 	tempSymbols := nil.
-	createdClasses := nil
+	createdClasses := nil.
+	addedUnmanagedClasses := Set new
+%
+
+category: 'private - applying'
+method: RwGsPatchSet_V2_symbolList
+installAddedClasses
+	"Copy the name association from TempSymbols to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
+
+	super installAddedClasses.
+	addedUnmanagedClasses do: [ :patch | self halt.
+patch installClassInSystem ]
 %
 
 category: 'private - applying'
@@ -77145,6 +77284,46 @@ oldClassVersion
 	"We are adding a new class, so there is no old version."
 
 	^nil
+%
+
+! Class implementation for 'RwGsClassUnmanagedAdditionSymbolDictPatchV2'
+
+!		Instance methods for 'RwGsClassUnmanagedAdditionSymbolDictPatchV2'
+
+category: 'actions'
+method: RwGsClassUnmanagedAdditionSymbolDictPatchV2
+createClassFor: aPatchSet
+self error: 'probably shouldn''t be implemented or sent by this class'.
+	newClass := super createClassFor: aPatchSet.
+	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
+	^ newClass
+%
+
+category: 'actions'
+method: RwGsClassUnmanagedAdditionSymbolDictPatchV2
+createClassFor: aPatchSet inSymDict: symDictName
+self halt.
+	newClass := super createClassFor: aPatchSet inSymDict: symDictName.
+	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
+	^ newClass
+%
+
+category: 'actions'
+method: RwGsClassUnmanagedAdditionSymbolDictPatchV2
+installClassInSystem
+
+	"Copy the name association to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
+
+	| loadedClass |
+self halt.
+	loadedClass := self symbolDictionaryRegistry
+		addClassAssociation: symbolAssociation
+		forClass: newClass
+		toPackageNamed: self packageName
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
+	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 %
 
 ! Class implementation for 'RwGsClassConstraintsSymDictPatchV2'
@@ -81912,27 +82091,12 @@ updateClassTypeFromClass
 	"Must be in-synch with RwClassDefinition>>_updateClassTypeFromClass:"
 
 	| propertyName oldValue newValue |
-	propertyName := 'type'. 	"needs to be listed in _classBasedProperties method"
+	propertyName := 'type'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
-	newValue := handle isBytes
-						ifTrue: [
-							handle superClass isBytes not
-								ifTrue: [ 'byteSubclass' ]
-								ifFalse: [ 'normal' ]]
-						ifFalse: [ 
-							handle areInstancesSpecial
-								ifTrue: [ 'immediate' ]
-								ifFalse: 
-									[ handle isNsc
-										ifTrue: [ 'normal' ]
-										ifFalse:  [
-											(handle isVariable and: [handle superClass isVariable not])
-												ifTrue: [ 'variable' ]
-												ifFalse: [ 'normal' ] ] ] ].
+	newValue := handle rwClassType.
 
 	oldValue = newValue
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
+		ifFalse: [ self propertyAt: propertyName put: newValue ]
 %
 
 category: 'private-updating'
@@ -93350,31 +93514,6 @@ otherCvs ifNotNil:[ | destCvs |
 ^failed.
 %
 
-category: '*rowan-gemstone-kernel-36x'
-method: Behavior
-_rwGciCompileMethod: sourceString dictionaries: symbolList category: aCategoryString environmentId: envId
-	"used by GCI implementation , when session methods are enabled.
-   Returns nil for successful compilation, a warning String,
-   or signals a CompileError"
-
-	"uses Rowan API to ensure that the method is properly packaged by Rowan"
-
-	| warnStr |
-	[ 
-	Rowan gemstoneTools topaz
-		addOrUpdateMethod: sourceString
-		inProtocol: aCategoryString asString
-		forBehavior: self
-		symbolList: symbolList
-		environmentId: envId ]
-		onException: CompileWarning
-		do: [ :ex | 
-			"handle CompileWarning"
-			warnStr := ex warningString.
-			ex resume ].
-	^ warnStr
-%
-
 category: '*rowan-gemstone-kernel'
 method: Behavior
 _rwInstVar: aString constrainTo: aClass
@@ -94267,6 +94406,52 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 		packageName: aPackageName
 		constraints: #()
 		options: optionsArray
+%
+
+category: '*rowan-gemstone-kernel-36x'
+method: Class
+rwClassDefinitionInSymbolDictionaryNamed: symDictName
+	"create an RwClassDefinition for the reciever suitable for recreating the class. Ignore methods"
+
+	| loadedClass |
+	loadedClass := Rowan image
+		loadedClassForClass: self
+		ifAbsent: [ 
+			^ (RwClassDefinition
+				newForClassNamed: self name asString
+				super: self superClass name asString
+				instvars: (self instVarNames collect: [ :each | each asString ])
+				classinstvars: (self class instVarNames collect: [ :each | each asString ])
+				classvars: (self classVarNames collect: [ :each | each asString ])
+				category: self _classCategory
+				comment: self rwComment
+				pools: (self sharedPools collect: [ :each | each name asString ]) asArray
+				type: self rwClassType)
+				gs_symbolDictionary: symDictName;
+				yourself ].
+	^ loadedClass asDefinition
+%
+
+category: '*rowan-gemstone-kernel-36x'
+method: Class
+rwClassType
+	"Answer the string the desribes the class type"
+
+	^ self isBytes
+		ifTrue: [ 
+			self superClass isBytes not
+				ifTrue: [ 'byteSubclass' ]
+				ifFalse: [ 'normal' ] ]
+		ifFalse: [ 
+			self areInstancesSpecial
+				ifTrue: [ 'immediate' ]
+				ifFalse: [ 
+					self isNsc
+						ifTrue: [ 'normal' ]
+						ifFalse: [ 
+							(self isVariable and: [ self superClass isVariable not ])
+								ifTrue: [ 'variable' ]
+								ifFalse: [ 'normal' ] ] ] ]
 %
 
 category: '*rowan-gemstone-kernel'

@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwGsPatchSet_V2',
 	#instVars : [
 		'tempSymbolList',
-		'movedClassesSymbolList'
+		'movedClassesSymbolList',
+		'addedUnmanagedClasses'
 	],
 	#category : 'Rowan-GemStone-LoaderV2'
 }
@@ -116,6 +117,106 @@ RwGsPatchSet_V2_symbolList >> addAddedClassesToTempSymbols [
 						error:
 							'Encountered an existing association for a new class ' , key asString ].
 			symDict at: key put: nil	"Just need the names for now, they don't need to resolve to anything in particular" ]
+]
+
+{ #category : 'building' }
+RwGsPatchSet_V2_symbolList >> addAddedUnmanagedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+self halt.
+	addedUnmanagedClasses
+		add:
+			((self _classUnmanagedAdditionPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'modification dispatching' }
+RwGsPatchSet_V2_symbolList >> addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProject: aProjectDefinition [
+	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
+		while updating the loader using the loader"
+
+	aRwClassModification isAddition
+		ifTrue: [ 
+			| symDictName className |
+			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
+				in a project that is not included in this load"
+			className := aRwClassModification after name.
+			symDictName := aProjectDefinition
+				symbolDictNameForPackageNamed: aPackage name.
+			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+			(Rowan globalNamed: aRwClassModification after name)
+				ifNotNil: [ :class | 
+					(Rowan image loadedClassForClass: class ifAbsent: [  ])
+						ifNil: [ 
+							| theClassDefinition theClassModification |
+							"no loaded class exists for the class"
+							theClassDefinition := class
+								rwClassDefinitionInSymbolDictionaryNamed: symDictName.
+							theClassModification := aRwClassModification after
+								compareAgainstBase: theClassDefinition.
+							theClassModification isEmpty
+								ifTrue: [ 
+self halt.
+									self
+										addAddedUnmanagedClass: aRwClassModification after
+										inPackage: aPackage
+										inProject: aProjectDefinition.
+									(aRwClassModification propertiesModification elementsModified
+										at: 'gs_constraints'
+										ifAbsent: [  ])
+										ifNotNil: [ :constraints | 
+											"arrange to add constraints to a newly created class - constraints not created during class creation"
+											self
+												addPatchedClassConstraints: aRwClassModification after
+												inPackage: aPackage
+												inProject: aProjectDefinition ] .
+^self]
+								ifFalse: [ self halt ] ]
+						ifNotNil: [ 
+							"if the class is packaged, then it must be in another project, signal notification"
+							(RwExistingVisitorAddingExistingClassNotification new
+								class: class;
+								classDefinition: aRwClassModification after;
+								yourself) signal ] ].
+			self
+				addAddedClass: aRwClassModification after
+				inPackage: aPackage
+				inProject: aProjectDefinition.
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
+					"arrange to add constraints to a newly created class - constraints not created during class creation"
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
+						inProject: aProjectDefinition ].
+			^ self ].
+	aRwClassModification isDeletion
+		ifTrue: [ 
+			self
+				addDeletedClass: aRwClassModification before
+				inPackage: aPackage
+				inProject: aProjectDefinition ].
+	aRwClassModification isModification
+		ifTrue: [ 
+			RwGsClassVersioningPatchV2
+				addPatchedClassModification: aRwClassModification
+				inPackage: aPackage
+				inProject: aProjectDefinition
+				toPatchSet: self.
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
+					"arrange to add constraints to a newly created class - constraints not created during class creation"
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
+						inProject: aProjectDefinition ] ]
 ]
 
 { #category : 'private - applying' }
@@ -251,7 +352,19 @@ RwGsPatchSet_V2_symbolList >> createNewClassesAndClassVersions [
 RwGsPatchSet_V2_symbolList >> initialize [
 	super initialize.
 	tempSymbols := nil.
-	createdClasses := nil
+	createdClasses := nil.
+	addedUnmanagedClasses := Set new
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2_symbolList >> installAddedClasses [
+	"Copy the name association from TempSymbols to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
+
+	super installAddedClasses.
+	addedUnmanagedClasses do: [ :patch | self halt.
+patch installClassInSystem ]
 ]
 
 { #category : 'private - applying' }

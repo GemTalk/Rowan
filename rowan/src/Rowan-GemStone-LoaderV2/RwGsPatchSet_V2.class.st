@@ -159,6 +159,12 @@ RwGsPatchSet_V2 >> _classSymbolDictionaryMovePatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _classUnmanagedAdditionPatchClass [
+
+	^ RwGsClassUnmanagedAdditionSymbolDictPatchV2
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classVariablePatchClass [
 
 	^ RwGsClassVariableChangeSymbolDictPatchV2
@@ -373,9 +379,10 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 
 	aRwClassModification isAddition
 		ifTrue: [ 
-			| symDictName |
+			| symDictName className |
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
+			className := aRwClassModification after name.
 			symDictName := aProjectDefinition
 				symbolDictNameForPackageNamed: aPackage name.
 			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.

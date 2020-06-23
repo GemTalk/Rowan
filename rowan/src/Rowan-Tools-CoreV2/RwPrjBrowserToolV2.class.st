@@ -208,9 +208,9 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 			classDef := RwClassDefinition
 				newForClassNamed: className
 				super: superclassName
-				instvars: anArrayOfStrings
-				classinstvars: anArrayOfClassInstVars
-				classvars: anArrayOfClassVars
+				instvars: (anArrayOfStrings collect: [ :each | each asString ])
+				classinstvars: (anArrayOfClassInstVars collect: [ :each | each asString ])
+				classvars: (anArrayOfClassVars collect: [ :each | each asString ])
 				category: category
 				comment: nil
 				pools: #()
@@ -228,9 +228,9 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 					projectSetDef addProject: classProjectDef.
 					classDef
 						superclassName: superclassName;
-						instVarNames: anArrayOfStrings;
-						classVarNames: anArrayOfClassVars;
-						classInstVarNames: anArrayOfClassInstVars;
+						instVarNames: (anArrayOfStrings collect: [ :each | each asString ]);
+						classVarNames: (anArrayOfClassVars collect: [ :each | each asString ]);
+						classInstVarNames: (anArrayOfClassInstVars collect: [ :each | each asString ]);
 						gs_options: theOptions;
 						gs_constraints: theConstraints;
 						category: category;
@@ -254,7 +254,6 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 					"shouldn't happen ... loadedClass known to exist"
 					self error: 'unexpected missing class ' , className printString ] ].
 	^ (self _loadedClassNamed: className ifAbsent: [  ]) handle currentVersion
-
 ]
 
 { #category : 'class browsing' }
