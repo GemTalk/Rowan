@@ -76272,7 +76272,6 @@ method: RwGsPatchSet_V2_symbolList
 addAddedUnmanagedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition
 
 	currentProjectDefinition := aProjectDefinition.
-self halt.
 	addedUnmanagedClasses
 		add:
 			((self _classUnmanagedAdditionPatchClass
@@ -76309,7 +76308,6 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 								compareAgainstBase: theClassDefinition.
 							theClassModification isEmpty
 								ifTrue: [ 
-self halt.
 									self
 										addAddedUnmanagedClass: aRwClassModification after
 										inPackage: aPackage
@@ -76372,8 +76370,10 @@ self halt.
 category: 'private - applying'
 method: RwGsPatchSet_V2_symbolList
 addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList
-
-	addedClasses do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
+	addedClasses
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
+	addedUnmanagedClasses
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
 	classesWithClassVariableChanges
 		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
 	classesWithNewVersions
@@ -76522,8 +76522,7 @@ installAddedClasses
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
 	super installAddedClasses.
-	addedUnmanagedClasses do: [ :patch | self halt.
-patch installClassInSystem ]
+	addedUnmanagedClasses do: [ :patch | patch installClassInSystem ]
 %
 
 category: 'private - applying'

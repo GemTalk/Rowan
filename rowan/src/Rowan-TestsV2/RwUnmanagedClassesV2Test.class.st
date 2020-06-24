@@ -11,7 +11,7 @@ RwUnmanagedClassesV2Test >> _removeUnmanagedClass [
 
 	(UserGlobals at: #'UnmanagedTestClass' ifAbsent: [])
 		ifNotNil: [ 
-			[ Rowan projectTools browse removeClassNamed: className ]
+			[ Rowan projectTools browser removeClassNamed: className ]
 				on: RwPerformingUnpackagedEditNotification
 				do: [ :ex | ex resume ] ]
 ]
@@ -48,6 +48,7 @@ UserGlobals at: #ConditionalHalt put: false.
 			[ Rowan projectTools browse removeClassNamed: className ]
 				on: RwPerformingUnpackagedEditNotification
 				do: [ :ex | ex resume ] ].
+
 
 	unmanagedClass := Object 
 		subclass: className
