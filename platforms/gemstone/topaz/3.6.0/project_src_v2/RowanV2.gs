@@ -7287,7 +7287,7 @@ true.
 doit
 (RwGsClassAdditionSymbolDictPatchV2
 	subclass: 'RwGsClassUnmanagedAdditionSymbolDictPatchV2'
-	instVarNames: #(  )
+	instVarNames: #( oldClassVersion )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -76269,7 +76269,7 @@ true ifTrue: [^ super addAddedClassesToTempSymbols ].
 
 category: 'building'
 method: RwGsPatchSet_V2_symbolList
-addAddedUnmanagedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition
+addAddedUnmanagedClass: aClassDefinition oldClassVersion: aClass inPackage: aPackageDefinition inProject: aProjectDefinition
 
 	currentProjectDefinition := aProjectDefinition.
 	addedUnmanagedClasses
@@ -76278,6 +76278,7 @@ addAddedUnmanagedClass: aClassDefinition inPackage: aPackageDefinition inProject
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
+				oldClassVersion: aClass
 				yourself)
 %
 
@@ -76310,6 +76311,7 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 								ifTrue: [ 
 									self
 										addAddedUnmanagedClass: aRwClassModification after
+										oldClassVersion: class
 										inPackage: aPackage
 										inProject: aProjectDefinition.
 									(aRwClassModification propertiesModification elementsModified
@@ -77304,29 +77306,33 @@ self error: 'probably shouldn''t be implemented or sent by this class'.
 
 category: 'actions'
 method: RwGsClassUnmanagedAdditionSymbolDictPatchV2
-createClassFor: aPatchSet inSymDict: symDictName
-self halt.
-	newClass := super createClassFor: aPatchSet inSymDict: symDictName.
-	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
-	^ newClass
-%
-
-category: 'actions'
-method: RwGsClassUnmanagedAdditionSymbolDictPatchV2
 installClassInSystem
-
 	"Copy the name association to the correct 
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
 	| loadedClass |
-self halt.
+	[ 
 	loadedClass := self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
 		forClass: newClass
 		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ]
+		on: RwExistingAssociationWithSameKeyNotification
+		do: [ :ex | ex resume ].
 	loadedClass updatePropertiesFromClassDefinition: self classDefinition
+%
+
+category: 'accessing'
+method: RwGsClassUnmanagedAdditionSymbolDictPatchV2
+oldClassVersion
+	^oldClassVersion
+%
+
+category: 'accessing'
+method: RwGsClassUnmanagedAdditionSymbolDictPatchV2
+oldClassVersion: object
+	oldClassVersion := object
 %
 
 ! Class implementation for 'RwGsClassConstraintsSymDictPatchV2'

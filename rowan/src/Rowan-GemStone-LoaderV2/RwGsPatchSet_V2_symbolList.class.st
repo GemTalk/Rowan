@@ -121,7 +121,7 @@ true ifTrue: [^ super addAddedClassesToTempSymbols ].
 ]
 
 { #category : 'building' }
-RwGsPatchSet_V2_symbolList >> addAddedUnmanagedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet_V2_symbolList >> addAddedUnmanagedClass: aClassDefinition oldClassVersion: aClass inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	addedUnmanagedClasses
@@ -130,6 +130,7 @@ RwGsPatchSet_V2_symbolList >> addAddedUnmanagedClass: aClassDefinition inPackage
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
+				oldClassVersion: aClass
 				yourself)
 ]
 
@@ -161,6 +162,7 @@ RwGsPatchSet_V2_symbolList >> addClassModification: aRwClassModification toPatch
 								ifTrue: [ 
 									self
 										addAddedUnmanagedClass: aRwClassModification after
+										oldClassVersion: class
 										inPackage: aPackage
 										inProject: aProjectDefinition.
 									(aRwClassModification propertiesModification elementsModified
