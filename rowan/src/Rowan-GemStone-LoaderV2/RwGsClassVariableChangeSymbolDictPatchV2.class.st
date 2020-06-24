@@ -63,16 +63,11 @@ RwGsClassVariableChangeSymbolDictPatchV2 >> installPropertiesPatchSymbolListFor:
 	existingClass := symDict
 		at: className
 		ifAbsent: [ 
-			(aPatchSet class
-				lookupSymbolDictName: self symbolDictionaryName
-				in: aPatchSet tempSymbolList)
+			aPatchSet tempSymbols
 				at: className
 				ifAbsent: [ 
-					(aPatchSet tempSymbolList resolveSymbol: className)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							self error: 'Cannot find class to update class variables for.' ]
-						ifNotNil: [ :assoc | assoc value ] ] ].
+					"cannot find class ... caller can decide whether or not that is a problem"
+					self error: 'Cannot find class to update class variables for.' ] ].
 	aSymbolDictionaryRegistry
 		updateClassProperties: existingClass
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2

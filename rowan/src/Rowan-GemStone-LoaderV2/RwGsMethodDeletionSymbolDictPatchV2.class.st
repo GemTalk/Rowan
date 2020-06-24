@@ -36,6 +36,22 @@ RwGsMethodDeletionSymbolDictPatchV2 >> deleteMethodNewClasses: createdClasses an
 ]
 
 { #category : 'deleting' }
+RwGsMethodDeletionSymbolDictPatchV2 >> deleteMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
+	self
+		primeBehaviorNewClassesSymbolList: createdClasses
+		andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			"class is being deleted, nothing else to do"
+			^ self ].
+
+	self symbolDictionaryRegistry
+		deleteMethod: methodDefinition selector
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+]
+
+{ #category : 'deleting' }
 RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
 
 	"remove the method from deleted things"
@@ -48,6 +64,18 @@ RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClasses: created
 
 { #category : 'deleting' }
 RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
+	"remove the method from deleted things"
+
+	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
+
+	self symbolDictionaryRegistry
+		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+]
+
+{ #category : 'deleting' }
+RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
 	"remove the method from deleted things"
 
 	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "

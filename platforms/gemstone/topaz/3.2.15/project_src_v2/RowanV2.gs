@@ -76439,6 +76439,7 @@ res := { } .
 category: 'private - applying'
 method: RwGsPatchSet_V2_symbolList
 addAddedClassesToTempSymbols
+true ifTrue: [^ super addAddedClassesToTempSymbols ].
 	addedClasses
 		do: [ :patch | 
 			| key symDict symDictName |
@@ -76572,8 +76573,8 @@ category: 'private - applying'
 method: RwGsPatchSet_V2_symbolList
 compileMethodPatch: aMethodAdditionPatch
 	aMethodAdditionPatch
-		compileUsingNewClasses: self createdClasses
-		andExistingClassSymbolList: self tempSymbolList
+		compileUsingNewClassesSymbolList: self createdClasses
+		andExistingClasses: self tempSymbolList
 %
 
 category: 'private - applying'
@@ -76698,7 +76699,6 @@ category: 'initialization'
 method: RwGsPatchSet_V2_symbolList
 initialize
 	super initialize.
-	tempSymbols := nil.
 	createdClasses := nil.
 	addedUnmanagedClasses := Set new
 %
@@ -76749,8 +76749,8 @@ recordCompiledForNewClassVersionDeletions
 	deleteNewVersionMethods
 		do: [ :each | 
 			each
-				primeBehaviorNewClasses: self createdClasses
-				andExistingClassSymbolList: self tempSymbolList ]
+				primeBehaviorNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 %
 
 category: 'private - applying'
@@ -76758,11 +76758,15 @@ method: RwGsPatchSet_V2_symbolList
 removeDeletedClassesFromTempSymbols
 	"Deleted class names should not resolve during compilation."
 
+	true
+		ifTrue: [ ^ super removeDeletedClassesFromTempSymbols ].
 	deletedClasses
 		do: [ :patch | 
 			| symDictName symDict |
 			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := self class  lookupSymbolDictName: symDictName in: self tempSymbolList.
+			symDict := self class
+				lookupSymbolDictName: symDictName
+				in: self tempSymbolList.
 			symDict removeKey: patch className asSymbol ]
 %
 
@@ -76774,13 +76778,13 @@ removeDeletedMethods
 			| className |
 			className := methodDeletionPatch className.
 			methodDeletionPatch
-				deleteMethodNewClasses: self createdClasses
-				andExistingClassSymbolList: self tempSymbolList ].
+				deleteMethodNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbolList ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
-				deleteNewVersionMethodNewClasses: self createdClasses
-				andExistingClassSymbolList: self tempSymbolList ]
+				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbolList ]
 %
 
 category: 'private - applying'
@@ -76791,6 +76795,9 @@ setupForApply
 	to compile methods during this apply operation."
 
 	| symbolList |
+	true
+		ifTrue: [ ^ super setupForApply ].
+
 	symbolList := Rowan image symbolList.
 	1 to: symbolList size do: [ :index | 
 		| dict symDictName symDict |
@@ -76817,22 +76824,19 @@ superclassNamed: aName ifAbsent: absentBlock
 	superclassName := aName asSymbol.
 	^ (self createdClasses resolveSymbol: superclassName)
 		ifNotNil: [ :assoc | assoc value ]
-		ifNil: [ 
-			(self tempSymbolList resolveSymbol: superclassName)
-				ifNotNil: [ :assoc | assoc value ]
-				ifNil: absentBlock ]
+		ifNil: [ self tempSymbolList at: superclassName ifAbsent: absentBlock ]
 %
 
 category: 'patch access'
 method: RwGsPatchSet_V2_symbolList
 tempAssociationFor: aName
-	^ self tempSymbolList resolveSymbol: aName
+	^ self tempSymbolList associationAt: aName
 %
 
 category: 'accessing'
 method: RwGsPatchSet_V2_symbolList
 tempSymbolList
-	^ tempSymbolList ifNil: [ tempSymbolList :=  self _createNewSymbolList ]
+	^ tempSymbols
 %
 
 category: 'private - applying'
@@ -76848,15 +76852,15 @@ updateClassProperties
 		addAll:
 				(self class
 						classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges
-						tempSymbolList: ts);
+						tempSymbols: ts);
 		addAll:
 				(self class
 						classPatchesInReverseHierarchyOrder: classesWithPropertyChanges
-						tempSymbolList: ts);
+						tempSymbols: ts);
 		addAll:
 				(self class
 						classPatchesInReverseHierarchyOrder: classesWithConstraintChanges
-						tempSymbolList: ts);
+						tempSymbols: ts);
 		yourself.
 	classPatches
 		do: [ :patch | 
@@ -76954,8 +76958,8 @@ updateMethodProperties
 	methodsWithPropertyChanges
 		do: [ :each | 
 			each
-				installPropertiesPatchNewClasses: self createdClasses
-				andExistingClassSymbolList: self tempSymbolList ]
+				installPropertiesPatchNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 %
 
 category: 'dispatching'
@@ -77617,9 +77621,7 @@ installPropertiesPatchSymbolListFor: aPatchSet registry: aSymbolDictionaryRegist
 		in: aPatchSet createdClasses)
 		at: className
 		ifAbsent: [ 
-			aPatchSet class
-				lookupSymbolDictName: self symbolDictionaryName
-				in: aPatchSet tempSymbolList
+			aPatchSet tempSymbols
 				at: className
 				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ] ].
 	existingConstraintsMap := Dictionary new.
@@ -77835,17 +77837,14 @@ installPropertiesPatchSymbolListFor: aPatchSet registry: aSymbolDictionaryRegist
 	existingClass := symDict
 		at: className
 		ifAbsent: [ 
-			(aPatchSet class
-				lookupSymbolDictName: self symbolDictionaryName
-				in: aPatchSet tempSymbolList)
+			aPatchSet tempSymbols
 				at: className
 				ifAbsent: [ 
-					(aPatchSet tempSymbolList resolveSymbol: className)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							self error: 'Cannot find class to update properties for.' ]
-						ifNotNil: [ :assoc | assoc value ] ] ].
-	createdClass := self createClassFor: aPatchSet inSymDict: self symbolDictionaryName.	"use createClassFor:, but not expected to create new class version"
+					"cannot find class ... caller can decide whether or not that is a problem"
+					self error: 'Cannot find class to update properties for.' ] ].
+	createdClass := self
+		createClassFor: aPatchSet
+		inSymDict: self symbolDictionaryName.	"use createClassFor:, but not expected to create new class version"
 	createdClass == existingClass
 		ifFalse: [ 
 			self
@@ -77981,16 +77980,11 @@ installPropertiesPatchSymbolListFor: aPatchSet registry: aSymbolDictionaryRegist
 	existingClass := symDict
 		at: className
 		ifAbsent: [ 
-			(aPatchSet class
-				lookupSymbolDictName: self symbolDictionaryName
-				in: aPatchSet tempSymbolList)
+			aPatchSet tempSymbols
 				at: className
 				ifAbsent: [ 
-					(aPatchSet tempSymbolList resolveSymbol: className)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							self error: 'Cannot find class to update class variables for.' ]
-						ifNotNil: [ :assoc | assoc value ] ] ].
+					"cannot find class ... caller can decide whether or not that is a problem"
+					self error: 'Cannot find class to update class variables for.' ] ].
 	aSymbolDictionaryRegistry
 		updateClassProperties: existingClass
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
@@ -79020,6 +79014,42 @@ compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolLis
 			ex pass ]
 %
 
+category: 'compiling'
+method: RwGsMethodPatchV2
+compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
+	self
+		primeBehaviorNewClassesSymbolList: createdClasses
+		andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			self
+				error:
+					'Class ' , self className printString , ' not found in the symbol dictionary '
+						, self symbolDictionaryName printString , ' associated with the method '
+						, methodDefinition selector printString ].
+
+	[ 
+	| sourceString protocol symbolList |
+	sourceString := methodDefinition source.
+	symbolList := SymbolList with: tempSymbols.
+	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	compiledMethod := behavior
+		compileMethod: sourceString
+		dictionaries: symbolList
+		category: protocol
+		intoMethodDict: false
+		intoCategories: nil
+		intoPragmas: nil
+		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
+		on: CompileError , CompileWarning
+		do: [ :ex | 
+			ex
+				addText:
+					(RwRepositoryResolvedProjectTonelReaderVisitorV2
+						lineNumberStringForMethod: methodDefinition).
+			ex pass ]
+%
+
 category: 'initializers'
 method: RwGsMethodPatchV2
 isAnInitializer
@@ -79139,6 +79169,31 @@ primeBehaviorNewClasses: createdClassesSymbolList andExistingClassSymbolList: te
 							"cannot find class ... caller can decide whether or not that is a problem"
 							^ self ]
 						ifNotNil: [ :assoc | assoc value ] ] ].
+	behavior := isMeta
+		ifTrue: [ class class ]
+		ifFalse: [ class ]
+%
+
+category: 'private'
+method: RwGsMethodPatchV2
+primeBehaviorNewClassesSymbolList: createdClassesSymbolList andExistingClasses: tempSymbols
+	| className class symDictName |
+	classDefinition key
+		ifNil: [ 
+			"class is being deleted ... we're done"
+			^ self ].
+	className := classDefinition key asSymbol.
+	symDictName := self symbolDictionaryName.
+	class := (RwGsPatchSet_V2_symbolList
+		lookupSymbolDictName: symDictName
+		in: createdClassesSymbolList)
+		at: className
+		ifAbsent: [ 
+			tempSymbols
+				at: className
+				ifAbsent: [ 
+					"cannot find class ... caller can decide whether or not that is a problem"
+					^ self ] ].
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ]
@@ -79292,6 +79347,23 @@ deleteMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolLis
 
 category: 'deleting'
 method: RwGsMethodDeletionSymbolDictPatchV2
+deleteMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
+	self
+		primeBehaviorNewClassesSymbolList: createdClasses
+		andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			"class is being deleted, nothing else to do"
+			^ self ].
+
+	self symbolDictionaryRegistry
+		deleteMethod: methodDefinition selector
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
+category: 'deleting'
+method: RwGsMethodDeletionSymbolDictPatchV2
 deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols
 
 	"remove the method from deleted things"
@@ -79305,6 +79377,19 @@ deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols
 category: 'deleting'
 method: RwGsMethodDeletionSymbolDictPatchV2
 deleteNewVersionMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
+	"remove the method from deleted things"
+
+	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
+
+	self symbolDictionaryRegistry
+		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
+category: 'deleting'
+method: RwGsMethodDeletionSymbolDictPatchV2
+deleteNewVersionMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
 	"remove the method from deleted things"
 
 	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
@@ -79541,6 +79626,45 @@ compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolLis
    ]
 %
 
+category: 'compiling'
+method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
+compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
+	self
+		primeBehaviorNewClassesSymbolList: createdClasses
+		andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			self
+				error:
+					'Class ' , self className printString , ' not found in the symbol dictionary '
+						, self symbolDictionaryName printString , ' associated with the method '
+						, methodDefinition selector printString ].
+
+	[ 
+	| sourceString protocol symbolList |
+	sourceString := methodDefinition source.
+	symbolList := SymbolList with: tempSymbols.
+	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+
+	methDict := GsMethodDictionary new.
+	catDict := GsMethodDictionary new.
+	compiledMethod := behavior
+		compileMethod: sourceString
+		dictionaries: symbolList
+		category: protocol
+		intoMethodDict: methDict
+		intoCategories: catDict
+		intoPragmas: pArray
+		environmentId: self methodEnvironmentId ]
+		on: CompileError , CompileWarning
+		do: [ :ex | 
+			ex
+				addText:
+					(RwRepositoryResolvedProjectTonelReaderVisitorV2
+						lineNumberStringForMethod: methodDefinition).
+			ex pass ]
+%
+
 category: 'installing'
 method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
 installMethod
@@ -79599,6 +79723,34 @@ installPropertiesPatchNewClasses: createdClasses andExistingClassSymbolList: tem
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
 	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
+	selector := methodDefinition selector.
+	oldCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing CompileMethod found for patched method.' ].
+
+	self symbolDictionaryRegistry
+		moveCompiledMethod: oldCompiledMethod
+		toProtocol: self propertiesProtocolName
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
+category: 'installing'
+method: RwGsMethodPropertiesSymDictPatchV2
+installPropertiesPatchNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
+	" update method protocol and update loadedMethod with new compiled method"
+
+	| methodDictionary oldCompiledMethod |
+	self
+		primeBehaviorNewClassesSymbolList: createdClasses
+		andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
+
+	methodDictionary := (behavior persistentMethodDictForEnv: 0)
+		ifNil: [ Dictionary new ].
 	selector := methodDefinition selector.
 	oldCompiledMethod := methodDictionary
 		at: selector
@@ -98132,6 +98284,9 @@ classmethod: RwGsImage
 applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
 	| visitorClassName visitorClass |
 	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
+	visitorClassName := SessionTemps current
+		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
+		ifAbsent: [ #'RwGsImagePatchVisitor_V2' ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
 			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.

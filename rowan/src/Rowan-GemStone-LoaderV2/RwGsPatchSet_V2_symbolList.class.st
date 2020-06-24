@@ -103,6 +103,7 @@ RwGsPatchSet_V2_symbolList >> _createNewSymbolList [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> addAddedClassesToTempSymbols [
+true ifTrue: [^ super addAddedClassesToTempSymbols ].
 	addedClasses
 		do: [ :patch | 
 			| key symDict symDictName |
@@ -232,8 +233,8 @@ RwGsPatchSet_V2_symbolList >> addCreatedClassesAndVersionsToSymbolList: newClass
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> compileMethodPatch: aMethodAdditionPatch [
 	aMethodAdditionPatch
-		compileUsingNewClasses: self createdClasses
-		andExistingClassSymbolList: self tempSymbolList
+		compileUsingNewClassesSymbolList: self createdClasses
+		andExistingClasses: self tempSymbolList
 ]
 
 { #category : 'private - applying' }
@@ -351,7 +352,6 @@ RwGsPatchSet_V2_symbolList >> createNewClassesAndClassVersions [
 { #category : 'initialization' }
 RwGsPatchSet_V2_symbolList >> initialize [
 	super initialize.
-	tempSymbols := nil.
 	createdClasses := nil.
 	addedUnmanagedClasses := Set new
 ]
@@ -397,19 +397,23 @@ RwGsPatchSet_V2_symbolList >> recordCompiledForNewClassVersionDeletions [
 	deleteNewVersionMethods
 		do: [ :each | 
 			each
-				primeBehaviorNewClasses: self createdClasses
-				andExistingClassSymbolList: self tempSymbolList ]
+				primeBehaviorNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
+	true
+		ifTrue: [ ^ super removeDeletedClassesFromTempSymbols ].
 	deletedClasses
 		do: [ :patch | 
 			| symDictName symDict |
 			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := self class  lookupSymbolDictName: symDictName in: self tempSymbolList.
+			symDict := self class
+				lookupSymbolDictName: symDictName
+				in: self tempSymbolList.
 			symDict removeKey: patch className asSymbol ]
 ]
 
@@ -420,13 +424,13 @@ RwGsPatchSet_V2_symbolList >> removeDeletedMethods [
 			| className |
 			className := methodDeletionPatch className.
 			methodDeletionPatch
-				deleteMethodNewClasses: self createdClasses
-				andExistingClassSymbolList: self tempSymbolList ].
+				deleteMethodNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbolList ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
-				deleteNewVersionMethodNewClasses: self createdClasses
-				andExistingClassSymbolList: self tempSymbolList ]
+				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbolList ]
 ]
 
 { #category : 'private - applying' }
@@ -436,6 +440,9 @@ RwGsPatchSet_V2_symbolList >> setupForApply [
 	to compile methods during this apply operation."
 
 	| symbolList |
+	true
+		ifTrue: [ ^ super setupForApply ].
+
 	symbolList := Rowan image symbolList.
 	1 to: symbolList size do: [ :index | 
 		| dict symDictName symDict |
@@ -461,20 +468,17 @@ RwGsPatchSet_V2_symbolList >> superclassNamed: aName ifAbsent: absentBlock [
 	superclassName := aName asSymbol.
 	^ (self createdClasses resolveSymbol: superclassName)
 		ifNotNil: [ :assoc | assoc value ]
-		ifNil: [ 
-			(self tempSymbolList resolveSymbol: superclassName)
-				ifNotNil: [ :assoc | assoc value ]
-				ifNil: absentBlock ]
+		ifNil: [ self tempSymbolList at: superclassName ifAbsent: absentBlock ]
 ]
 
 { #category : 'patch access' }
 RwGsPatchSet_V2_symbolList >> tempAssociationFor: aName [
-	^ self tempSymbolList resolveSymbol: aName
+	^ self tempSymbolList associationAt: aName
 ]
 
 { #category : 'accessing' }
 RwGsPatchSet_V2_symbolList >> tempSymbolList [
-	^ tempSymbolList ifNil: [ tempSymbolList :=  self _createNewSymbolList ]
+	^ tempSymbols
 ]
 
 { #category : 'private - applying' }
@@ -489,15 +493,15 @@ RwGsPatchSet_V2_symbolList >> updateClassProperties [
 		addAll:
 				(self class
 						classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges
-						tempSymbolList: ts);
+						tempSymbols: ts);
 		addAll:
 				(self class
 						classPatchesInReverseHierarchyOrder: classesWithPropertyChanges
-						tempSymbolList: ts);
+						tempSymbols: ts);
 		addAll:
 				(self class
 						classPatchesInReverseHierarchyOrder: classesWithConstraintChanges
-						tempSymbolList: ts);
+						tempSymbols: ts);
 		yourself.
 	classPatches
 		do: [ :patch | 
@@ -593,8 +597,8 @@ RwGsPatchSet_V2_symbolList >> updateMethodProperties [
 	methodsWithPropertyChanges
 		do: [ :each | 
 			each
-				installPropertiesPatchNewClasses: self createdClasses
-				andExistingClassSymbolList: self tempSymbolList ]
+				installPropertiesPatchNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 ]
 
 { #category : 'dispatching' }

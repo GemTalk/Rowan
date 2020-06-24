@@ -97,9 +97,7 @@ RwGsClassConstraintsSymDictPatchV2 >> installPropertiesPatchSymbolListFor: aPatc
 		in: aPatchSet createdClasses)
 		at: className
 		ifAbsent: [ 
-			aPatchSet class
-				lookupSymbolDictName: self symbolDictionaryName
-				in: aPatchSet tempSymbolList
+			aPatchSet tempSymbols
 				at: className
 				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ] ].
 	existingConstraintsMap := Dictionary new.

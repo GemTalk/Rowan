@@ -9,7 +9,7 @@ RwUnmanagedClassesV2Test >> _removeUnmanagedClass [
 	| className |
 	className := self _unmanagedClassName.
 
-	(Rowan globalNamed: className)
+	(UserGlobals at: #'UnmanagedTestClass' ifAbsent: [])
 		ifNotNil: [ 
 			[ Rowan projectTools browse removeClassNamed: className ]
 				on: RwPerformingUnpackagedEditNotification
@@ -38,6 +38,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass [
 	"should be able to use Rowan expression to package an unmanaged class"
 
 	| unmanagedPackageName className unmanagedClass managedClass |
+UserGlobals at: #ConditionalHalt put: false.
 	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
 
 	className := self _unmanagedClassName.
@@ -47,7 +48,8 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass [
 			[ Rowan projectTools browse removeClassNamed: className ]
 				on: RwPerformingUnpackagedEditNotification
 				do: [ :ex | ex resume ] ].
-	unmanagedClass := Object
+
+	unmanagedClass := Object 
 		subclass: className
 		instVarNames: #(#'xxx')
 		classVars: #()
