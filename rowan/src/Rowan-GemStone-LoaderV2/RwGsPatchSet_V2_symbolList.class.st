@@ -164,18 +164,23 @@ RwGsPatchSet_V2_symbolList >> addClassModification: aRwClassModification toPatch
 										addAddedUnmanagedClass: aRwClassModification after
 										oldClassVersion: class
 										inPackage: aPackage
-										inProject: aProjectDefinition.
-									(aRwClassModification propertiesModification elementsModified
-										at: 'gs_constraints'
-										ifAbsent: [  ])
-										ifNotNil: [ :constraints | 
-											"arrange to add constraints to a newly created class - constraints not created during class creation"
-											self
-												addPatchedClassConstraints: aRwClassModification after
-												inPackage: aPackage
-												inProject: aProjectDefinition ] .
-^self]
-								ifFalse: [ self halt ] ]
+										inProject: aProjectDefinition ]
+								ifFalse: [ 
+									aRwClassModification before: theClassDefinition.
+									self
+										addPatchedUnmanagedClassNewVersion: aRwClassModification
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							(aRwClassModification propertiesModification elementsModified
+								at: 'gs_constraints'
+								ifAbsent: [  ])
+								ifNotNil: [ :constraints | 
+									"arrange to add constraints to a newly created class - constraints not created during class creation"
+									self
+										addPatchedClassConstraints: aRwClassModification after
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							^ self ]
 						ifNotNil: [ 
 							"if the class is packaged, then it must be in another project, signal notification"
 							(RwExistingVisitorAddingExistingClassNotification new

@@ -165,6 +165,12 @@ RwGsPatchSet_V2 >> _classUnmanagedAdditionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _classUnmanagedVersioningPatchClass [
+
+	^ RwGsClassUnmanagedVersioningSymbolDictPatchV2
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classVariablePatchClass [
 
 	^ RwGsClassVariableChangeSymbolDictPatchV2
@@ -803,6 +809,20 @@ RwGsPatchSet_V2 >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition
 				forMethod: aInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
+RwGsPatchSet_V2 >> addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+
+	classesWithNewVersions
+		add:
+			((self _classUnmanagedVersioningPatchClass
+				for: aClassModification
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)

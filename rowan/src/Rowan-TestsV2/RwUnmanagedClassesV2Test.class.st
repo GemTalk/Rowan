@@ -34,11 +34,10 @@ RwUnmanagedClassesV2Test >> tearDown [
 ]
 
 { #category : 'tests' }
-RwUnmanagedClassesV2Test >> testUnmanagedClass [
-	"should be able to use Rowan expression to package an unmanaged class"
+RwUnmanagedClassesV2Test >> testUnmanagedClass_01 [
+	"Use project browser class creation expression to package an unmanaged class"
 
 	| unmanagedPackageName className unmanagedClass managedClass |
-UserGlobals at: #ConditionalHalt put: false.
 	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
 
 	className := self _unmanagedClassName.
@@ -72,4 +71,44 @@ UserGlobals at: #ConditionalHalt put: false.
 		options: #().
 
 	self assert: unmanagedClass == managedClass.
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_01 [
+	"Use project browser class creation expression to package and create a new version of an unmanaged class"
+
+	| unmanagedPackageName className unmanagedClass managedClass |
+	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+
+	className := self _unmanagedClassName.
+
+	(Rowan globalNamed: className)
+		ifNotNil: [ 
+			[ Rowan projectTools browse removeClassNamed: className ]
+				on: RwPerformingUnpackagedEditNotification
+				do: [ :ex | ex resume ] ].
+
+	unmanagedClass := Object 
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		options: #().
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+
+	managedClass := Object
+		rwSubclass: className
+		instVarNames: #(#'xxx' #'yyy')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: nil
+		packageName: unmanagedPackageName
+		constraints: #()
+		options: #().
+
+	self assert: unmanagedClass ~~ managedClass.
 ]

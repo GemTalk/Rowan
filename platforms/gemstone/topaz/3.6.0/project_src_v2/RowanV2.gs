@@ -7429,6 +7429,22 @@ true.
 %
 
 doit
+(RwGsClassVersioningSymbolDictPatchV2
+	subclass: 'RwGsClassUnmanagedVersioningSymbolDictPatchV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanLoader
+	options: #()
+)
+		category: 'Rowan-GemStone-LoaderV2';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (RwGsPatchV2
 	subclass: 'RwGsMethodPatchV2'
 	instVarNames: #( isMeta methodDefinition classDefinition behavior selector compiledMethod )
@@ -75329,6 +75345,21 @@ addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDef
 				yourself)
 %
 
+category: 'building'
+method: RwGsPatchSet_V2
+addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition
+
+	currentProjectDefinition := aProjectDefinition.
+
+	classesWithNewVersions
+		add:
+			((self _classUnmanagedVersioningPatchClass
+				for: aClassModification
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+%
+
 category: 'private - applying'
 method: RwGsPatchSet_V2
 allPatchesAffectingLiveMethodsDo: liveMethodsBlock deletedMethodsDo: deletedMethodsBlock
@@ -76043,6 +76074,13 @@ _classUnmanagedAdditionPatchClass
 
 category: 'private - patch class accessors'
 method: RwGsPatchSet_V2
+_classUnmanagedVersioningPatchClass
+
+	^ RwGsClassUnmanagedVersioningSymbolDictPatchV2
+%
+
+category: 'private - patch class accessors'
+method: RwGsPatchSet_V2
 _classVariablePatchClass
 
 	^ RwGsClassVariableChangeSymbolDictPatchV2
@@ -76313,18 +76351,23 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 										addAddedUnmanagedClass: aRwClassModification after
 										oldClassVersion: class
 										inPackage: aPackage
-										inProject: aProjectDefinition.
-									(aRwClassModification propertiesModification elementsModified
-										at: 'gs_constraints'
-										ifAbsent: [  ])
-										ifNotNil: [ :constraints | 
-											"arrange to add constraints to a newly created class - constraints not created during class creation"
-											self
-												addPatchedClassConstraints: aRwClassModification after
-												inPackage: aPackage
-												inProject: aProjectDefinition ] .
-^self]
-								ifFalse: [ self halt ] ]
+										inProject: aProjectDefinition ]
+								ifFalse: [ 
+									aRwClassModification before: theClassDefinition.
+									self
+										addPatchedUnmanagedClassNewVersion: aRwClassModification
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							(aRwClassModification propertiesModification elementsModified
+								at: 'gs_constraints'
+								ifAbsent: [  ])
+								ifNotNil: [ :constraints | 
+									"arrange to add constraints to a newly created class - constraints not created during class creation"
+									self
+										addPatchedClassConstraints: aRwClassModification after
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							^ self ]
 						ifNotNil: [ 
 							"if the class is packaged, then it must be in another project, signal notification"
 							(RwExistingVisitorAddingExistingClassNotification new
@@ -78707,6 +78750,69 @@ _updateNewClassVersionPatchesForClass: class in: aProjectSetModification patchSe
 						isMeta: true
 						loadedMethod: loadedMethod
 						projectSetModification: aProjectSetModification ] ]
+%
+
+! Class implementation for 'RwGsClassUnmanagedVersioningSymbolDictPatchV2'
+
+!		Instance methods for 'RwGsClassUnmanagedVersioningSymbolDictPatchV2'
+
+category: 'new version support'
+method: RwGsClassUnmanagedVersioningSymbolDictPatchV2
+updatePatchesForNewClassVersion: aProjectSetModification patchSetSymbolList: patchSet
+	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
+	movedDeletedMap := Dictionary new.
+	(patchSet class
+		lookupSymbolDictName: self symbolDictionaryName
+		in: patchSet movedClassesSymbolList)
+		keysAndValuesDo: [ :className :classMove | movedDeletedMap at: className put: classMove ].
+	existingClass := self oldClassVersion.
+	existingClassName := existingClass name asString.
+
+	loadedClass := self existingSymbolDictionaryRegistry
+		existingForClass: existingClass
+		ifAbsent: [ 
+			"
+				we happen to be modifying the existing project modification, so I think
+					it may be practical to fabricate a newVersionClassModification
+					that matches the one that would have been created if the before
+					class had been packaged.
+
+				So a little ifNotNil error action and then convert the remainder of the 
+					method to do what we need
+			"
+			self halt ].
+	loadedClassDefinition := loadedClass asDefinition.
+	loadedPackageName := loadedClass loadedPackage name.
+
+	newVersionClassModification := self classDefinition
+		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
+	newVersionClassModification isEmpty
+		ifFalse: [ 
+			"only newVersionClassModification with substance need further processing"
+			aProjectSetModification
+				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification | 
+					classesModification isEmpty
+						ifFalse: [ 
+							| classesModified |
+							classesModified := classesModification elementsModified.
+							(classesModified at: existingClassName ifAbsent: [  ])
+								ifNil: [ 
+									"not unexpected ... if there are multiple packages involved"
+									 ]
+								ifNotNil: [ :existingClassModification | 
+									| deleteClassModification |
+									deleteClassModification := false.
+									(movedDeletedMap at: existingClassName ifAbsent: [  ])
+										ifNotNil: [ :classMove | 
+											deleteClassModification := classMove packageBefore name
+												= packageModification after name ].
+									deleteClassModification
+										ifTrue: [ classesModified removeKey: existingClassName ]
+										ifFalse: [ 
+											newVersionClassModification mergeForExistingClassWith: existingClassModification.
+											classesModified
+												at: existingClassName
+												put: newVersionClassModification ] ] ] ] ]
 %
 
 ! Class implementation for 'RwGsMethodPatchV2'
