@@ -76,6 +76,12 @@ res := { } .
 ^ res
 ]
 
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet_V2_symbolList >> _classUnmanagedVersioningPatchClass [
+
+	^ RwGsClassUnmanagedVersioningSymbolDictPatchV2
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> _createMovedClasses [
 	movedClasses
@@ -235,6 +241,20 @@ RwGsPatchSet_V2_symbolList >> addCreatedClassesAndVersionsToSymbolList: newClass
 		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
 	classesWithNewVersions
 		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ]
+]
+
+{ #category : 'building' }
+RwGsPatchSet_V2_symbolList >> addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+
+	classesWithNewVersions
+		add:
+			((self _classUnmanagedVersioningPatchClass
+				for: aClassModification
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
 ]
 
 { #category : 'private - applying' }

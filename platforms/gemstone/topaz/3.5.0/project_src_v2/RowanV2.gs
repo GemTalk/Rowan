@@ -8077,6 +8077,22 @@ true.
 %
 
 doit
+(RwClassModification
+	subclass: 'RwClassUnmanagedModification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-GemStone-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (RwModification
 	subclass: 'RwMethodModification'
 	instVarNames: #( sourceModification isMeta classDefinition )
@@ -69395,6 +69411,18 @@ compareAgainstBase: aDefinition
 
 category: 'comparing'
 method: RwDefinition
+compareAgainstBaseForNewClassUnmanagedVersion: aBaseDefinition
+
+	"Diff myself for changes against the given base definition. 
+	Answer a Modification, which might be empty if there are no changes."
+
+	"Filter the definition to include changes that are only applicable to new unmanaged class versions"
+
+	self subclassResponsibility
+%
+
+category: 'comparing'
+method: RwDefinition
 compareAgainstBaseForNewClassVersion: aBaseDefinition
 
 	"Diff myself for changes against the given base definition. 
@@ -69625,8 +69653,15 @@ category: 'comparing'
 method: RwAbstractClassDefinition
 compareAgainstBase: aDefinition
 
+	^self compareAgainstBase: aDefinition using:  self _modificationClass
+%
+
+category: 'comparing'
+method: RwAbstractClassDefinition
+compareAgainstBase: aDefinition using: aModificationClass
+
 	| modification instanceMethodsModification classMethodsModification className |
-	modification := self _modificationClass before: aDefinition after: self.
+	modification := aModificationClass before: aDefinition after: self.
 	modification
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
 	className := self _classNameForCompare: aDefinition.
@@ -69654,12 +69689,32 @@ compareAgainstBase: aDefinition
 
 category: 'comparing'
 method: RwAbstractClassDefinition
+compareAgainstBaseForNewClassUnmanagedVersion: aDefinition
+	"all unchanged and unremoved methods need to be applied to the patch"
+
+	^ self
+		compareAgainstBase: aDefinition
+		using: RwClassUnmanagedModification
+%
+
+category: 'comparing'
+method: RwAbstractClassDefinition
 compareAgainstBaseForNewClassVersion: aDefinition
+	"all unchanged and unremoved methods need to be applied to the patch"
+
+	^ self
+		compareAgainstBaseForNewClassVersion: aDefinition
+		using: self _modificationClass
+%
+
+category: 'comparing'
+method: RwAbstractClassDefinition
+compareAgainstBaseForNewClassVersion: aDefinition using: modificationClass
 
 	"all unchanged and unremoved methods need to be applied to the patch"
 
 	| modification instanceMethodsModification classMethodsModification |
-	modification := self _modificationClass before: aDefinition after: self.
+	modification := modificationClass before: aDefinition after: self.
 	instanceMethodsModification := self _methodsModificationClass
 		extendedClassName: self key.
 	classMethodsModification := self _methodsModificationClass
@@ -75209,12 +75264,11 @@ addPatchedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinitio
 category: 'building'
 method: RwGsPatchSet_V2
 addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition
-
 	currentProjectDefinition := aProjectDefinition.
 
 	classesWithNewVersions
 		add:
-			((self _classVersioningPatchClass
+			(((aClassModification classVersioningPatchClassUsing: self)
 				for: aClassModification
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
@@ -75340,21 +75394,6 @@ addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDef
 				forMethod: aInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
-				projectDefinition: aProjectDefinition;
-				yourself)
-%
-
-category: 'building'
-method: RwGsPatchSet_V2
-addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition
-
-	currentProjectDefinition := aProjectDefinition.
-
-	classesWithNewVersions
-		add:
-			((self _classUnmanagedVersioningPatchClass
-				for: aClassModification
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
@@ -76074,13 +76113,6 @@ _classUnmanagedAdditionPatchClass
 
 category: 'private - patch class accessors'
 method: RwGsPatchSet_V2
-_classUnmanagedVersioningPatchClass
-
-	^ RwGsClassUnmanagedVersioningSymbolDictPatchV2
-%
-
-category: 'private - patch class accessors'
-method: RwGsPatchSet_V2
 _classVariablePatchClass
 
 	^ RwGsClassVariableChangeSymbolDictPatchV2
@@ -76423,6 +76455,21 @@ addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList
 		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
 	classesWithNewVersions
 		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ]
+%
+
+category: 'building'
+method: RwGsPatchSet_V2_symbolList
+addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition
+
+	currentProjectDefinition := aProjectDefinition.
+
+	classesWithNewVersions
+		add:
+			((self _classUnmanagedVersioningPatchClass
+				for: aClassModification
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
 %
 
 category: 'private - applying'
@@ -76842,6 +76889,13 @@ updateSymbolAssociations
 					| classMove |
 					classMove := assoc value.
 					each moveNewClassVersionInSystem: classMove ] ]
+%
+
+category: 'private - patch class accessors'
+method: RwGsPatchSet_V2_symbolList
+_classUnmanagedVersioningPatchClass
+
+	^ RwGsClassUnmanagedVersioningSymbolDictPatchV2
 %
 
 category: 'private - applying'
@@ -78756,10 +78810,33 @@ _updateNewClassVersionPatchesForClass: class in: aProjectSetModification patchSe
 
 !		Instance methods for 'RwGsClassUnmanagedVersioningSymbolDictPatchV2'
 
+category: 'patching'
+method: RwGsClassUnmanagedVersioningSymbolDictPatchV2
+installNewClassVersionInSystem
+	"Install the new class association in the symbolAssociation for the class.
+	 Update the LoadedClass with properties for the new classversion."
+
+	self symbolDictionaryRegistry
+		addNewUnmanagedClassVersionToAssociation: newClassVersion
+		oldClassVersion: oldClassVersion
+		toPackageNamed: self packageName
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+%
+
 category: 'new version support'
 method: RwGsClassUnmanagedVersioningSymbolDictPatchV2
 updatePatchesForNewClassVersion: aProjectSetModification patchSetSymbolList: patchSet
-	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
+	"
+	we happen to be modifying the existing project modification, so I think
+		it may be practical to fabricate a newVersionClassModification
+		that matches the one that would have been created if the before
+		class had been packaged.
+
+	So a little ifNotNil error action and then convert the remainder of the 
+		method to do what we need
+	"
+
+	| existingClass newVersionClassModification existingClassName movedDeletedMap |
 	movedDeletedMap := Dictionary new.
 	(patchSet class
 		lookupSymbolDictName: self symbolDictionaryName
@@ -78768,25 +78845,24 @@ updatePatchesForNewClassVersion: aProjectSetModification patchSetSymbolList: pat
 	existingClass := self oldClassVersion.
 	existingClassName := existingClass name asString.
 
-	loadedClass := self existingSymbolDictionaryRegistry
+	(self existingSymbolDictionaryRegistry
 		existingForClass: existingClass
-		ifAbsent: [ 
-			"
-				we happen to be modifying the existing project modification, so I think
-					it may be practical to fabricate a newVersionClassModification
-					that matches the one that would have been created if the before
-					class had been packaged.
-
-				So a little ifNotNil error action and then convert the remainder of the 
-					method to do what we need
-			"
-			self halt ].
-	loadedClassDefinition := loadedClass asDefinition.
-	loadedPackageName := loadedClass loadedPackage name.
+		ifAbsent: [  ])
+		ifNotNil: [ :loadedClass | 
+			self
+				error:
+					'Expected the class ' , existingClassName printString
+						, ' to be unmanaged, but found a loaded class in package '
+						, loadedClass loadedPackage name printString ].
 
 	newVersionClassModification := self classDefinition
-		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
+		compareAgainstBaseForNewClassUnmanagedVersion: classModification before.
 	newVersionClassModification isEmpty
+		ifTrue: [ 
+			self
+				error:
+					'Unexpectedly empty class modification for an unmanaged class '
+						, existingClassName asString ]
 		ifFalse: [ 
 			"only newVersionClassModification with substance need further processing"
 			aProjectSetModification
@@ -80046,6 +80122,20 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 
 category: 'private'
 method: RwGsSymbolDictionaryRegistryV2
+addNewUnmanagedClassVersionToAssociation: newClass oldClassVersion: oldClass toPackageNamed: aPackageName implementationClass: implementationClass
+	"a new class version is being added to the association in the receiver previously occupied by the original class"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	implementationClass
+		addNewUnmanagedClassVersionToAssociation: newClass
+		oldClassVersion: oldClass
+		toPackageNamed: aPackageName
+		instance: self
+%
+
+category: 'private'
+method: RwGsSymbolDictionaryRegistryV2
 addRecompiledMethod: newCompiledMethod
 
 	"add a recompiled compiled method to behavior and update the loaded things"
@@ -80886,6 +80976,28 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
 	loadedClassOrExtension addLoadedMethod: loadedMethod.
 	^ registryInstance
+%
+
+category: 'private'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+addNewUnmanagedClassVersionToAssociation: newClass oldClassVersion: oldClass toPackageNamed: aPackageName instance: registryInstance
+	"a new class version is being added to the association in the receiver previously occupied by 
+		the original class. No loadedClass or loadedClassExtension is expected for the oldClass"
+
+	(oldClass isKindOf: Class)
+		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
+
+	(Rowan image loadedClassForClass: oldClass ifAbsent: [  ])
+		ifNotNil: [ 
+			self
+				error:
+					'Unexpected loaded class for old version of class '
+						, oldClass name asString printString ].
+
+	self
+		_symbolDictionary: registryInstance _symbolDictionary
+		associationAt: newClass name
+		ifPresent: [ :assoc | Rowan packageTools adopt adoptClass: newClass intoPackageNamed: aPackageName ]
 %
 
 category: 'private'
@@ -97904,6 +98016,13 @@ addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefi
 		inProject: aProjectDefinition.
 %
 
+category: '*rowan-gemstone-loader-extensions-onlyv2'
+method: RwClassModification
+classVersioningPatchClassUsing: aPatchSet
+
+	^ aPatchSet _classVersioningPatchClass
+%
+
 ! Class extensions for 'RwClassModificationForcingNewClassVersion'
 
 !		Instance methods for 'RwClassModificationForcingNewClassVersion'
@@ -97934,6 +98053,17 @@ method: RwClassMove
 addMovedClassToPatchSet: aPatchSet
 
 	aPatchSet addClassMove: self
+%
+
+! Class extensions for 'RwClassUnmanagedModification'
+
+!		Instance methods for 'RwClassUnmanagedModification'
+
+category: '*rowan-gemstone-loader-extensions-onlyv2'
+method: RwClassUnmanagedModification
+classVersioningPatchClassUsing: aPatchSet
+
+	^ aPatchSet _classUnmanagedVersioningPatchClass
 %
 
 ! Class extensions for 'RwDefinition'

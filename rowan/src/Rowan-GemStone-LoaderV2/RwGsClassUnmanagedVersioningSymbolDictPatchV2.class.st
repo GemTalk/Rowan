@@ -4,9 +4,31 @@ Class {
 	#category : 'Rowan-GemStone-LoaderV2'
 }
 
+{ #category : 'patching' }
+RwGsClassUnmanagedVersioningSymbolDictPatchV2 >> installNewClassVersionInSystem [
+	"Install the new class association in the symbolAssociation for the class.
+	 Update the LoadedClass with properties for the new classversion."
+
+	self symbolDictionaryRegistry
+		addNewUnmanagedClassVersionToAssociation: newClassVersion
+		oldClassVersion: oldClassVersion
+		toPackageNamed: self packageName
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+]
+
 { #category : 'new version support' }
 RwGsClassUnmanagedVersioningSymbolDictPatchV2 >> updatePatchesForNewClassVersion: aProjectSetModification patchSetSymbolList: patchSet [
-	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
+	"
+	we happen to be modifying the existing project modification, so I think
+		it may be practical to fabricate a newVersionClassModification
+		that matches the one that would have been created if the before
+		class had been packaged.
+
+	So a little ifNotNil error action and then convert the remainder of the 
+		method to do what we need
+	"
+
+	| existingClass newVersionClassModification existingClassName movedDeletedMap |
 	movedDeletedMap := Dictionary new.
 	(patchSet class
 		lookupSymbolDictName: self symbolDictionaryName
@@ -15,25 +37,24 @@ RwGsClassUnmanagedVersioningSymbolDictPatchV2 >> updatePatchesForNewClassVersion
 	existingClass := self oldClassVersion.
 	existingClassName := existingClass name asString.
 
-	loadedClass := self existingSymbolDictionaryRegistry
+	(self existingSymbolDictionaryRegistry
 		existingForClass: existingClass
-		ifAbsent: [ 
-			"
-				we happen to be modifying the existing project modification, so I think
-					it may be practical to fabricate a newVersionClassModification
-					that matches the one that would have been created if the before
-					class had been packaged.
-
-				So a little ifNotNil error action and then convert the remainder of the 
-					method to do what we need
-			"
-			self halt ].
-	loadedClassDefinition := loadedClass asDefinition.
-	loadedPackageName := loadedClass loadedPackage name.
+		ifAbsent: [  ])
+		ifNotNil: [ :loadedClass | 
+			self
+				error:
+					'Expected the class ' , existingClassName printString
+						, ' to be unmanaged, but found a loaded class in package '
+						, loadedClass loadedPackage name printString ].
 
 	newVersionClassModification := self classDefinition
-		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
+		compareAgainstBaseForNewClassUnmanagedVersion: classModification before.
 	newVersionClassModification isEmpty
+		ifTrue: [ 
+			self
+				error:
+					'Unexpectedly empty class modification for an unmanaged class '
+						, existingClassName asString ]
 		ifFalse: [ 
 			"only newVersionClassModification with substance need further processing"
 			aProjectSetModification

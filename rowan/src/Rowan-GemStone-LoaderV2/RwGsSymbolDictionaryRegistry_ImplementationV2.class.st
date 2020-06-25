@@ -596,6 +596,27 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: com
 ]
 
 { #category : 'private' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewUnmanagedClassVersionToAssociation: newClass oldClassVersion: oldClass toPackageNamed: aPackageName instance: registryInstance [
+	"a new class version is being added to the association in the receiver previously occupied by 
+		the original class. No loadedClass or loadedClassExtension is expected for the oldClass"
+
+	(oldClass isKindOf: Class)
+		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
+
+	(Rowan image loadedClassForClass: oldClass ifAbsent: [  ])
+		ifNotNil: [ 
+			self
+				error:
+					'Unexpected loaded class for old version of class '
+						, oldClass name asString printString ].
+
+	self
+		_symbolDictionary: registryInstance _symbolDictionary
+		associationAt: newClass name
+		ifPresent: [ :assoc | Rowan packageTools adopt adoptClass: newClass intoPackageNamed: aPackageName ]
+]
+
+{ #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newCompiledMethod instance: registryInstance [
 	"add a recompiled compiled method to behavior and update the loaded things"
 
