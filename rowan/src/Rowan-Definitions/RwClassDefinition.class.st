@@ -42,6 +42,20 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName cat
 ]
 
 { #category : 'instance creation' }
+RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars [
+	^ self
+		newForClassNamed: className
+		super: superClassName
+		instvars: instvars
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: nil
+		pools: #()
+		type: 'normal'
+]
+
+{ #category : 'instance creation' }
 RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars category: category [
 
 	^ self 

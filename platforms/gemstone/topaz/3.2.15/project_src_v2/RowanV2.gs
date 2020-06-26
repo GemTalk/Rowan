@@ -70173,6 +70173,21 @@ newForClassNamed: className super: superClassName category: category comment: co
 
 category: 'instance creation'
 classmethod: RwClassDefinition
+newForClassNamed: className super: superClassName instvars: instvars
+	^ self
+		newForClassNamed: className
+		super: superClassName
+		instvars: instvars
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: nil
+		pools: #()
+		type: 'normal'
+%
+
+category: 'instance creation'
+classmethod: RwClassDefinition
 newForClassNamed: className super: superClassName instvars: instvars category: category
 
 	^ self 
@@ -72410,6 +72425,17 @@ method: RwPackageDefinition
 addClassNamed: className super: superclassName category: categryName comment: comment
 
 	^ self addClassDefinition: (RwClassDefinition newForClassNamed: className super: superclassName  category: categryName comment: comment)
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName instvars: instvars
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars)
 %
 
 category: 'accessing'
