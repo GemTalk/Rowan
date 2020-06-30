@@ -428,16 +428,16 @@ RowanProjectService >> refresh [
 
 { #category : 'client commands' }
 RowanProjectService >> reloadProject [
-  [ (Rowan projectNamed: name) load ]
-    on: Warning
-    do: [ :ex | 
-      Transcript
-        cr;
-        show: ex description.
-      ex resume ].
-  self update.
-  RowanCommandResult addResult: self.
-  RowanBrowserService new packagesWithTests
+	[ Rowan projectTools load loadProjectNamed: name ]
+		on: Warning
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: ex description.
+			ex resume ].
+	self update.
+	RowanCommandResult addResult: self.
+	RowanBrowserService new packagesWithTests
 ]
 
 { #category : 'rowan' }
