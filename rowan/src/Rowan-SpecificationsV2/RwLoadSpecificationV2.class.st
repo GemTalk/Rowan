@@ -285,9 +285,9 @@ RwLoadSpecificationV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 			gemstoneProperties
 				at: self _gemstoneAllUsersName
 				ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ] ].
-	^ userProperties
+	^ (userProperties
 		at: #'defaultSymbolDictName'
-		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
+		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]) asString
 ]
 
 { #category : 'gemstone-support' }
@@ -325,7 +325,7 @@ RwLoadSpecificationV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: sym
 
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultSymbolDictName put: symbolDictName
+			at: #defaultSymbolDictName put: symbolDictName asString
 ]
 
 { #category : 'gemstone-support' }

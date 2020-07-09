@@ -831,7 +831,7 @@ RwGsPatchSet_V2 >> apply [
 
 	"Apply the changes I represent to the running image."
 	"UserGlobals at: #ConditionalHalt put: false"
-
+ 
 (UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	self
 		setupForApply;

@@ -44,30 +44,80 @@ RwClsAuditTool >> _auditCategory: category selectors: aSelectorSet forBehavior: 
 
 { #category : 'audit' }
 RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior [
-"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
+	"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| res  aDict superclassName |
-	res :=  self _result.
-	superclassName := aBehavior superclass ifNil: [ 'nil' ] ifNotNil: [:superCls | superCls name ].
-	(aLoadedClass classSuperclass isEquivalent: superclassName ) 
-		ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Superclass is different from loaded class')].
-	(aLoadedClass classInstVarNames = (aBehavior instVarNames collect: [:e | e asString]) ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'instVarNames changed in compiled class v loaded class')].
-	(aLoadedClass classClassVarNames = ((aBehavior.classVars ifNil: [SymbolDictionary new]) 
-			keys collect: [:e | e asString]) asSortedCollection asArray) ifFalse: [
-				res  add: (RwAuditDetail for: aLoadedClass message: 'ClassVars changed in compiled class v loaded class')].
-	(aLoadedClass classPoolDictionaries = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
-			ifFalse: [ res  add: (RwAuditDetail for: aLoadedClass message: 'PoolDictionaries changed in compiled class v loaded class')].
-	(aLoadedClass classComment isEquivalent: aBehavior rwComment ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Comment has changed in compiled class v loaded class')].
-	(aLoadedClass classCategory = (aBehavior _classCategory ifNil: ['']) ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Class category has changed in compiled class v loaded class')].
-	(aDict := System myUserProfile resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol ) 
-			ifNil: [res  add: (RwAuditDetail for: aLoadedClass message: ('Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName))] 
-			ifNotNil: [:smbd | smbd value at: aLoadedClass name asSymbol 
-					ifAbsent: [res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
+	| res aDict superclassName |
+	res := self _result.
+	superclassName := aBehavior superclass
+		ifNil: [ 'nil' ]
+		ifNotNil: [ :superCls | superCls name ].
+	(aLoadedClass classSuperclass isEquivalent: superclassName)
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Superclass is different from loaded class') ].
+	aLoadedClass classInstVarNames
+		= (aBehavior instVarNames collect: [ :e | e asString ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'instVarNames changed in compiled class v loaded class') ].
+	aLoadedClass classClassVarNames
+		=
+			((aBehavior.classVars ifNil: [ SymbolDictionary new ]) keys
+				collect: [ :e | e asString ]) asSortedCollection asArray
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'ClassVars changed in compiled class v loaded class') ].
+	aLoadedClass classPoolDictionaries
+		=
+			((aBehavior.poolDictionaries ifNil: [ Array new ]) collect: [ :e | e asString ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'PoolDictionaries changed in compiled class v loaded class') ].
+	(aLoadedClass classComment isEquivalent: aBehavior rwComment)
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Comment has changed in compiled class v loaded class') ].
+	aLoadedClass classCategory = (aBehavior _classCategory ifNil: [ '' ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Class category has changed in compiled class v loaded class') ].
+	(aDict := System myUserProfile
+		resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol)
+		ifNil: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message:
+							'Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName) ]
+		ifNotNil: [ :smbd | 
+			smbd value
+				at: aLoadedClass name asSymbol
+				ifAbsent: [ 
+					res
+						add:
+							aLoadedClass name
+								-> 'Compiled class not found in symbol dictionary of loaded class' ] ].
 
-	^res
+	^ res
 ]
 
 { #category : 'audit' }

@@ -63908,30 +63908,80 @@ _auditCategory: category selectors: aSelectorSet forBehavior: aBehavior loadedCl
 category: 'audit'
 method: RwClsAuditTool
 _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
-"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
+	"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| res  aDict superclassName |
-	res :=  self _result.
-	superclassName := aBehavior superclass ifNil: [ 'nil' ] ifNotNil: [:superCls | superCls name ].
-	(aLoadedClass classSuperclass isEquivalent: superclassName ) 
-		ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Superclass is different from loaded class')].
-	(aLoadedClass classInstVarNames = (aBehavior instVarNames collect: [:e | e asString]) ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'instVarNames changed in compiled class v loaded class')].
-	(aLoadedClass classClassVarNames = ((aBehavior.classVars ifNil: [SymbolDictionary new]) 
-			keys collect: [:e | e asString]) asSortedCollection asArray) ifFalse: [
-				res  add: (RwAuditDetail for: aLoadedClass message: 'ClassVars changed in compiled class v loaded class')].
-	(aLoadedClass classPoolDictionaries = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
-			ifFalse: [ res  add: (RwAuditDetail for: aLoadedClass message: 'PoolDictionaries changed in compiled class v loaded class')].
-	(aLoadedClass classComment isEquivalent: aBehavior rwComment ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Comment has changed in compiled class v loaded class')].
-	(aLoadedClass classCategory = (aBehavior _classCategory ifNil: ['']) ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Class category has changed in compiled class v loaded class')].
-	(aDict := System myUserProfile resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol ) 
-			ifNil: [res  add: (RwAuditDetail for: aLoadedClass message: ('Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName))] 
-			ifNotNil: [:smbd | smbd value at: aLoadedClass name asSymbol 
-					ifAbsent: [res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
+	| res aDict superclassName |
+	res := self _result.
+	superclassName := aBehavior superclass
+		ifNil: [ 'nil' ]
+		ifNotNil: [ :superCls | superCls name ].
+	(aLoadedClass classSuperclass isEquivalent: superclassName)
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Superclass is different from loaded class') ].
+	aLoadedClass classInstVarNames
+		= (aBehavior instVarNames collect: [ :e | e asString ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'instVarNames changed in compiled class v loaded class') ].
+	aLoadedClass classClassVarNames
+		=
+			((aBehavior.classVars ifNil: [ SymbolDictionary new ]) keys
+				collect: [ :e | e asString ]) asSortedCollection asArray
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'ClassVars changed in compiled class v loaded class') ].
+	aLoadedClass classPoolDictionaries
+		=
+			((aBehavior.poolDictionaries ifNil: [ Array new ]) collect: [ :e | e asString ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'PoolDictionaries changed in compiled class v loaded class') ].
+	(aLoadedClass classComment isEquivalent: aBehavior rwComment)
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Comment has changed in compiled class v loaded class') ].
+	aLoadedClass classCategory = (aBehavior _classCategory ifNil: [ '' ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Class category has changed in compiled class v loaded class') ].
+	(aDict := System myUserProfile
+		resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol)
+		ifNil: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message:
+							'Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName) ]
+		ifNotNil: [ :smbd | 
+			smbd value
+				at: aLoadedClass name asSymbol
+				ifAbsent: [ 
+					res
+						add:
+							aLoadedClass name
+								-> 'Compiled class not found in symbol dictionary of loaded class' ] ].
 
-	^res
+	^ res
 %
 
 category: 'audit'
@@ -67586,13 +67636,17 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator origi
 		instanceMigrator: instanceMigrator ]
 		on: RwExistingVisitorAddingExistingClassNotification
 		do: [ :ex | 
+			| theProjectName |
 			theClassName := ex classDefinition name.
 			(processedClassNames includes: theClassName)
 				ifTrue: [ ex resume ].
 			theClass := ex class.
 			theClass isBehavior
 				ifFalse: [ ex pass ].
-			theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
+			theProjectName := theClass rowanProjectName.
+			theProjectName = Rowan unpackagedName
+				ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
+				ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
 			theLoadedProject
 				ifNil: [ 
 					"the loaded project should not be nil - if it is, pass the notification"
@@ -70016,21 +70070,20 @@ newForClassNamed: className super: superClassName instvars: instvars category: c
 category: 'instance creation'
 classmethod: RwClassDefinition
 newForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type
-
 	| propertiesDictionary |
 	propertiesDictionary := Dictionary new.
 	category
 		ifNotNil: [ 
 			propertiesDictionary
-				at: 'category' put: category;
+				at: 'category' put: category asString;
 				yourself ].
 	propertiesDictionary
-		at: 'classinstvars' put: classinstvars;
-		at: 'classvars' put: classvars;
-		at: 'instvars' put: instvars;
-		at: 'name' put: className;
+		at: 'classinstvars' put: (classinstvars collect: [ :each | each asString ]);
+		at: 'classvars' put: (classvars collect: [ :each | each asString ]);
+		at: 'instvars' put: (instvars collect: [ :each | each asString ]);
+		at: 'name' put: className asString;
 		at: 'pools' put: pools;
-		at: 'superclass' put: superClassName;
+		at: 'superclass' put: superClassName asString;
 		at: 'type' put: type asString.
 	comment ifNotNil: [ propertiesDictionary at: 'comment' put: comment ].
 	^ self
@@ -75452,7 +75505,7 @@ apply
 
 	"Apply the changes I represent to the running image."
 	"UserGlobals at: #ConditionalHalt put: false"
-
+ 
 (UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	self
 		setupForApply;
@@ -86890,9 +86943,9 @@ gemstoneDefaultSymbolDictNameForUser: userId
 			gemstoneProperties
 				at: self _gemstoneAllUsersName
 				ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ] ].
-	^ userProperties
+	^ (userProperties
 		at: #'defaultSymbolDictName'
-		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
+		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]) asString
 %
 
 category: 'gemstone-support'
@@ -86934,7 +86987,7 @@ gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultSymbolDictName put: symbolDictName
+			at: #defaultSymbolDictName put: symbolDictName asString
 %
 
 category: 'gemstone-support'
@@ -94998,6 +95051,42 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		options: optionsArray
 %
 
+category: '*rowan-gemstone-kernel'
+method: Class
+rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass packageName: aPackageName options: optionsArray
+	| loadedClass |
+	loadedClass := Rowan image
+		loadedClassForClass: oldClass
+		ifAbsent: [ self error: 'No loaded class found for ' , aString printString ].
+
+	aDictionary
+		ifNotNil: [ 
+			| expectedSymDictName specifiedSymDictName |
+			(expectedSymDictName := loadedClass loadedProject
+				symbolDictNameForPackageNamed: aPackageName)
+				~= (specifiedSymDictName := aDictionary name asString)
+				ifTrue: [ 
+					self
+						error:
+							'Attempt to move a packaged class ' , aString printString
+								, ' from the symbol dictionary ' , expectedSymDictName printString
+								, ' to the symbol dictionary ' , specifiedSymDictName printString
+								, '. Please use the Rowan api to achieve the move' ] ].
+
+	^ Rowan projectTools browser
+		addOrUpdateClassDefinition: aString
+		type: 'normal'
+		superclass: self name asString
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: nil
+		packageName: aPackageName
+		constraints: #()
+		options: optionsArray
+%
+
 category: '*ston-core'
 method: Class
 stonName
@@ -95013,7 +95102,7 @@ subclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassV
 
 	| newClass |
 	newClass := self 
-		subclass: aString 
+		_subclass: aString 
 		instVarNames: anArrayOfInstvarNames 
 		classVars: anArrayOfClassVars 
 		classInstVars: anArrayOfClassInstVars 
@@ -98174,7 +98263,9 @@ applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
 	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
 	visitorClassName := SessionTemps current
 		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [ #'RwGsImagePatchVisitor_V2' ].
+		ifAbsent: [ 
+			"#'RwGsImagePatchVisitor_V2'"
+			visitorClassName ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
 			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
@@ -100533,6 +100624,24 @@ category: '*ast-kernel-core'
 method: UndefinedObject
 rbStoreOn: aStream
   aStream nextPutAll: self asString
+%
+
+category: '*rowan-gemstone-kernel'
+method: UndefinedObject
+rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName constraints: constraintArray options: optionsArray
+
+	^ Rowan projectTools browser
+		addOrUpdateClassDefinition: aString
+		type: 'normal'
+		superclass: 'nil'
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: aCategoryName
+		packageName: aPackageName
+		constraints: constraintArray
+		options: optionsArray
 %
 
 category: '*ston-core'

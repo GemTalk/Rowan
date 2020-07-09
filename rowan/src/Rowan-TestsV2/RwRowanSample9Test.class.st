@@ -120,7 +120,7 @@ RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: c
 	symDictName := projectSpec
 		gemstoneDefaultSymbolDictNameForUser: Rowan image currentUserId.
 
-	self assert: symDictName = expectedSymDictName.
+	self assert: symDictName = expectedSymDictName asString.
 
 	(symDict := Rowan globalNamed: symDictName)
 		ifNil: [ 

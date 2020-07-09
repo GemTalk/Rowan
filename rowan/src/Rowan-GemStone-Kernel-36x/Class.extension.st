@@ -17,13 +17,14 @@ Class >> _rwReservedOop [
 Class >> rwClassDefinitionInSymbolDictionaryNamed: symDictName [
 	"create an RwClassDefinition for the reciever suitable for recreating the class. Ignore methods"
 
-	| loadedClass |
+	| loadedClass superclassName |
+superclassName := self superClass ifNil: [ 'nil' ] ifNotNil: [:sc| sc name asString ].
 	loadedClass := Rowan image
 		loadedClassForClass: self
 		ifAbsent: [ 
 			^ (RwClassDefinition
 				newForClassNamed: self name asString
-				super: self superClass name asString
+				super: superclassName
 				instvars: (self instVarNames collect: [ :each | each asString ])
 				classinstvars: (self class instVarNames collect: [ :each | each asString ])
 				classvars: (self classVarNames collect: [ :each | each asString ])

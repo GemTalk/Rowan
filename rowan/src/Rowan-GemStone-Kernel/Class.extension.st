@@ -281,3 +281,38 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		options: optionsArray
 
 ]
+
+{ #category : '*rowan-gemstone-kernel' }
+Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass packageName: aPackageName options: optionsArray [
+	| loadedClass |
+	loadedClass := Rowan image
+		loadedClassForClass: oldClass
+		ifAbsent: [ self error: 'No loaded class found for ' , aString printString ].
+
+	aDictionary
+		ifNotNil: [ 
+			| expectedSymDictName specifiedSymDictName |
+			(expectedSymDictName := loadedClass loadedProject
+				symbolDictNameForPackageNamed: aPackageName)
+				~= (specifiedSymDictName := aDictionary name asString)
+				ifTrue: [ 
+					self
+						error:
+							'Attempt to move a packaged class ' , aString printString
+								, ' from the symbol dictionary ' , expectedSymDictName printString
+								, ' to the symbol dictionary ' , specifiedSymDictName printString
+								, '. Please use the Rowan api to achieve the move' ] ].
+
+	^ Rowan projectTools browser
+		addOrUpdateClassDefinition: aString
+		type: 'normal'
+		superclass: self name asString
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: nil
+		packageName: aPackageName
+		constraints: #()
+		options: optionsArray
+]

@@ -155,7 +155,7 @@ Class >> subclass: aString instVarNames: anArrayOfInstvarNames classVars: anArra
 
 	| newClass |
 	newClass := self 
-		subclass: aString 
+		_subclass: aString 
 		instVarNames: anArrayOfInstvarNames 
 		classVars: anArrayOfClassVars 
 		classInstVars: anArrayOfClassInstVars 

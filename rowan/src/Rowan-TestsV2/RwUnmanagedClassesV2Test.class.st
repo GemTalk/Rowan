@@ -9,7 +9,7 @@ RwUnmanagedClassesV2Test >> _removeUnmanagedClass [
 	| className |
 	className := self _unmanagedClassName.
 
-	(UserGlobals at: className asSymbol ifAbsent: [])
+	((Rowan globalNamed: 'UserGlobals') at: className asSymbol ifAbsent: [])
 		ifNotNil: [ 
 			[ Rowan projectTools browser removeClassNamed: className ]
 				on: RwPerformingUnpackagedEditNotification
@@ -75,7 +75,7 @@ RwUnmanagedClassesV2Test >> testPackagedClass_01 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
 		options: #().
 	self assert: unmanagedClass notNil.
 
@@ -120,7 +120,7 @@ RwUnmanagedClassesV2Test >> testPackagedClassNewVersion_01 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
 		options: #().
 	self assert: unmanagedClass notNil.
 
@@ -151,7 +151,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_01 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
@@ -194,7 +194,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_02 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
@@ -211,6 +211,143 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_02 [
 	self
 		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
 	self assert: (x := unmanagedClass rowanPackageName) = unmanagedPackageName
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedClass_03 [
+	"Use project browser class creation expression to package an unmanaged class with a superclass of nil"
+
+	| unmanagedPackageName className unmanagedClass managedClass x |
+	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+
+	className := self _unmanagedClassName.
+
+	(Rowan globalNamed: className)
+		ifNotNil: [ 
+			[ Rowan projectTools browser removeClassNamed: className ]
+				on: RwPerformingUnpackagedEditNotification
+				do: [ :ex | ex resume ] ].
+
+	unmanagedClass := nil
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		options: #().
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+
+	managedClass := nil
+		rwSubclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: nil
+		packageName: unmanagedPackageName
+		constraints: #()
+		options: #().
+
+	self assert: unmanagedClass == managedClass.
+	self
+		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
+	self assert: (x := unmanagedClass rowanPackageName) = unmanagedPackageName
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedClass_04 [
+	"Use class definition in a different project to package an unmanaged class"
+
+	| unmanagedPackageName className unmanagedClass managedClass x projectName componentName packageName project |
+	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+
+	className := self _unmanagedClassName.
+	projectName := 'ManagedProject_test'.
+	packageName := projectName , '-Core'.
+	componentName := 'Core'.
+
+	(Rowan globalNamed: className)
+		ifNotNil: [ 
+			[ Rowan projectTools browser removeClassNamed: className ]
+				on: RwPerformingUnpackagedEditNotification
+				do: [ :ex | ex resume ] ].
+
+	unmanagedClass := Object
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		options: #().
+
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+
+	project := Rowan newProjectNamed: projectName.
+	(project
+		addNewComponentNamed: 'Core';
+		addPackageNamed: packageName toComponentNamed: componentName)
+		addClassNamed: className super: 'Object' instvars: #(#'xxx');
+		yourself.
+
+	project load.
+
+	managedClass := Rowan globalNamed: className.
+	self assert: unmanagedClass == managedClass.
+	self
+		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
+	self assert: (x := managedClass rowanPackageName) = packageName
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedClass_05 [
+	"Use class definition that creates new version in a different project to package an unmanaged class"
+
+	| unmanagedPackageName className unmanagedClass managedClass x projectName componentName packageName project |
+	(Rowan globalNamed: 'UserGlobals') at: #'ConditionalHalt' put: false.
+	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+
+	className := self _unmanagedClassName.
+	projectName := 'ManagedProject_test'.
+	packageName := projectName , '-Core'.
+	componentName := 'Core'.
+
+	(Rowan globalNamed: className)
+		ifNotNil: [ 
+			[ Rowan projectTools browser removeClassNamed: className ]
+				on: RwPerformingUnpackagedEditNotification
+				do: [ :ex | ex resume ] ].
+
+	unmanagedClass := Object
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		options: #().
+
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+
+	project := Rowan newProjectNamed: projectName.
+	(project
+		addNewComponentNamed: 'Core';
+		addPackageNamed: packageName toComponentNamed: componentName)
+		addClassNamed: className super: 'Object' instvars: #('xxx' 'yyy');
+		yourself.
+
+	(Rowan globalNamed: 'UserGlobals') at: #'ConditionalHalt' put: false.
+	project load.
+
+	managedClass := Rowan globalNamed: className.
+	self assert: unmanagedClass ~~ managedClass.
+	self
+		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
+	self assert: (x := managedClass rowanPackageName) = packageName
 ]
 
 { #category : 'tests' }
@@ -234,7 +371,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_01 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
@@ -277,7 +414,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_02 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (Rowan globalNamed: 'UserGlobals')
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.

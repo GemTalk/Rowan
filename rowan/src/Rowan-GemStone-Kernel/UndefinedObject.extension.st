@@ -1,6 +1,23 @@
 Extension { #name : 'UndefinedObject' }
 
 { #category : '*rowan-gemstone-kernel' }
+UndefinedObject >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName constraints: constraintArray options: optionsArray [
+
+	^ Rowan projectTools browser
+		addOrUpdateClassDefinition: aString
+		type: 'normal'
+		superclass: 'nil'
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: aCategoryName
+		packageName: aPackageName
+		constraints: constraintArray
+		options: optionsArray
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 UndefinedObject >> subclass: aString 
 instVarNames: anArrayOfInstvarNames 
 classVars: anArrayOfClassVars 

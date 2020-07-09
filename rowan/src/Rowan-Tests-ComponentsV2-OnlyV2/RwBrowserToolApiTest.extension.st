@@ -17,7 +17,7 @@ RwBrowserToolApiTest >> _expectedAssociationCreationTemplate [
 RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
 
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames classDefinition testInstance projectTools symDict registry resolvedProject componentName audit project1 project2 |
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames classDefinition testInstance projectTools symDict registry resolvedProject componentName audit project1 project2 x y |
 	projectName1 := 'Simple Browser1'.
 	componentName := 'Core'.
 	packageName1 := 'Simple1-Core'.
@@ -120,8 +120,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	testProjectDefinition := browserTool projectNamed: projectName2.
 	self
 		assert:
-			testProjectDefinition gemstoneDefaultSymbolDictName
-				= self _symbolDictionaryName1.
+			(x := testProjectDefinition gemstoneDefaultSymbolDictName)
+				= (y := self _symbolDictionaryName1 asString).
 
 	browserTool
 		addOrUpdateMethod: 'bar ^''bar'''

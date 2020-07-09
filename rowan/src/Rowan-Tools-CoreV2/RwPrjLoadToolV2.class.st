@@ -13,13 +13,17 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 		instanceMigrator: instanceMigrator ]
 		on: RwExistingVisitorAddingExistingClassNotification
 		do: [ :ex | 
+			| theProjectName |
 			theClassName := ex classDefinition name.
 			(processedClassNames includes: theClassName)
 				ifTrue: [ ex resume ].
 			theClass := ex class.
 			theClass isBehavior
 				ifFalse: [ ex pass ].
-			theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
+			theProjectName := theClass rowanProjectName.
+			theProjectName = Rowan unpackagedName
+				ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
+				ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
 			theLoadedProject
 				ifNil: [ 
 					"the loaded project should not be nil - if it is, pass the notification"

@@ -72,21 +72,20 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName ins
 
 { #category : 'instance creation' }
 RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
-
 	| propertiesDictionary |
 	propertiesDictionary := Dictionary new.
 	category
 		ifNotNil: [ 
 			propertiesDictionary
-				at: 'category' put: category;
+				at: 'category' put: category asString;
 				yourself ].
 	propertiesDictionary
-		at: 'classinstvars' put: classinstvars;
-		at: 'classvars' put: classvars;
-		at: 'instvars' put: instvars;
-		at: 'name' put: className;
+		at: 'classinstvars' put: (classinstvars collect: [ :each | each asString ]);
+		at: 'classvars' put: (classvars collect: [ :each | each asString ]);
+		at: 'instvars' put: (instvars collect: [ :each | each asString ]);
+		at: 'name' put: className asString;
 		at: 'pools' put: pools;
-		at: 'superclass' put: superClassName;
+		at: 'superclass' put: superClassName asString;
 		at: 'type' put: type asString.
 	comment ifNotNil: [ propertiesDictionary at: 'comment' put: comment ].
 	^ self

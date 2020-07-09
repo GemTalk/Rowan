@@ -34,7 +34,9 @@ RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrato
 	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
 	visitorClassName := SessionTemps current
 		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [ #'RwGsImagePatchVisitor_V2' ].
+		ifAbsent: [ 
+			"#'RwGsImagePatchVisitor_V2'"
+			visitorClassName ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
 			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
