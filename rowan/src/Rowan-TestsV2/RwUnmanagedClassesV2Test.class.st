@@ -5,6 +5,35 @@ Class {
 }
 
 { #category : 'private' }
+RwUnmanagedClassesV2Test >> _createLoadedProject: projectName packageName: packageName symbolDictionaryName: symbolDictionaryName [
+	| project |
+	project := self
+		_createProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionaryName.
+	^ project load at: 1
+]
+
+{ #category : 'private' }
+RwUnmanagedClassesV2Test >> _createProject: projectName packageName: packageName symbolDictionaryName: symbolDictionaryName [
+	| componentName project |
+	componentName := 'Core'.
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	project := Rowan newProjectNamed: projectName.
+	project
+		addNewComponentNamed: 'Core';
+		addPackageNamed: packageName toComponentNamed: componentName;
+		gemstoneSetSymbolDictName: symbolDictionaryName forPackageNamed: packageName;
+		packageConvention: 'Rowan';
+		yourself.
+	^ project
+]
+
+{ #category : 'private' }
 RwUnmanagedClassesV2Test >> _removeUnmanagedClass [
 	| className |
 	className := self _unmanagedClassName.
@@ -19,6 +48,16 @@ RwUnmanagedClassesV2Test >> _removeUnmanagedClass [
 { #category : 'private' }
 RwUnmanagedClassesV2Test >> _unmanagedClassName [
 	^ 'UnmanagedTestClass'
+]
+
+{ #category : 'private' }
+RwUnmanagedClassesV2Test >> _validateAuditFailure: audit forPackage: packageName class: className method: selector [
+	"right now there are unrelated auditissues in UnPackaged project, so filter them out"
+
+	self
+		assert:
+			((audit at: packageName) at: className) first message
+				= ('Missing loaded method>>' , selector asString)
 ]
 
 { #category : 'private' }
@@ -42,19 +81,254 @@ RwUnmanagedClassesV2Test >> tearDown [
 ]
 
 { #category : 'tests' }
-RwUnmanagedClassesV2Test >> testPackagedClass_01 [
-	"Use filein class creation against packaged class with no modifications (inverse of testUnManagedClass01"
+RwUnmanagedClassesV2Test >> testMoveManagedClass_01 [
+	"Move packaged class with packaged and unpackaged methods to a package in another project"
 
-	| unmanagedPackageName className unmanagedClass managedClass x |
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className managedClass project projectName packageName symbolDictionary unmanagedMethod managedMethod x anotherProject anotherProjectName anotherPackageName |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	anotherProjectName := 'AnotherPackagedClass_project'.
+	anotherPackageName := anotherProjectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browse removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	anotherProject := self
+		_createLoadedProject: anotherProjectName
+		packageName: anotherPackageName
+		symbolDictionaryName: symbolDictionary name.
+
+	managedClass := Object
+		rwSubclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+	unmanagedMethod := managedClass
+		compileMethod: 'foo ^1'
+		dictionaries: Rowan image symbolList
+		category: 'unmanaged'
+		environmentId: 0.
+	managedMethod := managedClass
+		rwCompileMethod: 'bar ^2'
+		category: 'managed'
+		packageName: packageName.
+
+	self assert: managedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: (x := managedClass rowanPackageName) = packageName.
+	self assert: (x := unmanagedMethod rowanPackageName) = Rowan unpackagedName.
+	self assert: (x := managedMethod rowanPackageName) = packageName.
+
+	managedClass rwMoveClassToPackage: anotherPackageName.
+
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+
+	self assert: (x := managedClass rowanPackageName) = anotherPackageName.
+	self assert: (x := managedMethod rowanPackageName) = anotherPackageName.
+	self assert: (x := unmanagedMethod rowanPackageName) = Rowan unpackagedName.
+	self _validateAuditResults: (Rowan projectNamed: projectName) audit.
+	self
+		_validateAuditFailure: (Rowan projectNamed: anotherProjectName) audit
+		forPackage: anotherPackageName
+		class: className
+		method: unmanagedMethod selector.
+	managedClass
+		rwMoveMethod: unmanagedMethod selector
+		toPackage: anotherPackageName.	"repair the audit failure, so all audits run clean"
+	self _validateAuditResults: (Rowan projectNamed: projectName) audit.
+	self _validateAuditResults: (Rowan projectNamed: anotherProjectName) audit
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testMoveManagedMethod_01 [
+	"Move packaged method in unpackaged class to another package"
+
+	| className unmanagedClass project projectName packageName symbolDictionary managedMethod x anotherProject anotherProjectName anotherPackageName |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	anotherProjectName := 'AnotherPackagedClass_project'.
+	anotherPackageName := anotherProjectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	anotherProject := self
+		_createLoadedProject: anotherProjectName
+		packageName: anotherPackageName
+		symbolDictionaryName: symbolDictionary name.
+
+	unmanagedClass := Object
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symbolDictionary
+		options: #().
+	managedMethod := unmanagedClass
+		rwCompileExtensionMethod: 'bar ^2'
+		category: 'managed'
+		packageName: packageName.
+
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: (x := managedMethod rowanPackageName) = packageName.
+
+	unmanagedClass
+		rwMoveMethod: managedMethod selector
+		toPackage: anotherPackageName.
+
+	self
+		_validateAuditResults: project audit;
+		_validateAuditResults: anotherProject audit.
+	self assert: (x := managedMethod rowanPackageName) = anotherPackageName
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testMoveUnmanagedClass_01 [
+	"Move unpackaged class with packaged and unpackaged methods to a package in another project"
+
+	| className unmanagedClass project projectName packageName symbolDictionary unmanagedMethod managedMethod x anotherProject anotherProjectName anotherPackageName |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	anotherProjectName := 'AnotherPackagedClass_project'.
+	anotherPackageName := anotherProjectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	anotherProject := self
+		_createLoadedProject: anotherProjectName
+		packageName: anotherPackageName
+		symbolDictionaryName: symbolDictionary name.
+
+	unmanagedClass := Object
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symbolDictionary
+		options: #().
+	unmanagedMethod := unmanagedClass
+		compileMethod: 'foo ^1'
+		dictionaries: Rowan image symbolList
+		category: 'unmanaged'
+		environmentId: 0.
+	managedMethod := unmanagedClass
+		rwCompileExtensionMethod: 'bar ^2'
+		category: 'managed'
+		packageName: packageName.
+
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: (x := unmanagedClass rowanPackageName) = Rowan unpackagedName.
+	self assert: (x := unmanagedMethod rowanPackageName) = Rowan unpackagedName.
+	self assert: (x := managedMethod rowanPackageName) = packageName.
+	self
+		_validateAuditResults: project audit;
+		_validateAuditResults: anotherProject audit.
+
+	unmanagedClass rwMoveClassToPackage: anotherPackageName.
+
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+
+	self
+		_validateAuditResults: project audit;
+		_validateAuditResults: anotherProject audit.
+	self assert: (x := unmanagedClass rowanPackageName) = anotherPackageName.
+	self assert: (x := unmanagedMethod rowanPackageName) = anotherPackageName.
+	self assert: (x := managedMethod rowanPackageName) = packageName
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testMoveUnmanagedMethod_01 [
+	"Move unpackaged method in unpackaged class to a package"
+
+	| className unmanagedClass project projectName packageName symbolDictionary unmanagedMethod |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	unmanagedClass := Object
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symbolDictionary
+		options: #().
+	unmanagedMethod := unmanagedClass
+		compileMethod: 'foo ^1'
+		dictionaries: Rowan image symbolList
+		category: 'unmanaged'
+		environmentId: 0.
+
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: unmanagedMethod rowanPackageName = Rowan unpackagedName.
+
+	unmanagedClass rwMoveMethod: unmanagedMethod selector toPackage: packageName.
+
+	self _validateAuditResults: project audit.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: unmanagedMethod rowanPackageName = packageName
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testPackagedClass_01 [
+	"Use filein class creation against packaged class with no modifications.
+		(inverse of testUnManagedClass01)"
+
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	managedClass := Object
 		rwSubclass: className
@@ -63,7 +337,7 @@ RwUnmanagedClassesV2Test >> testPackagedClass_01 [
 		classInstVars: #()
 		poolDictionaries: #()
 		category: nil
-		packageName: unmanagedPackageName
+		packageName: packageName
 		constraints: #()
 		options: #().
 	self assert: managedClass notNil.
@@ -75,31 +349,31 @@ RwUnmanagedClassesV2Test >> testPackagedClass_01 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 	self assert: unmanagedClass notNil.
 
 	self assert: unmanagedClass == managedClass.
-	self assert: unmanagedClass rowanPackageName = unmanagedPackageName.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := unmanagedClass rowanPackageName) = unmanagedPackageName
+	self assert: unmanagedClass rowanPackageName = packageName.
+	self _validateAuditResults: project audit
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testPackagedClassNewVersion_01 [
 	"Use filein class creation against packaged class and create new version of class (inverse of testUnManagedClassNewVersion01"
 
-	| unmanagedPackageName className unmanagedClass managedClass x |
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browse removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	managedClass := Object
 		rwSubclass: className
@@ -108,7 +382,7 @@ RwUnmanagedClassesV2Test >> testPackagedClassNewVersion_01 [
 		classInstVars: #()
 		poolDictionaries: #()
 		category: nil
-		packageName: unmanagedPackageName
+		packageName: packageName
 		constraints: #()
 		options: #().
 	self assert: managedClass notNil.
@@ -120,30 +394,31 @@ RwUnmanagedClassesV2Test >> testPackagedClassNewVersion_01 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 	self assert: unmanagedClass notNil.
 
 	self assert: unmanagedClass ~~ managedClass.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := unmanagedClass rowanPackageName) = unmanagedPackageName
+	self _validateAuditResults: (Rowan projectNamed: projectName) audit.
+	self assert: unmanagedClass rowanPackageName = packageName
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedClass_01 [
 	"Use project browser class creation expression to package an unmanaged class"
 
-	| unmanagedPackageName className unmanagedClass managedClass x |
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browser removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	unmanagedClass := Object
 		subclass: className
@@ -151,7 +426,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_01 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
@@ -163,30 +438,31 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_01 [
 		classInstVars: #()
 		poolDictionaries: #()
 		category: nil
-		packageName: unmanagedPackageName
+		packageName: packageName
 		constraints: #()
 		options: #().
 
 	self assert: unmanagedClass == managedClass.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := unmanagedClass rowanPackageName) = unmanagedPackageName
+	self _validateAuditResults: project audit.
+	self assert: unmanagedClass rowanPackageName = packageName
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedClass_02 [
 	"Use project load to package the class"
 
-	| unmanagedPackageName className unmanagedClass managedClass project x |
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browser removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	unmanagedClass := Object
 		subclass: className
@@ -194,13 +470,12 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_02 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
 
-	project := (Rowan projectNamed: Rowan unpackagedProjectName) defined.
-	(project packageNamed: unmanagedPackageName)
+	(project packageNamed: packageName)
 		addClassNamed: className
 		super: 'Object'
 		instvars: #('xxx').
@@ -208,25 +483,26 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_02 [
 
 	managedClass := Rowan globalNamed: className.
 	self assert: unmanagedClass == managedClass.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := unmanagedClass rowanPackageName) = unmanagedPackageName
+	self _validateAuditResults: (Rowan projectNamed: projectName) audit.
+	self assert: unmanagedClass rowanPackageName = packageName
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedClass_03 [
 	"Use project browser class creation expression to package an unmanaged class with a superclass of nil"
 
-	| unmanagedPackageName className unmanagedClass managedClass x |
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browser removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	unmanagedClass := nil
 		subclass: className
@@ -234,7 +510,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_03 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
@@ -246,33 +522,31 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_03 [
 		classInstVars: #()
 		poolDictionaries: #()
 		category: nil
-		packageName: unmanagedPackageName
+		packageName: packageName
 		constraints: #()
 		options: #().
 
 	self assert: unmanagedClass == managedClass.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := unmanagedClass rowanPackageName) = unmanagedPackageName
+	self _validateAuditResults: project audit.
+	self assert: unmanagedClass rowanPackageName = packageName
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedClass_04 [
 	"Use class definition in a different project to package an unmanaged class"
 
-	| unmanagedPackageName className unmanagedClass managedClass x projectName componentName packageName project |
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
-	projectName := 'ManagedProject_test'.
-	packageName := projectName , '-Core'.
-	componentName := 'Core'.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browser removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	unmanagedClass := Object
 		subclass: className
@@ -280,46 +554,39 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_04 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
 
-	project := Rowan newProjectNamed: projectName.
-	(project
-		addNewComponentNamed: 'Core';
-		addPackageNamed: packageName toComponentNamed: componentName)
+	(project packageNamed: packageName)
 		addClassNamed: className super: 'Object' instvars: #(#'xxx');
 		yourself.
-
 	project load.
 
 	managedClass := Rowan globalNamed: className.
 	self assert: unmanagedClass == managedClass.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := managedClass rowanPackageName) = packageName
+	self _validateAuditResults: (Rowan projectNamed: projectName) audit.
+	self assert: managedClass rowanPackageName = packageName
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedClass_05 [
 	"Use class definition that creates new version in a different project to package an unmanaged class"
 
-	| unmanagedPackageName className unmanagedClass managedClass x projectName componentName packageName project |
-	(Rowan globalNamed: 'UserGlobals') at: #'ConditionalHalt' put: false.
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
-	projectName := 'ManagedProject_test'.
-	packageName := projectName , '-Core'.
-	componentName := 'Core'.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browser removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	unmanagedClass := Object
 		subclass: className
@@ -327,43 +594,39 @@ RwUnmanagedClassesV2Test >> testUnmanagedClass_05 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
 
-	project := Rowan newProjectNamed: projectName.
-	(project
-		addNewComponentNamed: 'Core';
-		addPackageNamed: packageName toComponentNamed: componentName)
+	(project packageNamed: packageName)
 		addClassNamed: className super: 'Object' instvars: #('xxx' 'yyy');
 		yourself.
-
-	(Rowan globalNamed: 'UserGlobals') at: #'ConditionalHalt' put: false.
 	project load.
 
 	managedClass := Rowan globalNamed: className.
 	self assert: unmanagedClass ~~ managedClass.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := managedClass rowanPackageName) = packageName
+	self _validateAuditResults: (Rowan projectNamed: projectName) audit.
+	self assert: managedClass rowanPackageName = packageName
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_01 [
 	"Use project browser class creation expression to package and create a new version of an unmanaged class"
 
-	| unmanagedPackageName className unmanagedClass managedClass x |
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browser removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	unmanagedClass := Object
 		subclass: className
@@ -371,7 +634,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_01 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
@@ -383,30 +646,31 @@ RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_01 [
 		classInstVars: #()
 		poolDictionaries: #()
 		category: nil
-		packageName: unmanagedPackageName
+		packageName: packageName
 		constraints: #()
 		options: #().
 
 	self assert: unmanagedClass ~~ managedClass.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := managedClass rowanPackageName) = unmanagedPackageName
+	self _validateAuditResults: project audit.
+	self assert: managedClass rowanPackageName = packageName
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_02 [
 	"Use project load to package and create a new version of an unmanaged class"
 
-	| unmanagedPackageName className unmanagedClass managedClass project x |
-	unmanagedPackageName := Rowan unpackagedPackagePrefix , 'UserGlobals'.
+	| className unmanagedClass managedClass project projectName packageName symbolDictionary |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
 
 	className := self _unmanagedClassName.
 
-	(Rowan globalNamed: className)
-		ifNotNil: [ 
-			[ Rowan projectTools browser removeClassNamed: className ]
-				on: RwPerformingUnpackagedEditNotification
-				do: [ :ex | ex resume ] ].
+	project := self
+		_createProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
 
 	unmanagedClass := Object
 		subclass: className
@@ -414,13 +678,12 @@ RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_02 [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: (Rowan globalNamed: 'UserGlobals')
+		inDictionary: symbolDictionary
 		options: #().
 	self assert: unmanagedClass notNil.
 	self assert: (Rowan globalNamed: className) notNil.
 
-	project := (Rowan projectNamed: Rowan unpackagedProjectName) defined.
-	(project packageNamed: unmanagedPackageName)
+	(project packageNamed: packageName)
 		addClassNamed: className
 		super: 'Object'
 		instvars: #('xxx' 'yyy').
@@ -429,7 +692,6 @@ RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_02 [
 	managedClass := Rowan globalNamed: className.
 
 	self assert: unmanagedClass ~~ managedClass.
-	self
-		_validateAuditResults: (Rowan projectNamed: Rowan unpackagedProjectName) audit.
-	self assert: (x := managedClass rowanPackageName) = unmanagedPackageName
+	self _validateAuditResults: (Rowan projectNamed: projectName) audit.
+	self assert: managedClass rowanPackageName = packageName
 ]

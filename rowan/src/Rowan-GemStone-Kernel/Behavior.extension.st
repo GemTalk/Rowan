@@ -183,16 +183,9 @@ Behavior >> rowanProjectName [
 
 { #category : '*rowan-gemstone-kernel' }
 Behavior >> rwCompileExtensionMethod: sourceString category: categoryName packageName: packageName [
-	| aCategory |
-	(categoryName notEmpty and: [ categoryName first == $* ])
-		ifFalse: [ self error: 'Extension category must  contain * as first character' ].
-	(aCategory isEquivalent: '*' , packageName asLowercase)
-		ifFalse: [ 
-			self
-				error: 'Extension category name must match lowercased name of Rowan package' ].
 	^ Rowan projectTools browser
 		addOrUpdateMethod: sourceString
-		inProtocol: aCategory asString asLowercase
+		inProtocol: categoryName
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
 		inPackageNamed: packageName
@@ -233,6 +226,17 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName:
 ]
 
 { #category : '*rowan-gemstone-kernel' }
+Behavior >> rwMoveClassToPackage: packageName [
+	"Move class to <packageName>, whether or not it has been packaged. The methods in the class that are in the
+		original package of the class are also moved to the new package. If the class was originally unpackaged,
+		then only unpackaged methods (class and instance side) are moved to the new package."
+
+	^ Rowan projectTools browser
+		moveClassNamed: self thisClass name asString
+		toPackage: packageName
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
 
 	^ Rowan projectTools browser
@@ -241,6 +245,17 @@ Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
 		isMeta: self isMeta
 		toProtocol: categoryName
 
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Behavior >> rwMoveMethod: methodSelector toPackage: packageName [
+	"Move the method into <packageName>, whether or not it has been packaged"
+
+	^ Rowan projectTools browser
+		moveMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+		toPackage: packageName
 ]
 
 { #category : '*rowan-gemstone-kernel' }
