@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'tempSymbolList',
 		'movedClassesSymbolList',
-		'addedUnmanagedClasses'
+		'addedUnmanagedClasses',
+		'loadSymbolList'
 	],
 	#category : 'Rowan-GemStone-LoaderV2'
 }
@@ -97,7 +98,7 @@ RwGsPatchSet_V2_symbolList >> _createMovedClasses [
 RwGsPatchSet_V2_symbolList >> _createNewSymbolList [
 	| new |
 	new := SymbolList new.
-	Rowan image symbolList
+	self loadSymbolList
 		do: [ :symDict | 
 			| newSymDict |
 			newSymDict := SymbolDictionary new
@@ -376,6 +377,89 @@ RwGsPatchSet_V2_symbolList >> createNewClassesAndClassVersions [
 						andClassesByNameSymbolList: newClassesByNameSymbolList ] ]
 ]
 
+{ #category : 'private - applying' }
+RwGsPatchSet_V2_symbolList >> doMoveMethodsBetweenPackages [
+
+	| image |
+	image := Rowan image.
+	movedMethods 
+		do: [:aMethodMove |
+			| packageDef classOrExtensionDef loadedPackage loadedClassOrExtension loadedMethods loadedMethod compiledMethod registry |
+			packageDef := aMethodMove packageBefore.
+			classOrExtensionDef := aMethodMove classOrExtensionBefore.
+			loadedPackage := image loadedPackageNamed: packageDef name.
+			loadedClassOrExtension := loadedPackage 
+				classOrExtensionForClassNamed: classOrExtensionDef name 
+				ifAbsent: [ 
+					self error: 'internal error - no loaded class or extension found for class ', 
+						classOrExtensionDef name printString, 
+						'  in package ', 
+						packageDef name printString ].
+			loadedMethods := aMethodMove isMeta
+				ifTrue: [ loadedClassOrExtension loadedClassMethods ]
+				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
+			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
+
+			registry := image loadedRegistryForPackageNamed: loadedPackage name.
+
+			loadedClassOrExtension removeLoadedMethod: loadedMethod.
+			loadedClassOrExtension isLoadedClassExtension
+				ifTrue: [
+					loadedClassOrExtension isEmpty
+						ifTrue: [ 
+							(registry loadedClassExtensionsForClass: loadedClassOrExtension handle ifAbsent: [])
+								ifNotNil: [ :loadedClassExtensions |
+									loadedClassExtensions isEmpty
+										ifFalse: [ 
+											loadedClassExtensions remove: loadedClassOrExtension.
+											loadedClassExtensions isEmpty
+												ifTrue: [ 
+													registry 
+														unregisterLoadedClassExtension: loadedClassOrExtension
+														forClass: loadedClassOrExtension handle ] ] ].
+							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+
+            compiledMethod := loadedMethod handle.
+			registry methodRegistry removeKey: compiledMethod ifAbsent: [].
+
+			packageDef := aMethodMove packageAfter.
+			classOrExtensionDef := aMethodMove classOrExtensionAfter.
+			loadedPackage := image loadedPackageNamed: packageDef name.
+			registry := (Rowan image symbolDictNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
+			loadedClassOrExtension := loadedPackage 
+				classOrExtensionForClassNamed: classOrExtensionDef name 
+				ifAbsent: [ 
+					classOrExtensionDef isClassExtension
+						ifTrue: [ 
+							"add a new class extension on demand"
+							(aMethodMove projectAfter
+								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
+								ifTrue: [ | resolved |
+									((resolved := self loadSymbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
+										and: [resolved isBehavior and: [ resolved isMeta not ]])
+										ifFalse: [ 
+											self
+												error:
+													'The extension class named ' , self className printString , ' cannot be found.' ].
+"logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"
+"https://github.com/dalehenrich/Rowan/issues/254"]
+								ifFalse: [
+									registry
+										ensureExtensionClassNamed: classOrExtensionDef name
+										existsForPackageNamed: packageDef name
+										implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ].
+							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
+						ifFalse: [ 
+							self error: 'internal error - no loaded class found for class ', 
+								classOrExtensionDef name printString, 
+								'  in package ', 
+								packageDef name printString ] ].
+
+			loadedClassOrExtension addLoadedMethod: loadedMethod.
+
+			registry methodRegistry at: compiledMethod put: loadedMethod ]
+]
+
 { #category : 'initialization' }
 RwGsPatchSet_V2_symbolList >> initialize [
 	super initialize.
@@ -391,6 +475,22 @@ RwGsPatchSet_V2_symbolList >> installAddedClasses [
 
 	super installAddedClasses.
 	addedUnmanagedClasses do: [ :patch | patch installClassInSystem ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2_symbolList >> installAddedClassExtensions [
+
+	extendedClasses do: [ :each | each installClassExtensionInSystem: self loadSymbolList ]
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2_symbolList >> loadSymbolList [
+	^ loadSymbolList ifNil: [ Rowan image symbolList ]
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2_symbolList >> loadSymbolList: aSymbolList [
+	loadSymbolList := aSymbolList
 ]
 
 { #category : 'private - applying' }
@@ -469,7 +569,7 @@ RwGsPatchSet_V2_symbolList >> setupForApply [
 	true
 		ifTrue: [ ^ super setupForApply ].
 
-	symbolList := Rowan image symbolList.
+	symbolList := self loadSymbolList.
 	1 to: symbolList size do: [ :index | 
 		| dict symDictName symDict |
 		"Need to preserve association identity and symbolList structure tempSymbolList is used for compiling methods"

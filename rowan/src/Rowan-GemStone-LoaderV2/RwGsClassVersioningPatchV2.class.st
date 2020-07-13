@@ -244,7 +244,7 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModificationForcingNewClassVersion:
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	beforeClassDefinition := aClassModification before.
-	dict := Rowan image symbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
+	dict := aRwGsPatchSet loadSymbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
 		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
@@ -252,7 +252,6 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModificationForcingNewClassVersion:
 		addPatchedClassNewVersion: aClassModification
 		inPackage: aPackageDefinition
 		inProject: aProjectDefinition
-
 ]
 
 { #category : 'accessing' }

@@ -54,11 +54,60 @@ RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrato
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator symbolList: symbolList [
+	| visitorClassName visitorClass |
+	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
+	visitorClassName := SessionTemps current
+		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
+		ifAbsent: [ 
+			"#'RwGsImagePatchVisitor_V2'"
+			visitorClassName ].
+	(self _shouldCloneRowanLoader: aProjectSetModification)
+		ifTrue: [ 
+			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
+			self
+				applyModification_V2: aProjectSetModification
+				visitorClass: visitorClass
+				instanceMigrator: instanceMigrator
+				symbolList: symbolList ]
+		ifFalse: [ 
+			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
+				at: visitorClassName.
+			self
+				applyModification_V2: aProjectSetModification
+				visitorClass: visitorClass
+				instanceMigrator: instanceMigrator ]
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
 RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator [
 	| visitor patchSet newClassVersionPatchSet |
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
+	patchSet classesWithNewVersions isEmpty
+		ifTrue: [ 
+			patchSet apply.
+			^ self ].
+	patchSet setupForNewClassVersionUpdates.
+	patchSet classesWithNewVersions
+		do: [ :each | 
+			patchSet
+				updatePatchesForNewClassVersion: each
+				projectModification: aProjectSetModification ].
+	visitor := visitorClass new.
+	visitor visit: aProjectSetModification.
+	newClassVersionPatchSet := visitor patchSet.
+	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator symbolList: symbolList [
+	| visitor patchSet newClassVersionPatchSet |
+	visitor := visitorClass new.
+	visitor visit: aProjectSetModification.
+	patchSet := visitor patchSet.
+	patchSet symbolList: symbolList.
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
