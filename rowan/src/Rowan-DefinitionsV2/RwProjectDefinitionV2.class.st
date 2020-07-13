@@ -46,7 +46,6 @@ RwProjectDefinitionV2 class >> topazReadTonelFile: fileName [
       category: methDef protocol asSymbol
       intoMethodDict: nil "install into the class's dictionaries"
       intoCategories: nil
-      intoPragmas: nil
       environmentId:  envId
     ] on: (CompileError, CompileWarning) do:[:ex | 
       ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).

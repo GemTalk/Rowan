@@ -30,7 +30,6 @@ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClasses: cre
 		  category: protocol
 		  intoMethodDict: methDict
 		  intoCategories: catDict
-		  intoPragmas: pArray
 		  environmentId: self methodEnvironmentId
    ] on: (CompileError, CompileWarning) do:[:ex |
      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
@@ -62,7 +61,6 @@ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClasses: cre
 		  category: protocol
 		  intoMethodDict: methDict
 		  intoCategories: catDict
-		  intoPragmas: pArray
 		  environmentId: self methodEnvironmentId
    ] on: (CompileError, CompileWarning) do:[:ex |
      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
@@ -97,7 +95,6 @@ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClassesSymbo
 		category: protocol
 		intoMethodDict: methDict
 		intoCategories: catDict
-		intoPragmas: pArray
 		environmentId: self methodEnvironmentId ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 

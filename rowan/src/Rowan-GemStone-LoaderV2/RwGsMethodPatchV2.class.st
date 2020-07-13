@@ -79,7 +79,6 @@ RwGsMethodPatchV2 >> compileUsingNewClasses: createdClasses andExistingClasses: 
 		  category: protocol
 		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
 		  intoCategories: nil
-		  intoPragmas: nil
 		  environmentId: self methodEnvironmentId
   ] on: (CompileError, CompileWarning) do:[:ex |
     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
@@ -110,7 +109,6 @@ RwGsMethodPatchV2 >> compileUsingNewClasses: createdClasses andExistingClassSymb
 		category: protocol
 		intoMethodDict: false
 		intoCategories: nil
-		intoPragmas: nil
 		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 
@@ -145,7 +143,6 @@ RwGsMethodPatchV2 >> compileUsingNewClassesSymbolList: createdClasses andExistin
 		category: protocol
 		intoMethodDict: false
 		intoCategories: nil
-		intoPragmas: nil
 		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 

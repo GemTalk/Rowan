@@ -14618,7 +14618,6 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 		category: cat
 		intoMethodDict: GsMethodDictionary new
 		intoCategories: GsMethodDictionary new
-		intoPragmas: nil
 		environmentId: anEnvironmentId]
 			onSynchronous: (Array with: CompileError with: CompileWarning)
 			do: (Array with: 
@@ -14642,7 +14641,6 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 									category: cat
 									intoMethodDict: GsMethodDictionary new
 									intoCategories: GsMethodDictionary new
-									intoPragmas: nil
 									environmentId: anEnvironmentId]
 										onException: CompileError
 										do: [:exb | undefSymbol := false]].
@@ -61656,7 +61654,6 @@ checkMethodDefinitions: aClassDef
       category: methDef protocol asSymbol
       intoMethodDict: fakeMethDict
       intoCategories: nil
-      intoPragmas: nil
       environmentId:  0
     ] on: ( CompileError , CompileWarning ) do:[:ex | 
       ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
@@ -71048,7 +71045,6 @@ topazReadTonelFile: fileName
       category: methDef protocol asSymbol
       intoMethodDict: nil "install into the class's dictionaries"
       intoCategories: nil
-      intoPragmas: nil
       environmentId:  envId
     ] on: (CompileError, CompileWarning) do:[:ex | 
       ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
@@ -79401,7 +79397,6 @@ compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 		  category: protocol
 		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
 		  intoCategories: nil
-		  intoPragmas: nil
 		  environmentId: self methodEnvironmentId
   ] on: (CompileError, CompileWarning) do:[:ex |
     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
@@ -79433,7 +79428,6 @@ compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolLis
 		category: protocol
 		intoMethodDict: false
 		intoCategories: nil
-		intoPragmas: nil
 		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 
@@ -79469,7 +79463,6 @@ compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
 		category: protocol
 		intoMethodDict: false
 		intoCategories: nil
-		intoPragmas: nil
 		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 
@@ -80015,7 +80008,6 @@ compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 		  category: protocol
 		  intoMethodDict: methDict
 		  intoCategories: catDict
-		  intoPragmas: pArray
 		  environmentId: self methodEnvironmentId
    ] on: (CompileError, CompileWarning) do:[:ex |
      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
@@ -80048,7 +80040,6 @@ compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolLis
 		  category: protocol
 		  intoMethodDict: methDict
 		  intoCategories: catDict
-		  intoPragmas: pArray
 		  environmentId: self methodEnvironmentId
    ] on: (CompileError, CompileWarning) do:[:ex |
      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
@@ -80084,7 +80075,6 @@ compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
 		category: protocol
 		intoMethodDict: methDict
 		intoCategories: catDict
-		intoPragmas: pArray
 		environmentId: self methodEnvironmentId ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 
@@ -86416,7 +86406,6 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 		category: cat
 		intoMethodDict: GsMethodDictionary new
 		intoCategories: GsMethodDictionary new
-		intoPragmas: nil
 		environmentId: anEnvironmentId]
 			onSynchronous: (Array with: CompileError with: CompileWarning)
 			do: (Array with: 
@@ -86440,7 +86429,6 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 									category: cat
 									intoMethodDict: GsMethodDictionary new
 									intoCategories: GsMethodDictionary new
-									intoPragmas: nil
 									environmentId: anEnvironmentId]
 										onException: CompileError
 										do: [:exb | undefSymbol := false]].
@@ -94014,6 +94002,23 @@ method: Behavior
 areInstancesSpecial
 	"3.6.0/Rowan compat"
 	^ self isSpecial
+%
+
+category: '*rowan-gemstone-kernel-32'
+method: Behavior
+compileMethod: sourceString
+dictionaries: aSymbolList
+category: categorySymbol
+intoMethodDict: aMethodDict
+intoCategories: aCategDict
+environmentId: env
+
+^ self compileMethod: sourceString 
+       dictionaries: aSymbolList
+       category: categorySymbol 
+       intoMethodDict: aMethodDict
+       intoCategories: aCategDict  
+       intoPragmas: nil environmentId: env
 %
 
 category: '*rowan-gemstone-32x'
