@@ -787,13 +787,9 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_1 [
 "audit --> category not correct according to Monticello conventions"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
-
-"change method using non-Rowan api"
-	instanceMethod := theClass
-		compileMethod: 'foo ^"comment" ''foo'''
-		dictionaries: Rowan image symbolList
-		category: 'accessing'
-		environmentId: 0.
+"disown the method so it is no longer packaged"
+	Rowan packageTools disown disownMethod: #foo inClassNamed: className isMeta: false.
+	instanceMethod := theClass compiledMethodAt: #foo.
 
 "confirm conruption"
 	self assert: instanceMethod rowanPackageName =  Rowan unpackagedName.
@@ -862,13 +858,9 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_2 [
 "audit --> category not correct according to Monticello conventions"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
-
-"change method using non-Rowan api"
-	instanceMethod := theClass
-		compileMethod: 'foo ^"comment" ''foo'''
-		dictionaries: Rowan image symbolList
-		category: 'accessing'
-		environmentId: 0.
+"disown the method so it is no longer packaged"
+	Rowan packageTools disown disownMethod: #foo inClassNamed: className isMeta: false.
+	instanceMethod := theClass compiledMethodAt: #foo.
 
 "confirm conruption"
 	self assert: instanceMethod rowanPackageName =  Rowan unpackagedName.
@@ -937,12 +929,9 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_3 [
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 
-"change method using non-Rowan api"
-	instanceMethod := theClass
-		compileMethod: 'foo ^"comment" ''foo'''
-		dictionaries: Rowan image symbolList
-		category: 'accessing'
-		environmentId: 0.
+"disown the method so it is no longer packaged"
+	Rowan packageTools disown disownMethod: #foo inClassNamed: className isMeta: false.
+	instanceMethod := theClass compiledMethodAt: #foo.
 
 "confirm conruption"
 	self assert: instanceMethod rowanPackageName =  Rowan unpackagedName.
@@ -969,7 +958,6 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_3 [
 	self assert: expectedFailure first owner name =  'AdoptedClass'.
 	self assert: expectedFailure first owner classCategory = 'Adopt-Core'.
 	self assert: (expectedFailure first message matchPattern: { 'Extension category name' . $* . 'must not match class package name.'})
-
 ]
 
 { #category : 'tests' }

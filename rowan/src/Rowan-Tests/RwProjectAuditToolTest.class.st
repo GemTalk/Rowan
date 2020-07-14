@@ -387,8 +387,11 @@ self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) 
  "lets break it"
 	fooMethod := theClass
 		compileMethod: 'foo ^2'
-		dictionaries:  #() 
-		category: '*' , packageName1 asLowercase .
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName1 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 2.
 	self assert: ( y := x at: packageName1) notNil; 
@@ -453,27 +456,39 @@ x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
 
 
 self assert: x isEmpty.
-"lets mess up the class extension"
 
-
-    fooMethod := theClass
+	fooMethod := theClass
 		compileMethod: 'bar: aBar bar := aBar'
-		dictionaries:  #() 
-		category: '*' , packageName2 asLowercase.
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
-	 fooMethod := theClass class
+	fooMethod := theClass class
 		compileMethod: 'new2 ^self new'
-		dictionaries: #()
-		category: '*' , packageName2 asLowercase.
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
 	fooMethod := theClass class
 		compileMethod: 'new3 ^self new initialize'
-		dictionaries: #()
-		category: '*' , packageName3 asLowercase.
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName3 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
-	 theClass class compileMethod: 'new ^super new '
-		dictionaries: #()
-		category: '*Instance creation'. "non existing extension/package"
+	fooMethod := theClass class
+		compileMethod:  'new ^super new '
+		dictionaries: Rowan image symbolList
+		category: #'*Instance creation' "non existing extension/package"
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+
 x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
 
 
@@ -482,7 +497,6 @@ x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
 	  assert: ((y := x at: packageName1) at: className) size = 4;
 	  assert: ((y := x at: packageName2) at: className) size = 3;
 	  assert: ((y := x at: packageName3) at: className) size = 2
-
 ]
 
 { #category : 'tests' }
