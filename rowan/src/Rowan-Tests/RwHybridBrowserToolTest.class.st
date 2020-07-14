@@ -368,7 +368,6 @@ RwHybridBrowserToolTest >> testHybridCompileMethod_02 [
 		rwCompileMethod: 'bar ^''bar'''
 		dictionaries: Rowan image symbolList
 		category: '*' , packageName2
-		environmentId: 0
 		packageName: packageName2.
 
 	self assert: (audit := project audit) isEmpty.

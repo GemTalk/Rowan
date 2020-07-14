@@ -65738,7 +65738,7 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 
 category: 'method browsing'
 method: RwPrjBrowserToolV2
-addOrUpdateMethod: methodSource dictionaries: aSymbolList environmentId: environmentId inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName
+addOrUpdateMethod: methodSource dictionaries: aSymbolList inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName
 	"If the method is already installed in a different package, remove the method from that package.
 	 If package name matches the name of the package of the class definition, then add the method 
 		to the class definition.
@@ -65799,7 +65799,9 @@ addOrUpdateMethod: methodSource dictionaries: aSymbolList environmentId: environ
 							crDef removeInstanceMethod: methodDef selector.
 							cDef addInstanceMethodDefinition: methodDef ] ] ].
 	projectSetDefinition addProject: pDef.
-	projectTools load loadProjectSetDefinition: projectSetDefinition.
+	projectTools load
+		loadProjectSetDefinition: projectSetDefinition
+		symbolList: aSymbolList.
 	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
 		handle ].
 
@@ -66051,7 +66053,6 @@ addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className is
 	^ self
 		addOrUpdateMethod: methodSource
 		dictionaries: Rowan image symbolList
-		environmentId: 0
 		inProtocol: protocol
 		forClassNamed: className
 		isMeta: isMeta
@@ -67885,28 +67886,11 @@ method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
-	| projectSetDefinition requiredProjectNames |
-	projectSetDefinition := RwProjectSetDefinition new
-		addProject: projectDefinition;
-		yourself.
-	(requiredProjectNames := projectDefinition
-		requiredProjectNames: platformConfigurationAttributes) isEmpty
-		ifFalse: [ 
-			| absentProjectNames |
-			"if required projects are not already present in the image, then they must be loaded at this time"
-			absentProjectNames := requiredProjectNames
-				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
-			absentProjectNames isEmpty
-				ifFalse: [ 
-					self
-						error:
-							'Missing required projects for the project '
-								, projectDefinition name printString
-								,
-									'. Use loadProjectSet to ensure that all required projects are installed.' ] ].
 	^ self
-		loadProjectSetDefinition: projectSetDefinition
+		loadProjectDefinition: projectDefinition
+		platformConfigurationAttributes: platformConfigurationAttributes
 		instanceMigrator: instanceMigrator
+		symbolList: Rowan image symbolList
 %
 
 category: 'load project definitions'
@@ -67989,15 +67973,13 @@ loadProjectSetDefinition: projectSetDefinitionToLoad
 category: 'load project definitions'
 method: RwPrjLoadToolV2
 loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
-
 	"NOTE: when loading a definition into a stone, the loaded things are not marked as non-dirty ... dirty state is relative to the disk image for a
 		project and a definition can have come from anywhere"
 
-	^ self 
-		_doProjectSetLoad: projectSetDefinition
-		instanceMigrator: instanceMigrator 
-		originalProjectSet: projectSetDefinition 
-		processedClassNames: Set new
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
+		symbolList: Rowan image symbolList
 %
 
 category: 'load project definitions'
@@ -68012,6 +67994,15 @@ loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrato
 		symbolList: symbolList
 		originalProjectSet: projectSetDefinition
 		processedClassNames: Set new
+%
+
+category: 'load project definitions'
+method: RwPrjLoadToolV2
+loadProjectSetDefinition: projectSetDefinitionToLoad symbolList: symbolList
+	^ self
+		loadProjectSetDefinition: projectSetDefinitionToLoad
+		instanceMigrator: Rowan platform instanceMigrator
+		symbolList: symbolList
 %
 
 category: 'project load specifications'
@@ -68038,56 +68029,6 @@ markProjectSetNotDirty: projectSetDefinition
 			loadedProject markNotDirty.
 			loadedProject loadedPackages
 				valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ]
-%
-
-category: 'private'
-method: RwPrjLoadToolV2
-_doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames
-	| copiedProjectSetDef theClassName theClass projectDef theLoadedProject loadedClass packageDef |
-	[ 
-	^ self
-		_loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator ]
-		on: RwExistingVisitorAddingExistingClassNotification
-		do: [ :ex | 
-			| theProjectName |
-			theClassName := ex classDefinition name.
-			(processedClassNames includes: theClassName)
-				ifTrue: [ ex resume ].
-			theClass := ex class.
-			theClass isBehavior
-				ifFalse: [ ex pass ].
-			theProjectName := theClass rowanProjectName.
-			theProjectName = Rowan unpackagedName
-				ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
-				ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
-			theLoadedProject
-				ifNil: [ 
-					"the loaded project should not be nil - if it is, pass the notification"
-					ex pass ].
-			(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
-				ifNotNil: [ 
-					"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
-					ex resume ].
-			copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded class,
-					remove the class from the original project's package and attempt a reload"
-			projectDef := copiedProjectSetDef
-				projectNamed: theLoadedProject name
-				ifAbsent: [ 
-					projectDef := theLoadedProject asDefinition.
-					copiedProjectSetDef addProject: projectDef.
-					projectDef ].
-			loadedClass := Rowan image
-				loadedClassForClass: theClass
-				ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
-			packageDef := projectDef packageNamed: loadedClass loadedPackage name.
-			packageDef removeClassNamed: theClassName.
-			processedClassNames add: theClassName ].	"trim the stack"
-	^ self
-		_doProjectSetLoad: copiedProjectSetDef
-		instanceMigrator: instanceMigrator
-		originalProjectSet: originalProjectSet
-		processedClassNames: processedClassNames
 %
 
 category: 'private'
@@ -68140,53 +68081,6 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 		symbolList: symbolList
 		originalProjectSet: originalProjectSet
 		processedClassNames: processedClassNames
-%
-
-category: 'private'
-method: RwPrjLoadToolV2
-_loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator
-	| loadedProjectSet loadedProjectDefinitionSet diff loadedProjects |
-	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
-	loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet.
-	projectSetDefinitionToLoad definitions
-		keysAndValuesDo: [ :projectName :projectDefinition | 
-			projectDefinition packages
-				keysAndValuesDo: [ :packageName :packageDefinition | 
-					| symdictName |
-					"set the target symbol dictionary name for each incoming package definition"
-					symdictName := projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName.
-						packageDefinition gs_symbolDictionary: symdictName.
-						packageDefinition classDefinitions values do: [:classDef | classDef gs_symbolDictionary: symdictName ] ] ].
-	diff := projectSetDefinitionToLoad
-		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
-	diff isEmpty
-		ifFalse: [ 
-			| componentsWithDoits |
-			componentsWithDoits := diff componentsWithDoits.
-			componentsWithDoits do: [ :component | component executePreloadDoit ].
-			Rowan image applyModification_V2: diff instanceMigrator: instanceMigrator.
-			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
-	loadedProjects := Array new.
-	projectSetDefinitionToLoad definitions
-		do: [ :projectDef | 
-			| theLoadedProject |
-			loadedProjects add: (RwProject newNamed: projectDef name).
-			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
-			theLoadedProject handle _projectStructure: projectDef components copy.
-			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
-			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
-			(projectDef projectDefinitionSourceProperty
-				= RwLoadedProject _projectDiskDefinitionSourceValue
-				or: [ 
-					projectDef projectDefinitionSourceProperty
-						= RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ])
-				ifTrue: [ 
-					theLoadedProject
-						updateLoadedCommitId;
-						markNotDirty.
-					theLoadedProject loadedPackages
-						valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ] ].
-	^ loadedProjects
 %
 
 category: 'private'
@@ -94465,7 +94359,7 @@ rwCompileMethod: sourceString category: aCategoryString packageName: packageName
 
 category: '*rowan-gemstone-kernel'
 method: Behavior
-rwCompileMethod: sourceString dictionaries: aSymbolList category: aCategoryString environmentId: environmentId packageName: packageName
+rwCompileMethod: sourceString dictionaries: aSymbolList category: aCategoryString packageName: packageName
 	"Rowan version of Behavior >> #compileMethod:dictionaries:category:environmentId:"
 
 	"This compiles some source code for the receiver.  The first argument,
@@ -94492,7 +94386,6 @@ rwCompileMethod: sourceString dictionaries: aSymbolList category: aCategoryStrin
 	^ Rowan projectTools browser
 		addOrUpdateMethod: sourceString
 		dictionaries: aSymbolList
-		environmentId: environmentId
 		inProtocol: aCategoryString
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta

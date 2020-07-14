@@ -226,7 +226,7 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName:
 ]
 
 { #category : '*rowan-gemstone-kernel' }
-Behavior >> rwCompileMethod: sourceString dictionaries: aSymbolList category: aCategoryString environmentId: environmentId packageName: packageName [
+Behavior >> rwCompileMethod: sourceString dictionaries: aSymbolList category: aCategoryString packageName: packageName [
 	"Rowan version of Behavior >> #compileMethod:dictionaries:category:environmentId:"
 
 	"This compiles some source code for the receiver.  The first argument,
@@ -253,7 +253,6 @@ Behavior >> rwCompileMethod: sourceString dictionaries: aSymbolList category: aC
 	^ Rowan projectTools browser
 		addOrUpdateMethod: sourceString
 		dictionaries: aSymbolList
-		environmentId: environmentId
 		inProtocol: aCategoryString
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta

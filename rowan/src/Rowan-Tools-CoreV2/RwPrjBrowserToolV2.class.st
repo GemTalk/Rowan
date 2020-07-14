@@ -275,7 +275,7 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 ]
 
 { #category : 'method browsing' }
-RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList environmentId: environmentId inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName [
 	"If the method is already installed in a different package, remove the method from that package.
 	 If package name matches the name of the package of the class definition, then add the method 
 		to the class definition.
@@ -336,7 +336,9 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList 
 							crDef removeInstanceMethod: methodDef selector.
 							cDef addInstanceMethodDefinition: methodDef ] ] ].
 	projectSetDefinition addProject: pDef.
-	projectTools load loadProjectSetDefinition: projectSetDefinition.
+	projectTools load
+		loadProjectSetDefinition: projectSetDefinition
+		symbolList: aSymbolList.
 	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
 		handle ].
 
@@ -586,7 +588,6 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource inProtocol: protocol forCl
 	^ self
 		addOrUpdateMethod: methodSource
 		dictionaries: Rowan image symbolList
-		environmentId: 0
 		inProtocol: protocol
 		forClassNamed: className
 		isMeta: isMeta
