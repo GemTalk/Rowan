@@ -404,6 +404,55 @@ RwUnmanagedClassesV2Test >> testPackagedClassNewVersion_01 [
 ]
 
 { #category : 'tests' }
+RwUnmanagedClassesV2Test >> testRemoveAllMethods [
+	"Remove all methods, some packaged and some unpackaged"
+
+	| className unmanagedClass project projectName packageName symbolDictionary unmanagedMethod managedMethod |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	unmanagedClass := Object
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symbolDictionary
+		options: #().
+	unmanagedMethod := unmanagedClass
+		compileMethod: 'foo ^1'
+		dictionaries: Rowan image symbolList
+		category: 'unmanaged'
+		environmentId: 0.
+	managedMethod := unmanagedClass
+		rwCompileExtensionMethod: 'bar ^2'
+		category: 'managed'
+		packageName: packageName.
+
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: unmanagedMethod rowanPackageName = Rowan unpackagedName.
+	self assert: managedMethod rowanPackageName = packageName.
+
+	unmanagedClass removeAllMethods.
+
+	self assert: project audit isEmpty.
+	self assert: (unmanagedClass compiledMethodAt: #foo otherwise: nil) isNil.
+	self assert: (unmanagedClass compiledMethodAt: #bar otherwise: nil) isNil.
+]
+
+{ #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedClass_01 [
 	"Use project browser class creation expression to package an unmanaged class"
 
