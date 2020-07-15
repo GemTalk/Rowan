@@ -45,3 +45,8 @@ RwPackage >> isEmpty [
 
 	^ self _loadedPackage isEmpty
 ]
+
+{ #category : 'accessing' }
+RwPackage >> project [
+	^ RwProject newNamed: self _loadedProject name
+]

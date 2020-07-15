@@ -192,6 +192,113 @@ RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _runTestSuiteForProject: project [
+	| testResult testSuite |
+	testSuite := project testSuite.
+	self deny: testSuite tests isEmpty.
+	testResult := testSuite run.
+	self deny: testResult hasErrors.
+	self deny: testResult hasFailures
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _spec0057GsFilein [
+	^ self _spec0057GsFilein: true
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _spec0057GsFilein: includeRemoveAll [
+	| filein |
+	filein := 'set compile_env: 0
+! ------------------- Class definition for RowanSample9Class1
+expectvalue /Class
+doit
+Object subclass: ''RowanSample9Class1''
+  instVarNames: #( ivar1)
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: RowanSample9_1
+  options: #()
+
+%
+expectvalue /Class
+doit
+RowanSample9Class1 comment: 
+''I am an example class''
+%
+expectvalue /Class
+doit
+RowanSample9Class1 category: ''RowanSample9-Core''
+%
+'.
+	includeRemoveAll
+		ifTrue: [ 
+			filein := filein
+				,
+					'
+! ------------------- Remove existing behavior from RowanSample9Class1
+expectvalue /Metaclass3
+doit
+RowanSample9Class1 removeAllMethods.
+RowanSample9Class1 class removeAllMethods.
+%
+' ].
+	filein := filein
+		,
+			'
+set compile_env: 0
+! ------------------- Class methods for RowanSample9Class1
+category: ''accessing''
+classmethod: RowanSample9Class1
+bar ^''bar''
+%
+! ------------------- Instance methods for RowanSample9Class1
+category: ''accessing''
+method: RowanSample9Class1
+foo ^1
+%
+
+set compile_env: 0
+! ------------------- Class definition for RowanSample9TestCase
+expectvalue /Class
+doit
+TestCase subclass: ''RowanSample9TestCase''
+  instVarNames: #()
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: RowanSample9_1
+  options: #()
+
+%
+expectvalue /Class
+doit
+RowanSample9TestCase comment: 
+''I test the example class''
+%
+expectvalue /Class
+doit
+RowanSample9TestCase category: ''RowanSample9-Tests''
+%
+! ------------------- Remove existing behavior from RowanSample9TestCase
+expectvalue /Metaclass3
+doit
+RowanSample9TestCase removeAllMethods.
+RowanSample9TestCase class removeAllMethods.
+%
+set compile_env: 0
+! ------------------- Class methods for RowanSample9TestCase
+! ------------------- Instance methods for RowanSample9TestCase
+category: ''tests''
+method: RowanSample9TestCase
+test  self assert: RowanSample9Class1 new foo = 1
+%
+'.
+	^ filein
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _specListProjectNames [
 	^ super _specListProjectNames
 		,
@@ -211,20 +318,14 @@ RwRowanSample9Test >> _standard_resolve_load_validate: projectSpec [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects [ 
-	| testResult loadedProjectDefinition x |
+RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects [
+	| loadedProjectDefinition x |
 	"validate"
 	self assert: loadedProjects size = 1.
 	loadedProjects
 		do: [ :project | 
-			| testSuite |
 			self assert: (x := project audit) isEmpty.
-			testSuite := project testSuite.
-			self deny: testSuite tests isEmpty.
-			testResult := testSuite run.
-			self deny: testResult hasErrors.
-			self deny: testResult hasFailures.
-
+			self _runTestSuiteForProject: project.
 			loadedProjectDefinition := project asDefinition.
 			self
 				assert:
@@ -233,7 +334,7 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 
 { #category : 'private' }
 RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames [
-	| testResult loadedProjectDefinition x |
+	| loadedProjectDefinition x |
 	"validate"
 	self assert: loadedProjects size = expectedProjectNames size.
 	self
@@ -242,9 +343,7 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 	loadedProjects
 		do: [ :project | 
 			self assert: (x := project audit) isEmpty.
-			testResult := project testSuite run.
-			self deny: testResult hasErrors.
-			self deny: testResult hasFailures.
+			self _runTestSuiteForProject: project.
 
 			loadedProjectDefinition := project asDefinition.
 			self
@@ -582,7 +681,7 @@ RwRowanSample9Test >> testIndexCards [
 RwRowanSample9Test >> testIssue_254 [
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
-	| loadSpec projectName resolvedProject loadedProjects project testResult 
+	| loadSpec projectName resolvedProject loadedProjects project 
 		packageName1 packageName2 |
 
 	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
@@ -612,9 +711,7 @@ RwRowanSample9Test >> testIssue_254 [
 	self assert: loadedProjects size = 1.
 	project := loadedProjects at: 1.
 	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	self _runTestSuiteForProject: project.
 
 	loadSpec := self _loadSpecNamed: 'spec_0002'.	"basic project (remove instancesInvariant option and move class to default symbol dictionary: self _sampleSymbolDictionaryName1)"
 
@@ -626,9 +723,7 @@ RwRowanSample9Test >> testIssue_254 [
 	self assert: loadedProjects size = 1.
 	project := loadedProjects at: 1.
 	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	self _runTestSuiteForProject: project.
 ]
 
 { #category : 'tests' }
@@ -4019,13 +4114,37 @@ RwRowanSample9Test >> testSpec_0001_B [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0002 [
+	"spec_0002 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+self halt.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSpec_0002_to_0003 [
 	"https://github.com/dalehenrich/Rowan/issues/230"
 
 	"Passing variation"
 
-	| loadSpec projectName resolvedProject loadedProjects project testResult 
-		packageName1 packageName2 x |
+	| loadSpec projectName resolvedProject loadedProjects project 
+		packageName1 packageName2 |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
 	projectName := loadSpec projectName.
@@ -4048,9 +4167,7 @@ RwRowanSample9Test >> testSpec_0002_to_0003 [
 	self assert: loadedProjects size = 1.
 	project := loadedProjects at: 1.
 	self assert: project audit isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	self _runTestSuiteForProject: project.
 
 	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
 
@@ -4069,10 +4186,7 @@ RwRowanSample9Test >> testSpec_0002_to_0003 [
 "validate"
 	self assert: loadedProjects size = 1.
 	project := loadedProjects at: 1.
-	self assert: (x := project audit) isEmpty.
-	testResult := project testSuite run.
-	self deny: testResult hasErrors.
-	self deny: testResult hasFailures.
+	self _runTestSuiteForProject: project.
 ]
 
 { #category : 'issue 493' }
@@ -5920,7 +6034,7 @@ RwRowanSample9Test >> testSpec_0057 [
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
+		expectedProjectNames: projectNames
 ]
 
 { #category : 'tests' }
@@ -6032,4 +6146,82 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') new ivar1 isNil.	"ivar1 method not present in spec_0052"
 	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
+	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged report and an audit"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects stream project audit packageName1 packageName2 classAudit className1 className2 |
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+	packageName1 := 'RowanSample9-Tests'.
+	packageName2 := 'RowanSample9-Core'.
+	className1 := 'RowanSample9TestCase'.
+	className2 := 'RowanSample9Class1'.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+"load project"
+	loadedProjects := resolvedProject load.
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"do filein"
+	stream := self _spec0057GsFilein readStreamPortable.
+	(GsFileIn _fromStream: stream) doFileIn.
+"validate"
+	project := loadedProjects at: 1.
+	self _runTestSuiteForProject: project.
+	audit := project audit.
+
+	classAudit := ((audit at: packageName1) at: className1)
+		collect: [ :each | each message ].
+	self assert: classAudit size = 2.
+	self
+		assert:
+			(classAudit
+				includes: 'Class category has changed in compiled class v loaded class').
+	self assert: (classAudit includes: 'Missing loaded method>>test').
+
+	classAudit := ((audit at: packageName2) at: className2)
+		collect: [ :each | each message ].
+	self assert: classAudit size = 3.
+	self
+		assert:
+			(classAudit
+				includes: 'Class category has changed in compiled class v loaded class').
+	self assert: (classAudit includes: 'Missing loaded method>>foo').
+	self assert: (classAudit includes: 'Missing loaded method>>bar').
+
+"run reports"
+	{(Rowan gemstoneTools topaz
+		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList).
+	(Rowan gemstoneTools topaz
+		unmanagedClassesAndMethodsReportForSymbolDictionary:
+			(Rowan image
+				symbolDictNamed: (project symbolDictNameForPackageNamed: packageName1))).
+	(Rowan gemstoneTools topaz
+		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}
+		do: [ :details | 
+			details
+				unmanagedMethodsDo: [ :methodDetails :classDetails | 
+					(classDetails at: 'class') name asString = className1
+						ifTrue: [ self assert: (methodDetails at: 'method') selector == #'test' ].
+					(classDetails at: 'class') name asString = className2
+						ifTrue: [ 
+							self
+								assert:
+									((methodDetails at: 'method') selector == #'foo'
+										or: [ (methodDetails at: 'method') selector == #'bar' ]) ] ] ]
 ]

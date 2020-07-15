@@ -50238,6 +50238,12 @@ isEmpty
 	^ self _loadedPackage isEmpty
 %
 
+category: 'accessing'
+method: RwPackage
+project
+	^ RwProject newNamed: self _loadedProject name
+%
+
 category: 'private'
 method: RwPackage
 _loadedPackage
@@ -99564,7 +99570,7 @@ category: '*rowan-gemstone-core'
 method: RwPackage
 symbolDictName
 
-	^ self _gemstonePlatformSpec symbolDictNameForPackageNamed: self name
+	^ self project symbolDictNameForPackageNamed: self name
 %
 
 category: '*rowan-gemstone-core'

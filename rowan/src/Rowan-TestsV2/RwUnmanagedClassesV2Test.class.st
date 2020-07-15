@@ -15,7 +15,25 @@ RwUnmanagedClassesV2Test >> _createLoadedProject: projectName packageName: packa
 ]
 
 { #category : 'private' }
+RwUnmanagedClassesV2Test >> _createLoadedProject: projectName packageNames: packageNames symbolDictionaryName: symbolDictionaryName [
+	| project |
+	project := self
+		_createProject: projectName
+		packageNames: packageNames
+		symbolDictionaryName: symbolDictionaryName.
+	^ project load at: 1
+]
+
+{ #category : 'private' }
 RwUnmanagedClassesV2Test >> _createProject: projectName packageName: packageName symbolDictionaryName: symbolDictionaryName [
+	^ self
+		_createProject: projectName
+		packageNames: {packageName}
+		symbolDictionaryName: symbolDictionaryName
+]
+
+{ #category : 'private' }
+RwUnmanagedClassesV2Test >> _createProject: projectName packageNames: packageNames symbolDictionaryName: symbolDictionaryName [
 	| componentName project |
 	componentName := 'Core'.
 	{projectName}
@@ -26,10 +44,16 @@ RwUnmanagedClassesV2Test >> _createProject: projectName packageName: packageName
 	project := Rowan newProjectNamed: projectName.
 	project
 		addNewComponentNamed: 'Core';
-		addPackageNamed: packageName toComponentNamed: componentName;
-		gemstoneSetSymbolDictName: symbolDictionaryName forPackageNamed: packageName;
 		packageConvention: 'Rowan';
 		yourself.
+
+	packageNames
+		do: [ :packageName | 
+			project
+				addPackageNamed: packageName toComponentNamed: componentName;
+				gemstoneSetSymbolDictName: symbolDictionaryName
+					forPackageNamed: packageName;
+				yourself ].
 	^ project
 ]
 
@@ -43,6 +67,58 @@ RwUnmanagedClassesV2Test >> _removeUnmanagedClass [
 			[ Rowan projectTools browser removeClassNamed: className ]
 				on: RwPerformingUnpackagedEditNotification
 				do: [ :ex | ex resume ] ]
+]
+
+{ #category : 'private' }
+RwUnmanagedClassesV2Test >> _simpleGsFilein: className instVarNames: instVarNamesString symbolDictionaryName: symbolDictionaryName [
+	^ self
+		_simpleGsFilein: className
+		instVarNames: instVarNamesString
+		symbolDictionaryName: symbolDictionaryName
+		includeRemoveAllMethods: true
+]
+
+{ #category : 'private' }
+RwUnmanagedClassesV2Test >> _simpleGsFilein: className instVarNames: instVarNamesString symbolDictionaryName: symbolDictionaryName includeRemoveAllMethods: includeRemoveAllMethods [
+	| filein |
+	filein := 'expectvalue /String
+run
+(Object subclass: ''' , className
+		,
+			'''
+  instVarNames: ' , instVarNamesString
+		,
+			'
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: ' , symbolDictionaryName
+		,
+			'
+  options:#() ) definition
+%
+set class ' , className.
+	includeRemoveAllMethods
+		ifTrue: [ 
+			filein := filein
+				,
+					'
+removeallmethods
+removeallclassmethods' ].
+	filein := filein
+		,
+			'
+category: accessing
+method
+foo ^1
+%
+
+category: accessing
+method
+bar ^2
+%
+'.
+	^ filein
 ]
 
 { #category : 'private' }
@@ -743,4 +819,315 @@ RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_02 [
 	self assert: unmanagedClass ~~ managedClass.
 	self _validateAuditResults: (Rowan projectNamed: projectName) audit.
 	self assert: managedClass rowanPackageName = packageName
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedFilein_01 [
+	"File in an unmanaged class and methods (includes removeAllMethods)"
+
+	| className unmanagedClass project projectName packageName symbolDictionary stream |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	stream := ReadStreamPortable
+		on:
+			(self
+				_simpleGsFilein: className
+				instVarNames: '#(#xxx)'
+				symbolDictionaryName: symbolDictionary name asString).
+
+	(GsFileIn _fromStream: stream) doFileIn.
+
+	unmanagedClass := Rowan globalNamed: className.
+	self assert: unmanagedClass notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: unmanagedClass rowanPackageName = Rowan unpackagedName.
+	self
+		assert:
+			(unmanagedClass compiledMethodAt: #'foo') rowanPackageName
+				= Rowan unpackagedName.
+	self
+		assert:
+			(unmanagedClass compiledMethodAt: #'bar') rowanPackageName
+				= Rowan unpackagedName.
+	self assert: project audit isEmpty
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
+	"File in a managed class and unmanaged methods (includes removeAllMethods)"
+
+	| className managedClass project projectName packageName symbolDictionary stream audit details |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	stream := ReadStreamPortable
+		on:
+			(self
+				_simpleGsFilein: className
+				instVarNames: '#(#xxx)'
+				symbolDictionaryName: symbolDictionary name asString).
+
+	managedClass := Object
+		rwSubclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+
+	self assert: managedClass notNil.
+
+	(GsFileIn _fromStream: stream) doFileIn.
+
+	self assert: managedClass == (Rowan globalNamed: className).
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: managedClass rowanPackageName = packageName.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'bar') rowanPackageName = Rowan unpackagedName.
+	self deny: (audit := project audit) isEmpty.
+	self assert: ((audit at: packageName) at: className) size = 2.
+	details := ((audit at: packageName) at: className)
+		collect: [ :each | each message ].
+	self assert: (details includes: 'Missing loaded method>>' , 'foo').
+	self assert: (details includes: 'Missing loaded method>>' , 'bar')
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
+	"File in a managed class and unmanaged methods (without removeAllMethods)"
+
+	| className managedClass project projectName packageName symbolDictionary stream audit details |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	stream := ReadStreamPortable
+		on:
+			(self
+				_simpleGsFilein: className
+				instVarNames: '#(#xxx)'
+				symbolDictionaryName: symbolDictionary name asString
+				includeRemoveAllMethods: false).
+
+	managedClass := Object
+		rwSubclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+
+	self assert: managedClass notNil.
+
+	(GsFileIn _fromStream: stream) doFileIn.
+
+	self assert: managedClass == (Rowan globalNamed: className).
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: managedClass rowanPackageName = packageName.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'bar') rowanPackageName = Rowan unpackagedName.
+	self deny: (audit := project audit) isEmpty.
+	self assert: ((audit at: packageName) at: className) size = 2.
+	details := ((audit at: packageName) at: className)
+		collect: [ :each | each message ].
+	self assert: (details includes: 'Missing loaded method>>' , 'foo').
+	self assert: (details includes: 'Missing loaded method>>' , 'bar')
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
+	"File in a managed class with a managed method and an unmanaged method (without removeAllMethods)"
+
+	| className managedClass project projectName packageName symbolDictionary stream audit details managedMethod x |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	stream := ReadStreamPortable
+		on:
+			(self
+				_simpleGsFilein: className
+				instVarNames: '#(#xxx)'
+				symbolDictionaryName: symbolDictionary name asString
+				includeRemoveAllMethods: false).
+
+	managedClass := Object
+		rwSubclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+
+	self assert: managedClass notNil.
+
+	managedMethod := managedClass
+		rwCompileExtensionMethod: 'bar ^2'
+		category: 'managed'
+		packageName: packageName.
+
+	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
+
+	(GsFileIn _fromStream: stream) doFileIn.
+
+	self assert: managedClass == (Rowan globalNamed: className).
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: managedClass rowanPackageName = packageName.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
+	self
+		assert:
+			(x := (Rowan globalNamed: className) categoryOfSelector: #'foo') = #'accessing'.
+	self
+		assert:
+			(x := (managedClass compiledMethodAt: #'bar') rowanPackageName) = packageName.
+	self
+		assert:
+			((Rowan globalNamed: className) categoryOfSelector: #'bar') = #'accessing'.
+	self deny: (audit := project audit) isEmpty.
+	self assert: ((audit at: packageName) at: className) size = 1.
+	details := ((audit at: packageName) at: className)
+		collect: [ :each | each message ].
+	self assert: (details includes: 'Missing loaded method>>' , 'foo')
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnmanagedFilein_05 [
+	"File in a managed class with a managed method, an extension method and an unmanaged method (without removeAllMethods)"
+
+	| className managedClass project projectName packageName1 packageName2 symbolDictionary stream audit details fileinString |
+	projectName := 'PackagedClass_project'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Extensions'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageNames:
+			{packageName1.
+			packageName2}
+		symbolDictionaryName: symbolDictionary name.
+
+	fileinString := (self
+		_simpleGsFilein: className
+		instVarNames: '#(#xxx)'
+		symbolDictionaryName: symbolDictionary name asString
+		includeRemoveAllMethods: false)
+		,
+			'
+category: accessing
+method
+baz ^3
+%
+'.
+	stream := ReadStreamPortable on: fileinString.
+
+	managedClass := Object
+		rwSubclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+
+	self assert: managedClass notNil.
+
+	managedClass
+		rwCompileExtensionMethod: 'bar ^2'
+			category: 'managed'
+			packageName: packageName1;
+		rwCompileExtensionMethod: 'baz ^3'
+			category: 'extension'
+			packageName: packageName2;
+		yourself.
+
+	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
+	self assert: (managedClass categoryOfSelector: #'baz') = #'extension'.
+
+	(GsFileIn _fromStream: stream) doFileIn.
+
+	self assert: managedClass == (Rowan globalNamed: className).
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: ((Rowan globalNamed: className) new perform: #'baz') = 3.
+	self assert: managedClass rowanPackageName = packageName1.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
+	self
+		assert:
+			((Rowan globalNamed: className) categoryOfSelector: #'foo') = #'accessing'.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'bar') rowanPackageName = packageName1.
+	self
+		assert:
+			((Rowan globalNamed: className) categoryOfSelector: #'bar') = #'accessing'.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'baz') rowanPackageName = packageName2.
+	self
+		assert:
+			((Rowan globalNamed: className) categoryOfSelector: #'bar') = #'accessing'.
+	self deny: (audit := project audit) isEmpty.
+	self assert: (audit at: packageName2 ifAbsent: [  ]) isNil.
+	self assert: ((audit at: packageName1) at: className) size = 1.
+	details := ((audit at: packageName1) at: className)
+		collect: [ :each | each message ].
+	self assert: (details includes: 'Missing loaded method>>' , 'foo')
 ]
