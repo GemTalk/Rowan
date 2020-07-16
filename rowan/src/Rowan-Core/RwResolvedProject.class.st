@@ -102,6 +102,19 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes [
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: projectsHome;
+		customConditionalAttributes: customConditionalAttributes;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+]
+
 { #category : 'transitions' }
 RwResolvedProject >> defined [
 	^ RwDefinedProject fromResolvedProject: self

@@ -49765,6 +49765,20 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: projectsHome;
+		customConditionalAttributes: customConditionalAttributes;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+%
+
 !		Instance methods for 'RwResolvedProject'
 
 category: 'transitions'
@@ -98399,6 +98413,15 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes
+	^ self platform
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		customConditionalAttributes: customConditionalAttributes
+%
+
 category: '*rowan-gemstone-core'
 classmethod: Rowan
 sessionAutomaticClassInitializationBlackList
@@ -99793,6 +99816,15 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		projectsHome: projectsHome
 		componentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes
+	^ RwResolvedProject
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		customConditionalAttributes: customConditionalAttributes
 %
 
 category: '*rowan-core'

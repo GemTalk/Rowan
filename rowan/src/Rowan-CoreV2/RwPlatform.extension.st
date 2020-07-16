@@ -50,3 +50,11 @@ RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNa
 		componentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
 ]
+
+{ #category : '*rowan-corev2' }
+RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes [
+	^ RwResolvedProject
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		customConditionalAttributes: customConditionalAttributes
+]
