@@ -342,7 +342,7 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 
 { #category : 'private' }
 RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames [
-	| loadedProjectDefinition x |
+	| testResult loadedProjectDefinition x |
 	"validate"
 	self assert: loadedProjects size = expectedProjectNames size.
 	self
@@ -351,12 +351,15 @@ RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loaded
 	loadedProjects
 		do: [ :project | 
 			self assert: (x := project audit) isEmpty.
-			self _runTestSuiteForProject: project.
+			testResult := project testSuite run.
+			self deny: testResult hasErrors.
+			self deny: testResult hasFailures.
 
 			loadedProjectDefinition := project asDefinition.
 			self
 				assert:
 					loadedProjectDefinition class = resolvedProject projectDefinition class ]
+
 ]
 
 { #category : 'migration tests' }
@@ -442,7 +445,7 @@ RwRowanSample9Test >> _testUnmanagedSpec_0057: includeRemoveAll  packageName1: p
 
 "do filein"
 	stream := (self _spec0057GsFilein: includeRemoveAll) readStreamPortable.
-	(GsFileIn _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
 
 	^ loadedProjects
 ]
@@ -4173,8 +4176,7 @@ RwRowanSample9Test >> testSpec_0002 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-self halt.
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
 ]
 
 { #category : 'tests' }
@@ -6212,20 +6214,12 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 
 	classAudit := ((audit at: packageName1) at: className1)
 		collect: [ :each | each message ].
-	self assert: classAudit size = 2.
-	self
-		assert:
-			(classAudit
-				includes: 'Class category has changed in compiled class v loaded class').
+	self assert: classAudit size = 1.
 	self assert: (classAudit includes: 'Missing loaded method>>test').
 
 	classAudit := ((audit at: packageName2) at: className2)
 		collect: [ :each | each message ].
-	self assert: classAudit size = 3.
-	self
-		assert:
-			(classAudit
-				includes: 'Class category has changed in compiled class v loaded class').
+	self assert: classAudit size = 2.
 	self assert: (classAudit includes: 'Missing loaded method>>foo').
 	self assert: (classAudit includes: 'Missing loaded method>>bar').
 
@@ -6249,6 +6243,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 								assert:
 									((methodDetails at: 'method') selector == #'foo'
 										or: [ (methodDetails at: 'method') selector == #'bar' ]) ] ] ]
+
 ]
 
 { #category : 'tests' }

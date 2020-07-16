@@ -845,7 +845,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_01 [
 				instVarNames: '#(#xxx)'
 				symbolDictionaryName: symbolDictionary name asString).
 
-	(GsFileIn _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
 
 	unmanagedClass := Rowan globalNamed: className.
 	self assert: unmanagedClass notNil.
@@ -898,7 +898,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
 
 	self assert: managedClass notNil.
 
-	(GsFileIn _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
@@ -954,7 +954,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 
 	self assert: managedClass notNil.
 
-	(GsFileIn _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
@@ -1017,7 +1017,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 
 	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
 
-	(GsFileIn _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
@@ -1099,7 +1099,7 @@ baz ^3
 	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
 	self assert: (managedClass categoryOfSelector: #'baz') = #'extension'.
 
-	(GsFileIn _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.

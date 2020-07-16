@@ -95465,7 +95465,7 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 
 category: '*rowan-gemstone-kernel'
 method: Class
-rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass packageName: aPackageName options: optionsArray
+rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass category: aCategoryName packageName: aPackageName options: optionsArray
 	| loadedClass |
 	loadedClass := Rowan image
 		loadedClassForClass: oldClass
@@ -95493,7 +95493,7 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
-		category: nil
+		category: aCategoryName
 		packageName: aPackageName
 		constraints: #()
 		options: optionsArray
