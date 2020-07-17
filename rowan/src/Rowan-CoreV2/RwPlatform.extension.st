@@ -21,6 +21,11 @@ RwPlatform >> projectFromUrl: loadSpecUrl diskUrl: urlString [
 ]
 
 { #category : '*rowan-corev2' }
+RwPlatform >> projectFromUrl: loadSpecUrl gitUrl: urlString [
+	^ RwResolvedProject projectFromUrl: loadSpecUrl gitUrl: urlString
+]
+
+{ #category : '*rowan-corev2' }
 RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome [
 	^ RwResolvedProject projectFromUrl: loadSpecUrl projectsHome: projectsHome
 ]

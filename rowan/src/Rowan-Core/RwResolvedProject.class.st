@@ -51,6 +51,19 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl diskUrl: urlString [
 ]
 
 { #category : 'instance creation' }
+RwResolvedProject class >> projectFromUrl: loadSpecUrl gitUrl: urlString [
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		gitUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+]
+
+{ #category : 'instance creation' }
 RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome [
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)

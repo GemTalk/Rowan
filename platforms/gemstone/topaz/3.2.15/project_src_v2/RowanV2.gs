@@ -49711,6 +49711,20 @@ projectFromUrl: loadSpecUrl diskUrl: urlString
 
 category: 'instance creation'
 classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl gitUrl: urlString
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		gitUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProject
 projectFromUrl: loadSpecUrl projectsHome: projectsHome
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
@@ -98380,6 +98394,12 @@ projectFromUrl: loadSpecUrl diskUrl: urlString
 
 category: '*rowan-coreV2'
 classmethod: Rowan
+projectFromUrl: loadSpecUrl gitUrl: urlString
+	^ self platform projectFromUrl: loadSpecUrl gitUrl: urlString
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
 projectFromUrl: loadSpecUrl projectsHome: projectsHome
 	^ self platform projectFromUrl: loadSpecUrl projectsHome: projectsHome
 %
@@ -99781,6 +99801,12 @@ category: '*rowan-corev2'
 method: RwPlatform
 projectFromUrl: loadSpecUrl diskUrl: urlString
 	^ RwResolvedProject projectFromUrl: loadSpecUrl diskUrl: urlString
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl gitUrl: urlString
+	^ RwResolvedProject projectFromUrl: loadSpecUrl gitUrl: urlString
 %
 
 category: '*rowan-corev2'
