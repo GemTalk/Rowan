@@ -941,7 +941,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 				_simpleGsFilein: className
 				instVarNames: '#(#xxx)'
 				symbolDictionaryName: symbolDictionary name asString
-				includeRemoveAllMethods: false).
+				includeRemoveAllMethods: true).
 
 	managedClass := Object
 		rwSubclass: className
@@ -954,7 +954,9 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 
 	self assert: managedClass notNil.
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+		setEnableRemoveAll: false;
+		doFileIn.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
@@ -997,7 +999,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 				_simpleGsFilein: className
 				instVarNames: '#(#xxx)'
 				symbolDictionaryName: symbolDictionary name asString
-				includeRemoveAllMethods: false).
+				includeRemoveAllMethods: true).
 
 	managedClass := Object
 		rwSubclass: className
@@ -1017,7 +1019,9 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 
 	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+		setEnableRemoveAll: false;
+		doFileIn.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
@@ -1066,7 +1070,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_05 [
 		_simpleGsFilein: className
 		instVarNames: '#(#xxx)'
 		symbolDictionaryName: symbolDictionary name asString
-		includeRemoveAllMethods: false)
+		includeRemoveAllMethods: true)
 		,
 			'
 category: accessing
@@ -1099,7 +1103,9 @@ baz ^3
 	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
 	self assert: (managedClass categoryOfSelector: #'baz') = #'extension'.
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+		setEnableRemoveAll: false;
+		doFileIn.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.

@@ -237,11 +237,8 @@ RowanSample9Class1 category: ''RowanSample9-Core''
 				,
 					'
 ! ------------------- Remove existing behavior from RowanSample9Class1
-expectvalue /Metaclass3
-doit
-RowanSample9Class1 removeAllMethods.
-RowanSample9Class1 class removeAllMethods.
-%
+removeAllMethods RowanSample9Class1
+removeallclassmethods RowanSample9Class1
 ' ].
 	filein := filein
 		,
@@ -286,11 +283,8 @@ RowanSample9TestCase category: ''RowanSample9-Tests''
 				,
 					'
 ! ------------------- Remove existing behavior from RowanSample9TestCase
-expectvalue /Metaclass3
-doit
-RowanSample9TestCase removeAllMethods.
-RowanSample9TestCase class removeAllMethods.
-%
+removeAllMethods RowanSample9TestCase
+removeAllClassMethods RowanSample9TestCase
 ' ].
 	filein := filein
 		,
@@ -444,9 +438,10 @@ RwRowanSample9Test >> _testUnmanagedSpec_0057: includeRemoveAll  packageName1: p
 		expectedProjectNames: projectNames.
 
 "do filein"
-	stream := (self _spec0057GsFilein: includeRemoveAll) readStreamPortable.
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
-
+	stream := (self _spec0057GsFilein: true) readStreamPortable.
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+		setEnableRemoveAll: includeRemoveAll;
+		doFileIn.
 	^ loadedProjects
 ]
 
