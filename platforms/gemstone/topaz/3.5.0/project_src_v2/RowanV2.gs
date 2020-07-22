@@ -95476,15 +95476,15 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 category: '*rowan-gemstone-kernel'
 method: Class
 rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass category: aCategoryName packageName: aPackageName options: optionsArray
-	| loadedClass |
-	loadedClass := Rowan image
-		loadedClassForClass: oldClass
-		ifAbsent: [ self error: 'No loaded class found for ' , aString printString ].
+	| loadedPackage |
+	loadedPackage := Rowan image
+		loadedPackageNamed: aPackageName
+		ifAbsent: [ self error: 'No loaded package found for ' , aPackageName printString ].
 
 	aDictionary
 		ifNotNil: [ 
 			| expectedSymDictName specifiedSymDictName |
-			(expectedSymDictName := loadedClass loadedProject
+			(expectedSymDictName := loadedPackage loadedProject
 				symbolDictNameForPackageNamed: aPackageName)
 				~= (specifiedSymDictName := aDictionary name asString)
 				ifTrue: [ 
