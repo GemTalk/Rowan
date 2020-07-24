@@ -29,7 +29,7 @@ superclassName := self superClass ifNil: [ 'nil' ] ifNotNil: [:sc| sc name asStr
 				classinstvars: (self class instVarNames collect: [ :each | each asString ])
 				classvars: (self classVarNames collect: [ :each | each asString ])
 				category: self _classCategory
-				comment: self rwComment
+				comment: self commentForFileout
 				pools: (self sharedPools collect: [ :each | each name asString ]) asArray
 				type: self rwClassType)
 				gs_symbolDictionary: symDictName;

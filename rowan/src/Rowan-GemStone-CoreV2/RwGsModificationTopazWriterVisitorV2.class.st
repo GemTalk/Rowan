@@ -31,43 +31,59 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 	hasClassInstVars := self
 		_writeClassTypeMessage: classDefinition
 		on: aStream
-		hasInstanceVariables: [ aStream
-			nextPutAll:
-			'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
-			lf ].
+		hasInstanceVariables: [ 
+			aStream
+				nextPutAll:
+						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
+								, ' )';
+				lf ].
 	optionsString := ''.
 	classDefinition gs_options isEmpty
-		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
+		ifFalse: [ 
+			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
+				, ' ' ].
 	reservedOopString := ''.
 	classDefinition gs_reservedOop isEmpty
-		ifFalse: [
+		ifFalse: [ 
 			| strm |
 			strm := WriteStream on: String new.
-			strm nextPutAll: '	reservedOop: ', classDefinition gs_reservedOop; lf.
+			strm
+				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
+				lf.
 			reservedOopString := strm contents ].
 	aStream
-		nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
+		nextPutAll:
+				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
+						, ' )';
 		lf.
 	hasClassInstVars
 		ifTrue: [ 
-		aStream
-			nextPutAll:
-			'	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-			lf ].
+			aStream
+				nextPutAll:
+						'	classInstVars: #( '
+								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+				lf ].
 	aStream
 		nextPutAll: '	poolDictionaries: #()';
 		lf;
-		nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
+		nextPutAll:
+				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
 		lf;
-		nextPutAll: '	options: #(', optionsString, ')';
+		nextPutAll: '	options: #(' , optionsString , ')';
 		lf;
 		nextPutAll: reservedOopString;
 		nextPutAll: ')';
 		lf;
 		nextPutAll: '		category: ' , classDefinition category printString , ';';
 		lf;
-		nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-		lf;
+		yourself.
+	classDefinition comment isEmpty
+		ifFalse: [ 
+			aStream
+				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+				lf;
+				yourself ].
+	aStream
 		nextPutAll: '		immediateInvariant.';
 		lf;
 		nextPutAll: 'true.';

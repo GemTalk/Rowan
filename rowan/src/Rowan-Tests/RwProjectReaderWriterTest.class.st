@@ -356,7 +356,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -372,7 +371,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -388,7 +386,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -502,7 +499,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_1'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -518,7 +514,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_2'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -534,7 +529,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_1'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -550,7 +544,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_2'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -566,7 +559,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_1'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -582,7 +574,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_2'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -728,7 +719,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_1'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -744,7 +734,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_2'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -760,7 +749,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_1'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -776,7 +764,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_2'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -792,7 +779,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_1'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -808,7 +794,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core_2'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '

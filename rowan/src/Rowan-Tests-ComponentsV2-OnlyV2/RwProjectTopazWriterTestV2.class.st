@@ -23,7 +23,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -39,7 +38,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -55,7 +53,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -118,7 +115,7 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
+		comment: ''this is a comment'';
 		immediateInvariant.
 true.
 ', percent, '
@@ -134,7 +131,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -150,7 +146,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -218,7 +213,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -234,7 +228,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -250,7 +243,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -621,7 +613,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 		classinstvars: #()
 		classvars: #()
 		category: packageName1
-		comment: ''
+		comment: 'this is a comment'
 		pools: #()
 		type: 'normal'.
 	classDefinition

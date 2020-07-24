@@ -12,7 +12,6 @@ doit
 	options: #()
 )
 		category: 'Network-UUID';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -765,7 +764,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -813,7 +811,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -829,7 +826,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -845,7 +841,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -861,7 +856,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -877,7 +871,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -893,7 +886,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -909,7 +901,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -925,7 +916,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -941,7 +931,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -957,7 +946,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -973,7 +961,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -989,7 +976,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1005,7 +991,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1021,7 +1006,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1037,7 +1021,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1053,7 +1036,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1069,7 +1051,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1085,7 +1066,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1101,7 +1081,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1117,7 +1096,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1828,7 +1806,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Cypress-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1876,7 +1853,6 @@ doit
 	options: #()
 )
 		category: 'Cypress-Environmental-Tools';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -1908,7 +1884,6 @@ doit
 	options: #()
 )
 		category: 'Cypress-Environmental-Tools';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -2144,7 +2119,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Cypress-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -2176,7 +2150,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Cypress-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -2256,7 +2229,6 @@ doit
 	options: #()
 )
 		category: 'Cypress-Environmental-Tools';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -2733,7 +2705,6 @@ doit
 	options: #()
 )
 		category: 'Network-UUID';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3352,7 +3323,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3368,7 +3338,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3384,7 +3353,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3400,7 +3368,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3416,7 +3383,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3432,7 +3398,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3448,7 +3413,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3464,7 +3428,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3480,7 +3443,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3496,7 +3458,6 @@ doit
 	options: #()
 )
 		category: 'GemStone-Interactions-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3528,7 +3489,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-JadeServer';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3544,7 +3504,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-JadeServer';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3560,7 +3519,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-JadeServer';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3576,7 +3534,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-JadeServer';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3592,7 +3549,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-JadeServer';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3608,7 +3564,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-JadeServer';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -3812,7 +3767,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4047,7 +4001,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4249,7 +4202,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4625,7 +4577,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4727,7 +4678,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4798,7 +4748,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4830,7 +4779,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4867,7 +4815,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4883,7 +4830,6 @@ doit
 	options: #()
 )
 		category: 'AST-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -4986,7 +4932,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5002,7 +4947,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5018,7 +4962,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5034,7 +4977,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5050,7 +4992,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5066,7 +5007,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5082,7 +5022,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5198,7 +5137,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5214,7 +5152,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5230,7 +5167,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5246,7 +5182,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5262,7 +5197,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5278,7 +5212,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5294,7 +5227,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5310,7 +5242,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5326,7 +5257,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5342,7 +5272,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5358,7 +5287,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5374,7 +5302,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Services-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5390,7 +5317,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5406,7 +5332,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5422,7 +5347,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5438,7 +5362,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5454,7 +5377,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5470,7 +5392,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5486,7 +5407,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5502,7 +5422,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5598,7 +5517,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5614,7 +5532,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5630,7 +5547,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5646,7 +5562,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5662,7 +5577,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5678,7 +5592,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5694,7 +5607,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5710,7 +5622,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5726,7 +5637,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5742,7 +5652,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5758,7 +5667,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Definitions-Common';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5774,7 +5682,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5790,7 +5697,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5806,7 +5712,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5822,7 +5727,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5838,7 +5742,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5884,7 +5787,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5916,7 +5818,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5932,7 +5833,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5948,7 +5848,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5964,7 +5863,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5980,7 +5878,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5996,7 +5893,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6012,7 +5908,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6028,7 +5923,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6044,7 +5938,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6060,7 +5953,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6076,7 +5968,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6092,7 +5983,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6108,7 +5998,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6124,7 +6013,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6140,7 +6028,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6156,7 +6043,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6172,7 +6058,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6188,7 +6073,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6204,7 +6088,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6220,7 +6103,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6236,7 +6118,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6252,7 +6133,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6268,7 +6148,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6284,7 +6163,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6300,7 +6178,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6316,7 +6193,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6332,7 +6208,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6348,7 +6223,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6364,7 +6238,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6380,7 +6253,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6396,7 +6268,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6412,7 +6283,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6428,7 +6298,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6444,7 +6313,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6460,7 +6328,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6476,7 +6343,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6492,7 +6358,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6508,7 +6373,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6524,7 +6388,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6540,7 +6403,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6556,7 +6418,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6645,7 +6506,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Definitions';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6699,7 +6559,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6715,7 +6574,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6731,7 +6589,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Definitions-Common';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6747,7 +6604,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6763,7 +6619,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6779,7 +6634,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6795,7 +6649,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6871,7 +6724,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Definitions';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -6964,7 +6816,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7032,7 +6883,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7185,7 +7035,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7201,7 +7050,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7217,7 +7065,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7249,7 +7096,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7265,7 +7111,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7281,7 +7126,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7297,7 +7141,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7313,7 +7156,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7329,7 +7171,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7345,7 +7186,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7361,7 +7201,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7377,7 +7216,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7393,7 +7231,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7409,7 +7246,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7425,7 +7261,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7441,7 +7276,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7457,7 +7291,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7473,7 +7306,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7489,7 +7321,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7505,7 +7336,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7521,7 +7351,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7537,7 +7366,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7553,7 +7381,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7569,7 +7396,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7585,7 +7411,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7601,7 +7426,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7617,7 +7441,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7633,7 +7456,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7649,7 +7471,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7665,7 +7486,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7681,7 +7501,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7697,7 +7516,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7713,7 +7531,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7729,7 +7546,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7745,7 +7561,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7840,7 +7655,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7876,7 +7690,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7947,7 +7760,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7963,7 +7775,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7979,7 +7790,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -7995,7 +7805,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-CoreV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8073,7 +7882,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8089,7 +7897,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8105,7 +7912,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-GemStone-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8143,7 +7949,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8159,7 +7964,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8175,7 +7979,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8235,7 +8038,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8251,7 +8053,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8299,7 +8100,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8391,7 +8191,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-ComponentsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8407,7 +8206,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Specifications';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8423,7 +8221,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-SpecificationsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8439,7 +8236,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-SpecificationsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8455,7 +8251,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-SpecificationsV2';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8721,7 +8516,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Url-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -8737,7 +8531,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Url-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -9141,7 +8934,6 @@ doit
 	options: #()
 )
 		category: 'Tonel-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -9157,7 +8949,6 @@ doit
 	options: #()
 )
 		category: 'Tonel-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -9498,7 +9289,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -9514,7 +9304,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -9530,7 +9319,6 @@ doit
 	options: #()
 )
 		category: 'Rowan-Tools-Core';
-		comment: '';
 		immediateInvariant.
 true.
 %
@@ -58383,43 +58171,59 @@ _fileOutClassDeclaration: classDefinition on: aStream
 	hasClassInstVars := self
 		_writeClassTypeMessage: classDefinition
 		on: aStream
-		hasInstanceVariables: [ aStream
-			nextPutAll:
-			'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
-			lf ].
+		hasInstanceVariables: [ 
+			aStream
+				nextPutAll:
+						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
+								, ' )';
+				lf ].
 	optionsString := ''.
 	classDefinition gs_options isEmpty
-		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
+		ifFalse: [ 
+			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
+				, ' ' ].
 	reservedOopString := ''.
 	classDefinition gs_reservedOop isEmpty
-		ifFalse: [
+		ifFalse: [ 
 			| strm |
 			strm := WriteStream on: String new.
-			strm nextPutAll: '	reservedOop: ', classDefinition gs_reservedOop; lf.
+			strm
+				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
+				lf.
 			reservedOopString := strm contents ].
 	aStream
-		nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
+		nextPutAll:
+				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
+						, ' )';
 		lf.
 	hasClassInstVars
 		ifTrue: [ 
-		aStream
-			nextPutAll:
-			'	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-			lf ].
+			aStream
+				nextPutAll:
+						'	classInstVars: #( '
+								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+				lf ].
 	aStream
 		nextPutAll: '	poolDictionaries: #()';
 		lf;
-		nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
+		nextPutAll:
+				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
 		lf;
-		nextPutAll: '	options: #(', optionsString, ')';
+		nextPutAll: '	options: #(' , optionsString , ')';
 		lf;
 		nextPutAll: reservedOopString;
 		nextPutAll: ')';
 		lf;
 		nextPutAll: '		category: ' , classDefinition category printString , ';';
 		lf;
-		nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-		lf;
+		yourself.
+	classDefinition comment isEmpty
+		ifFalse: [ 
+			aStream
+				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+				lf;
+				yourself ].
+	aStream
 		nextPutAll: '		immediateInvariant.';
 		lf;
 		nextPutAll: 'true.';
@@ -58957,43 +58761,59 @@ _fileOutClassDeclaration: classDefinition on: aStream
 	hasClassInstVars := self
 		_writeClassTypeMessage: classDefinition
 		on: aStream
-		hasInstanceVariables: [ aStream
-			nextPutAll:
-			'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
-			lf ].
+		hasInstanceVariables: [ 
+			aStream
+				nextPutAll:
+						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
+								, ' )';
+				lf ].
 	optionsString := ''.
 	classDefinition gs_options isEmpty
-		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
+		ifFalse: [ 
+			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
+				, ' ' ].
 	reservedOopString := ''.
 	classDefinition gs_reservedOop isEmpty
-		ifFalse: [
+		ifFalse: [ 
 			| strm |
 			strm := WriteStream on: String new.
-			strm nextPutAll: '	reservedOop: ', classDefinition gs_reservedOop; lf.
+			strm
+				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
+				lf.
 			reservedOopString := strm contents ].
 	aStream
-		nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
+		nextPutAll:
+				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
+						, ' )';
 		lf.
 	hasClassInstVars
 		ifTrue: [ 
-		aStream
-			nextPutAll:
-			'	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-			lf ].
+			aStream
+				nextPutAll:
+						'	classInstVars: #( '
+								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+				lf ].
 	aStream
 		nextPutAll: '	poolDictionaries: #()';
 		lf;
-		nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
+		nextPutAll:
+				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
 		lf;
-		nextPutAll: '	options: #(', optionsString, ')';
+		nextPutAll: '	options: #(' , optionsString , ')';
 		lf;
 		nextPutAll: reservedOopString;
 		nextPutAll: ')';
 		lf;
 		nextPutAll: '		category: ' , classDefinition category printString , ';';
 		lf;
-		nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-		lf;
+		yourself.
+	classDefinition comment isEmpty
+		ifFalse: [ 
+			aStream
+				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+				lf;
+				yourself ].
+	aStream
 		nextPutAll: '		immediateInvariant.';
 		lf;
 		nextPutAll: 'true.';
@@ -61300,7 +61120,7 @@ newClassDefinitionFrom: anArray
 		classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ])
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
 		category: (metadata at: #'category' ifAbsent: [  ])
-		comment: (anArray second ifNil: [ '' ])
+		comment: (anArray second )
 		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 		type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
 	^ currentClassDefinition
@@ -61486,7 +61306,7 @@ readClassDirectory: classDirectory inPackage: packageName
 		normalizedMetadata at: key asLowercase asSymbol put: value ].
 	classDef :=	self newClassDefinitionFrom: {
 		nil.
-		classComment. 
+		classComment isEmpty ifTrue: [ nil ]. 
 		nil. 
 		normalizedMetadata at: 'type' ifAbsent: ['normal']. 
 		nil. 
@@ -77732,7 +77552,7 @@ basicCreateClassWithSuperclass: superclass
 				poolDictionaries: (classDefinition propertyAt: 'pools')
 				inDictionary: nil
 				newVersionOf: oldVersion
-				description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+				description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 				constraints: oldConstraints
 				options: gs_options ]
 		ifFalse: [ 
@@ -77746,7 +77566,7 @@ basicCreateClassWithSuperclass: superclass
 						poolDictionaries: (classDefinition propertyAt: 'pools')
 						inDictionary: nil
 						newVersionOf: oldVersion
-						description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+						description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
@@ -77761,7 +77581,7 @@ basicCreateClassWithSuperclass: superclass
 								poolDictionaries: (classDefinition propertyAt: 'pools')
 								inDictionary: nil
 								newVersionOf: oldVersion
-								description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+								description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 								options: gs_options ]
 						ifFalse: [ self error: 'Unknown class type' ] ] ].
 	^ createdClass
@@ -101668,7 +101488,7 @@ options: optionsArray
             oldClass _commentOrDescription: aDescription.
             ^oldClass "avoid creation of a new version"
         ].
-      descr ifNil: [descr := oldClass rwComment]
+      descr ifNil: [descr := oldClass commentForFileout]
   ].
   theClass := Object
         subclass: aString

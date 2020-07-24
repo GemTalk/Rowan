@@ -122,7 +122,7 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 				poolDictionaries: (classDefinition propertyAt: 'pools')
 				inDictionary: nil
 				newVersionOf: oldVersion
-				description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+				description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 				constraints: oldConstraints
 				options: gs_options ]
 		ifFalse: [ 
@@ -136,7 +136,7 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 						poolDictionaries: (classDefinition propertyAt: 'pools')
 						inDictionary: nil
 						newVersionOf: oldVersion
-						description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+						description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
@@ -151,7 +151,7 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 								poolDictionaries: (classDefinition propertyAt: 'pools')
 								inDictionary: nil
 								newVersionOf: oldVersion
-								description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+								description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 								options: gs_options ]
 						ifFalse: [ self error: 'Unknown class type' ] ] ].
 	^ createdClass
@@ -201,21 +201,20 @@ RwGsClassPatchV2 >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
 	self installPropertiesPatchFor: aPatchSet registry: theRegistry
 ]
 
-{ #category : 'patching moved classes' }
-RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove [
-
-	| theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchSymbolListFor: aPatchSet registry: theRegistry
-]
-
 { #category : 'installing' }
 RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet_symbolList [
 
 	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
 ]
 
+{ #category : 'patching moved classes' }
+RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove [
+
+	| theRegistry |
+	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+		rowanSymbolDictionaryRegistry.
+	self installPropertiesPatchSymbolListFor: aPatchSet registry: theRegistry
+]
 
 { #category : 'versioning' }
 RwGsClassPatchV2 >> oldClassVersion [
