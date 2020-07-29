@@ -634,11 +634,6 @@ RwResolvedProjectV2 >> name [
 	^ self projectName
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> packageConvention [
-	^ self _projectSpecification packageConvention
-]
-
 { #category : 'querying' }
 RwResolvedProjectV2 >> packageForClassNamed: className [
 	"Answer nil if no class found"
