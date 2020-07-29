@@ -61117,7 +61117,7 @@ readClassDirectory: classDirectory inPackage: packageName
 		normalizedMetadata at: key asLowercase asSymbol put: value ].
 	classDef :=	self newClassDefinitionFrom: {
 		nil.
-		classComment isEmpty ifTrue: [ nil ]. 
+		classComment isEmpty ifTrue: [ nil ] ifFalse: [ classComment ]. 
 		nil. 
 		normalizedMetadata at: 'type' ifAbsent: ['normal']. 
 		nil. 
