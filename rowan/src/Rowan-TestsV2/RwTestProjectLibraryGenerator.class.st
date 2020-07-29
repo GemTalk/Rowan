@@ -68,6 +68,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0055: commitComment;
 	genSpec_0056: commitComment;
 	genSpec_0057: commitComment;
+	genSpec_0058: commitComment;
 	yourself
 "
 Class {
@@ -3013,6 +3014,34 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0057: resolvedProject [
 	className := projectName , 'Class1'.
 	((resolvedProject packageNamed: packageName2) addClassExtensionNamed: className)
 		addClassMethod: 'bar ^''bar''' protocol: 'accessing';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0058: resolvedProject [
+	"Start with spec_0057 and set class category to nil and empty string (https://github.com/GemTalk/Rowan/issues/169)"
+
+	| packageName1 packageName2 packageName5 className testClassName |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName5 := projectName , '-' , 'Tests'.
+	className := projectName , 'Class1'.
+	testClassName := projectName , 'TestCase'.
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className)
+		category: nil;
+		yourself.
+	((resolvedProject packageNamed: packageName5)
+		classDefinitionNamed: testClassName)
+		category: '';
+		addInstanceMethod:
+				'testCategories
+	| x |
+	self assert: (x := ' , className
+						,
+							' category) =  ''Kernel''.
+	self assert: (x := ' , testClassName , ' category) = '''''
+			protocol: 'tests';
 		yourself.
 	^ resolvedProject
 ]
@@ -6382,6 +6411,49 @@ RwTestProjectLibraryGenerator >> genSpec_0057: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0057: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0058: commitMessage [
+	"Start with spec_0057 and set class category to nil and empty string (https://github.com/GemTalk/Rowan/issues/169)"
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0058'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0057'.
+	title := 'Start with spec_0057 and set class category to nil and empty string (https://github.com/GemTalk/Rowan/issues/169)'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 3
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #();
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		packageConvention: 'Rowan';
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests' };
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0058: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
