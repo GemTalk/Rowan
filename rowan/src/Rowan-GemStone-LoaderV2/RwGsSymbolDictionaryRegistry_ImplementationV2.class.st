@@ -396,8 +396,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
 			compiledMethod == oldCompiledMethod
-				ifFalse: [ 
-					compiledMethod sourceString = oldCompiledMethod sourceString
+				ifFalse: [ | src oldSrc "temps for ease of debugging" |
+					(src := compiledMethod sourceString trimWhiteSpace) = (oldSrc := oldCompiledMethod sourceString trimWhiteSpace)
 						ifFalse: [ 
 							"only a problem, if the new and old compiled method are not identical"
 							self
