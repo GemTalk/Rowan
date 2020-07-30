@@ -62045,6 +62045,30 @@ loadSpecification
 
 category: 'accessing'
 method: RwAbstractResolvedProjectV2
+packageConvention
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	^ self _projectSpecification packageConvention
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+packageConvention: aString
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	self _projectSpecification packageConvention: aString
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
 platformConditionalAttributes
 	^ self projectDefinitionPlatformConditionalAttributes
 		ifNil: [ super platformConditionalAttributes , Rowan platformConditionalAttributes ]
@@ -62352,30 +62376,6 @@ category: 'actions'
 method: RwResolvedProjectSpecificationV2
 export
 	self exportProjectSpecification
-%
-
-category: 'accessubg'
-method: RwResolvedProjectSpecificationV2
-packageConvention
-	"
-		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
-		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
-		Rowan			- Class category and method protocol are not overloaded with packaging information
-	"
-
-	^ self _projectSpecification packageConvention
-%
-
-category: 'accessubg'
-method: RwResolvedProjectSpecificationV2
-packageConvention: aString
-	"
-		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
-		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
-		Rowan			- Class category and method protocol are not overloaded with packaging information
-	"
-
-	self _projectSpecification packageConvention: aString
 %
 
 category: 'accessubg'
@@ -63111,12 +63111,6 @@ name
 		should use projectAlias, but need to wait until we're no longer using RwComponentProjectDefinition"
 
 	^ self projectName
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-packageConvention
-	^ self _projectSpecification packageConvention
 %
 
 category: 'querying'
