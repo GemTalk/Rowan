@@ -164,6 +164,20 @@ RwAbstractResolvedProjectV2 >> commit: message [
 ]
 
 { #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> customConditionalAttributes [
+	"get the custom conditional attributes"
+
+	^ self _loadSpecification customConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> customConditionalAttributes: anArray [
+	"set the custom conditional attributes"
+
+	^ self _loadSpecification customConditionalAttributes: anArray
+]
+
+{ #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> loadSpecification [
 	^ RwResolvedLoadSpecificationV2 new
 		_projectDefinition: projectDefinition;

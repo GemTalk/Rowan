@@ -85,6 +85,16 @@ RwProject >> currentBranchName [
 
 ]
 
+{ #category : 'accessing' }
+RwProject >> customConditionalAttributes [
+	^ self _loadSpecification customConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwProject >> customConditionalAttributes: anArray [
+	self _loadSpecification customConditionalAttributes: anArray
+]
+
 { #category : 'transitions' }
 RwProject >> defined [
 	^ RwDefinedProject fromLoadedProject: self

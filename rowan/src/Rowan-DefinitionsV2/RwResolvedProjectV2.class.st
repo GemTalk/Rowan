@@ -112,6 +112,11 @@ RwResolvedProjectV2 >> addNewComponentNamed: aComponentName comment: aString [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition [
+	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
 ]
@@ -267,6 +272,14 @@ RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: 
 RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName [
 	self _loadSpecification addTopLevelComponentNamed: componentName.
 	^ self _projectDefinition addNewComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName condition: condition [
+	self _loadSpecification addTopLevelComponentNamed: componentName.
+	^ self _projectDefinition
+		addNewComponentNamed: componentName
+		condition: condition
 ]
 
 { #category : 'actions' }

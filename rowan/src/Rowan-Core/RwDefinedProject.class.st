@@ -90,6 +90,13 @@ RwDefinedProject >> addNewComponentNamed: aComponentName comment: aString [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition [
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		condition: condition
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
@@ -208,6 +215,11 @@ RwDefinedProject >> addSimpleNestedComponentNamed: aComponentName condition: con
 { #category : 'accessing' }
 RwDefinedProject >> addTopLevelComponentNamed: componentName [
 	^ self _resolvedProject addTopLevelComponentNamed: componentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addTopLevelComponentNamed: componentName  condition: condition [
+	^ self _resolvedProject addTopLevelComponentNamed: componentName  condition: condition
 ]
 
 { #category : 'accessing' }

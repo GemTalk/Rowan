@@ -85,6 +85,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			theLoadedProject handle _projectStructure: projectDef components copy.
+			theLoadedProject handle _loadSpecification: projectDef _loadSpecification copy.
 			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
 			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty

@@ -48869,6 +48869,12 @@ load
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+packageFormat: aString
+	^ self _resolvedProject packageFormat: aString
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 packageNames
 	^self _resolvedProject packageNames
 %
@@ -49006,6 +49012,14 @@ addNewComponentNamed: aComponentName comment: aString
 
 category: 'accessing'
 method: RwDefinedProject
+addNewComponentNamed: aComponentName condition: condition
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		condition: condition
+%
+
+category: 'accessing'
+method: RwDefinedProject
 addNewComponentNamed: aComponentName condition: condition comment: aString
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
@@ -49139,6 +49153,12 @@ category: 'accessing'
 method: RwDefinedProject
 addTopLevelComponentNamed: componentName
 	^ self _resolvedProject addTopLevelComponentNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addTopLevelComponentNamed: componentName  condition: condition
+	^ self _resolvedProject addTopLevelComponentNamed: componentName  condition: condition
 %
 
 category: 'accessing'
@@ -49756,6 +49776,18 @@ currentBranchName
 	rootPath := self repositoryRootPath.
 	rootPath ifNil: [ ^ '' ].
 	^ Rowan gitTools gitBranchNameIn:rootPath
+%
+
+category: 'accessing'
+method: RwProject
+customConditionalAttributes
+	^ self _loadSpecification customConditionalAttributes
+%
+
+category: 'accessing'
+method: RwProject
+customConditionalAttributes: anArray
+	self _loadSpecification customConditionalAttributes: anArray
 %
 
 category: 'transitions'
@@ -62033,6 +62065,22 @@ commit: message
 
 category: 'accessing'
 method: RwAbstractResolvedProjectV2
+customConditionalAttributes
+	"get the custom conditional attributes"
+
+	^ self _loadSpecification customConditionalAttributes
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+customConditionalAttributes: anArray
+	"set the custom conditional attributes"
+
+	^ self _loadSpecification customConditionalAttributes: anArray
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
 loadSpecification
 	^ RwResolvedLoadSpecificationV2 new
 		_projectDefinition: projectDefinition;
@@ -62298,22 +62346,6 @@ componentNames: anArray
 	self _loadSpecification componentNames: anArray
 %
 
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-customConditionalAttributes
-	"get the custom conditional attributes"
-
-	^ self _loadSpecification customConditionalAttributes
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-customConditionalAttributes: anArray
-	"set the custom conditional attributes"
-
-	^ self _loadSpecification customConditionalAttributes: anArray
-%
-
 category: 'actions'
 method: RwResolvedLoadSpecificationV2
 export
@@ -62532,6 +62564,12 @@ addNewComponentNamed: aComponentName comment: aString
 
 category: 'project definition'
 method: RwResolvedProjectV2
+addNewComponentNamed: aComponentName condition: condition
+	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
 addNewComponentNamed: aComponentName condition: condition comment: aString
 	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
 %
@@ -62706,6 +62744,15 @@ method: RwResolvedProjectV2
 addTopLevelComponentNamed: componentName
 	self _loadSpecification addTopLevelComponentNamed: componentName.
 	^ self _projectDefinition addNewComponentNamed: componentName
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+addTopLevelComponentNamed: componentName condition: condition
+	self _loadSpecification addTopLevelComponentNamed: componentName.
+	^ self _projectDefinition
+		addNewComponentNamed: componentName
+		condition: condition
 %
 
 category: 'actions'
@@ -64521,10 +64568,12 @@ method: RwGitTool
 isGitHome: dirPath
 	"Answer true if the given directory path is the home directory for a git repository"
 
-	^ (self gitPresentIn: dirPath)
+	| dirReference |
+	dirReference := dirPath asFileReference.
+	^ (self gitPresentIn: dirReference pathString)
 		and: [ 
-			(self gitrevparseShowTopLevelIn: dirPath) trimBoth asFileReference
-				= dirPath asFileReference ]
+			(self gitrevparseShowTopLevelIn: dirReference pathString) trimBoth
+				asFileReference = dirReference ]
 %
 
 category: 'private'
@@ -67962,6 +68011,7 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			theLoadedProject handle _projectStructure: projectDef components copy.
+			theLoadedProject handle _loadSpecification: projectDef _loadSpecification copy.
 			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
 			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
@@ -70988,6 +71038,14 @@ category: 'accessing'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName comment: aString
 	^ self addNewComponentNamed: aComponentName condition: 'common' comment: aString
+%
+
+category: 'accessing'
+method: RwProjectDefinitionV2
+addNewComponentNamed: aComponentName condition: condition
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: condition
 %
 
 category: 'accessing'
@@ -81231,8 +81289,8 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
 			compiledMethod == oldCompiledMethod
-				ifFalse: [ 
-					compiledMethod sourceString = oldCompiledMethod sourceString
+				ifFalse: [ | src oldSrc "temps for ease of debugging" |
+					(src := compiledMethod sourceString trimWhiteSpace) = (oldSrc := oldCompiledMethod sourceString trimWhiteSpace)
 						ifFalse: [ 
 							"only a problem, if the new and old compiled method are not identical"
 							self
@@ -86637,6 +86695,24 @@ addProjectNamed: projectName toComponentNamed: toComponentName
 		componentNamed: toComponentName
 		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
 	component addProjectNamed: projectName
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addSimpleComponentNamed: aComponentName condition: condition
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
+	component
+		condition: condition;
+		yourself.
+	^ component
 %
 
 category: 'accessing'
@@ -99887,6 +99963,31 @@ addNewPackageNamed: packageName toComponentNamed: componentName
 		addNewPackageNamed: packageName
 		inSybolDictionaryNamed: self _loadSpecification gemstoneDefaultSymbolDictName
 		toComponentNamed: componentName
+%
+
+category: '*rowan-corev2'
+method: RwProject
+addTopLevelComponentNamed: componentName
+	^ self addTopLevelComponentNamed: componentName condition: 'common'
+%
+
+category: '*rowan-corev2'
+method: RwProject
+addTopLevelComponentNamed: componentName condition: condition
+	"since we are working with a loaded project here, adding a new top level component 
+		with a condition, implies that the condition should be applied to the load specification, 
+		thus causing the new component to be loaded"
+
+	| projectDefinition component conditionals |
+	projectDefinition := self defined.
+	component := projectDefinition
+		addTopLevelComponentNamed: componentName
+		condition: condition.
+	conditionals := projectDefinition customConditionalAttributes copy.
+	conditionals add: condition.
+	projectDefinition customConditionalAttributes: conditionals asSet asArray.
+	projectDefinition load.
+	^ component
 %
 
 category: '*rowan-corev2'

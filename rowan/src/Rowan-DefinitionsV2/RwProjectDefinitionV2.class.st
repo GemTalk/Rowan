@@ -176,6 +176,13 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName comment: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: condition
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self components
 		addSimpleComponentNamed: aComponentName

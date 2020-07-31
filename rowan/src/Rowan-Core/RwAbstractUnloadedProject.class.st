@@ -45,6 +45,11 @@ RwAbstractUnloadedProject >> load [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> packageFormat: aString [
+	^ self _resolvedProject packageFormat: aString
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> packageNames [
 	^self _resolvedProject packageNames
 ]

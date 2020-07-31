@@ -174,6 +174,23 @@ RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toC
 ]
 
 { #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
+	component
+		condition: condition;
+		yourself.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
 	| component |
 	self components
