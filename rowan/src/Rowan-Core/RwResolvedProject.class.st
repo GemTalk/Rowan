@@ -128,6 +128,19 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString [
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		readonlyDiskUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+]
+
 { #category : 'transitions' }
 RwResolvedProject >> defined [
 	^ RwDefinedProject fromResolvedProject: self

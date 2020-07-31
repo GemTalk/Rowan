@@ -158,6 +158,32 @@ RwGsTopazRowanToolTest >> testTopazCreateProject_git [
 	self assert: Rowan gemstoneTools topaz currentTopazProjectName = projectName
 ]
 
+{ #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazLoadProjectFromUrl [
+	"Create a git-based project using topaz api"
+
+	| projectName projectsHome loadSpecUrl  project |
+	projectName := 'RowanSample9'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	(projectsHome / projectName) ensureDeleteAll.
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"Create"
+	loadSpecUrl := 'file:', ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0002.ston') pathString.
+	project := Rowan gemstoneTools topaz
+		loadProjectFromUrl: loadSpecUrl
+		projectsHome: projectsHome 
+		componentNames: nil 
+		customConditionalAttributes: {'common'}.
+
+"Validate"
+	self assert: project packageNames sort = #('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone' ) sort.
+]
+
 { #category : 'tonel support' }
 RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 	"load spec_0001 and then checkout spec_0009 and read 

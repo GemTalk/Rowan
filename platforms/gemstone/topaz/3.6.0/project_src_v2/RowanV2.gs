@@ -49412,6 +49412,20 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		yourself
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		readonlyDiskUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+%
+
 !		Instance methods for 'RwResolvedProject'
 
 category: 'transitions'
@@ -61016,14 +61030,25 @@ readClassesFor: packageName packageRoot: packageRoot
 category: 'package reading'
 method: RwRepositoryComponentProjectReaderVisitor
 readPackages: packagesRoot
+  | trace |
+  trace := Rowan projectTools trace.
 	packagesRoot directories do: [:packageDir | | dir |
     dir := packageDir path basename .
     dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
-		  | packageName |
+		  | packageName a b c |
 		  packageName := self _packageNameFromPackageDir: packageDir.
-		  (packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
-			  ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
-    ].
+      trace trace:'--- reading package ', packageName asString , ' dir ' , packageDir asString  .
+		  (a := packageDir extension) = (b := self packageExtension) ifFalse:[
+        trace trace:'      skipped readClasses, extension does not match'.
+      ] ifTrue:[
+        ((c :=self packageNames) includes: packageName) ifTrue:[
+			    self readClassesFor: packageName packageRoot: packageDir 
+        ] ifFalse:[ 
+          trace trace:'      skipped readClasses, packageName rejected'.
+        ]
+      ]
+    ]
+  ].
 %
 
 category: 'public'
@@ -97824,6 +97849,12 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		customConditionalAttributes: customConditionalAttributes
 %
 
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	^ self platform projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+%
+
 category: '*rowan-gemstone-core'
 classmethod: Rowan
 sessionAutomaticClassInitializationBlackList
@@ -99233,6 +99264,12 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		projectFromUrl: loadSpecUrl
 		projectsHome: projectsHome
 		customConditionalAttributes: customConditionalAttributes
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	^ RwResolvedProject projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 %
 
 category: '*rowan-core'
