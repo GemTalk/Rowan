@@ -61205,14 +61205,25 @@ readClassesFor: packageName packageRoot: packageRoot
 category: 'package reading'
 method: RwRepositoryComponentProjectReaderVisitor
 readPackages: packagesRoot
+  | trace |
+  trace := Rowan projectTools trace.
 	packagesRoot directories do: [:packageDir | | dir |
     dir := packageDir path basename .
     dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
-		  | packageName |
+		  | packageName a b c |
 		  packageName := self _packageNameFromPackageDir: packageDir.
-		  (packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
-			  ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
-    ].
+      trace trace:'--- reading package ', packageName asString , ' dir ' , packageDir asString  .
+		  (a := packageDir extension) = (b := self packageExtension) ifFalse:[
+        trace trace:'      skipped readClasses, extension does not match'.
+      ] ifTrue:[
+        ((c :=self packageNames) includes: packageName) ifTrue:[
+			    self readClassesFor: packageName packageRoot: packageDir 
+        ] ifFalse:[ 
+          trace trace:'      skipped readClasses, packageName rejected'.
+        ]
+      ]
+    ]
+  ].
 %
 
 category: 'public'
@@ -63820,18 +63831,6 @@ fileUtilities
   ^ Rowan fileUtilities
 %
 
-category: 'bash utilities'
-method: RwAbstractTool
-readlink: filepath
-
-	"resolve (possible) symbolic links in filepath and return an absolute path"
-	"NOTE: may need alternate solution on OSX"
-
-	| command |
-	command := self _sh_realpath_source, '; realpath ' , filepath.
-	^Rowan gitTools performOnServer: command
-%
-
 category: 'smalltalk api'
 method: RwAbstractTool
 specification: aRwSpecification
@@ -63842,17 +63841,6 @@ category: 'smalltalk api'
 method: RwAbstractTool
 specUrl: aString
   ^ self specification: (RwSpecification fromUrl: aString)
-%
-
-category: 'private'
-method: RwAbstractTool
-_sh_realpath_source
-
-	"https://github.com/mkropat/sh-realpath/blob/master/realpath.sh"
-
-	"all on one line because that's what our perform on server call wants - I think:)"
-
-	^'realpath() { canonicalize_path "$(resolve_symlinks "$1")"; }; resolve_symlinks() { local dir_context path ; path=$(readlink -- "$1"); if [ $? -eq 0 ]; then dir_context=$(dirname -- "$1"); resolve_symlinks "$(_prepend_path_if_relative "$dir_context" "$path")"; else printf ''%s\n'' "$1"; fi; }; _prepend_path_if_relative() { case "$2" in /* ) printf ''%s\n'' "$2" ;; * ) printf ''%s\n'' "$1/$2" ;; esac; }; canonicalize_path() { if [ -d "$1" ]; then _canonicalize_dir_path "$1"; else _canonicalize_file_path "$1"; fi; }; _canonicalize_dir_path() { (cd "$1" 2>/dev/null && pwd -P); }; _canonicalize_file_path() { local dir file; dir=$(dirname -- "$1"); file=$(basename -- "$1"); (cd "$dir" 2>/dev/null && printf ''%s/%s\n'' "$(pwd -P)" "$file"); }'
 %
 
 category: 'private'
@@ -98506,6 +98494,18 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 
 !		Instance methods for 'RwAbstractTool'
 
+category: '*rowan-tools-gemstone-32x'
+method: RwAbstractTool
+readlink: filepath
+
+	"resolve (possible) symbolic links in filepath and return an absolute path"
+	"NOTE: may need alternate solution on OSX"
+
+	| command |
+	command := self _sh_realpath_source, '; realpath ' , filepath.
+	^Rowan gitTools performOnServer: command
+%
+
 category: '*rowan-tools-gemstone'
 method: RwAbstractTool
 _log: aString
@@ -98516,6 +98516,17 @@ If the client is a topaz process, the default logger writes to the
  else to stdout.
 "
 	GsFile gciLogClient: aString
+%
+
+category: '*rowan-tools-gemstone-32x'
+method: RwAbstractTool
+_sh_realpath_source
+
+	"https://github.com/mkropat/sh-realpath/blob/master/realpath.sh"
+
+	"all on one line because that's what our perform on server call wants - I think:)"
+
+	^'realpath() { canonicalize_path "$(resolve_symlinks "$1")"; }; resolve_symlinks() { local dir_context path ; path=$(readlink -- "$1"); if [ $? -eq 0 ]; then dir_context=$(dirname -- "$1"); resolve_symlinks "$(_prepend_path_if_relative "$dir_context" "$path")"; else printf ''%s\n'' "$1"; fi; }; _prepend_path_if_relative() { case "$2" in /* ) printf ''%s\n'' "$2" ;; * ) printf ''%s\n'' "$1/$2" ;; esac; }; canonicalize_path() { if [ -d "$1" ]; then _canonicalize_dir_path "$1"; else _canonicalize_file_path "$1"; fi; }; _canonicalize_dir_path() { (cd "$1" 2>/dev/null && pwd -P); }; _canonicalize_file_path() { local dir file; dir=$(dirname -- "$1"); file=$(basename -- "$1"); (cd "$dir" 2>/dev/null && printf ''%s/%s\n'' "$(pwd -P)" "$file"); }'
 %
 
 ! Class extensions for 'RwBasicProjectLoadComponentV2'

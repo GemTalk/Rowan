@@ -1,0 +1,21 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/gemstone35-/Tools',
+	#condition : [
+		'gs3.[5-]'
+	],
+	#packageNames : [
+		'Rowan-Tools-GemStone-35x'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tools-GemStone-35x' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Core gs3.[5-]  packages '
+}
