@@ -10,6 +10,12 @@ RwGsProjectPatchV2 class >> for: aProjectDefinition [
 	^self new projectDefinition: aProjectDefinition
 ]
 
+{ #category : 'printing' }
+RwGsProjectPatchV2 >> printOn: aStream [
+	super printOn: aStream.
+	aStream nextPutAll: '(' , projectDefinition name , ')'
+]
+
 { #category : 'applying' }
 RwGsProjectPatchV2 >> updateProjectProperties [
 

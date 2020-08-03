@@ -16,6 +16,16 @@ RwPlatform >> projectFromUrl: loadSpecUrl [
 ]
 
 { #category : '*rowan-corev2' }
+RwPlatform >> projectFromUrl: loadSpecUrl diskUrl: urlString [
+	^ RwResolvedProject projectFromUrl: loadSpecUrl diskUrl: urlString
+]
+
+{ #category : '*rowan-corev2' }
+RwPlatform >> projectFromUrl: loadSpecUrl gitUrl: urlString [
+	^ RwResolvedProject projectFromUrl: loadSpecUrl gitUrl: urlString
+]
+
+{ #category : '*rowan-corev2' }
 RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome [
 	^ RwResolvedProject projectFromUrl: loadSpecUrl projectsHome: projectsHome
 ]
@@ -44,4 +54,12 @@ RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNa
 		projectsHome: projectsHome
 		componentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : '*rowan-corev2' }
+RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes [
+	^ RwResolvedProject
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		customConditionalAttributes: customConditionalAttributes
 ]

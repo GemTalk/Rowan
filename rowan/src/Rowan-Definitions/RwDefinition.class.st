@@ -59,6 +59,17 @@ RwDefinition >> compareAgainstBase: aDefinition [
 ]
 
 { #category : 'comparing' }
+RwDefinition >> compareAgainstBaseForNewClassUnmanagedVersion: aBaseDefinition [
+
+	"Diff myself for changes against the given base definition. 
+	Answer a Modification, which might be empty if there are no changes."
+
+	"Filter the definition to include changes that are only applicable to new unmanaged class versions"
+
+	self subclassResponsibility
+]
+
+{ #category : 'comparing' }
 RwDefinition >> compareAgainstBaseForNewClassVersion: aBaseDefinition [
 
 	"Diff myself for changes against the given base definition. 

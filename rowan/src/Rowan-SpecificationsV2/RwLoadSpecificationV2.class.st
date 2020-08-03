@@ -227,6 +227,7 @@ RwLoadSpecificationV2 >> diskUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> diskUrl: anUrlString [
+	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	diskUrl := anUrlString
 ]
 
@@ -284,9 +285,9 @@ RwLoadSpecificationV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 			gemstoneProperties
 				at: self _gemstoneAllUsersName
 				ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ] ].
-	^ userProperties
+	^ (userProperties
 		at: #'defaultSymbolDictName'
-		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
+		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]) asString
 ]
 
 { #category : 'gemstone-support' }
@@ -324,7 +325,7 @@ RwLoadSpecificationV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: sym
 
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultSymbolDictName put: symbolDictName
+			at: #defaultSymbolDictName put: symbolDictName asString
 ]
 
 { #category : 'gemstone-support' }
@@ -353,6 +354,7 @@ RwLoadSpecificationV2 >> gitUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> gitUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	gitUrl := anUrlString
 ]
 
@@ -410,6 +412,7 @@ RwLoadSpecificationV2 >> mercurialUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> mercurialUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	mercurialUrl := anUrlString
 ]
 
@@ -523,6 +526,7 @@ RwLoadSpecificationV2 >> readonlyDiskUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> readonlyDiskUrl: anUrlString [
+	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
 ]
 
@@ -614,6 +618,7 @@ RwLoadSpecificationV2 >> svnUrl [
 ]
 
 { #category : 'accessing' }
-RwLoadSpecificationV2 >> svnUrlUrl: anUrlString [
+RwLoadSpecificationV2 >> svnUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
 ]

@@ -86,7 +86,6 @@ RwSymbolDictionaryTest >> _compileMethodIn: behavior source: sourceString dictio
 		category: nil
 		intoMethodDict: false
 		intoCategories: nil
-		intoPragmas: nil
 		environmentId: 0
 ]
 

@@ -199,6 +199,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttr
 		instanceMigrator: instanceMigrator
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadSpecification [
+
+	^ handle _loadSpecification
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> markPackageDirty [
 	"... indicates that receiver needs to mark it's container as dirty .... "

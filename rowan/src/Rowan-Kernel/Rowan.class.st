@@ -228,6 +228,13 @@ Rowan class >> projectNames [
 	^ self image projectNames
 ]
 
+{ #category : 'public' }
+Rowan class >> projects [
+	"Return list of projects"
+
+	^ self projectNames collect: [ :projectName | self projectNamed: projectName ]
+]
+
 { #category : 'public client services' }
 Rowan class >> projectServiceClass [
 
@@ -261,8 +268,21 @@ Rowan class >> specificationServiceClass [
 
 { #category : 'public' }
 Rowan class >> unpackagedName [
-
-	"Answer the name used for unpackaged projects and packages"
+	"Answer the name used for projects and packages that are not in a package ... unpackaged projects and packages are where pacakge things go by default."
 
 	^ '(NONE)'
+]
+
+{ #category : 'public' }
+Rowan class >> unpackagedPackagePrefix [
+	"Answer the prefix used for naming unpackaged packages"
+
+	^ self unpackagedProjectName , '-'
+]
+
+{ #category : 'public' }
+Rowan class >> unpackagedProjectName [
+	"Answer the name of the unpackaged project that manages unpackaged things"
+
+	^ 'UnPackaged'
 ]

@@ -64,7 +64,7 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 		classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ])
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
 		category: (metadata at: #'category' ifAbsent: [  ])
-		comment: (anArray second ifNil: [ '' ])
+		comment: (anArray second )
 		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 		type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
 	^ currentClassDefinition
@@ -111,14 +111,25 @@ RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName package
 
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
+  | trace |
+  trace := Rowan projectTools trace.
 	packagesRoot directories do: [:packageDir | | dir |
     dir := packageDir path basename .
     dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
-		  | packageName |
+		  | packageName a b c |
 		  packageName := self _packageNameFromPackageDir: packageDir.
-		  (packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
-			  ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
-    ].
+      trace trace:'--- reading package ', packageName asString , ' dir ' , packageDir asString  .
+		  (a := packageDir extension) = (b := self packageExtension) ifFalse:[
+        trace trace:'      skipped readClasses, extension does not match'.
+      ] ifTrue:[
+        ((c :=self packageNames) includes: packageName) ifTrue:[
+			    self readClassesFor: packageName packageRoot: packageDir 
+        ] ifFalse:[ 
+          trace trace:'      skipped readClasses, packageName rejected'.
+        ]
+      ]
+    ]
+  ].
 ]
 
 { #category : 'public' }

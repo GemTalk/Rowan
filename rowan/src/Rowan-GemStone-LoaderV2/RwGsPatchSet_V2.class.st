@@ -159,6 +159,12 @@ RwGsPatchSet_V2 >> _classSymbolDictionaryMovePatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _classUnmanagedAdditionPatchClass [
+
+	^ RwGsClassUnmanagedAdditionSymbolDictPatchV2
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classVariablePatchClass [
 
 	^ RwGsClassVariableChangeSymbolDictPatchV2
@@ -368,25 +374,36 @@ RwGsPatchSet_V2 >> addAndUpdateLoadedProjects [
 
 { #category : 'modification dispatching' }
 RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProject: aProjectDefinition [
-
 	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
 		while updating the loader using the loader"
 
 	aRwClassModification isAddition
 		ifTrue: [ 
+			| symDictName className |
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
-			(Rowan globalNamed: aRwClassModification after name) ifNotNil: [:global | (RwExistingVisitorAddingExistingClassNotification new classDefinition: aRwClassModification after) signal ].
+			className := aRwClassModification after name.
+			symDictName := aProjectDefinition
+				symbolDictNameForPackageNamed: aPackage name.
+			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+			(Rowan globalNamed: aRwClassModification after name)
+				ifNotNil: [ :global | 
+					(RwExistingVisitorAddingExistingClassNotification new
+						class: global;
+						classDefinition: aRwClassModification after;
+						yourself) signal ].
 			self
 				addAddedClass: aRwClassModification after
 				inPackage: aPackage
 				inProject: aProjectDefinition.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
-				ifNotNil: [:constraints |  
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self 
-						addPatchedClassConstraints: aRwClassModification after 
-						inPackage: aPackage 
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
 						inProject: aProjectDefinition ] ].
 	aRwClassModification isDeletion
 		ifTrue: [ 
@@ -401,12 +418,14 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 				inPackage: aPackage
 				inProject: aProjectDefinition
 				toPatchSet: self.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
-				ifNotNil: [:constraints |  
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self 
-						addPatchedClassConstraints: aRwClassModification after 
-						inPackage: aPackage 
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
 						inProject: aProjectDefinition ] ]
 ]
 
@@ -517,8 +536,10 @@ RwGsPatchSet_V2 >> addDeletedPackage: packageDefinition inProject: aProjectDefin
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
-
 	currentProjectDefinition := aProjectDefinition.
+	Rowan image
+		newOrExistingSymbolDictionaryNamed:
+			(aProjectDefinition symbolDictNameForPackageNamed: aPackageDefinition name).	"ensure that symbol dictionary exists"
 	extendedClasses
 		add:
 			((self _classExtensionPatchClass
@@ -655,12 +676,11 @@ RwGsPatchSet_V2 >> addPatchedClassMethodProperties: aClassMethodDefinition inCla
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
-
 	currentProjectDefinition := aProjectDefinition.
 
 	classesWithNewVersions
 		add:
-			((self _classVersioningPatchClass
+			(((aClassModification classVersioningPatchClassUsing: self)
 				for: aClassModification
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
@@ -811,7 +831,7 @@ RwGsPatchSet_V2 >> apply [
 
 	"Apply the changes I represent to the running image."
 	"UserGlobals at: #ConditionalHalt put: false"
-
+ 
 (UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	self
 		setupForApply;
@@ -1156,6 +1176,11 @@ RwGsPatchSet_V2 >> movedClassesMap [
 
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSet_V2 >> movedMethods [
+	^ movedMethods
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> movePackages [
 	movedPackages do: [ :each | each movePackage: classesWithNewVersions ]
@@ -1393,6 +1418,16 @@ RwGsPatchSet_V2 >> updateMethodProperties [
 
 	methodsWithPropertyChanges
 		do: [:each | each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
+]
+
+{ #category : 'dispatching' }
+RwGsPatchSet_V2 >> updatePatchesForNewClassVersion: aClassVersioningPatch projectModification: aProjectSetModification [
+	aClassVersioningPatch
+		updatePatchesForNewClassVersion: aProjectSetModification patchSet: self;
+		updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+			patchSet: self;
+		updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
+			patchSet: self
 ]
 
 { #category : 'private - applying' }

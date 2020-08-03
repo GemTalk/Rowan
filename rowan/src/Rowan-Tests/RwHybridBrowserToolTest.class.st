@@ -293,7 +293,7 @@ RwHybridBrowserToolTest >> testHybridClassRename [
 ]
 
 { #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridCompileMethod [
+RwHybridBrowserToolTest >> testHybridCompileMethod_01 [
 	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
@@ -323,6 +323,50 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 
 	barMethod := normalClass class
 		rwCompileMethod: 'bar ^''bar'''
+		category: '*' , packageName2
+		packageName: packageName2.
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: (normalClass perform: #'bar') = 'bar'.
+	normalInstance := normalClass new.
+	self assert: (normalInstance perform: #'foo') = 'foo'.
+
+	self assert: fooMethod rowanPackageName = packageName1.
+	self assert: barMethod rowanPackageName = packageName2
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridCompileMethod_02 [
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance project audit |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: (audit := project audit) isEmpty.
+	self assert: normalClass rowanPackageName = packageName1.
+
+	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
+	self assert: (audit := project audit) isEmpty.
+
+	barMethod := normalClass class
+		rwCompileMethod: 'bar ^''bar'''
+		dictionaries: Rowan image symbolList
 		category: '*' , packageName2
 		packageName: packageName2.
 

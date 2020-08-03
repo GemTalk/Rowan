@@ -282,6 +282,19 @@ RwGsSymbolDictionaryRegistryV2 >> addNewCompiledMethod: compiledMethod for: beha
 ]
 
 { #category : 'private' }
+RwGsSymbolDictionaryRegistryV2 >> addNewUnmanagedClassVersionToAssociation: newClass oldClassVersion: oldClass toPackageNamed: aPackageName implementationClass: implementationClass [
+	"a new class version is being added to the association in the receiver previously occupied by the original class"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	implementationClass
+		addNewUnmanagedClassVersionToAssociation: newClass
+		oldClassVersion: oldClass
+		toPackageNamed: aPackageName
+		instance: self
+]
+
+{ #category : 'private' }
 RwGsSymbolDictionaryRegistryV2 >> addRecompiledMethod: newCompiledMethod [
 
 	"add a recompiled compiled method to behavior and update the loaded things"

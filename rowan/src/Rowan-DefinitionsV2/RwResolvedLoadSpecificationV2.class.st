@@ -28,20 +28,6 @@ RwResolvedLoadSpecificationV2 >> componentNames: anArray [
 	self _loadSpecification componentNames: anArray
 ]
 
-{ #category : 'accessing' }
-RwResolvedLoadSpecificationV2 >> customConditionalAttributes [
-	"get the custom conditional attributes"
-
-	^ self _loadSpecification customConditionalAttributes
-]
-
-{ #category : 'accessing' }
-RwResolvedLoadSpecificationV2 >> customConditionalAttributes: anArray [
-	"set the custom conditional attributes"
-
-	^ self _loadSpecification customConditionalAttributes: anArray
-]
-
 { #category : 'actions' }
 RwResolvedLoadSpecificationV2 >> export [
 	self specsRoot ensureCreateDirectory.

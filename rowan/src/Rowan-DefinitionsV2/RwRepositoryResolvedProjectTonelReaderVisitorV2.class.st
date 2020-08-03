@@ -108,7 +108,6 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> checkMethodDefinitions: aClas
       category: methDef protocol asSymbol
       intoMethodDict: fakeMethDict
       intoCategories: nil
-      intoPragmas: nil
       environmentId:  0
     ] on: ( CompileError , CompileWarning ) do:[:ex | 
       ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).

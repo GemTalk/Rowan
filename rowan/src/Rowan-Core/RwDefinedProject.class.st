@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwDefinedProject class >> fromLoadedProject: aLoadedProject [
+	^ (self newNamed: aLoadedProject name)
+		_resolvedProject: aLoadedProject _loadedProject asDefinition;
+		yourself
+]
+
+{ #category : 'instance creation' }
 RwDefinedProject class >> fromResolvedProject: aResolvedProject [
 	^ (self newNamed: aResolvedProject name)
 		_resolvedProject: aResolvedProject _resolvedProject;
@@ -80,6 +87,13 @@ RwDefinedProject >> addNewComponentNamed: componentName [
 { #category : 'accessing' }
 RwDefinedProject >> addNewComponentNamed: aComponentName comment: aString [
 	^ self _resolvedProject addNewComponentNamed: aComponentName comment: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition [
+	^ self _resolvedProject
+		addNewComponentNamed: aComponentName
+		condition: condition
 ]
 
 { #category : 'accessing' }
@@ -204,8 +218,18 @@ RwDefinedProject >> addTopLevelComponentNamed: componentName [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addTopLevelComponentNamed: componentName  condition: condition [
+	^ self _resolvedProject addTopLevelComponentNamed: componentName  condition: condition
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> componentNamed: componentName [
 	^ self _resolvedProject componentNamed: componentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> componentNamed: aComponentName ifAbsent: absentBlock [
+	^ self _resolvedProject componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
@@ -240,6 +264,13 @@ RwDefinedProject >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: p
 { #category : 'testing' }
 RwDefinedProject >> isStrict [
 	^ self _resolvedProject isStrict
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> load [
+	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+
+	^ self _resolvedProject load
 ]
 
 { #category : 'accessing' }
@@ -277,6 +308,11 @@ RwDefinedProject >> packageNamed: aString [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> packageNamed: aString ifAbsent: absentBlock [
+	^ self _resolvedProject packageNamed: aString ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> packagesPath: aString [
 	self _projectSpecification packagesPath: aString
 ]
@@ -296,9 +332,60 @@ RwDefinedProject >> projectsRoot [
 	^ self _resolvedProject projectsRoot
 ]
 
+{ #category : 'transitions' }
+RwDefinedProject >> read [
+
+	"return a RwDefinedProject with definitions read from disk"
+
+	self _resolvedProject read
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> read: platformConditionalAttributes [
+	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
+
+	self _resolvedProject read: platformConditionalAttributes
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> readProjectComponentNames: componentNames [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _resolvedProject readProjectComponentNames: componentNames
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _resolvedProject
+		readProjectComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _resolvedProject
+		readProjectComponentNames: componentNames
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
 { #category : 'accessing' }
 RwDefinedProject >> removeComponentNamed: aComponentName [
 	^ self _resolvedProject removeComponentNamed: aComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> removePackageNamed: packageName [
+	^ self _resolvedProject removePackageNamed: packageName
 ]
 
 { #category : 'accessing' }

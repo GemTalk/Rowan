@@ -112,6 +112,11 @@ RwResolvedProjectV2 >> addNewComponentNamed: aComponentName comment: aString [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition [
+	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
 ]
@@ -269,9 +274,26 @@ RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName [
 	^ self _projectDefinition addNewComponentNamed: componentName
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName condition: condition [
+	self _loadSpecification addTopLevelComponentNamed: componentName.
+	^ self _projectDefinition
+		addNewComponentNamed: componentName
+		condition: condition
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> classNamed: aString ifAbsent: absentBlock [
+	self packages
+		do: [ :packageDef | 
+			(packageDef classDefinitionNamed: aString ifAbsent: [  ])
+				ifNotNil: [ :classDef | ^ classDef ] ].
+	^ absentBlock value
 ]
 
 { #category : 'project definition' }
@@ -356,7 +378,6 @@ RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
 { #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl [
 	^ self _loadSpecification diskUrl
-		ifNil: [ ^ 'file:' , self _loadSpecification repositoryRoot pathString ]
 ]
 
 { #category : 'load specification' }
@@ -626,11 +647,6 @@ RwResolvedProjectV2 >> name [
 	^ self projectName
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> packageConvention [
-	^ self _projectSpecification packageConvention
-]
-
 { #category : 'querying' }
 RwResolvedProjectV2 >> packageForClassNamed: className [
 	"Answer nil if no class found"
@@ -792,6 +808,23 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames [
 ]
 
 { #category : 'actions' }
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self componentNames: componentNames.	"record the list of component names used to create this instance of the project definition"
+	self _loadSpecification
+		customConditionalAttributes: customConditionalAttributes.	"record customConditionalAttributes in load spec"
+	self projectDefinitionPlatformConditionalAttributes: nil.	"reset project platformConditionalAttributes"
+	^ Rowan projectTools readV2
+		readProjectForResolvedProject: self
+		withComponentNames: componentNames
+		platformConditionalAttributes:
+			(self platformConditionalAttributes , customConditionalAttributes) asSet asArray
+]
+
+{ #category : 'actions' }
 RwResolvedProjectV2 >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -854,6 +887,7 @@ RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
+	(self componentForPackageNamed: packageName) removePackageNamed: packageName.
 	^ self _projectDefinition removePackageNamed: packageName
 ]
 

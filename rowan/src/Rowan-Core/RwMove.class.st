@@ -57,3 +57,15 @@ RwMove >> projectBefore: newValue [
 	projectBefore := newValue
 
 ]
+
+{ #category : 'Accessing' }
+RwMove >> symbolDictionaryNameAfter [
+	^ self projectAfter
+		gemstoneSymbolDictNameForPackageNamed: self packageAfter name
+]
+
+{ #category : 'Accessing' }
+RwMove >> symbolDictionaryNameBefore [
+	^ self projectBefore
+		gemstoneSymbolDictNameForPackageNamed: self packageBefore name
+]

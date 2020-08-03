@@ -97,12 +97,16 @@ RwGitRepositoryDefinitionV2 >> clone [
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> commitId [
-
-	^ [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+	^ [ 
+	| gitHome gitTools |
+	gitTools := Rowan gitTools.
+	gitHome := (gitTools gitrevparseShowTopLevelIn: self repositoryRoot pathString)
+		trimBoth.
+	gitTools gitcommitShaIn: gitHome ]
 		on: Error
 		do: [ :ignored | 
 			"most likely no commits yet"
-			'' ].
+			'' ]
 ]
 
 { #category : 'loading' }

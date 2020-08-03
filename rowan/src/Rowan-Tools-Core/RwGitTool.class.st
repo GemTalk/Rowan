@@ -168,10 +168,12 @@ RwGitTool >> gitstatusIn: gitRepoPath with: args [
 RwGitTool >> isGitHome: dirPath [
 	"Answer true if the given directory path is the home directory for a git repository"
 
-	^ (self gitPresentIn: dirPath)
+	| dirReference |
+	dirReference := dirPath asFileReference.
+	^ (self gitPresentIn: dirReference pathString)
 		and: [ 
-			(self gitrevparseShowTopLevelIn: dirPath) trimBoth asFileReference
-				= dirPath asFileReference ]
+			(self gitrevparseShowTopLevelIn: dirReference pathString) trimBoth
+				asFileReference = dirReference ]
 ]
 
 { #category : 'private' }

@@ -25,9 +25,10 @@ RwGsMethodExtensionSymbolDictPatchV2 >> installMovedMethod: aMethodMove newClass
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| oldClassVersion oldBehavior theRegistry |
-	theRegistry := (self symbolDictionaryFor: aMethodMove packageAfter name projectDefinition: aMethodMove projectAfter)
-		rowanSymbolDictionaryRegistry.
+	| oldClassVersion oldBehavior theRegistry newBehavior |
+	theRegistry := (self
+		symbolDictionaryFor: aMethodMove packageAfter name
+		projectDefinition: aMethodMove projectAfter) rowanSymbolDictionaryRegistry.
 	oldClassVersion := newClassVersionPatch oldClassVersion.
 	oldClassVersion ~~ newClassVersionPatch newClassVersion
 		ifTrue: [ 
@@ -36,20 +37,21 @@ RwGsMethodExtensionSymbolDictPatchV2 >> installMovedMethod: aMethodMove newClass
 				ifTrue: [ oldClassVersion class ]
 				ifFalse: [ oldClassVersion ].
 			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
-				ifNotNil: [ :oldCompiledMethod |
+				ifNotNil: [ :oldCompiledMethod | 
 					"new methods will not be in the old method dictionary"
-					(theRegistry methodRegistry
-						at: oldCompiledMethod
-						ifAbsent: [])
-							ifNil: [
-								theRegistry
-									error:
-										'Internal error -- no existing LoadedMethod found for deleted method.' ]
-							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
+					(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
+						ifNil: [ 
+							theRegistry
+								error:
+									'Internal error -- no existing LoadedMethod found for deleted method.' ]
+						ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
 
+	newBehavior := behavior isMeta
+		ifTrue: [ newClassVersionPatch newClassVersion class ]
+		ifFalse: [ newClassVersionPatch newClassVersion ].
 	theRegistry
 		addExtensionCompiledMethod: compiledMethod
-		for: behavior
+		for: newBehavior
 		protocol: self propertiesProtocolName
 		toPackageNamed: aMethodMove packageAfter name
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.

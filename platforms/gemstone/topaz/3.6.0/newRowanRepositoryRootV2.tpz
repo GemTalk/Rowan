@@ -11,10 +11,19 @@
   login
 
 	run
-	Rowan gemstoneTools image 
-		newRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan' 
-		platformConditionalAttributes: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2')
-		forProjectNamed: 'Rowan'
+	(Rowan projectNamed: 'Rowan') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
+	(Rowan projectNamed: 'gemstoneBaseImage') 
+		gitRepositoryRoot: '$ARCHBASE/image'.
+	
+false ifTrue: [
+	"load Rowan test classes"
+	(Rowan projectNamed: 'Rowan') defined
+		read: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2');
+		load.
+].
+	Rowan projects do: [:project | project existsOnDisk ].	"trigger lazy inititialization"
+
 %
 	commit
 

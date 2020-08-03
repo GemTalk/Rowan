@@ -208,9 +208,9 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 			classDef := RwClassDefinition
 				newForClassNamed: className
 				super: superclassName
-				instvars: anArrayOfStrings
-				classinstvars: anArrayOfClassInstVars
-				classvars: anArrayOfClassVars
+				instvars: (anArrayOfStrings collect: [ :each | each asString ])
+				classinstvars: (anArrayOfClassInstVars collect: [ :each | each asString ])
+				classvars: (anArrayOfClassVars collect: [ :each | each asString ])
 				category: category
 				comment: nil
 				pools: #()
@@ -228,9 +228,9 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 					projectSetDef addProject: classProjectDef.
 					classDef
 						superclassName: superclassName;
-						instVarNames: anArrayOfStrings;
-						classVarNames: anArrayOfClassVars;
-						classInstVarNames: anArrayOfClassInstVars;
+						instVarNames: (anArrayOfStrings collect: [ :each | each asString ]);
+						classVarNames: (anArrayOfClassVars collect: [ :each | each asString ]);
+						classInstVarNames: (anArrayOfClassInstVars collect: [ :each | each asString ]);
 						gs_options: theOptions;
 						gs_constraints: theConstraints;
 						category: category;
@@ -254,7 +254,6 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 					"shouldn't happen ... loadedClass known to exist"
 					self error: 'unexpected missing class ' , className printString ] ].
 	^ (self _loadedClassNamed: className ifAbsent: [  ]) handle currentVersion
-
 ]
 
 { #category : 'class browsing' }
@@ -273,6 +272,140 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 		constraints: #() 
 		options: optionsArray
 
+]
+
+{ #category : 'method browsing' }
+RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+	"If the method is already installed in a different package, remove the method from that package.
+	 If package name matches the name of the package of the class definition, then add the method 
+		to the class definition.
+	 If there is no matching class extension or the package name does not match, add the method 
+		to a class extension in the named package.
+	 Return the resulting compiled method"
+
+	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved packageConvention |
+	projectSetDefinition := RwProjectSetDefinition new.
+
+	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+	loadedMethodToBeRemoved := self
+		_loadedMethod: methodDef selector
+		inClassNamed: className
+		isMeta: isMeta
+		ifAbsent: [ 
+			"no pre-existing method for this selector installed"
+			 ].
+
+	projectTools := Rowan projectTools.
+	updateBlock := [ :cDef :pDef | 
+	loadedMethodToBeRemoved
+		ifNil: [ 
+			"no method needs to be remove, just add the method to the class or extension def"
+			isMeta
+				ifTrue: [ cDef addClassMethodDefinition: methodDef ]
+				ifFalse: [ cDef addInstanceMethodDefinition: methodDef ] ]
+		ifNotNil: [ :loadedMethod | 
+			| loadedPackageForMethod |
+			loadedPackageForMethod := loadedMethod loadedPackage.
+			loadedPackageForMethod name = packageName
+				ifTrue: [ 
+					"loaded method being updated in same package, sjust update the method def"
+					isMeta
+						ifTrue: [ cDef updateClassMethodDefinition: methodDef ]
+						ifFalse: [ cDef updateInstanceMethodDefinition: methodDef ] ]
+				ifFalse: [ 
+					| loadedClassOrExtension projectDef packageDef crDef |
+					"loaded method in different package than new version of method"
+					projectDef := loadedPackageForMethod loadedProject asDefinition.
+					projectDef name = pDef name
+						ifTrue: [ 
+							"both packages are in same project"
+							projectDef := pDef ]
+						ifFalse: [ 
+							"each package in a different project, will need to load loaded method project as well"
+							projectSetDefinition addProject: projectDef ].
+					packageDef := projectDef packageNamed: loadedPackageForMethod name.
+					loadedClassOrExtension := loadedMethod loadedClass.
+					crDef := loadedClassOrExtension isLoadedClass
+						ifTrue: [ packageDef classDefinitions at: loadedClassOrExtension name ]
+						ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].	"remove the method from one package and add it to the other"
+					isMeta
+						ifTrue: [ 
+							crDef removeClassMethod: methodDef selector.
+							cDef addClassMethodDefinition: methodDef ]
+						ifFalse: [ 
+							crDef removeInstanceMethod: methodDef selector.
+							cDef addInstanceMethodDefinition: methodDef ] ] ].
+	projectSetDefinition addProject: pDef.
+	projectTools load
+		loadProjectSetDefinition: projectSetDefinition
+		symbolList: aSymbolList.
+	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
+		handle ].
+
+	self
+		definitionsForClassNamed: className
+		ifFound: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName
+				ifTrue: [ 
+					packageConvention := projectDef packageConvention.
+					packageConvention = 'Rowan'
+						ifTrue: [ 
+							"method protocol is not restricted"
+							 ]
+						ifFalse: [ 
+							packageConvention = 'RowanHybrid'
+								ifTrue: [ 
+									(protocol equalsNoCase: '*' , packageName)
+										ifTrue: [ 
+											self
+												error:
+													'The supplied method protocol ' , protocol printString
+														,
+															' does not follow the expected package convention for ''RowanHybrid''. The protocol indicates an extension method for the package in which the class resides, which is not an extension method' ] ]
+								ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
+					^ updateBlock value: classDef value: projectDef ]
+				ifFalse: [ 
+					"the named package is different from the class definition package"
+					 ] ]
+		ifAbsent: [ 
+			"no loaded class definition, so we probably need to add a class extension"
+			 ].
+	loadedPackage := Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ self error: 'A package named ' , packageName printString , ' was not found.' ].
+
+	projectDefinition := loadedPackage loadedProject asDefinition.
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	packageConvention := projectDefinition packageConvention.
+	packageConvention = 'Rowan'
+		ifTrue: [ 
+			"method protocol is not restricted"
+			 ]
+		ifFalse: [ 
+			packageConvention = 'RowanHybrid'
+				ifTrue: [ 
+					| expectedProtocol |
+					expectedProtocol := loadedPackage asExtensionName.
+					(expectedProtocol equalsNoCase: protocol)
+						ifFalse: [ 
+							self
+								error:
+									'The supplied method protocol ' , protocol printString
+										, ' does not follow the expected package convention '
+										, expectedProtocol printString , ' for ''RowanHybrid''' ] ]
+				ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
+
+	classExtensionDef := packageDefinition classExtensions
+		at: className
+		ifAbsent: [ 
+			"no existing class extension definition ... create a new one"
+			classExtensionDef := RwClassExtensionDefinition newForClassNamed: className.
+
+			packageDefinition addClassExtensionDefinition: classExtensionDef.
+			classExtensionDef ].
+
+	^ updateBlock value: classExtensionDef value: projectDefinition
 ]
 
 { #category : 'method browsing' }
@@ -452,127 +585,13 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource inProtocol: protocol forCl
 		to a class extension in the named package.
 	 Return the resulting compiled method"
 
-	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved packageConvention |
-	projectSetDefinition := RwProjectSetDefinition new.
-
-	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
-	loadedMethodToBeRemoved := self
-		_loadedMethod: methodDef selector
-		inClassNamed: className
+	^ self
+		addOrUpdateMethod: methodSource
+		dictionaries: Rowan image symbolList
+		inProtocol: protocol
+		forClassNamed: className
 		isMeta: isMeta
-		ifAbsent: [ 
-			"no pre-existing method for this selector installed"
-			 ].
-
-	projectTools := Rowan projectTools.
-	updateBlock := [ :cDef :pDef | 
-	loadedMethodToBeRemoved
-		ifNil: [ 
-			"no method needs to be remove, just add the method to the class or extension def"
-			isMeta
-				ifTrue: [ cDef addClassMethodDefinition: methodDef ]
-				ifFalse: [ cDef addInstanceMethodDefinition: methodDef ] ]
-		ifNotNil: [ :loadedMethod | 
-			| loadedPackageForMethod |
-			loadedPackageForMethod := loadedMethod loadedPackage.
-			loadedPackageForMethod name = packageName
-				ifTrue: [ 
-					"loaded method being updated in same package, sjust update the method def"
-					isMeta
-						ifTrue: [ cDef updateClassMethodDefinition: methodDef ]
-						ifFalse: [ cDef updateInstanceMethodDefinition: methodDef ] ]
-				ifFalse: [ 
-					| loadedClassOrExtension projectDef packageDef crDef |
-					"loaded method in different package than new version of method"
-					projectDef := loadedPackageForMethod loadedProject asDefinition.
-					projectDef name = pDef name
-						ifTrue: [ 
-							"both packages are in same project"
-							projectDef := pDef ]
-						ifFalse: [ 
-							"each package in a different project, will need to load loaded method project as well"
-							projectSetDefinition addProject: projectDef ].
-					packageDef := projectDef packageNamed: loadedPackageForMethod name.
-					loadedClassOrExtension := loadedMethod loadedClass.
-					crDef := loadedClassOrExtension isLoadedClass
-						ifTrue: [ packageDef classDefinitions at: loadedClassOrExtension name ]
-						ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].	"remove the method from one package and add it to the other"
-					isMeta
-						ifTrue: [ 
-							crDef removeClassMethod: methodDef selector.
-							cDef addClassMethodDefinition: methodDef ]
-						ifFalse: [ 
-							crDef removeInstanceMethod: methodDef selector.
-							cDef addInstanceMethodDefinition: methodDef ] ] ].
-	projectSetDefinition addProject: pDef.
-	projectTools load loadProjectSetDefinition: projectSetDefinition.
-	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
-		handle ].
-
-	self
-		definitionsForClassNamed: className
-		ifFound: [ :classDef :packageDef :projectDef | 
-			packageDef name = packageName
-				ifTrue: [ 
-					packageConvention := projectDef packageConvention.
-					packageConvention = 'Rowan'
-						ifTrue: [ 
-							"method protocol is not restricted"
-							 ]
-						ifFalse: [ 
-							packageConvention = 'RowanHybrid'
-								ifTrue: [ 
-									(protocol equalsNoCase: '*' , packageName)
-										ifTrue: [ 
-											self
-												error:
-													'The supplied method protocol ' , protocol printString
-														,
-															' does not follow the expected package convention for ''RowanHybrid''. The protocol indicates an extension method for the package in which the class resides, which is not an extension method' ] ]
-								ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
-					^ updateBlock value: classDef value: projectDef ]
-				ifFalse: [ 
-					"the named package is different from the class definition package"
-					 ] ]
-		ifAbsent: [ 
-			"no loaded class definition, so we probably need to add a class extension"
-			 ].
-	loadedPackage := Rowan image
-		loadedPackageNamed: packageName
-		ifAbsent: [ self error: 'A package named ' , packageName printString , ' was not found.' ].
-
-	projectDefinition := loadedPackage loadedProject asDefinition.
-	packageDefinition := projectDefinition packageNamed: packageName.
-
-	packageConvention := projectDefinition packageConvention.
-	packageConvention = 'Rowan'
-		ifTrue: [ 
-			"method protocol is not restricted"
-			 ]
-		ifFalse: [ 
-			packageConvention = 'RowanHybrid'
-				ifTrue: [ 
-					| expectedProtocol |
-					expectedProtocol := loadedPackage asExtensionName.
-					(expectedProtocol equalsNoCase: protocol)
-						ifFalse: [ 
-							self
-								error:
-									'The supplied method protocol ' , protocol printString
-										, ' does not follow the expected package convention '
-										, expectedProtocol printString , ' for ''RowanHybrid''' ] ]
-				ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
-
-	classExtensionDef := packageDefinition classExtensions
-		at: className
-		ifAbsent: [ 
-			"no existing class extension definition ... create a new one"
-			classExtensionDef := RwClassExtensionDefinition newForClassNamed: className.
-
-			packageDefinition addClassExtensionDefinition: classExtensionDef.
-			classExtensionDef ].
-
-	^ updateBlock value: classExtensionDef value: projectDefinition
+		inPackageNamed: packageName
 ]
 
 { #category : 'method browsing' }
@@ -1069,6 +1088,168 @@ RwPrjBrowserToolV2 >> isExtensionMethod: methodSelector forClassNamed: className
 
 	^loadedClassOrExtension isLoadedClassExtension
 
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserToolV2 >> moveClassNamed: className toPackage: packageName [
+	"Move class to <packageName>, whether or not it has been packaged. The methods in the class that are in the
+		original package of the class are also moved to the new package. If the class was originally unpackaged,
+		then only unpackaged methods (class and instance side) are moved to the new package."
+
+	| class |
+	class := Rowan globalNamed: className.
+	(self _loadedClassNamed: className ifAbsent: [  ])
+		ifNil: [ 
+			| instanceSelectors classSelectors classPackageName |
+			"unpackaged class"
+			classPackageName := Rowan unpackagedName.
+			instanceSelectors := Set new.
+			classSelectors := Set new.
+			class
+				methodsDo: [ :selector :method | 
+					method rowanPackageName = classPackageName
+						ifTrue: [ instanceSelectors add: selector ] ].
+			class class
+				methodsDo: [ :selector :method | 
+					method rowanPackageName = classPackageName
+						ifTrue: [ classSelectors add: selector ] ].
+			Rowan packageTools adopt
+				adoptClassNamed: className
+				instanceSelectors: instanceSelectors
+				classSelectors: classSelectors
+				intoPackageNamed: packageName ]
+		ifNotNil: [ :loadedClass | 
+			| destinationLoadedPackage sourceLoadedPackage projectSetDefinition projectDef packageDef clsDef destProjectDef srcPackageDef srcClsDef destPackageDef |
+			"packaged class"
+			destinationLoadedPackage := Rowan image loadedPackageNamed: packageName.
+			sourceLoadedPackage := loadedClass loadedPackage.
+			destinationLoadedPackage name = sourceLoadedPackage name
+				ifTrue: [ 
+					"class is already in the desired package, never mind"
+					^ self ].
+			projectSetDefinition := RwProjectSetDefinition new.
+			projectDef := sourceLoadedPackage loadedProject asDefinition.
+			packageDef := projectDef packageNamed: sourceLoadedPackage name.
+			clsDef := packageDef classDefinitions at: className.
+
+			projectSetDefinition addProject: projectDef.
+			destinationLoadedPackage loadedProject name = projectDef name
+				ifTrue: [ destProjectDef := projectDef ]
+				ifFalse: [ 
+					"class is moving to a different project"
+					destProjectDef := destinationLoadedPackage loadedProject asDefinition.
+					projectSetDefinition addProject: destProjectDef ].
+
+			srcPackageDef := projectDef packageNamed: sourceLoadedPackage name.
+			srcClsDef := srcPackageDef removeClassNamed: className.
+
+			destPackageDef := destProjectDef packageNamed: destinationLoadedPackage name.
+			(destPackageDef classDefinitions at: className ifAbsent: [  ])
+				ifNotNil: [ 
+					self
+						error:
+							'A class definition for the class ' , className printString
+								, ' already exists in the destination package '
+								, packageName printString ].
+
+			destPackageDef classDefinitions at: className put: srcClsDef.
+
+			Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ]
+]
+
+{ #category : 'method browsing' }
+RwPrjBrowserToolV2 >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toPackage: packageName [
+	"Move the method into <packageName>, whether or not it has been packaged"
+
+	(self
+		_loadedMethod: methodSelector
+		inClassNamed: className
+		isMeta: isMeta
+		ifAbsent: [  ])
+		ifNil: [ 
+			"adopt an unpackaged method into the named package"
+			Rowan packageTools adopt
+				adoptMethod: methodSelector
+				inClassNamed: className
+				isMeta: isMeta
+				intoPackageNamed: packageName ]
+		ifNotNil: [ :loadedMethodToBeMoved | 
+			| srcLoadedMethodPackage srcLoadedClassPackage srcLoadedClassOrExtension projectDef packageDef clsDef projectSetDefinition destinationLoadedPackage methodDef beh category |
+			"Move a packaged method to another package"
+			beh := Rowan globalNamed: className.
+			isMeta
+				ifTrue: [ beh := beh class ].
+			category := beh categoryOfSelector: methodSelector asSymbol.
+			destinationLoadedPackage := Rowan image loadedPackageNamed: packageName.
+			srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
+			srcLoadedClassOrExtension := srcLoadedMethodPackage
+				classOrExtensionForClassNamed: className
+				ifAbsent: [ 
+					self
+						error:
+							'Internal error -- no class or extension for ' , className printString
+								, ' in package ' , srcLoadedMethodPackage name printString , '.' ].
+
+			projectSetDefinition := RwProjectSetDefinition new.
+			projectDef := srcLoadedMethodPackage loadedProject asDefinition.
+			packageDef := projectDef packageNamed: srcLoadedMethodPackage name.
+			clsDef := srcLoadedClassOrExtension isLoadedClass
+				ifTrue: [ packageDef classDefinitions at: className ]
+				ifFalse: [ packageDef classExtensions at: className ].
+
+			projectSetDefinition addProject: projectDef.
+			destinationLoadedPackage name = srcLoadedMethodPackage name
+				ifTrue: [ 
+					"method is not moving to a different package, only need to change the protocol for the method"
+					methodDef := isMeta
+						ifTrue: [ clsDef classMethodDefinitions at: methodSelector ]
+						ifFalse: [ clsDef instanceMethodDefinitions at: methodSelector ].
+					methodDef protocol: category ]
+				ifFalse: [ 
+					| destProjectDef "method is moving to a different package" destPackageDef destClsDef srcPackageDef srcClsDef |
+					destinationLoadedPackage loadedProject name = projectDef name
+						ifTrue: [ destProjectDef := projectDef ]
+						ifFalse: [ 
+							"method is moving to a different project"
+							destProjectDef := destinationLoadedPackage loadedProject asDefinition.
+							projectSetDefinition addProject: destProjectDef ].
+					srcPackageDef := projectDef packageNamed: srcLoadedMethodPackage name.
+					srcClsDef := srcLoadedClassOrExtension isLoadedClass
+						ifTrue: [ srcPackageDef classDefinitions at: className ]
+						ifFalse: [ srcPackageDef classExtensions at: className ].
+
+					destPackageDef := destProjectDef
+						packageNamed: destinationLoadedPackage name.
+
+					destClsDef := srcLoadedClassPackage == destinationLoadedPackage
+						ifTrue: [ 
+							"method is not an extension method ... add the method to the class definition"
+							destPackageDef classDefinitions
+								at: className
+								ifAbsent: [ 
+									self
+										error:
+											'internal error - class ' , className printString
+												, ' not found in expected package '
+												, destinationLoadedPackage name printString ] ]
+						ifFalse: [ 
+							"method is to be added as an extension method"
+							destPackageDef classExtensions
+								at: className
+								ifAbsentPut: [ RwClassExtensionDefinition newForClassNamed: className ] ].
+					isMeta
+						ifTrue: [ 
+							methodDef := srcClsDef classMethodDefinitions at: methodSelector.
+							methodDef protocol: category.
+							destClsDef addClassMethodDefinition: methodDef.
+							srcClsDef removeClassMethod: methodSelector ]
+						ifFalse: [ 
+							methodDef := srcClsDef instanceMethodDefinitions at: methodSelector.
+							methodDef protocol: category.
+							destClsDef addInstanceMethodDefinition: methodDef.
+							srcClsDef removeInstanceMethod: methodSelector ] ].
+
+			Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ]
 ]
 
 { #category : 'method browsing' }

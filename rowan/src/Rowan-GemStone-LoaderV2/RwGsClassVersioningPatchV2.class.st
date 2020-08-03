@@ -79,7 +79,7 @@ patchedClassNewVersions: patchedClassNewVersionsBlock [
 "
 
 	| supr opts ivs civs poolds cvars cons cvarsPatched |
-	cvarsPatched := (anArrayOfClassVars asSortedCollection = oldClass classVarNames asSortedCollection) not.
+	cvarsPatched := (anArrayOfClassVars asSortedCollection = (oldClass classVarNames collect: [:each | each asString ]) asSortedCollection) not.
 	self
 		_newSubclassWithSuperclass: newSuperclass
 		isEquivalentToSubclass: oldClass
@@ -112,7 +112,6 @@ patchedClassNewVersions: patchedClassNewVersionsBlock [
 			patchedConstraintsBlock value ].
 	"class property changes that do not affect method compilation"
 	patchedClassPropertiesBlock value
-
 ]
 
 { #category : 'private' }
@@ -245,7 +244,7 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModificationForcingNewClassVersion:
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	beforeClassDefinition := aClassModification before.
-	dict := Rowan image symbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
+	dict := aRwGsPatchSet loadSymbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
 		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
@@ -253,7 +252,6 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModificationForcingNewClassVersion:
 		addPatchedClassNewVersion: aClassModification
 		inPackage: aPackageDefinition
 		inProject: aProjectDefinition
-
 ]
 
 { #category : 'accessing' }

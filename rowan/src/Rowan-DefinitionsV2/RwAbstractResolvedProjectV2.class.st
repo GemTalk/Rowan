@@ -73,10 +73,11 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 																	gitTool := Rowan projectTools git.
 																	repositoryRootPath := self _loadSpecification repositoryRoot
 																		pathString.
-																	^ projectRepository := ((gitTool gitPresentIn: repositoryRootPath)
-																			and: [ 
-																				(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
-																					asFileReference = self _loadSpecification repositoryRoot ])
+																	^ projectRepository := ((gitTool
+																		gitPresentIn: repositoryRootPath)
+																		and: [ 
+																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
+																				asFileReference = self _loadSpecification repositoryRoot ])
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2
 																				newNamed: self projectAlias
@@ -103,37 +104,18 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 																		repositoryUrl: ''
 																		revision: self _loadSpecification revision ]
 																ifFalse: [ 
-																	RwDiskRepositoryDefinitionV2
-																		newNamed: self projectAlias
-																		projectsHome: self projectsHome
-																		repositoryUrl: self diskUrl ] ] ].
-											projectSpecification
-												ifNil: [ 
-													RwNoRepositoryDefinitionV2
-														newNamed: self projectAlias
-														projectsHome: nil
-														repositoryUrl: nil ]
-												ifNotNil: [ 
-													self _projectSpecification repoType == #'git'
-														ifTrue: [ 
-															RwGitRepositoryDefinitionV2
-																newNamed: self projectAlias
-																projectsHome: self projectsHome
-																repositoryUrl: ''
-																revision: self _loadSpecification revision ]
-														ifFalse: [ 
-															self _projectSpecification repoType == #'disk'
-																ifTrue: [ 
-																	RwDiskRepositoryDefinitionV2
-																		newNamed: self projectAlias
-																		projectsHome: self projectsHome
-																		repositoryUrl: self diskUrl ]
-																ifFalse: [ 
-																	"#none"
-																	RwNoRepositoryDefinitionV2
-																		newNamed: self projectAlias
-																		projectsHome: nil
-																		repositoryUrl: nil ] ] ] ] ] ] ].
+																	self _projectSpecification repoType == #'disk'
+																		ifTrue: [ 
+																			RwDiskRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: self projectsHome
+																				repositoryUrl: self diskUrl ]
+																		ifFalse: [ 
+																			"#none"
+																			RwNoRepositoryDefinitionV2
+																				newNamed: self projectAlias
+																				projectsHome: nil
+																				repositoryUrl: nil ] ] ] ] ] ] ] ].
 			projectRepository ]
 ]
 
@@ -182,6 +164,20 @@ RwAbstractResolvedProjectV2 >> commit: message [
 ]
 
 { #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> customConditionalAttributes [
+	"get the custom conditional attributes"
+
+	^ self _loadSpecification customConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> customConditionalAttributes: anArray [
+	"set the custom conditional attributes"
+
+	^ self _loadSpecification customConditionalAttributes: anArray
+]
+
+{ #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> loadSpecification [
 	^ RwResolvedLoadSpecificationV2 new
 		_projectDefinition: projectDefinition;
@@ -190,6 +186,28 @@ RwAbstractResolvedProjectV2 >> loadSpecification [
 		_projectSpecification: projectSpecification;
 		_projectStructure: projectStructure;
 		yourself
+]
+
+{ #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> packageConvention [
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	^ self _projectSpecification packageConvention
+]
+
+{ #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> packageConvention: aString [
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	self _projectSpecification packageConvention: aString
 ]
 
 { #category : 'accessing' }

@@ -20,6 +20,11 @@ RwProject >> _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock [
 ]
 
 { #category : 'private' }
+RwProject >> _loadSpecification [
+	^ self _loadedProject loadSpecification
+]
+
+{ #category : 'private' }
 RwProject >> _specification [
 
 	^ self _loadedProject specification
@@ -55,7 +60,7 @@ RwProject >> comment [
 	^ self _specification comment
 ]
 
-{ #category : 'qurying' }
+{ #category : 'querying' }
 RwProject >> commitId [
 
 	^ self _loadedProject commitId
@@ -78,6 +83,21 @@ RwProject >> currentBranchName [
 	rootPath ifNil: [ ^ '' ].
 	^ Rowan gitTools gitBranchNameIn:rootPath
 
+]
+
+{ #category : 'accessing' }
+RwProject >> customConditionalAttributes [
+	^ self _loadSpecification customConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwProject >> customConditionalAttributes: anArray [
+	self _loadSpecification customConditionalAttributes: anArray
+]
+
+{ #category : 'transitions' }
+RwProject >> defined [
+	^ RwDefinedProject fromLoadedProject: self
 ]
 
 { #category : 'accessing' }
@@ -197,6 +217,13 @@ RwProject >> loadProjectSet: platformConditionalAttributes instanceMigrator: ins
 	^ self _loadedProject
 		loadProjectSet: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
+]
+
+{ #category : 'querying' }
+RwProject >> packageNamed: aString ifAbsent: absentBlock [
+	^ self packages
+		detect: [ :package | package name = aString ]
+		ifNone: absentBlock
 ]
 
 { #category : 'accessing' }

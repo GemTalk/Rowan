@@ -46,7 +46,6 @@ RwProjectDefinitionV2 class >> topazReadTonelFile: fileName [
       category: methDef protocol asSymbol
       intoMethodDict: nil "install into the class's dictionaries"
       intoCategories: nil
-      intoPragmas: nil
       environmentId:  envId
     ] on: (CompileError, CompileWarning) do:[:ex | 
       ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
@@ -174,6 +173,13 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName comment: aString [
 	^ self addNewComponentNamed: aComponentName condition: 'common' comment: aString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition [
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: condition
 ]
 
 { #category : 'accessing' }
@@ -502,12 +508,6 @@ RwProjectDefinitionV2 >> projectName [
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectName: aString [
 	self propertyAt: 'name' put: aString
-]
-
-{ #category : 'reading' }
-RwProjectDefinitionV2 >> readProjectSet [
-
-	^ Rowan projectTools readV2 readProjectSetForComponentProjectDefinition: self
 ]
 
 { #category : 'reading' }

@@ -48,7 +48,6 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 		category: cat
 		intoMethodDict: GsMethodDictionary new
 		intoCategories: GsMethodDictionary new
-		intoPragmas: nil
 		environmentId: anEnvironmentId]
 			onSynchronous: (Array with: CompileError with: CompileWarning)
 			do: (Array with: 
@@ -72,7 +71,6 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 									category: cat
 									intoMethodDict: GsMethodDictionary new
 									intoCategories: GsMethodDictionary new
-									intoPragmas: nil
 									environmentId: anEnvironmentId]
 										onException: CompileError
 										do: [:exb | undefSymbol := false]].

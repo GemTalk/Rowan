@@ -43,12 +43,16 @@ RwGsImagePatchVisitor_V2 >> addAddedProject: aProjectDefinition [
 
 { #category : 'private' }
 RwGsImagePatchVisitor_V2 >> addClasses: classDefinitions [
-
 	classDefinitions
 		do: [ :classDefinition | 
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
-			(Rowan globalNamed: classDefinition name) ifNotNil: [:global | (RwExistingVisitorAddingExistingClassNotification new classDefinition: classDefinition) signal ]].
+			(Rowan globalNamed: classDefinition name)
+				ifNotNil: [ :global | 
+					(RwExistingVisitorAddingExistingClassNotification new
+						class: global;
+						classDefinition: classDefinition;
+						yourself) signal ] ].
 	classDefinitions
 		do: [ :classDefinition | 
 			patchSet
@@ -69,7 +73,6 @@ RwGsImagePatchVisitor_V2 >> addClasses: classDefinitions [
 						inClass: classDefinition
 						inPackage: currentPackage
 						inProject: currentProject ] ]
-
 ]
 
 { #category : 'private' }
@@ -260,10 +263,12 @@ RwGsImagePatchVisitor_V2 >> visitPackageModification: aPackageModification [
 	| propertiesModification beforePackage |
 	aPackageModification isAddition
 		ifTrue: [ self addAddedPackage: aPackageModification after ].
-	aPackageModification isDeletion
-		ifTrue: [ self addDeletedPackage: aPackageModification before ].
 	currentPackage := aPackageModification after.
 	beforePackage := aPackageModification before.
+	aPackageModification isDeletion
+		ifTrue: [ 
+			self addDeletedPackage: aPackageModification before.
+			currentPackage := beforePackage ].
 	aPackageModification isModification
 		ifTrue: [ 
 			propertiesModification := aPackageModification propertiesModification.

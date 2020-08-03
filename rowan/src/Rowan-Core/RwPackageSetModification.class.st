@@ -302,11 +302,10 @@ RwPackageSetModification >> updateForMethodMoves [
 
 	| methodAdditions methodRemovals |
 	methodAdditions := self findAddedMethods.
-	methodRemovals := self findRemovedMethods.
-	"Any keys that match between added and removed should be considered a move."
-	methodAdditions keysAndValuesDo: 
-			[:key :addition |
+	methodRemovals := self findRemovedMethods.	"Any keys that match between added and removed should be considered a move."
+	methodAdditions
+		keysAndValuesDo: [ :key :addition | 
 			| removal |
-			removal := methodRemovals at: key ifAbsent: [nil].
-			removal ifNotNil: [self updateForMethodMoveFrom: removal to: addition]]
+			removal := methodRemovals at: key ifAbsent: [ nil ].
+			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition ] ]
 ]
