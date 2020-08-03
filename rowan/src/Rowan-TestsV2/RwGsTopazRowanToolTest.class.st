@@ -159,6 +159,130 @@ RwGsTopazRowanToolTest >> testTopazCreateProject_git [
 ]
 
 { #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazExportProject [
+	"load spec_0009 and then export the components, load spec, and packages .... there should be no changes"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project  |
+	loadSpec := self _loadSpecNamed: 'spec_0009'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self assert: project gitShortStatus isEmpty.
+
+"export"
+	Rowan gemstoneTools topaz
+		exportLoadSpecificationForProject: projectName;
+		exportComponentsForProject: projectName;
+		exportPackagesForProject: projectName;
+		yourself.
+
+"validate"
+	self assert: project gitShortStatus isEmpty
+]
+
+{ #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazGitSupport_01 [
+	"Create a git-based project using topaz api: checkout, commit, log, and status"
+
+	| projectName projectsHome repoType packageFormat packageConvention componentName packageNames defaultSymbolDictionaryName project topazTool comment |
+	projectName := 'TopazApiProject'.
+	projectsHome := self _testRowanProjectsSandbox.
+	repoType := #'git'.
+	packageFormat := 'tonel'.
+	packageConvention := 'Rowan'.
+	componentName := 'Core'.
+	packageNames := {(projectName , '-Core')}.
+	defaultSymbolDictionaryName := self _sampleSymbolDictionaryName1.
+
+	(projectsHome / projectName) ensureDeleteAll.
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"Create"
+	topazTool := Rowan gemstoneTools topaz.
+	project := topazTool
+		createNewLoadedProject: projectName
+		in: projectsHome
+		type: repoType
+		packageFormat: packageFormat
+		packageConvention: packageConvention
+		componentName: componentName
+		packageNames: packageNames
+		defaultSymbolDictionaryName: defaultSymbolDictionaryName.
+
+"Validate"
+	self assert: (project repositoryRoot) exists.
+	self assert: (project packageNames includes: (packageNames at: 1)).	
+	self assert: project useGit.
+	self assert: (Rowan gitTools isGitHome: project repositoryRoot).
+	self assert: Rowan gemstoneTools topaz currentTopazProjectName = projectName.
+
+"git operations: status, commit, log, "
+	self deny: (topazTool gitStatusProject: projectName) isEmpty.
+	comment := 'my first commit'.
+	topazTool gitCommitProject: projectName commitComment: comment.
+	self assert: (topazTool gitShortStatusProject: projectName) isEmpty.
+	self assert: ((topazTool gitLogProject: projectName) includesString: comment).
+	topazTool gitCreateBranchProject: projectName branchName: 'newbranch'.
+	self assert: ((topazTool gitStatusProject: projectName) includesString: 'newbranch').
+	topazTool gitCheckoutProject: projectName branchOrSHA: 'master'.
+	self assert: ((topazTool gitStatusProject: projectName) includesString: 'master').
+]
+
+{ #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
+	"Create a git-based project using topaz api: push and pull
+		load spec_0001 and then do a push and pull without error."
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project className class |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+	className := projectName , 'Class1'.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	class := Rowan globalNamed: className.
+	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
+	self assert: class new foo = 1.
+	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
+	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
+
+"do git push and pull without error"
+	Rowan gemstoneTools topaz
+		gitPullProject: projectName remote: 'origin' branch: 'spec_0001';
+		gitPushProject: projectName remote: 'origin' branch: 'spec_0001'
+]
+
+{ #category : 'project support' }
 RwGsTopazRowanToolTest >> testTopazLoadProjectFromUrl [
 	"Create a git-based project using topaz api"
 
@@ -224,4 +348,85 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 	self assert: class new foo = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) notNil.
 	self assert: class bar = 'bar'
+]
+
+{ #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazReloadProject [
+	"load spec_0001 and then checkout spec_0011 and reload the project, adding a class method #bar in an extension package."
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project className class |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+	className := projectName , 'Class1'.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	class := Rowan globalNamed: className.
+	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
+	self assert: class new foo = 1.
+	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
+	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
+
+"read tonel file from spec_0011"
+	project checkout: 'spec_0011'.
+	Rowan gemstoneTools topaz reloadProjectNamed: projectName.
+
+"validate"
+	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
+	self assert: class new foo = 1.
+	self assert: (class class compiledMethodAt: #bar otherwise: nil) notNil.
+	self assert: class bar = 'bar'.
+	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-Tests') sort.
+]
+
+{ #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazUnloadProject [
+	"load spec_0001 and then unload the project."
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project className class |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+	className := projectName , 'Class1'.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	class := Rowan globalNamed: className.
+	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
+	self assert: class new foo = 1.
+	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
+	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
+	self assert: (Rowan projectNames includes: projectName).
+
+"unload the project"
+	Rowan gemstoneTools topaz unloadProjectNamed: projectName.
+
+"validate"
+	self assert: (Rowan globalNamed: className) isNil.
+	self deny: (Rowan projectNames includes: projectName).
 ]

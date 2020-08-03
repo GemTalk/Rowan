@@ -49837,6 +49837,76 @@ extendedClasses
 	^ self _projectTools query classExtensionsForProjectNamed: self name
 %
 
+category: 'git support'
+method: RwProject
+gitCheckout: branchOrSha
+	"git checkout a branch or sha"
+
+	^ Rowan gitTools gitcheckoutIn: self repositoryRoot with: branchOrSha
+%
+
+category: 'git support'
+method: RwProject
+gitCommit: commitComment
+	"git checkout a branch or sha"
+
+	^ self _loadedProject resolvedProject commit: commitComment
+%
+
+category: 'git support'
+method: RwProject
+gitCreateBranch: branchName
+	"git create a new branch"
+
+	^ Rowan gitTools gitcheckoutIn: self repositoryRoot with: ' -b ', branchName
+%
+
+category: 'git support'
+method: RwProject
+gitLog: logLimit
+	"return `git log` report"
+
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRoot pathString
+%
+
+category: 'git support'
+method: RwProject
+gitPullRemote: remoteName branch: branchName
+	"git pull remote and branch name"
+
+	^ Rowan gitTools
+		gitpullIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+%
+
+category: 'git support'
+method: RwProject
+gitPushRemote: remoteName branch: branchName
+	"git push remote and branch name"
+
+	^ Rowan gitTools
+		gitpushIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+%
+
+category: 'git support'
+method: RwProject
+gitShortStatus
+	"`git status --short` returns an empty string if there is nothing to commit"
+
+	^ Rowan gitTools gitstatusIn: self repositoryRoot pathString with: '--short'
+%
+
+category: 'git support'
+method: RwProject
+gitStatus
+	"return standard `git status` report"
+
+	^ Rowan gitTools gitstatusIn: self repositoryRoot pathString with: ''
+%
+
 category: 'testing'
 method: RwProject
 isDirty

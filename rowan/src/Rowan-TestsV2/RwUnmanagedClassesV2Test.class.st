@@ -220,7 +220,8 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_01 [
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_02 [
-	"Package a method in an unpackaged class load a .gs filein using `set package`"
+	"Package a method in an unpackaged class load a .gs filein using `set package`
+		removeAll enabled"
 
 	| className unmanagedClass project projectName packageName symbolDictionary managedMethod x anotherProject anotherProjectName anotherPackageName stream |
 	projectName := 'PackagedClass_project'.
@@ -273,6 +274,80 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_02 [
 						symbolDictionaryName: symbolDictionary name asString).
 
 	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
+
+
+	self
+		_validateAuditResults: project audit;
+		_validateAuditResults: anotherProject audit.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+
+	self
+		assert:
+			(unmanagedClass compiledMethodAt: #'foo') rowanPackageName = anotherPackageName.
+	self
+		assert:
+			(x := (unmanagedClass compiledMethodAt: #'bar') rowanPackageName) = anotherPackageName
+]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_03 [
+	"Package a method in an unpackaged class load a .gs filein using `set package`
+		removeAll disabled"
+
+	| className unmanagedClass project projectName packageName symbolDictionary managedMethod x anotherProject anotherProjectName anotherPackageName stream |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	anotherProjectName := 'AnotherPackagedClass_project'.
+	anotherPackageName := anotherProjectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	anotherProject := self
+		_createLoadedProject: anotherProjectName
+		packageName: anotherPackageName
+		symbolDictionaryName: symbolDictionary name.
+
+	unmanagedClass := Object
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symbolDictionary
+		options: #().
+	managedMethod := unmanagedClass
+		rwCompileExtensionMethod: 'bar ^2'
+		category: 'managed'
+		packageName: packageName.
+
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: (x := managedMethod rowanPackageName) = packageName.
+
+	stream := ReadStreamPortable
+		on:
+			'set package ' , anotherPackageName
+				,
+					'		
+'
+				,
+					(self
+						_simpleGsFilein: className
+						instVarNames: '#(#xxx)'
+						symbolDictionaryName: symbolDictionary name asString).
+
+	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+		setEnableRemoveAll: false;
+		doFileIn.
 
 
 	self
