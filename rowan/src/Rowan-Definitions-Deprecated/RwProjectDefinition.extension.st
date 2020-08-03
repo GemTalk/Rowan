@@ -1,20 +1,20 @@
 Extension { #name : 'RwProjectDefinition' }
 
 { #category : '*rowan-definitions-deprecated' }
-RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
+RwProjectDefinition >> commit: message [
+	"lperform commit on the repository associated with receiver ..."
 
-	self deprecated: 'RwProjectDefinition >> packageNamesInLoadOrder: deprecated in Rowan 1.2.6+'.
-	packageNamesInLoadOrder
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+	^ Rowan projectTools commit commitProjectDefinition: self message: message
 ]
 
 { #category : '*rowan-definitions-deprecated' }
-RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
+RwProjectDefinition >> export [
 
-	| spec |
-	self deprecated: 'RwProjectDefinition class >> newForGitPackageProjectNamed: deprecated in Rowan 1.2.6+'.
-	spec := RwSimpleProjectSpecification new
-		specName: aString;
-		yourself.
-	^ self newForSpecification: spec
+	Rowan projectTools write writeDeprecatedProjectDefinition: self
+]
+
+{ #category : '*rowan-definitions-deprecated' }
+RwProjectDefinition >> exportSpecification [
+
+	^ Rowan tools spec exportProjectDefinition: self
 ]

@@ -37,8 +37,11 @@ RwDefinition >> addDefinition: aDefinition to: aDictionary [
 
 	| key |
 	key := aDefinition key.
-	(aDictionary includesKey: key)
-		ifTrue: [self error: 'Duplicate definition.'].
+	(aDictionary includesKey: key) ifTrue: [
+     | nam |
+     nam := [ ' in ' , self name ] on: Error do:[:ex | '' ].
+     self error: 'Duplicate definition of ', key , nam .
+   ].
 	^ aDictionary at: key put: aDefinition
 ]
 
@@ -51,6 +54,17 @@ RwDefinition >> asDefinition [
 RwDefinition >> compareAgainstBase: aDefinition [
 	"Diff myself for changes against the given base definition. 
 	Answer a Modification, which might be empty if there are no changes."
+
+	self subclassResponsibility
+]
+
+{ #category : 'comparing' }
+RwDefinition >> compareAgainstBaseForNewClassUnmanagedVersion: aBaseDefinition [
+
+	"Diff myself for changes against the given base definition. 
+	Answer a Modification, which might be empty if there are no changes."
+
+	"Filter the definition to include changes that are only applicable to new unmanaged class versions"
 
 	self subclassResponsibility
 ]
@@ -164,10 +178,15 @@ RwDefinition >> removeDefinition: aDefinition from: aDictionary [
 
 { #category : 'private' }
 RwDefinition >> removeKey: key from: aDictionary [
-
-	aDictionary
+	^ self
 		removeKey: key
+		from: aDictionary
 		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+]
+
+{ #category : 'private' }
+RwDefinition >> removeKey: key from: aDictionary ifAbsent: absentBlock [
+	^ aDictionary removeKey: key ifAbsent: absentBlock
 ]
 
 { #category : 'properties' }

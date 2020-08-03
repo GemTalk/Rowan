@@ -78,6 +78,14 @@ RowanService class >> setBreakPointsAreEnabled: boolean [
   ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
 ]
 
+{ #category : 'accessing' }
+RowanService class >> version [
+  "change this method carefully and only at Jadeite release boundaries.
+	Failure to do so will prevent logins"
+
+  ^ 3092
+]
+
 { #category : 'other' }
 RowanService >> answer: anObject [
 
@@ -229,7 +237,7 @@ RowanService >> extendHierarchies: hierarchies [
 
 { #category : 'perform' }
 RowanService >> handleDeletedService [
-  updateType := #'removed:'.
+  self updateType: #'removed:'.
   RowanCommandResult addResult: self
 ]
 
@@ -267,6 +275,12 @@ RowanService >> initialize [
 
 { #category : 'testing' }
 RowanService >> isClassService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isDictionaryService [
 
 	^false
 ]
@@ -383,6 +397,13 @@ RowanService >> servicePerform: symbol withArguments: collection [
   "each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
 
+  SessionTemps current
+    at: #'versionsVerified'
+    ifAbsent: [ 
+      SessionTemps current at: #'versionsVerified' put: false.
+      self
+        inform:
+          'Version mismatch failure. Client version is older than server version.' ].
   symbol == #'update'
     ifTrue: [ ^ self ].
   ^ super perform: symbol withArguments: collection
@@ -448,6 +469,18 @@ RowanService >> stonStringFor: anObject [
 
 ]
 
+{ #category : 'private' }
+RowanService >> stripOutUnicode: string [
+  | asciiString |
+  asciiString := string
+    collect: [ :char | 
+      ((self validLowRangeCharacters includes: char) not
+        and: [ char asciiValue < 32 or: [ char asciiValue > 255 ] ])
+        ifTrue: [ $? ]
+        ifFalse: [ char ] ].
+  ^ asciiString
+]
+
 { #category : 'commands support' }
 RowanService >> superclassChainsFor: behaviors [
 	organizer := ClassOrganizer new. 
@@ -482,10 +515,28 @@ RowanService >> updateInternalService: updatedService [
 	"no internally held services to update"
 ]
 
+{ #category : 'update' }
+RowanService >> updateLatest [
+  "subclasses may want to special behavior to update themselves
+	to their loaded version"
+
+  self update
+]
+
 { #category : 'accessing' }
 RowanService >> updateType: aSymbol [
 
 	updateType := aSymbol
+]
+
+{ #category : 'accessing' }
+RowanService >> userGlobals [
+  ^ Rowan image symbolList objectNamed: #'UserGlobals'
+]
+
+{ #category : 'private' }
+RowanService >> validLowRangeCharacters [
+  ^ Array with: Character lf with: Character tab
 ]
 
 { #category : 'testing' }

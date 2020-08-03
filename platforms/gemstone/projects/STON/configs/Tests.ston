@@ -1,11 +1,13 @@
 RwProjectLoadConfiguration {
 	#name : 'Tests',
+	#comment : 'STON test packages',
 	#version : '0.1.0',
+	#configurationNames : [ ],
 	#conditionalPackages : {
 		[
-			'gemstone'
+			'gemstone-kernel'
 		] : {
-			'core' : {
+			'tests' : {
 				#packageNames : [
 					'STON-Tests',
 					'STON-GemStone-Tests'
@@ -13,6 +15,6 @@ RwProjectLoadConfiguration {
 			}
 		}
 	},
-	#configurationNames : [ ],
-	#comment : 'STON test packages'
+	#conditionalPackageMapSpecs : { },
+	#definedGroupNames : { }
 }

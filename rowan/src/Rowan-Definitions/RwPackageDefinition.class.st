@@ -58,19 +58,82 @@ RwPackageDefinition >> addClassNamed: className super: superclassName category: 
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
+RwPackageDefinition >> addClassNamed: className super: superclassName category: categryName comment: comment [
 
-	^ self addClassDefinition: 
-		(RwClassDefinition 
-			newForClassNamed: className 
-				super: superclassName 
-				instvars: instvars 
-				classinstvars: 
-				classinstvars 
-				classvars: classvars 
-				category: category 
-				comment: comment 
-				pools: pools 
+	^ self addClassDefinition: (RwClassDefinition newForClassNamed: className super: superclassName  category: categryName comment: comment)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars category: category comment: comment [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: #()
+				classvars: #()
+				category: category
+				comment: comment
+				pools: #()
+				type: 'normal')
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: #()
+				type: 'normal')
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
+				type: 'normal')
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: instvars
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
 				type: type)
 ]
 
@@ -96,6 +159,12 @@ RwPackageDefinition >> classDefinitions [
 RwPackageDefinition >> classDefinitions: classDefinitionDictionary [
 
 	classDefinitions := classDefinitionDictionary
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> classExtensionDefinitionNamed: className [
+
+	^ self classExtensionDefinitionNamed: className ifAbsent: [ self error: 'No class extension definition found with the name ', className printString ]
 ]
 
 { #category : 'accessing' }
@@ -138,6 +207,22 @@ RwPackageDefinition >> key [
 	^self propertyAt: 'name' ifAbsent: [nil]
 ]
 
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassNamed: className modifyClassDefinition: classDefinitionBlock toPackage: packageDefinition [
+	| classDefinition |
+	classDefinition := self removeKey: className from: classDefinitions.
+	classDefinitionBlock cull: classDefinition.
+	packageDefinition addClassDefinition: classDefinition
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassNamed: className toPackage: packageDefinition [
+	self
+		moveClassNamed: className
+		modifyClassDefinition: [  ]
+		toPackage: packageDefinition
+]
+
 { #category : 'copying' }
 RwPackageDefinition >> postCopy [
 
@@ -171,8 +256,34 @@ RwPackageDefinition >> removeClassExtensionDefinitionNamed: className [
 
 { #category : 'accessing' }
 RwPackageDefinition >> removeClassNamed: className [
+	^ self removeKey: className from: classDefinitions
+]
 
-	self removeKey: className from: classDefinitions
+{ #category : 'accessing' }
+RwPackageDefinition >> removeClassNamed: className ifAbsent: absentBlock [
+
+	self removeKey: className from: classDefinitions ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> renameTo: newPackageName packageConvention: thePackageConvention [
+	self propertyAt: 'name' put: newPackageName.
+	thePackageConvention = 'Rowan'
+		ifTrue: [ ^ self ].
+	thePackageConvention = 'Monticello'
+		ifTrue: [ self error: 'not yet implemented' ].
+	thePackageConvention ~= 'RowanHybrid'
+		ifTrue: [ self error: 'unknown package convention' ].
+	self classDefinitions
+		valuesDo: [ :classDef | 
+			classDef
+				moveToPackageNamed: newPackageName
+				packageConvention: thePackageConvention ].
+	self classExtensions
+		valuesDo: [ :classDef | 
+			classDef
+				moveToPackageNamed: newPackageName
+				packageConvention: thePackageConvention ]
 ]
 
 { #category : 'accessing' }

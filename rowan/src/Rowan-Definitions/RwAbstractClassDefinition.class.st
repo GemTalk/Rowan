@@ -46,7 +46,7 @@ RwAbstractClassDefinition >> addClassMethod: methodSource protocol: protocol [
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addClassMethodDefinition: aMethodDefinition [
 
-	self addDefinition: aMethodDefinition to: classMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: classMethodDefinitions
 ]
 
 { #category : 'accessing' }
@@ -58,7 +58,7 @@ RwAbstractClassDefinition >> addInstanceMethod: methodSource protocol: protocol 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addInstanceMethodDefinition: aMethodDefinition [
 
-	self addDefinition: aMethodDefinition to: instanceMethodDefinitions
+	^ self addDefinition: aMethodDefinition to: instanceMethodDefinitions
 ]
 
 { #category : 'private' }
@@ -86,8 +86,14 @@ RwAbstractClassDefinition >> classMethodDefinitions: dictionaryOfDefinitions [
 { #category : 'comparing' }
 RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 
+	^self compareAgainstBase: aDefinition using:  self _modificationClass
+]
+
+{ #category : 'comparing' }
+RwAbstractClassDefinition >> compareAgainstBase: aDefinition using: aModificationClass [
+
 	| modification instanceMethodsModification classMethodsModification className |
-	modification := self _modificationClass before: aDefinition after: self.
+	modification := aModificationClass before: aDefinition after: self.
 	modification
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
 	className := self _classNameForCompare: aDefinition.
@@ -111,16 +117,33 @@ RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
+]
 
+{ #category : 'comparing' }
+RwAbstractClassDefinition >> compareAgainstBaseForNewClassUnmanagedVersion: aDefinition [
+	"all unchanged and unremoved methods need to be applied to the patch"
+
+	^ self
+		compareAgainstBase: aDefinition
+		using: RwClassUnmanagedModification
 ]
 
 { #category : 'comparing' }
 RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
+	"all unchanged and unremoved methods need to be applied to the patch"
+
+	^ self
+		compareAgainstBaseForNewClassVersion: aDefinition
+		using: self _modificationClass
+]
+
+{ #category : 'comparing' }
+RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition using: modificationClass [
 
 	"all unchanged and unremoved methods need to be applied to the patch"
 
 	| modification instanceMethodsModification classMethodsModification |
-	modification := self _modificationClass before: aDefinition after: self.
+	modification := modificationClass before: aDefinition after: self.
 	instanceMethodsModification := self _methodsModificationClass
 		extendedClassName: self key.
 	classMethodsModification := self _methodsModificationClass
@@ -141,7 +164,6 @@ RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
-
 ]
 
 { #category : 'comparing' }
@@ -233,6 +255,11 @@ RwAbstractClassDefinition >> key [
 ]
 
 { #category : 'accessing' }
+RwAbstractClassDefinition >> moveToPackageNamed: aPackageName packageConvention: aPackageConvention [
+	self subclassResponsibility: #'moveToPackageNamed:packageConvention:'
+]
+
+{ #category : 'accessing' }
 RwAbstractClassDefinition >> name: aString [
 
 	properties at: 'name' put: aString
@@ -254,32 +281,54 @@ RwAbstractClassDefinition >> postCopy [
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> removeClassMethod: selector [
+	^ self
+		removeClassMethod: selector
+		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ]
+]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> removeClassMethod: selector ifAbsent: absentBlock [
 	| definition |
 	definition := classMethodDefinitions
 		at: selector
-		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
+		ifAbsent: [ absentBlock value ].
 	self removeDefinition: definition from: classMethodDefinitions.
 	^ definition
-
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> removeInstanceMethod: selector [
+	^ self
+		removeInstanceMethod: selector
+		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ]
+]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> removeInstanceMethod: selector ifAbsent: absentBlock [
 	| definition |
 	definition := instanceMethodDefinitions
 		at: selector
-		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
+		ifAbsent: [ ^ absentBlock value ].
 	self removeDefinition: definition from: instanceMethodDefinitions.
 	^ definition
+]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> updateClassMethod: methodSource protocol: protocol [
+
+	^self updateClassMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> updateClassMethodDefinition: aMethodDefinition [
 
 	self updateDefinition: aMethodDefinition in: classMethodDefinitions
+]
+
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> updateInstanceMethod: methodSource protocol: protocol [
+
+	^self updateInstanceMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
 ]
 
 { #category : 'accessing' }

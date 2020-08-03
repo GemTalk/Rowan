@@ -71,17 +71,6 @@ RowanPackageService >> classHierarchy: theClasses [
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> createPackage [
-	| projectService default |
-	default := RowanProjectService defaultProjectName.
-	projectService := RowanProjectService new.
-	projectService createProjectNamed: default.  
-	(Rowan packageNames includes: name) ifFalse:[
-		self browserTool addPackageNamed: name toProjectNamed: default].
-
-]
-
-{ #category : 'rowan' }
 RowanPackageService >> createPackageNamed: aString inProject: projName [
 	| projectService | 
 	name := aString.
@@ -139,6 +128,12 @@ RowanPackageService >> isDirty [
 RowanPackageService >> isDirty: boolean [
 
 	isDirty := boolean
+]
+
+{ #category : 'testing' }
+RowanPackageService >> isPackageService [
+
+	^true
 ]
 
 { #category : 'Accessing' }
@@ -226,8 +221,8 @@ RowanPackageService >> projectDefinition: newValue [
 
 { #category : 'testing' }
 RowanPackageService >> projectIsDirty [
-
-	^(RowanProjectService new name: projectName) rowanDirty
+  projectName ifNil: [ self updateProjectName ].
+  ^ (RowanProjectService new name: projectName) rowanDirty
 ]
 
 { #category : 'Accessing' }
@@ -242,12 +237,12 @@ RowanPackageService >> projectName: newValue [
 
 { #category : 'client commands' }
 RowanPackageService >> removeClass: classService [
-	self removeClassNamed: classService name. 
-	self setDefaultTemplate.
-	classService updateType: #removedClass:.
-	classService wasRemoved: true. 
-	RowanCommandResult addResult: classService.
-	RowanBrowserService new packagesWithTests. "sunit browser might need updated"
+  self removeClassNamed: classService name.
+  self setDefaultTemplate.
+  classService updateType: #'removedClass:'.
+  classService wasRemoved: true.
+  RowanCommandResult addResult: classService.
+  RowanBrowserService new packagesWithTests	"sunit browser might need updated"
 ]
 
 { #category : 'commands support' }
@@ -313,31 +308,31 @@ RowanPackageService >> setDefaultTemplate [
 RowanPackageService >> testClasses [
   organizer := ClassOrganizer new.
   testClasses := Set new.
-  TestCase allSubclasses
-    do: [ :testSubclass | 
-      testSubclass isAbstract
-        ifFalse: [ 
-          testSubclass suite tests
-            do: [ :testClassInstance | 
-              | implementingClass compiledMethod |
-              compiledMethod := testSubclass
-                compiledMethodAt: testClassInstance selector
-                otherwise: nil.
-              compiledMethod
-                ifNil: [ 
-                  implementingClass := testClassInstance class
-                    whichClassIncludesSelector: testClassInstance selector.
-                  compiledMethod := implementingClass
-                    compiledMethodAt: testClassInstance selector ].
-              (compiledMethod rowanPackageName = name
-                or: [ testSubclass rowanPackageName = name ])
-                ifTrue: [ 
-                  | classService |
-                  classService := RowanClassService
-                    basicForClassNamed: testSubclass name.
-                  testClasses add: classService ] ] ] ].
-  updateType := #'testClasses:'.
+  self loadedClasses
+    valuesDo: [ :loadedClass | 
+      | cls |
+      cls := loadedClass handle.
+      (cls inheritsFrom: TestCase)
+        ifTrue: [ 
+          cls isAbstract
+            ifFalse: [ 
+              | classService |
+              classService := RowanClassService basicForClassNamed: cls name.
+              testClasses add: classService ] ] ].
+  self loadedClassExtensions
+    valuesDo: [ :loadedClass | 
+      | cls |
+      cls := loadedClass handle.
+      (cls inheritsFrom: TestCase)
+        ifTrue: [ 
+          cls isAbstract
+            ifFalse: [ 
+              | classService |
+              classService := RowanClassService basicForClassNamed: cls name.
+              testClasses add: classService ] ] ].
+  updateType := #'testClasses:browser:'.
   testClasses := testClasses asArray.
+  testClasses do: [ :classService | classService update ].
   RowanCommandResult addResult: self
 ]
 

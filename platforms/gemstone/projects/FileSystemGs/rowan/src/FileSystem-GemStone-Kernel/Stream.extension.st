@@ -5,3 +5,9 @@ Stream >> isBinary [
 	^false
 
 ]
+
+{ #category : '*filesystem-gemstone-kernel' }
+Stream >> wrappedStreamName [
+
+	^''
+]

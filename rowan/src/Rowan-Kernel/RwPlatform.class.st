@@ -63,20 +63,19 @@ RwPlatform >> automaticClassInitializationBlackList_global [
 ]
 
 { #category : 'queries' }
-RwPlatform >> basePlatformAttribute [
-	"Answer the generic configuration attribute for the platform"
+RwPlatform >> basePlatformConditionalAttribute [
+	"Answer the generic conditional attribute for the platform"
 
-	"Examples include: 'gemstone', 'pharo', 'squeak'"
+	"Examples include: 'gemstone', 'pharo', 'squeak', 'vast' 
+		(see RwSpecification class >> _supportedPlatformNames)"
 
-
-	self subclassResponsibility: #basePlatformAttribute
-
+	self subclassResponsibility: #'basePlatformConditionalAttribute'
 ]
 
 { #category : 'preferences' }
 RwPlatform >> clearAllPreferencesFor: preferenceSymbol [ 
 
-	self subclassResponisbility: #clearAllPreferencesFor:
+	self subclassResponsibility: #clearAllPreferencesFor:
 ]
 
 { #category : 'automatic class initialization' }
@@ -112,13 +111,13 @@ RwPlatform >> clearAutomaticClassInitializationBlackList_global [
 { #category : 'preferences' }
 RwPlatform >> clearDefaultPreferenceFor: preferenceSymbol [ 
 
-	self subclassResponisbility: #clearDefaultPreferenceFor:
+	self subclassResponsibility: #clearDefaultPreferenceFor:
 ]
 
 { #category : 'preferences' }
 RwPlatform >> clearPreferenceFor: preferenceSymbol [ 
 
-	self subclassResponisbility: #clearPreferenceFor:
+	self subclassResponsibility: #clearPreferenceFor:
 ]
 
 { #category : 'preferences' }
@@ -130,7 +129,7 @@ RwPlatform >> defaultPreferenceFor: preferenceSymbol [
 { #category : 'preferences' }
 RwPlatform >> defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
-	^ self subclassResponisbility: #defaultPreferenceFor:ifAbsent:
+	^ self subclassResponsibility: #defaultPreferenceFor:ifAbsent:
 ]
 
 { #category : 'queries' }
@@ -158,13 +157,12 @@ RwPlatform >> loadedPackageClass [
 ]
 
 { #category : 'queries' }
-RwPlatform >> platformConfigurationAttributes [
-	"Answer the configuration attributes. Currently 'common' is the only shared attribute."
+RwPlatform >> platformConditionalAttributes [
+	"Answer the platform conditional attributes. Currently 'common' is the only shared attribute."
 
 	"subclasses need to override and provide additional platform-specific attributes"
 
 	^ #('common')
-
 ]
 
 { #category : 'preferences' }
@@ -176,19 +174,19 @@ RwPlatform >> preferenceFor: preferenceSymbol [
 { #category : 'preferences' }
 RwPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
 
-	^ self subclassResponisbility: #preferenceFor:ifAbsent:
+	^ self subclassResponsibility: #preferenceFor:ifAbsent:
 ]
 
 { #category : 'preferences' }
 RwPlatform >> setDefaultPreferenceFor: preferenceSymbol to: anObject [
 
-	self subclassResponisbility: #setDefaultPreferenceFor:to:
+	self subclassResponsibility: #setDefaultPreferenceFor:to:
 ]
 
 { #category : 'preferences' }
 RwPlatform >> setPreferenceFor: preferenceSymbol to: anObject [
 
-	self subclassResponisbility: #setPreferenceFor:to:
+	self subclassResponsibility: #setPreferenceFor:to:
 ]
 
 { #category : 'queries' }

@@ -211,6 +211,28 @@ ZnBufferedReadStream >> nextInto: collection [
 		into: collection
 ]
 
+{ #category : 'accessing' }
+ZnBufferedReadStream >> nextLine [
+"Answer next line (may be empty) without line end delimiters, or nil if at end.
+Leave the stream positioned after the line delimiter(s).
+Handle a zoo of line delimiters CR, LF, or CR-LF pair"
+
+| cr lf chrcls result ch |
+self atEnd ifTrue: [^nil].
+cr := (chrcls:= Character) cr.
+lf := chrcls  lf.
+result := self collectionSpecies new.
+[ ch := self next .
+  (ch == cr or:[ ch == lf ]) ifTrue:[ 
+    ch == cr ifTrue:[ self peekFor: lf ].
+    ^ result 
+  ].
+  result add: ch .
+  self atEnd 
+] whileFalse .
+^ result
+]
+
 { #category : 'accessing-bytes' }
 ZnBufferedReadStream >> nextLittleEndianNumber: numberOfBytes [
 	^ self nextIntegerOfSize: numberOfBytes signed: false bigEndian: false
@@ -241,6 +263,12 @@ ZnBufferedReadStream >> peek [
 	^ position <= limit
 		ifTrue: [ buffer at: position ]
 		ifFalse: [ nil ]
+]
+
+{ #category : 'accessing' }
+ZnBufferedReadStream >> peek: count [
+  self peek .
+  ^ buffer copyFrom: position to: (position + count min: limit)
 ]
 
 { #category : 'accessing' }
@@ -416,4 +444,9 @@ ZnBufferedReadStream >> upToEnd [
 { #category : 'accessing' }
 ZnBufferedReadStream >> wrappedStream [
 	^ stream
+]
+
+{ #category : 'accessing' }
+ZnBufferedReadStream >> wrappedStreamName [
+	^ stream wrappedStreamName
 ]

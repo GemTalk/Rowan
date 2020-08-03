@@ -1,0 +1,16 @@
+RwComponentSpecification{
+	#specName : 'RowanSample4',
+	#version : '0.3.0',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample4',
+	#repoSpec : RwGitRepositorySpecification {
+			#committish : 'issue_200_0',
+			#committishType : 'branch'
+		},
+	#configsPath : 'rowan/components',
+	#projectsPath : 'rowan/projects',
+	#repoPath : 'rowan/src',
+	#specsPath : 'rowan/specs',
+	#defaultComponentName : 'Load',
+	#defaultGroupName : 'core',
+	#comment : 'component defintions'
+}

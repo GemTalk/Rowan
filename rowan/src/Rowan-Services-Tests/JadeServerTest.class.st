@@ -81,6 +81,9 @@ JadeServerTest >> test_jadeServerHierarchyValid [
 	self assert: subclasses asArray first name = #JadeServer64bit32.
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit32. 
 	subclasses :=  jadeServerClass subclasses asArray.
+	self assert: subclasses asArray first name = #JadeServer64bit35.
+	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit35. 
+	subclasses :=  jadeServerClass subclasses asArray.
 	self assert: subclasses isEmpty
 ]
 

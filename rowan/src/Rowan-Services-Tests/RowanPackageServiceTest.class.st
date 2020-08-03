@@ -122,40 +122,19 @@ RowanPackageServiceTest >> test_compileClassSelectsPackageAndClass [
 ]
 
 { #category : 'tests' }
-RowanPackageServiceTest >> test_packageWasDeleted [
-  "NOTE - use commit/abort in tests carefully. 
-	Can cause hard-to-diagnose problems later 
-	in test runs"
-
-  | packageService projectDef packageDef |
-  self
-    jadeiteIssueTested: #'issue284'
-    withTitle:
-      '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
-  projectDef := self defaultProjectDefinition.
-  [ 
-  System commitTransaction.	"commit project but not package"
-  projectDef
-    packageNamed: self servicesTestPackageName
-    ifAbsent: [ 
-      packageDef := RwPackageDefinition newNamed: self servicesTestPackageName.
-      projectDef addPackage: packageDef ].
-  Rowan projectTools load loadProjectDefinition: projectDef.
-  packageService := RowanPackageService
-    forPackageNamed: self servicesTestPackageName.
-  self deny: packageService wasDeleted.
-  System abortTransaction.
-  self assert: packageService wasDeleted ]
-    ensure: [ 
-      self unloadServicesTestProject.
-      System commitTransaction ]
+RowanPackageServiceTest >> test_projectIsDirtyWithNonUpdatedPackage [
+  | packageService |
+  packageService := RowanPackageService new name: 'Rowan-Services-Tests'.
+  self assert: packageService projectName equals: nil.
+  packageService projectIsDirty.	"answer is irrelevant for this test"
+  self assert: packageService projectName equals: 'Rowan'
 ]
 
 { #category : 'tests' }
 RowanPackageServiceTest >> test_testClassesIncludesExtensions [
 	| packageService testClassNames |
 	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
-	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-Tests'.
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-TestsV2'.
 	packageService testClasses. 
 	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
 	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest'). "extension tests"

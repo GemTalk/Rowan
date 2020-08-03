@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/componentsV2/Loader',
+	#condition : 'componentsV2',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/componentsV2/platforms/Loader'
+	],
+	#packageNames : [ ],
+	#comment : 'Organize all componentsV2 loader classes under one component. componentsV2 will eventually be deprecated, when v2 is fully functional.'
+}

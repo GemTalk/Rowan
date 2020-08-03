@@ -89,6 +89,12 @@ FileReference >> asPath [
 	^path
 ]
 
+{ #category : 'printing' }
+FileReference >> asString [
+  "needed for informative topaz stack display"
+  ^ path asString 
+]
+
 { #category : 'streams' }
 FileReference >> binaryReadStream [
 	

@@ -49,28 +49,6 @@ result add: 'constraints: '.
 ]
 
 { #category : '*rowan-gemstone-kernel' }
-Class >> _rwOptionsArray [
-  "copy of _optionsArray"
-
-  | result optCount | 
-  result := { } .
-  optCount := 0 .
-  self instancesDbTransient ifTrue:[ result add: #dbTransient . optCount := optCount + 1 ].
-  self instancesNonPersistent ifTrue:[ result add:  #instancesNonPersistent  . optCount := optCount + 1 ].
-  self instancesInvariant ifTrue:[ result add:  #instancesInvariant  . optCount := optCount + 1 ].
-  optCount > 1 ifTrue:[
-    self _error: #classErrBadFormat
-        with:'only one of #dbTransient #instancesNonPersistent  #instancesInvariant allowed' .
-  ].
-  "self _structuralUpdatesDisallowed ifTrue:[ result add: #disallowGciStore  ]." "commented out variant of _optionsArray (https://github.com/dalehenrich/Rowan/issues/292)"
-  self isModifiable ifTrue:[ result add: #modifiable  ].
-  self subclassesDisallowed ifTrue:[ result add: #subclassesDisallowed  ].
-  "self _traversalByCallback ifTrue:[ result add: #traverseByCallback  ]." "commented out variant of _optionsArray (https://github.com/dalehenrich/Rowan/issues/292)"
-  ^ result
-
-]
-
-{ #category : '*rowan-gemstone-kernel' }
 Class >> _rwOptionsForDefinition [ 
   "copy of _optionsForDefinition"
 
@@ -119,7 +97,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
-		type: 'bytes'
+		type: 'byteSubclass'
 		superclass: self name asString
 		instVarNames: #()
 		classVars: anArrayOfClassVars
@@ -135,7 +113,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
-		type: 'bytes'
+		type: 'byteSubclass'
 		superclass: self name asString
 		instVarNames: #()
 		classVars: anArrayOfClassVars
@@ -145,7 +123,6 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		packageName: aPackageName
 		constraints: #()
 		options: optionsArray
-
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -303,4 +280,39 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		constraints: #()
 		options: optionsArray
 
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass category: aCategoryName packageName: aPackageName options: optionsArray [
+	| loadedPackage |
+	loadedPackage := Rowan image
+		loadedPackageNamed: aPackageName
+		ifAbsent: [ self error: 'No loaded package found for ' , aPackageName printString ].
+
+	aDictionary
+		ifNotNil: [ 
+			| expectedSymDictName specifiedSymDictName |
+			(expectedSymDictName := loadedPackage loadedProject
+				symbolDictNameForPackageNamed: aPackageName)
+				~= (specifiedSymDictName := aDictionary name asString)
+				ifTrue: [ 
+					self
+						error:
+							'Attempt to move a packaged class ' , aString printString
+								, ' from the symbol dictionary ' , expectedSymDictName printString
+								, ' to the symbol dictionary ' , specifiedSymDictName printString
+								, '. Please use the Rowan api to achieve the move' ] ].
+
+	^ Rowan projectTools browser
+		addOrUpdateClassDefinition: aString
+		type: 'normal'
+		superclass: self name asString
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: aCategoryName
+		packageName: aPackageName
+		constraints: #()
+		options: optionsArray
 ]

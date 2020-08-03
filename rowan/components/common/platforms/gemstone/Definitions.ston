@@ -1,0 +1,29 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/gemstone/Definitions',
+	#condition : [
+		'gemstone'
+	],
+	#packageNames : [
+		'Rowan-Cypress-Definitions',
+		'Rowan-Cypress-Kernel',
+		'Rowan-GemStone-Definitions'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Cypress-Definitions' : {
+						'symbolDictName' : 'RowanTools'
+					},
+					'Rowan-Cypress-Kernel' : {
+						'symbolDictName' : 'Globals'
+					},
+					'Rowan-GemStone-Definitions' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Definitions gemstone  packages '
+}

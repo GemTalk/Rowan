@@ -11,6 +11,16 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'accessing' }
+RowanDictionaryService >> classes [
+	^classes
+]
+
+{ #category : 'accessing' }
+RowanDictionaryService >> classes: object [
+	classes := object
+]
+
 { #category : 'client commands' }
 RowanDictionaryService >> classHierarchy [
 	| theClasses |
@@ -46,6 +56,11 @@ RowanDictionaryService >> insertAt: index [
 	theDictionary at: name asSymbol put: theDictionary. 
 	System myUserProfile insertDictionary: theDictionary at: index. 
 	RowanBrowserService new updateDictionaries.
+]
+
+{ #category : 'testing' }
+RowanDictionaryService >> isDictionaryService [
+  ^ true
 ]
 
 { #category : 'accessing' }
@@ -103,6 +118,8 @@ RowanDictionaryService >> update [
   sorted := SortedCollection sortBlock: [ :x :y | x first < y first ].
   dictionary := Rowan image symbolList objectNamed: name.
   dictionary ifNil: [ ^ self ].
+  (dictionary isKindOf: SymbolDictionary)
+    ifFalse: [ ^ self ].
   dictionary
     keysAndValuesDo: [ :key :value | 
       value isClass
@@ -113,14 +130,20 @@ RowanDictionaryService >> update [
           classService version: (value classHistory indexOf: value).
           classes add: classService ]
         ifFalse: [ 
-          | printString |
-          printString := [ value printString ]
+          | printString theKey |
+          printString := [ 
+          value printString charSize > 1
+            ifTrue: [ '<<unprintable string. charSize > 1>>' ]
+            ifFalse: [ value printString ] ]
             on: Error
             do: [ :ex | 'unprintable string. Error - <' , ex printString , '>' ].
+          key charSize = 1
+            ifTrue: [ theKey := key ]
+            ifFalse: [ theKey := '<<unprintable string. charSize > 1>>' ].
           sorted
             add:
               (Array
-                with: name , '.' , key
+                with: name , '.' , theKey
                 with: value class name
                 with: value asOop
                 with: printString) ] ].

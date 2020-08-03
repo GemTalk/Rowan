@@ -202,7 +202,8 @@ File class >> getPosition: aGsFile [
 { #category : 'primitives-path' }
 File class >> lookupDirectory: fullPath filename: fileName [
 
-	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
+	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and 
+   return entry array or nil "
 
 	^ self lookupPath: fullPath, '/', fileName
 ]
@@ -224,6 +225,7 @@ File class >> lookupPath: fullPath [
    On Macs and PCs, it is the container of the system volumes."
 
 	| gsFileStat |
+	(GsFile existsOnServer: fullPath) ifFalse: [^ nil ].
 	gsFileStat := GsFile stat: fullPath isLstat: true.
 	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
 	^	{
@@ -235,7 +237,6 @@ File class >> lookupPath: fullPath [
 		gsFileStat mode bitAnd: 8r777. "https://github.com/GemTalk/FileSystemGs/issues/11"
 		(gsFileStat mode bitAnd: 8r0120000) = 8r0120000. "https://github.com/GemTalk/FileSystemGs/issues/10"
 	}
-
 ]
 
 { #category : 'file creation' }
@@ -262,8 +263,11 @@ File class >> open: fileName writable: writeMode [
 		ifTrue: [ 'w+' ] 
 		ifFalse: [ 
 			writeMode = #read
-				ifTrue: [ 'r+' ]
-				ifFalse: [ 'a+' ] ].
+				ifTrue: [ 'r' ]
+				ifFalse: [ 
+           writeMode == #append 
+             ifTrue:[ 'a+' ] 
+             ifFalse:[ Error signal:'invalid mode']]].
 	^ GsFile
 		open: fileName 
 		mode: mode 
@@ -395,6 +399,12 @@ File class >> write: aGsFile from: stringOrByteArray startingAt: startIndex coun
 		ifFalse: [ aGsFile nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
 	written ifNil: [ self error: 'failed write' ].
 	^ written
+]
+
+{ #category : 'printing' }
+File >> asString [
+  "Needed for topaz debugging"
+  ^ name
 ]
 
 { #category : 'accessing' }

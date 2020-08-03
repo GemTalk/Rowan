@@ -13,6 +13,14 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'private' }
+RwLoadedClass >> _classBasedProperties [
+
+	"Answer the list of properties that are derived from the class instance itself"
+
+	^ #()
+]
+
 { #category : 'definitions' }
 RwLoadedClass >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."
@@ -25,8 +33,7 @@ RwLoadedClass >> asDefinition [
 { #category : 'accessing' }
 RwLoadedClass >> classCategory [
 
-	^self propertyAt: 'category'
-
+	^self propertyAt: 'category' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
@@ -183,4 +190,15 @@ RwLoadedClass >> prettyName [
 
 	^' class ', self name
 
+]
+
+{ #category : 'properties' }
+RwLoadedClass >> updatePropertiesFromClassDefinition: classDefinition [
+	"Copy all properties to the receiver's property dictionary that are not recorded in the class directly"
+
+	| recordedPropertyNames |
+	recordedPropertyNames := self _classBasedProperties asSet.
+	classDefinition properties keysAndValuesDo: [:propertyName :propertyValue |
+		(recordedPropertyNames includes: propertyName)
+			ifFalse: [ self propertyAt: propertyName put: propertyValue ] ]
 ]

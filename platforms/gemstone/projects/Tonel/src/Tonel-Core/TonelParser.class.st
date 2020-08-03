@@ -92,6 +92,13 @@ cls := (symList resolveSymbol: clsName) value .
 
 ]
 
+{ #category : 'accessing' }
+TonelParser class >> lineEnding [
+  "Answer the os-specific line endings"
+
+  ^ String with: Character lf
+]
+
 { #category : 'instance creation' }
 TonelParser class >> on: aStream forReader: aTonelReader [
 	^ self new 
@@ -117,6 +124,20 @@ TonelParser class >> parseStream: aStream forReader: aTonelReader [
 { #category : 'parsing' }
 TonelParser class >> parseString: aString forReader: aTonelReader [
 	^ self parseStream: (self readStreamClass on: aString) forReader: aTonelReader
+
+]
+
+{ #category : 'accessing' }
+TonelParser class >> readStreamClass [
+
+	^ ReadStreamPortable
+
+]
+
+{ #category : 'accessing' }
+TonelParser class >> writeStreamClass [
+
+	^ WriteStreamPortable
 
 ]
 
@@ -263,7 +284,7 @@ TonelParser >> methodBody [
 		- I can have inner blocks
 		- I can mention a comment of the form ""$"" or a comment of the form '$'
 	 all that needs to be skipped "
-	| result char prevChar comment string count |
+	| result char prevChar comment string count startPos |
 	
 	result := self class writeStreamClass on: String new.
 
@@ -271,6 +292,8 @@ TonelParser >> methodBody [
 	string := false.
 	prevChar := nil.
 	count := 0.
+        startPos := stream position .
+        "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
 	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
 	[ stream atEnd not ]
 	whileTrue: [ 
@@ -310,25 +333,26 @@ TonelParser >> methodDef [
 
 { #category : 'parsing' }
 TonelParser >> methodDef: aBlock [
-	| ar def |
-	ar := { 
-		self separator.
-		self try: [ self metadata ]. 
-		self separator. 
-		self method. 
-		self methodBody 
-	}.
-	def := self newMethodDefinitionFrom: ar.
-	aBlock 
-		value: ar fourth first second notNil 
-		value: def
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStreamName .
 
+  aBlock
+    value: ar fourth first second notNil
+    value: def
 ]
 
 { #category : 'parsing' }
 TonelParser >> methodDefList [
 	| result classStream instanceStream |
-	
 	self separator. "to arrive to the end of the file in case there are no methods"
 	result := { {}. {} }.
 	classStream := (result at: 1) writeStreamPortable.
@@ -342,12 +366,15 @@ TonelParser >> methodDefList [
 						ifFalse: [ instanceStream nextPut: mDef ].
 					"skip possible spaces at the end"
 					self separator ]
-			] ] on: TonelParseError do:[:ex | 
-				lastSelectorParsed ifNotNil:[
-					GsFile gciLogServer:'Last selector parsed was: ', lastSelectorParsed printString ].
-				ex pass ].
-	^ result
-
+			] 
+  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
+      str := ex details ifNil:[ '' ].
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
+    ].
+    ex pass 
+  ].
+  ^ result
 ]
 
 { #category : 'private factory' }
@@ -409,7 +436,7 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
   result skip: 1.
   (#(#'both' #'left') includes: cleanSymbol)
     ifTrue: [ 
-      stop := TonelWriter lineEnding size.
+      stop := self class lineEnding size.
       [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
         whileTrue: [ 
           (self isEnter: ch)
@@ -423,7 +450,7 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
   result skip: -1.
   (#(#'both' #'right') includes: cleanSymbol)
     ifTrue: [ 
-      stop := TonelWriter lineEnding size.
+      stop := self class lineEnding size.
       [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
         whileTrue: [ 
           (self isEnter: ch)
@@ -431,7 +458,6 @@ TonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clean:
           result skip: -1 ] ].
   end := result position.
   ^ result originalContents copyFrom: start + 1 to: end + 1
-
 ]
 
 { #category : 'parsing' }
@@ -448,8 +474,7 @@ TonelParser >> shebang [
 
 	(stream peekFor: $#) ifFalse: [ ^ nil ].	
 	(stream peekFor: $!) ifFalse: [ ^ nil ].
-	stream  upTo: Character lf.
-
+	^ stream  upTo: Character lf.
 ]
 
 { #category : 'accessing' }
@@ -518,7 +543,8 @@ TonelParser >> type [
 
 { #category : 'parsing' }
 TonelParser >> typeDef [
-	self shebang. "ignore shebang on first line of file if present"
+	| shebang |
+	shebang := self shebang. "ignore shebang on first line of file if present"
 	^ self newTypeDefinitionFrom: { 
 		self separator.
 		self try: [ self comment ]. 
@@ -531,9 +557,9 @@ TonelParser >> typeDef [
 			normalizedMetadata := Dictionary new.
 			typeMetadata keysAndValuesDo: [:key :value |
 				normalizedMetadata at: key asLowercase asSymbol put: value ].
+			normalizedMetadata at: #shebang put: shebang.
 			normalizedMetadata ] 
 	}
-
 ]
 
 { #category : 'private parsing' }

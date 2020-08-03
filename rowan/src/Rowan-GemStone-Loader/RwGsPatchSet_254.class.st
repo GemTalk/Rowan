@@ -176,23 +176,19 @@ RwGsPatchSet_254 >> _classVersioningPatchClass [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> _createMovedClasses [
-
-	movedClasses do: [:movedClass | 
-		movedClassesMap 
-			at: movedClass classBefore name 
-			put: movedClass ].
-
+	movedClasses
+		do: [ :movedClass | movedClassesMap at: movedClass classBefore name put: movedClass ]
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> _currentProjectDefinition [
-
 	^ currentProjectDefinition
 		ifNil: [ 
 			currentProjectDefinition := Rowan image
 				loadedProjectNamed: Rowan unpackagedName
-				ifAbsent: [ RwUnmanagedProjectDefinition new ] ]
-
+				ifAbsent: [ 
+					"RwUnmanagedProjectDefinition may not be applicable in V2 system"
+					(Rowan globalNamed: 'RwUnmanagedProjectDefinition') new ] ]
 ]
 
 { #category : 'private - patch class accessors' }
@@ -372,7 +368,7 @@ RwGsPatchSet_254 >> addAndUpdateLoadedProjects [
 
 	addedProjects
 		do: [ :projectAdditionPatch | projectAdditionPatch createLoadedProject ].
-	projectsWithPropertyChanges do: [ :patch | patch updateLoadedProject ]
+	projectsWithPropertyChanges do: [ :patch | "patch updateLoadedProject" self error: 'Not yet implmented' ]
 ]
 
 { #category : 'modification dispatching' }
@@ -605,7 +601,6 @@ RwGsPatchSet_254 >> addMovedPackage: packageDefinition inProject: aProjectDefini
 			((self _packageMovePatchClass for: packageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
-
 ]
 
 { #category : 'building' }
@@ -822,6 +817,8 @@ RwGsPatchSet_254 >> anyElementOfCollection: aCollection [
 RwGsPatchSet_254 >> apply [
 
 	"Apply the changes I represent to the running image."
+	"UserGlobals at: #ConditionalHalt put: false"
+
 (UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	self
 		setupForApply;
@@ -855,7 +852,6 @@ RwGsPatchSet_254 >> apply [
 		commit;
 		migrateInstances;
 		commit
-
 ]
 
 { #category : 'public' }
@@ -1044,7 +1040,7 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
 			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan globalNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
+			registry := (Rowan image symbolDictNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage 
 				classOrExtensionForClassNamed: classOrExtensionDef name 
 				ifAbsent: [ 
@@ -1168,9 +1164,7 @@ RwGsPatchSet_254 >> movedClassesMap [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> movePackages [
-
-	movedPackages do: [:each | each movePackage ]
-
+	movedPackages do: [ :each | each movePackage: classesWithNewVersions ]
 ]
 
 { #category : 'private - applying' }

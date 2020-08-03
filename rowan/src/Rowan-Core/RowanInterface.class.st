@@ -68,8 +68,18 @@ RowanInterface >> name [
 	^ name
 ]
 
+{ #category : 'printing' }
+RowanInterface >> printOn: aStream [
+	super printOn: aStream.
+	self name
+		ifNotNil: [:aString |
+			aStream
+				nextPutAll: ' for ';
+				nextPutAll:  aString ]
+]
+
 { #category : 'accessing' }
 RowanInterface >> project [
 
-	^ self RwProject newNamed: self _loadedProject name
+	^ RwProject newNamed: self _loadedProject name
 ]

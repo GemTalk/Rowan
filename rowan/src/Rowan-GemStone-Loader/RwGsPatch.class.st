@@ -31,8 +31,10 @@ RwGsPatch >> packageName [
 
 { #category : 'accessing' }
 RwGsPatch >> projectDefinition [
-
-	^ projectDefinition ifNil: [ RwUnmanagedProjectDefinition new ]
+	^ projectDefinition
+		ifNil: [ 
+			"RwUnmanagedProjectDefinition may not be applicable in V2 system"
+			(Rowan globalNamed: 'RwUnmanagedProjectDefinition') new ]
 ]
 
 { #category : 'accessing' }
@@ -70,12 +72,8 @@ RwGsPatch >> symbolDictionaryFor: aPackageName [
 
 { #category : 'accessing' }
 RwGsPatch >> symbolDictionaryFor: aPackageName projectDefinition: aProjectDefinition [
-
-	| symDictName symDict |
+	| symDictName |
 	symDictName := aProjectDefinition symbolDictNameForPackageNamed: aPackageName.
-	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
-	symDict
-		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
 ]
 

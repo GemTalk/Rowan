@@ -169,7 +169,6 @@ TonelWriter >> splitMethodSource: aMethodDefinition into: aBlock [
 	aBlock 
 		value: (declaration contents trimLeft withLineEndings: self newLine)
 		value: (source upToEnd withLineEndings: self newLine)
-
 ]
 
 { #category : 'private' }
@@ -216,11 +215,13 @@ TonelWriter >> typeClassDefinitionOf: aClassDefinition [
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
 
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedOop' put: gs_reservedOop asString ].
+
 	definition 		
 		at: #category put: aClassDefinition category asSymbol.
 	
 	^ self toSTON: definition
-
 ]
 
 { #category : 'private definitions' }

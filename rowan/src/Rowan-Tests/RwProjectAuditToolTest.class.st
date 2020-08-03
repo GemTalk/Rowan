@@ -77,102 +77,6 @@ RwProjectAuditToolTest >> _auditLoadedClassBlock [
 ]
 
 { #category : 'tests' }
-RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
-
-^[:aLoadedClassExtension |
-		| ar |
-		ar := {}.
-		(Rowan globalNamed: aLoadedClassExtension name) 
-			ifNil: [ 
-				ar addAll: { 'Class does not exists '-> aLoadedClassExtension name }.
-				GsFile gciLogServer: 'Class does not exist ', aLoadedClassExtension name ]
-			ifNotNil: [ :aBehavior |
-				| selectors extensionCategoryName categories |
-				extensionCategoryName := '*', aLoadedClassExtension loadedPackage name asLowercase.
-
-				categories := (aBehavior _baseCategorys: 0)
-					ifNil: [ #() ]
-					ifNotNil: [:catDict | catDict keys ].
-				(categories
-						detect: [:each | each equalsNoCase: extensionCategoryName ]
-						ifNone: [ ])
-					ifNotNil: [:categoryName |
-						selectors := aBehavior selectorsIn: categoryName.
-						(selectors reject: [:e | 
-							aLoadedClassExtension includesSelector: e isMeta: false]) 
-								do: [:aSelector |
-									ar addAll: { aSelector -> 'Missing loaded extension method' ->  aSelector }.
-									GsFile gciLogServer: 'Missing loaded extension method ', aLoadedClassExtension name, '>>', aSelector ].
-						selectors do: [:sel |
-							| cMeth lMeth |
-							(cMeth := aBehavior compiledMethodAt: sel otherwise: nil) == (lMeth := (aLoadedClassExtension loadedInstanceMethods at: sel) handle)
-								ifFalse: [
-									ar addAll: { sel -> 'compiled Method is not identical to loaded Method' }.
-									GsFile gciLogServer: 
-										'Compiled Method (oop: ', 
-										cMeth asOop printString, 
-										') is not identical to loaded Method (oop: ',
-									  lMeth asOop printString, 
-										') ', 
-										aLoadedClassExtension name, 
-										'>>', 
-										sel ] ] ]
-					ifNil: [ 
-						aLoadedClassExtension loadedInstanceMethods isEmpty not
-							ifTrue: [
-								ar addAll: 
-									{('expected methods in the category ', extensionCategoryName printString, ' are missing') -> aLoadedClassExtension name }.
-								GsFile gciLogServer: 'expected methods in category ', extensionCategoryName printString, 'for class ', aLoadedClassExtension name printString ] 
-				].
-
-				categories := (aBehavior class _baseCategorys: 0)
-					ifNil: [ #() ]
-					ifNotNil: [:catDict | catDict keys ].
-				(categories
-						detect: [:each | each equalsNoCase: extensionCategoryName ]
-						ifNone: [ ])
-					ifNotNil: [:categoryName |
-						selectors := aBehavior class selectorsIn: categoryName.
-						(selectors reject: [:e | aLoadedClassExtension includesSelector: e isMeta: true]) do: [:aSelector |
-								ar addAll: {aSelector -> 'Missing loaded extensions class method: ' }.
-								GsFile gciLogServer: 'Missing loaded extension method ', aLoadedClassExtension name, ' class>>', aSelector ].
-						selectors do: [:sel |
-							| cMeth lMeth |
-							(cMeth := aBehavior class compiledMethodAt: sel otherwise: nil) == (lMeth := (aLoadedClassExtension loadedClassMethods at: sel) handle)
-								ifFalse: [
-									ar addAll: { sel -> 'class compiled Method is not identical to loaded Method' }.
-									GsFile gciLogServer: 
-										'Compiled Method (oop: ', 
-										cMeth asOop printString, 
-										') is not identical to loaded Method (oop: ',
-									  lMeth asOop printString, 
-										') ', 
-										aLoadedClassExtension name, 
-										' class>>', 
-										sel ] ]  ]
-					ifNil: [
-						aLoadedClassExtension loadedClassMethods isEmpty not
-							ifTrue: [ 
-								ar addAll: {('expected class methods in the category ', extensionCategoryName printString, ' are missing') -> aLoadedClassExtension name }.
-								GsFile gciLogServer: 'expected methods in category ', extensionCategoryName printString, 'for class ', aLoadedClassExtension name printString, ' class' ] 
-				].
-
-				"look for methods removed outside of Rowan API"
-				aLoadedClassExtension 
-					loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-						(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil) 
-							ifNil: [
-								ar addAll: {aLoadedMethod name -> 'Missing compiled method: ' }.
-								GsFile gciLogServer: 'Missing compiled  method ', loadedClass name, '>>', aLoadedMethod name ] ]
-					loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-						(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
-							ifNil: [
-								ar addAll: { aLoadedMethod name -> 'Missing compiled class method: ' }.
-								GsFile gciLogServer: 'Missing compiled  class method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
-		ar ].
-]
-
-{ #category : 'tests' }
 RwProjectAuditToolTest >> test_issue478 [
 
 	"https://github.com/GemTalk/Rowan/issues/478"
@@ -483,8 +387,11 @@ self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) 
  "lets break it"
 	fooMethod := theClass
 		compileMethod: 'foo ^2'
-		dictionaries:  #() 
-		category: '*' , packageName1 asLowercase .
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName1 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 2.
 	self assert: ( y := x at: packageName1) notNil; 
@@ -492,7 +399,7 @@ self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) 
 		assert: (y at: className) size = 1;
 		assert: (y := x at: packageName2 ) notNil;
 		assert: y size = 1;
-		assert: (y at: className) size = 2
+		assert: (y at: className) size = 1
 ]
 
 { #category : 'tests' }
@@ -549,36 +456,47 @@ x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
 
 
 self assert: x isEmpty.
-"lets mess up the class extension"
 
-
-    fooMethod := theClass
+	fooMethod := theClass
 		compileMethod: 'bar: aBar bar := aBar'
-		dictionaries:  #() 
-		category: '*' , packageName2 asLowercase.
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
-	 fooMethod := theClass class
+	fooMethod := theClass class
 		compileMethod: 'new2 ^self new'
-		dictionaries: #()
-		category: '*' , packageName2 asLowercase.
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
 	fooMethod := theClass class
 		compileMethod: 'new3 ^self new initialize'
-		dictionaries: #()
-		category: '*' , packageName3 asLowercase.
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName3 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
-	 theClass class compileMethod: 'new ^super new '
-		dictionaries: #()
-		category: '*Instance creation'. "non existing extension/package"
+	fooMethod := theClass class
+		compileMethod:  'new ^super new '
+		dictionaries: Rowan image symbolList
+		category: #'*Instance creation' "non existing extension/package"
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+
 x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
 
 
 	self 
 	  assert: x size = 3;
-	  assert: ((y := x at: packageName1) at: className) size = 1;
+	  assert: ((y := x at: packageName1) at: className) size = 4;
 	  assert: ((y := x at: packageName2) at: className) size = 3;
 	  assert: ((y := x at: packageName3) at: className) size = 2
-
 ]
 
 { #category : 'tests' }
@@ -626,9 +544,7 @@ RwProjectAuditToolTest >> testClassVars [
 	self assert: testClassB == (System myUserProfile resolveSymbol: className asSymbol) value.	
 	self assert: testClassB == (Rowan globalNamed: className) description: 'Rowan does not resolve new version of class'.
 	self deny: testClassB == testClass.
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 4 description: 'expected 4 failures superclass instvars classvars and comment'
-
+	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') isEmpty
 ]
 
 { #category : 'tests' }
@@ -743,7 +659,7 @@ RwProjectAuditToolTest >> testMissingBehavior [
 	
 	(System myUserProfile resolveSymbol: self _symbolDictionaryName1) value removeKey: theClass name asSymbol.
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 1
+	self assert: ((x at: packageName) at: className) size = 2
 ]
 
 { #category : 'tests' }

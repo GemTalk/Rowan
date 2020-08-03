@@ -110,6 +110,28 @@ RwProjectLoadConfigurationVisitor >> _processConditionalPackageNames: aProjectLo
 ]
 
 { #category : 'private' }
+RwProjectLoadConfigurationVisitor >> _processGroupNames [
+
+	| seedGroupNames seeded |
+	seedGroupNames := groupNames asSet copy.
+	seeded := Set new.
+	[seedGroupNames isEmpty ]
+		whileFalse: [ 
+			seedGroupNames copy do: [:groupName |
+				| referencedGroupNames |
+				"make sure that required groups are included in group names, recursively"
+				seedGroupNames remove: groupName.
+				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
+				groupNames addAll: referencedGroupNames.
+				referencedGroupNames do: [:refGroupName |
+					(seeded includes: refGroupName)
+						ifFalse: [
+						"ensure that we seed each group only once"
+						seeded add: refGroupName.
+						seedGroupNames add: refGroupName ] ] ] ].
+]
+
+{ #category : 'private' }
 RwProjectLoadConfigurationVisitor >> _visited: aConfiguration [
 
 	visitedConfigurationNames add:  aConfiguration name.
@@ -158,10 +180,9 @@ RwProjectLoadConfigurationVisitor >> initialize [
 	visitedConfigurationNames := Set new.
 	configurationNames := Set new.
 	platformAttributes := #().
-	groupNames := {}.
+	groupNames := Set new.
 	configurationBasePath := ''.
 	packageMapSpecs := Dictionary new.
-
 ]
 
 { #category : 'accessing' }
@@ -175,7 +196,6 @@ RwProjectLoadConfigurationVisitor >> packageMapSpecs [
 RwProjectLoadConfigurationVisitor >> packageNames [
 
 	^ packageNames
-
 ]
 
 { #category : 'accessing' }
@@ -241,23 +261,13 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoadConfiguration [
 
-	| seedGroupNames |
 	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aProjectLoadConfiguration. 
 
 	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
-	seedGroupNames := groupNames asSet copy.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				seedGroupNames addAll: referencedGroupNames ] ].
+	self _processGroupNames.
 
 	self _processConditionalPackageNames: aProjectLoadConfiguration.
 
@@ -266,5 +276,4 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoad
 	self configurationNames addAll: aProjectLoadConfiguration configurationNames.
 	(self _configurations: self configurationBasePath, '/' forProject: aProjectLoadConfiguration projectName)
 		do: [:config | config acceptNestedVisitor: self ].
-
 ]

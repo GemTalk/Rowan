@@ -1,0 +1,26 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Tools',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/platforms/Tools',
+		'common/v1/Tools',
+		'common/v2/Tools'
+	],
+	#packageNames : [
+		'Rowan-Cypress-Core',
+		'Rowan-Tools-Core'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tools-Core' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all tool classes under one component. Shared between Rowan and RowanDiskAPI.'
+}

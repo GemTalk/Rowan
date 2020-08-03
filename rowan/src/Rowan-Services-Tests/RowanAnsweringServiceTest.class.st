@@ -16,9 +16,12 @@ RowanAnsweringServiceTest >> setUp [
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
+  | breakPointsAreEnabled |
   self
     jadeiteIssueTested: #'issue515'
     withTitle: '(3.0.77) clear all breakpoints menu item would be useful'.
+  breakPointsAreEnabled := RowanService breakPointsAreEnabled.
+  [ 
   service setBreakPointsAreEnabled: true.
   self assert: service breakPointsAreEnabled.
   self assert: RowanService breakPointsAreEnabled equals: true.
@@ -26,7 +29,8 @@ RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
   service setBreakPointsAreEnabled: false.
   self deny: service breakPointsAreEnabled.
   self assert: RowanService breakPointsAreEnabled equals: false.
-  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+  self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled') ]
+    ensure: [ service setBreakPointsAreEnabled: breakPointsAreEnabled ]
 ]
 
 { #category : 'tests' }
@@ -51,6 +55,38 @@ RowanAnsweringServiceTest >> test_execWithContext [
 	self assert: (service exec: 'self' context: 123 asOop) value equals: 123 asOop.
 	self assert: (service exec: 'self size' context: Array new asOop) value equals: 0 asOop.
 	self assert: (service exec: '1 + self' context: 2 asOop) value equals: 3 asOop.
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_expressionSelector [
+  "spelunk a string in hopes of finding a selector within"
+
+  | answeringService |
+  self
+    jadeiteIssueTested: #'issue568'
+    withTitle:
+      'Workspace popup menu gets ridiculously long menu items for Browse Senders/Implementors,'.
+  answeringService := RowanAnsweringService new.
+  self assert: (answeringService expressionSelector: '1 + 1') equals: #'+'.
+  self
+    assert: (answeringService expressionSelector: 'coll add:')
+    equals: #'add:'.
+  self assert: (answeringService expressionSelector: 'size: 1') equals: #'size:'.
+  self
+    assert: (answeringService expressionSelector: 'self size: 1')
+    equals: #'size:'.
+  self
+    assert: (answeringService expressionSelector: 'RowanAnsweringService new')
+    equals: #'new'.
+  self
+    assert: (answeringService expressionSelector: 'RowanAnsweringService new')
+    equals: #'new'.
+  self
+    assert:
+      (answeringService
+        expressionSelector:
+          'dictionary dynamicInstVarAt: #foo put: ''bar''; yourself')
+    equals: #'dynamicInstVarAt:put:'
 ]
 
 { #category : 'tests' }
@@ -136,6 +172,32 @@ RowanAnsweringServiceTest >> test_maxPrint [
 	self assert: (service printStringOf: 'ab
 cd' asOop toMaxSize: 25) equals: '''ab
 cd'''.  "includes lf (10) - no ? substitution"
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_methodHistory [
+  "don't change the size of the collection by returning the history"
+
+  | methodService history answeringService |
+  self jadeiteIssueTested: #'issue518' withTitle: 'Add method history'.
+  methodService := RowanMethodService new
+    selector: #'test_methodHistory';
+    className: 'RowanAnsweringServiceTest';
+    meta: false.
+  answeringService := RowanAnsweringService new.
+  history := answeringService methodHistoryFor: methodService.
+  self
+    assert: history size
+    equals: (answeringService methodHistoryFor: methodService) size.
+  self
+    assert: history size
+    equals: (answeringService methodHistoryFor: methodService) size.
+  self
+    assert: history size
+    equals: (answeringService methodHistoryFor: methodService) size.
+  self
+    assert: history size
+    equals: (answeringService methodHistoryFor: methodService) size
 ]
 
 { #category : 'tests' }

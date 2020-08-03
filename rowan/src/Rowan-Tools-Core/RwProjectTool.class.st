@@ -18,12 +18,6 @@ RwProjectTool class >> audit [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> browser [
-
-	^ RwPrjBrowserTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> checkout [
 
 	^RwPrjCheckoutTool new
@@ -39,11 +33,6 @@ RwProjectTool class >> clone [
 RwProjectTool class >> commit [
 
 	^RwPrjCommitTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> create [
-  ^ RwPrjCreateTool new
 ]
 
 { #category : 'commands' }
@@ -73,12 +62,6 @@ RwProjectTool class >> edit [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> load [
-
-	^RwPrjLoadTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> log [
 
 	^RwPrjLogTool new
@@ -103,26 +86,9 @@ RwProjectTool class >> query [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> read [
-  ^ RwPrjReadTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> reconcile [
-
-	^ RwPrjReconcileTool new
-
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> revert [
 
 	^RwPrjRevertTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> spec [
-  ^ RwPrjSpecTool new
 ]
 
 { #category : 'commands' }
@@ -132,20 +98,9 @@ RwProjectTool class >> test [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> write [
+RwProjectTool class >> trace [
 
-	^RwPrjWriteTool new
-]
-
-{ #category : 'private' }
-RwProjectTool >> _createLoadedProject: aRwProjectReference [
-
-	Rowan image 
-		loadedProjectNamed: aRwProjectReference projectAlias
-		ifAbsent: [
-			| newLoadedProject |
-			newLoadedProject := RwGsLoadedSymbolDictProject newForProjectReference: aRwProjectReference.
-			Rowan image addLoadedProject: newLoadedProject ]
+	^RwPrjTraceTool new
 ]
 
 { #category : 'smalltalk api' }

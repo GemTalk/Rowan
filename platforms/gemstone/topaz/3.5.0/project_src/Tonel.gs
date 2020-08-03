@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (CypressAbstractFileUrl
@@ -8,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
@@ -23,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'I''m a reader for tonel format.';
 		immediateInvariant.
@@ -38,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'I''m a writer for tonel format';
 		immediateInvariant.
@@ -53,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Core';
 		comment: 'No class-specific documentation for CypressTonelRepository, hierarchy is: 
 Object
@@ -73,7 +78,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a parsing error. 
 I happen whenever the parsing of a tonel file is broken in someway.';
@@ -89,7 +95,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a notification to say tonel writer that he should ignore a section. 
 This tipically happens on a MCClassTraitDefinition, because it will be managed on MCTraitDefinition.
@@ -107,7 +114,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-GemStoneCommon-Core';
 		comment: 'I am an implementation of a dictionary. Compared to other dictionaries I am very efficient for small sizes, speed- and space-wise. I also mantain the order in which elements are added when iterating. My implementation features some ideas from the RefactoringBrowser.';
 		immediateInvariant.
@@ -122,7 +130,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a parser for tonel files. 
 I parse a class with the following format: 
@@ -180,7 +189,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: '';
 		immediateInvariant.
@@ -195,7 +205,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Core';
 		comment: 'I''m a modified STON writer to make tonel metadata look as we want.
 
@@ -213,7 +224,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -228,7 +240,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -243,7 +256,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -258,7 +272,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -273,7 +288,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'CypressTonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -288,7 +304,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -303,7 +320,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Cypress-Tests';
 		comment: '';
 		immediateInvariant.
@@ -318,7 +336,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Tests';
 		comment: '';
 		immediateInvariant.
@@ -333,7 +352,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Tonel-Cypress-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1126,6 +1146,44 @@ values
 	^ values copyFrom: 1 to: size
 %
 
+category: 'filetree'
+method: GsTonelOrderedDictionary
+_writeCypressJsonOn: fileStream
+	"Private method which may be removed in a future GemStone version."
+
+	self _writeCypressJsonOn: fileStream indent: 0
+%
+
+category: 'filetree'
+method: GsTonelOrderedDictionary
+_writeCypressJsonOn: aStream indent: startIndent
+	"Private method which may be removed in a future GemStone version."
+
+	| indent cnt |
+	indent := startIndent.
+	aStream
+		nextPutAll: '{';
+		lf.
+	cnt := 0.
+	indent := indent + 1.
+	self keys do: 
+			[:key |
+			| value |
+			value := self at: key.
+			cnt := cnt + 1.
+			indent timesRepeat: [aStream tab].
+			key _writeCypressJsonOn: aStream indent: indent.
+			aStream nextPutAll: ' : '.
+			value _writeCypressJsonOn: aStream indent: indent.
+			cnt < size
+				ifTrue: 
+					[aStream
+						nextPutAll: ',';
+						lf]].
+	size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
+	aStream nextPutAll: ' }'
+%
+
 ! Class implementation for 'TonelParser'
 
 !		Class methods for 'TonelParser'
@@ -1341,7 +1399,7 @@ methodBody
 		- I can have inner blocks
 		- I can mention a comment of the form ""$"" or a comment of the form '$'
 	 all that needs to be skipped "
-	| result char prevChar comment string count |
+	| result char prevChar comment string count startPos |
 	
 	result := self class writeStreamClass on: String new.
 
@@ -1349,6 +1407,8 @@ methodBody
 	string := false.
 	prevChar := nil.
 	count := 0.
+        startPos := stream position .
+        "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
 	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
 	[ stream atEnd not ]
 	whileTrue: [ 
@@ -1388,25 +1448,27 @@ methodDef
 category: 'parsing'
 method: TonelParser
 methodDef: aBlock
-	| ar def |
-	ar := { 
-		self separator.
-		self try: [ self metadata ]. 
-		self separator. 
-		self method. 
-		self methodBody 
-	}.
-	def := self newMethodDefinitionFrom: ar.
-	aBlock 
-		value: ar fourth first second notNil 
-		value: def
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStreamName .
+
+  aBlock
+    value: ar fourth first second notNil
+    value: def
 %
 
 category: 'parsing'
 method: TonelParser
 methodDefList
 	| result classStream instanceStream |
-	
 	self separator. "to arrive to the end of the file in case there are no methods"
 	result := { {}. {} }.
 	classStream := (result at: 1) writeStreamPortable.
@@ -1420,11 +1482,15 @@ methodDefList
 						ifFalse: [ instanceStream nextPut: mDef ].
 					"skip possible spaces at the end"
 					self separator ]
-			] ] on: TonelParseError do:[:ex | 
-				lastSelectorParsed ifNotNil:[
-					GsFile gciLogServer:'Last selector parsed was: ', lastSelectorParsed printString ].
-				ex pass ].
-	^ result
+			] 
+  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
+      str := ex details ifNil:[ '' ].
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
+    ].
+    ex pass 
+  ].
+  ^ result
 %
 
 category: 'private factory'
@@ -1526,7 +1592,7 @@ shebang
 
 	(stream peekFor: $#) ifFalse: [ ^ nil ].	
 	(stream peekFor: $!) ifFalse: [ ^ nil ].
-	stream  upTo: Character lf.
+	^ stream  upTo: Character lf.
 %
 
 category: 'accessing'
@@ -1596,7 +1662,8 @@ type
 category: 'parsing'
 method: TonelParser
 typeDef
-	self shebang. "ignore shebang on first line of file if present"
+	| shebang |
+	shebang := self shebang. "ignore shebang on first line of file if present"
 	^ self newTypeDefinitionFrom: { 
 		self separator.
 		self try: [ self comment ]. 
@@ -1609,6 +1676,7 @@ typeDef
 			normalizedMetadata := Dictionary new.
 			typeMetadata keysAndValuesDo: [:key :value |
 				normalizedMetadata at: key asLowercase asSymbol put: value ].
+			normalizedMetadata at: #shebang put: shebang.
 			normalizedMetadata ] 
 	}
 %
@@ -1853,6 +1921,9 @@ typeClassDefinitionOf: aClassDefinition
 
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
+
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedOop' put: gs_reservedOop asString ].
 
 	definition 		
 		at: #category put: aClassDefinition category asSymbol.
@@ -3927,33 +3998,6 @@ putOn: aStream
 
 category: '*tonel-gemstone-kernel'
 method: CharacterCollection
-substrings: separators 
-	"Answer an array containing the substrings in the receiver separated 
-	by the elements of separators."
-	| result sourceStream subStringStream |
-	
-	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
-		ifFalse: [ ^ self error: 'separators must be Characters.' ].
-	sourceStream := self readStream.
-	result := OrderedCollection new.
-	subStringStream := String new writeStreamPortable.
-	[ sourceStream atEnd ] whileFalse: [
-		| char |
-		char := sourceStream next.
-		(separators includes: char)
-			ifTrue: [
-				subStringStream isEmpty ifFalse: [
-					result add: subStringStream contents.
-					subStringStream := String new writeStreamPortable ] ]
-			ifFalse: [
-				subStringStream nextPut: char ] ].
-	subStringStream isEmpty ifFalse: [
-		result add: subStringStream contents ].
-	^ result asArray
-%
-
-category: '*tonel-gemstone-kernel'
-method: CharacterCollection
 trimBoth
 
 	"Trim separators from both sides of the receiving string."
@@ -4107,16 +4151,6 @@ select: selectBlock thenDo: doBlock
   "Utility method to improve readability."
 
   ^ (self select: selectBlock) do: doBlock
-%
-
-category: '*tonel-gemstone-kernel'
-method: Collection
-sort: aSortBlock
-
-	"Sort this array using aSortBlock. The block should take two arguments
-	and return true if the first element should preceed the second one."
-
-	^ self sortWithBlock: aSortBlock
 %
 
 ! Class extensions for 'CypressClassDefinition'
@@ -4397,31 +4431,6 @@ putOn: aStream
 
 category: '*tonel-gemstonecommon-core'
 method: PositionableStreamPortable
-match: subCollection
-  "Set the access position of the receiver to be past the next occurrence of the subCollection. Answer whether subCollection is found.  No wildcards, and case does matter."
-
-  | pattern startMatch |
-  pattern := ReadStreamPortable on: subCollection.
-  startMatch := nil.
-  [ pattern atEnd ]
-    whileFalse: [ 
-      self atEnd
-        ifTrue: [ ^ false ].
-      self next = pattern next
-        ifTrue: [ 
-          pattern position = 1
-            ifTrue: [ startMatch := self position ] ]
-        ifFalse: [ 
-          pattern position: 0.
-          startMatch
-            ifNotNil: [ 
-              self position: startMatch.
-              startMatch := nil ] ] ].
-  ^ true
-%
-
-category: '*tonel-gemstonecommon-core'
-method: PositionableStreamPortable
 originalContents
 	"Answer the receiver's actual contents collection, NOT a copy.  1/29/96 sw"
 
@@ -4554,13 +4563,6 @@ withIndexDo: elementAndIndexBlock
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
 %
 
-category: '*tonel-gemstone-kernel'
-method: SequenceableCollection
-writeStreamPortable
-
-	^ WriteStreamPortable on: self
-%
-
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -4570,41 +4572,6 @@ method: Stream
 << items
 
 	items putOn: self
-%
-
-! Class extensions for 'Symbol'
-
-!		Instance methods for 'Symbol'
-
-category: '*tonel-gemstone-kernel'
-method: Symbol
-keywords
-
-	"Answer an array of the keywords that compose the receiver."
-
-	| kwd char keywords |
-	keywords := Array new.
-			kwd := WriteStreamPortable on: String new.
-			1 to: self size do: [ :i | 
-				kwd nextPut: (char := self at: i).
-				char = $:
-					ifTrue: [ 
-						keywords add: kwd contents.
-						kwd reset ] ].
-			kwd position = 0
-				ifFalse: [ keywords add: kwd contents ].
-	(keywords size >= 1 and: [ (keywords at: 1) = ':' ])
-		ifTrue: [ 
-			"Has an initial keyword, as in #:if:then:else:"
-			keywords := keywords allButFirst ].
-	(keywords size >= 2 and: [ (keywords at: keywords size - 1) = ':' ])
-		ifTrue: [ 
-			"Has a final keyword, as in #nextPut::andCR"
-			keywords := keywords
-				copyReplaceFrom: keywords size - 1
-				to: keywords size
-				with: {(':' , keywords last)} ].
-	^ keywords
 %
 
 ! Class extensions for 'TonelAbstractWriterTest'

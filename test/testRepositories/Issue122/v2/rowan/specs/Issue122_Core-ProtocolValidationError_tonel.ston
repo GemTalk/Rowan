@@ -1,0 +1,10 @@
+RwLoadSpecificationV2 {
+	#specName : 'Issue122_Core-ProtocolValidationError_tonel',
+	#projectName : 'Issue122',
+	#projectSpecFile : 'rowan/project_tonel.ston',
+	#componentNames : [
+		'Core_ProtocolValidationError'
+	],
+	#customConditionalAttributes : [ ],
+	#comment : 'tonel loadSpec - package source is in tonel format'
+}

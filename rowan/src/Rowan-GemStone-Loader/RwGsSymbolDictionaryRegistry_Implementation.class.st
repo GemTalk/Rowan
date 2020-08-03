@@ -162,6 +162,29 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteCompiledMethodFrom
 ]
 
 { #category : 'private' }
+RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassExtensionsFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
+	| loadedClassExtensionSet |
+	(class isKindOf: Class)
+		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
+	loadedClassExtensionSet := registryInstance classExtensionRegistry
+		at: class classHistory
+		ifAbsent: [ 
+			"we're done here"
+			^ self ].
+	loadedClassExtensionSet
+		do: [ :loadedClassExtension | 
+			| classKey |
+			classKey := loadedClassExtension key asSymbol.
+			self
+				_symbolDictionary: registryInstance _symbolDictionary
+				associationAt: classKey
+				ifPresent: [ :assoc | 
+					assoc value == loadedClassExtension handle
+						ifTrue: [ ^ noNewVersionBlock cull: loadedClassExtension ]
+						ifFalse: [ ^ newVersionBlock cull: loadedClassExtension ] ] ]
+]
+
+{ #category : 'private' }
 RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassFor: class noNewVersion: noNewVersionBlock instance: registryInstance [
 
 	self
@@ -201,9 +224,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassFor: class noNe
 	registryInstance
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
-				, classKey asString printString.
-	^ registryInstance
-
+				, classKey asString printString
 ]
 
 { #category : 'private' }
@@ -274,7 +295,8 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
 					"have yet to come with a test case that takes this path"
-					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
+					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ].
+			loadedClass ].
 
 	self 
 		_symbolDictionary: registryInstance _symbolDictionary 
@@ -293,8 +315,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 		ifAbsent: [
 			assoc value: class.
 			registryInstance _symbolDictionary add: assoc].
-	^ registryInstance
-
+	^ loadedClass
 ]
 
 { #category : 'private' }
@@ -303,6 +324,14 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
 	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
+
+	(methodDictionary at: selector ifAbsent: [  ])
+		ifNotNil: [ :oldCompiledMethod | 
+			compiledMethod == oldCompiledMethod
+				ifFalse: [ 
+					"only a problem, if the new and old compiled method are not identical"
+					self error: 'internal error - compiled method already exists in method dictionary when new extension method is expected' ] ].
+
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
@@ -419,20 +448,27 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewClassVersionToAssocia
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
-	^ self 
+	self 
 		_loadedClassFor: newClass
 		noNewVersion: [ 
 			"newClass is actually not a new class version of existing class, that's okay... update properties anyway"
-			self updateClassProperties: newClass instance: registryInstance.
-			^ registryInstance ]
+			self updateClassProperties: newClass instance: registryInstance.]
 		newVersion: [ :loadedClass :assoc | 
 			"association for class is present, install in association and update the loadedthing"
 			assoc value: newClass.
 			loadedClass handleClassDeletionOrNewVersion
 				ifTrue: [ loadedClass updatePropertiesFromClassFor: registryInstance ]
 				ifFalse: [ registryInstance error: 'internal error - new version of class not properly installed' ] ]
-		instance: registryInstance
-
+		instance: registryInstance.
+	self 
+		_loadedClassExtensionsFor: newClass
+		noNewVersion: [ 
+			"newClass is actually not a new class version of existing class, that's okay... noop"
+]
+		newVersion: [ :loadedClassExtension | 
+			loadedClassExtension handleClassDeletionOrNewVersion
+				ifFalse: [ registryInstance error: 'internal error - new version of class not properly installed' ] ]
+		instance: registryInstance.
 ]
 
 { #category : 'private' }
@@ -550,32 +586,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addRecompiledSessionMethodM
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_Implementation class >> createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: registryInstance [
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	| loadedPackage loadedClass |
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
-
-	registryInstance classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-			loadedPackage addLoadedClass: loadedClass.
-			loadedClass updatePropertiesFromClassFor: registryInstance.
-			registryInstance classRegistry at: class classHistory put: loadedClass.
-			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
-				ifNotNil: [ :loadedClassExtension | 
-					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					"have yet to come with a test case that takes this path"
-					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
-	^ registryInstance
 
 ]
 
@@ -756,7 +766,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> ensureExtensionClassNamed: 
 				at: extensionClass classHistory
 				ifAbsentPut: [ IdentitySet new ]) add: loadedClassExtension ].
 	^ registryInstance
-
 ]
 
 { #category : 'package - creation api' }
@@ -809,13 +818,13 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveClassFor: classMove [
 	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
 
 	before := classMove classBefore.
-	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
+	originalSymbolDictionary := Rowan image symbolDictNamed: before gs_symbolDictionary.
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	theClass := assoc value.
 	theBehavior := theClass class.
 	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan globalNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newSymbolDictionary := Rowan image symbolDictNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
@@ -878,7 +887,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+	behavior moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := registryInstance methodRegistry
 		at: compiledMethod
@@ -893,18 +902,34 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName instance: fromRegistryInstance [
-
-	| loadedPackage toRegistryInstance |
+RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions instance: fromRegistryInstance [
+	| loadedPackage toRegistryInstance newClassVersionMap |
 	loadedPackage := fromRegistryInstance packageRegistry
 		removeKey: packageName
 		ifAbsent: [ fromRegistryInstance error: 'package ' , packageName printString , ' not found' ].
-	toRegistryInstance := (Rowan image newOrExistingSymbolDictionaryNamed: symbolDictionaryName) rowanSymbolDictionaryRegistry.
-	(toRegistryInstance packageRegistry at: packageName ifAbsent: [])
-		ifNotNil: [:unexpectedLoadedPackage | toRegistryInstance error: 'package ', packageName printString, ' unexpectedly found in ', symbolDictionaryName printString ].
+	newClassVersionMap := Dictionary new.
+	classesWithNewVersions
+		do: [ :patch | newClassVersionMap at: patch oldClassVersion put: patch newClassVersion ].
+	toRegistryInstance := (Rowan image
+		newOrExistingSymbolDictionaryNamed: symbolDictionaryName)
+		rowanSymbolDictionaryRegistry.
+	loadedPackage loadedClassExtensions
+		do: [ :loadedClassExtensions | 
+			"class extensions must be removed from old package, additions are handled elsewhere"
+			"https://github.com/dalehenrich/Rowan/issues/495"
+			loadedClassExtensions moveFrom: fromRegistryInstance.
+			newClassVersionMap
+				at: loadedClassExtensions handle
+				ifPresent: [ :newClassVersion | loadedClassExtensions handle: newClassVersion ].
+			loadedClassExtensions moveTo: toRegistryInstance.].
+	(toRegistryInstance packageRegistry at: packageName ifAbsent: [  ])
+		ifNotNil: [ :unexpectedLoadedPackage | 
+			toRegistryInstance
+				error:
+					'package ' , packageName printString , ' unexpectedly found in '
+						, symbolDictionaryName printString ].
 	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
 	^ fromRegistryInstance
-
 ]
 
 { #category : 'package - creation api' }

@@ -16,16 +16,6 @@ Class {
 }
 
 { #category : 'actions' }
-RwGsClassAdditionSymbolDictPatch >> createAndInstallLoadedClass [
-
-	self symbolDictionaryRegistry
-		createAndInstallLoadedClassForClass: newClass 
-		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
-]
-
-{ #category : 'actions' }
 RwGsClassAdditionSymbolDictPatch >> createClassFor: aPatchSet [
 	newClass := super createClassFor: aPatchSet.
 	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
@@ -39,12 +29,13 @@ RwGsClassAdditionSymbolDictPatch >> installClassInSystem [
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	self symbolDictionaryRegistry
+	| loadedClass |
+	loadedClass := self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
 		forClass: newClass
 		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 ]
 
 { #category : 'accessing' }

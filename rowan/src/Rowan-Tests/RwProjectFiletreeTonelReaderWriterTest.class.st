@@ -19,6 +19,12 @@ RwProjectFiletreeTonelReaderWriterTest >> _classExtensionRemovedArtifactFileRefe
 ]
 
 { #category : 'private' }
+RwProjectFiletreeTonelReaderWriterTest >> _classMovedArtifactFileReference: repositoryRoot [
+
+	self subclassResponsibility: #_classMovedArtifactFileReference:
+]
+
+{ #category : 'private' }
 RwProjectFiletreeTonelReaderWriterTest >> _classRemovedArtifactFileReference: repositoryRoot [
 
 	self subclassResponsibility: #_classRemovedArtifactFileReference:
@@ -236,257 +242,6 @@ RwProjectFiletreeTonelReaderWriterTest >> _validateIssue361ProjectDefinitionSet:
 ]
 
 { #category : 'tests' }
-RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
-
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
-
-"identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
-
-"create project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project"
-	projectDefinitionSet := Rowan projectTools read 
-		readProjectSetForComponentProjectDefinition: projectDefinition.
-
-"validation"
-	self _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
-]
-
-{ #category : 'tests' }
-RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithBothMethodProtocolValidationError [
-	"https://github.com/GemTalk/Rowan/issues/122"
-
-	"method protocol starts with a * for non-extension method"
-
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet patches |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
-
-"identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Both-ProtocolValidationError.ston'.
-
-"create project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project -- catch and resume the notification ... repair the protocol"
-	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
-		on: RwInvalidCategoryProtocolConventionErrorNotification
-		do: [:ex | 
-			ex
-				classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
-				nonExtensionMethodNoficationDo: [ 
-					"repair the protocol"
-					ex methodDefinition protocol: 'repaired'.
-					ex resume ] 
-				extensionMethodPackageMismatchNoficationDo: [ 
-					"repair the protocol - extension method protocol does start with a *, but does not match the package name"
-					ex methodDefinition protocol: '*', ex packageName asLowercase.
-					ex resume ]  
-				extensionMethodNonExtensionProtocolNoficationDo: [ 
-					"repair the protocol - extension method protocol doesn't start with a *"
-					ex methodDefinition protocol: '*', ex packageName asLowercase.
-					ex resume ] ].
-
-"validation - read from disk, without repairing the issues (creating a patch reads without repairing validation errors"
-	patches := Rowan projectTools diff patchesForProjectDefinition: projectDefinition.
-	self assert: patches size = 1.
-	patches do: [:assoc |
-		| packageName patch operations |
-		packageName := assoc key.
-		patch := assoc value.
-		self assert: packageName = 'Issue122-Extension1-ProtocolValidationError'.
-		operations := patch operations.
-		self assert: operations size = 2.
-		operations do: [:modification |
-			| definition |
-			definition := modification modification.
-			definition selector = 'method1'
-				ifTrue: [ self assert: definition category = '*issue122-extension1-protocolvalidationerror' ]
-				ifFalse: [
-					definition selector = 'method20'
-						ifTrue: [ self assert: definition category = '*issue122-extension1-protocolvalidationerror' ]
-						ifFalse: [ self assert: false description: 'unknown definition ', definition printString ] ] ] ]
-]
-
-{ #category : 'tests' }
-RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithClassCategoryValidationError [
-	"https://github.com/GemTalk/Rowan/issues/122"
-
-	"class category does not match package name -- Rowan Hybrid"
-
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
-
-"identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_CategoryValidationError.ston'.
-
-"create project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project -- hit category does not match error"
-	self 
-		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
-		raise: Error.
-
-"recreate project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project -- catch and resume the notification ... repair the category"
-	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
-		on: RwInvalidCategoryProtocolConventionErrorNotification
-		do: [:ex | 
-			ex
-				classCategoryNotificationDo: [
-					"repair the class category"
-					ex classDefinition category: ex packageName.
-					ex resume: true ]
-				nonExtensionMethodNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] 
-				extensionMethodPackageMismatchNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ]  
-				extensionMethodNonExtensionProtocolNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] ].
-
-"validation"
-	self _validateIssue122Repaired_CategoryValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
-]
-
-{ #category : 'tests' }
-RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithEmptyClassExtension [
-	"https://github.com/GemTalk/Rowan/issues/361"
-
-
-	| rowanSpec projectHome projectName specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
-
-"identify spec to be used for reading project"
-	projectName := 'Issue361'.
-	specUrlString :=  'file:' , projectHome, '/', projectName, '/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
-
-"create project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project -- hit protocol is invalid error"
-	projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition.
-
-"validate"
-	self _validateIssue361ProjectDefinitionSet: projectDefinitionSet projectName: projectName
-]
-
-{ #category : 'tests' }
-RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithExtensionMethodProtocolValidationError [
-	"https://github.com/GemTalk/Rowan/issues/122"
-
-	"
-		extension method protocol doesn't start with a *
-			OR
-		extension method protocol does start with a *, but does not match the package name
-	"
-
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
-
-"identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Extension-ProtocolValidationError.ston'.
-
-"create project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project -- hit protocol is invalid error"
-	self 
-		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
-		raise: Error.
-
-"recreate project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project -- catch and resume the notification ... repair the protocol"
-	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
-		on: RwInvalidCategoryProtocolConventionErrorNotification
-		do: [:ex | 
-			ex
-				classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
-				nonExtensionMethodNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] 
-				extensionMethodPackageMismatchNoficationDo: [ 
-					"repair the protocol - extension method protocol does start with a *, but does not match the package name"
-					ex methodDefinition protocol: '*', ex packageName asLowercase.
-					ex resume ]  
-				extensionMethodNonExtensionProtocolNoficationDo: [ 
-					"repair the protocol - extension method protocol doesn't start with a *"
-					ex methodDefinition protocol: '*', ex packageName asLowercase.
-					ex resume ] ].
-
-"validation"
-	self _validateIssue122Repaired_ExtensionProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
-]
-
-{ #category : 'tests' }
-RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodProtocolValidationError [
-	"https://github.com/GemTalk/Rowan/issues/122"
-
-	"method protocol starts with a * for non-extension method"
-
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
-
-"identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Core-ProtocolValidationError.ston'.
-
-"create project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project -- hit protocol is invalid error"
-	self 
-		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
-		raise: Error.
-
-"recreate project definition"
-	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-
-"point to directory where the disk project is located"
-	projectDefinition projectHome: projectHome.
-
-"read project -- catch and resume the notification ... repair the protocol"
-	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
-		on: RwInvalidCategoryProtocolConventionErrorNotification
-		do: [:ex | 
-			ex
-				classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
-				nonExtensionMethodNoficationDo: [ 
-					"repair the protocol"
-					ex methodDefinition protocol: 'repaired'.
-					ex resume ] 
-				extensionMethodPackageMismatchNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ]  
-				extensionMethodNonExtensionProtocolNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] ].
-
-"validation"
-	self _validateIssue122Repaired_CoreProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
-]
-
-{ #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 
 	"multiple class extensions from multiple packages for multiple classes"
@@ -495,16 +250,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -516,6 +267,66 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 	writeProjectSetDefinition := RwProjectSetDefinition new addProject: writtenProjectDefinition; yourself.
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
+]
+
+{ #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_moveClass_518 [
+
+	"https://github.com/GemTalk/Rowan/issues/128"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot 
+		movedClassDef |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _classRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	movedClassDef := (changedProjectDefinition packageNamed: 'Issue361-Core')
+		removeClassNamed: 'Issue361Class2'.
+	movedClassDef category:  'Issue361-Extension1'.
+	(changedProjectDefinition packageNamed: 'Issue361-Extension1')
+		addClassDefinition: movedClassDef.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (self _classMovedArtifactFileReference: repositoryRoot) exists.
 ]
 
 { #category : 'tests' }
@@ -533,16 +344,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeClass [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -593,16 +400,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClas
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -653,16 +456,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removePackage [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -709,16 +508,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_C [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -757,16 +552,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_D_changeClass [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -816,16 +607,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_D_changeMethods [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -880,16 +667,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_E [
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.

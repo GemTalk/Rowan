@@ -47,6 +47,24 @@ RowanQueryService >> defaultProjectLogSize [
 ]
 
 { #category : 'queries' }
+RowanQueryService >> gitTagListUsing: projectService [
+  | answerString readStream |
+  Rowan gitTools
+    performGitCommand: 'fetch'
+    in: projectService repositoryRootPath
+    with: '--tags'.
+  answerString := Rowan gitTools
+    performGitCommand: 'tag'
+    in: projectService repositoryRootPath
+    with: '--sort=-taggerdate'.
+  queryResults := Array new.
+  readStream := ReadStream on: answerString.
+  [ readStream atEnd ]
+    whileFalse: [ queryResults add: (readStream upTo: Character lf) ].
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'queries' }
 RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 
 	| methods behavior classes |
@@ -84,30 +102,38 @@ RowanQueryService >> implementorsOf: selector [
 
 { #category : 'queries' }
 RowanQueryService >> instVarReaders: instVarName in: className [
-  | methods symbolAssociation theClass |
+  | methods symbolAssociation theClasses |
   symbolAssociation := Rowan image symbolList resolveSymbol: className.
   symbolAssociation ifNil: [ ^ self ].
-  theClass := symbolAssociation value.
+  theClasses := symbolAssociation value allSuperclasses.
+  theClasses add: symbolAssociation value.
+  theClasses addAll: (organizer allSubclassesOf: symbolAssociation value).
   methods := Array new.
-  theClass
-    methodsDo: [ :selector :method | 
-      (method instVarsRead includes: instVarName asSymbol)
-        ifTrue: [ methods add: method ] ].
+  theClasses
+    do: [ :theClass | 
+      theClass
+        methodsDo: [ :selector :method | 
+          (method instVarsRead includes: instVarName asSymbol)
+            ifTrue: [ methods add: method ] ] ].
   queryResults := self methodServicesFrom: methods.
   self returnQueryToClient
 ]
 
 { #category : 'queries' }
 RowanQueryService >> instVarWriters: instVarName in: className [
-  | methods symbolAssociation theClass |
+  | methods symbolAssociation theClasses |
   symbolAssociation := Rowan image symbolList resolveSymbol: className.
   symbolAssociation ifNil: [ ^ self ].
-  theClass := symbolAssociation value.
+  theClasses := symbolAssociation value allSuperclasses.
+  theClasses add: symbolAssociation value.
+  theClasses addAll: (organizer allSubclassesOf: symbolAssociation value).
   methods := Array new.
-  theClass
-    methodsDo: [ :selector :method | 
-      (method instVarsWritten includes: instVarName asSymbol)
-        ifTrue: [ methods add: method ] ].
+  theClasses
+    do: [ :theClass | 
+      theClass
+        methodsDo: [ :selector :method | 
+          (method instVarsWritten includes: instVarName asSymbol)
+            ifTrue: [ methods add: method ] ] ].
   queryResults := self methodServicesFrom: methods.
   self returnQueryToClient
 ]
@@ -125,14 +151,30 @@ RowanQueryService >> literalReferences: string [
 
 { #category : 'queries' }
 RowanQueryService >> methodsContaining: string [
-
-	| methods |
-	methods := organizer substringSearch: string.
-	queryResults := self methodServicesFrom: methods first.
-	self returnQueryToClient.
+  | methods sorted |
+  methods := organizer substringSearch: string.
+  sorted := SortedCollection
+    sortBlock: [ :x :y | 
+      x className = y className
+        ifTrue: [ x selector < y selector ]
+        ifFalse: [ x className < y className ] ].
+  1 to: methods first size do: [ :index | 
+    | methodService |
+    methodService := self methodServiceFrom: (methods first at: index).
+    methodService
+      firstReference: (methods last at: index);
+      searchString: string.
+    sorted add: methodService ].
+  queryResults := sorted asArray.
+  self returnQueryToClient
 ]
 
-{ #category : 'queries' }
+{ #category : 'query support' }
+RowanQueryService >> methodServiceFrom: method [
+  ^ (self methodServicesFrom: (Array with: method)) first
+]
+
+{ #category : 'query support' }
 RowanQueryService >> methodServicesFrom: methods [
 
 	| sorted | 

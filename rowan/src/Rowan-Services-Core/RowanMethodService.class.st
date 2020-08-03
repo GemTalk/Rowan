@@ -32,7 +32,10 @@ Class {
 		'firstReference',
 		'renamedName',
 		'isMethodForBlock',
-		'homeMethodOop'
+		'homeMethodOop',
+		'hasMethodHistory',
+		'searchString',
+		'definedClassName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -139,6 +142,16 @@ RowanMethodService >> addOrUpdateMethod [
                    forClassNamed: self classService name
                    isMeta: meta
                    inPackageNamed: self classService packageName
+]
+
+{ #category : 'method history' }
+RowanMethodService >> addToMethodHistory [
+  | rowanMethodHistory methodHistory |
+  rowanMethodHistory := self userGlobals
+    at: #'RowanMethodHistory'
+    ifAbsentPut: [ Dictionary new ].
+  methodHistory := rowanMethodHistory at: self ifAbsentPut: [ Array new ].
+  methodHistory add: self
 ]
 
 { #category : 'client commands' }
@@ -276,15 +289,46 @@ RowanMethodService >> debugTest: testSelector inClassName: theClassName [
   [ (Rowan image objectNamed: theClassName) debug: testSelector asSymbol ]
     on: Exception
     do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
       testResult := ex class = TestFailure
         ifTrue: [ 'failure' ]
         ifFalse: [ 
           (ex class isSubclassOf: Notification)
             ifTrue: [ 'passed' ]
             ifFalse: [ 'error' ] ].
-      ex signal ].
+      ex pass ].
   testRunClassName := theClassName.
   RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> debugTestAsFailure: testSelector inClassName: theClassName [
+  testResult := 'passed'.
+  [ 
+  ((Rowan image objectNamed: theClassName) selector: testSelector asSymbol)
+    debugAsFailure ]
+    on: Exception
+    do: [ :ex | 
+      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
+      testResult := ex class = TestFailure
+        ifTrue: [ 'failure' ]
+        ifFalse: [ 
+          (ex class isSubclassOf: Notification)
+            ifTrue: [ 'passed' ]
+            ifFalse: [ 'error' ] ].
+      ex pass ].
+  testRunClassName := theClassName.
+  RowanCommandResult addResult: self
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> definedClassName [
+	^definedClassName
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> definedClassName: object [
+	definedClassName := object
 ]
 
 { #category : 'Accessing' }
@@ -298,6 +342,40 @@ RowanMethodService >> definitionClass [
 
 	^RwMethodDefinition
 
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> disableBreakAt: stepPoint [
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
+			ifFalse:[self gsNMethod].
+	method disableBreakAtStepPoint: stepPoint.
+	self update. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> disableMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self disableBreakAt: breakPoint ]
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> enableBreakAt: stepPoint [
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[(Object _objectForOop: oop) homeMethod] 
+			ifFalse:[self gsNMethod].
+	method setBreakAtStepPoint: stepPoint.
+	self update. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> enableMethodBreaks [
+  self update.
+  breakPoints do: [ :breakPoint | self enableBreakAt: breakPoint ]
 ]
 
 { #category : 'Updating' }
@@ -396,6 +474,7 @@ RowanMethodService >> initialize [
 	isTestMethod := false.
 	failedCompile := false.
 	isMethodForBlock := false.
+	hasMethodHistory := true.
 ]
 
 { #category : 'initialization' }
@@ -420,7 +499,8 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
-	self initializeTestMethodsFor: inClass thisClass
+	self initializeTestMethodsFor: inClass thisClass.
+	self setHasMethodHistory
 ]
 
 { #category : 'initialization' }
@@ -497,6 +577,16 @@ RowanMethodService >> name [
 	^selector
 ]
 
+{ #category : 'accessing' }
+RowanMethodService >> oop [
+	^oop
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> oop: object [
+	oop := object
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> packageName [
 	^packageName
@@ -570,6 +660,16 @@ RowanMethodService >> runTest: testSelector inClassName: theClassName [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'accessing' }
+RowanMethodService >> searchString [
+	^searchString
+]
+
+{ #category : 'accessing' }
+RowanMethodService >> searchString: object [
+	searchString := object
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> selectedPackageServices [
 
@@ -616,8 +716,18 @@ RowanMethodService >> setBreakAt: stepPoint [
     ifTrue: [ (Object _objectForOop: oop) homeMethod ]
     ifFalse: [ self gsNMethod ].
   method setBreakAtStepPoint: stepPoint.
+  self class breakPointsAreEnabled
+    ifFalse: [ self disableBreakAt: stepPoint ].
   self update.
   RowanCommandResult addResult: self
+]
+
+{ #category : 'method history' }
+RowanMethodService >> setHasMethodHistory [
+  | answeringService |
+  answeringService := RowanAnsweringService new.
+  hasMethodHistory := (answeringService basicMethodHistoryFor: self) answer size
+    > 1.
 ]
 
 { #category : 'initialization' }
@@ -671,7 +781,7 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 	"Answers an Array of Associations (offset -> selector) indexed by step point"
 
 	|  selectors list |
-	(selectors := aGsNMethod _allDebugInfo: 10) ifNil: [^#()].
+	(selectors := aGsNMethod _sourceOffsetsOfSends) ifNil: [^#()].
 	list := aGsNMethod homeMethod  _sourceOffsets.
 	list := list collect: [:each |
 		| index eachSelector |
@@ -681,7 +791,6 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 		each -> eachSelector.
 	].
 	^list
-
 ]
 
 { #category : 'Accessing' }
@@ -702,6 +811,17 @@ RowanMethodService >> update [
 		initialize: (Object _objectForOop: oop) 
 		organizer: organizer.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'updates' }
+RowanMethodService >> updateLatest [
+  | theClass compiledMethod |
+  theClass := (RowanClassService new name: className) theClass.
+  theClass ifNil: [ ^ self ].
+  compiledMethod := theClass compiledMethodAt: selector otherwise: nil.
+  compiledMethod ifNil: [ ^ self ].
+  oop := compiledMethod asOop.
+  super updateLatest
 ]
 
 { #category : 'private' }

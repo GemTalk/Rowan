@@ -1,5 +1,6 @@
 RwProjectLoadConfiguration {
 	#name : 'Common',
+	#comment : 'Common set of packages ',
 	#version : '0.1.0',
 	#conditionalPackages : {
 		[
@@ -13,7 +14,17 @@ RwProjectLoadConfiguration {
 					'Tonel-GemStone-Kernel'
 				]
 			}
+		},
+		[
+			'gs3.2.x'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Tonel-GemStone-32x-Kernel'
+				]
+			}
 		}
 	},
-	#comment : 'Common set of packages '
+	#conditionalPackageMapSpecs : { },
+	#definedGroupNames : { }
 }

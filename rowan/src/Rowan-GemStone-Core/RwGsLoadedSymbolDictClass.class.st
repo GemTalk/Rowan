@@ -10,6 +10,15 @@ RwGsLoadedSymbolDictClass class >> newForClass: aClass [
 	^self new initializeForClass: aClass
 ]
 
+{ #category : 'private' }
+RwGsLoadedSymbolDictClass >> _classBasedProperties [
+
+	"Answer the list of properties that are derived from the class instance itself"
+
+	^ #(  'category' 'classinstvars'  'name' 'type' 'classvars' 'comment' 'gs_constraints' 'instvars'  'gs_options' 
+			'pools' 'superclass' 'gs_SymbolDictionary' )
+]
+
 { #category : 'methods' }
 RwGsLoadedSymbolDictClass >> addLoadedClassMethod: aLoadedMethod [
 
@@ -160,6 +169,22 @@ RwGsLoadedSymbolDictClass >> removeLoadedMethod: aLoadedMethod [
 ]
 
 { #category : 'private' }
+RwGsLoadedSymbolDictClass >> reregisterLoadedClassMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedClassMethods := aDictionary
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictClass >> reregisterLoadedInstanceMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedInstanceMethods := aDictionary
+]
+
+{ #category : 'private' }
 RwGsLoadedSymbolDictClass >> symbolDictionaryName: aName [
 
 	self propertyAt: 'gs_SymbolDictionary' put: aName asString
@@ -169,7 +194,7 @@ RwGsLoadedSymbolDictClass >> symbolDictionaryName: aName [
 RwGsLoadedSymbolDictClass >> updateCategoryFromClass [
 
 	| propertyName oldValue newValue absentToken |
-	propertyName := 'category'.
+	propertyName := 'category'.	"needs to be listed in _classBasedProperties method"
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	newValue := handle _classCategory ifNil: [ absentToken ].
@@ -189,7 +214,7 @@ RwGsLoadedSymbolDictClass >> updateClassInstvarNamesFromClass [
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'classinstvars'.
+	propertyName := 'classinstvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := handle class instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
@@ -204,40 +229,25 @@ RwGsLoadedSymbolDictClass >> updateClassNameFromClass [
 	oldName = newName
 		ifFalse: 
 			[self name: newName.
-			self propertyAt: 'name' put: name]
+			self propertyAt: 'name' put: name] 	"needs to be listed in _classBasedProperties method"
 ]
 
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
 	"Must be in-synch with RwClassDefinition>>_updateClassTypeFromClass:"
 
 	| propertyName oldValue newValue |
-	propertyName := 'type'.
+	propertyName := 'type'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
-	newValue := handle isBytes
-						ifTrue: [
-							handle superClass isBytes not
-								ifTrue: [ 'bytes' ]
-								ifFalse: [ 'normal' ]]
-						ifFalse: [ 
-							handle isSpecial
-								ifTrue: [ 'immediate' ]
-								ifFalse: 
-									[ handle isNsc
-										ifTrue: [ 'normal' ]
-										ifFalse:  [
-											(handle isVariable and: [handle superClass isVariable not])
-												ifTrue: [ 'variable' ]
-												ifFalse: [ 'normal' ] ] ] ].
+	newValue := handle rwClassType.
 
 	oldValue = newValue
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
+		ifFalse: [ self propertyAt: propertyName put: newValue ]
 ]
 
 { #category : 'private-updating' }
@@ -245,7 +255,7 @@ RwGsLoadedSymbolDictClass >> updateClassVariableNamesFromClass [
 	"Order of variable names does not matter to Cypress (at least not for GemStone) so we keep the names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'classvars'.
+	propertyName := 'classvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle classVarNames collect: [:each | each asString])
 				asSortedCollection asArray.
@@ -256,7 +266,7 @@ RwGsLoadedSymbolDictClass >> updateClassVariableNamesFromClass [
 RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 
 	| propertyName oldValue newValue absentToken |
-	propertyName := 'comment'.
+	propertyName := 'comment'.	"needs to be listed in _classBasedProperties method"
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	(oldValue ~~ absentToken and: [oldValue isEmpty])
@@ -273,13 +283,12 @@ RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 				[newValue == absentToken
 					ifTrue: [self removeProperty: propertyName]
 					ifFalse: [self propertyAt: propertyName put: newValue]]
-
 ]
 
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateConstraintsFromClass [
 	| propertyName oldValue newValue sortedConstraints |
-	propertyName := 'gs_constraints'.
+	propertyName := 'gs_constraints'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
 	sortedConstraints := handle _rwSortedConstraints.
 	(sortedConstraints isKindOf: Array ) 
@@ -302,7 +311,6 @@ RwGsLoadedSymbolDictClass >> updateConstraintsFromClass [
 			[newValue == self absentToken
 				ifTrue: [self removeProperty: propertyName]
 				ifFalse: [self propertyAt: propertyName put: newValue]]
-
 ]
 
 { #category : 'private-updating' }
@@ -310,7 +318,7 @@ RwGsLoadedSymbolDictClass >> updateInstvarNamesFromClass [
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'instvars'.
+	propertyName := 'instvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := handle instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
@@ -333,19 +341,20 @@ RwGsLoadedSymbolDictClass >> updateOptionsFromClass [
 	from the image, and the image is trusted to only have valid values."
 
 	| propertyName oldValue newValue |
-	propertyName := 'gs_options'.
-	oldValue := self propertyAt: propertyName.
-	newValue := (handle _rwOptionsArray collect: [:option | option asString])
-				asSortedCollection asArray.
-	newValue isEmpty ifTrue: [newValue := self absentToken].
-
-	"Since the absent token is not equal to any other valid value, we can skip the identity check in this case."
+	propertyName := 'gs_options'.	"needs to be listed in _classBasedProperties method"
+	oldValue := self propertyAt: propertyName.	"TODO, may need changes to result of _rwOptionsArray , see RwClassDefinition >> _updateOptionsFromClass "
+	newValue := (handle _rwOptionsArray collect: [ :option | option asString ])
+		asArray.
+	newValue isEmpty
+		ifTrue: [ newValue := self absentToken ].	"Since the absent token is not equal to any other valid value, we can skip the identity check in this case."
 	oldValue = newValue
-		ifFalse: 
-			[newValue == self absentToken
-				ifTrue: [self removeProperty: propertyName]
-				ifFalse: [self propertyAt: propertyName put: newValue]]
-
+		ifFalse: [ 
+			newValue == self absentToken
+				ifTrue: [ self removeProperty: propertyName ]
+				ifFalse: [ self propertyAt: propertyName put: newValue ] ].
+	handle _rwReservedOop
+		ifNotNil: [ :resOop | self propertyAt: 'gs_reservedoop' put: resOop asString ]
+		ifNil: [ self removeProperty: 'gs_reservedoop' ]
 ]
 
 { #category : 'private-updating' }
@@ -353,7 +362,7 @@ RwGsLoadedSymbolDictClass >> updatePoolDictionaryNamesFromClass [
 	"Order of pool dictionaries *does* matter in GemStone, so we keep the names in the order given in the image."
 
 	| propertyName oldNames newNames |
-	propertyName := 'pools'.
+	propertyName := 'pools'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle sharedPools collect: [ :each | each name asString ])
 		asArray.
@@ -386,7 +395,7 @@ RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionaryRegi
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateSuperclassNameFromClass [
   | oldName newName |
-  oldName := self propertyAt: 'superclass'.
+  oldName := self propertyAt: 'superclass'.	"needs to be listed in _classBasedProperties method"
   newName := handle superclass
     ifNil: [ 'nil' ]
     ifNotNil: [ :superclass | superclass name asString ].
@@ -399,8 +408,7 @@ RwGsLoadedSymbolDictClass >> updateSymbolDictionaryFromClassFor: aSymbolDictiona
 
 	| newName oldName |
 	newName := aSymbolDictionary name.
-	oldName := self propertyAt: 'gs_SymbolDictionary'.
+	oldName := self propertyAt: 'gs_SymbolDictionary'.	"needs to be listed in _classBasedProperties method"
 	oldName = newName
 		ifFalse: [ self symbolDictionaryName: newName ]
-
 ]

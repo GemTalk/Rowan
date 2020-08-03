@@ -1,0 +1,24 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v1/Tools',
+	#condition : 'v1',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/v1/deprecated/Tools',
+		'common/v1/v1Only/Tools'
+	],
+	#packageNames : [
+		'Rowan-Tools-CoreV1'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tools-CoreV1' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Organize all v1 tools classes under one component'
+}

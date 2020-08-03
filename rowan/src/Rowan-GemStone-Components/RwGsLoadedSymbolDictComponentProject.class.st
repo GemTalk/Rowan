@@ -1,9 +1,6 @@
 Class {
 	#name : 'RwGsLoadedSymbolDictComponentProject',
 	#superclass : 'RwLoadedProject',
-	#instVars : [
-		'loadedComponents'
-	],
 	#category : 'Rowan-GemStone-Components'
 }
 
@@ -24,7 +21,12 @@ RwGsLoadedSymbolDictComponentProject >> asDefinition [
 	^ RwComponentProjectDefinition
 		withProperties: self propertiesForDefinition
 		packageDefinitions: self loadedPackageDefinitions
-		componentDefinitions: self loadedComponentDefinitions
+]
+
+{ #category : 'testing' }
+RwGsLoadedSymbolDictComponentProject >> canCommit [
+
+	^ self projectRef canCommit
 ]
 
 { #category : 'commit log' }
@@ -33,11 +35,22 @@ RwGsLoadedSymbolDictComponentProject >> commitLog: logLimit [
 	^ self projectRef commitLog: logLimit
 ]
 
-{ #category : 'initialization' }
-RwGsLoadedSymbolDictComponentProject >> initialize [
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> components [
 
-	super initialize.
-	loadedComponents := KeyValueDictionary new.
+	^ self projectRef components
+]
+
+{ #category : 'properties' }
+RwGsLoadedSymbolDictComponentProject >> defaultSymbolDictName: symDictName [
+
+	self projectRef defaultSymbolDictName: symDictName
+]
+
+{ #category : 'properties' }
+RwGsLoadedSymbolDictComponentProject >> defaultUseSessionMethodsForExtensions: aBool [
+
+	self projectRef defaultUseSessionMethodsForExtensions: aBool
 ]
 
 { #category : 'initialization' }
@@ -51,7 +64,7 @@ RwGsLoadedSymbolDictComponentProject >> initializeForLoadSpecification: aLoadSpe
 RwGsLoadedSymbolDictComponentProject >> initializeForProjectReferenceDefinition: aProjectReferenceDefinition [
 
 	self initializeForName: aProjectReferenceDefinition projectAlias.
-	handle := aProjectReferenceDefinition
+	handle := aProjectReferenceDefinition copy
 ]
 
 { #category : 'properties' }
@@ -65,14 +78,36 @@ RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 
 	"Create definitions from all of the components I define, and answer the collection of them"
 
-	^ self definitionsFor: loadedComponents
+	| components |
+	components := self components copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	^ components
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames [
+
+	^ self projectRef loadedConfigurationNames
 ]
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames: configNames [
 
+	"noop - project ref component keys is list of loaded config names"
 
-	self projectRef loadedConfigurationNames: configNames
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
+
+	| x y |
+	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
+		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedGroupNames [
+
+	^ self projectRef loadedGroupNames
 ]
 
 { #category : 'accessing' }
@@ -87,6 +122,18 @@ RwGsLoadedSymbolDictComponentProject >> markPackageDirty [
 	"... indicates that receiver needs to mark it's container as dirty .... "
 
 	self markDirty
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> packageConvention [
+	"hack to be able to use ComponentV2 to develop patch for https://github.com/GemTalk/Rowan/issues/603"
+	^ 'RowanHybrid'
+]
+
+{ #category : 'properties' }
+RwGsLoadedSymbolDictComponentProject >> packageNameToPlatformPropertiesMap: aDictionary [
+
+	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
 ]
 
 { #category : 'accessing' }
@@ -120,8 +167,14 @@ RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 
 	| props |
 	props := super propertiesForDefinition.
-	props at: 'projectRef' put: handle.
+	props at: 'projectRef' put: handle copy.
 	^ props
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> remote [
+
+	^ self projectRef remote
 ]
 
 { #category : 'accessing' }
@@ -135,6 +188,12 @@ RwGsLoadedSymbolDictComponentProject >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> repositoryRootPath [
+
+	^ self repositoryRoot pathString
 ]
 
 { #category : 'accessing' }

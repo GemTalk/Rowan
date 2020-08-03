@@ -1,8 +1,11 @@
 Extension { #name : 'Object' }
 
 { #category : '*ast-kernel-core' }
-Object >> value [
+Object >> acceptVisitor: aVisitor [
+]
 
-	^self
+{ #category : '*ast-kernel-core' }
+Object >> isValue [
 
+	^false
 ]

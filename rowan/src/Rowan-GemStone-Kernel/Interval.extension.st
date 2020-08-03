@@ -9,3 +9,14 @@ Interval class >> fromSton: stonReader [
 	values size = 3 ifTrue: [result := self from: values first to: values second by: values third].
 	^result
 ]
+
+{ #category : '*Rowan-GemStone-Kernel' }
+Interval >> stonOn: stonWriter [
+  stonWriter
+    writeObject: self
+    streamMap: [ :dictionary | 
+      dictionary
+        at: #'start' put: from;
+        at: #'stop' put: to;
+        at: #'step' put: by ]
+]

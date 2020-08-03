@@ -13,6 +13,12 @@ Class {
 	#category : 'Rowan-Kernel'
 }
 
+{ #category : 'public client services' }
+Rowan class >> answeringServiceClass [
+
+	^ self platform answeringServiceClass
+]
+
 { #category : 'public' }
 Rowan class >> automaticClassInitializationBlackList [
 
@@ -153,12 +159,11 @@ Rowan class >> platform [
 ]
 
 { #category : 'public' }
-Rowan class >> platformConfigurationAttributes [
+Rowan class >> platformConditionalAttributes [
 
-	"Return list of platform-specific configuration attributes"
+	"Return list of platform-specific conditional attributes for use by components"
 
-	^ self platform platformConfigurationAttributes
-
+	^ self platform platformConditionalAttributes
 ]
 
 { #category : 'public' }
@@ -213,6 +218,13 @@ Rowan class >> projectNames [
 	^ self image projectNames
 ]
 
+{ #category : 'public' }
+Rowan class >> projects [
+	"Return list of projects"
+
+	^ self projectNames collect: [ :projectName | self projectNamed: projectName ]
+]
+
 { #category : 'public client services' }
 Rowan class >> projectServiceClass [
 
@@ -235,8 +247,21 @@ Rowan class >> serviceClass [
 
 { #category : 'public' }
 Rowan class >> unpackagedName [
-
-	"Answer the name used for unpackaged projects and packages"
+	"Answer the name used for projects and packages that are not in a package ... unpackaged projects and packages are where pacakge things go by default."
 
 	^ '(NONE)'
+]
+
+{ #category : 'public' }
+Rowan class >> unpackagedPackagePrefix [
+	"Answer the prefix used for naming unpackaged packages"
+
+	^ self unpackagedProjectName , '-'
+]
+
+{ #category : 'public' }
+Rowan class >> unpackagedProjectName [
+	"Answer the name of the unpackaged project that manages unpackaged things"
+
+	^ 'UnPackaged'
 ]

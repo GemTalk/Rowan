@@ -5,6 +5,111 @@ Class {
 }
 
 { #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
+	"adopt the methods for class named <className> and it's methods into the package named <packageName>, 
+		if it is not a <classExtension>, adopt the class into the package as well."
+
+	"Ignore packaged instance and class methods"
+
+	| loadedPackage loadedProject packageSymDictName theSymbolDictionary registry theBehavior className |
+	loadedPackage := Rowan image loadedPackageNamed: packageName.
+	loadedProject := loadedPackage loadedProject.
+	className := theClass name asString.
+
+	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName)
+		asSymbol.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
+
+	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
+
+	classExtension
+		ifFalse: [ 
+			[ 
+			registry
+				addClassAssociation: (theSymbolDictionary associationAt: theClass name)
+				forClass: theClass
+				toPackageNamed: packageName ]
+				on: RwExistingAssociationWithSameKeyNotification
+				do: [ :ex | ex resume ] ].
+
+	theBehavior := theClass.
+	instanceSelectors
+		do: [ :methodSelector | 
+			| theCompiledMethod |
+			theCompiledMethod := (theBehavior
+				compiledMethodAt: methodSelector
+				otherwise: nil)
+				ifNil: [ 
+					(RwAdoptMissingMethodErrorNotification
+						method: methodSelector
+						isMeta: false
+						inClassNamed: className
+						isClassExtension: classExtension
+						intoPackageNamed: packageName) signal.
+					"skip adoption of this method"
+					nil ].
+			theCompiledMethod
+				ifNotNil: [ 
+					registry
+						adoptCompiledMethod: theCompiledMethod
+						classExtension: classExtension
+						for: theBehavior
+						protocol: (theBehavior categoryOfSelector: methodSelector)
+						toPackageNamed: packageName ] ].
+
+	theBehavior := theClass class.
+	classSelectors
+		do: [ :methodSelector | 
+			| theCompiledMethod |
+			theCompiledMethod := (theBehavior
+				compiledMethodAt: methodSelector
+				otherwise: nil)
+				ifNil: [ 
+					(RwAdoptMissingMethodErrorNotification
+						method: methodSelector
+						isMeta: true
+						inClassNamed: className
+						isClassExtension: classExtension
+						intoPackageNamed: packageName) signal.
+					"skip adoption of this method"
+					nil ].
+			theCompiledMethod
+				ifNotNil: [ 
+					registry
+						adoptCompiledMethod: theCompiledMethod
+						classExtension: classExtension
+						for: theBehavior
+						protocol: (theBehavior categoryOfSelector: methodSelector)
+						toPackageNamed: packageName ] ]
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptClass: theClass intoPackageNamed: packageName [
+	"adopt the class named <className> and it's methods into the package named <packageName>"
+
+	"Ignore packaged instance and class methods"
+
+	self
+		adoptClass: theClass
+		classExtension: false
+		instanceSelectors: theClass selectors
+		classSelectors: theClass class selectors
+		intoPackageNamed: packageName
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptClassExtension: theClass instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
+	"adopt extension methods for the class named <className> into the package named <packageName>"
+
+	^ self
+		adoptClass: theClass
+		classExtension: true
+		instanceSelectors: instanceSelectors
+		classSelectors: classSelectors
+		intoPackageNamed: packageName
+]
+
+{ #category : 'smalltalk api' }
 RwPkgAdoptTool >> adoptClassExtensionNamed: className  instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
 
 	"adopt extension methods for the class named <className> into the package named <packageName>"
@@ -20,80 +125,30 @@ RwPkgAdoptTool >> adoptClassExtensionNamed: className  instanceSelectors: instan
 
 { #category : 'smalltalk api' }
 RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
-
 	"adopt the methods for class named <className> and it's methods into the package named <packageName>, 
 		if it is not a <classExtension>, adopt the class into the package as well."
 
 	"Ignore packaged instance and class methods"
 
-	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary
-		registry theBehavior actualPackageSymDictName |
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName) asSymbol.
+	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName)
+		asSymbol.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
-	theClass := Rowan globalNamed: className.
-	theClass ifNil: [ 
-		(RwAdoptMissingClassErrorNotification classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
-		"if exception resumed then we'll skip the adopt operation for this class"
-		^ self ].
-	(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
-		do: [:ar |
-			actualPackageSymDictName := (ar at: 1) name.
-			actualPackageSymDictName == packageSymDictName
-				ifTrue: [ theSymbolDictionary := (ar at: 1). ] ].
-	theSymbolDictionary 
-		ifNil: [ 
-			self error: 'The symbol dictionary for class ', 
-				className printString, 
-				' (', actualPackageSymDictName, ') does not match the expected symbol dictionary for the package ', 
-				packageName printString, 
-				'. (', packageSymDictName, '). REQUIRED.'.]. 
+	theClass := theSymbolDictionary
+		at: className asSymbol
+		ifAbsent: [ 
+			(RwAdoptMissingClassErrorNotification
+				classNamed: className
+				isClassExtension: classExtension
+				intoPackageNamed: packageName) signal.
+			"if exception resumed then we'll skip the adopt operation for this class"
+			^ self ].
 
-	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	classExtension
-		ifFalse: [
-			[ registry
-				addClassAssociation: (theSymbolDictionary associationAt: theClass name) 
-				forClass: theClass 
-				toPackageNamed: packageName ]
-					on: RwExistingAssociationWithSameKeyNotification
-					do: [:ex | ex resume ] ].
-
-	theBehavior := theClass.
-	instanceSelectors do: [:methodSelector |
-		| theCompiledMethod |
-		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
-			ifNil: [ 
-				(RwAdoptMissingMethodErrorNotification method: methodSelector isMeta: false inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
-				"skip adoption of this method"
-				nil ].
-		theCompiledMethod
-			ifNotNil: [ 
-				registry
-					adoptCompiledMethod: theCompiledMethod
-					classExtension: classExtension
-					for: theBehavior 
-					protocol: (theBehavior categoryOfSelector: methodSelector) 
-					toPackageNamed: packageName ] ] .
-
-	theBehavior := theClass class.
-	classSelectors do: [:methodSelector |
-		| theCompiledMethod |
-		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
-			ifNil: [ (RwAdoptMissingMethodErrorNotification method: methodSelector isMeta: true inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
-				"skip adoption of this method"
-				nil ].
-		theCompiledMethod
-			ifNotNil: [ 
-				registry
-					adoptCompiledMethod: theCompiledMethod 
-					classExtension: classExtension
-					for: theBehavior 
-					protocol: (theBehavior categoryOfSelector: methodSelector) 
-					toPackageNamed: packageName ] ].
+	^ self adoptClass: theClass classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName
 ]
 
 { #category : 'smalltalk api' }
@@ -164,7 +219,7 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -212,8 +267,7 @@ RwPkgAdoptTool >> adoptSymbolDictionaryNamed: symDictName intoPackageNamed: pack
 
 	"create loaded classes in the loaded package <packageName> for the unpackaged classes in the symbol dictionary named <symDictName>"
 
-	^ self adoptSymbolDictionary: (Rowan globalNamed: symDictName) intoPackageNamed: packageName
-
+	^ self adoptSymbolDictionary: (Rowan image symbolDictNamed: symDictName) intoPackageNamed: packageName
 ]
 
 { #category : 'smalltalk api' }

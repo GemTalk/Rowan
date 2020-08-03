@@ -1,0 +1,10 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Gemstone35-',
+	#condition : 'gs3.[5-]',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'FileSystem-GemStone-Kernel-35x'
+	],
+	#comment : 'FileSystemGs component. For now all packages are expected to be loaded into Globals by SystemUser'
+}

@@ -23,12 +23,31 @@ RwAbstractReaderWriterVisitor class >> _readObjectFrom: aFileReference [
 
 { #category : 'private' }
 RwAbstractReaderWriterVisitor class >> _repositoryPropertyDictFor: packagesRoot [
-
 	| propertiesFile |
-	propertiesFile := packagesRoot / 'properties', 'st'.
+	propertiesFile := packagesRoot / 'properties' , 'st'.
 	propertiesFile exists
-		ifFalse: [ ^ Dictionary new ].
+		ifFalse: [ 
+			| propertiesDict |
+			propertiesFile := packagesRoot / '.filetree'.
+			propertiesFile exists
+				ifFalse: [ 
+					propertiesFile := packagesRoot / '.properties'.
+					propertiesFile exists
+						ifFalse: [ ^ Dictionary new ] ].
+			propertiesDict := self _readObjectFrom: propertiesFile.
+			propertiesDict at: #'format' put: 'filetree'.
+			^ propertiesDict ].
 	^ self _readObjectFrom: propertiesFile
+]
+
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor class >> tonelClassLabel [
+	^ 'Class'
+]
+
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor class >> tonelExtensionLabel [
+	^ 'Extension'
 ]
 
 { #category : 'private' }
@@ -52,7 +71,7 @@ RwAbstractReaderWriterVisitor >> _repositoryConventionFor: packagesRoot [
 { #category : 'private' }
 RwAbstractReaderWriterVisitor >> _repositoryFormatFor: packagesRoot [
 
-	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ 'filetree' ]
+	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ self defaultPackageFormat ]
 ]
 
 { #category : 'private' }
@@ -124,6 +143,12 @@ RwAbstractReaderWriterVisitor >> _validateRowanMonticelloClassCategoryConvention
 ]
 
 { #category : 'validation' }
+RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName [
+
+	self error: 'not yet implemented'
+]
+
+{ #category : 'validation' }
 RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: protocol  forPackageNamed: packageName [
 
 	| canonProtocol expectedProtocol |
@@ -186,6 +211,12 @@ RwAbstractReaderWriterVisitor >> currentProjectDefinition: aRwComponentProjectDe
 ]
 
 { #category : 'accessing' }
+RwAbstractReaderWriterVisitor >> defaultPackageFormat [
+
+	self subclassResponsibility: #defaultPackageFormat
+]
+
+{ #category : 'accessing' }
 RwAbstractReaderWriterVisitor >> packageConvention [
 
 	"
@@ -199,7 +230,8 @@ RwAbstractReaderWriterVisitor >> packageConvention [
 		ppc := self currentProjectDefinition packageConvention.
 		dpc := self _repositoryConventionFor: self packagesRoot.
 		dpc ~= ppc
-			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, ' does not match expected package convention ', ppc printstring. ' for project ', self projectName printString ].
+			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, 
+           ' does not match expected package convention ', ppc printString. ' for project ', self projectName printString ].
 		packageConvention := ppc ]
 ]
 

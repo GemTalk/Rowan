@@ -186,13 +186,9 @@ RwGsClassVersioningSymbolDictPatch >> createClassFor: aPatchSet [
 RwGsClassVersioningSymbolDictPatch >> existingSymbolDictionary [
 	"answer the current symbol dictionary for the class ... before being (potentially) moved to a different symbolDictionary"
 
-	| symDictName symDict |
+	| symDictName |
 	symDictName := classModification before gs_symbolDictionary.
-	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
-	symDict
-		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
-
 ]
 
 { #category : 'accessing' }

@@ -40,6 +40,8 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 				do: [ :stream | ^ self _readStonFrom: stream ] ].
 	url scheme asString = 'https'
 		ifTrue: [ 
+self error: 'not yet supported'.
+"
 			| client response |
 			GsSecureSocket disableCertificateVerificationOnClient.
 			client := (Rowan globalNamed: 'ZnClient') new.
@@ -47,9 +49,9 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 				beOneShot;
 				enforceHttpSuccess: true;
 				get: url.
-			^ self _readStonFrom: response decodeFromUTF8 ].
+			^ self _readStonFrom: response decodeFromUTF8
+" ].
 	self error: 'Unknown scheme: ' , url scheme printString
-
 ]
 
 { #category : 'instance creation' }
@@ -232,6 +234,12 @@ RwAbstractProjectConfiguration >> initializeForImport [
 
 	projectName := nil
 
+]
+
+{ #category : 'testing' }
+RwAbstractProjectConfiguration >> isIndependentlyLoadable [
+	
+	^ true
 ]
 
 { #category : 'accessing' }

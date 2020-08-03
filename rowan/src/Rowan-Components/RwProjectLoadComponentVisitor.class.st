@@ -4,10 +4,18 @@ Class {
 	#instVars : [
 		'projectNames',
 		'projectBasePath',
-		'projectLoadSpecs'
+		'projectLoadSpecs',
+		'visitedComponents',
+		'projectComponentDefinition'
 	],
 	#category : 'Rowan-Components'
 }
+
+{ #category : 'private' }
+RwProjectLoadComponentVisitor >> _addPackageNames: somePackageNames for: aComponent [
+
+	self projectComponentDefinition addPackages: somePackageNames forComponent: aComponent
+]
 
 { #category : 'private' }
 RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: ignored [
@@ -19,9 +27,14 @@ RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: ignored [
 		collect: [ :prjName | 
 			| url |
 			url := urlBase , prjName , '.ston'.
-			(RwSpecification fromUrl: url)
-				projectName: prjName;
-				yourself ]
+			RwSpecification fromUrl: url ]
+]
+
+{ #category : 'private' }
+RwProjectLoadComponentVisitor >> _visited: aComponent [
+
+	super _visited: aComponent.
+	visitedComponents at: aComponent name put: aComponent.
 ]
 
 { #category : 'initialization' }
@@ -29,7 +42,8 @@ RwProjectLoadComponentVisitor >> initialize [
 
 	super initialize.
 	projectNames := Set new.
-	projectLoadSpecs := Set new
+	projectLoadSpecs := Set new.
+	visitedComponents := Dictionary new
 ]
 
 { #category : 'accessing' }
@@ -42,6 +56,18 @@ RwProjectLoadComponentVisitor >> projectBasePath [
 RwProjectLoadComponentVisitor >> projectBasePath: aString [
 
 	projectBasePath := aString
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitor >> projectComponentDefinition [
+
+	^ projectComponentDefinition
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitor >> projectComponentDefinition: aProjectComponentDefinition [
+
+	projectComponentDefinition := aProjectComponentDefinition
 ]
 
 { #category : 'accessing' }
@@ -59,23 +85,13 @@ RwProjectLoadComponentVisitor >> projectNames [
 { #category : 'visiting' }
 RwProjectLoadComponentVisitor >> visitComponentLoadConfiguration: aComponentLoadConfiguration [
 
-	| seedGroupNames |
 	(visitedConfigurationNames includes: aComponentLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aComponentLoadConfiguration. 
 
 	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
-	seedGroupNames := groupNames asSet copy.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				seedGroupNames addAll: referencedGroupNames ] ].
+	self _processGroupNames.
 
 	self _processConditionalPackageNames: aComponentLoadConfiguration.
 
@@ -94,4 +110,10 @@ RwProjectLoadComponentVisitor >> visitComponentLoadConfiguration: aComponentLoad
 RwProjectLoadComponentVisitor >> visitComponentSpecification: aComponentSpecification [
 
 	self projectLoadSpecs add: aComponentSpecification
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitor >> visitedComponents [
+
+	^ visitedComponents
 ]

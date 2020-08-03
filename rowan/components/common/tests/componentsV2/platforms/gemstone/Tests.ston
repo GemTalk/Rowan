@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/tests/componentsV2/platforms/gemstone/Tests',
+	#condition : [
+		'gemstone'
+	],
+	#packageNames : [
+		'Rowan-Tests-GemStone-35x'
+	],
+	#comment : ''
+}

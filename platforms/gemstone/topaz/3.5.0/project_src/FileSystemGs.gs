@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (ByteArray
@@ -8,7 +9,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Network-UUID';
 		comment: '';
 		immediateInvariant.
@@ -23,7 +25,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files';
 		comment: 'Common superclass for exceptions while using file streams';
 		immediateInvariant.
@@ -38,7 +41,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files';
 		comment: 'Notfify when not able to delete';
 		immediateInvariant.
@@ -53,7 +57,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files';
 		comment: 'I am an exception that notifies that a file already exists.';
 		immediateInvariant.
@@ -68,7 +73,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files';
 		comment: 'I am raised when an operation is attempted on a file that does not exist.
 
@@ -95,7 +101,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files';
 		comment: 'Notify about an error when trying to attempt to write to a file';
 		immediateInvariant.
@@ -110,7 +117,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for errors that may occur during filesystem operations.';
 		immediateInvariant.
@@ -125,7 +133,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised when I an operation is attempted inside a directory that does not exist. ';
 		immediateInvariant.
@@ -140,7 +149,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a directory that already exists.';
 		immediateInvariant.
@@ -155,7 +165,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to delete a directory when is not empty.';
 		immediateInvariant.
@@ -170,7 +181,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a file or directory over top of an existing file.';
 		immediateInvariant.
@@ -185,7 +197,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to use an illegal file name
 ';
@@ -201,7 +214,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterEncodingError.
 I am an Error.
@@ -221,7 +235,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I represent a request for user assistance in resolving an origin. I am a resumable exception that gets raised when there is no way of automatically resolving a particular origin. ';
 		immediateInvariant.
@@ -236,7 +251,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for FileLocator and FileReference. By implementing most of the methods on myself most code duplucation between the locator and the reference can be avoided';
 		immediateInvariant.
@@ -251,7 +267,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am a late-bound reference. I refer to a file or directory in relation to a well-known location on the filesystem, called an origin. When asked to perform concrete operation, I look up the current location of my origin, and resolve my path against it. 
 
@@ -296,7 +313,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I combine a filesystem and path, which is sufficient to refer to a concrete file or directory. I provide methods for navigating my filesystem, performing filesystem operations and opening and closing files.  I am the primary mechanism for working with files and directories. 
 
@@ -320,7 +338,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Network-UUID';
 		comment: '';
 		immediateInvariant.
@@ -335,7 +354,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files';
 		comment: 'I represent a sequential binary File. I provide the minimum operations to:
 
@@ -388,7 +408,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I present a low-level protocol for interacting with filesystems. I hold a reference to
 a store (a subinstance of FileSystemStore) which takes care of the details of performing 
@@ -416,7 +437,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am a cache for metadata about a file or directory. The information I hold is as follows:
 
@@ -448,7 +470,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that fulfill the Guide role in the Guide/Visitor pattern. My subclasses know how to traverse a filesystem in a specific order, "showing" the files and directories they encounter to a visitor.
 
@@ -469,7 +492,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in breadth-first order. Given this hierarchy:
 
@@ -495,7 +519,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first post order. Given this hierarchy:
 
@@ -520,7 +545,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first pre order. Given this hierarchy:
 
@@ -545,7 +571,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for file handle implementations. I provide a uniform interface that streams can use for read and write operations on a file regardless of the filesystem. I encapsulate the actual IO primitives.';
 		immediateInvariant.
@@ -560,7 +587,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I provide an interface for doing IO on an open file. I keep an id, which as an opaque identifier used by the FilePlugin primitives. I translate positions from the 1-based indexes used in Smalltalk to the 0-based offsets used by the primitives.
 
@@ -577,7 +605,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I provide "primitives" for doing IO on files in a MemoryFileSystem. I delegate most of my actions to the MemoryFile. This way there is only one place needed where the data is stored.';
 		immediateInvariant.
@@ -592,7 +621,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I''m a set of permissions for a Directory Entry';
 		immediateInvariant.
@@ -607,7 +637,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can resolve origins into references. Such objects use the Chain of Responsibility pattern, and when unable to resolve a particular origin, delegate that resolution request to the next resolver in the list.
 
@@ -626,7 +657,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I resolve origins by consulting the user. I maintain a cache of the user''s responses.';
 		immediateInvariant.
@@ -641,7 +673,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for platform-specific resolvers.';
 		immediateInvariant.
@@ -656,7 +689,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Mac OS X filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
@@ -671,7 +705,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Unix filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
@@ -686,7 +721,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Windows filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
@@ -701,7 +737,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I resolve origins that are related to the currently running Smalltalk system, using primitives provided by the VM. ';
 		immediateInvariant.
@@ -716,7 +753,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
 
@@ -738,7 +776,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I am an abstract superclass for disk store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
 ';
@@ -754,7 +793,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Unix file systems';
 		immediateInvariant.
@@ -769,7 +809,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for OSX file systems';
 		immediateInvariant.
@@ -784,7 +825,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Windows file systems';
 		immediateInvariant.
@@ -799,7 +841,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I''m a specific store for memory file system';
 		immediateInvariant.
@@ -814,7 +857,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can perform operations on directory trees. My subclasses implement the visitor protocol, and process filesystem nodes shown to them by guides.';
 		immediateInvariant.
@@ -829,7 +873,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I''m an abstract superclass for enumeration operations on directory entries. ';
 		immediateInvariant.
@@ -844,7 +889,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am a visitor that collects objects from the nodes I visit. I take a block similar to those passed to Collection>>collect:. I evaluate the block with DirectoryEntries for the nodes I visit, and collect the objects answered into an array.
 
@@ -861,7 +907,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I am a visitor that selects objects from the nodes I visit. I take a block similar to those passed to Collection>>select:. I evaluate the block with DirectoryEntries for the nodes I visit.
 
@@ -878,7 +925,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I create a copy of the directory tree that I visit. I use the PreorderGuide so that I can create directories before creating their contents. ';
 		immediateInvariant.
@@ -893,7 +941,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Core';
 		comment: 'I delete the directory tree that I visit. I use the PostorderGuide so that I can delete files before deleting their containing directories.';
 		immediateInvariant.
@@ -908,7 +957,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I am an abstract file system entry for a memory file system.
 My subclasses should specialize on the kind of file they are.';
@@ -924,7 +974,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a directory';
 		immediateInvariant.
@@ -939,7 +990,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a regular file';
 		immediateInvariant.
@@ -954,7 +1006,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'A file write stream - but within memory';
 		immediateInvariant.
@@ -969,7 +1022,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Path';
 		comment: 'I''m a private and abstract filesystem path, independent of the string representation used to describe paths on a specific filesystem. I provide methods for navigating the filesystem hierarchy and working with absolute and relative paths. I only refer to a concrete file or directory with regard to a specific filesystem. Normally users should not use me directly. 
 
@@ -996,7 +1050,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Path';
 		comment: 'I represent an absolute path (a position starting from Path root)';
 		immediateInvariant.
@@ -1011,7 +1066,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Path';
 		comment: 'I represent a relative path (a position starting from Path workingDirectory)';
 		immediateInvariant.
@@ -1026,7 +1082,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedReadStream.
 
@@ -1049,7 +1106,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedReadWriteStream.
 I wrap a buffered read stream and a buffered write stream on the same file.
@@ -1074,7 +1132,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedWriteStream.
 I wrap a write stream and add buffering.
@@ -1098,7 +1157,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterEncoder, I encode and decode Character objects to and from a binary stream.
 I am an abstract class with following protocol:
@@ -1146,7 +1206,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am the GemStone/S implementation of ZnUTF8Encoder.
 I implement the variable length UTF-8 encoding and decoding of Unicode according to RFC 3629.
@@ -1168,7 +1229,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am a read-write character stream. I am mainly used to open the Pharo source and changes files.';
 		immediateInvariant.
@@ -1183,7 +1245,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedStream, an abstract support class for read and write streams on an encoded binary stream.
 
@@ -1200,7 +1263,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedReadStream, an abstract support class for read streams on a binary encoded wrapped stream.
 
@@ -1217,7 +1281,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterReadStream.
 I wrap another binary ReadStream and use a ZnCharacerEncoder to allow Characters to be read.
@@ -1238,7 +1303,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedWriteStream, an abstract support class for write streams on a binary encoded wrapped stream.
 
@@ -1255,7 +1321,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterWriteStream.
 I wrap another binary WriteStream and use a ZnCharacerEncoder to allow Characters to be written.
@@ -1273,7 +1340,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files';
 		comment: 'Provides a simple, platform-independent, file stream. I am 
    - binary
@@ -1318,7 +1386,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files';
 		comment: 'I am a concrete subclass of AbstractBinaryFileStream for normal files. Regardless the position of the file, I will make my operarions on my position and then return the file it''s own position.
 
@@ -1338,7 +1407,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Network-UUID-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1353,7 +1423,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Network-UUID-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1368,7 +1439,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemDirectoryEntry';
 		immediateInvariant.
@@ -1383,7 +1455,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit test for FileLocator';
 		immediateInvariant.
@@ -1398,7 +1471,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Attributes';
 		comment: 'Try and test file attribute access from FileReference.
 
@@ -1416,7 +1490,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for file reference';
 		immediateInvariant.
@@ -1431,7 +1506,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemHandle';
 		immediateInvariant.
@@ -1446,7 +1522,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for file handles, the tests may be found in superclass';
 		immediateInvariant.
@@ -1461,7 +1538,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Memory';
 		comment: 'SUnit tests for memory handles, the tests may be found in superclass';
 		immediateInvariant.
@@ -1476,7 +1554,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemResolver';
 		immediateInvariant.
@@ -1491,7 +1570,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for InteractiveResolver';
 		immediateInvariant.
@@ -1506,7 +1586,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for PlatformResolver';
 		immediateInvariant.
@@ -1521,7 +1602,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for SystemResolver';
 		immediateInvariant.
@@ -1536,7 +1618,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'I am an abstract file system test. 
 I directly test 
@@ -1554,7 +1637,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for the disk filesystem';
 		immediateInvariant.
@@ -1569,7 +1653,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Memory';
 		comment: 'SUnit tests for MemoryFileSystem';
 		immediateInvariant.
@@ -1584,7 +1669,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for a file system tree';
 		immediateInvariant.
@@ -1599,7 +1685,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for CopyVisitor';
 		immediateInvariant.
@@ -1614,7 +1701,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for a single file system tree (depth one)';
 		immediateInvariant.
@@ -1629,7 +1717,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for AbstractEnumerationVisitor';
 		immediateInvariant.
@@ -1644,7 +1733,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class CollectVisitor';
 		immediateInvariant.
@@ -1659,7 +1749,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class SelectVistor
 ';
@@ -1675,7 +1766,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class DeleteVisitor';
 		immediateInvariant.
@@ -1690,7 +1782,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'Common superclass for tests of guidance through the filesystem';
 		immediateInvariant.
@@ -1705,7 +1798,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class BreadthFirstGuide';
 		immediateInvariant.
@@ -1720,7 +1814,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class PostorderGuide';
 		immediateInvariant.
@@ -1735,7 +1830,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class PreorderGuide';
 		immediateInvariant.
@@ -1750,7 +1846,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Files-Tests';
 		comment: 'Unit tests for file operations';
 		immediateInvariant.
@@ -1765,7 +1862,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-GemStone';
 		comment: '';
 		immediateInvariant.
@@ -1780,7 +1878,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for file system paths';
 		immediateInvariant.
@@ -1795,7 +1894,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for class WindowsStore';
 		immediateInvariant.
@@ -1810,7 +1910,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: 'I am ZnBufferedReadStreamTests.';
 		immediateInvariant.
@@ -1825,7 +1926,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1840,7 +1942,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: 'Tests for bufferer read/write streams that are assumed to contain bytes.
 
@@ -1862,7 +1965,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1877,7 +1981,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1892,7 +1997,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'Zinc-Character-Encoding-Tests';
 		comment: '';
 		immediateInvariant.
@@ -1907,7 +2013,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Tests-Attributes';
 		comment: 'DiskFileAttributesTestsResources provides a file with known attributes that can be used to test attribute retrieval in the File System.
 
@@ -1925,14 +2032,15 @@ true.
 %
 
 doit
-(WriteStream
+(WriteStreamPortable
 	subclass: 'MemoryWriteStream'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #())
+	options: #()
+)
 		category: 'FileSystem-Memory';
 		comment: 'I am like a WriteStream but I have more capacities than it.
 I am closer to a FileStream so I delegate some operations to my handle (collection instance variable)';
@@ -2137,7 +2245,7 @@ category: 'instance creation'
 classmethod: FileException
 signalOnFile: aFile 
 	
-	(self fileName: aFile basename) signal
+	(self fileName: aFile basename) signal: aFile name
 %
 
 category: 'instance creation'
@@ -2145,8 +2253,8 @@ classmethod: FileException
 signalWith: aReference
 	"Signal a new instance of the receiver with the supplied reference.
 	aReference is something that can be converted to a path, e.g. a String, Path or FileReference"
-
-	^(self fileName: aReference asPath pathString) signal
+  | str |
+	^(self fileName: (str := aReference asPath pathString)) signal: str
 %
 
 !		Instance methods for 'FileException'
@@ -2191,7 +2299,7 @@ signalOnFile: aFile
 	
 	self new
 		file: aFile;
-		signal
+		signal: aFile name "use signal: so filename shows up in exception printString"
 %
 
 !		Instance methods for 'FileAlreadyExistsException'
@@ -2224,9 +2332,10 @@ category: 'signalling'
 classmethod: FileDoesNotExistException
 signalWithFile: aFile writeMode: writeMode
 
-	^ (self fileName: aFile basename)
+  | ex |
+	^ (ex := self fileName: aFile basename)
 		readOnly: writeMode not;
-		signal
+		signal: ex fileName  "use signal: so file name shows up in  ex printString"
 %
 
 !		Instance methods for 'FileDoesNotExistException'
@@ -3907,6 +4016,13 @@ asPath
 	^path
 %
 
+category: 'printing'
+method: FileReference
+asString
+  "needed for informative topaz stack display"
+  ^ path asString 
+%
+
 category: 'streams'
 method: FileReference
 binaryReadStream
@@ -4551,7 +4667,8 @@ category: 'primitives-path'
 classmethod: File
 lookupDirectory: fullPath filename: fileName
 
-	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
+	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and 
+   return entry array or nil "
 
 	^ self lookupPath: fullPath, '/', fileName
 %
@@ -4574,6 +4691,7 @@ lookupPath: fullPath
    On Macs and PCs, it is the container of the system volumes."
 
 	| gsFileStat |
+	(GsFile existsOnServer: fullPath) ifFalse: [^ nil ].
 	gsFileStat := GsFile stat: fullPath isLstat: true.
 	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
 	^	{
@@ -4613,8 +4731,11 @@ open: fileName writable: writeMode
 		ifTrue: [ 'w+' ] 
 		ifFalse: [ 
 			writeMode = #read
-				ifTrue: [ 'r+' ]
-				ifFalse: [ 'a+' ] ].
+				ifTrue: [ 'r' ]
+				ifFalse: [ 
+           writeMode == #append 
+             ifTrue:[ 'a+' ] 
+             ifFalse:[ Error signal:'invalid mode']]].
 	^ GsFile
 		open: fileName 
 		mode: mode 
@@ -4760,6 +4881,13 @@ write: aGsFile from: stringOrByteArray startingAt: startIndex count: count
 %
 
 !		Instance methods for 'File'
+
+category: 'printing'
+method: File
+asString
+  "Needed for topaz debugging"
+  ^ name
+%
 
 category: 'accessing'
 method: File
@@ -7632,7 +7760,8 @@ classmethod: DiskStore
 activeClass
 	self allSubclasses do: [:ea | 
 		ea isActiveClass ifTrue: [^ ea]].
-	^ self
+  "Various methods go into infinite recursion if we return self."
+	Error signal:'Cannot find an active subclass of DiskStore' .
 %
 
 category: 'current'
@@ -7733,14 +7862,22 @@ category: 'private'
 method: DiskStore
 basicEntry: ignored path: aPath nodesDo: aBlock
 	| pathString intOrArray |
-		
 	pathString := self stringFromPath: aPath.
 	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
 	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
 	intOrArray
 		do: [:entryPathString |
 			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (File lookupPath: entryPathString) ] ]
+				ifFalse: [ | aFile |
+          aFile := File lookupPath: entryPathString .
+          "For now, ignore symLinks which reference a non-existant file."
+          aFile ifNil:[ 
+             (GsFile isSymbolicLink: entryPathString onClient: false) ifFalse:[
+                self signalFileDoesNotExist: entryPathString 
+             ]
+          ] ifNotNil:[
+            aBlock value: aFile 
+          ]]]
 %
 
 category: 'public'
@@ -8006,8 +8143,8 @@ openFileStream: path writable: writable
 	fullPath := self stringFromPath: path.
 	"redirect over the default implementation"
 	^ writable 
-		ifFalse: [ FileStream readOnlyFileNamed: fullPath ]
-		ifTrue: [ FileStream fileNamed: fullPath ]
+		ifFalse: [ FileStreamPortable readOnlyFileNamed: fullPath ]
+		ifTrue: [ FileStreamPortable fileNamed: fullPath ]
 %
 
 category: 'public'
@@ -8039,7 +8176,9 @@ delimiter
 category: 'current'
 classmethod: UnixStore
 isActiveClass
-	^ ((System gemVersionAt: 'osName') = 'Linux') and: [ super isActiveClass ]
+  | osNam |
+  osNam := System gemVersionAt: 'osName'.
+  ^ (#( 'Linux' 'Darwin' 'SunOS' 'AIX') includes: osNam) and:[ super isActiveClass ]
 %
 
 category: 'public'
@@ -8086,7 +8225,7 @@ checkName: aFileName fixErrors: fixing
 category: 'current'
 classmethod: MacStore
 isActiveClass
-	^ ((System gemVersionAt: 'osName') = 'OSX') and: [ super isActiveClass ]
+	^ ((System gemVersionAt: 'osName') = 'Darwin') and: [ super isActiveClass ]
 %
 
 category: 'public'
@@ -9336,11 +9475,13 @@ from: aString delimiter: aDelimiterCharacter
 
 	aString first = $$
 		ifTrue: [
-			| pathElements envVarString envVarElement |
+			| pathElements envVarString envVarElement eVar |
 			"GemStone paths are allowed to start with an environment variable"
 			pathElements := aDelimiterCharacter split: aString.
 			envVarElement := (pathElements at: 1) .
-			envVarString := (System gemEnvironmentVariable: (envVarElement copyFrom: 2 to: envVarElement size)) decodeFromUTF8 asString.
+			envVarString := System gemEnvironmentVariable: (eVar := envVarElement copyFrom: 2 to: envVarElement size). 
+      envVarString ifNil:[ Error signal:'environment variable ' , eVar ,' not defined']. 
+      envVarString := envVarString decodeFromUTF8 asString .
 			pathClass :=  ((self isAbsolutePath: envVarString delimiter: aDelimiterCharacter) or: 
 									[self isAbsoluteWindowsPath: envVarString]) 
 				ifTrue: [ AbsolutePath ]
@@ -9354,6 +9495,15 @@ from: aString delimiter: aDelimiterCharacter
 			splitPathElements := aDelimiterCharacter split: aString. ].
 	
 	^ pathClass withAll: splitPathElements
+%
+
+category: 'ston'
+classmethod: Path
+fromSton: stonReader
+	| elements |
+	elements := Array streamContents: [ :out |
+		stonReader parseListDo: [ :each | out nextPut: each ] ].
+	^ self withAll: elements
 %
 
 category: 'private'
@@ -9913,6 +10063,15 @@ segments
 	^ segments asArray 
 %
 
+category: 'ston'
+method: Path
+stonOn: stonWriter
+	stonWriter 
+		writeObject: self 
+		streamShortList: [ :listWriter | 
+			self do: [ :each | listWriter add: each ] ]
+%
+
 category: 'navigating'
 method: Path
 withExtension: extension 
@@ -9969,6 +10128,17 @@ from: aString delimiter: aDelimiterCharater
 %
 
 !		Instance methods for 'AbsolutePath'
+
+category: 'printing'
+method: AbsolutePath
+asString
+  "used by topaz stack display"
+  | str sz |
+  str := '/' copy .
+  1 to: (sz := self size) - 1 do:[:j | str addAll: (self at: j) ; add: $/ ].
+  str add: (self at: sz ).
+  ^ str
+%
 
 category: 'testing'
 method: AbsolutePath
@@ -10285,6 +10455,29 @@ nextInto: collection
 		into: collection
 %
 
+category: 'accessing'
+method: ZnBufferedReadStream
+nextLine
+"Answer next line (may be empty) without line end delimiters, or nil if at end.
+Leave the stream positioned after the line delimiter(s).
+Handle a zoo of line delimiters CR, LF, or CR-LF pair"
+
+| cr lf chrcls result ch |
+self atEnd ifTrue: [^nil].
+cr := (chrcls:= Character) cr.
+lf := chrcls  lf.
+result := self collectionSpecies new.
+[ ch := self next .
+  (ch == cr or:[ ch == lf ]) ifTrue:[ 
+    ch == cr ifTrue:[ self peekFor: lf ].
+    ^ result 
+  ].
+  result add: ch .
+  self atEnd 
+] whileFalse .
+^ result
+%
+
 category: 'accessing-bytes'
 method: ZnBufferedReadStream
 nextLittleEndianNumber: numberOfBytes
@@ -10320,6 +10513,13 @@ peek
 	^ position <= limit
 		ifTrue: [ buffer at: position ]
 		ifFalse: [ nil ]
+%
+
+category: 'accessing'
+method: ZnBufferedReadStream
+peek: count
+  self peek .
+  ^ buffer copyFrom: position to: (position + count min: limit)
 %
 
 category: 'accessing'
@@ -10512,6 +10712,12 @@ category: 'accessing'
 method: ZnBufferedReadStream
 wrappedStream
 	^ stream
+%
+
+category: 'accessing'
+method: ZnBufferedReadStream
+wrappedStreamName
+	^ stream wrappedStreamName
 %
 
 ! Class implementation for 'ZnBufferedReadWriteStream'
@@ -10754,6 +10960,13 @@ method: ZnBufferedReadWriteStream
 wrappedStream
 
 	^ readStream wrappedStream
+%
+
+category: 'accessing'
+method: ZnBufferedReadWriteStream
+wrappedStreamName
+
+	^ readStream wrappedStreamName
 %
 
 category: 'accessing'
@@ -11692,6 +11905,12 @@ wrappedStream
 	^ stream
 %
 
+category: 'accessing'
+method: ZnEncodedStream
+wrappedStreamName
+	^ stream wrappedStreamName
+%
+
 ! Class implementation for 'ZnEncodedReadStream'
 
 !		Instance methods for 'ZnEncodedReadStream'
@@ -12388,6 +12607,13 @@ upToEnd
 		| next |
 		[ (next := self next) isNil ] whileFalse: [
 			newStream nextPut: next ] ]
+%
+
+category: 'accessing'
+method: AbstractBinaryFileStream
+wrappedStreamName
+
+	^self name
 %
 
 ! Class implementation for 'BinaryFileStream'
@@ -18360,12 +18586,12 @@ testGsDeleteDirectoryOnError
 	self should: [ filesystem delete: path parent ] raise: Error.
 %
 
-! Class extensions for 'FileStream'
+! Class extensions for 'FileStreamPortable'
 
-!		Class methods for 'FileStream'
+!		Class methods for 'FileStreamPortable'
 
 category: '*FileSystem-Core'
-classmethod: FileStream
+classmethod: FileStreamPortable
 onHandle: aFileSystemHandle
 	^ self concreteStream new
 		open: aFileSystemHandle fullName
@@ -18822,6 +19048,13 @@ isBinary
 	^false
 %
 
+category: '*filesystem-gemstone-kernel'
+method: Stream
+wrappedStreamName
+
+	^''
+%
+
 ! Class extensions for 'TestAsserter'
 
 !		Instance methods for 'TestAsserter'
@@ -18893,15 +19126,21 @@ isEmptyOrNil
 category: '*filesystem-gemstone-kernel'
 method: Utf8
 asByteArray
-
 	^ ByteArray streamContents: [ :stream |
 		self do: [ :each |
 			stream nextPut: each ] ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Utf8
+asString
+  "override the *filesystem  ByteArray >> asString"
+  ^ self decodeToString   "or maybe  decodeToUnicode ??"
 %
 
 ! Class Initialization
 
 run
 FastUUIDGenerator initialize.
+true
 %
-

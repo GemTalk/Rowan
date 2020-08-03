@@ -27,28 +27,85 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName cat
 ]
 
 { #category : 'instance creation' }
-RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
+RwClassDefinition class >> newForClassNamed: className super: superClassName category: category comment: comment [
 
+	^ self 
+		newForClassNamed: className 
+		super: superClassName 
+		instvars: #() 
+		classinstvars: #() 
+		classvars: #() 
+		category: category 
+		comment: comment 
+		pools: #() 
+		type: 'normal'
+]
+
+{ #category : 'instance creation' }
+RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars [
+	^ self
+		newForClassNamed: className
+		super: superClassName
+		instvars: instvars
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: nil
+		pools: #()
+		type: 'normal'
+]
+
+{ #category : 'instance creation' }
+RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars category: category [
+
+	^ self 
+		newForClassNamed: className 
+		super: superClassName 
+		instvars: instvars
+		classinstvars: #() 
+		classvars: #() 
+		category: category 
+		comment: nil 
+		pools: #() 
+		type: 'normal'
+]
+
+{ #category : 'instance creation' }
+RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
 	| propertiesDictionary |
 	propertiesDictionary := Dictionary new.
 	category
 		ifNotNil: [ 
 			propertiesDictionary
-				at: 'category' put: category;
+				at: 'category' put: category asString;
 				yourself ].
 	propertiesDictionary
-		at: 'classinstvars' put: classinstvars;
-		at: 'classvars' put: classvars;
-		at: 'instvars' put: instvars;
-		at: 'name' put: className;
+		at: 'classinstvars' put: (classinstvars collect: [ :each | each asString ]);
+		at: 'classvars' put: (classvars collect: [ :each | each asString ]);
+		at: 'instvars' put: (instvars collect: [ :each | each asString ]);
+		at: 'name' put: className asString;
 		at: 'pools' put: pools;
-		at: 'superclass' put: superClassName;
+		at: 'superclass' put: superClassName asString;
 		at: 'type' put: type asString.
 	comment ifNotNil: [ propertiesDictionary at: 'comment' put: comment ].
 	^ self
 		withProperties: propertiesDictionary
 		classMethodDefinitions: Dictionary new
 		instanceMethodDefinitions: Dictionary new
+]
+
+{ #category : 'utility' }
+RwClassDefinition >> _removeSubclassesDisallowed [
+  "Only for use in building definitions for bootstap of the base image.
+   image bootstrap code responsible for setting subclassesDisallowed on
+   appropriate classes after they are all defined."
+  | propertyName oldValue newValue |
+  propertyName := 'gs_options'.
+  oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
+  oldValue isEmpty ifFalse:[
+     newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
+     self propertyAt: propertyName put: newValue
+  ]
 ]
 
 { #category : 'utility' }
@@ -79,11 +136,11 @@ RwClassDefinition >> _updateClassNameFromClass: aClass [
 RwClassDefinition >> _updateClassTypeFromClass: aClass [
 
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
-	"Must be in-synch with RwGsLoadedSymbolDictPatch>>updateClassTypeFromClass"
+	"Must be in-synch with RwGsLoadedSymbolDictClass>>updateClassTypeFromClass"
 
 	| propertyName oldValue newValue |
 	propertyName := 'type'.
@@ -91,10 +148,10 @@ RwClassDefinition >> _updateClassTypeFromClass: aClass [
 	newValue := aClass isBytes
 						ifTrue: [
 							aClass superClass isBytes not
-								ifTrue: [ 'bytes' ]
+								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
-							aClass isSpecial
+							aClass areInstancesSpecial
 								ifTrue: [ 'immediate' ]
 								ifFalse: 
 									[ aClass isNsc
@@ -177,8 +234,9 @@ RwClassDefinition >> _updateOptionsFromClass: aClass [
 				asSortedCollection asArray.
 	newValue isEmpty 
 		ifTrue: [ self removeProperty: propertyName ]
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
+		ifFalse: [ self propertyAt: propertyName put: newValue ].
+  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedoop' put: resOop asString ]
+                          ifNil:[ self removeProperty:'gs_reservedoop' ].
 ]
 
 { #category : 'utility' }
@@ -193,8 +251,7 @@ RwClassDefinition >> _updatePoolDictionaryNamesFromClass: aClass [
 
 { #category : 'utility' }
 RwClassDefinition >> _updateSuperclassNameFromClass: aClass [
-
-	self superclassName: aClass superclass name asString
+	self superclassName: (aClass superclass ifNotNil:[:sup | sup name asString] ifNil:['nil'])
 ]
 
 { #category : 'utility' }
@@ -208,7 +265,7 @@ RwClassDefinition >> _updateSymbolDictionaryFromClass: aClass [
 
 { #category : 'accessing' }
 RwClassDefinition >> classType [
-	"Legal types are normal, variable, and bytes."
+	"Legal types are normal, variable, and byteSubclass."
 
 	^self propertyAt: 'type' ifAbsent: ['normal']
 ]
@@ -240,6 +297,30 @@ RwClassDefinition >> instVarNames [
 RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
 
 	^ properties at: 'instvars' put: arrayOfInstanceVariableNames
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> moveToPackageNamed: newPackageName packageConvention: thePackageConvention [
+	thePackageConvention = 'Rowan'
+		ifTrue: [ ^ self ].
+	thePackageConvention = 'Monticello'
+		ifTrue: [ self error: 'not yet implemented' ].
+	thePackageConvention ~= 'RowanHybrid'
+		ifTrue: [ self error: 'unknown package convention' ].
+	self category: newPackageName
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> shebang [
+
+	^ self propertyAt: 'shebang' ifAbsent: []
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> shebang: aStringOrNil [
+
+	aStringOrNil ifNil: [ ^ self properties removeKey: 'shebang' ifAbsent: [] ].
+	^ self propertyAt: 'shebang' put: aStringOrNil
 ]
 
 { #category : 'accessing' }

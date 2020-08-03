@@ -2,13 +2,18 @@ Extension { #name : 'RwClassDefinition' }
 
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
- 
-	propertyKey = 'comment' ifFalse: [ ^super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue ].
-	propertyValue = baseValue
-		ifTrue: [ ^ true ]
-		ifFalse: [ 
-			"empty or nil comments need to compare equal in GemStone"
-			^(propertyValue == nil or: [ propertyValue isEmpty]) and: [ baseValue == nil or: [ baseValue isEmpty] ] ]
+	propertyKey = 'comment'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"empty or nil comments need to compare equal in GemStone"
+					^ (propertyValue == nil or: [ propertyValue isEmpty ])
+						and: [ baseValue == nil or: [ baseValue isEmpty ] ] ] ].
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
 ]
 
 { #category : '*rowan-gemstone-definitions' }
@@ -81,13 +86,28 @@ RwClassDefinition >> gs_options [
 
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_options: optionsArray [
+	"preserver optionsArray order"
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])
 		ifTrue: [ 
 			self properties
 				at: 'gs_options'
 				put:
-					(optionsArray collect: [ :each | each asString ]) asSortedCollection asArray ]
+					(optionsArray collect: [ :each | each asString ]) asArray ]
+]
+
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_reservedOop [
+
+	^self properties
+				at: 'gs_reservedoop'
+				ifAbsent: [ '' ]
+]
+
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_reservedOop: aString [
+	aString isEmpty not
+		ifTrue: [ self properties at: 'gs_reservedoop' put: aString ]
 ]
 
 { #category : '*rowan-gemstone-definitions' }

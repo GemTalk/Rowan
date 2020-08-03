@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'Gemstone32-5',
+	#condition : [
+		'gs3.[2-5]'
+	],
+	#packageNames : [
+		'Tonel-GemStone-32-5-Kernel'
+	],
+	#comment : 'Tonel project'
+}

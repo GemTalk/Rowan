@@ -1,24 +1,21 @@
 Extension { #name : 'RwProjectSetDefinition' }
 
 { #category : '*rowan-core-definitions-extensions' }
-RwProjectSetDefinition >> compareAgainstBase_254: aDefinition [
-
+RwProjectSetDefinition >> compareAgainstBase: aDefinition [
 	| result |
 	result := RwProjectSetModification new.
 	self
 		compareDictionary: definitions
 		againstBaseDictionary: aDefinition definitions
 		into: result
-		elementClass: RwProjectDefinition.
-	result
-		updateForClassMoves;
-		updateForMethodMoves.
+		elementClass: RwProjectDefinitionV2.
 	^ result
-
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
-RwProjectSetDefinition >> compareAgainstBase: aDefinition [
+RwProjectSetDefinition >> compareAgainstBaseForLoader: aDefinition [
+	"use this message IFF you are prepared to deal directly with movedClasses and movedMethods.
+		For general purpose comparison, compareAgainstBase: is a better choice"
 
 	| result |
 	result := RwProjectSetModification new.
@@ -26,6 +23,9 @@ RwProjectSetDefinition >> compareAgainstBase: aDefinition [
 		compareDictionary: definitions
 		againstBaseDictionary: aDefinition definitions
 		into: result
-		elementClass: RwProjectDefinition.
+		elementClass: RwProjectDefinitionV2.
+	result
+		updateForClassMoves;
+		updateForMethodMoves.
 	^ result
 ]

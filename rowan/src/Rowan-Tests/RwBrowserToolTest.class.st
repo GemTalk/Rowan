@@ -62,7 +62,7 @@ RwBrowserToolTest >> _assert: foundBlock forClassNamed: className [
 ]
 
 { #category : 'private' }
-RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: classHistory ifPresent: presentBlock ifAbsent: absentBlock [
+RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: class ifPresent: presentBlock ifAbsent: absentBlock [
 
 	"validate loaded class extension registry structure"
 
@@ -72,7 +72,7 @@ RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: classHistory if
 		do: [ :symbolDict | 
 			symbolDict rowanSymbolDictionaryRegistry
 				ifNotNil: [ :registry | 
-					(registry classExtensionRegistry at: classHistory ifAbsent: [  ])
+					(registry loadedClassExtensionsForClass: class ifAbsent: [  ])
 						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
 	found isEmpty
 		ifFalse: [ ^ presentBlock cull: found ].
@@ -126,27 +126,6 @@ RwBrowserToolTest >> _basicClassDefinition: className superclass: superclass typ
 		superclass: superclass
 		gs_options: nil
 		type: type
-]
-
-{ #category : 'private' }
-RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
-		comment: comment;
-		packageNames: packageNames;
-		defaultSymbolDictName: defaultSymbolDictName;
-		yourself.
-
-	packageNames
-		do: [ :packageName | 
-			projectDefinition
-				setUseSessionMethodsForExtensions: true
-				forPackageNamed: packageName ].
-
-	^ projectDefinition
 ]
 
 { #category : 'private' }
@@ -236,35 +215,6 @@ RwBrowserToolTest >> _issue481_projectDefinition: projectName  packageName1: pac
 	self assert: classMethod2 rowanPackageName = packageName2.
 
 	^(Rowan image loadedProjectNamed: projectName) asDefinition
-]
-
-{ #category : 'private' }
-RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath [
-
-	| projectDefinition projectTools |
-	projectTools := Rowan projectTools.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
-
-	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
-		comment: comment;
-		defaultSymbolDictName: defaultSymbolDictName;
-		packageNames: packageNames;
-		yourself.
-
-	self
-		handleConfirmationDuring: [ 
-			projectTools create
-				createProjectFor: projectDefinition
-				format: format
-				root: rootPath
-				configsPath: 'configs'
-				repoPath: 'src' 
-				specsPath: 'specs' ].
-
-	projectTools load loadProjectDefinition: projectDefinition
-
 ]
 
 { #category : 'private' }
@@ -379,11 +329,11 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 				(self
 					_basicClassDefinition: 'SimpleCustomByteArray1'
 					superclass: 'Object'
-					type: 'bytes').
+					type: 'byteSubclass').
 				(self
 					_basicClassDefinition: 'SimpleByteArray1'
 					superclass: 'ByteArray'
-					type: 'bytes').
+					type: 'byteSubclass').
 				(self _basicClassDefinition: 'SimpleProto1' superclass: 'nil' type: 'normal')}
 					do: [ :cd | 
 						cd category: (classPackageNames at: index).
@@ -395,7 +345,6 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 	[ projectTools load loadProjectSetDefinition: projectSetDefinition  ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }
@@ -626,21 +575,4 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 		defaultSymbolDictName: defaultSymbolDictName
 		defaultUseSessionMethodsForExtensions: false
 		comment: comment
-]
-
-{ #category : 'private' }
-RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment [
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
-		comment: comment;
-		packageNames: packageNames;
-		defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions;
-		yourself.
-	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
-
-	^ projectDefinition
-
 ]

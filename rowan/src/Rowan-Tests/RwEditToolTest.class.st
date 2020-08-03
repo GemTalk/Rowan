@@ -187,21 +187,6 @@ RwEditToolTest >> _standardClassDefinition: className [
 	^ classDefinition
 ]
 
-{ #category : 'private' }
-RwEditToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
-		comment: comment;
-		packageNames: packageNames;
-		yourself.
-	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
-
-	^ projectDefinition
-]
-
 { #category : 'running' }
 RwEditToolTest >> setUp [
 
@@ -285,10 +270,10 @@ RwEditToolTest >> testAddAndRemoveClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 
 	projectTools edit
@@ -302,7 +287,6 @@ RwEditToolTest >> testAddAndRemoveClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass isNil
-
 ]
 
 { #category : 'tests - classes' }
@@ -350,10 +334,10 @@ RwEditToolTest >> testAddClass_blackList_A [
 "validate"
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 isNil.
-	self assert: testClass cvar1 isNil.
+	self assert: (testClass perform: #civar1) isNil.
+	self assert: (testClass perform: #cvar1) isNil.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 ]
 
 { #category : 'tests - classes' }
@@ -401,10 +385,10 @@ RwEditToolTest >> testAddClass_blackList_B [
 "validate"
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 isNil.
-	self assert: testClass cvar1 isNil.
+	self assert: (testClass perform: #civar1) isNil.
+	self assert: (testClass perform: #cvar1) isNil.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 ]
 
 { #category : 'tests - classes' }
@@ -435,14 +419,13 @@ RwEditToolTest >> testAddClassExtension [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: (testClass cadd: 1) = 2.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cadd: with: 1) = 2.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	testInstance ivar1: 2.
-	self assert: testInstance ivar1 = 2.
+	(testInstance perform: #ivar1: with: 2).
+	self assert: (testInstance perform: #ivar1) = 2.
 	self assert: (testInstance add: 1) = 3
-
 ]
 
 { #category : 'tests - classes' }
@@ -480,10 +463,10 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	classDefinition
 		instVarNames: #();
@@ -506,10 +489,10 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self should: [ testClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testClass civar1 = 1.
+	self should: [ testClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testClass perform: #civar1) = 1.
 	testInstance := testClass new.
-	self should: [ testInstance ivar1 ] raise: MessageNotUnderstood.
+	self should: [ testInstance perform: #ivar1 ] raise: MessageNotUnderstood.
 
 	projectTools edit
 		removeClass: classDefinition
@@ -520,7 +503,6 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass isNil
-
 ]
 
 { #category : 'test api' }
@@ -583,10 +565,10 @@ RwEditToolTest >> testUpdateClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
+	self assert: (testInstance perform: #ivar1) isNil.
 
 	projectTools := Rowan projectTools.
 	projectTools edit
@@ -597,7 +579,7 @@ RwEditToolTest >> testUpdateClass [
 		ifAbsent: [ 
 			self
 				assert: false
-				decription:
+				description:
 					'expected class definition for class ' , className printString , ' not found.' ].
 
 	classDefinition
@@ -621,11 +603,10 @@ RwEditToolTest >> testUpdateClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self should: [ testClass cvar1 ] raise: MessageNotUnderstood.
-	self assert: testClass civar1 = 1.
+	self should: [ testClass perform: #cvar1 ] raise: MessageNotUnderstood.
+	self assert: (testClass perform: #civar1) = 1.
 	testInstance := testClass new.
-	self should: [ testInstance ivar1 ] raise: MessageNotUnderstood
-
+	self should: [ testInstance perform: #ivar1 ] raise: MessageNotUnderstood
 ]
 
 { #category : 'tests - classes' }
@@ -660,12 +641,12 @@ RwEditToolTest >> testUpdateClassExtension [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: (testClass cadd: 1) = 2.
-	self assert: testClass cvar1 = 2.
+	self assert: (testClass perform: #civar1) = 1.
+	self assert: (testClass perform: #cadd: with: 1) = 2.
+	self assert: (testClass perform: #cvar1) = 2.
 	testInstance := testClass new.
-	testInstance ivar1: 2.
-	self assert: testInstance ivar1 = 2.
+	testInstance perform: #ivar1: with: 2.
+	self assert: (testInstance perform: #ivar1) = 2.
 	self assert: (testInstance add: 1) = 3.
 
 	classExtensionDefinitions := {}.
@@ -681,7 +662,7 @@ RwEditToolTest >> testUpdateClassExtension [
 		ifAbsent: [ 
 			self
 				assert: false
-				decription:
+				description:
 					'expected class extension definitions for class ' , className printString
 						, ' not found.' ].
 	self
@@ -710,5 +691,4 @@ RwEditToolTest >> testUpdateClassExtension [
 					self
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'add:') ] ]
-
 ]

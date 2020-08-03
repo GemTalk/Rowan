@@ -4,18 +4,9 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-{ #category : 'smalltalk api' }
-RwGitTool >> createTmpFileWith: fileContents [
-
-	| file filename |
-	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
-	[ 
-	| count |
-	file := GsFile openWriteOnServer: filename.
-	(count := file nextPutAll: fileContents withGemstoneLineEndings)
-		ifNil: [ self error: 'failed write' ] ]
-		ensure: [ file close ].
-	^ filename
+{ #category : 'private' }
+RwGitTool >> _shouldLog [
+	^ Rowan projectTools trace isTracing
 ]
 
 { #category : 'smalltalk api' }
@@ -32,25 +23,23 @@ RwGitTool >> gitbranchIn: gitRepoPath with: args [
 
 { #category : 'smalltalk api' }
 RwGitTool >> gitBranchNameIn: gitRepoPath [
-
 	"return current branch for git repository located at gitPath"
 
 	| command result |
 	command := 'set -e; cd ' , gitRepoPath , ';git branch | sed -n ''/\* /s///p'''.
-	result := self performOnServer: command logging: false.
+	result := self performOnServer: command logging: self _shouldLog.
 	^ result trimWhiteSpace
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitcheckoutIn: gitRepoPath with: args [
-
-	^ self performGitCommand: 'checkout' in: gitRepoPath pathString with: args
+RwGitTool >> gitcheckoutIn: gitRootReference with: args [
+	^ self performGitCommand: 'checkout' in: gitRootReference pathString with: args
 ]
 
 { #category : 'smalltalk api' }
 RwGitTool >> gitcloneIn: gitRootPath with: args [
 
-	^ self gitcloneIn: gitRootPath with: args logging: true
+	^ self gitcloneIn: gitRootPath with: args logging: self _shouldLog
 ]
 
 { #category : 'smalltalk api' }
@@ -81,11 +70,16 @@ RwGitTool >> gitcommitShaIn: gitRepoPath [
 ]
 
 { #category : 'smalltalk api' }
+RwGitTool >> gitfetchIn: gitRootReference with: args [
+	^ self performGitCommand: 'fetch' in: gitRootReference pathString with: args
+]
+
+{ #category : 'smalltalk api' }
 RwGitTool >> gitinitIn: dirPath with: args [
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git init ' , args.
-	^ self performOnServer: command logging: true
+	^ self performOnServer: command logging: self _shouldLog
 ]
 
 { #category : 'smalltalk api' }
@@ -120,11 +114,10 @@ RwGitTool >> gitPresentIn: gitRepoPath [
 	[ 
 	gitHome := self gitrevparseShowTopLevelIn: gitRepoPath.
 	command := 'set -e; cd ' , gitRepoPath , '; pwd'.
-	cdResponse := self performOnServer: command logging: true ]
+	cdResponse := self performOnServer: command logging: self _shouldLog ]
 		on: Error
 		do: [ :ex | ^ false ].
 	^ (self readlink: gitHome) = (self readlink: cdResponse)
-
 ]
 
 { #category : 'smalltalk api' }
@@ -162,13 +155,25 @@ RwGitTool >> gitrevparseShowTopLevelIn: dirPath [
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git rev-parse --show-toplevel'.
-	^ self performOnServer: command logging: true
+	^ self performOnServer: command logging: self _shouldLog
 ]
 
 { #category : 'smalltalk api' }
 RwGitTool >> gitstatusIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'status' in: gitRepoPath with: args
+]
+
+{ #category : 'smalltalk api' }
+RwGitTool >> isGitHome: dirPath [
+	"Answer true if the given directory path is the home directory for a git repository"
+
+	| dirReference |
+	dirReference := dirPath asFileReference.
+	^ (self gitPresentIn: dirReference pathString)
+		and: [ 
+			(self gitrevparseShowTopLevelIn: dirReference pathString) trimBoth
+				asFileReference = dirReference ]
 ]
 
 { #category : 'private' }
@@ -179,7 +184,7 @@ RwGitTool >> performGitCommand: gitCommand in: gitRepoPath with: gitArgs [
 		in: gitRepoPath
 		worktree: gitRepoPath
 		with: gitArgs
-		logging: true
+		logging: self _shouldLog
 ]
 
 { #category : 'private' }
@@ -192,6 +197,11 @@ RwGitTool >> performGitCommand: gitCommand in: gitRepoPath worktree: workTreePat
 		, '/.git --work-tree ' , workTreePath , ' ' , gitCommand , ' '.
 	command := commandBase , gitArgs.
 	^ self performOnServer: command logging: logging
+]
+
+{ #category : 'private' }
+RwGitTool >> performOnServer: commandLine [
+	^ self performOnServer: commandLine logging: self _shouldLog
 ]
 
 { #category : 'private' }
@@ -226,11 +236,4 @@ RwGitTool >> performOnServer: commandLine logging: logging [
         show: result ].
   ^ result
 
-]
-
-{ #category : 'private' }
-RwGitTool >> performOnServer: commandLine status: statusBlock [
-  | performOnServerStatusArray |
-  performOnServerStatusArray := System _performOnServer: commandLine.
-  ^ statusBlock value: performOnServerStatusArray
 ]

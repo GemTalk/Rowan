@@ -1,0 +1,24 @@
+RwEmbeddedLoadSpecificationV2 {
+	#specName : 'Tonel',
+	#projectName : 'Tonel',
+	#projectAlias : 'Rowan',
+	#gitUrl : 'https://github.com/GemTalk/Rowan',
+	#revision : 'master',
+	#projectSpecFile : 'platforms/gemstone/projects/Tonel/project.ston',
+	#componentNames : [
+		'Core',
+		'Tests'
+	],
+	#customConditionalAttributes : [
+		'tests'
+	],
+	#groupNames : [ ],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : 'Tonel--- Tonel format reader used with V1 ... deprecated in V2'
+}

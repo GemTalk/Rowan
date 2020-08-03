@@ -6,19 +6,14 @@ Class {
 
 { #category : 'private' }
 RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389_A: audit packageNames: packageNames className: className [
-
 	"validate expected audit failures - according to Monticello conventions"
 
-	| unexpectedFailures |
-	self _validateExpectedMonticelloConventionFailure_389: audit packageName: (packageNames at: 2) className: className.
-	audit removeKey: (packageNames at: 2).
-
-	"class category not following Monticello conventions"
-	unexpectedFailures := ((audit at: (packageNames at: 1)) at: className)
-		reject: [:each | (each matches: 'Class category has changed in compiled class v loaded class')
-			or: [ (each matches: 'Missing instance method extension category') or: [ (each matches:  'Missing class method extension category')
-			or: [ (each matches:  'Missing loaded method') ] ] ] ].
-	self assert: unexpectedFailures isEmpty
+	self
+		_validateExpectedMonticelloConventionFailure_389: audit
+		packageName: (packageNames at: 2)
+		className: className.
+	audit removeKey: (packageNames at: 2).	"class category not following Monticello conventions"
+	self assert: audit isEmpty
 ]
 
 { #category : 'private' }
@@ -597,7 +592,7 @@ RwAdoptToolApiTest >> testAdoptClass [
 		defaultSymbolDictName: symDictName
 		comment: 'project for testing package adopt api'.
 
-	symDict := Rowan globalNamed: symDictName.
+	symDict := Rowan image symbolDictNamed: symDictName.
 
 	"Use non-Rowan api to create class and methods"
 	theClass := Object subclass: className
@@ -630,7 +625,6 @@ RwAdoptToolApiTest >> testAdoptClass [
 	self assert: theClass rowanProjectName = projectName.
 	self assert: instanceMethod rowanProjectName = projectName.
 	self assert: classMethod rowanProjectName = projectName.
-
 ]
 
 { #category : 'tests' }
@@ -793,13 +787,9 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_1 [
 "audit --> category not correct according to Monticello conventions"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
-
-"change method using non-Rowan api"
-	instanceMethod := theClass
-		compileMethod: 'foo ^"comment" ''foo'''
-		dictionaries: Rowan image symbolList
-		category: 'accessing'
-		environmentId: 0.
+"disown the method so it is no longer packaged"
+	Rowan packageTools disown disownMethod: #foo inClassNamed: className isMeta: false.
+	instanceMethod := theClass compiledMethodAt: #foo.
 
 "confirm conruption"
 	self assert: instanceMethod rowanPackageName =  Rowan unpackagedName.
@@ -868,13 +858,9 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_2 [
 "audit --> category not correct according to Monticello conventions"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
-
-"change method using non-Rowan api"
-	instanceMethod := theClass
-		compileMethod: 'foo ^"comment" ''foo'''
-		dictionaries: Rowan image symbolList
-		category: 'accessing'
-		environmentId: 0.
+"disown the method so it is no longer packaged"
+	Rowan packageTools disown disownMethod: #foo inClassNamed: className isMeta: false.
+	instanceMethod := theClass compiledMethodAt: #foo.
 
 "confirm conruption"
 	self assert: instanceMethod rowanPackageName =  Rowan unpackagedName.
@@ -943,12 +929,9 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_3 [
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 
-"change method using non-Rowan api"
-	instanceMethod := theClass
-		compileMethod: 'foo ^"comment" ''foo'''
-		dictionaries: Rowan image symbolList
-		category: 'accessing'
-		environmentId: 0.
+"disown the method so it is no longer packaged"
+	Rowan packageTools disown disownMethod: #foo inClassNamed: className isMeta: false.
+	instanceMethod := theClass compiledMethodAt: #foo.
 
 "confirm conruption"
 	self assert: instanceMethod rowanPackageName =  Rowan unpackagedName.
@@ -975,7 +958,6 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_3 [
 	self assert: expectedFailure first owner name =  'AdoptedClass'.
 	self assert: expectedFailure first owner classCategory = 'Adopt-Core'.
 	self assert: (expectedFailure first message matchPattern: { 'Extension category name' . $* . 'must not match class package name.'})
-
 ]
 
 { #category : 'tests' }

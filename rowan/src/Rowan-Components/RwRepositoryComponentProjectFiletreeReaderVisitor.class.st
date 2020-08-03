@@ -48,10 +48,10 @@ RwRepositoryComponentProjectFiletreeReaderVisitor class >> readClassDirectory: d
 	^ self readClassDirectories: {directory} projectName: projectName packageName: packageName
 ]
 
-{ #category : 'private' }
-RwRepositoryComponentProjectFiletreeReaderVisitor >> _filetreeRepositoryPropertyDictFor: packagesRoot [
+{ #category : 'other' }
+RwRepositoryComponentProjectFiletreeReaderVisitor >> _filetreeRepositoryPropertyDictFor: aPackagesRoot [
 
-	^ self _readObjectFrom: packagesRoot / '.filetree'
+	^ self _readObjectFrom: aPackagesRoot / '.filetree'
 ]
 
 { #category : 'accessing' }
@@ -140,11 +140,13 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectory: method
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream methodDef |
+				| protocol methodSource methodStream methodDef offset |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
+        offset := methodStream position .
 				methodSource := methodStream upToEnd.
 				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+        methodDef offset: offset inFile: file pathString .
 				self 
 					validateMethodDefinitionProtocol: methodDef 
 						className: classDefinition name

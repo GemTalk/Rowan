@@ -1,0 +1,17 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core',
+	#condition : 'gemstone-kernel',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Cypress-Comparison',
+		'Cypress-Definitions',
+		'Cypress-Environmental-Tools',
+		'Cypress-GemStoneFileServer',
+		'Cypress-MesssageDigest',
+		'Cypress-Network-Url',
+		'Cypress-PackageManagement',
+		'Cypress-Structure'
+	],
+	#comment : 'Single component for Cypress project'
+}

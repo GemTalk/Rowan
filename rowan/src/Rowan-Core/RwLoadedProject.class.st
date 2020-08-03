@@ -9,6 +9,13 @@ Class {
 }
 
 { #category : 'accessing' }
+RwLoadedProject class >> _projectDefinitionPlatformConditionalAttributesKey [
+	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
+
+	^ '_Project_Definition_PlatformConditionalAttributes'
+]
+
+{ #category : 'accessing' }
 RwLoadedProject class >> _projectDefinitionSourceKey [
 	"The value of the property key indicates which source the project definition was derived from.
 		Currently used when deciding whether to change the loaded commit id, during a load ... 
@@ -35,6 +42,21 @@ RwLoadedProject class >> _projectLoadedDefinitionSourceValue [
 ]
 
 { #category : 'accessing' }
+RwLoadedProject class >> _projectLoadedDefinitionSourceWithDependentProjectsValue [
+	"This value of the property key indicates that the source of the project definition was loaded from disk, 
+		however, the project has dependent projects that will need to be reread from disk on load."
+
+	^ 'loaded from disk with dependent projects'
+]
+
+{ #category : 'accessing' }
+RwLoadedProject class >> _projectModifiedProjectSourceValue [
+	"This value of the property key indicates that the source of the project definition is newly created project or explicitly modified, so we don't want to read project from disk on load."
+
+	^ 'modified project'
+]
+
+{ #category : 'accessing' }
 RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
 	"This value of the property key indicates that the source of the project definition is unknown."
 
@@ -58,14 +80,11 @@ RwLoadedProject >> addLoadedPackage: aLoadedPackage [
 	aLoadedPackage loadedProject: self
 ]
 
-{ #category : 'definitions' }
-RwLoadedProject >> asDefinition [
+{ #category : 'actions' }
+RwLoadedProject >> audit [
+	"run audit on the receiver"
 
-	"Create a Definition corresponding to what I define in the image."
-
-	^ RwProjectDefinition
-		withProperties: self propertiesForDefinition
-		packageDefinitions: self loadedPackageDefinitions
+	^ Rowan projectTools audit auditForProject: self
 ]
 
 { #category : 'commit log' }
@@ -92,16 +111,15 @@ RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
 
 { #category : 'testing' }
 RwLoadedProject >> isDirty [
-
 	"a project is dirty if it has changes that are not written to disk, or it's packages have changes that are not written to  disk."
 
-	isDirty ifTrue: [ ^ true].
+	isDirty
+		ifTrue: [ ^ true ].
 	self loadedPackages
 		do: [ :loadedPackage | 
 			loadedPackage isDirty
 				ifTrue: [ ^ true ] ].
 	^ false
-
 ]
 
 { #category : 'testing' }
@@ -114,6 +132,36 @@ RwLoadedProject >> isEmpty [
 RwLoadedProject >> key [
 
 	^ name
+]
+
+{ #category : 'actions' }
+RwLoadedProject >> load [
+	"load the receiver into the image"
+
+	| projectDefinition projectSetDefinition readProjectDefinition |
+	projectDefinition := self asDefinition.
+	projectSetDefinition := projectDefinition read.
+	readProjectDefinition := projectSetDefinition projectNamed: projectDefinition name.
+	readProjectDefinition == projectDefinition 
+		ifFalse: [
+			"https://github.com/GemTalk/Rowan/issues/488"
+			self halt: 'expected to update the projectDefinition in-place' ].
+	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
+]
+
+{ #category : 'actions' }
+RwLoadedProject >> load: instanceMigrator [
+	"load the receiver into the image"
+
+	| projectDefinition projectSetDefinition readProjectDefinition |
+	projectDefinition := self asDefinition.
+	projectSetDefinition := projectDefinition read.
+	readProjectDefinition := projectSetDefinition projectNamed: projectDefinition name.
+	readProjectDefinition == projectDefinition 
+		ifFalse: [
+			"https://github.com/GemTalk/Rowan/issues/488"
+			self halt: 'expected to update the projectDefinition in-place' ].
+	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
 ]
 
 { #category : 'accessing' }
@@ -243,6 +291,15 @@ RwLoadedProject >> repositoryCommitId [
 RwLoadedProject >> specification [
 
 	^ properties at: 'spec'
+]
+
+{ #category : 'actions' }
+RwLoadedProject >> unload [
+	"unload the receiver from the image"
+
+	| projectDefinition |
+	projectDefinition := self asDefinition.
+	^ projectDefinition _deleteTool deleteProjectDefinition: projectDefinition
 ]
 
 { #category : 'testing' }

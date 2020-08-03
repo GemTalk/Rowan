@@ -1,0 +1,10 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core',
+	#condition : 'gemstone-kernel',
+	#packageNames : [
+		'STON-Core',
+		'STON-GemStoneBase',
+		'STON-GemStoneCommon'
+	],
+	#comment : 'Single component for STON project'
+}

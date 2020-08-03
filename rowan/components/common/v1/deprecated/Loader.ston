@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v1/deprecated/Loader',
+	#condition : 'deprecated',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/v1/deprecated/platforms/Loader'
+	],
+	#packageNames : [ ],
+	#comment : ''
+}

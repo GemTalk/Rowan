@@ -65,6 +65,17 @@ RwGsLoadedSymbolDictPackage >> loadedClassOrClassExtensionForClass: aClass ifAbs
 		ifAbsent: [ self loadedClassExtensionForClass: aClass ifAbsent: absentBlock ]
 ]
 
+{ #category : 'queries' }
+RwGsLoadedSymbolDictPackage >> packageSymbolDictionaryName [
+
+	^self propertyAt: 'gs_SymbolDictionary'
+]
+
+{ #category : 'queries' }
+RwGsLoadedSymbolDictPackage >> packageSymbolDictionaryName: symDictName [
+	self propertyAt: 'gs_SymbolDictionary' put: symDictName asString
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictPackage >> propertiesForDefinition [
 
@@ -73,4 +84,15 @@ RwGsLoadedSymbolDictPackage >> propertiesForDefinition [
 	props at:  'gs_SymbolDictionary' put: (Rowan image loadedRegistryForPackageNamed: self name) _symbolDictionary name asString.
 	^ props
 
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictPackage >> updatePropertiesFromRegistryFor: aSymbolDictionaryRegistry [
+	"Update my properties from the symbol dictionary registry."
+
+	| newName oldName |
+	newName := aSymbolDictionaryRegistry _symbolDictionary name.
+	oldName := self propertyAt: 'gs_SymbolDictionary'.
+	oldName = newName
+		ifFalse: [ self packageSymbolDictionaryName: newName ]
 ]

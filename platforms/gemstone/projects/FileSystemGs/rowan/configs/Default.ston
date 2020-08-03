@@ -4,7 +4,7 @@ RwProjectLoadConfiguration {
 	#version : '0.1.0',
 	#conditionalPackages : {
 		[
-			'gemstone'
+			'gemstone-kernel'
 		] : {
 			'core' : {
 				#packageNames : [
@@ -50,7 +50,7 @@ RwProjectLoadConfiguration {
 			}
 		}
 	},
-  #conditionalPackageMapSpecs : {
+	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'SystemUser' : {
 				#defaultSymbolDictName : 'Globals'
@@ -58,7 +58,9 @@ RwProjectLoadConfiguration {
 		}
 	},
 	#definedGroupNames : {
-		'core' : [ ],
-		'tests' : [ 'core' ]
+		'tests' : [
+			'core'
+		],
+		'core' : [ ]
 	}
 }

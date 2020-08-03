@@ -19,7 +19,8 @@ Class {
 DiskStore class >> activeClass [
 	self allSubclasses do: [:ea | 
 		ea isActiveClass ifTrue: [^ ea]].
-	^ self
+  "Various methods go into infinite recursion if we return self."
+	Error signal:'Cannot find an active subclass of DiskStore' .
 ]
 
 { #category : 'current' }
@@ -95,23 +96,36 @@ DiskStore >> basenameFromEntry: entry [
 { #category : 'private' }
 DiskStore >> basicCreationTimeOf: anEntry [
 	" the entry contains the seconds since the squeak epoch in local time"
-	| dt |
-	dt := DateAndTime posixSeconds:  (anEntry at: 2)  offset: (Duration seconds: 0).
-	dt offset: (Duration seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC).
-	^ dt
+
+	"this method should be reimplemented with the new file system code"
+
+	| dt offset |
+	offset := Duration seconds: 0.
+	dt := DateAndTime posixSeconds: (anEntry at: 2) offset: offset.
+	offset := Duration
+		seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC.
+	^ DateAndTime posixSeconds: (anEntry at: 2) offset: offset	"SmallDateAndTime prevents changing the offset, so create a new instance, as suggesed"
 ]
 
 { #category : 'private' }
 DiskStore >> basicEntry: ignored path: aPath nodesDo: aBlock [
 	| pathString intOrArray |
-		
 	pathString := self stringFromPath: aPath.
 	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
 	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
 	intOrArray
 		do: [:entryPathString |
 			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (File lookupPath: entryPathString) ] ]
+				ifFalse: [ | aFile |
+          aFile := File lookupPath: entryPathString .
+          "For now, ignore symLinks which reference a non-existant file."
+          aFile ifNil:[ 
+             (GsFile isSymbolicLink: entryPathString onClient: false) ifFalse:[
+                self signalFileDoesNotExist: entryPathString 
+             ]
+          ] ifNotNil:[
+            aBlock value: aFile 
+          ]]]
 ]
 
 { #category : 'public' }
@@ -146,10 +160,12 @@ DiskStore >> basicIsSymlink: anEntry [
 DiskStore >> basicModificationTimeOf: anEntry [
 	" the entry contains the seconds since the squeak epoch in local time"
 
-	| dt |
-	dt := DateAndTime posixSeconds:  (anEntry at: 3) offset: (Duration seconds: 0).
-	dt offset: (Duration seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC).
-	^ dt
+	| dt offset |
+	offset := Duration seconds: 0.
+	dt := DateAndTime posixSeconds: (anEntry at: 3) offset: offset.
+	offset := Duration
+		seconds: (dt currentTimeZone transitionAtUTC: dt) offsetFromUTC.
+	^ DateAndTime posixSeconds: (anEntry at: 3) offset: offset
 ]
 
 { #category : 'public' }
@@ -352,8 +368,8 @@ DiskStore >> openFileStream: path writable: writable [
 	fullPath := self stringFromPath: path.
 	"redirect over the default implementation"
 	^ writable 
-		ifFalse: [ FileStream readOnlyFileNamed: fullPath ]
-		ifTrue: [ FileStream fileNamed: fullPath ]
+		ifFalse: [ FileStreamPortable readOnlyFileNamed: fullPath ]
+		ifTrue: [ FileStreamPortable fileNamed: fullPath ]
 ]
 
 { #category : 'public' }

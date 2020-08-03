@@ -3,8 +3,10 @@ Class {
 	#superclass : 'RwProjectSpecification',
 	#instVars : [
 		'projectName',
+		'projectAlias',
 		'projectsPath',
-		'defaultComponentName'
+		'defaultComponentName',
+		'defaultGroupName'
 	],
 	#category : 'Rowan-Components'
 }
@@ -39,6 +41,42 @@ RwComponentSpecification >> defaultComponentName [
 RwComponentSpecification >> defaultComponentName: aString [
 
 	defaultComponentName := aString
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> defaultConfigurationNames [
+
+	^ defaultConfigurationNames ifNil: [ defaultConfigurationNames := { self defaultComponentName } ]
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> defaultGroupName [
+
+	^ defaultGroupName ifNil: [ 'core' ]
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> defaultGroupName: aString [
+
+	defaultGroupName := aString
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> defaultGroupNames [
+
+	^ defaultGroupNames ifNil: [ defaultGroupNames := { self defaultGroupName } ]
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> projectAlias [
+
+	^ projectAlias ifNil: [ self projectName ]
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> projectAlias: aString [
+
+	projectAlias := aString
 ]
 
 { #category : 'accessing' }

@@ -62,16 +62,6 @@ SequenceableCollection >> putOn: aStream [
 ]
 
 { #category : '*tonel-gemstone-kernel' }
-SequenceableCollection >> second [
-
-	"Answer the second element of the receiver.
-	Raise an error if there are not enough elements."
-
-	^ self at: 2
-
-]
-
-{ #category : '*tonel-gemstone-kernel' }
 SequenceableCollection >> sixth [
 
 	"Answer the sixth element of the receiver.
@@ -106,12 +96,5 @@ SequenceableCollection >> withIndexDo: elementAndIndexBlock [
 	"Just like with:do: except that the iteration index supplies the second argument to the block."
 
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
-
-]
-
-{ #category : '*tonel-gemstone-kernel' }
-SequenceableCollection >> writeStreamPortable [
-
-	^ WriteStreamPortable on: self
 
 ]

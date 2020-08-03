@@ -1,0 +1,71 @@
+#!//usr/local/bin/smalltalk/gemstone/topaz
+#
+
+ omit pushonly
+  iferr 1 stk
+  iferr 2 stack
+#  iferr 3 exit 1
+	display oops
+
+  set user SystemUser p swordfish
+  login
+
+run
+ | repositoryRoot gsSrcRoot platformConfigurationAttributes
+  projectSetDefinition projectSetModification specUrl loadSpec
+  resolvedProject topazFileNameMap visitor archBase doCompile
+	gemStoneRowanPackageNames |
+
+false ifTrue: [ 
+ Rowan projectTools trace startTracing.
+].
+ (archBase := System gemEnvironmentVariable: 'ARCHBASE') ifNil:[
+   Error signal: 'ARCHBASE not defined in environment'
+ ].
+ repositoryRoot := archBase , '/image' .
+ gsSrcRoot :=  repositoryRoot , '/bootstrap' . "where .gs files are written"
+
+ platformConfigurationAttributes := { 'common' .  'gemstone' . 'bootstraponly' . 'filein3' }.
+
+ doCompile := false .
+
+ specUrl := repositoryRoot asFileReference /'rowan'/ 'specs' / 'gemstoneBaseImage.ston'.
+ (loadSpec := RwSpecification fromUrl: 'file:', (specUrl pathString))
+   projectsHome: repositoryRoot ;
+   diskUrl: 'file:',repositoryRoot;
+   yourself .
+ resolvedProject := loadSpec resolve
+   compileWhileReading: doCompile;
+		yourself.
+
+ [ projectSetDefinition := resolvedProject readProjectSet: platformConfigurationAttributes
+ ] on: CompileWarning do:[:ex | | str |
+   ((str := ex asString) includesString:'not optimized') ifTrue:[ 
+     ex resume 
+   ] ifFalse:[
+     GsFile gciLogServer: str .
+     ex pass
+   ]
+ ].
+
+ projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+ gemStoneRowanPackageNames := #('GemStone-Rowan-Extensions-Tools' 'GemStone-Rowan-Tools').
+ topazFileNameMap := Dictionary new
+  at: 'GemStone-Rowan' put: gemStoneRowanPackageNames;
+	yourself.
+ resolvedProject packageNames do: [:packageName |
+    (gemStoneRowanPackageNames includes: packageName)
+			ifFalse: [ 
+        "write one package per file, except for the GemStone-Rowan packages"
+        (topazFileNameMap at: packageName ifAbsentPut: [{}]) add: packageName ] ].
+  visitor := RwGsModificationTopazWriterVisitor new
+         repositoryRootPath: gsSrcRoot;
+         topazFilenamePackageNamesMap: topazFileNameMap;
+         excludeClassInitializers ;
+         topazFileHeader:
+'! Copyright (C) GemTalk Systems 1986-2020.  All Rights Reserved.
+' ;
+         yourself.
+  visitor visit: projectSetModification.
+  ^true
+%

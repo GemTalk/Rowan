@@ -35,7 +35,8 @@ RwGsPlatform >> _globalPreferenceDict [
 RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId [
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.
-	 Returns the compiled method or signals a CompileError."
+	 Returns the compiled method or signals a CompileError.
+   Only used to parse a method to determine the selector.  "
 
 	| undefinedSymbolList undefinedSymbols |
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
@@ -47,7 +48,6 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 		category: cat
 		intoMethodDict: GsMethodDictionary new
 		intoCategories: GsMethodDictionary new
-		intoPragmas: nil
 		environmentId: anEnvironmentId]
 			onSynchronous: (Array with: CompileError with: CompileWarning)
 			do: (Array with: 
@@ -71,7 +71,6 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 									category: cat
 									intoMethodDict: GsMethodDictionary new
 									intoCategories: GsMethodDictionary new
-									intoPragmas: nil
 									environmentId: anEnvironmentId]
 										onException: CompileError
 										do: [:exb | undefSymbol := false]].
@@ -124,12 +123,13 @@ RwGsPlatform >> automaticClassInitializationBlackList_user [
 ]
 
 { #category : 'queries' }
-RwGsPlatform >> basePlatformAttribute [
-	"Answer the generic configuration attribute for the platform"
+RwGsPlatform >> basePlatformConditionalAttribute [
+	"Answer the generic conditional attribute for the platform"
 
+	"Examples include: 'gemstone', 'pharo', 'squeak', 'vast' 
+		(see RwSpecification class >> _supportedPlatformNames)"
 
 	^ 'gemstone'
-
 ]
 
 { #category : 'preferences' }
@@ -240,6 +240,12 @@ RwGsPlatform >> globalNamed: aString [
 ]
 
 { #category : 'preferences - gemstone' }
+RwGsPlatform >> globalPreferenceFor: preferenceSymbol [
+
+	^ self globalPreferenceFor: preferenceSymbol ifAbsent: [ self error: 'Preference for ', preferenceSymbol printString, ' not found' ].
+]
+
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> globalPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _globalPreferenceDict 
@@ -303,11 +309,14 @@ RwGsPlatform >> parseSelectorFrom: methodString [
 ]
 
 { #category : 'queries' }
-RwGsPlatform >> platformConfigurationAttributes [
-	"Answer the configuration attributes for the current platform."
+RwGsPlatform >> platformConditionalAttributes [
+	"Answer the conditional attributes for the current platform."
 
-	^ super platformConfigurationAttributes, {self basePlatformAttribute. 'gemstone-kernel'. (System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
-
+	^ super platformConditionalAttributes
+		,
+			{(self basePlatformConditionalAttribute).
+			'gemstone-kernel'.
+			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}
 ]
 
 { #category : 'preferences' }
@@ -322,6 +331,12 @@ RwGsPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
 					self _globalPreferenceDict 
 						at: preferenceSymbol
 						ifAbsent:aBlock ] ]
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> sessionPreferenceFor: preferenceSymbol [
+
+	^ self sessionPreferenceFor: preferenceSymbol ifAbsent: [ self error: 'Preference for ', preferenceSymbol printString, ' not found' ].
 ]
 
 { #category : 'preferences - gemstone' }
@@ -365,6 +380,12 @@ RwGsPlatform >> setSessionPreferenceFor: preferenceSymbol to: anObject [
 RwGsPlatform >> setUserPreferenceFor: preferenceSymbol to: anObject [
 
 	self _userPreferenceDict at: preferenceSymbol put: anObject
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> userPreferenceFor: preferenceSymbol [
+
+	^ self userPreferenceFor: preferenceSymbol ifAbsent: [ self error: 'Preference for ', preferenceSymbol printString, ' not found' ].
 ]
 
 { #category : 'preferences - gemstone' }

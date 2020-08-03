@@ -23,6 +23,933 @@ RwProjectReaderWriterTest >> _createFileSystem [
 ]
 
 { #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_A [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_B [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Core [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension1 [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension2 [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Core [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''initialization''
+classmethod: Issue361Class1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1 initialize.
+true
+', percent, '
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Extension1 [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Extension2 [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2''
+
+!		Class methods for ''Issue361Class2''
+
+category: ''*issue361-extension2''
+classmethod: Issue361Class2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class2 initialize.
+true
+', percent, '
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_Multi_A [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Array
+	subclass: ''Issue361Class2_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2_1''
+
+!		Instance methods for ''Issue361Class2_1''
+
+category: ''accessing''
+method: Issue361Class2_1
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class2_2''
+
+!		Instance methods for ''Issue361Class2_2''
+
+category: ''accessing''
+method: Issue361Class2_2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class3_1''
+
+!		Class methods for ''Issue361Class3_1''
+
+category: ''accessing''
+classmethod: Issue361Class3_1
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class3_2''
+
+!		Class methods for ''Issue361Class3_2''
+
+category: ''accessing''
+classmethod: Issue361Class3_2
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class1_1''
+
+!		Class methods for ''Issue361Class1_1''
+
+category: ''initialization''
+classmethod: Issue361Class1_1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class1_2''
+
+!		Class methods for ''Issue361Class1_2''
+
+category: ''initialization''
+classmethod: Issue361Class1_2
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_2
+method2 ^2
+', percent, '
+
+! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension1_1''
+method: Issue361Class1_1
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2_1''
+method: Issue361Class1_1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension1_2''
+method: Issue361Class1_2
+method1 ^1
+', percent, '
+
+category: ''*issue361-extension2_2''
+method: Issue361Class1_2
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2_1''
+
+!		Class methods for ''Issue361Class2_1''
+
+category: ''*issue361-extension2_1''
+classmethod: Issue361Class2_1
+initialize "another noop"
+', percent, '
+
+! Class extensions for ''Issue361Class2_2''
+
+!		Class methods for ''Issue361Class2_2''
+
+category: ''*issue361-extension2_2''
+classmethod: Issue361Class2_2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1_1 initialize.
+Issue361Class1_2 initialize.
+Issue361Class2_1 initialize.
+Issue361Class2_2 initialize.
+true
+', percent, '
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Core [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Array
+	subclass: ''Issue361Class2_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_1'';
+		immediateInvariant.
+true.
+', percent, '
+
+doit
+(Object
+	subclass: ''Issue361Class1_2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core_2'';
+		immediateInvariant.
+true.
+', percent, '
+
+! Class implementation for ''Issue361Class2_1''
+
+!		Instance methods for ''Issue361Class2_1''
+
+category: ''accessing''
+method: Issue361Class2_1
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class2_2''
+
+!		Instance methods for ''Issue361Class2_2''
+
+category: ''accessing''
+method: Issue361Class2_2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class3_1''
+
+!		Class methods for ''Issue361Class3_1''
+
+category: ''accessing''
+classmethod: Issue361Class3_1
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class3_2''
+
+!		Class methods for ''Issue361Class3_2''
+
+category: ''accessing''
+classmethod: Issue361Class3_2
+method4 ^4
+', percent, '
+
+! Class implementation for ''Issue361Class1_1''
+
+!		Class methods for ''Issue361Class1_1''
+
+category: ''initialization''
+classmethod: Issue361Class1_1
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class1_2''
+
+!		Class methods for ''Issue361Class1_2''
+
+category: ''initialization''
+classmethod: Issue361Class1_2
+initialize "noop"
+', percent, '
+
+category: ''accessing''
+classmethod: Issue361Class1_2
+method2 ^2
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class1_1 initialize.
+Issue361Class1_2 initialize.
+true
+', percent, '
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension1 [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension1_1''
+method: Issue361Class1_1
+method1 ^1
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension1_2''
+method: Issue361Class1_2
+method1 ^1
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectReaderWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension2 [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class extensions for ''Issue361Class1_1''
+
+!		Instance methods for ''Issue361Class1_1''
+
+category: ''*issue361-extension2_1''
+method: Issue361Class1_1
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class1_2''
+
+!		Instance methods for ''Issue361Class1_2''
+
+category: ''*issue361-extension2_2''
+method: Issue361Class1_2
+method5 ^5
+', percent, '
+
+! Class extensions for ''Issue361Class2_1''
+
+!		Class methods for ''Issue361Class2_1''
+
+category: ''*issue361-extension2_1''
+classmethod: Issue361Class2_1
+initialize "another noop"
+', percent, '
+
+! Class extensions for ''Issue361Class2_2''
+
+!		Class methods for ''Issue361Class2_2''
+
+category: ''*issue361-extension2_2''
+classmethod: Issue361Class2_2
+initialize "another noop"
+', percent, '
+
+! Class Initialization
+
+run
+Issue361Class2_1 initialize.
+Issue361Class2_2 initialize.
+true
+', percent, '
+'
+]
+
+{ #category : 'private' }
 RwProjectReaderWriterTest >> _markForCleanup: aFileReference [
 	toDelete add: aFileReference
 ]
@@ -30,143 +957,6 @@ RwProjectReaderWriterTest >> _markForCleanup: aFileReference [
 { #category : 'private' }
 RwProjectReaderWriterTest >> _markForProjectCleanup: aProjectName [
 	projectsToDelete add: aProjectName
-]
-
-{ #category : 'private' }
-RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat [
-
-	"multiple class extensions from multiple packages for multiple classes"
-
-	| packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition packageName3 rowanSpec projectHome |
-
-	self _markForProjectCleanup: projectName.
-	packageName1 := 'Issue361-Core'.
-	packageName2 := 'Issue361-Extension1'.
-	packageName3 := 'Issue361-Extension2'.
-	className1 := 'Issue361Class1'. 
-	className2 := 'Issue361Class2'. 
-	className3 := 'Issue361Class3'. 
-
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
-
-
-"create definitions"
-	projectDefinition := (RwComponentProjectDefinition
-		newForDiskBasedProjectNamed: projectName)
-		packageFormat: repositoryFormat;
-		projectHome: projectHome;
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
-		yourself.
-
-	packageDefinition := projectDefinition packageNamed: packageName1.
-
-	classDefinition := RwClassDefinition
-		newForClassNamed: className1
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: 'this is a test comment for ', className1
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addInstanceMethodDefinition: 
-			(RwMethodDefinition
-					newForSelector: #'method6'
-					protocol: 'instance accessing'
-					source: 'method6 ^6');
-		addClassMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method2'
-					protocol: 'class accessing'
-					source: 'method2 ^2').
-	packageDefinition addClassDefinition: classDefinition.
-
-	classDefinition := RwClassDefinition
-		newForClassNamed: className2
-		super: 'Array'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: 'this is a test comment for ', className2
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method3'
-					protocol: 'accessing'
-					source: 'method3 ^3').
-	packageDefinition addClassDefinition: classDefinition.
-
-	classDefinition := RwClassDefinition
-		newForClassNamed: className3
-		super: className1
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: 'this is a test comment for ', className3
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method8:'
-					protocol: 'accessing'
-					source: 'method8: ignored ^ignored');
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method9'
-					protocol: 'accessing'
-					source: 'method9 ^9');
-		addClassMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method4'
-					protocol: 'accessing'
-					source: 'method4 ^4');
-		addClassMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method10'
-					protocol: 'accessing'
-					source: 'method10 ^10').
-	packageDefinition addClassDefinition: classDefinition.
-
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method1'
-					protocol: '*', packageName2 asLowercase
-					source: 'method1 ^1').
-	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-	packageDefinition := projectDefinition packageNamed: packageName3.
-
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method5'
-					protocol: '*', packageName3 asLowercase
-					source: 'method5 ^5');
-		addClassMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method6'
-					protocol: '*', packageName3 asLowercase
-					source: 'method6 ^6').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-	^ projectDefinition
 ]
 
 { #category : 'running' }
@@ -185,8 +975,6 @@ RwProjectReaderWriterTest >> tearDown [
 	projectsToDelete
 		do: [ :projectName | 
 		(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-			(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-				ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ] ].
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
 	super tearDown
 ]

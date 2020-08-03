@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/v2/platforms/gemstone/Core',
+	#condition : [
+		'gemstone'
+	],
+	#packageNames : [
+		'Rowan-GemStone-CoreV2'
+	],
+	#comment : 'Core vw gemstone packages'
+}

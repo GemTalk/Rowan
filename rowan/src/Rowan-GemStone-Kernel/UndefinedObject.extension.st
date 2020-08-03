@@ -1,6 +1,23 @@
 Extension { #name : 'UndefinedObject' }
 
 { #category : '*rowan-gemstone-kernel' }
+UndefinedObject >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName constraints: constraintArray options: optionsArray [
+
+	^ Rowan projectTools browser
+		addOrUpdateClassDefinition: aString
+		type: 'normal'
+		superclass: 'nil'
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: aCategoryName
+		packageName: aPackageName
+		constraints: constraintArray
+		options: optionsArray
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 UndefinedObject >> subclass: aString 
 instVarNames: anArrayOfInstvarNames 
 classVars: anArrayOfClassVars 
@@ -29,7 +46,7 @@ options: optionsArray [
             oldClass _commentOrDescription: aDescription.
             ^oldClass "avoid creation of a new version"
         ].
-      descr ifNil: [descr := oldClass rwComment]
+      descr ifNil: [descr := oldClass commentForFileout]
   ].
   theClass := Object
         subclass: aString
@@ -48,5 +65,4 @@ options: optionsArray [
       theClass _unsafeAt: superClassOffset put: nil.
       theClass class _unsafeAt: superClassOffset put: Object class superClass].
   ^theClass
-
 ]

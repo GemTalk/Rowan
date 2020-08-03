@@ -8,7 +8,7 @@ Class {
 RwProjectReferenceDefinition class >> newForSpecification: aRwSpecification [
 
 	^ self
-		newNamed: aRwSpecification projectName 
+		newNamed: aRwSpecification projectName
 			forSpecification: aRwSpecification 
 			projectHome: nil
 ]
@@ -34,7 +34,7 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 { #category : 'instance creation' }
 RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
 
-	^ self
+	^ (self
 		projectName: projectName
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
@@ -48,7 +48,9 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 			configsPath: aRwSpecification configsPath
 			packagesPath: aRwSpecification repoPath
 			projectsPath: aRwSpecification projectsPath
-			specsPath: aRwSpecification specsPath
+			specsPath: aRwSpecification specsPath)
+				projectAlias: aRwSpecification projectAlias;
+				yourself
 ]
 
 { #category : 'instance creation' }
@@ -155,24 +157,14 @@ RwProjectReferenceDefinition >> _repositoryDefinitionClass [
 RwProjectReferenceDefinition >> _repositoryDefinitionForProjectHome: projectHomeFileReferenceOrString [
 
 
-	| existingProjectRepository |
-	existingProjectRepository := 
-		Rowan image 
-			projectRepositoryNamed: self projectAlias
-				ifAbsent: [
-					| newProjectRepository |
-					newProjectRepository := self _repositoryDefinitionClass
-						newNamed: self projectAlias
-							repositoryRoot: projectHomeFileReferenceOrString asFileReference / self projectAlias
-							projectUrl: self projectUrl
-							committish: self committish 
-							committishType: self committishType.
-					Rowan image addProjectRepository: newProjectRepository.
-					^ newProjectRepository ].
-	"confirm that the existing project repository is compatible with the receiver"
-	existingProjectRepository projectUrl = self projectUrl
-		ifFalse: [ self error: 'incompatible project repository found in registry' ].
-	^ existingProjectRepository
+	| newProjectRepository |
+	newProjectRepository := self _repositoryDefinitionClass
+		newNamed: self projectAlias
+			repositoryRoot: self repositoryRoot	"not a good idea to have repository root stored in two spots"
+			projectUrl: self projectUrl
+			committish: self committish 
+			committishType: self committishType.
+	^ newProjectRepository
 ]
 
 { #category : 'visiting' }
@@ -181,41 +173,16 @@ RwProjectReferenceDefinition >> acceptVisitor: aVisitor [
 	^ aVisitor visitProjectReferenceDefinition: self
 ]
 
-{ #category : 'conversion' }
-RwProjectReferenceDefinition >> asSpecification [
-
-	| repoSpec platformSpec platformDict |
-	self useGit
-		ifTrue: [
-			repoSpec := RwGitRepositorySpecification new
-				committish: self committish;
-				committishType: self committishType;
-				remoteUrl: self remoteUrl;
-				yourself ]
-		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
-	platformSpec := RwGemStoneSpecification new.
-	platformSpec packageNameToPlatformPropertiesMap: self packageNameToPlatformPropertiesMap.
-	platformDict := (Dictionary new) at: 'gemstone' put: platformSpec; yourself.
-	^ RwComponentSpecification new
-		specName: self projectName;
-		projectUrl: self projectUrl;
-		repoPath: self packagesPath;
-		configsPath: self configsPath;
-		specsPath: self specsPath;
-		projectsPath: self projectsPath;
-		defaultComponentName: self defaultComponentName;
-		defaultConfigurationNames: self configurationNames;
-		defaultGroupNames: self groupNames;
-		comment: self comment;
-		repoSpec: repoSpec;
-		platformSpec: platformDict;
-		yourself.
-]
-
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> branch: aString [
 
 	self committish: aString committishType: 'branch'
+]
+
+{ #category : 'properties' }
+RwProjectReferenceDefinition >> canCommit [
+
+	^ self repositoryDefinition canCommit
 ]
 
 { #category : 'actions' }
@@ -261,6 +228,18 @@ RwProjectReferenceDefinition >> committish: aString committishType: committishTy
 RwProjectReferenceDefinition >> committishType [
 
 	^ self properties at: 'committishType'  ifAbsent: [ 'branch' ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> components [
+
+	^ self properties at: 'components' ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> components: aComponentDefinitionDictionary [
+
+	^ self properties at: 'components' put: aComponentDefinitionDictionary
 ]
 
 { #category : 'accessing' }
@@ -325,6 +304,12 @@ RwProjectReferenceDefinition >> defaultGroupName: aString [
 	^ self properties at: 'defaultGroupName' put: aString
 ]
 
+{ #category : 'actions' }
+RwProjectReferenceDefinition >> doCommit: message [
+
+	^ self repositoryDefinition doCommit: message
+]
+
 { #category : 'exporting' }
 RwProjectReferenceDefinition >> exportSpecification [
 
@@ -342,13 +327,17 @@ RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> groupNames [
 
-	^ self properties at: 'groupNames' ifAbsent: [{ self defaultGroupName } ]
+	| gns |
+	gns := self properties at: 'groupNames' ifAbsent: [ {} ].
+	^ gns isEmpty
+		ifTrue: [ { self defaultGroupName } ]
+		ifFalse: [ gns ]
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinition >> groupNames: anArray [
+RwProjectReferenceDefinition >> groupNames: aSet [
 
-	^ self properties at: 'groupNames' put: anArray
+	^ self properties at: 'groupNames' put: aSet asSet
 ]
 
 { #category : 'temporary compat' }
@@ -378,11 +367,17 @@ RwProjectReferenceDefinition >> loadedCommitId:  aCommitId [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedConfigurationNames [
 
-	^ self configurationNames
+	^ self components isEmpty
+		ifTrue: [ self configurationNames ]
+		ifFalse: [ (self components values select: [:each | each isIndependentlyLoadable ]) collect: [:each | each name ] ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedConfigurationNames: anArray [
+
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
 
 	^ self configurationNames: anArray
 ]
@@ -457,6 +452,16 @@ RwProjectReferenceDefinition >> packagesRoot [
 	^self repositoryRoot / self packagesPath
 ]
 
+{ #category : 'copying' }
+RwProjectReferenceDefinition >> postCopy [
+
+	| components |
+	super postCopy.
+	components := self components copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	self components: components
+]
+
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectAlias [
 
@@ -494,6 +499,7 @@ RwProjectReferenceDefinition >> projectName [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectName: aString [
 
+	self repositoryDefinition: nil. "changing project name invalidates the current repository definition"
 	^ self properties at: 'projectName' put: aString
 ]
 
@@ -540,6 +546,12 @@ RwProjectReferenceDefinition >> projectUrl: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> remote [
+
+	^ self properties at: 'remote' ifAbsent: [ 'origin' ]
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> remoteUrl [
 
 	^ self repositoryDefinition remoteUrl
@@ -574,17 +586,31 @@ RwProjectReferenceDefinition >> repositoryDefinition: aRepositoryDefinition [
 RwProjectReferenceDefinition >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^self projectHome / self projectAlias
+	^self projectHome / self projectName
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> repositoryRoot: aFileReferenceOrPath [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	| fileRef |
+	| fileRef projectDirName |
 	fileRef := aFileReferenceOrPath asFileReference.
-	self projectHome: fileRef parent.
-	self projectAlias: fileRef basename
+	self projectHome: fileRef parent.	 "changing project home invalidates the current repository definition"
+	"the project name should match the name of the directory ... use the alias if the names don't match"
+	projectDirName := fileRef basename.
+	self projectName
+		ifNotNil: [:nm | 
+			nm = projectDirName
+				ifTrue: [
+					"we're done"
+					^ self ].
+			"project name does not equal name project directory"
+			self projectAlias = self projectName
+				ifTrue: [
+					"move the old name to the alias"
+					self projectAlias: self projectName ] ].
+	"set project name to projectDirName "
+	self projectName: projectDirName
 ]
 
 { #category : 'temporary compat' }

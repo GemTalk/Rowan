@@ -33,6 +33,17 @@ RwAbstractTest class >> _symbolDictionaryNames [
 ]
 
 { #category : 'private' }
+RwAbstractTest class >> _testRowanProjectsSandbox [
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	| rowanProject |
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX')
+		ifNotNil: [ :sandboxPath | ^ sandboxPath asFileReference ].
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ rowanProject repositoryRoot / 'test/testRepositories/repos/'
+]
+
+{ #category : 'private' }
 RwAbstractTest class >> _unmanagedDictionaryName [
 
 	^ #'UnmanagedPackages'
@@ -40,17 +51,17 @@ RwAbstractTest class >> _unmanagedDictionaryName [
 
 { #category : 'cleanup' }
 RwAbstractTest class >> cleanup [
-
 	"self cleanup"
 
 	| user symListP symListT dictP dictT index |
 	user := System myUserProfile.
 	symListP := user symbolList.
 	symListT := GsCurrentSession currentSession symbolList.
-
 	self _symbolDictionaryNames
 		do: [ :symDictName | 
-			dictP := symListP objectNamed: symDictName.
+			dictP := symListP
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+				ifNone: [  ].
 			dictP
 				ifNotNil: [ 
 					(dictP at: GsPackagePolicy globalName otherwise: nil)
@@ -58,19 +69,18 @@ RwAbstractTest class >> cleanup [
 					index := symListP indexOf: dictP.
 					index > 0
 						ifTrue: [ user removeDictionaryAt: index ] ].
-
-			dictT := symListT objectNamed: symDictName.
+			dictT := symListT
+				detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+				ifNone: [  ].
 			dictT
 				ifNotNil: [ 
 					(dictT at: GsPackagePolicy globalName otherwise: nil)
 						ifNotNil: [ :policy | policy disable ].
 					index := symListT indexOf: dictT.
 					index > 0
-						ifTrue: [ symListT removeAtIndex: index ] ].
- ].
+						ifTrue: [ symListT removeAtIndex: index ] ] ].
 	GsPackagePolicy current refreshSessionMethodDictionary.
 	ClassOrganizer clearCachedOrganizer
-
 ]
 
 { #category : 'private' }
@@ -140,6 +150,13 @@ RwAbstractTest >> _symbolDictionaryName1 [
 RwAbstractTest >> _symbolDictionaryName2 [
 
 	^ self class _symbolDictionaryName2
+]
+
+{ #category : 'private' }
+RwAbstractTest >> _testRowanProjectsSandbox [
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	^ self class _testRowanProjectsSandbox
 ]
 
 { #category : 'private' }
@@ -699,18 +716,27 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName instV
 
 { #category : 'running' }
 RwAbstractTest >> setUp [
-
 	super setUp.
 	self class cleanup.
 
-	Rowan platform _alternateImageClass: Rowan image testImageClass
+	Rowan platform _alternateImageClass: Rowan image testImageClass.
+
+	true
+		ifTrue: [ 
+			SessionTemps current
+				at: #'Experimental_RwGsImagePatchVisitor_V2_className'
+				put: #'RwGsImagePatchVisitor_V2_symbolList' ]
 ]
 
 { #category : 'running' }
 RwAbstractTest >> tearDown [
-
 	super tearDown.
 	Rowan platform _alternateImageClass: nil.
 	self class cleanup.
 
+	true
+		ifTrue: [ 
+			SessionTemps current
+				removeKey: #'Experimental_RwGsImagePatchVisitor_V2_className'
+				ifAbsent: [  ] ]
 ]
