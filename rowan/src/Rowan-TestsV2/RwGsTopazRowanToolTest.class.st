@@ -37,6 +37,64 @@ RwGsTopazRowanToolTest >> _createTestProjectNamed: projectName [
 ]
 
 { #category : 'private' }
+RwGsTopazRowanToolTest >> _expected_spec_0001_Fileout [
+^'! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Object
+	subclass: ''RowanSample9Class1''
+	instVarNames: #( ivar1 )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #()
+)
+		category: ''RowanSample9-Core'';
+		comment: ''I am an example class'';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: ''RowanSample9TestCase''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #()
+)
+		category: ''RowanSample9-Tests'';
+		comment: ''I test the example class'';
+		immediateInvariant.
+true.
+%
+
+! Class implementation for ''RowanSample9Class1''
+
+!		Instance methods for ''RowanSample9Class1''
+
+category: ''accessing''
+method: RowanSample9Class1
+foo ^1
+%
+
+! Class implementation for ''RowanSample9TestCase''
+
+!		Instance methods for ''RowanSample9TestCase''
+
+category: ''tests''
+method: RowanSample9TestCase
+test  self assert: RowanSample9Class1 new foo = 1
+%
+
+'
+]
+
+{ #category : 'private' }
 RwGsTopazRowanToolTest >> _loadSpecNamed: specName [
 ""
 	^ RwRowanSample9Test _loadSpecNamed: specName
@@ -195,6 +253,41 @@ RwGsTopazRowanToolTest >> testTopazExportProject [
 ]
 
 { #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazExportProjectGsFile [
+	"load spec_0001 and then export the packages in topaz filein format"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project gsFileRef fileout |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self assert: project gitShortStatus isEmpty.
+
+"export"
+	gsFileRef := self _testRowanProjectsSandbox / projectName, 'gs'.
+	Rowan gemstoneTools topaz
+		exportProjectNamed: projectName inTopazFormatTo: gsFileRef pathString.
+
+"validate"
+	gsFileRef readStreamDo: [:fileStream | fileout := fileStream contents ].
+	self assert: fileout = self _expected_spec_0001_Fileout.
+]
+
+{ #category : 'project support' }
 RwGsTopazRowanToolTest >> testTopazGitSupport_01 [
 	"Create a git-based project using topaz api: checkout, commit, log, and status"
 
@@ -280,6 +373,20 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 	Rowan gemstoneTools topaz
 		gitPullProject: projectName remote: 'origin' branch: 'spec_0001';
 		gitPushProject: projectName remote: 'origin' branch: 'spec_0001'
+]
+
+{ #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazListProjects [
+	"return the list of loaded projects"
+
+	| x |
+	RwGsTestImage resetTestProjectRegistry.
+	self
+		assert:
+			(x := Rowan gemstoneTools topaz listProjects sort)
+				=
+					#('Cypress' 'Tonel' 'Rowan' 'FileSystemGs' 'STON' 'UnPackaged' 'gemstoneBaseImage')
+						sort
 ]
 
 { #category : 'project support' }

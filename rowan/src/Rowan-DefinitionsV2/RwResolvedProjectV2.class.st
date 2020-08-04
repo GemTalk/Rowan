@@ -474,7 +474,8 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath [
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
+		filenameExtension: fileReference extension;
 		yourself.
 	visitor visit: projectSetModification
 ]
@@ -489,7 +490,7 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packa
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification

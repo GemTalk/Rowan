@@ -1652,6 +1652,34 @@ RwPrjBrowserToolV2 >> renameClassNamed: className to: newName [
 	^ Rowan globalNamed: newName
 ]
 
+{ #category : 'method browsing' }
+RwPrjBrowserToolV2 >> unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta [
+	"unpackage the given method, while leaving the method installed in the image"
+
+	| loadedMethod loadedClassOrExtension loadedPackage theBehavior packageName theMethod |
+	theBehavior := Rowan globalNamed: className.
+	isMeta
+		ifTrue: [ theBehavior := theBehavior class ].
+	theMethod := theBehavior compiledMethodAt: methodSelector.
+	packageName := theMethod rowanPackageName.
+	packageName = Rowan unpackagedName
+		ifTrue: [ 
+			"already unpackaged, nothing else to do"
+			^ self ].
+	loadedMethod := Rowan image loadedMethodForMethod: theMethod.
+	loadedPackage := loadedMethod loadedPackage.
+	loadedClassOrExtension := loadedMethod loadedClass.
+	loadedClassOrExtension isLoadedClassExtension
+		ifTrue: [ 
+			loadedClassOrExtension isEmpty
+				ifTrue: [ 
+					RwGsSymbolDictionaryRegistry_ImplementationV2
+						unregisterLoadedClassExtension: loadedClassOrExtension
+						forClass: loadedClassOrExtension handle.
+					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+	loadedMethod unpackageMethod
+]
+
 { #category : 'class browsing' }
 RwPrjBrowserToolV2 >> updateClassComment: aString forClassNamed: className [ 
 

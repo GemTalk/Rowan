@@ -450,13 +450,15 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 							componentNames := componentAndPlatformConditionalAttributes at: 1.
 							platformConditionalAttributes := componentAndPlatformConditionalAttributes
 								at: 2.
-							currentProjectDefinition componentsRoot exists
-								ifTrue: [ 
-									"read the project from disk, if it is present on disk"
-									visitor := readTool
-										readProjectForResolvedProject: currentProjectDefinition
-										withComponentNames: componentNames
-										platformConditionalAttributes: platformConditionalAttributes ].
+							componentNames isEmpty
+								ifFalse: [ 
+									currentProjectDefinition componentsRoot exists
+										ifTrue: [ 
+											"read the project from disk, if it is present on disk"
+											visitor := readTool
+												readProjectForResolvedProject: currentProjectDefinition
+												withComponentNames: componentNames
+												platformConditionalAttributes: platformConditionalAttributes ] ].
 							packageNames := visitor
 								ifNil: [ 
 									self topazFilenameComponentMap size > 1

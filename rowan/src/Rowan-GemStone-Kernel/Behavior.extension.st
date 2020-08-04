@@ -310,3 +310,13 @@ Behavior >> rwRemoveSelector: methodSelector [
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
 ]
+
+{ #category : '*rowan-gemstone-kernel' }
+Behavior >> rwUnpackageMethod: methodSelector [
+	"Move the method into <packageName>, whether or not it has been packaged"
+
+	^ Rowan projectTools browser
+		unpackageMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+]

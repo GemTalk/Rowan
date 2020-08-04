@@ -1395,3 +1395,55 @@ baz ^3
 		collect: [ :each | each message ].
 	self assert: (details includes: 'Missing loaded method>>' , 'foo')
 ]
+
+{ #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnpackageManagedMethod_01 [
+	"unpackage the method in unpackaged class"
+
+	| className unmanagedClass project projectName packageName symbolDictionary managedMethod x anotherProject anotherProjectName anotherPackageName |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	anotherProjectName := 'AnotherPackagedClass_project'.
+	anotherPackageName := anotherProjectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	anotherProject := self
+		_createLoadedProject: anotherProjectName
+		packageName: anotherPackageName
+		symbolDictionaryName: symbolDictionary name.
+
+	unmanagedClass := Object
+		subclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symbolDictionary
+		options: #().
+	managedMethod := unmanagedClass
+		rwCompileExtensionMethod: 'bar ^2'
+		category: 'managed'
+		packageName: packageName.
+
+	self assert: unmanagedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: (x := managedMethod rowanPackageName) = packageName.
+
+	unmanagedClass rwUnpackageMethod: #bar.
+
+	self
+		_validateAuditResults: project audit;
+		_validateAuditResults: anotherProject audit.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: (x := managedMethod rowanPackageName) = Rowan unpackagedName
+]

@@ -58548,13 +58548,15 @@ processProject: aProjectModification
 							componentNames := componentAndPlatformConditionalAttributes at: 1.
 							platformConditionalAttributes := componentAndPlatformConditionalAttributes
 								at: 2.
-							currentProjectDefinition componentsRoot exists
-								ifTrue: [ 
-									"read the project from disk, if it is present on disk"
-									visitor := readTool
-										readProjectForResolvedProject: currentProjectDefinition
-										withComponentNames: componentNames
-										platformConditionalAttributes: platformConditionalAttributes ].
+							componentNames isEmpty
+								ifFalse: [ 
+									currentProjectDefinition componentsRoot exists
+										ifTrue: [ 
+											"read the project from disk, if it is present on disk"
+											visitor := readTool
+												readProjectForResolvedProject: currentProjectDefinition
+												withComponentNames: componentNames
+												platformConditionalAttributes: platformConditionalAttributes ] ].
 							packageNames := visitor
 								ifNil: [ 
 									self topazFilenameComponentMap size > 1
@@ -62876,7 +62878,8 @@ exportTopazFormatTo: filePath
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
+		filenameExtension: fileReference extension;
 		yourself.
 	visitor visit: projectSetModification
 %
@@ -62892,7 +62895,7 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
@@ -66921,6 +66924,35 @@ renameClassNamed: className to: newName
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	^ Rowan globalNamed: newName
+%
+
+category: 'method browsing'
+method: RwPrjBrowserToolV2
+unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
+	"unpackage the given method, while leaving the method installed in the image"
+
+	| loadedMethod loadedClassOrExtension loadedPackage theBehavior packageName theMethod |
+	theBehavior := Rowan globalNamed: className.
+	isMeta
+		ifTrue: [ theBehavior := theBehavior class ].
+	theMethod := theBehavior compiledMethodAt: methodSelector.
+	packageName := theMethod rowanPackageName.
+	packageName = Rowan unpackagedName
+		ifTrue: [ 
+			"already unpackaged, nothing else to do"
+			^ self ].
+	loadedMethod := Rowan image loadedMethodForMethod: theMethod.
+	loadedPackage := loadedMethod loadedPackage.
+	loadedClassOrExtension := loadedMethod loadedClass.
+	loadedClassOrExtension isLoadedClassExtension
+		ifTrue: [ 
+			loadedClassOrExtension isEmpty
+				ifTrue: [ 
+					RwGsSymbolDictionaryRegistry_ImplementationV2
+						unregisterLoadedClassExtension: loadedClassOrExtension
+						forClass: loadedClassOrExtension handle.
+					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+	loadedMethod unpackageMethod
 %
 
 category: 'class browsing'
@@ -83492,7 +83524,7 @@ handleClassDeletion
 
 	"The class to which I refer has been deleted, so I must unregister myself."
 
-	Rowan image removeLoadedMethodForCompileMethod: handle
+	self unpackageMethod
 %
 
 category: 'accessing'
@@ -83521,6 +83553,15 @@ method: RwGsLoadedSymbolDictMethod
 source
 
 	^handle sourceString copy
+%
+
+category: 'private-updating'
+method: RwGsLoadedSymbolDictMethod
+unpackageMethod
+
+	"Remove the loaded method from the package structure - turn the method into an unpackaged method"
+
+	Rowan image removeLoadedMethodForCompileMethod: handle
 %
 
 category: 'private-updating'
@@ -94201,6 +94242,17 @@ rwRemoveSelector: methodSelector
 
 	^ Rowan projectTools browser
 		removeMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+%
+
+category: '*rowan-gemstone-kernel'
+method: Behavior
+rwUnpackageMethod: methodSelector
+	"Move the method into <packageName>, whether or not it has been packaged"
+
+	^ Rowan projectTools browser
+		unpackageMethod: methodSelector
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
 %
