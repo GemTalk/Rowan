@@ -112,7 +112,7 @@ RowanService class >> version [
   "change this method carefully and only at Jadeite release boundaries.
 	Failure to do so will prevent logins"
 
-  ^ 3092
+  ^ 3200
 ]
 
 { #category : 'other' }
