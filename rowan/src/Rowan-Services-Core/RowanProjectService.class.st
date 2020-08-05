@@ -58,9 +58,9 @@ RowanProjectService >> addPackageNamed: packageName [
 ]
 
 { #category : 'client commands support' }
-RowanProjectService >> basicLoadProjectNamed: aName [
+RowanProjectService >> basicLoadProject: aBlock [
 	| updatedProjects |
-	[ updatedProjects := Rowan projectTools load loadProjectNamed: aName ]
+	[ updatedProjects := aBlock value ]
 		on: Warning
 		do: [ :ex | 
 			Transcript
@@ -71,10 +71,11 @@ RowanProjectService >> basicLoadProjectNamed: aName [
 		do: [ :project | 
 			| projectService |
 			projectService := project name = name
-				ifTrue: [ self "don't send an extraneous service back across the wire" ]
+				ifTrue: [ self	"don't send an extraneous service back across the wire" ]
 				ifFalse: [ RowanProjectService newNamed: project name ].
 			projectService update.
-			RowanCommandResult addResult: projectService ]
+			RowanCommandResult addResult: projectService ].
+	RowanBrowserService new updateProjects
 ]
 
 { #category : 'initialization' }
@@ -240,41 +241,22 @@ RowanProjectService >> isSkew [
 
 { #category : 'client commands' }
 RowanProjectService >> loadProjectFromFile: fileString [
-	[ 
-	((RwSpecification fromUrl: fileString)
-		customConditionalAttributes: #('tests');
-		componentNames: #('Core' 'Tests')) resolveStrict load ]
-		on: Warning
-		do: [ :ex | 
-			Transcript
-				cr;
-				show: ex description.
-			ex resume ].
-	RowanBrowserService new updateProjects
+	self
+		basicLoadProject: [ (RwSpecification fromUrl: fileString) yourself resolveStrict load ]
 ]
 
 { #category : 'client commands' }
 RowanProjectService >> loadProjectFromFile: fileString projectsHome: projectsHomePath [
-	"customConditionalAttributes: and componentNames: will 
-	eventually be parameters" 
-	[ 
-	((RwSpecification fromUrl: fileString)
-		projectsHome: projectsHomePath; 
-		yourself) resolveStrict load ]
-		on: Warning
-		do: [ :ex | 
-			Transcript
-				cr;
-				show: ex description.
-			ex resume ].
-	RowanBrowserService new updateProjects
+	self
+		basicLoadProject: [ 
+			((RwSpecification fromUrl: fileString)
+				projectsHome: projectsHomePath;
+				yourself) resolveStrict load ]
 ]
 
 { #category : 'client commands' }
 RowanProjectService >> loadProjectNamed: aName [
-
-	self basicLoadProjectNamed: aName.
-	RowanBrowserService new updateProjects.
+	self basicLoadProject: [ Rowan projectTools load loadProjectNamed: aName ]
 ]
 
 { #category : 'rowan' }
@@ -445,8 +427,7 @@ RowanProjectService >> refresh [
 
 { #category : 'client commands' }
 RowanProjectService >> reloadProject [
-	self basicLoadProjectNamed: name. 
-	RowanBrowserService new packagesWithTests
+	self basicLoadProject: [ Rowan projectTools load loadProjectNamed: name ]
 ]
 
 { #category : 'rowan' }
