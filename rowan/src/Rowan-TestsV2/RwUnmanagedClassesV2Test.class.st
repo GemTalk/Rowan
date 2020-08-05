@@ -1397,6 +1397,60 @@ baz ^3
 ]
 
 { #category : 'tests' }
+RwUnmanagedClassesV2Test >> testUnpackageManagedClass_01 [
+	"unpackage a managed class with packaged and unpackaged methods"
+
+	| className managedClass project projectName packageName symbolDictionary unmanagedMethod managedMethod x  |
+	projectName := 'PackagedClass_project'.
+	packageName := projectName , '-Core'.
+	symbolDictionary := Rowan image
+		newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+
+	className := self _unmanagedClassName.
+
+	project := self
+		_createLoadedProject: projectName
+		packageName: packageName
+		symbolDictionaryName: symbolDictionary name.
+
+	managedClass := Object
+		rwSubclass: className
+		instVarNames: #(#'xxx')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+	unmanagedMethod := managedClass
+		compileMethod: 'foo ^1'
+		dictionaries: Rowan image symbolList
+		category: 'unmanaged'
+		environmentId: 0.
+	managedMethod := managedClass
+		rwCompileMethod: 'bar ^2'
+		category: 'managed'
+		packageName: packageName.
+
+	self assert: managedClass notNil.
+	self assert: (Rowan globalNamed: className) notNil.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: (x := managedClass rowanPackageName) = packageName.
+	self assert: (x := unmanagedMethod rowanPackageName) = Rowan unpackagedName.
+	self assert: (x := managedMethod rowanPackageName) = packageName.
+
+	managedClass rwUnpackageClass.
+
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+
+	self assert: (x := managedClass rowanPackageName) = Rowan unpackagedName.
+	self assert: (x := managedMethod rowanPackageName) = Rowan unpackagedName.
+	self assert: (x := unmanagedMethod rowanPackageName) = Rowan unpackagedName.
+	self assert: (x := (Rowan projectNamed: projectName) audit) isEmpty.
+]
+
+{ #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnpackageManagedMethod_01 [
 	"unpackage the method in unpackaged class"
 

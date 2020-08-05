@@ -66926,22 +66926,59 @@ renameClassNamed: className to: newName
 	^ Rowan globalNamed: newName
 %
 
+category: 'class browsing'
+method: RwPrjBrowserToolV2
+unpackageClass: class
+	"Unpackage the given class and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	| loadedClass loadedPackage |
+	loadedClass := Rowan image
+		loadedClassForClass: class
+		ifAbsent: [ 
+			"the class is not packaged, so we are done"
+			^ self ].
+	loadedClass loadedInstanceMethods values
+		do: [ :loadedMethod | 
+			loadedClass removeLoadedMethod: loadedMethod.
+			loadedMethod unpackageMethod ].
+	loadedClass loadedClassMethods values
+		do: [ :loadedMethod | 
+			loadedClass removeLoadedMethod: loadedMethod.
+			loadedMethod unpackageMethod ].
+
+	loadedPackage := loadedClass loadedPackage.
+	loadedPackage removeLoadedClass: loadedClass.
+	RwGsSymbolDictionaryRegistry_ImplementationV2
+		unregisterLoadedClass: loadedClass
+		forClass: class
+%
+
+category: 'class browsing'
+method: RwPrjBrowserToolV2
+unpackageClassNamed: className
+	"Unpackage the given class and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	| theClass |
+	theClass := Rowan globalNamed: className.
+	theClass
+		ifNil: [ self error: 'No class named ' , className printString , ' found' ].
+	self unpackageClass: theClass
+%
+
 category: 'method browsing'
 method: RwPrjBrowserToolV2
-unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
+unpackageMethod: method
 	"unpackage the given method, while leaving the method installed in the image"
 
-	| loadedMethod loadedClassOrExtension loadedPackage theBehavior packageName theMethod |
-	theBehavior := Rowan globalNamed: className.
-	isMeta
-		ifTrue: [ theBehavior := theBehavior class ].
-	theMethod := theBehavior compiledMethodAt: methodSelector.
-	packageName := theMethod rowanPackageName.
+	| loadedMethod loadedClassOrExtension loadedPackage packageName |
+	packageName := method rowanPackageName.
 	packageName = Rowan unpackagedName
 		ifTrue: [ 
 			"already unpackaged, nothing else to do"
 			^ self ].
-	loadedMethod := Rowan image loadedMethodForMethod: theMethod.
+	loadedMethod := Rowan image loadedMethodForMethod: method.
 	loadedPackage := loadedMethod loadedPackage.
 	loadedClassOrExtension := loadedMethod loadedClass.
 	loadedClassOrExtension isLoadedClassExtension
@@ -66953,6 +66990,19 @@ unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
 						forClass: loadedClassOrExtension handle.
 					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 	loadedMethod unpackageMethod
+%
+
+category: 'method browsing'
+method: RwPrjBrowserToolV2
+unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
+	"unpackage the given method, while leaving the method installed in the image"
+
+	| theBehavior theMethod |
+	theBehavior := Rowan globalNamed: className.
+	isMeta
+		ifTrue: [ theBehavior := theBehavior class ].
+	theMethod := theBehavior compiledMethodAt: methodSelector.
+	self unpackageMethod: theMethod
 %
 
 category: 'class browsing'
@@ -94244,6 +94294,15 @@ rwRemoveSelector: methodSelector
 		removeMethod: methodSelector
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
+%
+
+category: '*rowan-gemstone-kernel'
+method: Behavior
+rwUnpackageClass
+	"Unpackage the receiver and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	^ Rowan projectTools browser unpackageClassNamed: self thisClass name asString
 %
 
 category: '*rowan-gemstone-kernel'

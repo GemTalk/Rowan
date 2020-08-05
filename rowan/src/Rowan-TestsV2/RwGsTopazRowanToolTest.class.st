@@ -376,6 +376,19 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 ]
 
 { #category : 'project support' }
+RwGsTopazRowanToolTest >> testTopazListPackageNames [
+	"return the list of loaded packages for given project"
+
+	| x |
+	self
+		assert:
+			((x := Rowan gemstoneTools topaz listPackagesForProjectNamed: 'STON') sort)
+				=
+					#('STON-GemStone-Tests' 'STON-Tests' 'STON-Core' 'STON-GemStoneCommon' 'STON-GemStoneBase')
+						sort
+]
+
+{ #category : 'project support' }
 RwGsTopazRowanToolTest >> testTopazListProjects [
 	"return the list of loaded projects"
 
