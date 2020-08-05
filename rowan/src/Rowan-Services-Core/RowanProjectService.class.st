@@ -259,9 +259,8 @@ RowanProjectService >> loadProjectFromFile: fileString projectsHome: projectsHom
 	eventually be parameters" 
 	[ 
 	((RwSpecification fromUrl: fileString)
-		customConditionalAttributes: #('tests');
 		projectsHome: projectsHomePath; 
-		componentNames: #('Core' 'Tests')) resolveStrict load ]
+		yourself) resolveStrict load ]
 		on: Warning
 		do: [ :ex | 
 			Transcript
