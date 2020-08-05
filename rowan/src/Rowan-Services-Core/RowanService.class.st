@@ -15,7 +15,7 @@ RowanCommandResult addResult: <self>
 "
 Class {
 	#name : 'RowanService',
-	#superclass : 'RsrService',
+	#superclass : 'Object',
 	#instVars : [
 		'command',
 		'commandArgs',

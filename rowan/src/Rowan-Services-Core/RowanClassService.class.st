@@ -165,7 +165,6 @@ RowanClassService >> basicRefreshFrom: theClass [
 	command := nil. 
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
-	comment := theClass rwComment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.

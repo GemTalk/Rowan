@@ -57,6 +57,26 @@ RowanProjectService >> addPackageNamed: packageName [
 	self answer: #'duplicatePackage'
 ]
 
+{ #category : 'client commands support' }
+RowanProjectService >> basicLoadProjectNamed: aName [
+	| updatedProjects |
+	[ updatedProjects := Rowan projectTools load loadProjectNamed: aName ]
+		on: Warning
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: ex description.
+			ex resume ].
+	updatedProjects
+		do: [ :project | 
+			| projectService |
+			projectService := project name = name
+				ifTrue: [ self "don't send an extraneous service back across the wire" ]
+				ifFalse: [ RowanProjectService newNamed: project name ].
+			projectService update.
+			RowanCommandResult addResult: projectService ]
+]
+
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
 	name = Rowan unpackagedName
@@ -254,9 +274,7 @@ RowanProjectService >> loadProjectFromFile: fileString projectsHome: projectsHom
 { #category : 'client commands' }
 RowanProjectService >> loadProjectNamed: aName [
 
-	[Rowan projectTools load loadProjectNamed: aName] 
-		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ].
+	self basicLoadProjectNamed: aName.
 	RowanBrowserService new updateProjects.
 ]
 
@@ -428,15 +446,7 @@ RowanProjectService >> refresh [
 
 { #category : 'client commands' }
 RowanProjectService >> reloadProject [
-	[ Rowan projectTools load loadProjectNamed: name ]
-		on: Warning
-		do: [ :ex | 
-			Transcript
-				cr;
-				show: ex description.
-			ex resume ].
-	self update.
-	RowanCommandResult addResult: self.
+	self basicLoadProjectNamed: name. 
 	RowanBrowserService new packagesWithTests
 ]
 
