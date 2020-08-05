@@ -241,8 +241,7 @@ RowanProjectService >> isSkew [
 
 { #category : 'client commands' }
 RowanProjectService >> loadProjectFromFile: fileString [
-	self
-		basicLoadProject: [ (RwSpecification fromUrl: fileString) yourself resolveStrict load ]
+	self loadProjectFromFile: fileString projectsHome: nil
 ]
 
 { #category : 'client commands' }
