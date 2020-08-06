@@ -48673,7 +48673,13 @@ gitUrl: aString
 category: 'transitions'
 method: RwAbstractUnloadedProject
 load
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	^ self _resolvedProject load
 %
@@ -49026,10 +49032,13 @@ isStrict
 
 category: 'transitions'
 method: RwDefinedProject
-load
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+loadProjectSet
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
 
-	^ self _resolvedProject load
+	^ self _resolvedProject loadProjectSet
 %
 
 category: 'accessing'
@@ -49104,7 +49113,6 @@ projectsRoot
 category: 'transitions'
 method: RwDefinedProject
 read
-
 	"return a RwDefinedProject with definitions read from disk"
 
 	self _resolvedProject read
@@ -49150,6 +49158,26 @@ readProjectComponentNames: componentNames platformConditionalAttributes: platfor
 	self _resolvedProject
 		readProjectComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedProject
+readProjectSet
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _resolvedProject readProjectSet
+%
+
+category: 'transitions'
+method: RwDefinedProject
+readProjectSet: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _resolvedProject readProjectSet: platformConditionalAttributes
 %
 
 category: 'accessing'
@@ -84138,7 +84166,7 @@ load
 	readProjectDefinition == projectDefinition 
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
-			self halt: 'expected to update the projectDefinition in-place' ].
+			self error: 'expected to update the projectDefinition in-place' ].
 	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
 %
 

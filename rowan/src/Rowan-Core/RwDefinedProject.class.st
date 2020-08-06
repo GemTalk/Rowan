@@ -267,10 +267,13 @@ RwDefinedProject >> isStrict [
 ]
 
 { #category : 'transitions' }
-RwDefinedProject >> load [
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+RwDefinedProject >> loadProjectSet [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
 
-	^ self _resolvedProject load
+	^ self _resolvedProject loadProjectSet
 ]
 
 { #category : 'accessing' }
@@ -334,7 +337,6 @@ RwDefinedProject >> projectsRoot [
 
 { #category : 'transitions' }
 RwDefinedProject >> read [
-
 	"return a RwDefinedProject with definitions read from disk"
 
 	self _resolvedProject read
@@ -376,6 +378,24 @@ RwDefinedProject >> readProjectComponentNames: componentNames platformConditiona
 	self _resolvedProject
 		readProjectComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> readProjectSet [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _resolvedProject readProjectSet
+]
+
+{ #category : 'transitions' }
+RwDefinedProject >> readProjectSet: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _resolvedProject readProjectSet: platformConditionalAttributes
 ]
 
 { #category : 'accessing' }

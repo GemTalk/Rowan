@@ -39,7 +39,13 @@ RwAbstractUnloadedProject >> gitUrl: aString [
 
 { #category : 'transitions' }
 RwAbstractUnloadedProject >> load [
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	^ self _resolvedProject load
 ]
