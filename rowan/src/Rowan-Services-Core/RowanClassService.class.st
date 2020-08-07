@@ -122,24 +122,20 @@ RowanClassService >> allSubclassServices [
 
 { #category : 'Accessing' }
 RowanClassService >> allTests [
-  | allSelectors theClass |
-  self isTestCase
-    ifFalse: [ ^ Array new ].
-  theClass := self theClass thisClass.
-  theClass isAbstract
-    ifTrue: [ ^ Array new ].
-  allSelectors := self theClass thisClass allTestSelectors.
-  ^ allSelectors
-    collect: [ :selector | 
-      | methodService |
-      methodService := RowanMethodService
-        forSelector: selector
-        class: (theClass whichClassIncludesSelector: selector asString)
-        meta: false
-        organizer: organizer.
-      methodService
-        definedClassName: (theClass whichClassIncludesSelector: selector asString) name asString.	"may get changed in client"
-      methodService ]
+	| allSelectors theClass |
+	self isTestCase
+		ifFalse: [ ^ Array new ].
+	theClass := self theClass thisClass.
+	theClass isAbstract
+		ifTrue: [ ^ Array new ].
+	allSelectors := self theClass thisClass allTestSelectors.
+	^ allSelectors
+		collect: [ :selector | 
+			RowanMethodService
+				forSelector: selector
+				class: (theClass whichClassIncludesSelector: selector asString)
+				meta: false
+				organizer: organizer ]
 ]
 
 { #category : 'testing' }

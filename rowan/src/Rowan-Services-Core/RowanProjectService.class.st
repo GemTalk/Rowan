@@ -254,6 +254,17 @@ RowanProjectService >> loadProjectFromFile: fileString projectsHome: projectsHom
 ]
 
 { #category : 'client commands' }
+RowanProjectService >> loadProjectFromFile: fileString projectsHome: projectsHomePath customConditionalAttributes: attributes componentNames: componentNames [
+	self
+		basicLoadProject: [ 
+			((RwSpecification fromUrl: fileString)
+				customConditionalAttributes: attributes;
+				projectsHome: projectsHomePath;
+				componentNames: componentNames;
+				yourself) resolveStrict load ]
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> loadProjectNamed: aName [
 	self basicLoadProject: [ Rowan projectTools load loadProjectNamed: aName ]
 ]

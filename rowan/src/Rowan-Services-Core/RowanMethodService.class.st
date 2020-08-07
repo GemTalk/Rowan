@@ -378,26 +378,27 @@ RowanMethodService >> firstReference: integer [
 
 { #category : 'initialization' }
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
-  "assume meta and selector are set"
+	"assume meta and selector are set"
 
-  | classOrMeta gsNMethod |
-  organizer := theOrganizer.
-  classOrMeta := meta
-    ifTrue: [ theClass class ]
-    ifFalse: [ theClass ].
-  gsNMethod := classOrMeta compiledMethodAt: selector.
-  definedPackage := gsNMethod rowanPackageName.
-  oop := gsNMethod asOop.
-  stepPoints := self stepPointsFor: gsNMethod.
-  breakPoints := self breakPointsFor: gsNMethod.
-  self updateSource: gsNMethod sourceString.
-  category := (classOrMeta categoryOfSelector: selector) asString.
-  className := theClass name asString.
-  packageName := gsNMethod rowanPackageName.
-  projectName := gsNMethod rowanProjectName.
-  self setSupersAndSubsFor: classOrMeta.
-  isExtension := self rowanIsExtension.
-  self initializeTestMethodsFor: classOrMeta thisClass
+	| classOrMeta gsNMethod |
+	organizer := theOrganizer.
+	classOrMeta := meta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	gsNMethod := classOrMeta compiledMethodAt: selector.
+	definedPackage := gsNMethod rowanPackageName.
+	oop := gsNMethod asOop.
+	stepPoints := self stepPointsFor: gsNMethod.
+	breakPoints := self breakPointsFor: gsNMethod.
+	self updateSource: gsNMethod sourceString.
+	category := (classOrMeta categoryOfSelector: selector) asString.
+	className := theClass name asString.
+	packageName := gsNMethod rowanPackageName.
+	projectName := gsNMethod rowanProjectName.
+	self setSupersAndSubsFor: classOrMeta.
+	isExtension := self rowanIsExtension.
+	self initializeTestMethodsFor: classOrMeta thisClass.
+	self setDefinedClass: classOrMeta
 ]
 
 { #category : 'Accessing' }
@@ -695,6 +696,16 @@ RowanMethodService >> setBreakAt: stepPoint [
     ifFalse: [ self disableBreakAt: stepPoint ].
   self update.
   RowanCommandResult addResult: self
+]
+
+{ #category : 'initialization' }
+RowanMethodService >> setDefinedClass: aClass [
+	"only used in the test browsers (for now) to identify which class the method is defined in.
+	That may be different than what is displayed, say, when we run a superclass test in concrete subclass.
+	Assume selector is defined in aClass hierarchy."
+
+	definedClassName := (aClass whichClassIncludesSelector: selector asString) name
+		asString
 ]
 
 { #category : 'method history' }
