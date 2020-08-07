@@ -162,7 +162,7 @@ RowanQueryService >> methodsContaining: string [
     | methodService |
     methodService := self methodServiceFrom: (methods first at: index).
     methodService
-      firstReference: (methods last at: index);
+      firstReference: ((methods at: 2) at: index);   "<<<< FIX HERE"
       searchString: string.
     sorted add: methodService ].
   queryResults := sorted asArray.
