@@ -39,19 +39,16 @@ RwMethodDefinition >> compareExtensionMethodsAgainstBase: aDefinition [
 
 { #category : '*rowan-core-definitions-extensions' }
 RwMethodDefinition >> compareSourceAgainstBase: aDefinition [
-
-	| modification |
+	| modification before after |
 	modification := RwSourceModification new.
-	(aDefinition source _unicodeEqual: self source) not
-		ifTrue: [
-			| before after |
-			before := aDefinition source.
-			after := self source.
-			modification addElementModification: (RwPropertyModification
-								key: 'source'
-								oldValue: before
-								newValue: after) ].
-	^modification
+	before := aDefinition source.
+	after := self source.
+	(before notNil and: [ after notNil and: [ before _unicodeEqual: after ] ])
+		ifFalse: [ 
+			modification
+				addElementModification:
+					(RwPropertyModification key: 'source' oldValue: before newValue: after) ].
+	^ modification
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
