@@ -42,7 +42,7 @@ RwMethodDefinition >> compareSourceAgainstBase: aDefinition [
 
 	| modification |
 	modification := RwSourceModification new.
-	aDefinition source ~= self source
+	(aDefinition source _unicodeEqual: self source) not
 		ifTrue: [
 			| before after |
 			before := aDefinition source.
