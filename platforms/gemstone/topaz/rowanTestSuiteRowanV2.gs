@@ -1,5 +1,5 @@
 run
-	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings resultsDict resultCases |
+	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings resultsDict resultCases deprecationErrors |
 
 	includeDeprecatedPackages := (System stoneVersionReport at: 'gsVersion') = '3.2.15' 
 		ifTrue: [
@@ -75,9 +75,11 @@ run
 										] ] ] ] ]
 			ifFalse: [ 
 				"standard test suite run"
+				deprecationErrors := 0.
 				[ 
 					res := suite run.
 				] on: Deprecated do: [:ex |
+					deprecationErrors := deprecationErrors + 1.
 					ex resignalAs: (Error new messageText: ex description; yourself)
 					] ].
 
@@ -109,7 +111,7 @@ run
 					at: #status put: 'passed';
 					yourself) ].
 
-		strm nextPutAll: res printString; lf.
+		strm nextPutAll: res printString; nextPutAll: ', ', deprecationErrors printString, ' deprecationErrors'; lf.
 		strm nextPutAll: '  errors'; lf.
 		(res errors collect: [:each |  
 			resultCases add: (Dictionary new

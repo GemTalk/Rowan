@@ -63,3 +63,8 @@ RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customCondi
 		projectsHome: projectsHome
 		customConditionalAttributes: customConditionalAttributes
 ]
+
+{ #category : '*rowan-corev2' }
+RwPlatform >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString [
+	^ RwResolvedProject projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+]

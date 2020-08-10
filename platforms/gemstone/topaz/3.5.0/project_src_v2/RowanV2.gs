@@ -48673,7 +48673,13 @@ gitUrl: aString
 category: 'transitions'
 method: RwAbstractUnloadedProject
 load
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	^ self _resolvedProject load
 %
@@ -49026,10 +49032,13 @@ isStrict
 
 category: 'transitions'
 method: RwDefinedProject
-load
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+loadProjectSet
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
 
-	^ self _resolvedProject load
+	^ self _resolvedProject loadProjectSet
 %
 
 category: 'accessing'
@@ -49104,7 +49113,6 @@ projectsRoot
 category: 'transitions'
 method: RwDefinedProject
 read
-
 	"return a RwDefinedProject with definitions read from disk"
 
 	self _resolvedProject read
@@ -49150,6 +49158,26 @@ readProjectComponentNames: componentNames platformConditionalAttributes: platfor
 	self _resolvedProject
 		readProjectComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedProject
+readProjectSet
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _resolvedProject readProjectSet
+%
+
+category: 'transitions'
+method: RwDefinedProject
+readProjectSet: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _resolvedProject readProjectSet: platformConditionalAttributes
 %
 
 category: 'accessing'
@@ -49412,6 +49440,20 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		yourself
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		readonlyDiskUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+%
+
 !		Instance methods for 'RwResolvedProject'
 
 category: 'transitions'
@@ -49632,6 +49674,76 @@ method: RwProject
 extendedClasses
 
 	^ self _projectTools query classExtensionsForProjectNamed: self name
+%
+
+category: 'git support'
+method: RwProject
+gitCheckout: branchOrSha
+	"git checkout a branch or sha"
+
+	^ Rowan gitTools gitcheckoutIn: self repositoryRoot with: branchOrSha
+%
+
+category: 'git support'
+method: RwProject
+gitCommit: commitComment
+	"git checkout a branch or sha"
+
+	^ self _loadedProject resolvedProject commit: commitComment
+%
+
+category: 'git support'
+method: RwProject
+gitCreateBranch: branchName
+	"git create a new branch"
+
+	^ Rowan gitTools gitcheckoutIn: self repositoryRoot with: ' -b ', branchName
+%
+
+category: 'git support'
+method: RwProject
+gitLog: logLimit
+	"return `git log` report"
+
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRoot pathString
+%
+
+category: 'git support'
+method: RwProject
+gitPullRemote: remoteName branch: branchName
+	"git pull remote and branch name"
+
+	^ Rowan gitTools
+		gitpullIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+%
+
+category: 'git support'
+method: RwProject
+gitPushRemote: remoteName branch: branchName
+	"git push remote and branch name"
+
+	^ Rowan gitTools
+		gitpushIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+%
+
+category: 'git support'
+method: RwProject
+gitShortStatus
+	"`git status --short` returns an empty string if there is nothing to commit"
+
+	^ Rowan gitTools gitstatusIn: self repositoryRoot pathString with: '--short'
+%
+
+category: 'git support'
+method: RwProject
+gitStatus
+	"return standard `git status` report"
+
+	^ Rowan gitTools gitstatusIn: self repositoryRoot pathString with: ''
 %
 
 category: 'testing'
@@ -58464,13 +58576,15 @@ processProject: aProjectModification
 							componentNames := componentAndPlatformConditionalAttributes at: 1.
 							platformConditionalAttributes := componentAndPlatformConditionalAttributes
 								at: 2.
-							currentProjectDefinition componentsRoot exists
-								ifTrue: [ 
-									"read the project from disk, if it is present on disk"
-									visitor := readTool
-										readProjectForResolvedProject: currentProjectDefinition
-										withComponentNames: componentNames
-										platformConditionalAttributes: platformConditionalAttributes ].
+							componentNames isEmpty
+								ifFalse: [ 
+									currentProjectDefinition componentsRoot exists
+										ifTrue: [ 
+											"read the project from disk, if it is present on disk"
+											visitor := readTool
+												readProjectForResolvedProject: currentProjectDefinition
+												withComponentNames: componentNames
+												platformConditionalAttributes: platformConditionalAttributes ] ].
 							packageNames := visitor
 								ifNil: [ 
 									self topazFilenameComponentMap size > 1
@@ -62792,7 +62906,8 @@ exportTopazFormatTo: filePath
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
+		filenameExtension: fileReference extension;
 		yourself.
 	visitor visit: projectSetModification
 %
@@ -62808,7 +62923,7 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
@@ -66837,6 +66952,85 @@ renameClassNamed: className to: newName
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	^ Rowan globalNamed: newName
+%
+
+category: 'class browsing'
+method: RwPrjBrowserToolV2
+unpackageClass: class
+	"Unpackage the given class and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	| loadedClass loadedPackage |
+	loadedClass := Rowan image
+		loadedClassForClass: class
+		ifAbsent: [ 
+			"the class is not packaged, so we are done"
+			^ self ].
+	loadedClass loadedInstanceMethods values
+		do: [ :loadedMethod | 
+			loadedClass removeLoadedMethod: loadedMethod.
+			loadedMethod unpackageMethod ].
+	loadedClass loadedClassMethods values
+		do: [ :loadedMethod | 
+			loadedClass removeLoadedMethod: loadedMethod.
+			loadedMethod unpackageMethod ].
+
+	loadedPackage := loadedClass loadedPackage.
+	loadedPackage removeLoadedClass: loadedClass.
+	RwGsSymbolDictionaryRegistry_ImplementationV2
+		unregisterLoadedClass: loadedClass
+		forClass: class
+%
+
+category: 'class browsing'
+method: RwPrjBrowserToolV2
+unpackageClassNamed: className
+	"Unpackage the given class and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	| theClass |
+	theClass := Rowan globalNamed: className.
+	theClass
+		ifNil: [ self error: 'No class named ' , className printString , ' found' ].
+	self unpackageClass: theClass
+%
+
+category: 'method browsing'
+method: RwPrjBrowserToolV2
+unpackageMethod: method
+	"unpackage the given method, while leaving the method installed in the image"
+
+	| loadedMethod loadedClassOrExtension loadedPackage packageName |
+	packageName := method rowanPackageName.
+	packageName = Rowan unpackagedName
+		ifTrue: [ 
+			"already unpackaged, nothing else to do"
+			^ self ].
+	loadedMethod := Rowan image loadedMethodForMethod: method.
+	loadedPackage := loadedMethod loadedPackage.
+	loadedClassOrExtension := loadedMethod loadedClass.
+	loadedClassOrExtension isLoadedClassExtension
+		ifTrue: [ 
+			loadedClassOrExtension isEmpty
+				ifTrue: [ 
+					RwGsSymbolDictionaryRegistry_ImplementationV2
+						unregisterLoadedClassExtension: loadedClassOrExtension
+						forClass: loadedClassOrExtension handle.
+					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+	loadedMethod unpackageMethod
+%
+
+category: 'method browsing'
+method: RwPrjBrowserToolV2
+unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
+	"unpackage the given method, while leaving the method installed in the image"
+
+	| theBehavior theMethod |
+	theBehavior := Rowan globalNamed: className.
+	isMeta
+		ifTrue: [ theBehavior := theBehavior class ].
+	theMethod := theBehavior compiledMethodAt: methodSelector.
+	self unpackageMethod: theMethod
 %
 
 category: 'class browsing'
@@ -83408,7 +83602,7 @@ handleClassDeletion
 
 	"The class to which I refer has been deleted, so I must unregister myself."
 
-	Rowan image removeLoadedMethodForCompileMethod: handle
+	self unpackageMethod
 %
 
 category: 'accessing'
@@ -83437,6 +83631,15 @@ method: RwGsLoadedSymbolDictMethod
 source
 
 	^handle sourceString copy
+%
+
+category: 'private-updating'
+method: RwGsLoadedSymbolDictMethod
+unpackageMethod
+
+	"Remove the loaded method from the package structure - turn the method into an unpackaged method"
+
+	Rowan image removeLoadedMethodForCompileMethod: handle
 %
 
 category: 'private-updating'
@@ -83963,7 +84166,7 @@ load
 	readProjectDefinition == projectDefinition 
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
-			self halt: 'expected to update the projectDefinition in-place' ].
+			self error: 'expected to update the projectDefinition in-place' ].
 	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
 %
 
@@ -94128,6 +94331,26 @@ rwRemoveSelector: methodSelector
 		isMeta: self isMeta
 %
 
+category: '*rowan-gemstone-kernel'
+method: Behavior
+rwUnpackageClass
+	"Unpackage the receiver and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	^ Rowan projectTools browser unpackageClassNamed: self thisClass name asString
+%
+
+category: '*rowan-gemstone-kernel'
+method: Behavior
+rwUnpackageMethod: methodSelector
+	"Move the method into <packageName>, whether or not it has been packaged"
+
+	^ Rowan projectTools browser
+		unpackageMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+%
+
 category: '*rowan-gemstone-35x'
 method: Behavior
 _constraintOn: aSymbol
@@ -97991,6 +98214,12 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		customConditionalAttributes: customConditionalAttributes
 %
 
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	^ self platform projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+%
+
 category: '*rowan-gemstone-core'
 classmethod: Rowan
 sessionAutomaticClassInitializationBlackList
@@ -99408,6 +99637,12 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		projectFromUrl: loadSpecUrl
 		projectsHome: projectsHome
 		customConditionalAttributes: customConditionalAttributes
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	^ RwResolvedProject projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 %
 
 category: '*rowan-core'

@@ -537,13 +537,13 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 
 "export"
 	repositoryRootPath := projectsHome / projectName / 'topaz'.
-	topazFileReference := repositoryRootPath asFileReference / projectName.
+	topazFileReference := repositoryRootPath asFileReference / projectName, 'gs'.
 	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
 	projectDefinition exportTopazFormatTo: topazFileReference.
 
 "validate"
-	stream := ZnBufferedReadStream on: (topazFileReference, 'gs') readStream.
+	stream := ZnBufferedReadStream on: topazFileReference readStream.
 	x := stream contents.
 	y := self _expectedGsTopazWriterFileContents_A.
 	self assert: x = y
