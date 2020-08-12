@@ -56173,7 +56173,7 @@ methodsContaining: string
     | methodService |
     methodService := self methodServiceFrom: (methods first at: index).
     methodService
-      firstReference: (methods last at: index);
+      firstReference: ((methods at: 2) at: index);   "<<<< FIX HERE"
       searchString: string.
     sorted add: methodService ].
   queryResults := sorted asArray.
@@ -94102,39 +94102,6 @@ parseTreeFor: aSymbol
 	^ RBParser parseMethod: (self sourceCodeAt: aSymbol) onError: [ :msg :pos | ^ nil ]
 %
 
-category: '*cypress-environmental-tools'
-method: Behavior
-persistentSuperclassForEnv: envId
-  "result will be nil if no methods exist for specified environmentId."
-
-  | mds |
-  (mds := methDicts) _isArray
-    ifTrue: [ ^ mds atOrNil: envId * 4 + 3 ].
-  envId == 0
-    ifTrue: [ ^ mds ].
-  ^ nil
-%
-
-category: '*cypress-environmental-tools'
-method: Behavior
-persistentSuperclassForEnv: envId put: aValue
-  "aValue should be a GsMethodDictionary, or nil ,
-   caller responsible for _refreshClassCache "
-
-  <protected>
-  | ofs mds |
-  (mds := methDicts) _isArray
-    ifFalse: [ envId == 0
-        ifTrue: [ methDicts := aValue.
-          ^ self ].
-      mds := {mds}.
-      methDicts := mds ].
-  ofs := envId * 4 + 3.
-  mds size < ofs
-    ifTrue: [ mds size: ofs ].
-  mds at: ofs put: aValue
-%
-
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rowanPackageName
@@ -99150,19 +99117,16 @@ compareExtensionMethodsAgainstBase: aDefinition
 category: '*rowan-core-definitions-extensions'
 method: RwMethodDefinition
 compareSourceAgainstBase: aDefinition
-
-	| modification |
+	| modification before after |
 	modification := RwSourceModification new.
-	aDefinition source ~= self source
-		ifTrue: [
-			| before after |
-			before := aDefinition source.
-			after := self source.
-			modification addElementModification: (RwPropertyModification
-								key: 'source'
-								oldValue: before
-								newValue: after) ].
-	^modification
+	before := aDefinition source.
+	after := self source.
+	(before notNil and: [ after notNil and: [ before _unicodeEqual: after ] ])
+		ifFalse: [ 
+			modification
+				addElementModification:
+					(RwPropertyModification key: 'source' oldValue: before newValue: after) ].
+	^ modification
 %
 
 category: '*rowan-core-definitions-extensions'
