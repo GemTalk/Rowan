@@ -424,6 +424,21 @@ RowanService >> projectTools [
 
 ]
 
+{ #category : 'release' }
+RowanService >> releaseProcessOop: oop [
+  "not really releasing it. The client should have registered
+	the process with the debugger window it opened before
+	this is run"
+
+  | jadeiteProcesses process |
+  ((process := Object _objectForOop: oop) isKindOf: GsProcess)
+    ifTrue: [ 
+      jadeiteProcesses := SessionTemps current
+        at: #'jadeiteProcesses'
+        ifAbsentPut: [ Array new ].
+      jadeiteProcesses remove: process ifAbsent: [  ] ]
+]
+
 { #category : 'samples' }
 RowanService >> removeSampleSymbolDictionary [
 

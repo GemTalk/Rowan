@@ -36,19 +36,16 @@ RowanDebuggerService >> debugStringFrom: aString [
   ^ newStream contents
 ]
 
-{ #category : 'release' }
-RowanDebuggerService >> releaseProcessOop: oop [
-  "not really releasing it. The client should have registered
-	the process with the debugger window it opened before
-	this is run"
-
-  | jadeiteProcesses process |
-  ((process := Object _objectForOop: oop) isKindOf: GsProcess)
-    ifTrue: [ 
-      jadeiteProcesses := SessionTemps current
-        at: #'jadeiteProcesses'
-        ifAbsentPut: [ Array new ].
-      jadeiteProcesses remove: process ifAbsent: [  ] ]
+{ #category : 'other' }
+RowanDebuggerService >> registeredWindowsIncludesOop: oop [
+	| dictionary registeredOops |
+	dictionary := SessionTemps current
+		at: #'rowanServicesWindowRegistry'
+		ifAbsentPut: [ Dictionary new ].
+	registeredOops := Array new.
+	dictionary values
+		do: [ :array | array do: [ :object | registeredOops add: object asOop ] ].
+	^ registeredOops includes: oop
 ]
 
 { #category : 'release' }
@@ -94,5 +91,6 @@ RowanDebuggerService >> update [
   ProcessorScheduler scheduler waitingProcesses
     do: [ :each | processes add: (RowanProcessService new oop: each asOop; status: 'waiting')]. 
   RowanCommandResult addResult: self.
-  self releaseProcessOop: initialProcessOop
+  (self registeredWindowsIncludesOop: initialProcessOop) 
+		ifTrue:[	"the oop should be there but just in case" self releaseProcessOop: initialProcessOop.].
 ]
