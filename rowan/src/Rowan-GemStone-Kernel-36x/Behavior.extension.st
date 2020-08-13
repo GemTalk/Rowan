@@ -1,6 +1,59 @@
 Extension { #name : 'Behavior' }
 
 { #category : '*rowan-gemstone-kernel-36x' }
+Behavior >> _rwCompileMethodForConditionalPackaging: sourceString symbolList: symList category: categ environmentId: environmentId ifUnpackagedDo: unpackagedBlock [
+	"for now, we will only check for Rowan packaging if we are working in environment 0"
+
+	environmentId == 0
+		ifTrue: [ 
+			| meth |
+			meth := Rowan platform
+				_parseMethod: sourceString
+				category: categ
+				using: symList
+				environmentId: environmentId.
+			meth class == GsNMethod
+				ifTrue: [ 
+					"successful  parse of method, so let's see if the method is already pacakged"
+					(self
+						compiledMethodAt: meth selector
+						environmentId: environmentId
+						otherwise: nil)
+						ifNotNil: [ :theMethod | 
+							| packageName |
+							"existing compiled method, so let's check if it is packaged"
+							packageName := theMethod rowanPackageName.
+							packageName = Rowan unpackagedName
+								ifTrue: [ 
+									"method not already, packaged, check to see if the the 
+										currentTopazPackageName has been set, if so package the method
+										using the topaz package name"
+									Rowan gemstoneTools topaz currentTopazPackageName
+										ifNotNil: [ :topazPackageName | packageName := topazPackageName ] ].
+							packageName ~= Rowan unpackagedName
+								ifTrue: [ 
+									"The original method was packaged (or topaz package name set), so 
+										preserve the packaging"
+									^ self
+										rwCompileMethod: sourceString
+										dictionaries: symList
+										category: categ
+										packageName: packageName ] ]
+						ifNil: [ 
+							"no existing method, but if current topaz package name is set, we'll compile the 
+								new method in that package"
+							Rowan gemstoneTools topaz currentTopazPackageName
+								ifNotNil: [ :packageName | 
+									^ self
+										rwCompileMethod: sourceString
+										dictionaries: symList
+										category: categ
+										packageName: packageName ] ] ] ].
+	^ unpackagedBlock value
+
+]
+
+{ #category : '*rowan-gemstone-kernel-36x' }
 Behavior >> rwMethodCategories [
 	^ self _unifiedCategorys: 0
 ]
