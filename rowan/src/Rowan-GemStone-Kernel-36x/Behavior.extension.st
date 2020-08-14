@@ -54,6 +54,24 @@ Behavior >> _rwCompileMethodForConditionalPackaging: sourceString symbolList: sy
 ]
 
 { #category : '*rowan-gemstone-kernel-36x' }
+Behavior >> _rwRemoveAllMethods: baseMeths enironmentId: envId [
+	| unpackagedName packagedSels |
+	envId == 0
+		ifFalse: [ 
+			"only check for packaged methods in envId 1"
+			^ self ].
+	unpackagedName := Rowan unpackagedName.
+	packagedSels := {}.
+	baseMeths
+		keysAndValuesDo: [ :sel :meth | 
+			self setStamp: nil forMethod: sel.
+			meth rowanPackageName ~= unpackagedName
+				ifTrue: [ packagedSels add: sel ] ].
+	packagedSels do: [ :sel | self rwRemoveSelector: sel ]
+
+]
+
+{ #category : '*rowan-gemstone-kernel-36x' }
 Behavior >> rwMethodCategories [
 	^ self _unifiedCategorys: 0
 ]
