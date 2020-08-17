@@ -90761,20 +90761,23 @@ methodDefList
 category: 'private factory'
 method: TonelParser
 newMethodDefinitionFrom: anArray
-	| metadata className meta selector source  |
-	
+	| metadata className meta selector source |
 	metadata := anArray second ifNil: [ Dictionary new ].
 	className := anArray fourth first first.
+ 	(Metaclass3 _validateNewClassName: className asSymbol)
+		ifFalse: [ self error: 'Invalid class name ' , className printString ].
 	meta := anArray fourth first second notNil.
 	selector := self extractSelector: anArray fourth second trimBoth.
-	source := String streamContents: [ :s | 
-		s << anArray fourth second.
-		anArray fifth ifNotEmpty: [ :src | s << src ] ].
+	source := String
+		streamContents: [ :s | 
+			s << anArray fourth second.
+			anArray fifth ifNotEmpty: [ :src | s << src ] ].
 
-	^ self packageReader newMethodDefinitionForClassNamed: className
+	^ self packageReader
+		newMethodDefinitionForClassNamed: className
 		classIsMeta: meta
 		selector: selector
-		category: (metadata at: #category ifAbsent: [ '' ]) 
+		category: (metadata at: #'category' ifAbsent: [ '' ])
 		source: source
 %
 

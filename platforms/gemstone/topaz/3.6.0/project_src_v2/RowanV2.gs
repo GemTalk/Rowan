@@ -90761,20 +90761,23 @@ methodDefList
 category: 'private factory'
 method: TonelParser
 newMethodDefinitionFrom: anArray
-	| metadata className meta selector source  |
-	
+	| metadata className meta selector source |
 	metadata := anArray second ifNil: [ Dictionary new ].
 	className := anArray fourth first first.
+ 	(Metaclass3 _validateNewClassName: className asSymbol)
+		ifFalse: [ self error: 'Invalid class name ' , className printString ].
 	meta := anArray fourth first second notNil.
 	selector := self extractSelector: anArray fourth second trimBoth.
-	source := String streamContents: [ :s | 
-		s << anArray fourth second.
-		anArray fifth ifNotEmpty: [ :src | s << src ] ].
+	source := String
+		streamContents: [ :s | 
+			s << anArray fourth second.
+			anArray fifth ifNotEmpty: [ :src | s << src ] ].
 
-	^ self packageReader newMethodDefinitionForClassNamed: className
+	^ self packageReader
+		newMethodDefinitionForClassNamed: className
 		classIsMeta: meta
 		selector: selector
-		category: (metadata at: #category ifAbsent: [ '' ]) 
+		category: (metadata at: #'category' ifAbsent: [ '' ])
 		source: source
 %
 
@@ -94458,59 +94461,6 @@ otherCvs ifNotNil:[ | destCvs |
 ^failed.
 %
 
-category: '*rowan-gemstone-kernel-36x'
-method: Behavior
-_rwCompileMethodForConditionalPackaging: sourceString symbolList: symList category: categ environmentId: environmentId ifUnpackagedDo: unpackagedBlock
-	"for now, we will only check for Rowan packaging if we are working in environment 0"
-
-	environmentId == 0
-		ifTrue: [ 
-			| meth |
-			meth := Rowan platform
-				_parseMethod: sourceString
-				category: categ
-				using: symList
-				environmentId: environmentId.
-			meth class == GsNMethod
-				ifTrue: [ 
-					"successful  parse of method, so let's see if the method is already pacakged"
-					(self
-						compiledMethodAt: meth selector
-						environmentId: environmentId
-						otherwise: nil)
-						ifNotNil: [ :theMethod | 
-							| packageName |
-							"existing compiled method, so let's check if it is packaged"
-							packageName := theMethod rowanPackageName.
-							packageName = Rowan unpackagedName
-								ifTrue: [ 
-									"method not already, packaged, check to see if the the 
-										currentTopazPackageName has been set, if so package the method
-										using the topaz package name"
-									Rowan gemstoneTools topaz currentTopazPackageName
-										ifNotNil: [ :topazPackageName | packageName := topazPackageName ] ].
-							packageName ~= Rowan unpackagedName
-								ifTrue: [ 
-									"The original method was packaged (or topaz package name set), so 
-										preserve the packaging"
-									^ self
-										rwCompileMethod: sourceString
-										dictionaries: symList
-										category: categ
-										packageName: packageName ] ]
-						ifNil: [ 
-							"no existing method, but if current topaz package name is set, we'll compile the 
-								new method in that package"
-							Rowan gemstoneTools topaz currentTopazPackageName
-								ifNotNil: [ :packageName | 
-									^ self
-										rwCompileMethod: sourceString
-										dictionaries: symList
-										category: categ
-										packageName: packageName ] ] ] ].
-	^ unpackagedBlock value
-%
-
 category: '*rowan-gemstone-kernel'
 method: Behavior
 _rwInstVar: aString constrainTo: aClass
@@ -94584,24 +94534,6 @@ self _validatePrivilege ifTrue:[
   ] .
 ]
  
-%
-
-category: '*rowan-gemstone-kernel-36x'
-method: Behavior
-_rwRemoveAllMethods: baseMeths enironmentId: envId
-	| unpackagedName packagedSels |
-	envId == 0
-		ifFalse: [ 
-			"only check for packaged methods in envId 1"
-			^ self ].
-	unpackagedName := Rowan unpackagedName.
-	packagedSels := {}.
-	baseMeths
-		keysAndValuesDo: [ :sel :meth | 
-			self setStamp: nil forMethod: sel.
-			meth rowanPackageName ~= unpackagedName
-				ifTrue: [ packagedSels add: sel ] ].
-	packagedSels do: [ :sel | self rwRemoveSelector: sel ]
 %
 
 category: '*rowan-gemstone-35x'
@@ -95833,57 +95765,6 @@ method: Class
 _installOldConstraints: theConstraints
 
 	constraints := theConstraints copy
-%
-
-category: '*rowan-gemstone-kernel-36x'
-method: Class
-_rwCreateSubclass: aString instVarNames: anArrayOfInstvarNames classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass description: aDescription options: optionsArray ifUnpackagedDo: unpackagedBlock
-	| descr newClass |
-	descr := aDescription.
-	oldClass
-		ifNotNil: [
-			oldClass rowanPackageName ~= Rowan unpackagedName
-				ifTrue: [ 
-					"The oldClass is packaged, so preserve the packaging for the new class version"
-					newClass := self
-						rwSubclass: aString
-						instVarNames: anArrayOfInstvarNames
-						classVars: anArrayOfClassVars
-						classInstVars: anArrayOfClassInstVars
-						poolDictionaries: anArrayOfPoolDicts
-						inDictionary: aDictionary
-						newVersionOf: oldClass
-						category: oldClass _classCategory
-						packageName: oldClass rowanPackageName
-						options: optionsArray.
-					descr
-						ifNil: [ 
-							descr := [ oldClass commentForFileout ]
-								on: Error
-								do: [  ] ].
-					newClass rwComment: descr.
-					^ newClass ] ].
-	Rowan gemstoneTools topaz currentTopazPackageName
-		ifNotNil: [ :packageName | 
-			newClass := self
-				rwSubclass: aString
-				instVarNames: anArrayOfInstvarNames
-				classVars: anArrayOfClassVars
-				classInstVars: anArrayOfClassInstVars
-				poolDictionaries: anArrayOfPoolDicts
-				inDictionary: aDictionary
-				newVersionOf: oldClass
-				category: nil
-				packageName: packageName
-				options: optionsArray.
-			(descr isNil and: [ oldClass notNil ])
-				ifTrue: [ 
-					descr := [ oldClass commentForFileout ]
-						on: Error
-						do: [  ] ].
-			newClass rwComment: descr.
-			^ newClass ].
-	^ unpackagedBlock value
 %
 
 category: '*rowan-gemstone-kernel'
