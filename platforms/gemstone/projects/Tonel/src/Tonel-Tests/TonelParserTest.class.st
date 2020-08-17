@@ -229,6 +229,60 @@ TClass classSide >> template: aSystemCategoryName [
 ]
 
 { #category : 'tests' }
+TonelParserTest >> testMethodDef_627_01 [
+	self
+		shouldParse:
+			'
+{ #category: ''accessing'' }
+:Object>>name [
+	^ self printString
+]'
+		rule: #'methodDef'
+		raise: ArgumentError
+]
+
+{ #category : 'tests' }
+TonelParserTest >> testMethodDef_627_02 [
+	self
+		shouldParse:
+			'
+( #category: ''accessing'' }
+Object>>name [
+	^ self printString
+]'
+		rule: #'methodDef'
+		raise: ArgumentError
+]
+
+{ #category : 'tests' }
+TonelParserTest >> testMethodDef_627_03 [
+	self
+		shouldParse:
+			'
+.
+{ #category: ''accessing'' }
+Object>>name [
+	^ self printString
+]'
+		rule: #'methodDef'
+		raise: ArgumentError
+]
+
+{ #category : 'tests' }
+TonelParserTest >> testMethodDef_627_04 [
+	self
+		shouldParse:
+			'
+!
+{ #category: ''accessing'' }
+Object>>name [
+	^ self printString
+]'
+		rule: #'methodDef'
+		raise: ArgumentError
+]
+
+{ #category : 'tests' }
 TonelParserTest >> testMethodDefList [
 	| parsed |
 	

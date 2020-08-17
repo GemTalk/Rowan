@@ -474,6 +474,29 @@ Object>>anReOverviewComment [
 ]
 
 { #category : 'tests' }
+NewTonelParserTest >> testIssue627 [
+	self 
+		assertParse: '
+{ #category: ''accessing'' }
+:Object >> offset: anInteger inFile: aFileName [
+"these properties are used when handling a CompileError or
+a tonel parse error."
+properties at:''_gsFileOffset'' put: anInteger .
+properties at:''_gsFileName'' put: aFileName .
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #Object
+			classIsMeta: false
+			selector: #offset:inFile:
+			category: 'accessing'
+			source: 'offset: anInteger inFile: aFileName
+"these properties are used when handling a CompileError or
+a tonel parse error."
+properties at:''_gsFileOffset'' put: anInteger .
+properties at:''_gsFileName'' put: aFileName .').
+]
+
+{ #category : 'tests' }
 NewTonelParserTest >> testMetadata [
 	self 
 		assertParse: '{ #vars: [ #a, #b ] }' 
@@ -736,7 +759,7 @@ Class {
 { #category : 'private' }
 NewTonelParserTest >> tonelParserClass [
 
-	^true
+	^ true
 		ifTrue: [ NewTonelParser ]
 		ifFalse: [ TonelParser ]
 ]
