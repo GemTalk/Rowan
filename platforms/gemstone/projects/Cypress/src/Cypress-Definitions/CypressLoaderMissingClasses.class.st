@@ -33,17 +33,15 @@ CypressLoaderMissingClasses >> initialize [
 { #category : 'initializing - private' }
 CypressLoaderMissingClasses >> initializeMessageText [
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	stream nextPutAll: 'Missing classes:'.
+	| str |
+	str := 'Missing classes:' copy .
 	self requirementsMap keysAndValuesDo: 
 			[:className :definitions |
-			stream
+			str
 				space;
-				nextPutAll: className printString , '(' , definitions size printString
+				addAll: className printString , '(' , definitions size printString
 							, ')'].
-	messageText := stream contents
-
+	self details: str.
 ]
 
 { #category : 'initializing - private' }

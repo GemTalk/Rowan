@@ -9564,13 +9564,12 @@ category: 'initializing - private'
 method: CypressLoaderError
 initializeMessageText
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	stream
-		nextPutAll: self patchOperation printString;
-		nextPutAll: ' failed because ';
-		nextPutAll: self exception printString.
-	messageText := stream contents
+	| str |
+	(str := String new )
+		addAll: self patchOperation printString;
+		addAll: ' failed because ';
+		addAll: self exception printString.
+	self details: str .
 %
 
 category: 'initializing - private'
@@ -9637,16 +9636,15 @@ category: 'initializing - private'
 method: CypressLoaderMissingClasses
 initializeMessageText
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	stream nextPutAll: 'Missing classes:'.
+	| str |
+	str := 'Missing classes:' copy .
 	self requirementsMap keysAndValuesDo: 
 			[:className :definitions |
-			stream
+			str
 				space;
-				nextPutAll: className printString , '(' , definitions size printString
+				addAll: className printString , '(' , definitions size printString
 							, ')'].
-	messageText := stream contents
+	self details: str.
 %
 
 category: 'initializing - private'
@@ -9706,6 +9704,13 @@ signalWith: aReference
 
 category: 'exceptiondescription'
 method: FileException
+buildMessageText
+  self details: fileName printString .
+  super buildMessageText
+%
+
+category: 'exceptiondescription'
+method: FileException
 fileName
 	^fileName
 %
@@ -9722,16 +9727,6 @@ isResumable
 	"Determine whether an exception is resumable."
 
 	^true
-%
-
-category: 'exceptiondescription'
-method: FileException
-messageText
-	"Return an exception's message text."
-
-	^ messageText isNil
-		ifTrue: [ fileName printString ]
-		ifFalse: [ messageText ]
 %
 
 ! Class implementation for 'FileAlreadyExistsException'
@@ -9751,6 +9746,13 @@ signalOnFile: aFile
 
 category: 'accessing'
 method: FileAlreadyExistsException
+buildMessageText
+  self details:  'File already exists: ', (file ifNotNil:[:f | f basename] ifNil:['nil']).
+  super buildMessageText 
+%
+
+category: 'accessing'
+method: FileAlreadyExistsException
 file
 	^ file
 %
@@ -9760,13 +9762,6 @@ method: FileAlreadyExistsException
 file: aFile
 	
 	file := aFile
-%
-
-category: 'accessing'
-method: FileAlreadyExistsException
-messageText
-
-	^ 'File already exists: ', file basename
 %
 
 ! Class implementation for 'FileDoesNotExistException'
@@ -9819,7 +9814,7 @@ category: 'initialize-release'
 method: FileSystemError
 initializeWithReference: aReference
 	reference := aReference.
-	messageText := aReference printString
+	self details: aReference printString
 %
 
 category: 'testing'
@@ -9882,13 +9877,11 @@ signal: aString streamPosition: streamPosition
 
 category: 'accessing'
 method: STONReaderError
-messageText
-	^ streamPosition 
-		ifNil: [ 
-			super messageText ] 
-		ifNotNil: [ :pos | 
-			'At character {1}: {2}' format: 
-				(Array with: streamPosition with: super messageText) ]
+buildMessageText
+	streamPosition ifNotNil: [ :pos | 
+    self details: 'Error at character position ', pos asString 
+  ].
+  super buildMessageText .
 %
 
 category: 'accessing'
@@ -10700,13 +10693,10 @@ category: 'initializing - private'
 method: CypressLoaderErrorNotification
 initializeMessageText
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	stream
-		nextPutAll: self patchOperation printString;
-		nextPutAll: ' failed because ';
-		nextPutAll: self exception printString.
-	messageText := stream contents
+	| str |
+	str :=	self patchOperation printString ,  ' failed because '.
+	str addAll: self exception printString.
+	self details: str .
 %
 
 category: 'initializing - private'
@@ -56173,7 +56163,7 @@ methodsContaining: string
     | methodService |
     methodService := self methodServiceFrom: (methods first at: index).
     methodService
-      firstReference: (methods last at: index);
+      firstReference: ((methods at: 2) at: index);   "<<<< FIX HERE"
       searchString: string.
     sorted add: methodService ].
   queryResults := sorted asArray.
@@ -94102,39 +94092,6 @@ parseTreeFor: aSymbol
 	^ RBParser parseMethod: (self sourceCodeAt: aSymbol) onError: [ :msg :pos | ^ nil ]
 %
 
-category: '*cypress-environmental-tools'
-method: Behavior
-persistentSuperclassForEnv: envId
-  "result will be nil if no methods exist for specified environmentId."
-
-  | mds |
-  (mds := methDicts) _isArray
-    ifTrue: [ ^ mds atOrNil: envId * 4 + 3 ].
-  envId == 0
-    ifTrue: [ ^ mds ].
-  ^ nil
-%
-
-category: '*cypress-environmental-tools'
-method: Behavior
-persistentSuperclassForEnv: envId put: aValue
-  "aValue should be a GsMethodDictionary, or nil ,
-   caller responsible for _refreshClassCache "
-
-  <protected>
-  | ofs mds |
-  (mds := methDicts) _isArray
-    ifFalse: [ envId == 0
-        ifTrue: [ methDicts := aValue.
-          ^ self ].
-      mds := {mds}.
-      methDicts := mds ].
-  ofs := envId * 4 + 3.
-  mds size < ofs
-    ifTrue: [ mds size: ofs ].
-  mds at: ofs put: aValue
-%
-
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rowanPackageName
@@ -99150,19 +99107,16 @@ compareExtensionMethodsAgainstBase: aDefinition
 category: '*rowan-core-definitions-extensions'
 method: RwMethodDefinition
 compareSourceAgainstBase: aDefinition
-
-	| modification |
+	| modification before after |
 	modification := RwSourceModification new.
-	aDefinition source ~= self source
-		ifTrue: [
-			| before after |
-			before := aDefinition source.
-			after := self source.
-			modification addElementModification: (RwPropertyModification
-								key: 'source'
-								oldValue: before
-								newValue: after) ].
-	^modification
+	before := aDefinition source.
+	after := self source.
+	(before notNil and: [ after notNil and: [ before _unicodeEqual: after ] ])
+		ifFalse: [ 
+			modification
+				addElementModification:
+					(RwPropertyModification key: 'source' oldValue: before newValue: after) ].
+	^ modification
 %
 
 category: '*rowan-core-definitions-extensions'
