@@ -47,10 +47,7 @@ FileException >> isResumable [
 ]
 
 { #category : 'exceptiondescription' }
-FileException >> messageText [
-	"Return an exception's message text."
-
-	^ messageText isNil
-		ifTrue: [ fileName printString ]
-		ifFalse: [ messageText ]
+FileException >> buildMessageText [
+  self details: fileName printString .
+  super buildMessageText
 ]

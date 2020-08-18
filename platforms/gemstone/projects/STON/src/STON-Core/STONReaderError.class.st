@@ -21,14 +21,11 @@ STONReaderError class >> signal: aString streamPosition: streamPosition [
 ]
 
 { #category : 'accessing' }
-STONReaderError >> messageText [
-	^ streamPosition 
-		ifNil: [ 
-			super messageText ] 
-		ifNotNil: [ :pos | 
-			'At character {1}: {2}' format: 
-				(Array with: streamPosition with: super messageText) ]
-
+STONReaderError >> buildMessageText [
+	streamPosition ifNotNil: [ :pos | 
+    self details: 'Error at character position ', pos asString 
+  ].
+  super buildMessageText .
 ]
 
 { #category : 'accessing' }

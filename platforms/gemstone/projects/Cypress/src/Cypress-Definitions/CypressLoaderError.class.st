@@ -59,14 +59,12 @@ CypressLoaderError >> initialize [
 { #category : 'initializing - private' }
 CypressLoaderError >> initializeMessageText [
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	stream
-		nextPutAll: self patchOperation printString;
-		nextPutAll: ' failed because ';
-		nextPutAll: self exception printString.
-	messageText := stream contents
-
+	| str |
+	(str := String new )
+		addAll: self patchOperation printString;
+		addAll: ' failed because ';
+		addAll: self exception printString.
+	self details: str .
 ]
 
 { #category : 'initializing - private' }
