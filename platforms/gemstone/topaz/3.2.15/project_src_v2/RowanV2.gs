@@ -64337,7 +64337,7 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 				inClassNamed: aBehavior theNonMetaClass name
 				isClassExtension: aLoadedClass isLoadedClassExtension
 				intoPackageNamed: aLoadedClass loadedPackage name)
-				description: 'Missing loaded method. ';
+				description: 'Missing loaded method';
 				yourself.
 			notification signal
 				ifTrue: [ 
