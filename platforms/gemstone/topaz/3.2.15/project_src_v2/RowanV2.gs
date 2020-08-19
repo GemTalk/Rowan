@@ -77150,6 +77150,7 @@ basicCreateClassWithSuperclass: superclass
 		ifNil: [ #() ]
 		ifNotNil: [ oldVersion _rwSortedConstraints ].
 	gs_options := classDefinition gs_options collect: [ :each | each asSymbol ].
+  (SessionTemps current at: #ROWAN_TRACE otherwise: nil) ifNotNil:[gs_options add: #logCreation ].
 	createdClass := (type = 'normal' or: [ type = 'immediate' ])
 		ifTrue: [ 
 			superclass
@@ -77204,7 +77205,7 @@ classDefinition
 category: 'accessing'
 method: RwGsClassPatchV2
 classDefinition: newValue
-	classDefinition := newValue
+	classDefinition := newValue .
 %
 
 category: 'accessing'

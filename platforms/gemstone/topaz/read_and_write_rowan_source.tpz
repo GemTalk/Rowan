@@ -25,7 +25,7 @@
 	display oops
 
   set user SystemUser p swordfish
-#	set solologin on
+	set solologin on
   login
 
 run
