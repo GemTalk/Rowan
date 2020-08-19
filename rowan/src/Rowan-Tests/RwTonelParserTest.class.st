@@ -5,41 +5,65 @@ Class {
 }
 
 { #category : 'asserting' }
-RwTonelParserTest >> assertParse: aString rule: rule equals: result [ 
-	self 
-		assert: (self parse: aString rule: rule)
-		equals: result
-
+RwTonelParserTest >> assertParse: aString rule: rule equals: result [
+	| parsed |
+	parsed := self parse: aString rule: rule.
+	(rule == #'methodDef' or: [ rule == #'typeDef' ])
+		ifTrue: [ self assert: (parsed compareAgainstBase: result) isEmpty ]
+		ifFalse: [ self assert: parsed equals: result ]
 ]
 
 { #category : 'private' }
-RwTonelParserTest >> newClassDefinitionForClassNamed: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString [
-  self subclassResponsibility
-
+RwTonelParserTest >> newClassDefinitionForClassNamed: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: type comment: commentString [
+	^ RwClassDefinition
+		newForClassNamed: nameString
+		super: superclassString
+		instvars: ivarArray
+		classinstvars: civarArray
+		classvars: cvarArray
+		category: categoryString
+		comment: commentString
+		pools: poolArray
+		type: type
 ]
 
 { #category : 'private' }
 RwTonelParserTest >> newClassDefinitionFrom: anArray [
-  self subclassResponsibility
-
+	| metadata classDef |
+	metadata := anArray sixth.
+	classDef := RwClassDefinition
+		newForClassNamed: (metadata at: #'name') asString
+		super:
+			(metadata at: #'superclass' ifAbsent: [ metadata at: #'super' ]) asString
+		instvars: (metadata at: #'instvars' ifAbsent: [ #() ])
+		classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ])
+		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
+		category: (metadata at: #'category' ifAbsent: [  ])
+		comment: anArray second
+		pools: (metadata at: #'pools' ifAbsent: [ #() ])
+		type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
+	^ classDef
+		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
+		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);
+		gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ]);
+		shebang: (metadata at: #'shebang' ifAbsent: [  ]);
+		yourself
 ]
 
 { #category : 'private' }
 RwTonelParserTest >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
-  self subclassResponsibility
-
-]
-
-{ #category : 'private' }
-RwTonelParserTest >> newTraitDefinitionFrom: anArray [
-  self subclassResponsibility
-
+	^ RwMethodDefinition newForSelector: selector protocol: category source: source
 ]
 
 { #category : 'private' }
 RwTonelParserTest >> newTypeDefinitionFrom: anArray [
-  self subclassResponsibility
-
+	| typeString |
+	typeString := anArray fourth.
+	typeString = RwAbstractReaderWriterVisitor tonelClassLabel
+		ifTrue: [ ^ self newClassDefinitionFrom: anArray ].
+	typeString = RwAbstractReaderWriterVisitor tonelExtensionLabel
+		ifTrue: [ ^ self newClassExtensionDefinitionFrom: anArray ].
+	^ self error: 'unexpected typeClass: ' , typeString
 ]
 
 { #category : 'private' }
