@@ -24,6 +24,7 @@
 #  iferr 3 exit 1
 	display oops
 
+  set solo on
   set user SystemUser p swordfish
   login
 
