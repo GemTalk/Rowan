@@ -4,13 +4,17 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gs3.[2-5]'
 	],
 	#packageNames : [
-		'Rowan-GemStone-Kernel-32x'
+		'Rowan-GemStone-Kernel-32x',
+		'Rowan-Tonel-GemStone-Kernel-32-5'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-GemStone-Kernel-32x' : {
+						'symbolDictName' : 'Globals'
+					},
+					'Rowan-Tonel-GemStone-Kernel-32-5' : {
 						'symbolDictName' : 'Globals'
 					}
 				}

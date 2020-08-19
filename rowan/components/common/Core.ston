@@ -11,6 +11,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	],
 	#packageNames : [
 		'Rowan-Core',
+		'Rowan-Tonel-Core',
 		'Rowan-Core-Conditional-Support',
 		'Rowan-Core-Definitions-Extensions',
 		'Rowan-Kernel',

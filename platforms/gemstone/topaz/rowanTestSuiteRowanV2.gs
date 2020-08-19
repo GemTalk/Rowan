@@ -12,7 +12,7 @@ run
 	deprecationAction := Deprecated deprecatedAction.
 	warnings := {}.
 	[
-		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystemGs' ).
+		projectNames := #( 'Rowan' 'STON' 'Cypress' 'FileSystemGs' ).
 		"audit before load"
 		projectNames do: [:projectName |
 			| audit |

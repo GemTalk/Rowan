@@ -4,8 +4,7 @@ RwSimpleProjectLoadComponentV2 {
 	#projectNames : [
 		'Cypress',
 		'FileSystemGs',
-		'STON',
-		'Tonel'
+		'STON'
 	],
 	#componentNames : [
 		'common/AST',
