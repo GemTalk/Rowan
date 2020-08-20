@@ -4,59 +4,6 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
-{ #category : 'topaz tonel support' }
-RwProjectDefinitionV2 class >> topazReadTonelFile: fileName [
-    "Read a single file and compile the methods within that file.
-     Definition/redefinition of the class not implemented yet "
-  | projectDef package clsName clsDef cls methBlk envId |
-  projectDef := RwRepositoryResolvedProjectTonelReaderVisitorV2
-     readClassFile: fileName
-     projectName: 'TopazLoad'   "synthetic projed and package names"
-     packageName: 'TopazPackage' .
-  package := projectDef packageNamed: 'TopazPackage_1' .
-  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
-  package classDefinitions ifNotNil:[:defs | | sz |
-    (sz := defs size) > 1 ifTrue:[
-      Error signal:'more than one class definition in file ' , fileName
-    ].
-    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
-  ].
-  package classExtensions ifNotNil:[:defs | | sz |
-    (sz := defs size) > 1 ifTrue:[
-      Error signal:'more than one class extension in file ' , fileName
-    ].
-    sz > 0 ifTrue:[
-      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
-      clsDef :=  defs values at: 1.
-    ].
-  ].   
-  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
-  clsName := clsDef name .
-  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
-    "creating the class not implemented yet"
-    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
-  ].
-  cls := cls"anAssociation" value.
-
-  methBlk := [ :methDef "a RwMethodDefinition" |
-    [
-      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
-      cls compileMethod: methDef source
-      dictionaries: System myUserProfile symbolList
-      category: methDef protocol asSymbol
-      intoMethodDict: nil "install into the class's dictionaries"
-      intoCategories: nil
-      environmentId:  envId
-    ] on: (CompileError, CompileWarning) do:[:ex | 
-      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
-      ex pass
-    ]
-   ].
-  clsDef instanceMethodDefinitions do: methBlk .
-  cls := cls class .
-  clsDef classMethodDefinitions do: methBlk .
-]
-
 { #category : 'actions' }
 RwProjectDefinitionV2 >> _deleteTool [
 

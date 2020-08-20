@@ -139,7 +139,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> definitionForType: aString [
     ifTrue: [ ^ #class ].
   aString = self class tonelExtensionLabel
     ifTrue: [ ^ #classExtension ].
-  TonelParseError signal: 'Unknown type declaration.'
+  RwTonelParseError signal: 'Unknown type declaration.'
 ]
 
 { #category : 'tonel parser' }
@@ -211,7 +211,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
       self checkMethodDefinitions: currentClassExtension .
-    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+    ] on: ( STONReaderError , RwTonelParseError) do:[:ex |
       ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
       ex pass .
     ].
@@ -245,7 +245,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 			self checkMethodDefinitions: clsDef.
 			projectDef := currentProjectDefinition packageNamed: packageName.
 			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ]	"ifNil:[ projectDef addClassExtensionDefinition: clsDef]." ]
-				on: STONReaderError , TonelParseError
+				on: STONReaderError , RwTonelParseError
 				do: [ :ex | 
 					ex
 						addText:

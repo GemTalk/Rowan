@@ -55,43 +55,6 @@ Class {
 	#category : 'Rowan-Tonel-Core'
 }
 
-{ #category : 'Topaz support' }
-RwTonelParser class >> _compileForTopaz: aString envId: envId [
-  "aString is the topaz text object for topaz TMETHOD command"
-| strm parser catDict category methInfo methSrc symList clsName cls
-  warnStr  |
-strm :=  ReadStreamPortable on: aString  .
-(parser := self new) stream: strm .
-
-parser separator ifNotNil:[ Error signal:'expected parser separator to be nil'].
-
-catDict :=  (parser try: [ parser metadata ]).
-catDict ifNil:[ Error signal:'Category dictionary not found'. ].
-category := catDict at: #category .
-
-parser separator ifNotNil:[ Error signal:'expected second parser separator to be nil'].
-
-methInfo :=  parser method.
-clsName := Symbol _existingWithAll: ((methInfo at: 1) at: 1) .
-
-methSrc :=  (methInfo at: 2)"keywords+args" ,  parser methodBody .
-symList := System myUserProfile symbolList .
-cls := (symList resolveSymbol: clsName) value .
-((methInfo at: 1) at: 2) ifNotNil:[:classWord |
-  classWord = 'class' ifTrue:[ cls := cls class ]
-      ifFalse:[ Error signal:'unrecognized ' , classWord asString, ' after >>'].
-].
-[ cls compileMethod: methSrc dictionaries: symList 
-               category: category  
-               environmentId: envId .
-] on: CompileWarning do:[:ex | 
-   warnStr := ex warningString .
-   ex resume 
-].
-^ warnStr "nil if no warnings"
-
-]
-
 { #category : 'accessing' }
 RwTonelParser class >> lineEnding [
   "Answer the os-specific line endings"
@@ -161,7 +124,7 @@ RwTonelParser >> comment [
 	result := String new writeStreamPortable.
 
 	eatNext := false.
-	stream next = $" ifFalse: [ TonelParseError signal: 'Can''t parse comment' ].	
+	stream next = $" ifFalse: [ RwTonelParseError signal: 'Can''t parse comment' ].	
 	[ stream atEnd not 
 		and: [ 
 				(ch := stream next) ~= $" 
@@ -244,7 +207,7 @@ RwTonelParser >> metadata [
 	result := String new writeStreamPortable.
 
 	count := 0.
-	stream peek = ${ ifFalse: [ TonelParseError signal: 'Can''t parse metadata' ].	
+	stream peek = ${ ifFalse: [ RwTonelParseError signal: 'Can''t parse metadata' ].	
 	[ stream atEnd not ]
 	whileTrue: [ 
 		ch := stream next.
@@ -253,7 +216,7 @@ RwTonelParser >> metadata [
 		ch = $} ifTrue: [ count := count -1 ].
 		count = 0 ifTrue: [ ^ STON fromString: result contents ]].
 
-	TonelParseError signal: 'Can''t parse metadata'
+	RwTonelParseError signal: 'Can''t parse metadata'
 
 ]
 
@@ -294,7 +257,7 @@ RwTonelParser >> methodBody [
 	count := 0.
         startPos := stream position .
         "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
-	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
+	stream peek = $[ ifFalse: [ RwTonelParseError signal: 'Can''t parse method body' ].
 	[ stream atEnd not ]
 	whileTrue: [ 
 		char := stream next.
@@ -314,13 +277,12 @@ RwTonelParser >> methodBody [
 				clean: #right ].
 		prevChar := char ].
 
-	TonelParseError signal: 'Can''t parse method body'
+	RwTonelParseError signal: 'Can''t parse method body'
 
 ]
 
 { #category : 'parsing' }
 RwTonelParser >> methodDef [
-	"kept around for tests"
 
 	| methodDef |
 	self methodDef: [:isMeta :mDef |
@@ -328,7 +290,6 @@ RwTonelParser >> methodDef [
 		"skip possible spaces at the end"
 		self separator ].
 	^methodDef
-
 ]
 
 { #category : 'parsing' }
@@ -367,7 +328,7 @@ RwTonelParser >> methodDefList [
 					"skip possible spaces at the end"
 					self separator ]
 			] 
-  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+  ] on: (RwTonelParseError,STONReaderError,STONWriterError) do:[:ex | 
     lastSelectorParsed ifNotNil:[ | str |
       str := ex details ifNil:[ '' ].
       ex details: str, ', last method parsed: ', lastSelectorParsed printString
@@ -379,10 +340,10 @@ RwTonelParser >> methodDefList [
 
 { #category : 'private factory' }
 RwTonelParser >> newMethodDefinitionFrom: anArray [
-	| metadata className meta selector source |
+	| metadata className meta selector source categ |
 	metadata := anArray second ifNil: [ Dictionary new ].
 	className := anArray fourth first first.
- 	(Metaclass3 _validateNewClassName: className asSymbol)
+	(Metaclass3 _validateNewClassName: className asSymbol)
 		ifFalse: [ self error: 'Invalid class name ' , className printString ].
 	meta := anArray fourth first second notNil.
 	selector := self extractSelector: anArray fourth second trimBoth.
@@ -391,11 +352,20 @@ RwTonelParser >> newMethodDefinitionFrom: anArray [
 			s << anArray fourth second.
 			anArray fifth ifNotEmpty: [ :src | s << src ] ].
 
+	categ := metadata
+		at: #'category'
+		ifAbsent: [ 
+			"to avoid error, resume with default category string"
+			(RwTonelParseRequireMethodCategoryNotification
+				className: className
+				isMeta: meta
+				selector: selector) signal ].
+
 	^ self packageReader
 		newMethodDefinitionForClassNamed: className
 		classIsMeta: meta
 		selector: selector
-		category: (metadata at: #'category' ifAbsent: [ '' ])
+		category: categ
 		source: source
 ]
 
@@ -434,7 +404,7 @@ RwTonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clea
   | result stop ch start end |
   result := self class readStreamClass on: aString trimBoth.
   result peek = startChar
-    ifFalse: [ TonelParseError signal: 'I cannot remove enclosing start' ].
+    ifFalse: [ RwTonelParseError signal: 'I cannot remove enclosing start' ].
   result skip: 1.
   (#(#'both' #'left') includes: cleanSymbol)
     ifTrue: [ 
@@ -448,7 +418,7 @@ RwTonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clea
   result setToEnd.
   result skip: -1.
   result peek = endChar
-    ifFalse: [ TonelParseError signal: 'I cannot remove enclosing end' ].
+    ifFalse: [ RwTonelParseError signal: 'I cannot remove enclosing end' ].
   result skip: -1.
   (#(#'both' #'right') includes: cleanSymbol)
     ifTrue: [ 
@@ -524,7 +494,7 @@ RwTonelParser >> try: aBlock onSuccess: successBlock onFailure: failureBlock [
 	
 	pos := stream position.
 	[ ^ successBlock value: aBlock value ]
-	on: TonelParseError 
+	on: RwTonelParseError 
 	do: [ :e | 
 		stream position: pos.
 		^ failureBlock value ]. 
@@ -539,7 +509,7 @@ RwTonelParser >> type [
 	self try: [ self word: 'Extension' ] onSuccess: [ :word | ^ word  ].
 	
 	"at end"
-	TonelParseError signal: 'Can''t parse type.'	
+	RwTonelParseError signal: 'Can''t parse type.'	
 
 ]
 
@@ -584,7 +554,7 @@ RwTonelParser >> word: aString [
 	| result |
 	result := stream next: aString size.
 	result = aString
-		ifFalse: [ TonelParseError signal: 'Can''t parse ', aString ].
+		ifFalse: [ RwTonelParseError signal: 'Can''t parse ', aString ].
 	^ result
 
 ]

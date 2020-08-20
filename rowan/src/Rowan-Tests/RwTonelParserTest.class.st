@@ -87,7 +87,7 @@ RwTonelParserTest >> testComment [
 	self 
 		shouldParse: 'this "should" be an error'
 		rule: #comment
-		raise: TonelParseError.
+		raise: RwTonelParseError.
 	
 	self  
 		assertParse: '"this is a comment"'
@@ -201,46 +201,60 @@ what] is inside'.
 
 { #category : 'tests' }
 RwTonelParserTest >> testMethodDef [
-	self 
-		assertParse: '
+	[ 
+	self
+		assertParse:
+			'
 { #category: ''accessing'' }
 Object>>name [
 	^ self printString
 ]'
-		rule: #methodDef
-		equals: (self newMethodDefinitionForClassNamed: #Object
-			classIsMeta: false
-			selector: #name
-			category: 'accessing' 
-			source: 'name
+		rule: #'methodDef'
+		equals:
+			(self
+				newMethodDefinitionForClassNamed: #'Object'
+				classIsMeta: false
+				selector: #'name'
+				category: 'accessing'
+				source:
+					'name
 	^ self printString').
-			
-	self 
-		assertParse: '
+
+	self
+		assertParse:
+			'
 Object class>>name [ 
 	^ self printString
 ]'
-		rule: #methodDef
-		equals: (self newMethodDefinitionForClassNamed: #Object
-			classIsMeta: true
-			selector: #name
-			category: ''
-			source: 'name 
+		rule: #'methodDef'
+		equals:
+			(self
+				newMethodDefinitionForClassNamed: #'Object'
+				classIsMeta: true
+				selector: #'name'
+				category: ''
+				source:
+					'name 
 	^ self printString').
 
-	self 
-		assertParse: '
+	self
+		assertParse:
+			'
 TClass classSide >> template: aSystemCategoryName [ 
 	"I really do not care"
 ]'
-		rule: #methodDef
-		equals: (self newMethodDefinitionForClassNamed: #TClass
-			classIsMeta: true
-			selector: #template:
-			category: ''
-			source: 'template: aSystemCategoryName 
-	"I really do not care"').
-
+		rule: #'methodDef'
+		equals:
+			(self
+				newMethodDefinitionForClassNamed: #'TClass'
+				classIsMeta: true
+				selector: #'template:'
+				category: ''
+				source:
+					'template: aSystemCategoryName 
+	"I really do not care"') ]
+		on: RwTonelParseRequireMethodCategoryNotification
+		do: [ :ex | ex resume: '' ]
 ]
 
 { #category : 'tests' }
@@ -300,9 +314,10 @@ Object>>name [
 { #category : 'tests' }
 RwTonelParserTest >> testMethodDefList [
 	| parsed |
-	
-	parsed := self 
-		parse: '
+	[ 
+	parsed := self
+		parse:
+			'
 Object class>>new [
 	^ self basicNew initialize
 ]
@@ -324,10 +339,10 @@ Object>>printOn: aStream [
 		nextPutAll: title
 
 ]'
-		rule: #methodDefList.
-		
+		rule: #'methodDefList' ]
+		on: RwTonelParseRequireMethodCategoryNotification
+		do: [ :ex | ex resume: '' ].
 	self assert: parsed flattened size equals: 3
-
 ]
 
 { #category : 'tests' }

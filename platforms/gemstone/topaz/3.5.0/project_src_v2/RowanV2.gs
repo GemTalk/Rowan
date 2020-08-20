@@ -283,6 +283,23 @@ true.
 
 doit
 (Error
+	subclass: 'RwTonelParseError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tonel-Core';
+		comment: 'I''m a parsing error. 
+I happen whenever the parsing of a tonel file is broken in someway.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Error
 	subclass: 'STONReaderError'
 	instVarNames: #( streamPosition )
 	classVars: #(  )
@@ -310,23 +327,6 @@ doit
 )
 		category: 'STON-Core';
 		comment: 'STONWriterError is the error/exception signalled by STONWriter when illegal/incorrect input is seen. ';
-		immediateInvariant.
-true.
-%
-
-doit
-(Error
-	subclass: 'TonelParseError'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-GemStone-Core';
-		comment: 'I''m a parsing error. 
-I happen whenever the parsing of a tonel file is broken in someway.';
 		immediateInvariant.
 true.
 %
@@ -1096,6 +1096,26 @@ doit
 	options: #()
 )
 		category: 'Rowan-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(Notification
+	subclass: 'RwTonelParseRequireMethodCategoryNotification'
+	instVarNames: #( className isMeta selector )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tonel-Core';
+		comment: 'The receiver is signalled when the RwTonelParser is about to create a method definition with no method category defined.
+
+If the caller wants to continue, #resume: the notification with the value of the category to be used.
+
+If unhandled,  a RwTonelParseError is signalled.';
 		immediateInvariant.
 true.
 %
@@ -8210,6 +8230,28 @@ true.
 
 doit
 (Object
+	subclass: 'RwTopazTonelReader'
+	instVarNames: #( environmentId )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Tonel-Core';
+		comment: 'Support class for topaz `tfile` and `tmethod` commands.
+
+`tmethod`
+	Read and compile a single tonal format method from a given string
+
+`tfile`
+	Read a single tonel format class from a file and compile the methods within that file. Definition/redefinition of the class not implemented yet.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'RwUrl'
 	instVarNames: #( fragment )
 	classVars: #(  )
@@ -11389,6 +11431,72 @@ signal: aMessage
 
 	self informMessage: aMessage.
 	^ self signal
+%
+
+! Class implementation for 'RwTonelParseRequireMethodCategoryNotification'
+
+!		Class methods for 'RwTonelParseRequireMethodCategoryNotification'
+
+category: 'instance creation'
+classmethod: RwTonelParseRequireMethodCategoryNotification
+className: className isMeta: isMeta selector: selector
+	^ self new
+		className: className;
+		isMeta: isMeta;
+		selector: selector;
+		yourself
+%
+
+!		Instance methods for 'RwTonelParseRequireMethodCategoryNotification'
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+className
+	^className
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+className: object
+	className := object
+%
+
+category: 'Handling'
+method: RwTonelParseRequireMethodCategoryNotification
+defaultAction
+	"handle and resume: with the desired method category to be used to avoid error"
+
+	RwTonelParseError
+		signal:
+			'Missing method category for ' , self className
+				,
+					(self isMeta
+						ifTrue: [ ' class >> ' ]
+						ifFalse: [ ' >> ' ]) , self selector
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+isMeta
+	^isMeta
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+isMeta: object
+	isMeta := object
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+selector
+	^selector
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+selector: object
+	selector := object
 %
 
 ! Class implementation for 'AbstractFileReference'
@@ -17540,6 +17648,18 @@ instVarNames
   ^ instVarNames
 %
 
+category: 'testing'
+method: CypressClassDefinition
+isClassDefinition
+  ^ true
+%
+
+category: 'testing'
+method: CypressClassDefinition
+isMethodDefinition
+  ^ false
+%
+
 category: 'loading'
 method: CypressClassDefinition
 loadClassDefinition
@@ -17887,8 +18007,20 @@ instanceMethod: instanceBlock classMethod: classBlock
 
 category: 'testing'
 method: CypressMethodDefinition
+isClassDefinition
+  ^ false
+%
+
+category: 'testing'
+method: CypressMethodDefinition
 isInitializer
 	^ self selector = 'initialize' and: [self classIsMeta]
+%
+
+category: 'testing'
+method: CypressMethodDefinition
+isMethodDefinition
+  ^ true
 %
 
 category: 'loading'
@@ -19840,7 +19972,7 @@ method: CypressClassStructure
 asCypressClassDefinition
 
 	self isClassExtension ifTrue: [^CypressError signal: 'Extensions cannot have class definitions'].
-	^CypressClassDefinition
+	^CypressClassDefinition new
 		name: self className
 		superclassName: self superclassName
 		category: self category
@@ -60884,7 +61016,7 @@ definitionForType: aString
     ifTrue: [ ^ #class ].
   aString = self class tonelExtensionLabel
     ifTrue: [ ^ #classExtension ].
-  TonelParseError signal: 'Unknown type declaration.'
+  RwTonelParseError signal: 'Unknown type declaration.'
 %
 
 category: 'tonel parser'
@@ -60961,7 +61093,7 @@ readClassExtensionFile: file inPackage: packageName
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
       self checkMethodDefinitions: currentClassExtension .
-    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+    ] on: ( STONReaderError , RwTonelParseError) do:[:ex |
       ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
       ex pass .
     ].
@@ -60996,7 +61128,7 @@ readClassFile: file inPackage: packageName
 			self checkMethodDefinitions: clsDef.
 			projectDef := currentProjectDefinition packageNamed: packageName.
 			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ]	"ifNil:[ projectDef addClassExtensionDefinition: clsDef]." ]
-				on: STONReaderError , TonelParseError
+				on: STONReaderError , RwTonelParseError
 				do: [ :ex | 
 					ex
 						addText:
@@ -70321,62 +70453,6 @@ _projectDefinition
 %
 
 ! Class implementation for 'RwProjectDefinitionV2'
-
-!		Class methods for 'RwProjectDefinitionV2'
-
-category: 'topaz tonel support'
-classmethod: RwProjectDefinitionV2
-topazReadTonelFile: fileName
-    "Read a single file and compile the methods within that file.
-     Definition/redefinition of the class not implemented yet "
-  | projectDef package clsName clsDef cls methBlk envId |
-  projectDef := RwRepositoryResolvedProjectTonelReaderVisitorV2
-     readClassFile: fileName
-     projectName: 'TopazLoad'   "synthetic projed and package names"
-     packageName: 'TopazPackage' .
-  package := projectDef packageNamed: 'TopazPackage_1' .
-  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
-  package classDefinitions ifNotNil:[:defs | | sz |
-    (sz := defs size) > 1 ifTrue:[
-      Error signal:'more than one class definition in file ' , fileName
-    ].
-    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
-  ].
-  package classExtensions ifNotNil:[:defs | | sz |
-    (sz := defs size) > 1 ifTrue:[
-      Error signal:'more than one class extension in file ' , fileName
-    ].
-    sz > 0 ifTrue:[
-      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
-      clsDef :=  defs values at: 1.
-    ].
-  ].   
-  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
-  clsName := clsDef name .
-  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
-    "creating the class not implemented yet"
-    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
-  ].
-  cls := cls"anAssociation" value.
-
-  methBlk := [ :methDef "a RwMethodDefinition" |
-    [
-      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
-      cls compileMethod: methDef source
-      dictionaries: System myUserProfile symbolList
-      category: methDef protocol asSymbol
-      intoMethodDict: nil "install into the class's dictionaries"
-      intoCategories: nil
-      environmentId:  envId
-    ] on: (CompileError, CompileWarning) do:[:ex | 
-      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
-      ex pass
-    ]
-   ].
-  clsDef instanceMethodDefinitions do: methBlk .
-  cls := cls class .
-  clsDef classMethodDefinitions do: methBlk .
-%
 
 !		Instance methods for 'RwProjectDefinitionV2'
 
@@ -87633,43 +87709,6 @@ writeStreamClass
 	^ WriteStreamPortable
 %
 
-category: 'Topaz support'
-classmethod: RwTonelParser
-_compileForTopaz: aString envId: envId
-  "aString is the topaz text object for topaz TMETHOD command"
-| strm parser catDict category methInfo methSrc symList clsName cls
-  warnStr  |
-strm :=  ReadStreamPortable on: aString  .
-(parser := self new) stream: strm .
-
-parser separator ifNotNil:[ Error signal:'expected parser separator to be nil'].
-
-catDict :=  (parser try: [ parser metadata ]).
-catDict ifNil:[ Error signal:'Category dictionary not found'. ].
-category := catDict at: #category .
-
-parser separator ifNotNil:[ Error signal:'expected second parser separator to be nil'].
-
-methInfo :=  parser method.
-clsName := Symbol _existingWithAll: ((methInfo at: 1) at: 1) .
-
-methSrc :=  (methInfo at: 2)"keywords+args" ,  parser methodBody .
-symList := System myUserProfile symbolList .
-cls := (symList resolveSymbol: clsName) value .
-((methInfo at: 1) at: 2) ifNotNil:[:classWord |
-  classWord = 'class' ifTrue:[ cls := cls class ]
-      ifFalse:[ Error signal:'unrecognized ' , classWord asString, ' after >>'].
-].
-[ cls compileMethod: methSrc dictionaries: symList 
-               category: category  
-               environmentId: envId .
-] on: CompileWarning do:[:ex | 
-   warnStr := ex warningString .
-   ex resume 
-].
-^ warnStr "nil if no warnings"
-%
-
 !		Instance methods for 'RwTonelParser'
 
 category: 'private'
@@ -87693,7 +87732,7 @@ comment
 	result := String new writeStreamPortable.
 
 	eatNext := false.
-	stream next = $" ifFalse: [ TonelParseError signal: 'Can''t parse comment' ].	
+	stream next = $" ifFalse: [ RwTonelParseError signal: 'Can''t parse comment' ].	
 	[ stream atEnd not 
 		and: [ 
 				(ch := stream next) ~= $" 
@@ -87776,7 +87815,7 @@ metadata
 	result := String new writeStreamPortable.
 
 	count := 0.
-	stream peek = ${ ifFalse: [ TonelParseError signal: 'Can''t parse metadata' ].	
+	stream peek = ${ ifFalse: [ RwTonelParseError signal: 'Can''t parse metadata' ].	
 	[ stream atEnd not ]
 	whileTrue: [ 
 		ch := stream next.
@@ -87785,7 +87824,7 @@ metadata
 		ch = $} ifTrue: [ count := count -1 ].
 		count = 0 ifTrue: [ ^ STON fromString: result contents ]].
 
-	TonelParseError signal: 'Can''t parse metadata'
+	RwTonelParseError signal: 'Can''t parse metadata'
 %
 
 category: 'parsing'
@@ -87826,7 +87865,7 @@ methodBody
 	count := 0.
         startPos := stream position .
         "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
-	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
+	stream peek = $[ ifFalse: [ RwTonelParseError signal: 'Can''t parse method body' ].
 	[ stream atEnd not ]
 	whileTrue: [ 
 		char := stream next.
@@ -87846,13 +87885,12 @@ methodBody
 				clean: #right ].
 		prevChar := char ].
 
-	TonelParseError signal: 'Can''t parse method body'
+	RwTonelParseError signal: 'Can''t parse method body'
 %
 
 category: 'parsing'
 method: RwTonelParser
 methodDef
-	"kept around for tests"
 
 	| methodDef |
 	self methodDef: [:isMeta :mDef |
@@ -87900,7 +87938,7 @@ methodDefList
 					"skip possible spaces at the end"
 					self separator ]
 			] 
-  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+  ] on: (RwTonelParseError,STONReaderError,STONWriterError) do:[:ex | 
     lastSelectorParsed ifNotNil:[ | str |
       str := ex details ifNil:[ '' ].
       ex details: str, ', last method parsed: ', lastSelectorParsed printString
@@ -87913,10 +87951,10 @@ methodDefList
 category: 'private factory'
 method: RwTonelParser
 newMethodDefinitionFrom: anArray
-	| metadata className meta selector source |
+	| metadata className meta selector source categ |
 	metadata := anArray second ifNil: [ Dictionary new ].
 	className := anArray fourth first first.
- 	(Metaclass3 _validateNewClassName: className asSymbol)
+	(Metaclass3 _validateNewClassName: className asSymbol)
 		ifFalse: [ self error: 'Invalid class name ' , className printString ].
 	meta := anArray fourth first second notNil.
 	selector := self extractSelector: anArray fourth second trimBoth.
@@ -87925,11 +87963,20 @@ newMethodDefinitionFrom: anArray
 			s << anArray fourth second.
 			anArray fifth ifNotEmpty: [ :src | s << src ] ].
 
+	categ := metadata
+		at: #'category'
+		ifAbsent: [ 
+			"to avoid error, resume with default category string"
+			(RwTonelParseRequireMethodCategoryNotification
+				className: className
+				isMeta: meta
+				selector: selector) signal ].
+
 	^ self packageReader
 		newMethodDefinitionForClassNamed: className
 		classIsMeta: meta
 		selector: selector
-		category: (metadata at: #'category' ifAbsent: [ '' ])
+		category: categ
 		source: source
 %
 
@@ -87969,7 +88016,7 @@ removeFrom: aString enclosingStart: startChar end: endChar clean: cleanSymbol
   | result stop ch start end |
   result := self class readStreamClass on: aString trimBoth.
   result peek = startChar
-    ifFalse: [ TonelParseError signal: 'I cannot remove enclosing start' ].
+    ifFalse: [ RwTonelParseError signal: 'I cannot remove enclosing start' ].
   result skip: 1.
   (#(#'both' #'left') includes: cleanSymbol)
     ifTrue: [ 
@@ -87983,7 +88030,7 @@ removeFrom: aString enclosingStart: startChar end: endChar clean: cleanSymbol
   result setToEnd.
   result skip: -1.
   result peek = endChar
-    ifFalse: [ TonelParseError signal: 'I cannot remove enclosing end' ].
+    ifFalse: [ RwTonelParseError signal: 'I cannot remove enclosing end' ].
   result skip: -1.
   (#(#'both' #'right') includes: cleanSymbol)
     ifTrue: [ 
@@ -88061,7 +88108,7 @@ try: aBlock onSuccess: successBlock onFailure: failureBlock
 	
 	pos := stream position.
 	[ ^ successBlock value: aBlock value ]
-	on: TonelParseError 
+	on: RwTonelParseError 
 	do: [ :e | 
 		stream position: pos.
 		^ failureBlock value ]. 
@@ -88076,7 +88123,7 @@ type
 	self try: [ self word: 'Extension' ] onSuccess: [ :word | ^ word  ].
 	
 	"at end"
-	TonelParseError signal: 'Can''t parse type.'	
+	RwTonelParseError signal: 'Can''t parse type.'	
 %
 
 category: 'parsing'
@@ -88122,8 +88169,152 @@ word: aString
 	| result |
 	result := stream next: aString size.
 	result = aString
-		ifFalse: [ TonelParseError signal: 'Can''t parse ', aString ].
+		ifFalse: [ RwTonelParseError signal: 'Can''t parse ', aString ].
 	^ result
+%
+
+! Class implementation for 'RwTopazTonelReader'
+
+!		Class methods for 'RwTopazTonelReader'
+
+category: 'instance creation'
+classmethod: RwTopazTonelReader
+forEnvironmentId: environmentId
+	"Create a new instance of the receiver that will compile methods using environmentId"
+
+	^ self new
+		environmentId: environmentId;
+		yourself
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazCompileTonelMethod: aString
+	"Read and compile a single tonal format method from a given string.
+		For topaz TMETHOD command"
+
+	^ self topazCompileTonelMethod: aString envId: 0
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazCompileTonelMethod: aString envId: envId
+	"Read and compile a single tonal format method (category plush method block) from a given string.
+		For topaz TMETHOD command"
+
+	| strm parser warnStr |
+	strm := ReadStreamPortable on: aString.
+
+	parser := RwTonelParser on: strm forReader: (self forEnvironmentId: envId).
+
+	[ parser methodDef ]
+		on: CompileWarning
+		do: [ :ex | 
+			warnStr := ex warningString.
+			ex resume ].
+	^ warnStr	"nil if no warnings"
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazReadTonelFile: filePath
+	"Read a single tonel format class from a file and compile the methods within that file. 
+		Definition/redefinition of the class not implemented yet.
+		For topaz TFILE command"
+
+	^ self topazReadTonelFile: filePath envId: 0
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazReadTonelFile: filePath envId: envId
+	"Read a single tonel format class from a file and compile the methods within that file. 
+		Definition/redefinition of the class not implemented yet.
+		For topaz TFILE command"
+
+	| gsfile stream |
+	gsfile := GsFile openReadOnServer: filePath.
+	stream := ReadStreamPortable on: gsfile contents.
+	gsfile close.
+	[ self topazReadTonelStream: stream envId: envId ]
+		on: STONReaderError , RwTonelParseError
+		do: [ :ex | 
+			ex addText: (self _lineNumberStringForOffset: stream position fileName: filePath).
+			ex pass ]
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazReadTonelStream: tonelStream envId: envId
+	"Read a single tonel format class from a stream and compile the methods on that stream. 
+		Definition/redefinition of the class not implemented yet.
+		For topaz TFILE command"
+
+	RwTonelParser
+		parseStream: tonelStream
+		forReader: (self forEnvironmentId: envId)
+%
+
+category: 'private'
+classmethod: RwTopazTonelReader
+_lineNumberStringForOffset: offset fileName: fName
+	| res |
+	res := '  (Unable to determine line number)'.
+	[ 
+	| buf lf lNum gsfile |
+	gsfile := GsFile openReadOnServer: fName.
+	buf := gsfile contents.
+	gsfile close.
+	buf size > offset
+		ifTrue: [ buf size: offset ].
+	lNum := 1 + (buf occurrencesOf: (lf := Character lf)).
+	res := '' , lf , ' near line ' , lNum asString , lf , ' in file ' , fName ]
+		on: Error
+		do: [ :ex | 
+			"ignore"
+			 ].
+	^ res
+%
+
+!		Instance methods for 'RwTopazTonelReader'
+
+category: 'accessing'
+method: RwTopazTonelReader
+environmentId
+	^ environmentId ifNil: [ environmentId := 0 ]
+%
+
+category: 'accessing'
+method: RwTopazTonelReader
+environmentId: object
+	environmentId := object
+%
+
+category: 'tonel parser interface'
+method: RwTopazTonelReader
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+	| behavior symbolList |
+	symbolList := GsCurrentSession currentSession symbolList.
+	behavior := symbolList objectNamed: className asSymbol.
+	meta
+		ifTrue: [ behavior := behavior class ].
+	behavior
+		compileMethod: source
+		dictionaries: symbolList
+		category: category
+		environmentId: self environmentId
+%
+
+category: 'tonel parser interface'
+method: RwTopazTonelReader
+newTypeDefinitionFrom: anArray
+	"class definition/redefinition not supported"
+%
+
+category: 'method definition'
+method: RwTopazTonelReader
+offset: anInteger inFile: aFileName
+	"message sent to method definitions ... avoid MNU"
 %
 
 ! Class implementation for 'RwUrl'
