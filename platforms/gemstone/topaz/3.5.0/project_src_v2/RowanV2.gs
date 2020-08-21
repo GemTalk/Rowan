@@ -88234,12 +88234,15 @@ topazReadTonelFile: filePath envId: envId
 
 	| gsfile stream |
 	gsfile := GsFile openReadOnServer: filePath.
+	gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
 	stream := ReadStreamPortable on: gsfile contents.
 	gsfile close.
 	[ self topazReadTonelStream: stream envId: envId ]
 		on: STONReaderError , RwTonelParseError
 		do: [ :ex | 
-			ex addText: (self _lineNumberStringForOffset: stream position fileName: filePath).
+			ex
+				addText:
+					(self _lineNumberStringForOffset: stream position fileName: filePath).
 			ex pass ]
 %
 
@@ -89588,18 +89591,22 @@ isSimpleSymbolChar: char
 category: 'private'
 method: STONReader
 lookupClass: name
-  ^ (System myUserProfile objectNamed: name asSymbol)
-    ifNil: [ 
-		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
-			ifNotNil: [:rowanSymbolDictionary |
-				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
-					ifNotNil: [:cls | ^cls ] ])
-						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
+	^ (System myUserProfile objectNamed: name asSymbol)
+		ifNil: [ 
+			(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
+				ifNotNil: [ :rowanSymbolDictionary | 
+					(rowanSymbolDictionary at: name asSymbol ifAbsent: [  ])
+						ifNotNil: [ :cls | ^ cls ] ])
+				ifNil: [ 
+					classes
+						at: name
+						ifAbsentPut: [ 
+							(ClassOrganizer new allSubclassesOf: Object)
 								detect: [ :cls | cls stonName == name ]
-								ifNone: [
-									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
-										platform serviceClassFor: name)
-											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
+								ifNone: [ 
+									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan')
+										ifNotNil: [ :rowan | rowan platform serviceClassFor: name ])
+										ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
 %
 
 category: 'private'
@@ -94290,7 +94297,7 @@ stonOn: stonWriter
                 ifFalse: [stonWriter writeString: self]
 %
 
-category: '*rowan-gemstone-components-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 substrings: separators 
 	"Answer an array containing the substrings in the receiver separated 
@@ -96352,6 +96359,12 @@ method: GsFile
  	items putOn: self.
 	
 	^ self
+%
+
+category: '*rowan-tonel-gemstone-kernel'
+method: GsFile
+wrappedStreamName
+	^ self pathName
 %
 
 ! Class extensions for 'GsNMethod'
@@ -99879,7 +99892,7 @@ withIndexDo: elementAndIndexBlock
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
 %
 
-category: '*rowan-gemstone-components-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 writeStreamPortable
 
@@ -99903,7 +99916,7 @@ isBinary
 	^false
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Stream
 wrappedStreamName
 

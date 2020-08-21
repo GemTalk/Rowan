@@ -1,6 +1,8 @@
 RwSimpleProjectLoadComponentV2 {
 	#name : 'Core',
 	#condition : 'gemstone-kernel',
+	#projectNames : [ ],
+	#componentNames : [ ],
 	#packageNames : [
 		'STON-Core',
 		'STON-GemStone-Core',

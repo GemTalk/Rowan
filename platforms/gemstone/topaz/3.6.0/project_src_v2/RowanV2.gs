@@ -91678,33 +91678,6 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 	^ aRwSemanticVersonComponent rwSemanticStringLessThanSelf: self
 %
 
-category: '*rowan-gemstone-components-kernel'
-method: CharacterCollection
-substrings: separators 
-	"Answer an array containing the substrings in the receiver separated 
-	by the elements of separators."
-	| result sourceStream subStringStream |
-	
-	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
-		ifFalse: [ ^ self error: 'separators must be Characters.' ].
-	sourceStream := self readStream.
-	result := OrderedCollection new.
-	subStringStream := String new writeStreamPortable.
-	[ sourceStream atEnd ] whileFalse: [
-		| char |
-		char := sourceStream next.
-		(separators includes: char)
-			ifTrue: [
-				subStringStream isEmpty ifFalse: [
-					result add: subStringStream contents.
-					subStringStream := String new writeStreamPortable ] ]
-			ifFalse: [
-				subStringStream nextPut: char ] ].
-	subStringStream isEmpty ifFalse: [
-		result add: subStringStream contents ].
-	^ result asArray
-%
-
 category: '*rowan-gemstone-url'
 method: CharacterCollection
 unescapePercents
@@ -96583,13 +96556,6 @@ reversed
 	^ result
 %
 
-category: '*rowan-gemstone-components-kernel'
-method: SequenceableCollection
-writeStreamPortable
-
-	^ WriteStreamPortable on: self
-%
-
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -96598,13 +96564,6 @@ category: '*filesystem-gemstone-kernel'
 method: Stream
 isBinary
 	^false
-%
-
-category: '*filesystem-gemstone-kernel'
-method: Stream
-wrappedStreamName
-
-	^''
 %
 
 ! Class extensions for 'String'

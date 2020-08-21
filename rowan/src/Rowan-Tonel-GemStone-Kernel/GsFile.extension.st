@@ -8,3 +8,8 @@ GsFile >> << items [
 	^ self
 
 ]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
+GsFile >> wrappedStreamName [
+	^ self pathName
+]

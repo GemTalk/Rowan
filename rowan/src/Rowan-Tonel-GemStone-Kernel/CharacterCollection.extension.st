@@ -1,6 +1,31 @@
 Extension { #name : 'CharacterCollection' }
 
 { #category : '*rowan-tonel-gemstone-kernel' }
+CharacterCollection >> endsWith: suffix [
+
+	"Answer whether the tail end of the receiver is the same as suffix.
+	 The comparison is case-sensitive."
+
+	| ofs |
+	suffix size == 0
+		ifTrue: [ ^ false ].
+	(ofs := self size - suffix size) < 0
+		ifTrue: [ ^ false ].
+	^ self at: ofs + 1 equals: suffix	"
+  'Elvis' endsWith: 'vis'
+  'Elvis' endsWith: ''
+"
+
+]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
+CharacterCollection >> findString: subString startingAt: startIndex caseSensitive: aBoolean [
+
+	^ self _findString: subString startingAt: startIndex ignoreCase: aBoolean not
+
+]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
 CharacterCollection >> join: aCollection [ 
 	"'*' join: #('WWWWW' 'W  EW' 'zzzz')
 		->  'WWWWW*W  EW*zzzz' "
@@ -49,60 +74,36 @@ CharacterCollection >> lineIndicesDo: aBlock [
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }
-CharacterCollection >> withLineEndings: lineEndingString [
-	| stream |
-	stream := nil.
-	self
-		lineIndicesDo: [ :start :endWithoutDelimiters :end | 
-			(stream isNil and: [ endWithoutDelimiters ~= end ])
-				ifTrue: [ 
-					((self copyFrom: endWithoutDelimiters + 1 to: end)
-						_unicodeEqual: lineEndingString)
-						ifFalse: [ 
-							stream := WriteStreamPortable with: self copy.
-							stream position: start - 1 ] ].
-			stream
-				ifNotNil: [ 
-					stream next: endWithoutDelimiters - start + 1 putAll: self startingAt: start.
-					endWithoutDelimiters = end
-						ifFalse: [ stream nextPutAll: lineEndingString ] ] ].
-	^ stream
-		ifNil: [ self ]
-		ifNotNil: [ 
-			stream position = self size
-				ifTrue: [ stream originalContents ]
-				ifFalse: [ stream contents ] ]
-]
-
-{ #category : '*rowan-tonel-gemstone-kernel' }
-CharacterCollection >> endsWith: suffix [
-
-	"Answer whether the tail end of the receiver is the same as suffix.
-	 The comparison is case-sensitive."
-
-	| ofs |
-	suffix size == 0
-		ifTrue: [ ^ false ].
-	(ofs := self size - suffix size) < 0
-		ifTrue: [ ^ false ].
-	^ self at: ofs + 1 equals: suffix	"
-  'Elvis' endsWith: 'vis'
-  'Elvis' endsWith: ''
-"
-
-]
-
-{ #category : '*rowan-tonel-gemstone-kernel' }
-CharacterCollection >> findString: subString startingAt: startIndex caseSensitive: aBoolean [
-
-	^ self _findString: subString startingAt: startIndex ignoreCase: aBoolean not
-
-]
-
-{ #category : '*rowan-tonel-gemstone-kernel' }
 CharacterCollection >> putOn: aStream [
 
 	^ aStream nextPutAll: self
+
+]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
+CharacterCollection >> substrings: separators [ 
+	"Answer an array containing the substrings in the receiver separated 
+	by the elements of separators."
+	| result sourceStream subStringStream |
+	
+	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
+		ifFalse: [ ^ self error: 'separators must be Characters.' ].
+	sourceStream := self readStream.
+	result := OrderedCollection new.
+	subStringStream := String new writeStreamPortable.
+	[ sourceStream atEnd ] whileFalse: [
+		| char |
+		char := sourceStream next.
+		(separators includes: char)
+			ifTrue: [
+				subStringStream isEmpty ifFalse: [
+					result add: subStringStream contents.
+					subStringStream := String new writeStreamPortable ] ]
+			ifFalse: [
+				subStringStream nextPut: char ] ].
+	subStringStream isEmpty ifFalse: [
+		result add: subStringStream contents ].
+	^ result asArray
 
 ]
 
@@ -174,4 +175,30 @@ CharacterCollection >> trimRight: aBlock [
 
 	^ self trimLeft: [ :char | false ] right: aBlock
 
+]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
+CharacterCollection >> withLineEndings: lineEndingString [
+	| stream |
+	stream := nil.
+	self
+		lineIndicesDo: [ :start :endWithoutDelimiters :end | 
+			(stream isNil and: [ endWithoutDelimiters ~= end ])
+				ifTrue: [ 
+					((self copyFrom: endWithoutDelimiters + 1 to: end)
+						_unicodeEqual: lineEndingString)
+						ifFalse: [ 
+							stream := WriteStreamPortable with: self copy.
+							stream position: start - 1 ] ].
+			stream
+				ifNotNil: [ 
+					stream next: endWithoutDelimiters - start + 1 putAll: self startingAt: start.
+					endWithoutDelimiters = end
+						ifFalse: [ stream nextPutAll: lineEndingString ] ] ].
+	^ stream
+		ifNil: [ self ]
+		ifNotNil: [ 
+			stream position = self size
+				ifTrue: [ stream originalContents ]
+				ifFalse: [ stream contents ] ]
 ]

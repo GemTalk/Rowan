@@ -6,3 +6,9 @@ Stream >> << items [
 	items putOn: self
 
 ]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
+Stream >> wrappedStreamName [
+
+	^''
+]

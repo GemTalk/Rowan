@@ -88,12 +88,15 @@ RwTopazTonelReader class >> topazReadTonelFile: filePath envId: envId [
 
 	| gsfile stream |
 	gsfile := GsFile openReadOnServer: filePath.
+	gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
 	stream := ReadStreamPortable on: gsfile contents.
 	gsfile close.
 	[ self topazReadTonelStream: stream envId: envId ]
 		on: STONReaderError , RwTonelParseError
 		do: [ :ex | 
-			ex addText: (self _lineNumberStringForOffset: stream position fileName: filePath).
+			ex
+				addText:
+					(self _lineNumberStringForOffset: stream position fileName: filePath).
 			ex pass ]
 ]
 

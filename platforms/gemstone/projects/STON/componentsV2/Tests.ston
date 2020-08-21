@@ -1,6 +1,8 @@
 RwSimpleProjectLoadComponentV2 {
 	#name : 'Tests',
 	#condition : 'tests',
+	#projectNames : [ ],
+	#componentNames : [ ],
 	#packageNames : [
 		'STON-Tests',
 		'STON-GemStone-Tests'
@@ -9,10 +11,10 @@ RwSimpleProjectLoadComponentV2 {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'STON-Tests' : {
+					'STON-GemStone-Tests' : {
 						'symbolDictName' : 'Globals'
 					},
-					'STON-GemStone-Tests' : {
+					'STON-Tests' : {
 						'symbolDictName' : 'Globals'
 					}
 				}

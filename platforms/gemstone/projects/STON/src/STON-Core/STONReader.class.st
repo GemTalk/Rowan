@@ -120,19 +120,22 @@ STONReader >> isSimpleSymbolChar: char [
 
 { #category : 'private' }
 STONReader >> lookupClass: name [
-  ^ (System myUserProfile objectNamed: name asSymbol)
-    ifNil: [ 
-		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
-			ifNotNil: [:rowanSymbolDictionary |
-				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
-					ifNotNil: [:cls | ^cls ] ])
-						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
+	^ (System myUserProfile objectNamed: name asSymbol)
+		ifNil: [ 
+			(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
+				ifNotNil: [ :rowanSymbolDictionary | 
+					(rowanSymbolDictionary at: name asSymbol ifAbsent: [  ])
+						ifNotNil: [ :cls | ^ cls ] ])
+				ifNil: [ 
+					classes
+						at: name
+						ifAbsentPut: [ 
+							(ClassOrganizer new allSubclassesOf: Object)
 								detect: [ :cls | cls stonName == name ]
-								ifNone: [
-									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
-										platform serviceClassFor: name)
-											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
-
+								ifNone: [ 
+									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan')
+										ifNotNil: [ :rowan | rowan platform serviceClassFor: name ])
+										ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
 ]
 
 { #category : 'private' }

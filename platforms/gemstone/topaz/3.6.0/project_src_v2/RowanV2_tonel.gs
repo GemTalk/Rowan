@@ -1077,12 +1077,15 @@ topazReadTonelFile: filePath envId: envId
 
 	| gsfile stream |
 	gsfile := GsFile openReadOnServer: filePath.
+	gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
 	stream := ReadStreamPortable on: gsfile contents.
 	gsfile close.
 	[ self topazReadTonelStream: stream envId: envId ]
 		on: STONReaderError , RwTonelParseError
 		do: [ :ex | 
-			ex addText: (self _lineNumberStringForOffset: stream position fileName: filePath).
+			ex
+				addText:
+					(self _lineNumberStringForOffset: stream position fileName: filePath).
 			ex pass ]
 %
 
@@ -1370,18 +1373,22 @@ isSimpleSymbolChar: char
 category: 'private'
 method: STONReader
 lookupClass: name
-  ^ (System myUserProfile objectNamed: name asSymbol)
-    ifNil: [ 
-		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
-			ifNotNil: [:rowanSymbolDictionary |
-				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
-					ifNotNil: [:cls | ^cls ] ])
-						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
+	^ (System myUserProfile objectNamed: name asSymbol)
+		ifNil: [ 
+			(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
+				ifNotNil: [ :rowanSymbolDictionary | 
+					(rowanSymbolDictionary at: name asSymbol ifAbsent: [  ])
+						ifNotNil: [ :cls | ^ cls ] ])
+				ifNil: [ 
+					classes
+						at: name
+						ifAbsentPut: [ 
+							(ClassOrganizer new allSubclassesOf: Object)
 								detect: [ :cls | cls stonName == name ]
-								ifNone: [
-									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
-										platform serviceClassFor: name)
-											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
+								ifNone: [ 
+									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan')
+										ifNotNil: [ :rowan | rowan platform serviceClassFor: name ])
+										ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
 %
 
 category: 'private'
@@ -2634,6 +2641,33 @@ stonOn: stonWriter
 
 category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
+substrings: separators 
+	"Answer an array containing the substrings in the receiver separated 
+	by the elements of separators."
+	| result sourceStream subStringStream |
+	
+	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
+		ifFalse: [ ^ self error: 'separators must be Characters.' ].
+	sourceStream := self readStream.
+	result := OrderedCollection new.
+	subStringStream := String new writeStreamPortable.
+	[ sourceStream atEnd ] whileFalse: [
+		| char |
+		char := sourceStream next.
+		(separators includes: char)
+			ifTrue: [
+				subStringStream isEmpty ifFalse: [
+					result add: subStringStream contents.
+					subStringStream := String new writeStreamPortable ] ]
+			ifFalse: [
+				subStringStream nextPut: char ] ].
+	subStringStream isEmpty ifFalse: [
+		result add: subStringStream contents ].
+	^ result asArray
+%
+
+category: '*rowan-tonel-gemstone-kernel'
+method: CharacterCollection
 trimBoth
 
 	"Trim separators from both sides of the receiving string."
@@ -2901,6 +2935,12 @@ method: GsFile
  	items putOn: self.
 	
 	^ self
+%
+
+category: '*rowan-tonel-gemstone-kernel'
+method: GsFile
+wrappedStreamName
+	^ self pathName
 %
 
 ! Class extensions for 'Integer'
@@ -3198,6 +3238,13 @@ withIndexDo: elementAndIndexBlock
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
 %
 
+category: '*rowan-tonel-gemstone-kernel'
+method: SequenceableCollection
+writeStreamPortable
+
+	^ WriteStreamPortable on: self
+%
+
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -3207,6 +3254,13 @@ method: Stream
 << items
 
 	items putOn: self
+%
+
+category: '*rowan-tonel-gemstone-kernel'
+method: Stream
+wrappedStreamName
+
+	^''
 %
 
 ! Class extensions for 'String'
