@@ -3,8 +3,6 @@ RwPlatformNestedProjectLoadComponentV2 {
 	#condition : [
 		'gemstone'
 	],
-	#projectNames : [ ],
-	#componentNames : [ ],
 	#packageNames : [
 		'Rowan-Tonel-GemStone-Kernel'
 	],

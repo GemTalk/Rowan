@@ -120,7 +120,7 @@ false ifTrue: [
 	} 
 	do: [:ar |
 		"Read project and packages from disk."
-		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome conditionalAttributes theRepositoryRoot specialCaseDict |
+		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome conditionalAttributes theRepositoryRoot specialCaseDict excludedPackages |
 		loadSpecUrl := ar at: 1.
 		projectsHome := ar at: 2.
 		conditionalAttributes := (ar at: 3) copy.
@@ -140,17 +140,24 @@ false ifTrue: [
 
 		topazFileNameMap := Dictionary new.
 		topazFileNameMap at: gsFileName put: {}.
+		excludedPackages := Set new.
 		theProjectSetDefinition keys do: [:projectName |
-			| projectDefinition excludedPackages thePackages |
+			| projectDefinition thePackages |
+			"compute excludedPackages for all projects"
 			projectDefinition := theProjectSetDefinition projectNamed: projectName.
-			excludedPackages := {}.
 			specialCaseDict 
 				at: projectName
 				ifPresent: [:assocList |
 					assocList do: [:assoc | 
-						excludedPackages := assoc value.
-						topazFileNameMap at: gsFileName, '_', assoc key put:excludedPackages.
-						GsFile gciLogServer: '	---', assoc key, ' packages ', excludedPackages printString ] ].
+						excludedPackages addAll: assoc value.
+						(topazFileNameMap at: gsFileName, '_', assoc key ifAbsentPut: [ Set new ])
+							addAll: assoc value.
+						GsFile gciLogServer: '	---', assoc key, ' packages ', assoc value printString ] ] ].
+		GsFile gciLogServer: '	Excluded packages: ', excludedPackages asArray printString.
+		theProjectSetDefinition keys do: [:projectName |
+			| projectDefinition thePackages |
+			"define contents of RowanV2.gs"
+			projectDefinition := theProjectSetDefinition projectNamed: projectName.
 			thePackages := projectDefinition packageNames.
 			thePackages removeAllPresent: excludedPackages.
 			thePackages do: [:packageName |

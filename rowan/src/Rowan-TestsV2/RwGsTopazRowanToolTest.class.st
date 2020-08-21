@@ -384,7 +384,7 @@ RwGsTopazRowanToolTest >> testTopazListPackageNames [
 		assert:
 			((x := Rowan gemstoneTools topaz listPackagesForProjectNamed: 'STON') sort)
 				=
-					#('STON-GemStone-Tests' 'STON-Tests' 'STON-Core' 'STON-GemStoneCommon' 'STON-GemStoneBase')
+					#('STON-GemStone-Tests' 'STON-Tests' 'STON-Core'  'STON-GemStone-Core' 'STON-GemStoneCommon' 'STON-GemStoneBase')
 						sort
 ]
 
@@ -461,7 +461,7 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 
 "read tonel file from spec_0009"
 	project checkout: 'spec_0009'.
-	Rowan gemstoneTools topaz topazReadTonelFile: project repositoryRoot / 'rowan' / 'src' / 'RowanSample9-Extensions' / (className, '.extension.st').
+	RwTopazTonelReader topazReadTonelFile: (project repositoryRoot / 'rowan' / 'src' / 'RowanSample9-Extensions' / (className, '.extension.st')) pathString.
 
 "validate"
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
