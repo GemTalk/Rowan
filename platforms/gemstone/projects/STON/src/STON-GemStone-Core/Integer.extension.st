@@ -1,6 +1,6 @@
 Extension { #name : 'Integer' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Integer >> stonOn: stonWriter [
 	stonWriter writeInteger: self
 

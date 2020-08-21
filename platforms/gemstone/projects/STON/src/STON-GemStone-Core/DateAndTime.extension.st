@@ -1,12 +1,12 @@
 Extension { #name : 'DateAndTime' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 DateAndTime >> stonContainSubObjects [ 
 	^ false
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 DateAndTime class >> fromSton: stonReader [
   ^ DateAndTime fromString: stonReader parseListSingleton
 

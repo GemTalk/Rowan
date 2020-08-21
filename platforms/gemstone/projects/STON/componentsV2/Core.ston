@@ -3,8 +3,26 @@ RwSimpleProjectLoadComponentV2 {
 	#condition : 'gemstone-kernel',
 	#packageNames : [
 		'STON-Core',
+		'STON-GemStone-Core',
 		'STON-GemStoneBase',
 		'STON-GemStoneCommon'
 	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'STON-GemStone-Core' : {
+						'symbolDictName' : 'Globals'
+					},
+					'STON-GemStoneBase' : {
+						'symbolDictName' : 'Globals'
+					},
+					'STON-GemStoneCommon' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
 	#comment : 'Single component for STON project'
 }

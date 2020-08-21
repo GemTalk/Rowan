@@ -1,6 +1,6 @@
 Extension { #name : 'Object' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Object >> fromSton: stonReader [
   "Decode non-variable classes from a map of their instance variables and values.
 	Override to customize and add a matching #toSton: (see implementors)."
@@ -14,13 +14,13 @@ Object >> fromSton: stonReader [
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Object >> isStonReference [
 	^ false
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Object >> stonContainSubObjects [
 	"Return true if I contain subObjects that should be processed, false otherwise.
 	Overwrite when necessary. See also #stonProcessSubObjects:"
@@ -29,7 +29,7 @@ Object >> stonContainSubObjects [
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Object >> stonOn: stonWriter [
 	"Encode non-variable classes with a map of their instance variable and values.
 	Override to customize and add a matching #fromSton: (see implementors)."
@@ -42,7 +42,7 @@ Object >> stonOn: stonWriter [
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Object >> stonShouldWriteNilInstVars [
 	"Return true if my instance variables that are nil should be written out, 
 	false otherwise. Overwrite when necessary. By default, return false."
@@ -51,7 +51,7 @@ Object >> stonShouldWriteNilInstVars [
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Object class >> fromSton: stonReader [
 	"Create a new instance and delegate decoding to instance side.
 	Override only when new instance should be created directly (see implementors). "

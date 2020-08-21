@@ -19,6 +19,14 @@ Class {
 }
 
 { #category : 'instance creation' }
+STONReader class >> new [
+  ^ self basicNew
+    initialize;
+    yourself
+
+]
+
+{ #category : 'instance creation' }
 STONReader class >> on: readStream [
 	^ self new
 		on: readStream;
@@ -111,6 +119,23 @@ STONReader >> isSimpleSymbolChar: char [
 ]
 
 { #category : 'private' }
+STONReader >> lookupClass: name [
+  ^ (System myUserProfile objectNamed: name asSymbol)
+    ifNil: [ 
+		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
+			ifNotNil: [:rowanSymbolDictionary |
+				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
+					ifNotNil: [:cls | ^cls ] ])
+						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
+								detect: [ :cls | cls stonName == name ]
+								ifNone: [
+									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
+										platform serviceClassFor: name)
+											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
+
+]
+
+{ #category : 'private' }
 STONReader >> match: string do: block [
 	"Try to read and consume string and execute block if successful.
 	Else do nothing (but do not back up)"
@@ -159,6 +184,13 @@ STONReader >> next [
 { #category : 'initialize-release' }
 STONReader >> on: aReadStream [
 	readStream := aReadStream
+
+]
+
+{ #category : 'private' }
+STONReader >> optimizeForLargeStructures [
+  "nothing special for GemStone"
+
 
 ]
 

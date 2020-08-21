@@ -77,21 +77,45 @@ false ifTrue: [
 			platformConditionalAttributes.
 			repositoryRoot.
 			'RowanV2'.
-			Dictionary new.
+			(Dictionary new).
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes360.
 			repositoryRoot360.
 			'RowanV2'.
-			(Dictionary new at: 'Rowan' put: ('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }); yourself).
+			(Dictionary new 
+				at: 'Rowan' 
+					put: 
+						{
+							('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }) .
+							('tonel' -> 
+								{ 
+									'Rowan-Tonel-Core' .
+									'Rowan-Tonel-GemStone-Kernel-32x' .
+									'Rowan-Tonel-GemStone-Kernel-32-5' .
+									'Rowan-Tonel-GemStone-Kernel' .
+								}) .
+						}; 
+				at: 'STON' 
+					put: 
+						{
+							('ston' -> 
+								{ 
+									'STON-Core' .
+									'STON-GemStone-Core'.
+									'STON-GemStoneBase' .
+									'STON-GemStoneCommon' .
+								}) .
+						}; 
+				yourself).
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes3215.
 			repositoryRoot3215.
 			'RowanV2'.
-			Dictionary new.
+			(Dictionary new).
 		}.
 	} 
 	do: [:ar |
@@ -119,13 +143,14 @@ false ifTrue: [
 		theProjectSetDefinition keys do: [:projectName |
 			| projectDefinition excludedPackages thePackages |
 			projectDefinition := theProjectSetDefinition projectNamed: projectName.
-			excludedPackages := #().
+			excludedPackages := {}.
 			specialCaseDict 
 				at: projectName
-				ifPresent: [:assoc | 
-					excludedPackages := assoc value.
-					topazFileNameMap at: gsFileName, '_', assoc key put:excludedPackages.
-				GsFile gciLogServer: '	---', assoc key, ' packages ', excludedPackages printString ].
+				ifPresent: [:assocList |
+					assocList do: [:assoc | 
+						excludedPackages := assoc value.
+						topazFileNameMap at: gsFileName, '_', assoc key put:excludedPackages.
+						GsFile gciLogServer: '	---', assoc key, ' packages ', excludedPackages printString ] ].
 			thePackages := projectDefinition packageNames.
 			thePackages removeAllPresent: excludedPackages.
 			thePackages do: [:packageName |

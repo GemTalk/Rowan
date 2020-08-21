@@ -1,6 +1,6 @@
 Extension { #name : 'SequenceableCollection' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 SequenceableCollection >> stonOn: stonWriter [
 	self class == STON listClass
 		ifTrue: [ stonWriter writeList: self ]
@@ -8,7 +8,7 @@ SequenceableCollection >> stonOn: stonWriter [
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 SequenceableCollection class >> fromSton: stonReader [
 	^ self streamContents: [ :stream |
 		stonReader parseListDo: [ :each |

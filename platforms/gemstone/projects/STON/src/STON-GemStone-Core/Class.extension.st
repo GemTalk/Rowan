@@ -1,6 +1,6 @@
 Extension { #name : 'Class' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Class >> stonName [
 	"Override to encode my instances using a different class name."
 	

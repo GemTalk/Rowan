@@ -6,12 +6,12 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/platforms/Core',
 		'common/stubs/Core',
 		'common/tests/Core',
+		'common/tonel/Core',
 		'common/v1/Core',
 		'common/v2/Core'
 	],
 	#packageNames : [
 		'Rowan-Core',
-		'Rowan-Tonel-Core',
 		'Rowan-Core-Conditional-Support',
 		'Rowan-Core-Definitions-Extensions',
 		'Rowan-Kernel',

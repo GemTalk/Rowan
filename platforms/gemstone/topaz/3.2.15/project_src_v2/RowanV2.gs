@@ -305,7 +305,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -322,7 +322,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -8621,7 +8621,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -8730,7 +8730,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -8748,7 +8748,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -8765,7 +8765,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -8782,7 +8782,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -8799,7 +8799,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -8816,7 +8816,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -8832,7 +8832,7 @@ doit
 	classVars: #( STONCharacters STONSimpleSymbolCharacters )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #()
 )
 		category: 'STON-Core';
@@ -89674,6 +89674,14 @@ writer
 
 category: 'instance creation'
 classmethod: STONReader
+new
+  ^ self basicNew
+    initialize;
+    yourself
+%
+
+category: 'instance creation'
+classmethod: STONReader
 on: readStream
 	^ self new
 		on: readStream;
@@ -89768,6 +89776,23 @@ isSimpleSymbolChar: char
 
 category: 'private'
 method: STONReader
+lookupClass: name
+  ^ (System myUserProfile objectNamed: name asSymbol)
+    ifNil: [ 
+		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
+			ifNotNil: [:rowanSymbolDictionary |
+				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
+					ifNotNil: [:cls | ^cls ] ])
+						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
+								detect: [ :cls | cls stonName == name ]
+								ifNone: [
+									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
+										platform serviceClassFor: name)
+											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
+%
+
+category: 'private'
+method: STONReader
 match: string do: block
 	"Try to read and consume string and execute block if successful.
 	Else do nothing (but do not back up)"
@@ -89816,6 +89841,13 @@ category: 'initialize-release'
 method: STONReader
 on: aReadStream
 	readStream := aReadStream
+%
+
+category: 'private'
+method: STONReader
+optimizeForLargeStructures
+  "nothing special for GemStone"
+
 %
 
 category: 'parsing-internal'
@@ -90216,6 +90248,14 @@ printOn: stream
 
 category: 'instance creation'
 classmethod: STONStreamWriter
+new
+  ^ self basicNew
+    initialize;
+    yourself
+%
+
+category: 'instance creation'
+classmethod: STONStreamWriter
 on: stonWriter
 	^ self new
 		on: stonWriter;
@@ -90273,6 +90313,25 @@ at: key put: value
 
 !		Class methods for 'STONWriter'
 
+category: 'private'
+classmethod: STONWriter
+findFirstInString: aString inSet: inclusionMap startingAt: start
+  "Trivial, non-primitive version"
+
+  | i stringSize ascii |
+  inclusionMap size ~= 256
+    ifTrue: [ ^ 0 ].
+  i := start.
+  stringSize := aString size.
+  [ i <= stringSize and: [ ascii := (aString at: i) asciiValue.
+      ascii < 256
+        ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
+        ifFalse: [ true ] ] ] whileTrue: [ i := i + 1 ].
+  i > stringSize
+    ifTrue: [ ^ 0 ].
+  ^ i
+%
+
 category: 'class initialization'
 classmethod: STONWriter
 initialize
@@ -90317,6 +90376,14 @@ isSimpleSymbolChar: char
 
 category: 'instance creation'
 classmethod: STONWriter
+new
+  ^ self basicNew
+    initialize;
+    yourself
+%
+
+category: 'instance creation'
+classmethod: STONWriter
 on: writeStream
 	^ self new
 		on: writeStream;
@@ -90331,6 +90398,29 @@ close
 	writeStream ifNotNil: [
 		writeStream close.
 		writeStream := nil ]
+%
+
+category: 'writing'
+method: STONWriter
+encodeCharacter: char
+  | code encoding |
+  ((code := char codePoint) < 127
+    and: [ (encoding := STONCharacters at: code + 1) notNil ])
+    ifTrue: [ encoding = #'pass'
+        ifTrue: [ writeStream nextPut: char ]
+        ifFalse: [ writeStream nextPutAll: encoding ] ]
+    ifFalse: [ | paddedStream padding digits |
+      paddedStream := WriteStream on: String new.
+      code printOn: paddedStream base: 16 showRadix: false.
+      digits := paddedStream contents.
+      padding := 4 - digits size.
+      writeStream nextPutAll: '\u'.
+      encoding := padding > 0
+        ifTrue: [ ((String new: padding)
+            atAllPut: $0;
+            yourself) , digits ]
+        ifFalse: [ digits ].
+      writeStream nextPutAll: encoding ]
 %
 
 category: 'private'
@@ -90418,6 +90508,17 @@ initialize
   objects := IdentityDictionary new
 %
 
+category: 'private'
+method: STONWriter
+isSimpleSymbol: symbol
+  symbol isEmpty
+    ifTrue: [ ^ false ].
+  ^ (self class
+    findFirstInString: symbol
+    inSet: STONSimpleSymbolCharacters
+    startingAt: 1) = 0
+%
+
 category: 'initialize-release'
 method: STONWriter
 jsonMode: boolean
@@ -90462,6 +90563,13 @@ category: 'initialize-release'
 method: STONWriter
 on: aWriteStream
 	writeStream := aWriteStream
+%
+
+category: 'private'
+method: STONWriter
+optimizeForLargeStructures
+  "nothing special for GemStone"
+
 %
 
 category: 'initialize-release'
@@ -93851,13 +93959,13 @@ rbStoreOn: aStream
   aStream nextPutAll: self asString
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Boolean
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Boolean
 stonOn: stonWriter
 	stonWriter writeBoolean: self
@@ -93875,7 +93983,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 !		Class methods for 'ByteArray'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: ByteArray
 fromSton: stonReader
   | singletonString |
@@ -93954,7 +94062,7 @@ expected' ].
     self at: i put: value ]
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: ByteArray
 stonContainSubObjects 
 	^ false
@@ -93994,7 +94102,7 @@ digitValue: x
 	^self withValue: (n < 10 ifTrue: [n + 48] ifFalse: [n + 55])
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: Character
 fromSton: stonReader
 	^ stonReader parseListSingleton first
@@ -94009,7 +94117,7 @@ isCharacter
 	^ true
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Character
 stonOn: stonWriter
 	stonWriter writeObject: self listSingleton: self asString
@@ -95004,7 +95112,7 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		options: optionsArray
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Class
 stonName
 	"Override to encode my instances using a different class name."
@@ -95403,7 +95511,7 @@ _validateOptions: optionsArray withFormat: theFormat newClassName: ignored
 
 !		Class methods for 'Collection'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: Collection
 fromSton: stonReader
 	| collection |
@@ -95516,7 +95624,7 @@ sort: aSortBlock
 	^ self sortWithBlock: aSortBlock
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Collection
 stonOn: stonWriter
 	stonWriter writeObject: self do: [
@@ -96266,7 +96374,7 @@ fromSton: stonReader
 
 !		Instance methods for 'Date'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Date
 stonContainSubObjects 
 	^ false
@@ -96286,7 +96394,7 @@ stonOn: stonWriter
 
 !		Class methods for 'DateAndTime'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: DateAndTime
 fromSton: stonReader
   ^ DateAndTime fromString: stonReader parseListSingleton
@@ -96294,7 +96402,7 @@ fromSton: stonReader
 
 !		Instance methods for 'DateAndTime'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: DateAndTime
 stonContainSubObjects 
 	^ false
@@ -96753,7 +96861,7 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 	^ aRwSemanticVersonComponent rwSemanticIntegerLessThanSelf: self
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Integer
 stonOn: stonWriter
 	stonWriter writeInteger: self
@@ -96881,13 +96989,13 @@ rbStoreOn: aStream
   self printOn: aStream
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Number
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Number
 stonOn: stonWriter
 	stonWriter writeFloat: self asFloat
@@ -96905,7 +97013,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 !		Class methods for 'Object'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: Object
 fromSton: stonReader
 	"Create a new instance and delegate decoding to instance side.
@@ -96938,7 +97046,7 @@ flag: aSymbol
 	Then, to retrieve all such messages, browse all senders of #returnHereUrgently."
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 fromSton: stonReader
   "Decode non-variable classes from a map of their instance variables and values.
@@ -96988,7 +97096,7 @@ isNumber
   ^ self _isNumber
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 isStonReference
 	^ false
@@ -97099,7 +97207,7 @@ split: aSequenceableCollection indicesDo: aBlock
 	aBlock value: oldPosition value: aSequenceableCollection size.
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 stonContainSubObjects
 	"Return true if I contain subObjects that should be processed, false otherwise.
@@ -97108,7 +97216,7 @@ stonContainSubObjects
 	^ true
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 stonOn: stonWriter
 	"Encode non-variable classes with a map of their instance variable and values.
@@ -97133,7 +97241,7 @@ stonProcessSubObjects: block
     ifTrue: [ 1 to: self _basicSize do: [ :each | self basicAt: each put: (block value: (self basicAt: each)) ] ]
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 stonShouldWriteNilInstVars
 	"Return true if my instance variables that are nil should be written out, 
@@ -99758,7 +99866,7 @@ fromFile: filePath
 
 !		Class methods for 'SequenceableCollection'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: SequenceableCollection
 fromSton: stonReader
 	^ self streamContents: [ :stream |
@@ -100082,7 +100190,7 @@ sort
 	^ self sort: [ :a :b | a <= b ]
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: SequenceableCollection
 stonOn: stonWriter
 	self class == STON listClass
@@ -100155,136 +100263,6 @@ _keysAndValuesDo: aBlock
   dict keysAndValuesDo:[ :each :aVal | aBlock value: each value: 1 ]
 %
 
-! Class extensions for 'STONReader'
-
-!		Class methods for 'STONReader'
-
-category: '*ston-gemstonebase'
-classmethod: STONReader
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-!		Instance methods for 'STONReader'
-
-category: '*ston-gemstonebase'
-method: STONReader
-lookupClass: name
-  ^ (System myUserProfile objectNamed: name asSymbol)
-    ifNil: [ 
-		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
-			ifNotNil: [:rowanSymbolDictionary |
-				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
-					ifNotNil: [:cls | ^cls ] ])
-						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
-								detect: [ :cls | cls stonName == name ]
-								ifNone: [
-									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
-										platform serviceClassFor: name)
-											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
-%
-
-category: '*ston-gemstonecommon'
-method: STONReader
-optimizeForLargeStructures
-  "nothing special for GemStone"
-
-%
-
-! Class extensions for 'STONStreamWriter'
-
-!		Class methods for 'STONStreamWriter'
-
-category: '*ston-gemstonebase'
-classmethod: STONStreamWriter
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-! Class extensions for 'STONWriter'
-
-!		Class methods for 'STONWriter'
-
-category: '*ston-gemstonecommon'
-classmethod: STONWriter
-findFirstInString: aString inSet: inclusionMap startingAt: start
-  "Trivial, non-primitive version"
-
-  | i stringSize ascii |
-  inclusionMap size ~= 256
-    ifTrue: [ ^ 0 ].
-  i := start.
-  stringSize := aString size.
-  [ i <= stringSize and: [ ascii := (aString at: i) asciiValue.
-      ascii < 256
-        ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
-        ifFalse: [ true ] ] ] whileTrue: [ i := i + 1 ].
-  i > stringSize
-    ifTrue: [ ^ 0 ].
-  ^ i
-%
-
-category: '*ston-gemstonebase'
-classmethod: STONWriter
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-!		Instance methods for 'STONWriter'
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-encodeCharacter: char
-  | code encoding |
-  ((code := char codePoint) < 127
-    and: [ (encoding := STONCharacters at: code + 1) notNil ])
-    ifTrue: [ encoding = #'pass'
-        ifTrue: [ writeStream nextPut: char ]
-        ifFalse: [ writeStream nextPutAll: encoding ] ]
-    ifFalse: [ | paddedStream padding digits |
-      paddedStream := WriteStream on: String new.
-      code printOn: paddedStream base: 16 showRadix: false.
-      digits := paddedStream contents.
-      padding := 4 - digits size.
-      writeStream nextPutAll: '\u'.
-      encoding := padding > 0
-        ifTrue: [ ((String new: padding)
-            atAllPut: $0;
-            yourself) , digits ]
-        ifFalse: [ digits ].
-      writeStream nextPutAll: encoding ]
-%
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-isSimpleSymbol: symbol
-  symbol isEmpty
-    ifTrue: [ ^ false ].
-  ^ (self class
-    findFirstInString: symbol
-    inSet: STONSimpleSymbolCharacters
-    startingAt: 1) = 0
-%
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-optimizeForLargeStructures
-  "nothing special for GemStone"
-
-%
-
-category: '*ston-gemstonebase'
-method: STONWriter
-writeFloat: float
-  writeStream nextPutAll: float asString
-%
-
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -100328,13 +100306,13 @@ decodeFromUTF8
  ^ self _decodeFromUtf8: true
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: String
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: String
 stonOn: stonWriter
 	stonWriter writeString: self
@@ -100371,7 +100349,7 @@ rbStoreOn: aStream
   super rbStoreOn: aStream
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Symbol
 stonOn: stonWriter
 	stonWriter writeSymbol: self
@@ -100551,7 +100529,7 @@ fromSton: stonReader
 
 !		Instance methods for 'Time'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Time
 stonContainSubObjects 
 	^ false
@@ -100603,13 +100581,13 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		options: optionsArray
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: UndefinedObject
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: UndefinedObject
 stonOn: stonWriter
 	stonWriter writeNull

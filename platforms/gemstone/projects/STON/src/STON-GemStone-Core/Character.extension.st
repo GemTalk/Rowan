@@ -1,12 +1,12 @@
 Extension { #name : 'Character' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Character >> stonOn: stonWriter [
 	stonWriter writeObject: self listSingleton: self asString
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Character class >> fromSton: stonReader [
 	^ stonReader parseListSingleton first
 

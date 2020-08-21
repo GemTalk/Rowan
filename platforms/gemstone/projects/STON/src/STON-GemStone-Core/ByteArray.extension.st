@@ -1,12 +1,12 @@
 Extension { #name : 'ByteArray' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 ByteArray >> stonContainSubObjects [ 
 	^ false
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 ByteArray class >> fromSton: stonReader [
   | singletonString |
   singletonString := stonReader parseListSingleton.

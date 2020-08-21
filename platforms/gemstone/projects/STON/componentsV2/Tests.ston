@@ -5,5 +5,19 @@ RwSimpleProjectLoadComponentV2 {
 		'STON-Tests',
 		'STON-GemStone-Tests'
 	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'STON-Tests' : {
+						'symbolDictName' : 'Globals'
+					},
+					'STON-GemStone-Tests' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
 	#comment : 'Single component for STON project'
 }

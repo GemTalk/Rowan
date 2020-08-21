@@ -1,12 +1,12 @@
 Extension { #name : 'Number' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Number >> stonContainSubObjects [ 
 	^ false
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Number >> stonOn: stonWriter [
 	stonWriter writeFloat: self asFloat
 

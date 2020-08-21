@@ -1,13 +1,13 @@
 Extension { #name : 'Collection' }
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Collection >> stonOn: stonWriter [
 	stonWriter writeObject: self do: [
 		stonWriter encodeList: self ]
 
 ]
 
-{ #category : '*ston-core' }
+{ #category : '*ston-gemstone-core' }
 Collection class >> fromSton: stonReader [
 	| collection |
 	collection := self new.
