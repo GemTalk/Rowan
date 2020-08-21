@@ -351,6 +351,12 @@ STONWriter >> writeBoolean: boolean [
 ]
 
 { #category : 'writing' }
+STONWriter >> writeFloat: float [
+  writeStream nextPutAll: float asString
+
+]
+
+{ #category : 'writing' }
 STONWriter >> writeInteger: integer [
 	writeStream print: integer
 

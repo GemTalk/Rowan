@@ -100,7 +100,7 @@ false ifTrue: [
 				at: 'STON' 
 					put: 
 						{
-							('ston' -> 
+							('tonel' -> 
 								{ 
 									'STON-Core' .
 									'STON-GemStone-Core'.

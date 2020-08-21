@@ -90441,6 +90441,12 @@ writeBoolean: boolean
 
 category: 'writing'
 method: STONWriter
+writeFloat: float
+  writeStream nextPutAll: float asString
+%
+
+category: 'writing'
+method: STONWriter
 writeInteger: integer
 	writeStream print: integer
 %
