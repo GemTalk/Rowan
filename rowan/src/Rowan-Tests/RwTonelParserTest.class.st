@@ -267,7 +267,7 @@ RwTonelParserTest >> testMethodDef_627_01 [
 	^ self printString
 ]'
 		rule: #'methodDef'
-		raise: ArgumentError
+		raise: RwTonelParseError
 ]
 
 { #category : 'tests' }
@@ -280,7 +280,7 @@ Object>>name [
 	^ self printString
 ]'
 		rule: #'methodDef'
-		raise: ArgumentError
+		raise: RwTonelParseError
 ]
 
 { #category : 'tests' }
@@ -294,7 +294,7 @@ Object>>name [
 	^ self printString
 ]'
 		rule: #'methodDef'
-		raise: ArgumentError
+		raise: RwTonelParseError
 ]
 
 { #category : 'tests' }
@@ -308,7 +308,7 @@ Object>>name [
 	^ self printString
 ]'
 		rule: #'methodDef'
-		raise: ArgumentError
+		raise: RwTonelParseError
 ]
 
 { #category : 'tests' }

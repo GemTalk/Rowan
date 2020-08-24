@@ -158,6 +158,11 @@ RwTonelParser >> document [
 
 ]
 
+{ #category : 'error handling' }
+RwTonelParser >> error: messageText [
+	^ RwTonelParseError signal: messageText
+]
+
 { #category : 'private' }
 RwTonelParser >> extractSelector: aString [
 	| separators selectorStream keywords |
@@ -343,8 +348,9 @@ RwTonelParser >> newMethodDefinitionFrom: anArray [
 	| metadata className meta selector source categ |
 	metadata := anArray second ifNil: [ Dictionary new ].
 	className := anArray fourth first first.
-	(Metaclass3 _validateNewClassName: className asSymbol)
-		ifFalse: [ self error: 'Invalid class name ' , className printString ].
+	[ Metaclass3 _validateNewClassName: className asSymbol ]
+		on: Error
+		do: [ :ex | self error: 'Invalid class name ' , className printString ].
 	meta := anArray fourth first second notNil.
 	selector := self extractSelector: anArray fourth second trimBoth.
 	source := String
