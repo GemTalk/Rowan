@@ -690,11 +690,20 @@ RowanClassService >> minimalRefreshFrom: theClass [
 RowanClassService >> moveMethods: methodServices to: category [
 	| behavior |
 	behavior := self classOrMeta.
-	methodServices do: [:methodService | 
+	methodServices
+		do: [ :methodService | 
 			behavior rwMoveMethod: methodService selector toCategory: category.
-			methodService category: category].
-	self update. 
+			methodService category: category ].
+	self update.
 	self selectedMethods: methodServices.
+	category first = $*
+		ifTrue: [ 
+			| packageService projectService |
+			packageService := RowanPackageService new name: (category copyWithout: $*).
+			packageService update.
+
+			projectService := RowanProjectService new name: packageService projectName.
+			projectService update ]
 ]
 
 { #category : 'Accessing' }
