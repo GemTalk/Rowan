@@ -38,7 +38,7 @@ RwTopazTonelReaderTest class >> testCompileMethod [
 	RwTopazTonelReader topazCompileTonelMethod: tonelMethodString.
 
 "validate"
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (class categoryOfSelector: #foo) = 'private'
 ]
 
@@ -70,7 +70,7 @@ RwTopazTonelReaderTest >> testCompileMethod_01 [
 	self assert: (RwTopazTonelReader topazCompileTonelMethod: tonelMethodString) isNil.
 
 "validate"
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (x := class categoryOfSelector: #foo) = #'private'
 ]
 
@@ -131,7 +131,7 @@ RwTopazTonelReaderTest >> testCompileMethod_03 [
 '.
 
 "validate"
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (class categoryOfSelector: #foo) = #'private'
 ]
 
@@ -157,15 +157,15 @@ RwTopazTonelReaderTest >> testCompileMethodsInFile [
 	RwTopazTonelReader topazReadTonelFile: tonelFileReference pathString.
 
 "validate"
-	self assert: class testClassMethod1 isNil.
+	self assert: (class perform: #testClassMethod1) isNil.
 	self assert: (class class categoryOfSelector: #testClassMethod1) = #'accessing'.
-	self assert: class testClassMethod2 isNil.
+	self assert: (class perform: #testClassMethod2) isNil.
 	self assert: (class class categoryOfSelector: #testClassMethod2) = #'accessing'.
-	self assert: class testClassMethod3.
+	self assert: (class perform: #testClassMethod3).
 	self assert: (class class categoryOfSelector: #testClassMethod3) = #'accessing'.
 
-	self assert: class new testInstanceMethod1 isNil.
+	self assert: (class new perform: #testInstanceMethod1) isNil.
 	self assert: (class categoryOfSelector: #testInstanceMethod1) = #'accessing'.
-	self assert: class new testInstanceMethod2 isNil.
+	self assert: (class new perform: #testInstanceMethod1) isNil.
 	self assert: (class categoryOfSelector: #testInstanceMethod2) = #'accessing'.
 ]

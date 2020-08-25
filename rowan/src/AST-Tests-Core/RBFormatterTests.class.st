@@ -70,12 +70,15 @@ RBFormatterTests >> testCoreSystem [
 
 { #category : 'testing' }
 RBFormatterTests >> testIndexingSystem [
-  #(#'IXCompoundQueryPredicateTests' #'IXGsClassicQueryBlockOptimizerTests' #'IXQueryBlockPredicateTests' #'IXQueryExpressionPrintStringTests' #'IXQueryExpressionTests' #'IXQueryPredicateTests')
-    do: [ :each | 
-       (Rowan globalNamed: each) ifNotNil: [ :class | 
-          class ifNotNilself
-            formatClass: class;
-            formatClass: class class ] ]
+	#(#'IXCompoundQueryPredicateTests' #'IXGsClassicQueryBlockOptimizerTests' #'IXQueryBlockPredicateTests' #'IXQueryExpressionPrintStringTests' #'IXQueryExpressionTests' #'IXQueryPredicateTests')
+		do: [ :each | 
+			(Rowan globalNamed: each)
+				ifNotNil: [ :class | 
+					class
+						ifNotNil: [ 
+							self
+								formatClass: class;
+								formatClass: class class ] ] ]
 ]
 
 { #category : 'testing' }

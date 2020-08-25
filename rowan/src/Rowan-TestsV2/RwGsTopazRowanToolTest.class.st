@@ -365,7 +365,7 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
 	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
 
@@ -456,7 +456,7 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
 
 "read tonel file from spec_0009"
@@ -465,9 +465,9 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 
 "validate"
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) notNil.
-	self assert: class bar = 'bar'
+	self assert: (class perform: #bar) = 'bar'
 ]
 
 { #category : 'project support' }
@@ -496,7 +496,7 @@ RwGsTopazRowanToolTest >> testTopazReloadProject [
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
 	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
 
@@ -506,9 +506,9 @@ RwGsTopazRowanToolTest >> testTopazReloadProject [
 
 "validate"
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) notNil.
-	self assert: class bar = 'bar'.
+	self assert: (class perform: #bar) = 'bar'.
 	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-Tests') sort.
 ]
 
@@ -538,7 +538,7 @@ RwGsTopazRowanToolTest >> testTopazUnloadProject [
 "validate"
 	class := Rowan globalNamed: className.
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
-	self assert: class new foo = 1.
+	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
 	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
 	self assert: (Rowan projectNames includes: projectName).

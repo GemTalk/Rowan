@@ -6210,7 +6210,7 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
 	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
-	self assert: (Rowan globalNamed: 'RowanSample9Class1') new ivar1 isNil.	"ivar1 method not present in spec_0052"
+	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0052"
 	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
 ]
 

@@ -7713,21 +7713,6 @@ true.
 
 doit
 (RwLoadedProject
-	subclass: 'RwGsLoadedSymbolDictProject'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-GemStone-Core';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwLoadedProject
 	subclass: 'RwGsLoadedSymbolDictResolvedProjectV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -56245,30 +56230,6 @@ visitNested: aProjectLoadComponent
 
 category: 'visiting'
 method: RwAbstractProjectComponentVisitorV2
-visitProjectLoadComponent: aProjectLoadComponent
-
-	(visitedComponentNames includes: aProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aProjectLoadComponent.
-
-	definedGroupNames := aProjectLoadComponent definedGroupNames.
-
-	self _processConditionalProperties: aProjectLoadComponent.
-
-	(self
-		_components: self componentsPath
-		forProject: aProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	(self
-		_projects: self projectsPath
-		forProject: aProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-%
-
-category: 'visiting'
-method: RwAbstractProjectComponentVisitorV2
 visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent
 	(visitedComponentNames includes: aSimpleProjectLoadComponent name)
 		ifTrue: [ ^ self ].
@@ -63419,33 +63380,6 @@ doGitCommit: messageString
 	^ status
 %
 
-category: 'git'
-method: RwAbstractTool
-doGitUpdateLoadedCommitId
-
-	| repoRootPath |
-	repoRootPath := specification repoSpec repositoryRootPath.
-	repoRootPath
-		ifNil: [ 
-			"in memory repo without a rootPath is legal"
-			^ nil ].
-	^ self doGitUpdateLoadedCommitId: repoRootPath
-%
-
-category: 'git'
-method: RwAbstractTool
-doGitUpdateLoadedCommitId: gitRootPath
-
-	| gitTool loadedCommitId |
-	gitTool := Rowan gitTools.
-	loadedCommitId := [ gitTool gitcommitShaIn: gitRootPath asFileReference pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	^ specification imageSpec loadedCommitId: loadedCommitId
-%
-
 category: 'private'
 method: RwAbstractTool
 fileUtilities
@@ -63462,15 +63396,6 @@ category: 'smalltalk api'
 method: RwAbstractTool
 specUrl: aString
   ^ self specification: (RwSpecification fromUrl: aString)
-%
-
-category: 'private'
-method: RwAbstractTool
-_symbolDictionaryForSpecification
-
-	^ Rowan image
-		newOrExistingSymbolDictionaryNamed:
-			(specification platformSpec at: 'gemstone') defaultSymbolDictName
 %
 
 ! Class implementation for 'RwClassTool'
@@ -64779,39 +64704,6 @@ disownPackageNamed: packageName
 			loadedClassExtension disownFromLoaded: registry ].
 
 	registry deletePackage: packageName
-%
-
-! Class implementation for 'RwPkgLoadTool'
-
-!		Instance methods for 'RwPkgLoadTool'
-
-category: 'smalltalk api'
-method: RwPkgLoadTool
-loadPackageSetDefinition: packageSetDefinitionToLoad
-
-	^ self
-		loadPackageSetDefinition: packageSetDefinitionToLoad
-		instanceMigrator: Rowan platform instanceMigrator
-%
-
-category: 'smalltalk api'
-method: RwPkgLoadTool
-loadPackageSetDefinition: packageSetDefinitionToLoad instanceMigrator: instanceMigrator
-
-	"NOTE: not sure that we want to support the loading of arbitrary package sets (mixed projects) ... used by relatively old tests at the moment ... should be legal if the we create some project sets where the package to be loaded replace the packages in definitions derived from loaded things ... do a single load with proper updating of loaded packages in specification ..."
-
-	| loadedPackageSet diff loadedEntitySet |
-	loadedEntitySet := packageSetDefinitionToLoad deriveLoadedThings.
-	loadedPackageSet := loadedEntitySet asPackageDefinitionSet.
-	diff := packageSetDefinitionToLoad compareAgainstBase: loadedPackageSet.
-	diff isEmpty
-		ifTrue: [ 
-			| msg |
-			msg := 'The packages are already up to date'.
-			self inform: msg.
-			^ msg ].
-	Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
-	^ diff
 %
 
 ! Class implementation for 'RwPkgAuditToolV2'
@@ -70945,15 +70837,6 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 		comment: commentString
 %
 
-category: 'actions'
-method: RwProjectDefinitionV2
-clone
-	"clone remote git project to disk"
-
-	self cloneRepository.
-	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
-%
-
 category: 'querying'
 method: RwProjectDefinitionV2
 componentForPackageNamed: packageName
@@ -71037,16 +70920,6 @@ projectName: aString
 	self propertyAt: 'name' put: aString
 %
 
-category: 'reading'
-method: RwProjectDefinitionV2
-readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames
-
-	^ readTool
-		readProjectSetForComponentProjectDefinition: self
-			withConfigurations: theConfigNames 
-			groupNames: theGroupNames
-%
-
 category: 'accessing'
 method: RwProjectDefinitionV2
 removePackage: aPackageDefinition
@@ -71102,57 +70975,6 @@ method: RwProjectDefinitionV2
 _loadTool
 
 	^ Rowan projectTools loadV2
-%
-
-category: 'private'
-method: RwProjectDefinitionV2
-_validate
-	"ensure that the data structures within the receiver contain valid information"
-
-	"make sure that list of packages is consistent between components and project definition"
-
-	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
-	definitionPackageNames := self packageNames asSet.
-	componentPackageNames := Set new.
-	self components_validate.
-	missingFromComponent := definitionPackageNames - componentPackageNames.
-	missingFromDefinition := componentPackageNames - definitionPackageNames.
-	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
-		ifTrue: [ ^ true ].
-	errorMessage := WriteStream on: String new.
-	errorMessage
-		nextPutAll:
-				'Inconsistency between packages defined and referenced in components:';
-		lf.
-	missingFromComponent isEmpty
-		ifFalse: [ 
-			errorMessage
-				tab;
-				nextPutAll:
-						'The following packages are defined, but not referenced in a component:';
-				lf.
-			missingFromComponent
-				do: [ :packageName | 
-					errorMessage
-						tag;
-						tab;
-						nextPutAll: packageName;
-						lf ] ].
-	missingFromDefinition isEmpty
-		ifFalse: [ 
-			errorMessage
-				tab;
-				nextPutAll:
-						'The following packages are referenced in a component, but not defined:';
-				lf.
-			missingFromDefinition
-				do: [ :packageName | 
-					errorMessage
-						tab;
-						tab;
-						nextPutAll: packageName;
-						lf ] ].
-	self error: errorMessage contents
 %
 
 category: 'private'
@@ -83989,157 +83811,6 @@ useGit
 	^ self subclassResponsibility: #useGit
 %
 
-! Class implementation for 'RwGsLoadedSymbolDictProject'
-
-!		Instance methods for 'RwGsLoadedSymbolDictProject'
-
-category: 'testing'
-method: RwGsLoadedSymbolDictProject
-canCommit
-
-	^ self specification canCommit
-%
-
-category: 'commit log'
-method: RwGsLoadedSymbolDictProject
-commitLog: logLimit
-
-	self useGit ifFalse: [ ^ '' ].
-	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-defaultSymbolDictName: aString
-
-	^ self specification defaultSymbolDictName: aString
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedCommitId
-
-	^ self specification loadedCommitId
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedConfigurationNames
-
-	^ self specification loadedConfigurationNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedConfigurationNames: configNames
-
-	self specification imageSpec loadedConfigurationNames: configNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedGroupNames
-
-	^ self specification loadedGroupNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedGroupNames: groupNames
-
-	self specification imageSpec loadedGroupNames: groupNames
-%
-
-category: 'specifiction'
-method: RwGsLoadedSymbolDictProject
-projectOwnerId
-
-	^ (self specification platformSpec at: 'gemstone') projectOwnerId
-%
-
-category: 'specifiction'
-method: RwGsLoadedSymbolDictProject
-projectOwnerId: aUserId
-
-	^ (self specification platformSpec at: 'gemstone') projectOwnerId: aUserId
-%
-
-category: 'definitions'
-method: RwGsLoadedSymbolDictProject
-propertiesForDefinition
-
-	| props |
-	props := super propertiesForDefinition.
-	props at: 'spec' put: handle.
-	^ props
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-repositoryCommitId
-
-	| rootPath |
-	self useGit
-		ifFalse: [ ^ '' ].
-	rootPath := self repositoryRootPath.
-	rootPath ifNil: [ ^ '' ].
-	^ Rowan gitTools gitcommitShaIn: rootPath
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self repositoryRootPath
-		ifNotNil: [:path | path asFileReference ]
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-repositoryRootPath
-
-	^ self specification repositoryRootPath
-%
-
-category: 'properties'
-method: RwGsLoadedSymbolDictProject
-specification
-
-	^ handle
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-symbolDictNameForPackageNamed: packageName
-
-	| spec gemstoneSpec |
-	spec := self specification.
-	gemstoneSpec := spec platformSpec at: 'gemstone'.
-	^ gemstoneSpec symbolDictNameForPackageNamed: packageName.
-%
-
-category: 'loading'
-method: RwGsLoadedSymbolDictProject
-updateLoadedCommitId
-
-	| loadedCommitId |
-	self useGit ifFalse: [ ^ nil ].
-	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	self specification imageSpec loadedCommitId: loadedCommitId
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-useGit
-
-	^ self specification useGit
-%
-
 ! Class implementation for 'RwGsLoadedSymbolDictResolvedProjectV2'
 
 !		Class methods for 'RwGsLoadedSymbolDictResolvedProjectV2'
@@ -84312,14 +83983,6 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 loadedGroupNames
 
 	^ self resolvedProject loadedGroupNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-loadedGroupNames: groupNames
-
-
-	self resolvedProject loadedGroupNames: groupNames
 %
 
 category: 'actions'
@@ -87814,18 +87477,6 @@ _repoType
 	"direct access to IV ... used by ="
 
 	^ repoType
-%
-
-category: 'actions'
-method: RwProjectSpecificationV2
-_resolve
-	"answer true if attaching to an existing repository"
-
-	^ self repositoryDefinition resolve
-		ifTrue: [ 
-			self _checkAndUpdateRepositoryRevision.
-			self _checkProjectDirectoryStructure ]
-		ifFalse: [ false ]
 %
 
 category: 'private'
@@ -99610,24 +99261,6 @@ componentsWithDoits
 			componentsWithDoits
 				addAll: projectModification componentsWithDoits ].
 	^ componentsWithDoits
-%
-
-! Class extensions for 'RwProjectSpecificationV2'
-
-!		Instance methods for 'RwProjectSpecificationV2'
-
-category: '*rowan-definitionsv2'
-method: RwProjectSpecificationV2
-asProjectDefiniton
-	^ RwProjectDefinitionV2 fromLoadSpecification: self
-%
-
-category: '*rowan-definitionsv2'
-method: RwProjectSpecificationV2
-asProjectDefinitonWithComment: commentString
-	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
-		comment: commentString;
-		yourself
 %
 
 ! Class extensions for 'RwProjectTool'

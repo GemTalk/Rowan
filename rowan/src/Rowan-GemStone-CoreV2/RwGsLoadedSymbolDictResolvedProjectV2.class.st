@@ -153,13 +153,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedGroupNames [
 	^ self resolvedProject loadedGroupNames
 ]
 
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadedGroupNames: groupNames [
-
-
-	self resolvedProject loadedGroupNames: groupNames
-]
-
 { #category : 'actions' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 	"
