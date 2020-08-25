@@ -35,7 +35,6 @@ RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_execCompileError [
- 
 	self deny: (service exec: '1 +' context: nil asOop) key.
 ]
 

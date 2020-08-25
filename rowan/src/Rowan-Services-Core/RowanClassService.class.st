@@ -95,12 +95,19 @@ RowanClassService >> = classService [
 
 { #category : 'client commands' }
 RowanClassService >> addCategory: string [
-
-	| theClass |
-
+	| theClass thePackageName |
+	string first = $*
+		ifTrue: [ 
+			thePackageName := string copyWithout: $*.
+			(self loadedPackageExistsAndIsInSameDictionary: thePackageName)
+				ifFalse: [ 
+					^self
+						inform:
+							'Loaded package named: ' , thePackageName , ' not found or is not in same dictionary' ] ].
 	theClass := self theClass.
-	meta ifTrue:[theClass := theClass class]. 
-	theClass addCategory: string.
+	meta
+		ifTrue: [ theClass := theClass class ].
+	theClass addCategory: string
 ]
 
 { #category : 'constants' }
@@ -579,6 +586,21 @@ RowanClassService >> isTestCase [
 RowanClassService >> isTestCase: aBoolean [
 
 	isTestCase := aBoolean
+]
+
+{ #category : 'testing' }
+RowanClassService >> loadedPackageExistsAndIsInSameDictionary: thePackageName [
+	| actualName loadedPackage packageDictionaryName |
+	actualName := Rowan image packageNames
+		detect: [ :loadedName | loadedName asLowercase = thePackageName asLowercase ]
+		ifNone: [  ].
+	loadedPackage := Rowan image loadedPackageNamed: actualName ifAbsent: [  ].
+	^ loadedPackage
+		ifNil: [ false ]
+		ifNotNil: [ 
+			packageDictionaryName := loadedPackage loadedProject
+				symbolDictNameForPackageNamed: thePackageName.
+			packageDictionaryName = dictionaryName ]
 ]
 
 { #category : 'Accessing' }
