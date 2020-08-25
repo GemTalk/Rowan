@@ -85,15 +85,6 @@ SequenceableCollection >> sixth [
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }
-SequenceableCollection >> sort [
-
-	"Sort this array into ascending order using the '<=' operator."
-
-	^ self sort: [ :a :b | a <= b ]
-
-]
-
-{ #category : '*rowan-tonel-gemstone-kernel' }
 SequenceableCollection >> third [
 
 	"Answer the third element of the receiver.

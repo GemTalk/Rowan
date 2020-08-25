@@ -93987,7 +93987,7 @@ fromSton: stonReader
 
 !		Instance methods for 'Character'
 
-category: '*filesystem-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Character
 isCharacter
 
@@ -95289,7 +95289,7 @@ select: selectBlock thenDo: doBlock
   ^ (self select: selectBlock) do: doBlock
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 sort
 
@@ -95298,7 +95298,7 @@ sort
 	^ self sort: [ :a :b | a <= b ]
 %
 
-category: '*rowan-gemstone-components-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 sort: aSortBlock
 
@@ -96771,7 +96771,7 @@ inspect
   ^ (GsInspectInteraction theObject: self) signal
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Object
 isCharacter
 
@@ -99861,15 +99861,6 @@ sixth
 	Raise an error if there are not enough elements."
 
 	^ self at: 6
-%
-
-category: '*rowan-tonel-gemstone-kernel'
-method: SequenceableCollection
-sort
-
-	"Sort this array into ascending order using the '<=' operator."
-
-	^ self sort: [ :a :b | a <= b ]
 %
 
 category: '*ston-gemstone-core'

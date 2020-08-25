@@ -91492,15 +91492,6 @@ digitValue: x
 	^self withValue: (n < 10 ifTrue: [n + 48] ifFalse: [n + 55])
 %
 
-!		Instance methods for 'Character'
-
-category: '*filesystem-gemstone-kernel'
-method: Character
-isCharacter
-
-	^ true
-%
-
 ! Class extensions for 'CharacterCollection'
 
 !		Class methods for 'CharacterCollection'
@@ -92402,25 +92393,6 @@ isEmptyOrNil
   "Answer whether the receiver contains any elements, or is nil.  Useful in numerous situations where one wishes the same reaction to an empty collection or to nil"
 
   ^ self size == 0
-%
-
-category: '*filesystem-gemstone-kernel'
-method: Collection
-sort
-
-	"Sort this array into ascending order using the '<=' operator."
-
-	^ self sort: [ :a :b | a <= b ]
-%
-
-category: '*rowan-gemstone-components-kernel'
-method: Collection
-sort: aSortBlock
-
-	"Sort this array using aSortBlock. The block should take two arguments
-	and return true if the first element should preceed the second one."
-
-	^ self sortWithBlock: aSortBlock
 %
 
 ! Class extensions for 'CypressAddition'
@@ -93671,13 +93643,6 @@ category: '*gemstone-interactions-kernel'
 method: Object
 inspect
   ^ (GsInspectInteraction theObject: self) signal
-%
-
-category: '*filesystem-gemstone-kernel'
-method: Object
-isCharacter
-
-	^ false
 %
 
 category: '*ast-kernel-core'

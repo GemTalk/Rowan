@@ -2507,6 +2507,13 @@ fromSton: stonReader
 
 !		Instance methods for 'Character'
 
+category: '*rowan-tonel-gemstone-kernel'
+method: Character
+isCharacter
+
+	^ true
+%
+
 category: '*ston-gemstone-core'
 method: Character
 stonOn: stonWriter
@@ -2857,6 +2864,25 @@ select: selectBlock thenDo: doBlock
   ^ (self select: selectBlock) do: doBlock
 %
 
+category: '*rowan-tonel-gemstone-kernel'
+method: Collection
+sort
+
+	"Sort this array into ascending order using the '<=' operator."
+
+	^ self sort: [ :a :b | a <= b ]
+%
+
+category: '*rowan-tonel-gemstone-kernel'
+method: Collection
+sort: aSortBlock
+
+	"Sort this array using aSortBlock. The block should take two arguments
+	and return true if the first element should preceed the second one."
+
+	^ self sortWithBlock: aSortBlock
+%
+
 category: '*ston-gemstone-core'
 method: Collection
 stonOn: stonWriter
@@ -3005,6 +3031,13 @@ fromSton: stonReader
       instanceVariableNames := self class allInstVarNames.
       stonReader
         parseMapDo: [ :instVarName :value | self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ]
+%
+
+category: '*rowan-tonel-gemstone-kernel'
+method: Object
+isCharacter
+
+	^ false
 %
 
 category: '*rowan-tonel-gemstone-kernel'
@@ -3207,15 +3240,6 @@ sixth
 	Raise an error if there are not enough elements."
 
 	^ self at: 6
-%
-
-category: '*rowan-tonel-gemstone-kernel'
-method: SequenceableCollection
-sort
-
-	"Sort this array into ascending order using the '<=' operator."
-
-	^ self sort: [ :a :b | a <= b ]
 %
 
 category: '*ston-gemstone-core'
