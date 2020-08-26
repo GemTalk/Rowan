@@ -106,6 +106,7 @@ false ifTrue: [
 									'STON-GemStone-Core'.
 									'STON-GemStoneBase' .
 									'STON-GemStoneCommon' .
+									'STON-GemStone-Core-36x' .
 								}) .
 						}; 
 				yourself).
