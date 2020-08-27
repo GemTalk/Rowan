@@ -9,7 +9,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tonel-Core';
 		comment: 'I''m a parsing error. 
@@ -26,7 +26,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONReaderError is the error/exception signalled by STONReader when illegal/incorrect input is seen. 
@@ -43,7 +43,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONWriterError is the error/exception signalled by STONWriter when illegal/incorrect input is seen. ';
@@ -59,7 +59,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tonel-Core';
 		comment: 'The receiver is signalled when the RwTonelParser is about to create a method definition with no method category defined.
@@ -79,7 +79,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tonel-Core';
 		comment: 'I''m a parser for tonel files. 
@@ -138,7 +138,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tonel-Core';
 		comment: 'Support class for topaz `tfile` and `tmethod` commands.
@@ -160,7 +160,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STON implements serialization and materialization using the Smalltalk Object Notation format.
@@ -269,7 +269,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONReader materializes objects using the Smalltalk Object Notation format.
@@ -287,7 +287,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONReference holds a forward reference to another object during materialization.
@@ -304,7 +304,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONStreamWriter helps in streaming writing STON representations.
@@ -321,7 +321,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONArrayWriter helps in writing array based STON representations.
@@ -338,7 +338,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONShortArrayWriter helps in writing short array based STON representations.
@@ -355,7 +355,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONDictionaryWriter helps in writing dictionary based STON representations.';
@@ -371,7 +371,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONWriter serializes objects using the Smalltalk Object Notation format. 

@@ -166,7 +166,7 @@ false ifTrue: [
 		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs (', (conditionalAttributes at: 4) printString, ')'.
 
 		projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-		visitor := RwGsModificationTopazWriterVisitor new
+		visitor := RwGsModificationTopazWriterVisitorV2 new
 			repositoryRootPath: theRepositoryRoot;
 			topazFilenamePackageNamesMap: topazFileNameMap;
 			yourself.

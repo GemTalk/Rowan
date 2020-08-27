@@ -60,7 +60,7 @@ false ifTrue: [
 			ifFalse: [ 
         "write one package per file, except for the GemStone-Rowan packages"
         (topazFileNameMap at: packageName ifAbsentPut: [{}]) add: packageName ] ].
-  visitor := RwGsModificationTopazWriterVisitor new
+  visitor := RwGsModificationTopazWriterVisitorV2 new
          repositoryRootPath: gsSrcRoot;
          topazFilenamePackageNamesMap: topazFileNameMap;
          excludeClassInitializers ;
