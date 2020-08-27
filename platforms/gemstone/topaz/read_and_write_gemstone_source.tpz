@@ -17,6 +17,7 @@ run
   resolvedProject topazFileNameMap visitor archBase doCompile
 	gemStoneRowanPackageNames |
 
+self error: 'GsRowanImageTool>>generateBootstrapGsFromSt must be used to generate GemStone .gs files'.
 false ifTrue: [ 
  Rowan projectTools trace startTracing.
 ].
