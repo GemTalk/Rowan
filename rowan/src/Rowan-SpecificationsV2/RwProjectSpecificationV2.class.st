@@ -30,17 +30,6 @@ RwProjectSpecificationV2 >> _repoType [
 	^ repoType
 ]
 
-{ #category : 'actions' }
-RwProjectSpecificationV2 >> _resolve [
-	"answer true if attaching to an existing repository"
-
-	^ self repositoryDefinition resolve
-		ifTrue: [ 
-			self _checkAndUpdateRepositoryRevision.
-			self _checkProjectDirectoryStructure ]
-		ifFalse: [ false ]
-]
-
 { #category : 'private' }
 RwProjectSpecificationV2 >> _validate [
 	"ensure that the data structures within the receiver contain valid information:

@@ -9,6 +9,8 @@ RwLoadSpecificationV2 {
 	],
 	#groupNames : [ ],
 	#customConditionalAttributes : [
+		'stubs',
+		'tonel',
 		'v2',
 		'v2Only'
 	],

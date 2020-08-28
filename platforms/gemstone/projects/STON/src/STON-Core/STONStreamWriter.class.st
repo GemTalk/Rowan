@@ -13,6 +13,13 @@ Class {
 }
 
 { #category : 'instance creation' }
+STONStreamWriter class >> new [
+  ^ self basicNew
+    initialize;
+    yourself
+
+]
+{ #category : 'instance creation' }
 STONStreamWriter class >> on: stonWriter [
 	^ self new
 		on: stonWriter;

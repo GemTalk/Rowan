@@ -9,7 +9,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Network-UUID';
 		immediateInvariant.
@@ -24,7 +24,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -40,7 +40,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -56,7 +56,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -84,7 +84,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -100,7 +100,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Files';
 		comment: 'Common superclass for exceptions while using file streams';
@@ -116,7 +116,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Files';
 		comment: 'Notfify when not able to delete';
@@ -132,7 +132,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Files';
 		comment: 'I am an exception that notifies that a file already exists.';
@@ -148,7 +148,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Files';
 		comment: 'I am raised when an operation is attempted on a file that does not exist.
@@ -176,7 +176,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Files';
 		comment: 'Notify about an error when trying to attempt to write to a file';
@@ -192,7 +192,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for errors that may occur during filesystem operations.';
@@ -208,7 +208,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised when I an operation is attempted inside a directory that does not exist. ';
@@ -224,7 +224,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a directory that already exists.';
@@ -240,7 +240,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to delete a directory when is not empty.';
@@ -256,7 +256,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a file or directory over top of an existing file.';
@@ -272,11 +272,28 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to use an illegal file name
 ';
+		immediateInvariant.
+true.
+%
+
+doit
+(Error
+	subclass: 'RwTonelParseError'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Tonel-Core';
+		comment: 'I''m a parsing error. 
+I happen whenever the parsing of a tonel file is broken in someway.';
 		immediateInvariant.
 true.
 %
@@ -288,8 +305,8 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONReaderError is the error/exception signalled by STONReader when illegal/incorrect input is seen. 
@@ -305,28 +322,11 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONWriterError is the error/exception signalled by STONWriter when illegal/incorrect input is seen. ';
-		immediateInvariant.
-true.
-%
-
-doit
-(Error
-	subclass: 'TonelParseError'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-GemStone-Core';
-		comment: 'I''m a parsing error. 
-I happen whenever the parsing of a tonel file is broken in someway.';
 		immediateInvariant.
 true.
 %
@@ -339,7 +339,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterEncodingError.
@@ -360,7 +360,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core-Conditional-Support';
 		comment: '# GemStone version format
@@ -378,7 +378,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core-Conditional-Support';
 		comment: 'RwSemanticVersionNumber conforms to version 2.0.0 of  [Semantic Versioning 2.0.0](http://semver.org/)
@@ -735,7 +735,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -761,7 +761,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -776,7 +776,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I represent a request for user assistance in resolving an origin. I am a resumable exception that gets raised when there is no way of automatically resolving a particular origin. ';
@@ -792,7 +792,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'General way for Cypress to toss things up the stack for consideration by a higher authority.';
@@ -808,7 +808,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -823,7 +823,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -838,7 +838,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -853,7 +853,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -868,7 +868,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -883,7 +883,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -898,7 +898,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -913,7 +913,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -928,7 +928,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -943,7 +943,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -958,7 +958,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -973,7 +973,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -988,7 +988,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1003,7 +1003,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1018,7 +1018,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1033,7 +1033,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1048,7 +1048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1063,7 +1063,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1078,7 +1078,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1093,7 +1093,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1102,19 +1102,20 @@ true.
 
 doit
 (Notification
-	subclass: 'TonelShouldIgnore'
-	instVarNames: #(  )
+	subclass: 'RwTonelParseRequireMethodCategoryNotification'
+	instVarNames: #( className isMeta selector )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
-		category: 'Tonel-Core';
-		comment: 'I''m a notification to say tonel writer that he should ignore a section. 
-This tipically happens on a MCClassTraitDefinition, because it will be managed on MCTraitDefinition.
+		category: 'Rowan-Tonel-Core';
+		comment: 'The receiver is signalled when the RwTonelParser is about to create a method definition with no method category defined.
 
-(see TonelWriter>>typeOf:)';
+If the caller wants to continue, #resume: the notification with the value of the category to be used.
+
+If unhandled,  a RwTonelParseError is signalled.';
 		immediateInvariant.
 true.
 %
@@ -1127,7 +1128,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for FileLocator and FileReference. By implementing most of the methods on myself most code duplucation between the locator and the reference can be avoided';
@@ -1143,7 +1144,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am a late-bound reference. I refer to a file or directory in relation to a well-known location on the filesystem, called an origin. When asked to perform concrete operation, I look up the current location of my origin, and resolve my path against it. 
@@ -1189,7 +1190,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I combine a filesystem and path, which is sufficient to refer to a concrete file or directory. I provide methods for navigating my filesystem, performing filesystem operations and opening and closing files.  I am the primary mechanism for working with files and directories. 
@@ -1214,7 +1215,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1230,7 +1231,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1246,7 +1247,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1262,7 +1263,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1278,7 +1279,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1294,7 +1295,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1310,7 +1311,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1326,7 +1327,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1342,7 +1343,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1358,7 +1359,7 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1374,7 +1375,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1390,7 +1391,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1406,42 +1407,10 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
-		immediateInvariant.
-true.
-%
-
-doit
-(CypressAbstractPackageWriter
-	subclass: 'TonelCypressWriter'
-	instVarNames: #( snapshot sourceDir packageDir writer )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'CypressTonel-Core';
-		comment: 'I''m a writer for tonel format';
-		immediateInvariant.
-true.
-%
-
-doit
-(CypressAbstractPackageFiler
-	subclass: 'TonelCypressReader'
-	instVarNames: #( packageName definitions directoryPath )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'CypressTonel-Core';
-		comment: 'I''m a reader for tonel format.';
 		immediateInvariant.
 true.
 %
@@ -1454,7 +1423,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1470,7 +1439,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1486,7 +1455,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -1506,7 +1475,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -1526,7 +1495,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1542,7 +1511,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1558,31 +1527,10 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
-		immediateInvariant.
-true.
-%
-
-doit
-(CypressFileSystemRepository
-	subclass: 'CypressTonelRepository'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'CypressTonel-Core';
-		comment: 'No class-specific documentation for CypressTonelRepository, hierarchy is: 
-Object
-  CypressAbstractRepository( url properties readerClass writerClass)
-    CypressFileSystemRepository( directoryPath)
-      CypressTonelRepository
-';
 		immediateInvariant.
 true.
 %
@@ -1595,7 +1543,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1611,7 +1559,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1627,7 +1575,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1643,7 +1591,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1659,7 +1607,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1675,7 +1623,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1691,7 +1639,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1707,7 +1655,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1723,7 +1671,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1739,7 +1687,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1755,7 +1703,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1771,7 +1719,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1787,7 +1735,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1803,7 +1751,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Cypress-Core';
 		immediateInvariant.
@@ -1818,7 +1766,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1834,7 +1782,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1850,7 +1798,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Environmental-Tools';
 		immediateInvariant.
@@ -1865,7 +1813,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1881,7 +1829,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Environmental-Tools';
 		immediateInvariant.
@@ -1896,7 +1844,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1912,7 +1860,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Environmental-Tools';
 		comment: 'No class-specific documentation for CypressEnvironmentPackageDefinition, hierarchy is: 
@@ -1933,7 +1881,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -1972,7 +1920,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1988,7 +1936,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2004,7 +1952,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2020,7 +1968,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2036,7 +1984,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2052,7 +2000,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2068,7 +2016,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2084,7 +2032,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2100,7 +2048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2116,7 +2064,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Cypress-Core';
 		immediateInvariant.
@@ -2131,7 +2079,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2147,7 +2095,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Cypress-Core';
 		immediateInvariant.
@@ -2162,7 +2110,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Comparison';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2178,7 +2126,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2194,7 +2142,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2210,7 +2158,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2226,7 +2174,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Environmental-Tools';
 		immediateInvariant.
@@ -2241,7 +2189,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Comparison';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2257,7 +2205,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2275,7 +2223,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2293,7 +2241,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2311,7 +2259,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2329,7 +2277,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2394,7 +2342,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2410,7 +2358,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2426,7 +2374,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2442,7 +2390,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2458,7 +2406,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2474,7 +2422,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2490,7 +2438,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2506,25 +2454,9 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
-		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
-		immediateInvariant.
-true.
-%
-
-doit
-(CypressAbstractFileUrl
-	subclass: 'CypressTonelFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'CypressTonel-Core';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
 		immediateInvariant.
 true.
@@ -2538,7 +2470,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2554,7 +2486,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2572,7 +2504,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2590,7 +2522,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2608,7 +2540,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2626,7 +2558,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2642,7 +2574,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2668,7 +2600,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2684,7 +2616,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2702,7 +2634,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Network-UUID';
 		immediateInvariant.
@@ -2717,7 +2649,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Files';
 		comment: 'I represent a sequential binary File. I provide the minimum operations to:
@@ -2771,7 +2703,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I present a low-level protocol for interacting with filesystems. I hold a reference to
@@ -2800,7 +2732,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am a cache for metadata about a file or directory. The information I hold is as follows:
@@ -2833,7 +2765,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that fulfill the Guide role in the Guide/Visitor pattern. My subclasses know how to traverse a filesystem in a specific order, "showing" the files and directories they encounter to a visitor.
@@ -2855,7 +2787,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in breadth-first order. Given this hierarchy:
@@ -2882,7 +2814,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first post order. Given this hierarchy:
@@ -2908,7 +2840,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first pre order. Given this hierarchy:
@@ -2934,7 +2866,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for file handle implementations. I provide a uniform interface that streams can use for read and write operations on a file regardless of the filesystem. I encapsulate the actual IO primitives.';
@@ -2950,7 +2882,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Disk';
 		comment: 'I provide an interface for doing IO on an open file. I keep an id, which as an opaque identifier used by the FilePlugin primitives. I translate positions from the 1-based indexes used in Smalltalk to the 0-based offsets used by the primitives.
@@ -2968,7 +2900,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Memory';
 		comment: 'I provide "primitives" for doing IO on files in a MemoryFileSystem. I delegate most of my actions to the MemoryFile. This way there is only one place needed where the data is stored.';
@@ -2984,7 +2916,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I''m a set of permissions for a Directory Entry';
@@ -3000,7 +2932,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can resolve origins into references. Such objects use the Chain of Responsibility pattern, and when unable to resolve a particular origin, delegate that resolution request to the next resolver in the list.
@@ -3020,7 +2952,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I resolve origins by consulting the user. I maintain a cache of the user''s responses.';
@@ -3036,7 +2968,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for platform-specific resolvers.';
@@ -3052,7 +2984,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Mac OS X filesystem conventions. I resolve origins according to these conventions.';
@@ -3068,7 +3000,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Unix filesystem conventions. I resolve origins according to these conventions.';
@@ -3084,7 +3016,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Windows filesystem conventions. I resolve origins according to these conventions.';
@@ -3100,7 +3032,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I resolve origins that are related to the currently running Smalltalk system, using primitives provided by the VM. ';
@@ -3116,7 +3048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
@@ -3139,7 +3071,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Disk';
 		comment: 'I am an abstract superclass for disk store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
@@ -3156,7 +3088,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Unix file systems';
@@ -3172,7 +3104,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for OSX file systems';
@@ -3188,7 +3120,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Windows file systems';
@@ -3204,7 +3136,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Memory';
 		comment: 'I''m a specific store for memory file system';
@@ -3220,7 +3152,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can perform operations on directory trees. My subclasses implement the visitor protocol, and process filesystem nodes shown to them by guides.';
@@ -3236,7 +3168,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I''m an abstract superclass for enumeration operations on directory entries. ';
@@ -3252,7 +3184,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am a visitor that collects objects from the nodes I visit. I take a block similar to those passed to Collection>>collect:. I evaluate the block with DirectoryEntries for the nodes I visit, and collect the objects answered into an array.
@@ -3270,7 +3202,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I am a visitor that selects objects from the nodes I visit. I take a block similar to those passed to Collection>>select:. I evaluate the block with DirectoryEntries for the nodes I visit.
@@ -3288,7 +3220,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I create a copy of the directory tree that I visit. I use the PreorderGuide so that I can create directories before creating their contents. ';
@@ -3304,7 +3236,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core';
 		comment: 'I delete the directory tree that I visit. I use the PostorderGuide so that I can delete files before deleting their containing directories.';
@@ -3320,7 +3252,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3335,7 +3267,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3350,7 +3282,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3365,7 +3297,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3380,7 +3312,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3395,7 +3327,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3410,7 +3342,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3425,7 +3357,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3440,7 +3372,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3455,7 +3387,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3470,7 +3402,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'I am an implementation of a dictionary. Compared to other dictionaries I am very efficient for small sizes, speed- and space-wise. I also mantain the order in which elements are added when iterating. My implementation features some ideas from the RefactoringBrowser.';
@@ -3486,7 +3418,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3501,7 +3433,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3516,7 +3448,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3531,7 +3463,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3546,7 +3478,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3561,7 +3493,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3576,7 +3508,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Memory';
 		comment: 'I am an abstract file system entry for a memory file system.
@@ -3593,7 +3525,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a directory';
@@ -3609,7 +3541,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a regular file';
@@ -3625,7 +3557,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Memory';
 		comment: 'A file write stream - but within memory';
@@ -3641,7 +3573,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Core-32x';
 		comment: 'I represent a selector and its argument values.
@@ -3659,7 +3591,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Path';
 		comment: 'I''m a private and abstract filesystem path, independent of the string representation used to describe paths on a specific filesystem. I provide methods for navigating the filesystem hierarchy and working with absolute and relative paths. I only refer to a concrete file or directory with regard to a specific filesystem. Normally users should not use me directly. 
@@ -3687,7 +3619,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Path';
 		comment: 'I represent an absolute path (a position starting from Path root)';
@@ -3703,7 +3635,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Path';
 		comment: 'I represent a relative path (a position starting from Path workingDirectory)';
@@ -3719,7 +3651,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBParser takes a source code string and generates an AST for it. This is a hand-written, recursive descent parser and has been optimized for speed. The simplest way to call this is either ''RBParser parseExpression: aString'' if you want the AST for an expression, or ''RBParser parseMethod: aString'' if you want to parse an entire method.
@@ -3747,7 +3679,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPatternParser is a subclass of RBParser that allows the extended syntax that creates matching trees. These trees can be used by the ParseTreeMatcher to search and transform source code.
@@ -3764,7 +3696,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -3779,7 +3711,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBParseTreeRule is the abstract superclass of all of the parse tree searching rules. A parse tree rule is the first class representation of a particular rule to search for. The owner of a rule is the algorithm that actually executes the search. This arrangement allows multiple searches to be conducted by a single Searcher.
@@ -3801,7 +3733,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBReplaceRule is the abstract superclass of all of the transforming rules. The rules change the source code by replacing the node that matches the rule. Subclasses implement different strategies for this replacement.
@@ -3826,7 +3758,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBBlockReplaceRule replaces the matching node by the result of evaluating replaceBlock. This allows arbitrary computation to come up with a replacement.
@@ -3846,7 +3778,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBStringReplaceRule replaces a matched tree with another tree (which may include metavariable from the matching tree). This is a very succint syntax for specifying most rewrites.
@@ -3867,7 +3799,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBSearchRule is a parse tree rule that simply searches for matches to the rule. Every time a match is found, answerBlock is evaluated with the node that matches and the cureent answer. This two-argument approach allows a collection to be formed from all of the matches (Think inject:into:).
@@ -3888,7 +3820,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBProgramNode is an abstract class that represents an abstract syntax tree node in a Smalltalk program.
@@ -3926,7 +3858,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBMethodNode is the AST that represents a Smalltalk method.
@@ -3954,7 +3886,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPatternMethodNode is a RBMethodNode that will match other method nodes without their selectors being equal. 
@@ -3975,7 +3907,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPragmaNode is an AST node that represents a method pragma.
@@ -3998,7 +3930,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4013,7 +3945,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBReturnNode is an AST node that represents a return expression.
@@ -4035,7 +3967,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBSequenceNode is an AST node that represents a sequence of statements. Both RBBlockNodes and RBMethodNodes contain these.
@@ -4060,7 +3992,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBValueNode is an abstract class that represents a node that returns some value.
@@ -4088,7 +4020,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'A RBArrayNode is an AST node for runtime arrays.
@@ -4110,7 +4042,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBAssignmentNode is an AST node for assignment statements
@@ -4133,7 +4065,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBBlockNode is an AST node that represents a block "[...]".
@@ -4159,7 +4091,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPatternBlockNode is the node in matching parse trees (it never occurs in normal Smalltalk code) that executes a block to determine if a match occurs. valueBlock takes two arguments, the first is the actual node that we are trying to match against, and second node is the dictionary that contains all the metavariable bindings that the matcher has made thus far.
@@ -4180,7 +4112,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPatternWrapperBlockNode allows further matching using a block after a node has been matched by a pattern node.
@@ -4199,7 +4131,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4214,7 +4146,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBCascadeNode is an AST node for cascaded messages (e.g., "self print1 ; print2").
@@ -4236,7 +4168,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literals.';
@@ -4252,7 +4184,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'A RBLiteralArrayNode is an AST node that represents literal arrays and literal byte arrays.
@@ -4274,7 +4206,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literal values (e.g., #foo, true, 1, etc.), but not literal arrays.
@@ -4293,7 +4225,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBMessageNode is an AST node that represents a message send.
@@ -4317,7 +4249,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPatternMessageNode is a RBMessageNode that will match other message nodes without their selectors being equal. 
@@ -4337,7 +4269,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBVariableNode is an AST node that represent a variable (global, inst var, temp, etc.).
@@ -4358,7 +4290,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPatternVariableNode is an AST node that is used to match several other types of nodes (literals, variables, value nodes, statement nodes, and sequences of statement nodes).
@@ -4389,7 +4321,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBProgramNodeVisitor is an abstract visitor for the RBProgramNodes.
@@ -4407,7 +4339,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBConfigurableFormatter formats the Refactoring Browser''s parse trees. It has many more formatting options than the default formatter used by the RB. To change the RB to use this formatter, execute "RBProgramNode formatterClass: RBConfigurableFormatter". For some refactorings the RB must reformat the code after the change, so it is good to have a formatter configured to your tastes.
@@ -4432,7 +4364,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBFormatter formats a parse tree. It is an example of a Visitor. This is rarely called directly. Sending ''formattedCode'' to a parse tree uses this algorithm to return a pretty-printed version.
@@ -4456,7 +4388,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'ParseTreeSearcher walks over a normal source code parse tree using the visitor pattern, and then matches these nodes against the meta-nodes using the match:inContext: methods defined for the meta-nodes.
@@ -4479,7 +4411,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'ParseTreeRewriter walks over and transforms its RBProgramNode (tree). If the tree is modified, then answer is set to true, and the modified tree can be retrieved by the #tree method.
@@ -4498,7 +4430,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBReadBeforeWrittenTester is a visitor that identifies variables that may have been read before they are initialized.
@@ -4521,7 +4453,7 @@ doit
 	classInstVars: #( classificationTable )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBScanner is a stream that returns a sequence of token from the string that it is created on. The tokens know where they came from in the source code and which comments were attached to them.
@@ -4557,7 +4489,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPatternScanner is a subclass of RBScanner that allows the extended syntax of pattern matching trees.
@@ -4574,7 +4506,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4589,7 +4521,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBSmallDictionary is a special dictionary optimized for small collections. In addition to the normal dictionary protocol, it also supports an #empty message which "empties" the collection but may hang on to the original elements (so it could collect garbage). Without #empty we would either need to create a new dictionary or explicitly remove everything from the dictionary. Both of these take more time and #empty.
@@ -4611,7 +4543,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBStringReplacement represents replacing source in the original method with a different string. These are used when reformatting code after a parse tree change has been made. Depending on the change, it may be possible to minimally change the parse tree without needing to format it.
@@ -4634,7 +4566,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBToken is the abstract superclass of all of the RB tokens. These tokens (unlike the standard parser''s) remember where they came from in the original source code.
@@ -4658,7 +4590,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBAssignmentToken is the first-class representation of the assignment token '':=''
@@ -4675,7 +4607,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4690,7 +4622,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBValueToken is the abstract superclass of all tokens that have additional information attached. For example, the BinarySelector token holds onto the actual character (e.g. $+).
@@ -4711,7 +4643,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBBinarySelectorToken is the first-class representation of a binary selector (e.g. +)
@@ -4728,7 +4660,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBIdentifierToken is the first class representation of an identifier token (e.g. Class)
@@ -4745,7 +4677,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4760,7 +4692,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBKeywordToken is the first-class representation of a keyword token (e.g. add:)';
@@ -4776,7 +4708,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4791,7 +4723,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBLiteralToken is the first-class representation of a literal token (entire literals, even literal arrays, are a single token in the ST80 grammar.).
@@ -4812,7 +4744,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4827,7 +4759,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4842,7 +4774,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBPatternBlockToken is the first-class representation of the pattern block token.
@@ -4860,7 +4792,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'AST-Core';
 		comment: 'RBSpecialCharacterToken is the first class representation of special characters.
@@ -4878,7 +4810,7 @@ doit
 	classInstVars: #( configuration )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Kernel';
 		comment: 'No class-specific documentation for Cypress, hierarchy is: 
@@ -4897,7 +4829,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		comment: 'Simple object with the results of the Jadeite command.';
@@ -4913,7 +4845,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'Copied from CypressGsGeneralDependencySorter';
@@ -4929,7 +4861,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4944,7 +4876,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4959,7 +4891,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4974,7 +4906,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4989,7 +4921,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5004,7 +4936,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5019,7 +4951,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5034,7 +4966,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		comment: 'Rowan Service is the abstract service class for classes that represent
@@ -5062,7 +4994,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		comment: 'A place to put miscellaneous commands that don''t fit 
@@ -5083,7 +5015,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		comment: 'Simple service that provides updates to the client related to auto commit.';
@@ -5099,7 +5031,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		comment: 'RowanBrowserService handles services that fall outside
@@ -5116,7 +5048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		comment: 'Most class operations done here. 
@@ -5134,7 +5066,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5149,7 +5081,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5164,7 +5096,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5179,7 +5111,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5194,7 +5126,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5209,7 +5141,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5224,7 +5156,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5239,7 +5171,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5254,7 +5186,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5269,7 +5201,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5284,7 +5216,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5299,7 +5231,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5314,7 +5246,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core-Conditional-Support';
 		immediateInvariant.
@@ -5329,7 +5261,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core-Conditional-Support';
 		immediateInvariant.
@@ -5344,7 +5276,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core-Conditional-Support';
 		immediateInvariant.
@@ -5359,7 +5291,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core-Conditional-Support';
 		immediateInvariant.
@@ -5374,7 +5306,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -5389,7 +5321,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -5404,7 +5336,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5419,7 +5351,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5434,7 +5366,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Abstract class with support for walking a modification tree and writing out the source code in a variety of formats:
@@ -5447,74 +5379,13 @@ true.
 
 doit
 (RwModificationWriterVisitor
-	subclass: 'RwGsModificationTopazWriterVisitor'
-	instVarNames: #( topazFilenameConfigsMap topazFilename topazFileHeader filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-GemStone-Core';
-		comment: '  Example script that produces topaz bootstrap files for the Rowan projects:
-
-	| repositoryRootPath projectSetDefinition projectSetModification visitor |
-	repositoryRootPath := FileLocator dbfScratchDir / ''rowanBootstrap''.
-	repositoryRootPath ensureCreateDirectory.
-
-	projectSetDefinition := RwProjectSetDefinition new.
-	Rowan image loadedProjects do: [:lp | projectSetDefinition addProject: lp asDefinition ].
-
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitor new
-		repositoryRootPath: repositoryRootPath;
-		yourself.
-	false 
-		ifTrue: [ visitor topazFilename: ''rowan_bootstrap'' ]
-		ifFalse: [
-			| fileNameConfigsMap |
-			fileNameConfigsMap := Dictionary new
-				at: ''rowan_bootstrap_app'' 
-					put: (Dictionary new 
-							at: ''Rowan'' put: {{''Kernel''}. {}};
-							at: ''FileSystemGs'' put: nil;
-							at: ''Cypress'' put: nil;
-							at: ''STON'' put: nil;
-							at: ''Tonel'' put: nil;
-							yourself);
-				at: ''rowan_bootstrap_globals'' 
-					put: (Dictionary new 
-							at: ''Rowan'' put: {{''Globals''}. {}};
-							at: ''FileSystemGs'' put: {{''Default''}. {}};
-							at: ''Cypress'' put: {{''Default''}. {}};
-							at: ''STON'' put: {{''Bootstrap''}. {}};
-							at: ''Tonel'' put: {{''Bootstrap''}. {}};
-							yourself);
-				at: ''rowan_bootstrap_user_globals'' 
-					put: (Dictionary new 
-							at: ''Rowan'' put: {{''UserGlobals''}. {}};
-							at: ''FileSystemGs'' put: nil;
-							at: ''Cypress'' put: nil;
-							at: ''STON'' put: nil;
-							at: ''Tonel'' put: nil;
-							yourself);
-				yourself.
-			visitor topazFilenameConfigsMap: fileNameConfigsMap].
-	visitor visit: projectSetModification.
-	visitor export.';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwModificationWriterVisitor
 	subclass: 'RwGsModificationTopazWriterVisitorV2'
 	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-CoreV2';
 		immediateInvariant.
@@ -5529,7 +5400,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5544,7 +5415,7 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5559,7 +5430,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5574,7 +5445,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5589,7 +5460,7 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5604,7 +5475,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5619,7 +5490,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5634,7 +5505,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5649,7 +5520,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5664,7 +5535,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions-Common';
 		immediateInvariant.
@@ -5679,7 +5550,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5694,7 +5565,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5709,7 +5580,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5724,7 +5595,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5739,7 +5610,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5754,7 +5625,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		comment: 'Fundamental concepts:
@@ -5784,7 +5655,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5799,7 +5670,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		comment: 'This class audits individual classes';
@@ -5815,7 +5686,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5830,7 +5701,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5845,7 +5716,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5860,7 +5731,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5875,7 +5746,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5890,7 +5761,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5905,7 +5776,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5920,7 +5791,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5935,7 +5806,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5950,7 +5821,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5965,7 +5836,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -5980,7 +5851,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5995,7 +5866,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6010,7 +5881,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6025,7 +5896,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6040,7 +5911,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6055,7 +5926,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6070,7 +5941,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6085,7 +5956,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6100,7 +5971,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6115,7 +5986,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6130,7 +6001,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6145,7 +6016,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6160,7 +6031,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6175,7 +6046,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6190,7 +6061,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6205,7 +6076,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6220,7 +6091,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6235,7 +6106,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6250,7 +6121,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6265,7 +6136,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6280,7 +6151,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6295,7 +6166,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6310,7 +6181,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6325,7 +6196,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6340,7 +6211,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6355,7 +6226,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6370,7 +6241,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6385,7 +6256,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6400,7 +6271,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6415,7 +6286,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6430,7 +6301,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassAdditionOrRemoval, hierarchy is: 
@@ -6449,7 +6320,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Configuration that guides Cypress operation.
@@ -6480,7 +6351,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		comment: 'Abstract.
@@ -6503,7 +6374,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		immediateInvariant.
@@ -6518,7 +6389,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		comment: 'Defines a class.
@@ -6538,7 +6409,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		comment: 'Extends an existing class with additional methods.
@@ -6556,7 +6427,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6571,7 +6442,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6586,7 +6457,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions-Common';
 		immediateInvariant.
@@ -6601,7 +6472,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6616,7 +6487,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6631,7 +6502,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6646,7 +6517,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6661,7 +6532,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
@@ -6681,7 +6552,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
@@ -6701,7 +6572,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
@@ -6721,7 +6592,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		immediateInvariant.
@@ -6736,7 +6607,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		comment: 'Defines a package, which is a bunch of class definitions and class extensions.
@@ -6755,7 +6626,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to the elements of some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
@@ -6777,7 +6648,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
@@ -6793,7 +6664,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassExtensionsModification, hierarchy is: 
@@ -6813,7 +6684,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -6828,7 +6699,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
@@ -6846,7 +6717,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
@@ -6864,7 +6735,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the instance or class methods defined by a class or class extension. The elements are method definitions. Key is selector (as string).';
@@ -6880,7 +6751,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -6895,7 +6766,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
@@ -6911,7 +6782,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the properties of a single entity. The elements are associations of propertyName -> propertyValue. Key is property name.';
@@ -6927,7 +6798,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'DELETE ME';
@@ -6943,7 +6814,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Definitions';
 		comment: 'Holds some number of RwDefinitions or RwLoadedThingss to be operated on together. The entities put into the receiver should be at the same semantic level: all methods, class, packages , or projects.
@@ -6961,7 +6832,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypFileUtilities, hierarchy is: 
@@ -6980,7 +6851,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'No class-specific documentation for CypGemStoneFileUtilities, hierarchy is: 
@@ -7000,7 +6871,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'Keeps track of what LoadedPackages are in the GemStone repository, and is the gateway for operations to query or change the image.';
@@ -7016,7 +6887,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		comment: 'Walks a diff tree and adds patches to a patchSet that will update the GemStone image (repository) to the code state represented by the ''after'' state of the diff, provided that the ''before'' state of the diff is the current state of the image.';
@@ -7032,7 +6903,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7047,7 +6918,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7062,7 +6933,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7077,7 +6948,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		comment: 'A set of patches (changes) to be applied atomically (or as close to atomically as possible) to a GemStone repository.';
@@ -7093,7 +6964,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7108,7 +6979,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7123,7 +6994,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7138,7 +7009,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7153,7 +7024,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7168,7 +7039,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7183,7 +7054,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7198,7 +7069,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7213,7 +7084,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7228,7 +7099,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7243,7 +7114,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7258,7 +7129,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7273,7 +7144,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7288,7 +7159,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7303,7 +7174,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7318,7 +7189,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7333,7 +7204,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7348,7 +7219,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7363,7 +7234,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7378,7 +7249,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7393,7 +7264,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7408,7 +7279,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7423,7 +7294,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7438,7 +7309,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7453,7 +7324,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7468,7 +7339,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7483,7 +7354,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7498,7 +7369,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7513,7 +7384,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7528,7 +7399,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7543,7 +7414,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7558,7 +7429,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7573,7 +7444,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		comment: 'The Rowan-GemStone-Loader implementation does depend upon having a stable and consistent implementation of the RwGsSymbolDictionaryRegistry behavior for the duration of a load.
@@ -7617,7 +7488,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'properties: dictionary of properties
@@ -7635,7 +7506,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'package: the CypLoadedPackage that defines me and all my methods that are not extension methods.
@@ -7652,7 +7523,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7667,7 +7538,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedClassExtension, hierarchy is: 
@@ -7687,7 +7558,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7702,7 +7573,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedMethod, hierarchy is: 
@@ -7722,7 +7593,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'The MethodRegistry maps GsNMethods to LoadedMethods.';
@@ -7738,7 +7609,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'repository: The repository I was loaded from (if known, nil otherwise)
@@ -7757,7 +7628,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7772,24 +7643,9 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwLoadedProject
-	subclass: 'RwGsLoadedSymbolDictProject'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
 true.
 %
@@ -7802,7 +7658,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-CoreV2';
 		immediateInvariant.
@@ -7817,7 +7673,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypMethodAdditionOrRemoval, hierarchy is: 
@@ -7836,7 +7692,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
@@ -7857,7 +7713,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single class definition or class extension.
@@ -7879,7 +7735,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7894,7 +7750,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7909,7 +7765,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7924,7 +7780,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single method
@@ -7946,7 +7802,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7961,7 +7817,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7976,7 +7832,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7991,7 +7847,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
@@ -8013,7 +7869,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
@@ -8035,7 +7891,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -8050,7 +7906,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -8065,7 +7921,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Represents the move of a class definition from one package to another.';
@@ -8081,7 +7937,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'Represents a move of a method from a class definition to a class extension, or from a class extension to a class definition, or between two extensions, of the same class. This should always also result in a change of package, since a class should not be defined and extended in the same package, nor extended twice in the same package.';
@@ -8097,7 +7953,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -8112,7 +7968,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Kernel';
 		comment: 'Provides services specific to the Smalltalk dialect being run,
@@ -8129,7 +7985,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'This class is private to Cypress.
@@ -8146,7 +8002,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
@@ -8167,7 +8023,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
@@ -8188,7 +8044,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -8203,7 +8059,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Specifications';
 		immediateInvariant.
@@ -8218,7 +8074,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-SpecificationsV2';
 		immediateInvariant.
@@ -8233,7 +8089,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-SpecificationsV2';
 		immediateInvariant.
@@ -8248,9 +8104,90 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-SpecificationsV2';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RwTonelParser'
+	instVarNames: #( packageReader stream lastSelectorParsed )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Tonel-Core';
+		comment: 'I''m a parser for tonel files. 
+I parse a class with the following format: 
+
+Tonel spec
+====
+
+    [comment]
+    type { typeDefinition }
+    (
+        [{ methodMetadata }]
+        method [
+            methodBody ] 
+    )*
+
+
+comment
+---
+"
+comment string
+"
+is optional (but it should be there, in good design ;)
+
+type
+---
+Class|Trait|Extension
+
+typeDefinition
+---
+a STON file with class/trait/extension metadata
+
+methodMetadata
+---
+a STON file with method metadata
+is optional (but also, recommended)
+
+method
+---
+method declaration as this: 
+
+Class[ class] >> selector
+
+methodBody 
+---
+the method body (we do not parse contents, that''s class builder task)';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RwTopazTonelReader'
+	instVarNames: #( environmentId )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Tonel-Core';
+		comment: 'Support class for topaz `tfile` and `tmethod` commands.
+
+`tmethod`
+	Read and compile a single tonal format method from a given string
+
+`tfile`
+	Read a single tonel format class from a file and compile the methods within that file. Definition/redefinition of the class not implemented yet.';
 		immediateInvariant.
 true.
 %
@@ -8263,7 +8200,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'A Uniform Resource Locator.  It specifies the location of a document on the Internet.  The base class is abstract; child classes break different types of URLs down in ways appropriate for that type.
@@ -8322,7 +8259,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class models a file URL according to (somewhat) RFC1738, see http://www.w3.org/Addressing/rfc1738.txt
@@ -8385,7 +8322,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the cypress: scheme:
@@ -8415,7 +8352,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the tonel: scheme:
@@ -8437,7 +8374,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the filetree: scheme[1]:
@@ -8459,7 +8396,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the github: scheme[1]:
@@ -8481,7 +8418,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'a URL type that can''t be broken down in any systematic way.  For example, mailto: and telnet: URLs.  The part after the scheme name is stored available via the #locator message.';
@@ -8497,7 +8434,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'A URL which has a hierarchical encoding.  For instance, http and ftp URLs are hierarchical.';
@@ -8513,7 +8450,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		immediateInvariant.
@@ -8528,7 +8465,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		immediateInvariant.
@@ -8543,7 +8480,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the smalltalk: scheme:
@@ -8570,7 +8507,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the gitfiletree: scheme:
@@ -8608,8 +8545,8 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STON implements serialization and materialization using the Smalltalk Object Notation format.
@@ -8717,8 +8654,8 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONReader materializes objects using the Smalltalk Object Notation format.
@@ -8735,8 +8672,8 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONReference holds a forward reference to another object during materialization.
@@ -8752,8 +8689,8 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONStreamWriter helps in streaming writing STON representations.
@@ -8769,8 +8706,8 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONArrayWriter helps in writing array based STON representations.
@@ -8786,8 +8723,8 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONShortArrayWriter helps in writing short array based STON representations.
@@ -8803,8 +8740,8 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONDictionaryWriter helps in writing dictionary based STON representations.';
@@ -8819,8 +8756,8 @@ doit
 	classVars: #( STONCharacters STONSimpleSymbolCharacters )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
 )
 		category: 'STON-Core';
 		comment: 'STONWriter serializes objects using the Smalltalk Object Notation format. 
@@ -8853,7 +8790,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'I''m a modified STON writer to make tonel metadata look as we want.
@@ -8866,102 +8803,13 @@ true.
 
 doit
 (Object
-	subclass: 'TonelParser'
-	instVarNames: #( packageReader stream lastSelectorParsed )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'Tonel-Core';
-		comment: 'I''m a parser for tonel files. 
-I parse a class with the following format: 
-
-Tonel spec
-====
-
-    [comment]
-    type { typeDefinition }
-    (
-        [{ methodMetadata }]
-        method [
-            methodBody ] 
-    )*
-
-
-comment
----
-"
-comment string
-"
-is optional (but it should be there, in good design ;)
-
-type
----
-Class|Trait|Extension
-
-typeDefinition
----
-a STON file with class/trait/extension metadata
-
-methodMetadata
----
-a STON file with method metadata
-is optional (but also, recommended)
-
-method
----
-method declaration as this: 
-
-Class[ class] >> selector
-
-methodBody 
----
-the method body (we do not parse contents, that''s class builder task)';
-		immediateInvariant.
-true.
-%
-
-doit
-(TonelParser
-	subclass: 'NewTonelParser'
-	instVarNames: #( methodParser currentMethodNode methodBodyStart )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'Tonel-Core';
-		immediateInvariant.
-true.
-%
-
-doit
-(Object
-	subclass: 'TonelWriter'
-	instVarNames: #( packageWriter )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'Tonel-Core';
-		immediateInvariant.
-true.
-%
-
-doit
-(Object
 	subclass: 'ZnBufferedReadStream'
 	instVarNames: #( stream buffer position limit )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedReadStream.
@@ -8985,7 +8833,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedReadWriteStream.
@@ -9011,7 +8859,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedWriteStream.
@@ -9036,7 +8884,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterEncoder, I encode and decode Character objects to and from a binary stream.
@@ -9085,7 +8933,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am the GemStone/S implementation of ZnUTF8Encoder.
@@ -9108,7 +8956,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am a read-write character stream. I am mainly used to open the Pharo source and changes files.';
@@ -9124,7 +8972,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedStream, an abstract support class for read and write streams on an encoded binary stream.
@@ -9142,7 +8990,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedReadStream, an abstract support class for read streams on a binary encoded wrapped stream.
@@ -9160,7 +9008,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterReadStream.
@@ -9182,7 +9030,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedWriteStream, an abstract support class for write streams on a binary encoded wrapped stream.
@@ -9200,7 +9048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterWriteStream.
@@ -9219,7 +9067,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Files';
 		comment: 'Provides a simple, platform-independent, file stream. I am 
@@ -9265,7 +9113,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Files';
 		comment: 'I am a concrete subclass of AbstractBinaryFileStream for normal files. Regardless the position of the file, I will make my operarions on my position and then return the file it''s own position.
@@ -9286,7 +9134,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -9301,7 +9149,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -9316,7 +9164,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -9331,7 +9179,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'Cypress-MesssageDigest';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -9347,7 +9195,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #()
+	options: #( #logCreation )
 )
 		category: 'FileSystem-Memory';
 		comment: 'I am like a WriteStream but I have more capacities than it.
@@ -9582,13 +9430,12 @@ category: 'initializing - private'
 method: CypressLoaderError
 initializeMessageText
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	stream
-		nextPutAll: self patchOperation printString;
-		nextPutAll: ' failed because ';
-		nextPutAll: self exception printString.
-	messageText := stream contents
+	| str |
+	(str := String new )
+		addAll: self patchOperation printString;
+		addAll: ' failed because ';
+		addAll: self exception printString.
+	self details: str .
 %
 
 category: 'initializing - private'
@@ -9655,16 +9502,15 @@ category: 'initializing - private'
 method: CypressLoaderMissingClasses
 initializeMessageText
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	stream nextPutAll: 'Missing classes:'.
+	| str |
+	str := 'Missing classes:' copy .
 	self requirementsMap keysAndValuesDo: 
 			[:className :definitions |
-			stream
+			str
 				space;
-				nextPutAll: className printString , '(' , definitions size printString
+				addAll: className printString , '(' , definitions size printString
 							, ')'].
-	messageText := stream contents
+	self details: str.
 %
 
 category: 'initializing - private'
@@ -9724,6 +9570,13 @@ signalWith: aReference
 
 category: 'exceptiondescription'
 method: FileException
+buildMessageText
+  self details: fileName printString .
+  super buildMessageText
+%
+
+category: 'exceptiondescription'
+method: FileException
 fileName
 	^fileName
 %
@@ -9740,16 +9593,6 @@ isResumable
 	"Determine whether an exception is resumable."
 
 	^true
-%
-
-category: 'exceptiondescription'
-method: FileException
-messageText
-	"Return an exception's message text."
-
-	^ messageText isNil
-		ifTrue: [ fileName printString ]
-		ifFalse: [ messageText ]
 %
 
 ! Class implementation for 'FileAlreadyExistsException'
@@ -9769,6 +9612,13 @@ signalOnFile: aFile
 
 category: 'accessing'
 method: FileAlreadyExistsException
+buildMessageText
+  self details:  'File already exists: ', (file ifNotNil:[:f | f basename] ifNil:['nil']).
+  super buildMessageText 
+%
+
+category: 'accessing'
+method: FileAlreadyExistsException
 file
 	^ file
 %
@@ -9778,13 +9628,6 @@ method: FileAlreadyExistsException
 file: aFile
 	
 	file := aFile
-%
-
-category: 'accessing'
-method: FileAlreadyExistsException
-messageText
-
-	^ 'File already exists: ', file basename
 %
 
 ! Class implementation for 'FileDoesNotExistException'
@@ -9837,7 +9680,7 @@ category: 'initialize-release'
 method: FileSystemError
 initializeWithReference: aReference
 	reference := aReference.
-	messageText := aReference printString
+	self details: aReference printString
 %
 
 category: 'testing'
@@ -9900,13 +9743,11 @@ signal: aString streamPosition: streamPosition
 
 category: 'accessing'
 method: STONReaderError
-messageText
-	^ streamPosition 
-		ifNil: [ 
-			super messageText ] 
-		ifNotNil: [ :pos | 
-			'At character {1}: {2}' format: 
-				(Array with: streamPosition with: super messageText) ]
+buildMessageText
+	streamPosition ifNotNil: [ :pos | 
+    self details: 'Error at character position ', pos asString 
+  ].
+  super buildMessageText .
 %
 
 category: 'accessing'
@@ -10718,13 +10559,10 @@ category: 'initializing - private'
 method: CypressLoaderErrorNotification
 initializeMessageText
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	stream
-		nextPutAll: self patchOperation printString;
-		nextPutAll: ' failed because ';
-		nextPutAll: self exception printString.
-	messageText := stream contents
+	| str |
+	str :=	self patchOperation printString ,  ' failed because '.
+	str addAll: self exception printString.
+	self details: str .
 %
 
 category: 'initializing - private'
@@ -11535,6 +11373,72 @@ signal: aMessage
 
 	self informMessage: aMessage.
 	^ self signal
+%
+
+! Class implementation for 'RwTonelParseRequireMethodCategoryNotification'
+
+!		Class methods for 'RwTonelParseRequireMethodCategoryNotification'
+
+category: 'instance creation'
+classmethod: RwTonelParseRequireMethodCategoryNotification
+className: className isMeta: isMeta selector: selector
+	^ self new
+		className: className;
+		isMeta: isMeta;
+		selector: selector;
+		yourself
+%
+
+!		Instance methods for 'RwTonelParseRequireMethodCategoryNotification'
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+className
+	^className
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+className: object
+	className := object
+%
+
+category: 'Handling'
+method: RwTonelParseRequireMethodCategoryNotification
+defaultAction
+	"handle and resume: with the desired method category to be used to avoid error"
+
+	RwTonelParseError
+		signal:
+			'Missing method category for ' , self className
+				,
+					(self isMeta
+						ifTrue: [ ' class >> ' ]
+						ifFalse: [ ' >> ' ]) , self selector
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+isMeta
+	^isMeta
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+isMeta: object
+	isMeta := object
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+selector
+	^selector
+%
+
+category: 'accessing'
+method: RwTonelParseRequireMethodCategoryNotification
+selector: object
+	selector := object
 %
 
 ! Class implementation for 'AbstractFileReference'
@@ -14924,385 +14828,6 @@ writePropertiesFile
 	 for preserving the FileTree details. Strictly read-only."
 %
 
-! Class implementation for 'TonelCypressWriter'
-
-!		Class methods for 'TonelCypressWriter'
-
-category: 'instance creation'
-classmethod: TonelCypressWriter
-on: sourceDir
-	^ self new
-		sourceDir: sourceDir;
-		yourself
-%
-
-!		Instance methods for 'TonelCypressWriter'
-
-category: 'accessing'
-method: TonelCypressWriter
-definitions
-
-	^ snapshot definitions
-%
-
-category: 'initializing - private'
-method: TonelCypressWriter
-initializeForRepository: aCypressFileSystemRepository
-  repository := aCypressFileSystemRepository.
-  self sourceDir: repository directoryPath
-%
-
-category: 'private testing'
-method: TonelCypressWriter
-isClass: aClassDefinition
-	^ aClassDefinition class = CypressClassDefinition
-%
-
-category: 'private testing'
-method: TonelCypressWriter
-isTrait: aClassDefinition
-	^ false
-%
-
-category: 'accessing'
-method: TonelCypressWriter
-packageDir
-	^ packageDir 
-		ifNotNil: [ self fileUtils directoryFromPath: packageDir relativeTo: self sourceDir ]
-		ifNil: [ self sourceDir  ]
-%
-
-category: 'accessing'
-method: TonelCypressWriter
-sourceDir
-	^ sourceDir
-%
-
-category: 'accessing'
-method: TonelCypressWriter
-sourceDir: aFileReference
-	sourceDir := aFileReference
-%
-
-category: 'private writing'
-method: TonelCypressWriter
-writeMethodExtensions
-	| classesAndMethods |
-	classesAndMethods := Dictionary new.
-	snapshot definitions 
-		select: [ :each | each isMethodDefinition and: [ each isExtensionMethod ] ]
-		thenDo: [ :each | 
-			(classesAndMethods 
-				at: each className
-				ifAbsentPut: [ Set new ])
-				add: each ].
-	classesAndMethods keysAndValuesDo: [ :className :methods | 
-		self writer
-			writeExtensionMethods: methods 
-			className: className ]
-		
-	
-%
-
-category: 'private writing'
-method: TonelCypressWriter
-writePackage: aPackageName
-	"I'm assuming first category is actually the package"
-	packageDir := aPackageName.
-	(self fileUtils directoryExists: self packageDir) ifTrue: [ 
-		self fileUtils deleteAll: self packageDir ].  
-	self fileUtils ensureDirectoryExists: self packageDir.
-	self writer writePackage: packageDir
-%
-
-category: 'private writing'
-method: TonelCypressWriter
-writePackageFileNamed: packageFileName do: writerBlock
-
-	self fileUtils 
-		writeStreamFor: packageFileName
-		in: self packageDir 
-		do: [ :aStream | writerBlock value: aStream ]
-%
-
-category: 'accessing'
-method: TonelCypressWriter
-writer
-  ^ writer
-    ifNil: [ 
-      writer := TonelWriter new
-        packageWriter: self;
-        yourself ]
-%
-
-category: 'accessing'
-method: TonelCypressWriter
-writer: aTonelWriter
-	writer := aTonelWriter
-%
-
-category: 'writing'
-method: TonelCypressWriter
-writeSnapshot: aSnapshot
-  self
-    writeSnapshot: aSnapshot
-    inPackageNamed: (aSnapshot dynamicInstVarAt: #'packageName')
-%
-
-category: 'writing'
-method: TonelCypressWriter
-writeSnapshot: aSnapshot inPackageNamed: packageName
-  snapshot := aSnapshot.	"ensure package dirs exists. 
-	 It has to be just one but well..."
-  self writePackage: packageName.	"now export classes"
-  (self definitions select: [ :each | each isClassDefinition ])
-    do: [ :each | self writer writeClass: each ].	"... and method extensions"
-  self writeMethodExtensions
-%
-
-category: 'writing'
-method: TonelCypressWriter
-writeVersion: aVersion
-	self writeSnapshot: aVersion snapshot
-%
-
-! Class implementation for 'TonelCypressReader'
-
-!		Class methods for 'TonelCypressReader'
-
-category: 'definition creation'
-classmethod: TonelCypressReader
-definitionForType: aString
-  aString = TonelWriter classLabel
-    ifTrue: [ ^ CypressClassDefinition ].
-  aString = TonelWriter extensionLabel
-    ifTrue: [ ^ nil ].
-  TonelParseError signal: 'Unknown type declaration.'
-%
-
-category: 'accessing'
-classmethod: TonelCypressReader
-definitionOrders
-	"Used to sort definitions inside a snapshot"
-	^ Dictionary new
-		at: CypressMethodDefinition put: 1;
-		at: CypressClassDefinition put: 2;
-		yourself
-%
-
-category: 'definition creation'
-classmethod: TonelCypressReader
-newClassDefinitionForClassNamed: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString
-  ^ CypressClassDefinition
-    name: nameString
-    superclassName: superclassString
-    category: categoryString
-    instVarNames: ivarArray
-    classInstVarNames: civarArray
-    classVarNames: cvarArray
-    poolDictionaryNames: poolArray
-    comment: commentString
-    type: typeSymbol
-%
-
-category: 'definition creation'
-classmethod: TonelCypressReader
-newClassDefinitionFrom: anArray
-  | metadata |
-  metadata := anArray sixth.
-  ^ CypressClassDefinition
-    name: (metadata at: #'name')
-    superclassName: (metadata at: #'superclass')
-    category: (metadata at: #'category')
-    instVarNames: (metadata at: #'instvars' ifAbsent: [ #() ])
-    classInstVarNames: (metadata at: #'classinstvars' ifAbsent: [ #() ])
-    classVarNames: (metadata at: #'classvars' ifAbsent: [ #() ])
-    poolDictionaryNames: (metadata at: #'pools' ifAbsent: [ #() ])
-    gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ])
-    gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ])
-    comment: (anArray second ifNil: [ '' ])
-    type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol
-%
-
-category: 'definition creation'
-classmethod: TonelCypressReader
-newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
-  ^ CypressMethodDefinition
-    className: className
-    classIsMeta: meta
-    selector: selector
-    category: category
-    source: source
-%
-
-category: 'definition creation'
-classmethod: TonelCypressReader
-newTypeDefinitionFrom: anArray
-  | typeClass |
-  typeClass := self definitionForType: anArray fourth.
-  typeClass = CypressClassDefinition
-    ifTrue: [ ^ self newClassDefinitionFrom: anArray ].
-  "is extension, no type"
-  ^ nil
-%
-
-category: 'reading'
-classmethod: TonelCypressReader
-on: rootDirectoryPath fileName: packageName
-  | reader |
-  reader := self new.
-  ^ reader
-    packageDirectory:
-        rootDirectoryPath , reader fileUtils pathNameDelimiter , packageName;
-    packageName: packageName;
-    yourself
-%
-
-!		Instance methods for 'TonelCypressReader'
-
-category: 'private'
-method: TonelCypressReader
-canBeLoaded: aFileReference
-  | fileName |
-  fileName := self fileUtils localNameFrom: aFileReference.
-  ^ fileName ~= 'package.st' and: [ fileName endsWith: '.st' ]
-%
-
-category: 'private'
-method: TonelCypressReader
-categoriesFrom: aCollection
-  ^ ((aCollection select: [ :each | each isClassDefinition ])
-    collect: [ :each | each category asSymbol ]) asSet sortWithBlock: [ :a :b | a < b ]
-%
-
-category: 'parser support'
-method: TonelCypressReader
-definitionForType: aString
-  ^ self class definitionForType: aString
-%
-
-category: 'accessing'
-method: TonelCypressReader
-definitions
-  ^ definitions
-%
-
-category: 'accessing'
-method: TonelCypressReader
-directoryPath
-  ^ directoryPath
-%
-
-category: 'accessing'
-method: TonelCypressReader
-directoryPath: aString
-  directoryPath := aString
-%
-
-category: 'initializing - private'
-method: TonelCypressReader
-initializeForRepository: aCypressFileSystemRepository
-  repository := aCypressFileSystemRepository.
-  self directoryPath: repository directoryPath
-%
-
-category: 'loading'
-method: TonelCypressReader
-loadDefinitions
-  "load all definitions in the known directories and files."
-  | definitionOrders newDefinitions loadable dir |
-  definitionOrders := self class definitionOrders.
-  loadable := (self fileUtils directoryEntriesFrom: (dir := self packageDirectory))
-               select: [ :each | self canBeLoaded: each ].
-  loadable isEmpty ifTrue:[ GsFile gciLogServer:'No loadable files found in ' , dir asString ].
-  newDefinitions := ( 
-    loadable collect: [ :each | 
-    GsFile gciLogServer:'Reading ' , each asString .
-      self fileUtils
-        readStreamFor: each
-        do: [ :s | TonelParser parseStream: s forReader: self ] ])
-    flattened
-    sort: [ :a :b | (definitionOrders at: a class) < (definitionOrders at: b class) ].
-  definitions := newDefinitions sort
-%
-
-category: 'loading'
-method: TonelCypressReader
-loadDefinitionsFromFiles: fileNames
-  "From the known directories and files, load only those files
-   whose file names end with one of the Strings in the Array  fileNames ."
-  | definitionOrders newDefinitions loadable dir |
-  definitionOrders := self class definitionOrders.
-  loadable := (self fileUtils directoryEntriesFrom: (dir := self packageDirectory))
-        select: [ :each | (self canBeLoaded: each) and:[ 
-                  (fileNames detect:[:n | each endsWith: n] ifNone:[nil]) ~~ nil] ].
-  loadable isEmpty ifTrue:[ 
-      GsFile gciLogServer: 'None of specified  files found in ' , dir asString ].
-  newDefinitions := ( 
-    loadable collect: [ :each | 
-    GsFile gciLogServer:'Reading ' , each asString .
-      self fileUtils
-        readStreamFor: each
-        do: [ :s | TonelParser parseStream: s forReader: self ] ])
-    flattened
-    sort: [ :a :b | (definitionOrders at: a class) < (definitionOrders at: b class) ].
-  definitions := newDefinitions sort
-%
-
-category: 'parser support'
-method: TonelCypressReader
-newClassDefinitionFrom: anArray
-	^self class newClassDefinitionFrom: anArray
-%
-
-category: 'parser support'
-method: TonelCypressReader
-newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
-  ^ self class
-    newMethodDefinitionForClassNamed: className
-    classIsMeta: meta
-    selector: selector
-    category: category
-    source: source
-%
-
-category: 'parser support'
-method: TonelCypressReader
-newTraitDefinitionFrom: anArray
-	^ self class newTraitDefinitionFrom: anArray
-%
-
-category: 'parser support'
-method: TonelCypressReader
-newTypeDefinitionFrom: anArray
-	^ self class newTypeDefinitionFrom: anArray
-%
-
-category: 'accessing'
-method: TonelCypressReader
-packageName
-
-   ^packageName
-%
-
-category: 'accessing'
-method: TonelCypressReader
-packageName: aString
-  packageName := aString.
-  self
-    packageDirectory:
-      (self fileUtils directoryFromPath: packageName relativeTo: self directoryPath)
-%
-
-category: 'reading'
-method: TonelCypressReader
-readPackageStructure
-  self loadDefinitions.
-  ^ packageStructure
-    fromSnapshot: definitions;
-    yourself
-%
-
 ! Class implementation for 'CypressAbstractRepository'
 
 !		Class methods for 'CypressAbstractRepository'
@@ -16258,94 +15783,6 @@ validateUrl
 
   (self url projectPath isEmpty or: [ self url projectBranchOrTag isEmpty ])
     ifTrue: [ self error: self printString , ' should not be used with non-git URLs.' ]
-%
-
-! Class implementation for 'CypressTonelRepository'
-
-!		Instance methods for 'CypressTonelRepository'
-
-category: 'updating properties'
-method: CypressTonelRepository
-codeFormatProperty: aString
-  (aString equalsNoCase: 'Tonel')
-    ifFalse: [ ^ super codeFormatProperty: aString ].
-  properties at: '_gs_format' put: aString
-%
-
-category: 'initializing - private'
-method: CypressTonelRepository
-initializeReaderAndWriterClasses
-  self isCodeFormatTonel
-    ifTrue: [ 
-      readerClass := TonelCypressReader.
-      writerClass := TonelCypressWriter ]
-    ifFalse: [ super initializeReaderAndWriterClasses ]
-%
-
-category: 'testing properties'
-method: CypressTonelRepository
-isCodeFormatTonel
-
-	^self isCodeFormatProperty: 'Tonel'
-%
-
-category: 'accessing properties'
-method: CypressTonelRepository
-packageExtension
-  ^ properties at: 'packageExtension' ifAbsent: [ '' ]
-%
-
-category: 'reading'
-method: CypressTonelRepository
-readPackageStructureForPackageNamed: packageName 
-  | reader |
-  reader := self reader
-    packageName: packageName;
-    loadDefinitions;
-    yourself.
-  ^ CypressSnapshot definitions: reader definitions
-%
-
-category: 'reading'
-method: CypressTonelRepository
-readPackageStructureForPackageNamed: packageName  files: fileNames
-  "Load only those files whose file names end with one of the Strings
-   in the Array fileNames."
-  | reader |
-  reader := self reader
-    packageName: packageName;
-    loadDefinitionsFromFiles: fileNames  ;
-    yourself.
-  ^ CypressSnapshot definitions: reader definitions
-%
-
-category: 'reading'
-method: CypressTonelRepository
-readPropertiesFile
-  "noop"
-
-%
-
-category: 'reading'
-method: CypressTonelRepository
-readPropertiesFile: fileName
-  "noop"
-
-%
-
-category: 'writing'
-method: CypressTonelRepository
-writePackageStructure: aPackageStructure
-  ^ self writer
-    writeSnapshot: aPackageStructure snapshot
-    inPackageNamed: aPackageStructure packageName
-%
-
-category: 'writing'
-method: CypressTonelRepository
-writePropertiesFile: fileName
-  "noop"
-
 %
 
 ! Class implementation for 'CypressFileUtilities'
@@ -18153,6 +17590,18 @@ instVarNames
   ^ instVarNames
 %
 
+category: 'testing'
+method: CypressClassDefinition
+isClassDefinition
+  ^ true
+%
+
+category: 'testing'
+method: CypressClassDefinition
+isMethodDefinition
+  ^ false
+%
+
 category: 'loading'
 method: CypressClassDefinition
 loadClassDefinition
@@ -18500,8 +17949,20 @@ instanceMethod: instanceBlock classMethod: classBlock
 
 category: 'testing'
 method: CypressMethodDefinition
+isClassDefinition
+  ^ false
+%
+
+category: 'testing'
+method: CypressMethodDefinition
 isInitializer
 	^ self selector = 'initialize' and: [self classIsMeta]
+%
+
+category: 'testing'
+method: CypressMethodDefinition
+isMethodDefinition
+  ^ true
 %
 
 category: 'loading'
@@ -20453,7 +19914,7 @@ method: CypressClassStructure
 asCypressClassDefinition
 
 	self isClassExtension ifTrue: [^CypressError signal: 'Extensions cannot have class definitions'].
-	^CypressClassDefinition
+	^CypressClassDefinition new
 		name: self className
 		superclassName: self superclassName
 		category: self category
@@ -23998,37 +23459,6 @@ method: CypressSmalltalkUrl
 repositoryClass
 
 	^CypressSmalltalkRepository
-%
-
-! Class implementation for 'CypressTonelFileUrl'
-
-!		Class methods for 'CypressTonelFileUrl'
-
-category: 'constants'
-classmethod: CypressTonelFileUrl
-schemeName
-  ^ 'tonel'
-%
-
-!		Instance methods for 'CypressTonelFileUrl'
-
-category: 'accessing'
-method: CypressTonelFileUrl
-codeFormat
-  ^ 'Tonel'
-%
-
-category: 'testing'
-method: CypressTonelFileUrl
-isStrict
-  ^ true
-%
-
-category: 'accessing'
-method: CypressTonelFileUrl
-repositoryClass
-
-	^CypressTonelRepository
 %
 
 ! Class implementation for 'CypressTopazUrl'
@@ -48862,7 +48292,13 @@ gitUrl: aString
 category: 'transitions'
 method: RwAbstractUnloadedProject
 load
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	^ self _resolvedProject load
 %
@@ -49215,10 +48651,13 @@ isStrict
 
 category: 'transitions'
 method: RwDefinedProject
-load
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+loadProjectSet
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
 
-	^ self _resolvedProject load
+	^ self _resolvedProject loadProjectSet
 %
 
 category: 'accessing'
@@ -49293,7 +48732,6 @@ projectsRoot
 category: 'transitions'
 method: RwDefinedProject
 read
-
 	"return a RwDefinedProject with definitions read from disk"
 
 	self _resolvedProject read
@@ -49339,6 +48777,26 @@ readProjectComponentNames: componentNames platformConditionalAttributes: platfor
 	self _resolvedProject
 		readProjectComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedProject
+readProjectSet
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _resolvedProject readProjectSet
+%
+
+category: 'transitions'
+method: RwDefinedProject
+readProjectSet: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _resolvedProject readProjectSet: platformConditionalAttributes
 %
 
 category: 'accessing'
@@ -49601,6 +49059,20 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		yourself
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		readonlyDiskUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+%
+
 !		Instance methods for 'RwResolvedProject'
 
 category: 'transitions'
@@ -49821,6 +49293,76 @@ method: RwProject
 extendedClasses
 
 	^ self _projectTools query classExtensionsForProjectNamed: self name
+%
+
+category: 'git support'
+method: RwProject
+gitCheckout: branchOrSha
+	"git checkout a branch or sha"
+
+	^ Rowan gitTools gitcheckoutIn: self repositoryRoot with: branchOrSha
+%
+
+category: 'git support'
+method: RwProject
+gitCommit: commitComment
+	"git checkout a branch or sha"
+
+	^ self _loadedProject resolvedProject commit: commitComment
+%
+
+category: 'git support'
+method: RwProject
+gitCreateBranch: branchName
+	"git create a new branch"
+
+	^ Rowan gitTools gitcheckoutIn: self repositoryRoot with: ' -b ', branchName
+%
+
+category: 'git support'
+method: RwProject
+gitLog: logLimit
+	"return `git log` report"
+
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRoot pathString
+%
+
+category: 'git support'
+method: RwProject
+gitPullRemote: remoteName branch: branchName
+	"git pull remote and branch name"
+
+	^ Rowan gitTools
+		gitpullIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+%
+
+category: 'git support'
+method: RwProject
+gitPushRemote: remoteName branch: branchName
+	"git push remote and branch name"
+
+	^ Rowan gitTools
+		gitpushIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+%
+
+category: 'git support'
+method: RwProject
+gitShortStatus
+	"`git status --short` returns an empty string if there is nothing to commit"
+
+	^ Rowan gitTools gitstatusIn: self repositoryRoot pathString with: '--short'
+%
+
+category: 'git support'
+method: RwProject
+gitStatus
+	"return standard `git status` report"
+
+	^ Rowan gitTools gitstatusIn: self repositoryRoot pathString with: ''
 %
 
 category: 'testing'
@@ -56250,7 +55792,7 @@ methodsContaining: string
     | methodService |
     methodService := self methodServiceFrom: (methods first at: index).
     methodService
-      firstReference: (methods last at: index);
+      firstReference: ((methods at: 2) at: index);   "<<<< FIX HERE"
       searchString: string.
     sorted add: methodService ].
   queryResults := sorted asArray.
@@ -56623,30 +56165,6 @@ method: RwAbstractProjectComponentVisitorV2
 visitNested: aProjectLoadComponent
 
 	^aProjectLoadComponent acceptNestedVisitor: self
-%
-
-category: 'visiting'
-method: RwAbstractProjectComponentVisitorV2
-visitProjectLoadComponent: aProjectLoadComponent
-
-	(visitedComponentNames includes: aProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aProjectLoadComponent.
-
-	definedGroupNames := aProjectLoadComponent definedGroupNames.
-
-	self _processConditionalProperties: aProjectLoadComponent.
-
-	(self
-		_components: self componentsPath
-		forProject: aProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	(self
-		_projects: self projectsPath
-		forProject: aProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 %
 
 category: 'visiting'
@@ -57774,583 +57292,6 @@ _newLine
 	 ^ self class lineEnding
 %
 
-! Class implementation for 'RwGsModificationTopazWriterVisitor'
-
-!		Instance methods for 'RwGsModificationTopazWriterVisitor'
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-bufferedStream
-
-	^ bufferedStream ifNil: [ 
-		| encodedStream |
-		encodedStream := (self repositoryRootPath / self topazFilename, self filenameExtension) writeStreamEncoded: 'utf8'.
-		bufferedStream := ZnBufferedWriteStream on: encodedStream ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-buildPackageNamesMap
-
-	"If true, topazFilenamePackageNamesMap will be built from topazFilenameConfigsMap.
-		If false, existing topazFilenamePackageNamesMap will be used"
-
-	^ buildPackageNamesMap ifNil: [ buildPackageNamesMap := true ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-classDefinitions
-
-	^ classDefinitions ifNil: [ classDefinitions := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-classDefPackageNameMap
-
-	^ classDefPackageNameMap ifNil: [ classDefPackageNameMap := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-classExtensions
-
-	^ classExtensions ifNil: [ classExtensions := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-classExtPackageNameMap
-
-	^ classExtPackageNameMap ifNil: [ classExtPackageNameMap := IdentityKeyValueDictionary new ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-classInitializationDefinitions
-
-	^ classInitializationDefinitions
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-classSymbolDictionaryNames
-
-	^ classSymbolDictionaryNames ifNil: [ classSymbolDictionaryNames := Dictionary new ]
-%
-
-category: 'actions'
-method: RwGsModificationTopazWriterVisitor
-deletededClass: aClassModification
-
-	"a deleted class is ignored for topaz ... the deleted class is simply not written"
-%
-
-category: 'actions'
-method: RwGsModificationTopazWriterVisitor
-deletededClassExtension: aClassExtensionModification
-
-	"a deleted class extension is ignored for topaz ... the deleted methods are simply not written"
-%
-
-category: 'actions'
-method: RwGsModificationTopazWriterVisitor
-deletededPackage: aPackageModification
-
-	"a deleted package is ignored for topaz ... the deleted classes and methods are simply not written out"
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-excludeClassInitializers
-  self dynamicInstVarAt: #excludeClassInitializers put: true
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitor
-export
-
-	self topazFilenamePackageNamesMap keysAndValuesDo: [:filename :packageNames |
-		| classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
-
-		self _setBufferedStreamFor: filename.
-		self bufferedStream nextPutAll: self topazFileHeader.
-
-		classInitializationDefinitions := Set new. "per file record"
-		classDefinitionsList := Set new.
-
-		self classDefPackageNameMap keysAndValuesDo: [:className :packageName |
-			(packageNames includes: packageName)
-				ifTrue: [ classDefinitionsList add: (self classDefinitions at: className) ] ].
-
-		classDefinitionsInOrder := (RowanGsGeneralDependencySorter
-			on: classDefinitionsList
-			dependsOn: [:candidate | candidate superclassName]
-			dependent: [:candidate | candidate name]) inOrder.
-		self exportClassDefinitions: classDefinitionsInOrder;
-			exportMethodDefinitions: classDefinitionsInOrder.
-
-		"consolidate the classExtensions for a class from multiple packages into a single definition"
-		classExtensionsList := Set new. 
-		self classExtensions keysAndValuesDo: [:classExtName :extSet |
-			| extsInConfig |
-			extsInConfig := Set new.
-			extSet do: [:ext |
-				| packageName |
-				packageName := self classExtPackageNameMap at: ext.
-				(packageNames includes: packageName)
-					ifTrue: [ extsInConfig add: ext ] ].
-
-			extsInConfig size <= 1 
-				ifTrue: [ classExtensionsList addAll: extsInConfig ]
-				ifFalse: [
-					| ar def |
-					ar := extsInConfig asArray.
-					def := (ar at: 1) copy.
-					2 to: ar size do: [:index |
-						| d |
-						d := (ar at: index).
-						d classMethodDefinitions values do: [:m | def addClassMethodDefinition: m ].
-						d instanceMethodDefinitions values do: [:m | def addInstanceMethodDefinition: m ] ].
-					classExtensionsList add: def ] ].
-
-		classExtensionsInOrder := classExtensionsList sort: [:a :b | a name <= b name ].
-		self
-			exportExtensionMethodDefinitions: classExtensionsInOrder.
-
-		self exportClassInitializations.
-
-		self bufferedStream flush; close ].
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitor
-exportClassDefinitions: classDefinitionsInOrder
-
-	| stream |
-	stream := self bufferedStream.
-	classDefinitionsInOrder isEmpty not
-		ifTrue: [ 
-			stream
-				nextPutAll: '! Class Declarations'; lf;
-				nextPutAll: '! Generated file, do not Edit'; lf;
-				lf ].
-	classDefinitionsInOrder do: [:classDef | 
-		self _fileOutClassDeclaration: classDef on: stream ].
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitor
-exportClassInitializations
-	| stream exclude |
-	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
-	stream := self bufferedStream.
-  exclude := (self dynamicInstVarAt: #excludeClassInitializers) ~~ nil  .
-  exclude ifTrue:[
-    stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
-  ] ifFalse:[
-	  stream 
-		  nextPutAll: '! Class Initialization'; lf;
-      lf;
-		  nextPutAll: 'run'; lf.
-  ].
-	(self classInitializationDefinitions sort: [:a :b | a name <= b name ]) do: [ :classDef |
-    exclude ifTrue:[ stream nextPutAll:'!  ' ].
-		stream nextPutAll: classDef name, ' initialize.'; lf 
-  ].
-  exclude ifFalse:[
-	  stream nextPutAll: 'true'; lf;
-	  nextPutAll: '%'; lf .
-  ].
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitor
-exportExtensionMethodDefinitions: classDefinitionsInOrder
-
-	self exportMethodDefinitions: classDefinitionsInOrder labeled: 'Class extensions'
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitor
-exportMethodDefinitions: classDefinitionsInOrder
-
-	self exportMethodDefinitions: classDefinitionsInOrder labeled: 'Class implementation'
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitor
-exportMethodDefinitions: classDefinitionsInOrder labeled: label
-	| stream |
-	stream := self bufferedStream.
-	classDefinitionsInOrder do: [:classDef | 
-		| className |
-		className := classDef name.
-		(classDef classMethodDefinitions isEmpty not or: [ classDef instanceMethodDefinitions isEmpty not])
-			ifTrue: [ 
-				stream nextPutAll: '! ', label, ' for ', className printString; lf;
-				lf ].
-		classDef classMethodDefinitions isEmpty not
-			ifTrue: [ 
-				stream nextPutAll: '!		Class methods for ', className printString; lf;
-				lf ].
-		(classDef classMethodDefinitions values sort: [:a :b | a selector <= b selector ])
-			do: [:methodDef |
-				methodDef selector == #initialize
-					ifTrue: [ self classInitializationDefinitions add: classDef ].
-				self _fileOutMethod: methodDef forClass: className isMeta: true on: stream ].
-		classDef instanceMethodDefinitions isEmpty not
-			ifTrue: [ 
-				stream nextPutAll: '!		Instance methods for ', className printString; lf;
-				lf ].
-		(classDef instanceMethodDefinitions values sort: [:a :b | a selector <= b selector ])
-			do: [:methodDef |
-				self _fileOutMethod: methodDef forClass: className isMeta: false on: stream ] ].
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-filenameExtension
-
-	^ filenameExtension ifNil: ['gs' ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-filenameExtension: aString
-
-	filenameExtension := aString
-%
-
-category: 'class writing'
-method: RwGsModificationTopazWriterVisitor
-processClass: aClassModification
-
-	| classDefinition symbolDictName clsName |
-	classDefinition := aClassModification after.
-	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: []) ifNotNil: [ 
-   self error: 'duplicate class definition for ', clsName printString, ' encountered.'].
-
-	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
-	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
-	self classDefinitions at: classDefinition name put: classDefinition.
-
-	self classDefPackageNameMap at: classDefinition name put: currentPackageDefinition name.
-
-	"no need to visit any further as the class definition records the instance and class methods"
-%
-
-category: 'class writing'
-method: RwGsModificationTopazWriterVisitor
-processClassExtension: aClassExtensionModification
-
-	| classExtension |
-	classExtension := aClassExtensionModification after.
-	(self classExtensions at: classExtension name ifAbsentPut: [ Set new ])
-		add: classExtension.
-
-	self classExtPackageNameMap at: classExtension put: currentPackageDefinition name.
-
-	"no need to visit any further as the class etension records the instance and class methods"
-%
-
-category: 'project writing'
-method: RwGsModificationTopazWriterVisitor
-processProject: aProjectModification
-
-	self buildPackageNamesMap 
-		ifTrue: [
-			| readTool |
-			topazFilenamePackageNamesMap := self topazFilenamePackageNamesMap.
-			readTool := Rowan projectTools read.
-			self topazFilenameConfigsMap keysAndValuesDo: [:filename :configAndGroupNamesMap | 
-				| configNames groupNames visitor packageNames configAndGroupNamesArray |
-				configAndGroupNamesArray := configAndGroupNamesMap at: currentProjectDefinition name ifAbsent: [ {{}.{}} ].
-				configAndGroupNamesArray
-					ifNotNil: [
-						configNames := configAndGroupNamesArray at: 1.
-						groupNames := configAndGroupNamesArray at: 2.
-						visitor := readTool 
-							readConfigurationsForProjectDefinition: currentProjectDefinition 
-							withConfigurations: configNames 
-							groupNames: groupNames 
-							forLoad: false.
-						packageNames := visitor
-							ifNil: [ 
-								self topazFilenameConfigsMap size > 1
-									ifTrue: [ self error: 'unable to read project configurations for project ', currentProjectDefinition name printString, '. Multiple output files likely to have the same contents.'].
-								currentProjectDefinition packageNames ]
-							ifNotNil: [  visitor packageNames ].
-						(topazFilenamePackageNamesMap at: filename ifAbsentPut: [ Set new ]) addAll: packageNames ] ] ].
-	aProjectModification packagesModification acceptVisitor: self
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-repositoryRootPath
-
-	^ repositoryRootPath
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-repositoryRootPath: aStringOrFileReference 
-
-	repositoryRootPath := aStringOrFileReference asFileReference.
-	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFileHeader
-
-	^ topazFileHeader ifNil: [ '' ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFileHeader: aString
-
-	topazFileHeader := aString
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFilename
-
-	^ topazFilename
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFilename: aString
-
-	topazFilename := aString
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFilename: aNameString filenameExtension: anExtensionString
-
-	topazFilename := aNameString.
-	filenameExtension := anExtensionString
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFilenameConfigsMap
-
-	^ topazFilenameConfigsMap
-		ifNil: [ topazFilenameConfigsMap := Dictionary new at: self topazFilename put: Dictionary new; yourself ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFilenameConfigsMap: aDictionary
-
-	"keys are topaz file names, values are a dictionary:
-		whose keys are project names and values are two slot array with config name list and group name list. 
-			The config names and group names are resolved to a list of packages that will be written to the named file.
-
-			If the config/group name list is empty, the default config and group names for the project will be used.
-			If either (or both) of the slots contain empty array, then the corresponding project default will be used."
-
-	"If topazFilenamePackageNamesMap is explicitly set, then the contents of topazFilenameConfigsMap will be ignored."
-
-	buildPackageNamesMap := true.
-	topazFilenameConfigsMap := aDictionary
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFilenamePackageNamesMap
-
-	^ topazFilenamePackageNamesMap ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFilenamePackageNamesMap: aDictionary
-
-	"keys are topaz file names, values are a collection of package names"
-
-	"if topazFilenameConfigsMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
-		based on the project configurations."
-
-	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameConfigsMap will be ignored."
-
-	buildPackageNamesMap := false.
-	topazFilenamePackageNamesMap := aDictionary
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitor
-topazFileReference
-
-	^ self repositoryRootPath / self topazFilename, self filenameExtension
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitor
-_fileOutClassDeclaration: classDefinition on: aStream
-	| optionsString reservedOopString hasClassInstVars |
-	aStream
-		nextPutAll: 'doit';
-		lf;
-		nextPutAll: '(' , classDefinition superclassName;
-		lf.
-	hasClassInstVars := self
-		_writeClassTypeMessage: classDefinition
-		on: aStream
-		hasInstanceVariables: [ 
-			aStream
-				nextPutAll:
-						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
-								, ' )';
-				lf ].
-	optionsString := ''.
-	classDefinition gs_options isEmpty
-		ifFalse: [ 
-			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
-				, ' ' ].
-	reservedOopString := ''.
-	classDefinition gs_reservedOop isEmpty
-		ifFalse: [ 
-			| strm |
-			strm := WriteStream on: String new.
-			strm
-				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
-				lf.
-			reservedOopString := strm contents ].
-	aStream
-		nextPutAll:
-				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
-						, ' )';
-		lf.
-	hasClassInstVars
-		ifTrue: [ 
-			aStream
-				nextPutAll:
-						'	classInstVars: #( '
-								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-				lf ].
-	aStream
-		nextPutAll: '	poolDictionaries: #()';
-		lf;
-		nextPutAll:
-				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
-		lf;
-		nextPutAll: '	options: #(' , optionsString , ')';
-		lf;
-		nextPutAll: reservedOopString;
-		nextPutAll: ')';
-		lf;
-		nextPutAll: '		category: ' , classDefinition category printString , ';';
-		lf;
-		yourself.
-	classDefinition comment isEmpty
-		ifFalse: [ 
-			aStream
-				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-				lf;
-				yourself ].
-	aStream
-		nextPutAll: '		immediateInvariant.';
-		lf;
-		nextPutAll: 'true.';
-		lf;
-		nextPutAll: '%';
-		lf;
-		lf
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitor
-_fileOutMethod: methodDefinition forClass: className isMeta: isMeta on: aStream
-
-	aStream
-		nextPutAll: 'category: ', methodDefinition protocol printString; lf;
-		nextPutAll: (isMeta ifTrue: ['classmethod: '] ifFalse: ['method: ']), className; lf;
-		nextPutAll: methodDefinition source.
-	methodDefinition source last = Character lf
-		ifFalse: [aStream lf].
-	aStream nextPutAll: '%'; lf;
-		lf
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitor
-_setBufferedStreamFor: filename
-
-	^ self _setBufferedStreamFor: filename extension: self filenameExtension
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitor
-_setBufferedStreamFor: filename extension: extension
-
-	| encodedStream |
-	encodedStream := (self repositoryRootPath / filename, extension) writeStreamEncoded: 'utf8'.
-	bufferedStream := ZnBufferedWriteStream on: encodedStream
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitor
-_stringForVariables: variableList
-
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	variableList do: [:each | stream nextPutAll: each]
-		separatedBy: [stream space].
-	^stream contents
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitor
-_symbolsForVariables: variableList
-
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
-		separatedBy: [stream space].
-	^stream contents
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitor
-_writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock
-	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
-	hasInstanceVariables := true.
-	hasReservedOop := classDefinition gs_reservedOop isEmpty not.
-	hasClassInstVars := true.
-	classType := classDefinition subclassType.
-	classType = 'variable'
-		ifTrue: [ 
-			classTypeMessage :=  hasReservedOop
-				ifTrue: [ '_newKernelIndexableSubclass:' ]
-				ifFalse: [ 'indexableSubclass: ' ] ]
-		ifFalse: [ classType = 'byteSubclass'
-			ifTrue: [ 
-				classTypeMessage :=  hasReservedOop
-					ifTrue: [ '_newKernelByteSubclass:' ]
-					ifFalse: [ 'byteSubclass: ' ].
-				hasClassInstVars := hasInstanceVariables := false ]
-			ifFalse: [ (classType = '' or: [classType = 'immediate'])
-				ifTrue: [ 
-					classTypeMessage :=  hasReservedOop
-						ifTrue: [ '_newKernelSubclass:' ]
-						ifFalse: [ 'subclass: ' ] ]
-				ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
-	aStream
-		tab;
-		nextPutAll: classTypeMessage , classDefinition name asString printString;
-		lf.
-	hasInstanceVariables
-		ifTrue: [ instanceVariableBlock value ].
-	^ hasClassInstVars
-%
-
 ! Class implementation for 'RwGsModificationTopazWriterVisitorV2'
 
 !		Instance methods for 'RwGsModificationTopazWriterVisitorV2'
@@ -58653,13 +57594,15 @@ processProject: aProjectModification
 							componentNames := componentAndPlatformConditionalAttributes at: 1.
 							platformConditionalAttributes := componentAndPlatformConditionalAttributes
 								at: 2.
-							currentProjectDefinition componentsRoot exists
-								ifTrue: [ 
-									"read the project from disk, if it is present on disk"
-									visitor := readTool
-										readProjectForResolvedProject: currentProjectDefinition
-										withComponentNames: componentNames
-										platformConditionalAttributes: platformConditionalAttributes ].
+							componentNames isEmpty
+								ifFalse: [ 
+									currentProjectDefinition componentsRoot exists
+										ifTrue: [ 
+											"read the project from disk, if it is present on disk"
+											visitor := readTool
+												readProjectForResolvedProject: currentProjectDefinition
+												withComponentNames: componentNames
+												platformConditionalAttributes: platformConditionalAttributes ] ].
 							packageNames := visitor
 								ifNil: [ 
 									self topazFilenameComponentMap size > 1
@@ -58799,11 +57742,12 @@ _fileOutClassDeclaration: classDefinition on: aStream
 						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
 								, ' )';
 				lf ].
-	optionsString := ''.
+	optionsString := String new .
 	classDefinition gs_options isEmpty
 		ifFalse: [ 
 			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
 				, ' ' ].
+  optionsString addAll: ' #logCreation '.  "for verbose logging during filein and upgrade"
 	reservedOopString := ''.
 	classDefinition gs_reservedOop isEmpty
 		ifFalse: [ 
@@ -61585,7 +60529,7 @@ definitionForType: aString
     ifTrue: [ ^ #class ].
   aString = self class tonelExtensionLabel
     ifTrue: [ ^ #classExtension ].
-  TonelParseError signal: 'Unknown type declaration.'
+  RwTonelParseError signal: 'Unknown type declaration.'
 %
 
 category: 'tonel parser'
@@ -61656,13 +60600,13 @@ readClassExtensionFile: file inPackage: packageName
 		[ | definitions |
 		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		  definitions := (TonelParser on: stream forReader: self) start.
+		  definitions := (RwTonelParser on: stream forReader: self) start.
 		  ((definitions at: 2) at: 1) do: [:mDef |
 			  currentClassExtension addClassMethodDefinition: mDef ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
       self checkMethodDefinitions: currentClassExtension .
-    ] on: ( STONReaderError , TonelParseError) do:[:ex |
+    ] on: ( STONReaderError , RwTonelParseError) do:[:ex |
       ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
       ex pass .
     ].
@@ -61682,7 +60626,7 @@ readClassFile: file inPackage: packageName
 			"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 			stream := ZnBufferedReadStream on: fileStream.
 			stream sizeBuffer: fileReference size.	"part of workaround for GemTalk/FileSystemGs#9"
-			definitions := (TonelParser on: stream forReader: self) start.
+			definitions := (RwTonelParser on: stream forReader: self) start.
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 
 					currentClassExtension
@@ -61697,7 +60641,7 @@ readClassFile: file inPackage: packageName
 			self checkMethodDefinitions: clsDef.
 			projectDef := currentProjectDefinition packageNamed: packageName.
 			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ]	"ifNil:[ projectDef addClassExtensionDefinition: clsDef]." ]
-				on: STONReaderError , TonelParseError
+				on: STONReaderError , RwTonelParseError
 				do: [ :ex | 
 					ex
 						addText:
@@ -62981,7 +61925,8 @@ exportTopazFormatTo: filePath
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
+		filenameExtension: fileReference extension;
 		yourself.
 	visitor visit: projectSetModification
 %
@@ -62997,7 +61942,7 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
@@ -63798,33 +62743,6 @@ doGitCommit: messageString
 	^ status
 %
 
-category: 'git'
-method: RwAbstractTool
-doGitUpdateLoadedCommitId
-
-	| repoRootPath |
-	repoRootPath := specification repoSpec repositoryRootPath.
-	repoRootPath
-		ifNil: [ 
-			"in memory repo without a rootPath is legal"
-			^ nil ].
-	^ self doGitUpdateLoadedCommitId: repoRootPath
-%
-
-category: 'git'
-method: RwAbstractTool
-doGitUpdateLoadedCommitId: gitRootPath
-
-	| gitTool loadedCommitId |
-	gitTool := Rowan gitTools.
-	loadedCommitId := [ gitTool gitcommitShaIn: gitRootPath asFileReference pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	^ specification imageSpec loadedCommitId: loadedCommitId
-%
-
 category: 'private'
 method: RwAbstractTool
 fileUtilities
@@ -63841,15 +62759,6 @@ category: 'smalltalk api'
 method: RwAbstractTool
 specUrl: aString
   ^ self specification: (RwSpecification fromUrl: aString)
-%
-
-category: 'private'
-method: RwAbstractTool
-_symbolDictionaryForSpecification
-
-	^ Rowan image
-		newOrExistingSymbolDictionaryNamed:
-			(specification platformSpec at: 'gemstone') defaultSymbolDictName
 %
 
 ! Class implementation for 'RwClassTool'
@@ -64222,7 +63131,7 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 				inClassNamed: aBehavior theNonMetaClass name
 				isClassExtension: aLoadedClass isLoadedClassExtension
 				intoPackageNamed: aLoadedClass loadedPackage name)
-				description: 'Missing loaded method. ';
+				description: 'Missing loaded method';
 				yourself.
 			notification signal
 				ifTrue: [ 
@@ -65158,39 +64067,6 @@ disownPackageNamed: packageName
 			loadedClassExtension disownFromLoaded: registry ].
 
 	registry deletePackage: packageName
-%
-
-! Class implementation for 'RwPkgLoadTool'
-
-!		Instance methods for 'RwPkgLoadTool'
-
-category: 'smalltalk api'
-method: RwPkgLoadTool
-loadPackageSetDefinition: packageSetDefinitionToLoad
-
-	^ self
-		loadPackageSetDefinition: packageSetDefinitionToLoad
-		instanceMigrator: Rowan platform instanceMigrator
-%
-
-category: 'smalltalk api'
-method: RwPkgLoadTool
-loadPackageSetDefinition: packageSetDefinitionToLoad instanceMigrator: instanceMigrator
-
-	"NOTE: not sure that we want to support the loading of arbitrary package sets (mixed projects) ... used by relatively old tests at the moment ... should be legal if the we create some project sets where the package to be loaded replace the packages in definitions derived from loaded things ... do a single load with proper updating of loaded packages in specification ..."
-
-	| loadedPackageSet diff loadedEntitySet |
-	loadedEntitySet := packageSetDefinitionToLoad deriveLoadedThings.
-	loadedPackageSet := loadedEntitySet asPackageDefinitionSet.
-	diff := packageSetDefinitionToLoad compareAgainstBase: loadedPackageSet.
-	diff isEmpty
-		ifTrue: [ 
-			| msg |
-			msg := 'The packages are already up to date'.
-			self inform: msg.
-			^ msg ].
-	Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
-	^ diff
 %
 
 ! Class implementation for 'RwPkgAuditToolV2'
@@ -67026,6 +65902,85 @@ renameClassNamed: className to: newName
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	^ Rowan globalNamed: newName
+%
+
+category: 'class browsing'
+method: RwPrjBrowserToolV2
+unpackageClass: class
+	"Unpackage the given class and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	| loadedClass loadedPackage |
+	loadedClass := Rowan image
+		loadedClassForClass: class
+		ifAbsent: [ 
+			"the class is not packaged, so we are done"
+			^ self ].
+	loadedClass loadedInstanceMethods values
+		do: [ :loadedMethod | 
+			loadedClass removeLoadedMethod: loadedMethod.
+			loadedMethod unpackageMethod ].
+	loadedClass loadedClassMethods values
+		do: [ :loadedMethod | 
+			loadedClass removeLoadedMethod: loadedMethod.
+			loadedMethod unpackageMethod ].
+
+	loadedPackage := loadedClass loadedPackage.
+	loadedPackage removeLoadedClass: loadedClass.
+	RwGsSymbolDictionaryRegistry_ImplementationV2
+		unregisterLoadedClass: loadedClass
+		forClass: class
+%
+
+category: 'class browsing'
+method: RwPrjBrowserToolV2
+unpackageClassNamed: className
+	"Unpackage the given class and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	| theClass |
+	theClass := Rowan globalNamed: className.
+	theClass
+		ifNil: [ self error: 'No class named ' , className printString , ' found' ].
+	self unpackageClass: theClass
+%
+
+category: 'method browsing'
+method: RwPrjBrowserToolV2
+unpackageMethod: method
+	"unpackage the given method, while leaving the method installed in the image"
+
+	| loadedMethod loadedClassOrExtension loadedPackage packageName |
+	packageName := method rowanPackageName.
+	packageName = Rowan unpackagedName
+		ifTrue: [ 
+			"already unpackaged, nothing else to do"
+			^ self ].
+	loadedMethod := Rowan image loadedMethodForMethod: method.
+	loadedPackage := loadedMethod loadedPackage.
+	loadedClassOrExtension := loadedMethod loadedClass.
+	loadedClassOrExtension isLoadedClassExtension
+		ifTrue: [ 
+			loadedClassOrExtension isEmpty
+				ifTrue: [ 
+					RwGsSymbolDictionaryRegistry_ImplementationV2
+						unregisterLoadedClassExtension: loadedClassOrExtension
+						forClass: loadedClassOrExtension handle.
+					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+	loadedMethod unpackageMethod
+%
+
+category: 'method browsing'
+method: RwPrjBrowserToolV2
+unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
+	"unpackage the given method, while leaving the method installed in the image"
+
+	| theBehavior theMethod |
+	theBehavior := Rowan globalNamed: className.
+	isMeta
+		ifTrue: [ theBehavior := theBehavior class ].
+	theMethod := theBehavior compiledMethodAt: methodSelector.
+	self unpackageMethod: theMethod
 %
 
 category: 'class browsing'
@@ -70943,62 +69898,6 @@ _projectDefinition
 
 ! Class implementation for 'RwProjectDefinitionV2'
 
-!		Class methods for 'RwProjectDefinitionV2'
-
-category: 'topaz tonel support'
-classmethod: RwProjectDefinitionV2
-topazReadTonelFile: fileName
-    "Read a single file and compile the methods within that file.
-     Definition/redefinition of the class not implemented yet "
-  | projectDef package clsName clsDef cls methBlk envId |
-  projectDef := RwRepositoryResolvedProjectTonelReaderVisitorV2
-     readClassFile: fileName
-     projectName: 'TopazLoad'   "synthetic projed and package names"
-     packageName: 'TopazPackage' .
-  package := projectDef packageNamed: 'TopazPackage_1' .
-  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
-  package classDefinitions ifNotNil:[:defs | | sz |
-    (sz := defs size) > 1 ifTrue:[
-      Error signal:'more than one class definition in file ' , fileName
-    ].
-    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
-  ].
-  package classExtensions ifNotNil:[:defs | | sz |
-    (sz := defs size) > 1 ifTrue:[
-      Error signal:'more than one class extension in file ' , fileName
-    ].
-    sz > 0 ifTrue:[
-      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
-      clsDef :=  defs values at: 1.
-    ].
-  ].   
-  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
-  clsName := clsDef name .
-  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
-    "creating the class not implemented yet"
-    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
-  ].
-  cls := cls"anAssociation" value.
-
-  methBlk := [ :methDef "a RwMethodDefinition" |
-    [
-      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
-      cls compileMethod: methDef source
-      dictionaries: System myUserProfile symbolList
-      category: methDef protocol asSymbol
-      intoMethodDict: nil "install into the class's dictionaries"
-      intoCategories: nil
-      environmentId:  envId
-    ] on: (CompileError, CompileWarning) do:[:ex | 
-      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
-      ex pass
-    ]
-   ].
-  clsDef instanceMethodDefinitions do: methBlk .
-  cls := cls class .
-  clsDef classMethodDefinitions do: methBlk .
-%
-
 !		Instance methods for 'RwProjectDefinitionV2'
 
 category: 'visiting'
@@ -71301,15 +70200,6 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 		comment: commentString
 %
 
-category: 'actions'
-method: RwProjectDefinitionV2
-clone
-	"clone remote git project to disk"
-
-	self cloneRepository.
-	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
-%
-
 category: 'querying'
 method: RwProjectDefinitionV2
 componentForPackageNamed: packageName
@@ -71393,16 +70283,6 @@ projectName: aString
 	self propertyAt: 'name' put: aString
 %
 
-category: 'reading'
-method: RwProjectDefinitionV2
-readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames
-
-	^ readTool
-		readProjectSetForComponentProjectDefinition: self
-			withConfigurations: theConfigNames 
-			groupNames: theGroupNames
-%
-
 category: 'accessing'
 method: RwProjectDefinitionV2
 removePackage: aPackageDefinition
@@ -71458,57 +70338,6 @@ method: RwProjectDefinitionV2
 _loadTool
 
 	^ Rowan projectTools loadV2
-%
-
-category: 'private'
-method: RwProjectDefinitionV2
-_validate
-	"ensure that the data structures within the receiver contain valid information"
-
-	"make sure that list of packages is consistent between components and project definition"
-
-	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
-	definitionPackageNames := self packageNames asSet.
-	componentPackageNames := Set new.
-	self components_validate.
-	missingFromComponent := definitionPackageNames - componentPackageNames.
-	missingFromDefinition := componentPackageNames - definitionPackageNames.
-	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
-		ifTrue: [ ^ true ].
-	errorMessage := WriteStream on: String new.
-	errorMessage
-		nextPutAll:
-				'Inconsistency between packages defined and referenced in components:';
-		lf.
-	missingFromComponent isEmpty
-		ifFalse: [ 
-			errorMessage
-				tab;
-				nextPutAll:
-						'The following packages are defined, but not referenced in a component:';
-				lf.
-			missingFromComponent
-				do: [ :packageName | 
-					errorMessage
-						tag;
-						tab;
-						nextPutAll: packageName;
-						lf ] ].
-	missingFromDefinition isEmpty
-		ifFalse: [ 
-			errorMessage
-				tab;
-				nextPutAll:
-						'The following packages are referenced in a component, but not defined:';
-				lf.
-			missingFromDefinition
-				do: [ :packageName | 
-					errorMessage
-						tab;
-						tab;
-						nextPutAll: packageName;
-						lf ] ].
-	self error: errorMessage contents
 %
 
 category: 'private'
@@ -77582,6 +76411,7 @@ basicCreateClassWithSuperclass: superclass
 		ifNil: [ #() ]
 		ifNotNil: [ oldVersion _rwSortedConstraints ].
 	gs_options := classDefinition gs_options collect: [ :each | each asSymbol ].
+  (SessionTemps current at: #ROWAN_TRACE otherwise: nil) ifNotNil:[gs_options add: #logCreation ].
 	createdClass := (type = 'normal' or: [ type = 'immediate' ])
 		ifTrue: [ 
 			superclass
@@ -77636,7 +76466,7 @@ classDefinition
 category: 'accessing'
 method: RwGsClassPatchV2
 classDefinition: newValue
-	classDefinition := newValue
+	classDefinition := newValue .
 %
 
 category: 'accessing'
@@ -83597,7 +82427,7 @@ handleClassDeletion
 
 	"The class to which I refer has been deleted, so I must unregister myself."
 
-	Rowan image removeLoadedMethodForCompileMethod: handle
+	self unpackageMethod
 %
 
 category: 'accessing'
@@ -83626,6 +82456,15 @@ method: RwGsLoadedSymbolDictMethod
 source
 
 	^handle sourceString copy
+%
+
+category: 'private-updating'
+method: RwGsLoadedSymbolDictMethod
+unpackageMethod
+
+	"Remove the loaded method from the package structure - turn the method into an unpackaged method"
+
+	Rowan image removeLoadedMethodForCompileMethod: handle
 %
 
 category: 'private-updating'
@@ -84152,7 +82991,7 @@ load
 	readProjectDefinition == projectDefinition 
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
-			self halt: 'expected to update the projectDefinition in-place' ].
+			self error: 'expected to update the projectDefinition in-place' ].
 	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
 %
 
@@ -84335,157 +83174,6 @@ useGit
 	^ self subclassResponsibility: #useGit
 %
 
-! Class implementation for 'RwGsLoadedSymbolDictProject'
-
-!		Instance methods for 'RwGsLoadedSymbolDictProject'
-
-category: 'testing'
-method: RwGsLoadedSymbolDictProject
-canCommit
-
-	^ self specification canCommit
-%
-
-category: 'commit log'
-method: RwGsLoadedSymbolDictProject
-commitLog: logLimit
-
-	self useGit ifFalse: [ ^ '' ].
-	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-defaultSymbolDictName: aString
-
-	^ self specification defaultSymbolDictName: aString
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedCommitId
-
-	^ self specification loadedCommitId
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedConfigurationNames
-
-	^ self specification loadedConfigurationNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedConfigurationNames: configNames
-
-	self specification imageSpec loadedConfigurationNames: configNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedGroupNames
-
-	^ self specification loadedGroupNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-loadedGroupNames: groupNames
-
-	self specification imageSpec loadedGroupNames: groupNames
-%
-
-category: 'specifiction'
-method: RwGsLoadedSymbolDictProject
-projectOwnerId
-
-	^ (self specification platformSpec at: 'gemstone') projectOwnerId
-%
-
-category: 'specifiction'
-method: RwGsLoadedSymbolDictProject
-projectOwnerId: aUserId
-
-	^ (self specification platformSpec at: 'gemstone') projectOwnerId: aUserId
-%
-
-category: 'definitions'
-method: RwGsLoadedSymbolDictProject
-propertiesForDefinition
-
-	| props |
-	props := super propertiesForDefinition.
-	props at: 'spec' put: handle.
-	^ props
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-repositoryCommitId
-
-	| rootPath |
-	self useGit
-		ifFalse: [ ^ '' ].
-	rootPath := self repositoryRootPath.
-	rootPath ifNil: [ ^ '' ].
-	^ Rowan gitTools gitcommitShaIn: rootPath
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self repositoryRootPath
-		ifNotNil: [:path | path asFileReference ]
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-repositoryRootPath
-
-	^ self specification repositoryRootPath
-%
-
-category: 'properties'
-method: RwGsLoadedSymbolDictProject
-specification
-
-	^ handle
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-symbolDictNameForPackageNamed: packageName
-
-	| spec gemstoneSpec |
-	spec := self specification.
-	gemstoneSpec := spec platformSpec at: 'gemstone'.
-	^ gemstoneSpec symbolDictNameForPackageNamed: packageName.
-%
-
-category: 'loading'
-method: RwGsLoadedSymbolDictProject
-updateLoadedCommitId
-
-	| loadedCommitId |
-	self useGit ifFalse: [ ^ nil ].
-	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	self specification imageSpec loadedCommitId: loadedCommitId
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictProject
-useGit
-
-	^ self specification useGit
-%
-
 ! Class implementation for 'RwGsLoadedSymbolDictResolvedProjectV2'
 
 !		Class methods for 'RwGsLoadedSymbolDictResolvedProjectV2'
@@ -84658,14 +83346,6 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 loadedGroupNames
 
 	^ self resolvedProject loadedGroupNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-loadedGroupNames: groupNames
-
-
-	self resolvedProject loadedGroupNames: groupNames
 %
 
 category: 'actions'
@@ -88162,18 +86842,6 @@ _repoType
 	^ repoType
 %
 
-category: 'actions'
-method: RwProjectSpecificationV2
-_resolve
-	"answer true if attaching to an existing repository"
-
-	^ self repositoryDefinition resolve
-		ifTrue: [ 
-			self _checkAndUpdateRepositoryRevision.
-			self _checkProjectDirectoryStructure ]
-		ifFalse: [ false ]
-%
-
 category: 'private'
 method: RwProjectSpecificationV2
 _validate
@@ -88188,6 +86856,678 @@ _validate
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
 	^ true
+%
+
+! Class implementation for 'RwTonelParser'
+
+!		Class methods for 'RwTonelParser'
+
+category: 'accessing'
+classmethod: RwTonelParser
+lineEnding
+  "Answer the os-specific line endings"
+
+  ^ String with: Character lf
+%
+
+category: 'instance creation'
+classmethod: RwTonelParser
+on: aStream forReader: aTonelReader
+	^ self new 
+		stream: aStream;
+		packageReader: aTonelReader;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwTonelParser
+onString: aString forReader: aTonelReader
+  ^ self on: (self readStreamClass on: aString) forReader: aTonelReader
+%
+
+category: 'parsing'
+classmethod: RwTonelParser
+parseStream: aStream forReader: aTonelReader
+	^ (self on: aStream forReader: aTonelReader)
+		 start
+%
+
+category: 'parsing'
+classmethod: RwTonelParser
+parseString: aString forReader: aTonelReader
+	^ self parseStream: (self readStreamClass on: aString) forReader: aTonelReader
+%
+
+category: 'accessing'
+classmethod: RwTonelParser
+readStreamClass
+
+	^ ReadStreamPortable
+%
+
+category: 'accessing'
+classmethod: RwTonelParser
+writeStreamClass
+
+	^ WriteStreamPortable
+%
+
+!		Instance methods for 'RwTonelParser'
+
+category: 'private'
+method: RwTonelParser
+cleanSelector: aString
+	"BEWARE: I'm doing some heave assumptions here: I'm removing just ONE space (in case there 
+	 is one) because I expect this to be a file generated by tonel, and tonel adds one space 
+	 before start with the method body to make the format more readable. 
+	 But of course this is not very good :("
+	^ (aString last = Character space
+		ifTrue: [ aString allButLast ]
+		ifFalse: [ aString ]) 
+		trimLeft
+%
+
+category: 'parsing'
+method: RwTonelParser
+comment
+	| result ch eatNext |
+	
+	result := String new writeStreamPortable.
+
+	eatNext := false.
+	stream next = $" ifFalse: [ RwTonelParseError signal: 'Can''t parse comment' ].	
+	[ stream atEnd not 
+		and: [ 
+				(ch := stream next) ~= $" 
+				or: [ eatNext := (stream peek = $") ] ] ]
+	whileTrue: [ 
+		result nextPut: ch.
+		eatNext ifTrue: [ 
+			stream skip: 1.
+			eatNext := false ] ].
+	
+	^ self 
+		removeFrom: '"',result contents,'"' 
+		enclosingStart: $" 
+		end: $"
+%
+
+category: 'private factory'
+method: RwTonelParser
+definitionForType: aString
+  ^ self packageReader definitionForType: aString
+%
+
+category: 'parsing'
+method: RwTonelParser
+document
+	^ { 
+	self typeDef.
+	self methodDefList.
+	 } 
+	select: [:each | each notNil ]
+%
+
+category: 'error handling'
+method: RwTonelParser
+error: messageText
+	^ RwTonelParseError signal: messageText
+%
+
+category: 'private'
+method: RwTonelParser
+extractSelector: aString
+	| separators selectorStream keywords |
+	
+	separators := { 
+		Character space. 
+		Character tab. 
+		Character lf. 
+		Character newPage. 
+		Character cr. 
+		$:}.
+
+	keywords := Array new writeStreamPortable.
+	selectorStream := aString readStream.
+	[ selectorStream atEnd ]
+	whileFalse: [ | word ch |
+		word := String new writeStreamPortable.
+		[ selectorStream atEnd not and: [ (separators includes: (ch := selectorStream next)) not ] ]
+		whileTrue: [ word nextPut: ch ].
+		ch = $: ifTrue: [ word nextPut: ch ]. 
+		word contents trimBoth ifNotEmpty: [ :v | keywords nextPut: v ] ].
+	keywords := keywords contents.
+
+	^ (keywords size <= 2 
+		ifTrue: [ keywords first]
+		ifFalse: [ ('' join: (keywords pairsCollect: [ :keyword :argument | keyword ])) ])
+		asSymbol
+%
+
+category: 'testing'
+method: RwTonelParser
+isEnter: aCharacter
+	^ #(13 10) includes: aCharacter asciiValue
+%
+
+category: 'testing'
+method: RwTonelParser
+isSeparator: aCharacter 
+	^ aCharacter isSeparator
+%
+
+category: 'parsing'
+method: RwTonelParser
+metadata
+	| result ch count |
+	
+	result := String new writeStreamPortable.
+
+	count := 0.
+	stream peek = ${ ifFalse: [ RwTonelParseError signal: 'Can''t parse metadata' ].	
+	[ stream atEnd not ]
+	whileTrue: [ 
+		ch := stream next.
+		result nextPut: ch.
+		ch = ${ ifTrue: [ count := count +1 ].
+		ch = $} ifTrue: [ count := count -1 ].
+		count = 0 ifTrue: [ ^ STON fromString: result contents ]].
+
+	RwTonelParseError signal: 'Can''t parse metadata'
+%
+
+category: 'parsing'
+method: RwTonelParser
+method
+	| type selector |
+	
+	type := self untilIncluding: '>>'.
+	selector := self cleanSelector: (self untilExcluding: '[').
+	type := type trimBoth substrings: ' '.
+	type size = 1 ifTrue: [ type := type copyWith: nil ].
+  lastSelectorParsed := selector .
+	^ { 
+		type.
+		selector.
+	}
+%
+
+category: 'parsing'
+method: RwTonelParser
+methodBody
+	"I read a methodbody (what is inside [ ... ])
+	 Since a method body can contain enclosing brackets we need to be sure we will skip them and
+	 correctly read the method. For that, I have to take into account: 
+		- I can mention [] in comments
+		- I can mention [] in strings
+		- I can use $[, $] 
+		- I can have inner blocks
+		- I can mention a comment of the form ""$"" or a comment of the form '$'
+	 all that needs to be skipped "
+	| result char prevChar comment string count startPos |
+	
+	result := self class writeStreamClass on: String new.
+
+	comment := false.
+	string := false.
+	prevChar := nil.
+	count := 0.
+        startPos := stream position .
+        "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
+	stream peek = $[ ifFalse: [ RwTonelParseError signal: 'Can''t parse method body' ].
+	[ stream atEnd not ]
+	whileTrue: [ 
+		char := stream next.
+		result nextPut: char.
+		(char = $" and: [ string not and: [ prevChar ~= $$ or: [ comment ] ] ]) 
+			ifTrue: [ comment := comment not ]. 
+		(char = $' and: [ comment not and: [ prevChar ~= $$ or: [ string ] ] ]) 
+			ifTrue: [ string := string not ]. 
+		(comment or: [ string ]) ifFalse: [ 
+			(char = $[ and: [  prevChar ~= $$ ]) ifTrue: [ count := count +1 ].
+			(char = $] and: [ prevChar ~= $$ ]) ifTrue: [ count := count -1 ] ].
+		count = 0 ifTrue: [ 
+			^ self 
+				removeFrom: result contents 
+				enclosingStart: $[ 
+				end: $]
+				clean: #right ].
+		prevChar := char ].
+
+	RwTonelParseError signal: 'Can''t parse method body'
+%
+
+category: 'parsing'
+method: RwTonelParser
+methodDef
+
+	| methodDef |
+	self methodDef: [:isMeta :mDef |
+		methodDef :=  mDef.
+		"skip possible spaces at the end"
+		self separator ].
+	^methodDef
+%
+
+category: 'parsing'
+method: RwTonelParser
+methodDef: aBlock
+  | ar def offset |
+  ar := {
+    self separator.
+    self try: [ self metadata ].
+    self separator.
+    [ offset := stream position . self method ] value .
+    self methodBody
+  }.
+  (def := self newMethodDefinitionFrom: ar )
+    offset: offset
+    inFile: stream wrappedStreamName .
+
+  aBlock
+    value: ar fourth first second notNil
+    value: def
+%
+
+category: 'parsing'
+method: RwTonelParser
+methodDefList
+	| result classStream instanceStream |
+	self separator. "to arrive to the end of the file in case there are no methods"
+	result := { {}. {} }.
+	classStream := (result at: 1) writeStreamPortable.
+	instanceStream := (result at: 2) writeStreamPortable.
+	[
+		[ stream atEnd ]
+			whileFalse: [ 
+				self methodDef: [:isMeta :mDef |
+					isMeta
+						ifTrue: [ classStream nextPut: mDef ]
+						ifFalse: [ instanceStream nextPut: mDef ].
+					"skip possible spaces at the end"
+					self separator ]
+			] 
+  ] on: (RwTonelParseError,STONReaderError,STONWriterError) do:[:ex | 
+    lastSelectorParsed ifNotNil:[ | str |
+      str := ex details ifNil:[ '' ].
+      ex details: str, ', last method parsed: ', lastSelectorParsed printString
+    ].
+    ex pass 
+  ].
+  ^ result
+%
+
+category: 'private factory'
+method: RwTonelParser
+newMethodDefinitionFrom: anArray
+	| metadata className meta selector source categ |
+	metadata := anArray second ifNil: [ Dictionary new ].
+	className := anArray fourth first first.
+	[ Metaclass3 _validateNewClassName: className asSymbol ]
+		on: Error
+		do: [ :ex | self error: 'Invalid class name ' , className printString ].
+	meta := anArray fourth first second notNil.
+	selector := self extractSelector: anArray fourth second trimBoth.
+	source := String
+		streamContents: [ :s | 
+			s << anArray fourth second.
+			anArray fifth ifNotEmpty: [ :src | s << src ] ].
+
+	categ := metadata
+		at: #'category'
+		ifAbsent: [ 
+			"to avoid error, resume with default category string"
+			(RwTonelParseRequireMethodCategoryNotification
+				className: className
+				isMeta: meta
+				selector: selector) signal ].
+
+	^ self packageReader
+		newMethodDefinitionForClassNamed: className
+		classIsMeta: meta
+		selector: selector
+		category: categ
+		source: source
+%
+
+category: 'private factory'
+method: RwTonelParser
+newTypeDefinitionFrom: anArray
+	^ self packageReader newTypeDefinitionFrom: anArray
+%
+
+category: 'accessing'
+method: RwTonelParser
+packageReader
+	^ packageReader
+%
+
+category: 'accessing'
+method: RwTonelParser
+packageReader: aPackageReader 
+	packageReader := aPackageReader
+%
+
+category: 'private'
+method: RwTonelParser
+removeFrom: aString enclosingStart: startChar end: endChar
+	^ self 
+		removeFrom: aString 
+		enclosingStart: startChar 
+		end: endChar
+		clean: #both
+%
+
+category: 'private'
+method: RwTonelParser
+removeFrom: aString enclosingStart: startChar end: endChar clean: cleanSymbol
+  "cleanSymbol can be #left, #rigth and #both"
+
+  | result stop ch start end |
+  result := self class readStreamClass on: aString trimBoth.
+  result peek = startChar
+    ifFalse: [ RwTonelParseError signal: 'I cannot remove enclosing start' ].
+  result skip: 1.
+  (#(#'both' #'left') includes: cleanSymbol)
+    ifTrue: [ 
+      stop := self class lineEnding size.
+      [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
+        whileTrue: [ 
+          (self isEnter: ch)
+            ifTrue: [ stop := stop - 1 ].
+          result skip: 1 ] ].
+  start := result position.
+  result setToEnd.
+  result skip: -1.
+  result peek = endChar
+    ifFalse: [ RwTonelParseError signal: 'I cannot remove enclosing end' ].
+  result skip: -1.
+  (#(#'both' #'right') includes: cleanSymbol)
+    ifTrue: [ 
+      stop := self class lineEnding size.
+      [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
+        whileTrue: [ 
+          (self isEnter: ch)
+            ifTrue: [ stop := stop - 1 ].
+          result skip: -1 ] ].
+  end := result position.
+  ^ result originalContents copyFrom: start + 1 to: end + 1
+%
+
+category: 'parsing'
+method: RwTonelParser
+separator
+	[ stream atEnd not and: [ self isSeparator: stream peek ] ]
+	whileTrue: [ stream next ].
+	^ nil
+%
+
+category: 'parsing'
+method: RwTonelParser
+shebang
+	"look for a '#!' in first two character position and skip to next line if present"
+
+	(stream peekFor: $#) ifFalse: [ ^ nil ].	
+	(stream peekFor: $!) ifFalse: [ ^ nil ].
+	^ stream  upTo: Character lf.
+%
+
+category: 'accessing'
+method: RwTonelParser
+start
+	^ self document
+%
+
+category: 'accessing'
+method: RwTonelParser
+stream: aStream 
+	stream := aStream
+%
+
+category: 'private parsing'
+method: RwTonelParser
+try: aBlock
+	^ self 
+		try: aBlock 
+		onSuccess: [ :parsedValue | parsedValue ] 
+		onFailure: [ nil ]
+%
+
+category: 'private parsing'
+method: RwTonelParser
+try: aBlock onFailure: failureBlock
+	^ self 
+		try: aBlock 
+		onSuccess: [ :parsedValue |  parsedValue ] 
+		onFailure: failureBlock
+%
+
+category: 'private parsing'
+method: RwTonelParser
+try: aBlock onSuccess: successBlock
+	^ self 
+		try: aBlock 
+		onSuccess: successBlock 
+		onFailure: [ nil ]
+%
+
+category: 'private parsing'
+method: RwTonelParser
+try: aBlock onSuccess: successBlock onFailure: failureBlock
+	| pos |
+	
+	pos := stream position.
+	[ ^ successBlock value: aBlock value ]
+	on: RwTonelParseError 
+	do: [ :e | 
+		stream position: pos.
+		^ failureBlock value ]. 
+	
+%
+
+category: 'parsing'
+method: RwTonelParser
+type
+	self try: [ self word: 'Class' ] onSuccess: [ :word | ^ word  ].
+	self try: [ self word: 'Trait' ] onSuccess: [ :word | ^ word  ].
+	self try: [ self word: 'Extension' ] onSuccess: [ :word | ^ word  ].
+	
+	"at end"
+	RwTonelParseError signal: 'Can''t parse type.'	
+%
+
+category: 'parsing'
+method: RwTonelParser
+typeDef
+	| shebang |
+	shebang := self shebang. "ignore shebang on first line of file if present"
+	^ self newTypeDefinitionFrom: { 
+		self separator.
+		self try: [ self comment ]. 
+		self separator. 
+		self type. 
+		self separator. 
+		self try: [ 
+			| typeMetadata normalizedMetadata |
+			typeMetadata := self metadata.
+			normalizedMetadata := Dictionary new.
+			typeMetadata keysAndValuesDo: [:key :value |
+				normalizedMetadata at: key asLowercase asSymbol put: value ].
+			normalizedMetadata at: #shebang put: shebang.
+			normalizedMetadata ] 
+	}
+%
+
+category: 'private parsing'
+method: RwTonelParser
+untilExcluding: aCollection
+	| result |
+	result := stream upToAll: aCollection.
+	stream position: stream position - aCollection size.
+	^ result
+%
+
+category: 'private parsing'
+method: RwTonelParser
+untilIncluding: aCollection
+	^ stream upToAll: aCollection
+%
+
+category: 'private parsing'
+method: RwTonelParser
+word: aString
+	| result |
+	result := stream next: aString size.
+	result = aString
+		ifFalse: [ RwTonelParseError signal: 'Can''t parse ', aString ].
+	^ result
+%
+
+! Class implementation for 'RwTopazTonelReader'
+
+!		Class methods for 'RwTopazTonelReader'
+
+category: 'instance creation'
+classmethod: RwTopazTonelReader
+forEnvironmentId: environmentId
+	"Create a new instance of the receiver that will compile methods using environmentId"
+
+	^ self new
+		environmentId: environmentId;
+		yourself
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazCompileTonelMethod: aString
+	"Read and compile a single tonal format method from a given string.
+		For topaz TMETHOD command"
+
+	^ self topazCompileTonelMethod: aString envId: 0
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazCompileTonelMethod: aString envId: envId
+	"Read and compile a single tonal format method (category plush method block) from a given string.
+		For topaz TMETHOD command"
+
+	| strm parser warnStr |
+	strm := ReadStreamPortable on: aString.
+
+	parser := RwTonelParser on: strm forReader: (self forEnvironmentId: envId).
+
+	[ parser methodDef ]
+		on: CompileWarning
+		do: [ :ex | 
+			warnStr := ex warningString.
+			ex resume ].
+	^ warnStr	"nil if no warnings"
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazReadTonelFile: filePath
+	"Read a single tonel format class from a file and compile the methods within that file. 
+		Definition/redefinition of the class not implemented yet.
+		For topaz TFILE command"
+
+	^ self topazReadTonelFile: filePath envId: 0
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazReadTonelFile: filePath envId: envId
+	"Read a single tonel format class from a file and compile the methods within that file. 
+		Definition/redefinition of the class not implemented yet.
+		For topaz TFILE command"
+
+	| gsfile stream |
+	gsfile := GsFile openReadOnServer: filePath.
+	gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
+	stream := ReadStreamPortable on: gsfile contents.
+	gsfile close.
+	[ self topazReadTonelStream: stream envId: envId ]
+		on: STONReaderError , RwTonelParseError
+		do: [ :ex | 
+			ex
+				addText:
+					(self _lineNumberStringForOffset: stream position fileName: filePath).
+			ex pass ]
+%
+
+category: 'topaz support'
+classmethod: RwTopazTonelReader
+topazReadTonelStream: tonelStream envId: envId
+	"Read a single tonel format class from a stream and compile the methods on that stream. 
+		Definition/redefinition of the class not implemented yet.
+		For topaz TFILE command"
+
+	RwTonelParser
+		parseStream: tonelStream
+		forReader: (self forEnvironmentId: envId)
+%
+
+category: 'private'
+classmethod: RwTopazTonelReader
+_lineNumberStringForOffset: offset fileName: fName
+	| res |
+	res := '  (Unable to determine line number)'.
+	[ 
+	| buf lf lNum gsfile |
+	gsfile := GsFile openReadOnServer: fName.
+	buf := gsfile contents.
+	gsfile close.
+	buf size > offset
+		ifTrue: [ buf size: offset ].
+	lNum := 1 + (buf occurrencesOf: (lf := Character lf)).
+	res := '' , lf , ' near line ' , lNum asString , lf , ' in file ' , fName ]
+		on: Error
+		do: [ :ex | 
+			"ignore"
+			 ].
+	^ res
+%
+
+!		Instance methods for 'RwTopazTonelReader'
+
+category: 'accessing'
+method: RwTopazTonelReader
+environmentId
+	^ environmentId ifNil: [ environmentId := 0 ]
+%
+
+category: 'accessing'
+method: RwTopazTonelReader
+environmentId: object
+	environmentId := object
+%
+
+category: 'tonel parser interface'
+method: RwTopazTonelReader
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+	| behavior symbolList |
+	symbolList := GsCurrentSession currentSession symbolList.
+	behavior := symbolList objectNamed: className asSymbol.
+	meta
+		ifTrue: [ behavior := behavior class ].
+	behavior
+		compileMethod: source
+		dictionaries: symbolList
+		category: category
+		environmentId: self environmentId
+%
+
+category: 'tonel parser interface'
+method: RwTopazTonelReader
+newTypeDefinitionFrom: anArray
+	"class definition/redefinition not supported"
+%
+
+category: 'method definition'
+method: RwTopazTonelReader
+offset: anInteger inFile: aFileName
+	"message sent to method definitions ... avoid MNU"
 %
 
 ! Class implementation for 'RwUrl'
@@ -89358,6 +88698,14 @@ writer
 
 category: 'instance creation'
 classmethod: STONReader
+new
+  ^ self basicNew
+    initialize;
+    yourself
+%
+
+category: 'instance creation'
+classmethod: STONReader
 on: readStream
 	^ self new
 		on: readStream;
@@ -89452,6 +88800,27 @@ isSimpleSymbolChar: char
 
 category: 'private'
 method: STONReader
+lookupClass: name
+	^ (System myUserProfile objectNamed: name asSymbol)
+		ifNil: [ 
+			(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
+				ifNotNil: [ :rowanSymbolDictionary | 
+					(rowanSymbolDictionary at: name asSymbol ifAbsent: [  ])
+						ifNotNil: [ :cls | ^ cls ] ])
+				ifNil: [ 
+					classes
+						at: name
+						ifAbsentPut: [ 
+							(ClassOrganizer new allSubclassesOf: Object)
+								detect: [ :cls | cls stonName == name ]
+								ifNone: [ 
+									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan')
+										ifNotNil: [ :rowan | rowan platform serviceClassFor: name ])
+										ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
+%
+
+category: 'private'
+method: STONReader
 match: string do: block
 	"Try to read and consume string and execute block if successful.
 	Else do nothing (but do not back up)"
@@ -89500,6 +88869,13 @@ category: 'initialize-release'
 method: STONReader
 on: aReadStream
 	readStream := aReadStream
+%
+
+category: 'private'
+method: STONReader
+optimizeForLargeStructures
+  "nothing special for GemStone"
+
 %
 
 category: 'parsing-internal'
@@ -89900,6 +89276,14 @@ printOn: stream
 
 category: 'instance creation'
 classmethod: STONStreamWriter
+new
+  ^ self basicNew
+    initialize;
+    yourself
+%
+
+category: 'instance creation'
+classmethod: STONStreamWriter
 on: stonWriter
 	^ self new
 		on: stonWriter;
@@ -89957,6 +89341,25 @@ at: key put: value
 
 !		Class methods for 'STONWriter'
 
+category: 'private'
+classmethod: STONWriter
+findFirstInString: aString inSet: inclusionMap startingAt: start
+  "Trivial, non-primitive version"
+
+  | i stringSize ascii |
+  inclusionMap size ~= 256
+    ifTrue: [ ^ 0 ].
+  i := start.
+  stringSize := aString size.
+  [ i <= stringSize and: [ ascii := (aString at: i) asciiValue.
+      ascii < 256
+        ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
+        ifFalse: [ true ] ] ] whileTrue: [ i := i + 1 ].
+  i > stringSize
+    ifTrue: [ ^ 0 ].
+  ^ i
+%
+
 category: 'class initialization'
 classmethod: STONWriter
 initialize
@@ -90001,6 +89404,14 @@ isSimpleSymbolChar: char
 
 category: 'instance creation'
 classmethod: STONWriter
+new
+  ^ self basicNew
+    initialize;
+    yourself
+%
+
+category: 'instance creation'
+classmethod: STONWriter
 on: writeStream
 	^ self new
 		on: writeStream;
@@ -90015,6 +89426,29 @@ close
 	writeStream ifNotNil: [
 		writeStream close.
 		writeStream := nil ]
+%
+
+category: 'writing'
+method: STONWriter
+encodeCharacter: char
+  | code encoding |
+  ((code := char codePoint) < 127
+    and: [ (encoding := STONCharacters at: code + 1) notNil ])
+    ifTrue: [ encoding = #'pass'
+        ifTrue: [ writeStream nextPut: char ]
+        ifFalse: [ writeStream nextPutAll: encoding ] ]
+    ifFalse: [ | paddedStream padding digits |
+      paddedStream := WriteStream on: String new.
+      code printOn: paddedStream base: 16 showRadix: false.
+      digits := paddedStream contents.
+      padding := 4 - digits size.
+      writeStream nextPutAll: '\u'.
+      encoding := padding > 0
+        ifTrue: [ ((String new: padding)
+            atAllPut: $0;
+            yourself) , digits ]
+        ifFalse: [ digits ].
+      writeStream nextPutAll: encoding ]
 %
 
 category: 'private'
@@ -90102,6 +89536,17 @@ initialize
   objects := IdentityDictionary new
 %
 
+category: 'private'
+method: STONWriter
+isSimpleSymbol: symbol
+  symbol isEmpty
+    ifTrue: [ ^ false ].
+  ^ (self class
+    findFirstInString: symbol
+    inSet: STONSimpleSymbolCharacters
+    startingAt: 1) = 0
+%
+
 category: 'initialize-release'
 method: STONWriter
 jsonMode: boolean
@@ -90146,6 +89591,13 @@ category: 'initialize-release'
 method: STONWriter
 on: aWriteStream
 	writeStream := aWriteStream
+%
+
+category: 'private'
+method: STONWriter
+optimizeForLargeStructures
+  "nothing special for GemStone"
+
 %
 
 category: 'initialize-release'
@@ -90202,6 +89654,12 @@ category: 'writing'
 method: STONWriter
 writeBoolean: boolean
 	writeStream print: boolean
+%
+
+category: 'writing'
+method: STONWriter
+writeFloat: float
+  writeStream nextPutAll: float asString
 %
 
 category: 'writing'
@@ -90411,997 +89869,6 @@ writeObject: anObject do: block
 			writeStream nextPutAll: stonName.
 			self prettyPrintSpace ].
 		block value ]
-%
-
-! Class implementation for 'TonelParser'
-
-!		Class methods for 'TonelParser'
-
-category: 'accessing'
-classmethod: TonelParser
-lineEnding
-  "Answer the os-specific line endings"
-
-  ^ String with: Character lf
-%
-
-category: 'instance creation'
-classmethod: TonelParser
-on: aStream forReader: aTonelReader
-	^ self new 
-		stream: aStream;
-		packageReader: aTonelReader;
-		yourself
-%
-
-category: 'instance creation'
-classmethod: TonelParser
-onString: aString forReader: aTonelReader
-  ^ self on: (self readStreamClass on: aString) forReader: aTonelReader
-%
-
-category: 'parsing'
-classmethod: TonelParser
-parseStream: aStream forReader: aTonelReader
-	^ (self on: aStream forReader: aTonelReader)
-		 start
-%
-
-category: 'parsing'
-classmethod: TonelParser
-parseString: aString forReader: aTonelReader
-	^ self parseStream: (self readStreamClass on: aString) forReader: aTonelReader
-%
-
-category: 'accessing'
-classmethod: TonelParser
-readStreamClass
-
-	^ ReadStreamPortable
-%
-
-category: 'accessing'
-classmethod: TonelParser
-writeStreamClass
-
-	^ WriteStreamPortable
-%
-
-category: 'Topaz support'
-classmethod: TonelParser
-_compileForTopaz: aString envId: envId
-  "aString is the topaz text object for topaz TMETHOD command"
-| strm parser catDict category methInfo methSrc symList clsName cls
-  warnStr  |
-strm :=  ReadStreamPortable on: aString  .
-(parser := self new) stream: strm .
-
-parser separator ifNotNil:[ Error signal:'expected parser separator to be nil'].
-
-catDict :=  (parser try: [ parser metadata ]).
-catDict ifNil:[ Error signal:'Category dictionary not found'. ].
-category := catDict at: #category .
-
-parser separator ifNotNil:[ Error signal:'expected second parser separator to be nil'].
-
-methInfo :=  parser method.
-clsName := Symbol _existingWithAll: ((methInfo at: 1) at: 1) .
-
-methSrc :=  (methInfo at: 2)"keywords+args" ,  parser methodBody .
-symList := System myUserProfile symbolList .
-cls := (symList resolveSymbol: clsName) value .
-((methInfo at: 1) at: 2) ifNotNil:[:classWord |
-  classWord = 'class' ifTrue:[ cls := cls class ]
-      ifFalse:[ Error signal:'unrecognized ' , classWord asString, ' after >>'].
-].
-[ cls compileMethod: methSrc dictionaries: symList 
-               category: category  
-               environmentId: envId .
-] on: CompileWarning do:[:ex | 
-   warnStr := ex warningString .
-   ex resume 
-].
-^ warnStr "nil if no warnings"
-%
-
-!		Instance methods for 'TonelParser'
-
-category: 'private'
-method: TonelParser
-cleanSelector: aString
-	"BEWARE: I'm doing some heave assumptions here: I'm removing just ONE space (in case there 
-	 is one) because I expect this to be a file generated by tonel, and tonel adds one space 
-	 before start with the method body to make the format more readable. 
-	 But of course this is not very good :("
-	^ (aString last = Character space
-		ifTrue: [ aString allButLast ]
-		ifFalse: [ aString ]) 
-		trimLeft
-%
-
-category: 'parsing'
-method: TonelParser
-comment
-	| result ch eatNext |
-	
-	result := String new writeStreamPortable.
-
-	eatNext := false.
-	stream next = $" ifFalse: [ TonelParseError signal: 'Can''t parse comment' ].	
-	[ stream atEnd not 
-		and: [ 
-				(ch := stream next) ~= $" 
-				or: [ eatNext := (stream peek = $") ] ] ]
-	whileTrue: [ 
-		result nextPut: ch.
-		eatNext ifTrue: [ 
-			stream skip: 1.
-			eatNext := false ] ].
-	
-	^ self 
-		removeFrom: '"',result contents,'"' 
-		enclosingStart: $" 
-		end: $"
-%
-
-category: 'private factory'
-method: TonelParser
-definitionForType: aString
-  ^ self packageReader definitionForType: aString
-%
-
-category: 'parsing'
-method: TonelParser
-document
-	^ { 
-	self typeDef.
-	self methodDefList.
-	 } 
-	select: [:each | each notNil ]
-%
-
-category: 'private'
-method: TonelParser
-extractSelector: aString
-	| separators selectorStream keywords |
-	
-	separators := { 
-		Character space. 
-		Character tab. 
-		Character lf. 
-		Character newPage. 
-		Character cr. 
-		$:}.
-
-	keywords := Array new writeStreamPortable.
-	selectorStream := aString readStream.
-	[ selectorStream atEnd ]
-	whileFalse: [ | word ch |
-		word := String new writeStreamPortable.
-		[ selectorStream atEnd not and: [ (separators includes: (ch := selectorStream next)) not ] ]
-		whileTrue: [ word nextPut: ch ].
-		ch = $: ifTrue: [ word nextPut: ch ]. 
-		word contents trimBoth ifNotEmpty: [ :v | keywords nextPut: v ] ].
-	keywords := keywords contents.
-
-	^ (keywords size <= 2 
-		ifTrue: [ keywords first]
-		ifFalse: [ ('' join: (keywords pairsCollect: [ :keyword :argument | keyword ])) ])
-		asSymbol
-%
-
-category: 'testing'
-method: TonelParser
-isEnter: aCharacter
-	^ #(13 10) includes: aCharacter asciiValue
-%
-
-category: 'testing'
-method: TonelParser
-isSeparator: aCharacter 
-	^ aCharacter isSeparator
-%
-
-category: 'parsing'
-method: TonelParser
-metadata
-	| result ch count |
-	
-	result := String new writeStreamPortable.
-
-	count := 0.
-	stream peek = ${ ifFalse: [ TonelParseError signal: 'Can''t parse metadata' ].	
-	[ stream atEnd not ]
-	whileTrue: [ 
-		ch := stream next.
-		result nextPut: ch.
-		ch = ${ ifTrue: [ count := count +1 ].
-		ch = $} ifTrue: [ count := count -1 ].
-		count = 0 ifTrue: [ ^ STON fromString: result contents ]].
-
-	TonelParseError signal: 'Can''t parse metadata'
-%
-
-category: 'parsing'
-method: TonelParser
-method
-	| type selector |
-	
-	type := self untilIncluding: '>>'.
-	selector := self cleanSelector: (self untilExcluding: '[').
-	type := type trimBoth substrings: ' '.
-	type size = 1 ifTrue: [ type := type copyWith: nil ].
-  lastSelectorParsed := selector .
-	^ { 
-		type.
-		selector.
-	}
-%
-
-category: 'parsing'
-method: TonelParser
-methodBody
-	"I read a methodbody (what is inside [ ... ])
-	 Since a method body can contain enclosing brackets we need to be sure we will skip them and
-	 correctly read the method. For that, I have to take into account: 
-		- I can mention [] in comments
-		- I can mention [] in strings
-		- I can use $[, $] 
-		- I can have inner blocks
-		- I can mention a comment of the form ""$"" or a comment of the form '$'
-	 all that needs to be skipped "
-	| result char prevChar comment string count startPos |
-	
-	result := self class writeStreamClass on: String new.
-
-	comment := false.
-	string := false.
-	prevChar := nil.
-	count := 0.
-        startPos := stream position .
-        "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
-	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
-	[ stream atEnd not ]
-	whileTrue: [ 
-		char := stream next.
-		result nextPut: char.
-		(char = $" and: [ string not and: [ prevChar ~= $$ or: [ comment ] ] ]) 
-			ifTrue: [ comment := comment not ]. 
-		(char = $' and: [ comment not and: [ prevChar ~= $$ or: [ string ] ] ]) 
-			ifTrue: [ string := string not ]. 
-		(comment or: [ string ]) ifFalse: [ 
-			(char = $[ and: [  prevChar ~= $$ ]) ifTrue: [ count := count +1 ].
-			(char = $] and: [ prevChar ~= $$ ]) ifTrue: [ count := count -1 ] ].
-		count = 0 ifTrue: [ 
-			^ self 
-				removeFrom: result contents 
-				enclosingStart: $[ 
-				end: $]
-				clean: #right ].
-		prevChar := char ].
-
-	TonelParseError signal: 'Can''t parse method body'
-%
-
-category: 'parsing'
-method: TonelParser
-methodDef
-	"kept around for tests"
-
-	| methodDef |
-	self methodDef: [:isMeta :mDef |
-		methodDef :=  mDef.
-		"skip possible spaces at the end"
-		self separator ].
-	^methodDef
-%
-
-category: 'parsing'
-method: TonelParser
-methodDef: aBlock
-  | ar def offset |
-  ar := {
-    self separator.
-    self try: [ self metadata ].
-    self separator.
-    [ offset := stream position . self method ] value .
-    self methodBody
-  }.
-  (def := self newMethodDefinitionFrom: ar )
-    offset: offset
-    inFile: stream wrappedStreamName .
-
-  aBlock
-    value: ar fourth first second notNil
-    value: def
-%
-
-category: 'parsing'
-method: TonelParser
-methodDefList
-	| result classStream instanceStream |
-	self separator. "to arrive to the end of the file in case there are no methods"
-	result := { {}. {} }.
-	classStream := (result at: 1) writeStreamPortable.
-	instanceStream := (result at: 2) writeStreamPortable.
-	[
-		[ stream atEnd ]
-			whileFalse: [ 
-				self methodDef: [:isMeta :mDef |
-					isMeta
-						ifTrue: [ classStream nextPut: mDef ]
-						ifFalse: [ instanceStream nextPut: mDef ].
-					"skip possible spaces at the end"
-					self separator ]
-			] 
-  ] on: (TonelParseError,STONReaderError,STONWriterError) do:[:ex | 
-    lastSelectorParsed ifNotNil:[ | str |
-      str := ex details ifNil:[ '' ].
-      ex details: str, ', last method parsed: ', lastSelectorParsed printString
-    ].
-    ex pass 
-  ].
-  ^ result
-%
-
-category: 'private factory'
-method: TonelParser
-newMethodDefinitionFrom: anArray
-	| metadata className meta selector source  |
-	
-	metadata := anArray second ifNil: [ Dictionary new ].
-	className := anArray fourth first first.
-	meta := anArray fourth first second notNil.
-	selector := self extractSelector: anArray fourth second trimBoth.
-	source := String streamContents: [ :s | 
-		s << anArray fourth second.
-		anArray fifth ifNotEmpty: [ :src | s << src ] ].
-
-	^ self packageReader newMethodDefinitionForClassNamed: className
-		classIsMeta: meta
-		selector: selector
-		category: (metadata at: #category ifAbsent: [ '' ]) 
-		source: source
-%
-
-category: 'private factory'
-method: TonelParser
-newTypeDefinitionFrom: anArray
-	^ self packageReader newTypeDefinitionFrom: anArray
-%
-
-category: 'accessing'
-method: TonelParser
-packageReader
-	^ packageReader
-%
-
-category: 'accessing'
-method: TonelParser
-packageReader: aPackageReader 
-	packageReader := aPackageReader
-%
-
-category: 'private'
-method: TonelParser
-removeFrom: aString enclosingStart: startChar end: endChar
-	^ self 
-		removeFrom: aString 
-		enclosingStart: startChar 
-		end: endChar
-		clean: #both
-%
-
-category: 'private'
-method: TonelParser
-removeFrom: aString enclosingStart: startChar end: endChar clean: cleanSymbol
-  "cleanSymbol can be #left, #rigth and #both"
-
-  | result stop ch start end |
-  result := self class readStreamClass on: aString trimBoth.
-  result peek = startChar
-    ifFalse: [ TonelParseError signal: 'I cannot remove enclosing start' ].
-  result skip: 1.
-  (#(#'both' #'left') includes: cleanSymbol)
-    ifTrue: [ 
-      stop := self class lineEnding size.
-      [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
-        whileTrue: [ 
-          (self isEnter: ch)
-            ifTrue: [ stop := stop - 1 ].
-          result skip: 1 ] ].
-  start := result position.
-  result setToEnd.
-  result skip: -1.
-  result peek = endChar
-    ifFalse: [ TonelParseError signal: 'I cannot remove enclosing end' ].
-  result skip: -1.
-  (#(#'both' #'right') includes: cleanSymbol)
-    ifTrue: [ 
-      stop := self class lineEnding size.
-      [ stop > 0 and: [ self isSeparator: (ch := result peek) ] ]
-        whileTrue: [ 
-          (self isEnter: ch)
-            ifTrue: [ stop := stop - 1 ].
-          result skip: -1 ] ].
-  end := result position.
-  ^ result originalContents copyFrom: start + 1 to: end + 1
-%
-
-category: 'parsing'
-method: TonelParser
-separator
-	[ stream atEnd not and: [ self isSeparator: stream peek ] ]
-	whileTrue: [ stream next ].
-	^ nil
-%
-
-category: 'parsing'
-method: TonelParser
-shebang
-	"look for a '#!' in first two character position and skip to next line if present"
-
-	(stream peekFor: $#) ifFalse: [ ^ nil ].	
-	(stream peekFor: $!) ifFalse: [ ^ nil ].
-	^ stream  upTo: Character lf.
-%
-
-category: 'accessing'
-method: TonelParser
-start
-	^ self document
-%
-
-category: 'accessing'
-method: TonelParser
-stream: aStream 
-	stream := aStream
-%
-
-category: 'private parsing'
-method: TonelParser
-try: aBlock
-	^ self 
-		try: aBlock 
-		onSuccess: [ :parsedValue | parsedValue ] 
-		onFailure: [ nil ]
-%
-
-category: 'private parsing'
-method: TonelParser
-try: aBlock onFailure: failureBlock
-	^ self 
-		try: aBlock 
-		onSuccess: [ :parsedValue |  parsedValue ] 
-		onFailure: failureBlock
-%
-
-category: 'private parsing'
-method: TonelParser
-try: aBlock onSuccess: successBlock
-	^ self 
-		try: aBlock 
-		onSuccess: successBlock 
-		onFailure: [ nil ]
-%
-
-category: 'private parsing'
-method: TonelParser
-try: aBlock onSuccess: successBlock onFailure: failureBlock
-	| pos |
-	
-	pos := stream position.
-	[ ^ successBlock value: aBlock value ]
-	on: TonelParseError 
-	do: [ :e | 
-		stream position: pos.
-		^ failureBlock value ]. 
-	
-%
-
-category: 'parsing'
-method: TonelParser
-type
-	self try: [ self word: 'Class' ] onSuccess: [ :word | ^ word  ].
-	self try: [ self word: 'Trait' ] onSuccess: [ :word | ^ word  ].
-	self try: [ self word: 'Extension' ] onSuccess: [ :word | ^ word  ].
-	
-	"at end"
-	TonelParseError signal: 'Can''t parse type.'	
-%
-
-category: 'parsing'
-method: TonelParser
-typeDef
-	| shebang |
-	shebang := self shebang. "ignore shebang on first line of file if present"
-	^ self newTypeDefinitionFrom: { 
-		self separator.
-		self try: [ self comment ]. 
-		self separator. 
-		self type. 
-		self separator. 
-		self try: [ 
-			| typeMetadata normalizedMetadata |
-			typeMetadata := self metadata.
-			normalizedMetadata := Dictionary new.
-			typeMetadata keysAndValuesDo: [:key :value |
-				normalizedMetadata at: key asLowercase asSymbol put: value ].
-			normalizedMetadata at: #shebang put: shebang.
-			normalizedMetadata ] 
-	}
-%
-
-category: 'private parsing'
-method: TonelParser
-untilExcluding: aCollection
-	| result |
-	result := stream upToAll: aCollection.
-	stream position: stream position - aCollection size.
-	^ result
-%
-
-category: 'private parsing'
-method: TonelParser
-untilIncluding: aCollection
-	^ stream upToAll: aCollection
-%
-
-category: 'private parsing'
-method: TonelParser
-word: aString
-	| result |
-	result := stream next: aString size.
-	result = aString
-		ifFalse: [ TonelParseError signal: 'Can''t parse ', aString ].
-	^ result
-%
-
-! Class implementation for 'NewTonelParser'
-
-!		Instance methods for 'NewTonelParser'
-
-category: 'parsing'
-method: NewTonelParser
-method
-
-	| type start end currentPosition selector count |
-	
-	type := self untilIncluding: '>>'.
-	start := stream position.
-	self methodParser
-		scanner: (methodParser scannerClass on: stream
-				errorBlock: [:errorMessage :errorPosition |self halt]).
-	currentMethodNode := methodParser parseTonelMessagePattern.
-	end := methodParser scanner previousStepPosition.
-	currentPosition := methodParser scanner stream position.
-
-	methodParser scanner stream position: start.
-	count := end - start.
-	selector := String new: count.
-	methodParser scanner stream readInto: selector startingAt: 1 count: count.
-	methodParser scanner stream position: currentPosition.
-	selector := selector trimBoth.
-	type := type trimBoth substrings: ' '.
-	type size = 1 ifTrue: [ type := type copyWith: nil ].
-	methodBodyStart := stream position.
-	methodParser tonelStep.	"eat the $["
-	^ { 
-		type.
-		selector.
-	}
-%
-
-category: 'parsing'
-method: NewTonelParser
-methodBody
-	| source end count currentPosition |
-	self methodParser tonelMethodBodyTerminationToken
-		ifFalse: [
-			methodParser parseTonelPragmas.
-			currentMethodNode body: (methodParser parseTonelStatements: true) ].
-	end := methodParser currentToken start - 1.
-	count :=  end - methodBodyStart.
-	source := String new: count - 2.
-	currentPosition := methodParser scanner stream position.
-	methodParser scanner stream position: methodBodyStart + 1.
-	methodParser scanner stream readInto: source startingAt: 1 count: count - 2.
-	methodParser scanner stream position: currentPosition.
-	^ source
-%
-
-category: 'accessing'
-method: NewTonelParser
-methodParser
-
-	^ methodParser ifNil: [ methodParser := RBTonelParser new ]
-%
-
-category: 'private factory'
-method: NewTonelParser
-newMethodDefinitionFrom: anArray
-	| metadata className meta selector source  |
-	
-	metadata := anArray second ifNil: [ Dictionary new ].
-	className := anArray fourth first first.
-	meta := anArray fourth first second notNil.
-	selector :=  anArray fourth second trimBoth.
-	source := String streamContents: [ :s | 
-		s << selector.
-		anArray fifth ifNotEmpty: [ :src | 
-			s lf.
-			s << src ] ].
-
-	^ self packageReader newMethodDefinitionForClassNamed: className
-		classIsMeta: meta
-		selector: (self extractSelector: selector)
-		category: (metadata at: #category ifAbsent: [ '' ]) 
-		source: source
-%
-
-! Class implementation for 'TonelWriter'
-
-!		Class methods for 'TonelWriter'
-
-category: 'accessing'
-classmethod: TonelWriter
-classLabel
-	^ 'Class'
-%
-
-category: 'accessing'
-classmethod: TonelWriter
-extensionLabel
-	^ 'Extension'
-%
-
-category: 'instance creation'
-classmethod: TonelWriter
-on: aPackageWriter
-
-	^ self new
-		packageWriter: aPackageWriter;
-		yourself
-%
-
-category: 'accessing'
-classmethod: TonelWriter
-traitLabel
-	^ 'Trait'
-%
-
-!		Instance methods for 'TonelWriter'
-
-category: 'private'
-method: TonelWriter
-classNameFor: aMethodDefinition parent: aClassDefinition
-	aClassDefinition ifNil: [ ^ aMethodDefinition fullClassName ].
-	^ aMethodDefinition classIsMeta
-		ifFalse: [ aMethodDefinition className ]
-		ifTrue: [ 
-			aClassDefinition isTraitDefinition
-				ifFalse: [aMethodDefinition className, ' class']
-				ifTrue: [aMethodDefinition className, ' classSide'] ]
-%
-
-category: 'private definitions'
-method: TonelWriter
-commentOf: aClassDefinition
-	^ (aClassDefinition comment 
-		copyReplaceAll: '"' 
-		with: '""')
-		withLineEndings: self newLine
-%
-
-category: 'accessing'
-method: TonelWriter
-definitions
-
-   ^self packageWriter definitions
-%
-
-category: 'private'
-method: TonelWriter
-fileNameFor: aClassDefinition
-	^ String streamContents: [ :stream | 
-		stream 
-			<< aClassDefinition className
-			<< '.' << (self typeOf: aClassDefinition) asLowercase
-			<< '.st'  ]
-%
-
-category: 'private testing'
-method: TonelWriter
-isClass: aClassDefinition
-	^ self packageWriter isClass: aClassDefinition
-%
-
-category: 'private testing'
-method: TonelWriter
-isTrait: aClassDefinition
-	^ self packageWriter isTrait: aClassDefinition
-%
-
-category: 'private definitions'
-method: TonelWriter
-methodDefinitionOf: aMethodDefinition
-	^ self toSTON: (self class orderedDictionaryClass new 
-		at: #category put: aMethodDefinition category asSymbol; 
-		yourself)	
-	
-%
-
-category: 'private'
-method: TonelWriter
-newLine
-	 ^ self class lineEnding
-%
-
-category: 'accessing'
-method: TonelWriter
-packageWriter
-  ^ packageWriter
-%
-
-category: 'accessing'
-method: TonelWriter
-packageWriter: anObject
-
-   packageWriter := anObject
-%
-
-category: 'private'
-method: TonelWriter
-selectorIsComplete: keywords in: aString
-	| start |
-	
-	start := 1.
-	keywords do: [ :each | | index | 
-		index := aString 
-			findString: each 
-			startingAt: start 
-			caseSensitive: true.
-		index = 0 ifTrue: [ ^ false ].
-		start := index + each size ].
-	^ true
-%
-
-category: 'private'
-method: TonelWriter
-skipComment: aStream
-	"I assume I'm on top of the begining of a comment"
-	aStream skip: 1.
-	[ aStream atEnd not 
-		and: [ aStream next ~= $" or: [ aStream peek = $" ] ] ]
-	whileTrue.	
-%
-
-category: 'private'
-method: TonelWriter
-skipSeparators: aStream
-	[ aStream peek isSeparator ]
-	whileTrue: [ aStream skip: 1 ]. 
-%
-
-category: 'private'
-method: TonelWriter
-splitMethodSource: aMethodDefinition into: aBlock
-	| keywords source declaration |
-	
-	keywords := aMethodDefinition selector asSymbol keywords.
-	source := aMethodDefinition source readStream.
-	"Skip spaces"
-	(source peek isSeparator) ifTrue: [ self skipSeparators: source ].
-	"Skip comments"
-	(source peek = $") ifTrue: [ self skipComment: source ]. 
-	"Parse declaration"
-	declaration := String new writeStreamPortable.
-	[ (self selectorIsComplete: keywords in: declaration originalContents) not 
-		or: [ ':+-/\*~<>=@,%|&?!' includes: declaration contents trimRight last ] ]
-	whileTrue: [ 
-		"get separators"
-		[ source atEnd not and: [ source peek isSeparator ] ]
-			whileTrue: [ declaration nextPut: source next ].
-		"take next word"
-		[ source atEnd not and: [ source peek isSeparator not ] ]
-			whileTrue: [ declaration nextPut: source next ] ].
-	aBlock 
-		value: (declaration contents trimLeft withLineEndings: self newLine)
-		value: (source upToEnd withLineEndings: self newLine)
-%
-
-category: 'private'
-method: TonelWriter
-toSTON: anObject
-	^ (String streamContents: [ :stream | 
-		(TonelSTONWriter on: stream) nextPut: anObject ])
-		withLineEndings: self newLine
-%
-
-category: 'private definitions'
-method: TonelWriter
-typeClassDefinitionOf: aClassDefinition
-	| definition |
-	
-	definition := self class orderedDictionaryClass new 
-		at: #name put: aClassDefinition className asSymbol; 
-		at: #superclass put: aClassDefinition superclassName asSymbol;
-		yourself.
-
-	aClassDefinition type = #normal ifFalse: [ 
-		definition at: #type put: aClassDefinition type ].
-	
-	aClassDefinition hasTraitComposition ifTrue: [ 
-		definition at: #traits put: aClassDefinition traitCompositionString ].
-	
-	aClassDefinition hasClassTraitComposition ifTrue: [ 
-		definition at: #classTraits put: aClassDefinition classTraitCompositionString ].
-	
-	(aClassDefinition instVarNames)
-		ifNotEmpty: [ :vars | definition at: #instVars put: vars asArray ].
-
-	(aClassDefinition classVarNames)
-		ifNotEmpty: [ :vars | definition at: #classVars put: vars asArray ].
-		
-	((aClassDefinition poolDictionaries) collect: [:each | each asString])
-		ifNotEmpty: [ :vars | definition at: #pools put: vars asArray ].
-		
-	(aClassDefinition classInstVarNames)
-		ifNotEmpty: [ :vars | definition at: #classInstVars put: vars asArray ].
-
-	(aClassDefinition gs_constraints)
-		ifNotEmpty: [:gs_constraints | definition at: #'gs_constraints' put: gs_constraints asArray ].
-
-	(aClassDefinition gs_options)
-		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
-
-	(aClassDefinition gs_reservedOop)
-		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedOop' put: gs_reservedOop asString ].
-
-	definition 		
-		at: #category put: aClassDefinition category asSymbol.
-	
-	^ self toSTON: definition
-%
-
-category: 'private definitions'
-method: TonelWriter
-typeDefinitionOf: aClassDefinition
-	(self isTrait: aClassDefinition) 
-		ifTrue: [ ^ self typeTraitDefinitionOf: aClassDefinition ].
-	^ self typeClassDefinitionOf: aClassDefinition
-%
-
-category: 'private'
-method: TonelWriter
-typeOf: aClassDefinition
-	(self isClass: aClassDefinition) ifTrue: [ ^ self class classLabel ].
-	(self isTrait: aClassDefinition) ifTrue: [ ^ self class traitLabel ].
-
-	TonelShouldIgnore signal
-%
-
-category: 'writing'
-method: TonelWriter
-writeClass: aClassDefinition
-	[ 
-		self packageWriter 
-			writePackageFileNamed: (self fileNameFor: aClassDefinition) 
-			do:  [ :aStream | 
-				self writeClassDefinition: aClassDefinition on: aStream.
-				self writeClassSideMethodDefinitions: aClassDefinition on: aStream.
-				self writeInstanceSideMethodDefinitions: aClassDefinition on: aStream ] ]
-	on: TonelShouldIgnore
-	do: [ :e | self logCr: 'ignoring: ', aClassDefinition asString ]
-%
-
-category: 'private writing'
-method: TonelWriter
-writeClassDefinition: aClassDefinition on: aStream
-	| nl |
-	nl := self newLine.
-	
-	aClassDefinition hasComment 
-		ifTrue: [ 
-			aStream 
-				<< '"' << nl
-				<< (self commentOf: aClassDefinition) << nl
-				<< '"' << nl ].
-	aStream
-		<< (self typeOf: aClassDefinition) 
-		<< ' ' << (self typeDefinitionOf: aClassDefinition ) << nl
-%
-
-category: 'private writing'
-method: TonelWriter
-writeClassSideMethodDefinitions: aClassDefinition on: aStream
-	((self definitions 
-		select: [ :each | 
-			each isMethodDefinition 
-			and: [ each className = aClassDefinition className
-			and: [ each classIsMeta ] ] ])
-		sortWithBlock: [ :a :b | a selector _unicodeLessThan: b selector ])
-		do: [ :each | 
-			self writeMethodDefinition: each parent: aClassDefinition on: aStream ]
-%
-
-category: 'writing'
-method: TonelWriter
-writeExtensionMethods: methods className: className
-
-	| nl |
-	nl := self newLine.
-	self packageWriter
-		writePackageFileNamed: className , '.extension.st'
-		do: [ :s | 
-			s << 'Extension '
-				<< (self toSTON: {(#'name' -> className asSymbol)} asDictionary) << nl.
-			((methods select: [ :m | m classIsMeta not ])
-				sortWithBlock: [ :a :b | a selector  _unicodeLessThan: b selector ])
-				do: [ :each | self writeMethodDefinition: each on: s ].
-			((methods select: [ :m | m classIsMeta ])
-				sortWithBlock: [ :a :b | a selector  _unicodeLessThan: b selector ])
-				do: [ :each | self writeMethodDefinition: each on: s ] ]
-%
-
-category: 'private writing'
-method: TonelWriter
-writeInstanceSideMethodDefinitions: aClassDefinition on: aStream
-	((self definitions 
-		select: [ :each | 
-			each isMethodDefinition 
-			and: [ each className = aClassDefinition className
-			and: [ each classIsMeta not ] ] ])
-		sortWithBlock: [ :a :b | a selector _unicodeLessThan: b selector ])
-		do: [ :each | 
-			self writeMethodDefinition: each parent: aClassDefinition on: aStream ]
-
-	
-	
-%
-
-category: 'private writing'
-method: TonelWriter
-writeMethodDefinition: aMethodDefinition on: aStream
-	^ self 
-		writeMethodDefinition: aMethodDefinition 
-		parent: nil 
-		on: aStream
-%
-
-category: 'private writing'
-method: TonelWriter
-writeMethodDefinition: aMethodDefinition parent: aClassDefinition on: aStream
-	| nl |
-	
-	nl := self newLine.
-	self 
-		splitMethodSource: aMethodDefinition 
-		into: [ :methodDeclaration :methodBody | | fullClassName |
-			fullClassName := self classNameFor: aMethodDefinition parent: aClassDefinition.
-			aStream 
-				<< nl 
-				<< (self methodDefinitionOf: aMethodDefinition) << nl 
-				<< fullClassName << ' >> ' << methodDeclaration 
-				<< ' [' << methodBody << nl << ']' << nl ]
-%
-
-category: 'writing'
-method: TonelWriter
-writePackage: packageName
-	self packageWriter 
-		writePackageFileNamed: 'package.st'
-		do:  [ :aStream | self writePackage: packageName on: aStream ]
-%
-
-category: 'writing'
-method: TonelWriter
-writePackage: packageName on: aStream
-
-	aStream 
-		<< 'Package ' 
-		<< (self toSTON: { #name ->  packageName asSymbol } asDictionary) 
-		<< self  newLine
 %
 
 ! Class implementation for 'ZnBufferedReadStream'
@@ -94161,39 +92628,6 @@ parseTreeFor: aSymbol
 	^ RBParser parseMethod: (self sourceCodeAt: aSymbol) onError: [ :msg :pos | ^ nil ]
 %
 
-category: '*cypress-environmental-tools'
-method: Behavior
-persistentSuperclassForEnv: envId
-  "result will be nil if no methods exist for specified environmentId."
-
-  | mds |
-  (mds := methDicts) _isArray
-    ifTrue: [ ^ mds atOrNil: envId * 4 + 3 ].
-  envId == 0
-    ifTrue: [ ^ mds ].
-  ^ nil
-%
-
-category: '*cypress-environmental-tools'
-method: Behavior
-persistentSuperclassForEnv: envId put: aValue
-  "aValue should be a GsMethodDictionary, or nil ,
-   caller responsible for _refreshClassCache "
-
-  <protected>
-  | ofs mds |
-  (mds := methDicts) _isArray
-    ifFalse: [ envId == 0
-        ifTrue: [ methDicts := aValue.
-          ^ self ].
-      mds := {mds}.
-      methDicts := mds ].
-  ofs := envId * 4 + 3.
-  mds size < ofs
-    ifTrue: [ mds size: ofs ].
-  mds at: ofs put: aValue
-%
-
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rowanPackageName
@@ -94376,6 +92810,26 @@ rwRemoveSelector: methodSelector
 
 category: '*rowan-gemstone-kernel'
 method: Behavior
+rwUnpackageClass
+	"Unpackage the receiver and all methods in the class that in the same package, 
+		while leaving the class installed in the image"
+
+	^ Rowan projectTools browser unpackageClassNamed: self thisClass name asString
+%
+
+category: '*rowan-gemstone-kernel'
+method: Behavior
+rwUnpackageMethod: methodSelector
+	"Move the method into <packageName>, whether or not it has been packaged"
+
+	^ Rowan projectTools browser
+		unpackageMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+%
+
+category: '*rowan-gemstone-kernel'
+method: Behavior
 _rowanCopyMethodsAndVariablesFrom: sourceClass dictionaries: dicts
 
 "Copies all instance and class methods, pool dictionaries, and values of
@@ -94539,13 +92993,13 @@ rbStoreOn: aStream
   aStream nextPutAll: self asString
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Boolean
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Boolean
 stonOn: stonWriter
 	stonWriter writeBoolean: self
@@ -94563,7 +93017,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 !		Class methods for 'ByteArray'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: ByteArray
 fromSton: stonReader
   | singletonString |
@@ -94642,7 +93096,7 @@ expected' ].
     self at: i put: value ]
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: ByteArray
 stonContainSubObjects 
 	^ false
@@ -94682,7 +93136,7 @@ digitValue: x
 	^self withValue: (n < 10 ifTrue: [n + 48] ifFalse: [n + 55])
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: Character
 fromSton: stonReader
 	^ stonReader parseListSingleton first
@@ -94690,14 +93144,14 @@ fromSton: stonReader
 
 !		Instance methods for 'Character'
 
-category: '*filesystem-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Character
 isCharacter
 
 	^ true
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Character
 stonOn: stonWriter
 	stonWriter writeObject: self listSingleton: self asString
@@ -94828,7 +93282,7 @@ encodeWith: encoding
 	^ encoding asZnCharacterEncoder encodeString: self
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 endsWith: suffix
 
@@ -94846,7 +93300,7 @@ endsWith: suffix
 "
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 findString: subString startingAt: startIndex caseSensitive: aBoolean
 
@@ -94885,7 +93339,7 @@ isString
   ^ true
 %
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 join: aCollection 
 	"'*' join: #('WWWWW' 'W  EW' 'zzzz')
@@ -94896,7 +93350,7 @@ join: aCollection
 				separatedBy: [stream nextPutAll: self]]
 %
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 lineIndicesDo: aBlock
 	"execute aBlock with 3 arguments for each line:
@@ -94933,7 +93387,7 @@ lineIndicesDo: aBlock
 					nextCR := self indexOf: cr startingAt: start ]]]
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 putOn: aStream
 
@@ -95007,7 +93461,7 @@ stonOn: stonWriter
                 ifFalse: [stonWriter writeString: self]
 %
 
-category: '*rowan-gemstone-components-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 substrings: separators 
 	"Answer an array containing the substrings in the receiver separated 
@@ -95034,7 +93488,7 @@ substrings: separators
 	^ result asArray
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 trimBoth
 
@@ -95043,7 +93497,7 @@ trimBoth
 	^ self trimBoth: [ :char | char isSeparator ]
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 trimBoth: aBlock
 
@@ -95052,7 +93506,7 @@ trimBoth: aBlock
 	^ self trimLeft: aBlock right: aBlock
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 trimLeft
 
@@ -95061,7 +93515,7 @@ trimLeft
 	^ self trimLeft: [ :char | char isSeparator ]
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 trimLeft: aBlock
 
@@ -95070,7 +93524,7 @@ trimLeft: aBlock
 	^ self trimLeft: aBlock right: [ :char | false ]
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 trimLeft: aLeftBlock right: aRightBlock
 
@@ -95086,7 +93540,7 @@ trimLeft: aLeftBlock right: aRightBlock
 	^ self copyFrom: left to: right
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 trimRight
 
@@ -95095,7 +93549,7 @@ trimRight
 	^ self trimRight: [ :char | char isSeparator ]
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 trimRight: aBlock
 
@@ -95188,7 +93642,7 @@ withGemstoneLineEndings
 	^ outString copyFrom: 1 to: newOutPos - 1
 %
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 withLineEndings: lineEndingString
 	| stream |
@@ -95692,7 +94146,7 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		options: optionsArray
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Class
 stonName
 	"Override to encode my instances using a different class name."
@@ -96091,7 +94545,7 @@ _validateOptions: optionsArray withFormat: theFormat newClassName: ignored
 
 !		Class methods for 'Collection'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: Collection
 fromSton: stonReader
 	| collection |
@@ -96103,7 +94557,7 @@ fromSton: stonReader
 
 !		Instance methods for 'Collection'
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 asDictionary
 
@@ -96122,7 +94576,7 @@ difference: aCollection
   ^ self reject: [ :each | aCollection includes: each ]
 %
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 flattened
 	
@@ -96136,7 +94590,7 @@ flattened
 	^ Array streamContents: [ :stream | self flattenOn: stream].
 %
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 flattenOn: aStream
 
@@ -96152,7 +94606,7 @@ ifEmpty: aBlock
     ifTrue: [ ^ aBlock value ]
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 ifNotEmpty: aBlock
 
@@ -96160,7 +94614,7 @@ ifNotEmpty: aBlock
 		ifFalse: [ aBlock cull: self ]
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 isCollection
 
@@ -96177,7 +94631,7 @@ isEmptyOrNil
   ^ self size == 0
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 select: selectBlock thenDo: doBlock
   "Utility method to improve readability."
@@ -96185,7 +94639,7 @@ select: selectBlock thenDo: doBlock
   ^ (self select: selectBlock) do: doBlock
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 sort
 
@@ -96194,7 +94648,7 @@ sort
 	^ self sort: [ :a :b | a <= b ]
 %
 
-category: '*rowan-gemstone-components-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Collection
 sort: aSortBlock
 
@@ -96204,7 +94658,7 @@ sort: aSortBlock
 	^ self sortWithBlock: aSortBlock
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Collection
 stonOn: stonWriter
 	stonWriter writeObject: self do: [
@@ -96257,96 +94711,6 @@ postLoadDefinition: lookupSymbolList environmentId: environmentId
 %
 
 ! Class extensions for 'CypressClassDefinition'
-
-!		Class methods for 'CypressClassDefinition'
-
-category: '*cypresstonel-core'
-classmethod: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment subclassType: subclassType
-
-	^ self new
-		name: aClassName asString
-		superclassName: aSuperclassName asString
-		category: aCategory asString
-		instVarNames:
-			(someInstanceVariableNames asArray collect: [ :each | each asString ])
-		classInstVarNames:
-			(someClassInstanceVariableNames asArray collect: [ :each | each asString ])
-		classVarNames:
-			(someClassVariableNames asArray collect: [ :each | each asString ])
-		poolDictionaryNames:
-			(somePoolDictionaryNames asArray collect: [ :each | each asString ])
-		comment: (self normalizeLineEndingsOf: aComment)
-		subclassType: subclassType asString
-%
-
-category: '*cypresstonel-core'
-classmethod: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment type: type
-  | st |
-  st := type.
-  st == #'normal'
-    ifTrue: [ st := '' ].
-  ^ self
-    name: aClassName
-    superclassName: aSuperclassName
-    category: aCategory
-    instVarNames: someInstanceVariableNames
-    classInstVarNames: someClassInstanceVariableNames
-    classVarNames: someClassVariableNames
-    poolDictionaryNames: somePoolDictionaryNames
-    comment: aComment
-    subclassType: st
-%
-
-category: '*cypresstonel-core'
-classmethod: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
-	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
-	poolDictionaryNames: somePoolDictionaryNames gs_options: gs_options gs_constraints: gs_constraints comment: aComment 
-	subclassType: subclassType
-
-	^ self new
-		name: aClassName asString
-		superclassName: aSuperclassName asString
-		category: aCategory asString
-		instVarNames:
-			(someInstanceVariableNames asArray collect: [ :each | each asString ])
-		classInstVarNames:
-			(someClassInstanceVariableNames asArray collect: [ :each | each asString ])
-		classVarNames:
-			(someClassVariableNames asArray collect: [ :each | each asString ])
-		poolDictionaryNames:
-			(somePoolDictionaryNames asArray collect: [ :each | each asString ])
-		gs_options: gs_options 
-		gs_constraints: gs_constraints
-		comment: (self normalizeLineEndingsOf: aComment)
-		subclassType: subclassType asString
-%
-
-category: '*cypresstonel-core'
-classmethod: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
-	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
-	poolDictionaryNames: somePoolDictionaryNames  gs_options: someGs_options gs_constraints: someGs_constraints
-	comment: aComment type: type
-  | st |
-  st := type.
-  st == #'normal'
-    ifTrue: [ st := '' ].
-  ^ self
-    name: aClassName
-    superclassName: aSuperclassName
-    category: aCategory
-    instVarNames: someInstanceVariableNames
-    classInstVarNames: someClassInstanceVariableNames
-    classVarNames: someClassVariableNames
-    poolDictionaryNames: somePoolDictionaryNames
-    gs_options: someGs_options 
-    gs_constraints: someGs_constraints
-    comment: aComment
-    subclassType: st
-%
 
 !		Instance methods for 'CypressClassDefinition'
 
@@ -96529,32 +94893,6 @@ hasClassInstanceVariables
 	^ self classInstVarNames isEmpty not
 %
 
-category: '*cypresstonel-core'
-method: CypressClassDefinition
-hasClassTraitComposition
-
-	^false
-%
-
-category: '*cypresstonel-core'
-method: CypressClassDefinition
-hasComment
-  ^ comment notNil and: [ comment ~= '' ]
-%
-
-category: '*cypresstonel-core'
-method: CypressClassDefinition
-hasTraitComposition
-
-	^false
-%
-
-category: '*cypresstonel-core'
-method: CypressClassDefinition
-isClassDefinition
-  ^ true
-%
-
 category: '*cypress-environmental-tools'
 method: CypressClassDefinition
 loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader
@@ -96576,13 +94914,6 @@ loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader
     recompileWithSubclassesFrom: oldClass
     to: newClass
     symbolList: lookupSymbolList 
-%
-
-category: '*cypresstonel-core'
-method: CypressClassDefinition
-poolDictionaries
-
-	^self poolDictionaryNames
 %
 
 category: '*rowan-cypress-kernel'
@@ -96610,12 +94941,6 @@ printDefinitionOn: stream
             store: self category asString 
 %
 
-category: '*cypresstonel-core'
-method: CypressClassDefinition
-sortKey
-	^ self className
-%
-
 category: '*cypress-environmental-tools'
 method: CypressClassDefinition
 symbolDictionaryForClassNamed: aString symbolList: aSymbolList
@@ -96627,16 +94952,6 @@ symbolDictionaryForClassNamed: aString symbolList: aSymbolList
   ^ aSymbolList asArray detect: [ :each | each
         anySatisfy: [ :every | every isBehavior and: [ every name asString = aString asString ] ] ]
   ifNone: [  ]
-%
-
-category: '*cypresstonel-core'
-method: CypressClassDefinition
-type
-  | st |
-  st := self subclassType.
-  st = ''
-    ifTrue: [ ^ #'normal' ].
-  ^ st
 %
 
 ! Class extensions for 'CypressClassStructure'
@@ -96713,34 +95028,10 @@ isSkeleton
 
 !		Instance methods for 'CypressDefinition'
 
-category: '*cypresstonel-core'
-method: CypressDefinition
-<= other
-	^ self sortKey <= other sortKey
-%
-
-category: '*cypresstonel-core'
-method: CypressDefinition
-isClassDefinition
-  ^ false
-%
-
-category: '*cypresstonel-core'
-method: CypressDefinition
-isMethodDefinition
-  ^ false
-%
-
 category: '*rowan-tools-kernel'
 method: CypressDefinition
 isOrganizationDefinition
   ^false
-%
-
-category: '*cypresstonel-core'
-method: CypressDefinition
-isTraitDefinition
-  ^ false
 %
 
 category: '*cypress-environmental-tools'
@@ -96770,33 +95061,6 @@ postLoadOver: aDefinition lookupSymbolList: lookupSymbolList environmentId: envi
   self postLoad: lookupSymbolList environmentId: environmentId
 %
 
-category: '*cypresstonel-core'
-method: CypressDefinition
-sortKey
-	self subclassResponsibility
-%
-
-! Class extensions for 'CypressGemStoneDirectoryUtilities'
-
-!		Class methods for 'CypressGemStoneDirectoryUtilities'
-
-category: '*cypresstonel-core'
-classmethod: CypressGemStoneDirectoryUtilities
-default
-  ^ self workingDirectory
-%
-
-category: '*cypresstonel-core'
-classmethod: CypressGemStoneDirectoryUtilities
-entryNamesFrom: aDirectory
-  "Answer just the name of the contents of aDirectory."
-
-  ^ (((self directoryEntriesFrom: aDirectory)
-    collect: [ :each | self localNameFrom: each ])
-    reject: [ :each | each = '.' or: [ each = '..' ] ])
-    sortWithBlock: [ :a :b | a <= b ]
-%
-
 ! Class extensions for 'CypressHierarchicalUrl'
 
 !		Instance methods for 'CypressHierarchicalUrl'
@@ -96815,27 +95079,6 @@ category: '*rowan-cypress-kernel'
 method: CypressMethodDefinition
 accept: aVisitor
 	^ aVisitor visitMethodDefinition: self
-%
-
-category: '*cypresstonel-core'
-method: CypressMethodDefinition
-fullClassName
-	
-	^ self classIsMeta
-		ifFalse: [self className]
-		ifTrue: [self className, ' class' ]
-%
-
-category: '*cypresstonel-core'
-method: CypressMethodDefinition
-isExtensionMethod
-	^ category beginsWith: '*'
-%
-
-category: '*cypresstonel-core'
-method: CypressMethodDefinition
-isMethodDefinition
-  ^ true
 %
 
 category: '*cypress-environmental-tools'
@@ -96872,12 +95115,6 @@ postLoadOver: aDefinition lookupSymbolList: lookupSymbolList environmentId: envi
       (self theNonMetaClass: lookupSymbolList)
         perform: #'initialize'
         env: environmentId ]
-%
-
-category: '*cypresstonel-core'
-method: CypressMethodDefinition
-sortKey
-	^ self className, '.', (self classIsMeta ifTrue: ['meta'] ifFalse: ['nonmeta']), '.', self selector
 %
 
 category: '*cypress-environmental-tools'
@@ -97125,16 +95362,6 @@ postLoadDefinition: lookupSymbolList environmentId: environmentId
       'inappropriate to send #postLoadDefinition:environmentId: to a removal operation'
 %
 
-! Class extensions for 'CypressSnapshot'
-
-!		Instance methods for 'CypressSnapshot'
-
-category: '*cypresstonel-core'
-method: CypressSnapshot
-snapshot
-  ^ self
-%
-
 ! Class extensions for 'CypressStructure'
 
 !		Instance methods for 'CypressStructure'
@@ -97168,29 +95395,6 @@ isSkeleton
 	^self subclassResponsibility: #isSkeleton
 %
 
-! Class extensions for 'CypressTonelRepository'
-
-!		Instance methods for 'CypressTonelRepository'
-
-category: '*rowan-cypress-kernel'
-method: CypressTonelRepository
-packageNames
-
-	"only directories with a package.st file in them"
-
-	| utils |
-	utils := self fileUtils.
-	^ (((utils directoryEntriesFrom: self directoryPath , '*')
-		reject: [ :each | 
-			| aGsFileStat |
-			aGsFileStat := GsFile _stat: each isLstat: false.
-			aGsFileStat _isSmallInteger
-				ifTrue: [ false ]
-				ifFalse: [ aGsFileStat isDirectory not ] ])
-		collect: [ :each | utils localNameFrom: each ])
-		reject: [ :each | each = '.' or: [ each = '..' ] ]
-%
-
 ! Class extensions for 'Date'
 
 !		Class methods for 'Date'
@@ -97204,7 +95408,7 @@ fromSton: stonReader
 
 !		Instance methods for 'Date'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Date
 stonContainSubObjects 
 	^ false
@@ -97224,7 +95428,7 @@ stonOn: stonWriter
 
 !		Class methods for 'DateAndTime'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: DateAndTime
 fromSton: stonReader
   ^ DateAndTime fromString: stonReader parseListSingleton
@@ -97232,7 +95436,7 @@ fromSton: stonReader
 
 !		Instance methods for 'DateAndTime'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: DateAndTime
 stonContainSubObjects 
 	^ false
@@ -97498,13 +95702,19 @@ self _primitiveFailed: #stat:isLstat: args: { aName . aBoolean }
 
 !		Instance methods for 'GsFile'
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: GsFile
 << items
 
  	items putOn: self.
 	
 	^ self
+%
+
+category: '*rowan-tonel-gemstone-kernel'
+method: GsFile
+wrappedStreamName
+	^ self pathName
 %
 
 ! Class extensions for 'GsNMethod'
@@ -97691,7 +95901,7 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 	^ aRwSemanticVersonComponent rwSemanticIntegerLessThanSelf: self
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Integer
 stonOn: stonWriter
 	stonWriter writeInteger: self
@@ -97819,13 +96029,13 @@ rbStoreOn: aStream
   self printOn: aStream
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Number
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Number
 stonOn: stonWriter
 	stonWriter writeFloat: self asFloat
@@ -97843,7 +96053,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 !		Class methods for 'Object'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: Object
 fromSton: stonReader
 	"Create a new instance and delegate decoding to instance side.
@@ -97876,7 +96086,7 @@ flag: aSymbol
 	Then, to retrieve all such messages, browse all senders of #returnHereUrgently."
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 fromSton: stonReader
   "Decode non-variable classes from a map of their instance variables and values.
@@ -97904,14 +96114,14 @@ inspect
   ^ (GsInspectInteraction theObject: self) signal
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Object
 isCharacter
 
 	^ false
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Object
 isCollection
 
@@ -97926,7 +96136,7 @@ isNumber
   ^ self _isNumber
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 isStonReference
 	^ false
@@ -97945,7 +96155,7 @@ isValue
 	^false
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Object
 putOn: aStream
 
@@ -98037,7 +96247,7 @@ split: aSequenceableCollection indicesDo: aBlock
 	aBlock value: oldPosition value: aSequenceableCollection size.
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 stonContainSubObjects
 	"Return true if I contain subObjects that should be processed, false otherwise.
@@ -98046,7 +96256,7 @@ stonContainSubObjects
 	^ true
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 stonOn: stonWriter
 	"Encode non-variable classes with a map of their instance variable and values.
@@ -98071,7 +96281,7 @@ stonProcessSubObjects: block
     ifTrue: [ 1 to: self _basicSize do: [ :each | self basicAt: each put: (block value: (self basicAt: each)) ] ]
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Object
 stonShouldWriteNilInstVars
 	"Return true if my instance variables that are nil should be written out, 
@@ -98131,7 +96341,7 @@ nextInto: aCollection
 	^self next: aCollection size into: aCollection startingAt: 1.
 %
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: PositionableStreamPortable
 originalContents
 	"Answer the receiver's actual contents collection, NOT a copy.  1/29/96 sw"
@@ -98318,6 +96528,12 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		projectFromUrl: loadSpecUrl
 		projectsHome: projectsHome
 		customConditionalAttributes: customConditionalAttributes
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	^ self platform projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 %
 
 category: '*rowan-gemstone-core'
@@ -99444,19 +97660,16 @@ compareExtensionMethodsAgainstBase: aDefinition
 category: '*rowan-core-definitions-extensions'
 method: RwMethodDefinition
 compareSourceAgainstBase: aDefinition
-
-	| modification |
+	| modification before after |
 	modification := RwSourceModification new.
-	aDefinition source ~= self source
-		ifTrue: [
-			| before after |
-			before := aDefinition source.
-			after := self source.
-			modification addElementModification: (RwPropertyModification
-								key: 'source'
-								oldValue: before
-								newValue: after) ].
-	^modification
+	before := aDefinition source.
+	after := self source.
+	(before notNil and: [ after notNil and: [ before _unicodeEqual: after ] ])
+		ifFalse: [ 
+			modification
+				addElementModification:
+					(RwPropertyModification key: 'source' oldValue: before newValue: after) ].
+	^ modification
 %
 
 category: '*rowan-core-definitions-extensions'
@@ -99752,6 +97965,12 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		projectFromUrl: loadSpecUrl
 		projectsHome: projectsHome
 		customConditionalAttributes: customConditionalAttributes
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+	^ RwResolvedProject projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 %
 
 category: '*rowan-core'
@@ -100407,24 +98626,6 @@ componentsWithDoits
 	^ componentsWithDoits
 %
 
-! Class extensions for 'RwProjectSpecificationV2'
-
-!		Instance methods for 'RwProjectSpecificationV2'
-
-category: '*rowan-definitionsv2'
-method: RwProjectSpecificationV2
-asProjectDefiniton
-	^ RwProjectDefinitionV2 fromLoadSpecification: self
-%
-
-category: '*rowan-definitionsv2'
-method: RwProjectSpecificationV2
-asProjectDefinitonWithComment: commentString
-	^ (RwProjectDefinitionV2 fromLoadSpecification: self)
-		comment: commentString;
-		yourself
-%
-
 ! Class extensions for 'RwProjectTool'
 
 !		Class methods for 'RwProjectTool'
@@ -100687,7 +98888,7 @@ fromFile: filePath
 
 !		Class methods for 'SequenceableCollection'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 classmethod: SequenceableCollection
 fromSton: stonReader
 	^ self streamContents: [ :stream |
@@ -100742,7 +98943,7 @@ allButFirst: n
 	^ self copyFrom: n + 1 to: self size
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 allButLast
 
@@ -100752,7 +98953,7 @@ allButLast
 	^ self allButLast: 1
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 allButLast: n
 
@@ -100762,7 +98963,7 @@ allButLast: n
 	^ self copyFrom: 1 to: self size - n
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 beginsWith: aSequenceableCollection
 
@@ -100838,7 +99039,7 @@ copyWithFirst: newElement
 	^ newIC
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 fifth
 
@@ -100848,7 +99049,7 @@ fifth
 	^ self at: 5
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 fourth
 
@@ -100895,7 +99096,7 @@ lastIndexOf: anElement startingAt: lastIndex ifAbsent: exceptionBlock
     ifFalse: [ 0 ]
 %
 
-category: '*tonel-gemstonecommon-core'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 pairsCollect: aBlock 
 	"Evaluate aBlock with my elements taken two at a time, and return an Array with the results"
@@ -100908,7 +99109,7 @@ pairsCollect: aBlock
 "
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 putOn: aStream
 
@@ -100982,7 +99183,7 @@ reversed
 	^ result
 %
 
-category: '*tonel-gemstone-32-5-kernel'
+category: '*rowan-tonel-gemstone-kernel-32-5'
 method: SequenceableCollection
 second
 
@@ -100992,7 +99193,7 @@ second
 	^ self at: 2
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 sixth
 
@@ -101002,16 +99203,7 @@ sixth
 	^ self at: 6
 %
 
-category: '*tonel-gemstone-kernel'
-method: SequenceableCollection
-sort
-
-	"Sort this array into ascending order using the '<=' operator."
-
-	^ self sort: [ :a :b | a <= b ]
-%
-
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: SequenceableCollection
 stonOn: stonWriter
 	self class == STON listClass
@@ -101019,7 +99211,7 @@ stonOn: stonWriter
 		ifFalse: [ super stonOn: stonWriter ]
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 third
 
@@ -101029,7 +99221,7 @@ third
 	^ self at: 3
 %
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 withIndexDo: elementAndIndexBlock
 
@@ -101038,7 +99230,7 @@ withIndexDo: elementAndIndexBlock
 	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
 %
 
-category: '*rowan-gemstone-components-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: SequenceableCollection
 writeStreamPortable
 
@@ -101084,141 +99276,11 @@ _keysAndValuesDo: aBlock
   dict keysAndValuesDo:[ :each :aVal | aBlock value: each value: 1 ]
 %
 
-! Class extensions for 'STONReader'
-
-!		Class methods for 'STONReader'
-
-category: '*ston-gemstonebase'
-classmethod: STONReader
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-!		Instance methods for 'STONReader'
-
-category: '*ston-gemstonebase'
-method: STONReader
-lookupClass: name
-  ^ (System myUserProfile objectNamed: name asSymbol)
-    ifNil: [ 
-		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
-			ifNotNil: [:rowanSymbolDictionary |
-				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
-					ifNotNil: [:cls | ^cls ] ])
-						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
-								detect: [ :cls | cls stonName == name ]
-								ifNone: [
-									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
-										platform serviceClassFor: name)
-											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
-%
-
-category: '*ston-gemstonecommon'
-method: STONReader
-optimizeForLargeStructures
-  "nothing special for GemStone"
-
-%
-
-! Class extensions for 'STONStreamWriter'
-
-!		Class methods for 'STONStreamWriter'
-
-category: '*ston-gemstonebase'
-classmethod: STONStreamWriter
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-! Class extensions for 'STONWriter'
-
-!		Class methods for 'STONWriter'
-
-category: '*ston-gemstonecommon'
-classmethod: STONWriter
-findFirstInString: aString inSet: inclusionMap startingAt: start
-  "Trivial, non-primitive version"
-
-  | i stringSize ascii |
-  inclusionMap size ~= 256
-    ifTrue: [ ^ 0 ].
-  i := start.
-  stringSize := aString size.
-  [ i <= stringSize and: [ ascii := (aString at: i) asciiValue.
-      ascii < 256
-        ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
-        ifFalse: [ true ] ] ] whileTrue: [ i := i + 1 ].
-  i > stringSize
-    ifTrue: [ ^ 0 ].
-  ^ i
-%
-
-category: '*ston-gemstonebase'
-classmethod: STONWriter
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-!		Instance methods for 'STONWriter'
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-encodeCharacter: char
-  | code encoding |
-  ((code := char codePoint) < 127
-    and: [ (encoding := STONCharacters at: code + 1) notNil ])
-    ifTrue: [ encoding = #'pass'
-        ifTrue: [ writeStream nextPut: char ]
-        ifFalse: [ writeStream nextPutAll: encoding ] ]
-    ifFalse: [ | paddedStream padding digits |
-      paddedStream := WriteStream on: String new.
-      code printOn: paddedStream base: 16 showRadix: false.
-      digits := paddedStream contents.
-      padding := 4 - digits size.
-      writeStream nextPutAll: '\u'.
-      encoding := padding > 0
-        ifTrue: [ ((String new: padding)
-            atAllPut: $0;
-            yourself) , digits ]
-        ifFalse: [ digits ].
-      writeStream nextPutAll: encoding ]
-%
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-isSimpleSymbol: symbol
-  symbol isEmpty
-    ifTrue: [ ^ false ].
-  ^ (self class
-    findFirstInString: symbol
-    inSet: STONSimpleSymbolCharacters
-    startingAt: 1) = 0
-%
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-optimizeForLargeStructures
-  "nothing special for GemStone"
-
-%
-
-category: '*ston-gemstonebase'
-method: STONWriter
-writeFloat: float
-  writeStream nextPutAll: float asString
-%
-
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
 
-category: '*tonel-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Stream
 << items
 
@@ -101231,7 +99293,7 @@ isBinary
 	^false
 %
 
-category: '*filesystem-gemstone-kernel'
+category: '*rowan-tonel-gemstone-kernel'
 method: Stream
 wrappedStreamName
 
@@ -101257,13 +99319,13 @@ decodeFromUTF8
  ^ self _decodeFromUtf8: true
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: String
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: String
 stonOn: stonWriter
 	stonWriter writeString: self
@@ -101285,7 +99347,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 !		Instance methods for 'Symbol'
 
-category: '*tonel-gemstone-32x-kernel'
+category: '*rowan-tonel-gemstone-kernel-32x'
 method: Symbol
 keywords
 	"override needed for 3.2.15"
@@ -101300,13 +99362,13 @@ rbStoreOn: aStream
   super rbStoreOn: aStream
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Symbol
 stonOn: stonWriter
 	stonWriter writeSymbol: self
 %
 
-category: '*tonel-gemstone-32x-kernel'
+category: '*rowan-tonel-gemstone-kernel-32x'
 method: Symbol
 _keywords
   "Disabled for now by rename to _keywords ; see if 3.6 base image is ok.
@@ -101480,7 +99542,7 @@ fromSton: stonReader
 
 !		Instance methods for 'Time'
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: Time
 stonContainSubObjects 
 	^ false
@@ -101494,26 +99556,6 @@ stonOn: stonWriter
   stonWriter
     writeObject: self
     listSingleton: (self asStringUsingFormat: #($: true false))
-%
-
-! Class extensions for 'TonelWriter'
-
-!		Class methods for 'TonelWriter'
-
-category: '*tonel-gemstonecommon-core'
-classmethod: TonelWriter
-lineEnding
-  "Answer the os-specific line endings"
-
-  ^ String with: Character lf
-%
-
-category: '*tonel-gemstonecommon-core'
-classmethod: TonelWriter
-orderedDictionaryClass
-  "Answer the platform-specific OrderedDictionary-compatible class"
-
-  ^ GsTonelOrderedDictionary
 %
 
 ! Class extensions for 'UndefinedObject'
@@ -101552,13 +99594,13 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		options: optionsArray
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: UndefinedObject
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-core'
 method: UndefinedObject
 stonOn: stonWriter
 	stonWriter writeNull

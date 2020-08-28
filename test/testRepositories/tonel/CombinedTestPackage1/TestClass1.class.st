@@ -22,7 +22,11 @@ TestClass1 class >> testClassMethod1 [ ^ ClassVar1
 ]
 
 { #category : 'accessing' }
-TestClass1 class >> testClassMethod2 [ ^ true
+TestClass1 class >> testClassMethod2 [ ^ classInstVar1
+]
+
+{ #category : 'accessing' }
+TestClass1 class >> testClassMethod3 [ ^ true
 ]
 
 { #category : 'accessing' }
@@ -30,5 +34,5 @@ TestClass1 >> testInstanceMethod1 [ ^ instVar1
 ]
 
 { #category : 'accessing' }
-TestClass1 >> testInstanceMethod2 [ ^ classInstVar1
+TestClass1 >> testInstanceMethod2 [ ^ ClassVar1
 ]

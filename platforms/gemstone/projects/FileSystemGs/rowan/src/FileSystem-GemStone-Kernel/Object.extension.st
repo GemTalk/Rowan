@@ -9,13 +9,6 @@ Object >> flag: aSymbol [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
-Object >> isCharacter [
-
-	^ false
-
-]
-
-{ #category : '*filesystem-gemstone-kernel' }
 Object >> split: aSequenceableCollection [
 	"Split the argument using the receiver as a separator."
 	"optimized version for single delimiters"

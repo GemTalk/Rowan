@@ -4,59 +4,6 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
-{ #category : 'topaz tonel support' }
-RwProjectDefinitionV2 class >> topazReadTonelFile: fileName [
-    "Read a single file and compile the methods within that file.
-     Definition/redefinition of the class not implemented yet "
-  | projectDef package clsName clsDef cls methBlk envId |
-  projectDef := RwRepositoryResolvedProjectTonelReaderVisitorV2
-     readClassFile: fileName
-     projectName: 'TopazLoad'   "synthetic projed and package names"
-     packageName: 'TopazPackage' .
-  package := projectDef packageNamed: 'TopazPackage_1' .
-  envId :=   projectDef methodEnvForPackageNamed: 'TopazPackage_1' .
-  package classDefinitions ifNotNil:[:defs | | sz |
-    (sz := defs size) > 1 ifTrue:[
-      Error signal:'more than one class definition in file ' , fileName
-    ].
-    sz > 0 ifTrue:[ clsDef :=  defs values at: 1 ].
-  ].
-  package classExtensions ifNotNil:[:defs | | sz |
-    (sz := defs size) > 1 ifTrue:[
-      Error signal:'more than one class extension in file ' , fileName
-    ].
-    sz > 0 ifTrue:[
-      clsDef ifNotNil:[ Error signal:'both class definition and extension in file ', fileName].
-      clsDef :=  defs values at: 1.
-    ].
-  ].   
-  clsDef ifNil:[ Error signal:'neither class definition nor extension in file ', fileName].
-  clsName := clsDef name .
-  (cls := System myUserProfile resolveSymbol: (clsName asSymbol)) ifNil:[
-    "creating the class not implemented yet"
-    Error signal:'class ' , clsName , ' not found by name (class must already exist)'.
-  ].
-  cls := cls"anAssociation" value.
-
-  methBlk := [ :methDef "a RwMethodDefinition" |
-    [
-      false ifTrue:[ GsFile gciLogServer:'compiling ', cls name, ' >> ', methDef selector].
-      cls compileMethod: methDef source
-      dictionaries: System myUserProfile symbolList
-      category: methDef protocol asSymbol
-      intoMethodDict: nil "install into the class's dictionaries"
-      intoCategories: nil
-      environmentId:  envId
-    ] on: (CompileError, CompileWarning) do:[:ex | 
-      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
-      ex pass
-    ]
-   ].
-  clsDef instanceMethodDefinitions do: methBlk .
-  cls := cls class .
-  clsDef classMethodDefinitions do: methBlk .
-]
-
 { #category : 'actions' }
 RwProjectDefinitionV2 >> _deleteTool [
 
@@ -67,56 +14,6 @@ RwProjectDefinitionV2 >> _deleteTool [
 RwProjectDefinitionV2 >> _loadTool [
 
 	^ Rowan projectTools loadV2
-]
-
-{ #category : 'private' }
-RwProjectDefinitionV2 >> _validate [
-	"ensure that the data structures within the receiver contain valid information"
-
-	"make sure that list of packages is consistent between components and project definition"
-
-	| definitionPackageNames componentPackageNames missingFromComponent missingFromDefinition errorMessage |
-	definitionPackageNames := self packageNames asSet.
-	componentPackageNames := Set new.
-	self components_validate.
-	missingFromComponent := definitionPackageNames - componentPackageNames.
-	missingFromDefinition := componentPackageNames - definitionPackageNames.
-	(missingFromComponent isEmpty and: [ missingFromDefinition isEmpty ])
-		ifTrue: [ ^ true ].
-	errorMessage := WriteStream on: String new.
-	errorMessage
-		nextPutAll:
-				'Inconsistency between packages defined and referenced in components:';
-		lf.
-	missingFromComponent isEmpty
-		ifFalse: [ 
-			errorMessage
-				tab;
-				nextPutAll:
-						'The following packages are defined, but not referenced in a component:';
-				lf.
-			missingFromComponent
-				do: [ :packageName | 
-					errorMessage
-						tag;
-						tab;
-						nextPutAll: packageName;
-						lf ] ].
-	missingFromDefinition isEmpty
-		ifFalse: [ 
-			errorMessage
-				tab;
-				nextPutAll:
-						'The following packages are referenced in a component, but not defined:';
-				lf.
-			missingFromDefinition
-				do: [ :packageName | 
-					errorMessage
-						tab;
-						tab;
-						nextPutAll: packageName;
-						lf ] ].
-	self error: errorMessage contents
 ]
 
 { #category : 'private' }
@@ -429,14 +326,6 @@ RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition
 		comment: commentString
 ]
 
-{ #category : 'actions' }
-RwProjectDefinitionV2 >> clone [
-	"clone remote git project to disk"
-
-	self cloneRepository.
-	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
-]
-
 { #category : 'querying' }
 RwProjectDefinitionV2 >> componentForPackageNamed: packageName [
 	"Answer nil if no component found"
@@ -508,15 +397,6 @@ RwProjectDefinitionV2 >> projectName [
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectName: aString [
 	self propertyAt: 'name' put: aString
-]
-
-{ #category : 'reading' }
-RwProjectDefinitionV2 >> readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames [
-
-	^ readTool
-		readProjectSetForComponentProjectDefinition: self
-			withConfigurations: theConfigNames 
-			groupNames: theGroupNames
 ]
 
 { #category : 'accessing' }

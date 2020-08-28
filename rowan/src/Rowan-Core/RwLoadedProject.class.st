@@ -145,7 +145,7 @@ RwLoadedProject >> load [
 	readProjectDefinition == projectDefinition 
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
-			self halt: 'expected to update the projectDefinition in-place' ].
+			self error: 'expected to update the projectDefinition in-place' ].
 	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
 ]
 
