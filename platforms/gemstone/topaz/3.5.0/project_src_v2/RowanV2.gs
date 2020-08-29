@@ -4943,7 +4943,7 @@ true.
 doit
 (Object
 	subclass: 'RowanService'
-	instVarNames: #( definition updates command commandArgs updateType organizer )
+	instVarNames: #( command commandArgs updateType organizer updates )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -5017,7 +5017,8 @@ doit
 )
 		category: 'Rowan-Services-Core';
 		comment: 'RowanBrowserService handles services that fall outside
-the scope of other services.';
+the scope of other services with an emphasis on browser-
+type tasks.';
 		immediateInvariant.
 true.
 %
@@ -5101,6 +5102,21 @@ true.
 %
 
 doit
+(RowanInspectorService
+	subclass: 'RowanSpecificationService'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+doit
 (RowanService
 	subclass: 'RowanLoggingService'
 	instVarNames: #( fileName id groupId date time comment services mode location isLogging )
@@ -5118,7 +5134,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanMethodService'
-	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop hasMethodHistory searchString definedClassName )
+	instVarNames: #( oop source selector methodDefinitions category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop hasMethodHistory searchString definedClassName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -5163,7 +5179,52 @@ true.
 doit
 (RowanService
 	subclass: 'RowanProjectService'
-	instVarNames: #( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome isDiskDirty )
+	instVarNames: #( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome isDiskDirty projectOop specService )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanProjectService
+	subclass: 'RowanDefinedProjectService'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanProjectService
+	subclass: 'RowanLoadedProjectService'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanProjectService
+	subclass: 'RowanResolvedProjectService'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -47574,6 +47635,12 @@ defaultAutomaticClassInitializationBlackList
 	^ self platform automaticClassInitializationBlackList_default
 %
 
+category: 'public client services'
+classmethod: Rowan
+definedProjectServiceClass
+	^ self platform definedProjectServiceClass
+%
+
 category: 'private'
 classmethod: Rowan
 fileUtilities
@@ -47611,6 +47678,12 @@ classmethod: Rowan
 jadeServerClassNamed: className
 
 	^ self platform jadeServerClassNamed: className
+%
+
+category: 'public client services'
+classmethod: Rowan
+loadedProjectServiceClass
+	^ self platform loadedProjectServiceClass
 %
 
 category: 'public client services'
@@ -47747,9 +47820,22 @@ projectTools
 
 category: 'public client services'
 classmethod: Rowan
+resolvedProjectServiceClass
+	^ self platform resolvedProjectServiceClass
+%
+
+category: 'public client services'
+classmethod: Rowan
 serviceClass
 
 	^ self platform serviceClass
+%
+
+category: 'public client services'
+classmethod: Rowan
+specificationServiceClass
+
+	^ self platform specificationServiceClass
 %
 
 category: 'public'
@@ -47784,7 +47870,7 @@ category: 'accessing'
 classmethod: RowanCommandResult
 addResult: service
 	service command: nil;
-			commandArgs: nil. 
+			commandArgs: nil.
 	self updateClientBoundServices: service.
 	^service
 %
@@ -49477,12 +49563,33 @@ breakPointsAreEnabled
 	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
 %
 
+category: 'rsr'
+classmethod: RowanService
+clientClassName
+
+	^self name
+%
+
 category: 'autocommit'
 classmethod: RowanService
 flipAutoCommit
 	| newValue |
 	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
 	^self setAutoCommit: newValue
+%
+
+category: 'rsr'
+classmethod: RowanService
+isClientClass
+	
+	^true
+%
+
+category: 'rsr'
+classmethod: RowanService
+isServerClass
+	
+	^true
 %
 
 category: 'instance creation'
@@ -49506,6 +49613,13 @@ sampleService
 	^self new sampleService
 %
 
+category: 'rsr'
+classmethod: RowanService
+serverClassName
+
+	^self name
+%
+
 category: 'autocommit'
 classmethod: RowanService
 setAutoCommit: object
@@ -49519,13 +49633,20 @@ setBreakPointsAreEnabled: boolean
   ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
 %
 
+category: 'rsr'
+classmethod: RowanService
+templateClassName 
+
+	^self name
+%
+
 category: 'accessing'
 classmethod: RowanService
 version
   "change this method carefully and only at Jadeite release boundaries.
 	Failure to do so will prevent logins"
 
-  ^ 3092
+  ^ 3200
 %
 
 !		Instance methods for 'RowanService'
@@ -49538,6 +49659,18 @@ answer: anObject
 	answeringService := RowanAnsweringService new. 
 	answeringService answer: anObject. 
 	RowanCommandResult addResult: answeringService.
+%
+
+category: 'commands support'
+method: RowanService
+autoCommitIfRequired
+	| commitResult |
+	self class autoCommit == true ifTrue:[
+		commitResult := System commitTransaction.
+		RowanAutoCommitService new autoCommit:  
+			(commitResult 
+				ifTrue:[true] 
+				ifFalse:[#failed])].
 %
 
 category: 'rowan'
@@ -49569,6 +49702,13 @@ classHierarchy: theClasses
         put:
           (value asSet asSortedCollection: [ :x :y | x name < y name ]) asArray ].
   ^ hierarchyServices
+%
+
+category: 'rsr'
+method: RowanService
+clearOrganizers
+	organizer := nil.
+	updates do: [ :update | update organizer: nil ]
 %
 
 category: 'accessing'
@@ -49663,6 +49803,36 @@ excludedInstVars
 	^#( #organizer)
 %
 
+category: 'rsr'
+method: RowanService
+executeCommand
+	"RSR -> RowanServices primary api."
+
+	[ 
+	Rowan commandResultClass initializeResults.
+	organizer := ClassOrganizer new.
+	[ 
+	updateType := nil.	"Update type is only for returned commands"
+	command ifNil: [ command := #'update' ].
+	GsFile gciLogClient: '========== about to execute command ============='.
+	self servicePerform: command withArguments: commandArgs ]
+		on: GsInteractionRequest
+		do: [ :ex | 
+			ex
+				response:
+					(ex interaction interactWith: self gsInteractionInformFailureHandler) ].
+	GsFile gciLogClient: '========== about to execute post command ============='.
+	Rowan loggingServiceClass current logSentServices.
+	updates := Rowan commandResultClass results.
+	self postCommandExecution ]
+		on: Error
+		do: [ :ex | 
+			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
+			ex pass ].
+
+	^ self
+%
+
 category: 'commands support'
 method: RowanService
 extendHierarchies: hierarchies
@@ -49723,11 +49893,20 @@ hierarchiesByLevel: hierarchies
 category: 'initialization'
 method: RowanService
 initialize
+
+	updates := Array new
 %
 
 category: 'testing'
 method: RowanService
 isClassService
+
+	^false
+%
+
+category: 'testing'
+method: RowanService
+isDefinedProject
 
 	^false
 %
@@ -49787,11 +49966,36 @@ organizer: anOrganizer
 	organizer := anOrganizer.
 %
 
+category: 'rsr'
+method: RowanService
+postCommandExecution
+	
+	self clearOrganizers. 
+	updates remove: self ifAbsent: [  ].
+	self autoCommitIfRequired
+%
+
 category: 'rowan'
 method: RowanService
 projectTools
 
 	^Rowan projectTools
+%
+
+category: 'release'
+method: RowanService
+releaseProcessOop: oop
+  "not really releasing it. The client should have registered
+	the process with the debugger window it opened before
+	this is run"
+
+  | jadeiteProcesses process |
+  ((process := Object _objectForOop: oop) isKindOf: GsProcess)
+    ifTrue: [ 
+      jadeiteProcesses := SessionTemps current
+        at: #'jadeiteProcesses'
+        ifAbsentPut: [ Array new ].
+      jadeiteProcesses remove: process ifAbsent: [  ] ]
 %
 
 category: 'samples'
@@ -50489,7 +50693,6 @@ interactionHandlerActive
 category: 'testing'
 method: RowanAnsweringService
 isTranscriptInstalled
-
 	^self transcriptObject == self jadeiteServer
 %
 
@@ -50543,7 +50746,6 @@ methodReferenceCounts: methodServices
 category: 'client commands'
 method: RowanAnsweringService
 needsCommit
-
 	answer := System needsCommit.
 	RowanCommandResult addResult: self.
 %
@@ -50996,6 +51198,18 @@ newCachedSelectors: object
 	newCachedSelectors := object
 %
 
+category: 'client commands'
+method: RowanBrowserService
+newProjectNamed: projectName windowHandle: handle
+	| definedProjectService project |
+	definedProjectService := RowanDefinedProjectService new name: projectName.
+	definedProjectService projectOop: (project := Rowan newProjectNamed: projectName) asOop.
+	self saveRootObject: definedProjectService projectOop windowHandle: handle. 
+	definedProjectService := definedProjectService updateType: #newProject:.
+	definedProjectService specService: (RowanSpecificationService new initialize: project _loadSpecification asOop).
+	RowanCommandResult addResult: definedProjectService
+%
+
 category: 'window registry'
 method: RowanBrowserService
 openWindows
@@ -51152,14 +51366,14 @@ saveRootObject: oop windowHandle: integer
   (dictionary at: integer) add: (Object _objectForOop: oop)
 %
 
-category: 'other'
+category: 'accessing'
 method: RowanBrowserService
 selectedClass
 
 	^selectedClass
 %
 
-category: 'other'
+category: 'accessing'
 method: RowanBrowserService
 selectedClass: object
 
@@ -51174,14 +51388,9 @@ servicePerform: symbol withArguments: collection
 
 category: 'client commands'
 method: RowanBrowserService
-unloadProjectsNamed: array
-  array
-    do: [ :projectName | 
-      | project |
-      project := Rowan image loadedProjectNamed: projectName ifAbsent: [  ].
-      project
-        ifNotNil: [ Rowan projectTools delete deleteProjectNamed: projectName ] ].
-  self updateProjects
+unloadProjectsNamed: projectNames
+	projectNames do: [ :projectName | (Rowan projectNamed: projectName) unload ].
+	self updateProjects
 %
 
 category: 'update'
@@ -51280,12 +51489,19 @@ method: RowanClassService
 category: 'client commands'
 method: RowanClassService
 addCategory: string
-
-	| theClass |
-
+	| theClass thePackageName |
+	string first = $*
+		ifTrue: [ 
+			thePackageName := string copyWithout: $*.
+			(self loadedPackageExistsAndIsInSameDictionary: thePackageName)
+				ifFalse: [ 
+					^self
+						inform:
+							'Loaded package named: ' , thePackageName , ' not found or is not in same dictionary' ] ].
 	theClass := self theClass.
-	meta ifTrue:[theClass := theClass class]. 
-	theClass addCategory: string.
+	meta
+		ifTrue: [ theClass := theClass class ].
+	theClass addCategory: string
 %
 
 category: 'constants'
@@ -51310,24 +51526,20 @@ allSubclassServices
 category: 'Accessing'
 method: RowanClassService
 allTests
-  | allSelectors theClass |
-  self isTestCase
-    ifFalse: [ ^ Array new ].
-  theClass := self theClass thisClass.
-  theClass isAbstract
-    ifTrue: [ ^ Array new ].
-  allSelectors := self theClass thisClass allTestSelectors.
-  ^ allSelectors
-    collect: [ :selector | 
-      | methodService |
-      methodService := RowanMethodService
-        forSelector: selector
-        class: (theClass whichClassIncludesSelector: selector asString)
-        meta: false
-        organizer: organizer.
-      methodService
-        definedClassName: (theClass whichClassIncludesSelector: selector asString) name asString.	"may get changed in client"
-      methodService ]
+	| allSelectors theClass |
+	self isTestCase
+		ifFalse: [ ^ Array new ].
+	theClass := self theClass thisClass.
+	theClass isAbstract
+		ifTrue: [ ^ Array new ].
+	allSelectors := self theClass thisClass allTestSelectors.
+	^ allSelectors
+		collect: [ :selector | 
+			RowanMethodService
+				forSelector: selector
+				class: (theClass whichClassIncludesSelector: selector asString)
+				meta: false
+				organizer: organizer ]
 %
 
 category: 'testing'
@@ -51356,7 +51568,6 @@ basicRefreshFrom: theClass
 	command := nil. 
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
-	comment := theClass rwComment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
@@ -51806,6 +52017,22 @@ isTestCase: aBoolean
 	isTestCase := aBoolean
 %
 
+category: 'testing'
+method: RowanClassService
+loadedPackageExistsAndIsInSameDictionary: thePackageName
+	| actualName loadedPackage packageDictionaryName |
+	actualName := Rowan image packageNames
+		detect: [ :loadedName | loadedName asLowercase = thePackageName asLowercase ]
+		ifNone: [  ].
+	loadedPackage := Rowan image loadedPackageNamed: actualName ifAbsent: [  ].
+	^ loadedPackage
+		ifNil: [ false ]
+		ifNotNil: [ 
+			packageDictionaryName := loadedPackage loadedProject
+				symbolDictNameForPackageNamed: thePackageName.
+			packageDictionaryName = dictionaryName ]
+%
+
 category: 'Accessing'
 method: RowanClassService
 meta
@@ -51901,11 +52128,20 @@ method: RowanClassService
 moveMethods: methodServices to: category
 	| behavior |
 	behavior := self classOrMeta.
-	methodServices do: [:methodService | 
+	methodServices
+		do: [ :methodService | 
 			behavior rwMoveMethod: methodService selector toCategory: category.
-			methodService category: category].
-	self update. 
+			methodService category: category ].
+	self update.
 	self selectedMethods: methodServices.
+	category first = $*
+		ifTrue: [ 
+			| packageService projectService |
+			packageService := RowanPackageService new name: (category copyWithout: $*).
+			packageService update.
+
+			projectService := RowanProjectService new name: packageService projectName.
+			projectService update ]
 %
 
 category: 'Accessing'
@@ -51992,6 +52228,27 @@ category: 'Updating'
 method: RowanClassService
 poolDictionaryNames: newValue
 	poolDictionaryNames := newValue
+%
+
+category: 'rsr'
+method: RowanClassService
+postCommandExecution
+	updates := Array new.
+	super postCommandExecution.
+
+	GsFile gciLogClient: '---------RowanMethodService----------'.
+	self reflectedVariableNames
+		do: [ :ivName | 
+			| index |
+			index := self class allInstVarNames indexOf: ivName asSymbol.
+
+			GsFile gciLogClient: ivName , ': '.
+			GsFile
+				gciLogClient:
+					([ (self instVarAt: index) printString ]
+						on: Error
+						do: [ :ex | ex printString ]) ].
+	methods do: [:methodService | methodService clearOrganizers].
 %
 
 category: 'printing'
@@ -52604,20 +52861,17 @@ debugStringFrom: aString
   ^ newStream contents
 %
 
-category: 'release'
+category: 'other'
 method: RowanDebuggerService
-releaseProcessOop: oop
-  "not really releasing it. The client should have registered
-	the process with the debugger window it opened before
-	this is run"
-
-  | jadeiteProcesses process |
-  ((process := Object _objectForOop: oop) isKindOf: GsProcess)
-    ifTrue: [ 
-      jadeiteProcesses := SessionTemps current
-        at: #'jadeiteProcesses'
-        ifAbsentPut: [ Array new ].
-      jadeiteProcesses remove: process ifAbsent: [  ] ]
+registeredWindowsIncludesOop: oop
+	| dictionary registeredOops |
+	dictionary := SessionTemps current
+		at: #'rowanServicesWindowRegistry'
+		ifAbsentPut: [ Dictionary new ].
+	registeredOops := Array new.
+	dictionary values
+		do: [ :array | array do: [ :object | registeredOops add: object asOop ] ].
+	^ registeredOops includes: oop
 %
 
 category: 'release'
@@ -52667,7 +52921,8 @@ update
   ProcessorScheduler scheduler waitingProcesses
     do: [ :each | processes add: (RowanProcessService new oop: each asOop; status: 'waiting')]. 
   RowanCommandResult addResult: self.
-  self releaseProcessOop: initialProcessOop
+  (self registeredWindowsIncludesOop: initialProcessOop) 
+		ifTrue:[	"the oop should be there but just in case" self releaseProcessOop: initialProcessOop.].
 %
 
 ! Class implementation for 'RowanDictionaryService'
@@ -53384,6 +53639,30 @@ variablesFrom: indexStart to: indexStop
   ^ indexedVars
 %
 
+! Class implementation for 'RowanSpecificationService'
+
+!		Instance methods for 'RowanSpecificationService'
+
+category: 'command support'
+method: RowanSpecificationService
+addInstVars: anObject
+	| namedSize |
+	instVarNames := anObject class allInstVarNames.
+	namedSize := instVarNames size.
+	1 to: namedSize do: [ :i | 
+		objects
+			add:
+				(self stripOutUnicode: (instVarNames at: i) asString) -> (anObject instVarAt: i) ]
+%
+
+category: 'initialization'
+method: RowanSpecificationService
+initialize: anOop
+	"intention revealing"
+	isOop := true. 
+	super inspect: anOop
+%
+
 ! Class implementation for 'RowanLoggingService'
 
 !		Class methods for 'RowanLoggingService'
@@ -53597,18 +53876,6 @@ accessedInstVars: anArray
 	accessedInstVars := anArray
 %
 
-category: 'rowan'
-method: RowanMethodService
-addOrUpdateMethod
-
-		self browserTool  
-                   addOrUpdateMethod: source
-                   inProtocol: category
-                   forClassNamed: self classService name
-                   isMeta: meta
-                   inPackageNamed: self classService packageName
-%
-
 category: 'method history'
 method: RowanMethodService
 addToMethodHistory
@@ -53708,19 +53975,6 @@ classOrMeta
 	^meta 
 			ifTrue:[self classFromName class] 
 			ifFalse: [self classFromName].
-%
-
-category: 'Accessing'
-method: RowanMethodService
-classService
-
-	^classService ifNil:[classService := RowanClassService forClassNamed: className package: packageName]
-%
-
-category: 'Updating'
-method: RowanMethodService
-classService: newValue
-	classService := newValue
 %
 
 category: 'client commands'
@@ -53895,26 +54149,27 @@ firstReference: integer
 category: 'initialization'
 method: RowanMethodService
 forClass: theClass organizer: theOrganizer
-  "assume meta and selector are set"
+	"assume meta and selector are set"
 
-  | classOrMeta gsNMethod |
-  organizer := theOrganizer.
-  classOrMeta := meta
-    ifTrue: [ theClass class ]
-    ifFalse: [ theClass ].
-  gsNMethod := classOrMeta compiledMethodAt: selector.
-  definedPackage := gsNMethod rowanPackageName.
-  oop := gsNMethod asOop.
-  stepPoints := self stepPointsFor: gsNMethod.
-  breakPoints := self breakPointsFor: gsNMethod.
-  self updateSource: gsNMethod sourceString.
-  category := (classOrMeta categoryOfSelector: selector) asString.
-  className := theClass name asString.
-  packageName := gsNMethod rowanPackageName.
-  projectName := gsNMethod rowanProjectName.
-  self setSupersAndSubsFor: classOrMeta.
-  isExtension := self rowanIsExtension.
-  self initializeTestMethodsFor: classOrMeta thisClass
+	| classOrMeta gsNMethod |
+	organizer := theOrganizer.
+	classOrMeta := meta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	gsNMethod := classOrMeta compiledMethodAt: selector.
+	definedPackage := gsNMethod rowanPackageName.
+	oop := gsNMethod asOop.
+	stepPoints := self stepPointsFor: gsNMethod.
+	breakPoints := self breakPointsFor: gsNMethod.
+	self updateSource: gsNMethod sourceString.
+	category := (classOrMeta categoryOfSelector: selector) asString.
+	className := theClass name asString.
+	packageName := gsNMethod rowanPackageName.
+	projectName := gsNMethod rowanProjectName.
+	self setSupersAndSubsFor: classOrMeta.
+	isExtension := self rowanIsExtension.
+	self initializeTestMethodsFor: classOrMeta thisClass.
+	self setDefinedClass: classOrMeta
 %
 
 category: 'Accessing'
@@ -54235,6 +54490,17 @@ setBreakAt: stepPoint
     ifFalse: [ self disableBreakAt: stepPoint ].
   self update.
   RowanCommandResult addResult: self
+%
+
+category: 'initialization'
+method: RowanMethodService
+setDefinedClass: aClass
+	"only used in the test browsers (for now) to identify which class the method is defined in.
+	That may be different than what is displayed, say, when we run a superclass test in concrete subclass.
+	Assume selector is defined in aClass hierarchy."
+
+	definedClassName := (aClass whichClassIncludesSelector: selector asString) name
+		asString
 %
 
 category: 'method history'
@@ -54914,23 +55180,66 @@ method: RowanProjectService
 	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
 %
 
+category: 'client commands'
+method: RowanProjectService
+addPackageNamed: packageName
+	self rowanFixMe.	"remove after #addPackageNamed:toComponentNamed: is integrated in v2.0 work"
+	Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			self browserTool
+				addPackageNamed: packageName
+				toComponentNamed: 'Core'
+				andProjectNamed: name.
+			self update.
+			^ self answer: #'added' ].
+	self answer: #'duplicatePackage'
+%
+
+category: 'client commands support'
+method: RowanProjectService
+basicLoadProject: aBlock
+	| updatedProjects |
+	[ updatedProjects := aBlock value ]
+		on: Warning
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: ex description.
+			ex resume ].
+	updatedProjects
+		do: [ :project | 
+			| projectService |
+			projectService := project name = name
+				ifTrue: [ self	"don't send an extraneous service back across the wire" ]
+				ifFalse: [ RowanProjectService newNamed: project name ].
+			projectService update.
+			RowanCommandResult addResult: projectService ].
+	RowanBrowserService new updateProjects
+%
+
 category: 'initialization'
 method: RowanProjectService
 basicRefresh
-	name = Rowan unpackagedName ifTrue:[
-		isLoaded := false.
-		RowanBrowserService new updateDictionaries. ^self]. 
-	(isLoaded := self projectIsLoaded) ifFalse:[
-		existsOnDisk := false. 
-		updateType := #removedProject:. 
-		^RowanCommandResult addResult: self]. 
-	isDirty := self isDirty. 
+	name = Rowan unpackagedName
+		ifTrue: [ 
+			isLoaded := false.
+			RowanBrowserService new updateDictionaries.
+			^ self ].
+	(isLoaded := self projectIsLoaded)
+		ifFalse: [ 
+			existsOnDisk := false.
+			self isDefinedProject
+				ifFalse: [ 
+					updateType := #'removedProject:'.
+					^ RowanCommandResult addResult: self ] ].
+	isDirty := self isDirty.
 	self setExistsOnDisk.
 	isSkew := self isSkew.
 	sha := self rowanSha.
 	branch := self rowanBranch.
-	projectUrl := self rowanProjectUrl. 
-	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' .
+	projectUrl := self rowanProjectUrl.
+	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
 	isDiskDirty := self isGitDirty.
 	RowanCommandResult addResult: self
 %
@@ -55084,12 +55393,36 @@ isSkew
 
 category: 'client commands'
 method: RowanProjectService
-loadProjectNamed: aName
+loadProjectFromFile: fileString
+	self loadProjectFromFile: fileString projectsHome: nil
+%
 
-	[Rowan projectTools load loadProjectNamed: aName] 
-		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ].
-	RowanBrowserService new updateProjects.
+category: 'client commands'
+method: RowanProjectService
+loadProjectFromFile: fileString projectsHome: projectsHomePath
+	self
+		basicLoadProject: [ 
+			((RwSpecification fromUrl: fileString)
+				projectsHome: projectsHomePath;
+				yourself) resolveStrict load ]
+%
+
+category: 'client commands'
+method: RowanProjectService
+loadProjectFromFile: fileString projectsHome: projectsHomePath customConditionalAttributes: attributes componentNames: componentNames
+	self
+		basicLoadProject: [ 
+			((RwSpecification fromUrl: fileString)
+				customConditionalAttributes: attributes;
+				projectsHome: projectsHomePath;
+				componentNames: componentNames;
+				yourself) resolveStrict load ]
+%
+
+category: 'client commands'
+method: RowanProjectService
+loadProjectNamed: aName
+	self basicLoadProject: [ Rowan projectTools load loadProjectNamed: aName ]
 %
 
 category: 'rowan'
@@ -55118,13 +55451,14 @@ name: anObject
 category: 'client commands'
 method: RowanProjectService
 newGitProject: url root: rootPath useSsh: useSsh
+	"not valid in Rowan V2.0"
 	"set useSsh to false to clone using https:"
 
-	Rowan projectTools clone
+	"Rowan projectTools clone
 		cloneSpecUrl: url
 		gitRootPath: rootPath
 		useSsh: useSsh.
-	(RowanBrowserService new organizer: organizer) updateProjects.
+	(RowanBrowserService new organizer: organizer) updateProjects."
 %
 
 category: 'rowan'
@@ -55198,6 +55532,18 @@ projectIsLoaded
 		ifAbsent: []) notNil
 %
 
+category: 'accessing'
+method: RowanProjectService
+projectOop
+	^projectOop
+%
+
+category: 'accessing'
+method: RowanProjectService
+projectOop: object
+	projectOop := object
+%
+
 category: 'rowan'
 method: RowanProjectService
 projects
@@ -55261,16 +55607,7 @@ refresh
 category: 'client commands'
 method: RowanProjectService
 reloadProject
-  [ Rowan projectTools load loadProjectNamed: name ]
-    on: Warning
-    do: [ :ex | 
-      Transcript
-        cr;
-        show: ex description.
-      ex resume ].
-  self update.
-  RowanCommandResult addResult: self.
-  RowanBrowserService new packagesWithTests
+	self basicLoadProject: [ Rowan projectTools load loadProjectNamed: name ]
 %
 
 category: 'rowan'
@@ -55342,7 +55679,11 @@ rowanSkew
 category: 'accessing'
 method: RowanProjectService
 rwProject
-	^ rwProject ifNil: [ rwProject := RwProject newNamed: name ]
+	^ rwProject
+		ifNil: [ 
+			rwProject := RwProject newNamed: name. 
+			projectOop := rwProject asOop.
+			rwProject ]
 %
 
 category: 'perform'
@@ -55379,6 +55720,18 @@ sha: anObject
 	set it here" 
 	sha := anObject.
 	isSkew := self rowanSkew
+%
+
+category: 'accessing'
+method: RowanProjectService
+specService
+	^specService
+%
+
+category: 'accessing'
+method: RowanProjectService
+specService: object
+	specService := object
 %
 
 category: 'rowan'
@@ -55429,6 +55782,80 @@ method: RowanProjectService
 _isSkew
 
 	^isSkew
+%
+
+! Class implementation for 'RowanDefinedProjectService'
+
+!		Instance methods for 'RowanDefinedProjectService'
+
+category: 'testing'
+method: RowanDefinedProjectService
+isDefinedProject
+
+	^true
+%
+
+category: 'client commands'
+method: RowanDefinedProjectService
+load
+%
+
+category: 'client commands'
+method: RowanDefinedProjectService
+resolve
+%
+
+! Class implementation for 'RowanLoadedProjectService'
+
+!		Instance methods for 'RowanLoadedProjectService'
+
+category: 'client commands'
+method: RowanLoadedProjectService
+define
+%
+
+category: 'client commands'
+method: RowanLoadedProjectService
+load
+%
+
+category: 'client commands'
+method: RowanLoadedProjectService
+resolve
+%
+
+category: 'client commands'
+method: RowanLoadedProjectService
+unload
+%
+
+category: 'client commands'
+method: RowanLoadedProjectService
+write
+%
+
+! Class implementation for 'RowanResolvedProjectService'
+
+!		Instance methods for 'RowanResolvedProjectService'
+
+category: 'client commands'
+method: RowanResolvedProjectService
+define
+%
+
+category: 'client commands'
+method: RowanResolvedProjectService
+load
+%
+
+category: 'client commands'
+method: RowanResolvedProjectService
+read
+%
+
+category: 'client commands'
+method: RowanResolvedProjectService
+write
 %
 
 ! Class implementation for 'RowanQueryService'
@@ -55603,7 +56030,7 @@ methodsContaining: string
     | methodService |
     methodService := self methodServiceFrom: (methods first at: index).
     methodService
-      firstReference: ((methods at: 2) at: index);   "<<<< FIX HERE"
+      firstReference: ((methods at: 2) at: index);
       searchString: string.
     sorted add: methodService ].
   queryResults := sorted asArray.
@@ -86105,7 +86532,7 @@ category: 'accessing'
 method: RwLoadSpecificationV2
 projectsHome: aStringOrFileReference
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
-
+	aStringOrFileReference ifNil:[projectsHome := nil. ^self].
 	projectsHome := aStringOrFileReference asFileReference
 %
 
@@ -93321,27 +93748,27 @@ stonOn: stonWriter
 category: '*rowan-tonel-gemstone-kernel'
 method: CharacterCollection
 substrings: separators 
-	"Answer an array containing the substrings in the receiver separated 
-	by the elements of separators."
-	| result sourceStream subStringStream |
-	
-	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
-		ifFalse: [ ^ self error: 'separators must be Characters.' ].
-	sourceStream := self readStream.
-	result := OrderedCollection new.
-	subStringStream := String new writeStreamPortable.
-	[ sourceStream atEnd ] whileFalse: [
-		| char |
-		char := sourceStream next.
-		(separators includes: char)
-			ifTrue: [
-				subStringStream isEmpty ifFalse: [
-					result add: subStringStream contents.
-					subStringStream := String new writeStreamPortable ] ]
-			ifFalse: [
-				subStringStream nextPut: char ] ].
-	subStringStream isEmpty ifFalse: [
-		result add: subStringStream contents ].
+	"Answer an array containing the substrings in the receiver separated 	
+	by the elements of separators."	
+	| result sourceStream subStringStream |	
+
+	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])	
+		ifFalse: [ ^ self error: 'separators must be Characters.' ].	
+	sourceStream := self readStream.	
+	result := OrderedCollection new.	
+	subStringStream := String new writeStreamPortable.	
+	[ sourceStream atEnd ] whileFalse: [	
+		| char |	
+		char := sourceStream next.	
+		(separators includes: char)	
+			ifTrue: [	
+				subStringStream isEmpty ifFalse: [	
+					result add: subStringStream contents.	
+					subStringStream := String new writeStreamPortable ] ]	
+			ifFalse: [	
+				subStringStream nextPut: char ] ].	
+	subStringStream isEmpty ifFalse: [	
+		result add: subStringStream contents ].	
 	^ result asArray
 %
 
@@ -97106,6 +97533,12 @@ commandResultClass
 	^ RowanCommandResult
 %
 
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+definedProjectServiceClass
+	^ RowanDefinedProjectService
+%
+
 category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 gitTools
@@ -97124,6 +97557,12 @@ jadeServerClassNamed: className
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit35). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+loadedProjectServiceClass
+	^ RowanLoadedProjectService
 %
 
 category: '*rowan-services-extensions'
@@ -97172,6 +97611,12 @@ projectTools
 
 category: '*rowan-services-extensions'
 method: RwGsPlatform
+resolvedProjectServiceClass
+	^ RowanResolvedProjectService
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
 serviceClass
 
 	^ RowanService
@@ -97183,26 +97628,31 @@ serviceClasses
 	"Explicitly add each class rather than sending #allSubclasses so
 	that users other than SystemUser have visibility. Visibility in Rowan
 	is determined at compile time. See STONReader>>lookupClass:"
-	
+
 	| array |
-	array := Array with: RowanService. 
-	array add: RowanAnsweringService; 
-		add: RowanAutoCommitService; 
+	array := Array with: RowanService.
+	array
+		add: RowanAnsweringService;
+		add: RowanAutoCommitService;
 		add: RowanBrowserService;
-		add: RowanClassService; 
-		add: RowanDebuggerService; 
-		add: RowanDictionaryService; 
+		add: RowanClassService;
+		add: RowanDebuggerService;
+		add: RowanDefinedProjectService;
+		add: RowanDictionaryService;
 		add: RowanFrameService;
 		add: RowanInspectorService;
+		add: RowanLoadedProjectService;
 		add: RowanLoggingService;
 		add: RowanMethodService;
-		add: RowanPackageService; 
+		add: RowanPackageService;
 		add: RowanProcessService;
 		add: RowanProjectService;
 		add: RowanQueryService;
+		add: RowanResolvedProjectService;
+		add: RowanSpecificationService;
 		add: RowanTestService;
 		add: RowanVariableService.
-	^array
+	^ array
 %
 
 category: '*rowan-services-extensions'
@@ -97210,6 +97660,12 @@ method: RwGsPlatform
 serviceClassFor: className
 
 	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone:[]
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+specificationServiceClass
+  ^ RowanSpecificationService
 %
 
 ! Class extensions for 'RwLoadSpecificationV2'
