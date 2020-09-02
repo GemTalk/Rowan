@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanMethodService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanMethodService( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop hasMethodHistory searchString definedClassName)
+
+"
 Class {
 	#name : 'RowanMethodService',
 	#superclass : 'RowanService',

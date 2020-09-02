@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanFrameService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanFrameService( label method stepPoint vars oop homeMethodSelector homeMethodClassName classIsResolvable)
+
+"
 Class {
 	#name : 'RowanFrameService',
 	#superclass : 'RowanService',

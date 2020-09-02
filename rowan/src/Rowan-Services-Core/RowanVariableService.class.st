@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanVariableService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanVariableService( oop key value className)
+
+"
 Class {
 	#name : 'RowanVariableService',
 	#superclass : 'RowanService',

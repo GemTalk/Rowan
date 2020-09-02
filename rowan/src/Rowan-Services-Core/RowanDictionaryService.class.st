@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanDictionaryService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanDictionaryService( name classes hierarchyServices globals defaultTemplate)
+
+"
 Class {
 	#name : 'RowanDictionaryService',
 	#superclass : 'RowanService',

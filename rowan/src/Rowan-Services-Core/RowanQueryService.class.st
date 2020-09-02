@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanQueryService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanQueryService( queryResults)
+
+"
 Class {
 	#name : 'RowanQueryService',
 	#superclass : 'RowanService',

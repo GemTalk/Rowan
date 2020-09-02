@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanDebuggerService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanDebuggerService( initialProcessOop processes)
+
+"
 Class {
 	#name : 'RowanDebuggerService',
 	#superclass : 'RowanService',

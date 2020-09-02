@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanProjectService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanProjectService( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome isDiskDirty)
+
+"
 Class {
 	#name : 'RowanProjectService',
 	#superclass : 'RowanService',

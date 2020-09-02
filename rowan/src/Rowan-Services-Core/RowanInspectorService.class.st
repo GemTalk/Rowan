@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanInspectorService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanInspectorService( oop objects myself className indexedSize visibleIndices nextIndices maxIndexedVars compileErrorArray isOop instVarNames instVarsAreRemovable isDictionary isVariable selectionOop isUnordered statusText)
+
+"
 Class {
 	#name : 'RowanInspectorService',
 	#superclass : 'RowanService',
