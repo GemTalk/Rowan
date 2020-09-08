@@ -49,7 +49,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''RowanSample9-Core'';
 		comment: ''I am an example class'';
@@ -65,7 +65,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''RowanSample9-Tests'';
 		comment: ''I test the example class'';
@@ -280,7 +280,8 @@ RwGsTopazRowanToolTest >> testTopazExportProjectGsFile [
 "export"
 	gsFileRef := self _testRowanProjectsSandbox / projectName, 'gs'.
 	Rowan gemstoneTools topaz
-		exportProjectNamed: projectName inTopazFormatTo: gsFileRef pathString.
+		exportProjectNamed: projectName 
+		inTopazFormatTo: gsFileRef pathString.
 
 "validate"
 	gsFileRef readStreamDo: [:fileStream | fileout := fileStream contents ].

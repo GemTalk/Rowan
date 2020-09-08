@@ -181,13 +181,8 @@ RwResolvedProject >> exportProjectSpecification [
 ]
 
 { #category : 'actions' }
-RwResolvedProject >> exportTopazFormatTo: filePath [
-	^ self _resolvedProject exportTopazFormatTo: filePath
-]
-
-{ #category : 'actions' }
-RwResolvedProject >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
-	^ self _resolvedProject exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation [
+	^ self _resolvedProject exportTopazFormatTo: filePath logClassCreation: logClassCreation
 ]
 
 { #category : 'accessing' }
