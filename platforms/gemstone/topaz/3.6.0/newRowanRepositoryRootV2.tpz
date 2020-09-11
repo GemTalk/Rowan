@@ -19,11 +19,9 @@
 false ifTrue: [
 	"load Rowan test classes"
 	(Rowan projectNamed: 'Rowan') defined
-		read: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2');
+		read: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel');
 		load.
 ].
-	Rowan projects do: [:project | project existsOnDisk ].	"trigger lazy inititialization"
-
 %
 	commit
 
