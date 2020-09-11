@@ -58,7 +58,7 @@ Behavior >> _rwRemoveAllMethods: baseMeths enironmentId: envId [
 	| unpackagedName packagedSels |
 	envId == 0
 		ifFalse: [ 
-			"only check for packaged methods in envId 1"
+			"only check for packaged methods in envId 0"
 			^ self ].
 	unpackagedName := Rowan unpackagedName.
 	packagedSels := {}.
