@@ -78,6 +78,7 @@ false ifTrue: [
 			repositoryRoot.
 			'RowanV2'.
 			(Dictionary new).
+      false.
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
@@ -110,6 +111,7 @@ false ifTrue: [
 								}) .
 						}; 
 				yourself).
+			true.
 		}.		{
 			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
@@ -117,17 +119,19 @@ false ifTrue: [
 			repositoryRoot3215.
 			'RowanV2'.
 			(Dictionary new).
+			false.
 		}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk."
-		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome conditionalAttributes theRepositoryRoot specialCaseDict excludedPackages |
+		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome conditionalAttributes theRepositoryRoot specialCaseDict excludedPackages logCreation |
 		loadSpecUrl := ar at: 1.
 		projectsHome := ar at: 2.
 		conditionalAttributes := (ar at: 3) copy.
 		theRepositoryRoot := ar at: 4.
 		gsFileName := ar at: 5.
 		specialCaseDict := ar at: 6.
+		logCreation := ar at: 7.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
 		conditionalAttributes addAll: loadSpec customConditionalAttributes.
 		resolvedProject := loadSpec
@@ -167,6 +171,7 @@ false ifTrue: [
 
 		projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 		visitor := RwGsModificationTopazWriterVisitorV2 new
+			logCreation: logCreation;
 			repositoryRootPath: theRepositoryRoot;
 			topazFilenamePackageNamesMap: topazFileNameMap;
 			yourself.

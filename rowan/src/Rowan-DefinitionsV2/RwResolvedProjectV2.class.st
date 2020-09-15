@@ -473,7 +473,7 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
-		logCreation: logClassCreation
+		logCreation: logClassCreation;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		filenameExtension: fileReference extension;

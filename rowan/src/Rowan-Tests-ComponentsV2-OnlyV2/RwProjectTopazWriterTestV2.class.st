@@ -20,7 +20,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
 		immediateInvariant.
@@ -35,7 +35,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
 		immediateInvariant.
@@ -50,7 +50,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
 		immediateInvariant.
@@ -423,6 +423,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: true;
 		repositoryRootPath: repositoryRootPath;
 		topazFilename: projectName;
 		yourself.
