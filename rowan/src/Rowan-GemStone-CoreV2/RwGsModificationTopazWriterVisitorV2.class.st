@@ -1,3 +1,11 @@
+"
+No class-specific documentation for RwGsModificationTopazWriterVisitorV2, hierarchy is:
+Object
+  RwAbstractReaderWriterVisitor( currentProjectDefinition packageConvention currentPackageDefinition currentClassDefinition currentClassExtension)
+    RwModificationWriterVisitor
+      RwGsModificationTopazWriterVisitorV2( topazFilenameComponentMap topazFilename topazFileHeader filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath)
+
+"
 Class {
 	#name : 'RwGsModificationTopazWriterVisitorV2',
 	#superclass : 'RwModificationWriterVisitor',
@@ -5,6 +13,7 @@ Class {
 		'topazFilenameComponentMap',
 		'topazFilename',
 		'topazFileHeader',
+		'logCreation',
 		'filenameExtension',
 		'classSymbolDictionaryNames',
 		'classDefinitions',
@@ -37,12 +46,15 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
 								, ' )';
 				lf ].
-	optionsString := String new .
+	optionsString := String new.
 	classDefinition gs_options isEmpty
 		ifFalse: [ 
 			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
 				, ' ' ].
-  optionsString addAll: ' #logCreation '.  "for verbose logging during filein and upgrade"
+	self logCreation
+		ifTrue: [ 
+			"for verbose logging during filein and upgrade"
+			optionsString addAll: ' #logCreation ' ].
 	reservedOopString := ''.
 	classDefinition gs_reservedOop isEmpty
 		ifFalse: [ 
@@ -399,6 +411,16 @@ RwGsModificationTopazWriterVisitorV2 >> filenameExtension [
 RwGsModificationTopazWriterVisitorV2 >> filenameExtension: aString [
 
 	filenameExtension := aString
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> logCreation [
+	^logCreation ifNil: [ ^false ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> logCreation: object [
+	logCreation := object
 ]
 
 { #category : 'class writing' }

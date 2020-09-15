@@ -465,7 +465,7 @@ RwResolvedProjectV2 >> exportProjectSpecification [
 ]
 
 { #category : 'exporting' }
-RwResolvedProjectV2 >> exportTopazFormatTo: filePath [
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation [
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -473,6 +473,7 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath [
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: logClassCreation;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		filenameExtension: fileReference extension;
@@ -481,7 +482,7 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath [
 ]
 
 { #category : 'exporting' }
-RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath  logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap [
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -489,6 +490,7 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packa
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: logClassCreation;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;

@@ -20,7 +20,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
 		immediateInvariant.
@@ -35,7 +35,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
 		immediateInvariant.
@@ -50,7 +50,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
 		immediateInvariant.
@@ -423,6 +423,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: true;
 		repositoryRootPath: repositoryRootPath;
 		topazFilename: projectName;
 		yourself.
@@ -540,7 +541,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 	topazFileReference := repositoryRootPath asFileReference / projectName, 'gs'.
 	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
-	projectDefinition exportTopazFormatTo: topazFileReference.
+	projectDefinition exportTopazFormatTo: topazFileReference logClassCreation: true.
 
 "validate"
 	stream := ZnBufferedReadStream on: topazFileReference readStream.
@@ -950,7 +951,10 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 	topazFileReference := repositoryRootPath asFileReference / projectName.
 	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
-	projectDefinition exportTopazFormatTo: topazFileReference usingPackageNamesMap: (Dictionary new
+	projectDefinition 
+		exportTopazFormatTo: topazFileReference
+			logClassCreation: false
+			usingPackageNamesMap: (Dictionary new
 				at: packageName1 put: {packageName1};
 				at: packageName2 put: {packageName2};
 				at: packageName3 put: {packageName3};

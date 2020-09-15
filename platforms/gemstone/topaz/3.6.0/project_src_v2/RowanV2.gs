@@ -5292,7 +5292,7 @@ true.
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwGsModificationTopazWriterVisitorV2'
-	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
+	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -5300,6 +5300,12 @@ doit
 	options: #( #logCreation )
 )
 		category: 'Rowan-GemStone-CoreV2';
+		comment: 'No class-specific documentation for RwGsModificationTopazWriterVisitorV2, hierarchy is:
+Object
+  RwAbstractReaderWriterVisitor( currentProjectDefinition packageConvention currentPackageDefinition currentClassDefinition currentClassExtension)
+    RwModificationWriterVisitor
+      RwGsModificationTopazWriterVisitorV2( topazFilenameComponentMap topazFilename topazFileHeader filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath)
+';
 		immediateInvariant.
 true.
 %
@@ -48437,14 +48443,8 @@ exportProjectSpecification
 
 category: 'actions'
 method: RwResolvedProject
-exportTopazFormatTo: filePath
-	^ self _resolvedProject exportTopazFormatTo: filePath
-%
-
-category: 'actions'
-method: RwResolvedProject
-exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
-	^ self _resolvedProject exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+exportTopazFormatTo: filePath logClassCreation: logClassCreation
+	^ self _resolvedProject exportTopazFormatTo: filePath logClassCreation: logClassCreation
 %
 
 category: 'accessing'
@@ -56855,6 +56855,18 @@ filenameExtension: aString
 	filenameExtension := aString
 %
 
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+logCreation
+	^logCreation ifNil: [ ^false ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+logCreation: object
+	logCreation := object
+%
+
 category: 'class writing'
 method: RwGsModificationTopazWriterVisitorV2
 processClass: aClassModification
@@ -57056,12 +57068,15 @@ _fileOutClassDeclaration: classDefinition on: aStream
 						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
 								, ' )';
 				lf ].
-	optionsString := String new .
+	optionsString := String new.
 	classDefinition gs_options isEmpty
 		ifFalse: [ 
 			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
 				, ' ' ].
-  optionsString addAll: ' #logCreation '.  "for verbose logging during filein and upgrade"
+	self logCreation
+		ifTrue: [ 
+			"for verbose logging during filein and upgrade"
+			optionsString addAll: ' #logCreation ' ].
 	reservedOopString := ''.
 	classDefinition gs_reservedOop isEmpty
 		ifFalse: [ 
@@ -61230,7 +61245,7 @@ exportProjectSpecification
 
 category: 'exporting'
 method: RwResolvedProjectV2
-exportTopazFormatTo: filePath
+exportTopazFormatTo: filePath logClassCreation: logClassCreation
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -61238,6 +61253,7 @@ exportTopazFormatTo: filePath
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: logClassCreation;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		filenameExtension: fileReference extension;
@@ -61247,7 +61263,7 @@ exportTopazFormatTo: filePath
 
 category: 'exporting'
 method: RwResolvedProjectV2
-exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+exportTopazFormatTo: filePath  logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -61255,6 +61271,7 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: logClassCreation;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;
@@ -75725,7 +75742,8 @@ basicCreateClassWithSuperclass: superclass
 		ifNil: [ #() ]
 		ifNotNil: [ oldVersion _rwSortedConstraints ].
 	gs_options := classDefinition gs_options collect: [ :each | each asSymbol ].
-  (SessionTemps current at: #ROWAN_TRACE otherwise: nil) ifNotNil:[gs_options add: #logCreation ].
+	(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil)
+		ifNotNil: [ gs_options add: #'logCreation' ].
 	createdClass := (type = 'normal' or: [ type = 'immediate' ])
 		ifTrue: [ 
 			superclass
@@ -94702,17 +94720,18 @@ exportLoadSpecification
 
 category: '*rowan-gemstone-core'
 method: RwProject
-exportTopazFormatTo: filePath
+exportTopazFormatTo: filePath logClassCreation: logClassCreation
 
 
-	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+	^ self _loadedProject asDefinition exportTopazFormatTo: filePath logClassCreation: logClassCreation
 %
 
 category: '*rowan-gemstone-core'
 method: RwProject
-exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+exportTopazFormatTo: filePath logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap
 	^ self _loadedProject asDefinition
 		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
 		usingPackageNamesMap: packageNamesMap
 %
 

@@ -15,6 +15,11 @@
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
 	(Rowan projectNamed: 'gemstoneBaseImage') 
 		gitRepositoryRoot: '$ARCHBASE/image'.
+	
+	"load Rowan test classes"
+	(Rowan projectNamed: 'Rowan') defined
+		read: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel');
+		load.
 %
 	commit
 

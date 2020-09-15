@@ -9,7 +9,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Network-UUID';
 		immediateInvariant.
@@ -24,7 +24,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -40,7 +40,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -56,7 +56,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -84,7 +84,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -100,7 +100,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Files';
 		comment: 'Common superclass for exceptions while using file streams';
@@ -116,7 +116,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Files';
 		comment: 'Notfify when not able to delete';
@@ -132,7 +132,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Files';
 		comment: 'I am an exception that notifies that a file already exists.';
@@ -148,7 +148,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Files';
 		comment: 'I am raised when an operation is attempted on a file that does not exist.
@@ -176,7 +176,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Files';
 		comment: 'Notify about an error when trying to attempt to write to a file';
@@ -192,7 +192,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for errors that may occur during filesystem operations.';
@@ -208,7 +208,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised when I an operation is attempted inside a directory that does not exist. ';
@@ -224,7 +224,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a directory that already exists.';
@@ -240,7 +240,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to delete a directory when is not empty.';
@@ -256,7 +256,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a file or directory over top of an existing file.';
@@ -272,7 +272,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to use an illegal file name
@@ -289,7 +289,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tonel-Core';
 		comment: 'I''m a parsing error. 
@@ -306,7 +306,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONReaderError is the error/exception signalled by STONReader when illegal/incorrect input is seen. 
@@ -323,7 +323,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONWriterError is the error/exception signalled by STONWriter when illegal/incorrect input is seen. ';
@@ -339,7 +339,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterEncodingError.
@@ -360,7 +360,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
 		comment: '# GemStone version format
@@ -378,7 +378,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
 		comment: 'RwSemanticVersionNumber conforms to version 2.0.0 of  [Semantic Versioning 2.0.0](http://semver.org/)
@@ -735,7 +735,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -761,7 +761,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -776,7 +776,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I represent a request for user assistance in resolving an origin. I am a resumable exception that gets raised when there is no way of automatically resolving a particular origin. ';
@@ -792,7 +792,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'General way for Cypress to toss things up the stack for consideration by a higher authority.';
@@ -808,7 +808,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -823,7 +823,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -838,7 +838,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -853,7 +853,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -868,7 +868,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -883,7 +883,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -898,7 +898,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -913,7 +913,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -928,7 +928,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -943,7 +943,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -958,7 +958,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -973,7 +973,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -988,7 +988,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1003,7 +1003,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1018,7 +1018,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1033,7 +1033,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1048,7 +1048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1063,7 +1063,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1078,7 +1078,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1093,7 +1093,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -1108,7 +1108,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tonel-Core';
 		comment: 'The receiver is signalled when the RwTonelParser is about to create a method definition with no method category defined.
@@ -1128,7 +1128,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for FileLocator and FileReference. By implementing most of the methods on myself most code duplucation between the locator and the reference can be avoided';
@@ -1144,7 +1144,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am a late-bound reference. I refer to a file or directory in relation to a well-known location on the filesystem, called an origin. When asked to perform concrete operation, I look up the current location of my origin, and resolve my path against it. 
@@ -1190,7 +1190,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I combine a filesystem and path, which is sufficient to refer to a concrete file or directory. I provide methods for navigating my filesystem, performing filesystem operations and opening and closing files.  I am the primary mechanism for working with files and directories. 
@@ -1215,7 +1215,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1231,7 +1231,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1247,7 +1247,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1263,7 +1263,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1279,7 +1279,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1295,7 +1295,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1311,7 +1311,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1327,7 +1327,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1343,7 +1343,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1359,7 +1359,7 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1375,7 +1375,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1391,7 +1391,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1407,7 +1407,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1423,7 +1423,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1439,7 +1439,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1455,7 +1455,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -1475,7 +1475,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -1495,7 +1495,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1511,7 +1511,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1527,7 +1527,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1543,7 +1543,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1559,7 +1559,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-GemStoneFileServer';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1575,7 +1575,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1591,7 +1591,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1607,7 +1607,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1623,7 +1623,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1639,7 +1639,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1655,7 +1655,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1671,7 +1671,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1687,7 +1687,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1703,7 +1703,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1719,7 +1719,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1735,7 +1735,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1751,7 +1751,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Cypress-Core';
 		immediateInvariant.
@@ -1766,7 +1766,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1782,7 +1782,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1798,7 +1798,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Environmental-Tools';
 		immediateInvariant.
@@ -1813,7 +1813,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1829,7 +1829,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Environmental-Tools';
 		immediateInvariant.
@@ -1844,7 +1844,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1860,7 +1860,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Environmental-Tools';
 		comment: 'No class-specific documentation for CypressEnvironmentPackageDefinition, hierarchy is: 
@@ -1881,7 +1881,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -1920,7 +1920,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1936,7 +1936,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1952,7 +1952,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1968,7 +1968,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -1984,7 +1984,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2000,7 +2000,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Definitions';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2016,7 +2016,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2032,7 +2032,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2048,7 +2048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2064,7 +2064,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Cypress-Core';
 		immediateInvariant.
@@ -2079,7 +2079,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Structure';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2095,7 +2095,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Cypress-Core';
 		immediateInvariant.
@@ -2110,7 +2110,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Comparison';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2126,7 +2126,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2142,7 +2142,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2158,7 +2158,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2174,7 +2174,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Environmental-Tools';
 		immediateInvariant.
@@ -2189,7 +2189,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Comparison';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2205,7 +2205,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2223,7 +2223,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2241,7 +2241,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2259,7 +2259,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2277,7 +2277,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2342,7 +2342,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2358,7 +2358,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2374,7 +2374,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2390,7 +2390,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2406,7 +2406,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2422,7 +2422,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2438,7 +2438,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2454,7 +2454,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2470,7 +2470,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2486,7 +2486,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2504,7 +2504,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2522,7 +2522,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2540,7 +2540,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2558,7 +2558,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2574,7 +2574,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2600,7 +2600,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-Network-Url';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -2616,7 +2616,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-PackageManagement';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.
@@ -2634,7 +2634,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Network-UUID';
 		immediateInvariant.
@@ -2649,7 +2649,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Files';
 		comment: 'I represent a sequential binary File. I provide the minimum operations to:
@@ -2703,7 +2703,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I present a low-level protocol for interacting with filesystems. I hold a reference to
@@ -2732,7 +2732,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am a cache for metadata about a file or directory. The information I hold is as follows:
@@ -2765,7 +2765,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that fulfill the Guide role in the Guide/Visitor pattern. My subclasses know how to traverse a filesystem in a specific order, "showing" the files and directories they encounter to a visitor.
@@ -2787,7 +2787,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in breadth-first order. Given this hierarchy:
@@ -2814,7 +2814,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first post order. Given this hierarchy:
@@ -2840,7 +2840,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first pre order. Given this hierarchy:
@@ -2866,7 +2866,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for file handle implementations. I provide a uniform interface that streams can use for read and write operations on a file regardless of the filesystem. I encapsulate the actual IO primitives.';
@@ -2882,7 +2882,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Disk';
 		comment: 'I provide an interface for doing IO on an open file. I keep an id, which as an opaque identifier used by the FilePlugin primitives. I translate positions from the 1-based indexes used in Smalltalk to the 0-based offsets used by the primitives.
@@ -2900,7 +2900,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Memory';
 		comment: 'I provide "primitives" for doing IO on files in a MemoryFileSystem. I delegate most of my actions to the MemoryFile. This way there is only one place needed where the data is stored.';
@@ -2916,7 +2916,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I''m a set of permissions for a Directory Entry';
@@ -2932,7 +2932,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can resolve origins into references. Such objects use the Chain of Responsibility pattern, and when unable to resolve a particular origin, delegate that resolution request to the next resolver in the list.
@@ -2952,7 +2952,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I resolve origins by consulting the user. I maintain a cache of the user''s responses.';
@@ -2968,7 +2968,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for platform-specific resolvers.';
@@ -2984,7 +2984,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Mac OS X filesystem conventions. I resolve origins according to these conventions.';
@@ -3000,7 +3000,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Unix filesystem conventions. I resolve origins according to these conventions.';
@@ -3016,7 +3016,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an expert on Windows filesystem conventions. I resolve origins according to these conventions.';
@@ -3032,7 +3032,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I resolve origins that are related to the currently running Smalltalk system, using primitives provided by the VM. ';
@@ -3048,7 +3048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
@@ -3071,7 +3071,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Disk';
 		comment: 'I am an abstract superclass for disk store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
@@ -3088,7 +3088,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Unix file systems';
@@ -3104,7 +3104,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for OSX file systems';
@@ -3120,7 +3120,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Windows file systems';
@@ -3136,7 +3136,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Memory';
 		comment: 'I''m a specific store for memory file system';
@@ -3152,7 +3152,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can perform operations on directory trees. My subclasses implement the visitor protocol, and process filesystem nodes shown to them by guides.';
@@ -3168,7 +3168,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I''m an abstract superclass for enumeration operations on directory entries. ';
@@ -3184,7 +3184,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am a visitor that collects objects from the nodes I visit. I take a block similar to those passed to Collection>>collect:. I evaluate the block with DirectoryEntries for the nodes I visit, and collect the objects answered into an array.
@@ -3202,7 +3202,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I am a visitor that selects objects from the nodes I visit. I take a block similar to those passed to Collection>>select:. I evaluate the block with DirectoryEntries for the nodes I visit.
@@ -3220,7 +3220,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I create a copy of the directory tree that I visit. I use the PreorderGuide so that I can create directories before creating their contents. ';
@@ -3236,7 +3236,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Core';
 		comment: 'I delete the directory tree that I visit. I use the PostorderGuide so that I can delete files before deleting their containing directories.';
@@ -3252,7 +3252,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3267,7 +3267,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3282,7 +3282,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3297,7 +3297,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3312,7 +3312,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3327,7 +3327,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3342,7 +3342,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3357,7 +3357,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3372,7 +3372,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3387,7 +3387,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'GemStone-Interactions-Core';
 		immediateInvariant.
@@ -3402,7 +3402,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'I am an implementation of a dictionary. Compared to other dictionaries I am very efficient for small sizes, speed- and space-wise. I also mantain the order in which elements are added when iterating. My implementation features some ideas from the RefactoringBrowser.';
@@ -3418,7 +3418,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3433,7 +3433,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3448,7 +3448,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3463,7 +3463,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3478,7 +3478,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3493,7 +3493,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-JadeServer';
 		immediateInvariant.
@@ -3508,7 +3508,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Memory';
 		comment: 'I am an abstract file system entry for a memory file system.
@@ -3525,7 +3525,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a directory';
@@ -3541,7 +3541,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a regular file';
@@ -3557,7 +3557,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Memory';
 		comment: 'A file write stream - but within memory';
@@ -3573,7 +3573,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Path';
 		comment: 'I''m a private and abstract filesystem path, independent of the string representation used to describe paths on a specific filesystem. I provide methods for navigating the filesystem hierarchy and working with absolute and relative paths. I only refer to a concrete file or directory with regard to a specific filesystem. Normally users should not use me directly. 
@@ -3601,7 +3601,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Path';
 		comment: 'I represent an absolute path (a position starting from Path root)';
@@ -3617,7 +3617,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Path';
 		comment: 'I represent a relative path (a position starting from Path workingDirectory)';
@@ -3633,7 +3633,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBParser takes a source code string and generates an AST for it. This is a hand-written, recursive descent parser and has been optimized for speed. The simplest way to call this is either ''RBParser parseExpression: aString'' if you want the AST for an expression, or ''RBParser parseMethod: aString'' if you want to parse an entire method.
@@ -3661,7 +3661,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPatternParser is a subclass of RBParser that allows the extended syntax that creates matching trees. These trees can be used by the ParseTreeMatcher to search and transform source code.
@@ -3678,7 +3678,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -3693,7 +3693,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBParseTreeRule is the abstract superclass of all of the parse tree searching rules. A parse tree rule is the first class representation of a particular rule to search for. The owner of a rule is the algorithm that actually executes the search. This arrangement allows multiple searches to be conducted by a single Searcher.
@@ -3715,7 +3715,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBReplaceRule is the abstract superclass of all of the transforming rules. The rules change the source code by replacing the node that matches the rule. Subclasses implement different strategies for this replacement.
@@ -3740,7 +3740,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBBlockReplaceRule replaces the matching node by the result of evaluating replaceBlock. This allows arbitrary computation to come up with a replacement.
@@ -3760,7 +3760,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBStringReplaceRule replaces a matched tree with another tree (which may include metavariable from the matching tree). This is a very succint syntax for specifying most rewrites.
@@ -3781,7 +3781,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBSearchRule is a parse tree rule that simply searches for matches to the rule. Every time a match is found, answerBlock is evaluated with the node that matches and the cureent answer. This two-argument approach allows a collection to be formed from all of the matches (Think inject:into:).
@@ -3802,7 +3802,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBProgramNode is an abstract class that represents an abstract syntax tree node in a Smalltalk program.
@@ -3840,7 +3840,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBMethodNode is the AST that represents a Smalltalk method.
@@ -3868,7 +3868,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPatternMethodNode is a RBMethodNode that will match other method nodes without their selectors being equal. 
@@ -3889,7 +3889,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPragmaNode is an AST node that represents a method pragma.
@@ -3912,7 +3912,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -3927,7 +3927,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBReturnNode is an AST node that represents a return expression.
@@ -3949,7 +3949,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBSequenceNode is an AST node that represents a sequence of statements. Both RBBlockNodes and RBMethodNodes contain these.
@@ -3974,7 +3974,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBValueNode is an abstract class that represents a node that returns some value.
@@ -4002,7 +4002,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'A RBArrayNode is an AST node for runtime arrays.
@@ -4024,7 +4024,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBAssignmentNode is an AST node for assignment statements
@@ -4047,7 +4047,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBBlockNode is an AST node that represents a block "[...]".
@@ -4073,7 +4073,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPatternBlockNode is the node in matching parse trees (it never occurs in normal Smalltalk code) that executes a block to determine if a match occurs. valueBlock takes two arguments, the first is the actual node that we are trying to match against, and second node is the dictionary that contains all the metavariable bindings that the matcher has made thus far.
@@ -4094,7 +4094,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPatternWrapperBlockNode allows further matching using a block after a node has been matched by a pattern node.
@@ -4113,7 +4113,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4128,7 +4128,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBCascadeNode is an AST node for cascaded messages (e.g., "self print1 ; print2").
@@ -4150,7 +4150,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literals.';
@@ -4166,7 +4166,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'A RBLiteralArrayNode is an AST node that represents literal arrays and literal byte arrays.
@@ -4188,7 +4188,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBLiteralNode is an AST node that represents literal values (e.g., #foo, true, 1, etc.), but not literal arrays.
@@ -4207,7 +4207,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBMessageNode is an AST node that represents a message send.
@@ -4231,7 +4231,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPatternMessageNode is a RBMessageNode that will match other message nodes without their selectors being equal. 
@@ -4251,7 +4251,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBVariableNode is an AST node that represent a variable (global, inst var, temp, etc.).
@@ -4272,7 +4272,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPatternVariableNode is an AST node that is used to match several other types of nodes (literals, variables, value nodes, statement nodes, and sequences of statement nodes).
@@ -4303,7 +4303,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBProgramNodeVisitor is an abstract visitor for the RBProgramNodes.
@@ -4321,7 +4321,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBConfigurableFormatter formats the Refactoring Browser''s parse trees. It has many more formatting options than the default formatter used by the RB. To change the RB to use this formatter, execute "RBProgramNode formatterClass: RBConfigurableFormatter". For some refactorings the RB must reformat the code after the change, so it is good to have a formatter configured to your tastes.
@@ -4346,7 +4346,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBFormatter formats a parse tree. It is an example of a Visitor. This is rarely called directly. Sending ''formattedCode'' to a parse tree uses this algorithm to return a pretty-printed version.
@@ -4370,7 +4370,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'ParseTreeSearcher walks over a normal source code parse tree using the visitor pattern, and then matches these nodes against the meta-nodes using the match:inContext: methods defined for the meta-nodes.
@@ -4393,7 +4393,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'ParseTreeRewriter walks over and transforms its RBProgramNode (tree). If the tree is modified, then answer is set to true, and the modified tree can be retrieved by the #tree method.
@@ -4412,7 +4412,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBReadBeforeWrittenTester is a visitor that identifies variables that may have been read before they are initialized.
@@ -4435,7 +4435,7 @@ doit
 	classInstVars: #( classificationTable )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBScanner is a stream that returns a sequence of token from the string that it is created on. The tokens know where they came from in the source code and which comments were attached to them.
@@ -4471,7 +4471,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPatternScanner is a subclass of RBScanner that allows the extended syntax of pattern matching trees.
@@ -4488,7 +4488,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4503,7 +4503,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBSmallDictionary is a special dictionary optimized for small collections. In addition to the normal dictionary protocol, it also supports an #empty message which "empties" the collection but may hang on to the original elements (so it could collect garbage). Without #empty we would either need to create a new dictionary or explicitly remove everything from the dictionary. Both of these take more time and #empty.
@@ -4525,7 +4525,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBStringReplacement represents replacing source in the original method with a different string. These are used when reformatting code after a parse tree change has been made. Depending on the change, it may be possible to minimally change the parse tree without needing to format it.
@@ -4548,7 +4548,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBToken is the abstract superclass of all of the RB tokens. These tokens (unlike the standard parser''s) remember where they came from in the original source code.
@@ -4572,7 +4572,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBAssignmentToken is the first-class representation of the assignment token '':=''
@@ -4589,7 +4589,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4604,7 +4604,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBValueToken is the abstract superclass of all tokens that have additional information attached. For example, the BinarySelector token holds onto the actual character (e.g. $+).
@@ -4625,7 +4625,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBBinarySelectorToken is the first-class representation of a binary selector (e.g. +)
@@ -4642,7 +4642,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBIdentifierToken is the first class representation of an identifier token (e.g. Class)
@@ -4659,7 +4659,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4674,7 +4674,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBKeywordToken is the first-class representation of a keyword token (e.g. add:)';
@@ -4690,7 +4690,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4705,7 +4705,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBLiteralToken is the first-class representation of a literal token (entire literals, even literal arrays, are a single token in the ST80 grammar.).
@@ -4726,7 +4726,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4741,7 +4741,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		immediateInvariant.
@@ -4756,7 +4756,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBPatternBlockToken is the first-class representation of the pattern block token.
@@ -4774,7 +4774,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'AST-Core';
 		comment: 'RBSpecialCharacterToken is the first class representation of special characters.
@@ -4792,7 +4792,7 @@ doit
 	classInstVars: #( configuration )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Kernel';
 		comment: 'No class-specific documentation for Cypress, hierarchy is: 
@@ -4811,7 +4811,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		comment: 'Simple object with the results of the Jadeite command.';
@@ -4827,7 +4827,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'Copied from CypressGsGeneralDependencySorter';
@@ -4843,7 +4843,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4858,7 +4858,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4873,7 +4873,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4888,7 +4888,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4903,7 +4903,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4918,7 +4918,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4933,7 +4933,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -4948,7 +4948,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		comment: 'Rowan Service is the abstract service class for classes that represent
@@ -4976,7 +4976,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		comment: 'A place to put miscellaneous commands that don''t fit 
@@ -4997,7 +4997,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		comment: 'Simple service that provides updates to the client related to auto commit.';
@@ -5013,7 +5013,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		comment: 'RowanBrowserService handles services that fall outside
@@ -5030,7 +5030,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		comment: 'Most class operations done here. 
@@ -5048,7 +5048,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5063,7 +5063,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5078,7 +5078,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5093,7 +5093,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5108,7 +5108,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5123,7 +5123,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5138,7 +5138,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5153,7 +5153,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5168,7 +5168,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5183,7 +5183,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5198,7 +5198,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5213,7 +5213,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Services-Core';
 		immediateInvariant.
@@ -5228,7 +5228,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
 		immediateInvariant.
@@ -5243,7 +5243,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
 		immediateInvariant.
@@ -5258,7 +5258,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
 		immediateInvariant.
@@ -5273,7 +5273,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core-Conditional-Support';
 		immediateInvariant.
@@ -5288,7 +5288,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -5303,7 +5303,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -5318,7 +5318,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5333,7 +5333,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5348,7 +5348,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Abstract class with support for walking a modification tree and writing out the source code in a variety of formats:
@@ -5362,14 +5362,20 @@ true.
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwGsModificationTopazWriterVisitorV2'
-	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
+	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-CoreV2';
+		comment: 'No class-specific documentation for RwGsModificationTopazWriterVisitorV2, hierarchy is:
+Object
+  RwAbstractReaderWriterVisitor( currentProjectDefinition packageConvention currentPackageDefinition currentClassDefinition currentClassExtension)
+    RwModificationWriterVisitor
+      RwGsModificationTopazWriterVisitorV2( topazFilenameComponentMap topazFilename topazFileHeader filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath)
+';
 		immediateInvariant.
 true.
 %
@@ -5382,7 +5388,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5397,7 +5403,7 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5412,7 +5418,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5427,7 +5433,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5442,7 +5448,7 @@ doit
 	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5457,7 +5463,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -5472,7 +5478,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5487,7 +5493,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5502,7 +5508,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5517,7 +5523,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions-Common';
 		immediateInvariant.
@@ -5532,7 +5538,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5547,7 +5553,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5562,7 +5568,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5577,7 +5583,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5592,7 +5598,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -5607,7 +5613,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		comment: 'Fundamental concepts:
@@ -5637,7 +5643,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5652,7 +5658,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		comment: 'This class audits individual classes';
@@ -5668,7 +5674,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5683,7 +5689,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5698,7 +5704,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5713,7 +5719,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5728,7 +5734,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5743,7 +5749,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5758,7 +5764,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5773,7 +5779,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5788,7 +5794,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5803,7 +5809,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5818,7 +5824,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -5833,7 +5839,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5848,7 +5854,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5863,7 +5869,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5878,7 +5884,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -5893,7 +5899,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5908,7 +5914,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5923,7 +5929,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5938,7 +5944,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -5953,7 +5959,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5968,7 +5974,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5983,7 +5989,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -5998,7 +6004,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6013,7 +6019,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6028,7 +6034,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6043,7 +6049,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6058,7 +6064,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6073,7 +6079,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6088,7 +6094,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6103,7 +6109,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6118,7 +6124,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6133,7 +6139,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6148,7 +6154,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6163,7 +6169,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-CoreV2';
 		immediateInvariant.
@@ -6178,7 +6184,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -6193,7 +6199,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6208,7 +6214,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6223,7 +6229,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6238,7 +6244,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6253,7 +6259,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6268,7 +6274,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -6283,7 +6289,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassAdditionOrRemoval, hierarchy is: 
@@ -6302,7 +6308,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Configuration that guides Cypress operation.
@@ -6333,7 +6339,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		comment: 'Abstract.
@@ -6356,7 +6362,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		immediateInvariant.
@@ -6371,7 +6377,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		comment: 'Defines a class.
@@ -6391,7 +6397,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		comment: 'Extends an existing class with additional methods.
@@ -6409,7 +6415,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6424,7 +6430,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6439,7 +6445,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions-Common';
 		immediateInvariant.
@@ -6454,7 +6460,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6469,7 +6475,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6484,7 +6490,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6499,7 +6505,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-DefinitionsV2';
 		immediateInvariant.
@@ -6514,7 +6520,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
@@ -6534,7 +6540,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
@@ -6554,7 +6560,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		comment: 'No class-specific documentation for CypPackageSetDefinition, hierarchy is: 
@@ -6574,7 +6580,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		immediateInvariant.
@@ -6589,7 +6595,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		comment: 'Defines a package, which is a bunch of class definitions and class extensions.
@@ -6608,7 +6614,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to the elements of some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
@@ -6630,7 +6636,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
@@ -6646,7 +6652,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypClassExtensionsModification, hierarchy is: 
@@ -6666,7 +6672,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -6681,7 +6687,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
@@ -6699,7 +6705,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between two PackageSets. The elements are packages. Key is package name.
@@ -6717,7 +6723,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the instance or class methods defined by a class or class extension. The elements are method definitions. Key is selector (as string).';
@@ -6733,7 +6739,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -6748,7 +6754,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the classes or classExtensions of a package. The elements are classes. Key is class name.';
@@ -6764,7 +6770,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'A modification showing the difference between the properties of a single entity. The elements are associations of propertyName -> propertyValue. Key is property name.';
@@ -6780,7 +6786,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'DELETE ME';
@@ -6796,7 +6802,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Definitions';
 		comment: 'Holds some number of RwDefinitions or RwLoadedThingss to be operated on together. The entities put into the receiver should be at the same semantic level: all methods, class, packages , or projects.
@@ -6814,7 +6820,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypFileUtilities, hierarchy is: 
@@ -6833,7 +6839,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'No class-specific documentation for CypGemStoneFileUtilities, hierarchy is: 
@@ -6853,7 +6859,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'Keeps track of what LoadedPackages are in the GemStone repository, and is the gateway for operations to query or change the image.';
@@ -6869,7 +6875,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		comment: 'Walks a diff tree and adds patches to a patchSet that will update the GemStone image (repository) to the code state represented by the ''after'' state of the diff, provided that the ''before'' state of the diff is the current state of the image.';
@@ -6885,7 +6891,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -6900,7 +6906,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -6915,7 +6921,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -6930,7 +6936,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		comment: 'A set of patches (changes) to be applied atomically (or as close to atomically as possible) to a GemStone repository.';
@@ -6946,7 +6952,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -6961,7 +6967,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -6976,7 +6982,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -6991,7 +6997,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7006,7 +7012,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7021,7 +7027,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7036,7 +7042,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7051,7 +7057,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7066,7 +7072,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7081,7 +7087,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7096,7 +7102,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7111,7 +7117,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7126,7 +7132,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7141,7 +7147,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7156,7 +7162,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7171,7 +7177,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7186,7 +7192,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7201,7 +7207,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7216,7 +7222,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7231,7 +7237,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7246,7 +7252,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7261,7 +7267,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7276,7 +7282,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7291,7 +7297,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7306,7 +7312,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7321,7 +7327,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7336,7 +7342,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7351,7 +7357,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7366,7 +7372,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7381,7 +7387,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7396,7 +7402,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7411,7 +7417,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		immediateInvariant.
@@ -7426,7 +7432,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-LoaderV2';
 		comment: 'The Rowan-GemStone-Loader implementation does depend upon having a stable and consistent implementation of the RwGsSymbolDictionaryRegistry behavior for the duration of a load.
@@ -7470,7 +7476,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'properties: dictionary of properties
@@ -7488,7 +7494,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'package: the CypLoadedPackage that defines me and all my methods that are not extension methods.
@@ -7505,7 +7511,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7520,7 +7526,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedClassExtension, hierarchy is: 
@@ -7540,7 +7546,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7555,7 +7561,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypLoadedMethod, hierarchy is: 
@@ -7575,7 +7581,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'The MethodRegistry maps GsNMethods to LoadedMethods.';
@@ -7591,7 +7597,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'repository: The repository I was loaded from (if known, nil otherwise)
@@ -7610,7 +7616,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7625,7 +7631,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7640,7 +7646,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-CoreV2';
 		immediateInvariant.
@@ -7655,7 +7661,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypMethodAdditionOrRemoval, hierarchy is: 
@@ -7674,7 +7680,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Abstract. Represents a modification to some code entity. "Modification" means that the code entity exists both before and after, but has differences in some of its elements.
@@ -7695,7 +7701,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single class definition or class extension.
@@ -7717,7 +7723,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7732,7 +7738,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7747,7 +7753,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
@@ -7762,7 +7768,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single method
@@ -7784,7 +7790,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7799,7 +7805,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7814,7 +7820,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7829,7 +7835,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
@@ -7851,7 +7857,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Represents modifications to a single package.
@@ -7873,7 +7879,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7888,7 +7894,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7903,7 +7909,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Represents the move of a class definition from one package to another.';
@@ -7919,7 +7925,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'Represents a move of a method from a class definition to a class extension, or from a class extension to a class definition, or between two extensions, of the same class. This should always also result in a change of package, since a class should not be defined and extended in the same package, nor extended twice in the same package.';
@@ -7935,7 +7941,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		immediateInvariant.
@@ -7950,7 +7956,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Kernel';
 		comment: 'Provides services specific to the Smalltalk dialect being run,
@@ -7967,7 +7973,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'This class is private to Cypress.
@@ -7984,7 +7990,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
@@ -8005,7 +8011,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Core';
 		comment: 'No class-specific documentation for CypPropertyModification, hierarchy is: 
@@ -8026,7 +8032,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-ComponentsV2';
 		immediateInvariant.
@@ -8041,7 +8047,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Specifications';
 		immediateInvariant.
@@ -8056,7 +8062,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-SpecificationsV2';
 		immediateInvariant.
@@ -8071,7 +8077,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-SpecificationsV2';
 		immediateInvariant.
@@ -8086,7 +8092,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-SpecificationsV2';
 		immediateInvariant.
@@ -8101,7 +8107,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tonel-Core';
 		comment: 'I''m a parser for tonel files. 
@@ -8160,7 +8166,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tonel-Core';
 		comment: 'Support class for topaz `tfile` and `tmethod` commands.
@@ -8182,7 +8188,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'A Uniform Resource Locator.  It specifies the location of a document on the Internet.  The base class is abstract; child classes break different types of URLs down in ways appropriate for that type.
@@ -8241,7 +8247,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class models a file URL according to (somewhat) RFC1738, see http://www.w3.org/Addressing/rfc1738.txt
@@ -8304,7 +8310,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the cypress: scheme:
@@ -8334,7 +8340,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the tonel: scheme:
@@ -8356,7 +8362,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the filetree: scheme[1]:
@@ -8378,7 +8384,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the github: scheme[1]:
@@ -8400,7 +8406,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'a URL type that can''t be broken down in any systematic way.  For example, mailto: and telnet: URLs.  The part after the scheme name is stored available via the #locator message.';
@@ -8416,7 +8422,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'A URL which has a hierarchical encoding.  For instance, http and ftp URLs are hierarchical.';
@@ -8432,7 +8438,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		immediateInvariant.
@@ -8447,7 +8453,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		immediateInvariant.
@@ -8462,7 +8468,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the smalltalk: scheme:
@@ -8489,7 +8495,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Url-Core';
 		comment: 'This class implements the gitfiletree: scheme:
@@ -8528,7 +8534,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STON implements serialization and materialization using the Smalltalk Object Notation format.
@@ -8637,7 +8643,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONReader materializes objects using the Smalltalk Object Notation format.
@@ -8655,7 +8661,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONReference holds a forward reference to another object during materialization.
@@ -8672,7 +8678,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONStreamWriter helps in streaming writing STON representations.
@@ -8689,7 +8695,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONArrayWriter helps in writing array based STON representations.
@@ -8706,7 +8712,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONShortArrayWriter helps in writing short array based STON representations.
@@ -8723,7 +8729,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONDictionaryWriter helps in writing dictionary based STON representations.';
@@ -8739,7 +8745,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'STON-Core';
 		comment: 'STONWriter serializes objects using the Smalltalk Object Notation format. 
@@ -8772,7 +8778,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-GemStone-Core';
 		comment: 'I''m a modified STON writer to make tonel metadata look as we want.
@@ -8791,7 +8797,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedReadStream.
@@ -8815,7 +8821,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedReadWriteStream.
@@ -8841,7 +8847,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnBufferedWriteStream.
@@ -8866,7 +8872,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterEncoder, I encode and decode Character objects to and from a binary stream.
@@ -8915,7 +8921,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am the GemStone/S implementation of ZnUTF8Encoder.
@@ -8938,7 +8944,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am a read-write character stream. I am mainly used to open the Pharo source and changes files.';
@@ -8954,7 +8960,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedStream, an abstract support class for read and write streams on an encoded binary stream.
@@ -8972,7 +8978,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedReadStream, an abstract support class for read streams on a binary encoded wrapped stream.
@@ -8990,7 +8996,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterReadStream.
@@ -9012,7 +9018,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnEncodedWriteStream, an abstract support class for write streams on a binary encoded wrapped stream.
@@ -9030,7 +9036,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Zinc-Character-Encoding-Core';
 		comment: 'I am ZnCharacterWriteStream.
@@ -9049,7 +9055,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Files';
 		comment: 'Provides a simple, platform-independent, file stream. I am 
@@ -9095,7 +9101,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Files';
 		comment: 'I am a concrete subclass of AbstractBinaryFileStream for normal files. Regardless the position of the file, I will make my operarions on my position and then return the file it''s own position.
@@ -9116,7 +9122,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -9131,7 +9137,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -9146,7 +9152,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: RowanTools
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Rowan-Tools-Core';
 		immediateInvariant.
@@ -9161,7 +9167,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'Cypress-MesssageDigest';
 		comment: 'All Cypress classes are private to GemStone and are likely to be removed in a future release.';
@@ -9177,7 +9183,7 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: Globals
-	options: #( #logCreation )
+	options: #()
 )
 		category: 'FileSystem-Memory';
 		comment: 'I am like a WriteStream but I have more capacities than it.
@@ -48934,14 +48940,8 @@ exportProjectSpecification
 
 category: 'actions'
 method: RwResolvedProject
-exportTopazFormatTo: filePath
-	^ self _resolvedProject exportTopazFormatTo: filePath
-%
-
-category: 'actions'
-method: RwResolvedProject
-exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
-	^ self _resolvedProject exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+exportTopazFormatTo: filePath logClassCreation: logClassCreation
+	^ self _resolvedProject exportTopazFormatTo: filePath logClassCreation: logClassCreation
 %
 
 category: 'accessing'
@@ -57352,6 +57352,18 @@ filenameExtension: aString
 	filenameExtension := aString
 %
 
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+logCreation
+	^logCreation ifNil: [ ^false ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+logCreation: object
+	logCreation := object
+%
+
 category: 'class writing'
 method: RwGsModificationTopazWriterVisitorV2
 processClass: aClassModification
@@ -57553,12 +57565,15 @@ _fileOutClassDeclaration: classDefinition on: aStream
 						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
 								, ' )';
 				lf ].
-	optionsString := String new .
+	optionsString := String new.
 	classDefinition gs_options isEmpty
 		ifFalse: [ 
 			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
 				, ' ' ].
-  optionsString addAll: ' #logCreation '.  "for verbose logging during filein and upgrade"
+	self logCreation
+		ifTrue: [ 
+			"for verbose logging during filein and upgrade"
+			optionsString addAll: ' #logCreation ' ].
 	reservedOopString := ''.
 	classDefinition gs_reservedOop isEmpty
 		ifFalse: [ 
@@ -61727,7 +61742,7 @@ exportProjectSpecification
 
 category: 'exporting'
 method: RwResolvedProjectV2
-exportTopazFormatTo: filePath
+exportTopazFormatTo: filePath logClassCreation: logClassCreation
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -61735,6 +61750,7 @@ exportTopazFormatTo: filePath
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: logClassCreation;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		filenameExtension: fileReference extension;
@@ -61744,7 +61760,7 @@ exportTopazFormatTo: filePath
 
 category: 'exporting'
 method: RwResolvedProjectV2
-exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+exportTopazFormatTo: filePath  logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -61752,6 +61768,7 @@ exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: logClassCreation;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;
@@ -76222,7 +76239,8 @@ basicCreateClassWithSuperclass: superclass
 		ifNil: [ #() ]
 		ifNotNil: [ oldVersion _rwSortedConstraints ].
 	gs_options := classDefinition gs_options collect: [ :each | each asSymbol ].
-  (SessionTemps current at: #ROWAN_TRACE otherwise: nil) ifNotNil:[gs_options add: #logCreation ].
+	(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil)
+		ifNotNil: [ gs_options add: #'logCreation' ].
 	createdClass := (type = 'normal' or: [ type = 'immediate' ])
 		ifTrue: [ 
 			superclass
@@ -97927,17 +97945,18 @@ exportLoadSpecification
 
 category: '*rowan-gemstone-core'
 method: RwProject
-exportTopazFormatTo: filePath
+exportTopazFormatTo: filePath logClassCreation: logClassCreation
 
 
-	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+	^ self _loadedProject asDefinition exportTopazFormatTo: filePath logClassCreation: logClassCreation
 %
 
 category: '*rowan-gemstone-core'
 method: RwProject
-exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+exportTopazFormatTo: filePath logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap
 	^ self _loadedProject asDefinition
 		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
 		usingPackageNamesMap: packageNamesMap
 %
 

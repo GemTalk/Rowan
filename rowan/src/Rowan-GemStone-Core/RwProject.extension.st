@@ -19,16 +19,17 @@ RwProject >> defaultUseSessionMethodsForExtensions [
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> exportTopazFormatTo: filePath [
+RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation [
 
 
-	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+	^ self _loadedProject asDefinition exportTopazFormatTo: filePath logClassCreation: logClassCreation
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap [
 	^ self _loadedProject asDefinition
 		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
 		usingPackageNamesMap: packageNamesMap
 ]
 
