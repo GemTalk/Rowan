@@ -64,6 +64,11 @@ RowanProjectService >> addPackageNamed: packageName [
 	self answer: #'duplicatePackage'
 ]
 
+{ #category : 'rowan' }
+RowanProjectService >> audit [
+	^ (Rowan projectNamed: name) audit
+]
+
 { #category : 'client commands support' }
 RowanProjectService >> basicLoadProject: aBlock [
 	| updatedProjects |

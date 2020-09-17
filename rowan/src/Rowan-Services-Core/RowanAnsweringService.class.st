@@ -63,6 +63,12 @@ RowanAnsweringService >> answer: anObject [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> auditProjectNamed: projectName [
+	answer := (RowanProjectService new name: projectName) audit printString.
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> autoCommit [
 
 	answer := RowanService autoCommit. 
