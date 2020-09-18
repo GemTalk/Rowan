@@ -57,6 +57,9 @@ doit
 true.
 %
 
+removeallmethods RowanSample9Class1
+removeallclassmethods RowanSample9Class1
+
 doit
 (TestCase
 	subclass: ''RowanSample9TestCase''
@@ -72,6 +75,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanSample9TestCase
+removeallclassmethods RowanSample9TestCase
 
 ! Class implementation for ''RowanSample9Class1''
 
