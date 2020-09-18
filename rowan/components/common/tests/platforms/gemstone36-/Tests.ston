@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/tests/platforms/gemstone36-/Tests',
+	#condition : [
+		'gs3.[6-]'
+	],
+	#packageNames : [
+		'Rowan-Tests-GemStone-36x'
+	],
+	#comment : 'Tests gemstone 3.6 and beyond test packages'
+}

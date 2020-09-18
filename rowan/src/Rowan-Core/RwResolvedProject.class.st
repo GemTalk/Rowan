@@ -181,8 +181,21 @@ RwResolvedProject >> exportProjectSpecification [
 ]
 
 { #category : 'actions' }
-RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation [
-	^ self _resolvedProject exportTopazFormatTo: filePath logClassCreation: logClassCreation
+RwResolvedProject >> exportTopazFormatTo: filePath [
+	^ self
+		exportTopazFormatTo: filePath
+		logClassCreation: false
+		excludeClassInitializers: false
+		excludeRemoveAllMethods: false
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods [
+	^ self _resolvedProject
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
 ]
 
 { #category : 'accessing' }

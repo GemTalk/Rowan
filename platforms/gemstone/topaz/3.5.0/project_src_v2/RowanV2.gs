@@ -5362,7 +5362,7 @@ true.
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwGsModificationTopazWriterVisitorV2'
-	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
+	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader excludeClassInitializers excludeRemoveAllMethods fileNamesInFileInOrder logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -48940,8 +48940,22 @@ exportProjectSpecification
 
 category: 'actions'
 method: RwResolvedProject
-exportTopazFormatTo: filePath logClassCreation: logClassCreation
-	^ self _resolvedProject exportTopazFormatTo: filePath logClassCreation: logClassCreation
+exportTopazFormatTo: filePath
+	^ self
+		exportTopazFormatTo: filePath
+		logClassCreation: false
+		excludeClassInitializers: false
+		excludeRemoveAllMethods: false
+%
+
+category: 'actions'
+method: RwResolvedProject
+exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods
+	^ self _resolvedProject
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
 %
 
 category: 'accessing'
@@ -57193,16 +57207,34 @@ deletededPackage: aPackageModification
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
 excludeClassInitializers
-  self dynamicInstVarAt: #excludeClassInitializers put: true
+	^ excludeClassInitializers ifNil: [ false ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+excludeClassInitializers: aBool
+	excludeClassInitializers := aBool
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+excludeRemoveAllMethods
+	^ excludeRemoveAllMethods ifNil: [ false ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+excludeRemoveAllMethods: aBool
+	excludeRemoveAllMethods := aBool
 %
 
 category: 'exporting'
 method: RwGsModificationTopazWriterVisitorV2
 export
 
-	self topazFilenamePackageNamesMap keysAndValuesDo: [:filename :packageNames |
-		| classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
-
+	self fileNamesInFileInOrder do: [:filename | 
+		| packageNames classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
+		packageNames := self topazFilenamePackageNamesMap at: filename.
 		self _setBufferedStreamFor: filename.
 		self bufferedStream nextPutAll: self topazFileHeader.
 
@@ -57275,7 +57307,7 @@ exportClassInitializations
 	| stream exclude |
 	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
 	stream := self bufferedStream.
-  exclude := (self dynamicInstVarAt: #excludeClassInitializers) ~~ nil  .
+  exclude := self excludeClassInitializers.
   exclude ifTrue:[
     stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
   ] ifFalse:[
@@ -57350,6 +57382,20 @@ method: RwGsModificationTopazWriterVisitorV2
 filenameExtension: aString
 
 	filenameExtension := aString
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+fileNamesInFileInOrder
+	"Normally the order that fileins are created in does not matter"
+
+	^ fileNamesInFileInOrder ifNil: [ self topazFilenamePackageNamesMap keys ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+fileNamesInFileInOrder: object
+	fileNamesInFileInOrder := object
 %
 
 category: 'accessing'
@@ -57622,7 +57668,8 @@ _fileOutClassDeclaration: classDefinition on: aStream
 		lf;
 		nextPutAll: '%';
 		lf;
-		lf
+		lf.
+	self _fileoutRemoveAllMethodsFor: classDefinition name on: aStream
 %
 
 category: 'private exporting'
@@ -57637,6 +57684,19 @@ _fileOutMethod: methodDefinition forClass: className isMeta: isMeta on: aStream
 		ifFalse: [aStream lf].
 	aStream nextPutAll: '%'; lf;
 		lf
+%
+
+category: 'private exporting'
+method: RwGsModificationTopazWriterVisitorV2
+_fileoutRemoveAllMethodsFor: className on: aStream
+	self excludeRemoveAllMethods
+		ifFalse: [ 
+			aStream
+				nextPutAll: 'removeallmethods ' , className;
+				lf;
+				nextPutAll: 'removeallclassmethods ' , className;
+				lf;
+				lf ]
 %
 
 category: 'private exporting'
@@ -61742,7 +61802,7 @@ exportProjectSpecification
 
 category: 'exporting'
 method: RwResolvedProjectV2
-exportTopazFormatTo: filePath logClassCreation: logClassCreation
+exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -61751,6 +61811,8 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		logCreation: logClassCreation;
+		excludeClassInitializers: excludeClassInitializers;
+		excludeRemoveAllMethods: excludeRemoveAllMethods;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		filenameExtension: fileReference extension;
@@ -61760,7 +61822,7 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation
 
 category: 'exporting'
 method: RwResolvedProjectV2
-exportTopazFormatTo: filePath  logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap
+exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods usingPackageNamesMap: packageNamesMap
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -61769,6 +61831,8 @@ exportTopazFormatTo: filePath  logClassCreation: logClassCreation usingPackageNa
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		logCreation: logClassCreation;
+		excludeClassInitializers: excludeClassInitializers;
+		excludeRemoveAllMethods: excludeRemoveAllMethods;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;
@@ -97945,18 +98009,31 @@ exportLoadSpecification
 
 category: '*rowan-gemstone-core'
 method: RwProject
-exportTopazFormatTo: filePath logClassCreation: logClassCreation
-
-
-	^ self _loadedProject asDefinition exportTopazFormatTo: filePath logClassCreation: logClassCreation
+exportTopazFormatTo: filePath
+	^ self
+		logClassCreation: false
+		excludeClassInitializers: false
+		excludeRemoveAllMethods: false
 %
 
 category: '*rowan-gemstone-core'
 method: RwProject
-exportTopazFormatTo: filePath logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap
+exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods
 	^ self _loadedProject asDefinition
 		exportTopazFormatTo: filePath
 		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+%
+
+category: '*rowan-gemstone-core'
+method: RwProject
+exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods usingPackageNamesMap: packageNamesMap
+	^ self _loadedProject asDefinition
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
 		usingPackageNamesMap: packageNamesMap
 %
 

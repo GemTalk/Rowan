@@ -465,7 +465,7 @@ RwResolvedProjectV2 >> exportProjectSpecification [
 ]
 
 { #category : 'exporting' }
-RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation [
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods [
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -474,6 +474,8 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		logCreation: logClassCreation;
+		excludeClassInitializers: excludeClassInitializers;
+		excludeRemoveAllMethods: excludeRemoveAllMethods;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		filenameExtension: fileReference extension;
@@ -482,7 +484,7 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 ]
 
 { #category : 'exporting' }
-RwResolvedProjectV2 >> exportTopazFormatTo: filePath  logClassCreation: logClassCreation usingPackageNamesMap: packageNamesMap [
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods usingPackageNamesMap: packageNamesMap [
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -491,6 +493,8 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath  logClassCreation: logClass
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		logCreation: logClassCreation;
+		excludeClassInitializers: excludeClassInitializers;
+		excludeRemoveAllMethods: excludeRemoveAllMethods;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;

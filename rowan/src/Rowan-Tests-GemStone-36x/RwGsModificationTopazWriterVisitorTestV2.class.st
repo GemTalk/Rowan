@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsModificationTopazWriterVisitorTestV2',
 	#superclass : 'RwProjectReaderWriterTest',
-	#category : 'Rowan-Tests-ComponentsV2-OnlyV2'
+	#category : 'Rowan-Tests-GemStone-36x'
 }
 
 { #category : 'private' }
@@ -575,6 +575,44 @@ RwGsModificationTopazWriterVisitorTestV2 >> testGsModificationTopazWriter_A2 [
 	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
 	x := stream contents.
 	y := self _expectedGsModificationTopazWriterFileContents_A2.
+	self assert: x = y
+]
+
+{ #category : 'tests' }
+RwGsModificationTopazWriterVisitorTestV2 >> testGsModificationTopazWriter_A3 [
+	"fileout excludes removeall*methods after class definitions, using excludeRemoveAllMethods: overriding class tracking"
+
+	| projectName packageName1 packageName2 className1 className2 className3 projectSetDefinition projectSetModification visitor repositoryRootPath x stream y packageName3 projectsHome |
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'.
+	className2 := 'Issue361Class2'.
+	className3 := 'Issue361Class3'.
+	projectsHome := self _testRowanProjectsSandbox.
+
+	projectSetDefinition := self _standardProjectSetDefinition: projectsHome.
+
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	self _markForCleanup: projectsHome / projectName.
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	[ 
+	GsModificationTopazWriterVisitor startTrackingClassNames.
+	visitor := GsModificationTopazWriterVisitor new
+		excludeRemoveAllMethods: true;
+		repositoryRootPath: repositoryRootPath;
+		topazFilename: projectName;
+		yourself.
+	visitor visit: projectSetModification ]
+		ensure: [ GsModificationTopazWriterVisitor stopTrackingClassNames ].
+
+	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
+	x := stream contents.
+	y := self _expectedGsModificationTopazWriterFileContents_A1.
 	self assert: x = y
 ]
 

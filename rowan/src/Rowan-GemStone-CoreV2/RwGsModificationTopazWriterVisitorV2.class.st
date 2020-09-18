@@ -13,6 +13,9 @@ Class {
 		'topazFilenameComponentMap',
 		'topazFilename',
 		'topazFileHeader',
+		'excludeClassInitializers',
+		'excludeRemoveAllMethods',
+		'fileNamesInFileInOrder',
 		'logCreation',
 		'filenameExtension',
 		'classSymbolDictionaryNames',
@@ -103,7 +106,8 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 		lf;
 		nextPutAll: '%';
 		lf;
-		lf
+		lf.
+	self _fileoutRemoveAllMethodsFor: classDefinition name on: aStream
 ]
 
 { #category : 'private exporting' }
@@ -117,6 +121,18 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutMethod: methodDefinition forClas
 		ifFalse: [aStream lf].
 	aStream nextPutAll: '%'; lf;
 		lf
+]
+
+{ #category : 'private exporting' }
+RwGsModificationTopazWriterVisitorV2 >> _fileoutRemoveAllMethodsFor: className on: aStream [
+	self excludeRemoveAllMethods
+		ifFalse: [ 
+			aStream
+				nextPutAll: 'removeallmethods ' , className;
+				lf;
+				nextPutAll: 'removeallclassmethods ' , className;
+				lf;
+				lf ]
 ]
 
 { #category : 'private exporting' }
@@ -262,15 +278,30 @@ RwGsModificationTopazWriterVisitorV2 >> deletededPackage: aPackageModification [
 
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> excludeClassInitializers [
-  self dynamicInstVarAt: #excludeClassInitializers put: true
+	^ excludeClassInitializers ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> excludeClassInitializers: aBool [
+	excludeClassInitializers := aBool
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> excludeRemoveAllMethods [
+	^ excludeRemoveAllMethods ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> excludeRemoveAllMethods: aBool [
+	excludeRemoveAllMethods := aBool
 ]
 
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> export [
 
-	self topazFilenamePackageNamesMap keysAndValuesDo: [:filename :packageNames |
-		| classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
-
+	self fileNamesInFileInOrder do: [:filename | 
+		| packageNames classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
+		packageNames := self topazFilenamePackageNamesMap at: filename.
 		self _setBufferedStreamFor: filename.
 		self bufferedStream nextPutAll: self topazFileHeader.
 
@@ -341,7 +372,7 @@ RwGsModificationTopazWriterVisitorV2 >> exportClassInitializations [
 	| stream exclude |
 	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
 	stream := self bufferedStream.
-  exclude := (self dynamicInstVarAt: #excludeClassInitializers) ~~ nil  .
+  exclude := self excludeClassInitializers.
   exclude ifTrue:[
     stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
   ] ifFalse:[
@@ -411,6 +442,18 @@ RwGsModificationTopazWriterVisitorV2 >> filenameExtension [
 RwGsModificationTopazWriterVisitorV2 >> filenameExtension: aString [
 
 	filenameExtension := aString
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> fileNamesInFileInOrder [
+	"Normally the order that fileins are created in does not matter"
+
+	^ fileNamesInFileInOrder ifNil: [ self topazFilenamePackageNamesMap keys ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> fileNamesInFileInOrder: object [
+	fileNamesInFileInOrder := object
 ]
 
 { #category : 'accessing' }
