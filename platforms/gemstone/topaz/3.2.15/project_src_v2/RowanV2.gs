@@ -16,6 +16,9 @@ doit
 true.
 %
 
+removeallmethods UUID
+removeallclassmethods UUID
+
 doit
 (Error
 	subclass: 'CypressError'
@@ -32,6 +35,9 @@ doit
 true.
 %
 
+removeallmethods CypressError
+removeallclassmethods CypressError
+
 doit
 (Error
 	subclass: 'CypressJsonError'
@@ -47,6 +53,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressJsonError
+removeallclassmethods CypressJsonError
 
 doit
 (Error
@@ -76,6 +85,9 @@ exception:			the Error which occurred while trying to apply the Patch Operation.
 true.
 %
 
+removeallmethods CypressLoaderError
+removeallclassmethods CypressLoaderError
+
 doit
 (Error
 	subclass: 'CypressLoaderMissingClasses'
@@ -91,6 +103,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressLoaderMissingClasses
+removeallclassmethods CypressLoaderMissingClasses
 
 doit
 (Error
@@ -108,6 +123,9 @@ doit
 true.
 %
 
+removeallmethods FileException
+removeallclassmethods FileException
+
 doit
 (FileException
 	subclass: 'CannotDeleteFileException'
@@ -124,6 +142,9 @@ doit
 true.
 %
 
+removeallmethods CannotDeleteFileException
+removeallclassmethods CannotDeleteFileException
+
 doit
 (FileException
 	subclass: 'FileAlreadyExistsException'
@@ -139,6 +160,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods FileAlreadyExistsException
+removeallclassmethods FileAlreadyExistsException
 
 doit
 (FileException
@@ -168,6 +192,9 @@ Applications that want to offer the user the opportunity to select a different f
 true.
 %
 
+removeallmethods FileDoesNotExistException
+removeallclassmethods FileDoesNotExistException
+
 doit
 (FileException
 	subclass: 'FileWriteError'
@@ -183,6 +210,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods FileWriteError
+removeallclassmethods FileWriteError
 
 doit
 (Error
@@ -200,6 +230,9 @@ doit
 true.
 %
 
+removeallmethods FileSystemError
+removeallclassmethods FileSystemError
+
 doit
 (FileSystemError
 	subclass: 'DirectoryDoesNotExist'
@@ -215,6 +248,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods DirectoryDoesNotExist
+removeallclassmethods DirectoryDoesNotExist
 
 doit
 (FileSystemError
@@ -232,6 +268,9 @@ doit
 true.
 %
 
+removeallmethods DirectoryExists
+removeallclassmethods DirectoryExists
+
 doit
 (FileSystemError
 	subclass: 'DirectoryIsNotEmpty'
@@ -248,6 +287,9 @@ doit
 true.
 %
 
+removeallmethods DirectoryIsNotEmpty
+removeallclassmethods DirectoryIsNotEmpty
+
 doit
 (FileSystemError
 	subclass: 'FileExists'
@@ -263,6 +305,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods FileExists
+removeallclassmethods FileExists
 
 doit
 (FileSystemError
@@ -281,6 +326,9 @@ doit
 true.
 %
 
+removeallmethods IllegalName
+removeallclassmethods IllegalName
+
 doit
 (Error
 	subclass: 'RwTonelParseError'
@@ -297,6 +345,9 @@ I happen whenever the parsing of a tonel file is broken in someway.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwTonelParseError
+removeallclassmethods RwTonelParseError
 
 doit
 (Error
@@ -315,6 +366,9 @@ doit
 true.
 %
 
+removeallmethods STONReaderError
+removeallclassmethods STONReaderError
+
 doit
 (Error
 	subclass: 'STONWriterError'
@@ -330,6 +384,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONWriterError
+removeallclassmethods STONWriterError
 
 doit
 (Error
@@ -352,6 +409,9 @@ Part of Zinc HTTP Components';
 true.
 %
 
+removeallmethods ZnCharacterEncodingError
+removeallclassmethods ZnCharacterEncodingError
+
 doit
 (Magnitude
 	indexableSubclass: 'RwGemStoneVersionNumber'
@@ -369,6 +429,9 @@ GemStone versions are simply an unbounded collection of $. separated positive in
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGemStoneVersionNumber
+removeallclassmethods RwGemStoneVersionNumber
 
 doit
 (Magnitude
@@ -727,6 +790,9 @@ http://creativecommons.org/licenses/by/3.0/';
 true.
 %
 
+removeallmethods RwSemanticVersionNumber
+removeallclassmethods RwSemanticVersionNumber
+
 doit
 (Notification
 	subclass: 'CypressLoaderErrorNotification'
@@ -753,6 +819,9 @@ exception:			the Error which occurred while trying to apply the Patch Operation.
 true.
 %
 
+removeallmethods CypressLoaderErrorNotification
+removeallclassmethods CypressLoaderErrorNotification
+
 doit
 (Notification
 	subclass: 'GsInteractionRequest'
@@ -767,6 +836,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods GsInteractionRequest
+removeallclassmethods GsInteractionRequest
 
 doit
 (Notification
@@ -784,6 +856,9 @@ doit
 true.
 %
 
+removeallmethods ResolutionRequest
+removeallclassmethods ResolutionRequest
+
 doit
 (Notification
 	subclass: 'RwNotification'
@@ -800,6 +875,9 @@ doit
 true.
 %
 
+removeallmethods RwNotification
+removeallclassmethods RwNotification
+
 doit
 (RwNotification
 	subclass: 'RwAddUpdateRemoveMethodForUnpackagedClassNotification'
@@ -814,6 +892,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAddUpdateRemoveMethodForUnpackagedClassNotification
+removeallclassmethods RwAddUpdateRemoveMethodForUnpackagedClassNotification
 
 doit
 (RwNotification
@@ -830,6 +911,9 @@ doit
 true.
 %
 
+removeallmethods RwAdoptAuditErrorNotification
+removeallclassmethods RwAdoptAuditErrorNotification
+
 doit
 (RwAdoptAuditErrorNotification
 	subclass: 'RwAdoptAuditClassErrorNotification'
@@ -844,6 +928,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAdoptAuditClassErrorNotification
+removeallclassmethods RwAdoptAuditClassErrorNotification
 
 doit
 (RwAdoptAuditClassErrorNotification
@@ -860,6 +947,9 @@ doit
 true.
 %
 
+removeallmethods RwAdoptMissingClassErrorNotification
+removeallclassmethods RwAdoptMissingClassErrorNotification
+
 doit
 (RwAdoptAuditClassErrorNotification
 	subclass: 'RwAuditClassErrorNotification'
@@ -874,6 +964,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAuditClassErrorNotification
+removeallclassmethods RwAuditClassErrorNotification
 
 doit
 (RwAdoptAuditErrorNotification
@@ -890,6 +983,9 @@ doit
 true.
 %
 
+removeallmethods RwAdoptAuditMethodErrorNotification
+removeallclassmethods RwAdoptAuditMethodErrorNotification
+
 doit
 (RwAdoptAuditMethodErrorNotification
 	subclass: 'RwAdoptMissingMethodErrorNotification'
@@ -904,6 +1000,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAdoptMissingMethodErrorNotification
+removeallclassmethods RwAdoptMissingMethodErrorNotification
 
 doit
 (RwAdoptAuditMethodErrorNotification
@@ -920,6 +1019,9 @@ doit
 true.
 %
 
+removeallmethods RwAuditMethodErrorNotification
+removeallclassmethods RwAuditMethodErrorNotification
+
 doit
 (RwNotification
 	subclass: 'RwAllowChangeRepositoryRevisionOnResolveNotification'
@@ -934,6 +1036,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAllowChangeRepositoryRevisionOnResolveNotification
+removeallclassmethods RwAllowChangeRepositoryRevisionOnResolveNotification
 
 doit
 (RwNotification
@@ -950,6 +1055,9 @@ doit
 true.
 %
 
+removeallmethods RwDeleteClassFromSystemNotification
+removeallclassmethods RwDeleteClassFromSystemNotification
+
 doit
 (RwNotification
 	subclass: 'RwExecuteClassInitializeMethodsAfterLoadNotification'
@@ -964,6 +1072,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwExecuteClassInitializeMethodsAfterLoadNotification
+removeallclassmethods RwExecuteClassInitializeMethodsAfterLoadNotification
 
 doit
 (RwNotification
@@ -980,6 +1091,9 @@ doit
 true.
 %
 
+removeallmethods RwExistingAssociationWithSameKeyNotification
+removeallclassmethods RwExistingAssociationWithSameKeyNotification
+
 doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingClassNotification'
@@ -994,6 +1108,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwExistingVisitorAddingExistingClassNotification
+removeallclassmethods RwExistingVisitorAddingExistingClassNotification
 
 doit
 (RwNotification
@@ -1010,6 +1127,9 @@ doit
 true.
 %
 
+removeallmethods RwInvalidCategoryProtocolConventionErrorNotification
+removeallclassmethods RwInvalidCategoryProtocolConventionErrorNotification
+
 doit
 (RwInvalidCategoryProtocolConventionErrorNotification
 	subclass: 'RwInvalidClassCategoryConventionErrorNotification'
@@ -1024,6 +1144,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwInvalidClassCategoryConventionErrorNotification
+removeallclassmethods RwInvalidClassCategoryConventionErrorNotification
 
 doit
 (RwInvalidCategoryProtocolConventionErrorNotification
@@ -1040,6 +1163,9 @@ doit
 true.
 %
 
+removeallmethods RwInvalidMethodProtocolConventionErrorNotification
+removeallclassmethods RwInvalidMethodProtocolConventionErrorNotification
+
 doit
 (RwInvalidMethodProtocolConventionErrorNotification
 	subclass: 'RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification'
@@ -1054,6 +1180,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+removeallclassmethods RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
 
 doit
 (RwInvalidMethodProtocolConventionErrorNotification
@@ -1070,6 +1199,9 @@ doit
 true.
 %
 
+removeallmethods RwExtensionProtocolNonExtensionMethodErrorNotification
+removeallclassmethods RwExtensionProtocolNonExtensionMethodErrorNotification
+
 doit
 (RwInvalidMethodProtocolConventionErrorNotification
 	subclass: 'RwNonExtensionProtocolExtensionMethodErrorNotification'
@@ -1085,6 +1217,9 @@ doit
 true.
 %
 
+removeallmethods RwNonExtensionProtocolExtensionMethodErrorNotification
+removeallclassmethods RwNonExtensionProtocolExtensionMethodErrorNotification
+
 doit
 (RwNotification
 	subclass: 'RwPerformingUnpackagedEditNotification'
@@ -1099,6 +1234,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPerformingUnpackagedEditNotification
+removeallclassmethods RwPerformingUnpackagedEditNotification
 
 doit
 (Notification
@@ -1120,6 +1258,9 @@ If unhandled,  a RwTonelParseError is signalled.';
 true.
 %
 
+removeallmethods RwTonelParseRequireMethodCategoryNotification
+removeallclassmethods RwTonelParseRequireMethodCategoryNotification
+
 doit
 (Object
 	subclass: 'AbstractFileReference'
@@ -1135,6 +1276,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods AbstractFileReference
+removeallclassmethods AbstractFileReference
 
 doit
 (AbstractFileReference
@@ -1182,6 +1326,9 @@ path
 true.
 %
 
+removeallmethods FileLocator
+removeallclassmethods FileLocator
+
 doit
 (AbstractFileReference
 	subclass: 'FileReference'
@@ -1207,6 +1354,9 @@ disk working.                         	"a reference to the working directory"';
 true.
 %
 
+removeallmethods FileReference
+removeallclassmethods FileReference
+
 doit
 (Object
 	subclass: 'CypressAbstractPackageFiler'
@@ -1222,6 +1372,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressAbstractPackageFiler
+removeallclassmethods CypressAbstractPackageFiler
 
 doit
 (CypressAbstractPackageFiler
@@ -1239,6 +1392,9 @@ doit
 true.
 %
 
+removeallmethods CypressAbstractFileoutWriter
+removeallclassmethods CypressAbstractFileoutWriter
+
 doit
 (CypressAbstractFileoutWriter
 	subclass: 'CypressSmalltalkFileoutWriter'
@@ -1254,6 +1410,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressSmalltalkFileoutWriter
+removeallclassmethods CypressSmalltalkFileoutWriter
 
 doit
 (CypressAbstractFileoutWriter
@@ -1271,6 +1430,9 @@ doit
 true.
 %
 
+removeallmethods CypressTopazFileoutWriter
+removeallclassmethods CypressTopazFileoutWriter
+
 doit
 (CypressAbstractPackageFiler
 	subclass: 'CypressAbstractPackageReader'
@@ -1286,6 +1448,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressAbstractPackageReader
+removeallclassmethods CypressAbstractPackageReader
 
 doit
 (CypressAbstractPackageReader
@@ -1303,6 +1468,9 @@ doit
 true.
 %
 
+removeallmethods CypressDoNothingPackageReader
+removeallclassmethods CypressDoNothingPackageReader
+
 doit
 (CypressAbstractPackageReader
 	subclass: 'CypressFileTreeFormatPackageReader'
@@ -1318,6 +1486,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressFileTreeFormatPackageReader
+removeallclassmethods CypressFileTreeFormatPackageReader
 
 doit
 (CypressAbstractPackageReader
@@ -1335,6 +1506,9 @@ doit
 true.
 %
 
+removeallmethods CypressFlexiblePackageReader
+removeallclassmethods CypressFlexiblePackageReader
+
 doit
 (CypressAbstractPackageReader
 	subclass: 'CypressPackageReader'
@@ -1350,6 +1524,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressPackageReader
+removeallclassmethods CypressPackageReader
 
 doit
 (CypressAbstractPackageFiler
@@ -1367,6 +1544,9 @@ doit
 true.
 %
 
+removeallmethods CypressAbstractPackageWriter
+removeallclassmethods CypressAbstractPackageWriter
+
 doit
 (CypressAbstractPackageWriter
 	subclass: 'CypressFileTreeFormatPackageWriter'
@@ -1382,6 +1562,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressFileTreeFormatPackageWriter
+removeallclassmethods CypressFileTreeFormatPackageWriter
 
 doit
 (CypressAbstractPackageWriter
@@ -1399,6 +1582,9 @@ doit
 true.
 %
 
+removeallmethods CypressPackageWriter
+removeallclassmethods CypressPackageWriter
+
 doit
 (CypressAbstractPackageWriter
 	subclass: 'CypressStrictFileTreeFormatDoNothingPackageWriter'
@@ -1414,6 +1600,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressStrictFileTreeFormatDoNothingPackageWriter
+removeallclassmethods CypressStrictFileTreeFormatDoNothingPackageWriter
 
 doit
 (Object
@@ -1431,6 +1620,9 @@ doit
 true.
 %
 
+removeallmethods CypressAbstractRepository
+removeallclassmethods CypressAbstractRepository
+
 doit
 (CypressAbstractRepository
 	subclass: 'CypressAbstractFileoutRepository'
@@ -1446,6 +1638,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressAbstractFileoutRepository
+removeallclassmethods CypressAbstractFileoutRepository
 
 doit
 (CypressAbstractFileoutRepository
@@ -1467,6 +1662,9 @@ It could be made readable, to be able to file-in Smalltalk scripts, but it''s no
 true.
 %
 
+removeallmethods CypressSmalltalkRepository
+removeallclassmethods CypressSmalltalkRepository
+
 doit
 (CypressAbstractFileoutRepository
 	subclass: 'CypressTopazRepository'
@@ -1487,6 +1685,9 @@ It could be made readable, to be able to file-in Topaz scripts, but it''s not th
 true.
 %
 
+removeallmethods CypressTopazRepository
+removeallclassmethods CypressTopazRepository
+
 doit
 (CypressAbstractRepository
 	subclass: 'CypressDictionaryRepository'
@@ -1502,6 +1703,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressDictionaryRepository
+removeallclassmethods CypressDictionaryRepository
 
 doit
 (CypressAbstractRepository
@@ -1519,6 +1723,9 @@ doit
 true.
 %
 
+removeallmethods CypressFileSystemRepository
+removeallclassmethods CypressFileSystemRepository
+
 doit
 (CypressFileSystemRepository
 	subclass: 'CypressFileSystemGitRepository'
@@ -1534,6 +1741,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressFileSystemGitRepository
+removeallclassmethods CypressFileSystemGitRepository
 
 doit
 (Object
@@ -1551,6 +1761,9 @@ doit
 true.
 %
 
+removeallmethods CypressFileUtilities
+removeallclassmethods CypressFileUtilities
+
 doit
 (CypressFileUtilities
 	subclass: 'CypressGemStoneDirectoryUtilities'
@@ -1566,6 +1779,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressGemStoneDirectoryUtilities
+removeallclassmethods CypressGemStoneDirectoryUtilities
 
 doit
 (Object
@@ -1583,6 +1799,9 @@ doit
 true.
 %
 
+removeallmethods CypressGsGeneralDependencySorter
+removeallclassmethods CypressGsGeneralDependencySorter
+
 doit
 (Object
 	subclass: 'CypressJsonParser'
@@ -1598,6 +1817,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressJsonParser
+removeallclassmethods CypressJsonParser
 
 doit
 (Object
@@ -1615,6 +1837,9 @@ doit
 true.
 %
 
+removeallmethods CypressObject
+removeallclassmethods CypressObject
+
 doit
 (CypressObject
 	subclass: 'CypressAbstractPackageInformation'
@@ -1630,6 +1855,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressAbstractPackageInformation
+removeallclassmethods CypressAbstractPackageInformation
 
 doit
 (CypressAbstractPackageInformation
@@ -1647,6 +1875,9 @@ doit
 true.
 %
 
+removeallmethods CypressConflictingPackageInformation
+removeallclassmethods CypressConflictingPackageInformation
+
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressEclipsedPackageInformation'
@@ -1662,6 +1893,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressEclipsedPackageInformation
+removeallclassmethods CypressEclipsedPackageInformation
 
 doit
 (CypressAbstractPackageInformation
@@ -1679,6 +1913,9 @@ doit
 true.
 %
 
+removeallmethods CypressKnownPackageInformation
+removeallclassmethods CypressKnownPackageInformation
+
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressUnknownPackageInformation'
@@ -1694,6 +1931,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressUnknownPackageInformation
+removeallclassmethods CypressUnknownPackageInformation
 
 doit
 (CypressObject
@@ -1711,6 +1951,9 @@ doit
 true.
 %
 
+removeallmethods CypressDefinition
+removeallclassmethods CypressDefinition
+
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
@@ -1726,6 +1969,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressClassDefinition
+removeallclassmethods CypressClassDefinition
 
 doit
 (CypressDefinition
@@ -1743,6 +1989,9 @@ doit
 true.
 %
 
+removeallmethods CypressMethodDefinition
+removeallclassmethods CypressMethodDefinition
+
 doit
 (CypressMethodDefinition
 	subclass: 'RwCypressMethodDefinition'
@@ -1757,6 +2006,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwCypressMethodDefinition
+removeallclassmethods RwCypressMethodDefinition
 
 doit
 (CypressObject
@@ -1774,6 +2026,9 @@ doit
 true.
 %
 
+removeallmethods CypressDefinitionIndex
+removeallclassmethods CypressDefinitionIndex
+
 doit
 (CypressObject
 	subclass: 'CypressDependencySorter'
@@ -1790,6 +2045,9 @@ doit
 true.
 %
 
+removeallmethods CypressDependencySorter
+removeallclassmethods CypressDependencySorter
+
 doit
 (CypressDependencySorter
 	subclass: 'CypressEnvironmentDependencySorter'
@@ -1804,6 +2062,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressEnvironmentDependencySorter
+removeallclassmethods CypressEnvironmentDependencySorter
 
 doit
 (CypressObject
@@ -1821,6 +2082,9 @@ doit
 true.
 %
 
+removeallmethods CypressLoader
+removeallclassmethods CypressLoader
+
 doit
 (CypressLoader
 	subclass: 'CypressEnvironmentLoader'
@@ -1835,6 +2099,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressEnvironmentLoader
+removeallclassmethods CypressEnvironmentLoader
 
 doit
 (CypressObject
@@ -1851,6 +2118,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressPackageDefinition
+removeallclassmethods CypressPackageDefinition
 
 doit
 (CypressPackageDefinition
@@ -1872,6 +2142,9 @@ Object
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressEnvironmentPackageDefinition
+removeallclassmethods CypressEnvironmentPackageDefinition
 
 doit
 (CypressObject
@@ -1912,6 +2185,9 @@ Instance Variables
 true.
 %
 
+removeallmethods CypressPackageInformation
+removeallclassmethods CypressPackageInformation
+
 doit
 (CypressObject
 	subclass: 'CypressPatch'
@@ -1927,6 +2203,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressPatch
+removeallclassmethods CypressPatch
 
 doit
 (CypressObject
@@ -1944,6 +2223,9 @@ doit
 true.
 %
 
+removeallmethods CypressPatchOperation
+removeallclassmethods CypressPatchOperation
+
 doit
 (CypressPatchOperation
 	subclass: 'CypressAddition'
@@ -1959,6 +2241,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressAddition
+removeallclassmethods CypressAddition
 
 doit
 (CypressPatchOperation
@@ -1976,6 +2261,9 @@ doit
 true.
 %
 
+removeallmethods CypressModification
+removeallclassmethods CypressModification
+
 doit
 (CypressPatchOperation
 	subclass: 'CypressRemoval'
@@ -1991,6 +2279,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressRemoval
+removeallclassmethods CypressRemoval
 
 doit
 (CypressObject
@@ -2008,6 +2299,9 @@ doit
 true.
 %
 
+removeallmethods CypressSnapshot
+removeallclassmethods CypressSnapshot
+
 doit
 (CypressObject
 	subclass: 'CypressStructure'
@@ -2023,6 +2317,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressStructure
+removeallclassmethods CypressStructure
 
 doit
 (CypressStructure
@@ -2040,6 +2337,9 @@ doit
 true.
 %
 
+removeallmethods CypressClassStructure
+removeallclassmethods CypressClassStructure
+
 doit
 (CypressStructure
 	subclass: 'CypressMethodStructure'
@@ -2056,6 +2356,9 @@ doit
 true.
 %
 
+removeallmethods CypressMethodStructure
+removeallclassmethods CypressMethodStructure
+
 doit
 (CypressMethodStructure
 	subclass: 'RwCypressMethodStructure'
@@ -2070,6 +2373,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwCypressMethodStructure
+removeallclassmethods RwCypressMethodStructure
 
 doit
 (CypressStructure
@@ -2087,6 +2393,9 @@ doit
 true.
 %
 
+removeallmethods CypressPackageStructure
+removeallclassmethods CypressPackageStructure
+
 doit
 (CypressPackageStructure
 	subclass: 'RwCypressPackageStructure'
@@ -2101,6 +2410,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwCypressPackageStructure
+removeallclassmethods RwCypressPackageStructure
 
 doit
 (Object
@@ -2118,6 +2430,9 @@ doit
 true.
 %
 
+removeallmethods CypressPackageComparator
+removeallclassmethods CypressPackageComparator
+
 doit
 (Object
 	subclass: 'CypressPackageManager'
@@ -2133,6 +2448,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressPackageManager
+removeallclassmethods CypressPackageManager
 
 doit
 (Object
@@ -2150,6 +2468,9 @@ doit
 true.
 %
 
+removeallmethods CypressPackageManager2
+removeallclassmethods CypressPackageManager2
+
 doit
 (Object
 	subclass: 'CypressPackageManager3'
@@ -2166,6 +2487,9 @@ doit
 true.
 %
 
+removeallmethods CypressPackageManager3
+removeallclassmethods CypressPackageManager3
+
 doit
 (CypressPackageManager3
 	subclass: 'CypressEnvironmentPackageManager'
@@ -2180,6 +2504,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressEnvironmentPackageManager
+removeallclassmethods CypressEnvironmentPackageManager
 
 doit
 (Object
@@ -2196,6 +2523,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressPackageStringComparator
+removeallclassmethods CypressPackageStringComparator
 
 doit
 (Object
@@ -2215,6 +2545,9 @@ A CypressReference is an abstract superclass for various kinds of references to 
 true.
 %
 
+removeallmethods CypressReference
+removeallclassmethods CypressReference
+
 doit
 (CypressReference
 	subclass: 'CypressPackageReference'
@@ -2232,6 +2565,9 @@ A CypressPackageReference refers to a specific Cypress package.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressPackageReference
+removeallclassmethods CypressPackageReference
 
 doit
 (CypressPackageReference
@@ -2251,6 +2587,9 @@ A CypressResolvedReference refers to a specific Cypress package in a repository.
 true.
 %
 
+removeallmethods CypressResolvedReference
+removeallclassmethods CypressResolvedReference
+
 doit
 (Object
 	subclass: 'CypressUrl'
@@ -2268,6 +2607,9 @@ A Uniform Resource Locator.  It specifies the location of a document on the Inte
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressUrl
+removeallclassmethods CypressUrl
 
 doit
 (CypressUrl
@@ -2334,6 +2676,9 @@ Notes regarding non RFC features in this class:
 true.
 %
 
+removeallmethods CypressFileUrl
+removeallclassmethods CypressFileUrl
+
 doit
 (CypressFileUrl
 	subclass: 'CypressAbstractFileUrl'
@@ -2349,6 +2694,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressAbstractFileUrl
+removeallclassmethods CypressAbstractFileUrl
 
 doit
 (CypressAbstractFileUrl
@@ -2366,6 +2714,9 @@ doit
 true.
 %
 
+removeallmethods CypressCypressFileUrl
+removeallclassmethods CypressCypressFileUrl
+
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressFileTreeFormatFileUrl'
@@ -2381,6 +2732,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressFileTreeFormatFileUrl
+removeallclassmethods CypressFileTreeFormatFileUrl
 
 doit
 (CypressAbstractFileUrl
@@ -2398,6 +2752,9 @@ doit
 true.
 %
 
+removeallmethods CypressFileTreeReadOnlyFileUrl
+removeallclassmethods CypressFileTreeReadOnlyFileUrl
+
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressGitFileUrl'
@@ -2413,6 +2770,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressGitFileUrl
+removeallclassmethods CypressGitFileUrl
 
 doit
 (CypressGitFileUrl
@@ -2430,6 +2790,9 @@ doit
 true.
 %
 
+removeallmethods CypressGitFileTreeUrl
+removeallclassmethods CypressGitFileTreeUrl
+
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressLaxFileUrl'
@@ -2445,6 +2808,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressLaxFileUrl
+removeallclassmethods CypressLaxFileUrl
 
 doit
 (CypressAbstractFileUrl
@@ -2462,6 +2828,9 @@ doit
 true.
 %
 
+removeallmethods CypressSmalltalkUrl
+removeallclassmethods CypressSmalltalkUrl
+
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressTopazUrl'
@@ -2477,6 +2846,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressTopazUrl
+removeallclassmethods CypressTopazUrl
 
 doit
 (CypressUrl
@@ -2496,6 +2868,9 @@ a URL type that can''t be broken down in any systematic way.  For example, mailt
 true.
 %
 
+removeallmethods CypressGenericUrl
+removeallclassmethods CypressGenericUrl
+
 doit
 (CypressGenericUrl
 	subclass: 'CypressBrowserUrl'
@@ -2513,6 +2888,9 @@ URLs that instruct a browser to do something.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressBrowserUrl
+removeallclassmethods CypressBrowserUrl
 
 doit
 (CypressGenericUrl
@@ -2532,6 +2910,9 @@ a URL specifying a mailing address; activating it triggers a mail-sender to star
 true.
 %
 
+removeallmethods CypressMailtoUrl
+removeallclassmethods CypressMailtoUrl
+
 doit
 (CypressUrl
 	subclass: 'CypressHierarchicalUrl'
@@ -2550,6 +2931,9 @@ A URL which has a hierarchical encoding.  For instance, http and ftp URLs are hi
 true.
 %
 
+removeallmethods CypressHierarchicalUrl
+removeallclassmethods CypressHierarchicalUrl
+
 doit
 (CypressHierarchicalUrl
 	subclass: 'CypressFtpUrl'
@@ -2565,6 +2949,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressFtpUrl
+removeallclassmethods CypressFtpUrl
 
 doit
 (CypressHierarchicalUrl
@@ -2592,6 +2979,9 @@ TODO: use the username and password, if specified
 true.
 %
 
+removeallmethods CypressHttpUrl
+removeallclassmethods CypressHttpUrl
+
 doit
 (CypressHttpUrl
 	subclass: 'CypressHttpsUrl'
@@ -2607,6 +2997,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CypressHttpsUrl
+removeallclassmethods CypressHttpsUrl
 
 doit
 (Object
@@ -2626,6 +3019,9 @@ A CypressVersionReference refers to a specific version of a Monticello package.'
 true.
 %
 
+removeallmethods CypressVersionReference
+removeallclassmethods CypressVersionReference
+
 doit
 (Object
 	subclass: 'FastUUIDGenerator'
@@ -2640,6 +3036,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods FastUUIDGenerator
+removeallclassmethods FastUUIDGenerator
 
 doit
 (Object
@@ -2695,6 +3094,9 @@ buffer asString.';
 true.
 %
 
+removeallmethods File
+removeallclassmethods File
+
 doit
 (Object
 	subclass: 'FileSystem'
@@ -2723,6 +3125,9 @@ FileSystem disk root
 		immediateInvariant.
 true.
 %
+
+removeallmethods FileSystem
+removeallclassmethods FileSystem
 
 doit
 (Object
@@ -2757,6 +3162,9 @@ size
 true.
 %
 
+removeallmethods FileSystemDirectoryEntry
+removeallclassmethods FileSystemDirectoryEntry
+
 doit
 (Object
 	subclass: 'FileSystemGuide'
@@ -2778,6 +3186,9 @@ work
 		immediateInvariant.
 true.
 %
+
+removeallmethods FileSystemGuide
+removeallclassmethods FileSystemGuide
 
 doit
 (FileSystemGuide
@@ -2806,6 +3217,9 @@ I use my work instance variable as a queue, adding nodes to be visited to the en
 true.
 %
 
+removeallmethods BreadthFirstGuide
+removeallclassmethods BreadthFirstGuide
+
 doit
 (FileSystemGuide
 	subclass: 'PostorderGuide'
@@ -2831,6 +3245,9 @@ I use my work instance variable as a stack. I push messages that cause nodes to 
 		immediateInvariant.
 true.
 %
+
+removeallmethods PostorderGuide
+removeallclassmethods PostorderGuide
 
 doit
 (FileSystemGuide
@@ -2858,6 +3275,9 @@ I use my work instance variable as a stack. I push nodes to be visited and visit
 true.
 %
 
+removeallmethods PreorderGuide
+removeallclassmethods PreorderGuide
+
 doit
 (Object
 	subclass: 'FileSystemHandle'
@@ -2873,6 +3293,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods FileSystemHandle
+removeallclassmethods FileSystemHandle
 
 doit
 (FileSystemHandle
@@ -2892,6 +3315,9 @@ I implement the primitives on my class side.';
 true.
 %
 
+removeallmethods FileHandle
+removeallclassmethods FileHandle
+
 doit
 (FileSystemHandle
 	subclass: 'MemoryHandle'
@@ -2908,6 +3334,9 @@ doit
 true.
 %
 
+removeallmethods MemoryHandle
+removeallclassmethods MemoryHandle
+
 doit
 (Object
 	subclass: 'FileSystemPermission'
@@ -2923,6 +3352,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods FileSystemPermission
+removeallclassmethods FileSystemPermission
 
 doit
 (Object
@@ -2944,6 +3376,9 @@ next
 true.
 %
 
+removeallmethods FileSystemResolver
+removeallclassmethods FileSystemResolver
+
 doit
 (FileSystemResolver
 	subclass: 'InteractiveResolver'
@@ -2959,6 +3394,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods InteractiveResolver
+removeallclassmethods InteractiveResolver
 
 doit
 (FileSystemResolver
@@ -2976,6 +3414,9 @@ doit
 true.
 %
 
+removeallmethods PlatformResolver
+removeallclassmethods PlatformResolver
+
 doit
 (PlatformResolver
 	subclass: 'MacOSResolver'
@@ -2991,6 +3432,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods MacOSResolver
+removeallclassmethods MacOSResolver
 
 doit
 (PlatformResolver
@@ -3008,6 +3452,9 @@ doit
 true.
 %
 
+removeallmethods UnixResolver
+removeallclassmethods UnixResolver
+
 doit
 (PlatformResolver
 	subclass: 'WindowsResolver'
@@ -3024,6 +3471,9 @@ doit
 true.
 %
 
+removeallmethods WindowsResolver
+removeallclassmethods WindowsResolver
+
 doit
 (FileSystemResolver
 	subclass: 'SystemResolver'
@@ -3039,6 +3489,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods SystemResolver
+removeallclassmethods SystemResolver
 
 doit
 (Object
@@ -3063,6 +3516,9 @@ My associated filesystem can be accessed as follows:
 true.
 %
 
+removeallmethods FileSystemStore
+removeallclassmethods FileSystemStore
+
 doit
 (FileSystemStore
 	subclass: 'DiskStore'
@@ -3080,6 +3536,9 @@ doit
 true.
 %
 
+removeallmethods DiskStore
+removeallclassmethods DiskStore
+
 doit
 (DiskStore
 	subclass: 'UnixStore'
@@ -3095,6 +3554,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods UnixStore
+removeallclassmethods UnixStore
 
 doit
 (UnixStore
@@ -3112,6 +3574,9 @@ doit
 true.
 %
 
+removeallmethods MacStore
+removeallclassmethods MacStore
+
 doit
 (DiskStore
 	subclass: 'WindowsStore'
@@ -3127,6 +3592,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods WindowsStore
+removeallclassmethods WindowsStore
 
 doit
 (FileSystemStore
@@ -3144,6 +3612,9 @@ doit
 true.
 %
 
+removeallmethods MemoryStore
+removeallclassmethods MemoryStore
+
 doit
 (Object
 	subclass: 'FileSystemVisitor'
@@ -3160,6 +3631,9 @@ doit
 true.
 %
 
+removeallmethods FileSystemVisitor
+removeallclassmethods FileSystemVisitor
+
 doit
 (FileSystemVisitor
 	subclass: 'AbstractEnumerationVisitor'
@@ -3175,6 +3649,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods AbstractEnumerationVisitor
+removeallclassmethods AbstractEnumerationVisitor
 
 doit
 (AbstractEnumerationVisitor
@@ -3194,6 +3671,9 @@ I can use any guide, and the objects in the array I produce will reflect the ord
 true.
 %
 
+removeallmethods CollectVisitor
+removeallclassmethods CollectVisitor
+
 doit
 (AbstractEnumerationVisitor
 	subclass: 'SelectVisitor'
@@ -3212,6 +3692,9 @@ I can use any guide, and the objects in the array I produce will reflect the ord
 true.
 %
 
+removeallmethods SelectVisitor
+removeallclassmethods SelectVisitor
+
 doit
 (FileSystemVisitor
 	subclass: 'CopyVisitor'
@@ -3227,6 +3710,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods CopyVisitor
+removeallclassmethods CopyVisitor
 
 doit
 (FileSystemVisitor
@@ -3244,6 +3730,9 @@ doit
 true.
 %
 
+removeallmethods DeleteVisitor
+removeallclassmethods DeleteVisitor
+
 doit
 (Object
 	subclass: 'GsInteraction'
@@ -3258,6 +3747,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods GsInteraction
+removeallclassmethods GsInteraction
 
 doit
 (GsInteraction
@@ -3274,6 +3766,9 @@ doit
 true.
 %
 
+removeallmethods GsChoiceInteraction
+removeallclassmethods GsChoiceInteraction
+
 doit
 (GsInteraction
 	subclass: 'GsConfirmInteraction'
@@ -3288,6 +3783,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods GsConfirmInteraction
+removeallclassmethods GsConfirmInteraction
 
 doit
 (GsConfirmInteraction
@@ -3304,6 +3802,9 @@ doit
 true.
 %
 
+removeallmethods GsNotifyInteraction
+removeallclassmethods GsNotifyInteraction
+
 doit
 (GsInteraction
 	subclass: 'GsInformInteraction'
@@ -3318,6 +3819,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods GsInformInteraction
+removeallclassmethods GsInformInteraction
 
 doit
 (GsInteraction
@@ -3334,6 +3838,9 @@ doit
 true.
 %
 
+removeallmethods GsInspectInteraction
+removeallclassmethods GsInspectInteraction
+
 doit
 (GsInspectInteraction
 	subclass: 'GsExploreInteraction'
@@ -3348,6 +3855,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods GsExploreInteraction
+removeallclassmethods GsExploreInteraction
 
 doit
 (GsInteraction
@@ -3364,6 +3874,9 @@ doit
 true.
 %
 
+removeallmethods GsTextInteraction
+removeallclassmethods GsTextInteraction
+
 doit
 (GsTextInteraction
 	subclass: 'GsMultiLineTextInteraction'
@@ -3379,6 +3892,9 @@ doit
 true.
 %
 
+removeallmethods GsMultiLineTextInteraction
+removeallclassmethods GsMultiLineTextInteraction
+
 doit
 (Object
 	subclass: 'GsInteractionHandler'
@@ -3393,6 +3909,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods GsInteractionHandler
+removeallclassmethods GsInteractionHandler
 
 doit
 (Object
@@ -3410,6 +3929,9 @@ doit
 true.
 %
 
+removeallmethods GsTonelOrderedDictionary
+removeallclassmethods GsTonelOrderedDictionary
+
 doit
 (Object
 	subclass: 'JadeServer'
@@ -3424,6 +3946,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods JadeServer
+removeallclassmethods JadeServer
 
 doit
 (JadeServer
@@ -3440,6 +3965,9 @@ doit
 true.
 %
 
+removeallmethods JadeServer64bit
+removeallclassmethods JadeServer64bit
+
 doit
 (JadeServer64bit
 	subclass: 'JadeServer64bit24'
@@ -3454,6 +3982,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods JadeServer64bit24
+removeallclassmethods JadeServer64bit24
 
 doit
 (JadeServer64bit24
@@ -3470,6 +4001,9 @@ doit
 true.
 %
 
+removeallmethods JadeServer64bit3x
+removeallclassmethods JadeServer64bit3x
+
 doit
 (JadeServer64bit3x
 	subclass: 'JadeServer64bit32'
@@ -3485,6 +4019,9 @@ doit
 true.
 %
 
+removeallmethods JadeServer64bit32
+removeallclassmethods JadeServer64bit32
+
 doit
 (JadeServer64bit32
 	subclass: 'JadeServer64bit35'
@@ -3499,6 +4036,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods JadeServer64bit35
+removeallclassmethods JadeServer64bit35
 
 doit
 (Object
@@ -3517,6 +4057,9 @@ My subclasses should specialize on the kind of file they are.';
 true.
 %
 
+removeallmethods MemoryFileSystemEntry
+removeallclassmethods MemoryFileSystemEntry
+
 doit
 (MemoryFileSystemEntry
 	subclass: 'MemoryFileSystemDirectory'
@@ -3532,6 +4075,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods MemoryFileSystemDirectory
+removeallclassmethods MemoryFileSystemDirectory
 
 doit
 (MemoryFileSystemEntry
@@ -3549,6 +4095,9 @@ doit
 true.
 %
 
+removeallmethods MemoryFileSystemFile
+removeallclassmethods MemoryFileSystemFile
+
 doit
 (Object
 	subclass: 'MemoryFileWriteStream'
@@ -3564,6 +4113,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods MemoryFileWriteStream
+removeallclassmethods MemoryFileWriteStream
 
 doit
 (Object
@@ -3582,6 +4134,9 @@ Generally, the system does not use instances of Message for efficiency reasons. 
 		immediateInvariant.
 true.
 %
+
+removeallmethods Message
+removeallclassmethods Message
 
 doit
 (Object
@@ -3611,6 +4166,9 @@ API path manipulation:
 true.
 %
 
+removeallmethods Path
+removeallclassmethods Path
+
 doit
 (Path
 	subclass: 'AbsolutePath'
@@ -3627,6 +4185,9 @@ doit
 true.
 %
 
+removeallmethods AbsolutePath
+removeallclassmethods AbsolutePath
+
 doit
 (Path
 	subclass: 'RelativePath'
@@ -3642,6 +4203,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RelativePath
+removeallclassmethods RelativePath
 
 doit
 (Object
@@ -3671,6 +4235,9 @@ Shared Variables:
 true.
 %
 
+removeallmethods RBParser
+removeallclassmethods RBParser
+
 doit
 (RBParser
 	subclass: 'RBPatternParser'
@@ -3688,6 +4255,9 @@ doit
 true.
 %
 
+removeallmethods RBPatternParser
+removeallclassmethods RBPatternParser
+
 doit
 (RBParser
 	subclass: 'RBTonelParser'
@@ -3702,6 +4272,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBTonelParser
+removeallclassmethods RBTonelParser
 
 doit
 (Object
@@ -3724,6 +4297,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBParseTreeRule
+removeallclassmethods RBParseTreeRule
 
 doit
 (RBParseTreeRule
@@ -3750,6 +4326,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBReplaceRule
+removeallclassmethods RBReplaceRule
+
 doit
 (RBReplaceRule
 	subclass: 'RBBlockReplaceRule'
@@ -3769,6 +4348,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBBlockReplaceRule
+removeallclassmethods RBBlockReplaceRule
 
 doit
 (RBReplaceRule
@@ -3791,6 +4373,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBStringReplaceRule
+removeallclassmethods RBStringReplaceRule
+
 doit
 (RBParseTreeRule
 	subclass: 'RBSearchRule'
@@ -3811,6 +4396,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBSearchRule
+removeallclassmethods RBSearchRule
 
 doit
 (Object
@@ -3850,6 +4438,9 @@ Shared Variables:
 true.
 %
 
+removeallmethods RBProgramNode
+removeallclassmethods RBProgramNode
+
 doit
 (RBProgramNode
 	subclass: 'RBMethodNode'
@@ -3878,6 +4469,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBMethodNode
+removeallclassmethods RBMethodNode
+
 doit
 (RBMethodNode
 	subclass: 'RBPatternMethodNode'
@@ -3898,6 +4492,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBPatternMethodNode
+removeallclassmethods RBPatternMethodNode
 
 doit
 (RBProgramNode
@@ -3922,6 +4519,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBPragmaNode
+removeallclassmethods RBPragmaNode
+
 doit
 (RBPragmaNode
 	subclass: 'RBPatternPragmaNode'
@@ -3936,6 +4536,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBPatternPragmaNode
+removeallclassmethods RBPatternPragmaNode
 
 doit
 (RBProgramNode
@@ -3958,6 +4561,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBReturnNode
+removeallclassmethods RBReturnNode
 
 doit
 (RBProgramNode
@@ -3983,6 +4589,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBSequenceNode
+removeallclassmethods RBSequenceNode
 
 doit
 (RBProgramNode
@@ -4012,6 +4621,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBValueNode
+removeallclassmethods RBValueNode
+
 doit
 (RBValueNode
 	subclass: 'RBArrayNode'
@@ -4033,6 +4645,9 @@ Instance Variables
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBArrayNode
+removeallclassmethods RBArrayNode
 
 doit
 (RBValueNode
@@ -4056,6 +4671,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBAssignmentNode
+removeallclassmethods RBAssignmentNode
 
 doit
 (RBValueNode
@@ -4083,6 +4701,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBBlockNode
+removeallclassmethods RBBlockNode
+
 doit
 (RBBlockNode
 	subclass: 'RBPatternBlockNode'
@@ -4104,6 +4725,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBPatternBlockNode
+removeallclassmethods RBPatternBlockNode
+
 doit
 (RBPatternBlockNode
 	subclass: 'RBPatternWrapperBlockNode'
@@ -4123,6 +4747,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBPatternWrapperBlockNode
+removeallclassmethods RBPatternWrapperBlockNode
+
 doit
 (RBBlockNode
 	subclass: 'RBQueryBlockNode'
@@ -4137,6 +4764,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBQueryBlockNode
+removeallclassmethods RBQueryBlockNode
 
 doit
 (RBValueNode
@@ -4160,6 +4790,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBCascadeNode
+removeallclassmethods RBCascadeNode
+
 doit
 (RBValueNode
 	subclass: 'RBLiteralNode'
@@ -4175,6 +4808,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBLiteralNode
+removeallclassmethods RBLiteralNode
 
 doit
 (RBLiteralNode
@@ -4198,6 +4834,9 @@ Instance Variables
 true.
 %
 
+removeallmethods RBLiteralArrayNode
+removeallclassmethods RBLiteralArrayNode
+
 doit
 (RBLiteralNode
 	subclass: 'RBLiteralValueNode'
@@ -4216,6 +4855,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBLiteralValueNode
+removeallclassmethods RBLiteralValueNode
 
 doit
 (RBValueNode
@@ -4241,6 +4883,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBMessageNode
+removeallclassmethods RBMessageNode
+
 doit
 (RBMessageNode
 	subclass: 'RBPatternMessageNode'
@@ -4260,6 +4905,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBPatternMessageNode
+removeallclassmethods RBPatternMessageNode
 
 doit
 (RBValueNode
@@ -4281,6 +4929,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBVariableNode
+removeallclassmethods RBVariableNode
 
 doit
 (RBVariableNode
@@ -4313,6 +4964,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBPatternVariableNode
+removeallclassmethods RBPatternVariableNode
+
 doit
 (Object
 	subclass: 'RBProgramNodeVisitor'
@@ -4330,6 +4984,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBProgramNodeVisitor
+removeallclassmethods RBProgramNodeVisitor
 
 doit
 (RBProgramNodeVisitor
@@ -4356,6 +5013,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBConfigurableFormatter
+removeallclassmethods RBConfigurableFormatter
+
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBFormatter'
@@ -4380,6 +5040,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBFormatter
+removeallclassmethods RBFormatter
+
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBParseTreeSearcher'
@@ -4403,6 +5066,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBParseTreeSearcher
+removeallclassmethods RBParseTreeSearcher
+
 doit
 (RBParseTreeSearcher
 	subclass: 'RBParseTreeRewriter'
@@ -4421,6 +5087,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBParseTreeRewriter
+removeallclassmethods RBParseTreeRewriter
 
 doit
 (RBProgramNodeVisitor
@@ -4444,6 +5113,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBReadBeforeWrittenTester
+removeallclassmethods RBReadBeforeWrittenTester
 
 doit
 (Object
@@ -4481,6 +5153,9 @@ Shared Variables:
 true.
 %
 
+removeallmethods RBScanner
+removeallclassmethods RBScanner
+
 doit
 (RBScanner
 	subclass: 'RBPatternScanner'
@@ -4498,6 +5173,9 @@ doit
 true.
 %
 
+removeallmethods RBPatternScanner
+removeallclassmethods RBPatternScanner
+
 doit
 (RBScanner
 	subclass: 'RBTonelScanner'
@@ -4512,6 +5190,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBTonelScanner
+removeallclassmethods RBTonelScanner
 
 doit
 (Object
@@ -4535,6 +5216,9 @@ values <Array of: Object> array of our values
 true.
 %
 
+removeallmethods RBSmallDictionary
+removeallclassmethods RBSmallDictionary
+
 doit
 (Object
 	subclass: 'RBStringReplacement'
@@ -4557,6 +5241,9 @@ Instance Variables:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBStringReplacement
+removeallclassmethods RBStringReplacement
 
 doit
 (Object
@@ -4582,6 +5269,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBToken
+removeallclassmethods RBToken
+
 doit
 (RBToken
 	subclass: 'RBAssignmentToken'
@@ -4599,6 +5289,9 @@ doit
 true.
 %
 
+removeallmethods RBAssignmentToken
+removeallclassmethods RBAssignmentToken
+
 doit
 (RBAssignmentToken
 	subclass: 'RBShortAssignmentToken'
@@ -4613,6 +5306,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBShortAssignmentToken
+removeallclassmethods RBShortAssignmentToken
 
 doit
 (RBToken
@@ -4635,6 +5331,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBValueToken
+removeallclassmethods RBValueToken
+
 doit
 (RBValueToken
 	subclass: 'RBBinarySelectorToken'
@@ -4651,6 +5350,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBBinarySelectorToken
+removeallclassmethods RBBinarySelectorToken
 
 doit
 (RBValueToken
@@ -4669,6 +5371,9 @@ doit
 true.
 %
 
+removeallmethods RBIdentifierToken
+removeallclassmethods RBIdentifierToken
+
 doit
 (RBIdentifierToken
 	subclass: 'RBPathToken'
@@ -4683,6 +5388,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBPathToken
+removeallclassmethods RBPathToken
 
 doit
 (RBValueToken
@@ -4700,6 +5408,9 @@ doit
 true.
 %
 
+removeallmethods RBKeywordToken
+removeallclassmethods RBKeywordToken
+
 doit
 (RBValueToken
 	subclass: 'RBLiteralArrayToken'
@@ -4714,6 +5425,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBLiteralArrayToken
+removeallclassmethods RBLiteralArrayToken
 
 doit
 (RBValueToken
@@ -4736,6 +5450,9 @@ Instance Variables:
 true.
 %
 
+removeallmethods RBLiteralToken
+removeallclassmethods RBLiteralToken
+
 doit
 (RBLiteralToken
 	subclass: 'RBMultiKeywordLiteralToken'
@@ -4751,6 +5468,9 @@ doit
 true.
 %
 
+removeallmethods RBMultiKeywordLiteralToken
+removeallclassmethods RBMultiKeywordLiteralToken
+
 doit
 (RBLiteralToken
 	subclass: 'RBNumberLiteralToken'
@@ -4765,6 +5485,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBNumberLiteralToken
+removeallclassmethods RBNumberLiteralToken
 
 doit
 (RBValueToken
@@ -4784,6 +5507,9 @@ doit
 true.
 %
 
+removeallmethods RBPatternBlockToken
+removeallclassmethods RBPatternBlockToken
+
 doit
 (RBValueToken
 	subclass: 'RBSpecialCharacterToken'
@@ -4801,6 +5527,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RBSpecialCharacterToken
+removeallclassmethods RBSpecialCharacterToken
 
 doit
 (Object
@@ -4821,6 +5550,9 @@ Object
 true.
 %
 
+removeallmethods Rowan
+removeallclassmethods Rowan
+
 doit
 (Object
 	subclass: 'RowanCommandResult'
@@ -4836,6 +5568,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanCommandResult
+removeallclassmethods RowanCommandResult
 
 doit
 (Object
@@ -4853,6 +5588,9 @@ doit
 true.
 %
 
+removeallmethods RowanGsGeneralDependencySorter
+removeallclassmethods RowanGsGeneralDependencySorter
+
 doit
 (Object
 	subclass: 'RowanInterface'
@@ -4867,6 +5605,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanInterface
+removeallclassmethods RowanInterface
 
 doit
 (RowanInterface
@@ -4883,6 +5624,9 @@ doit
 true.
 %
 
+removeallmethods RwAbstractProject
+removeallclassmethods RwAbstractProject
+
 doit
 (RwAbstractProject
 	subclass: 'RwAbstractUnloadedProject'
@@ -4897,6 +5641,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractUnloadedProject
+removeallclassmethods RwAbstractUnloadedProject
 
 doit
 (RwAbstractUnloadedProject
@@ -4913,6 +5660,9 @@ doit
 true.
 %
 
+removeallmethods RwDefinedProject
+removeallclassmethods RwDefinedProject
+
 doit
 (RwAbstractUnloadedProject
 	subclass: 'RwResolvedProject'
@@ -4927,6 +5677,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwResolvedProject
+removeallclassmethods RwResolvedProject
 
 doit
 (RwAbstractProject
@@ -4943,6 +5696,9 @@ doit
 true.
 %
 
+removeallmethods RwProject
+removeallclassmethods RwProject
+
 doit
 (RowanInterface
 	subclass: 'RwPackage'
@@ -4957,6 +5713,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPackage
+removeallclassmethods RwPackage
 
 doit
 (Object
@@ -4986,6 +5745,9 @@ RowanCommandResult addResult: <self>';
 true.
 %
 
+removeallmethods RowanService
+removeallclassmethods RowanService
+
 doit
 (RowanService
 	subclass: 'RowanAnsweringService'
@@ -5007,6 +5769,9 @@ services.';
 true.
 %
 
+removeallmethods RowanAnsweringService
+removeallclassmethods RowanAnsweringService
+
 doit
 (RowanService
 	subclass: 'RowanAutoCommitService'
@@ -5022,6 +5787,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanAutoCommitService
+removeallclassmethods RowanAutoCommitService
 
 doit
 (RowanService
@@ -5039,6 +5807,9 @@ the scope of other services.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanBrowserService
+removeallclassmethods RowanBrowserService
 
 doit
 (RowanService
@@ -5058,6 +5829,9 @@ selectedMethods - client side selection. Used after a method compile.';
 true.
 %
 
+removeallmethods RowanClassService
+removeallclassmethods RowanClassService
+
 doit
 (RowanService
 	subclass: 'RowanDebuggerService'
@@ -5072,6 +5846,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanDebuggerService
+removeallclassmethods RowanDebuggerService
 
 doit
 (RowanService
@@ -5088,6 +5865,9 @@ doit
 true.
 %
 
+removeallmethods RowanDictionaryService
+removeallclassmethods RowanDictionaryService
+
 doit
 (RowanService
 	subclass: 'RowanFrameService'
@@ -5102,6 +5882,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanFrameService
+removeallclassmethods RowanFrameService
 
 doit
 (RowanService
@@ -5118,6 +5901,9 @@ doit
 true.
 %
 
+removeallmethods RowanInspectorService
+removeallclassmethods RowanInspectorService
+
 doit
 (RowanService
 	subclass: 'RowanLoggingService'
@@ -5132,6 +5918,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanLoggingService
+removeallclassmethods RowanLoggingService
 
 doit
 (RowanService
@@ -5148,6 +5937,9 @@ doit
 true.
 %
 
+removeallmethods RowanMethodService
+removeallclassmethods RowanMethodService
+
 doit
 (RowanService
 	subclass: 'RowanPackageService'
@@ -5162,6 +5954,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanPackageService
+removeallclassmethods RowanPackageService
 
 doit
 (RowanService
@@ -5178,6 +5973,9 @@ doit
 true.
 %
 
+removeallmethods RowanProcessService
+removeallclassmethods RowanProcessService
+
 doit
 (RowanService
 	subclass: 'RowanProjectService'
@@ -5192,6 +5990,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanProjectService
+removeallclassmethods RowanProjectService
 
 doit
 (RowanService
@@ -5208,6 +6009,9 @@ doit
 true.
 %
 
+removeallmethods RowanQueryService
+removeallclassmethods RowanQueryService
+
 doit
 (RowanService
 	subclass: 'RowanTestService'
@@ -5222,6 +6026,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RowanTestService
+removeallclassmethods RowanTestService
 
 doit
 (RowanService
@@ -5238,6 +6045,9 @@ doit
 true.
 %
 
+removeallmethods RowanVariableService
+removeallclassmethods RowanVariableService
+
 doit
 (Object
 	subclass: 'RwAbstractConfigurationPlatformAttributeMatcher'
@@ -5252,6 +6062,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractConfigurationPlatformAttributeMatcher
+removeallclassmethods RwAbstractConfigurationPlatformAttributeMatcher
 
 doit
 (RwAbstractConfigurationPlatformAttributeMatcher
@@ -5268,6 +6081,9 @@ doit
 true.
 %
 
+removeallmethods RwGemStoneVersionConfigurationPlatformAttributeMatcher
+removeallclassmethods RwGemStoneVersionConfigurationPlatformAttributeMatcher
+
 doit
 (RwGemStoneVersionConfigurationPlatformAttributeMatcher
 	subclass: 'RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher'
@@ -5282,6 +6098,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher
+removeallclassmethods RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher
 
 doit
 (RwAbstractConfigurationPlatformAttributeMatcher
@@ -5298,6 +6117,9 @@ doit
 true.
 %
 
+removeallmethods RwStringConfigurationPlatformAttributeMatcher
+removeallclassmethods RwStringConfigurationPlatformAttributeMatcher
+
 doit
 (Object
 	subclass: 'RwAbstractProjectComponentVisitorV2'
@@ -5312,6 +6134,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractProjectComponentVisitorV2
+removeallclassmethods RwAbstractProjectComponentVisitorV2
 
 doit
 (RwAbstractProjectComponentVisitorV2
@@ -5328,6 +6153,9 @@ doit
 true.
 %
 
+removeallmethods RwResolvedProjectComponentVisitorV2
+removeallclassmethods RwResolvedProjectComponentVisitorV2
+
 doit
 (Object
 	subclass: 'RwAbstractProjectSetModificationVisitor'
@@ -5343,6 +6171,9 @@ doit
 true.
 %
 
+removeallmethods RwAbstractProjectSetModificationVisitor
+removeallclassmethods RwAbstractProjectSetModificationVisitor
+
 doit
 (Object
 	subclass: 'RwAbstractReaderWriterVisitor'
@@ -5357,6 +6188,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractReaderWriterVisitor
+removeallclassmethods RwAbstractReaderWriterVisitor
 
 doit
 (RwAbstractReaderWriterVisitor
@@ -5376,6 +6210,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwModificationWriterVisitor
+removeallclassmethods RwModificationWriterVisitor
 
 doit
 (RwModificationWriterVisitor
@@ -5398,6 +6235,9 @@ Object
 true.
 %
 
+removeallmethods RwGsModificationTopazWriterVisitorV2
+removeallclassmethods RwGsModificationTopazWriterVisitorV2
+
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwModificationCypressFamilyWriterVisitor'
@@ -5412,6 +6252,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwModificationCypressFamilyWriterVisitor
+removeallclassmethods RwModificationCypressFamilyWriterVisitor
 
 doit
 (RwModificationCypressFamilyWriterVisitor
@@ -5428,6 +6271,9 @@ doit
 true.
 %
 
+removeallmethods RwModificationFiletreeWriterVisitor
+removeallclassmethods RwModificationFiletreeWriterVisitor
+
 doit
 (RwModificationCypressFamilyWriterVisitor
 	subclass: 'RwModificationTonelWriterVisitor'
@@ -5442,6 +6288,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwModificationTonelWriterVisitor
+removeallclassmethods RwModificationTonelWriterVisitor
 
 doit
 (RwModificationWriterVisitor
@@ -5458,6 +6307,9 @@ doit
 true.
 %
 
+removeallmethods RwModificationCypressFamilyWriterVisitorV2
+removeallclassmethods RwModificationCypressFamilyWriterVisitorV2
+
 doit
 (RwModificationCypressFamilyWriterVisitorV2
 	subclass: 'RwModificationFiletreeWriterVisitorV2'
@@ -5472,6 +6324,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwModificationFiletreeWriterVisitorV2
+removeallclassmethods RwModificationFiletreeWriterVisitorV2
 
 doit
 (RwModificationCypressFamilyWriterVisitorV2
@@ -5488,6 +6343,9 @@ doit
 true.
 %
 
+removeallmethods RwModificationTonelWriterVisitorV2
+removeallclassmethods RwModificationTonelWriterVisitorV2
+
 doit
 (RwAbstractReaderWriterVisitor
 	subclass: 'RwRepositoryComponentProjectReaderVisitor'
@@ -5502,6 +6360,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwRepositoryComponentProjectReaderVisitor
+removeallclassmethods RwRepositoryComponentProjectReaderVisitor
 
 doit
 (RwRepositoryComponentProjectReaderVisitor
@@ -5518,6 +6379,9 @@ doit
 true.
 %
 
+removeallmethods RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+removeallclassmethods RwRepositoryResolvedProjectFiletreeReaderVisitorV2
+
 doit
 (RwRepositoryComponentProjectReaderVisitor
 	subclass: 'RwRepositoryResolvedProjectTonelReaderVisitorV2'
@@ -5532,6 +6396,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwRepositoryResolvedProjectTonelReaderVisitorV2
+removeallclassmethods RwRepositoryResolvedProjectTonelReaderVisitorV2
 
 doit
 (Object
@@ -5548,6 +6415,9 @@ doit
 true.
 %
 
+removeallmethods RwAbstractResolvedObjectV2
+removeallclassmethods RwAbstractResolvedObjectV2
+
 doit
 (RwAbstractResolvedObjectV2
 	subclass: 'RwAbstractResolvedProjectV2'
@@ -5562,6 +6432,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractResolvedProjectV2
+removeallclassmethods RwAbstractResolvedProjectV2
 
 doit
 (RwAbstractResolvedProjectV2
@@ -5578,6 +6451,9 @@ doit
 true.
 %
 
+removeallmethods RwResolvedLoadSpecificationV2
+removeallclassmethods RwResolvedLoadSpecificationV2
+
 doit
 (RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedProjectSpecificationV2'
@@ -5592,6 +6468,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwResolvedProjectSpecificationV2
+removeallclassmethods RwResolvedProjectSpecificationV2
 
 doit
 (RwAbstractResolvedProjectV2
@@ -5608,6 +6487,9 @@ doit
 true.
 %
 
+removeallmethods RwResolvedProjectV2
+removeallclassmethods RwResolvedProjectV2
+
 doit
 (RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedRepositoryV2'
@@ -5622,6 +6504,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwResolvedRepositoryV2
+removeallclassmethods RwResolvedRepositoryV2
 
 doit
 (Object
@@ -5653,6 +6538,9 @@ doit
 true.
 %
 
+removeallmethods RwAbstractTool
+removeallclassmethods RwAbstractTool
+
 doit
 (RwAbstractTool
 	subclass: 'RwClassTool'
@@ -5667,6 +6555,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwClassTool
+removeallclassmethods RwClassTool
 
 doit
 (RwClassTool
@@ -5684,6 +6575,9 @@ doit
 true.
 %
 
+removeallmethods RwClsAuditTool
+removeallclassmethods RwClsAuditTool
+
 doit
 (RwClsAuditTool
 	subclass: 'RwClsExtensionAuditTool'
@@ -5698,6 +6592,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwClsExtensionAuditTool
+removeallclassmethods RwClsExtensionAuditTool
 
 doit
 (RwClassTool
@@ -5714,6 +6611,9 @@ doit
 true.
 %
 
+removeallmethods RwClsDiffTool
+removeallclassmethods RwClsDiffTool
+
 doit
 (RwAbstractTool
 	subclass: 'RwGitTool'
@@ -5728,6 +6628,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGitTool
+removeallclassmethods RwGitTool
 
 doit
 (RwAbstractTool
@@ -5744,6 +6647,9 @@ doit
 true.
 %
 
+removeallmethods RwPackageTool
+removeallclassmethods RwPackageTool
+
 doit
 (RwPackageTool
 	subclass: 'RwPkgAdoptTool'
@@ -5758,6 +6664,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPkgAdoptTool
+removeallclassmethods RwPkgAdoptTool
 
 doit
 (RwPackageTool
@@ -5774,6 +6683,9 @@ doit
 true.
 %
 
+removeallmethods RwPkgCreateTool
+removeallclassmethods RwPkgCreateTool
+
 doit
 (RwPackageTool
 	subclass: 'RwPkgDiffTool'
@@ -5788,6 +6700,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPkgDiffTool
+removeallclassmethods RwPkgDiffTool
 
 doit
 (RwPackageTool
@@ -5804,6 +6719,9 @@ doit
 true.
 %
 
+removeallmethods RwPkgDisownTool
+removeallclassmethods RwPkgDisownTool
+
 doit
 (RwPackageTool
 	subclass: 'RwPkgLoadTool'
@@ -5818,6 +6736,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPkgLoadTool
+removeallclassmethods RwPkgLoadTool
 
 doit
 (RwPackageTool
@@ -5834,6 +6755,9 @@ doit
 true.
 %
 
+removeallmethods RwPkgRevertTool
+removeallclassmethods RwPkgRevertTool
+
 doit
 (RwAbstractTool
 	subclass: 'RwPkgAuditToolV2'
@@ -5848,6 +6772,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPkgAuditToolV2
+removeallclassmethods RwPkgAuditToolV2
 
 doit
 (RwAbstractTool
@@ -5864,6 +6791,9 @@ doit
 true.
 %
 
+removeallmethods RwProjectTool
+removeallclassmethods RwProjectTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjAdoptTool'
@@ -5878,6 +6808,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjAdoptTool
+removeallclassmethods RwPrjAdoptTool
 
 doit
 (RwProjectTool
@@ -5894,6 +6827,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjAuditTool
+removeallclassmethods RwPrjAuditTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjBrowserToolV2'
@@ -5908,6 +6844,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjBrowserToolV2
+removeallclassmethods RwPrjBrowserToolV2
 
 doit
 (RwProjectTool
@@ -5924,6 +6863,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjCheckoutTool
+removeallclassmethods RwPrjCheckoutTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjCloneTool'
@@ -5938,6 +6880,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjCloneTool
+removeallclassmethods RwPrjCloneTool
 
 doit
 (RwProjectTool
@@ -5954,6 +6899,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjCommitTool
+removeallclassmethods RwPrjCommitTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjCreateToolV2'
@@ -5968,6 +6916,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjCreateToolV2
+removeallclassmethods RwPrjCreateToolV2
 
 doit
 (RwProjectTool
@@ -5984,6 +6935,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjDeleteTool
+removeallclassmethods RwPrjDeleteTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjDiffTool'
@@ -5998,6 +6952,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjDiffTool
+removeallclassmethods RwPrjDiffTool
 
 doit
 (RwProjectTool
@@ -6014,6 +6971,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjDisownTool
+removeallclassmethods RwPrjDisownTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjEditTool'
@@ -6028,6 +6988,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjEditTool
+removeallclassmethods RwPrjEditTool
 
 doit
 (RwProjectTool
@@ -6044,6 +7007,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjLoadToolV2
+removeallclassmethods RwPrjLoadToolV2
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjLogTool'
@@ -6058,6 +7024,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjLogTool
+removeallclassmethods RwPrjLogTool
 
 doit
 (RwProjectTool
@@ -6074,6 +7043,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjPullTool
+removeallclassmethods RwPrjPullTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjPushTool'
@@ -6088,6 +7060,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjPushTool
+removeallclassmethods RwPrjPushTool
 
 doit
 (RwProjectTool
@@ -6104,6 +7079,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjQueryTool
+removeallclassmethods RwPrjQueryTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjReadToolV2'
@@ -6118,6 +7096,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjReadToolV2
+removeallclassmethods RwPrjReadToolV2
 
 doit
 (RwProjectTool
@@ -6134,6 +7115,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjReconcileToolV2
+removeallclassmethods RwPrjReconcileToolV2
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjRevertTool'
@@ -6148,6 +7132,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjRevertTool
+removeallclassmethods RwPrjRevertTool
 
 doit
 (RwProjectTool
@@ -6164,6 +7151,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjTestTool
+removeallclassmethods RwPrjTestTool
+
 doit
 (RwProjectTool
 	subclass: 'RwPrjTraceTool'
@@ -6178,6 +7168,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPrjTraceTool
+removeallclassmethods RwPrjTraceTool
 
 doit
 (RwProjectTool
@@ -6194,6 +7187,9 @@ doit
 true.
 %
 
+removeallmethods RwPrjWriteToolV2
+removeallclassmethods RwPrjWriteToolV2
+
 doit
 (Object
 	subclass: 'RwAuditDetail'
@@ -6208,6 +7204,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAuditDetail
+removeallclassmethods RwAuditDetail
 
 doit
 (Object
@@ -6224,6 +7223,9 @@ doit
 true.
 %
 
+removeallmethods RwBasicProjectLoadComponentV2
+removeallclassmethods RwBasicProjectLoadComponentV2
+
 doit
 (RwBasicProjectLoadComponentV2
 	subclass: 'RwAbstractSimpleProjectLoadComponentV2'
@@ -6238,6 +7240,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractSimpleProjectLoadComponentV2
+removeallclassmethods RwAbstractSimpleProjectLoadComponentV2
 
 doit
 (RwAbstractSimpleProjectLoadComponentV2
@@ -6254,6 +7259,9 @@ doit
 true.
 %
 
+removeallmethods RwAbstractRowanProjectLoadComponentV2
+removeallclassmethods RwAbstractRowanProjectLoadComponentV2
+
 doit
 (RwAbstractRowanProjectLoadComponentV2
 	subclass: 'RwSimpleProjectLoadComponentV2'
@@ -6268,6 +7276,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwSimpleProjectLoadComponentV2
+removeallclassmethods RwSimpleProjectLoadComponentV2
 
 doit
 (RwSimpleProjectLoadComponentV2
@@ -6284,6 +7295,9 @@ doit
 true.
 %
 
+removeallmethods RwSimpleNestedProjectLoadComponentV2
+removeallclassmethods RwSimpleNestedProjectLoadComponentV2
+
 doit
 (RwSimpleNestedProjectLoadComponentV2
 	subclass: 'RwPlatformNestedProjectLoadComponentV2'
@@ -6298,6 +7312,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPlatformNestedProjectLoadComponentV2
+removeallclassmethods RwPlatformNestedProjectLoadComponentV2
 
 doit
 (Object
@@ -6317,6 +7334,9 @@ Object
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwClassAdditionOrRemoval
+removeallclassmethods RwClassAdditionOrRemoval
 
 doit
 (Object
@@ -6349,6 +7369,9 @@ Acceptable values are platform-specific:
 true.
 %
 
+removeallmethods RwConfiguration
+removeallclassmethods RwConfiguration
+
 doit
 (Object
 	subclass: 'RwDefinition'
@@ -6372,6 +7395,9 @@ properties is a dictionary. Keys and values should be strings. These correspond 
 true.
 %
 
+removeallmethods RwDefinition
+removeallclassmethods RwDefinition
+
 doit
 (RwDefinition
 	subclass: 'RwAbstractClassDefinition'
@@ -6386,6 +7412,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractClassDefinition
+removeallclassmethods RwAbstractClassDefinition
 
 doit
 (RwAbstractClassDefinition
@@ -6407,6 +7436,9 @@ Methods are their own definitions: classMethodDefinitions instanceMethodDefiniti
 true.
 %
 
+removeallmethods RwClassDefinition
+removeallclassmethods RwClassDefinition
+
 doit
 (RwAbstractClassDefinition
 	subclass: 'RwClassExtensionDefinition'
@@ -6425,6 +7457,9 @@ Properties must include ''name'', the name of the class to be extended, but shou
 true.
 %
 
+removeallmethods RwClassExtensionDefinition
+removeallclassmethods RwClassExtensionDefinition
+
 doit
 (RwDefinition
 	subclass: 'RwAbstractProjectDefinitionV2'
@@ -6439,6 +7474,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractProjectDefinitionV2
+removeallclassmethods RwAbstractProjectDefinitionV2
 
 doit
 (RwAbstractProjectDefinitionV2
@@ -6455,6 +7493,9 @@ doit
 true.
 %
 
+removeallmethods RwProjectDefinitionV2
+removeallclassmethods RwProjectDefinitionV2
+
 doit
 (RwDefinition
 	subclass: 'RwAbstractRepositoryDefinitionV2'
@@ -6469,6 +7510,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAbstractRepositoryDefinitionV2
+removeallclassmethods RwAbstractRepositoryDefinitionV2
 
 doit
 (RwAbstractRepositoryDefinitionV2
@@ -6485,6 +7529,9 @@ doit
 true.
 %
 
+removeallmethods RwDiskRepositoryDefinitionV2
+removeallclassmethods RwDiskRepositoryDefinitionV2
+
 doit
 (RwDiskRepositoryDefinitionV2
 	subclass: 'RwGitRepositoryDefinitionV2'
@@ -6499,6 +7546,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGitRepositoryDefinitionV2
+removeallclassmethods RwGitRepositoryDefinitionV2
 
 doit
 (RwDiskRepositoryDefinitionV2
@@ -6515,6 +7565,9 @@ doit
 true.
 %
 
+removeallmethods RwNoRepositoryDefinitionV2
+removeallclassmethods RwNoRepositoryDefinitionV2
+
 doit
 (RwDiskRepositoryDefinitionV2
 	subclass: 'RwReadOnlyDiskRepositoryDefinitionV2'
@@ -6529,6 +7582,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwReadOnlyDiskRepositoryDefinitionV2
+removeallclassmethods RwReadOnlyDiskRepositoryDefinitionV2
 
 doit
 (RwDefinition
@@ -6550,6 +7606,9 @@ Object
 true.
 %
 
+removeallmethods RwDefinitionSetDefinition
+removeallclassmethods RwDefinitionSetDefinition
+
 doit
 (RwDefinitionSetDefinition
 	subclass: 'RwPackageSetDefinition'
@@ -6569,6 +7628,9 @@ Object
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPackageSetDefinition
+removeallclassmethods RwPackageSetDefinition
 
 doit
 (RwDefinitionSetDefinition
@@ -6590,6 +7652,9 @@ Object
 true.
 %
 
+removeallmethods RwProjectSetDefinition
+removeallclassmethods RwProjectSetDefinition
+
 doit
 (RwDefinition
 	subclass: 'RwMethodDefinition'
@@ -6604,6 +7669,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwMethodDefinition
+removeallclassmethods RwMethodDefinition
 
 doit
 (RwDefinition
@@ -6623,6 +7691,9 @@ Sub-definitions are classDefinitions and classExtensions
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPackageDefinition
+removeallclassmethods RwPackageDefinition
 
 doit
 (Object
@@ -6646,6 +7717,9 @@ elementsModified	Dictionary elementKey -> CypModification  (key may have changed
 true.
 %
 
+removeallmethods RwElementsModification
+removeallclassmethods RwElementsModification
+
 doit
 (RwElementsModification
 	subclass: 'RwClassesModification'
@@ -6661,6 +7735,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwClassesModification
+removeallclassmethods RwClassesModification
 
 doit
 (RwElementsModification
@@ -6682,6 +7759,9 @@ Object
 true.
 %
 
+removeallmethods RwClassExtensionsModification
+removeallclassmethods RwClassExtensionsModification
+
 doit
 (RwElementsModification
 	subclass: 'RwEntitySetModification'
@@ -6696,6 +7776,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwEntitySetModification
+removeallclassmethods RwEntitySetModification
 
 doit
 (RwEntitySetModification
@@ -6715,6 +7798,9 @@ movedMethods are methods that have moved from a class definition to an extension
 true.
 %
 
+removeallmethods RwPackageSetModification
+removeallclassmethods RwPackageSetModification
+
 doit
 (RwEntitySetModification
 	subclass: 'RwProjectSetModification'
@@ -6733,6 +7819,9 @@ movedMethods are methods that have moved from a class definition to an extension
 true.
 %
 
+removeallmethods RwProjectSetModification
+removeallclassmethods RwProjectSetModification
+
 doit
 (RwElementsModification
 	subclass: 'RwMethodsModification'
@@ -6749,6 +7838,9 @@ doit
 true.
 %
 
+removeallmethods RwMethodsModification
+removeallclassmethods RwMethodsModification
+
 doit
 (RwMethodsModification
 	subclass: 'RwExtensionMethodsModification'
@@ -6763,6 +7855,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwExtensionMethodsModification
+removeallclassmethods RwExtensionMethodsModification
 
 doit
 (RwElementsModification
@@ -6780,6 +7875,9 @@ doit
 true.
 %
 
+removeallmethods RwPackagesModification
+removeallclassmethods RwPackagesModification
+
 doit
 (RwElementsModification
 	subclass: 'RwPropertiesModification'
@@ -6796,6 +7894,9 @@ doit
 true.
 %
 
+removeallmethods RwPropertiesModification
+removeallclassmethods RwPropertiesModification
+
 doit
 (RwElementsModification
 	subclass: 'RwSourceModification'
@@ -6811,6 +7912,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwSourceModification
+removeallclassmethods RwSourceModification
 
 doit
 (Object
@@ -6830,6 +7934,9 @@ When the receiver is sent #asDefinition, the receiver is converted to a RwDefini
 true.
 %
 
+removeallmethods RwEntitySet
+removeallclassmethods RwEntitySet
+
 doit
 (Object
 	subclass: 'RwFileUtilities'
@@ -6848,6 +7955,9 @@ Object
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwFileUtilities
+removeallclassmethods RwFileUtilities
 
 doit
 (RwFileUtilities
@@ -6869,6 +7979,9 @@ Object
 true.
 %
 
+removeallmethods RwGsFileUtilities
+removeallclassmethods RwGsFileUtilities
+
 doit
 (Object
 	subclass: 'RwGsImage'
@@ -6884,6 +7997,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsImage
+removeallclassmethods RwGsImage
 
 doit
 (Object
@@ -6901,6 +8017,9 @@ doit
 true.
 %
 
+removeallmethods RwGsImagePatchVisitor_V2
+removeallclassmethods RwGsImagePatchVisitor_V2
+
 doit
 (RwGsImagePatchVisitor_V2
 	subclass: 'RwGsImagePatchVisitor_V2_symbolList'
@@ -6915,6 +8034,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsImagePatchVisitor_V2_symbolList
+removeallclassmethods RwGsImagePatchVisitor_V2_symbolList
 
 doit
 (Object
@@ -6931,6 +8053,9 @@ doit
 true.
 %
 
+removeallmethods RwGsInstanceMigrator
+removeallclassmethods RwGsInstanceMigrator
+
 doit
 (RwGsInstanceMigrator
 	subclass: 'RwGsDeferredInstanceMigrator'
@@ -6945,6 +8070,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsDeferredInstanceMigrator
+removeallclassmethods RwGsDeferredInstanceMigrator
 
 doit
 (Object
@@ -6962,6 +8090,9 @@ doit
 true.
 %
 
+removeallmethods RwGsPatchSet_V2
+removeallclassmethods RwGsPatchSet_V2
+
 doit
 (RwGsPatchSet_V2
 	subclass: 'RwGsPatchSet_V2_symbolList'
@@ -6976,6 +8107,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsPatchSet_V2_symbolList
+removeallclassmethods RwGsPatchSet_V2_symbolList
 
 doit
 (Object
@@ -6992,6 +8126,9 @@ doit
 true.
 %
 
+removeallmethods RwGsPatchV2
+removeallclassmethods RwGsPatchV2
+
 doit
 (RwGsPatchV2
 	subclass: 'RwGsClassPatchV2'
@@ -7006,6 +8143,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsClassPatchV2
+removeallclassmethods RwGsClassPatchV2
 
 doit
 (RwGsClassPatchV2
@@ -7022,6 +8162,9 @@ doit
 true.
 %
 
+removeallmethods RwGsClassAdditionSymbolDictPatchV2
+removeallclassmethods RwGsClassAdditionSymbolDictPatchV2
+
 doit
 (RwGsClassAdditionSymbolDictPatchV2
 	subclass: 'RwGsClassUnmanagedAdditionSymbolDictPatchV2'
@@ -7036,6 +8179,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsClassUnmanagedAdditionSymbolDictPatchV2
+removeallclassmethods RwGsClassUnmanagedAdditionSymbolDictPatchV2
 
 doit
 (RwGsClassPatchV2
@@ -7052,6 +8198,9 @@ doit
 true.
 %
 
+removeallmethods RwGsClassConstraintsSymDictPatchV2
+removeallclassmethods RwGsClassConstraintsSymDictPatchV2
+
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassDeletionSymbolDictPatchV2'
@@ -7066,6 +8215,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsClassDeletionSymbolDictPatchV2
+removeallclassmethods RwGsClassDeletionSymbolDictPatchV2
 
 doit
 (RwGsClassPatchV2
@@ -7082,6 +8234,9 @@ doit
 true.
 %
 
+removeallmethods RwGsClassExtensionSymbolDictPatchV2
+removeallclassmethods RwGsClassExtensionSymbolDictPatchV2
+
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassPropertiesSymDictPatchV2'
@@ -7096,6 +8251,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsClassPropertiesSymDictPatchV2
+removeallclassmethods RwGsClassPropertiesSymDictPatchV2
 
 doit
 (RwGsClassPatchV2
@@ -7112,6 +8270,9 @@ doit
 true.
 %
 
+removeallmethods RwGsClassSymbolDictionaryMoveSymDictPatchV2
+removeallclassmethods RwGsClassSymbolDictionaryMoveSymDictPatchV2
+
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassVariableChangeSymbolDictPatchV2'
@@ -7126,6 +8287,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsClassVariableChangeSymbolDictPatchV2
+removeallclassmethods RwGsClassVariableChangeSymbolDictPatchV2
 
 doit
 (RwGsClassPatchV2
@@ -7142,6 +8306,9 @@ doit
 true.
 %
 
+removeallmethods RwGsClassVersioningPatchV2
+removeallclassmethods RwGsClassVersioningPatchV2
+
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassVersioningSymbolDictPatchV2'
@@ -7156,6 +8323,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsClassVersioningSymbolDictPatchV2
+removeallclassmethods RwGsClassVersioningSymbolDictPatchV2
 
 doit
 (RwGsClassVersioningSymbolDictPatchV2
@@ -7172,6 +8342,9 @@ doit
 true.
 %
 
+removeallmethods RwGsClassUnmanagedVersioningSymbolDictPatchV2
+removeallclassmethods RwGsClassUnmanagedVersioningSymbolDictPatchV2
+
 doit
 (RwGsPatchV2
 	subclass: 'RwGsMethodPatchV2'
@@ -7186,6 +8359,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsMethodPatchV2
+removeallclassmethods RwGsMethodPatchV2
 
 doit
 (RwGsMethodPatchV2
@@ -7202,6 +8378,9 @@ doit
 true.
 %
 
+removeallmethods RwGsMethodAdditionSymbolDictPatchV2
+removeallclassmethods RwGsMethodAdditionSymbolDictPatchV2
+
 doit
 (RwGsMethodPatchV2
 	subclass: 'RwGsMethodDeletionSymbolDictPatchV2'
@@ -7216,6 +8395,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsMethodDeletionSymbolDictPatchV2
+removeallclassmethods RwGsMethodDeletionSymbolDictPatchV2
 
 doit
 (RwGsMethodDeletionSymbolDictPatchV2
@@ -7232,6 +8414,9 @@ doit
 true.
 %
 
+removeallmethods RwGsMethodDeletionExtensionSymbolDictPatchV2
+removeallclassmethods RwGsMethodDeletionExtensionSymbolDictPatchV2
+
 doit
 (RwGsMethodDeletionExtensionSymbolDictPatchV2
 	subclass: 'RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2'
@@ -7246,6 +8431,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
+removeallclassmethods RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
 
 doit
 (RwGsMethodPatchV2
@@ -7262,6 +8450,9 @@ doit
 true.
 %
 
+removeallmethods RwGsMethodExtensionSymbolDictPatchV2
+removeallclassmethods RwGsMethodExtensionSymbolDictPatchV2
+
 doit
 (RwGsMethodExtensionSymbolDictPatchV2
 	subclass: 'RwGsMethodExtensionSessionMethodSymbolDictPatchV2'
@@ -7276,6 +8467,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsMethodExtensionSessionMethodSymbolDictPatchV2
+removeallclassmethods RwGsMethodExtensionSessionMethodSymbolDictPatchV2
 
 doit
 (RwGsMethodPatchV2
@@ -7292,6 +8486,9 @@ doit
 true.
 %
 
+removeallmethods RwGsMethodPropertiesSymDictPatchV2
+removeallclassmethods RwGsMethodPropertiesSymDictPatchV2
+
 doit
 (RwGsMethodPropertiesSymDictPatchV2
 	subclass: 'RwGsMethodExtensionSessionMethodPropertiesSymDictPatchV2'
@@ -7306,6 +8503,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsMethodExtensionSessionMethodPropertiesSymDictPatchV2
+removeallclassmethods RwGsMethodExtensionSessionMethodPropertiesSymDictPatchV2
 
 doit
 (RwGsMethodPatchV2
@@ -7322,6 +8522,9 @@ doit
 true.
 %
 
+removeallmethods RwGsMethodSourceSymbolDictPatchV2
+removeallclassmethods RwGsMethodSourceSymbolDictPatchV2
+
 doit
 (RwGsMethodSourceSymbolDictPatchV2
 	subclass: 'RwGsMethodExtensionSessionMethodSourceSymbolDictPatchV2'
@@ -7336,6 +8539,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsMethodExtensionSessionMethodSourceSymbolDictPatchV2
+removeallclassmethods RwGsMethodExtensionSessionMethodSourceSymbolDictPatchV2
 
 doit
 (RwGsPatchV2
@@ -7352,6 +8558,9 @@ doit
 true.
 %
 
+removeallmethods RwGsPackagePatchV2
+removeallclassmethods RwGsPackagePatchV2
+
 doit
 (RwGsPackagePatchV2
 	subclass: 'RwGsPackageAdditionSymbolDictPatchV2'
@@ -7366,6 +8575,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsPackageAdditionSymbolDictPatchV2
+removeallclassmethods RwGsPackageAdditionSymbolDictPatchV2
 
 doit
 (RwGsPackagePatchV2
@@ -7382,6 +8594,9 @@ doit
 true.
 %
 
+removeallmethods RwGsPackageDeletionSymbolDictPatchV2
+removeallclassmethods RwGsPackageDeletionSymbolDictPatchV2
+
 doit
 (RwGsPackagePatchV2
 	subclass: 'RwGsPackageMoveSymbolDictPatchV2'
@@ -7396,6 +8611,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsPackageMoveSymbolDictPatchV2
+removeallclassmethods RwGsPackageMoveSymbolDictPatchV2
 
 doit
 (RwGsPatchV2
@@ -7412,6 +8630,9 @@ doit
 true.
 %
 
+removeallmethods RwGsProjectPatchV2
+removeallclassmethods RwGsProjectPatchV2
+
 doit
 (RwGsProjectPatchV2
 	subclass: 'RwGsProjectAdditionPatchV2'
@@ -7427,6 +8648,9 @@ doit
 true.
 %
 
+removeallmethods RwGsProjectAdditionPatchV2
+removeallclassmethods RwGsProjectAdditionPatchV2
+
 doit
 (Object
 	subclass: 'RwGsSymbolDictionaryRegistryV2'
@@ -7441,6 +8665,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsSymbolDictionaryRegistryV2
+removeallclassmethods RwGsSymbolDictionaryRegistryV2
 
 doit
 (Object
@@ -7486,6 +8713,9 @@ Inside the Rowan-GemStone-Loader package, the messgaes sends must pass in a refe
 true.
 %
 
+removeallmethods RwGsSymbolDictionaryRegistry_ImplementationV2
+removeallclassmethods RwGsSymbolDictionaryRegistry_ImplementationV2
+
 doit
 (Object
 	subclass: 'RwLoadedThing'
@@ -7504,6 +8734,9 @@ handle: reference to the class or method object, or to the native package object
 true.
 %
 
+removeallmethods RwLoadedThing
+removeallclassmethods RwLoadedThing
+
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedClass'
@@ -7521,6 +8754,9 @@ extensions: a collection of CypLoadedExtendedClasses for this class. From these 
 true.
 %
 
+removeallmethods RwLoadedClass
+removeallclassmethods RwLoadedClass
+
 doit
 (RwLoadedClass
 	subclass: 'RwGsLoadedSymbolDictClass'
@@ -7535,6 +8771,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsLoadedSymbolDictClass
+removeallclassmethods RwGsLoadedSymbolDictClass
 
 doit
 (RwLoadedThing
@@ -7556,6 +8795,9 @@ Object
 true.
 %
 
+removeallmethods RwLoadedClassExtension
+removeallclassmethods RwLoadedClassExtension
+
 doit
 (RwLoadedClassExtension
 	subclass: 'RwGsLoadedSymbolDictClassExtension'
@@ -7570,6 +8812,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsLoadedSymbolDictClassExtension
+removeallclassmethods RwGsLoadedSymbolDictClassExtension
 
 doit
 (RwLoadedThing
@@ -7591,6 +8836,9 @@ Object
 true.
 %
 
+removeallmethods RwLoadedMethod
+removeallclassmethods RwLoadedMethod
+
 doit
 (RwLoadedMethod
 	subclass: 'RwGsLoadedSymbolDictMethod'
@@ -7606,6 +8854,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsLoadedSymbolDictMethod
+removeallclassmethods RwGsLoadedSymbolDictMethod
 
 doit
 (RwLoadedThing
@@ -7626,6 +8877,9 @@ loadedClassExtensions: -- Dictionary -- keys are (non-meta) classes, values are 
 true.
 %
 
+removeallmethods RwLoadedPackage
+removeallclassmethods RwLoadedPackage
+
 doit
 (RwLoadedPackage
 	subclass: 'RwGsLoadedSymbolDictPackage'
@@ -7640,6 +8894,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsLoadedSymbolDictPackage
+removeallclassmethods RwGsLoadedSymbolDictPackage
 
 doit
 (RwLoadedThing
@@ -7656,6 +8913,9 @@ doit
 true.
 %
 
+removeallmethods RwLoadedProject
+removeallclassmethods RwLoadedProject
+
 doit
 (RwLoadedProject
 	subclass: 'RwGsLoadedSymbolDictResolvedProjectV2'
@@ -7670,6 +8930,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsLoadedSymbolDictResolvedProjectV2
+removeallclassmethods RwGsLoadedSymbolDictResolvedProjectV2
 
 doit
 (Object
@@ -7689,6 +8952,9 @@ Object
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwMethodAdditionOrRemoval
+removeallclassmethods RwMethodAdditionOrRemoval
 
 doit
 (Object
@@ -7710,6 +8976,9 @@ after		A definition of state after the modification';
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwModification
+removeallclassmethods RwModification
 
 doit
 (RwModification
@@ -7733,6 +9002,9 @@ classMethodsModification		MethodsModification -- changes to class methods define
 true.
 %
 
+removeallmethods RwClassModification
+removeallclassmethods RwClassModification
+
 doit
 (RwClassModification
 	subclass: 'RwClassExtensionModification'
@@ -7747,6 +9019,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwClassExtensionModification
+removeallclassmethods RwClassExtensionModification
 
 doit
 (RwClassModification
@@ -7763,6 +9038,9 @@ doit
 true.
 %
 
+removeallmethods RwClassModificationForcingNewClassVersion
+removeallclassmethods RwClassModificationForcingNewClassVersion
+
 doit
 (RwClassModification
 	subclass: 'RwClassUnmanagedModification'
@@ -7777,6 +9055,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwClassUnmanagedModification
+removeallclassmethods RwClassUnmanagedModification
 
 doit
 (RwModification
@@ -7800,6 +9081,9 @@ newSource						String -- source code after';
 true.
 %
 
+removeallmethods RwMethodModification
+removeallclassmethods RwMethodModification
+
 doit
 (RwMethodModification
 	subclass: 'RwExtensionMethodModification'
@@ -7814,6 +9098,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwExtensionMethodModification
+removeallclassmethods RwExtensionMethodModification
 
 doit
 (RwMethodModification
@@ -7830,6 +9117,9 @@ doit
 true.
 %
 
+removeallmethods RwMethodModificationForNewClassVersion
+removeallclassmethods RwMethodModificationForNewClassVersion
+
 doit
 (RwMethodModificationForNewClassVersion
 	subclass: 'RwExtensionMethodModificationForNewClassVersion'
@@ -7844,6 +9134,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwExtensionMethodModificationForNewClassVersion
+removeallclassmethods RwExtensionMethodModificationForNewClassVersion
 
 doit
 (RwModification
@@ -7867,6 +9160,9 @@ classExtensionsModification		ClassesModificaiton -- changes to classes extended'
 true.
 %
 
+removeallmethods RwPackageModification
+removeallclassmethods RwPackageModification
+
 doit
 (RwModification
 	subclass: 'RwProjectModification'
@@ -7889,6 +9185,9 @@ classExtensionsModification		ClassesModificaiton -- changes to classes extended'
 true.
 %
 
+removeallmethods RwProjectModification
+removeallclassmethods RwProjectModification
+
 doit
 (Object
 	subclass: 'RwMove'
@@ -7904,6 +9203,9 @@ doit
 true.
 %
 
+removeallmethods RwMove
+removeallclassmethods RwMove
+
 doit
 (RwMove
 	subclass: 'RwClassExtensionMove'
@@ -7918,6 +9220,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwClassExtensionMove
+removeallclassmethods RwClassExtensionMove
 
 doit
 (RwMove
@@ -7935,6 +9240,9 @@ doit
 true.
 %
 
+removeallmethods RwClassMove
+removeallclassmethods RwClassMove
+
 doit
 (RwMove
 	subclass: 'RwMethodMove'
@@ -7951,6 +9259,9 @@ doit
 true.
 %
 
+removeallmethods RwMethodMove
+removeallclassmethods RwMethodMove
+
 doit
 (RwMove
 	subclass: 'RwPackageMove'
@@ -7965,6 +9276,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwPackageMove
+removeallclassmethods RwPackageMove
 
 doit
 (Object
@@ -7983,6 +9297,9 @@ and locates other services that are dialect-specific.';
 true.
 %
 
+removeallmethods RwPlatform
+removeallclassmethods RwPlatform
+
 doit
 (RwPlatform
 	subclass: 'RwGsPlatform'
@@ -7999,6 +9316,9 @@ A GsPlatform is the gateway object for requesting platform-specific actions.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGsPlatform
+removeallclassmethods RwGsPlatform
 
 doit
 (Object
@@ -8021,6 +9341,9 @@ Object
 true.
 %
 
+removeallmethods RwPropertyModification
+removeallclassmethods RwPropertyModification
+
 doit
 (RwPropertyModification
 	subclass: 'RwUnconditionalPropertyModification'
@@ -8042,6 +9365,9 @@ Object
 true.
 %
 
+removeallmethods RwUnconditionalPropertyModification
+removeallclassmethods RwUnconditionalPropertyModification
+
 doit
 (Object
 	subclass: 'RwResolvedLoadComponentsV2'
@@ -8056,6 +9382,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwResolvedLoadComponentsV2
+removeallclassmethods RwResolvedLoadComponentsV2
 
 doit
 (Object
@@ -8072,6 +9401,9 @@ doit
 true.
 %
 
+removeallmethods RwSpecification
+removeallclassmethods RwSpecification
+
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
@@ -8086,6 +9418,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwLoadSpecificationV2
+removeallclassmethods RwLoadSpecificationV2
 
 doit
 (RwLoadSpecificationV2
@@ -8102,6 +9437,9 @@ doit
 true.
 %
 
+removeallmethods RwEmbeddedLoadSpecificationV2
+removeallclassmethods RwEmbeddedLoadSpecificationV2
+
 doit
 (RwSpecification
 	subclass: 'RwProjectSpecificationV2'
@@ -8116,6 +9454,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwProjectSpecificationV2
+removeallclassmethods RwProjectSpecificationV2
 
 doit
 (Object
@@ -8176,6 +9517,9 @@ the method body (we do not parse contents, that''s class builder task)';
 true.
 %
 
+removeallmethods RwTonelParser
+removeallclassmethods RwTonelParser
+
 doit
 (Object
 	subclass: 'RwTopazTonelReader'
@@ -8197,6 +9541,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwTopazTonelReader
+removeallclassmethods RwTopazTonelReader
 
 doit
 (Object
@@ -8256,6 +9603,9 @@ The smalltalk: scheme is based on Thierry Goubier''s gitfiletree url[1]. The ori
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwUrl
+removeallclassmethods RwUrl
 
 doit
 (RwUrl
@@ -8320,6 +9670,9 @@ Notes regarding non RFC features in this class:
 true.
 %
 
+removeallmethods RwFileUrl
+removeallclassmethods RwFileUrl
+
 doit
 (RwFileUrl
 	subclass: 'RwCypressUrl'
@@ -8350,6 +9703,9 @@ When the cypress: url is resolved, the appropriate platform-specific repository 
 true.
 %
 
+removeallmethods RwCypressUrl
+removeallclassmethods RwCypressUrl
+
 doit
 (RwCypressUrl
 	subclass: 'RwTonelUrl'
@@ -8371,6 +9727,9 @@ The scheme is supported for backward compatibility with the tonel disk format[1]
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwTonelUrl
+removeallclassmethods RwTonelUrl
 
 doit
 (RwFileUrl
@@ -8394,6 +9753,9 @@ This scheme is supported for backward compatibility. Moving forward the cypress:
 true.
 %
 
+removeallmethods RwFiletreeUrl
+removeallclassmethods RwFiletreeUrl
+
 doit
 (RwFileUrl
 	subclass: 'RwGithubUrl'
@@ -8416,6 +9778,9 @@ This scheme is supported for backward compatibility. Moving forward the metacell
 true.
 %
 
+removeallmethods RwGithubUrl
+removeallclassmethods RwGithubUrl
+
 doit
 (RwUrl
 	subclass: 'RwGenericUrl'
@@ -8431,6 +9796,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGenericUrl
+removeallclassmethods RwGenericUrl
 
 doit
 (RwUrl
@@ -8448,6 +9816,9 @@ doit
 true.
 %
 
+removeallmethods RwHierarchicalUrl
+removeallclassmethods RwHierarchicalUrl
+
 doit
 (RwHierarchicalUrl
 	subclass: 'RwHttpUrl'
@@ -8463,6 +9834,9 @@ doit
 true.
 %
 
+removeallmethods RwHttpUrl
+removeallclassmethods RwHttpUrl
+
 doit
 (RwHttpUrl
 	subclass: 'RwHttpsUrl'
@@ -8477,6 +9851,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwHttpsUrl
+removeallclassmethods RwHttpsUrl
 
 doit
 (RwHierarchicalUrl
@@ -8504,6 +9881,9 @@ The smalltalk: scheme is based on Thierry Goubier''s gitfiletree url[1]:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwSmalltalkRepositoryUrl
+removeallclassmethods RwSmalltalkRepositoryUrl
 
 doit
 (RwSmalltalkRepositoryUrl
@@ -8543,6 +9923,9 @@ From the method comment[1]:
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwGitFileTreeUrl
+removeallclassmethods RwGitFileTreeUrl
 
 doit
 (Object
@@ -8653,6 +10036,9 @@ S y n t a x
 true.
 %
 
+removeallmethods STON
+removeallclassmethods STON
+
 doit
 (Object
 	subclass: 'STONReader'
@@ -8671,6 +10057,9 @@ This parser is backwards compatible with standard JSON.';
 true.
 %
 
+removeallmethods STONReader
+removeallclassmethods STONReader
+
 doit
 (Object
 	subclass: 'STONReference'
@@ -8687,6 +10076,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONReference
+removeallclassmethods STONReference
 
 doit
 (Object
@@ -8705,6 +10097,9 @@ This is an abstract class.';
 true.
 %
 
+removeallmethods STONStreamWriter
+removeallclassmethods STONStreamWriter
+
 doit
 (STONStreamWriter
 	subclass: 'STONListWriter'
@@ -8721,6 +10116,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONListWriter
+removeallclassmethods STONListWriter
 
 doit
 (STONListWriter
@@ -8739,6 +10137,9 @@ doit
 true.
 %
 
+removeallmethods STONShortListWriter
+removeallclassmethods STONShortListWriter
+
 doit
 (STONStreamWriter
 	subclass: 'STONMapWriter'
@@ -8754,6 +10155,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONMapWriter
+removeallclassmethods STONMapWriter
 
 doit
 (Object
@@ -8788,6 +10192,9 @@ Customization options are:
 true.
 %
 
+removeallmethods STONWriter
+removeallclassmethods STONWriter
+
 doit
 (STONWriter
 	subclass: 'TonelSTONWriter'
@@ -8806,6 +10213,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods TonelSTONWriter
+removeallclassmethods TonelSTONWriter
 
 doit
 (Object
@@ -8830,6 +10240,9 @@ Part of Zinc HTTP Components.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods ZnBufferedReadStream
+removeallclassmethods ZnBufferedReadStream
 
 doit
 (Object
@@ -8857,6 +10270,9 @@ Part of Zinc HTTP Components.';
 true.
 %
 
+removeallmethods ZnBufferedReadWriteStream
+removeallclassmethods ZnBufferedReadWriteStream
+
 doit
 (Object
 	subclass: 'ZnBufferedWriteStream'
@@ -8881,6 +10297,9 @@ Part of Zinc HTTP Components.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods ZnBufferedWriteStream
+removeallclassmethods ZnBufferedWriteStream
 
 doit
 (Object
@@ -8931,6 +10350,9 @@ Part of Zinc HTTP Components.';
 true.
 %
 
+removeallmethods ZnCharacterEncoder
+removeallclassmethods ZnCharacterEncoder
+
 doit
 (ZnCharacterEncoder
 	subclass: 'ZnUTF8Encoder'
@@ -8954,6 +10376,9 @@ I use the ICU library to encode strings and decode ByteArray and Utf8 instances 
 true.
 %
 
+removeallmethods ZnUTF8Encoder
+removeallclassmethods ZnUTF8Encoder
+
 doit
 (Object
 	subclass: 'ZnCharacterReadWriteStream'
@@ -8969,6 +10394,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods ZnCharacterReadWriteStream
+removeallclassmethods ZnCharacterReadWriteStream
 
 doit
 (Object
@@ -8988,6 +10416,9 @@ Part of Zinc HTTP Components';
 true.
 %
 
+removeallmethods ZnEncodedStream
+removeallclassmethods ZnEncodedStream
+
 doit
 (ZnEncodedStream
 	subclass: 'ZnEncodedReadStream'
@@ -9005,6 +10436,9 @@ Part of Zinc HTTP Components';
 		immediateInvariant.
 true.
 %
+
+removeallmethods ZnEncodedReadStream
+removeallclassmethods ZnEncodedReadStream
 
 doit
 (ZnEncodedReadStream
@@ -9028,6 +10462,9 @@ Part of Zinc HTTP Components.
 true.
 %
 
+removeallmethods ZnCharacterReadStream
+removeallclassmethods ZnCharacterReadStream
+
 doit
 (ZnEncodedStream
 	subclass: 'ZnEncodedWriteStream'
@@ -9045,6 +10482,9 @@ Part of Zinc HTTP Components';
 		immediateInvariant.
 true.
 %
+
+removeallmethods ZnEncodedWriteStream
+removeallclassmethods ZnEncodedWriteStream
 
 doit
 (ZnEncodedWriteStream
@@ -9064,6 +10504,9 @@ Part of Zinc HTTP Components.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods ZnCharacterWriteStream
+removeallclassmethods ZnCharacterWriteStream
 
 doit
 (Stream
@@ -9111,6 +10554,9 @@ stream peek.';
 true.
 %
 
+removeallmethods AbstractBinaryFileStream
+removeallclassmethods AbstractBinaryFileStream
+
 doit
 (AbstractBinaryFileStream
 	subclass: 'BinaryFileStream'
@@ -9132,6 +10578,9 @@ stream upToEnd
 true.
 %
 
+removeallmethods BinaryFileStream
+removeallclassmethods BinaryFileStream
+
 doit
 (StringKeyValueDictionary
 	subclass: 'RwAuditReport'
@@ -9146,6 +10595,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwAuditReport
+removeallclassmethods RwAuditReport
 
 doit
 (StringKeyValueDictionary
@@ -9162,6 +10614,9 @@ doit
 true.
 %
 
+removeallmethods RwPackageAuditReport
+removeallclassmethods RwPackageAuditReport
+
 doit
 (StringKeyValueDictionary
 	subclass: 'RwProjectAuditReport'
@@ -9176,6 +10631,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwProjectAuditReport
+removeallclassmethods RwProjectAuditReport
 
 doit
 (WriteStream
@@ -9193,6 +10651,9 @@ doit
 true.
 %
 
+removeallmethods CypressMessageDigestStream
+removeallclassmethods CypressMessageDigestStream
+
 doit
 (WriteStreamPortable
 	subclass: 'MemoryWriteStream'
@@ -9209,6 +10670,9 @@ I am closer to a FileStream so I delegate some operations to my handle (collecti
 		immediateInvariant.
 true.
 %
+
+removeallmethods MemoryWriteStream
+removeallclassmethods MemoryWriteStream
 
 ! Class implementation for 'UUID'
 

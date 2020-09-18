@@ -18,6 +18,9 @@ I happen whenever the parsing of a tonel file is broken in someway.';
 true.
 %
 
+removeallmethods RwTonelParseError
+removeallclassmethods RwTonelParseError
+
 doit
 (Error
 	subclass: 'STONReaderError'
@@ -35,6 +38,9 @@ doit
 true.
 %
 
+removeallmethods STONReaderError
+removeallclassmethods STONReaderError
+
 doit
 (Error
 	subclass: 'STONWriterError'
@@ -50,6 +56,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONWriterError
+removeallclassmethods STONWriterError
 
 doit
 (Notification
@@ -70,6 +79,9 @@ If unhandled,  a RwTonelParseError is signalled.';
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwTonelParseRequireMethodCategoryNotification
+removeallclassmethods RwTonelParseRequireMethodCategoryNotification
 
 doit
 (Object
@@ -130,6 +142,9 @@ the method body (we do not parse contents, that''s class builder task)';
 true.
 %
 
+removeallmethods RwTonelParser
+removeallclassmethods RwTonelParser
+
 doit
 (Object
 	subclass: 'RwTopazTonelReader'
@@ -151,6 +166,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods RwTopazTonelReader
+removeallclassmethods RwTopazTonelReader
 
 doit
 (Object
@@ -261,6 +279,9 @@ S y n t a x
 true.
 %
 
+removeallmethods STON
+removeallclassmethods STON
+
 doit
 (Object
 	subclass: 'STONReader'
@@ -279,6 +300,9 @@ This parser is backwards compatible with standard JSON.';
 true.
 %
 
+removeallmethods STONReader
+removeallclassmethods STONReader
+
 doit
 (Object
 	subclass: 'STONReference'
@@ -295,6 +319,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONReference
+removeallclassmethods STONReference
 
 doit
 (Object
@@ -313,6 +340,9 @@ This is an abstract class.';
 true.
 %
 
+removeallmethods STONStreamWriter
+removeallclassmethods STONStreamWriter
+
 doit
 (STONStreamWriter
 	subclass: 'STONListWriter'
@@ -329,6 +359,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONListWriter
+removeallclassmethods STONListWriter
 
 doit
 (STONListWriter
@@ -347,6 +380,9 @@ doit
 true.
 %
 
+removeallmethods STONShortListWriter
+removeallclassmethods STONShortListWriter
+
 doit
 (STONStreamWriter
 	subclass: 'STONMapWriter'
@@ -362,6 +398,9 @@ doit
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONMapWriter
+removeallclassmethods STONMapWriter
 
 doit
 (Object
@@ -395,6 +434,9 @@ Customization options are:
 		immediateInvariant.
 true.
 %
+
+removeallmethods STONWriter
+removeallclassmethods STONWriter
 
 ! Class implementation for 'STONReaderError'
 
