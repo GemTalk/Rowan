@@ -4,18 +4,18 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gs3.[6-]'
 	],
 	#packageNames : [
-		'STON-GemStone-Core-36x'
+		'STON-GemStone-Core36x'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'STON-GemStone-Core-36x' : {
+					'STON-GemStone-Core36x' : {
 						'symbolDictName' : 'Globals'
 					}
 				}
 			}
 		}
 	},
-	#comment : 'Conditional component for GemSTone 3.6.0 and beyond'
+	#comment : 'Conditional component for GemStone 3.6.0 and beyond'
 }

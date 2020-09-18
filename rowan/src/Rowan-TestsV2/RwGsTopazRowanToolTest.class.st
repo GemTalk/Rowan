@@ -391,7 +391,7 @@ RwGsTopazRowanToolTest >> testTopazListPackageNames [
 		assert:
 			((x := Rowan gemstoneTools topaz listPackagesForProjectNamed: 'STON') sort)
 				=
-					#('STON-GemStone-Tests' 'STON-Tests' 'STON-Core'  'STON-GemStone-Core' 'STON-GemStoneCommon' 'STON-GemStoneBase' 'STON-GemStone-Core-36x')
+					#('STON-GemStone-Tests' 'STON-Tests' 'STON-Core'  'STON-GemStone-Core' 'STON-GemStoneCommon' 'STON-GemStoneBase' 'STON-GemStone-Core36x')
 						sort
 ]
 
