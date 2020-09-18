@@ -162,7 +162,7 @@ RowanProjectService >> checkout: branchName [
 
 { #category : 'client commands' }
 RowanProjectService >> checkoutTag: tagName [
-  Rowan gitTools gitcheckoutIn: self repositoryRootPath with: tagName
+  Rowan gitTools gitcheckoutIn: self repositoryRoot with: tagName
 ]
 
 { #category : 'client commands' }
@@ -462,9 +462,14 @@ RowanProjectService >> removeProjectNamed: projectName [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> repositoryRoot [
+	^ (RwProject newNamed: name) repositoryRoot
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> repositoryRootPath [
 
-	^(RwProject newNamed: name) repositoryRootPath
+	^self repositoryRoot pathString
 ]
 
 { #category : 'rowan' }
