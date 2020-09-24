@@ -3318,6 +3318,42 @@ writeStreamPortable
 	^ WriteStreamPortable on: self
 %
 
+! Class extensions for 'SmallDate'
+
+!		Class methods for 'SmallDate'
+
+category: '*ston-gemstone-core36x'
+classmethod: SmallDate
+stonName
+	"Need to use a well-known class name. Instances of Date converted to SmallDate if in range"
+	
+	^ 'Date'
+%
+
+! Class extensions for 'SmallDateAndTime'
+
+!		Class methods for 'SmallDateAndTime'
+
+category: '*ston-gemstone-core36x'
+classmethod: SmallDateAndTime
+stonName
+	"Need to use a well-known class name. Instances of DateAndTime converted to SmallDateAndTime if in range"
+	
+	^ 'DateAndTime'
+%
+
+! Class extensions for 'SmallTime'
+
+!		Class methods for 'SmallTime'
+
+category: '*ston-gemstone-core36x'
+classmethod: SmallTime
+stonName
+	"Need to use a well-known class name. Instances of Time converted to SmallTime if in range"
+	
+	^ 'Time'
+%
+
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
