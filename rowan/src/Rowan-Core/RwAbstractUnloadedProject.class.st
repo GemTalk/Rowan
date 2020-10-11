@@ -28,6 +28,11 @@ RwAbstractUnloadedProject >> comment: aString [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> diskUrl: aString [
+	self _loadSpecification diskUrl: aString
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
 	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 ]
@@ -58,6 +63,16 @@ RwAbstractUnloadedProject >> packageFormat: aString [
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> packageNames [
 	^self _resolvedProject packageNames
+]
+
+{ #category : 'actions' }
+RwAbstractUnloadedProject >> packages [
+	^ self _resolvedProject packages
+]
+
+{ #category : 'actions' }
+RwAbstractUnloadedProject >> packages: aPackageDictionary [
+	self _resolvedProject packages: aPackageDictionary
 ]
 
 { #category : 'accessing' }

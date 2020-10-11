@@ -99,7 +99,7 @@ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 >> readClassesFor: packageNam
 
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
-		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	packageRoot directories do: [:directory |
 		| directoryExtension |
 		directoryExtension := directory extension.

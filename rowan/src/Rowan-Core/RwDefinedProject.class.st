@@ -233,6 +233,11 @@ RwDefinedProject >> componentNamed: aComponentName ifAbsent: absentBlock [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> componentsPath: aString [
+	self _projectSpecification componentsPath: aString
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> customConditionalAttributes [
 	^ self _loadSpecification customConditionalAttributes
 ]
@@ -326,8 +331,23 @@ RwDefinedProject >> projectAlias: aString [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> projectsPath: aString [
+	self _projectSpecification projectsPath: aString
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> projectSpecFile: relativePathString [
 	^ self _resolvedProject projectSpecFile: relativePathString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> projectSpecName: aString [
+	self _projectSpecification specName: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> projectSpecPath: aString [
+	self _projectSpecification projectSpecPath: aString
 ]
 
 { #category : 'accessing' }
@@ -466,4 +486,9 @@ RwDefinedProject >> revision: aString [
 { #category : 'accessing' }
 RwDefinedProject >> specName: aString [
 	self _loadSpecification specName: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> specsPath: aString [
+	self _projectSpecification specsPath: aString
 ]

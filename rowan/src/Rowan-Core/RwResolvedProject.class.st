@@ -141,6 +141,11 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 		yourself
 ]
 
+{ #category : 'accessing' }
+RwResolvedProject >> componentsRoot [
+	^ self _resolvedProject componentsRoot
+]
+
 { #category : 'transitions' }
 RwResolvedProject >> defined [
 	^ RwDefinedProject fromResolvedProject: self
@@ -176,6 +181,11 @@ RwResolvedProject >> exportPackages: diskProjectSetDefinition packagesRoot: pack
 ]
 
 { #category : 'actions' }
+RwResolvedProject >> exportProjects [
+	^ self _resolvedProject exportProjects
+]
+
+{ #category : 'actions' }
 RwResolvedProject >> exportProjectSpecification [
 	^ self _resolvedProject exportProjectSpecification
 ]
@@ -199,8 +209,28 @@ RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCre
 ]
 
 { #category : 'accessing' }
+RwResolvedProject >> packagesRoot [
+	^ self _resolvedProject packagesRoot
+]
+
+{ #category : 'accessing' }
 RwResolvedProject >> projectRoots [
 	^ self _resolvedProject projectRoots
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> projectsRoot [
+	^ self _resolvedProject projectsRoot
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> readPackageNames: packageNames [
+	^ self _resolvedProject readPackageNames: packageNames
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> readPackageNamesBlock: packageNamesBlock [
+	^ self _resolvedProject readPackageNamesBlock: packageNamesBlock
 ]
 
 { #category : 'accessing' }

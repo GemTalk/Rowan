@@ -6246,7 +6246,7 @@ removeallclassmethods RwModificationTonelWriterVisitorV2
 doit
 (RwAbstractReaderWriterVisitor
 	subclass: 'RwRepositoryComponentProjectReaderVisitor'
-	instVarNames: #( packageNames currentDirectory currentProjectReferenceDefinition )
+	instVarNames: #( packageNames packageNamesBlock currentDirectory currentProjectReferenceDefinition )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -49018,6 +49018,12 @@ comment: aString
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+diskUrl: aString
+	self _loadSpecification diskUrl: aString
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 %
@@ -49052,6 +49058,18 @@ category: 'accessing'
 method: RwAbstractUnloadedProject
 packageNames
 	^self _resolvedProject packageNames
+%
+
+category: 'actions'
+method: RwAbstractUnloadedProject
+packages
+	^ self _resolvedProject packages
+%
+
+category: 'actions'
+method: RwAbstractUnloadedProject
+packages: aPackageDictionary
+	self _resolvedProject packages: aPackageDictionary
 %
 
 category: 'accessing'
@@ -49350,6 +49368,12 @@ componentNamed: aComponentName ifAbsent: absentBlock
 
 category: 'accessing'
 method: RwDefinedProject
+componentsPath: aString
+	self _projectSpecification componentsPath: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
 customConditionalAttributes
 	^ self _loadSpecification customConditionalAttributes
 %
@@ -49458,8 +49482,26 @@ projectAlias: aString
 
 category: 'accessing'
 method: RwDefinedProject
+projectsPath: aString
+	self _projectSpecification projectsPath: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
 projectSpecFile: relativePathString
 	^ self _resolvedProject projectSpecFile: relativePathString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+projectSpecName: aString
+	self _projectSpecification specName: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+projectSpecPath: aString
+	self _projectSpecification projectSpecPath: aString
 %
 
 category: 'accessing'
@@ -49618,6 +49660,12 @@ category: 'accessing'
 method: RwDefinedProject
 specName: aString
 	self _loadSpecification specName: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+specsPath: aString
+	self _projectSpecification specsPath: aString
 %
 
 category: 'private'
@@ -49814,6 +49862,12 @@ projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 
 !		Instance methods for 'RwResolvedProject'
 
+category: 'accessing'
+method: RwResolvedProject
+componentsRoot
+	^ self _resolvedProject componentsRoot
+%
+
 category: 'transitions'
 method: RwResolvedProject
 defined
@@ -49856,6 +49910,12 @@ exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageForma
 
 category: 'actions'
 method: RwResolvedProject
+exportProjects
+	^ self _resolvedProject exportProjects
+%
+
+category: 'actions'
+method: RwResolvedProject
 exportProjectSpecification
 	^ self _resolvedProject exportProjectSpecification
 %
@@ -49882,8 +49942,32 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 
 category: 'accessing'
 method: RwResolvedProject
+packagesRoot
+	^ self _resolvedProject packagesRoot
+%
+
+category: 'accessing'
+method: RwResolvedProject
 projectRoots
 	^ self _resolvedProject projectRoots
+%
+
+category: 'accessing'
+method: RwResolvedProject
+projectsRoot
+	^ self _resolvedProject projectsRoot
+%
+
+category: 'actions'
+method: RwResolvedProject
+readPackageNames: packageNames
+	^ self _resolvedProject readPackageNames: packageNames
+%
+
+category: 'actions'
+method: RwResolvedProject
+readPackageNamesBlock: packageNamesBlock
+	^ self _resolvedProject readPackageNamesBlock: packageNamesBlock
 %
 
 category: 'accessing'
@@ -57714,43 +57798,56 @@ _validateRowanHybridProtocolConvention:  methodDef className: className isMeta: 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
 _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
-
-	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
-	RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageName: packageName packageConvention: 'Monticello'
+	(aClassDefinition category beginsWith: packageName)
+		ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification
+		signalWithClassDefinition: aClassDefinition
+		packageName: packageName
+		packageConvention: 'Monticello'
 %
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-_validateRowanMonticelloProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName
-
-	self error: 'not yet implemented'
-%
-
-category: 'validation'
-method: RwAbstractReaderWriterVisitor
-_validateRowanMonticelloProtocolConvention: protocol  forPackageNamed: packageName
-
-	| canonProtocol expectedProtocol |
+_validateRowanMonticelloProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed: packageName
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
 	(protocol at: 1) = $*
-		ifTrue: [
+		ifTrue: [ 
 			currentClassDefinition
-				ifNotNil: [
-					"protocol should not start with $* -- an obvious violation"
-					self error: 'not yet implemented']]
-		ifFalse: [
-			currentClassDefinition 
-				ifNotNil:  [ 
+				ifNotNil: [ 
+					"protocol should not start with $* for a non-extension method"
+					RwExtensionProtocolNonExtensionMethodErrorNotification
+						signalWithMethodDefinition: methodDef
+						className: className
+						isMeta: isMeta
+						packageName: packageName
+						packageConvention: 'Monticello'.
+					^ self ] ]
+		ifFalse: [ 
+			currentClassDefinition
+				ifNotNil: [ 
 					"protocol does not start with $* as expected"
-					^ self ] ].			
-	"validate conformance to convention for extension method"
+					^ self ] ].	"validate conformance to convention for extension method"
+	(protocol at: 1) = $*
+		ifFalse: [ 
+			"extension method protocol must start with a *"
+			RwNonExtensionProtocolExtensionMethodErrorNotification
+				signalWithMethodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				packageName: packageName
+				packageConvention: 'Monticello'.
+			^ self ].
 	canonProtocol := protocol asLowercase.
-	expectedProtocol := '*', packageName asLowercase.
-	"off the top of my head"
-	(canonProtocol beginsWith: expectedProtocol) 
-		ifTrue: [
-			(canonProtocol indexOf: $- startingAt: expectedProtocol size) <= 1 ifTrue: [ ^self ] ].
-	"protocol does not conform to Monticello convention"
-	self error: 'not yet implemented'
+	expectedProtocol := '*' , packageName asLowercase.
+	(canonProtocol beginsWith: expectedProtocol)
+		ifTrue: [ ^ self ].	"protocol does not match package name"
+	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+		signalWithMethodDefinition: methodDef
+		className: className
+		isMeta: isMeta
+		packageName: packageName
+		packageConvention: 'Monticello'
 %
 
 ! Class implementation for 'RwModificationWriterVisitor'
@@ -59815,10 +59912,7 @@ processPackage: aPackageModification
 category: 'class writing'
 method: RwModificationCypressFamilyWriterVisitorV2
 _commentOf: aClassDefinition
-	^ (aClassDefinition comment 
-		copyReplaceAll: '"' 
-		with: '""')
-		withLineEndings: self _newLine
+	^ aClassDefinition comment withLineEndings: self _newLine
 %
 
 category: 'package writing'
@@ -60649,6 +60743,15 @@ _classSourceFile
 
 category: 'class writing'
 method: RwModificationTonelWriterVisitorV2
+_commentOf: aClassDefinition
+	^ (aClassDefinition comment 
+		copyReplaceAll: '"' 
+		with: '""')
+		withLineEndings: self _newLine
+%
+
+category: 'class writing'
+method: RwModificationTonelWriterVisitorV2
 _fileNameFor: aClassDefinition
 	^ String streamContents: [ :stream | 
 		stream 
@@ -60947,6 +61050,19 @@ packageNames: anArray
 	packageNames := anArray
 %
 
+category: 'accessing'
+method: RwRepositoryComponentProjectReaderVisitor
+packageNamesBlock
+	^ packageNamesBlock
+		ifNil: [ [ :packageName | self packageNames includes: packageName ] ]
+%
+
+category: 'accessing'
+method: RwRepositoryComponentProjectReaderVisitor
+packageNamesBlock: object
+	packageNamesBlock := object
+%
+
 category: 'class reading'
 method: RwRepositoryComponentProjectReaderVisitor
 readClassesFor: packageName packageRoot: packageRoot
@@ -60957,25 +61073,25 @@ readClassesFor: packageName packageRoot: packageRoot
 category: 'package reading'
 method: RwRepositoryComponentProjectReaderVisitor
 readPackages: packagesRoot
-  | trace |
-  trace := Rowan projectTools trace.
-	packagesRoot directories do: [:packageDir | | dir |
-    dir := packageDir path basename .
-    dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
-		  | packageName a b c |
-		  packageName := self _packageNameFromPackageDir: packageDir.
-      trace trace:'--- reading package ', packageName asString , ' dir ' , packageDir asString  .
-		  (a := packageDir extension) = (b := self packageExtension) ifFalse:[
-        trace trace:'      skipped readClasses, extension does not match'.
-      ] ifTrue:[
-        ((c :=self packageNames) includes: packageName) ifTrue:[
-			    self readClassesFor: packageName packageRoot: packageDir 
-        ] ifFalse:[ 
-          trace trace:'      skipped readClasses, packageName rejected'.
-        ]
-      ]
-    ]
-  ].
+	| trace |
+	trace := Rowan projectTools trace.
+	packagesRoot directories
+		do: [ :packageDir | 
+			| dir |
+			dir := packageDir path basename.
+			dir = '.svn'
+				ifFalse: [ 
+					| packageName "tolerate checkout produced by svn version 1.6" |
+					packageName := self _packageNameFromPackageDir: packageDir.
+					trace
+						trace:
+							'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
+					packageDir extension = self packageExtension
+						ifFalse: [ trace trace: '      skipped readClasses, extension does not match' ]
+						ifTrue: [ 
+							(self packageNamesBlock value: packageName)
+								ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ]
+								ifFalse: [ trace trace: '      skipped readClasses, packageName rejected' ] ] ] ]
 %
 
 category: 'public'
@@ -61120,7 +61236,7 @@ readClassesFor: packageName packageRoot: packageRoot
 
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
-		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	packageRoot directories do: [:directory |
 		| directoryExtension |
 		directoryExtension := directory extension.
@@ -63097,6 +63213,29 @@ readPackageNames: packageNames
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
 		packageNames: packageNames;
+		visit: self
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+readPackageNamesBlock: packageNamesBlock
+	| format visitorClass |
+	format := self
+		packageFormatIfAbsent: [ 
+			| formatFromDisk |
+			formatFromDisk := (RwAbstractReaderWriterVisitor
+				_repositoryPropertyDictFor: self packagesRoot)
+				at: #'format'
+				ifAbsent: [ 'tonel' ].
+			self packageFormat: formatFromDisk.
+			formatFromDisk ].
+	self _projectDefinition packages: Dictionary new.
+	visitorClass := format = 'tonel'
+		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
+		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+	^ visitorClass new
+		compileWhileReading: self compileWhileReading;
+		packageNamesBlock: packageNamesBlock;
 		visit: self
 %
 
@@ -85970,43 +86109,47 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
    Only used to parse a method to determine the selector.  "
 
 	| undefinedSymbolList undefinedSymbols |
-	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
+	undefinedSymbols := SymbolDictionary new name: #'UndefinedSymbols'.
 	undefinedSymbolList := SymbolList with: undefinedSymbols.
-	^
-	[UndefinedObject
+	^ [ 
+	UndefinedObject
 		compileMethod: source
 		dictionaries: aSymbolList
 		category: cat
 		intoMethodDict: GsMethodDictionary new
 		intoCategories: GsMethodDictionary new
-		environmentId: anEnvironmentId]
-			onSynchronous: (Array with: CompileError with: CompileWarning)
-			do: (Array with: 
-						[:ex |
-						| undefSymbol symbols |
-						undefSymbol := true.
-						symbols := Array new.
-						ex errorDetails do: 
-								[:errArray |
-								(errArray atOrNil: 1) == 1031
-									ifTrue: [symbols add: (errArray atOrNil: 5) asSymbol]
-									ifFalse: [undefSymbol := false]].
-						undefSymbol
-							ifTrue: 
-								["attempt auto-define of undefined symbols"
-								symbols do: [:sym | undefinedSymbols at: sym put: nil].
-								
-								[^UndefinedObject
-									compileMethod: source
-									dictionaries: aSymbolList , undefinedSymbolList
-									category: cat
-									intoMethodDict: GsMethodDictionary new
-									intoCategories: GsMethodDictionary new
-									environmentId: anEnvironmentId]
-										onException: CompileError
-										do: [:exb | undefSymbol := false]].
-						undefSymbol ifFalse: [ex outer]]
-					with: [:ex | ex resume])
+		environmentId: anEnvironmentId ]
+		onSynchronous: (Array with: CompileError with: CompileWarning)
+		do:
+			(Array
+				with: [ :ex | 
+					| undefSymbol symbols |
+					undefSymbol := true.
+					symbols := Array new.
+					ex errorDetails
+						do: [ :errArray | 
+							(errArray atOrNil: 1) == 1031
+								ifTrue: [ symbols add: (errArray atOrNil: 5) asSymbol ]
+								ifFalse: [ undefSymbol := false ] ].
+					undefSymbol
+						ifTrue: [ 
+							"attempt auto-define of undefined symbols"
+							symbols do: [ :sym | undefinedSymbols at: sym put: nil ].
+
+							[ 
+							^ UndefinedObject
+								compileMethod: source
+								dictionaries: aSymbolList , undefinedSymbolList
+								category: cat
+								intoMethodDict: GsMethodDictionary new
+								intoCategories: GsMethodDictionary new
+								environmentId: anEnvironmentId ]
+								onSynchronous: (Array with: CompileError with: CompileWarning)
+								do:
+									(Array with: [ :exb | undefSymbol := false ] with: [ :exc | exc resume ]) ].
+					undefSymbol
+						ifFalse: [ ex outer ] ]
+				with: [ :ex | ex resume ])
 %
 
 category: 'private'

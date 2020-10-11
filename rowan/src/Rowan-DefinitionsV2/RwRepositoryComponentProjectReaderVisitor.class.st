@@ -3,6 +3,7 @@ Class {
 	#superclass : 'RwAbstractReaderWriterVisitor',
 	#instVars : [
 		'packageNames',
+		'packageNamesBlock',
 		'currentDirectory',
 		'currentProjectReferenceDefinition'
 	],
@@ -103,6 +104,17 @@ RwRepositoryComponentProjectReaderVisitor >> packageNames: anArray [
 	packageNames := anArray
 ]
 
+{ #category : 'accessing' }
+RwRepositoryComponentProjectReaderVisitor >> packageNamesBlock [
+	^ packageNamesBlock
+		ifNil: [ [ :packageName | self packageNames includes: packageName ] ]
+]
+
+{ #category : 'accessing' }
+RwRepositoryComponentProjectReaderVisitor >> packageNamesBlock: object [
+	packageNamesBlock := object
+]
+
 { #category : 'class reading' }
 RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName packageRoot: packageRoot [
 
@@ -111,25 +123,25 @@ RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName package
 
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
-  | trace |
-  trace := Rowan projectTools trace.
-	packagesRoot directories do: [:packageDir | | dir |
-    dir := packageDir path basename .
-    dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
-		  | packageName a b c |
-		  packageName := self _packageNameFromPackageDir: packageDir.
-      trace trace:'--- reading package ', packageName asString , ' dir ' , packageDir asString  .
-		  (a := packageDir extension) = (b := self packageExtension) ifFalse:[
-        trace trace:'      skipped readClasses, extension does not match'.
-      ] ifTrue:[
-        ((c :=self packageNames) includes: packageName) ifTrue:[
-			    self readClassesFor: packageName packageRoot: packageDir 
-        ] ifFalse:[ 
-          trace trace:'      skipped readClasses, packageName rejected'.
-        ]
-      ]
-    ]
-  ].
+	| trace |
+	trace := Rowan projectTools trace.
+	packagesRoot directories
+		do: [ :packageDir | 
+			| dir |
+			dir := packageDir path basename.
+			dir = '.svn'
+				ifFalse: [ 
+					| packageName "tolerate checkout produced by svn version 1.6" |
+					packageName := self _packageNameFromPackageDir: packageDir.
+					trace
+						trace:
+							'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
+					packageDir extension = self packageExtension
+						ifFalse: [ trace trace: '      skipped readClasses, extension does not match' ]
+						ifTrue: [ 
+							(self packageNamesBlock value: packageName)
+								ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ]
+								ifFalse: [ trace trace: '      skipped readClasses, packageName rejected' ] ] ] ]
 ]
 
 { #category : 'public' }
