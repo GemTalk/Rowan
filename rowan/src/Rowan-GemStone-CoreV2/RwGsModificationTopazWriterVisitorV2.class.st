@@ -13,6 +13,7 @@ Class {
 		'topazFilenameComponentMap',
 		'topazFilename',
 		'topazFileHeader',
+		'topazFileFooter',
 		'excludeClassInitializers',
 		'excludeRemoveAllMethods',
 		'fileNamesInFileInOrder',
@@ -349,6 +350,8 @@ RwGsModificationTopazWriterVisitorV2 >> export [
 
 		self exportClassInitializations.
 
+		self bufferedStream nextPutAll: self topazFileFooter.
+
 		self bufferedStream flush; close ].
 ]
 
@@ -552,6 +555,16 @@ RwGsModificationTopazWriterVisitorV2 >> repositoryRootPath: aStringOrFileReferen
 
 	repositoryRootPath := aStringOrFileReference asFileReference.
 	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> topazFileFooter [
+	^ topazFileFooter ifNil: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> topazFileFooter: object [
+	topazFileFooter := object
 ]
 
 { #category : 'accessing' }
