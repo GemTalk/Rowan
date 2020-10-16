@@ -6196,7 +6196,7 @@ removeallclassmethods RwModificationWriterVisitor
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwGsModificationTopazWriterVisitorV2'
-	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader excludeClassInitializers excludeRemoveAllMethods fileNamesInFileInOrder logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
+	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader topazFileFooter excludeClassInitializers excludeRemoveAllMethods fileNamesInFileInOrder logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -58840,6 +58840,8 @@ export
 
 		self exportClassInitializations.
 
+		self bufferedStream nextPutAll: self topazFileFooter.
+
 		self bufferedStream flush; close ].
 %
 
@@ -59059,6 +59061,18 @@ repositoryRootPath: aStringOrFileReference
 
 	repositoryRootPath := aStringOrFileReference asFileReference.
 	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+topazFileFooter
+	^ topazFileFooter ifNil: [ '' ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitorV2
+topazFileFooter: object
+	topazFileFooter := object
 %
 
 category: 'accessing'
