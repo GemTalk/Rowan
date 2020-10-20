@@ -78502,7 +78502,7 @@ _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOp
 	(oldClass isKindOf: Class)
 		ifFalse: [ oldClass _validateClass: Class ].
 	suprBlock value: oldClass superClass == newSuperclass.
-	optsBlock value: (oldClass _optionsChangableTo: fmtArr).
+	optsBlock value: (oldClass _optionsChangableTo: fmtArr) == true.
 	ivsBlock value: (oldClass _instVarsEqual: anArrayOfInstvarNames).
 	civsBlock value: (oldClass class _instVarsEqual: anArrayOfClassInstVars).
 	poolsBlock value: (oldClass _poolDictsEqual: anArrayOfPoolDicts).

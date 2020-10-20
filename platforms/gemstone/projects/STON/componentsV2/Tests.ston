@@ -2,7 +2,10 @@ RwSimpleProjectLoadComponentV2 {
 	#name : 'Tests',
 	#condition : 'tests',
 	#projectNames : [ ],
-	#componentNames : [ ],
+	#componentNames : [
+		'gemstone32-5/Tests',
+		'gemstone36-/Tests'
+	 ],
 	#packageNames : [
 		'STON-Tests',
 		'STON-GemStone-Tests'
