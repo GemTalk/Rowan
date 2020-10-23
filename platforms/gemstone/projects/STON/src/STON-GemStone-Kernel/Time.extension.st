@@ -1,6 +1,6 @@
 Extension { #name : 'Time' }
 
-{ #category : '*ston-gemstone-core' }
+{ #category : '*ston-gemstone-kernel' }
 Time >> stonContainSubObjects [ 
 	^ false
 

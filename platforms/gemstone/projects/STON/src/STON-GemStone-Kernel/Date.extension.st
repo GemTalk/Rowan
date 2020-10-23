@@ -1,6 +1,6 @@
 Extension { #name : 'Date' }
 
-{ #category : '*ston-gemstone-core' }
+{ #category : '*ston-gemstone-kernel' }
 Date >> stonContainSubObjects [ 
 	^ false
 

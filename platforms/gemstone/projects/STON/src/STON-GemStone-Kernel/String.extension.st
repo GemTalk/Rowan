@@ -1,12 +1,12 @@
 Extension { #name : 'String' }
 
-{ #category : '*ston-gemstone-core' }
+{ #category : '*ston-gemstone-kernel' }
 String >> stonContainSubObjects [ 
 	^ false
 
 ]
 
-{ #category : '*ston-gemstone-core' }
+{ #category : '*ston-gemstone-kernel' }
 String >> stonOn: stonWriter [
 	stonWriter writeString: self
 

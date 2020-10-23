@@ -1,6 +1,6 @@
 Extension { #name : 'Symbol' }
 
-{ #category : '*ston-gemstone-core' }
+{ #category : '*ston-gemstone-kernel' }
 Symbol >> stonOn: stonWriter [
 	stonWriter writeSymbol: self
 

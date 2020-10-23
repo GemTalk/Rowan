@@ -94696,13 +94696,13 @@ rbStoreOn: aStream
   aStream nextPutAll: self asString
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Boolean
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Boolean
 stonOn: stonWriter
 	stonWriter writeBoolean: self
@@ -94720,7 +94720,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 !		Class methods for 'ByteArray'
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 classmethod: ByteArray
 fromSton: stonReader
   | singletonString |
@@ -94799,7 +94799,7 @@ expected' ].
     self at: i put: value ]
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: ByteArray
 stonContainSubObjects 
 	^ false
@@ -94839,7 +94839,7 @@ digitValue: x
 	^self withValue: (n < 10 ifTrue: [n + 48] ifFalse: [n + 55])
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 classmethod: Character
 fromSton: stonReader
 	^ stonReader parseListSingleton first
@@ -94854,7 +94854,7 @@ isCharacter
 	^ true
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Character
 stonOn: stonWriter
 	stonWriter writeObject: self listSingleton: self asString
@@ -95849,7 +95849,7 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		options: optionsArray
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Class
 stonName
 	"Override to encode my instances using a different class name."
@@ -96248,7 +96248,7 @@ _validateOptions: optionsArray withFormat: theFormat newClassName: ignored
 
 !		Class methods for 'Collection'
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 classmethod: Collection
 fromSton: stonReader
 	| collection |
@@ -96361,7 +96361,7 @@ sort: aSortBlock
 	^ self sortWithBlock: aSortBlock
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Collection
 stonOn: stonWriter
 	stonWriter writeObject: self do: [
@@ -97111,7 +97111,7 @@ fromSton: stonReader
 
 !		Instance methods for 'Date'
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Date
 stonContainSubObjects 
 	^ false
@@ -97131,7 +97131,7 @@ stonOn: stonWriter
 
 !		Class methods for 'DateAndTime'
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 classmethod: DateAndTime
 fromSton: stonReader
   ^ DateAndTime fromString: stonReader parseListSingleton
@@ -97139,7 +97139,7 @@ fromSton: stonReader
 
 !		Instance methods for 'DateAndTime'
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: DateAndTime
 stonContainSubObjects 
 	^ false
@@ -97604,7 +97604,7 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 	^ aRwSemanticVersonComponent rwSemanticIntegerLessThanSelf: self
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Integer
 stonOn: stonWriter
 	stonWriter writeInteger: self
@@ -97732,13 +97732,13 @@ rbStoreOn: aStream
   self printOn: aStream
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Number
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Number
 stonOn: stonWriter
 	stonWriter writeFloat: self asFloat
@@ -97756,7 +97756,7 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 !		Class methods for 'Object'
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 classmethod: Object
 fromSton: stonReader
 	"Create a new instance and delegate decoding to instance side.
@@ -97789,7 +97789,7 @@ flag: aSymbol
 	Then, to retrieve all such messages, browse all senders of #returnHereUrgently."
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Object
 fromSton: stonReader
   "Decode non-variable classes from a map of their instance variables and values.
@@ -97839,7 +97839,7 @@ isNumber
   ^ self _isNumber
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Object
 isStonReference
 	^ false
@@ -97950,7 +97950,7 @@ split: aSequenceableCollection indicesDo: aBlock
 	aBlock value: oldPosition value: aSequenceableCollection size.
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Object
 stonContainSubObjects
 	"Return true if I contain subObjects that should be processed, false otherwise.
@@ -97959,7 +97959,7 @@ stonContainSubObjects
 	^ true
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Object
 stonOn: stonWriter
 	"Encode non-variable classes with a map of their instance variable and values.
@@ -97984,7 +97984,7 @@ stonProcessSubObjects: block
     ifTrue: [ 1 to: self _basicSize do: [ :each | self basicAt: each put: (block value: (self basicAt: each)) ] ]
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Object
 stonShouldWriteNilInstVars
 	"Return true if my instance variables that are nil should be written out, 
@@ -100605,7 +100605,7 @@ fromFile: filePath
 
 !		Class methods for 'SequenceableCollection'
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 classmethod: SequenceableCollection
 fromSton: stonReader
 	^ self streamContents: [ :stream |
@@ -100920,7 +100920,7 @@ sixth
 	^ self at: 6
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: SequenceableCollection
 stonOn: stonWriter
 	self class == STON listClass
@@ -101036,13 +101036,13 @@ decodeFromUTF8
  ^ self _decodeFromUtf8: true
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: String
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: String
 stonOn: stonWriter
 	stonWriter writeString: self
@@ -101079,7 +101079,7 @@ rbStoreOn: aStream
   super rbStoreOn: aStream
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Symbol
 stonOn: stonWriter
 	stonWriter writeSymbol: self
@@ -101259,7 +101259,7 @@ fromSton: stonReader
 
 !		Instance methods for 'Time'
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: Time
 stonContainSubObjects 
 	^ false
@@ -101311,13 +101311,13 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		options: optionsArray
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: UndefinedObject
 stonContainSubObjects 
 	^ false
 %
 
-category: '*ston-gemstone-core'
+category: '*ston-gemstone-kernel'
 method: UndefinedObject
 stonOn: stonWriter
 	stonWriter writeNull
