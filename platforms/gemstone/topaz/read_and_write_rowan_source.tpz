@@ -104,10 +104,10 @@ false ifTrue: [
 							('tonel' -> 
 								{ 
 									'STON-Core' .
-									'STON-GemStone-Core'.
+									'STON-GemStone-Kernel'.
 									'STON-GemStoneBase' .
 									'STON-GemStoneCommon' .
-									'STON-GemStone-Core36x' .
+									'STON-GemStone-Kernel36x' .
 								}) .
 						}; 
 				yourself).

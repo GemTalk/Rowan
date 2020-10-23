@@ -1,21 +1,23 @@
 RwPlatformNestedProjectLoadComponentV2 {
-	#name : 'gemstone36-/Core',
+	#name : 'gemstone32-5/Tests',
 	#condition : [
-		'gs3.[6-]'
+		'gs3.[2-5]'
 	],
+	#projectNames : [ ],
+	#componentNames : [ ],
 	#packageNames : [
-		'STON-GemStone-Kernel36x'
+		'STON-Tests-32x'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'STON-GemStone-Kernel36x' : {
+					'STON-Tests-32x' : {
 						'symbolDictName' : 'Globals'
 					}
 				}
 			}
 		}
 	},
-	#comment : 'Conditional component for GemStone 3.6.0 and beyond'
+	#comment : 'Single component for STON project'
 }

@@ -1,12 +1,12 @@
 Extension { #name : 'Boolean' }
 
-{ #category : '*ston-gemstone-core' }
+{ #category : '*ston-gemstone-kernel' }
 Boolean >> stonContainSubObjects [ 
 	^ false
 
 ]
 
-{ #category : '*ston-gemstone-core' }
+{ #category : '*ston-gemstone-kernel' }
 Boolean >> stonOn: stonWriter [
 	stonWriter writeBoolean: self
 
