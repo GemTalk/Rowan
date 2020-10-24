@@ -61,7 +61,7 @@ RwSentButNotImplementedTest >> _specialCases [
 
 { #category : 'special cases' }
 RwSentButNotImplementedTest >> nonImplementedSelectorsGsKernel360 [
-	#(#'_announceMethodMoved:oldCategory:' #'_unsafeSetOop:' #'notify:' #'modifyingObject:atOffset:to:' #'changingSizeOfObject:to:' #'deletingIn:startingAt:count:' #'inserting:into:at:insertSize:' #'modifyingByteObject:startingAt:withNewValue:' #'invokingBecomeOn:to:' #'transformIntoDateTime:' #'zork' #'someMessageThatIsntUnderstood' #'adding:to:' #'removing:from:' #'installDocumentation')
+	^ #(#'_announceMethodMoved:oldCategory:' #'_unsafeSetOop:' #'notify:' #'modifyingObject:atOffset:to:' #'changingSizeOfObject:to:' #'deletingIn:startingAt:count:' #'inserting:into:at:insertSize:' #'modifyingByteObject:startingAt:withNewValue:' #'invokingBecomeOn:to:' #'transformIntoDateTime:' #'zork' #'someMessageThatIsntUnderstood' #'adding:to:' #'removing:from:' #'installDocumentation')
 ]
 
 { #category : 'test' }
