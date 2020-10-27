@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanProcessService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanProcessService( frames oop status)
+
+"
 Class {
 	#name : 'RowanProcessService',
 	#superclass : 'RowanService',

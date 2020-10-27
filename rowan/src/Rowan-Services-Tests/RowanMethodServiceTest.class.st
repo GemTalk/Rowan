@@ -155,3 +155,31 @@ RowanMethodServiceTest >> test_runMethodTest [
 	methodService runTest: #testMethod2 inClassName: self servicesDefaultTestClassName.
 	self assert: methodService testResult equals: 'error'.
 ]
+
+{ #category : 'tests' }
+RowanMethodServiceTest >> test_setDefinedClass [
+	| methodService organizer theMethod methodServicesClass |
+	self
+		jadeiteIssueTested: #'issue828'
+		withTitle:
+			'`UndefinedObject does not understand #asString` from `Browse Selected method` in SUnit Browser'.
+	organizer := ClassOrganizer new.
+	theMethod := RowanMethodServiceTest compiledMethodAt: #'test_setDefinedClass'.
+	methodService := RowanMethodService
+		forGsNMethod: theMethod
+		organizer: organizer.
+	methodService definedClassName: nil.	"reset for test"
+	self assert: methodService definedClassName equals: nil.
+	methodServicesClass := theMethod inClass.
+	methodService setDefinedClass: methodServicesClass.
+	self assert: methodService definedClassName equals: 'RowanMethodServiceTest'.
+
+	theMethod := RowanServicesTest compiledMethodAt: #'compileUnicodeMethod'.
+	methodService := RowanMethodService
+		forGsNMethod: theMethod
+		organizer: organizer.
+	methodService definedClassName: nil.	"reset for test"
+	self assert: methodService definedClassName equals: nil.
+	methodService setDefinedClass: methodServicesClass.
+	self assert: methodService definedClassName equals: 'RowanServicesTest'
+]

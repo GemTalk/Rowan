@@ -51,3 +51,4 @@ CharacterCollection >> rwSemanticVersionComponentLessThan: aRwSemanticVersonComp
 	^ aRwSemanticVersonComponent rwSemanticStringLessThanSelf: self
 
 ]
+

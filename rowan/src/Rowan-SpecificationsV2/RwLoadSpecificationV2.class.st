@@ -495,7 +495,7 @@ RwLoadSpecificationV2 >> projectsHome [
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> projectsHome: aStringOrFileReference [
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
-
+	aStringOrFileReference ifNil:[projectsHome := nil. ^self].
 	projectsHome := aStringOrFileReference asFileReference
 ]
 

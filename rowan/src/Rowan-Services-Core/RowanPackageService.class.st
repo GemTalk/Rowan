@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanPackageService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanPackageService( projectDefinition packageName name isDirty classes defaultTemplate projectName testClasses hierarchyServices selectedClass)
+
+"
 Class {
 	#name : 'RowanPackageService',
 	#superclass : 'RowanService',

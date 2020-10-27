@@ -62,3 +62,9 @@ RowanTestClassServiceTest >> test_testSelectors [
 	self deny: (classService tests detect:[:methodService | methodService selector = #test_testSelectors] ifNone:[]) equals: nil.
 	self assert: (classService tests detect:[:methodService | methodService selector = #nonTestMethod] ifNone:[]) equals: nil.
 ]
+
+{ #category : 'support' }
+RowanTestClassServiceTest >> ugh [
+
+	"do not remove. Short selector < 4 characters for Jadeite test support"
+]

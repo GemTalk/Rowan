@@ -15,7 +15,7 @@ RowanCommandResult addResult: <self>
 "
 Class {
 	#name : 'RowanService',
-	#superclass : 'RsrService',
+	#superclass : 'Object',
 	#instVars : [
 		'command',
 		'commandArgs',
@@ -112,7 +112,7 @@ RowanService class >> version [
   "change this method carefully and only at Jadeite release boundaries.
 	Failure to do so will prevent logins"
 
-  ^ 3092
+  ^ 3200
 ]
 
 { #category : 'other' }
@@ -422,6 +422,21 @@ RowanService >> projectTools [
 
 	^Rowan projectTools
 
+]
+
+{ #category : 'release' }
+RowanService >> releaseProcessOop: oop [
+  "not really releasing it. The client should have registered
+	the process with the debugger window it opened before
+	this is run"
+
+  | jadeiteProcesses process |
+  ((process := Object _objectForOop: oop) isKindOf: GsProcess)
+    ifTrue: [ 
+      jadeiteProcesses := SessionTemps current
+        at: #'jadeiteProcesses'
+        ifAbsentPut: [ Array new ].
+      jadeiteProcesses remove: process ifAbsent: [  ] ]
 ]
 
 { #category : 'samples' }

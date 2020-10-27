@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanFrameService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanFrameService( label method stepPoint vars oop homeMethodSelector homeMethodClassName classIsResolvable)
+
+"
 Class {
 	#name : 'RowanFrameService',
 	#superclass : 'RowanService',
@@ -63,45 +70,69 @@ RowanFrameService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'other' }
 RowanFrameService >> varsFor: anArray [
-
 	| keys list receiver values |
 	receiver := anArray at: 10.
 	values := OrderedCollection new.
-	(Reflection classOf: receiver) name == #'ClientForwarder' ifTrue: [
-		keys := OrderedCollection with: 'clientObject'.
-		values add: receiver clientObject.
-		receiver := '[aClientForwarder(' , (self oopOf: receiver) printString , ')]'.
-	] ifFalse: [
-		((receiver isKindOf: BlockClosure) or: [receiver isKindOf: Class]) ifTrue: [
-			keys := OrderedCollection new.
-		] ifFalse: [
-			keys := receiver class allInstVarNames asOrderedCollection collect: [:each | '-' , each].
-			1 to: keys size do: [:i |
-				values add: (receiver instVarAt: i).
-			].
-		].
-	].
+	(Reflection classOf: receiver) name == #'ClientForwarder'
+		ifTrue: [ 
+			keys := OrderedCollection with: 'clientObject'.
+			values add: receiver clientObject.
+			receiver := '[aClientForwarder(' , (self oopOf: receiver) printString , ')]'.
+			keys addAll: (anArray at: 9).
+			keys := keys reject: [ :each | each first == $. ] ]
+		ifFalse: [ 
+			((receiver isKindOf: BlockClosure) or: [ receiver isKindOf: Class ])
+				ifTrue: [ 
+					keys := OrderedCollection new.
+					keys addAll: (anArray at: 9).
+					keys := keys reject: [ :each | each first == $. ] ]
+				ifFalse: [ 
+					keys := receiver class allInstVarNames asOrderedCollection
+						collect: [ :each | '-' , each ].
+					1 to: keys size do: [ :i | values add: (receiver instVarAt: i) ].
+					keys
+						addAll:
+							(receiver dynamicInstanceVariables asOrderedCollection
+								collect: [ :each | '$' , each asString ]).
+					receiver dynamicInstanceVariables
+						do: [ :symbol | values add: (receiver dynamicInstVarAt: symbol) ].
+					keys addAll: (anArray at: 9).
+					keys := keys reject: [ :key | key first == $. ].
+					keys := keys collect: [ :key | key copyReplaceChar: $$ with: $. ] ] ].
+
 	keys addFirst: #'receiver'.
 	values addFirst: receiver.
-	keys addAll: (anArray at: 9).
-	keys := keys reject: [:each | each first == $.].
-	values addAll: (anArray size >= 11
-		ifTrue: [anArray copyFrom: 11 to: anArray size]
-		ifFalse: [#()]).
+	values
+		addAll:
+			(anArray size >= 11
+				ifTrue: [ anArray copyFrom: 11 to: anArray size ]
+				ifFalse: [ #() ]).
 	list := Array new.
-	1 to: (keys size min: values size) do: [:i | | theOop key value valueClass | 
+	1 to: (keys size min: values size) do: [ :i | 
+		| theOop key value valueClass |
 		key := keys at: i.
 		value := values at: i.
 		valueClass := value class.
 		theOop := value asOop.
-		value := [
-			value printString.
-		] on: Error do: [:ex | 
-			ex return: '(' , value class name , ' printString error: ' , ex description , ')'. 
-		].
-		value size > 500 ifTrue: [value := (value copyFrom: 1 to: 500) , '...'].
-		value := value collect: [:char | (char asciiValue < 32 or: [127 < char asciiValue]) ifTrue: [$?] ifFalse: [char]].
-		list add: (RowanVariableService oop: theOop key: key value: value className: valueClass name asString).
-	].
-	^list
+		value := [ value printString ]
+			on: Error
+			do: [ :ex | 
+				ex
+					return:
+						'(' , value class name , ' printString error: ' , ex description , ')' ].
+		value size > 500
+			ifTrue: [ value := (value copyFrom: 1 to: 500) , '...' ].
+		value := value
+			collect: [ :char | 
+				(char asciiValue < 32 or: [ 127 < char asciiValue ])
+					ifTrue: [ $? ]
+					ifFalse: [ char ] ].
+		list
+			add:
+				(RowanVariableService
+					oop: theOop
+					key: key
+					value: value
+					className: valueClass name asString) ].
+	^ list
 ]

@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanQueryService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanQueryService( queryResults)
+
+"
 Class {
 	#name : 'RowanQueryService',
 	#superclass : 'RowanService',
@@ -162,7 +169,7 @@ RowanQueryService >> methodsContaining: string [
     | methodService |
     methodService := self methodServiceFrom: (methods first at: index).
     methodService
-      firstReference: ((methods at: 2) at: index);   "<<<< FIX HERE"
+      firstReference: ((methods at: 2) at: index);
       searchString: string.
     sorted add: methodService ].
   queryResults := sorted asArray.

@@ -352,13 +352,13 @@ RowanBrowserService >> saveRootObject: oop windowHandle: integer [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanBrowserService >> selectedClass [
 
 	^selectedClass
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanBrowserService >> selectedClass: object [
 
 	selectedClass := object

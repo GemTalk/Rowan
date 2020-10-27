@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanLoggingService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanLoggingService( fileName id groupId date time comment services mode location isLogging)
+
+"
 Class {
 	#name : 'RowanLoggingService',
 	#superclass : 'RowanService',

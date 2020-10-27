@@ -222,6 +222,13 @@ RowanServicesTest >> tearDown [
   RowanAnsweringService new setEnableInteractionHandler: true
 ]
 
+{ #category : 'tests' }
+RowanServicesTest >> test_isAbstract [
+	self class name = #'RowanServicesTest'
+		ifTrue: [ self assert: self class isAbstract ]
+		ifFalse: [ self deny: self class isAbstract ]
+]
+
 { #category : 'support' }
 RowanServicesTest >> unloadServicesTestProject [
 

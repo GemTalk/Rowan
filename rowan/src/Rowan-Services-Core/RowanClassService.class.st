@@ -95,12 +95,19 @@ RowanClassService >> = classService [
 
 { #category : 'client commands' }
 RowanClassService >> addCategory: string [
-
-	| theClass |
-
+	| theClass thePackageName |
+	string first = $*
+		ifTrue: [ 
+			thePackageName := string copyWithout: $*.
+			(self loadedPackageExistsAndIsInSameDictionary: thePackageName)
+				ifFalse: [ 
+					^self
+						inform:
+							'Loaded package named: ' , thePackageName , ' not found or is not in same dictionary' ] ].
 	theClass := self theClass.
-	meta ifTrue:[theClass := theClass class]. 
-	theClass addCategory: string.
+	meta
+		ifTrue: [ theClass := theClass class ].
+	theClass addCategory: string
 ]
 
 { #category : 'constants' }
@@ -122,24 +129,20 @@ RowanClassService >> allSubclassServices [
 
 { #category : 'Accessing' }
 RowanClassService >> allTests [
-  | allSelectors theClass |
-  self isTestCase
-    ifFalse: [ ^ Array new ].
-  theClass := self theClass thisClass.
-  theClass isAbstract
-    ifTrue: [ ^ Array new ].
-  allSelectors := self theClass thisClass allTestSelectors.
-  ^ allSelectors
-    collect: [ :selector | 
-      | methodService |
-      methodService := RowanMethodService
-        forSelector: selector
-        class: (theClass whichClassIncludesSelector: selector asString)
-        meta: false
-        organizer: organizer.
-      methodService
-        definedClassName: (theClass whichClassIncludesSelector: selector asString) name asString.	"may get changed in client"
-      methodService ]
+	| allSelectors theClass |
+	self isTestCase
+		ifFalse: [ ^ Array new ].
+	theClass := self theClass thisClass.
+	theClass isAbstract
+		ifTrue: [ ^ Array new ].
+	allSelectors := self theClass thisClass allTestSelectors.
+	^ allSelectors
+		collect: [ :selector | 
+			RowanMethodService
+				forSelector: selector
+				class: (theClass whichClassIncludesSelector: selector asString)
+				meta: false
+				organizer: organizer ]
 ]
 
 { #category : 'testing' }
@@ -165,7 +168,6 @@ RowanClassService >> basicRefreshFrom: theClass [
 	command := nil. 
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
-	comment := theClass rwComment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
@@ -586,6 +588,21 @@ RowanClassService >> isTestCase: aBoolean [
 	isTestCase := aBoolean
 ]
 
+{ #category : 'testing' }
+RowanClassService >> loadedPackageExistsAndIsInSameDictionary: thePackageName [
+	| actualName loadedPackage packageDictionaryName |
+	actualName := Rowan image packageNames
+		detect: [ :loadedName | loadedName asLowercase = thePackageName asLowercase ]
+		ifNone: [  ].
+	loadedPackage := Rowan image loadedPackageNamed: actualName ifAbsent: [  ].
+	^ loadedPackage
+		ifNil: [ false ]
+		ifNotNil: [ 
+			packageDictionaryName := loadedPackage loadedProject
+				symbolDictNameForPackageNamed: thePackageName.
+			packageDictionaryName = dictionaryName ]
+]
+
 { #category : 'Accessing' }
 RowanClassService >> meta [
 
@@ -673,11 +690,20 @@ RowanClassService >> minimalRefreshFrom: theClass [
 RowanClassService >> moveMethods: methodServices to: category [
 	| behavior |
 	behavior := self classOrMeta.
-	methodServices do: [:methodService | 
+	methodServices
+		do: [ :methodService | 
 			behavior rwMoveMethod: methodService selector toCategory: category.
-			methodService category: category].
-	self update. 
+			methodService category: category ].
+	self update.
 	self selectedMethods: methodServices.
+	category first = $*
+		ifTrue: [ 
+			| packageService projectService |
+			packageService := RowanPackageService new name: (category copyWithout: $*).
+			packageService update.
+
+			projectService := RowanProjectService new name: packageService projectName.
+			projectService update ]
 ]
 
 { #category : 'Accessing' }

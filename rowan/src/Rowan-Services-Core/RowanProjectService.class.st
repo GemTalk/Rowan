@@ -1,3 +1,10 @@
+"
+No class-specific documentation for RowanProjectService, hierarchy is:
+Object
+  RowanService( definition updates command commandArgs updateType organizer)
+    RowanProjectService( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome isDiskDirty)
+
+"
 Class {
 	#name : 'RowanProjectService',
 	#superclass : 'RowanService',
@@ -55,6 +62,32 @@ RowanProjectService >> addPackageNamed: packageName [
 			self update.
 			^ self answer: #'added' ].
 	self answer: #'duplicatePackage'
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> audit [
+	^ (Rowan projectNamed: name) audit
+]
+
+{ #category : 'client commands support' }
+RowanProjectService >> basicLoadProject: aBlock [
+	| updatedProjects |
+	[ updatedProjects := aBlock value ]
+		on: Warning
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: ex description.
+			ex resume ].
+	updatedProjects
+		do: [ :project | 
+			| projectService |
+			projectService := project name = name
+				ifTrue: [ self	"don't send an extraneous service back across the wire" ]
+				ifFalse: [ RowanProjectService newNamed: project name ].
+			projectService update.
+			RowanCommandResult addResult: projectService ].
+	RowanBrowserService new updateProjects
 ]
 
 { #category : 'initialization' }
@@ -129,7 +162,7 @@ RowanProjectService >> checkout: branchName [
 
 { #category : 'client commands' }
 RowanProjectService >> checkoutTag: tagName [
-  Rowan gitTools gitcheckoutIn: self repositoryRootPath with: tagName
+  Rowan gitTools gitcheckoutIn: self repositoryRoot with: tagName
 ]
 
 { #category : 'client commands' }
@@ -220,44 +253,32 @@ RowanProjectService >> isSkew [
 
 { #category : 'client commands' }
 RowanProjectService >> loadProjectFromFile: fileString [
-	[ 
-	((RwSpecification fromUrl: fileString)
-		customConditionalAttributes: #('tests');
-		componentNames: #('Core' 'Tests')) resolveStrict load ]
-		on: Warning
-		do: [ :ex | 
-			Transcript
-				cr;
-				show: ex description.
-			ex resume ].
-	RowanBrowserService new updateProjects
+	self loadProjectFromFile: fileString projectsHome: nil
 ]
 
 { #category : 'client commands' }
 RowanProjectService >> loadProjectFromFile: fileString projectsHome: projectsHomePath [
-	"customConditionalAttributes: and componentNames: will 
-	eventually be parameters" 
-	[ 
-	((RwSpecification fromUrl: fileString)
-		customConditionalAttributes: #('tests');
-		projectsHome: projectsHomePath; 
-		componentNames: #('Core' 'Tests')) resolveStrict load ]
-		on: Warning
-		do: [ :ex | 
-			Transcript
-				cr;
-				show: ex description.
-			ex resume ].
-	RowanBrowserService new updateProjects
+	self
+		basicLoadProject: [ 
+			((RwSpecification fromUrl: fileString)
+				projectsHome: projectsHomePath;
+				yourself) resolveStrict load ]
+]
+
+{ #category : 'client commands' }
+RowanProjectService >> loadProjectFromFile: fileString projectsHome: projectsHomePath customConditionalAttributes: attributes componentNames: componentNames [
+	self
+		basicLoadProject: [ 
+			((RwSpecification fromUrl: fileString)
+				customConditionalAttributes: attributes;
+				projectsHome: projectsHomePath;
+				componentNames: componentNames;
+				yourself) resolveStrict load ]
 ]
 
 { #category : 'client commands' }
 RowanProjectService >> loadProjectNamed: aName [
-
-	[Rowan projectTools load loadProjectNamed: aName] 
-		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ].
-	RowanBrowserService new updateProjects.
+	self basicLoadProject: [ Rowan projectTools load loadProjectNamed: aName ]
 ]
 
 { #category : 'rowan' }
@@ -428,16 +449,7 @@ RowanProjectService >> refresh [
 
 { #category : 'client commands' }
 RowanProjectService >> reloadProject [
-	[ Rowan projectTools load loadProjectNamed: name ]
-		on: Warning
-		do: [ :ex | 
-			Transcript
-				cr;
-				show: ex description.
-			ex resume ].
-	self update.
-	RowanCommandResult addResult: self.
-	RowanBrowserService new packagesWithTests
+	self basicLoadProject: [ Rowan projectTools load loadProjectNamed: name ]
 ]
 
 { #category : 'rowan' }
@@ -450,9 +462,14 @@ RowanProjectService >> removeProjectNamed: projectName [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> repositoryRoot [
+	^ (RwProject newNamed: name) repositoryRoot
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> repositoryRootPath [
 
-	^(RwProject newNamed: name) repositoryRootPath
+	^self repositoryRoot pathString
 ]
 
 { #category : 'rowan' }
