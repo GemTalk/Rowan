@@ -8,6 +8,7 @@
 	display oops
 
   set user SystemUser p swordfish
+#	set solologin on
   login
 
 run
@@ -16,6 +17,7 @@ run
   resolvedProject topazFileNameMap visitor archBase doCompile
 	gemStoneRowanPackageNames |
 
+self error: 'GsRowanImageTool>>generateBootstrapGsFromSt must be used to generate GemStone .gs files'.
 false ifTrue: [ 
  Rowan projectTools trace startTracing.
 ].
@@ -58,7 +60,7 @@ false ifTrue: [
 			ifFalse: [ 
         "write one package per file, except for the GemStone-Rowan packages"
         (topazFileNameMap at: packageName ifAbsentPut: [{}]) add: packageName ] ].
-  visitor := RwGsModificationTopazWriterVisitor new
+  visitor := RwGsModificationTopazWriterVisitorV2 new
          repositoryRootPath: gsSrcRoot;
          topazFilenamePackageNamesMap: topazFileNameMap;
          excludeClassInitializers ;

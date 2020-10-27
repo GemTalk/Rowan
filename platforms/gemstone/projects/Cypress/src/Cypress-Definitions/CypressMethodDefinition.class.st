@@ -137,9 +137,19 @@ CypressMethodDefinition >> instanceMethod: instanceBlock classMethod: classBlock
 ]
 
 { #category : 'testing' }
+CypressMethodDefinition >> isClassDefinition [
+  ^ false
+]
+
+{ #category : 'testing' }
 CypressMethodDefinition >> isInitializer [
 	^ self selector = 'initialize' and: [self classIsMeta]
 
+]
+
+{ #category : 'testing' }
+CypressMethodDefinition >> isMethodDefinition [
+  ^ true
 ]
 
 { #category : 'loading' }

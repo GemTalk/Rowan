@@ -1,0 +1,23 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'gemstone32-5/Tests',
+	#condition : [
+		'gs3.[2-5]'
+	],
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'STON-Tests-32x'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'STON-Tests-32x' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Single component for STON project'
+}

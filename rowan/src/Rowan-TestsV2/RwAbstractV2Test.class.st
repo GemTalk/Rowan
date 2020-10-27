@@ -218,26 +218,6 @@ RwAbstractV2Test >> _validateComponent: component componentNames: componentNames
 				projectNames) asArray sort = projectNames sort
 ]
 
-{ #category : 'private' }
-RwAbstractV2Test >> _validateComponent: component condition: conditionArray group: groupName componentNames: componentNames packageNames: packageNames projectNames: projectNames [
-	| x |
-	self
-		assert:
-			(x := component
-				conditionalComponentsAtConditions: conditionArray
-				andGroup: groupName) asArray sort = componentNames sort.
-	self
-		assert:
-			(x := component
-				conditionalPackagesAtConditions: conditionArray
-				andGroup: groupName) asArray sort = packageNames sort.
-	self
-		assert:
-			(x := component
-				conditionalProjectsAtConditions: conditionArray
-				andGroup: groupName) asArray sort = projectNames sort
-]
-
 { #category : 'running' }
 RwAbstractV2Test >> setUp [
 	| projectsHome |

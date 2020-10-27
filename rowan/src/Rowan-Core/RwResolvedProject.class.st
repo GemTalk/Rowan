@@ -128,6 +128,24 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString [
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		readonlyDiskUrl: urlString;
+		projectsHome: urlString asRwUrl pathString asFileReference parent;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> componentsRoot [
+	^ self _resolvedProject componentsRoot
+]
+
 { #category : 'transitions' }
 RwResolvedProject >> defined [
 	^ RwDefinedProject fromResolvedProject: self
@@ -163,23 +181,56 @@ RwResolvedProject >> exportPackages: diskProjectSetDefinition packagesRoot: pack
 ]
 
 { #category : 'actions' }
+RwResolvedProject >> exportProjects [
+	^ self _resolvedProject exportProjects
+]
+
+{ #category : 'actions' }
 RwResolvedProject >> exportProjectSpecification [
 	^ self _resolvedProject exportProjectSpecification
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> exportTopazFormatTo: filePath [
-	^ self _resolvedProject exportTopazFormatTo: filePath
+	^ self
+		exportTopazFormatTo: filePath
+		logClassCreation: false
+		excludeClassInitializers: false
+		excludeRemoveAllMethods: false
 ]
 
 { #category : 'actions' }
-RwResolvedProject >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
-	^ self _resolvedProject exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap
+RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods [
+	^ self _resolvedProject
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> packagesRoot [
+	^ self _resolvedProject packagesRoot
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> projectRoots [
 	^ self _resolvedProject projectRoots
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> projectsRoot [
+	^ self _resolvedProject projectsRoot
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> readPackageNames: packageNames [
+	^ self _resolvedProject readPackageNames: packageNames
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> readPackageNamesBlock: packageNamesBlock [
+	^ self _resolvedProject readPackageNamesBlock: packageNamesBlock
 ]
 
 { #category : 'accessing' }

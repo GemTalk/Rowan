@@ -26,7 +26,7 @@ CypressClassStructure class >> fromClassDefinition: classDefinition [
 CypressClassStructure >> asCypressClassDefinition [
 
 	self isClassExtension ifTrue: [^CypressError signal: 'Extensions cannot have class definitions'].
-	^CypressClassDefinition
+	^CypressClassDefinition new
 		name: self className
 		superclassName: self superclassName
 		category: self category

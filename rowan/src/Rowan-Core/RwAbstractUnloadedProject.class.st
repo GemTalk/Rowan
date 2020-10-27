@@ -28,6 +28,11 @@ RwAbstractUnloadedProject >> comment: aString [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> diskUrl: aString [
+	self _loadSpecification diskUrl: aString
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
 	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 ]
@@ -39,7 +44,13 @@ RwAbstractUnloadedProject >> gitUrl: aString [
 
 { #category : 'transitions' }
 RwAbstractUnloadedProject >> load [
-	"load the receiver into the image and return an array of RwProjects representing the loaded project(s)"
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
 
 	^ self _resolvedProject load
 ]
@@ -52,6 +63,16 @@ RwAbstractUnloadedProject >> packageFormat: aString [
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> packageNames [
 	^self _resolvedProject packageNames
+]
+
+{ #category : 'actions' }
+RwAbstractUnloadedProject >> packages [
+	^ self _resolvedProject packages
+]
+
+{ #category : 'actions' }
+RwAbstractUnloadedProject >> packages: aPackageDictionary [
+	self _resolvedProject packages: aPackageDictionary
 ]
 
 { #category : 'accessing' }

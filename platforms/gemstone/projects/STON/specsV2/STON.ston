@@ -16,7 +16,7 @@ RwEmbeddedLoadSpecificationV2 {
 	#platformProperties : {
 		'gemstone' : {
 			'SystemUser' : {
-				#defaultSymbolDictName : 'Globals'
+				#defaultSymbolDictName : 'RowanKernel'
 			}
 		}
 	},

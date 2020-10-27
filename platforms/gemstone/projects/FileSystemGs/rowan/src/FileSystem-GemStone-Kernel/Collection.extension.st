@@ -21,12 +21,3 @@ Collection >> isEmptyOrNil [
   ^ self size == 0
 
 ]
-
-{ #category : '*filesystem-gemstone-kernel' }
-Collection >> sort [
-
-	"Sort this array into ascending order using the '<=' operator."
-
-	^ self sort: [ :a :b | a <= b ]
-
-]

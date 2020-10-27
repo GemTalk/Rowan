@@ -30,14 +30,6 @@ RwAbstractTool class >> git [
 	^ RwGitTool new
 ]
 
-{ #category : 'private' }
-RwAbstractTool >> _symbolDictionaryForSpecification [
-
-	^ Rowan image
-		newOrExistingSymbolDictionaryNamed:
-			(specification platformSpec at: 'gemstone') defaultSymbolDictName
-]
-
 { #category : 'class lookup' }
 RwAbstractTool >> definitionsForClassExtensionNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
@@ -117,31 +109,6 @@ RwAbstractTool >> doGitCommit: messageString [
 		show: status.
 	^ status
 
-]
-
-{ #category : 'git' }
-RwAbstractTool >> doGitUpdateLoadedCommitId [
-
-	| repoRootPath |
-	repoRootPath := specification repoSpec repositoryRootPath.
-	repoRootPath
-		ifNil: [ 
-			"in memory repo without a rootPath is legal"
-			^ nil ].
-	^ self doGitUpdateLoadedCommitId: repoRootPath
-]
-
-{ #category : 'git' }
-RwAbstractTool >> doGitUpdateLoadedCommitId: gitRootPath [
-
-	| gitTool loadedCommitId |
-	gitTool := Rowan gitTools.
-	loadedCommitId := [ gitTool gitcommitShaIn: gitRootPath asFileReference pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	^ specification imageSpec loadedCommitId: loadedCommitId
 ]
 
 { #category : 'private' }

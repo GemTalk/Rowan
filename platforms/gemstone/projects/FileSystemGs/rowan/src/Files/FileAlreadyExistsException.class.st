@@ -30,7 +30,7 @@ FileAlreadyExistsException >> file: aFile [
 ]
 
 { #category : 'accessing' }
-FileAlreadyExistsException >> messageText [
-
-	^ 'File already exists: ', file basename
+FileAlreadyExistsException >> buildMessageText [
+  self details:  'File already exists: ', (file ifNotNil:[:f | f basename] ifNil:['nil']).
+  super buildMessageText 
 ]

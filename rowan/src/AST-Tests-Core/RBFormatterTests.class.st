@@ -70,12 +70,15 @@ RBFormatterTests >> testCoreSystem [
 
 { #category : 'testing' }
 RBFormatterTests >> testIndexingSystem [
-  #(#'IXCompoundQueryPredicateTests' #'IXGsClassicQueryBlockOptimizerTests' #'IXQueryBlockPredicateTests' #'IXQueryExpressionPrintStringTests' #'IXQueryExpressionTests' #'IXQueryPredicateTests')
-    do: [ :each | 
-       (Rowan globalNamed: each) ifNotNil: [ :class | 
-          class ifNotNilself
-            formatClass: class;
-            formatClass: class class ] ]
+	#(#'IXCompoundQueryPredicateTests' #'IXGsClassicQueryBlockOptimizerTests' #'IXQueryBlockPredicateTests' #'IXQueryExpressionPrintStringTests' #'IXQueryExpressionTests' #'IXQueryPredicateTests')
+		do: [ :each | 
+			(Rowan globalNamed: each)
+				ifNotNil: [ :class | 
+					class
+						ifNotNil: [ 
+							self
+								formatClass: class;
+								formatClass: class class ] ] ]
 ]
 
 { #category : 'testing' }
@@ -88,7 +91,7 @@ RBFormatterTests >> testQueryBlocks [
       {'select: nsc 
 	nsc select: {:person | adam == adam}'.
       'select: nsc
-  nsc select: { :person | adam == adam }'}.
+	nsc select: { :person | adam == adam }'}.
   self
     formatMethodSource:
       'select: nsc nsc select: { :person | (true) & (1 < person) & (person <= 3) }'
@@ -96,7 +99,7 @@ RBFormatterTests >> testQueryBlocks [
       {'select: nsc 
 	nsc select: {:person | (true) & (1 < person) & (person <= 3)}'.
       'select: nsc
-  nsc select: { :person | true & (1 < person) & (person <= 3) }'}.
+	nsc select: { :person | true & (1 < person) & (person <= 3) }'}.
   self
     formatMethodSource:
       'select: nsc nsc select: { :person | (person.isMale) & (1 < person.numberOfChildren) & (person.numberOfChildren <= 3) }'
@@ -107,8 +110,8 @@ RBFormatterTests >> testQueryBlocks [
 			(person.isMale) & (1 < person.numberOfChildren) 
 				& (person.numberOfChildren <= 3)}'.
       'select: nsc
-  nsc
-    select: { :person | (person.isMale) & (1 < person.numberOfChildren) & (person.numberOfChildren <= 3) }'}.
+	nsc
+		select: { :person | (person.isMale) & (1 < person.numberOfChildren) & (person.numberOfChildren <= 3) }'}.
   self
     formatMethodSource:
       'select: nsc nsc select: { :person | (person.isMale == true) & (1 < person.numberOfChildren) & (person.numberOfChildren <= 3) }'
@@ -119,10 +122,10 @@ RBFormatterTests >> testQueryBlocks [
 			(person.isMale == true) & (1 < person.numberOfChildren) 
 				& (person.numberOfChildren <= 3)}'.
       'select: nsc
-  nsc
-    select: { :person | 
-      (person.isMale == true) & (1 < person.numberOfChildren)
-        & (person.numberOfChildren <= 3) }'}.
+	nsc
+		select: { :person | 
+			(person.isMale == true) & (1 < person.numberOfChildren)
+				& (person.numberOfChildren <= 3) }'}.
   self
     formatMethodSource:
       'select: nsc nsc select: {:person | (person.isMale) & (person.firstName = ''Casey'')}'
@@ -130,5 +133,5 @@ RBFormatterTests >> testQueryBlocks [
       {'select: nsc 
 	nsc select: {:person | (person.isMale) & (person.firstName = ''Casey'')}'.
       'select: nsc
-  nsc select: { :person | (person.isMale) & (person.firstName = ''Casey'') }'}
+	nsc select: { :person | (person.isMale) & (person.firstName = ''Casey'') }'}
 ]
