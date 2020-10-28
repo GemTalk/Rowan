@@ -36,12 +36,12 @@ RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrato
 				applyModification_V2: aProjectSetModification
 				visitorClass:
 					(self _cloneRowanLoaderSymbolDictionary
-						at: RwGsImagePatchVisitor_V2_symbolList name)
+						at: RwGsImagePatchVisitor_V2 name)
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: RwGsImagePatchVisitor_V2_symbolList
+				visitorClass: RwGsImagePatchVisitor_V2
 				instanceMigrator: instanceMigrator ]
 ]
 
@@ -53,13 +53,13 @@ RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrato
 				applyModification_V2: aProjectSetModification
 				visitorClass:
 					(self _cloneRowanLoaderSymbolDictionary
-						at: RwGsImagePatchVisitor_V2_symbolList name)
+						at: RwGsImagePatchVisitor_V2 name)
 				instanceMigrator: instanceMigrator
 				symbolList: symbolList ]
 		ifFalse: [ 
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: RwGsImagePatchVisitor_V2_symbolList
+				visitorClass: RwGsImagePatchVisitor_V2
 				instanceMigrator: instanceMigrator ]
 ]
 

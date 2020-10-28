@@ -8000,24 +8000,6 @@ removeallmethods RwGsImagePatchVisitor_V2
 removeallclassmethods RwGsImagePatchVisitor_V2
 
 doit
-(RwGsImagePatchVisitor_V2
-	subclass: 'RwGsImagePatchVisitor_V2_symbolList'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanLoader
-	options: #()
-)
-		category: 'Rowan-GemStone-LoaderV2';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGsImagePatchVisitor_V2_symbolList
-removeallclassmethods RwGsImagePatchVisitor_V2_symbolList
-
-doit
 (Object
 	subclass: 'RwGsInstanceMigrator'
 	instVarNames: #( migrationEnabled maxThreads maxCpuPercentage )
@@ -75027,7 +75009,8 @@ deleteClasses: classDefinitions
 category: 'initialization'
 method: RwGsImagePatchVisitor_V2
 initialize
-	patchSet := RwGsPatchSet_V2 new
+
+	patchSet := RwGsPatchSet_V2_symbolList new
 %
 
 category: 'accessing'
@@ -75256,17 +75239,6 @@ method: RwGsImagePatchVisitor_V2
 visitSourceModification: aSourceModification
 
 	self error: 'internal error - not yet implemented'
-%
-
-! Class implementation for 'RwGsImagePatchVisitor_V2_symbolList'
-
-!		Instance methods for 'RwGsImagePatchVisitor_V2_symbolList'
-
-category: 'initialization'
-method: RwGsImagePatchVisitor_V2_symbolList
-initialize
-
-	patchSet := RwGsPatchSet_V2_symbolList new
 %
 
 ! Class implementation for 'RwGsInstanceMigrator'
@@ -98381,12 +98353,12 @@ applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
 				applyModification_V2: aProjectSetModification
 				visitorClass:
 					(self _cloneRowanLoaderSymbolDictionary
-						at: RwGsImagePatchVisitor_V2_symbolList name)
+						at: RwGsImagePatchVisitor_V2 name)
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: RwGsImagePatchVisitor_V2_symbolList
+				visitorClass: RwGsImagePatchVisitor_V2
 				instanceMigrator: instanceMigrator ]
 %
 
@@ -98399,13 +98371,13 @@ applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
 				applyModification_V2: aProjectSetModification
 				visitorClass:
 					(self _cloneRowanLoaderSymbolDictionary
-						at: RwGsImagePatchVisitor_V2_symbolList name)
+						at: RwGsImagePatchVisitor_V2 name)
 				instanceMigrator: instanceMigrator
 				symbolList: symbolList ]
 		ifFalse: [ 
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: RwGsImagePatchVisitor_V2_symbolList
+				visitorClass: RwGsImagePatchVisitor_V2
 				instanceMigrator: instanceMigrator ]
 %
 
