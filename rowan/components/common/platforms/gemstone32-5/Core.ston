@@ -4,6 +4,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gs3.[2-5]'
 	],
 	#packageNames : [
+		'Rowan-GemStone-Core-32x',
 		'Rowan-GemStone-Kernel-32x'
 	],
 	#conditionalPackageMapSpecs : {

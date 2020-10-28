@@ -74570,46 +74570,6 @@ loadedHybridPackageNamed: aHybridName ifAbsent: absentBlock
 
 category: 'querying'
 classmethod: RwGsImage
-loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock
-
-	"scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
-
-	| behavior compiledMethod |
-	behavior := self objectNamed: className.
-	behavior ifNil: [ ^ absentBlock value ].
-	isMeta
-		ifTrue: [ behavior := behavior class ].
-	compiledMethod := behavior
-		compiledMethodAt: selector asSymbol
-		environmentId: 0
-		otherwise: nil.
-	compiledMethod ifNil: [ ^ absentBlock value ].
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-						ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
-	^ absentBlock value
-%
-
-category: 'querying'
-classmethod: RwGsImage
-loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock
-
-        "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
-
-        self symbolList
-                do: [ :symbolDict |
-                        symbolDict rowanSymbolDictionaryRegistry
-                                ifNotNil: [ :registry |
-                                        (registry methodRegistry at: compiledMethod ifAbsent: [  ])
-                                                ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
-        ^ absentBlock value
-%
-
-category: 'querying'
-classmethod: RwGsImage
 loadedMethodForMethod: compiledMethod
 
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
@@ -74620,21 +74580,6 @@ loadedMethodForMethod: compiledMethod
 			self
 				error:
 					'No loadedMethod found for the comiled method ' , compiledMethod printString ]
-%
-
-category: 'querying'
-classmethod: RwGsImage
-loadedMethodForMethod: compiledMethod ifAbsent: absentBlock
-
-	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
-
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-						ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
-	^ absentBlock value
 %
 
 category: 'querying'
@@ -74830,19 +74775,6 @@ projectNames
 	"Return list of project names"
 
 	^ (self loadedProjects collect: [ :loadedProject | loadedProject name ]) asArray
-%
-
-category: 'querying'
-classmethod: RwGsImage
-removeLoadedMethodForCompileMethod: compiledMethod
-
-	"The given compiled method is being removed from the system, remove the loadedMethod associated 
-		with the compiled method."
-
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
 %
 
 category: 'querying'
@@ -75095,8 +75027,7 @@ deleteClasses: classDefinitions
 category: 'initialization'
 method: RwGsImagePatchVisitor_V2
 initialize
-
-	patchSet := self _patchSetClass new
+	patchSet := RwGsPatchSet_V2 new
 %
 
 category: 'accessing'
@@ -75325,13 +75256,6 @@ method: RwGsImagePatchVisitor_V2
 visitSourceModification: aSourceModification
 
 	self error: 'internal error - not yet implemented'
-%
-
-category: 'private'
-method: RwGsImagePatchVisitor_V2
-_patchSetClass
-
-	^ RwGsPatchSet_V2
 %
 
 ! Class implementation for 'RwGsImagePatchVisitor_V2_symbolList'
@@ -82117,7 +82041,7 @@ loadedClassExtensionsForClass: aClass
 category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
-	^ (aClass theNonMetaClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
+	^ (aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
 %
 
 category: 'class - registration'
@@ -83088,21 +83012,6 @@ addLoadedMethod: aLoadedMethod
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
 %
 
-category: 'removing'
-method: RwGsLoadedSymbolDictClass
-disownFromLoaded: aPackageSymbolDictionary
-
-	loadedInstanceMethods
-		valuesDo: [ :loadedInstanceMethod | 
-			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			aPackageSymbolDictionary methodRegistry
-				removeKey: loadedInstanceMethod handle ].
-	loadedClassMethods
-		valuesDo: [ :loadedClassMethod | 
-			self removeLoadedClassMethod: loadedClassMethod.
-			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
-%
-
 category: 'private-updating'
 method: RwGsLoadedSymbolDictClass
 handleClassDeletion
@@ -83663,21 +83572,6 @@ addLoadedMethod: aLoadedMethod
 	aLoadedMethod classIsMeta
 		ifTrue: [self addLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
-%
-
-category: 'removing'
-method: RwGsLoadedSymbolDictClassExtension
-disownFromLoaded: registry
-	loadedInstanceMethods
-		valuesDo: [ :loadedInstanceMethod | 
-			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			registry methodRegistry removeKey: loadedInstanceMethod handle ].
-	loadedClassMethods
-		valuesDo: [ :loadedClassMethod | 
-			self removeLoadedClassMethod: loadedClassMethod.
-			registry methodRegistry removeKey: loadedClassMethod handle ].
-
-	registry unregisterLoadedClassExtension: self forClass: handle
 %
 
 category: 'private-updating'
@@ -98565,53 +98459,37 @@ performOnServer: commandLine status: statusBlock
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
 applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
-	| visitorClassName visitorClass |
-	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
-	visitorClassName := SessionTemps current
-		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [ 
-			"#'RwGsImagePatchVisitor_V2'"
-			visitorClassName ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass:
+					(self _cloneRowanLoaderSymbolDictionary
+						at: RwGsImagePatchVisitor_V2_symbolList name)
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
-			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
-				at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass: RwGsImagePatchVisitor_V2_symbolList
 				instanceMigrator: instanceMigrator ]
 %
 
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
 applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator symbolList: symbolList
-	| visitorClassName visitorClass |
-	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
-	visitorClassName := SessionTemps current
-		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [ 
-			"#'RwGsImagePatchVisitor_V2'"
-			visitorClassName ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass:
+					(self _cloneRowanLoaderSymbolDictionary
+						at: RwGsImagePatchVisitor_V2_symbolList name)
 				instanceMigrator: instanceMigrator
 				symbolList: symbolList ]
 		ifFalse: [ 
-			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
-				at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass: RwGsImagePatchVisitor_V2_symbolList
 				instanceMigrator: instanceMigrator ]
 %
 
@@ -98715,6 +98593,61 @@ loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock
 	^ foundBlock value: loadedClass
 %
 
+category: '*rowan-gemstone-core-32x'
+classmethod: RwGsImage
+loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock
+
+       "scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
+
+       | behavior compiledMethod |
+       behavior := self objectNamed: className.
+       behavior ifNil: [ ^ absentBlock value ].
+       isMeta
+               ifTrue: [ behavior := behavior class ].
+       compiledMethod := behavior
+               compiledMethodAt: selector asSymbol
+               environmentId: 0
+               otherwise: nil.
+       compiledMethod ifNil: [ ^ absentBlock value ].
+       self symbolList
+               do: [ :symbolDict | 
+                       symbolDict rowanSymbolDictionaryRegistry
+                               ifNotNil: [ :registry | 
+                                       (registry methodRegistry at: compiledMethod ifAbsent: [  ])
+                                               ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
+       ^ absentBlock value
+%
+
+category: '*rowan-gemstone-core-32x'
+classmethod: RwGsImage
+loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock
+
+        "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
+
+        self symbolList
+                do: [ :symbolDict |
+                        symbolDict rowanSymbolDictionaryRegistry
+                                ifNotNil: [ :registry |
+                                        (registry methodRegistry at: compiledMethod ifAbsent: [  ])
+                                                ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
+        ^ absentBlock value
+%
+
+category: '*rowan-gemstone-core-32x'
+classmethod: RwGsImage
+loadedMethodForMethod: compiledMethod ifAbsent: absentBlock
+
+       "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
+
+       self symbolList
+               do: [ :symbolDict | 
+                       symbolDict rowanSymbolDictionaryRegistry
+                               ifNotNil: [ :registry | 
+                                       (registry methodRegistry at: compiledMethod ifAbsent: [  ])
+                                               ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
+       ^ absentBlock value
+%
+
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
 removeLoadedClassExtensionsForClass: class
@@ -98728,6 +98661,19 @@ removeLoadedClassExtensionsForClass: class
 			self symbolDictionaryRegistryClass registry_ImplementationClass
 				unregisterLoadedClassExtension: loadedClassExtension
 				forClass: class ]
+%
+
+category: '*rowan-gemstone-core-32x'
+classmethod: RwGsImage
+removeLoadedMethodForCompileMethod: compiledMethod
+
+       "The given compiled method is being removed from the system, remove the loadedMethod associated 
+               with the compiled method."
+
+       self symbolList
+               do: [ :symbolDict | 
+                       symbolDict rowanSymbolDictionaryRegistry
+                               ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
 %
 
 category: '*rowan-gemstone-loader-extensions-onlyv2'
@@ -98764,6 +98710,44 @@ _shouldCloneRowanLoader: aProjectSetModification
 	projectModification := aProjectSetModification elementsModified at: 'Rowan' ifAbsent: [ ^ false ].
 	packageModification := projectModification packagesModification elementsModified at: 'Rowan-GemStone-Loader' ifAbsent: [ ^ false ].
 	^ packageModification isEmpty not
+%
+
+! Class extensions for 'RwGsLoadedSymbolDictClass'
+
+!		Instance methods for 'RwGsLoadedSymbolDictClass'
+
+category: '*rowan-gemstone-core-32x'
+method: RwGsLoadedSymbolDictClass
+disownFromLoaded: aPackageSymbolDictionary
+
+       loadedInstanceMethods
+               valuesDo: [ :loadedInstanceMethod | 
+                       self removeLoadedInstanceMethod: loadedInstanceMethod.
+                       aPackageSymbolDictionary methodRegistry
+                               removeKey: loadedInstanceMethod handle ].
+       loadedClassMethods
+               valuesDo: [ :loadedClassMethod | 
+                       self removeLoadedClassMethod: loadedClassMethod.
+                       aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
+%
+
+! Class extensions for 'RwGsLoadedSymbolDictClassExtension'
+
+!		Instance methods for 'RwGsLoadedSymbolDictClassExtension'
+
+category: '*rowan-gemstone-core-32x'
+method: RwGsLoadedSymbolDictClassExtension
+disownFromLoaded: registry
+       loadedInstanceMethods
+               valuesDo: [ :loadedInstanceMethod | 
+                       self removeLoadedInstanceMethod: loadedInstanceMethod.
+                       registry methodRegistry removeKey: loadedInstanceMethod handle ].
+       loadedClassMethods
+               valuesDo: [ :loadedClassMethod | 
+                       self removeLoadedClassMethod: loadedClassMethod.
+                       registry methodRegistry removeKey: loadedClassMethod handle ].
+
+       registry unregisterLoadedClassExtension: self forClass: handle
 %
 
 ! Class extensions for 'RwGsPlatform'

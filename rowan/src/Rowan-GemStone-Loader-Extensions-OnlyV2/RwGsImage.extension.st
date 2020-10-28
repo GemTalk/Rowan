@@ -30,52 +30,36 @@ RwGsImage class >> _shouldCloneRowanLoader: aProjectSetModification [
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
 RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator [
-	| visitorClassName visitorClass |
-	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
-	visitorClassName := SessionTemps current
-		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [ 
-			"#'RwGsImagePatchVisitor_V2'"
-			visitorClassName ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass:
+					(self _cloneRowanLoaderSymbolDictionary
+						at: RwGsImagePatchVisitor_V2_symbolList name)
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
-			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
-				at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass: RwGsImagePatchVisitor_V2_symbolList
 				instanceMigrator: instanceMigrator ]
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
 RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator symbolList: symbolList [
-	| visitorClassName visitorClass |
-	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
-	visitorClassName := SessionTemps current
-		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [ 
-			"#'RwGsImagePatchVisitor_V2'"
-			visitorClassName ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass:
+					(self _cloneRowanLoaderSymbolDictionary
+						at: RwGsImagePatchVisitor_V2_symbolList name)
 				instanceMigrator: instanceMigrator
 				symbolList: symbolList ]
 		ifFalse: [ 
-			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
-				at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass: RwGsImagePatchVisitor_V2_symbolList
 				instanceMigrator: instanceMigrator ]
 ]
 

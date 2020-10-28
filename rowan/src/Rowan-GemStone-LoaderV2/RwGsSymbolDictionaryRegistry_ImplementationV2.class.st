@@ -892,7 +892,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassExtensionsForC
 
 { #category : 'class - registration' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
-	^ (aClass theNonMetaClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
+	^ (aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
 ]
 
 { #category : 'class - registration' }
