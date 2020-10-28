@@ -1089,47 +1089,6 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 
 ]
 
-{ #category : 'initialization' }
-RwGsPatchSet_V2 >> initialize [
-
-	addedPackages := Set new.
-	addedProjects := Set new.
-	deletedPackages := Set new.
-	movedPackages := Set new.
-	projectsWithPropertyChanges := Set new.
-	deletedClasses := Set new.
-	addedClasses := Set new.
-	extendedClasses := Set new.
-	classesWithNewVersions := Set new.
-	classesWithClassVariableChanges := Set new.
-	classesWithPropertyChanges := Set new.
-	classesWithConstraintChanges := Set new.
-	classesWithSymbolDictionaryChanges := Set new.
-	movedClasses := Set new.
-	movedClassesMap := Dictionary new.
-	deletedMethods := Set new.
-	deleteNewVersionMethods := Set new.
-	movedMethods := Set new.
-	addedMethods := Set new.
-	extendedMethods := Set new.
-	methodsNeedingRecompile := Set new.
-	methodsWithPropertyChanges := Set new.
-	tempSymbols := SymbolDictionary new.
-	createdClasses := Dictionary new.
-	errors := Set new
-
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSet_V2 >> installAddedClasses [
-	"Copy the name association from TempSymbols to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	addedClasses do: [:patch |  patch installClassInSystem ]
-
-]
-
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> installAddedClassExtensions [
 

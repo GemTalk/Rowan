@@ -108,25 +108,6 @@ RwGsPatchSet_V2_symbolList >> _createNewSymbolList [
 	^ new
 ]
 
-{ #category : 'private - applying' }
-RwGsPatchSet_V2_symbolList >> addAddedClassesToTempSymbols [
-true ifTrue: [^ super addAddedClassesToTempSymbols ].
-	addedClasses
-		do: [ :patch | 
-			| key symDict symDictName |
-			key := patch className asSymbol.
-			symDictName := patch symbolDictionaryName.
-			symDict := self class
-				lookupSymbolDictName: symDictName
-				in: self tempSymbolList.
-			(symDict includesKey: key)
-				ifTrue: [ 
-					self
-						error:
-							'Encountered an existing association for a new class ' , key asString ].
-			symDict at: key put: nil	"Just need the names for now, they don't need to resolve to anything in particular" ]
-]
-
 { #category : 'building' }
 RwGsPatchSet_V2_symbolList >> addAddedUnmanagedClass: aClassDefinition oldClassVersion: aClass inPackage: aPackageDefinition inProject: aProjectDefinition [
 
@@ -462,7 +443,31 @@ RwGsPatchSet_V2_symbolList >> doMoveMethodsBetweenPackages [
 
 { #category : 'initialization' }
 RwGsPatchSet_V2_symbolList >> initialize [
-	super initialize.
+	addedPackages := Set new.
+	addedProjects := Set new.
+	deletedPackages := Set new.
+	movedPackages := Set new.
+	projectsWithPropertyChanges := Set new.
+	deletedClasses := Set new.
+	addedClasses := Set new.
+	extendedClasses := Set new.
+	classesWithNewVersions := Set new.
+	classesWithClassVariableChanges := Set new.
+	classesWithPropertyChanges := Set new.
+	classesWithConstraintChanges := Set new.
+	classesWithSymbolDictionaryChanges := Set new.
+	movedClasses := Set new.
+	movedClassesMap := Dictionary new.
+	deletedMethods := Set new.
+	deleteNewVersionMethods := Set new.
+	movedMethods := Set new.
+	addedMethods := Set new.
+	extendedMethods := Set new.
+	methodsNeedingRecompile := Set new.
+	methodsWithPropertyChanges := Set new.
+	tempSymbols := SymbolDictionary new.
+	createdClasses := Dictionary new.
+	errors := Set new.
 	createdClasses := nil.
 	addedUnmanagedClasses := Set new
 ]
@@ -473,7 +478,7 @@ RwGsPatchSet_V2_symbolList >> installAddedClasses [
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	super installAddedClasses.
+	addedClasses do: [:patch |  patch installClassInSystem ].
 	addedUnmanagedClasses do: [ :patch | patch installClassInSystem ]
 ]
 
@@ -528,22 +533,6 @@ RwGsPatchSet_V2_symbolList >> recordCompiledForNewClassVersionDeletions [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_V2_symbolList >> removeDeletedClassesFromTempSymbols [
-	"Deleted class names should not resolve during compilation."
-
-	true
-		ifTrue: [ ^ super removeDeletedClassesFromTempSymbols ].
-	deletedClasses
-		do: [ :patch | 
-			| symDictName symDict |
-			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := self class
-				lookupSymbolDictName: symDictName
-				in: self tempSymbolList.
-			symDict removeKey: patch className asSymbol ]
-]
-
-{ #category : 'private - applying' }
 RwGsPatchSet_V2_symbolList >> removeDeletedMethods [
 	deletedMethods
 		do: [ :methodDeletionPatch | 
@@ -557,35 +546,6 @@ RwGsPatchSet_V2_symbolList >> removeDeletedMethods [
 			methodDeletionPatch
 				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
 				andExistingClasses: self tempSymbolList ]
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSet_V2_symbolList >> setupForApply [
-	"Copy the entire namespace from the user's transient SymbolList into a temporary SymbolDictionary in a temporary 
-	SymbolList, the tempSymbols. The tempSymbols, once suitably modified, will be used as the environment in which 
-	to compile methods during this apply operation."
-
-	| symbolList |
-	true
-		ifTrue: [ ^ super setupForApply ].
-
-	symbolList := self loadSymbolList.
-	1 to: symbolList size do: [ :index | 
-		| dict symDictName symDict |
-		"Need to preserve association identity and symbolList structure tempSymbolList is used for compiling methods"
-		dict := symbolList at: index.
-		symDictName := dict name asSymbol.
-		symDict := self class
-			lookupSymbolDictName: symDictName
-			in: self tempSymbolList.
-		dict
-			associationsDo: [ :assoc | 
-				assoc key ~~ symDictName
-					ifTrue: [ 
-						"avoid add association for the SymbolDictionary name"
-						symDict add: assoc ] ] ].
-
-	self setupForMovedClasses
 ]
 
 { #category : 'patch access' }
