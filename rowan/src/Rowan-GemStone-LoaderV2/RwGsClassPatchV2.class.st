@@ -79,7 +79,7 @@ RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList 
 	name := classDefinition key asSymbol.
 	name ifNil: [ self error: 'Class definition with no name.' ].
 	symDictName := self symbolDictionaryName.
-	symDict := RwGsPatchSet_V2_symbolList
+	symDict := RwGsPatchSet_V2
 		lookupSymbolDictName: symDictName
 		in: newClassesByNameSymbolList
 		ifAbsent: [ 

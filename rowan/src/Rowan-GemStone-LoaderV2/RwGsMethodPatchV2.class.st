@@ -254,12 +254,12 @@ RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClassesSymbolList andExisti
 			^ self ].
 	className := classDefinition key asSymbol.
 	symDictName := self symbolDictionaryName.
-	class := (RwGsPatchSet_V2_symbolList
+	class := (RwGsPatchSet_V2
 		lookupSymbolDictName: symDictName
 		in: createdClassesSymbolList)
 		at: className
 		ifAbsent: [ 
-			(RwGsPatchSet_V2_symbolList lookupSymbolDictName: symDictName in: tempSymbolList)
+			(RwGsPatchSet_V2 lookupSymbolDictName: symDictName in: tempSymbolList)
 				at: className
 				ifAbsent: [ 
 					(tempSymbolList resolveSymbol: className)
@@ -281,7 +281,7 @@ RwGsMethodPatchV2 >> primeBehaviorNewClassesSymbolList: createdClassesSymbolList
 			^ self ].
 	className := classDefinition key asSymbol.
 	symDictName := self symbolDictionaryName.
-	class := (RwGsPatchSet_V2_symbolList
+	class := (RwGsPatchSet_V2
 		lookupSymbolDictName: symDictName
 		in: createdClassesSymbolList)
 		at: className

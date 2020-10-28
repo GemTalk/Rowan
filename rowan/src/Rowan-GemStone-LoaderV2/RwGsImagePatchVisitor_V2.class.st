@@ -136,7 +136,7 @@ RwGsImagePatchVisitor_V2 >> deleteClasses: classDefinitions [
 { #category : 'initialization' }
 RwGsImagePatchVisitor_V2 >> initialize [
 
-	patchSet := RwGsPatchSet_V2_symbolList new
+	patchSet := RwGsPatchSet_V2 new
 ]
 
 { #category : 'accessing' }
