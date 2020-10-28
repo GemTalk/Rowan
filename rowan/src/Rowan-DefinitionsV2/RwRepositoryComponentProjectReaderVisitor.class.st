@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'packageNames',
 		'packageNamesBlock',
-		'currentDirectory',
 		'currentProjectReferenceDefinition'
 	],
 	#category : 'Rowan-DefinitionsV2'
@@ -26,30 +25,6 @@ RwRepositoryComponentProjectReaderVisitor >> compileWhileReading [
 { #category : 'class reading' }
 RwRepositoryComponentProjectReaderVisitor >> compileWhileReading: aBoolean [
   self dynamicInstVarAt: #compileWhileReading put: aBoolean 
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentDirectory [
-
-	^ currentDirectory
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentDirectory: aFileReference [
-
-	currentDirectory := aFileReference
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentProjectReferenceDefinition [
-
-	^ currentProjectReferenceDefinition
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentProjectReferenceDefinition: aRwProjectReferenceDefinition [
-
-	currentProjectReferenceDefinition := aRwProjectReferenceDefinition
 ]
 
 { #category : 'tonel parser' }
@@ -156,14 +131,6 @@ RwRepositoryComponentProjectReaderVisitor >> visitComponentProjectDefinition: aR
 	self currentProjectDefinition: aRwComponentProjectDefinition.
 	aRwComponentProjectDefinition packages: Dictionary new.
 	self visit: aRwComponentProjectDefinition projectRef
-]
-
-{ #category : 'visiting' }
-RwRepositoryComponentProjectReaderVisitor >> visitProjectReferenceDefinition: aRwProjectReferenceDefinition [
-	"read the packageNames from the repository"
-
-	self currentProjectReferenceDefinition: aRwProjectReferenceDefinition.
-	self readPackages: aRwProjectReferenceDefinition packagesRoot
 ]
 
 { #category : 'visiting' }

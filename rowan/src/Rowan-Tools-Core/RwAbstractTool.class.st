@@ -111,11 +111,6 @@ RwAbstractTool >> doGitCommit: messageString [
 
 ]
 
-{ #category : 'private' }
-RwAbstractTool >> fileUtilities [
-  ^ Rowan fileUtilities
-]
-
 { #category : 'smalltalk api' }
 RwAbstractTool >> specification: aRwSpecification [
   ^ specification := aRwSpecification

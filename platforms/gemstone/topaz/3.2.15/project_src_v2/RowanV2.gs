@@ -6349,7 +6349,7 @@ removeallclassmethods RwModificationTonelWriterVisitorV2
 doit
 (RwAbstractReaderWriterVisitor
 	subclass: 'RwRepositoryComponentProjectReaderVisitor'
-	instVarNames: #( packageNames packageNamesBlock currentDirectory currentProjectReferenceDefinition )
+	instVarNames: #( packageNames packageNamesBlock currentProjectReferenceDefinition )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -7936,51 +7936,6 @@ true.
 
 removeallmethods RwEntitySet
 removeallclassmethods RwEntitySet
-
-doit
-(Object
-	subclass: 'RwFileUtilities'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Core';
-		comment: 'No class-specific documentation for CypFileUtilities, hierarchy is: 
-Object
-  CypFileUtilities
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwFileUtilities
-removeallclassmethods RwFileUtilities
-
-doit
-(RwFileUtilities
-	subclass: 'RwGsFileUtilities'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-GemStone-Core';
-		comment: 'No class-specific documentation for CypGemStoneFileUtilities, hierarchy is: 
-Object
-  CypFileUtilities
-    CypGemStoneFileUtilities
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGsFileUtilities
-removeallclassmethods RwGsFileUtilities
 
 doit
 (Object
@@ -49197,14 +49152,6 @@ defaultAutomaticClassInitializationBlackList
 	^ self platform automaticClassInitializationBlackList_default
 %
 
-category: 'private'
-classmethod: Rowan
-fileUtilities
-	"Private to the Cypress system."
-
-	^self platform fileUtilities
-%
-
 category: 'public tools'
 classmethod: Rowan
 gitTools
@@ -61674,34 +61621,6 @@ compileWhileReading: aBoolean
   self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 %
 
-category: 'accessing'
-method: RwRepositoryComponentProjectReaderVisitor
-currentDirectory
-
-	^ currentDirectory
-%
-
-category: 'accessing'
-method: RwRepositoryComponentProjectReaderVisitor
-currentDirectory: aFileReference
-
-	currentDirectory := aFileReference
-%
-
-category: 'accessing'
-method: RwRepositoryComponentProjectReaderVisitor
-currentProjectReferenceDefinition
-
-	^ currentProjectReferenceDefinition
-%
-
-category: 'accessing'
-method: RwRepositoryComponentProjectReaderVisitor
-currentProjectReferenceDefinition: aRwProjectReferenceDefinition
-
-	currentProjectReferenceDefinition := aRwProjectReferenceDefinition
-%
-
 category: 'tonel parser'
 method: RwRepositoryComponentProjectReaderVisitor
 newClassDefinitionFrom: anArray
@@ -61817,15 +61736,6 @@ visitComponentProjectDefinition: aRwComponentProjectDefinition
 	self currentProjectDefinition: aRwComponentProjectDefinition.
 	aRwComponentProjectDefinition packages: Dictionary new.
 	self visit: aRwComponentProjectDefinition projectRef
-%
-
-category: 'visiting'
-method: RwRepositoryComponentProjectReaderVisitor
-visitProjectReferenceDefinition: aRwProjectReferenceDefinition
-	"read the packageNames from the repository"
-
-	self currentProjectReferenceDefinition: aRwProjectReferenceDefinition.
-	self readPackages: aRwProjectReferenceDefinition packagesRoot
 %
 
 category: 'visiting'
@@ -63351,16 +63261,6 @@ checkout: aCommittish
 
 category: 'project definition'
 method: RwResolvedProjectV2
-classNamed: aString ifAbsent: absentBlock
-	self packages
-		do: [ :packageDef | 
-			(packageDef classDefinitionNamed: aString ifAbsent: [  ])
-				ifNotNil: [ :classDef | ^ classDef ] ].
-	^ absentBlock value
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
 comment
 	^ self _projectDefinition comment
 %
@@ -64403,12 +64303,6 @@ doGitCommit: messageString
 		cr;
 		show: status.
 	^ status
-%
-
-category: 'private'
-method: RwAbstractTool
-fileUtilities
-  ^ Rowan fileUtilities
 %
 
 category: 'smalltalk api'
@@ -74415,202 +74309,6 @@ size
 	^ entities size
 %
 
-! Class implementation for 'RwGsFileUtilities'
-
-!		Class methods for 'RwGsFileUtilities'
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-deleteAll: aDirectory
-  "Delete all the files and directories under the named directory.
-	 Ensure we don't try to recursively delete . or .."
-
-  self deleteAll: aDirectory rejecting: [ :filename | false ]
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-deleteAll: aDirectory rejecting: rejectBlock
-  "Delete all the files and directories under the named directory.
-       Reject file and directores in aDirectory that are rejected by rejectBlock.
-       The rejectBlock is not used recursively.
-       Ensure we don't try to recursively delete . or .."
-
-  | filename isFile |
-  (GsFile contentsAndTypesOfDirectory: aDirectory onClient: false)
-    doWithIndex: [ :each :index | 
-      index odd
-        ifTrue: [ filename := each ]
-        ifFalse: [ 
-          isFile := each.
-          isFile
-            ifTrue: [ 
-              (rejectBlock value: filename)
-                ifFalse: [ 
-                  (rejectBlock value: filename)
-                    ifFalse: [ GsFile removeServerFile: filename ] ] ]
-            ifFalse: [ 
-              (self _endsWithSpecial: filename)
-                ifFalse: [ 
-                  (rejectBlock value: filename)
-                    ifFalse: [ 
-                      self deleteAll: filename rejecting: rejectBlock.
-                      GsFile removeServerDirectory: filename ] ] ] ] ]
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-deleteDirectory: aDirectory
-  "Delete the named directory and all of it contents"
-
-	self deleteAll: aDirectory.
-   GsFile removeServerDirectory: aDirectory
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-directoryEntriesFrom: aDirectory
-	"Answer fully qualified paths to the contents of aDirectory."
-
-	^(GsFile contentsOfDirectory: aDirectory onClient: false) ifNil: [#()]
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-directoryExists: aDirectory
-
-	"handle the case where GsFile class>>existsOnServer: returns nil"
-	^ (GsFile existsOnServer: aDirectory) == true
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-directoryFromPath: directoryPath relativeTo: aDirectory
-
-	^((aDirectory endsWith: self pathNameDelimiter)
-		or: [directoryPath beginsWith: self pathNameDelimiter])
-			ifTrue: [aDirectory , directoryPath]
-			ifFalse: [aDirectory , self pathNameDelimiter , directoryPath]
-%
-
-category: 'private'
-classmethod: RwGsFileUtilities
-endsWithSpecial: filename
-	"Answer true if the given filename ends with any of the special sequences
-	'/..' '/.' '\..' '\.', false otherwise."
-
-	| filenameSize finalChars |
-	filenameSize := filename size.
-	finalChars := filename copyFrom: filenameSize - 1 to: filenameSize.
-	finalChars = '/.' ifTrue: [^true].
-	finalChars = '\.' ifTrue: [^true].
-	finalChars := filename copyFrom: filenameSize - 2 to: filenameSize.
-	finalChars = '/..' ifTrue: [^true].
-	finalChars = '\..' ifTrue: [^true].
-	^false
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-ensureDirectoryExists: aDirectory
-
-	| lastSeparator |
-	(GsFile existsOnServer: aDirectory) == true ifTrue: [^aDirectory].
-	(GsFile createServerDirectory: aDirectory) ifNotNil: [^aDirectory].
-	lastSeparator := aDirectory findLastSubString: self pathNameDelimiter
-				startingAt: aDirectory size.
-	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].
-	self ensureDirectoryExists: (aDirectory copyFrom: 1 to: lastSeparator - 1).
-	self ensureDirectoryExists: aDirectory
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-entryNamesFrom: aDirectory
-  "Answer just the name of the contents of aDirectory."
-
-  ^ (((self directoryEntriesFrom: aDirectory)
-    collect: [ :each | self localNameFrom: each ])
-    reject: [ :each | each = '.' or: [ each = '..' ] ])
-    sortWithBlock: [ :a :b | a <= b ]
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-localNameFrom: aDirectory
-
-	| endOfPath |
-	endOfPath := aDirectory findLastSubString: self pathNameDelimiter
-				startingAt: aDirectory size.
-	^aDirectory copyFrom: endOfPath + 1 to: aDirectory size
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-pathNameDelimiter
-
-	^'/'
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-readStreamFor: filePath do: aOneArgBlock
-
-	| file stream result |
-	GsFile serverErrorString.
-	file := GsFile openReadOnServer: filePath.
-	GsFile serverErrorString
-		ifNotNil: [:errorMessage | self error: errorMessage].
-	
-	[stream := ReadStreamPortable
-				on: (String withAll: file contents asByteArray decodeFromUTF8).
-	result := aOneArgBlock value: stream]
-			ensure: [file close].
-	^result
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-readStreamFor: filePath in: aDirectory do: aOneArgBlock
-
-	self
-		readStreamFor: (self directoryFromPath: filePath relativeTo: aDirectory)
-		do: aOneArgBlock
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-writeStreamFor: filePath in: aDirectory do: aOneArgBlock
-
-	| file stream |
-	GsFile serverErrorString.
-	file := GsFile openWriteOnServer: (self directoryFromPath: filePath relativeTo: aDirectory).
-	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
-	stream := WriteStreamPortable on: String new.
-	[aOneArgBlock value: stream] ensure: [file nextPutAll: stream contents encodeAsUTF8; close]
-%
-
-category: 'private'
-classmethod: RwGsFileUtilities
-_endsWithSpecial: filename
-  "Answer true if the given filename ends with any of the special sequences
-	'/..' '/.' '\..' '\.', false otherwise."
-
-  | filenameSize finalChars |
-  filenameSize := filename size.
-  finalChars := filename copyFrom: filenameSize - 1 to: filenameSize.
-  finalChars = '/.'
-    ifTrue: [ ^ true ].
-  finalChars = '\.'
-    ifTrue: [ ^ true ].
-  finalChars := filename copyFrom: filenameSize - 2 to: filenameSize.
-  finalChars = '/..'
-    ifTrue: [ ^ true ].
-  finalChars = '\..'
-    ifTrue: [ ^ true ].
-  ^ false
-%
-
 ! Class implementation for 'RwGsImage'
 
 !		Class methods for 'RwGsImage'
@@ -78242,7 +77940,7 @@ installSymbolDictionaryPatchFor: aPatchSet
 
 	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry loadedClass |
 	theClass := Rowan globalNamed: classDefinition name.
-	before := classModification before.
+	before := self classModification before.
 	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
@@ -83446,13 +83144,6 @@ forMethod: aGsNMethod
 
 !		Instance methods for 'RwGsLoadedSymbolDictMethod'
 
-category: 'private'
-method: RwGsLoadedSymbolDictMethod
-definingPackageOfClass
-
-	^loadedClass loadedPackage
-%
-
 category: 'private-updating'
 method: RwGsLoadedSymbolDictMethod
 handleClassDeletion
@@ -85736,14 +85427,6 @@ defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock
 
 category: 'queries'
 method: RwPlatform
-fileUtilities
-	"Answer the platform-specific object for accessing files and directories"
-
-	self subclassResponsibility: #fileUtilities
-%
-
-category: 'queries'
-method: RwPlatform
 globalNamed: aString
 
 	"Answer a global object with the given name.  If no object with the given name is found, returns nil."
@@ -85962,14 +85645,6 @@ defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock
 	"global preferences implements default preference"
 
 	^self globalPreferenceFor: preferenceSymbol ifAbsent: aBlock
-%
-
-category: 'queries'
-method: RwGsPlatform
-fileUtilities
-  "Answer the platform-specific object for accessing files and directories"
-
-  ^ RwGsFileUtilities
 %
 
 category: 'queries'

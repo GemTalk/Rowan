@@ -37,7 +37,7 @@ RwGsClassSymbolDictionaryMoveSymDictPatchV2 >> installSymbolDictionaryPatchFor: 
 
 	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry loadedClass |
 	theClass := Rowan globalNamed: classDefinition name.
-	before := classModification before.
+	before := self classModification before.
 	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.

@@ -278,9 +278,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 			self assert: (projectDefinition componentForPackageNamed: packageName) name = componentName.
 			self assert: (projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) 
 				= 'Globals'].
-	Rowan fileUtilities 
-		readStreamFor: (projectsHome / projectName) pathString, '/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
-		do: [:fileStream | classFileString := fileStream contents ].
+	 (projectsHome / projectName) readStreamDo: [:fileStream | classFileString := fileStream contents ].
 	self deny: (classFileString includesString: 'classSide')
 ]
 
