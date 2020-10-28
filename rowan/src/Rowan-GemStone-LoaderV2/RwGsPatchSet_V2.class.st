@@ -14,7 +14,6 @@ Class {
 		'addedClasses',
 		'deletedClasses',
 		'movedClasses',
-		'movedClassesMap',
 		'extendedClasses',
 		'classesWithPropertyChanges',
 		'classesWithSymbolDictionaryChanges',
@@ -1078,7 +1077,7 @@ RwGsPatchSet_V2 >> commit [
 RwGsPatchSet_V2 >> compileMethodPatch: aMethodAdditionPatch [
 	aMethodAdditionPatch
 		compileUsingNewClassesSymbolList: self createdClasses
-		andExistingClasses: self tempSymbolList
+		andExistingClasses: self tempSymbols
 ]
 
 { #category : 'private - applying' }
@@ -1347,7 +1346,6 @@ RwGsPatchSet_V2 >> initialize [
 	classesWithConstraintChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
 	movedClasses := Set new.
-	movedClassesMap := Dictionary new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedMethods := Set new.
@@ -1474,12 +1472,12 @@ RwGsPatchSet_V2 >> removeDeletedMethods [
 			className := methodDeletionPatch className.
 			methodDeletionPatch
 				deleteMethodNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbolList ].
+				andExistingClasses: self tempSymbols ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
 				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbolList ]
+				andExistingClasses: self tempSymbols ]
 ]
 
 { #category : 'private - applying' }
@@ -1570,7 +1568,7 @@ RwGsPatchSet_V2 >> superclassNamed: aName ifAbsent: absentBlock [
 	superclassName := aName asSymbol.
 	^ (self createdClasses resolveSymbol: superclassName)
 		ifNotNil: [ :assoc | assoc value ]
-		ifNil: [ self tempSymbolList at: superclassName ifAbsent: absentBlock ]
+		ifNil: [ self tempSymbols at: superclassName ifAbsent: absentBlock ]
 ]
 
 { #category : 'accessing' }
@@ -1583,12 +1581,7 @@ RwGsPatchSet_V2 >> symbolDictionaryRegistryClass [
 
 { #category : 'patch access' }
 RwGsPatchSet_V2 >> tempAssociationFor: aName [
-	^ self tempSymbolList associationAt: aName
-]
-
-{ #category : 'accessing' }
-RwGsPatchSet_V2 >> tempSymbolList [
-	^ tempSymbols
+	^ self tempSymbols associationAt: aName
 ]
 
 { #category : 'accessing' }
@@ -1602,7 +1595,7 @@ RwGsPatchSet_V2 >> updateClassProperties [
 	update the properties in the class and the LoadedClasses as appropriate."
 
 	| classPatches ts |
-	ts := self tempSymbolList.
+	ts := self tempSymbols.
 	classPatches := OrderedCollection new.
 	classPatches
 		addAll:

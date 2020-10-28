@@ -8059,7 +8059,7 @@ removeallclassmethods RwGsDeferredInstanceMigrator
 doit
 (Object
 	subclass: 'RwGsPatchSet_V2'
-	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition movedClassesSymbolList addedUnmanagedClasses loadSymbolList )
+	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition movedClassesSymbolList addedUnmanagedClasses loadSymbolList )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -76438,7 +76438,7 @@ method: RwGsPatchSet_V2
 compileMethodPatch: aMethodAdditionPatch
 	aMethodAdditionPatch
 		compileUsingNewClassesSymbolList: self createdClasses
-		andExistingClasses: self tempSymbolList
+		andExistingClasses: self tempSymbols
 %
 
 category: 'private - applying'
@@ -76718,7 +76718,6 @@ initialize
 	classesWithConstraintChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
 	movedClasses := Set new.
-	movedClassesMap := Dictionary new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedMethods := Set new.
@@ -76857,12 +76856,12 @@ removeDeletedMethods
 			className := methodDeletionPatch className.
 			methodDeletionPatch
 				deleteMethodNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbolList ].
+				andExistingClasses: self tempSymbols ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
 				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbolList ]
+				andExistingClasses: self tempSymbols ]
 %
 
 category: 'private - applying'
@@ -76958,7 +76957,7 @@ superclassNamed: aName ifAbsent: absentBlock
 	superclassName := aName asSymbol.
 	^ (self createdClasses resolveSymbol: superclassName)
 		ifNotNil: [ :assoc | assoc value ]
-		ifNil: [ self tempSymbolList at: superclassName ifAbsent: absentBlock ]
+		ifNil: [ self tempSymbols at: superclassName ifAbsent: absentBlock ]
 %
 
 category: 'accessing'
@@ -76973,13 +76972,7 @@ symbolDictionaryRegistryClass
 category: 'patch access'
 method: RwGsPatchSet_V2
 tempAssociationFor: aName
-	^ self tempSymbolList associationAt: aName
-%
-
-category: 'accessing'
-method: RwGsPatchSet_V2
-tempSymbolList
-	^ tempSymbols
+	^ self tempSymbols associationAt: aName
 %
 
 category: 'accessing'
@@ -76995,7 +76988,7 @@ updateClassProperties
 	update the properties in the class and the LoadedClasses as appropriate."
 
 	| classPatches ts |
-	ts := self tempSymbolList.
+	ts := self tempSymbols.
 	classPatches := OrderedCollection new.
 	classPatches
 		addAll:
