@@ -130,38 +130,6 @@ RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAssociationAt: aKey ifPresent
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAssociationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
-
-	self
-		_symbolDictionaryAssociationAt: key
-		ifPresent: [ :v | ^ oneArgBlock cull: v ].
-	^ absentBlock value
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAt: key ifPresent: oneArgBlock [
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
-
-	| v |
-	v := self _symbolDictionary at: key ifAbsent: [ ^ nil ].
-	^ oneArgBlock cull: v
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the value associated with the key, otherwise answer the value of absentBlock."
-
-	| v |
-	v := self _symbolDictionary at: key ifAbsent: [ ^absentBlock value ].
-	^ oneArgBlock cull: v
-
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistryV2 >> addClassAssociation: assoc forClass: class toPackageNamed: packageName [
 
 	"Copy the name association to the correct 

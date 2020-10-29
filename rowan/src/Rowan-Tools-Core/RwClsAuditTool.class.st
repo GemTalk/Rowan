@@ -369,10 +369,3 @@ RwClsAuditTool >> errorLog: aResult add: aMessage [
 	aResult add: aMessage.
 	GsFile gciLogServer: aMessage value asString , '  ' , aMessage key asString
 ]
-
-{ #category : 'audit' }
-RwClsAuditTool >> errorLog: aResult addAll: aCol [
-	"add all messages to result"
-
-	aCol do: [ :e | self errorLog: aResult add: e ]
-]

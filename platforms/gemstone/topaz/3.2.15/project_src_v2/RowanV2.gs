@@ -49613,13 +49613,6 @@ _loadedProject
 
 category: 'private'
 method: RowanInterface
-_packageTools
-
-	^ Rowan packageTools
-%
-
-category: 'private'
-method: RowanInterface
 _projectTools
 
 	^ Rowan projectTools
@@ -50132,12 +50125,6 @@ category: 'accessing'
 method: RwDefinedProject
 projectSpecFile: relativePathString
 	^ self _resolvedProject projectSpecFile: relativePathString
-%
-
-category: 'accessing'
-method: RwDefinedProject
-projectSpecName: aString
-	self _projectSpecification specName: aString
 %
 
 category: 'accessing'
@@ -57699,22 +57686,6 @@ _platformAttributeMatchIn: platformMatchersList
 
 category: 'private'
 method: RwAbstractProjectComponentVisitorV2
-_processConditionalProperties: aProjectLoadConfiguration
-	aProjectLoadConfiguration conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :groupMap | 
-			(self _platformAttributeMatchIn: platformMatchers)
-				ifTrue: [ 
-					groupMap
-						keysAndValuesDo: [ :group :map | 
-							self
-								_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
-								for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
-							self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ]
-%
-
-category: 'private'
-method: RwAbstractProjectComponentVisitorV2
 _visited: aComponent
 
 	visitedComponentNames add:  aComponent name.
@@ -59208,14 +59179,6 @@ topazFilename: aString
 
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
-topazFilename: aNameString filenameExtension: anExtensionString
-
-	topazFilename := aNameString.
-	filenameExtension := anExtensionString
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
 topazFilenameComponentMap
 
 	^ topazFilenameComponentMap
@@ -60321,16 +60284,6 @@ _classSourceFile
 
 category: 'class writing'
 method: RwModificationTonelWriterVisitor
-_fileNameFor: aClassDefinition
-	^ String streamContents: [ :stream | 
-		stream 
-			<< aClassDefinition name
-			<< '.' << (self _typeOfClass: aClassDefinition) asLowercase
-			<< '.st'  ]
-%
-
-category: 'class writing'
-method: RwModificationTonelWriterVisitor
 _hasCommentOf: aClassDefinition 
 
 	| comment |
@@ -61404,16 +61357,6 @@ _commentOf: aClassDefinition
 		copyReplaceAll: '"' 
 		with: '""')
 		withLineEndings: self _newLine
-%
-
-category: 'class writing'
-method: RwModificationTonelWriterVisitorV2
-_fileNameFor: aClassDefinition
-	^ String streamContents: [ :stream | 
-		stream 
-			<< aClassDefinition name
-			<< '.' << (self _typeOfClass: aClassDefinition) asLowercase
-			<< '.st'  ]
 %
 
 category: 'class writing'
@@ -64396,14 +64339,6 @@ errorLog: aResult add: aMessage
 
 category: 'audit'
 method: RwClsAuditTool
-errorLog: aResult addAll: aCol
-	"add all messages to result"
-
-	aCol do: [ :e | self errorLog: aResult add: e ]
-%
-
-category: 'audit'
-method: RwClsAuditTool
 _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 	| packageConvention |
 	packageConvention := aLoadedClass loadedProject packageConvention.
@@ -65721,13 +65656,6 @@ auditLoadedClassExtension: aLoadedClass
 "look for methods compiled into class without Rowan API"
 
 	^RwClsExtensionAuditTool new auditLoadedClassExtension: aLoadedClass
-%
-
-category: 'other'
-method: RwPkgAuditToolV2
-_addAll: aColl to: aDict for: aName
-
-	aDict at: aName ifAbsentPut: [aColl].
 %
 
 ! Class implementation for 'RwProjectTool'
@@ -67604,18 +67532,6 @@ _copyClassDefinitionNamed: className to: newName
 
 category: 'private'
 method: RwPrjBrowserToolV2
-_loadedClassExtensionsNamed: className
-
-	^ self
-		_loadedClassExtensionsNamed: className
-		ifAbsent: [ 
-			self
-				error:
-					'No extensions for the class ' , className printString , ' were found' ]
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
 _loadedClassExtensionsNamed: className ifAbsent: absentBlock
 
 	^ Rowan image
@@ -67712,30 +67628,6 @@ _loadedProjectNamed: projectName
 	^ Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ self error: 'No project named ' , projectName printString , ' found' ]
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_projectForClassNamed: className
-
-	^ (self _loadedProjectForClassNamed: className) asDefinition
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_projectForMethod: methodSelector inClassNamed: className isMeta: isMeta
-
-	^ (self
-		_loadedProjectForMethod: methodSelector
-		inClassNamed: className
-		isMeta: isMeta) asDefinition
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_projectForPackageNamed: packageName
-
-	^ (self _loadedProjectForPackageNamed: packageName) asDefinition
 %
 
 category: 'private'
@@ -70200,15 +70092,6 @@ projectDefinition: newValue
 
 !		Instance methods for 'RwConfiguration'
 
-category: 'testing'
-method: RwConfiguration
-needsPackageProtocolNames
-
-	"Answer true if image protocol names need to be *<packageName>*"
-
-	^ packageInfoSource == #'Category'
-%
-
 category: 'accessing'
 method: RwConfiguration
 packageInfoSource
@@ -70753,13 +70636,6 @@ removeInstanceMethod: selector ifAbsent: absentBlock
 		ifAbsent: [ ^ absentBlock value ].
 	self removeDefinition: definition from: instanceMethodDefinitions.
 	^ definition
-%
-
-category: 'accessing'
-method: RwAbstractClassDefinition
-updateClassMethod: methodSource protocol: protocol
-
-	^self updateClassMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
 %
 
 category: 'accessing'
@@ -72205,12 +72081,6 @@ resolve
 	self repositoryRoot exists
 		ifFalse: [ self repositoryRoot ensureCreateDirectory ].
 	^ true
-%
-
-category: 'private'
-method: RwDiskRepositoryDefinitionV2
-_fileSystem
-	^ FileSystem disk
 %
 
 ! Class implementation for 'RwGitRepositoryDefinitionV2'
@@ -76643,13 +76513,6 @@ setupForNewClassVersionUpdates
 
 category: 'patch access'
 method: RwGsPatchSet_V2
-superclassNamed: aName
-
-	^ self superclassNamed: aName ifAbsent: [ self error: 'Superclass not found: ' , aName printString ]
-%
-
-category: 'patch access'
-method: RwGsPatchSet_V2
 superclassNamed: aName ifAbsent: absentBlock
 	| superclassName |
 	superclassName := aName asSymbol.
@@ -77479,7 +77342,7 @@ installClassInSystem
 	| loadedClass |
 	loadedClass := self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
-		forClass: newClass
+		forClass: self newClass
 		toPackageNamed: self packageName
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 	loadedClass updatePropertiesFromClassDefinition: self classDefinition
@@ -78208,17 +78071,6 @@ oldClassVersion
 	"The old version is what is currently bound to the old class definition's name."
 
 	^ (self resolveName: self oldClassDefinition key) value
-%
-
-category: 'actions'
-method: RwGsClassVersioningPatchV2
-updateSymbolAssociation
-
-	oldClassVersion == newClassVersion 
-		ifTrue: [ 
-			"no newClassVersion created when property modifications applied .. not a problem"
-			^self ].
-	symbolAssociation value: newClassVersion
 %
 
 category: 'private'
@@ -79203,15 +79055,6 @@ methodEnvironmentId
 	"use the project load spec package properties"
 
 	^ self projectDefinition methodEnvForPackageNamed: self packageName
-%
-
-category: 'private-installing'
-method: RwGsMethodPatchV2
-packageProtocolName
-
-	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
-
-	^ '*' , self packageName
 %
 
 category: 'private'
@@ -80774,40 +80617,6 @@ _symbolDictionaryAssociationAt: aKey ifPresent: oneArgBlock
 	^ nil
 %
 
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-_symbolDictionaryAssociationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
-
-	self
-		_symbolDictionaryAssociationAt: key
-		ifPresent: [ :v | ^ oneArgBlock cull: v ].
-	^ absentBlock value
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-_symbolDictionaryAt: key ifPresent: oneArgBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
-
-	| v |
-	v := self _symbolDictionary at: key ifAbsent: [ ^ nil ].
-	^ oneArgBlock cull: v
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-_symbolDictionaryAt: key ifPresent: oneArgBlock ifAbsent: absentBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the value associated with the key, otherwise answer the value of absentBlock."
-
-	| v |
-	v := self _symbolDictionary at: key ifAbsent: [ ^absentBlock value ].
-	^ oneArgBlock cull: v
-%
-
 ! Class implementation for 'RwGsSymbolDictionaryRegistry_ImplementationV2'
 
 !		Class methods for 'RwGsSymbolDictionaryRegistry_ImplementationV2'
@@ -81882,30 +81691,6 @@ _symbolDictionary: symbolDictionary associationAt: aKey ifPresent: oneArgBlock
 	anAssoc := symbolDictionary associationAt: aKey otherwise: nil.
 	anAssoc ifNotNil: [ ^ oneArgBlock cull: anAssoc ].
 	^ nil
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-_symbolDictionary: symbolDictionary associationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
-
-	self
-		_symbolDictionary: symbolDictionary 
-		associationAt: key
-		ifPresent: [ :v | ^ oneArgBlock cull: v ].
-	^ absentBlock value
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-_symbolDictionary: symbolDictionary at: key ifPresent: oneArgBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
-
-	| v |
-	v := symbolDictionary at: key ifAbsent: [ ^ nil ].
-	^ oneArgBlock cull: v
 %
 
 category: 'private'
@@ -83559,16 +83344,6 @@ updatePropertiesFromRegistryFor: aSymbolDictionaryRegistry
 
 !		Class methods for 'RwLoadedProject'
 
-category: 'instance creation'
-classmethod: RwLoadedProject
-newForLoadSpecification: aLoadSpecification
-
-	^ self new
-		initialize;
-		initializeForLoadSpecification: aLoadSpecification;
-		yourself
-%
-
 category: 'accessing'
 classmethod: RwLoadedProject
 _projectDefinitionPlatformConditionalAttributesKey
@@ -83806,13 +83581,6 @@ markNotDirty
 	"I have been changed to be consistent with my source, so mark not dirty."
 
 	isDirty := false
-%
-
-category: 'private'
-method: RwLoadedProject
-markProjectDirty
-
-	self markDirty
 %
 
 category: 'accessing'
@@ -85436,14 +85204,6 @@ globalNamed: aString
 
 category: 'queries'
 method: RwPlatform
-loadedPackageClass
-	"Answer the platform-specific class for LoadedPackage"
-
-	self subclassResponsibility: #'loadedPackageClass'
-%
-
-category: 'queries'
-method: RwPlatform
 platformConditionalAttributes
 	"Answer the platform conditional attributes. Currently 'common' is the only shared attribute."
 
@@ -85478,14 +85238,6 @@ method: RwPlatform
 setPreferenceFor: preferenceSymbol to: anObject
 
 	self subclassResponsibility: #setPreferenceFor:to:
-%
-
-category: 'queries'
-method: RwPlatform
-tools
-	"Answer the platform-specific class for tools"
-
-	self subclassResponsibility: #tools
 %
 
 category: 'automatic class initialization'
@@ -88002,15 +87754,6 @@ try: aBlock
 		try: aBlock 
 		onSuccess: [ :parsedValue | parsedValue ] 
 		onFailure: [ nil ]
-%
-
-category: 'private parsing'
-method: RwTonelParser
-try: aBlock onFailure: failureBlock
-	^ self 
-		try: aBlock 
-		onSuccess: [ :parsedValue |  parsedValue ] 
-		onFailure: failureBlock
 %
 
 category: 'private parsing'
@@ -97433,18 +97176,6 @@ readlink: filepath
 	^Rowan gitTools performOnServer: command
 %
 
-category: '*rowan-tools-gemstone'
-method: RwAbstractTool
-_log: aString
-
-"
-If the client is a topaz process, the default logger writes to the 
- current output file as controlled by topaz OUTPUT PUSH statements, 
- else to stdout.
-"
-	GsFile gciLogClient: aString
-%
-
 category: '*rowan-tools-gemstone-32x'
 method: RwAbstractTool
 _sh_realpath_source
@@ -98522,21 +98253,6 @@ method: RwPackage
 methodEnv
 
 	^ self _gemstonePlatformSpec methodEnvForPackageNamed: self name
-%
-
-category: '*rowan-gemstone-core'
-method: RwPackage
-symbolDictName
-
-	^ self project symbolDictNameForPackageNamed: self name
-%
-
-category: '*rowan-gemstone-core'
-method: RwPackage
-useSessionMethodsForExtensions
-
-	^ self _gemstonePlatformSpec
-		useSessionMethodsForExtensionsForPackageNamed: self name
 %
 
 ! Class extensions for 'RwPackageDefinition'

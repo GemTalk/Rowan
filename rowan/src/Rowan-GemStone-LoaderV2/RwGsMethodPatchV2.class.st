@@ -215,14 +215,6 @@ RwGsMethodPatchV2 >> methodEnvironmentId [
 	^ self projectDefinition methodEnvForPackageNamed: self packageName
 ]
 
-{ #category : 'private-installing' }
-RwGsMethodPatchV2 >> packageProtocolName [
-
-	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
-
-	^ '*' , self packageName
-]
-
 { #category : 'private' }
 RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols [
 

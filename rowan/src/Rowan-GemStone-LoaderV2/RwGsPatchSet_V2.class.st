@@ -1557,12 +1557,6 @@ RwGsPatchSet_V2 >> setupForNewClassVersionUpdates [
 ]
 
 { #category : 'patch access' }
-RwGsPatchSet_V2 >> superclassNamed: aName [
-
-	^ self superclassNamed: aName ifAbsent: [ self error: 'Superclass not found: ' , aName printString ]
-]
-
-{ #category : 'patch access' }
 RwGsPatchSet_V2 >> superclassNamed: aName ifAbsent: absentBlock [
 	| superclassName |
 	superclassName := aName asSymbol.

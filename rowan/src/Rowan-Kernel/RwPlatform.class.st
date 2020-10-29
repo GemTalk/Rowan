@@ -141,14 +141,6 @@ RwPlatform >> globalNamed: aString [
 ]
 
 { #category : 'queries' }
-RwPlatform >> loadedPackageClass [
-	"Answer the platform-specific class for LoadedPackage"
-
-	self subclassResponsibility: #'loadedPackageClass'
-
-]
-
-{ #category : 'queries' }
 RwPlatform >> platformConditionalAttributes [
 	"Answer the platform conditional attributes. Currently 'common' is the only shared attribute."
 
@@ -179,12 +171,4 @@ RwPlatform >> setDefaultPreferenceFor: preferenceSymbol to: anObject [
 RwPlatform >> setPreferenceFor: preferenceSymbol to: anObject [
 
 	self subclassResponsibility: #setPreferenceFor:to:
-]
-
-{ #category : 'queries' }
-RwPlatform >> tools [
-	"Answer the platform-specific class for tools"
-
-	self subclassResponsibility: #tools
-
 ]

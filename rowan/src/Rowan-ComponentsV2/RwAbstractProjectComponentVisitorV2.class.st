@@ -49,21 +49,6 @@ RwAbstractProjectComponentVisitorV2 >> _platformAttributeMatchIn: platformMatche
 ]
 
 { #category : 'private' }
-RwAbstractProjectComponentVisitorV2 >> _processConditionalProperties: aProjectLoadConfiguration [
-	aProjectLoadConfiguration conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :groupMap | 
-			(self _platformAttributeMatchIn: platformMatchers)
-				ifTrue: [ 
-					groupMap
-						keysAndValuesDo: [ :group :map | 
-							self
-								_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
-								for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
-							self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ]
-]
-
-{ #category : 'private' }
 RwAbstractProjectComponentVisitorV2 >> _visited: aComponent [
 
 	visitedComponentNames add:  aComponent name.

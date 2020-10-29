@@ -592,13 +592,6 @@ RwGsModificationTopazWriterVisitorV2 >> topazFilename: aString [
 ]
 
 { #category : 'accessing' }
-RwGsModificationTopazWriterVisitorV2 >> topazFilename: aNameString filenameExtension: anExtensionString [
-
-	topazFilename := aNameString.
-	filenameExtension := anExtensionString
-]
-
-{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilenameComponentMap [
 
 	^ topazFilenameComponentMap

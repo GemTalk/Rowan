@@ -63,15 +63,6 @@ RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
 	^ 'unknown'
 ]
 
-{ #category : 'instance creation' }
-RwLoadedProject class >> newForLoadSpecification: aLoadSpecification [
-
-	^ self new
-		initialize;
-		initializeForLoadSpecification: aLoadSpecification;
-		yourself
-]
-
 { #category : 'accessing' }
 RwLoadedProject >> addLoadedPackage: aLoadedPackage [
 
@@ -228,12 +219,6 @@ RwLoadedProject >> markNotDirty [
 	"I have been changed to be consistent with my source, so mark not dirty."
 
 	isDirty := false
-]
-
-{ #category : 'private' }
-RwLoadedProject >> markProjectDirty [
-
-	self markDirty
 ]
 
 { #category : 'accessing' }

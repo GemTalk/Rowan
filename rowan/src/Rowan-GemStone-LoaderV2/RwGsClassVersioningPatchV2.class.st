@@ -285,13 +285,3 @@ RwGsClassVersioningPatchV2 >> oldClassVersion [
 
 	^ (self resolveName: self oldClassDefinition key) value
 ]
-
-{ #category : 'actions' }
-RwGsClassVersioningPatchV2 >> updateSymbolAssociation [
-
-	oldClassVersion == newClassVersion 
-		ifTrue: [ 
-			"no newClassVersion created when property modifications applied .. not a problem"
-			^self ].
-	symbolAssociation value: newClassVersion
-]

@@ -45,17 +45,6 @@ RwPrjBrowserToolV2 >> _copyClassDefinitionNamed: className to: newName [
 ]
 
 { #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedClassExtensionsNamed: className [
-
-	^ self
-		_loadedClassExtensionsNamed: className
-		ifAbsent: [ 
-			self
-				error:
-					'No extensions for the class ' , className printString , ' were found' ]
-]
-
-{ #category : 'private' }
 RwPrjBrowserToolV2 >> _loadedClassExtensionsNamed: className ifAbsent: absentBlock [
 
 	^ Rowan image
@@ -142,27 +131,6 @@ RwPrjBrowserToolV2 >> _loadedProjectNamed: projectName [
 	^ Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ self error: 'No project named ' , projectName printString , ' found' ]
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _projectForClassNamed: className [
-
-	^ (self _loadedProjectForClassNamed: className) asDefinition
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _projectForMethod: methodSelector inClassNamed: className isMeta: isMeta [
-
-	^ (self
-		_loadedProjectForMethod: methodSelector
-		inClassNamed: className
-		isMeta: isMeta) asDefinition
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _projectForPackageNamed: packageName [
-
-	^ (self _loadedProjectForPackageNamed: packageName) asDefinition
 ]
 
 { #category : 'private' }

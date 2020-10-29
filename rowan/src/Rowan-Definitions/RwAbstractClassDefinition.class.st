@@ -314,12 +314,6 @@ RwAbstractClassDefinition >> removeInstanceMethod: selector ifAbsent: absentBloc
 ]
 
 { #category : 'accessing' }
-RwAbstractClassDefinition >> updateClassMethod: methodSource protocol: protocol [
-
-	^self updateClassMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
-]
-
-{ #category : 'accessing' }
 RwAbstractClassDefinition >> updateClassMethodDefinition: aMethodDefinition [
 
 	self updateDefinition: aMethodDefinition in: classMethodDefinitions

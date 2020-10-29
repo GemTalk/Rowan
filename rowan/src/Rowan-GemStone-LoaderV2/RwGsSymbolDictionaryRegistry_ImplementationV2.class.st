@@ -309,30 +309,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _symbolDictionary: symbol
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _symbolDictionary: symbolDictionary associationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
-
-	self
-		_symbolDictionary: symbolDictionary 
-		associationAt: key
-		ifPresent: [ :v | ^ oneArgBlock cull: v ].
-	^ absentBlock value
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _symbolDictionary: symbolDictionary at: key ifPresent: oneArgBlock [
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
-
-	| v |
-	v := symbolDictionary at: key ifAbsent: [ ^ nil ].
-	^ oneArgBlock cull: v
-
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _symbolDictionary: symbolDictionary at: key ifPresent: oneArgBlock ifAbsent: absentBlock [
 
 	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the value associated with the key, otherwise answer the value of absentBlock."
