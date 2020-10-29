@@ -93,13 +93,6 @@ RwLoadedProject >> initialize [
 
 ]
 
-{ #category : 'initialization' }
-RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
-
-	self initializeForName: aLoadSpecification specName.
-	handle := aLoadSpecification
-]
-
 { #category : 'testing' }
 RwLoadedProject >> isDirty [
 	"a project is dirty if it has changes that are not written to disk, or it's packages have changes that are not written to  disk."

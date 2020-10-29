@@ -63599,15 +63599,6 @@ auditLoadedClass: aLoadedClass
 
 category: 'audit'
 method: RwClsAuditTool
-errorLog: aResult add: aMessage
-	"add error to results. print to file"
-
-	aResult add: aMessage.
-	GsFile gciLogServer: aMessage value asString , '  ' , aMessage key asString
-%
-
-category: 'audit'
-method: RwClsAuditTool
 _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 	| packageConvention |
 	packageConvention := aLoadedClass loadedProject packageConvention.
@@ -66811,15 +66802,6 @@ _loadedClassExtensionsNamed: className ifAbsent: absentBlock
 
 category: 'private'
 method: RwPrjBrowserToolV2
-_loadedClassNamed: className
-
-	^ self
-		_loadedClassNamed: className
-		ifAbsent: [ self error: 'The class ' , className printString , ' was not found' ]
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
 _loadedClassNamed: className ifAbsent: absentBlock
 
 	^ Rowan image loadedClassNamed: className ifAbsent: absentBlock
@@ -66866,28 +66848,6 @@ method: RwPrjBrowserToolV2
 _loadedPackageNamed: packageName ifAbsent: absentBlock
 
 	^ Rowan image loadedPackageNamed: packageName ifAbsent: absentBlock
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_loadedProjectForClassNamed: className
-
-	^ (self _loadedClassNamed: className) loadedProject
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_loadedProjectForMethod: methodSelector inClassNamed: className isMeta: isMeta
-
-	^ (self _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta)
-		loadedProject
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_loadedProjectForPackageNamed: packageName
-
-	^ (self _loadedPackageNamed: packageName) loadedProject
 %
 
 category: 'private'
@@ -67560,20 +67520,6 @@ loadProjectSetDefinition: projectSetDefinitionToLoad symbolList: symbolList
 		loadProjectSetDefinition: projectSetDefinitionToLoad
 		instanceMigrator: Rowan platform instanceMigrator
 		symbolList: symbolList
-%
-
-category: 'project load specifications'
-method: RwPrjLoadToolV2
-loadProjectSpecFromFile: aFilePathOrReference
-
-	^ RwSpecification fromFile: aFilePathOrReference
-%
-
-category: 'project load specifications'
-method: RwPrjLoadToolV2
-loadProjectSpecFromUrl: specUrl
-
-	^ RwSpecification fromUrl: specUrl
 %
 
 category: 'utilities'
@@ -82708,14 +82654,6 @@ initialize
 	super initialize.
 	loadedPackages := KeyValueDictionary new.
 	isDirty := true. "a project is dirty if it has changes that are not written to disk"
-%
-
-category: 'initialization'
-method: RwLoadedProject
-initializeForLoadSpecification: aLoadSpecification
-
-	self initializeForName: aLoadSpecification specName.
-	handle := aLoadSpecification
 %
 
 category: 'testing'

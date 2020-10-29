@@ -54,14 +54,6 @@ RwPrjBrowserToolV2 >> _loadedClassExtensionsNamed: className ifAbsent: absentBlo
 ]
 
 { #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedClassNamed: className [
-
-	^ self
-		_loadedClassNamed: className
-		ifAbsent: [ self error: 'The class ' , className printString , ' was not found' ]
-]
-
-{ #category : 'private' }
 RwPrjBrowserToolV2 >> _loadedClassNamed: className ifAbsent: absentBlock [
 
 	^ Rowan image loadedClassNamed: className ifAbsent: absentBlock
@@ -104,25 +96,6 @@ RwPrjBrowserToolV2 >> _loadedPackageNamed: packageName [
 RwPrjBrowserToolV2 >> _loadedPackageNamed: packageName ifAbsent: absentBlock [
 
 	^ Rowan image loadedPackageNamed: packageName ifAbsent: absentBlock
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedProjectForClassNamed: className [
-
-	^ (self _loadedClassNamed: className) loadedProject
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedProjectForMethod: methodSelector inClassNamed: className isMeta: isMeta [
-
-	^ (self _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta)
-		loadedProject
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedProjectForPackageNamed: packageName [
-
-	^ (self _loadedPackageNamed: packageName) loadedProject
 ]
 
 { #category : 'private' }

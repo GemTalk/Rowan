@@ -243,18 +243,6 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad symbolLi
 		symbolList: symbolList
 ]
 
-{ #category : 'project load specifications' }
-RwPrjLoadToolV2 >> loadProjectSpecFromFile: aFilePathOrReference [
-
-	^ RwSpecification fromFile: aFilePathOrReference
-]
-
-{ #category : 'project load specifications' }
-RwPrjLoadToolV2 >> loadProjectSpecFromUrl: specUrl [
-
-	^ RwSpecification fromUrl: specUrl
-]
-
 { #category : 'utilities' }
 RwPrjLoadToolV2 >> markProjectSetNotDirty: projectSetDefinition [
 	"This method should only be used when the projectSetDefinitions have been read from disk - mark them not dirty. Not dirty means that the loaded things match the code on disk."
