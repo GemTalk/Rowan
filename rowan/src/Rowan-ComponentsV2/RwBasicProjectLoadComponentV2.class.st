@@ -327,32 +327,10 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs [
 ]
 
 { #category : 'accessing' }
-RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs: aDictionary [
-	conditionalPackageMapSpecs := aDictionary
-]
-
-{ #category : 'accessing' }
-RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAt: key ifAbsent: absentBlock [
-	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
-
-	^ conditionalPackageMapSpecs at: key ifAbsent: absentBlock
-]
-
-{ #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId [ 
 
 	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
 		at: userId ifAbsent: [ ^ Dictionary new ])
-
-]
-
-{ #category : 'accessing' }
-RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName [
-
-	^ (((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsentPut: [ ^ Dictionary new ])
-			at: #packageNameToPlatformPropertiesMap ifAbsent: [ ^ Dictionary new ])
-				at: packageName ifAbsent: [ ^ Dictionary new ]
 
 ]
 

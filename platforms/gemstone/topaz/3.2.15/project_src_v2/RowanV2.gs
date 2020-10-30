@@ -68975,34 +68975,10 @@ conditionalPackageMapSpecs
 
 category: 'accessing'
 method: RwBasicProjectLoadComponentV2
-conditionalPackageMapSpecs: aDictionary
-	conditionalPackageMapSpecs := aDictionary
-%
-
-category: 'accessing'
-method: RwBasicProjectLoadComponentV2
-conditionalPackageMapSpecsAt: key ifAbsent: absentBlock
-	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
-
-	^ conditionalPackageMapSpecs at: key ifAbsent: absentBlock
-%
-
-category: 'accessing'
-method: RwBasicProjectLoadComponentV2
 conditionalPackageMapSpecsAtGemStoneUserId: userId 
 
 	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
 		at: userId ifAbsent: [ ^ Dictionary new ])
-%
-
-category: 'accessing'
-method: RwBasicProjectLoadComponentV2
-conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName
-
-	^ (((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsentPut: [ ^ Dictionary new ])
-			at: #packageNameToPlatformPropertiesMap ifAbsent: [ ^ Dictionary new ])
-				at: packageName ifAbsent: [ ^ Dictionary new ]
 %
 
 category: 'accessing'
@@ -78572,40 +78548,6 @@ compiledMethod
 
 category: 'compiling'
 method: RwGsMethodPatchV2
-compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-	self
-		primeBehaviorNewClasses: createdClasses
-		andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			self
-				error:
-					'Class ' , self className printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString , ' associated with the method '
-						, methodDefinition selector printString ].
-
-	[ 
-	| sourceString protocol |
-	sourceString := methodDefinition source.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: tempSymbolList
-		category: protocol
-		intoMethodDict: false
-		intoCategories: nil
-		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
-		on: CompileError , CompileWarning
-		do: [ :ex | 
-			ex
-				addText:
-					(RwRepositoryResolvedProjectTonelReaderVisitorV2
-						lineNumberStringForMethod: methodDefinition).
-			ex pass ]
-%
-
-category: 'compiling'
-method: RwGsMethodPatchV2
 compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
 	self
 		primeBehaviorNewClassesSymbolList: createdClasses
@@ -79143,38 +79085,6 @@ installMovedMethod: aMethodMove newClassVersionPatch: newClassVersionPatch
 ! Class implementation for 'RwGsMethodExtensionSessionMethodSymbolDictPatchV2'
 
 !		Instance methods for 'RwGsMethodExtensionSessionMethodSymbolDictPatchV2'
-
-category: 'compiling'
-method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
-compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-
-	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			self
-				error:
-					'Class ' , self className printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString , ' associated with the method '
-						, methodDefinition selector printString ].
-
-  [ | sourceString protocol |
-	  sourceString := methodDefinition source.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-
-	  methDict := GsMethodDictionary new.
-	  catDict := GsMethodDictionary new.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: tempSymbolList
-		  category: protocol
-		  intoMethodDict: methDict
-		  intoCategories: catDict
-		  environmentId: self methodEnvironmentId
-   ] on: (CompileError, CompileWarning) do:[:ex |
-     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-     ex pass
-   ]
-%
 
 category: 'compiling'
 method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
