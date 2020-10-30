@@ -33,27 +33,27 @@ RwLoadedClass >> asDefinition [
 { #category : 'accessing' }
 RwLoadedClass >> classCategory [
 
-	^self propertyAt: 'category' ifAbsent: [ '' ]
+	^self propertyAt: #'category' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
 RwLoadedClass >> classClassVarNames [
 
-	^self propertyAt: 'classvars'
+	^self propertyAt: #'classvars'
 
 ]
 
 { #category : 'accessing' }
 RwLoadedClass >> classComment [
 
-	^self propertyAt: 'comment' ifAbsent: ['']
+	^self propertyAt: #'comment' ifAbsent: ['']
 
 ]
 
 { #category : 'accessing' }
 RwLoadedClass >> classInstVarNames [
 
-	^self propertyAt: 'instvars'
+	^self propertyAt: #'instvars'
 
 ]
 
@@ -66,21 +66,21 @@ RwLoadedClass >> classMethodDefinitions [
 { #category : 'accessing' }
 RwLoadedClass >> classPoolDictionaries [
 
-	^self propertyAt: 'pools'
+	^self propertyAt: #'pools'
 
 ]
 
 { #category : 'accessing' }
 RwLoadedClass >> classSuperclass [
 
-	^self propertyAt: 'superclass'
+	^self propertyAt: #'superclass'
 
 ]
 
 { #category : 'accessing' }
 RwLoadedClass >> classSymbolDictionaryName [
 
-	^self propertyAt: 'gs_SymbolDictionary'
+	^self propertyAt: #'gs_SymbolDictionary'
 
 ]
 
@@ -197,8 +197,8 @@ RwLoadedClass >> updatePropertiesFromClassDefinition: classDefinition [
 	"Copy all properties to the receiver's property dictionary that are not recorded in the class directly"
 
 	| recordedPropertyNames |
-	recordedPropertyNames := self _classBasedProperties asSet.
+	recordedPropertyNames := self _classBasedProperties . "a small Array of Symbols"
 	classDefinition properties keysAndValuesDo: [:propertyName :propertyValue |
-		(recordedPropertyNames includes: propertyName)
+		(recordedPropertyNames includesIdentical: propertyName)
 			ifFalse: [ self propertyAt: propertyName put: propertyValue ] ]
 ]

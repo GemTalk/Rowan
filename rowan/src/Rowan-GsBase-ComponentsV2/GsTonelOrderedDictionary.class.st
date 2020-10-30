@@ -64,7 +64,7 @@ GsTonelOrderedDictionary >> _writeCypressJsonOn: aStream indent: startIndent [
 					[aStream
 						nextPutAll: ',';
 						lf]].
-	size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
+	size == 0 ifTrue: [indent timesRepeat: [aStream tab]].
 	aStream nextPutAll: ' }'
 ]
 
@@ -211,7 +211,7 @@ GsTonelOrderedDictionary >> isCollection [
 
 { #category : 'testing' }
 GsTonelOrderedDictionary >> isEmpty [
-	^ size = 0
+	^ size == 0
 
 ]
 

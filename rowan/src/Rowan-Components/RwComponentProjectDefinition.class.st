@@ -23,12 +23,12 @@ RwComponentProjectDefinition class >> newForGitBasedProjectNamed: projectName [
 { #category : 'instance creation' }
 RwComponentProjectDefinition class >> newForProjectReference: aRwProjectReferenceDefintion [
 
+  | props |
+	(props := SymbolDictionary new)
+				at: #'name' put: aRwProjectReferenceDefintion projectAlias;
+				at: #'projectRef' put: aRwProjectReferenceDefintion .
 	^ self
-		withProperties:
-			(Dictionary new
-				add: 'name' -> aRwProjectReferenceDefintion projectAlias;
-				add: 'projectRef' -> aRwProjectReferenceDefintion;
-				yourself)
+		withProperties: props
 		packageDefinitions: Dictionary new
 ]
 
@@ -48,10 +48,9 @@ RwComponentProjectDefinition class >> newForUrl: specUrl [
 RwComponentProjectDefinition class >> projectName: projectName [ 
 
 	| projectRef |
-	projectRef := RwProjectReferenceDefinition new
+	(projectRef := RwProjectReferenceDefinition new)
 		projectName: projectName;
-		useGit: true;
-		yourself.
+		useGit: true .
 	^ self newForProjectReference: projectRef
 ]
 
@@ -59,7 +58,7 @@ RwComponentProjectDefinition class >> projectName: projectName [
 RwComponentProjectDefinition class >> projectName: projectName componentNamesToLoad: componentNamesToLoad groupNamesToLoad: groupNamesToLoad defaultComponentName: defaultComponentName defaultGroupName: defaultGroupName packageFormat: packageFormat projectHome: projectHomeFileReferenceOrString specsPath: specsPath componentsPath: componentsPath packagesPath: packagesPath projectsPath: projectsPath projectUrl: projectUrl committish: commitish committishType: committishType comment: comment [
 
 	| projectRef |
-	projectRef := RwProjectReferenceDefinition new
+	(projectRef := RwProjectReferenceDefinition new)
 		projectName: projectName;
 		configurationNames: componentNamesToLoad;
 		defaultComponentName: defaultComponentName;
@@ -75,8 +74,7 @@ RwComponentProjectDefinition class >> projectName: projectName componentNamesToL
 		defaultGroupName: defaultGroupName;
 		projectUrl: projectUrl;
 		committish: commitish
-			committishType: committishType;
-		yourself.
+			committishType: committishType .
 	^ self newForProjectReference: projectRef
 ]
 
@@ -84,7 +82,7 @@ RwComponentProjectDefinition class >> projectName: projectName componentNamesToL
 RwComponentProjectDefinition class >> projectName: projectName componentNamesToLoad: componentNamesToLoad groupNamesToLoad: groupNamesToLoad defaultComponentName: defaultComponentName defaultGroupName: defaultGroupName packageFormat: packageFormat projectHome: projectHomeFileReferenceOrString specsPath: specsPath componentsPath: componentsPath packagesPath: packagesPath projectsPath: projectsPath useGit: useGit comment: comment [
 
 	| projectRef |
-	projectRef := RwProjectReferenceDefinition new
+	(projectRef := RwProjectReferenceDefinition new)
 		projectName: projectName;
 		configurationNames: componentNamesToLoad;
 		defaultComponentName: defaultComponentName;
@@ -97,8 +95,7 @@ RwComponentProjectDefinition class >> projectName: projectName componentNamesToL
 		projectsPath: projectsPath;
 		specsPath: specsPath;
 		packageFormat: packageFormat;
-		defaultGroupName: defaultGroupName;
-		yourself.
+		defaultGroupName: defaultGroupName .
 	^ self newForProjectReference: projectRef
 ]
 
@@ -106,12 +103,11 @@ RwComponentProjectDefinition class >> projectName: projectName componentNamesToL
 RwComponentProjectDefinition class >> projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: useGit comment: comment [
 
 	| projectRef |
-	projectRef := RwProjectReferenceDefinition new
+	(projectRef := RwProjectReferenceDefinition new)
 		projectName: projectName;
 		useGit: useGit;
 		comment: comment;
-		projectHome: projectHomeFileReferenceOrString;
-		yourself.
+		projectHome: projectHomeFileReferenceOrString .
 	^ self newForProjectReference: projectRef
 ]
 
@@ -172,10 +168,11 @@ RwComponentProjectDefinition class >> topazReadTonelFile: fileName [
 { #category : 'instance creation' }
 RwComponentProjectDefinition class >> withProperties: properties packageDefinitions: packageDefinitions [
 
-	^ self basicNew
+  | res |
+	(res := self basicNew)
 		properties: properties;
-		packages: packageDefinitions;
-		yourself
+		packages: packageDefinitions .
+   ^ res
 ]
 
 { #category : 'visiting' }
@@ -191,10 +188,10 @@ RwComponentProjectDefinition >> addComponentNamed: aComponentName comment: comme
 	component := self 
 		components at: aComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: aComponentName for: self name ].
-	^ component 
+	component 
 		addDefinedGroupName: self defaultGroupName includeGroups: #();
-		comment: commentString;
-		yourself
+		comment: commentString .
+  ^ component
 ]
 
 { #category : 'accessing' }
@@ -486,13 +483,13 @@ RwComponentProjectDefinition >> commit: message [
 { #category : 'properties' }
 RwComponentProjectDefinition >> compileWhileReading [
   "true means compile method defs while reading tonel files for immediate detection of syntax errors"
-  ^ properties at: 'CompileWhileReading' otherwise: false
+  ^ properties at: #'CompileWhileReading' otherwise: false
 ]
 
 { #category : 'properties' }
 RwComponentProjectDefinition >> compileWhileReading: aBoolean [
   "true means compile method defs while reading tonel files for immediate detection of syntax errors"
-  properties at: 'CompileWhileReading' put: aBoolean
+  properties at: #'CompileWhileReading' put: aBoolean
 ]
 
 { #category : 'accessing' }
@@ -561,7 +558,7 @@ RwComponentProjectDefinition >> defaultComponentName: aString [
 { #category : 'properties' }
 RwComponentProjectDefinition >> defaultConfigurationNames [
 
-	^ self propertyAt: 'defaultConfigurationNames' ifAbsent: [ self projectRef configurationNames ]
+	^ self propertyAt: #'defaultConfigurationNames' ifAbsent: [ self projectRef configurationNames ]
 ]
 
 { #category : 'accessing' }
@@ -815,13 +812,13 @@ RwComponentProjectDefinition >> projectNames: anArray [
 { #category : 'accessing' }
 RwComponentProjectDefinition >> projectRef [
 
-	^ self propertyAt: 'projectRef' ifAbsent: [ ]
+	^ self propertyAt: #'projectRef' ifAbsent: [ ]
 ]
 
 { #category : 'accessing' }
 RwComponentProjectDefinition >> projectRef: aRwProjectReferenceDefinition [
 
-	^ self propertyAt: 'projectRef' put: aRwProjectReferenceDefinition
+	^ self propertyAt: #'projectRef' put: aRwProjectReferenceDefinition
 ]
 
 { #category : 'properties' }

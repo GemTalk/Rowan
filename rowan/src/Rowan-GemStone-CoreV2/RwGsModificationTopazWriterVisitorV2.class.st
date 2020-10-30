@@ -39,65 +39,58 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 	aStream
 		nextPutAll: 'doit';
 		lf;
-		nextPutAll: '(' , classDefinition superclassName;
+		nextPutAll: '(' ; nextPutAll: classDefinition superclassName;
 		lf.
 	hasClassInstVars := self
 		_writeClassTypeMessage: classDefinition
 		on: aStream
 		hasInstanceVariables: [ 
 			aStream
-				nextPutAll:
-						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
-								, ' )';
-				lf ].
+				nextPutAll: '	instVarNames: #( ' .
+      self _stringForVariables: classDefinition instVarNames to: aStream .
+      aStream nextPutAll: ' )' ; lf ].
 	optionsString := String new.
 	classDefinition gs_options isEmpty
 		ifFalse: [ 
-			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
-				, ' ' ].
+			optionsString := ' ' copy .
+      self _symbolsForVariables: classDefinition gs_options toString: optionsString .
+		  ].
 	self logCreation
 		ifTrue: [ 
 			"for verbose logging during filein and upgrade"
 			optionsString addAll: ' #logCreation ' ].
-	reservedOopString := ''.
+	reservedOopString := String new .
 	classDefinition gs_reservedOop isEmpty
 		ifFalse: [ 
-			| strm |
-			strm := WriteStream on: String new.
-			strm
-				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
+			reservedOopString addAll: '	reservedOop: ' ; addAll: classDefinition gs_reservedOop;
 				lf.
-			reservedOopString := strm contents ].
+		].
 	aStream
-		nextPutAll:
-				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
-						, ' )';
-		lf.
+		nextPutAll: '	classVars: #( ' . 
+  self _stringForVariables: classDefinition classVarNames to: aStream .
+  aStream nextPutAll:' )' ; lf .
 	hasClassInstVars
 		ifTrue: [ 
-			aStream
-				nextPutAll:
-						'	classInstVars: #( '
-								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-				lf ].
+			aStream nextPutAll: '	classInstVars: #( ' .
+			self _stringForVariables: classDefinition classInstVarNames to: aStream .
+      aStream nextPutAll:' )' ; lf 
+    ].
 	aStream
 		nextPutAll: '	poolDictionaries: #()';
 		lf;
-		nextPutAll:
-				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
+		nextPutAll: '	inDictionary: ' ; nextPutAll: (self classSymbolDictionaryNames at: classDefinition name);
 		lf;
-		nextPutAll: '	options: #(' , optionsString , ')';
+		nextPutAll: '	options: #(' ; nextPutAll: optionsString ; nextPut: $) ;
 		lf;
 		nextPutAll: reservedOopString;
 		nextPutAll: ')';
 		lf;
-		nextPutAll: '		category: ' , classDefinition category printString , ';';
-		lf;
-		yourself.
-	classDefinition comment isEmpty
+		nextPutAll: '		category: '; nextPutAll: classDefinition category printString ; nextPut: $; ;
+		lf .
+	classDefinition comment size == 0
 		ifFalse: [ 
 			aStream
-				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+				nextPutAll: '		comment: '; nextPutAll: classDefinition comment printString; nextPut: $; ;
 				lf;
 				yourself ].
 	aStream
@@ -115,12 +108,12 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 RwGsModificationTopazWriterVisitorV2 >> _fileOutMethod: methodDefinition forClass: className isMeta: isMeta on: aStream [
 
 	aStream
-		nextPutAll: 'category: ', methodDefinition protocol printString; lf;
-		nextPutAll: (isMeta ifTrue: ['classmethod: '] ifFalse: ['method: ']), className; lf;
+		nextPutAll: 'category: '; nextPutAll: methodDefinition protocol printString; lf;
+		nextPutAll: (isMeta ifTrue: ['classmethod: '] ifFalse: ['method: ']) ; nextPutAll: className; lf;
 		nextPutAll: methodDefinition source.
-	methodDefinition source last = Character lf
+	methodDefinition source last == Character_lf
 		ifFalse: [aStream lf].
-	aStream nextPutAll: '%'; lf;
+	aStream nextPut: $% ; lf;
 		lf
 ]
 
@@ -151,23 +144,18 @@ RwGsModificationTopazWriterVisitorV2 >> _setBufferedStreamFor: filename extensio
 ]
 
 { #category : 'private exporting' }
-RwGsModificationTopazWriterVisitorV2 >> _stringForVariables: variableList [
-
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	variableList do: [:each | stream nextPutAll: each]
-		separatedBy: [stream space].
-	^stream contents
+RwGsModificationTopazWriterVisitorV2 >> _stringForVariables: variableList to: aStream [
+	variableList do: [:each | aStream nextPutAll: each ; nextPut: $  ].
 ]
 
 { #category : 'private exporting' }
-RwGsModificationTopazWriterVisitorV2 >> _symbolsForVariables: variableList [
+RwGsModificationTopazWriterVisitorV2 >> _symbolsForVariables: variableList to: aStream [
+	variableList do: [:each | aStream nextPutAll: each asSymbol printString ; nextPut: $  ].
+]
 
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
-		separatedBy: [stream space].
-	^stream contents
+{ #category : 'private exporting' }
+RwGsModificationTopazWriterVisitorV2 >> _symbolsForVariables: variableList toString: aString [
+	variableList do: [:each | aString addAll: each asSymbol printString ; add: $  ].
 ]
 
 { #category : 'private exporting' }
@@ -198,7 +186,7 @@ RwGsModificationTopazWriterVisitorV2 >> _writeClassTypeMessage: classDefinition 
 						ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
 	aStream
 		tab;
-		nextPutAll: classTypeMessage , classDefinition name asString printString;
+		nextPutAll: classTypeMessage ; nextPutAll: classDefinition name asString printString;
 		lf.
 	hasInstanceVariables
 		ifTrue: [ instanceVariableBlock value ].
@@ -386,7 +374,7 @@ RwGsModificationTopazWriterVisitorV2 >> exportClassInitializations [
   ].
 	(self classInitializationDefinitions sort: [:a :b | a name <= b name ]) do: [ :classDef |
     exclude ifTrue:[ stream nextPutAll:'!  ' ].
-		stream nextPutAll: classDef name, ' initialize.'; lf 
+		stream nextPutAll: classDef name ; nextPutAll: ' initialize.'; lf 
   ].
   exclude ifFalse:[
 	  stream nextPutAll: 'true'; lf;
@@ -415,20 +403,20 @@ RwGsModificationTopazWriterVisitorV2 >> exportMethodDefinitions: classDefinition
 		className := classDef name.
 		(classDef classMethodDefinitions isEmpty not or: [ classDef instanceMethodDefinitions isEmpty not])
 			ifTrue: [ 
-				stream nextPutAll: '! ', label, ' for ', className printString; lf;
+				stream nextPutAll: '! '; nextPutAll: label ; nextPutAll: ' for ' ; nextPutAll: className printString; lf;
 				lf ].
 		classDef classMethodDefinitions isEmpty not
 			ifTrue: [ 
-				stream nextPutAll: '!		Class methods for ', className printString; lf;
+				stream nextPutAll: '!		Class methods for ' ; nextPutAll: className printString; lf;
 				lf ].
 		(classDef classMethodDefinitions values sort: [:a :b | a selector <= b selector ])
 			do: [:methodDef |
 				methodDef selector == #initialize
 					ifTrue: [ self classInitializationDefinitions add: classDef ].
 				self _fileOutMethod: methodDef forClass: className isMeta: true on: stream ].
-		classDef instanceMethodDefinitions isEmpty not
-			ifTrue: [ 
-				stream nextPutAll: '!		Instance methods for ', className printString; lf;
+		classDef instanceMethodDefinitions isEmpty 
+			ifFalse: [ 
+				stream nextPutAll: '!		Instance methods for ' ; nextPutAll: className printString; lf;
 				lf ].
 		(classDef instanceMethodDefinitions values sort: [:a :b | a selector <= b selector ])
 			do: [:methodDef |

@@ -166,9 +166,9 @@ RwGsFileUtilities class >> readStreamFor: filePath do: aOneArgBlock [
 	GsFile serverErrorString
 		ifNotNil: [:errorMessage | self error: errorMessage].
 	
-	[stream := ReadStreamPortable
-				on: (String withAll: file contents asByteArray decodeFromUTF8).
-	result := aOneArgBlock value: stream]
+	[ stream := ReadStreamPortable
+				on: (file contents decodeFromUTF8ToString) .
+	  result := aOneArgBlock value: stream ]
 			ensure: [file close].
 	^result
 ]

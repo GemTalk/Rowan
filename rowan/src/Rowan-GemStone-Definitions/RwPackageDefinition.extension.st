@@ -4,7 +4,7 @@ Extension { #name : 'RwPackageDefinition' }
 RwPackageDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
 false ifTrue: [
 "gs_SymbolDictionary is now explicitly set before load, so no longer special case for nil"
- 	propertyKey = 'gs_SymbolDictionary'
+ 	propertyKey == #'gs_SymbolDictionary'
 		ifTrue: [ 
 			propertyValue = baseValue
 				ifTrue: [ ^ true ]
@@ -22,7 +22,7 @@ false ifTrue: [
 RwPackageDefinition >> gs_symbolDictionary [
 
 	^ self properties
-		at: 'gs_SymbolDictionary'
+		at: #'gs_SymbolDictionary'
 		ifAbsent: []
 
 ]
@@ -31,7 +31,7 @@ RwPackageDefinition >> gs_symbolDictionary [
 RwPackageDefinition >> gs_symbolDictionary: aSymbolDictionaryName [
 
 	self properties
-		at: 'gs_SymbolDictionary'
+		at: #'gs_SymbolDictionary'
 		put: aSymbolDictionaryName asString
 
 ]

@@ -272,7 +272,7 @@ RwGsImagePatchVisitor_V2 >> visitPackageModification: aPackageModification [
 	aPackageModification isModification
 		ifTrue: [ 
 			propertiesModification := aPackageModification propertiesModification.
-			(propertiesModification elementsModified includesKey: 'gs_SymbolDictionary')
+			(propertiesModification elementsModified includesKey: #'gs_SymbolDictionary')
 				ifTrue: [ 
 					currentPackage classDefinitions
 						keysAndValuesDo: [ :className :afterClassDef | 

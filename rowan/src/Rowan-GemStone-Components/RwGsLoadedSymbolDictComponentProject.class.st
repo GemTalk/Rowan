@@ -139,13 +139,13 @@ RwGsLoadedSymbolDictComponentProject >> packageNameToPlatformPropertiesMap: aDic
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> projectOwnerId [
 
-	^ self propertyAt: 'projectOwnerId'
+	^ self propertyAt: #'projectOwnerId'
 ]
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> projectOwnerId: aString [
 
-	^ self propertyAt: 'projectOwnerId' put: aString
+	^ self propertyAt: #'projectOwnerId' put: aString
 ]
 
 { #category : 'accessing' }

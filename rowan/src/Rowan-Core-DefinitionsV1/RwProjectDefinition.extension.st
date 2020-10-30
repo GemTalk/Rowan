@@ -3,7 +3,7 @@ Extension { #name : 'RwProjectDefinition' }
 { #category : '*rowan-core-definitionsv1' }
 RwProjectDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
 
-	({ 'projectOwnerId' . 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
+	({ #'projectOwnerId' . #'spec'. RwLoadedProject _projectDefinitionSourceKey. #'projectRef' } includesIdentical: propertyKey)
 		ifTrue: [ 
 		"projectRef entries are considered to be equal for comparison purposes"
 		"spec entries are considered to be equal for comparison purposes"

@@ -204,7 +204,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 	fileReference readStreamDo: [:fileStream | | stream |
 		[ | definitions |
 		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
+		  "stream sizeBuffer: fileReference size. ""part of workaround for GemTalk/FileSystemGs#9"
 		  definitions := (RwTonelParser on: stream forReader: self) start.
 		  ((definitions at: 2) at: 1) do: [:mDef |
 			  currentClassExtension addClassMethodDefinition: mDef ].
@@ -229,7 +229,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 			| definitions clsDef projectDef |
 			"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 			stream := ZnBufferedReadStream on: fileStream.
-			stream sizeBuffer: fileReference size.	"part of workaround for GemTalk/FileSystemGs#9"
+			"stream sizeBuffer: fileReference size."	"part of workaround for GemTalk/FileSystemGs#9"
 			definitions := (RwTonelParser on: stream forReader: self) start.
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 

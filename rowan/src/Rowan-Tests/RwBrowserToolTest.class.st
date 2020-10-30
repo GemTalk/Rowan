@@ -112,7 +112,7 @@ RwBrowserToolTest >> _basicClassDefinition: className superclass: superclass gs_
 	(gs_options _isArray and: [ gs_options isEmpty not ])
 		ifTrue: [ 
 			def properties
-				at: 'gs_options'
+				at: #'gs_options'
 				put:
 					(gs_options collect: [ :each | each asString ]) asSortedCollection asArray ].
 	^ def

@@ -49,7 +49,7 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 	| loadedProjectSet loadedProjectDefinitionSet diff loadedProjectInfo| 
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
 	loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet.
-	loadedProjectInfo := projectSetDefinitionToLoad properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
+	loadedProjectInfo := projectSetDefinitionToLoad properties at: #'loadedProjectInfo' ifAbsent: [ Dictionary new ].
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
 			"install the packageMapSpecs for this load into the specification prior to the load"
 			| projectDefinition |

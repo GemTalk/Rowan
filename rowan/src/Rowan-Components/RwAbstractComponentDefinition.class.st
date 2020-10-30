@@ -63,7 +63,7 @@ RwAbstractComponentDefinition >> initialize [
 { #category : 'accessing' }
 RwAbstractComponentDefinition >> key [
 
-	^properties at: 'name' ifAbsent: [nil]
+	^properties at: #'name' ifAbsent: [nil]
 ]
 
 { #category : 'accessing' }
@@ -75,5 +75,5 @@ RwAbstractComponentDefinition >> name [
 { #category : 'accessing' }
 RwAbstractComponentDefinition >> name: aString [ 
 
-	properties at: 'name' put: aString
+	properties at: #'name' put: aString
 ]

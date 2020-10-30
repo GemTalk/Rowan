@@ -2,7 +2,7 @@ Extension { #name : 'RwClassDefinition' }
 
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
-	propertyKey = 'comment'
+	propertyKey == #'comment'
 		ifTrue: [ 
 			propertyValue = baseValue
 				ifTrue: [ ^ true ]
@@ -60,7 +60,7 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 RwClassDefinition >> gs_constraints [
 
 	^self properties
-				at: 'gs_constraints'
+				at: #'gs_constraints'
 				ifAbsent: [ #() ]
 
 ]
@@ -71,7 +71,7 @@ RwClassDefinition >> gs_constraints: constraintsArray [
 	(constraintsArray _isArray and: [ constraintsArray isEmpty not ])
 		ifTrue: [ 
 			self properties
-				at: 'gs_constraints'
+				at: #'gs_constraints'
 				put: constraintsArray ]
 ]
 
@@ -79,7 +79,7 @@ RwClassDefinition >> gs_constraints: constraintsArray [
 RwClassDefinition >> gs_options [
 
 	^self properties
-				at: 'gs_options'
+				at: #'gs_options'
 				ifAbsent: [ #() ]
 
 ]
@@ -91,7 +91,7 @@ RwClassDefinition >> gs_options: optionsArray [
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])
 		ifTrue: [ 
 			self properties
-				at: 'gs_options'
+				at: #'gs_options'
 				put:
 					(optionsArray collect: [ :each | each asString ]) asArray ]
 ]
@@ -100,21 +100,21 @@ RwClassDefinition >> gs_options: optionsArray [
 RwClassDefinition >> gs_reservedOop [
 
 	^self properties
-				at: 'gs_reservedoop'
+				at: #'gs_reservedoop'
 				ifAbsent: [ '' ]
 ]
 
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_reservedOop: aString [
 	aString isEmpty not
-		ifTrue: [ self properties at: 'gs_reservedoop' put: aString ]
+		ifTrue: [ self properties at: #'gs_reservedoop' put: aString ]
 ]
 
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_symbolDictionary [
 
 	^ self properties
-		at: 'gs_SymbolDictionary'
+		at: #'gs_SymbolDictionary'
 		ifAbsent: []
 
 ]
@@ -123,7 +123,7 @@ RwClassDefinition >> gs_symbolDictionary [
 RwClassDefinition >> gs_symbolDictionary: aSymbolDictionaryName [
 
 	self properties
-		at: 'gs_SymbolDictionary'
+		at: #'gs_SymbolDictionary'
 		put: aSymbolDictionaryName asString
 
 ]

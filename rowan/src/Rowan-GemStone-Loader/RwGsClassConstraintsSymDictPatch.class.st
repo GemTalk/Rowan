@@ -46,8 +46,8 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registr
 		arrayOrVaryingConstraintClass _isArray
 			ifTrue: [ theConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ]
 			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
-	keys := existingConstraintsMap keys copy.
-	keys addAll: theConstraintsMap keys.
+	keys := existingConstraintsMap keys . "already a copy"
+  theConstraintsMap keysDo:[:k | keys add: k ].  "keys addAll: theConstraintsMap keys."
 	keys do: [:key | 
 		| existingConstraint theConstraint |
 		existingConstraint := existingConstraintsMap at: key ifAbsent: [].

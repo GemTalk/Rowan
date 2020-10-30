@@ -120,20 +120,20 @@ RwAbstractRepositoryDefinition >> commitLog: logLimit [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> committish [
 
-	^ self properties at: 'committish' ifAbsent: []
+	^ self properties at: #'committish' ifAbsent: []
 ]
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> committish: aString committishType: committishTypeString [
 
-	self properties at: 'committish' put: aString.
-	self properties at: 'committishType' put: committishTypeString.
+	self properties at: #'committish' put: aString.
+	self properties at: #'committishType' put: committishTypeString.
 ]
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> committishType [
 
-	^ self properties at: 'committishType' ifAbsent: []
+	^ self properties at: #'committishType' ifAbsent: []
 ]
 
 { #category : 'actions' }
@@ -155,7 +155,7 @@ RwAbstractRepositoryDefinition >> gitRoot: ignored [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> key [
 
-	^properties at: 'name' ifAbsent: [nil]
+	^properties at: #'name' ifAbsent: [nil]
 ]
 
 { #category : 'accessing' }
@@ -167,20 +167,20 @@ RwAbstractRepositoryDefinition >> name [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> name: aString [ 
 
-	properties at: 'name' put: aString
+	properties at: #'name' put: aString
 ]
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> projectUrl [
 
-	^ self properties at: 'projectUrl' ifAbsent: [ '' ]
+	^ self properties at: #'projectUrl' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> projectUrl: anUrlString [
 
-	anUrlString ifNil: [ ^ self properties removeKey: 'projectUrl' ifAbsent: [ ] ].
-	self properties at: 'projectUrl' put: anUrlString
+	anUrlString ifNil: [ ^ self properties removeKey: #'projectUrl' ifAbsent: [ ] ].
+	self properties at: #'projectUrl' put: anUrlString
 ]
 
 { #category : 'accessing' }
@@ -199,7 +199,7 @@ RwAbstractRepositoryDefinition >> repositoryExists [
 RwAbstractRepositoryDefinition >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^ self properties at: 'repositoryRoot'
+	^ self properties at: #'repositoryRoot'
 ]
 
 { #category : 'accessing' }
@@ -209,7 +209,7 @@ RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 	fileRef := pathStringOrReference asFileReference.
 	self projectUrl: nil.
 	self gitRoot: nil.
-	self properties at: 'repositoryRoot' put: fileRef
+	self properties at: #'repositoryRoot' put: fileRef
 ]
 
 { #category : 'actions' }

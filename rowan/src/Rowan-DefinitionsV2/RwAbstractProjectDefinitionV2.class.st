@@ -82,7 +82,7 @@ RwAbstractProjectDefinitionV2 >> initialize [
 RwAbstractProjectDefinitionV2 >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
-	^super isEmpty & packages isEmpty
+	^ packages isEmpty and:[ super isEmpty]
 ]
 
 { #category : 'accessing' }

@@ -12,7 +12,7 @@ RwMethodDefinition class >> newForSelector: selector protocol: protocol source: 
 
 	^ self
 		withProperties:
-			(Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
+			( SymbolDictionary with: #'selector' -> selector with: #'protocol' -> protocol)
 		source: source
 ]
 
@@ -40,7 +40,7 @@ RwMethodDefinition class >> withProperties: propertiesDictionary source: sourceS
 { #category : 'private' }
 RwMethodDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
 
-	({'_gsFileOffset'. '_gsFileName' } includes: propertyKey)
+	( #( #'_gsFileOffset' #'_gsFileName' ) includesIdentical: propertyKey)
 		ifTrue: [ 
 		"_gsFileOffset' '_gsFileName' are informational properties so any differences can be ignored "
 		^ true ].
@@ -51,14 +51,14 @@ RwMethodDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue 
 RwMethodDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
-	^super isEmpty & source isNil
+	^ source == nil and:[ super isEmpty ]
 
 ]
 
 { #category : 'private' }
 RwMethodDefinition >> key [
 
-	^properties at: 'selector' ifAbsent: [nil]
+	^properties at: #'selector' ifAbsent: [nil]
 
 ]
 
@@ -66,28 +66,28 @@ RwMethodDefinition >> key [
 RwMethodDefinition >> offset: anInteger inFile: aFileName [
   "these properties are used when handling a CompileError or
    a tonel parse error."
-  properties at:'_gsFileOffset' put: anInteger .
-  properties at:'_gsFileName' put: aFileName .
+  properties at:#'_gsFileOffset' put: anInteger .
+  properties at:#'_gsFileName' put: aFileName .
 ]
 
 { #category : 'accessing' }
 RwMethodDefinition >> protocol [
 
-	^properties at: 'protocol'
+	^properties at: #'protocol'
 
 ]
 
 { #category : 'accessing' }
 RwMethodDefinition >> protocol: aString [
 
-	properties at: 'protocol' put: aString
+	properties at: #'protocol' put: aString
 
 ]
 
 { #category : 'accessing' }
 RwMethodDefinition >> selector [
 
-	^properties at: 'selector'
+	^properties at: #'selector'
 ]
 
 { #category : 'accessing' }

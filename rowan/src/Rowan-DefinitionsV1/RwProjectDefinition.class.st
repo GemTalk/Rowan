@@ -11,10 +11,10 @@ Class {
 RwProjectDefinition class >> newForDiskBasedProjectNamed: aString [
 
 	| spec |
-	spec := RwSimpleProjectSpecification new
+	(spec := RwSimpleProjectSpecification new)
 		specName: aString;
-		repoSpec: RwDiskRepositorySpecification new;
-		yourself.
+		repoSpec: RwDiskRepositorySpecification new .
+
 	^ self newForSpecification: spec
 
 ]
@@ -23,32 +23,31 @@ RwProjectDefinition class >> newForDiskBasedProjectNamed: aString [
 RwProjectDefinition class >> newForGitBasedProjectNamed: aString [
 
 	| spec |
-	spec := RwSimpleProjectSpecification new
-		specName: aString;
-		yourself.
+	(spec := RwSimpleProjectSpecification new)
+		specName: aString .
+
 	^ self newForSpecification: spec
 
 ]
 
 { #category : 'instance creation' }
 RwProjectDefinition class >> newForSpecification: aRwSpecification [
-
+  | props |
+  (props := SymbolDictionary new)
+				at: #'name' put: aRwSpecification specName;
+				at: #'spec' put: aRwSpecification .
 	^ self
-		withProperties:
-			(Dictionary new
-				add: 'name' -> aRwSpecification specName;
-				add: 'spec' -> aRwSpecification;
-				yourself)
+		withProperties: props
 		packageDefinitions: Dictionary new
 ]
 
 { #category : 'instance creation' }
 RwProjectDefinition class >> withProperties: properties packageDefinitions: packageDefinitions [
-
-	^ self basicNew
+  | res |
+	(res := self basicNew)
 		properties: properties;
-		packages: packageDefinitions;
-		yourself
+		packages: packageDefinitions .
+  ^ res
 ]
 
 { #category : 'actions' }
@@ -149,10 +148,9 @@ RwProjectDefinition >> configurationTemplate [
 	"Return a generic RwProjectLoadConfiguration based on the list of packages in the reciever"
 
 	| config groupNames |
-	config := RwProjectLoadConfiguration new
+	(config := RwProjectLoadConfiguration new)
 		name: 'Default';
-		projectName: self specification specName;
-		yourself.
+		projectName: self specification specName .
 	groupNames := self specification defaultGroupNames.
 	groupNames
 		do: [:groupName | config addDefinedGroupName: groupName ].
@@ -192,14 +190,14 @@ RwProjectDefinition >> initialize [
 RwProjectDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
-	^super isEmpty & packages isEmpty
+  ^ packages isEmpty and:[ super isEmpty]
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
-	^self propertyAt: 'name' ifAbsent: [nil]
+	^self propertyAt: #'name' ifAbsent: [nil]
 ]
 
 { #category : 'accessing' }

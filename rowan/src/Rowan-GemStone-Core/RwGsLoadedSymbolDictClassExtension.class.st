@@ -94,8 +94,8 @@ RwGsLoadedSymbolDictClassExtension >> handleClassDeletionOrNewVersion [
 RwGsLoadedSymbolDictClassExtension >> initialize [
 
 	super initialize.
-	loadedInstanceMethods := KeyValueDictionary new.
-	loadedClassMethods := KeyValueDictionary new
+	loadedInstanceMethods := StringKeyValueDictionary new.
+	loadedClassMethods := StringKeyValueDictionary new
 ]
 
 { #category : 'initialization' }
@@ -105,7 +105,7 @@ RwGsLoadedSymbolDictClassExtension >> initializeForClass: aClass inPackage: aLoa
 	name := aClass name asString.
 	handle := aClass.
 	aLoadedPackage addLoadedClassExtension: self.
-	self propertyAt: 'name' put: name
+	self propertyAt: #'name' put: name
 ]
 
 { #category : 'accessing' }

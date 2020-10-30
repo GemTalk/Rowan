@@ -4,8 +4,6 @@ Extension { #name : 'DateAndTime' }
 DateAndTime >> stonOn: stonWriter [
 	"Use an ISO representation with all details"
 	
-	stonWriter writeObject: self listSingleton: 
-		(String streamContents: [ :stream |
-			self printOn: stream ])
+	stonWriter writeObject: self listSingleton: self printString 
 
 ]

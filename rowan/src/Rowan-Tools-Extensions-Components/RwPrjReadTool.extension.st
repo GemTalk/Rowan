@@ -193,10 +193,10 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 			ifNil: [ thePackageMapSpecs := Dictionary new ].	
 		theProjectComponentDefinition readPackageNames: thePackageNames.
 		projectSetDefinition addProject: theProjectComponentDefinition.
-		((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
-			at: projectName ifAbsentPut: [ Dictionary new ])
-				at: 'loadedConfigurationNames' put: theConfigNames;
-				at: 'loadedGroupNames' put: theGroupNames;
-				at: 'packageMapSpecs' put: thePackageMapSpecs ].
+		((projectSetDefinition properties at: #'loadedProjectInfo' ifAbsentPut: [Dictionary new])
+			at: projectName asSymbol ifAbsentPut: [ Dictionary new ])
+				at: #'loadedConfigurationNames' put: theConfigNames;
+				at: #'loadedGroupNames' put: theGroupNames;
+				at: #'packageMapSpecs' put: thePackageMapSpecs ].
 	^ projectSetDefinition
 ]

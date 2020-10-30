@@ -370,8 +370,15 @@ FileReference >> printOn: aStream [
 
 { #category : 'streams' }
 FileReference >> readStream [
-
-	^ self readStreamEncoded: 'utf8'
+ [ | binaryStream bytes str |
+   binaryStream := (File named: self fullName) readStream .
+   bytes := binaryStream contents . "expect a Utf8"
+   str := bytes decodeToString .
+   ^ ZnBufferedReadStream new onBuffer: str stream: binaryStream .
+ ] on: Error do:[:ex |
+   "possibly a memory::  file or such"
+   ^ self readStreamEncoded: 'utf8'
+ ]
 ]
 
 { #category : 'operations' }

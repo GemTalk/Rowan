@@ -105,11 +105,11 @@ RwPrjReadTool >> readProjectSetForProjectDefinition: projectDefinition withConfi
 		_readProjectSetForProjectDefinition: projectDefinition 
 		packageNames: packageNames 
 		fromRepo: repo.
-	((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
-		at: projectName ifAbsentPut: [ Dictionary new ])
-			at: 'loadedConfigurationNames' put: configNames;
-			at: 'loadedGroupNames' put: groupNames;
-			at: 'packageMapSpecs' put: packageMapSpecs.
+	((projectSetDefinition properties at: #'loadedProjectInfo' ifAbsentPut: [ SymbolDictionary new])
+		at: projectName asSymbol ifAbsentPut: [ Dictionary new ])
+			at: #'loadedConfigurationNames' put: configNames;
+			at: #'loadedGroupNames' put: groupNames;
+			at: #'packageMapSpecs' put: packageMapSpecs.
 	^ projectSetDefinition
 ]
 

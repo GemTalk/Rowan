@@ -59,6 +59,5 @@ RwPackageModification >> initialize [
 { #category : 'testing' }
 RwPackageModification >> isEmpty [
 
-	^super isEmpty & classesModification isEmpty
-		& classExtensionsModification isEmpty
+  ^ classExtensionsModification isEmpty and:[ classesModification isEmpty and:[ super isEmpty]]
 ]

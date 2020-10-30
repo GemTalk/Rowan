@@ -25,6 +25,20 @@ RwDefinition class >> new [
 		yourself
 ]
 
+{ #category : 'printing' }
+RwDefinition class >> diffString: aString to: bString [
+  | fa fb cmd res |
+  fa := FileReference newTempFilePrefix: 'STON' suffix: '.txt' .
+  fb := FileReference newTempFilePrefix: 'STON' suffix: '.txt' .
+  fa writeStream nextPutAll: aString ; flush ; close .
+  fb writeStream nextPutAll: bString ; flush ; close .
+  cmd := '/usr/bin/diff ' , fa asString,' ', fb asString .
+  res := [ GsHostProcess  execute: cmd 
+         ] on: ChildError do:[:ex | ex status == 1 ifTrue:[ ex resume ]. ex pass ].
+  fa delete . fb delete .
+  ^ res
+]
+
 { #category : 'private' }
 RwDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
 
@@ -84,7 +98,7 @@ RwDefinition >> compareAgainstBaseForNewClassVersion: aBaseDefinition [
 RwDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass [
 
 	| keys |
-	keys := myDictionary keys copy.
+	keys := myDictionary keys . "keys is already a copy"
 	keys addAll: baseDictionary keys.
 	keys do: 
 			[:key |
@@ -99,7 +113,7 @@ RwDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDicti
 { #category : 'initialization' }
 RwDefinition >> initialize [
 
-	properties := Dictionary new
+	properties := SymbolDictionary new
 ]
 
 { #category : 'testing' }
@@ -123,7 +137,7 @@ RwDefinition >> postCopy [
 	| oldProperties |
 	super postCopy.
 	oldProperties := properties.
-	properties := Dictionary new.
+	properties := SymbolDictionary new.
 	oldProperties keysAndValuesDo: [:key :value| properties at: key put: value copy ]
 ]
 
@@ -134,6 +148,18 @@ RwDefinition >> printOn: aStream [
 	aStream
 		nextPutAll: ' for ';
 		nextPutAll: (self key ifNil: ['nil'])
+]
+
+{ #category : 'printing' }
+RwDefinition >> printSTON [
+
+  ^ STON toStringPretty: self
+]
+
+{ #category : 'printing' }
+RwDefinition >> diffSTON: aRwDefinition [
+  ^ self class diffString: (self printSTON ) 
+                       to: (aRwDefinition printSTON )
 ]
 
 { #category : 'accessing' }

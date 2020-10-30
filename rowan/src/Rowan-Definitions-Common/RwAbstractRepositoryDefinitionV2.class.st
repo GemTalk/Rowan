@@ -62,7 +62,7 @@ RwAbstractRepositoryDefinitionV2 >> hash [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinitionV2 >> key [
 
-	^properties at: 'name' ifAbsent: [nil]
+	^properties at: #'name' ifAbsent: [nil]
 ]
 
 { #category : 'accessing' }
@@ -74,7 +74,7 @@ RwAbstractRepositoryDefinitionV2 >> name [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinitionV2 >> name: aString [ 
 
-	properties at: 'name' put: aString
+	properties at: #'name' put: aString
 ]
 
 { #category : 'accessing' }

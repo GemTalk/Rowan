@@ -196,13 +196,13 @@ RwProjectReferenceDefinition >> clone [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> comment [
 
-	^ self properties at: 'comment' ifAbsent: [ '' ]
+	^ self properties at: #'comment' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> comment: aString [
 
-	^ self properties at: 'comment' put: aString
+	^ self properties at: #'comment' put: aString
 ]
 
 { #category : 'accessing' }
@@ -214,44 +214,44 @@ RwProjectReferenceDefinition >> commitLog: logLimit [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> committish [
 
-	^ self properties at: 'committish' ifAbsent: [ 'master' ]
+	^ self properties at: #'committish' ifAbsent: [ 'master' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> committish: aString committishType: committishTypeString [
 
-	self properties at: 'committish' put: aString.
-	self properties at: 'committishType' put: committishTypeString.
+	self properties at: #'committish' put: aString.
+	self properties at: #'committishType' put: committishTypeString.
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> committishType [
 
-	^ self properties at: 'committishType'  ifAbsent: [ 'branch' ]
+	^ self properties at: #'committishType'  ifAbsent: [ 'branch' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> components [
 
-	^ self properties at: 'components' ifAbsentPut: [ Dictionary new ]
+	^ self properties at: #'components' ifAbsentPut: [ Dictionary new ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> components: aComponentDefinitionDictionary [
 
-	^ self properties at: 'components' put: aComponentDefinitionDictionary
+	^ self properties at: #'components' put: aComponentDefinitionDictionary
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> configsPath [
 
-	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/components' ]
+	^ self properties at: #'configsPath' ifAbsent: [ 'rowan/components' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> configsPath: aString [
 
-	^ self properties at: 'configsPath' put: aString
+	^ self properties at: #'configsPath' put: aString
 ]
 
 { #category : 'accessing' }
@@ -263,13 +263,13 @@ RwProjectReferenceDefinition >> configsRoot [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> configurationNames [
 
-	^ self properties at: 'configurationNames' ifAbsent: [ { self defaultComponentName } ]
+	^ self properties at: #'configurationNames' ifAbsent: [ { self defaultComponentName } ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> configurationNames: anArray [
 
-	^ self properties at: 'configurationNames' put: anArray
+	^ self properties at: #'configurationNames' put: anArray
 ]
 
 { #category : 'actions' }
@@ -283,25 +283,25 @@ RwProjectReferenceDefinition >> create [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> defaultComponentName [
 
-	^ self properties at: 'defaultComponentName' ifAbsent: [ 'Core' ]
+	^ self properties at: #'defaultComponentName' ifAbsent: [ 'Core' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> defaultComponentName: aString [
 
-	^ self properties at: 'defaultComponentName' put: aString
+	^ self properties at: #'defaultComponentName' put: aString
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> defaultGroupName [
 
-	^ self properties at: 'defaultGroupName' ifAbsent: [ 'core' ]
+	^ self properties at: #'defaultGroupName' ifAbsent: [ 'core' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> defaultGroupName: aString [
 
-	^ self properties at: 'defaultGroupName' put: aString
+	^ self properties at: #'defaultGroupName' put: aString
 ]
 
 { #category : 'actions' }
@@ -328,7 +328,7 @@ RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString [
 RwProjectReferenceDefinition >> groupNames [
 
 	| gns |
-	gns := self properties at: 'groupNames' ifAbsent: [ {} ].
+	gns := self properties at: #'groupNames' ifAbsent: [ {} ].
 	^ gns isEmpty
 		ifTrue: [ { self defaultGroupName } ]
 		ifFalse: [ gns ]
@@ -337,7 +337,7 @@ RwProjectReferenceDefinition >> groupNames [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> groupNames: aSet [
 
-	^ self properties at: 'groupNames' put: aSet asSet
+	^ self properties at: #'groupNames' put: aSet asSet
 ]
 
 { #category : 'temporary compat' }
@@ -355,13 +355,13 @@ RwProjectReferenceDefinition >> key [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedCommitId [
 
-	^ self properties at: 'loadedCommitId' ifAbsent: [ '' ]
+	^ self properties at: #'loadedCommitId' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedCommitId:  aCommitId [
 
-	^ self properties at: 'loadedCommitId' put: aCommitId
+	^ self properties at: #'loadedCommitId' put: aCommitId
 ]
 
 { #category : 'accessing' }
@@ -397,7 +397,7 @@ RwProjectReferenceDefinition >> loadedGroupNames: anArray [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> packageConvention [
 
-	^ self properties at: 'packageConvention' ifAbsent: [ 'RowanHybrid' ]
+	^ self properties at: #'packageConvention' ifAbsent: [ 'RowanHybrid' ]
 ]
 
 { #category : 'accessing' }
@@ -411,7 +411,7 @@ RwProjectReferenceDefinition >> packageConvention: aString [
 
 	(#( 'RowanHybrid' 'Monticello' 'Rowan' ) includes: aString)
 		ifFalse: [ self error: 'Unknown package convention ', aString printString, '. Should be one of: RowanHybrid, Monticello, or Rowan' ].
-	^ self properties at: 'packageConvention' put: aString
+	^ self properties at: #'packageConvention' put: aString
 ]
 
 { #category : 'accessing' }
@@ -425,25 +425,25 @@ RwProjectReferenceDefinition >> packageFormat: aString [
 
 	(#( 'tonel' 'filetree' ) includes: aString)
 		ifFalse: [ self error: 'Unknown package format ', aString printString, '. Should be one of: tonel, or filetree' ].
-	^ self properties at: 'packageFormat' put: aString
+	^ self properties at: #'packageFormat' put: aString
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> packageFormatIfAbsent: absentBlock [
 
-	^ self properties at: 'packageFormat' ifAbsent: absentBlock
+	^ self properties at: #'packageFormat' ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> packagesPath [
 
-	^ self properties at: 'packagesPath' ifAbsent: [ 'rowan/src' ]
+	^ self properties at: #'packagesPath' ifAbsent: [ 'rowan/src' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> packagesPath: aString [
 
-	^ self properties at: 'packagesPath' put: aString
+	^ self properties at: #'packagesPath' put: aString
 ]
 
 { #category : 'accessing' }
@@ -465,20 +465,20 @@ RwProjectReferenceDefinition >> postCopy [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectAlias [
 
-	^ self properties at: 'projectAlias' ifAbsent: [ self projectName ]
+	^ self properties at: #'projectAlias' ifAbsent: [ self projectName ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectAlias: aStringOrNil [
 
-	aStringOrNil ifNil: [ ^ self properties removeKey: 'projectAlias' ifAbsent: [] ].
-	^ self properties at: 'projectAlias' put: aStringOrNil
+	aStringOrNil ifNil: [ ^ self properties removeKey: #'projectAlias' ifAbsent: [] ].
+	^ self properties at: #'projectAlias' put: aStringOrNil
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectHome [
 
-	^ self properties at: 'projectHome' ifAbsent: [ FileLocator rowanProjectsHome ]
+	^ self properties at: #'projectHome' ifAbsent: [ FileLocator rowanProjectsHome ]
 ]
 
 { #category : 'accessing' }
@@ -486,45 +486,45 @@ RwProjectReferenceDefinition >> projectHome: projectHomeFileReferenceOrString [
 
 	self repositoryDefinition: nil. "changing project home invalidates the current repository definition"
 	projectHomeFileReferenceOrString
-		ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
-	self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference.
+		ifNil: [ ^ self properties removeKey: #'projectHome' ifAbsent: [] ].
+	self properties at: #'projectHome' put: projectHomeFileReferenceOrString asFileReference.
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectName [
 
-	^ self properties at: 'projectName' ifAbsent: []
+	^ self properties at: #'projectName' ifAbsent: []
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectName: aString [
 
 	self repositoryDefinition: nil. "changing project name invalidates the current repository definition"
-	^ self properties at: 'projectName' put: aString
+	^ self properties at: #'projectName' put: aString
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectNames [
 
-	^ self properties at: 'projectNames' ifAbsent: [ #() ]
+	^ self properties at: #'projectNames' ifAbsent: [ #() ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectNames: anArray [
 
-	^ self properties at: 'projectNames' put: anArray
+	^ self properties at: #'projectNames' put: anArray
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectsPath [
 
-	^ self properties at: 'projectsPath' ifAbsent: [ 'rowan/projects' ]
+	^ self properties at: #'projectsPath' ifAbsent: [ 'rowan/projects' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectsPath: aString [
 
-	^ self properties at: 'projectsPath' put: aString
+	^ self properties at: #'projectsPath' put: aString
 ]
 
 { #category : 'accessing' }
@@ -536,19 +536,19 @@ RwProjectReferenceDefinition >> projectsRoot [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectUrl [
 
-	^ self properties at: 'projectUrl' ifAbsent: [ '' ]
+	^ self properties at: #'projectUrl' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectUrl: aString [
 
-	^ self properties at: 'projectUrl' put: aString
+	^ self properties at: #'projectUrl' put: aString
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> remote [
 
-	^ self properties at: 'remote' ifAbsent: [ 'origin' ]
+	^ self properties at: #'remote' ifAbsent: [ 'origin' ]
 ]
 
 { #category : 'accessing' }
@@ -572,14 +572,14 @@ RwProjectReferenceDefinition >> repositoryCommitId [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> repositoryDefinition [
 
-	^ self properties at: 'repositoryDefinition' ifAbsentPut: [ self _repositoryDefinitionForProjectHome: self projectHome ]
+	^ self properties at: #'repositoryDefinition' ifAbsentPut: [ self _repositoryDefinitionForProjectHome: self projectHome ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> repositoryDefinition: aRepositoryDefinition [
 
-	aRepositoryDefinition ifNil: [ ^ self properties removeKey:  'repositoryDefinition' ifAbsent: [] ].
-	^ self properties at: 'repositoryDefinition' put: aRepositoryDefinition
+	aRepositoryDefinition ifNil: [ ^ self properties removeKey:  #'repositoryDefinition' ifAbsent: [] ].
+	^ self properties at: #'repositoryDefinition' put: aRepositoryDefinition
 ]
 
 { #category : 'accessing' }
@@ -643,13 +643,13 @@ RwProjectReferenceDefinition >> SHA: aString [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> specsPath [
 
-	^ self properties at: 'specsPath' ifAbsent: [ 'rowan/specs' ]
+	^ self properties at: #'specsPath' ifAbsent: [ 'rowan/specs' ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> specsPath: aString [
 
-	^ self properties at: 'specsPath' put: aString
+	^ self properties at: #'specsPath' put: aString
 ]
 
 { #category : 'accessing' }
@@ -679,13 +679,13 @@ self deprecated: 'temporary method ... simulating RwSpecification api'.
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> useGit [
 
-	^ self properties at: 'useGit' ifAbsent: [ false ]
+	^ self properties at: #'useGit' ifAbsent: [ false ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> useGit: aBool [
 
-	^ self properties at: 'useGit' put: aBool
+	^ self properties at: #'useGit' put: aBool
 ]
 
 { #category : 'actions' }

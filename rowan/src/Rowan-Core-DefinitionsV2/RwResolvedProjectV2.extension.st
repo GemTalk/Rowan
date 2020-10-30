@@ -21,8 +21,8 @@ RwResolvedProjectV2 >> compareAgainstBase: aDefinition [
 RwResolvedProjectV2 >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass [
 
 	| keys |
-	keys := myDictionary keys copy.
-	keys addAll: baseDictionary keys.
+	keys := myDictionary keys. "keys already a copy"
+  baseDictionary keysDo:[:k | keys add: k ].  "keys addAll: baseDictionary keys."
 	keys do: 
 			[:key |
 			| before after modification |

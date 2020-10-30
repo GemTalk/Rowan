@@ -386,7 +386,7 @@ RwGsPatchSet_254 >> addClassModification: aRwClassModification toPatchSetInPacka
 				addAddedClass: aRwClassModification after
 				inPackage: aPackage
 				inProject: aProjectDefinition.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
+			(aRwClassModification propertiesModification elementsModified at: #'gs_constraints' ifAbsent: [])
 				ifNotNil: [:constraints |  
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
 					self 
@@ -406,7 +406,7 @@ RwGsPatchSet_254 >> addClassModification: aRwClassModification toPatchSetInPacka
 				inPackage: aPackage
 				inProject: aProjectDefinition
 				toPatchSet: self.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
+			(aRwClassModification propertiesModification elementsModified at: #'gs_constraints' ifAbsent: [])
 				ifNotNil: [:constraints |  
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
 					self 

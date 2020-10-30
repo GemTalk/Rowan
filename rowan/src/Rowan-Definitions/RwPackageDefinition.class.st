@@ -18,7 +18,7 @@ Class {
 RwPackageDefinition class >> newNamed: packageName [
 
 	^ self
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (SymbolDictionary with: #'name' -> packageName)
 		classDefinitions: Dictionary new
 		classExtensions: Dictionary new
 ]
@@ -197,14 +197,14 @@ RwPackageDefinition >> initialize [
 RwPackageDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
-	^super isEmpty & classDefinitions isEmpty & classExtensions isEmpty
+  ^ classExtensions isEmpty and:[ classDefinitions isEmpty and:[ super isEmpty]]
 ]
 
 { #category : 'properties' }
 RwPackageDefinition >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
-	^self propertyAt: 'name' ifAbsent: [nil]
+	^self propertyAt: #'name' ifAbsent: [nil]
 ]
 
 { #category : 'accessing' }
@@ -267,7 +267,7 @@ RwPackageDefinition >> removeClassNamed: className ifAbsent: absentBlock [
 
 { #category : 'accessing' }
 RwPackageDefinition >> renameTo: newPackageName packageConvention: thePackageConvention [
-	self propertyAt: 'name' put: newPackageName.
+	self propertyAt: #'name' put: newPackageName.
 	thePackageConvention = 'Rowan'
 		ifTrue: [ ^ self ].
 	thePackageConvention = 'Monticello'

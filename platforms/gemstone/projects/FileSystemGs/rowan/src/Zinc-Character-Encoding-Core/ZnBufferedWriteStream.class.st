@@ -23,9 +23,11 @@ Class {
 
 { #category : 'instance creation' }
 ZnBufferedWriteStream class >> on: writeStream [
-	^ self basicNew
-		on: writeStream;
-		yourself
+ | res |
+	(res := self basicNew)
+		on: writeStream ;
+    buffer . "ensure buffer is initialized"
+  ^ res
 ]
 
 { #category : 'convenience' }
@@ -42,21 +44,21 @@ ZnBufferedWriteStream class >> on: writeStream do: block [
 
 { #category : 'private' }
 ZnBufferedWriteStream >> buffer [
-	buffer isNil 
-		ifTrue: [ self sizeBuffer: self defaultBufferSize ].
+	buffer 
+		ifNil: [ self sizeBuffer: self defaultBufferSize ].
 	^ buffer
 ]
 
 { #category : 'accessing' }
 ZnBufferedWriteStream >> bufferFreeSize [
-	^ self bufferSize - position
+	^ buffer size - position
 ]
 
 { #category : 'accessing' }
 ZnBufferedWriteStream >> bufferSize [
-	^ buffer isNil 
-		ifTrue: [ self defaultBufferSize ]
-		ifFalse: [ buffer size ]
+	^ buffer 
+		ifNil: [ self defaultBufferSize ]
+		ifNotNil: [ buffer size ]
 ]
 
 { #category : 'initialize-release' }
@@ -67,12 +69,12 @@ ZnBufferedWriteStream >> close [
 
 { #category : 'accessing' }
 ZnBufferedWriteStream >> cr [
-	self nextPut: Character cr
+	self nextPut: Character_cr
 ]
 
 { #category : 'accessing' }
 ZnBufferedWriteStream >> crlf [
-	self cr; lf
+  self nextPut: Character_cr ; nextPut: Character_lf 
 ]
 
 { #category : 'accessing' }
@@ -94,8 +96,8 @@ ZnBufferedWriteStream >> flush [
 
 { #category : 'private' }
 ZnBufferedWriteStream >> flushBuffer [
-	position = 0 ifTrue: [ ^ self ].
-	position = self bufferSize
+	position == 0 ifTrue: [ ^ self ].
+	position == buffer size
 		ifTrue: [ stream nextPutAll: buffer ]
 		ifFalse: [ stream nextPutAll: (buffer copyFrom: 1 to: position) ].
 	position := 0
@@ -103,7 +105,7 @@ ZnBufferedWriteStream >> flushBuffer [
 
 { #category : 'private' }
 ZnBufferedWriteStream >> flushBufferIfFull [
-	position = self bufferSize 
+	position == buffer size
 		ifTrue: [ self flushBuffer ]
 
 ]
@@ -137,7 +139,7 @@ ZnBufferedWriteStream >> isStream [
 
 { #category : 'accessing' }
 ZnBufferedWriteStream >> lf [
-	self nextPut: Character lf
+	self nextPut: Character_lf
 ]
 
 { #category : 'accessing' }
@@ -157,11 +159,11 @@ ZnBufferedWriteStream >> next: count putAll: collection startingAt: offset [
 	self flushBufferIfFull.
 	count <= self bufferFreeSize
 		ifTrue: [
-			self buffer replaceFrom: position + 1 to: position + count with: collection startingAt: offset.
+			buffer replaceFrom: position + 1 to: position + count with: collection startingAt: offset.
 			position := position + count ]
 		ifFalse: [
 			self flushBuffer.
-			count > (self bufferSize / 2)
+			count > ( buffer size / 2)
 				ifTrue: [ stream next: count putAll: collection startingAt: offset ]
 				ifFalse: [ self next: count putAll: collection startingAt: offset ] ]
 
@@ -272,12 +274,12 @@ ZnBufferedWriteStream >> sizeBuffer: size [
 
 { #category : 'accessing' }
 ZnBufferedWriteStream >> space [
-	self nextPut: Character space
+	self nextPut: Character_space
 ]
 
 { #category : 'accessing' }
 ZnBufferedWriteStream >> tab [
-	self nextPut: Character tab
+	self nextPut: Character_tab
 ]
 
 { #category : 'accessing' }
